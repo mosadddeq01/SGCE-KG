@@ -1504,1954 +1504,6 @@ if __name__ == "__main__":
 
 
 
-
-
-
-
-
-
-
-#?######################### Start ##########################
-#region:#?   Clustetting playgound 1
-
-#!/usr/bin/env python3
-
-
-"""
-embed_and_viz_entities.py
-
-Reads entities from a jsonl file (entities_raw.jsonl), computes embeddings using
-selected models, reduces dimensionality, saves CSVs and PNGs for inspection.
-
-Usage examples:
- python embed_and_viz_entities.py --model hf_all-MiniLM-L6-v2
- python embed_and_viz_entities.py --model openai_text-embedding-3-small
- python embed_and_viz_entities.py --model tfidf
- python embed_and_viz_entities.py --model hf_all-MiniLM-L6-v2 --reduce umap
-"""
-
-import os
-import json
-import argparse
-from pathlib import Path
-from tqdm import tqdm
-
-import numpy as np
-import pandas as pd
-import matplotlib.pyplot as plt
-
-from sklearn.decomposition import PCA
-from sklearn.manifold import TSNE
-from sklearn.feature_extraction.text import TfidfVectorizer
-
-# Optional imports (wrapped to provide helpful message)
-try:
-    from sentence_transformers import SentenceTransformer
-except Exception:
-    SentenceTransformer = None
-
-try:
-    import openai
-except Exception:
-    openai = None
-
-try:
-    import umap
-except Exception:
-    umap = None
-
-# ---------- CONFIG ----------
-ENT_FILE_DEFAULT = "/home/mabolhas/MyReposOnSOL/SGCE-KG/data/KG/entities_raw.jsonl"
-OUT_DIR = "/home/mabolhas/MyReposOnSOL/SGCE-KG/data/KG/entity_embedding_outputs"
-# ----------------------------
-
-def load_entities(jsonl_path):
-    ents = []
-    with open(jsonl_path, "r", encoding="utf-8") as f:
-        for line in f:
-            obj = json.loads(line)
-            # ensure keys exist
-            ents.append(obj)
-    return ents
-
-def build_text_for_entity(ent, max_ctx_snippets=2):
-    """
-    Build a representative text for embedding from entity fields.
-    """
-    parts = []
-    if ent.get("entity_name"):
-        parts.append(ent["entity_name"])
-    desc = ent.get("entity_description") or ""
-    if desc.strip():
-        parts.append(desc.strip())
-    # If used_context_ids present and your chunk DB is not accessible here,
-    # include text_span and other metadata to give local context
-    if ent.get("text_span"):
-        parts.append(ent["text_span"])
-    # add type hint for disambiguation
-    if ent.get("entity_type_hint"):
-        parts.append(f"TYPE:{ent['entity_type_hint']}")
-    return " ||| ".join([p for p in parts if p])
-
-def embed_with_sentence_transformer(model_name, texts, device="cpu", batch_size=64):
-    if SentenceTransformer is None:
-        raise RuntimeError("sentence-transformers not installed. `pip install sentence-transformers`")
-    model = SentenceTransformer(model_name, device=device)
-    embeddings = model.encode(texts, show_progress_bar=True, batch_size=batch_size, convert_to_numpy=True)
-    return embeddings
-
-def embed_with_openai(model_name, texts, batch_size=50):
-    if openai is None:
-        raise RuntimeError("openai package not installed. `pip install openai`")
-    key = os.environ.get("OPENAI_API_KEY")
-    if not key:
-        raise RuntimeError("OPENAI_API_KEY not set in environment.")
-    openai.api_key = key
-
-    embeddings = []
-    for i in tqdm(range(0, len(texts), batch_size), desc="OpenAI embed batches"):
-        batch = texts[i:i+batch_size]
-        # openai API: responses for multiple inputs
-        resp = openai.Embedding.create(model=model_name, input=batch)
-        for r in resp["data"]:
-            embeddings.append(np.array(r["embedding"], dtype=np.float32))
-    return np.vstack(embeddings)
-
-def embed_with_tfidf(texts, n_components=768):
-    vec = TfidfVectorizer(max_features=50000, ngram_range=(1,2))
-    X = vec.fit_transform(texts)  # sparse
-    # reduce to dense lower dim via PCA if n_components < features
-    dense = X.toarray()
-    if n_components and dense.shape[1] > n_components:
-        pca = PCA(n_components=n_components, random_state=0)
-        dense = pca.fit_transform(dense)
-    return dense
-
-def reduce_dimensions(embs, method="umap", n_components=2, pca_first=True, pca_dim=50, random_state=42):
-    """
-    pca_first: reduces to pca_dim before applying UMAP/t-SNE (good for speed/stability)
-    method: 'umap' | 'tsne' | 'pca'
-    """
-    X = embs
-    if pca_first and method in ("umap", "tsne") and X.shape[1] > pca_dim:
-        pca = PCA(n_components=pca_dim, random_state=random_state)
-        X = pca.fit_transform(X)
-    if method == "pca":
-        pca = PCA(n_components=n_components, random_state=random_state)
-        return pca.fit_transform(X)
-    elif method == "tsne":
-        ts = TSNE(n_components=n_components, random_state=random_state, perplexity=30, n_iter=1000, init="pca")
-        return ts.fit_transform(X)
-    elif method == "umap":
-        if umap is None:
-            raise RuntimeError("umap-learn not installed. `pip install umap-learn`")
-        reducer = umap.UMAP(n_components=n_components, random_state=random_state)
-        return reducer.fit_transform(X)
-    else:
-        raise ValueError("Unknown reduction method")
-
-def plot_scatter(coords, labels, title, out_path, sample_ids=None, figsize=(10,8), annotate=False, max_annot=50):
-    df = pd.DataFrame(coords, columns=["x","y"])
-    df["label"] = labels
-    plt.figure(figsize=figsize)
-    uniq = list(set(labels))
-    # color by label if few labels, else grey
-    if len(uniq) <= 20:
-        for lbl in uniq:
-            mask = df["label"] == lbl
-            plt.scatter(df.loc[mask, "x"], df.loc[mask, "y"], label=str(lbl), alpha=0.7, s=20)
-        plt.legend(bbox_to_anchor=(1.05,1), loc='upper left')
-    else:
-        plt.scatter(df["x"], df["y"], alpha=0.7, s=18)
-    plt.title(title)
-    plt.tight_layout()
-    plt.savefig(out_path, dpi=200)
-    # annotate a few
-    if annotate:
-        import random
-        n = min(max_annot, len(df))
-        idxs = random.sample(range(len(df)), n)
-        for i in idxs:
-            plt.annotate(sample_ids[i] if sample_ids is not None else str(i),
-                         (coords[i,0], coords[i,1]), fontsize=6)
-    plt.close()
-
-def main(args):
-    ent_file = Path(args.entities)
-    outdir = Path(args.outdir)
-    outdir.mkdir(parents=True, exist_ok=True)
-
-    print("Loading entities...")
-    ents = load_entities(ent_file)
-    print(f"Loaded {len(ents)} entities.")
-
-    # build texts
-    texts = [build_text_for_entity(e) for e in ents]
-    ids = [e.get("id") for e in ents]
-    names = [e.get("entity_name","") for e in ents]
-    types = [e.get("entity_type_hint","") for e in ents]
-
-    # Optionally subsample for quick tests
-    if args.limit and args.limit < len(texts):
-        texts = texts[:args.limit]
-        ids = ids[:args.limit]
-        names = names[:args.limit]
-        types = types[:args.limit]
-
-    # Compute embeddings
-    model = args.model
-    print("Embedding model:", model)
-    if model.startswith("hf_"):
-        hf_model = model[len("hf_"):]
-        emb = embed_with_sentence_transformer(hf_model, texts, device=args.device, batch_size=args.batch_size)
-    elif model.startswith("openai_"):
-        if openai is None:
-            raise RuntimeError("openai package not available.")
-        openai_model = model[len("openai_"):]
-        emb = embed_with_openai(openai_model, texts, batch_size=args.batch_size)
-    elif model == "tfidf":
-        emb = embed_with_tfidf(texts, n_components=args.tfidf_dim)
-    else:
-        raise ValueError("Unknown model format. Use hf_<model>, openai_<model>, or tfidf")
-
-    print("Embeddings shape:", emb.shape)
-
-    # normalize
-    norms = np.linalg.norm(emb, axis=1, keepdims=True)
-    norms[norms==0] = 1.0
-    emb = emb / norms
-
-    # Save raw embeddings
-    emb_df = pd.DataFrame(emb)
-    emb_df.insert(0, "id", ids[:len(emb)])
-    emb_df["name"] = names[:len(emb)]
-    emb_df["type"] = types[:len(emb)]
-    emb_df.to_csv(outdir / f"embeddings_{model}.csv", index=False)
-    print("Saved embeddings CSV.")
-
-    # Dimensionality reduction
-    print("Reducing dimensions...")
-    coords = reduce_dimensions(emb, method=args.reduction, n_components=2,
-                               pca_first=not args.no_pca_first, pca_dim=args.pca_first_dim, random_state=args.seed)
-    print("Reduced shape:", coords.shape)
-
-    # Save coords
-    coords_df = pd.DataFrame(coords, columns=["x","y"])
-    coords_df["id"] = ids[:len(coords)]
-    coords_df["name"] = names[:len(coords)]
-    coords_df["type"] = types[:len(coords)]
-    coords_df.to_csv(outdir / f"coords_{model}_{args.reduction}.csv", index=False)
-
-    # Plot
-    title = f"{model} -> {args.reduction}"
-    plot_path = outdir / f"scatter_{model}_{args.reduction}.png"
-    plot_scatter(coords, types, title, plot_path, sample_ids=ids, annotate=args.annotate)
-    print("Saved scatter plot to", plot_path)
-
-    print("Done.")
-
-class Args:
-    entities = ENT_FILE_DEFAULT
-    model = "hf_all-MiniLM-L6-v2"
-    reduction = "umap"
-    outdir = OUT_DIR
-    limit = 500
-    device = "cpu"
-    batch_size = 64
-    tfidf_dim = 512
-    no_pca_first = False
-    pca_first_dim = 50
-    seed = 42
-    annotate = True
-
-args = Args()
-main(args)
-
-#endregion#? Clustetting playgound
-#?#########################  End  ##########################
-
-
-#?######################### Start ##########################
-#region:#?   Clustering playgound 2 - Building a report
-
-"""
-entity_stats.py
-
-Compute diagnostics & summary statistics over provisional entities.
-
-Outputs:
- - prints a short human summary to stdout
- - writes `entity_stats_report.json` with detailed metrics
- - writes CSVs: name_frequencies.csv, entities_by_chunk.csv
- - optional embedding-based outputs (requires embeddings .npy and faiss/hdbscan installed)
-
-Usage:
-    python entity_stats.py
-
-Dependencies:
-    pip install pandas numpy tqdm faiss-cpu scikit-learn hdbscan
-
-If you don't have faiss/hdbscan, the script will still run lexical + confidence stats.
-"""
-
-import json
-import math
-from pathlib import Path
-from collections import Counter, defaultdict
-from typing import List, Dict, Tuple, Optional
-import numpy as np
-import pandas as pd
-from tqdm import tqdm
-
-# Optional imports
-try:
-    import faiss
-except Exception:
-    faiss = None
-
-try:
-    import hdbscan
-except Exception:
-    hdbscan = None
-
-# --------- Config (edit paths if necessary) ----------
-ENTITIES_PATH = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/KG/entities_raw.jsonl")
-EMBEDDINGS_NPY = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/clusterring/entities_emb.npy")   # optional: per-entity embeddings (order must match entities order)
-EMBED_META_NDX = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/clusterring/entities_emb_meta.jsonl")  # optional: mapping between embeddings rows and entity ids
-OUT_DIR = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/clusterring/entity_stats_output")
-OUT_DIR.mkdir(parents=True, exist_ok=True)
-REPORT_JSON = OUT_DIR / "/home/mabolhas/MyReposOnSOL/SGCE-KG/data/clusterring/entity_stats_report.json"
-
-# --------- Utility helpers ----------
-def load_entities(path: Path) -> List[Dict]:
-    if not path.exists():
-        raise FileNotFoundError(f"Entities file not found: {path}")
-    ents = []
-    with open(path, "r", encoding="utf-8") as fh:
-        for line in fh:
-            line = line.strip()
-            if not line:
-                continue
-            try:
-                e = json.loads(line)
-            except Exception:
-                # be forgiving: try to fix trailing commas or single quotes (if simple)
-                try:
-                    e = json.loads(line.replace("'", '"'))
-                except Exception:
-                    continue
-            ents.append(e)
-    return ents
-
-def normalize_name(s: str) -> str:
-    if not s or not isinstance(s, str):
-        return ""
-    s2 = s.strip().lower()
-    # remove common version tokens, punctuation, extra whitespace
-    s2 = s2.replace("_", " ")
-    s2 = s2.replace("-", " ")
-    s2 = s2.replace(".", " ")
-    # strip typical version markers like v1, v2, 1.0, 2.0
-    s2 = __import__("re").sub(r"\b(v|version)\s*\d+(\.\d+)?\b", "", s2)
-    s2 = __import__("re").sub(r"\s+", " ", s2).strip()
-    return s2
-
-# --------- Core stats functions ----------
-def lexical_stats(entities: List[Dict]) -> Dict:
-    total = len(entities)
-    names = [ (e.get("entity_name") or e.get("name") or "").strip() for e in entities ]
-    normalized = [ normalize_name(n) for n in names ]
-    non_empty_names = [n for n in names if n]
-    non_empty_norm = [n for n in normalized if n]
-    uniq_names = len(set(non_empty_names))
-    uniq_norm = len(set(non_empty_norm))
-
-    name_counts = Counter(non_empty_names)
-    norm_counts = Counter(non_empty_norm)
-
-    top_names = name_counts.most_common(30)
-    top_norm = norm_counts.most_common(30)
-
-    # how many singletons vs repeated
-    singleton_count = sum(1 for v in norm_counts.values() if v == 1)
-    repeated_count = sum(1 for v in norm_counts.values() if v > 1)
-
-    return {
-        "total_entities": total,
-        "non_empty_name_entities": len(non_empty_names),
-        "unique_surface_names": uniq_names,
-        "unique_normalized_names": uniq_norm,
-        "top_surface_names": top_names,
-        "top_normalized_names": top_norm,
-        "singleton_normalized_count": singleton_count,
-        "repeated_normalized_count": repeated_count,
-    }
-
-def type_and_confidence_stats(entities: List[Dict]) -> Dict:
-    type_counter = Counter()
-    confs = []
-    conf_present = 0
-    for e in entities:
-        t = e.get("entity_type_hint") or e.get("type") or "Unknown"
-        type_counter[t] += 1
-        c = e.get("confidence_score")
-        try:
-            if c is not None:
-                confs.append(float(c))
-                conf_present += 1
-        except Exception:
-            continue
-
-    conf_summary = None
-    if confs:
-        arr = np.array(confs)
-        conf_summary = {
-            "count": len(confs),
-            "mean": float(np.mean(arr)),
-            "median": float(np.median(arr)),
-            "min": float(np.min(arr)),
-            "max": float(np.max(arr)),
-            "p25": float(np.percentile(arr, 25)),
-            "p75": float(np.percentile(arr, 75)),
-        }
-
-    return {
-        "type_distribution": type_counter.most_common(50),
-        "confidence_summary": conf_summary,
-        "entities_with_confidence": conf_present
-    }
-
-def per_chunk_stats(entities: List[Dict]) -> Dict:
-    by_chunk = defaultdict(list)
-    for e in entities:
-        chunk = e.get("chunk_id") or e.get("source_chunk") or e.get("source_chunks",[None])[0]
-        by_chunk[chunk].append(e)
-    sizes = [ len(v) for v in by_chunk.values() ]
-    sizes_arr = np.array(sizes) if sizes else np.array([])
-    summary = {}
-    if sizes_arr.size:
-        summary = {
-            "n_chunks_with_entities": int(len(sizes)),
-            "mean_entities_per_chunk": float(sizes_arr.mean()),
-            "median_entities_per_chunk": float(np.median(sizes_arr)),
-            "max_entities_in_chunk": int(sizes_arr.max()),
-            "min_entities_in_chunk": int(sizes_arr.min()),
-            "p90": float(np.percentile(sizes_arr, 90))
-        }
-    else:
-        summary = {
-            "n_chunks_with_entities": 0
-        }
-    # also produce top chunks
-    top_chunks = sorted(by_chunk.items(), key=lambda kv: len(kv[1]), reverse=True)[:30]
-    top_chunks_summary = [ (chunk, len(lst)) for chunk,lst in top_chunks ]
-    summary["top_chunks"] = top_chunks_summary
-    return summary, by_chunk
-
-# --------- Embedding-based helpers (optional) ----------
-def load_embeddings(emb_path: Path, meta_path: Optional[Path]=None):
-    if not emb_path.exists():
-        return None, None
-    vecs = np.load(str(emb_path))
-    meta = None
-    if meta_path and meta_path.exists():
-        meta = [json.loads(l) for l in open(meta_path, "r", encoding="utf-8")]
-    return vecs, meta
-
-def build_faiss_index(vecs: np.ndarray):
-    if faiss is None:
-        raise RuntimeError("faiss not installed")
-    dim = vecs.shape[1]
-    # use inner-product on normalized vectors to get cosine
-    faiss.normalize_L2(vecs)
-    idx = faiss.IndexFlatIP(dim)
-    idx.add(vecs)
-    return idx
-
-def embedding_density_stats(vecs: np.ndarray, idx, topN: int = 64) -> Dict:
-    """
-    For each vector, query topN neighbors and compute:
-      - neighbor count above thresholds
-      - mean/top similarity distribution
-    Returns aggregate summaries.
-    """
-    if vecs is None or idx is None:
-        return {}
-    n = vecs.shape[0]
-    sims_topk = []
-    counts_above = defaultdict(int)
-    thresholds = [0.95, 0.90, 0.85, 0.80, 0.75]
-    for i in tqdm(range(n), desc="FAISS neighbor stats"):
-        q = vecs[i:i+1]
-        D, I = idx.search(q, topN+1)  # includes self
-        sims = D[0].tolist()
-        # drop self (should be 1.0)
-        sims_no_self = [s for s in sims if s < 0.9999]
-        if not sims_no_self:
-            sims_topk.append([0.0])
-            continue
-        sims_topk.append(sims_no_self[:topN])
-        for th in thresholds:
-            if any(s >= th for s in sims_no_self):
-                counts_above[th] += 1
-    # compute aggregated metrics
-    avg_top1 = float(np.mean([s[0] if s else 0.0 for s in sims_topk]))
-    p25 = float(np.percentile([s[0] if s else 0.0 for s in sims_topk], 25))
-    p75 = float(np.percentile([s[0] if s else 0.0 for s in sims_topk], 75))
-    return {
-        "n_vectors": int(n),
-        "avg_top1_similarity": avg_top1,
-        "top1_p25": p25,
-        "top1_p75": p75,
-        "counts_above_thresholds": { str(k): int(v) for k,v in counts_above.items() }
-    }
-
-def run_hdbscan_clustering(vecs: np.ndarray, min_cluster_size: int = 3):
-    if hdbscan is None:
-        return None
-    clusterer = hdbscan.HDBSCAN(min_cluster_size=min_cluster_size, metric="euclidean")
-    labels = clusterer.fit_predict(vecs)
-    # label -1 are noise/outliers
-    counts = Counter(labels)
-    return {
-        "labels": labels,
-        "cluster_counts": counts.most_common()
-    }
-
-# --------- Main driver ----------
-def build_report():
-    ents = load_entities(ENTITIES_PATH)
-    print(f"Loaded {len(ents)} entities from {ENTITIES_PATH}")
-
-    # Basic lexical / name stats
-    lex = lexical_stats(ents)
-    types = type_and_confidence_stats(ents)
-    chunk_summary, by_chunk = per_chunk_stats(ents)
-
-    # Save some CSVs for inspection
-    # name freq
-    name_rows = []
-    for n,c in Counter([ (e.get("entity_name") or "").strip() for e in ents if (e.get("entity_name") or "").strip() ]).most_common():
-        name_rows.append({"entity_name": n, "count": c, "normalized": normalize_name(n)})
-    df_names = pd.DataFrame(name_rows)
-    df_names.to_csv(OUT_DIR / "name_frequencies.csv", index=False)
-
-    # entities by chunk
-    chunk_rows = []
-    for chunk_id, lst in by_chunk.items():
-        for e in lst:
-            chunk_rows.append({
-                "chunk_id": chunk_id,
-                "entity_id": e.get("id"),
-                "entity_name": e.get("entity_name"),
-                "entity_type_hint": e.get("entity_type_hint"),
-                "confidence_score": e.get("confidence_score")
-            })
-    df_chunks = pd.DataFrame(chunk_rows)
-    df_chunks.to_csv(OUT_DIR / "entities_by_chunk.csv", index=False)
-
-    report = {
-        "lexical": lex,
-        "types": types,
-        "per_chunk": chunk_summary,
-        "n_entities": len(ents),
-    }
-
-    # Embedding-based analysis (if embeddings present)
-    vecs, meta = load_embeddings(EMBEDDINGS_NPY, EMBED_META_NDX if EMBED_META_NDX.exists() else None)
-    if vecs is not None:
-        try:
-            idx = build_faiss_index(vecs)
-            emb_stats = embedding_density_stats(vecs, idx, topN=64)
-            report["embedding_stats"] = emb_stats
-        except Exception as e:
-            report["embedding_stats_error"] = str(e)
-
-        # optional clustering
-        if hdbscan is not None:
-            try:
-                cluster_res = run_hdbscan_clustering(vecs, min_cluster_size=3)
-                report["hdbscan_summary"] = {
-                    "n_clusters_including_noise": len(set(cluster_res["labels"])),
-                    "cluster_counts_top": cluster_res["cluster_counts"][:30]
-                }
-            except Exception as e:
-                report["hdbscan_error"] = str(e)
-        else:
-            report["hdbscan_available"] = False
-    else:
-        report["embedding_stats"] = None
-        report["hdbscan_available"] = hdbscan is not None
-
-    # Write JSON report
-    with open(REPORT_JSON, "w", encoding="utf-8") as fh:
-        json.dump(report, fh, indent=2, ensure_ascii=False)
-
-    # Print a short human-friendly summary
-    print("\n=== ENTITY STATS SUMMARY ===")
-    print(f"Total provisional entities: {report['n_entities']}")
-    print(f"Unique surface names: {report['lexical']['unique_surface_names']}")
-    print(f"Unique normalized names: {report['lexical']['unique_normalized_names']}")
-    print(f"Singleton (normalized) names: {report['lexical']['singleton_normalized_count']}")
-    print(f"Repeated (normalized) names: {report['lexical']['repeated_normalized_count']}")
-    print(f"Top surface names saved to: {OUT_DIR / 'name_frequencies.csv'}")
-    print(f"Entities-by-chunk saved to: {OUT_DIR / 'entities_by_chunk.csv'}")
-    if report.get("types", None):
-        print(f"Top entity types (sample): {report['types']['type_distribution'][:10]}")
-    if report.get("embedding_stats"):
-        print("Embedding stats (avg top1 similarity):", report["embedding_stats"]["avg_top1_similarity"])
-    if report.get("hdbscan_summary"):
-        print("HDBSCAN clusters (top):", report["hdbscan_summary"]["cluster_counts_top"][:10])
-    print(f"Full JSON report saved to: {REPORT_JSON}")
-
-if __name__ == "__main__":
-    build_report()
-
-
-#endregion#? Clustering playgound 2 - Building a report
-#?#########################  End  ##########################
-
-
-#?######################### Start ##########################
-#region:#?   
-
-"""
-entity_stats_with_clusters.py
-
-Run entity diagnostics + embedding neighbor stats + HDBSCAN clustering
-using the paths you provided.
-
-Outputs (saved under OUT_DIR):
- - entity_stats_report.json
- - name_frequencies.csv
- - entities_by_chunk.csv
- - embedding_neighbor_stats.json
- - hdbscan_clusters.json
- - top_clusters_examples.csv
-"""
-
-import json
-from pathlib import Path
-from collections import Counter, defaultdict
-from typing import List, Dict, Optional, Tuple
-import numpy as np
-import pandas as pd
-from tqdm import tqdm
-
-# Optional libs
-try:
-    import faiss
-except Exception:
-    faiss = None
-try:
-    import hdbscan
-except Exception:
-    hdbscan = None
-
-# ---------------- CONFIG (from your message) ----------------
-ENTITIES_PATH = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/KG/entities_raw.jsonl")
-EMBEDDINGS_NPY = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/clusterring/entities_emb.npy")
-EMBED_META_NDX = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/clusterring/entities_emb_meta.jsonl")
-OUT_DIR = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/clusterring/entity_stats_output")
-OUT_DIR.mkdir(parents=True, exist_ok=True)
-REPORT_JSON = OUT_DIR / "entity_stats_report.json"
-
-# Tunable params
-TOPN_NEIGHBORS = 64
-MIN_CLUSTER_SIZE = 3        # HDBSCAN min_cluster_size
-EXEMPLAR_COUNT = 5          # per cluster exemplars to save
-LARGE_CLUSTER_THRESH = 50   # threshold to call cluster "large"
-SIM_THRESH_SUGGEST = 0.82   # suggested similarity threshold inferred from data
-
-# ---------------- Helpers ----------------
-def load_entities(p: Path) -> List[Dict]:
-    if not p.exists():
-        raise FileNotFoundError(f"Entities file not found: {p}")
-    out = []
-    with open(p, "r", encoding="utf-8") as fh:
-        for ln in fh:
-            ln = ln.strip()
-            if not ln:
-                continue
-            try:
-                out.append(json.loads(ln))
-            except Exception:
-                # last-resort tolerant parse
-                try:
-                    out.append(json.loads(ln.replace("'", '"')))
-                except Exception:
-                    continue
-    return out
-
-def normalize_name(s: str) -> str:
-    if not s:
-        return ""
-    s2 = s.strip().lower()
-    import re
-    s2 = s2.replace("_", " ").replace("-", " ").replace(".", " ")
-    s2 = re.sub(r"\b(v|version)\s*\d+(\.\d+)?\b", "", s2)
-    s2 = re.sub(r"\s+", " ", s2).strip()
-    return s2
-
-def load_embeddings(emb_path: Path, meta_path: Optional[Path]=None):
-    if not emb_path.exists():
-        return None, None
-    vecs = np.load(str(emb_path))
-    meta = None
-    if meta_path and meta_path.exists():
-        with open(meta_path, "r", encoding="utf-8") as fh:
-            meta = [json.loads(l) for l in fh]
-    return vecs, meta
-
-def build_faiss_index(vecs: np.ndarray):
-    if faiss is None:
-        raise RuntimeError("faiss is not installed or importable.")
-    # normalize for cosine (inner product after normalization)
-    vecs = vecs.astype("float32")
-    faiss.normalize_L2(vecs)
-    dim = vecs.shape[1]
-    idx = faiss.IndexFlatIP(dim)
-    idx.add(vecs)
-    return idx
-
-# ---------------- Stats functions ----------------
-def basic_lexical_stats(entities: List[Dict]):
-    total = len(entities)
-    names = [ (e.get("entity_name") or e.get("name") or "").strip() for e in entities ]
-    non_empty = [n for n in names if n]
-    uniq_surface = len(set(non_empty))
-    normals = [normalize_name(n) for n in non_empty]
-    uniq_norm = len(set(normals))
-    norm_counts = Counter(normals)
-    top_norm = norm_counts.most_common(50)
-    singleton_norm = sum(1 for v in norm_counts.values() if v == 1)
-    repeated_norm = sum(1 for v in norm_counts.values() if v > 1)
-
-    return {
-        "total_entities": total,
-        "non_empty_names": len(non_empty),
-        "unique_surface_names": uniq_surface,
-        "unique_normalized_names": uniq_norm,
-        "top_normalized_names": top_norm[:50],
-        "singleton_normalized_count": singleton_norm,
-        "repeated_normalized_count": repeated_norm
-    }
-
-def type_confidence_stats(entities: List[Dict]):
-    type_cnt = Counter()
-    confs = []
-    for e in entities:
-        t = e.get("entity_type_hint") or e.get("type") or "Unknown"
-        type_cnt[t] += 1
-        c = e.get("confidence_score")
-        try:
-            if c is not None:
-                confs.append(float(c))
-        except Exception:
-            pass
-    conf_summary = None
-    if confs:
-        arr = np.array(confs)
-        conf_summary = {
-            "count": int(len(arr)),
-            "mean": float(arr.mean()),
-            "median": float(np.median(arr)),
-            "min": float(arr.min()),
-            "max": float(arr.max()),
-            "p25": float(np.percentile(arr,25)),
-            "p75": float(np.percentile(arr,75))
-        }
-    return {"type_distribution": type_cnt.most_common(60), "confidence_summary": conf_summary}
-
-def per_chunk_distribution(entities: List[Dict]):
-    by_chunk = defaultdict(list)
-    for e in entities:
-        chunk = e.get("chunk_id") or e.get("source_chunk") or (e.get("source_chunks") and e.get("source_chunks")[0]) or None
-        by_chunk[chunk].append(e)
-    sizes = [len(v) for v in by_chunk.values()]
-    import numpy as np
-    if sizes:
-        return {
-            "n_chunks_with_entities": int(len(sizes)),
-            "mean_entities_per_chunk": float(np.mean(sizes)),
-            "median_entities_per_chunk": float(np.median(sizes)),
-            "max_entities_in_chunk": int(max(sizes)),
-            "min_entities_in_chunk": int(min(sizes)),
-            "p90": float(np.percentile(sizes,90)),
-            "top_chunks": sorted([(k,len(v)) for k,v in by_chunk.items()], key=lambda x: x[1], reverse=True)[:50]
-        }, by_chunk
-    else:
-        return {"n_chunks_with_entities": 0}, by_chunk
-
-# ---------------- Embedding neighbor diagnostics ----------------
-def embedding_neighbor_stats(vecs: np.ndarray, idx, topN: int = 64):
-    n = vecs.shape[0]
-    sims_top1 = []
-    counts_above = {0.95:0, 0.90:0, 0.85:0, 0.80:0, 0.75:0}
-    for i in tqdm(range(n), desc="neighbor stats"):
-        q = vecs[i:i+1]
-        D,I = idx.search(q, topN+1)  # includes self
-        sims = D[0].tolist()
-        # drop self (near 1.0)
-        sims_no_self = [s for s in sims if s < 0.9999]
-        if len(sims_no_self)==0:
-            sims_top1.append(0.0)
-            continue
-        top1 = sims_no_self[0]
-        sims_top1.append(top1)
-        for th in counts_above.keys():
-            if any(s >= th for s in sims_no_self):
-                counts_above[th] += 1
-    import numpy as np
-    arr = np.array(sims_top1)
-    return {
-        "n_vectors": int(n),
-        "avg_top1_similarity": float(arr.mean()),
-        "top1_p25": float(np.percentile(arr,25)),
-        "top1_p50": float(np.percentile(arr,50)),
-        "top1_p75": float(np.percentile(arr,75)),
-        "counts_above": {str(k):int(v) for k,v in counts_above.items()}
-    }
-
-# ---------------- HDBSCAN clustering ----------------
-def run_hdbscan(vecs: np.ndarray, min_cluster_size: int = MIN_CLUSTER_SIZE):
-    if hdbscan is None:
-        return None
-    # Use euclidean on normalized vectors; alternatively use precomputed distances
-    # If vectors are normalized for cosine (faiss.normalize_L2 was applied), euclidean works but metric could be 'cosine' too.
-    try:
-        clusterer = hdbscan.HDBSCAN(min_cluster_size=min_cluster_size, metric="euclidean", prediction_data=True)
-        labels = clusterer.fit_predict(vecs)
-        counts = Counter(labels)
-        return {"labels": labels.tolist(), "cluster_counts": counts.most_common(100)}
-    except Exception as e:
-        return {"error": str(e)}
-
-# ---------------- cluster exemplars ----------------
-def cluster_exemplars(labels: List[int], entities: List[Dict], vecs: np.ndarray, topk: int = EXEMPLAR_COUNT):
-    # produce for each cluster: size, topk exemplar names (closest to centroid)
-    from collections import defaultdict
-    clusters = defaultdict(list)
-    for i, lab in enumerate(labels):
-        clusters[lab].append(i)
-    out = []
-    for lab, idxs in sorted(clusters.items(), key=lambda kv: len(kv[1]), reverse=True):
-        if lab == -1:
-            # noise
-            continue
-        members = idxs
-        size = len(members)
-        # centroid (mean)
-        centroid = np.mean(vecs[members], axis=0)
-        # compute cosine sims (vecs assumed normalized)
-        sims = (vecs[members] @ centroid).tolist()
-        # get topk by sim
-        top_pairs = sorted(list(zip(members, sims)), key=lambda x: x[1], reverse=True)[:topk]
-        exemplars = []
-        for mid, sim in top_pairs:
-            ent = entities[mid]
-            exemplars.append({
-                "entity_index": int(mid),
-                "entity_id": ent.get("id"),
-                "entity_name": ent.get("entity_name"),
-                "normalized": normalize_name(ent.get("entity_name") or ""),
-                "sim_to_centroid": float(sim)
-            })
-        out.append({"cluster_id": int(lab), "size": int(size), "exemplars": exemplars})
-    return out
-
-# ---------------- Main ----------------
-def main():
-    print("Loading entities...")
-    entities = load_entities(ENTITIES_PATH)
-    print(f"Loaded {len(entities)} entities.")
-
-    print("Computing lexical & type stats...")
-    lex = basic_lexical_stats(entities)
-    types = type_confidence_stats(entities)
-    per_chunk, by_chunk = per_chunk_distribution(entities)
-
-    # save CSVs: name frequencies, entities by chunk
-    name_rows = []
-    for name, cnt in Counter([ (e.get("entity_name") or "").strip() for e in entities if (e.get("entity_name") or "").strip() ]).most_common():
-        name_rows.append({"entity_name": name, "count": cnt, "normalized": normalize_name(name)})
-    pd.DataFrame(name_rows).to_csv(OUT_DIR / "name_frequencies.csv", index=False)
-
-    chunk_rows = []
-    for chunk, lst in by_chunk.items():
-        for e in lst:
-            chunk_rows.append({
-                "chunk_id": chunk,
-                "entity_id": e.get("id"),
-                "entity_name": e.get("entity_name"),
-                "entity_type_hint": e.get("entity_type_hint"),
-                "confidence_score": e.get("confidence_score")
-            })
-    pd.DataFrame(chunk_rows).to_csv(OUT_DIR / "entities_by_chunk.csv", index=False)
-
-    report = {
-        "lexical": lex,
-        "types": types,
-        "per_chunk": per_chunk,
-        "n_entities": len(entities)
-    }
-
-    # Embedding analysis if present
-    print("Attempting to load embeddings...")
-    vecs, meta = load_embeddings(EMBEDDINGS_NPY, EMBED_META_NDX if EMBED_META_NDX.exists() else None)
-    if vecs is None:
-        print("Embeddings not found at:", EMBEDDINGS_NPY)
-        report["embeddings_present"] = False
-    else:
-        print("Embeddings loaded. shape=", vecs.shape)
-        report["embeddings_present"] = True
-        # normalize & build faiss index
-        if faiss is None:
-            print("faiss not available; skipping FAISS neighbor stats.")
-            report["faiss_available"] = False
-        else:
-            print("Building FAISS index...")
-            idx = build_faiss_index(vecs)
-            print("Computing neighbor similarity stats (this may take a while)...")
-            emb_stats = embedding_neighbor_stats(vecs, idx, topN=TOPN_NEIGHBORS)
-            report["embedding_neighbor_stats"] = emb_stats
-            # suggest similarity threshold heuristically:
-            avg_top1 = emb_stats.get("avg_top1_similarity", 0.0)
-            report["suggested_sim_threshold"] = float(max(0.70, min(0.90, avg_top1 - 0.03)))
-            print("avg_top1_similarity:", emb_stats.get("avg_top1_similarity"))
-
-        # clustering
-        if hdbscan is None:
-            print("hdbscan not available; skipping clustering.")
-            report["hdbscan_available"] = False
-        else:
-            print("Running HDBSCAN clustering (min_cluster_size=%d)..." % MIN_CLUSTER_SIZE)
-            clust_res = run_hdbscan(vecs, min_cluster_size=MIN_CLUSTER_SIZE)
-            report["hdbscan_result_summary"] = clust_res.get("cluster_counts") if clust_res else None
-            if isinstance(clust_res, dict) and "labels" in clust_res:
-                labels = clust_res["labels"]
-                # save labels mapping (index -> label)
-                with open(OUT_DIR / "hdbscan_labels.json", "w", encoding="utf-8") as fh:
-                    json.dump({"labels": labels}, fh, indent=2)
-                # produce cluster exemplars
-                exemplars = cluster_exemplars(labels, entities, vecs, topk=EXEMPLAR_COUNT)
-                # save cluster exemplars and top cluster sizes
-                with open(OUT_DIR / "hdbscan_clusters_examples.json", "w", encoding="utf-8") as fh:
-                    json.dump(exemplars, fh, indent=2, ensure_ascii=False)
-                # small CSV of top clusters
-                rows = []
-                for c in exemplars:
-                    rows.append({
-                        "cluster_id": c["cluster_id"],
-                        "size": c["size"],
-                        "exemplar_0": c["exemplars"][0]["entity_name"] if c["exemplars"] else None,
-                        "exemplar_1": c["exemplars"][1]["entity_name"] if len(c["exemplars"])>1 else None
-                    })
-                pd.DataFrame(rows).to_csv(OUT_DIR / "top_clusters_examples.csv", index=False)
-                # summary numbers
-                num_clusters = len(exemplars)
-                largest_clusters = sorted(exemplars, key=lambda x: x["size"], reverse=True)[:20]
-                report["hdbscan_clusters_top20"] = [{ "cluster_id":c["cluster_id"], "size":c["size"] } for c in largest_clusters]
-                report["hdbscan_n_clusters"] = int(num_clusters)
-                # detect large clusters
-                report["hdbscan_large_clusters"] = [ {"cluster_id":c["cluster_id"], "size":c["size"]} for c in exemplars if c["size"] >= LARGE_CLUSTER_THRESH ]
-            else:
-                report["hdbscan_error"] = clust_res
-
-    # write report JSON
-    with open(REPORT_JSON, "w", encoding="utf-8") as fh:
-        json.dump(report, fh, indent=2, ensure_ascii=False)
-
-    # PRINT short summary
-    print("\n=== SUMMARY ===")
-    print(f"Entities: {report['n_entities']}")
-    print("Unique normalized names (sample top 10):")
-    for name,count in report["lexical"]["top_normalized_names"][:10]:
-        print(f"  {name}  ({count})")
-    print("Top entity types (sample 10):")
-    for t,c in report["types"]["type_distribution"][:10]:
-        print(f"  {t}: {c}")
-    print("Chunks with entities:", report["per_chunk"]["n_chunks_with_entities"])
-    if report.get("embeddings_present"):
-        if report.get("embedding_neighbor_stats"):
-            print("Embedding avg top1 sim:", report["embedding_neighbor_stats"]["avg_top1_similarity"])
-            print("Counts above thresholds:", report["embedding_neighbor_stats"]["counts_above"])
-            print("Suggested sim threshold (heuristic):", report["suggested_sim_threshold"])
-        if report.get("hdbscan_n_clusters"):
-            print("HDBSCAN clusters (top):", report["hdbscan_clusters_top20"][:5])
-            print("Large clusters (>= %d): %s" % (LARGE_CLUSTER_THRESH, report.get("hdbscan_large_clusters", [])[:5]))
-
-    print("\nOutputs written to:", OUT_DIR)
-    print("Main report JSON:", REPORT_JSON)
-
-if __name__ == "__main__":
-    main()
-
-
-#endregion#? 
-#?#########################  End  ##########################
-
-
-#?######################### Start ##########################
-#region:#?   
-
-#!/usr/bin/env python3
-"""
-entity_embed_neighbor_stats.py
-
-1) Loads provisional entities NDJSON (entities_raw.jsonl)
-2) Produces embeddings for each entity (name + short description/context)
-3) Saves embeddings and metadata
-4) Builds FAISS (if available), queries neighbors, and computes counts above similarity thresholds
-5) Writes a JSON report + CSV summary for inspection
-
-Usage:
-    python entity_embed_neighbor_stats.py
-
-Outputs (OUT_DIR):
- - entities_emb.npy              (embeddings; row i -> entity i)
- - entities_emb_meta.jsonl       (meta rows matching entities)
- - neighbor_stats.json           (neighbor density diagnostics)
- - neighbor_summary.csv          (per-entity top1/topk counts)
-"""
-
-import json, os, sys, math
-from pathlib import Path
-from typing import List, Dict
-import numpy as np
-from tqdm import tqdm
-
-# transformers + torch
-import torch
-from transformers import AutoTokenizer, AutoModel
-
-# optional
-try:
-    import faiss
-except Exception:
-    faiss = None
-
-# -------- CONFIG --------
-ENTITIES_PATH = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/KG/entities_raw.jsonl")
-OUT_DIR = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/clusterring")
-OUT_DIR.mkdir(parents=True, exist_ok=True)
-
-EMB_MODEL_SMALL = "BAAI/bge-small-en-v1.5"
-EMB_MODEL_LARGE = "BAAI/bge-large-en-v1.5"
-
-USE_SMALL_MODEL = True        # switch to False to use large model (more accurate, more RAM)
-BATCH_SIZE = 64               # tune for GPU/CPU memory
-DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
-
-SAVE_EMBED_NPY = OUT_DIR / "entities_emb.npy"
-SAVE_META = OUT_DIR / "entities_emb_meta.jsonl"
-NEIGHBOR_JSON = OUT_DIR / "neighbor_stats.json"
-NEIGHBOR_CSV = OUT_DIR / "neighbor_summary.csv"
-
-# FAISS / neighbor params
-TOPN = 128
-SIM_THRESHOLDS = [0.95, 0.90, 0.85, 0.80, 0.75]  # thresholds to compute counts for
-MIN_REQUIRED_ENTITIES_FOR_FAISS = 2
-
-# -------- helpers --------
-def load_entities(path: Path) -> List[Dict]:
-    if not path.exists():
-        raise FileNotFoundError(f"Entities file not found: {path}")
-    ents = []
-    with open(path, "r", encoding="utf-8") as fh:
-        for ln in fh:
-            ln = ln.strip()
-            if not ln:
-                continue
-            try:
-                ents.append(json.loads(ln))
-            except Exception:
-                try:
-                    ents.append(json.loads(ln.replace("'", '"')))
-                except Exception:
-                    print("WARN: failed to parse entity line; skipping.")
-    return ents
-
-def build_input_text_for_entity(e: Dict) -> str:
-    # Compose a compact embedding input using canonical short fields
-    name = e.get("entity_name") or e.get("name") or ""
-    desc = e.get("entity_description") or e.get("entity_description_short") or e.get("context_phrase") or ""
-    # include type hint lightly
-    typ = e.get("entity_type_hint") or e.get("type") or ""
-    parts = []
-    if name:
-        parts.append(name)
-    if typ:
-        parts.append(f"[type:{typ}]")
-    if desc:
-        parts.append(desc)
-    txt = " \n ".join(parts).strip()
-    return txt if txt else name or desc or e.get("id","")
-
-@torch.no_grad()
-def embed_texts(model_name: str, texts: List[str], batch_size: int = 32, device: str = "cpu") -> np.ndarray:
-    tokenizer = AutoTokenizer.from_pretrained(model_name, use_fast=True)
-    model = AutoModel.from_pretrained(model_name).to(device)
-    model.eval()
-
-    all_embs = []
-    for i in tqdm(range(0, len(texts), batch_size), desc="Embedding batches"):
-        batch_texts = texts[i:i+batch_size]
-        enc = tokenizer(batch_texts, padding=True, truncation=True, return_tensors="pt").to(device)
-        out = model(**enc)
-        # pooling: mean over tokens with attention mask
-        if hasattr(out, "last_hidden_state"):
-            token_emb = out.last_hidden_state  # (B, T, D)
-        elif hasattr(out, "hidden_states"):
-            token_emb = out.hidden_states[-1]
-        else:
-            raise RuntimeError("Model output has no last_hidden_state")
-        mask = enc["attention_mask"].unsqueeze(-1)  # (B, T, 1)
-        token_emb = token_emb * mask
-        sum_emb = token_emb.sum(dim=1)
-        denom = mask.sum(dim=1).clamp(min=1)
-        mean_emb = sum_emb / denom
-        mean_emb = torch.nn.functional.normalize(mean_emb, p=2, dim=1)  # normalize
-        all_embs.append(mean_emb.cpu().numpy())
-    embs = np.vstack(all_embs).astype("float32")
-    return embs
-
-def build_faiss_index(vecs: np.ndarray):
-    if faiss is None:
-        raise RuntimeError("faiss not installed")
-    faiss.normalize_L2(vecs)  # ensure unit-norm
-    dim = vecs.shape[1]
-    idx = faiss.IndexFlatIP(dim)
-    idx.add(vecs)
-    return idx
-
-# -------- main --------
-def main():
-    print("Loading entities...")
-    entities = load_entities(ENTITIES_PATH)
-    n = len(entities)
-    print(f"Loaded {n} entities.")
-
-    # prepare input texts in same order
-    texts = [build_input_text_for_entity(e) for e in entities]
-    # choose model
-    model_name = EMB_MODEL_SMALL if USE_SMALL_MODEL else EMB_MODEL_LARGE
-    print(f"Using embedding model: {model_name} -> device {DEVICE}. Batching {BATCH_SIZE}.")
-
-    # embed
-    embs = embed_texts(model_name, texts, batch_size=BATCH_SIZE, device=DEVICE)
-    print("Embeddings shape:", embs.shape)
-
-    # save embeddings and meta (meta preserves id, name, type)
-    np.save(str(SAVE_EMBED_NPY), embs)
-    print("Saved embeddings to:", SAVE_EMBED_NPY)
-    with open(SAVE_META, "w", encoding="utf-8") as fh:
-        for e in entities:
-            meta = {
-                "id": e.get("id"),
-                "entity_name": e.get("entity_name"),
-                "entity_type_hint": e.get("entity_type_hint"),
-                "chunk_id": e.get("chunk_id", None)
-            }
-            fh.write(json.dumps(meta, ensure_ascii=False) + "\n")
-    print("Saved embedding meta to:", SAVE_META)
-
-    # neighbor diagnostics with FAISS (if available and >1 entity)
-    neighbor_report = {
-        "n_entities": n,
-        "topn": TOPN,
-        "sim_thresholds": SIM_THRESHOLDS,
-        "per_entity": []  # will contain dict rows
-    }
-
-    if faiss is None or n < MIN_REQUIRED_ENTITIES_FOR_FAISS:
-        print("FAISS not available or not enough entities; skipping neighbor stats.")
-        neighbor_report["faiss_available"] = False
-    else:
-        print("Building FAISS index and querying neighbors...")
-        idx = build_faiss_index(embs)  # uses normalized vecs internally
-        neighbor_report["faiss_available"] = True
-
-        # query in batches
-        batch = min(256, n)
-        rows = []
-        counts_above_global = {str(th): 0 for th in SIM_THRESHOLDS}
-        top1_list = []
-        for i in tqdm(range(0, n, batch), desc="FAISS query batches"):
-            q = embs[i:i+batch]
-            D, I = idx.search(q, TOPN+1)  # includes self
-            for row_idx_in_batch, (drow, irow) in enumerate(zip(D, I)):
-                global_idx = i + row_idx_in_batch
-                # drop self (should be near 1.0)
-                sims = [float(s) for s in drow if s < 0.9999]
-                ids = [int(j) for j in irow[:len(sims)] if j != global_idx]
-                top1 = sims[0] if sims else 0.0
-                top1_list.append(top1)
-                # counts above thresholds
-                counts = { str(th): int(sum(1 for s in sims if s >= th)) for th in SIM_THRESHOLDS }
-                for th in SIM_THRESHOLDS:
-                    if counts[str(th)] > 0:
-                        counts_above_global[str(th)] += 1
-                rows.append({
-                    "entity_index": int(global_idx),
-                    "entity_id": entities[global_idx].get("id"),
-                    "entity_name": entities[global_idx].get("entity_name"),
-                    "top1_sim": float(top1),
-                    "neighbors_count_topN": int(len(sims)),
-                    **{ f"n_ge_{int(th*100)}": counts[str(th)] for th in SIM_THRESHOLDS }
-                })
-        # aggregate stats
-        top1_arr = np.array(top1_list, dtype="float32") if top1_list else np.array([0.0], dtype="float32")
-        neighbor_report["aggregate"] = {
-            "avg_top1": float(top1_arr.mean()),
-            "median_top1": float(np.median(top1_arr)),
-            "p25_top1": float(np.percentile(top1_arr, 25)),
-            "p75_top1": float(np.percentile(top1_arr, 75)),
-            "counts_entities_with_any_neighbor_above_threshold": counts_above_global
-        }
-        neighbor_report["per_entity_sample_count"] = len(rows)
-        neighbor_report["per_entity_rows_saved"] = str(NEIGHBOR_CSV)
-        # save CSV
-        import pandas as pd
-        df = pd.DataFrame(rows)
-        df.to_csv(NEIGHBOR_CSV, index=False)
-        neighbor_report["per_entity_csv"] = str(NEIGHBOR_CSV)
-        neighbor_report["per_entity_rows"] = len(rows)
-
-    # save report
-    with open(NEIGHBOR_JSON, "w", encoding="utf-8") as fh:
-        json.dump(neighbor_report, fh, indent=2, ensure_ascii=False)
-
-    print("Neighbor report saved to:", NEIGHBOR_JSON)
-    if neighbor_report.get("faiss_available"):
-        print("Per-entity neighbor CSV:", NEIGHBOR_CSV)
-        print("Aggregate top1 avg:", neighbor_report["aggregate"]["avg_top1"])
-        print("Counts (entities with >=1 neighbor above thresholds):", neighbor_report["aggregate"]["counts_entities_with_any_neighbor_above_threshold"])
-    else:
-        print("FAISS not available; only embeddings were computed and saved.")
-
-if __name__ == "__main__":
-    main()
-
-
-#endregion#? 
-#?#########################  End  ##########################
-
-
-#?######################### Start ##########################
-#region:#?   
-
-"""
-entity_resolution_cluster_first.py
-
-Cluster-first entity resolution pipeline using embeddings + FAISS and LLM micro-batching.
-
-Outputs:
- - entities_resolved.jsonl (final canonical entities)
- - entities_resolution_history.jsonl (per-entity history)
- - actions_log.jsonl (all LLM-decisions & applied actions)
-"""
-
-import json
-import math
-import time
-from pathlib import Path
-from typing import List, Dict, Any, Tuple
-import numpy as np
-from collections import defaultdict, Counter
-import uuid
-import faiss
-import networkx as nx
-from sklearn.cluster import KMeans
-
-# ---------- CONFIG ----------
-ENTITIES_PATH = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/KG/entities_raw.jsonl")
-EMB_NPY = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/clusterring/entities_emb.npy")
-OUT_DIR = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/clusterring")
-OUT_DIR.mkdir(parents=True, exist_ok=True)
-FINAL_ENTITIES_OUT = OUT_DIR / "entities_resolved.jsonl"
-HISTORY_OUT = OUT_DIR / "entities_resolution_history.jsonl"
-ACTIONS_LOG = OUT_DIR / "actions_log.jsonl"
-
-# Tunable thresholds (based on your neighbor stats)
-T_BASE = 0.85       # base similarity to link nodes into candidate clusters (recall-friendly)
-T_AUTO = 0.92       # high-confidence auto-merge (very tight)
-MAX_LLM_BATCH = 12  # maximum cluster size passed to LLM at once
-MAX_SUBCLUSTER_SIZE = 40  # if cluster >> this, split by name/embedding
-MIN_MERGE_DELTA = 5  # minimum merges to continue another pass
-MAX_PASSES = 2
-
-LLM_MODEL = "gpt-4o"
-LLM_MAX_TOKENS = 1200
-LLM_TEMPERATURE = 0.0
-
-# ---------- UTILITIES ----------
-def load_entities(path: Path) -> List[Dict]:
-    ents = []
-    with open(path, "r", encoding="utf-8") as fh:
-        for line in fh:
-            line = line.strip()
-            if not line:
-                continue
-            try:
-                ents.append(json.loads(line))
-            except Exception:
-                ents.append(json.loads(line.replace("'", '"')))
-    return ents
-
-def normalize_name(s: str) -> str:
-    import re
-    if s is None:
-        return ""
-    s2 = s.strip().lower()
-    s2 = s2.replace("_", " ").replace("-", " ").replace(".", " ")
-    s2 = re.sub(r"\b(v|version)\s*\d+(\.\d+)?\b", "", s2)
-    s2 = re.sub(r"\s+", " ", s2).strip()
-    return s2
-
-def build_faiss_index(vecs: np.ndarray):
-    vecs = vecs.astype("float32")
-    faiss.normalize_L2(vecs)
-    dim = vecs.shape[1]
-    idx = faiss.IndexFlatIP(dim)
-    idx.add(vecs)
-    return idx
-
-# Minimal LLM wrapper — replace with your call_openai implementation if present
-def call_llm(prompt: str, model: str = LLM_MODEL, max_tokens: int = LLM_MAX_TOKENS, temperature: float = LLM_TEMPERATURE) -> str:
-    """
-    Replace with your OpenAI client implementation. Must return the raw text (string).
-    Expected that the model responds with ONLY a JSON array following the action schema.
-    """
-    # Example: if you already have client.chat.completions.create wrapper, call it here.
-    # For safety in this script, raise error so user connects their own.
-    raise RuntimeError("call_llm() not implemented. Please wire this to your OpenAI client (see earlier code).")
-
-# ---------- ACTION EXECUTION ----------
-def apply_actions(actions: List[Dict], active_entities: Dict[str, Dict], resolved_entities: Dict[str, Dict], history_out_fh):
-    """
-    Apply LLM-suggested actions to active_entities, produce resolved_entities, and record history.
-    Actions expected to be JSON objects of shape:
-      - {"action":"merge_entities", "merged_ids": [...], "canonical_name":"...", "new_description":"..."}
-      - {"action":"rename_entity", "entity_id":"En_012", "new_name":"...", "new_description":"..."}
-      - {"action":"keep_entity", "entity_id":"En_012"}
-    """
-    ts = time.time()
-    for act in actions:
-        a = act.get("action")
-        if a == "keep_entity":
-            eid = act["entity_id"]
-            if eid not in active_entities:
-                continue
-            e = active_entities.pop(eid)
-            new_id = f"ResEnt_{uuid.uuid4().hex[:8]}"
-            resolved = {
-                "id_final": new_id,
-                "label": e.get("entity_name"),
-                "aliases": [],
-                "description": e.get("entity_description") or e.get("context_phrase") or "",
-                "source_chunks": [e.get("chunk_id")] if e.get("chunk_id") else [],
-                "flag": "resolved_entity",
-                "members": [e.get("id")]
-            }
-            resolved_entities[new_id] = resolved
-            # history
-            hist = {"ts": ts, "action": "keep_entity", "input_id": eid, "result_id": new_id}
-            history_out_fh.write(json.dumps(hist, ensure_ascii=False) + "\n")
-
-        elif a == "rename_entity":
-            eid = act["entity_id"]
-            if eid not in active_entities:
-                continue
-            e = active_entities.pop(eid)
-            new_label = act.get("new_name", e.get("entity_name"))
-            new_desc = act.get("new_description", e.get("entity_description") or e.get("context_phrase",""))
-            new_id = f"ResEnt_{uuid.uuid4().hex[:8]}"
-            resolved = {
-                "id_final": new_id,
-                "label": new_label,
-                "aliases": [e.get("entity_name")] if e.get("entity_name") != new_label else [],
-                "description": new_desc,
-                "source_chunks": [e.get("chunk_id")] if e.get("chunk_id") else [],
-                "flag": "resolved_entity",
-                "members": [e.get("id")]
-            }
-            resolved_entities[new_id] = resolved
-            hist = {"ts": ts, "action": "rename_entity", "input_id": eid, "result_id": new_id, "new_name": new_label}
-            history_out_fh.write(json.dumps(hist, ensure_ascii=False) + "\n")
-
-        elif a == "merge_entities":
-            merge_ids = act.get("merged_ids", [])
-            canonical_name = act.get("canonical_name") or act.get("canonical_id") or "merged_entity"
-            new_desc = act.get("new_description", "")
-            members = [ active_entities.pop(mid) for mid in merge_ids if mid in active_entities ]
-            if not members:
-                continue
-            # combine aliases
-            aliases = [m.get("entity_name") for m in members if m.get("entity_name") and m.get("entity_name") != canonical_name]
-            source_chunks = sorted(list({ m.get("chunk_id") for m in members if m.get("chunk_id") }))
-            new_id = f"ResEnt_{uuid.uuid4().hex[:8]}"
-            resolved = {
-                "id_final": new_id,
-                "label": canonical_name,
-                "aliases": aliases,
-                "description": new_desc,
-                "source_chunks": source_chunks,
-                "flag": "resolved_entity",
-                "members": [m.get("id") for m in members]
-            }
-            resolved_entities[new_id] = resolved
-            hist = {"ts": ts, "action": "merge_entities", "merged_ids": merge_ids, "result_id": new_id, "canonical_name": canonical_name}
-            history_out_fh.write(json.dumps(hist, ensure_ascii=False) + "\n")
-
-        else:
-            # unknown action: ignore but log
-            hist = {"ts": ts, "action": "unknown_action", "payload": act}
-            history_out_fh.write(json.dumps(hist, ensure_ascii=False) + "\n")
-
-# ---------- PROMPT / LLM formatting ----------
-def build_cluster_prompt(cluster_entities: List[Dict], similar_chunks: List[Dict] = None) -> str:
-    """
-    Build a prompt for the LLM asking to resolve the small group of entities.
-    The LLM must return only a JSON array of actions (merge/rename/keep).
-    Keep prompt compact but informative: include entity name, short desc, type hint, sample context.
-    """
-    header = [
-        "You are an Entity Resolution Agent.",
-        "Task: Given the following candidate entity mentions (surface forms + short descriptions),",
-        "decide which mentions refer to the same real-world entity (merge), which should be renamed to avoid confusion,",
-        "and which should be kept separate.",
-        "Return ONLY a JSON array of actions (no extra text).",
-        "Allowed actions:",
-        " - merge_entities: {action:'merge_entities', merged_ids:[...], canonical_name:'...', new_description:'...'}",
-        " - rename_entity:  {action:'rename_entity', entity_id:'En_xxx', new_name:'..', new_description:'...'}",
-        " - keep_entity:    {action:'keep_entity', entity_id:'En_xxx'}",
-        "",
-        "Rules:",
-        "- Do NOT create classes; operate on mentions/instances only.",
-        "- Prefer precision: if ambiguous, keep separate rather than incorrectly merging.",
-        "- If multiple mentions are the same entity, merge them providing a canonical_name and a one-sentence new_description.",
-        "- Use the provided short descriptions to disambiguate; include only mentions present in the input list.",
-        ""
-    ]
-    lines = header[:]
-    lines.append("INPUT ENTITIES:")
-    for e in cluster_entities:
-        lines.append(json.dumps({
-            "id": e.get("id"),
-            "entity_name": e.get("entity_name"),
-            "type_hint": e.get("entity_type_hint"),
-            "short_desc": (e.get("entity_description") or e.get("context_phrase") or "")[:240],
-            "chunk_id": e.get("chunk_id")
-        }, ensure_ascii=False))
-    if similar_chunks:
-        lines.append("")
-        lines.append("SIMILAR CHUNKS (for provenance context):")
-        for c in similar_chunks[:5]:
-            lines.append((c.get("text") or "")[:300])
-
-    lines.append("")
-    lines.append("Return only JSON array of actions.")
-    return "\n".join(lines)
-
-# ---------- CLUSTERING helpers ----------
-def build_similarity_graph(vecs: np.ndarray, threshold: float = T_BASE, topk_search: int = 64) -> nx.Graph:
-    """
-    Build an undirected graph where nodes are indices 0..n-1 and there is an edge (i,j)
-    if cosine similarity(i,j) >= threshold. Use FAISS to get topk neighbors and filter by threshold.
-    """
-    n = vecs.shape[0]
-    idx = build_faiss_index(vecs)
-    G = nx.Graph()
-    G.add_nodes_from(range(n))
-    batch = min(256, n)
-    for i in range(0, n, batch):
-        q = vecs[i:i+batch]
-        D, I = idx.search(q, topk_search+1)  # includes self
-        for row_idx, (drow, irow) in enumerate(zip(D, I)):
-            src = i + row_idx
-            for sim, dst in zip(drow, irow):
-                if dst == src:
-                    continue
-                if float(sim) >= threshold:
-                    G.add_edge(int(src), int(dst), weight=float(sim))
-    return G
-
-def split_large_cluster(indices: List[int], vecs: np.ndarray, max_size: int = MAX_LLM_BATCH) -> List[List[int]]:
-    """
-    Split a very large cluster into subclusters using KMeans where k = ceil(size / max_size).
-    Returns list of index groups (indices into vecs and entities).
-    """
-    size = len(indices)
-    if size <= max_size:
-        return [indices]
-    k = math.ceil(size / max_size)
-    subvecs = vecs[indices]
-    # KMeans in original embedding space (vecs assumed normalized; euclidean okay)
-    kms = KMeans(n_clusters=k, random_state=0)
-    labels = kms.fit_predict(subvecs)
-    groups = defaultdict(list)
-    for idx_pos, lab in enumerate(labels):
-        groups[int(lab)].append(indices[idx_pos])
-    return list(groups.values())
-
-# ---------- MAIN RESOLUTION PIPELINE ----------
-def cluster_first_resolution(entities: List[Dict], vecs: np.ndarray):
-    n = len(entities)
-    # Map index -> entity id
-    idx2id = [e.get("id") for e in entities]
-
-    # Keep active_entities as dict id->entity (shallow copy)
-    active_entities = { e.get("id"): dict(e) for e in entities }
-    resolved_entities = {}  # new canonical id -> resolved dict
-
-    # history file
-    hist_fh = open(HISTORY_OUT, "w", encoding="utf-8")
-    actions_fh = open(ACTIONS_LOG, "w", encoding="utf-8")
-
-    total_merges = 0
-    pass_no = 0
-
-    while pass_no < MAX_PASSES:
-        pass_no += 1
-        print(f"\n=== PASS {pass_no} (active_entities={len(active_entities)}) ===")
-        # Build index of currently active entity indices and vectors
-        id_to_idx = {}
-        idx_list = []
-        vec_list = []
-        for idx, e in enumerate(entities):
-            eid = e.get("id")
-            if eid in active_entities:
-                id_to_idx[eid] = len(idx_list)
-                idx_list.append(eid)
-                vec_list.append(vecs[idx])
-        if not vec_list:
-            break
-        cur_vecs = np.vstack(vec_list).astype("float32")
-        # Build similarity graph
-        print("Building similarity graph (threshold:", T_BASE, ") ...")
-        G = build_similarity_graph(cur_vecs, threshold=T_BASE, topk_search=128)
-        components = list(nx.connected_components(G))
-        print(f"Found {len(components)} candidate clusters")
-
-        merges_this_pass = 0
-
-        # process components
-        for comp in components:
-            comp = sorted(list(comp))
-            if len(comp) == 1:
-                # skip singletons (keep them as-is)
-                continue
-
-            # map comp indices back to original entity ids & their full records
-            comp_entity_ids = [ idx_list[i] for i in comp ]
-            comp_entities = [ active_entities[eid] for eid in comp_entity_ids ]
-
-            # quick auto-merge: if cluster size small and internal sim stats very high -> auto-merge
-            # compute pairwise similarities from graph edges (weights)
-            sims = []
-            for i in comp:
-                for j in comp:
-                    if i < j and G.has_edge(i,j):
-                        sims.append(G[i][j]['weight'])
-            median_sim = float(np.median(sims)) if sims else 0.0
-
-            if median_sim >= T_AUTO and len(comp_entities) <= 8:
-                # auto-merge into canonical name = most common normalized name or longest label
-                names = [normalize_name(e.get("entity_name") or "") for e in comp_entities]
-                common = Counter(names).most_common(1)
-                canonical = common[0][0] if common else normalize_name(comp_entities[0].get("entity_name") or "")
-                canonical_label = canonical
-                new_desc = "Auto-merged cluster (high similarity)."
-                action = {
-                    "action": "merge_entities",
-                    "merged_ids": [e.get("id") for e in comp_entities],
-                    "canonical_name": canonical_label,
-                    "new_description": new_desc
-                }
-                # apply action
-                try:
-                    apply_actions([action], active_entities, resolved_entities, hist_fh)
-                    actions_fh.write(json.dumps({"pass":pass_no, "auto_action": action}, ensure_ascii=False) + "\n")
-                    merges_this_pass += 1
-                except Exception as ex:
-                    print("Auto-merge failed:", ex)
-                continue
-
-            # Otherwise resolve with LLM. If cluster is large, split
-            if len(comp_entities) > MAX_LLM_BATCH:
-                # split into subclusters by KMeans on the comp indices
-                sub_groups = split_large_cluster(comp, cur_vecs, max_size=MAX_LLM_BATCH)
-            else:
-                sub_groups = [comp]
-
-            for sg in sub_groups:
-                sg_entity_ids = [ idx_list[i] for i in sg ]
-                sg_entities = [ active_entities[eid] for eid in sg_entity_ids ]
-                # build prompt
-                prompt = build_cluster_prompt(sg_entities)
-                # call LLM
-                try:
-                    raw = call_llm(prompt, model=LLM_MODEL, max_tokens=LLM_MAX_TOKENS, temperature=LLM_TEMPERATURE)
-                except Exception as e:
-                    print("LLM call failed (user must wire the call):", e)
-                    # fallback: skip this subgroup
-                    continue
-
-                # parse JSON
-                try:
-                    parsed = json.loads(raw)
-                    if not isinstance(parsed, list):
-                        raise ValueError("LLM did not return a JSON list")
-                except Exception as e:
-                    # log raw output and skip
-                    actions_fh.write(json.dumps({"pass":pass_no, "prompt": prompt[:800], "raw_output": raw[:2000], "error": str(e)}, ensure_ascii=False) + "\n")
-                    continue
-
-                # apply actions
-                apply_actions(parsed, active_entities, resolved_entities, hist_fh)
-                actions_fh.write(json.dumps({"pass":pass_no, "llm_actions": parsed}, ensure_ascii=False) + "\n")
-                # count merges
-                merges_here = sum(1 for a in parsed if a.get("action") == "merge_entities")
-                merges_this_pass += merges_here
-
-        print(f"Pass {pass_no} merges_this_pass = {merges_this_pass}")
-        total_merges += merges_this_pass
-
-        # stop condition
-        if merges_this_pass < MIN_MERGE_DELTA:
-            print("Merges below MIN_MERGE_DELTA; stopping further passes.")
-            break
-        if pass_no >= MAX_PASSES:
-            break
-
-    # cleanup: any remaining active_entities -> keep them as resolved singletons
-    with open(HISTORY_OUT, "a", encoding="utf-8") as hist_fh_final:
-        for eid, e in list(active_entities.items()):
-            new_id = f"ResEnt_{uuid.uuid4().hex[:8]}"
-            resolved_entities[new_id] = {
-                "id_final": new_id,
-                "label": e.get("entity_name"),
-                "aliases": [],
-                "description": e.get("entity_description") or e.get("context_phrase") or "",
-                "source_chunks": [e.get("chunk_id")] if e.get("chunk_id") else [],
-                "flag": "resolved_entity",
-                "members": [e.get("id")]
-            }
-            hist = {"ts": time.time(), "action": "auto_keep_singleton", "input_id": eid, "result_id": new_id}
-            hist_fh_final.write(json.dumps(hist, ensure_ascii=False) + "\n")
-
-    # write final resolved entities file
-    with open(FINAL_ENTITIES_OUT, "w", encoding="utf-8") as fh:
-        for rid, r in resolved_entities.items():
-            fh.write(json.dumps(r, ensure_ascii=False) + "\n")
-
-    hist_fh.close()
-    actions_fh.close()
-    print("Resolution finished. total_resolved:", len(resolved_entities))
-    print("Final entities saved to:", FINAL_ENTITIES_OUT)
-    print("History saved to:", HISTORY_OUT)
-    print("Actions log saved to:", ACTIONS_LOG)
-
-# ---------- RUN ----------
-if __name__ == "__main__":
-    # Load
-    print("Loading entities and embeddings...")
-    entities = load_entities(ENTITIES_PATH)
-    vecs = np.load(str(EMB_NPY)).astype("float32")  # rows must align with entities list
-    if vecs.shape[0] != len(entities):
-        raise RuntimeError("Embedding rows do not match entities count! rows=%d entities=%d" % (vecs.shape[0], len(entities)))
-    # run pipeline
-    cluster_first_resolution(entities, vecs)
-
-
-#endregion#? 
-#?#########################  End  ##########################
-
-
-#?######################### Start ##########################
-#region:#?   
-
-#!/usr/bin/env python3
-"""
-inspect_merge_actions.py
-
-Inspect actions_log.jsonl for merge_entities actions, summarize, and optionally
-compute embedding-based sanity checks for each merge.
-
-Outputs:
- - merge_summary.csv   (one row per merge action)
- - merge_summary.json  (detailed JSON)
-"""
-
-import json
-from pathlib import Path
-from collections import Counter
-import itertools
-import csv
-import numpy as np
-
-# ---------- CONFIG -> adjust if your files are elsewhere ----------
-ACTIONS_LOG = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/clusterring/actions_log.jsonl")
-ENTITIES_FILE = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/KG/entities_raw.jsonl")
-EMB_NPY = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/clusterring/entities_emb.npy")  # may be absent
-OUT_DIR = ACTIONS_LOG.parent
-MERGE_SUM_CSV = OUT_DIR / "merge_summary.csv"
-MERGE_SUM_JSON = OUT_DIR / "merge_summary.json"
-
-# ---------- Helpers ----------
-def load_actions(path):
-    acts = []
-    with open(path, "r", encoding="utf-8") as fh:
-        for ln in fh:
-            ln = ln.strip()
-            if not ln:
-                continue
-            try:
-                acts.append(json.loads(ln))
-            except Exception:
-                # tolerant parse
-                try:
-                    acts.append(json.loads(ln.replace("'", '"')))
-                except Exception:
-                    print("Warning: failed to parse line in actions log.")
-    return acts
-
-def extract_merge_actions(actions):
-    merges = []
-    for a in actions:
-        # The log may contain different envelope keys; handle both direct and nested
-        if a.get("auto_action") and isinstance(a["auto_action"], dict):
-            a2 = a["auto_action"]
-        elif a.get("llm_actions") and isinstance(a["llm_actions"], list):
-            # sometimes we logged a group; need to iterate
-            for sub in a["llm_actions"]:
-                if sub.get("action") == "merge_entities":
-                    merges.append(sub)
-            continue
-        else:
-            a2 = a
-
-        if a2.get("action") == "merge_entities":
-            merges.append(a2)
-    return merges
-
-def load_entities_list(path):
-    ents = []
-    with open(path, "r", encoding="utf-8") as fh:
-        for ln in fh:
-            ln = ln.strip()
-            if not ln:
-                continue
-            try:
-                ents.append(json.loads(ln))
-            except Exception:
-                ents.append(json.loads(ln.replace("'", '"')))
-    return ents
-
-def build_entity_index_map(entities):
-    # Maps entity_id -> row_index (0-based)
-    m = {}
-    for i, e in enumerate(entities):
-        eid = e.get("id")
-        if eid in m:
-            # if duplicate ids (shouldn't happen) keep first
-            continue
-        m[eid] = i
-    return m
-
-def mean_pairwise_cosine(vecs):
-    # expects normalized vectors (or will normalize inside)
-    if vecs.shape[0] <= 1:
-        return 1.0
-    # normalize
-    v = vecs / np.linalg.norm(vecs, axis=1, keepdims=True)
-    sim_mat = v @ v.T
-    # take upper triangular off-diagonal
-    n = vecs.shape[0]
-    idxs = np.triu_indices(n, k=1)
-    vals = sim_mat[idxs]
-    return float(vals.mean()) if vals.size > 0 else 1.0
-
-# ---------- MAIN ----------
-def main():
-    if not ACTIONS_LOG.exists():
-        print("Actions log not found:", ACTIONS_LOG)
-        return
-
-    actions = load_actions(ACTIONS_LOG)
-    merges = extract_merge_actions(actions)
-    print(f"Total actions lines loaded: {len(actions)}. Merge actions extracted: {len(merges)}")
-
-    # Basic merge stats
-    sizes = [ len(m.get("merged_ids", [])) for m in merges ]
-    size_counter = Counter(sizes)
-    print("Merge size distribution (size:count):")
-    for s,c in sorted(size_counter.items()):
-        print(f"  {s}: {c}")
-
-    # Load entities and embeddings if possible
-    entities = []
-    id_to_idx = {}
-    emb_matrix = None
-    if ENTITIES_FILE.exists():
-        entities = load_entities_list(ENTITIES_FILE)
-        id_to_idx = build_entity_index_map(entities)
-        print(f"Loaded {len(entities)} entities from {ENTITIES_FILE}")
-    else:
-        print("Entities file not found at:", ENTITIES_FILE)
-
-    if EMB_NPY.exists():
-        emb_matrix = np.load(str(EMB_NPY)).astype("float32")
-        print("Embeddings loaded shape:", emb_matrix.shape)
-        if emb_matrix.shape[0] != len(entities):
-            print("WARNING: embeddings row count != entities count. Embedding-based checks may be invalid.")
-    else:
-        print("Embeddings not found at:", EMB_NPY, "-- skipping similarity checks.")
-
-    # Prepare per-merge rows
-    rows = []
-    suspicious = []
-    for i, m in enumerate(merges):
-        merged_ids = m.get("merged_ids") or m.get("merged", []) or []
-        canonical = m.get("canonical_name") or m.get("canonical", "") or m.get("canonical_id", "")
-        result_id = m.get("result_id") or m.get("id") or ""
-        size = len(merged_ids)
-        # get member names if entities loaded
-        member_names = []
-        mean_sim = None
-        missing_indexes = []
-        for mid in merged_ids:
-            if id_to_idx and mid in id_to_idx:
-                idx = id_to_idx[mid]
-                member_names.append(entities[idx].get("entity_name"))
-            else:
-                member_names.append(None)
-                missing_indexes.append(mid)
-        # similarity check
-        if emb_matrix is not None and id_to_idx:
-            valid_idxs = [id_to_idx[mid] for mid in merged_ids if mid in id_to_idx]
-            if len(valid_idxs) >= 1:
-                vecs = emb_matrix[valid_idxs]
-                mean_sim = mean_pairwise_cosine(vecs) if len(valid_idxs) > 1 else 1.0
-            else:
-                mean_sim = None
-
-        row = {
-            "merge_action_index": i,
-            "result_id": result_id,
-            "canonical_name": canonical,
-            "merged_ids": merged_ids,
-            "merged_names": member_names,
-            "size": size,
-            "mean_pairwise_sim": mean_sim,
-            "missing_entity_ids": missing_indexes
-        }
-        rows.append(row)
-        # flag suspicious merges: size>6 or mean_sim exists and <0.75
-        if (size > 6) or (mean_sim is not None and mean_sim < 0.75):
-            suspicious.append(row)
-
-    # write CSV
-    csv_fields = ["merge_action_index","result_id","canonical_name","size","mean_pairwise_sim","merged_ids","merged_names","missing_entity_ids"]
-    with open(MERGE_SUM_CSV, "w", encoding="utf-8", newline="") as fh:
-        writer = csv.DictWriter(fh, fieldnames=csv_fields)
-        writer.writeheader()
-        for r in rows:
-            # flatten lists to string
-            r2 = dict(r)
-            r2["merged_ids"] = ";".join(r2["merged_ids"]) if r2["merged_ids"] else ""
-            r2["merged_names"] = ";".join([n if n else "NULL" for n in r2["merged_names"]]) if r2["merged_names"] else ""
-            r2["missing_entity_ids"] = ";".join(r2["missing_entity_ids"]) if r2["missing_entity_ids"] else ""
-            writer.writerow(r2)
-
-    # write JSON for deeper inspection
-    with open(MERGE_SUM_JSON, "w", encoding="utf-8") as fh:
-        json.dump(rows, fh, indent=2, ensure_ascii=False)
-
-    print(f"Merge summary written to CSV: {MERGE_SUM_CSV} and JSON: {MERGE_SUM_JSON}")
-    print(f"Total merge actions: {len(rows)}")
-    print("Top 10 largest merges (by size):")
-    for r in sorted(rows, key=lambda x: x["size"], reverse=True)[:10]:
-        print(f"  size={r['size']}, canonical='{r['canonical_name']}', ids={r['merged_ids'][:8]}... mean_sim={r['mean_pairwise_sim']}")
-
-    if suspicious:
-        print("\nSuspicious merges detected (size>6 or mean_sim<0.75):")
-        for s in suspicious[:20]:
-            print(f"  size={s['size']}, canonical='{s['canonical_name']}', mean_sim={s['mean_pairwise_sim']}, missing={s['missing_entity_ids']}")
-
-    # simple aggregates
-    total_merged_ids = sum(r["size"] for r in rows)
-    unique_merged_member_ids = set(itertools.chain.from_iterable(r["merged_ids"] for r in rows))
-    print(f"\nAggregate stats: total merged mentions across actions = {total_merged_ids}")
-    print(f"Unique merged member ids (count) = {len(unique_merged_member_ids)}")
-    print("Done.")
-
-if __name__ == "__main__":
-    main()
-
-
-#endregion#? 
-#?#########################  End  ##########################
-
-
-
-
-
-
-#?######################### Start ##########################
-#region:#?   
-
-
-
-#endregion#? 
-#?#########################  End  ##########################
-
-
-
-
-
-
-#?######################### Start ##########################
-#region:#?   
-
-
-
-#endregion#? 
-#?#########################  End  ##########################
-
-
-
-
-
-
-#?######################### Start ##########################
-#region:#?   
-
-
-
-#endregion#? 
-#?#########################  End  ##########################
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #?######################### Start ##########################
 #region:#?   Entity Resolution V0
 
@@ -3503,25 +1555,25 @@ OUT_DIR = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/entity-resolved")
 OUT_DIR.mkdir(parents=True, exist_ok=True)
 
 # Embedding model (HuggingFace). Use the one you used earlier for consistency.
-EMBED_MODEL = "BAAI/bge-small-en-v1.5"  # change to large if you want and have resources
+EMBED_MODEL = "BAAI/bge-large-en-v1.5"  #"BAAI/bge-small-en-v1.5"  # change to large if you want and have resources
 USE_CUDA = True  # set False to force CPU
 BATCH_EMBED = 64
 
 # Neighbor retrieval settings
 TOPN_FAST = 64   # initial retrieval size (fast)
-T_BASE = 0.85    # base graph threshold for forming clusters (recall-friendly)
+T_BASE = 0.75    # base graph threshold for forming clusters (recall-friendly)
 T_AUTO = 0.92    # auto-merge threshold (very safe)
 T_HIGH = 0.95    # very high similarity (definitely same)
-CROSS_ENCODER_RANGE = (0.80, 0.92)  # range where we prefer LLM rerankers (we will use cluster-LLM instead)
+CROSS_ENCODER_RANGE = (0.70, 0.92)  # range where we prefer LLM rerankers (we will use cluster-LLM instead)
 
 # Composite similarity weights (name, desc, ctx, type)
-WEIGHTS = {"name": 0.45, "desc": 0.25, "ctx": 0.2, "type": 0.1}
+WEIGHTS = {"name": 0.45, "desc": 0.25, "ctx": 0.25, "type": 0.05}
 
 # LLM settings
 OPENAI_MODEL = "gpt-4o"
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")  # must be present to use LLM decisions
 MAX_LLM_BATCH = 10  # maximum cluster size to feed LLM intact; larger clusters are split
-MAX_PASSES = 2
+MAX_PASSES = 3
 MIN_MERGE_DELTA = 5
 
 # Safety / review flags
@@ -4148,14 +2200,2204 @@ if __name__ == "__main__":
 
 
 
+
+
+
 #?######################### Start ##########################
-#region:#?   
+#region:#?   Entity Resolution V1
+
+
 
 #!/usr/bin/env python3
 """
-analyze_entity_resolution_detailed.py
+entity_resolution_pipeline_v1_parsefix.py
 
-Detailed analysis + audit artifacts after entity resolution.
+Same pipeline as before but improved LLM parsing robustness, debug logging,
+and a single retry attempt when the LLM returns unparsable JSON.
+
+Keep prior behavior (MIN_SIM, auto-merge, LLM decisions, iterative passes).
+"""
+
+import json
+import os
+from pathlib import Path
+from collections import defaultdict, Counter
+import math
+import time
+import uuid
+import itertools
+import re
+from typing import List, Dict, Any, Optional
+
+# ---------------- Config (tune these) ----------------
+INPUT_ENT_PATH = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/KG/entities_raw-entResTestssmaller.jsonl")
+OUT_DIR = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/entity-resolved")
+OUT_DIR.mkdir(parents=True, exist_ok=True)
+
+# Embedding model
+EMBED_MODEL = "BAAI/bge-large-en-v1.5"
+USE_CUDA = True
+BATCH_EMBED = 64
+
+# Neighbor retrieval / thresholds
+TOPN_FAST = 64
+T_BASE = 0.75
+T_AUTO = 0.94
+MIN_SIM = 0.40
+
+WEIGHTS = {"name": 0.45, "desc": 0.25, "ctx": 0.25, "type": 0.05}
+
+OPENAI_MODEL = "gpt-4o"
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+MAX_LLM_BATCH = 10
+MAX_PASSES = 4
+
+# Debug and retry
+VERBOSE = True
+DEBUG_DIR = OUT_DIR / "llm_debug"
+DEBUG_DIR.mkdir(parents=True, exist_ok=True)
+LLM_PARSE_RETRY = True  # perform 1 retry if parse fails
+
+# ---------------- Dependencies ----------------
+try:
+    import torch
+    from transformers import AutoTokenizer, AutoModel
+except Exception as e:
+    raise RuntimeError("Missing transformers/torch. Install with `pip install torch transformers`") from e
+
+try:
+    import faiss
+except Exception:
+    try:
+        import faiss_cpu as faiss
+    except Exception:
+        raise RuntimeError("Missing faiss. Install faiss (faiss-cpu) to continue.") from None
+
+try:
+    from tqdm import tqdm
+except Exception:
+    def tqdm(x, **kw): return x
+
+try:
+    from sklearn.cluster import KMeans
+    _SKLEARN_AVAILABLE = True
+except Exception:
+    _SKLEARN_AVAILABLE = False
+
+# OpenAI client attempt
+_OPENAI_CLIENT = None
+try:
+    from openai import OpenAI as OpenAIClient
+    _OPENAI_CLIENT = ("openai_client", OpenAIClient)
+except Exception:
+    try:
+        import openai
+        _OPENAI_CLIENT = ("openai_pkg", openai)
+    except Exception:
+        _OPENAI_CLIENT = None
+
+# ---------------- Utilities ----------------
+def load_entities(path: Path) -> List[Dict[str, Any]]:
+    ents = []
+    if not path.exists():
+        raise FileNotFoundError(f"Entities file not found: {path}")
+    with open(path, "r", encoding="utf-8") as fh:
+        for ln in fh:
+            ln = ln.strip()
+            if not ln:
+                continue
+            ents.append(json.loads(ln))
+    if VERBOSE:
+        print(f"[load_entities] loaded {len(ents)} entity mentions from {path}")
+    return ents
+
+def normalize_surface(s: str) -> str:
+    if not s:
+        return ""
+    return " ".join(s.strip().lower().split())
+
+import numpy as np
+def cosine(a: np.ndarray, b: np.ndarray) -> float:
+    a_norm = np.linalg.norm(a)
+    b_norm = np.linalg.norm(b)
+    if a_norm == 0 or b_norm == 0:
+        return 0.0
+    return float(np.dot(a, b) / (a_norm * b_norm))
+
+# ---------------- Embedding ----------------
+device = "cuda" if (USE_CUDA and torch.cuda.is_available()) else "cpu"
+if VERBOSE:
+    print(f"[init] loading embedding model {EMBED_MODEL} on {device}")
+tokenizer = AutoTokenizer.from_pretrained(EMBED_MODEL, use_fast=True)
+model = AutoModel.from_pretrained(EMBED_MODEL).to(device)
+model.eval()
+
+@torch.no_grad()
+def embed_texts(texts: List[str], batch_size: int = BATCH_EMBED) -> np.ndarray:
+    vecs = []
+    for i in range(0, len(texts), batch_size):
+        batch = texts[i:i+batch_size]
+        enc = tokenizer(batch, padding=True, truncation=True, return_tensors="pt").to(device)
+        out = model(**enc)
+        token_emb = out.last_hidden_state if hasattr(out, "last_hidden_state") else out.hidden_states[-1]
+        mask = enc["attention_mask"].unsqueeze(-1)
+        token_emb = token_emb * mask
+        summed = token_emb.sum(dim=1)
+        denom = mask.sum(dim=1).clamp(min=1)
+        mean_emb = summed / denom
+        mean_emb = torch.nn.functional.normalize(mean_emb, p=2, dim=1)
+        vecs.append(mean_emb.cpu().numpy().astype("float32"))
+    if vecs:
+        return np.vstack(vecs)
+    return np.zeros((0, model.config.hidden_size), dtype="float32")
+
+def prepare_entity_embeddings(entities: List[Dict[str,Any]]):
+    if VERBOSE:
+        print("[embed] preparing name/desc/context texts for embedding")
+    ids = [e["id"] for e in entities]
+    name_texts = [e.get("entity_name","") or "" for e in entities]
+    desc_texts = [ (e.get("entity_description") or "") for e in entities ]
+    ctx_texts = []
+    for e in entities:
+        c = e.get("used_context_excerpt") or e.get("context_phrase") or ""
+        ctx_texts.append(c[:512])
+    emb_name = embed_texts(name_texts)
+    emb_desc = embed_texts(desc_texts)
+    emb_ctx = embed_texts(ctx_texts)
+    emb_name_map = { ids[i]: emb_name[i] for i in range(len(ids)) }
+    emb_desc_map = { ids[i]: emb_desc[i] for i in range(len(ids)) }
+    emb_ctx_map  = { ids[i]: emb_ctx[i]  for i in range(len(ids)) }
+    if VERBOSE:
+        print(f"[embed] built embeddings: name:{len(emb_name_map)} desc:{len(emb_desc_map)} ctx:{len(emb_ctx_map)}")
+    return emb_name_map, emb_desc_map, emb_ctx_map
+
+# ---------------- Composite sim / FAISS / graph ----------------
+def composite_sim(e1: Dict, e2: Dict, emb_name, emb_desc, emb_ctx, weights=WEIGHTS):
+    sims = []
+    ws = []
+    v1 = emb_name.get(e1["id"]); v2 = emb_name.get(e2["id"])
+    if v1 is not None and v2 is not None:
+        sims.append(cosine(v1, v2)); ws.append(weights["name"])
+    v1 = emb_desc.get(e1["id"]); v2 = emb_desc.get(e2["id"])
+    if v1 is not None and v2 is not None and (np.any(v1) or np.any(v2)):
+        sims.append(cosine(v1, v2)); ws.append(weights["desc"])
+    v1 = emb_ctx.get(e1["id"]); v2 = emb_ctx.get(e2["id"])
+    if v1 is not None and v2 is not None and (np.any(v1) or np.any(v2)):
+        sims.append(cosine(v1, v2)); ws.append(weights["ctx"])
+    t1 = (e1.get("entity_type_hint") or "").strip().lower()
+    t2 = (e2.get("entity_type_hint") or "").strip().lower()
+    if t1 and t2:
+        sims.append(1.0 if t1 == t2 else 0.0); ws.append(weights["type"])
+    if not sims:
+        return 0.0
+    total_w = sum(ws)
+    if total_w <= 0:
+        return sum(sims) / len(sims)
+    weighted = sum(s * w for s, w in zip(sims, ws)) / total_w
+    return float(weighted)
+
+def build_faiss_index(emb_map: Dict[str, np.ndarray]):
+    ids = list(emb_map.keys())
+    vecs = np.vstack([emb_map[i] for i in ids]).astype("float32")
+    dim = vecs.shape[1]
+    index = faiss.IndexFlatIP(dim)
+    faiss.normalize_L2(vecs)
+    index.add(vecs)
+    return index, ids, vecs
+
+def neighbors_topn(index, ids_list, vecs, query_vec, topn=TOPN_FAST):
+    q = query_vec.reshape(1, -1).astype("float32")
+    faiss.normalize_L2(q)
+    D, I = index.search(q, topn)
+    res = []
+    for dist, idx in zip(D[0], I[0]):
+        if idx < 0 or idx >= len(ids_list):
+            continue
+        res.append((ids_list[idx], float(dist)))
+    return res
+
+def build_similarity_graph(entities, emb_name, emb_desc, emb_ctx, fast_index, fast_ids, fast_vecs, t_base=T_BASE):
+    if VERBOSE:
+        print("[graph] building candidate edges with base threshold", t_base)
+    id_map = {e["id"]: e for e in entities}
+    adjacency = defaultdict(dict)
+    for e in tqdm(entities, desc="neighbors"):
+        qid = e["id"]
+        # prefer name then desc then ctx: use explicit membership to avoid KeyError
+        if qid in emb_name:
+            qvec = emb_name[qid]
+        elif qid in emb_desc:
+            qvec = emb_desc[qid]
+        elif qid in emb_ctx:
+            qvec = emb_ctx[qid]
+        else:
+            qvec = None
+        if qvec is None:
+            continue
+        nbrs = neighbors_topn(fast_index, fast_ids, fast_vecs, qvec, topn=TOPN_FAST)
+        for nid, fast_score in nbrs:
+            if nid == qid:
+                continue
+            s = composite_sim(e, id_map[nid], emb_name, emb_desc, emb_ctx)
+            if s >= t_base:
+                adjacency[qid][nid] = s
+                adjacency[nid][qid] = s
+    visited = set()
+    clusters = []
+    for eid in id_map.keys():
+        if eid in visited:
+            continue
+        stack = [eid]
+        comp = []
+        while stack:
+            cur = stack.pop()
+            if cur in visited:
+                continue
+            visited.add(cur)
+            comp.append(cur)
+            for nbr in adjacency.get(cur, {}).keys():
+                if nbr not in visited:
+                    stack.append(nbr)
+        clusters.append(sorted(comp))
+    if VERBOSE:
+        print(f"[graph] built {len(clusters)} candidate clusters (including singletons)")
+    return clusters, adjacency
+
+# ---------------- Union-Find ----------------
+class UnionFind:
+    def __init__(self):
+        self.parent = {}
+    def find(self, a):
+        if a not in self.parent:
+            self.parent[a] = a
+            return a
+        if self.parent[a] == a:
+            return a
+        self.parent[a] = self.find(self.parent[a])
+        return self.parent[a]
+    def union(self, a, b):
+        ra = self.find(a); rb = self.find(b)
+        if ra != rb:
+            self.parent[rb] = ra
+    def groups(self):
+        d = {}
+        for x in list(self.parent.keys()):
+            r = self.find(x)
+            d.setdefault(r, []).append(x)
+        return list(d.values())
+
+# ---------------- LLM prompt + call + parsing ----------------
+def build_cluster_prompt(cluster_entity_ids: List[str], entities_by_id: Dict[str, Dict], examples: Optional[List[Dict]]=None):
+    header = [
+        "You are an assistant whose job is to decide whether entity mentions refer to the same real-world entity.",
+        "Return ONLY a JSON array (no commentary). Each element must be an action object.",
+        "Action types (choose one per object):",
+        " - merge_entities: {action:'merge_entities', merged_ids:[...], canonical_name:'...', new_description:'...', confidence:0.0-1.0}",
+        " - rename_entity: {action:'rename_entity', entity_id:'...', new_name:'...', new_description:'...', confidence:0.0-1.0}",
+        " - keep_entity: {action:'keep_entity', entity_id:'...', confidence:0.0-1.0}",
+        "Important: include a 'confidence' float (0.0-1.0) for every action.",
+        "If unsure, prefer keep_entity with confidence < 0.9.",
+        ""
+    ]
+    # two concise examples to encourage correct shape
+    examples_block = [
+        {"action":"merge_entities","merged_ids":["En_A","En_B"],"canonical_name":"graphitization","new_description":"Formation of graphite in steel reducing strength.","confidence":0.95},
+        {"action":"rename_entity","entity_id":"En_C","new_name":"Heat_Fatigue","new_description":"Thermal fatigue cause in welds.", "confidence":0.85},
+        {"action":"keep_entity","entity_id":"En_D","confidence":0.40}
+    ]
+    if examples is None:
+        header.append("EXAMPLES:")
+        header.append(json.dumps(examples_block, ensure_ascii=False, indent=2))
+        header.append("")
+    else:
+        header.append("EXAMPLES:")
+        header.append(json.dumps(examples, ensure_ascii=False, indent=2))
+        header.append("")
+    header_text = "\n".join(header)
+    items = []
+    for eid in cluster_entity_ids:
+        ent = entities_by_id[eid]
+        items.append({
+            "id": ent.get("id"),
+            "surface": ent.get("entity_name"),
+            "short_desc": (ent.get("entity_description") or "")[:200],
+            "context_excerpt": (ent.get("used_context_excerpt") or ent.get("context_phrase") or "")[:300],
+            "type_hint": ent.get("entity_type_hint")
+        })
+    prompt = header_text + "\n\n" + json.dumps({"mentions": items}, ensure_ascii=False, indent=2)
+    prompt += "\n\nReturn only a JSON array of actions."
+    return prompt
+
+def call_llm(prompt: str, model=OPENAI_MODEL, max_tokens=600, temperature=0.0):
+    if not OPENAI_API_KEY or _OPENAI_CLIENT is None:
+        if VERBOSE:
+            print("[LLM] OpenAI key or client not available. Skipping LLM call.")
+        return None
+    try:
+        kind, client_pkg = _OPENAI_CLIENT
+        if kind == "openai_client":
+            client = client_pkg(api_key=OPENAI_API_KEY)
+            resp = client.chat.completions.create(model=model, messages=[{"role":"user","content":prompt}], max_tokens=max_tokens, temperature=temperature)
+            txt = resp.choices[0].message.content
+            return txt
+        else:
+            client_pkg.api_key = OPENAI_API_KEY
+            resp = client_pkg.ChatCompletion.create(model=model, messages=[{"role":"user","content":prompt}], max_tokens=max_tokens, temperature=temperature)
+            txt = resp.choices[0].message.content
+            return txt
+    except Exception as e:
+        print("[LLM] call error:", e)
+        return None
+
+def extract_first_json_array(txt: str):
+    """
+    Robust extraction attempt:
+     1) find first [...] block and parse
+     2) if fails, scan for balanced {...} objects and parse them individually; return list of parsed objects
+     3) try single-quote tolerant load
+    """
+    if not txt:
+        return []
+    t = txt.strip()
+    # remove leading/trailing triple backticks
+    if t.startswith("```"):
+        t = t.strip("`").strip()
+    # 1) try to find the first JSON array block
+    match = re.search(r'(\[\s*(?:[\s\S]*?)\s*\])', t)
+    if match:
+        candidate = match.group(1)
+        try:
+            parsed = json.loads(candidate)
+            if isinstance(parsed, list):
+                return parsed
+        except Exception:
+            # try single-quote tolerant
+            try:
+                parsed = json.loads(candidate.replace("'", '"'))
+                if isinstance(parsed, list):
+                    return parsed
+            except Exception:
+                pass
+    # 2) fallback: attempt to extract balanced JSON objects {...}
+    objs = []
+    stack = []
+    start_idx = None
+    for i, ch in enumerate(t):
+        if ch == "{":
+            if not stack:
+                start_idx = i
+            stack.append("{")
+        elif ch == "}":
+            if stack:
+                stack.pop()
+                if not stack and start_idx is not None:
+                    piece = t[start_idx:i+1]
+                    try:
+                        obj = json.loads(piece)
+                        if isinstance(obj, dict):
+                            objs.append(obj)
+                    except Exception:
+                        # try single-quote tolerant
+                        try:
+                            obj = json.loads(piece.replace("'", '"'))
+                            if isinstance(obj, dict):
+                                objs.append(obj)
+                        except Exception:
+                            pass
+                    start_idx = None
+    if objs:
+        return objs
+    # 3) final fallback: try to json.load entire text
+    try:
+        parsed = json.loads(t)
+        if isinstance(parsed, list):
+            return parsed
+    except Exception:
+        pass
+    try:
+        parsed = json.loads(t.replace("'", '"'))
+        if isinstance(parsed, list):
+            return parsed
+    except Exception:
+        pass
+    return []
+
+# ---------------- apply actions (robust) ----------------
+def apply_actions(actions: List[Dict], entities_by_id: Dict[str, Dict], uf: UnionFind, history: List[Dict]):
+    changed = False
+    for act in actions:
+        if not isinstance(act, dict):
+            history.append({"ts": time.time(), "action":"invalid_action_format", "payload": act})
+            continue
+        action = act.get("action")
+        conf = float(act.get("confidence")) if act.get("confidence") is not None else None
+        if action == "merge_entities":
+            mids = act.get("merged_ids") or []
+            if len(mids) >= 2:
+                base = mids[0]
+                for other in mids[1:]:
+                    uf.union(base, other)
+                changed = True
+            canonical_name = act.get("canonical_name") or act.get("canonical") or ""
+            history.append({"ts": time.time(), "action":"merge_entities", "merged_ids": mids, "canonical_name": canonical_name, "new_description": act.get("new_description"), "confidence": conf})
+        elif action == "rename_entity":
+            eid = act.get("entity_id")
+            new_name = act.get("new_name")
+            if eid in entities_by_id:
+                entities_by_id[eid]["__rename_suggested"] = {"new_name": new_name, "new_description": act.get("new_description"), "confidence": conf}
+            history.append({"ts": time.time(), "action":"rename_entity", "entity_id": eid, "new_name": new_name, "new_description": act.get("new_description"), "confidence": conf})
+        elif action == "keep_entity":
+            eid = act.get("entity_id")
+            history.append({"ts": time.time(), "action":"keep_entity", "entity_id": eid, "confidence": conf})
+        else:
+            history.append({"ts": time.time(), "action":"unknown", "payload": act})
+    return changed
+
+# ---------------- cluster splitting ----------------
+def split_cluster(cluster_ids: List[str], max_batch=MAX_LLM_BATCH):
+    if len(cluster_ids) <= max_batch:
+        return [cluster_ids]
+    out = []
+    for i in range(0, len(cluster_ids), max_batch):
+        out.append(cluster_ids[i:i+max_batch])
+    return out
+
+def mean_pairwise_sim(cluster_list: List[str], entities_by_id: Dict[str, Dict], emb_name, emb_desc, emb_ctx):
+    if len(cluster_list) <= 1:
+        return 1.0
+    sims = []
+    for a, b in itertools.combinations(cluster_list, 2):
+        sims.append(composite_sim(entities_by_id[a], entities_by_id[b], emb_name, emb_desc, emb_ctx))
+    return float(sum(sims)/len(sims)) if sims else 0.0
+
+# ---------------- helper: save debug file ----------------
+def save_llm_debug_file(cluster_root_tag: str, pass_no: int, sub_index: int, prompt: str, raw: str, raw_retry: Optional[str]=None):
+    ts = time.strftime("%Y%m%dT%H%M%SZ", time.gmtime())
+    fname = f"debug_pass{pass_no}_cluster{cluster_root_tag}_sub{sub_index}_{ts}_{uuid.uuid4().hex[:6]}.json"
+    p = DEBUG_DIR / fname
+    payload = {"pass": pass_no, "cluster_tag": cluster_root_tag, "sub_index": sub_index, "prompt": prompt, "raw": raw, "raw_retry": raw_retry, "timestamp": ts}
+    with open(p, "w", encoding="utf-8") as fh:
+        json.dump(payload, fh, ensure_ascii=False, indent=2)
+    return str(p)
+
+# ---------------- Main pipeline (with retry on parse failure) ----------------
+def main():
+    entities = load_entities(INPUT_ENT_PATH)
+    entities_by_id = { e["id"]: e for e in entities }
+
+    emb_name, emb_desc, emb_ctx = prepare_entity_embeddings(entities)
+
+    combined_emb_map = {}
+    for eid, v in emb_name.items():
+        combined_emb_map[eid] = v.copy()
+    for eid, v in emb_desc.items():
+        if eid not in combined_emb_map:
+            combined_emb_map[eid] = v.copy()
+        else:
+            combined_emb_map[eid] = (combined_emb_map[eid] + v) / 2.0
+    for eid, v in emb_ctx.items():
+        if eid not in combined_emb_map:
+            combined_emb_map[eid] = v.copy()
+
+    if not combined_emb_map:
+        raise RuntimeError("No embeddings available to build fast index; cannot proceed")
+    fast_index, fast_ids, fast_vecs = build_faiss_index(combined_emb_map)
+
+    uf = UnionFind()
+    history: List[Dict] = []
+    for eid in entities_by_id.keys():
+        uf.find(eid)
+
+    pass_no = 0
+    total_llm_calls = 0
+    changed_in_pass = True
+
+    while pass_no < MAX_PASSES and changed_in_pass:
+        pass_no += 1
+        if VERBOSE:
+            print(f"\n=== PASS {pass_no} ===")
+        changed_in_pass = False
+
+        clusters, adjacency = build_similarity_graph(list(entities_by_id.values()), emb_name, emb_desc, emb_ctx, fast_index, fast_ids, fast_vecs, t_base=T_BASE)
+
+        clusters_to_process = []
+        for cl in clusters:
+            mps = mean_pairwise_sim(cl, entities_by_id, emb_name, emb_desc, emb_ctx)
+            if len(cl) == 1:
+                eid = cl[0]
+                history.append({"ts": time.time(), "action":"kept_singleton", "entity_id": eid, "mean_sim": mps, "processed_by":"none", "confidence": mps})
+                continue
+            if mps < MIN_SIM:
+                history.append({"ts": time.time(), "action":"left_unchanged_low_sim", "members": cl, "mean_sim": mps, "processed_by":"none", "confidence": mps})
+                continue
+            clusters_to_process.append((cl, mps))
+
+        if VERBOSE:
+            print(f"[pass {pass_no}] clusters_to_process: {len(clusters_to_process)} (min_sim={MIN_SIM}, auto_threshold={T_AUTO})")
+
+        for cl, mps in tqdm(clusters_to_process, desc=f"processing clusters (pass {pass_no})"):
+            roots = set(uf.find(x) for x in cl)
+            if len(roots) == 1:
+                continue
+            if mps >= T_AUTO:
+                for i in range(1, len(cl)):
+                    uf.union(cl[0], cl[i])
+                history.append({"ts": time.time(), "action":"auto_merge", "members": cl, "mean_sim": mps, "processed_by": "auto", "confidence": 1.0})
+                changed_in_pass = True
+                if VERBOSE:
+                    print(f"[auto_merge] merged cluster size {len(cl)} mean_sim={mps:.3f}")
+                continue
+
+            subparts = split_cluster(cl, max_batch=MAX_LLM_BATCH)
+            for idx, sub in enumerate(subparts):
+                sub_active = [s for s in sub if uf.find(s) == s]
+                if not sub_active:
+                    continue
+                cluster_prompt = build_cluster_prompt(sub_active, entities_by_id, examples=None)
+                total_llm_calls += 1
+                raw = call_llm(cluster_prompt)
+                raw_retry = None
+                actions = extract_first_json_array(raw) if raw else []
+                if not actions and raw and LLM_PARSE_RETRY:
+                    # retry once with corrective instruction
+                    retry_prompt = (
+                        "You returned an output that is not valid JSON. "
+                        "Please return ONLY a single JSON array (no commentary) with the actions as specified. "
+                        "Here is your previous output (do not include it in the response):\n\n"
+                        "----PREVIOUS OUTPUT START----\n" + raw[:4000] + "\n----PREVIOUS OUTPUT END----\n\n"
+                        "Return only a corrected JSON array now."
+                    )
+                    raw_retry = call_llm(retry_prompt)
+                    actions = extract_first_json_array(raw_retry) if raw_retry else []
+                    # save debug including both raw and retry
+                    dbg_path = save_llm_debug_file(cluster_root_tag=cl[0], pass_no=pass_no, sub_index=idx+1, prompt=cluster_prompt, raw=raw or "", raw_retry=raw_retry or "")
+                    if VERBOSE:
+                        print(f"[LLM parse retry] saved debug file: {dbg_path}")
+                elif not actions and raw:
+                    dbg_path = save_llm_debug_file(cluster_root_tag=cl[0], pass_no=pass_no, sub_index=idx+1, prompt=cluster_prompt, raw=raw or "", raw_retry=None)
+                    if VERBOSE:
+                        print(f"[LLM parse fail] saved debug file: {dbg_path}")
+
+                if not actions:
+                    # parser failed or LLM unavailable -> fallback keeps with low confidence
+                    for s in sub_active:
+                        history.append({"ts": time.time(), "action":"llm_parse_failed_fallback_keep", "entity_id": s, "processed_by": "fallback", "confidence": 0.25})
+                    if VERBOSE:
+                        print("[LLM parse] parse failed; kept sub-batch conservatively")
+                    continue
+
+                applied = apply_actions(actions, entities_by_id, uf, history)
+                if applied:
+                    changed_in_pass = True
+                if VERBOSE:
+                    print(f"[LLM] processed sub-batch {idx+1}/{len(subparts)} for cluster(size={len(cl)}) -> actions: {len(actions)}")
+        if VERBOSE:
+            print(f"[pass {pass_no}] finished. changed_in_pass={changed_in_pass}")
+
+    # assemble groups and resolved records (same as prior code)
+    groups = {}
+    for eid in entities_by_id.keys():
+        root = uf.find(eid)
+        groups.setdefault(root, []).append(eid)
+
+    resolved_records = []
+    resolve_map = {}
+    clusters_processed = []
+
+    for root, members in groups.items():
+        candidate_names = []
+        candidate_name_conf = []
+        for m in members:
+            rs = entities_by_id[m].get("__rename_suggested")
+            if rs and rs.get("new_name"):
+                candidate_names.append(rs.get("new_name"))
+                candidate_name_conf.append(rs.get("confidence") or 0.0)
+        if candidate_names:
+            if candidate_name_conf:
+                idx = int(np.argmax(candidate_name_conf))
+                canonical_name = candidate_names[idx]
+            else:
+                canonical_name = Counter(candidate_names).most_common(1)[0][0]
+        else:
+            surfaces = [entities_by_id[m].get("entity_name") or "" for m in members]
+            normalized = [normalize_surface(s) for s in surfaces]
+            if normalized:
+                canonical_name = Counter(normalized).most_common(1)[0][0]
+            else:
+                canonical_name = f"Resolved_{root}"
+
+        descs = []
+        desc_confs = []
+        for m in members:
+            rs = entities_by_id[m].get("__rename_suggested")
+            if rs and rs.get("new_description"):
+                descs.append(rs.get("new_description"))
+                desc_confs.append(rs.get("confidence") or 0.0)
+        if descs:
+            idx = int(np.argmax(desc_confs)) if desc_confs else 0
+            description = descs[idx]
+        else:
+            found = None
+            for m in members:
+                dd = entities_by_id[m].get("entity_description")
+                if dd:
+                    found = dd
+                    break
+            description = found or f"Resolved entity combining {len(members)} mentions."
+
+        member_confidences = {}
+        for h in history:
+            if h.get("action") in ("merge_entities",):
+                for mid in h.get("merged_ids", []):
+                    if mid in members:
+                        member_confidences[mid] = max(member_confidences.get(mid, 0.0), float(h.get("confidence") or 0.0))
+            elif h.get("action") in ("rename_entity", "keep_entity", "kept_singleton"):
+                mid = h.get("entity_id")
+                if mid in members:
+                    member_confidences[mid] = max(member_confidences.get(mid, 0.0), float(h.get("confidence") or 0.0))
+            elif h.get("action") == "left_unchanged_low_sim":
+                for mid in h.get("members", []):
+                    if mid in members:
+                        member_confidences[mid] = max(member_confidences.get(mid, 0.0), float(h.get("confidence") or 0.0))
+        cluster_mean = mean_pairwise_sim(members, entities_by_id, emb_name, emb_desc, emb_ctx)
+        for m in members:
+            member_confidences.setdefault(m, float(cluster_mean))
+
+        new_id = f"ResEnt_{uuid.uuid4().hex[:8]}"
+        aliases = list({ (entities_by_id[m].get("entity_name") or "") for m in members if (entities_by_id[m].get("entity_name") or "").strip().lower() != canonical_name.strip().lower() })
+        resolved = {
+            "id_final": new_id,
+            "label": canonical_name,
+            "aliases": aliases,
+            "description": description,
+            "members": members,
+            "member_confidence": { m: member_confidences.get(m, 0.0) for m in members },
+            "flag": "resolved_entity"
+        }
+        resolved_records.append(resolved)
+        for m in members:
+            resolve_map[m] = new_id
+        clusters_processed.append({
+            "root": root,
+            "members": members,
+            "label": canonical_name,
+            "mean_pairwise_sim": cluster_mean,
+            "member_confidence": { m: member_confidences.get(m, 0.0) for m in members }
+        })
+
+    ENT_OUT = OUT_DIR / "entities_resolved.jsonl"
+    with open(ENT_OUT, "w", encoding="utf-8") as fh:
+        for r in resolved_records:
+            fh.write(json.dumps(r, ensure_ascii=False) + "\n")
+
+    MAP_OUT = OUT_DIR / "resolve_map.json"
+    with open(MAP_OUT, "w", encoding="utf-8") as fh:
+        json.dump(resolve_map, fh, indent=2, ensure_ascii=False)
+
+    HISTORY_OUT = OUT_DIR / "resolution_history.jsonl"
+    with open(HISTORY_OUT, "w", encoding="utf-8") as fh:
+        for h in history:
+            fh.write(json.dumps(h, ensure_ascii=False) + "\n")
+
+    CLUSTERS_OUT = OUT_DIR / "clusters_processed.jsonl"
+    with open(CLUSTERS_OUT, "w", encoding="utf-8") as fh:
+        for c in clusters_processed:
+            fh.write(json.dumps(c, ensure_ascii=False) + "\n")
+
+    if VERBOSE:
+        print("[done] results written to:", OUT_DIR)
+        print(" - entities_resolved:", ENT_OUT)
+        print(" - resolve_map:", MAP_OUT)
+        print(" - history:", HISTORY_OUT)
+        print(" - clusters_processed:", CLUSTERS_OUT)
+        print("Summary:")
+        print(f"  original_mentions: {len(entities)}")
+        print(f"  resolved_entities (canonical): {len(resolved_records)}")
+        print(f"  total_llm_calls (approx): {total_llm_calls}")
+
+if __name__ == "__main__":
+    main()
+
+
+
+
+
+
+
+
+
+
+#endregion#? Entity Resolution V1
+#?#########################  End  ##########################
+
+
+
+#?######################### Start ##########################
+#region:#?   Rerun Entity Resolution V1
+
+
+#!/usr/bin/env python3
+"""
+rerun_resolution_on_resolved.py
+
+Collapse resolved mention-groups into representative nodes and re-run Entity Resolution
+on representatives to catch cross-group merges that previous mention-level micro-batching
+may have missed.
+
+Outputs (OUT_DIR):
+ - entities_resolved_rerun.jsonl
+ - resolve_map_rerun.json
+ - rerun_history.jsonl
+ - debug files (per LLM call) in llm_debug_rerun/
+
+This version includes robust numeric handling to avoid dtype/shape issues.
+"""
+import json, os, uuid, time, re
+from pathlib import Path
+from collections import defaultdict, Counter
+from typing import List, Dict, Any, Optional
+
+# ---------- CONFIG ----------
+BASE_OUT = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/entity-resolved")
+RESOLVED_INPUT = BASE_OUT / "entities_resolved.jsonl"   # produced by your V1
+ORIG_ENT_RAW = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/KG/entities_raw-entResTestssmaller.jsonl")
+OUT_DIR = BASE_OUT
+RERUN_DEBUG = OUT_DIR / "llm_debug_rerun"
+RERUN_DEBUG.mkdir(parents=True, exist_ok=True)
+
+# Embedding settings (match your V1)
+EMBED_MODEL = "BAAI/bge-large-en-v1.5"
+USE_CUDA = True
+BATCH_EMBED = 64
+
+# thresholds (tunable)
+T_BASE = 0.75
+T_AUTO = 0.92       # auto-merge threshold for representatives (lower than mention-level typically)
+MIN_SIM = 0.40
+MAX_ROUNDS = 5      # collapse+rerun rounds
+OPENAI_MODEL = "gpt-4o"
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+MAX_LLM_BATCH = 32   # representative count usually small; we can process full clusters
+
+VERBOSE = True
+
+# ---------- deps ----------
+try:
+    import torch
+    from transformers import AutoTokenizer, AutoModel
+except Exception as e:
+    raise RuntimeError("Missing torch/transformers for embedding.") from e
+
+try:
+    import faiss
+except Exception:
+    try:
+        import faiss_cpu as faiss
+    except Exception:
+        raise RuntimeError("Missing faiss or faiss_cpu.") from None
+
+# try OpenAI client(s)
+_OPENAI_CLIENT = None
+try:
+    from openai import OpenAI as OpenAIClient
+    _OPENAI_CLIENT = ("openai_client", OpenAIClient)
+except Exception:
+    try:
+        import openai
+        _OPENAI_CLIENT = ("openai_pkg", openai)
+    except Exception:
+        _OPENAI_CLIENT = None
+
+# ---------- util helpers ----------
+def load_jsonl(path: Path) -> List[Dict[str, Any]]:
+    items = []
+    if not path.exists():
+        return items
+    with open(path, "r", encoding="utf-8") as fh:
+        for ln in fh:
+            ln = ln.strip()
+            if not ln: continue
+            items.append(json.loads(ln))
+    return items
+
+def save_jsonl(path: Path, items: List[Dict[str, Any]]):
+    with open(path, "w", encoding="utf-8") as fh:
+        for it in items:
+            fh.write(json.dumps(it, ensure_ascii=False) + "\n")
+
+def load_json(path: Path) -> Any:
+    if not path.exists(): return None
+    with open(path, "r", encoding="utf-8") as fh:
+        return json.load(fh)
+
+def save_json(path: Path, obj: Any):
+    with open(path, "w", encoding="utf-8") as fh:
+        json.dump(obj, fh, ensure_ascii=False, indent=2)
+
+def normalize(s: str) -> str:
+    if not s: return ""
+    return " ".join(s.strip().lower().split())
+
+# ---------- embedding (same approach as V1) ----------
+device = "cuda" if (USE_CUDA and torch.cuda.is_available()) else "cpu"
+if VERBOSE:
+    print(f"[init] loading embedding model {EMBED_MODEL} on {device}")
+tokenizer = AutoTokenizer.from_pretrained(EMBED_MODEL, use_fast=True)
+model = AutoModel.from_pretrained(EMBED_MODEL).to(device)
+model.eval()
+
+import numpy as np
+@torch.no_grad()
+def embed_texts(texts: List[str], batch_size: int = BATCH_EMBED) -> np.ndarray:
+    vecs = []
+    for i in range(0, len(texts), batch_size):
+        batch = texts[i:i+batch_size]
+        enc = tokenizer(batch, padding=True, truncation=True, return_tensors="pt").to(device)
+        out = model(**enc)
+        token_emb = out.last_hidden_state if hasattr(out, "last_hidden_state") else out.hidden_states[-1]
+        mask = enc["attention_mask"].unsqueeze(-1)
+        token_emb = token_emb * mask
+        summed = token_emb.sum(dim=1)
+        denom = mask.sum(dim=1).clamp(min=1)
+        mean_emb = summed / denom
+        mean_emb = torch.nn.functional.normalize(mean_emb, p=2, dim=1)
+        vecs.append(mean_emb.cpu().numpy().astype("float32"))
+    if vecs:
+        return np.vstack(vecs)
+    return np.zeros((0, model.config.hidden_size), dtype="float32")
+
+# ---------- FAISS helpers ----------
+def build_faiss_index(emb_map):
+    ids = list(emb_map.keys())
+    vecs = np.vstack([emb_map[i] for i in ids]).astype("float32")
+    dim = vecs.shape[1]
+    idx = faiss.IndexFlatIP(dim)
+    faiss.normalize_L2(vecs)
+    idx.add(vecs)
+    return idx, ids, vecs
+
+def neighbors_topn(index, ids_list, vecs, query_vec, topn=64):
+    q = np.asarray(query_vec).reshape(1, -1).astype("float32")
+    faiss.normalize_L2(q)
+    D, I = index.search(q, topn)
+    res = []
+    for dist, idx in zip(D[0], I[0]):
+        if idx < 0 or idx >= len(ids_list): continue
+        res.append((ids_list[idx], float(dist)))
+    return res
+
+def safe_vector(x):
+    """Return 1-D numpy float32 vector for x. If x is None or not convertible, return None."""
+    if x is None:
+        return None
+    arr = np.asarray(x, dtype="float32")
+    if arr.size == 0:
+        return None
+    return arr.ravel()
+
+def safe_cosine(a, b) -> float:
+    a_v = safe_vector(a)
+    b_v = safe_vector(b)
+    if a_v is None or b_v is None:
+        return 0.0
+    a_norm = np.linalg.norm(a_v)
+    b_norm = np.linalg.norm(b_v)
+    if a_norm == 0 or b_norm == 0:
+        return 0.0
+    return float(np.dot(a_v, b_v) / (a_norm * b_norm))
+
+# ---------- simple composite sim for reps ----------
+def composite_sim_rep(a: Dict, b: Dict, emb_map):
+    # prefer embedding similarity if available, else token overlap heuristic
+    va = emb_map.get(a["rep_id"])
+    vb = emb_map.get(b["rep_id"])
+    if va is not None and vb is not None:
+        return safe_cosine(va, vb)
+    an = normalize(a.get("entity_name","")); bn = normalize(b.get("entity_name",""))
+    if not an or not bn: return 0.0
+    sa = set(an.split()); sb = set(bn.split())
+    inter = sa & sb
+    uni = sa | sb
+    return float(len(inter)/len(uni)) if uni else 0.0
+
+# ---------- LLM helpers (robust JSON extraction) ----------
+def extract_first_json_array(txt: str):
+    if not txt: return []
+    t = txt.strip()
+    if t.startswith("```"): t = t.strip("`").strip()
+    try:
+        parsed = json.loads(t)
+        if isinstance(parsed, list): return parsed
+    except Exception:
+        pass
+    m = re.search(r'(\[\s*(?:[\s\S]*?)\s*\])', t)
+    if m:
+        candidate = m.group(1)
+        try:
+            parsed = json.loads(candidate)
+            if isinstance(parsed, list): return parsed
+        except Exception:
+            try:
+                parsed = json.loads(candidate.replace("'", '"'))
+                if isinstance(parsed, list): return parsed
+            except Exception:
+                pass
+    objs = []
+    stack = []
+    start = None
+    for i,ch in enumerate(t):
+        if ch == '{':
+            if not stack: start = i
+            stack.append('{')
+        elif ch == '}':
+            if stack:
+                stack.pop()
+                if not stack and start is not None:
+                    piece = t[start:i+1]
+                    try:
+                        obj = json.loads(piece); objs.append(obj)
+                    except Exception:
+                        try:
+                            obj = json.loads(piece.replace("'", '"')); objs.append(obj)
+                        except Exception:
+                            pass
+                    start = None
+    if objs: return objs
+    try:
+        parsed = json.loads(t.replace("'", '"'))
+        if isinstance(parsed, list): return parsed
+    except Exception:
+        pass
+    return []
+
+def call_llm(prompt: str, model=OPENAI_MODEL, max_tokens=800, temperature=0.0):
+    if not OPENAI_API_KEY or _OPENAI_CLIENT is None:
+        if VERBOSE: print("[LLM] key/client not available - skipping")
+        return None
+    try:
+        kind, client_pkg = _OPENAI_CLIENT
+        if kind == "openai_client":
+            client = client_pkg(api_key=OPENAI_API_KEY)
+            resp = client.chat.completions.create(model=model, messages=[{"role":"user","content":prompt}], max_tokens=max_tokens, temperature=temperature)
+            return resp.choices[0].message.content
+        else:
+            client_pkg.api_key = OPENAI_API_KEY
+            resp = client_pkg.ChatCompletion.create(model=model, messages=[{"role":"user","content":prompt}], max_tokens=max_tokens, temperature=temperature)
+            return resp.choices[0].message.content
+    except Exception as e:
+        print("[LLM] call error:", e)
+        return None
+
+# ---------- build prompt for representatives ----------
+def build_prompt_for_rep_cluster(rep_ids: List[str], reps_map: Dict[str, Dict]):
+    header = [
+        "You are an assistant. Decide whether the following representative nodes refer to the same real-world entity.",
+        "Return ONLY a JSON array with action objects. Each action must have a 'confidence' float 0.0-1.0.",
+        "Allowed actions:",
+        " - merge_entities: {action:'merge_entities', merged_ids:[...], canonical_name:'...', new_description:'...', confidence:0.0-1.0}",
+        " - keep_entity: {action:'keep_entity', entity_id:'...', confidence:0.0-1.0}",
+        ""
+    ]
+    items = []
+    for rid in rep_ids:
+        r = reps_map[rid]
+        items.append({
+            "rep_id": rid,
+            "entity_name": r.get("entity_name"),
+            "entity_description": (r.get("entity_description") or "")[:300],
+            "members_count": len(r.get("members",[]))
+        })
+    prompt = "\n".join(header) + "\n\n" + json.dumps({"mentions": items}, ensure_ascii=False, indent=2)
+    prompt += "\n\nReturn only a JSON array."
+    return prompt
+
+# ---------- main rerun logic ----------
+def main():
+    if not RESOLVED_INPUT.exists():
+        raise FileNotFoundError(f"Resolved input not found: {RESOLVED_INPUT}")
+    resolved = load_jsonl(RESOLVED_INPUT)
+    if VERBOSE:
+        print(f"[load] resolved records: {len(resolved)}")
+
+    # Build representative nodes from resolved records
+    reps = []
+    for r in resolved:
+        rep = {
+            "rep_id": r.get("id_final"),
+            "entity_name": r.get("label") or r.get("id_final"),
+            "entity_description": r.get("description") or "",
+            "members": r.get("members", [])
+        }
+        reps.append(rep)
+    reps_map = { r["rep_id"]: r for r in reps }
+    if VERBOSE:
+        print(f"[reps] built {len(reps)} representatives")
+
+    # Embed representatives (use name + description)
+    texts = [ (r["entity_name"] or "") + " . " + (r["entity_description"] or "") for r in reps ]
+    if texts:
+        emb = embed_texts(texts)
+    else:
+        emb = np.zeros((0, model.config.hidden_size), dtype="float32")
+    rep_emb_map = { reps[i]["rep_id"]: safe_vector(emb[i]) for i in range(len(reps)) }
+
+    # iterative rounds: build FAISS on representatives, cluster, resolve
+    round_no = 0
+    overall_history = []
+    changed_any = True
+
+    while round_no < MAX_ROUNDS and changed_any:
+        round_no += 1
+        if VERBOSE: print(f"\n=== RERUN ROUND {round_no} ===")
+        changed_any = False
+
+        # build fast index (only for reps with vectors)
+        if not rep_emb_map:
+            if VERBOSE:
+                print("[warn] no rep embeddings available; stopping")
+            break
+        fast_index, fast_ids, fast_vecs = build_faiss_index(rep_emb_map)
+
+        # build similarity graph (undirected adjacency) using T_BASE
+        adjacency = defaultdict(dict)
+        for rid in list(reps_map.keys()):
+            qvec = rep_emb_map.get(rid)
+            if qvec is None:
+                continue
+            nbrs = neighbors_topn(fast_index, fast_ids, fast_vecs, qvec, topn=64)
+            for nid, fast_score in nbrs:
+                if nid == rid: continue
+                v_nid = rep_emb_map.get(nid)
+                if v_nid is None:
+                    continue
+                s = safe_cosine(qvec, v_nid)
+                if s >= T_BASE:
+                    adjacency[rid][nid] = s
+                    adjacency[nid][rid] = s
+
+        # connected components (representative clusters)
+        visited = set()
+        rep_clusters = []
+        for rid in reps_map.keys():
+            if rid in visited:
+                continue
+            stack = [rid]
+            comp = []
+            while stack:
+                cur = stack.pop()
+                if cur in visited: continue
+                visited.add(cur)
+                comp.append(cur)
+                for nbr in adjacency.get(cur, {}).keys():
+                    if nbr not in visited:
+                        stack.append(nbr)
+            rep_clusters.append(sorted(comp))
+        if VERBOSE:
+            print(f"[graph] reps clusters: {len(rep_clusters)}")
+
+        # process each rep-cluster
+        for cl in rep_clusters:
+            if len(cl) == 1:
+                continue
+            # compute mean pairwise sim
+            sims = []
+            for i in range(len(cl)):
+                for j in range(i+1, len(cl)):
+                    va = rep_emb_map.get(cl[i])
+                    vb = rep_emb_map.get(cl[j])
+                    if va is not None and vb is not None:
+                        sims.append(safe_cosine(va, vb))
+            mean_sim = float(sum(sims)/len(sims)) if sims else 0.0
+            if mean_sim >= T_AUTO:
+                # auto-merge: combine into first rep
+                base = cl[0]
+                involved = [rep_emb_map[x] for x in cl if x in rep_emb_map]
+                if involved:
+                    # compute average embedding safely
+                    stacked = np.stack(involved, axis=0)
+                    rep_emb_map[base] = np.mean(stacked, axis=0)
+                # merge members and mark deletions
+                for other in cl[1:]:
+                    if other in reps_map:
+                        reps_map[base]["members"].extend(reps_map[other].get("members", []))
+                        reps_map[other]["_deleted"] = True
+                        if other in rep_emb_map:
+                            rep_emb_map.pop(other, None)
+                changed_any = True
+                msg = {"ts": time.time(), "action": "auto_merge_reps", "cluster": cl, "mean_sim": mean_sim}
+                overall_history.append(msg)
+                if VERBOSE:
+                    print(f"[auto_merge_reps] merged cluster size {len(cl)} mean_sim={mean_sim:.3f}")
+                continue
+
+            # otherwise, if mean_sim >= MIN_SIM, invoke LLM to decide
+            if mean_sim < MIN_SIM:
+                if VERBOSE:
+                    print(f"[skip] cluster mean_sim {mean_sim:.3f} < MIN_SIM")
+                continue
+
+            # build LLM prompt for the whole cluster (reps are few)
+            prompt = build_prompt_for_rep_cluster(cl, reps_map)
+            raw = call_llm(prompt)
+            raw_retry = None
+            actions = extract_first_json_array(raw) if raw else []
+            if not actions and raw:
+                retry_prompt = ("Your previous output was not valid JSON. Return ONLY a single JSON array of actions now. "
+                                "Do not include any commentary. Here is your previous output for reference:\n\n" + (raw[:3000] if raw else ""))
+                raw_retry = call_llm(retry_prompt)
+                actions = extract_first_json_array(raw_retry) if raw_retry else []
+
+            # save debug
+            dbg = {"round": round_no, "cluster": cl, "prompt": prompt[:2000], "raw": raw or "", "raw_retry": raw_retry or ""}
+            dbg_path = RERUN_DEBUG / f"rerun_debug_round{round_no}_{cl[0]}_{uuid.uuid4().hex[:6]}.json"
+            with open(dbg_path, "w", encoding="utf-8") as fh:
+                json.dump(dbg, fh, ensure_ascii=False, indent=2)
+
+            if not actions:
+                if VERBOSE:
+                    print("[LLM] no valid actions returned; skipping cluster (kept)")
+                overall_history.append({"ts": time.time(), "action": "llm_no_parse", "cluster": cl})
+                continue
+
+            # apply actions: merge_entities and keep_entity
+            for act in actions:
+                a = act.get("action")
+                conf = float(act.get("confidence") or 0.0)
+                if a == "merge_entities":
+                    mids = act.get("merged_ids") or []
+                    if len(mids) >= 2:
+                        base = mids[0]
+                        involved = [rep_emb_map[x] for x in mids if x in rep_emb_map]
+                        if involved:
+                            rep_emb_map[base] = np.mean(np.stack(involved, axis=0), axis=0)
+                        for other in mids[1:]:
+                            if other in reps_map:
+                                reps_map[base]["members"].extend(reps_map[other].get("members", []))
+                                reps_map[other]["_deleted"] = True
+                                if other in rep_emb_map:
+                                    rep_emb_map.pop(other, None)
+                                changed_any = True
+                        if VERBOSE:
+                            print(f"[LLM] merged reps: {mids} conf={conf:.2f}")
+                        overall_history.append({"ts": time.time(), "action":"llm_merge_reps", "merged": mids, "confidence": conf})
+                elif a == "keep_entity":
+                    overall_history.append({"ts": time.time(), "action":"llm_keep_rep", "entity": act.get("entity_id"), "confidence": float(act.get("confidence") or 0.0)})
+                else:
+                    overall_history.append({"ts": time.time(), "action":"llm_unknown", "payload": act})
+
+        # cleanup deleted reps: actually remove from reps_map and rep_emb_map
+        to_delete = [k for k,v in reps_map.items() if v.get("_deleted")]
+        for d in to_delete:
+            reps_map.pop(d, None)
+            rep_emb_map.pop(d, None)
+        if VERBOSE:
+            print(f"[round {round_no}] finished. changed_any={changed_any}. reps remaining: {len(reps_map)}")
+
+    # After rounds, produce new resolved_records and resolve_map that map original mentions to new resolved groups.
+    new_resolved = []
+    new_resolve_map = {}
+    for rep_id, r in reps_map.items():
+        new_id = f"ResEntR_{uuid.uuid4().hex[:8]}"
+        members = list(dict.fromkeys(r.get("members", [])))  # unique, preserve order
+        label = r.get("entity_name") or new_id
+        desc = r.get("entity_description") or ""
+        resolved_obj = {
+            "id_final": new_id,
+            "label": label,
+            "description": desc,
+            "members": members,
+            "flag": "resolved_entity_rerun"
+        }
+        new_resolved.append(resolved_obj)
+        for m in members:
+            new_resolve_map[m] = new_id
+
+    # save outputs
+    ENT_OUT = OUT_DIR / "entities_resolved_rerun.jsonl"
+    save_jsonl(ENT_OUT, new_resolved)
+    MAP_OUT = OUT_DIR / "resolve_map_rerun.json"
+    save_json(MAP_OUT, new_resolve_map)
+    HISTORY_OUT = OUT_DIR / "rerun_history.jsonl"
+    save_jsonl(HISTORY_OUT, overall_history)
+
+    if VERBOSE:
+        print("[done] rerun outputs:")
+        print(" - entities_resolved_rerun:", ENT_OUT)
+        print(" - resolve_map_rerun:", MAP_OUT)
+        print(" - rerun_history:", HISTORY_OUT)
+        print("summary: reps final:", len(reps_map), "rounds:", round_no)
+
+if __name__ == "__main__":
+    main()
+
+
+#endregion#? Rerun Entity Resolution V1
+#?#########################  End  ##########################
+
+
+
+#?######################### Start ##########################
+#region:#?   Run + Rerun
+
+
+
+#!/usr/bin/env python3
+"""
+entity_resolution_merged.py
+
+Merged Entity Resolution pipeline:
+  Stage A: mention-level ER (iterative passes, auto merges + LLM micro-batches)
+  Stage B: representative-level consolidation (collapse groups -> reps -> rerun)
+  Output: final resolved entities, mapping, and history files.
+
+Tune thresholds and models in the CONFIG section below.
+"""
+
+import json
+import os
+import re
+import time
+import uuid
+import math
+import itertools
+from pathlib import Path
+from collections import defaultdict, Counter
+from typing import List, Dict, Any, Optional
+
+# -------- CONFIG (tweak here) --------
+INPUT_ENT_PATH = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/KG/entities_raw-entResTestssmaller.jsonl")
+OUT_DIR = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/entity-resolved")
+OUT_DIR.mkdir(parents=True, exist_ok=True)
+
+# Embedding model (HuggingFace)
+EMBED_MODEL = "BAAI/bge-large-en-v1.5"
+USE_CUDA = True
+BATCH_EMBED = 64
+
+# Similarity / retrieval thresholds
+TOPN_FAST = 64
+T_BASE = 0.75     # base edge threshold when building similarity graph
+T_AUTO = 0.94     # auto-merge threshold at mention level
+MIN_SIM = 0.60    # below this we won't attempt LLM/auto (left unchanged)
+
+# Representative-level thresholds (after initial mention ER)
+REP_T_AUTO = 0.92   # auto-merge threshold for representatives (a bit lower is OK)
+REP_MIN_SIM = 0.35
+REP_TOPN = 64
+
+# LLM / passes
+OPENAI_MODEL = "gpt-4o"
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")   # optional
+MAX_LLM_BATCH = 6        # mention-level micro-batch
+MAX_PASSES = 4            # mention-level passes
+REP_MAX_ROUNDS = 5        # representative consolidation rounds
+
+# Weights for composite similarity
+WEIGHTS = {"name": 0.45, "desc": 0.25, "ctx": 0.25, "type": 0.05}
+
+# Debugging / logging
+VERBOSE = True
+DEBUG_DIR = OUT_DIR / "llm_debug"
+DEBUG_DIR.mkdir(parents=True, exist_ok=True)
+RERUN_DEBUG_DIR = OUT_DIR / "llm_debug_rerun"
+RERUN_DEBUG_DIR.mkdir(parents=True, exist_ok=True)
+LLM_PARSE_RETRY = True
+
+# ---------------- Dependent libs (transformers / torch / faiss) ----------------
+try:
+    import torch
+    from transformers import AutoTokenizer, AutoModel
+except Exception as e:
+    raise RuntimeError("Missing transformers/torch. Install with `pip install torch transformers`") from e
+
+try:
+    import faiss
+except Exception:
+    try:
+        import faiss_cpu as faiss
+    except Exception:
+        raise RuntimeError("Missing faiss (faiss-cpu) to continue.") from None
+
+# optional sklearn (not required)
+try:
+    from sklearn.cluster import KMeans
+    _SKLEARN_AVAILABLE = True
+except Exception:
+    _SKLEARN_AVAILABLE = False
+
+# OpenAI client attempt (optional)
+_OPENAI_CLIENT = None
+try:
+    from openai import OpenAI as OpenAIClient
+    _OPENAI_CLIENT = ("openai_client", OpenAIClient)
+except Exception:
+    try:
+        import openai
+        _OPENAI_CLIENT = ("openai_pkg", openai)
+    except Exception:
+        _OPENAI_CLIENT = None
+
+# ---------------- Utilities ----------------
+def load_jsonl(path: Path) -> List[Dict[str, Any]]:
+    items = []
+    if not path.exists():
+        raise FileNotFoundError(f"Entities file not found: {path}")
+    with open(path, "r", encoding="utf-8") as fh:
+        for ln in fh:
+            ln = ln.strip()
+            if not ln:
+                continue
+            items.append(json.loads(ln))
+    if VERBOSE:
+        print(f"[load_entities] loaded {len(items)} entries from {path}")
+    return items
+
+def save_jsonl(path: Path, items: List[Dict[str, Any]]):
+    with open(path, "w", encoding="utf-8") as fh:
+        for it in items:
+            fh.write(json.dumps(it, ensure_ascii=False) + "\n")
+
+def save_json(path: Path, obj: Any):
+    with open(path, "w", encoding="utf-8") as fh:
+        json.dump(obj, fh, ensure_ascii=False, indent=2)
+
+def normalize_surface(s: str) -> str:
+    if not s:
+        return ""
+    return " ".join(s.strip().lower().split())
+
+# ---------------- Numeric / vector helpers (safe) ----------------
+import numpy as np
+
+def safe_vector(x) -> Optional[np.ndarray]:
+    if x is None:
+        return None
+    arr = np.asarray(x, dtype="float32")
+    if arr.size == 0:
+        return None
+    return arr.ravel()
+
+def safe_cosine(a, b) -> float:
+    a_v = safe_vector(a)
+    b_v = safe_vector(b)
+    if a_v is None or b_v is None:
+        return 0.0
+    a_norm = np.linalg.norm(a_v)
+    b_norm = np.linalg.norm(b_v)
+    if a_norm == 0 or b_norm == 0:
+        return 0.0
+    return float(np.dot(a_v, b_v) / (a_norm * b_norm))
+
+# ---------------- Embeddings ----------------
+device = "cuda" if (USE_CUDA and torch.cuda.is_available()) else "cpu"
+if VERBOSE:
+    print(f"[init] loading embedding model {EMBED_MODEL} on {device}")
+tokenizer = AutoTokenizer.from_pretrained(EMBED_MODEL, use_fast=True)
+model = AutoModel.from_pretrained(EMBED_MODEL).to(device)
+model.eval()
+
+@torch.no_grad()
+def embed_texts(texts: List[str], batch_size: int = BATCH_EMBED) -> np.ndarray:
+    vecs = []
+    for i in range(0, len(texts), batch_size):
+        batch = texts[i:i+batch_size]
+        enc = tokenizer(batch, padding=True, truncation=True, return_tensors="pt").to(device)
+        out = model(**enc)
+        token_emb = out.last_hidden_state if hasattr(out, "last_hidden_state") else out.hidden_states[-1]
+        mask = enc["attention_mask"].unsqueeze(-1)
+        token_emb = token_emb * mask
+        summed = token_emb.sum(dim=1)
+        denom = mask.sum(dim=1).clamp(min=1)
+        mean_emb = summed / denom
+        mean_emb = torch.nn.functional.normalize(mean_emb, p=2, dim=1)
+        vecs.append(mean_emb.cpu().numpy().astype("float32"))
+    if vecs:
+        return np.vstack(vecs)
+    return np.zeros((0, model.config.hidden_size), dtype="float32")
+
+def prepare_entity_embeddings(entities: List[Dict[str,Any]]):
+    if VERBOSE:
+        print("[embed] preparing name/desc/context texts for embedding")
+    ids = [e["id"] for e in entities]
+    name_texts = [ (e.get("entity_name") or "") for e in entities ]
+    desc_texts = [ (e.get("entity_description") or "") for e in entities ]
+    ctx_texts = [ ( (e.get("used_context_excerpt") or e.get("context_phrase") or "")[:512] ) for e in entities ]
+    emb_name = embed_texts(name_texts)
+    emb_desc = embed_texts(desc_texts)
+    emb_ctx  = embed_texts(ctx_texts)
+    emb_name_map = { ids[i]: emb_name[i] for i in range(len(ids)) }
+    emb_desc_map = { ids[i]: emb_desc[i] for i in range(len(ids)) }
+    emb_ctx_map  = { ids[i]: emb_ctx[i]  for i in range(len(ids)) }
+    if VERBOSE:
+        print(f"[embed] built embeddings: name:{len(emb_name_map)} desc:{len(emb_desc_map)} ctx:{len(emb_ctx_map)}")
+    return emb_name_map, emb_desc_map, emb_ctx_map
+
+# ---------------- Composite similarity ----------------
+def composite_sim(e1: Dict, e2: Dict, emb_name, emb_desc, emb_ctx, weights=WEIGHTS):
+    sims = []
+    ws = []
+    v1 = emb_name.get(e1["id"]); v2 = emb_name.get(e2["id"])
+    if v1 is not None and v2 is not None:
+        sims.append(safe_cosine(v1, v2)); ws.append(weights["name"])
+    v1 = emb_desc.get(e1["id"]); v2 = emb_desc.get(e2["id"])
+    if v1 is not None and v2 is not None and (np.any(v1) or np.any(v2)):
+        sims.append(safe_cosine(v1, v2)); ws.append(weights["desc"])
+    v1 = emb_ctx.get(e1["id"]); v2 = emb_ctx.get(e2["id"])
+    if v1 is not None and v2 is not None and (np.any(v1) or np.any(v2)):
+        sims.append(safe_cosine(v1, v2)); ws.append(weights["ctx"])
+    t1 = (e1.get("entity_type_hint") or "").strip().lower()
+    t2 = (e2.get("entity_type_hint") or "").strip().lower()
+    if t1 and t2:
+        sims.append(1.0 if t1 == t2 else 0.0); ws.append(weights["type"])
+    if not sims:
+        return 0.0
+    total_w = sum(ws)
+    if total_w <= 0:
+        return sum(sims) / len(sims)
+    weighted = sum(s * w for s, w in zip(sims, ws)) / total_w
+    return float(weighted)
+
+# ---------------- FAISS helpers ----------------
+def build_faiss_index(emb_map: Dict[str, np.ndarray]):
+    ids = list(emb_map.keys())
+    if not ids:
+        raise RuntimeError("Empty emb_map for FAISS index")
+    vecs = np.vstack([emb_map[i] for i in ids]).astype("float32")
+    dim = vecs.shape[1]
+    index = faiss.IndexFlatIP(dim)
+    faiss.normalize_L2(vecs)
+    index.add(vecs)
+    return index, ids, vecs
+
+def neighbors_topn(index, ids_list, vecs, query_vec, topn=TOPN_FAST):
+    q = np.asarray(query_vec).reshape(1, -1).astype("float32")
+    faiss.normalize_L2(q)
+    D, I = index.search(q, topn)
+    res = []
+    for dist, idx in zip(D[0], I[0]):
+        if idx < 0 or idx >= len(ids_list): continue
+        res.append((ids_list[idx], float(dist)))
+    return res
+
+# ---------------- Graph & clustering ----------------
+def build_similarity_graph(entities, emb_name, emb_desc, emb_ctx, fast_index, fast_ids, fast_vecs, t_base=T_BASE):
+    if VERBOSE:
+        print("[graph] building candidate edges with base threshold", t_base)
+    id_map = {e["id"]: e for e in entities}
+    adjacency = defaultdict(dict)
+    for e in entities:
+        qid = e["id"]
+        # pick best available vector
+        # qvec = emb_name.get(qid) or emb_desc.get(qid) or emb_ctx.get(qid)
+        # pick the best available vector (safe with numpy arrays)
+        qvec = emb_name.get(qid)
+        if qvec is None:
+            qvec = emb_desc.get(qid)
+        if qvec is None:
+            qvec = emb_ctx.get(qid)
+        # qvec will be None if no vector exists
+
+        if qvec is None:
+            continue
+        nbrs = neighbors_topn(fast_index, fast_ids, fast_vecs, qvec, topn=TOPN_FAST)
+        for nid, fast_score in nbrs:
+            if nid == qid:
+                continue
+            s = composite_sim(e, id_map[nid], emb_name, emb_desc, emb_ctx)
+            if s >= t_base:
+                adjacency[qid][nid] = s
+                adjacency[nid][qid] = s
+    visited = set()
+    clusters = []
+    for eid in id_map.keys():
+        if eid in visited:
+            continue
+        stack = [eid]; comp = []
+        while stack:
+            cur = stack.pop()
+            if cur in visited: continue
+            visited.add(cur)
+            comp.append(cur)
+            for nbr in adjacency.get(cur, {}).keys():
+                if nbr not in visited:
+                    stack.append(nbr)
+        clusters.append(sorted(comp))
+    if VERBOSE:
+        print(f"[graph] built {len(clusters)} candidate clusters (including singletons)")
+    return clusters, adjacency
+
+# ---------------- Union-Find ----------------
+class UnionFind:
+    def __init__(self):
+        self.parent = {}
+    def find(self, a):
+        if a not in self.parent:
+            self.parent[a] = a
+            return a
+        if self.parent[a] == a:
+            return a
+        self.parent[a] = self.find(self.parent[a])
+        return self.parent[a]
+    def union(self, a, b):
+        ra = self.find(a); rb = self.find(b)
+        if ra != rb:
+            self.parent[rb] = ra
+    def groups(self):
+        d = {}
+        for x in list(self.parent.keys()):
+            r = self.find(x)
+            d.setdefault(r, []).append(x)
+        return list(d.values())
+
+# ---------------- LLM prompt / call / parse ----------------
+def build_cluster_prompt(cluster_entities: List[str], entities_by_id: Dict[str, Dict], examples: Optional[List[Dict]] = None):
+    header = [
+        "You are an assistant whose job is to decide whether entity mentions refer to the same real-world entity.",
+        "Return ONLY a JSON array (no commentary). Each element is an action object.",
+        "Action types:",
+        " - merge_entities: {action:'merge_entities', merged_ids:[...], canonical_name:'...', new_description:'...', confidence:0.0-1.0}",
+        " - rename_entity: {action:'rename_entity', entity_id:'...', new_name:'...', new_description:'...', confidence:0.0-1.0}",
+        " - keep_entity: {action:'keep_entity', entity_id:'...', confidence:0.0-1.0}",
+        "Important: include 'confidence' (0.0-1.0) for each action.",
+        ""
+    ]
+    examples_block = [
+        {"action":"merge_entities","merged_ids":["En_A","En_B"],"canonical_name":"graphitization","new_description":"Formation of graphite in steel.","confidence":0.95},
+        {"action":"rename_entity","entity_id":"En_C","new_name":"Heat_Fatigue","new_description":"Thermal fatigue cause.", "confidence":0.85},
+        {"action":"keep_entity","entity_id":"En_D","confidence":0.40}
+    ]
+    header.append("EXAMPLES:")
+    header.append(json.dumps(examples_block, ensure_ascii=False, indent=2))
+    items = []
+    for eid in cluster_entities:
+        ent = entities_by_id[eid]
+        items.append({
+            "id": ent.get("id"),
+            "surface": ent.get("entity_name"),
+            "short_desc": (ent.get("entity_description") or "")[:200],
+            "context_excerpt": (ent.get("used_context_excerpt") or ent.get("context_phrase") or "")[:300],
+            "type_hint": ent.get("entity_type_hint")
+        })
+    prompt = "\n".join(header) + "\n\n" + json.dumps({"mentions": items}, ensure_ascii=False, indent=2)
+    prompt += "\n\nReturn only a JSON array of actions."
+    return prompt
+
+def build_prompt_for_rep_cluster(rep_ids: List[str], reps_map: Dict[str, Dict]):
+    header = [
+        "You are an assistant. Decide whether the following representative nodes refer to the same real-world entity.",
+        "Return ONLY a JSON array with action objects. Each action must have a 'confidence' float 0.0-1.0.",
+        "Allowed actions:",
+        " - merge_entities: {action:'merge_entities', merged_ids:[...], canonical_name:'...', new_description:'...', confidence:0.0-1.0}",
+        " - keep_entity: {action:'keep_entity', entity_id:'...', confidence:0.0-1.0}",
+        ""
+    ]
+    items = []
+    for rid in rep_ids:
+        r = reps_map[rid]
+        items.append({
+            "rep_id": rid,
+            "entity_name": r.get("entity_name"),
+            "entity_description": (r.get("entity_description") or "")[:300],
+            "members_count": len(r.get("members",[]))
+        })
+    prompt = "\n".join(header) + "\n\n" + json.dumps({"mentions": items}, ensure_ascii=False, indent=2)
+    prompt += "\n\nReturn only a JSON array."
+    return prompt
+
+def call_llm(prompt: str, model=OPENAI_MODEL, max_tokens=600, temperature=0.0):
+    if not OPENAI_API_KEY or _OPENAI_CLIENT is None:
+        if VERBOSE:
+            print("[LLM] OpenAI key/client not available; skipping LLM call.")
+        return None
+    try:
+        kind, client_pkg = _OPENAI_CLIENT
+        if kind == "openai_client":
+            client = client_pkg(api_key=OPENAI_API_KEY)
+            resp = client.chat.completions.create(model=model, messages=[{"role":"user","content":prompt}], max_tokens=max_tokens, temperature=temperature)
+            return resp.choices[0].message.content
+        else:
+            client_pkg.api_key = OPENAI_API_KEY
+            resp = client_pkg.ChatCompletion.create(model=model, messages=[{"role":"user","content":prompt}], max_tokens=max_tokens, temperature=temperature)
+            return resp.choices[0].message.content
+    except Exception as e:
+        print("[LLM] call error:", e)
+        return None
+
+def extract_first_json_array(txt: str):
+    if not txt:
+        return []
+    t = txt.strip()
+    if t.startswith("```"):
+        t = t.strip("`").strip()
+    # 1) direct load
+    try:
+        parsed = json.loads(t)
+        if isinstance(parsed, list):
+            return parsed
+    except Exception:
+        pass
+    # 2) find first [...] block
+    m = re.search(r'(\[\s*(?:[\s\S]*?)\s*\])', t)
+    if m:
+        candidate = m.group(1)
+        try:
+            parsed = json.loads(candidate)
+            if isinstance(parsed, list):
+                return parsed
+        except Exception:
+            try:
+                parsed = json.loads(candidate.replace("'", '"'))
+                if isinstance(parsed, list):
+                    return parsed
+            except Exception:
+                pass
+    # 3) fallback: extract {...} objects
+    objs = []
+    stack = []
+    start = None
+    for i,ch in enumerate(t):
+        if ch == '{':
+            if not stack: start = i
+            stack.append('{')
+        elif ch == '}':
+            if stack:
+                stack.pop()
+                if not stack and start is not None:
+                    piece = t[start:i+1]
+                    try:
+                        obj = json.loads(piece)
+                        if isinstance(obj, dict):
+                            objs.append(obj)
+                    except Exception:
+                        try:
+                            obj = json.loads(piece.replace("'", '"'))
+                            if isinstance(obj, dict):
+                                objs.append(obj)
+                        except Exception:
+                            pass
+                    start = None
+    if objs:
+        return objs
+    # last attempt
+    try:
+        parsed = json.loads(t.replace("'", '"'))
+        if isinstance(parsed, list):
+            return parsed
+    except Exception:
+        pass
+    return []
+
+# ---------------- apply actions (mention-level) ----------------
+def apply_actions(actions: List[Dict], entities_by_id: Dict[str, Dict], uf: UnionFind, history: List[Dict]):
+    """
+    Apply LLM actions to union-find and entities_by_id (rename suggestions).
+    Returns True if any union change happened (i.e., changed structure).
+    """
+    changed = False
+    for act in actions:
+        if not isinstance(act, dict):
+            history.append({"ts": time.time(), "action":"invalid_action_format", "payload":act})
+            continue
+        action = act.get("action")
+        conf = float(act.get("confidence")) if act.get("confidence") is not None else None
+        if action == "merge_entities":
+            mids = act.get("merged_ids") or []
+            if len(mids) >= 2:
+                base = mids[0]
+                for other in mids[1:]:
+                    before_root = uf.find(other)
+                    uf.union(base, other)
+                    after_root = uf.find(other)
+                    if before_root != after_root:
+                        changed = True
+            history.append({"ts": time.time(), "action":"merge_entities", "merged_ids":mids, "canonical_name":act.get("canonical_name"), "new_description":act.get("new_description"), "confidence":conf})
+        elif action == "rename_entity":
+            eid = act.get("entity_id")
+            new_name = act.get("new_name")
+            if eid in entities_by_id:
+                entities_by_id[eid]["__rename_suggested"] = {"new_name": new_name, "new_description": act.get("new_description"), "confidence": conf}
+            history.append({"ts": time.time(), "action":"rename_entity", "entity_id": eid, "new_name": new_name, "new_description": act.get("new_description"), "confidence": conf})
+        elif action == "keep_entity":
+            eid = act.get("entity_id")
+            history.append({"ts": time.time(), "action":"keep_entity", "entity_id": eid, "confidence": conf})
+        else:
+            history.append({"ts": time.time(), "action":"unknown", "payload": act})
+    return changed
+
+# ---------------- cluster splitting ----------------
+def split_cluster(cluster_ids: List[str], max_batch=MAX_LLM_BATCH):
+    """
+    Splits cluster into sequential windows of size max_batch.
+    NOTE: we process each sub-window with the LLM, and apply union-find unions immediately,
+    which allows merges across windows in later sub-windows (transitive).
+    """
+    if len(cluster_ids) <= max_batch:
+        return [cluster_ids]
+    out = []
+    for i in range(0, len(cluster_ids), max_batch):
+        out.append(cluster_ids[i:i+max_batch])
+    return out
+
+# ---------------- Representative consolidation helpers ----------------
+def build_reps_from_groups(groups: Dict[str, List[str]], entities_by_id: Dict[str, Dict]):
+    """
+    groups: root -> list of mention ids
+    Returns reps_map: rep_id -> {rep_id, entity_name, entity_description, members}
+    """
+    reps = {}
+    for root, members in groups.items():
+        # choose name from rename suggestions or most common normalized surface
+        candidate_names = []
+        candidate_confs = []
+        for m in members:
+            rs = entities_by_id[m].get("__rename_suggested")
+            if rs and rs.get("new_name"):
+                candidate_names.append(rs.get("new_name"))
+                candidate_confs.append(float(rs.get("confidence") or 0.0))
+        if candidate_names:
+            if candidate_confs:
+                chosen = candidate_names[int(np.argmax(candidate_confs))]
+            else:
+                chosen = Counter(candidate_names).most_common(1)[0][0]
+        else:
+            surfaces = [entities_by_id[m].get("entity_name") or "" for m in members]
+            normalized = [normalize_surface(s) for s in surfaces if s]
+            if normalized:
+                chosen = Counter(normalized).most_common(1)[0][0]
+            else:
+                chosen = f"Rep_{root}"
+        # description: pick any suggested new_description or first available
+        descs = [ (entities_by_id[m].get("__rename_suggested") or {}).get("new_description") for m in members if (entities_by_id[m].get("__rename_suggested") or {}).get("new_description")]
+        if descs:
+            chosen_desc = descs[0]
+        else:
+            found = None
+            for m in members:
+                dd = entities_by_id[m].get("entity_description")
+                if dd:
+                    found = dd
+                    break
+            chosen_desc = found or ""
+        rep_id = f"Rep_{uuid.uuid4().hex[:8]}"
+        reps[rep_id] = {"rep_id": rep_id, "entity_name": chosen, "entity_description": chosen_desc, "members": list(members)}
+    return reps
+
+# ---------------- Main Pipeline ----------------
+def main():
+    # Load mentions
+    mentions = load_jsonl(INPUT_ENT_PATH)
+    entities_by_id = { e["id"]: e for e in mentions }
+
+    # Build mention-level embeddings
+    emb_name, emb_desc, emb_ctx = prepare_entity_embeddings(mentions)
+
+    # Build a combined emb_map for FAISS (name preferred, fallback to desc/ctx)
+    combined_emb_map = {}
+    for eid, v in emb_name.items():
+        combined_emb_map[eid] = v.copy()
+    for eid, v in emb_desc.items():
+        if eid not in combined_emb_map:
+            combined_emb_map[eid] = v.copy()
+        else:
+            combined_emb_map[eid] = (combined_emb_map[eid] + v) / 2.0
+    for eid, v in emb_ctx.items():
+        if eid not in combined_emb_map:
+            combined_emb_map[eid] = v.copy()
+
+    if not combined_emb_map:
+        raise RuntimeError("No embeddings available to build FAISS index; aborting")
+
+    fast_index, fast_ids, fast_vecs = build_faiss_index(combined_emb_map)
+
+    # union-find to apply merges
+    uf = UnionFind()
+    for eid in entities_by_id.keys():
+        uf.find(eid)
+
+    history = []
+    total_llm_calls = 0
+    pass_no = 0
+    changed_in_pass = True
+
+    # ---------- Stage A: mention-level iterative passes ----------
+    while pass_no < MAX_PASSES and changed_in_pass:
+        pass_no += 1
+        if VERBOSE:
+            print(f"\n=== PASS {pass_no} (mention-level) ===")
+        changed_in_pass = False
+
+        clusters, adjacency = build_similarity_graph(list(entities_by_id.values()), emb_name, emb_desc, emb_ctx, fast_index, fast_ids, fast_vecs, t_base=T_BASE)
+
+        clusters_to_process = []
+        for cl in clusters:
+            mps = mean_pairwise_sim(cl, entities_by_id, emb_name, emb_desc, emb_ctx)
+            if len(cl) == 1:
+                eid = cl[0]
+                history.append({"ts":time.time(),"action":"kept_singleton","entity_id":eid,"mean_sim":mps,"processed_by":"none","confidence":mps})
+                continue
+            if mps < MIN_SIM:
+                history.append({"ts":time.time(),"action":"left_unchanged_low_sim","members":cl,"mean_sim":mps,"processed_by":"none","confidence":mps})
+                continue
+            clusters_to_process.append((cl, mps))
+
+        if VERBOSE:
+            print(f"[pass {pass_no}] clusters_to_process: {len(clusters_to_process)} (min_sim={MIN_SIM}, auto_th={T_AUTO})")
+
+        for cl, mps in clusters_to_process:
+            # skip if already unified to single root
+            roots = set(uf.find(x) for x in cl)
+            if len(roots) == 1:
+                continue
+            # auto-merge if very high mean sim
+            if mps >= T_AUTO:
+                for i in range(1, len(cl)):
+                    uf.union(cl[0], cl[i])
+                history.append({"ts":time.time(),"action":"auto_merge","members":cl,"mean_sim":mps,"processed_by":"auto","confidence":1.0})
+                changed_in_pass = True
+                if VERBOSE:
+                    print(f"[auto_merge] merged cluster size {len(cl)} mean_sim={mps:.3f}")
+                continue
+
+            # LLM micro-batches (split cluster into windows)
+            subparts = split_cluster(cl, max_batch=MAX_LLM_BATCH)
+            for idx, sub in enumerate(subparts, start=1):
+                # only active (not already merged into another root)
+                sub_active = [s for s in sub if uf.find(s) == s]
+                if not sub_active:
+                    continue
+                prompt = build_cluster_prompt(sub_active, entities_by_id, examples=None)
+                total_llm_calls += 1
+                raw = call_llm(prompt)
+                raw_retry = None
+                actions = extract_first_json_array(raw) if raw else []
+                if not actions and raw and LLM_PARSE_RETRY:
+                    retry_prompt = ("Your previous output was not valid JSON. Return ONLY a single JSON array (no commentary) with actions now. "
+                                    "Previous output (for context):\n" + raw[:4000])
+                    raw_retry = call_llm(retry_prompt)
+                    actions = extract_first_json_array(raw_retry) if raw_retry else []
+                # save debug file
+                dbg_name = f"pass{pass_no}_cluster_{cl[0]}_sub{idx}_{uuid.uuid4().hex[:6]}.json"
+                dbg_path = DEBUG_DIR / dbg_name
+                with open(dbg_path, "w", encoding="utf-8") as fh:
+                    fh.write(json.dumps({"pass":pass_no,"cluster_root":cl[0],"sub_idx":idx,"prompt":prompt[:2000],"raw":raw or "","raw_retry":raw_retry or ""}, ensure_ascii=False, indent=2))
+                if not actions:
+                    # conservative fallback: mark keeps with low confidence
+                    for s in sub_active:
+                        history.append({"ts":time.time(),"action":"llm_parse_failed_fallback_keep","entity_id":s,"processed_by":"fallback","confidence":0.25})
+                    if VERBOSE:
+                        print(f"[LLM parse] failed for sub-batch {idx}/{len(subparts)}; fallback keeps")
+                    continue
+                # apply LLM actions immediately (unions applied now)
+                applied = apply_actions(actions, entities_by_id, uf, history)
+                if applied:
+                    changed_in_pass = True
+                if VERBOSE:
+                    print(f"[LLM] processed sub-batch {idx}/{len(subparts)} for cluster(size={len(cl)}) -> actions: {len(actions)}")
+
+        if VERBOSE:
+            print(f"[pass {pass_no}] finished. changed_in_pass={changed_in_pass}")
+
+    # After mention-level passes, assemble groups
+    groups = {}
+    for eid in entities_by_id.keys():
+        root = uf.find(eid)
+        groups.setdefault(root, []).append(eid)
+
+    # Create resolved records (intermediate)
+    resolved_records = []
+    resolve_map = {}
+    clusters_processed = []
+    for root, members in groups.items():
+        # canonical name selection (based on rename suggestions or most common normalized surface)
+        candidate_names = []
+        candidate_confs = []
+        for m in members:
+            rs = entities_by_id[m].get("__rename_suggested")
+            if rs and rs.get("new_name"):
+                candidate_names.append(rs.get("new_name"))
+                candidate_confs.append(float(rs.get("confidence") or 0.0))
+        if candidate_names:
+            if candidate_confs:
+                name = candidate_names[int(np.argmax(candidate_confs))]
+            else:
+                name = Counter(candidate_names).most_common(1)[0][0]
+        else:
+            surfaces = [entities_by_id[m].get("entity_name") or "" for m in members]
+            normalized = [normalize_surface(s) for s in surfaces if s]
+            name = Counter(normalized).most_common(1)[0][0] if normalized else f"Resolved_{root}"
+        # description
+        descs = [ (entities_by_id[m].get("__rename_suggested") or {}).get("new_description") for m in members if (entities_by_id[m].get("__rename_suggested") or {}).get("new_description")]
+        if descs:
+            description = descs[0]
+        else:
+            description = next((entities_by_id[m].get("entity_description") for m in members if entities_by_id[m].get("entity_description")), "") or f"Resolved entity combining {len(members)} mentions."
+        # member confidences from history
+        member_confidences = {}
+        for h in history:
+            if h.get("action") == "merge_entities":
+                for mid in h.get("merged_ids", []):
+                    if mid in members:
+                        member_confidences[mid] = max(member_confidences.get(mid, 0.0), float(h.get("confidence") or 0.0))
+            elif h.get("action") in ("rename_entity","keep_entity","kept_singleton"):
+                mid = h.get("entity_id")
+                if mid in members:
+                    member_confidences[mid] = max(member_confidences.get(mid, 0.0), float(h.get("confidence") or 0.0))
+            elif h.get("action") == "left_unchanged_low_sim":
+                for mid in h.get("members", []):
+                    if mid in members:
+                        member_confidences[mid] = max(member_confidences.get(mid, 0.0), float(h.get("confidence") or 0.0))
+        cluster_mean = mean_pairwise_sim(members, entities_by_id, emb_name, emb_desc, emb_ctx)
+        for m in members:
+            member_confidences.setdefault(m, float(cluster_mean))
+        new_id = f"ResEnt_{uuid.uuid4().hex[:8]}"
+        aliases = list({ (entities_by_id[m].get("entity_name") or "") for m in members if (entities_by_id[m].get("entity_name") or "").strip().lower() != name.strip().lower() })
+        resolved_obj = {
+            "id_final": new_id,
+            "label": name,
+            "aliases": aliases,
+            "description": description,
+            "members": members,
+            "member_confidence": {m: member_confidences.get(m, 0.0) for m in members},
+            "flag": "resolved_entity_stageA"
+        }
+        resolved_records.append(resolved_obj)
+        for m in members:
+            resolve_map[m] = new_id
+        clusters_processed.append({"root": root, "members": members, "label": name, "mean_pairwise_sim": cluster_mean, "member_confidence": {m: member_confidences.get(m, 0.0) for m in members}})
+
+    # Save intermediate outputs (optional)
+    ENT_OUT_STAGEA = OUT_DIR / "entities_resolved_stageA.jsonl"
+    save_jsonl(ENT_OUT_STAGEA, resolved_records)
+    save_json(OUT_DIR / "resolve_map_stageA.json", resolve_map)
+    save_jsonl(OUT_DIR / "resolution_history_stageA.jsonl", history)
+    save_jsonl(OUT_DIR / "clusters_processed_stageA.jsonl", clusters_processed)
+    if VERBOSE:
+        print(f"[stageA done] stageA resolved groups: {len(resolved_records)} saved to {ENT_OUT_STAGEA}")
+
+    # ---------- Stage B: representative-level consolidation (rerun) ----------
+    # Build groups map root->members (we already have groups), make reps
+    reps_map = build_reps_from_groups(groups, entities_by_id)
+
+    # Build rep embeddings (name + description)
+    rep_ids = list(reps_map.keys())
+    rep_texts = [ (reps_map[r]["entity_name"] or "") + " . " + (reps_map[r]["entity_description"] or "") for r in rep_ids ]
+    rep_emb = embed_texts(rep_texts) if rep_texts else np.zeros((0, model.config.hidden_size), dtype="float32")
+    rep_emb_map = { rep_ids[i]: safe_vector(rep_emb[i]) for i in range(len(rep_ids)) } if len(rep_ids)>0 else {}
+
+    round_no = 0
+    changed_any = True
+    overall_rerun_history = []
+
+    while round_no < REP_MAX_ROUNDS and changed_any:
+        round_no += 1
+        if VERBOSE:
+            print(f"\n=== REP RERUN ROUND {round_no} ===")
+        changed_any = False
+        if not rep_emb_map:
+            if VERBOSE:
+                print("[rep_rerun] no rep embeddings; stopping")
+            break
+        # build FAISS index for reps
+        try:
+            fast_idx, fast_ids, fast_vecs = build_faiss_index(rep_emb_map)
+        except Exception as e:
+            print("[rep_rerun] build faiss failed:", e)
+            break
+        # adjacency based on rep embeddings
+        adjacency = defaultdict(dict)
+        for rid in list(reps_map.keys()):
+            qvec = rep_emb_map.get(rid)
+            if qvec is None:
+                continue
+            nbrs = neighbors_topn(fast_idx, fast_ids, fast_vecs, qvec, topn=REP_TOPN)
+            for nid, fast_score in nbrs:
+                if nid == rid:
+                    continue
+                v_nid = rep_emb_map.get(nid)
+                if v_nid is None:
+                    continue
+                s = safe_cosine(qvec, v_nid)
+                if s >= T_BASE:
+                    adjacency[rid][nid] = s
+                    adjacency[nid][rid] = s
+        # connected components at rep-level
+        visited = set()
+        rep_clusters = []
+        for rid in list(reps_map.keys()):
+            if rid in visited: continue
+            stack = [rid]; comp = []
+            while stack:
+                cur = stack.pop()
+                if cur in visited: continue
+                visited.add(cur)
+                comp.append(cur)
+                for nbr in adjacency.get(cur, {}).keys():
+                    if nbr not in visited:
+                        stack.append(nbr)
+            rep_clusters.append(sorted(comp))
+        if VERBOSE:
+            print(f"[graph] rep clusters: {len(rep_clusters)}")
+
+        # process clusters (full cluster passed to LLM unless too large)
+        for cl in rep_clusters:
+            if len(cl) <= 1:
+                continue
+            # compute mean pairwise sim
+            sims = []
+            for i in range(len(cl)):
+                for j in range(i+1, len(cl)):
+                    sims.append(safe_cosine(rep_emb_map.get(cl[i]), rep_emb_map.get(cl[j])))
+            mean_sim = float(sum(sims)/len(sims)) if sims else 0.0
+            # auto-merge if very high
+            if mean_sim >= REP_T_AUTO:
+                base = cl[0]
+                involved_vecs = [rep_emb_map[x] for x in cl if x in rep_emb_map and rep_emb_map[x] is not None]
+                if involved_vecs:
+                    rep_emb_map[base] = np.mean(np.stack(involved_vecs, axis=0), axis=0)
+                for other in cl[1:]:
+                    if other in reps_map:
+                        reps_map[base]["members"].extend(reps_map[other].get("members", []))
+                        reps_map[other]["_deleted"] = True
+                        rep_emb_map.pop(other, None)
+                changed_any = True
+                overall_rerun_history.append({"ts":time.time(),"action":"auto_merge_reps","cluster":cl,"mean_sim":mean_sim})
+                if VERBOSE:
+                    print(f"[auto_merge_reps] merged cluster size {len(cl)} mean_sim={mean_sim:.3f}")
+                continue
+            # skip if too low
+            if mean_sim < REP_MIN_SIM:
+                if VERBOSE:
+                    print(f"[rep skip] cluster mean_sim {mean_sim:.3f} < REP_MIN_SIM")
+                continue
+            # build prompt and call LLM for whole cluster (reps are small)
+            prompt = build_prompt_for_rep_cluster(cl, reps_map)
+            raw = call_llm(prompt)
+            raw_retry = None
+            actions = extract_first_json_array(raw) if raw else []
+            if not actions and raw and LLM_PARSE_RETRY:
+                retry_prompt = ("Your previous output was invalid. Return ONLY a JSON array of actions now. Previous output:\n" + raw[:3000])
+                raw_retry = call_llm(retry_prompt)
+                actions = extract_first_json_array(raw_retry) if raw_retry else []
+            # save debug file
+            dbg_path = RERUN_DEBUG_DIR / f"rerun_round{round_no}_{cl[0]}_{uuid.uuid4().hex[:6]}.json"
+            with open(dbg_path, "w", encoding="utf-8") as fh:
+                fh.write(json.dumps({"round":round_no,"cluster":cl,"prompt":prompt[:2000],"raw":raw or "","raw_retry":raw_retry or ""}, ensure_ascii=False, indent=2))
+            if not actions:
+                overall_rerun_history.append({"ts":time.time(),"action":"llm_no_parse_reps","cluster":cl})
+                if VERBOSE:
+                    print("[LLM] no valid actions for rep cluster; skipping")
+                continue
+            # apply actions
+            for act in actions:
+                a = act.get("action")
+                conf = float(act.get("confidence") or 0.0)
+                if a == "merge_entities":
+                    mids = act.get("merged_ids") or []
+                    if len(mids) >= 2:
+                        base = mids[0]
+                        involved_vecs = [rep_emb_map[x] for x in mids if x in rep_emb_map and rep_emb_map[x] is not None]
+                        if involved_vecs:
+                            rep_emb_map[base] = np.mean(np.stack(involved_vecs, axis=0), axis=0)
+                        for other in mids[1:]:
+                            if other in reps_map:
+                                reps_map[base]["members"].extend(reps_map[other].get("members", []))
+                                reps_map[other]["_deleted"] = True
+                                rep_emb_map.pop(other, None)
+                                changed_any = True
+                        overall_rerun_history.append({"ts":time.time(),"action":"llm_merge_reps","merged":mids,"confidence":conf})
+                        if VERBOSE:
+                            print(f"[LLM] merged reps: {mids} conf={conf:.2f}")
+                elif a == "keep_entity":
+                    overall_rerun_history.append({"ts":time.time(),"action":"llm_keep_rep","entity":act.get("entity_id"),"confidence":float(act.get("confidence") or 0.0)})
+                else:
+                    overall_rerun_history.append({"ts":time.time(),"action":"llm_unknown_rep","payload":act})
+
+        # cleanup deleted reps
+        to_delete = [k for k,v in reps_map.items() if v.get("_deleted")]
+        for d in to_delete:
+            reps_map.pop(d, None)
+            rep_emb_map.pop(d, None)
+        if VERBOSE:
+            print(f"[rep round {round_no}] finished. changed_any={changed_any}. reps remaining: {len(reps_map)}")
+
+    # Build final resolved objects from reps_map
+    final_resolved = []
+    final_resolve_map = {}
+    for rep_id, r in reps_map.items():
+        new_id = f"ResEntFinal_{uuid.uuid4().hex[:8]}"
+        members = list(dict.fromkeys(r.get("members", [])))  # unique preserve order
+        label = r.get("entity_name") or new_id
+        desc = r.get("entity_description") or ""
+        obj = {"id_final": new_id, "label": label, "description": desc, "members": members, "flag":"resolved_entity_final"}
+        final_resolved.append(obj)
+        for m in members:
+            final_resolve_map[m] = new_id
+
+    # Save final outputs
+    ENT_OUT = OUT_DIR / "entities_resolved_final.jsonl"
+    save_jsonl(ENT_OUT, final_resolved)
+    MAP_OUT = OUT_DIR / "resolve_map_final.json"
+    save_json(MAP_OUT, final_resolve_map)
+    HISTORY_OUT = OUT_DIR / "resolution_history_full.jsonl"
+    # combine mention history and rerun history
+    combined_history = history + overall_rerun_history
+    save_jsonl(HISTORY_OUT, combined_history)
+
+    if VERBOSE:
+        print("[done] Final outputs:")
+        print(" - entities_resolved_final:", ENT_OUT)
+        print(" - resolve_map_final:", MAP_OUT)
+        print(" - resolution_history_full:", HISTORY_OUT)
+        print("Summary:")
+        print(f"  original_mentions: {len(mentions)}")
+        print(f"  resolved_entities (stageA): {len(resolved_records)}")
+        print(f"  final_resolved_entities: {len(final_resolved)}")
+        print(f"  total_llm_calls (approx): {total_llm_calls}")
+    return
+
+# ---------------- small helper used earlier ----------------
+def mean_pairwise_sim(cluster_list: List[str], entities_by_id: Dict[str, Dict], emb_name, emb_desc, emb_ctx):
+    if len(cluster_list) <= 1:
+        return 1.0
+    sims = []
+    for a,b in itertools.combinations(cluster_list, 2):
+        sims.append(composite_sim(entities_by_id[a], entities_by_id[b], emb_name, emb_desc, emb_ctx))
+    return float(sum(sims)/len(sims)) if sims else 0.0
+
+# ---------------- run main ----------------
+if __name__ == "__main__":
+    main()
+
+
+#endregion#? Run + Rerun
+#?#########################  End  ##########################
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#?######################### Start ##########################
+#region:#?   Resolution Analysis Full V0
+
+
+#!/usr/bin/env python3
+"""
+analyze_entity_resolution_full.py
+
+Enhanced analysis / human-inspection outputs for entity resolution run.
 
 Inputs (expected):
   - /home/mabolhas/MyReposOnSOL/SGCE-KG/data/KG/entities_raw.jsonl
@@ -4163,23 +4405,25 @@ Inputs (expected):
   - /home/mabolhas/MyReposOnSOL/SGCE-KG/data/entity-resolved/resolve_map.json
   - /home/mabolhas/MyReposOnSOL/SGCE-KG/data/entity-resolved/clusters_for_review.jsonl (optional)
 
-Outputs (all under OUT_DIR):
-  - merged_members.csv            (rows = original mentions that have a resolved_id)
-  - all_members_with_resolution.csv  (rows = all original mentions with resolution data)
-  - clusters_detailed.jsonl       (one JSON object per resolved canonical node with full member records)
-  - clusters_summary.csv          (one row per resolved canonical node with aggregated stats)
-  - clusters_flagged_for_review.csv (if any)
-  - singletons_unresolved.csv     (original mentions not assigned to any resolved node)
+Outputs (created under):
+  /home/mabolhas/MyReposOnSOL/SGCE-KG/data/entity-resolved/analysis/
+    - resolved_entity_table.csv
+    - merged_groups_full.json
+    - merged_groups_full.jsonl
+    - merged_groups_by_size.csv
+    - singletons_unresolved.csv
+    - clusters_flagged_for_review.jsonl (if present)
+    - top_resolved_stats.json
 """
 
 import json
 from pathlib import Path
 from collections import defaultdict, Counter
 import csv
-import statistics
+import math
 
-# --- CONFIG: adjust paths if needed ---
-ENT_RAW = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/KG/entities_raw.jsonl")
+# --- paths: adjust if you moved files ---
+ENT_RAW = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/KG/entities_raw-entResTest.jsonl")
 RESOLVED_JSONL = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/entity-resolved/entities_resolved.jsonl")
 RESOLVE_MAP = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/entity-resolved/resolve_map.json")
 CLUSTERS_REVIEW = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/entity-resolved/clusters_for_review.jsonl")
@@ -4187,8 +4431,8 @@ CLUSTERS_REVIEW = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/entity-resolved
 OUT_DIR = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/entity-resolved/analysis")
 OUT_DIR.mkdir(parents=True, exist_ok=True)
 
-# --- helper loaders ---
-def load_jsonl(path):
+# --- helpers ---
+def load_jsonl(path: Path):
     items = []
     if not path.exists():
         return items
@@ -4200,292 +4444,2747 @@ def load_jsonl(path):
             try:
                 items.append(json.loads(ln))
             except Exception:
-                # tolerant fallback
+                # tolerant fallback: try single-quote replacement
                 try:
                     items.append(json.loads(ln.replace("'", '"')))
                 except Exception:
-                    print(f"[warn] failed to parse line in {path}: {ln[:120]}")
+                    print(f"Warning: failed to parse line in {path}: {ln[:100]}")
     return items
 
-def load_json(path):
+def load_json(path: Path):
     if not path.exists():
         return None
     with open(path, "r", encoding="utf-8") as fh:
         return json.load(fh)
 
-def safe_get(e, key, default=""):
-    v = e.get(key)
-    if v is None:
-        return default
-    return v
-
 def normalize_surface(s):
     if not s:
         return ""
-    return " ".join(str(s).strip().lower().split())
+    return " ".join(s.strip().lower().split())
 
-# --- load data ---
-print("Loading original mentions...")
+# --- load inputs ---
+print("Loading files...")
 entities_raw = load_jsonl(ENT_RAW)
-print(f" - original mentions: {len(entities_raw)}")
+print(f"  original mentions loaded: {len(entities_raw)}")
 
-print("Loading resolved canonical nodes...")
-resolved = load_jsonl(RESOLVED_JSONL)
-print(f" - resolved canonical nodes: {len(resolved)}")
+resolved_records = load_jsonl(RESOLVED_JSONL)
+print(f"  resolved canonical records loaded: {len(resolved_records)}")
 
 resolve_map = load_json(RESOLVE_MAP) or {}
-print(f" - resolve_map entries: {len(resolve_map)}")
+print(f"  resolve_map entries loaded: {len(resolve_map)}")
 
-clusters_review = load_jsonl(CLUSTERS_REVIEW)
-print(f" - clusters_for_review entries: {len(clusters_review)}")
+clusters_for_review = load_jsonl(CLUSTERS_REVIEW)
+print(f"  clusters_for_review entries loaded: {len(clusters_for_review)}")
 
-# build lookups
+# quick lookups
 entities_by_id = { e.get("id"): e for e in entities_raw }
-resolved_by_id = { r.get("id_final"): r for r in resolved }
+resolved_by_newid = { r.get("id_final"): r for r in resolved_records }
 
-# build inverted mapping resolved_id -> member ids (from resolve_map)
-members_by_resolved = defaultdict(list)
-unmapped_originals = []
-for orig_id in entities_by_id.keys():
-    resolved_id = resolve_map.get(orig_id)
-    if resolved_id:
-        members_by_resolved[resolved_id].append(orig_id)
-    else:
-        unmapped_originals.append(orig_id)
+# ensure resolved records have expected fields
+for r in resolved_by_newid.values():
+    r.setdefault("label", r.get("label") or r.get("id_final"))
+    r.setdefault("aliases", r.get("aliases") or [])
+    r.setdefault("members", r.get("members") or [])
+    r.setdefault("description", r.get("description") or "")
 
-# Safety: if resolved canonical records contain a members list already, prefer that
-# (ensures consistency if resolve_map incomplete)
-for r in resolved:
-    rid = r.get("id_final")
-    if rid:
-        m = r.get("members")
-        if m and isinstance(m, list):
-            # merge uniqueness
-            for mid in m:
-                if mid not in members_by_resolved[rid]:
-                    members_by_resolved[rid].append(mid)
-
-# --- Produce merged_members.csv (ONLY merged members, i.e., those with a resolved id) ---
-merged_csv = OUT_DIR / "merged_members.csv"
-all_members_csv = OUT_DIR / "all_members_with_resolution.csv"
-clusters_jsonl = OUT_DIR / "clusters_detailed.jsonl"
-clusters_summary_csv = OUT_DIR / "clusters_summary.csv"
-singletons_csv = OUT_DIR / "singletons_unresolved.csv"
-flagged_review_csv = OUT_DIR / "clusters_flagged_for_review.csv"
-
-# Write merged_members.csv and all_members_with_resolution.csv
-fieldnames = [
-    "original_id",
-    "entity_name",
-    "entity_description",
-    "context_phrase",
-    "used_context_excerpt",
-    "entity_type_hint",
-    "chunk_id",
-    "confidence_score",
-    "resolved_id",
-    "resolved_label",
-    "resolved_size",
-    "resolved_aliases"
+# --- 1) resolved_entity_table.csv (one row per original mention with resolved info) ---
+csv_path = OUT_DIR / "resolved_entity_table.csv"
+fields = [
+    "original_id", "resolved_id", "resolved_label", "resolved_size", "resolved_aliases",
+    "entity_name", "entity_description", "entity_type_hint", "chunk_id", "confidence_score"
 ]
-
-with open(merged_csv, "w", encoding="utf-8", newline="") as fh_m, \
-     open(all_members_csv, "w", encoding="utf-8", newline="") as fh_all:
-    writer_m = csv.DictWriter(fh_m, fieldnames=fieldnames)
-    writer_all = csv.DictWriter(fh_all, fieldnames=fieldnames)
-    writer_m.writeheader()
-    writer_all.writeheader()
-
-    # for convenience, build resolved label/size/aliases lookup
-    resolved_info = {}
-    for rid, members in members_by_resolved.items():
-        rec = resolved_by_id.get(rid, {})
-        resolved_info[rid] = {
-            "label": rec.get("label") or rid,
-            "size": len(members),
-            "aliases": rec.get("aliases") or []
-        }
-
-    for orig in entities_raw:
-        oid = orig.get("id")
-        rid = resolve_map.get(oid)
+with open(csv_path, "w", encoding="utf-8", newline="") as fh:
+    writer = csv.DictWriter(fh, fieldnames=fields)
+    writer.writeheader()
+    for ent in entities_raw:
+        eid = ent.get("id")
+        rid = resolve_map.get(eid)
         rlabel = ""
         rsize = ""
         raliases = ""
-        if rid and rid in resolved_info:
-            rlabel = resolved_info[rid]["label"]
-            rsize = resolved_info[rid]["size"]
-            raliases = "|".join(resolved_info[rid]["aliases"]) if resolved_info[rid]["aliases"] else ""
+        if rid and rid in resolved_by_newid:
+            rec = resolved_by_newid[rid]
+            rlabel = rec.get("label","")
+            rsize = len(rec.get("members",[]))
+            raliases = "|".join(rec.get("aliases",[]))
         row = {
-            "original_id": oid,
-            "entity_name": safe_get(orig, "entity_name", ""),
-            "entity_description": safe_get(orig, "entity_description", ""),
-            "context_phrase": safe_get(orig, "context_phrase", ""),
-            "used_context_excerpt": safe_get(orig, "used_context_excerpt", ""),
-            "entity_type_hint": safe_get(orig, "entity_type_hint", ""),
-            "chunk_id": safe_get(orig, "chunk_id", ""),
-            "confidence_score": safe_get(orig, "confidence_score", ""),
+            "original_id": eid,
             "resolved_id": rid or "",
             "resolved_label": rlabel,
             "resolved_size": rsize,
-            "resolved_aliases": raliases
+            "resolved_aliases": raliases,
+            "entity_name": ent.get("entity_name",""),
+            "entity_description": ent.get("entity_description",""),
+            "entity_type_hint": ent.get("entity_type_hint",""),
+            "chunk_id": ent.get("chunk_id") or ent.get("source_chunk") or "",
+            "confidence_score": ent.get("confidence_score","")
         }
-        # write to all-members table
-        writer_all.writerow(row)
-        # if resolved, also write to merged_members
-        if rid:
-            writer_m.writerow(row)
+        writer.writerow(row)
+print("Wrote:", csv_path)
 
-print("Wrote merged members CSV:", merged_csv)
-print("Wrote all members CSV:", all_members_csv)
+# --- 2) merged_groups_full.json / .jsonl with member details (id,name,desc,type,chunk,confidence) ---
+groups = defaultdict(list)
+# build inverse map: resolved_id -> [orig ids]
+for orig_id in entities_by_id:
+    rid = resolve_map.get(orig_id)
+    if rid:
+        groups[rid].append(orig_id)
+    else:
+        # treat unresolved as its own pseudo-group (UNRESOLVED_<id>) if you want
+        groups.setdefault(f"UNRESOLVED_{orig_id}", []).append(orig_id)
 
-# --- clusters_detailed.jsonl (one canonical node per line with full member records) ---
-with open(clusters_jsonl, "w", encoding="utf-8") as fh:
-    for rid, members in members_by_resolved.items():
-        rec = resolved_by_id.get(rid, {})
-        cluster_obj = {
-            "resolved_id": rid,
-            "label": rec.get("label") or rid,
-            "description": rec.get("description") or "",
-            "aliases": rec.get("aliases") or [],
-            "members_count": len(members),
-            "members": []
-        }
-        for mid in members:
-            orig = entities_by_id.get(mid, {})
-            # include all original fields for inspection
-            member_record = {
-                "original_id": mid,
-                "entity_name": orig.get("entity_name",""),
-                "entity_description": orig.get("entity_description",""),
-                "context_phrase": orig.get("context_phrase",""),
-                "used_context_excerpt": orig.get("used_context_excerpt",""),
-                "entity_type_hint": orig.get("entity_type_hint",""),
-                "chunk_id": orig.get("chunk_id",""),
-                "confidence_score": orig.get("confidence_score",""),
-                "_raw": orig.get("_raw_llm") or None
-            }
-            cluster_obj["members"].append(member_record)
-        fh.write(json.dumps(cluster_obj, ensure_ascii=False) + "\n")
-
-print("Wrote clusters detailed JSONL:", clusters_jsonl)
-
-# --- clusters_summary.csv (one row per canonical node) ---
-summary_fields = [
-    "resolved_id",
-    "label",
-    "size",
-    "mean_confidence",
-    "median_confidence",
-    "most_common_surface",
-    "most_common_surface_count",
-    "distinct_types_count",
-    "top_types",
-    "aliases"
-]
-with open(clusters_summary_csv, "w", encoding="utf-8", newline="") as fh:
-    writer = csv.DictWriter(fh, fieldnames=summary_fields)
-    writer.writeheader()
-    for rid, members in members_by_resolved.items():
-        rec = resolved_by_id.get(rid, {})
-        surfaces = []
-        confidences = []
-        types = []
-        for mid in members:
-            m = entities_by_id.get(mid, {})
-            surfaces.append(safe_get(m, "entity_name", ""))
-            cs = m.get("confidence_score")
-            try:
-                if cs is not None and cs != "":
-                    confidences.append(float(cs))
-            except Exception:
-                pass
-            t = safe_get(m, "entity_type_hint", "")
-            if t:
-                types.append(t)
-        most_common_surface = ""
-        most_common_count = 0
-        if surfaces:
-            normed = [normalize_surface(s) for s in surfaces if s]
-            if normed:
-                mc = Counter(normed).most_common(1)[0]
-                most_common_surface, most_common_count = mc[0], mc[1]
-        mean_conf = statistics.mean(confidences) if confidences else ""
-        median_conf = statistics.median(confidences) if confidences else ""
-        type_counts = Counter(types)
-        top_types = ";".join([f"{t}:{c}" for t, c in type_counts.most_common(5)])
-        writer.writerow({
-            "resolved_id": rid,
-            "label": rec.get("label") or rid,
-            "size": len(members),
-            "mean_confidence": mean_conf,
-            "median_confidence": median_conf,
-            "most_common_surface": most_common_surface,
-            "most_common_surface_count": most_common_count,
-            "distinct_types_count": len(type_counts),
-            "top_types": top_types,
-            "aliases": "|".join(rec.get("aliases") or [])
+merged_groups = []
+for rid, members in groups.items():
+    # resolved fields if available
+    resolved_rec = resolved_by_newid.get(rid)
+    label = resolved_rec.get("label") if resolved_rec else None
+    aliases = resolved_rec.get("aliases") if resolved_rec else []
+    resolved_desc = resolved_rec.get("description") if resolved_rec else ""
+    member_objs = []
+    for mid in members:
+        m = entities_by_id.get(mid, {})
+        member_objs.append({
+            "id": mid,
+            "entity_name": m.get("entity_name",""),
+            "entity_description": m.get("entity_description",""),
+            "entity_type_hint": m.get("entity_type_hint",""),
+            "chunk_id": m.get("chunk_id") or m.get("source_chunk") or "",
+            "confidence_score": m.get("confidence_score"),
         })
+    merged_groups.append({
+        "resolved_id": rid,
+        "label": label or f"UNRESOLVED_GROUP_{rid}",
+        "aliases": aliases,
+        "members": member_objs,
+        "size": len(member_objs),
+        "resolved_description": resolved_desc
+    })
 
-print("Wrote clusters summary CSV:", clusters_summary_csv)
+# sort by size desc
+merged_groups_sorted = sorted(merged_groups, key=lambda x: x["size"], reverse=True)
 
-# --- clusters_flagged_for_review.csv (if present) ---
-if clusters_review:
-    # clusters_review lines might be dicts with 'cluster' and 'mean_sim' or reason; normalize
-    with open(flagged_review_csv, "w", encoding="utf-8", newline="") as fh:
-        fields = ["cluster_id", "size", "mean_sim", "reason", "sample_members"]
-        writer = csv.DictWriter(fh, fieldnames=fields)
-        writer.writeheader()
-        for i, item in enumerate(clusters_review):
-            cluster = item.get("cluster") or item.get("members") or item
-            if isinstance(cluster, dict):
-                # sometimes already has metadata
-                members = cluster.get("members") or cluster.get("cluster") or []
-            elif isinstance(cluster, list):
-                members = cluster
-            else:
-                members = []
-            mean_sim = item.get("mean_sim") or item.get("avg_sim") or ""
-            reason = item.get("reason") or item.get("flag") or ""
-            sample_members = ";".join(cluster[:6]) if cluster else ""
+out_json = OUT_DIR / "merged_groups_full.json"
+with open(out_json, "w", encoding="utf-8") as fh:
+    json.dump(merged_groups_sorted, fh, indent=2, ensure_ascii=False)
+print("Wrote:", out_json)
+
+out_jsonl = OUT_DIR / "merged_groups_full.jsonl"
+with open(out_jsonl, "w", encoding="utf-8") as fh:
+    for g in merged_groups_sorted:
+        fh.write(json.dumps(g, ensure_ascii=False) + "\n")
+print("Wrote:", out_jsonl)
+
+# --- 3) merged_groups_by_size.csv (for quick sorting/filtering in Excel) ---
+csv_groups = OUT_DIR / "merged_groups_by_size.csv"
+with open(csv_groups, "w", encoding="utf-8", newline="") as fh:
+    fieldnames = ["resolved_id", "label", "size", "aliases", "sample_member_names"]
+    writer = csv.DictWriter(fh, fieldnames=fieldnames)
+    writer.writeheader()
+    for g in merged_groups_sorted:
+        sample_names = "; ".join([m.get("entity_name","") for m in g["members"][:6]])
+        writer.writerow({
+            "resolved_id": g["resolved_id"],
+            "label": g["label"],
+            "size": g["size"],
+            "aliases": "|".join(g.get("aliases",[])),
+            "sample_member_names": sample_names
+        })
+print("Wrote:", csv_groups)
+
+# --- 4) singletons_unresolved.csv: mentions that remained single (size==1) but unresolved group key is UNRESOLVED_... ---
+singletons_path = OUT_DIR / "singletons_unresolved.csv"
+with open(singletons_path, "w", encoding="utf-8", newline="") as fh:
+    fieldnames = ["original_id", "entity_name", "entity_description", "entity_type_hint", "chunk_id", "confidence_score"]
+    writer = csv.DictWriter(fh, fieldnames=fieldnames)
+    writer.writeheader()
+    for g in merged_groups_sorted:
+        if g["size"] == 1 and (str(g["resolved_id"]).startswith("UNRESOLVED_") or g["label"].startswith("UNRESOLVED_")):
+            m = g["members"][0]
             writer.writerow({
-                "cluster_id": f"flag_{i}",
-                "size": len(members),
-                "mean_sim": mean_sim,
-                "reason": reason,
-                "sample_members": sample_members
+                "original_id": m.get("id"),
+                "entity_name": m.get("entity_name",""),
+                "entity_description": m.get("entity_description",""),
+                "entity_type_hint": m.get("entity_type_hint",""),
+                "chunk_id": m.get("chunk_id",""),
+                "confidence_score": m.get("confidence_score","")
             })
-    print("Wrote flagged-for-review CSV:", flagged_review_csv)
+print("Wrote:", singletons_path)
+
+# --- 5) clusters_flagged_for_review.jsonl copy/normalization ---
+if clusters_for_review:
+    out_review = OUT_DIR / "clusters_flagged_for_review.jsonl"
+    with open(out_review, "w", encoding="utf-8") as fh:
+        for item in clusters_for_review:
+            fh.write(json.dumps(item, ensure_ascii=False) + "\n")
+    print("Wrote review clusters copy:", out_review)
 else:
-    print("No clusters_for_review present; skipped writing flagged review CSV.")
+    print("No clusters_for_review file present or it was empty; nothing to copy.")
 
-# --- singletons_unresolved.csv (original mentions not mapped to any resolved node) ---
-with open(singletons_csv, "w", encoding="utf-8", newline="") as fh:
-    fields2 = ["original_id", "entity_name", "entity_description", "entity_type_hint", "chunk_id", "confidence_score"]
-    writer = csv.DictWriter(fh, fieldnames=fields2)
-    writer.writeheader()
-    for oid in unmapped_originals:
-        o = entities_by_id.get(oid, {})
-        writer.writerow({
-            "original_id": oid,
-            "entity_name": safe_get(o, "entity_name", ""),
-            "entity_description": safe_get(o, "entity_description", ""),
-            "entity_type_hint": safe_get(o, "entity_type_hint", ""),
-            "chunk_id": safe_get(o, "chunk_id", ""),
-            "confidence_score": safe_get(o, "confidence_score", "")
-        })
-print("Wrote singletons_unresolved.csv:", singletons_csv)
+# --- 6) top_resolved_stats.json ---
+size_counts = Counter([g["size"] for g in merged_groups_sorted])
+top_labels = [{"label":g["label"], "size":g["size"], "resolved_id": g["resolved_id"]} for g in merged_groups_sorted[:50]]
+type_dist = Counter([ e.get("entity_type_hint") or "None" for e in entities_raw ])
+confidence_vals = [ float(e.get("confidence_score")) for e in entities_raw if e.get("confidence_score") is not None ]
+conf_summary = {}
+if confidence_vals:
+    conf_summary = {
+        "count": len(confidence_vals),
+        "mean": sum(confidence_vals)/len(confidence_vals),
+        "min": min(confidence_vals),
+        "max": max(confidence_vals)
+    }
 
-print("\nDONE. Analysis outputs in:", OUT_DIR)
-print("Files produced:")
-for p in [merged_csv, all_members_csv, clusters_jsonl, clusters_summary_csv, singletons_csv]:
-    print(" -", p)
-if clusters_review:
-    print(" -", flagged_review_csv)
+stats = {
+    "n_original_mentions": len(entities_raw),
+    "n_resolved_groups": len(merged_groups_sorted),
+    "size_distribution": dict(size_counts),
+    "top_resolved_samples": top_labels,
+    "type_distribution_sample": type_dist.most_common(40),
+    "confidence_summary": conf_summary
+}
+stats_out = OUT_DIR / "top_resolved_stats.json"
+with open(stats_out, "w", encoding="utf-8") as fh:
+    json.dump(stats, fh, indent=2, ensure_ascii=False)
+print("Wrote:", stats_out)
+
+# --- final console summary ---
+print("\n=== QUICK INSPECTION ===")
+print("original mentions:", len(entities_raw))
+print("resolved groups:", len(merged_groups_sorted))
+print("top 10 resolved groups (label -- size -- resolved_id):")
+for g in merged_groups_sorted[:10]:
+    print(f"  {g['label'][:70]:70s}  size={g['size']:3d}  id={g['resolved_id']}")
+print("\nFiles written to:", OUT_DIR)
+print(" - resolved_entity_table.csv")
+print(" - merged_groups_full.json(.jsonl)")
+print(" - merged_groups_by_size.csv")
+print(" - singletons_unresolved.csv")
+print(" - top_resolved_stats.json")
+if clusters_for_review:
+    print(" - clusters_flagged_for_review.jsonl")
+print("========================\n")
 
 
 #endregion#? 
 #?#########################  End  ##########################
+
+
+#?######################### Start ##########################
+#region:#?   Resolution Analysis Full V0 - merge source
+
+#!/usr/bin/env python3
+"""
+annotate_merge_sources.py
+
+Annotate merged groups with resolution source:
+- auto
+- llm
+- mixed
+
+Uses:
+- merged_groups_full.json
+- resolution_history.jsonl
+"""
+
+import json
+from pathlib import Path
+from collections import defaultdict, Counter
+
+BASE_DIR = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/entity-resolved")
+ANALYSIS_DIR = BASE_DIR / "analysis"
+
+MERGED_GROUPS = ANALYSIS_DIR / "merged_groups_full.json"
+HISTORY = BASE_DIR / "resolution_history.jsonl"
+
+OUT_JSON = ANALYSIS_DIR / "merged_groups_full_annotated.json"
+OUT_JSONL = ANALYSIS_DIR / "merged_groups_full_annotated.jsonl"
+OUT_CSV = ANALYSIS_DIR / "merged_groups_by_source.csv"
+
+# ---------------- load ----------------
+merged_groups = json.load(open(MERGED_GROUPS, "r", encoding="utf-8"))
+
+history = []
+with open(HISTORY, "r", encoding="utf-8") as fh:
+    for ln in fh:
+        ln = ln.strip()
+        if ln:
+            history.append(json.loads(ln))
+
+# ---------------- build entity → source map ----------------
+entity_sources = defaultdict(list)
+
+for h in history:
+    action = h.get("action")
+
+    if action == "auto_merge":
+        for mid in h.get("member_ids", []):
+            entity_sources[mid].append("auto")
+
+    elif action == "merge_entities":
+        for mid in h.get("merged_ids", []):
+            entity_sources[mid].append("llm")
+
+    elif action == "applied_merge_group":
+        for mid in h.get("member_ids", []):
+            entity_sources[mid].append("llm")
+
+# ---------------- annotate groups ----------------
+annotated = []
+csv_rows = []
+
+for g in merged_groups:
+    members = g["members"]
+
+    src_counter = Counter()
+    for m in members:
+        mid = m["id"]
+        for src in entity_sources.get(mid, []):
+            src_counter[src] += 1
+
+    if not src_counter:
+        resolution_source = "singleton"
+    elif len(src_counter) == 1:
+        resolution_source = next(iter(src_counter))
+    else:
+        resolution_source = "mixed"
+
+    g2 = dict(g)
+    g2["resolution_source"] = resolution_source
+    g2["auto_merge_count"] = src_counter.get("auto", 0)
+    g2["llm_merge_count"] = src_counter.get("llm", 0)
+
+    annotated.append(g2)
+
+    csv_rows.append({
+        "resolved_id": g2["resolved_id"],
+        "label": g2["label"],
+        "size": g2["size"],
+        "resolution_source": resolution_source,
+        "auto_merge_count": g2["auto_merge_count"],
+        "llm_merge_count": g2["llm_merge_count"],
+        "sample_members": "; ".join(m["entity_name"] for m in members[:5])
+    })
+
+# ---------------- write outputs ----------------
+with open(OUT_JSON, "w", encoding="utf-8") as fh:
+    json.dump(annotated, fh, indent=2, ensure_ascii=False)
+
+with open(OUT_JSONL, "w", encoding="utf-8") as fh:
+    for g in annotated:
+        fh.write(json.dumps(g, ensure_ascii=False) + "\n")
+
+import csv
+with open(OUT_CSV, "w", encoding="utf-8", newline="") as fh:
+    writer = csv.DictWriter(
+        fh,
+        fieldnames=[
+            "resolved_id",
+            "label",
+            "size",
+            "resolution_source",
+            "auto_merge_count",
+            "llm_merge_count",
+            "sample_members"
+        ]
+    )
+    writer.writeheader()
+    for r in csv_rows:
+        writer.writerow(r)
+
+print("Annotated merged groups written:")
+print(" -", OUT_JSON)
+print(" -", OUT_JSONL)
+print(" -", OUT_CSV)
+
+
+
+#endregion#? Resolution Analysis - merge source
+#?#########################  End  ##########################
+
+
+#?######################### Start ##########################
+#region:#?   Resolution Analysis Full V0
+
+
+#!/usr/bin/env python3
+import json
+from pathlib import Path
+from collections import Counter, defaultdict
+
+BASE = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/entity-resolved")
+HISTORY = BASE / "resolution_history.jsonl"
+CLUSTERS_REVIEW = BASE / "clusters_for_review.jsonl"
+RES_MAP = BASE / "resolve_map.json"
+ENT_RES = BASE / "entities_resolved.jsonl"
+
+def load_jsonl(p):
+    items=[]
+    if not p.exists(): return items
+    for ln in open(p,'r',encoding='utf-8'):
+        ln=ln.strip()
+        if ln: items.append(json.loads(ln))
+    return items
+
+hist = load_jsonl(HISTORY)
+clusters_review = load_jsonl(CLUSTERS_REVIEW)
+resolve_map = json.load(open(RES_MAP)) if RES_MAP.exists() else {}
+resolved = load_jsonl(ENT_RES)
+
+print("history entries:", len(hist))
+# Count action types and sources
+action_counter = Counter()
+source_counter = Counter()
+passes = set()
+for i,h in enumerate(hist):
+    action = h.get("action") or h.get("type") or "unknown"
+    source = h.get("source") or h.get("by") or "unknown"
+    action_counter[action]+=1
+    source_counter[source]+=1
+    # some history entries may include pass index -> collect if present
+    if "pass" in h:
+        passes.add(h["pass"])
+print("action counts:", action_counter)
+print("source counts:", source_counter)
+print("distinct pass markers found in history:", sorted(list(passes)) if passes else "none")
+
+# Which clusters were sent to LLM?
+llm_clusters = [h for h in hist if h.get("action") in ("merge_entities","llm_merge","llm_decision","llm_action")]
+print("LLM-related history events:", len(llm_clusters))
+# Summarize merges by source
+merge_by_src = defaultdict(int)
+members_by_merge = []
+for h in hist:
+    if h.get("action") in ("merge_entities","llm_merge","auto_merge","applied_merge_group"):
+        src = h.get("source","auto" if h.get("action")=="auto_merge" else "llm")
+        merge_by_src[src]+=1
+        members_by_merge.append({"src":src,"members": len(h.get("merged_ids", h.get("member_ids", [])))})
+print("merge_by_source:", dict(merge_by_src))
+
+# Print clusters_for_review if present
+print("clusters_for_review exists:", CLUSTERS_REVIEW.exists())
+if CLUSTERS_REVIEW.exists():
+    print("clusters_for_review count:", len(clusters_review))
+    for cr in clusters_review[:5]:
+        print(" - sample flagged cluster:", cr.get("cluster_id") or cr.get("seed") or cr.get("members")[:5])
+
+# Basic final counts
+print("original mentions (estimated):", sum(len(v.get("members",[])) for v in resolved) if resolved else "unknown")
+print("resolved canonical entities:", len(resolved) if resolved else "unknown")
+
+# Show a few LLM history entries for inspection
+print("\nSample LLM history rows (first 6):")
+for row in hist[:6]:
+    if row.get("source","").lower().startswith("llm") or row.get("action","").startswith("llm") or row.get("source")=="llm":
+        print(json.dumps(row, indent=2))
+
+
+#endregion#? Analysis
+#?#########################  End  ##########################
+
+
+
+
+
+
+
+
+
+
+#?######################### Start ##########################
+#region:#?   Analysis V1
+
+
+
+
+
+#!/usr/bin/env python3
+"""
+analyze_entity_resolution_combined.py
+
+Combined analysis & annotation for the Entity Resolution pipeline.
+
+Inputs (defaults, override via constants below):
+  - ENT_RAW: original entity mentions (jsonl)
+  - ENT_RESOLVED_JSONL: entities_resolved.jsonl (resolved canonical records)
+  - RESOLVE_MAP: resolve_map.json (mapping from mention_id -> resolved_id)
+  - HISTORY: resolution_history.jsonl (history of actions)
+  - CLUSTERS_PROCESSED: clusters_processed.jsonl (optional audit info)
+  - LLM_DEBUG_DIR: optional directory with LLM debug files
+
+Outputs (written under OUT_DIR/analysis):
+  - resolved_entity_table.csv
+  - merged_groups_full.json
+  - merged_groups_full.jsonl
+  - merged_groups_by_size.csv
+  - singletons_unresolved.csv
+  - merged_groups_full_annotated.json / .jsonl / .csv (annotated by merge source)
+  - top_resolved_stats.json
+  - optional clusters_processed_copy.jsonl
+  - prints a short console summary
+
+Usage:
+  python analyze_entity_resolution_combined.py
+"""
+
+import json
+from pathlib import Path
+from collections import defaultdict, Counter
+import csv
+import math
+import argparse
+
+# ------------------ Config / paths (change if needed) ------------------
+BASE_DIR = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/entity-resolved")
+# Default inputs (pipeline outputs)
+ENT_RAW = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/KG/entities_raw-entResTestssmaller.jsonl")
+ENT_RESOLVED_JSONL = BASE_DIR / "entities_resolved.jsonl"
+RESOLVE_MAP = BASE_DIR / "resolve_map.json"
+HISTORY = BASE_DIR / "resolution_history.jsonl"
+CLUSTERS_PROCESSED = BASE_DIR / "clusters_processed.jsonl"   # optional audit info
+CLUSTERS_FOR_REVIEW = BASE_DIR / "clusters_for_review.jsonl" # legacy/optional
+LLM_DEBUG_DIR = BASE_DIR / "llm_debug"                       # optional
+
+OUT_DIR = BASE_DIR / "analysis"
+OUT_DIR.mkdir(parents=True, exist_ok=True)
+
+# ------------------ Helpers ------------------
+def load_jsonl(path: Path):
+    items = []
+    if not path.exists():
+        return items
+    with open(path, "r", encoding="utf-8") as fh:
+        for ln in fh:
+            ln = ln.strip()
+            if not ln:
+                continue
+            try:
+                items.append(json.loads(ln))
+            except Exception:
+                # tolerant fallback: try single-quote replacement (best-effort)
+                try:
+                    items.append(json.loads(ln.replace("'", '"')))
+                except Exception:
+                    print(f"[WARN] failed to parse line in {path}: {ln[:120]!r}")
+    return items
+
+def load_json(path: Path):
+    if not path.exists():
+        return None
+    with open(path, "r", encoding="utf-8") as fh:
+        return json.load(fh)
+
+def normalize_surface(s):
+    if not s:
+        return ""
+    return " ".join(s.strip().lower().split())
+
+# ------------------ Load inputs ------------------
+print("Loading input files (defaults shown in script)...")
+entities_raw = load_jsonl(ENT_RAW)
+print(f" - original mentions: {len(entities_raw)}  (ENT_RAW: {ENT_RAW})")
+
+resolved_records = load_jsonl(ENT_RESOLVED_JSONL)
+print(f" - canonical resolved records: {len(resolved_records)}  (ENT_RESOLVED_JSONL: {ENT_RESOLVED_JSONL})")
+
+resolve_map = load_json(RESOLVE_MAP) or {}
+print(f" - resolve_map entries: {len(resolve_map)}  (RESOLVE_MAP: {RESOLVE_MAP})")
+
+history = load_jsonl(HISTORY)
+print(f" - history entries: {len(history)}  (HISTORY: {HISTORY})")
+
+clusters_processed = load_jsonl(CLUSTERS_PROCESSED)
+if clusters_processed:
+    print(f" - clusters_processed entries: {len(clusters_processed)}  (CLUSTERS_PROCESSED: {CLUSTERS_PROCESSED})")
+else:
+    print(f" - clusters_processed missing or empty (CLUSTERS_PROCESSED: {CLUSTERS_PROCESSED})")
+
+clusters_for_review = load_jsonl(CLUSTERS_FOR_REVIEW)
+if clusters_for_review:
+    print(f" - clusters_for_review entries: {len(clusters_for_review)}  (CLUSTERS_FOR_REVIEW: {CLUSTERS_FOR_REVIEW})")
+
+# Build lookups
+entities_by_id = { e.get("id"): e for e in entities_raw }
+resolved_by_newid = { r.get("id_final"): r for r in resolved_records }
+
+# Ensure resolved records have defaults
+for r in resolved_by_newid.values():
+    r.setdefault("label", r.get("label") or r.get("id_final"))
+    r.setdefault("aliases", r.get("aliases") or [])
+    r.setdefault("members", r.get("members") or [])
+    r.setdefault("description", r.get("description") or "")
+
+# ------------------ 1) resolved_entity_table.csv ------------------
+csv_path = OUT_DIR / "resolved_entity_table.csv"
+fields = [
+    "original_id", "resolved_id", "resolved_label", "resolved_size", "resolved_aliases",
+    "entity_name", "entity_description", "entity_type_hint", "chunk_id", "mention_confidence", "member_confidence"
+]
+with open(csv_path, "w", encoding="utf-8", newline="") as fh:
+    writer = csv.DictWriter(fh, fieldnames=fields)
+    writer.writeheader()
+    for ent in entities_raw:
+        eid = ent.get("id")
+        rid = resolve_map.get(eid)
+        rlabel = ""
+        rsize = ""
+        raliases = ""
+        member_conf = None
+        if rid and rid in resolved_by_newid:
+            rec = resolved_by_newid[rid]
+            rlabel = rec.get("label","")
+            rsize = len(rec.get("members",[]))
+            raliases = "|".join(rec.get("aliases",[]))
+            member_conf = rec.get("member_confidence", {}).get(eid) if isinstance(rec.get("member_confidence", {}), dict) else None
+        row = {
+            "original_id": eid,
+            "resolved_id": rid or "",
+            "resolved_label": rlabel,
+            "resolved_size": rsize,
+            "resolved_aliases": raliases,
+            "entity_name": ent.get("entity_name",""),
+            "entity_description": ent.get("entity_description",""),
+            "entity_type_hint": ent.get("entity_type_hint",""),
+            "chunk_id": ent.get("chunk_id") or ent.get("source_chunk") or ent.get("chunk") or "",
+            "mention_confidence": ent.get("confidence_score") if ent.get("confidence_score") is not None else "",
+            "member_confidence": member_conf if member_conf is not None else ""
+        }
+        writer.writerow(row)
+print("Wrote:", csv_path)
+
+# ------------------ 2) merged_groups_full.json(.jsonl) ------------------
+groups = defaultdict(list)
+# Build groups: resolved_id -> orig ids; unresolved mentions become UNRESOLVED_<id>
+for orig_id in entities_by_id:
+    rid = resolve_map.get(orig_id)
+    if rid:
+        groups[rid].append(orig_id)
+    else:
+        groups[f"UNRESOLVED_{orig_id}"].append(orig_id)
+
+merged_groups = []
+for rid, members in groups.items():
+    resolved_rec = resolved_by_newid.get(rid)
+    label = resolved_rec.get("label") if resolved_rec else None
+    aliases = resolved_rec.get("aliases") if resolved_rec else []
+    resolved_desc = resolved_rec.get("description") if resolved_rec else ""
+    member_objs = []
+    for mid in members:
+        m = entities_by_id.get(mid, {})
+        member_objs.append({
+            "id": mid,
+            "entity_name": m.get("entity_name",""),
+            "entity_description": m.get("entity_description",""),
+            "entity_type_hint": m.get("entity_type_hint",""),
+            "chunk_id": m.get("chunk_id") or m.get("source_chunk") or m.get("chunk") or "",
+            "mention_confidence": m.get("confidence_score"),
+            # member-level confidence recorded in resolved record if available
+            "member_confidence": (resolved_by_newid.get(rid, {}).get("member_confidence", {}).get(mid) if rid in resolved_by_newid else None)
+        })
+    merged_groups.append({
+        "resolved_id": rid,
+        "label": label or f"UNRESOLVED_GROUP_{rid}",
+        "aliases": aliases,
+        "members": member_objs,
+        "size": len(member_objs),
+        "resolved_description": resolved_desc
+    })
+
+merged_groups_sorted = sorted(merged_groups, key=lambda x: x["size"], reverse=True)
+
+out_json = OUT_DIR / "merged_groups_full.json"
+with open(out_json, "w", encoding="utf-8") as fh:
+    json.dump(merged_groups_sorted, fh, indent=2, ensure_ascii=False)
+print("Wrote:", out_json)
+
+out_jsonl = OUT_DIR / "merged_groups_full.jsonl"
+with open(out_jsonl, "w", encoding="utf-8") as fh:
+    for g in merged_groups_sorted:
+        fh.write(json.dumps(g, ensure_ascii=False) + "\n")
+print("Wrote:", out_jsonl)
+
+# ------------------ 3) merged_groups_by_size.csv ------------------
+csv_groups = OUT_DIR / "merged_groups_by_size.csv"
+with open(csv_groups, "w", encoding="utf-8", newline="") as fh:
+    fieldnames = ["resolved_id", "label", "size", "aliases", "sample_member_names"]
+    writer = csv.DictWriter(fh, fieldnames=fieldnames)
+    writer.writeheader()
+    for g in merged_groups_sorted:
+        sample_names = "; ".join([m.get("entity_name","") for m in g["members"][:6]])
+        writer.writerow({
+            "resolved_id": g["resolved_id"],
+            "label": g["label"],
+            "size": g["size"],
+            "aliases": "|".join(g.get("aliases",[])),
+            "sample_member_names": sample_names
+        })
+print("Wrote:", csv_groups)
+
+# ------------------ 4) singletons_unresolved.csv ------------------
+singletons_path = OUT_DIR / "singletons_unresolved.csv"
+with open(singletons_path, "w", encoding="utf-8", newline="") as fh:
+    fieldnames = ["original_id", "entity_name", "entity_description", "entity_type_hint", "chunk_id", "mention_confidence"]
+    writer = csv.DictWriter(fh, fieldnames=fieldnames)
+    writer.writeheader()
+    for g in merged_groups_sorted:
+        if g["size"] == 1 and (str(g["resolved_id"]).startswith("UNRESOLVED_") or g["label"].startswith("UNRESOLVED_")):
+            m = g["members"][0]
+            writer.writerow({
+                "original_id": m.get("id"),
+                "entity_name": m.get("entity_name",""),
+                "entity_description": m.get("entity_description",""),
+                "entity_type_hint": m.get("entity_type_hint",""),
+                "chunk_id": m.get("chunk_id",""),
+                "mention_confidence": m.get("mention_confidence","")
+            })
+print("Wrote:", singletons_path)
+
+# ------------------ 5) clusters_for_review copy (if exists) ------------------
+if clusters_for_review:
+    out_review = OUT_DIR / "clusters_flagged_for_review.jsonl"
+    with open(out_review, "w", encoding="utf-8") as fh:
+        for item in clusters_for_review:
+            fh.write(json.dumps(item, ensure_ascii=False) + "\n")
+    print("Wrote review clusters copy:", out_review)
+
+# ------------------ 6) annotate merge sources (auto/llm/mixed) ------------------
+# Build entity -> sources map from history
+entity_sources = defaultdict(list)
+# We try to detect common action names used in pipeline: 'auto_merge', 'merge_entities', 'rename_entity', 'keep_entity', etc.
+for h in history:
+    act = h.get("action", "").lower()
+    # try different field names used earlier
+    if act == "auto_merge" or act == "auto_merge":
+        # some old history used 'member_ids' vs 'merged_ids'
+        mids = h.get("member_ids") or h.get("merged_ids") or h.get("members") or []
+        for m in mids:
+            entity_sources[m].append("auto")
+    elif act in ("merge_entities", "merge_entities"):  # LLM merges
+        mids = h.get("merged_ids") or h.get("member_ids") or []
+        for m in mids:
+            entity_sources[m].append("llm")
+    elif act in ("applied_merge_group", "applied_merge"):
+        mids = h.get("member_ids") or h.get("merged_ids") or []
+        for m in mids:
+            entity_sources[m].append("llm")
+    elif act == "rename_entity":
+        eid = h.get("entity_id")
+        if eid:
+            entity_sources[eid].append("llm")
+    elif act == "kept_singleton":
+        eid = h.get("entity_id")
+        if eid:
+            entity_sources[eid].append("none")
+    elif act == "left_unchanged_low_sim":
+        for m in h.get("members", []) or []:
+            entity_sources[m].append("none")
+    elif act == "keep_entity":
+        eid = h.get("entity_id")
+        if eid:
+            entity_sources[eid].append("llm")
+    # other history entries may also include merge data; we will inspect any 'merged_ids' or 'member_ids'
+    else:
+        # conservative: if merged_ids present mark as llm
+        mids = h.get("merged_ids") or h.get("member_ids") or []
+        for m in mids:
+            entity_sources[m].append("llm" if act and "auto" not in act else "auto")
+
+# Annotate groups by source
+annotated = []
+csv_rows = []
+for g in merged_groups_sorted:
+    members = g["members"]
+    src_counter = Counter()
+    for m in members:
+        mid = m["id"]
+        for src in entity_sources.get(mid, []):
+            src_counter[src] += 1
+    if not src_counter:
+        resolution_source = "singleton"
+    elif len(src_counter) == 1:
+        resolution_source = next(iter(src_counter))
+    else:
+        # mixed sources possible (auto + llm)
+        resolution_source = "mixed"
+    g2 = dict(g)
+    g2["resolution_source"] = resolution_source
+    g2["auto_merge_count"] = src_counter.get("auto", 0)
+    g2["llm_merge_count"] = src_counter.get("llm", 0)
+    annotated.append(g2)
+    csv_rows.append({
+        "resolved_id": g2["resolved_id"],
+        "label": g2["label"],
+        "size": g2["size"],
+        "resolution_source": resolution_source,
+        "auto_merge_count": g2["auto_merge_count"],
+        "llm_merge_count": g2["llm_merge_count"],
+        "sample_members": "; ".join(m["entity_name"] for m in members[:5])
+    })
+
+OUT_ANNOT_JSON = OUT_DIR / "merged_groups_full_annotated.json"
+OUT_ANNOT_JSONL = OUT_DIR / "merged_groups_full_annotated.jsonl"
+OUT_ANNOT_CSV = OUT_DIR / "merged_groups_by_source.csv"
+
+with open(OUT_ANNOT_JSON, "w", encoding="utf-8") as fh:
+    json.dump(annotated, fh, indent=2, ensure_ascii=False)
+with open(OUT_ANNOT_JSONL, "w", encoding="utf-8") as fh:
+    for g in annotated:
+        fh.write(json.dumps(g, ensure_ascii=False) + "\n")
+with open(OUT_ANNOT_CSV, "w", encoding="utf-8", newline="") as fh:
+    fieldnames = ["resolved_id", "label", "size", "resolution_source", "auto_merge_count", "llm_merge_count", "sample_members"]
+    writer = csv.DictWriter(fh, fieldnames=fieldnames)
+    writer.writeheader()
+    for r in csv_rows:
+        writer.writerow(r)
+
+print("Wrote annotated merged groups:", OUT_ANNOT_JSON, OUT_ANNOT_JSONL, OUT_ANNOT_CSV)
+
+# ------------------ 7) top_resolved_stats.json ------------------
+size_counts = Counter([g["size"] for g in merged_groups_sorted])
+top_labels = [{"label":g["label"], "size":g["size"], "resolved_id": g["resolved_id"]} for g in merged_groups_sorted[:50]]
+type_dist = Counter([ e.get("entity_type_hint") or "None" for e in entities_raw ])
+confidence_vals = []
+for e in entities_raw:
+    cs = e.get("confidence_score")
+    try:
+        if cs is not None:
+            confidence_vals.append(float(cs))
+    except Exception:
+        pass
+
+conf_summary = {}
+if confidence_vals:
+    conf_summary = {
+        "count": len(confidence_vals),
+        "mean": sum(confidence_vals)/len(confidence_vals),
+        "min": min(confidence_vals),
+        "max": max(confidence_vals)
+    }
+
+stats = {
+    "n_original_mentions": len(entities_raw),
+    "n_resolved_groups": len(merged_groups_sorted),
+    "size_distribution": dict(size_counts),
+    "top_resolved_samples": top_labels,
+    "type_distribution_sample": type_dist.most_common(40),
+    "confidence_summary": conf_summary,
+    "history_action_counts": Counter([h.get("action") for h in history])
+}
+
+stats_out = OUT_DIR / "top_resolved_stats.json"
+with open(stats_out, "w", encoding="utf-8") as fh:
+    json.dump(stats, fh, indent=2, ensure_ascii=False)
+print("Wrote:", stats_out)
+
+# ------------------ Optional: save clusters_processed copy ------------------
+if clusters_processed:
+    cp_out = OUT_DIR / "clusters_processed_copy.jsonl"
+    with open(cp_out, "w", encoding="utf-8") as fh:
+        for c in clusters_processed:
+            fh.write(json.dumps(c, ensure_ascii=False) + "\n")
+    print("Wrote clusters_processed copy:", cp_out)
+
+# ------------------ Final console summary ------------------
+print("\n=== QUICK INSPECTION ===")
+print("original mentions:", len(entities_raw))
+print("resolved groups:", len(merged_groups_sorted))
+print("top 10 resolved groups (label -- size -- resolved_id):")
+for g in merged_groups_sorted[:10]:
+    print(f"  {g['label'][:70]:70s}  size={g['size']:3d}  id={g['resolved_id']}")
+print("\nFiles written to:", OUT_DIR)
+print(" - resolved_entity_table.csv")
+print(" - merged_groups_full.json(.jsonl)")
+print(" - merged_groups_by_size.csv")
+print(" - singletons_unresolved.csv")
+print(" - merged_groups_full_annotated.json(.jsonl/.csv)")
+print(" - top_resolved_stats.json")
+if clusters_for_review:
+    print(" - clusters_flagged_for_review.jsonl")
+if LLM_DEBUG_DIR.exists():
+    print(" - LLM debug dir (exists):", LLM_DEBUG_DIR)
+print("========================\n")
+
+
+
+
+
+#endregion#? Analysis V1
+#?#########################  End  ##########################
+
+
+
+#?######################### Start ##########################
+#region:#?   Analysis V2
+
+
+
+#!/usr/bin/env python3
+"""
+analyze_entity_resolution_combined_with_nearmiss.py
+
+Same as previous analysis script, but adds "near-miss" detection:
+ - identifies mention-level pairs across different resolved groups whose
+   textual similarity indicates they might deserve a merge (but weren't merged).
+ - computes group-level similarity (representative labels) and suggests top group merges.
+
+Outputs (in OUT_DIR):
+ - near_miss_pairs.csv
+ - near_miss_group_pairs.csv
+ - merge_suggestions.jsonl
+ + all previous analysis outputs (resolved_entity_table.csv, merged_groups_full.json, ...)
+
+Notes:
+ - Uses string-based similarity (difflib.SequenceMatcher + token Jaccard).
+ - This is a pragmatic, lightweight heuristic; embedding-based similarity would be stronger.
+"""
+
+import json
+from pathlib import Path
+from collections import defaultdict, Counter
+import csv
+import math
+import argparse
+from difflib import SequenceMatcher
+import itertools
+import statistics
+
+# ------------------ Config / paths (change if needed) ------------------
+BASE_DIR = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/entity-resolved")
+ENT_RAW = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/KG/entities_raw-entResTestssmaller.jsonl")
+ENT_RESOLVED_JSONL = BASE_DIR / "entities_resolved.jsonl"
+RESOLVE_MAP = BASE_DIR / "resolve_map.json"
+HISTORY = BASE_DIR / "resolution_history.jsonl"
+CLUSTERS_PROCESSED = BASE_DIR / "clusters_processed.jsonl"
+CLUSTERS_FOR_REVIEW = BASE_DIR / "clusters_for_review.jsonl"
+LLM_DEBUG_DIR = BASE_DIR / "llm_debug"
+
+OUT_DIR = BASE_DIR / "analysis"
+OUT_DIR.mkdir(parents=True, exist_ok=True)
+
+# Near-miss thresholds (string-similarity based)
+NEAR_MISS_MIN = 0.70   # lower bound to consider "close"
+NEAR_MISS_MAX = 0.94   # if > this we may have expected a merge (tunable)
+TOP_K_SUGGESTIONS = 200  # how many top candidates to write to suggestions
+
+# ------------------ Helpers ------------------
+def load_jsonl(path: Path):
+    items = []
+    if not path.exists():
+        return items
+    with open(path, "r", encoding="utf-8") as fh:
+        for ln in fh:
+            ln = ln.strip()
+            if not ln:
+                continue
+            try:
+                items.append(json.loads(ln))
+            except Exception:
+                try:
+                    items.append(json.loads(ln.replace("'", '"')))
+                except Exception:
+                    print(f"[WARN] failed to parse line in {path}: {ln[:120]!r}")
+    return items
+
+def load_json(path: Path):
+    if not path.exists():
+        return None
+    with open(path, "r", encoding="utf-8") as fh:
+        return json.load(fh)
+
+def normalize_surface(s):
+    if not s:
+        return ""
+    return " ".join(s.strip().lower().split())
+
+def seq_ratio(a: str, b: str) -> float:
+    a = (a or "").strip()
+    b = (b or "").strip()
+    if not a or not b:
+        return 0.0
+    return SequenceMatcher(None, a, b).ratio()
+
+def token_jaccard(a: str, b: str) -> float:
+    a_tokens = set([t for t in (a or "").lower().split() if t])
+    b_tokens = set([t for t in (b or "").lower().split() if t])
+    if not a_tokens or not b_tokens:
+        return 0.0
+    inter = a_tokens.intersection(b_tokens)
+    uni = a_tokens.union(b_tokens)
+    return len(inter) / len(uni)
+
+def composite_string_sim(name_a: str, name_b: str, desc_a: str, desc_b: str, weights=None):
+    """
+    Lightweight composite similarity using sequence ratio and token jaccard on names and descriptions.
+    weights default tuned to prefer name similarity.
+    """
+    if weights is None:
+        weights = {"name_seq":0.5, "name_jac":0.25, "desc_seq":0.15, "desc_jac":0.10}
+    n_seq = seq_ratio(name_a, name_b)
+    n_jac = token_jaccard(name_a, name_b)
+    d_seq = seq_ratio(desc_a, desc_b)
+    d_jac = token_jaccard(desc_a or "", desc_b or "")
+    # normalize and weighted sum
+    score = (n_seq * weights["name_seq"] + n_jac * weights["name_jac"] +
+             d_seq * weights["desc_seq"] + d_jac * weights["desc_jac"])
+    return float(score)
+
+# ------------------ Load inputs ------------------
+print("Loading input files (defaults shown in script)...")
+entities_raw = load_jsonl(ENT_RAW)
+print(f" - original mentions: {len(entities_raw)}  (ENT_RAW: {ENT_RAW})")
+
+resolved_records = load_jsonl(ENT_RESOLVED_JSONL)
+print(f" - canonical resolved records: {len(resolved_records)}  (ENT_RESOLVED_JSONL: {ENT_RESOLVED_JSONL})")
+
+resolve_map = load_json(RESOLVE_MAP) or {}
+print(f" - resolve_map entries: {len(resolve_map)}  (RESOLVE_MAP: {RESOLVE_MAP})")
+
+history = load_jsonl(HISTORY)
+print(f" - history entries: {len(history)}  (HISTORY: {HISTORY})")
+
+clusters_processed = load_jsonl(CLUSTERS_PROCESSED)
+if clusters_processed:
+    print(f" - clusters_processed entries: {len(clusters_processed)}  (CLUSTERS_PROCESSED: {CLUSTERS_PROCESSED})")
+else:
+    print(f" - clusters_processed missing or empty (CLUSTERS_PROCESSED: {CLUSTERS_PROCESSED})")
+
+clusters_for_review = load_jsonl(CLUSTERS_FOR_REVIEW)
+if clusters_for_review:
+    print(f" - clusters_for_review entries: {len(clusters_for_review)}  (CLUSTERS_FOR_REVIEW: {CLUSTERS_FOR_REVIEW})")
+
+entities_by_id = { e.get("id"): e for e in entities_raw }
+resolved_by_newid = { r.get("id_final"): r for r in resolved_records }
+
+for r in resolved_by_newid.values():
+    r.setdefault("label", r.get("label") or r.get("id_final"))
+    r.setdefault("aliases", r.get("aliases") or [])
+    r.setdefault("members", r.get("members") or [])
+    r.setdefault("description", r.get("description") or "")
+
+# ------------------ Existing analysis (unchanged) ------------------
+csv_path = OUT_DIR / "resolved_entity_table.csv"
+fields = [
+    "original_id", "resolved_id", "resolved_label", "resolved_size", "resolved_aliases",
+    "entity_name", "entity_description", "entity_type_hint", "chunk_id", "mention_confidence", "member_confidence"
+]
+with open(csv_path, "w", encoding="utf-8", newline="") as fh:
+    writer = csv.DictWriter(fh, fieldnames=fields)
+    writer.writeheader()
+    for ent in entities_raw:
+        eid = ent.get("id")
+        rid = resolve_map.get(eid)
+        rlabel = ""
+        rsize = ""
+        raliases = ""
+        member_conf = None
+        if rid and rid in resolved_by_newid:
+            rec = resolved_by_newid[rid]
+            rlabel = rec.get("label","")
+            rsize = len(rec.get("members",[]))
+            raliases = "|".join(rec.get("aliases",[]))
+            member_conf = rec.get("member_confidence", {}).get(eid) if isinstance(rec.get("member_confidence", {}), dict) else None
+        row = {
+            "original_id": eid,
+            "resolved_id": rid or "",
+            "resolved_label": rlabel,
+            "resolved_size": rsize,
+            "resolved_aliases": raliases,
+            "entity_name": ent.get("entity_name",""),
+            "entity_description": ent.get("entity_description",""),
+            "entity_type_hint": ent.get("entity_type_hint",""),
+            "chunk_id": ent.get("chunk_id") or ent.get("source_chunk") or ent.get("chunk") or "",
+            "mention_confidence": ent.get("confidence_score") if ent.get("confidence_score") is not None else "",
+            "member_confidence": member_conf if member_conf is not None else ""
+        }
+        writer.writerow(row)
+print("Wrote:", csv_path)
+
+# Build groups
+groups = defaultdict(list)
+for orig_id in entities_by_id:
+    rid = resolve_map.get(orig_id)
+    if rid:
+        groups[rid].append(orig_id)
+    else:
+        groups[f"UNRESOLVED_{orig_id}"].append(orig_id)
+
+merged_groups = []
+for rid, members in groups.items():
+    resolved_rec = resolved_by_newid.get(rid)
+    label = resolved_rec.get("label") if resolved_rec else None
+    aliases = resolved_rec.get("aliases") if resolved_rec else []
+    resolved_desc = resolved_rec.get("description") if resolved_rec else ""
+    member_objs = []
+    for mid in members:
+        m = entities_by_id.get(mid, {})
+        member_objs.append({
+            "id": mid,
+            "entity_name": m.get("entity_name",""),
+            "entity_description": m.get("entity_description",""),
+            "entity_type_hint": m.get("entity_type_hint",""),
+            "chunk_id": m.get("chunk_id") or m.get("source_chunk") or m.get("chunk") or "",
+            "mention_confidence": m.get("confidence_score"),
+            "member_confidence": (resolved_by_newid.get(rid, {}).get("member_confidence", {}).get(mid) if rid in resolved_by_newid else None)
+        })
+    merged_groups.append({
+        "resolved_id": rid,
+        "label": label or f"UNRESOLVED_GROUP_{rid}",
+        "aliases": aliases,
+        "members": member_objs,
+        "size": len(member_objs),
+        "resolved_description": resolved_desc
+    })
+
+merged_groups_sorted = sorted(merged_groups, key=lambda x: x["size"], reverse=True)
+
+out_json = OUT_DIR / "merged_groups_full.json"
+with open(out_json, "w", encoding="utf-8") as fh:
+    json.dump(merged_groups_sorted, fh, indent=2, ensure_ascii=False)
+out_jsonl = OUT_DIR / "merged_groups_full.jsonl"
+with open(out_jsonl, "w", encoding="utf-8") as fh:
+    for g in merged_groups_sorted:
+        fh.write(json.dumps(g, ensure_ascii=False) + "\n")
+print("Wrote merged groups files.")
+
+csv_groups = OUT_DIR / "merged_groups_by_size.csv"
+with open(csv_groups, "w", encoding="utf-8", newline="") as fh:
+    fieldnames = ["resolved_id", "label", "size", "aliases", "sample_member_names"]
+    writer = csv.DictWriter(fh, fieldnames=fieldnames)
+    writer.writeheader()
+    for g in merged_groups_sorted:
+        sample_names = "; ".join([m.get("entity_name","") for m in g["members"][:6]])
+        writer.writerow({
+            "resolved_id": g["resolved_id"],
+            "label": g["label"],
+            "size": g["size"],
+            "aliases": "|".join(g.get("aliases",[])),
+            "sample_member_names": sample_names
+        })
+print("Wrote:", csv_groups)
+
+singletons_path = OUT_DIR / "singletons_unresolved.csv"
+with open(singletons_path, "w", encoding="utf-8", newline="") as fh:
+    fieldnames = ["original_id", "entity_name", "entity_description", "entity_type_hint", "chunk_id", "mention_confidence"]
+    writer = csv.DictWriter(fh, fieldnames=fieldnames)
+    writer.writeheader()
+    for g in merged_groups_sorted:
+        if g["size"] == 1 and (str(g["resolved_id"]).startswith("UNRESOLVED_") or g["label"].startswith("UNRESOLVED_")):
+            m = g["members"][0]
+            writer.writerow({
+                "original_id": m.get("id"),
+                "entity_name": m.get("entity_name",""),
+                "entity_description": m.get("entity_description",""),
+                "entity_type_hint": m.get("entity_type_hint",""),
+                "chunk_id": m.get("chunk_id",""),
+                "mention_confidence": m.get("mention_confidence","")
+            })
+print("Wrote:", singletons_path)
+
+# ------------------ Annotate merge sources (unchanged) ------------------
+entity_sources = defaultdict(list)
+for h in history:
+    act = (h.get("action") or "").lower()
+    if act == "auto_merge":
+        mids = h.get("member_ids") or h.get("merged_ids") or h.get("members") or []
+        for m in mids:
+            entity_sources[m].append("auto")
+    elif act == "merge_entities":
+        mids = h.get("merged_ids") or h.get("member_ids") or []
+        for m in mids:
+            entity_sources[m].append("llm")
+    elif act in ("applied_merge_group", "applied_merge"):
+        mids = h.get("member_ids") or h.get("merged_ids") or []
+        for m in mids:
+            entity_sources[m].append("llm")
+    elif act == "rename_entity":
+        eid = h.get("entity_id")
+        if eid:
+            entity_sources[eid].append("llm")
+    elif act == "kept_singleton":
+        eid = h.get("entity_id")
+        if eid:
+            entity_sources[eid].append("none")
+    elif act == "left_unchanged_low_sim":
+        for m in h.get("members", []) or []:
+            entity_sources[m].append("none")
+    elif act == "keep_entity":
+        eid = h.get("entity_id")
+        if eid:
+            entity_sources[eid].append("llm")
+    else:
+        mids = h.get("merged_ids") or h.get("member_ids") or []
+        for m in mids:
+            entity_sources[m].append("llm" if act and "auto" not in act else "auto")
+
+annotated = []
+csv_rows = []
+for g in merged_groups_sorted:
+    members = g["members"]
+    src_counter = Counter()
+    for m in members:
+        mid = m["id"]
+        for src in entity_sources.get(mid, []):
+            src_counter[src] += 1
+    if not src_counter:
+        resolution_source = "singleton"
+    elif len(src_counter) == 1:
+        resolution_source = next(iter(src_counter))
+    else:
+        resolution_source = "mixed"
+    g2 = dict(g)
+    g2["resolution_source"] = resolution_source
+    g2["auto_merge_count"] = src_counter.get("auto", 0)
+    g2["llm_merge_count"] = src_counter.get("llm", 0)
+    annotated.append(g2)
+    csv_rows.append({
+        "resolved_id": g2["resolved_id"],
+        "label": g2["label"],
+        "size": g2["size"],
+        "resolution_source": resolution_source,
+        "auto_merge_count": g2["auto_merge_count"],
+        "llm_merge_count": g2["llm_merge_count"],
+        "sample_members": "; ".join(m["entity_name"] for m in members[:5])
+    })
+
+OUT_ANNOT_JSON = OUT_DIR / "merged_groups_full_annotated.json"
+OUT_ANNOT_JSONL = OUT_DIR / "merged_groups_full_annotated.jsonl"
+OUT_ANNOT_CSV = OUT_DIR / "merged_groups_by_source.csv"
+
+with open(OUT_ANNOT_JSON, "w", encoding="utf-8") as fh:
+    json.dump(annotated, fh, indent=2, ensure_ascii=False)
+with open(OUT_ANNOT_JSONL, "w", encoding="utf-8") as fh:
+    for g in annotated:
+        fh.write(json.dumps(g, ensure_ascii=False) + "\n")
+with open(OUT_ANNOT_CSV, "w", encoding="utf-8", newline="") as fh:
+    fieldnames = ["resolved_id", "label", "size", "resolution_source", "auto_merge_count", "llm_merge_count", "sample_members"]
+    writer = csv.DictWriter(fh, fieldnames=fieldnames)
+    writer.writeheader()
+    for r in csv_rows:
+        writer.writerow(r)
+print("Wrote annotated merged groups.")
+
+# ------------------ Stats (unchanged) ------------------
+size_counts = Counter([g["size"] for g in merged_groups_sorted])
+top_labels = [{"label":g["label"], "size":g["size"], "resolved_id": g["resolved_id"]} for g in merged_groups_sorted[:50]]
+type_dist = Counter([ e.get("entity_type_hint") or "None" for e in entities_raw ])
+confidence_vals = []
+for e in entities_raw:
+    cs = e.get("confidence_score")
+    try:
+        if cs is not None:
+            confidence_vals.append(float(cs))
+    except Exception:
+        pass
+
+conf_summary = {}
+if confidence_vals:
+    conf_summary = {
+        "count": len(confidence_vals),
+        "mean": sum(confidence_vals)/len(confidence_vals),
+        "min": min(confidence_vals),
+        "max": max(confidence_vals)
+    }
+
+stats = {
+    "n_original_mentions": len(entities_raw),
+    "n_resolved_groups": len(merged_groups_sorted),
+    "size_distribution": dict(size_counts),
+    "top_resolved_samples": top_labels,
+    "type_distribution_sample": type_dist.most_common(40),
+    "confidence_summary": conf_summary,
+    "history_action_counts": Counter([h.get("action") for h in history])
+}
+
+stats_out = OUT_DIR / "top_resolved_stats.json"
+with open(stats_out, "w", encoding="utf-8") as fh:
+    json.dump(stats, fh, indent=2, ensure_ascii=False)
+print("Wrote:", stats_out)
+
+# ------------------ NEW: Near-miss detection ------------------
+
+# Build representative label/desc for each group:
+# If resolved record exists use label/desc; otherwise pick first member's name/desc.
+group_reprs = {}
+for g in merged_groups_sorted:
+    rid = g["resolved_id"]
+    label = g.get("label") or ""
+    desc = g.get("resolved_description") or ""
+    # fallback to first member
+    if (not label or label.startswith("UNRESOLVED_")) and g["members"]:
+        label = label if label and not label.startswith("UNRESOLVED_") else (g["members"][0].get("entity_name") or "")
+    if (not desc) and g["members"]:
+        desc = desc or (g["members"][0].get("entity_description") or "")
+    group_reprs[rid] = {"label": str(label), "desc": str(desc), "size": g["size"], "members": [m["id"] for m in g["members"]]}
+
+# 1) Group-level similarity (representative labels)
+group_pairs = []
+group_ids = list(group_reprs.keys())
+for a, b in itertools.combinations(group_ids, 2):
+    la = group_reprs[a]["label"]
+    lb = group_reprs[b]["label"]
+    da = group_reprs[a]["desc"]
+    db = group_reprs[b]["desc"]
+    score = composite_string_sim(la, lb, da, db)
+    if score >= NEAR_MISS_MIN:
+        group_pairs.append((a, b, score))
+
+# sort and write group-level near-misses
+group_pairs_sorted = sorted(group_pairs, key=lambda x: x[2], reverse=True)
+gp_csv = OUT_DIR / "near_miss_group_pairs.csv"
+with open(gp_csv, "w", encoding="utf-8", newline="") as fh:
+    writer = csv.DictWriter(fh, fieldnames=["group_a", "group_b", "label_a", "label_b", "size_a", "size_b", "score"])
+    writer.writeheader()
+    for a,b,sc in group_pairs_sorted:
+        writer.writerow({
+            "group_a": a, "group_b": b,
+            "label_a": group_reprs[a]["label"],
+            "label_b": group_reprs[b]["label"],
+            "size_a": group_reprs[a]["size"],
+            "size_b": group_reprs[b]["size"],
+            "score": f"{sc:.4f}"
+        })
+print("Wrote group-level near-miss csv:", gp_csv)
+
+# 2) Mention-level cross-group near-miss pairs (top K)
+# We'll compute for mentions across differing resolved groups, but to limit cost do:
+# - only compute pairs where names length > 1 and groups are different
+# - collect top candidates by score
+pairs = []
+mention_items = []
+# prepare mention list with resolved group id
+for ent in entities_raw:
+    mid = ent.get("id")
+    rid = resolve_map.get(mid) or f"UNRES_{mid}"
+    mention_items.append({
+        "id": mid,
+        "rid": rid,
+        "name": ent.get("entity_name","") or "",
+        "desc": ent.get("entity_description","") or ""
+    })
+
+# For efficiency, group mentions by group and compare group pairs that were flagged above first.
+# If no group pairs flagged, compare all groups but limit size.
+candidate_group_pairs = [ (a,b) for (a,b,sc) in group_pairs_sorted ]
+if not candidate_group_pairs:
+    # fallback: compare top N groups by size (to limit O(N^2))
+    top_groups = [g["resolved_id"] for g in merged_groups_sorted[:50]]
+    candidate_group_pairs = list(itertools.combinations(top_groups, 2))
+
+# build map group->members (mention dicts)
+group_to_mentions = defaultdict(list)
+for m in mention_items:
+    group_to_mentions[m["rid"]].append(m)
+
+# compute mention-level scores for candidate group pairs
+for a,b in candidate_group_pairs:
+    membs_a = group_to_mentions.get(a, [])
+    membs_b = group_to_mentions.get(b, [])
+    # skip trivial empty groups
+    if not membs_a or not membs_b:
+        continue
+    # compare cross pairs (limit by size to avoid explosion)
+    limit_a = moun_a = len(membs_a)
+    limit_b = len(membs_b)
+    # cap per-group comparisons
+    cap = 40
+    membs_a_sample = membs_a[:cap]
+    membs_b_sample = membs_b[:cap]
+    for ma in membs_a_sample:
+        for mb in membs_b_sample:
+            name_score = seq_ratio(ma["name"], mb["name"])
+            comp_score = composite_string_sim(ma["name"], mb["name"], ma["desc"], mb["desc"])
+            if comp_score >= NEAR_MISS_MIN:
+                pairs.append({
+                    "mention_a": ma["id"], "mention_b": mb["id"],
+                    "group_a": a, "group_b": b,
+                    "name_a": ma["name"], "name_b": mb["name"],
+                    "desc_a": ma["desc"], "desc_b": mb["desc"],
+                    "score": comp_score,
+                    "name_ratio": name_score
+                })
+
+# Keep only those in (NEAR_MISS_MIN, NEAR_MISS_MAX] to highlight "should-check" zone.
+pairs_filtered = [p for p in pairs if p["score"] >= NEAR_MISS_MIN]
+pairs_sorted = sorted(pairs_filtered, key=lambda x: x["score"], reverse=True)
+
+pairs_csv = OUT_DIR / "near_miss_pairs.csv"
+with open(pairs_csv, "w", encoding="utf-8", newline="") as fh:
+    fieldnames = ["mention_a","mention_b","group_a","group_b","name_a","name_b","score","name_ratio"]
+    writer = csv.DictWriter(fh, fieldnames=fieldnames)
+    writer.writeheader()
+    for p in pairs_sorted:
+        writer.writerow({
+            "mention_a": p["mention_a"],
+            "mention_b": p["mention_b"],
+            "group_a": p["group_a"],
+            "group_b": p["group_b"],
+            "name_a": p["name_a"],
+            "name_b": p["name_b"],
+            "score": f"{p['score']:.4f}",
+            "name_ratio": f"{p['name_ratio']:.4f}"
+        })
+print("Wrote mention-level near-miss pairs:", pairs_csv)
+
+# 3) Merge suggestions: aggregate group-level + mention-level evidence
+# For each group-pair compute a combined score: group_score + max_mention_score/2
+group_evidence = defaultdict(list)
+for p in pairs_sorted:
+    key = tuple(sorted([p["group_a"], p["group_b"]]))
+    group_evidence[key].append(p["score"])
+
+suggestions = []
+for (a,b,sc) in group_pairs_sorted:
+    key = tuple(sorted([a,b]))
+    mention_scores = group_evidence.get(key, [])
+    best_m = max(mention_scores) if mention_scores else 0.0
+    combined = sc * 0.6 + best_m * 0.4
+    suggestions.append({"group_a": key[0], "group_b": key[1], "group_score": sc, "best_mention_score": best_m, "combined_score": combined})
+
+# also include group pairs that only came from mention evidence (not in group_pairs_sorted)
+for key, mention_scores in group_evidence.items():
+    if not any((key[0]==x[0] and key[1]==x[1]) or (key[0]==x[1] and key[1]==x[0]) for x in [(g[0],g[1]) for g in group_pairs_sorted]):
+        best_m = max(mention_scores)
+        combined = best_m
+        suggestions.append({"group_a": key[0], "group_b": key[1], "group_score": None, "best_mention_score": best_m, "combined_score": combined})
+
+# sort suggestions by combined_score desc and write top-K
+suggestions_sorted = sorted(suggestions, key=lambda x: (x["combined_score"] or 0.0), reverse=True)[:TOP_K_SUGGESTIONS]
+sugg_out = OUT_DIR / "merge_suggestions.jsonl"
+with open(sugg_out, "w", encoding="utf-8") as fh:
+    for s in suggestions_sorted:
+        fh.write(json.dumps(s, ensure_ascii=False) + "\n")
+print("Wrote merge suggestions:", sugg_out)
+
+# Also write near_miss_group_pairs top view (already saved above). Save top-K there as well.
+gp_top_csv = OUT_DIR / "near_miss_group_pairs_top.csv"
+with open(gp_top_csv, "w", encoding="utf-8", newline="") as fh:
+    writer = csv.DictWriter(fh, fieldnames=["group_a","group_b","label_a","label_b","size_a","size_b","score"])
+    writer.writeheader()
+    for a,b,sc in group_pairs_sorted[:TOP_K_SUGGESTIONS]:
+        writer.writerow({
+            "group_a": a, "group_b": b,
+            "label_a": group_reprs[a]["label"], "label_b": group_reprs[b]["label"],
+            "size_a": group_reprs[a]["size"], "size_b": group_reprs[b]["size"],
+            "score": f"{sc:.4f}"
+        })
+print("Wrote top group-level near-miss csv:", gp_top_csv)
+
+# ------------------ Optional: Save clusters_processed copy ------------------
+if clusters_processed:
+    cp_out = OUT_DIR / "clusters_processed_copy.jsonl"
+    with open(cp_out, "w", encoding="utf-8") as fh:
+        for c in clusters_processed:
+            fh.write(json.dumps(c, ensure_ascii=False) + "\n")
+    print("Wrote clusters_processed copy:", cp_out)
+
+# ------------------ Final console summary ------------------
+print("\n=== QUICK INSPECTION ===")
+print("original mentions:", len(entities_raw))
+print("resolved groups:", len(merged_groups_sorted))
+print("top 10 resolved groups (label -- size -- resolved_id):")
+for g in merged_groups_sorted[:10]:
+    print(f"  {g['label'][:70]:70s}  size={g['size']:3d}  id={g['resolved_id']}")
+print("\nFiles written to:", OUT_DIR)
+print(" - resolved_entity_table.csv")
+print(" - merged_groups_full.json(.jsonl)")
+print(" - merged_groups_by_size.csv")
+print(" - singletons_unresolved.csv")
+print(" - merged_groups_full_annotated.json(.jsonl/.csv)")
+print(" - top_resolved_stats.json")
+print(" - near_miss_pairs.csv")
+print(" - near_miss_group_pairs.csv  (and _top.csv)")
+print(" - merge_suggestions.jsonl")
+if clusters_for_review:
+    print(" - clusters_flagged_for_review.jsonl")
+if LLM_DEBUG_DIR.exists():
+    print(" - LLM debug dir (exists):", LLM_DEBUG_DIR)
+print("========================\n")
+
+
+#endregion#? Analysis V2
+#?#########################  End  ##########################
+
+
+
+#?######################### Start ##########################
+#region:#?   Analysis V3 - for merged resolution 
+
+
+
+#!/usr/bin/env python3
+"""
+analyze_entity_resolution_combined_with_nearmiss_and_wrongmerges.py
+
+Combined analysis:
+ - original analysis outputs (resolved_entity_table.csv, merged_groups_full.json, ...)
+ - near-miss detection (mention- and group-level) -> near_miss_pairs.csv, near_miss_group_pairs.csv, merge_suggestions.jsonl
+ - NEW: potential "wrong merges" detection (low intra-group cohesion) -> wrong_merges.jsonl
+
+Tunable thresholds near top of file.
+"""
+import json
+from pathlib import Path
+from collections import defaultdict, Counter
+import csv
+import math
+import argparse
+from difflib import SequenceMatcher
+import itertools
+import statistics
+import sys
+
+# ------------------ Config / paths (change if needed) ------------------
+BASE_DIR = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/entity-resolved")
+ENT_RAW = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/KG/entities_raw-entResTestssmaller.jsonl")
+ENT_RESOLVED_JSONL = BASE_DIR / "entities_resolved.jsonl"
+RESOLVE_MAP = BASE_DIR / "resolve_map.json"
+HISTORY = BASE_DIR / "resolution_history.jsonl"
+CLUSTERS_PROCESSED = BASE_DIR / "clusters_processed.jsonl"
+CLUSTERS_FOR_REVIEW = BASE_DIR / "clusters_for_review.jsonl"
+LLM_DEBUG_DIR = BASE_DIR / "llm_debug"
+
+OUT_DIR = BASE_DIR / "analysis"
+OUT_DIR.mkdir(parents=True, exist_ok=True)
+
+# Near-miss thresholds (string-similarity based)
+NEAR_MISS_MIN = 0.70   # lower bound to consider "close"
+NEAR_MISS_MAX = 0.94   # if > this we may have expected a merge (tunable)
+TOP_K_SUGGESTIONS = 200  # how many top candidates to write to suggestions
+
+# Wrong-merge detection thresholds
+INTRA_COHESION_MIN = 0.55   # mean pairwise score below this -> flag as potential wrong merge
+INTRA_PAIR_MIN = 0.40       # individual low-scoring pairs below this are noteworthy
+MAX_MEMBER_PAIRS_REPORTED = 40  # cap number of pair details saved per flagged group
+
+# ------------------ Helpers ------------------
+def load_jsonl(path: Path):
+    items = []
+    if not path.exists():
+        return items
+    with open(path, "r", encoding="utf-8") as fh:
+        for ln in fh:
+            ln = ln.strip()
+            if not ln:
+                continue
+            try:
+                items.append(json.loads(ln))
+            except Exception:
+                try:
+                    items.append(json.loads(ln.replace("'", '"')))
+                except Exception:
+                    print(f"[WARN] failed to parse line in {path}: {ln[:120]!r}", file=sys.stderr)
+    return items
+
+def load_json(path: Path):
+    if not path.exists():
+        return None
+    with open(path, "r", encoding="utf-8") as fh:
+        return json.load(fh)
+
+def normalize_surface(s):
+    if not s:
+        return ""
+    return " ".join(s.strip().lower().split())
+
+def seq_ratio(a: str, b: str) -> float:
+    a = (a or "").strip()
+    b = (b or "").strip()
+    if not a or not b:
+        return 0.0
+    return SequenceMatcher(None, a, b).ratio()
+
+def token_jaccard(a: str, b: str) -> float:
+    a_tokens = set([t for t in (a or "").lower().split() if t])
+    b_tokens = set([t for t in (b or "").lower().split() if t])
+    if not a_tokens or not b_tokens:
+        return 0.0
+    inter = a_tokens.intersection(b_tokens)
+    uni = a_tokens.union(b_tokens)
+    return len(inter) / len(uni)
+
+def composite_string_sim(name_a: str, name_b: str, desc_a: str, desc_b: str, weights=None):
+    """
+    Lightweight composite similarity using sequence ratio and token jaccard on names and descriptions.
+    weights default tuned to prefer name similarity.
+    """
+    if weights is None:
+        weights = {"name_seq":0.5, "name_jac":0.25, "desc_seq":0.15, "desc_jac":0.10}
+    n_seq = seq_ratio(name_a, name_b)
+    n_jac = token_jaccard(name_a, name_b)
+    d_seq = seq_ratio(desc_a, desc_b)
+    d_jac = token_jaccard(desc_a or "", desc_b or "")
+    score = (n_seq * weights["name_seq"] + n_jac * weights["name_jac"] +
+             d_seq * weights["desc_seq"] + d_jac * weights["desc_jac"])
+    return float(score)
+
+# ------------------ Load inputs ------------------
+print("Loading input files (defaults shown in script)...")
+entities_raw = load_jsonl(ENT_RAW)
+print(f" - original mentions: {len(entities_raw)}  (ENT_RAW: {ENT_RAW})")
+
+resolved_records = load_jsonl(ENT_RESOLVED_JSONL)
+print(f" - canonical resolved records: {len(resolved_records)}  (ENT_RESOLVED_JSONL: {ENT_RESOLVED_JSONL})")
+
+resolve_map = load_json(RESOLVE_MAP) or {}
+print(f" - resolve_map entries: {len(resolve_map)}  (RESOLVE_MAP: {RESOLVE_MAP})")
+
+history = load_jsonl(HISTORY)
+print(f" - history entries: {len(history)}  (HISTORY: {HISTORY})")
+
+clusters_processed = load_jsonl(CLUSTERS_PROCESSED)
+if clusters_processed:
+    print(f" - clusters_processed entries: {len(clusters_processed)}  (CLUSTERS_PROCESSED: {CLUSTERS_PROCESSED})")
+else:
+    print(f" - clusters_processed missing or empty (CLUSTERS_PROCESSED: {CLUSTERS_PROCESSED})")
+
+clusters_for_review = load_jsonl(CLUSTERS_FOR_REVIEW)
+if clusters_for_review:
+    print(f" - clusters_for_review entries: {len(clusters_for_review)}  (CLUSTERS_FOR_REVIEW: {CLUSTERS_FOR_REVIEW})")
+
+entities_by_id = { e.get("id"): e for e in entities_raw }
+resolved_by_newid = { r.get("id_final"): r for r in resolved_records }
+
+for r in resolved_by_newid.values():
+    r.setdefault("label", r.get("label") or r.get("id_final"))
+    r.setdefault("aliases", r.get("aliases") or [])
+    r.setdefault("members", r.get("members") or [])
+    r.setdefault("description", r.get("description") or "")
+
+# ------------------ Existing analysis (unchanged) ------------------
+csv_path = OUT_DIR / "resolved_entity_table.csv"
+fields = [
+    "original_id", "resolved_id", "resolved_label", "resolved_size", "resolved_aliases",
+    "entity_name", "entity_description", "entity_type_hint", "chunk_id", "mention_confidence", "member_confidence"
+]
+with open(csv_path, "w", encoding="utf-8", newline="") as fh:
+    writer = csv.DictWriter(fh, fieldnames=fields)
+    writer.writeheader()
+    for ent in entities_raw:
+        eid = ent.get("id")
+        rid = resolve_map.get(eid)
+        rlabel = ""
+        rsize = ""
+        raliases = ""
+        member_conf = None
+        if rid and rid in resolved_by_newid:
+            rec = resolved_by_newid[rid]
+            rlabel = rec.get("label","")
+            rsize = len(rec.get("members",[]))
+            raliases = "|".join(rec.get("aliases",[]))
+            member_conf = rec.get("member_confidence", {}).get(eid) if isinstance(rec.get("member_confidence", {}), dict) else None
+        row = {
+            "original_id": eid,
+            "resolved_id": rid or "",
+            "resolved_label": rlabel,
+            "resolved_size": rsize,
+            "resolved_aliases": raliases,
+            "entity_name": ent.get("entity_name",""),
+            "entity_description": ent.get("entity_description",""),
+            "entity_type_hint": ent.get("entity_type_hint",""),
+            "chunk_id": ent.get("chunk_id") or ent.get("source_chunk") or ent.get("chunk") or "",
+            "mention_confidence": ent.get("confidence_score") if ent.get("confidence_score") is not None else "",
+            "member_confidence": member_conf if member_conf is not None else ""
+        }
+        writer.writerow(row)
+print("Wrote:", csv_path)
+
+# Build groups
+groups = defaultdict(list)
+for orig_id in entities_by_id:
+    rid = resolve_map.get(orig_id)
+    if rid:
+        groups[rid].append(orig_id)
+    else:
+        groups[f"UNRESOLVED_{orig_id}"].append(orig_id)
+
+merged_groups = []
+for rid, members in groups.items():
+    resolved_rec = resolved_by_newid.get(rid)
+    label = resolved_rec.get("label") if resolved_rec else None
+    aliases = resolved_rec.get("aliases") if resolved_rec else []
+    resolved_desc = resolved_rec.get("description") if resolved_rec else ""
+    member_objs = []
+    for mid in members:
+        m = entities_by_id.get(mid, {})
+        member_objs.append({
+            "id": mid,
+            "entity_name": m.get("entity_name",""),
+            "entity_description": m.get("entity_description",""),
+            "entity_type_hint": m.get("entity_type_hint",""),
+            "chunk_id": m.get("chunk_id") or m.get("source_chunk") or m.get("chunk") or "",
+            "mention_confidence": m.get("confidence_score"),
+            "member_confidence": (resolved_by_newid.get(rid, {}).get("member_confidence", {}).get(mid) if rid in resolved_by_newid else None)
+        })
+    merged_groups.append({
+        "resolved_id": rid,
+        "label": label or f"UNRESOLVED_GROUP_{rid}",
+        "aliases": aliases,
+        "members": member_objs,
+        "size": len(member_objs),
+        "resolved_description": resolved_desc
+    })
+
+merged_groups_sorted = sorted(merged_groups, key=lambda x: x["size"], reverse=True)
+
+out_json = OUT_DIR / "merged_groups_full.json"
+with open(out_json, "w", encoding="utf-8") as fh:
+    json.dump(merged_groups_sorted, fh, indent=2, ensure_ascii=False)
+out_jsonl = OUT_DIR / "merged_groups_full.jsonl"
+with open(out_jsonl, "w", encoding="utf-8") as fh:
+    for g in merged_groups_sorted:
+        fh.write(json.dumps(g, ensure_ascii=False) + "\n")
+print("Wrote merged groups files.")
+
+csv_groups = OUT_DIR / "merged_groups_by_size.csv"
+with open(csv_groups, "w", encoding="utf-8", newline="") as fh:
+    fieldnames = ["resolved_id", "label", "size", "aliases", "sample_member_names"]
+    writer = csv.DictWriter(fh, fieldnames=fieldnames)
+    writer.writeheader()
+    for g in merged_groups_sorted:
+        sample_names = "; ".join([m.get("entity_name","") for m in g["members"][:6]])
+        writer.writerow({
+            "resolved_id": g["resolved_id"],
+            "label": g["label"],
+            "size": g["size"],
+            "aliases": "|".join(g.get("aliases",[])),
+            "sample_member_names": sample_names
+        })
+print("Wrote:", csv_groups)
+
+singletons_path = OUT_DIR / "singletons_unresolved.csv"
+with open(singletons_path, "w", encoding="utf-8", newline="") as fh:
+    fieldnames = ["original_id", "entity_name", "entity_description", "entity_type_hint", "chunk_id", "mention_confidence"]
+    writer = csv.DictWriter(fh, fieldnames=fieldnames)
+    writer.writeheader()
+    for g in merged_groups_sorted:
+        if g["size"] == 1 and (str(g["resolved_id"]).startswith("UNRESOLVED_") or g["label"].startswith("UNRESOLVED_")):
+            m = g["members"][0]
+            writer.writerow({
+                "original_id": m.get("id"),
+                "entity_name": m.get("entity_name",""),
+                "entity_description": m.get("entity_description",""),
+                "entity_type_hint": m.get("entity_type_hint",""),
+                "chunk_id": m.get("chunk_id",""),
+                "mention_confidence": m.get("mention_confidence","")
+            })
+print("Wrote:", singletons_path)
+
+# ------------------ Annotate merge sources (unchanged) ------------------
+entity_sources = defaultdict(list)
+for h in history:
+    act = (h.get("action") or "").lower()
+    if act == "auto_merge":
+        mids = h.get("member_ids") or h.get("merged_ids") or h.get("members") or []
+        for m in mids:
+            entity_sources[m].append("auto")
+    elif act == "merge_entities":
+        mids = h.get("merged_ids") or h.get("member_ids") or []
+        for m in mids:
+            entity_sources[m].append("llm")
+    elif act in ("applied_merge_group", "applied_merge"):
+        mids = h.get("member_ids") or h.get("merged_ids") or []
+        for m in mids:
+            entity_sources[m].append("llm")
+    elif act == "rename_entity":
+        eid = h.get("entity_id")
+        if eid:
+            entity_sources[eid].append("llm")
+    elif act == "kept_singleton":
+        eid = h.get("entity_id")
+        if eid:
+            entity_sources[eid].append("none")
+    elif act == "left_unchanged_low_sim":
+        for m in h.get("members", []) or []:
+            entity_sources[m].append("none")
+    elif act == "keep_entity":
+        eid = h.get("entity_id")
+        if eid:
+            entity_sources[eid].append("llm")
+    else:
+        mids = h.get("merged_ids") or h.get("member_ids") or []
+        for m in mids:
+            entity_sources[m].append("llm" if act and "auto" not in act else "auto")
+
+annotated = []
+csv_rows = []
+for g in merged_groups_sorted:
+    members = g["members"]
+    src_counter = Counter()
+    for m in members:
+        mid = m["id"]
+        for src in entity_sources.get(mid, []):
+            src_counter[src] += 1
+    if not src_counter:
+        resolution_source = "singleton"
+    elif len(src_counter) == 1:
+        resolution_source = next(iter(src_counter))
+    else:
+        resolution_source = "mixed"
+    g2 = dict(g)
+    g2["resolution_source"] = resolution_source
+    g2["auto_merge_count"] = src_counter.get("auto", 0)
+    g2["llm_merge_count"] = src_counter.get("llm", 0)
+    annotated.append(g2)
+    csv_rows.append({
+        "resolved_id": g2["resolved_id"],
+        "label": g2["label"],
+        "size": g2["size"],
+        "resolution_source": resolution_source,
+        "auto_merge_count": g2["auto_merge_count"],
+        "llm_merge_count": g2["llm_merge_count"],
+        "sample_members": "; ".join(m["entity_name"] for m in members[:5])
+    })
+
+OUT_ANNOT_JSON = OUT_DIR / "merged_groups_full_annotated.json"
+OUT_ANNOT_JSONL = OUT_DIR / "merged_groups_full_annotated.jsonl"
+OUT_ANNOT_CSV = OUT_DIR / "merged_groups_by_source.csv"
+
+with open(OUT_ANNOT_JSON, "w", encoding="utf-8") as fh:
+    json.dump(annotated, fh, indent=2, ensure_ascii=False)
+with open(OUT_ANNOT_JSONL, "w", encoding="utf-8") as fh:
+    for g in annotated:
+        fh.write(json.dumps(g, ensure_ascii=False) + "\n")
+with open(OUT_ANNOT_CSV, "w", encoding="utf-8", newline="") as fh:
+    fieldnames = ["resolved_id", "label", "size", "resolution_source", "auto_merge_count", "llm_merge_count", "sample_members"]
+    writer = csv.DictWriter(fh, fieldnames=fieldnames)
+    writer.writeheader()
+    for r in csv_rows:
+        writer.writerow(r)
+print("Wrote annotated merged groups.")
+
+# ------------------ Stats (unchanged) ------------------
+size_counts = Counter([g["size"] for g in merged_groups_sorted])
+top_labels = [{"label":g["label"], "size":g["size"], "resolved_id": g["resolved_id"]} for g in merged_groups_sorted[:50]]
+type_dist = Counter([ e.get("entity_type_hint") or "None" for e in entities_raw ])
+confidence_vals = []
+for e in entities_raw:
+    cs = e.get("confidence_score")
+    try:
+        if cs is not None:
+            confidence_vals.append(float(cs))
+    except Exception:
+        pass
+
+conf_summary = {}
+if confidence_vals:
+    conf_summary = {
+        "count": len(confidence_vals),
+        "mean": sum(confidence_vals)/len(confidence_vals),
+        "min": min(confidence_vals),
+        "max": max(confidence_vals)
+    }
+
+stats = {
+    "n_original_mentions": len(entities_raw),
+    "n_resolved_groups": len(merged_groups_sorted),
+    "size_distribution": dict(size_counts),
+    "top_resolved_samples": top_labels,
+    "type_distribution_sample": type_dist.most_common(40),
+    "confidence_summary": conf_summary,
+    "history_action_counts": Counter([h.get("action") for h in history])
+}
+
+stats_out = OUT_DIR / "top_resolved_stats.json"
+with open(stats_out, "w", encoding="utf-8") as fh:
+    json.dump(stats, fh, indent=2, ensure_ascii=False)
+print("Wrote:", stats_out)
+
+# ------------------ NEW: Near-miss detection ------------------
+
+# Build representative label/desc for each group:
+group_reprs = {}
+for g in merged_groups_sorted:
+    rid = g["resolved_id"]
+    label = g.get("label") or ""
+    desc = g.get("resolved_description") or ""
+    if (not label or label.startswith("UNRESOLVED_")) and g["members"]:
+        label = (g["members"][0].get("entity_name") or "")
+    if (not desc) and g["members"]:
+        desc = (g["members"][0].get("entity_description") or "")
+    group_reprs[rid] = {"label": str(label), "desc": str(desc), "size": g["size"], "members": [m["id"] for m in g["members"]]}
+
+# 1) Group-level similarity (representative labels)
+group_pairs = []
+group_ids = list(group_reprs.keys())
+for a, b in itertools.combinations(group_ids, 2):
+    la = group_reprs[a]["label"]
+    lb = group_reprs[b]["label"]
+    da = group_reprs[a]["desc"]
+    db = group_reprs[b]["desc"]
+    score = composite_string_sim(la, lb, da, db)
+    if score >= NEAR_MISS_MIN:
+        group_pairs.append((a, b, score))
+
+group_pairs_sorted = sorted(group_pairs, key=lambda x: x[2], reverse=True)
+gp_csv = OUT_DIR / "near_miss_group_pairs.csv"
+with open(gp_csv, "w", encoding="utf-8", newline="") as fh:
+    writer = csv.DictWriter(fh, fieldnames=["group_a", "group_b", "label_a", "label_b", "size_a", "size_b", "score"])
+    writer.writeheader()
+    for a,b,sc in group_pairs_sorted:
+        writer.writerow({
+            "group_a": a, "group_b": b,
+            "label_a": group_reprs[a]["label"],
+            "label_b": group_reprs[b]["label"],
+            "size_a": group_reprs[a]["size"],
+            "size_b": group_reprs[b]["size"],
+            "score": f"{sc:.4f}"
+        })
+print("Wrote group-level near-miss csv:", gp_csv)
+
+# 2) Mention-level cross-group near-miss pairs (top K)
+pairs = []
+mention_items = []
+for ent in entities_raw:
+    mid = ent.get("id")
+    rid = resolve_map.get(mid) or f"UNRES_{mid}"
+    mention_items.append({
+        "id": mid,
+        "rid": rid,
+        "name": ent.get("entity_name","") or "",
+        "desc": ent.get("entity_description","") or ""
+    })
+
+# Candidate group pairs: those flagged above first, fallback to top groups
+candidate_group_pairs = [ (a,b) for (a,b,sc) in group_pairs_sorted ]
+if not candidate_group_pairs:
+    top_groups = [g["resolved_id"] for g in merged_groups_sorted[:50]]
+    candidate_group_pairs = list(itertools.combinations(top_groups, 2))
+
+group_to_mentions = defaultdict(list)
+for m in mention_items:
+    group_to_mentions[m["rid"]].append(m)
+
+for a,b in candidate_group_pairs:
+    membs_a = group_to_mentions.get(a, [])
+    membs_b = group_to_mentions.get(b, [])
+    if not membs_a or not membs_b:
+        continue
+    cap = 40
+    membs_a_sample = membs_a[:cap]
+    membs_b_sample = membs_b[:cap]
+    for ma in membs_a_sample:
+        for mb in membs_b_sample:
+            name_score = seq_ratio(ma["name"], mb["name"])
+            comp_score = composite_string_sim(ma["name"], mb["name"], ma["desc"], mb["desc"])
+            if comp_score >= NEAR_MISS_MIN:
+                pairs.append({
+                    "mention_a": ma["id"], "mention_b": mb["id"],
+                    "group_a": a, "group_b": b,
+                    "name_a": ma["name"], "name_b": mb["name"],
+                    "desc_a": ma["desc"], "desc_b": mb["desc"],
+                    "score": comp_score,
+                    "name_ratio": name_score
+                })
+
+pairs_filtered = [p for p in pairs if p["score"] >= NEAR_MISS_MIN]
+pairs_sorted = sorted(pairs_filtered, key=lambda x: x["score"], reverse=True)
+
+pairs_csv = OUT_DIR / "near_miss_pairs.csv"
+with open(pairs_csv, "w", encoding="utf-8", newline="") as fh:
+    fieldnames = ["mention_a","mention_b","group_a","group_b","name_a","name_b","score","name_ratio"]
+    writer = csv.DictWriter(fh, fieldnames=fieldnames)
+    writer.writeheader()
+    for p in pairs_sorted:
+        writer.writerow({
+            "mention_a": p["mention_a"],
+            "mention_b": p["mention_b"],
+            "group_a": p["group_a"],
+            "group_b": p["group_b"],
+            "name_a": p["name_a"],
+            "name_b": p["name_b"],
+            "score": f"{p['score']:.4f}",
+            "name_ratio": f"{p['name_ratio']:.4f}"
+        })
+print("Wrote mention-level near-miss pairs:", pairs_csv)
+
+# 3) Merge suggestions: aggregate group-level + mention-level evidence
+group_evidence = defaultdict(list)
+for p in pairs_sorted:
+    key = tuple(sorted([p["group_a"], p["group_b"]]))
+    group_evidence[key].append(p["score"])
+
+suggestions = []
+for (a,b,sc) in group_pairs_sorted:
+    key = tuple(sorted([a,b]))
+    mention_scores = group_evidence.get(key, [])
+    best_m = max(mention_scores) if mention_scores else 0.0
+    combined = sc * 0.6 + best_m * 0.4
+    suggestions.append({"group_a": key[0], "group_b": key[1], "group_score": sc, "best_mention_score": best_m, "combined_score": combined})
+
+for key, mention_scores in group_evidence.items():
+    found = any((key[0]==x[0] and key[1]==x[1]) for x in [(g[0],g[1]) for g in group_pairs_sorted])
+    if not found:
+        best_m = max(mention_scores)
+        combined = best_m
+        suggestions.append({"group_a": key[0], "group_b": key[1], "group_score": None, "best_mention_score": best_m, "combined_score": combined})
+
+suggestions_sorted = sorted(suggestions, key=lambda x: (x["combined_score"] or 0.0), reverse=True)[:TOP_K_SUGGESTIONS]
+sugg_out = OUT_DIR / "merge_suggestions.jsonl"
+with open(sugg_out, "w", encoding="utf-8") as fh:
+    for s in suggestions_sorted:
+        fh.write(json.dumps(s, ensure_ascii=False) + "\n")
+print("Wrote merge suggestions:", sugg_out)
+
+gp_top_csv = OUT_DIR / "near_miss_group_pairs_top.csv"
+with open(gp_top_csv, "w", encoding="utf-8", newline="") as fh:
+    writer = csv.DictWriter(fh, fieldnames=["group_a","group_b","label_a","label_b","size_a","size_b","score"])
+    writer.writeheader()
+    for a,b,sc in group_pairs_sorted[:TOP_K_SUGGESTIONS]:
+        writer.writerow({
+            "group_a": a, "group_b": b,
+            "label_a": group_reprs[a]["label"], "label_b": group_reprs[b]["label"],
+            "size_a": group_reprs[a]["size"], "size_b": group_reprs[b]["size"],
+            "score": f"{sc:.4f}"
+        })
+print("Wrote top group-level near-miss csv:", gp_top_csv)
+
+# ------------------ NEW: Potential wrong merges detection ------------------
+# For each resolved group (size>1) compute intra-group pairwise composite_string_sim on member names/descs.
+# If mean pairwise score < INTRA_COHESION_MIN, flag the group as a potential wrong merge.
+wrong_merges = []
+for g in merged_groups_sorted:
+    members = g["members"]
+    if len(members) <= 1:
+        continue
+    # compute all pairwise scores, but cap reporting
+    pair_scores = []
+    for a, b in itertools.combinations(members, 2):
+        name_a = a.get("entity_name") or ""
+        name_b = b.get("entity_name") or ""
+        desc_a = a.get("entity_description") or ""
+        desc_b = b.get("entity_description") or ""
+        sc = composite_string_sim(name_a, name_b, desc_a, desc_b)
+        pair_scores.append({
+            "a_id": a.get("id"),
+            "b_id": b.get("id"),
+            "a_name": name_a,
+            "b_name": name_b,
+            "score": sc
+        })
+    if not pair_scores:
+        continue
+    mean_pair = sum(p["score"] for p in pair_scores) / len(pair_scores)
+    # count how many extremely low pairs exist
+    low_pairs = [p for p in pair_scores if p["score"] <= INTRA_PAIR_MIN]
+    if mean_pair < INTRA_COHESION_MIN or len(low_pairs) > 0:
+        # sort pair_scores by ascending (lowest score first) to show problematic pairs
+        pair_scores_sorted = sorted(pair_scores, key=lambda x: x["score"])
+        # trim details to avoid huge files
+        detail_pairs = pair_scores_sorted[:MAX_MEMBER_PAIRS_REPORTED]
+        wrong_merges.append({
+            "resolved_id": g["resolved_id"],
+            "label": g.get("label"),
+            "size": g.get("size"),
+            "mean_pairwise_score": mean_pair,
+            "n_pairs_total": len(pair_scores),
+            "n_low_pairs": len(low_pairs),
+            "low_pair_examples": detail_pairs
+        })
+
+# Save wrong merges JSONL and JSON summary
+wrong_jsonl = OUT_DIR / "wrong_merges.jsonl"
+with open(wrong_jsonl, "w", encoding="utf-8") as fh:
+    for w in wrong_merges:
+        fh.write(json.dumps(w, ensure_ascii=False) + "\n")
+wrong_json = OUT_DIR / "wrong_merges_summary.json"
+with open(wrong_json, "w", encoding="utf-8") as fh:
+    json.dump({"n_flagged_groups": len(wrong_merges), "flags": wrong_merges}, fh, indent=2, ensure_ascii=False)
+print(f"Wrote potential wrong-merge outputs: {wrong_jsonl} and {wrong_json}  (flagged groups: {len(wrong_merges)})")
+
+# ------------------ Optional: Save clusters_processed copy ------------------
+if clusters_processed:
+    cp_out = OUT_DIR / "clusters_processed_copy.jsonl"
+    with open(cp_out, "w", encoding="utf-8") as fh:
+        for c in clusters_processed:
+            fh.write(json.dumps(c, ensure_ascii=False) + "\n")
+    print("Wrote clusters_processed copy:", cp_out)
+
+# ------------------ Final console summary ------------------
+print("\n=== QUICK INSPECTION ===")
+print("original mentions:", len(entities_raw))
+print("resolved groups:", len(merged_groups_sorted))
+print("near-miss group pairs found:", len(group_pairs_sorted))
+print("near-miss mention pairs found:", len(pairs_sorted))
+print("merge suggestions:", len(suggestions_sorted))
+print("potential wrong-merged groups flagged:", len(wrong_merges))
+print("\nTop 10 resolved groups (label -- size -- resolved_id):")
+for g in merged_groups_sorted[:10]:
+    print(f"  {g['label'][:70]:70s}  size={g['size']:3d}  id={g['resolved_id']}")
+print("\nFiles written to:", OUT_DIR)
+print(" - resolved_entity_table.csv")
+print(" - merged_groups_full.json(.jsonl)")
+print(" - merged_groups_by_size.csv")
+print(" - singletons_unresolved.csv")
+print(" - merged_groups_full_annotated.json(.jsonl/.csv)")
+print(" - top_resolved_stats.json")
+print(" - near_miss_pairs.csv")
+print(" - near_miss_group_pairs.csv  (and _top.csv)")
+print(" - merge_suggestions.jsonl")
+print(" - wrong_merges.jsonl")
+print("========================\n")
+
+
+
+#endregion#? Analysis V3 - for merged resolution
+#?#########################  End  ##########################
+
+
+
+
+
+
+
+
+
+
+
+
+#?######################### Start ##########################
+#region:#?   v4
+
+#!/usr/bin/env python3
+"""
+analyze_entity_resolution_combined_with_nearmiss.py
+
+Same as previous analysis script, but adds "near-miss" detection:
+ - identifies mention-level pairs across different resolved groups whose
+   textual similarity indicates they might deserve a merge (but weren't merged).
+ - computes group-level similarity (representative labels) and suggests top group merges.
+ - detects "potential wrong merges": resolved groups whose internal mean pairwise
+   similarity is below NEAR_MISS_MIN (these may be incorrectly merged).
+
+Outputs (in OUT_DIR):
+ - near_miss_pairs.csv
+ - near_miss_group_pairs.csv
+ - merge_suggestions.jsonl
+ - potential_wrong_merges.jsonl, potential_wrong_merges.csv
+ + all previous analysis outputs (resolved_entity_table.csv, merged_groups_full.json, ...)
+
+Notes:
+ - Uses string-based similarity (difflib.SequenceMatcher + token Jaccard).
+"""
+import json
+from pathlib import Path
+from collections import defaultdict, Counter
+import csv
+import math
+import argparse
+from difflib import SequenceMatcher
+import itertools
+import statistics
+from typing import List, Dict, Any
+
+# ------------------ Config / paths (change if needed) ------------------
+# BASE_DIR = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/entity-resolved/entities_resolved_final.jsonl")
+# ENT_RAW = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/KG/entities_raw-entResTestssmaller.jsonl")
+# ENT_RESOLVED_JSONL = BASE_DIR / "entities_resolved_final.jsonl"
+# RESOLVE_MAP = BASE_DIR / "resolve_map.json"
+# HISTORY = BASE_DIR / "resolution_history.jsonl"
+# CLUSTERS_PROCESSED = BASE_DIR / "clusters_processed.jsonl"
+# CLUSTERS_FOR_REVIEW = BASE_DIR / "clusters_for_review.jsonl"
+# LLM_DEBUG_DIR = BASE_DIR / "llm_debug"
+
+# ------------------ Config / paths (change if needed) ------------------
+BASE_DIR = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/entity-resolved")
+ENT_RAW = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/KG/entities_raw-entResTestssmaller.jsonl")
+
+# NOTE: use the final two-stage outputs produced by your pipeline
+OUT_DIR = BASE_DIR / "analysis"
+OUT_DIR.mkdir(parents=True, exist_ok=True)
+
+ENT_RESOLVED_JSONL = OUT_DIR / "entities_resolved_final.jsonl"
+RESOLVE_MAP = OUT_DIR / "resolve_map_final.json"
+HISTORY = OUT_DIR / "resolution_history_full.jsonl"
+
+CLUSTERS_PROCESSED = BASE_DIR / "clusters_processed.jsonl"
+CLUSTERS_FOR_REVIEW = BASE_DIR / "clusters_for_review.jsonl"
+LLM_DEBUG_DIR = BASE_DIR / "llm_debug"
+
+
+
+
+OUT_DIR = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/entity-resolved/analysis")
+OUT_DIR.mkdir(parents=True, exist_ok=True)
+
+# Near-miss thresholds (string-similarity based)
+NEAR_MISS_MIN = 0.70   # lower bound to consider "close"
+NEAR_MISS_MAX = 0.94   # if > this we may have expected a merge (tunable)
+TOP_K_SUGGESTIONS = 200  # how many top candidates to write to suggestions
+
+# ------------------ Helpers ------------------
+def load_jsonl(path: Path) -> List[Dict[str, Any]]:
+    items = []
+    if not path.exists():
+        return items
+    with open(path, "r", encoding="utf-8") as fh:
+        for ln in fh:
+            ln = ln.strip()
+            if not ln:
+                continue
+            try:
+                items.append(json.loads(ln))
+            except Exception:
+                try:
+                    items.append(json.loads(ln.replace("'", '"')))
+                except Exception:
+                    print(f"[WARN] failed to parse line in {path}: {ln[:120]!r}")
+    return items
+
+def load_json(path: Path):
+    if not path.exists():
+        return None
+    with open(path, "r", encoding="utf-8") as fh:
+        return json.load(fh)
+
+def normalize_surface(s):
+    if not s:
+        return ""
+    return " ".join(s.strip().lower().split())
+
+def seq_ratio(a: str, b: str) -> float:
+    a = (a or "").strip()
+    b = (b or "").strip()
+    if not a or not b:
+        return 0.0
+    return SequenceMatcher(None, a, b).ratio()
+
+def token_jaccard(a: str, b: str) -> float:
+    a_tokens = set([t for t in (a or "").lower().split() if t])
+    b_tokens = set([t for t in (b or "").lower().split() if t])
+    if not a_tokens or not b_tokens:
+        return 0.0
+    inter = a_tokens.intersection(b_tokens)
+    uni = a_tokens.union(b_tokens)
+    return len(inter) / len(uni)
+
+def composite_string_sim(name_a: str, name_b: str, desc_a: str, desc_b: str, weights=None) -> float:
+    """
+    Lightweight composite similarity using sequence ratio and token jaccard on names and descriptions.
+    weights default tuned to prefer name similarity.
+    """
+    if weights is None:
+        weights = {"name_seq":0.5, "name_jac":0.25, "desc_seq":0.15, "desc_jac":0.10}
+    n_seq = seq_ratio(name_a, name_b)
+    n_jac = token_jaccard(name_a, name_b)
+    d_seq = seq_ratio(desc_a, desc_b)
+    d_jac = token_jaccard(desc_a or "", desc_b or "")
+    score = (n_seq * weights["name_seq"] + n_jac * weights["name_jac"] +
+             d_seq * weights["desc_seq"] + d_jac * weights["desc_jac"])
+    return float(score)
+
+# ------------------ Load inputs ------------------
+print("Loading input files (defaults shown in script)...")
+entities_raw = load_jsonl(ENT_RAW)
+print(f" - original mentions: {len(entities_raw)}  (ENT_RAW: {ENT_RAW})")
+
+resolved_records = load_jsonl(ENT_RESOLVED_JSONL)
+print(f" - canonical resolved records: {len(resolved_records)}  (ENT_RESOLVED_JSONL: {ENT_RESOLVED_JSONL})")
+
+resolve_map = load_json(RESOLVE_MAP) or {}
+print(f" - resolve_map entries: {len(resolve_map)}  (RESOLVE_MAP: {RESOLVE_MAP})")
+
+history = load_jsonl(HISTORY)
+print(f" - history entries: {len(history)}  (HISTORY: {HISTORY})")
+
+clusters_processed = load_jsonl(CLUSTERS_PROCESSED)
+if clusters_processed:
+    print(f" - clusters_processed entries: {len(clusters_processed)}  (CLUSTERS_PROCESSED: {CLUSTERS_PROCESSED})")
+else:
+    print(f" - clusters_processed missing or empty (CLUSTERS_PROCESSED: {CLUSTERS_PROCESSED})")
+
+clusters_for_review = load_jsonl(CLUSTERS_FOR_REVIEW)
+if clusters_for_review:
+    print(f" - clusters_for_review entries: {len(clusters_for_review)}  (CLUSTERS_FOR_REVIEW: {CLUSTERS_FOR_REVIEW})")
+
+entities_by_id = { e.get("id"): e for e in entities_raw }
+resolved_by_newid = { r.get("id_final"): r for r in resolved_records }
+
+for r in resolved_by_newid.values():
+    r.setdefault("label", r.get("label") or r.get("id_final"))
+    r.setdefault("aliases", r.get("aliases") or [])
+    r.setdefault("members", r.get("members") or [])
+    r.setdefault("description", r.get("description") or "")
+
+# ------------------ Existing analysis (unchanged) ------------------
+csv_path = OUT_DIR / "resolved_entity_table.csv"
+fields = [
+    "original_id", "resolved_id", "resolved_label", "resolved_size", "resolved_aliases",
+    "entity_name", "entity_description", "entity_type_hint", "chunk_id", "mention_confidence", "member_confidence"
+]
+with open(csv_path, "w", encoding="utf-8", newline="") as fh:
+    writer = csv.DictWriter(fh, fieldnames=fields)
+    writer.writeheader()
+    for ent in entities_raw:
+        eid = ent.get("id")
+        rid = resolve_map.get(eid)
+        rlabel = ""
+        rsize = ""
+        raliases = ""
+        member_conf = None
+        if rid and rid in resolved_by_newid:
+            rec = resolved_by_newid[rid]
+            rlabel = rec.get("label","")
+            rsize = len(rec.get("members",[]))
+            raliases = "|".join(rec.get("aliases",[]))
+            member_conf = rec.get("member_confidence", {}).get(eid) if isinstance(rec.get("member_confidence", {}), dict) else None
+        row = {
+            "original_id": eid,
+            "resolved_id": rid or "",
+            "resolved_label": rlabel,
+            "resolved_size": rsize,
+            "resolved_aliases": raliases,
+            "entity_name": ent.get("entity_name",""),
+            "entity_description": ent.get("entity_description",""),
+            "entity_type_hint": ent.get("entity_type_hint",""),
+            "chunk_id": ent.get("chunk_id") or ent.get("source_chunk") or ent.get("chunk") or "",
+            "mention_confidence": ent.get("confidence_score") if ent.get("confidence_score") is not None else "",
+            "member_confidence": member_conf if member_conf is not None else ""
+        }
+        writer.writerow(row)
+print("Wrote:", csv_path)
+
+# Build groups
+groups = defaultdict(list)
+for orig_id in entities_by_id:
+    rid = resolve_map.get(orig_id)
+    if rid:
+        groups[rid].append(orig_id)
+    else:
+        groups[f"UNRESOLVED_{orig_id}"].append(orig_id)
+
+merged_groups = []
+for rid, members in groups.items():
+    resolved_rec = resolved_by_newid.get(rid)
+    label = resolved_rec.get("label") if resolved_rec else None
+    aliases = resolved_rec.get("aliases") if resolved_rec else []
+    resolved_desc = resolved_rec.get("description") if resolved_rec else ""
+    member_objs = []
+    for mid in members:
+        m = entities_by_id.get(mid, {})
+        member_objs.append({
+            "id": mid,
+            "entity_name": m.get("entity_name",""),
+            "entity_description": m.get("entity_description",""),
+            "entity_type_hint": m.get("entity_type_hint",""),
+            "chunk_id": m.get("chunk_id") or m.get("source_chunk") or m.get("chunk") or "",
+            "mention_confidence": m.get("confidence_score"),
+            "member_confidence": (resolved_by_newid.get(rid, {}).get("member_confidence", {}).get(mid) if rid in resolved_by_newid else None)
+        })
+    merged_groups.append({
+        "resolved_id": rid,
+        "label": label or f"UNRESOLVED_GROUP_{rid}",
+        "aliases": aliases,
+        "members": member_objs,
+        "size": len(member_objs),
+        "resolved_description": resolved_desc
+    })
+
+merged_groups_sorted = sorted(merged_groups, key=lambda x: x["size"], reverse=True)
+
+out_json = OUT_DIR / "merged_groups_full.json"
+with open(out_json, "w", encoding="utf-8") as fh:
+    json.dump(merged_groups_sorted, fh, indent=2, ensure_ascii=False)
+out_jsonl = OUT_DIR / "merged_groups_full.jsonl"
+with open(out_jsonl, "w", encoding="utf-8") as fh:
+    for g in merged_groups_sorted:
+        fh.write(json.dumps(g, ensure_ascii=False) + "\n")
+print("Wrote merged groups files.")
+
+csv_groups = OUT_DIR / "merged_groups_by_size.csv"
+with open(csv_groups, "w", encoding="utf-8", newline="") as fh:
+    fieldnames = ["resolved_id", "label", "size", "aliases", "sample_member_names"]
+    writer = csv.DictWriter(fh, fieldnames=fieldnames)
+    writer.writeheader()
+    for g in merged_groups_sorted:
+        sample_names = "; ".join([m.get("entity_name","") for m in g["members"][:6]])
+        writer.writerow({
+            "resolved_id": g["resolved_id"],
+            "label": g["label"],
+            "size": g["size"],
+            "aliases": "|".join(g.get("aliases",[])),
+            "sample_member_names": sample_names
+        })
+print("Wrote:", csv_groups)
+
+singletons_path = OUT_DIR / "singletons_unresolved.csv"
+with open(singletons_path, "w", encoding="utf-8", newline="") as fh:
+    fieldnames = ["original_id", "entity_name", "entity_description", "entity_type_hint", "chunk_id", "mention_confidence"]
+    writer = csv.DictWriter(fh, fieldnames=fieldnames)
+    writer.writeheader()
+    for g in merged_groups_sorted:
+        if g["size"] == 1 and (str(g["resolved_id"]).startswith("UNRESOLVED_") or g["label"].startswith("UNRESOLVED_")):
+            m = g["members"][0]
+            writer.writerow({
+                "original_id": m.get("id"),
+                "entity_name": m.get("entity_name",""),
+                "entity_description": m.get("entity_description",""),
+                "entity_type_hint": m.get("entity_type_hint",""),
+                "chunk_id": m.get("chunk_id",""),
+                "mention_confidence": m.get("mention_confidence","")
+            })
+print("Wrote:", singletons_path)
+
+# ------------------ Annotate merge sources (unchanged) ------------------
+entity_sources = defaultdict(list)
+for h in history:
+    act = (h.get("action") or "").lower()
+    if act == "auto_merge":
+        mids = h.get("member_ids") or h.get("merged_ids") or h.get("members") or []
+        for m in mids:
+            entity_sources[m].append("auto")
+    elif act == "merge_entities":
+        mids = h.get("merged_ids") or h.get("member_ids") or []
+        for m in mids:
+            entity_sources[m].append("llm")
+    elif act in ("applied_merge_group", "applied_merge"):
+        mids = h.get("member_ids") or h.get("merged_ids") or []
+        for m in mids:
+            entity_sources[m].append("llm")
+    elif act == "rename_entity":
+        eid = h.get("entity_id")
+        if eid:
+            entity_sources[eid].append("llm")
+    elif act == "kept_singleton":
+        eid = h.get("entity_id")
+        if eid:
+            entity_sources[eid].append("none")
+    elif act == "left_unchanged_low_sim":
+        for m in h.get("members", []) or []:
+            entity_sources[m].append("none")
+    elif act == "keep_entity":
+        eid = h.get("entity_id")
+        if eid:
+            entity_sources[eid].append("llm")
+    else:
+        mids = h.get("merged_ids") or h.get("member_ids") or []
+        for m in mids:
+            entity_sources[m].append("llm" if act and "auto" not in act else "auto")
+
+annotated = []
+csv_rows = []
+for g in merged_groups_sorted:
+    members = g["members"]
+    src_counter = Counter()
+    for m in members:
+        mid = m["id"]
+        for src in entity_sources.get(mid, []):
+            src_counter[src] += 1
+    if not src_counter:
+        resolution_source = "singleton"
+    elif len(src_counter) == 1:
+        resolution_source = next(iter(src_counter))
+    else:
+        resolution_source = "mixed"
+    g2 = dict(g)
+    g2["resolution_source"] = resolution_source
+    g2["auto_merge_count"] = src_counter.get("auto", 0)
+    g2["llm_merge_count"] = src_counter.get("llm", 0)
+    annotated.append(g2)
+    csv_rows.append({
+        "resolved_id": g2["resolved_id"],
+        "label": g2["label"],
+        "size": g2["size"],
+        "resolution_source": resolution_source,
+        "auto_merge_count": g2["auto_merge_count"],
+        "llm_merge_count": g2["llm_merge_count"],
+        "sample_members": "; ".join(m["entity_name"] for m in members[:5])
+    })
+
+OUT_ANNOT_JSON = OUT_DIR / "merged_groups_full_annotated.json"
+OUT_ANNOT_JSONL = OUT_DIR / "merged_groups_full_annotated.jsonl"
+OUT_ANNOT_CSV = OUT_DIR / "merged_groups_by_source.csv"
+
+with open(OUT_ANNOT_JSON, "w", encoding="utf-8") as fh:
+    json.dump(annotated, fh, indent=2, ensure_ascii=False)
+with open(OUT_ANNOT_JSONL, "w", encoding="utf-8") as fh:
+    for g in annotated:
+        fh.write(json.dumps(g, ensure_ascii=False) + "\n")
+with open(OUT_ANNOT_CSV, "w", encoding="utf-8", newline="") as fh:
+    fieldnames = ["resolved_id", "label", "size", "resolution_source", "auto_merge_count", "llm_merge_count", "sample_members"]
+    writer = csv.DictWriter(fh, fieldnames=fieldnames)
+    writer.writeheader()
+    for r in csv_rows:
+        writer.writerow(r)
+print("Wrote annotated merged groups.")
+
+# ------------------ Stats (unchanged) ------------------
+size_counts = Counter([g["size"] for g in merged_groups_sorted])
+top_labels = [{"label":g["label"], "size":g["size"], "resolved_id": g["resolved_id"]} for g in merged_groups_sorted[:50]]
+type_dist = Counter([ e.get("entity_type_hint") or "None" for e in entities_raw ])
+confidence_vals = []
+for e in entities_raw:
+    cs = e.get("confidence_score")
+    try:
+        if cs is not None:
+            confidence_vals.append(float(cs))
+    except Exception:
+        pass
+
+conf_summary = {}
+if confidence_vals:
+    conf_summary = {
+        "count": len(confidence_vals),
+        "mean": sum(confidence_vals)/len(confidence_vals),
+        "min": min(confidence_vals),
+        "max": max(confidence_vals)
+    }
+
+stats = {
+    "n_original_mentions": len(entities_raw),
+    "n_resolved_groups": len(merged_groups_sorted),
+    "size_distribution": dict(size_counts),
+    "top_resolved_samples": top_labels,
+    "type_distribution_sample": type_dist.most_common(40),
+    "confidence_summary": conf_summary,
+    "history_action_counts": Counter([h.get("action") for h in history])
+}
+
+stats_out = OUT_DIR / "top_resolved_stats.json"
+with open(stats_out, "w", encoding="utf-8") as fh:
+    json.dump(stats, fh, indent=2, ensure_ascii=False)
+print("Wrote:", stats_out)
+
+# ------------------ NEW: Near-miss detection ------------------
+
+# Build representative label/desc for each group:
+group_reprs = {}
+for g in merged_groups_sorted:
+    rid = g["resolved_id"]
+    label = g.get("label") or ""
+    desc = g.get("resolved_description") or ""
+    # fallback to first member
+    if (not label or label.startswith("UNRESOLVED_")) and g["members"]:
+        label = label if label and not label.startswith("UNRESOLVED_") else (g["members"][0].get("entity_name") or "")
+    if (not desc) and g["members"]:
+        desc = desc or (g["members"][0].get("entity_description") or "")
+    group_reprs[rid] = {"label": str(label), "desc": str(desc), "size": g["size"], "members": [m["id"] for m in g["members"]]}
+
+# 1) Group-level similarity (representative labels)
+group_pairs = []
+group_ids = list(group_reprs.keys())
+for a, b in itertools.combinations(group_ids, 2):
+    la = group_reprs[a]["label"]
+    lb = group_reprs[b]["label"]
+    da = group_reprs[a]["desc"]
+    db = group_reprs[b]["desc"]
+    score = composite_string_sim(la, lb, da, db)
+    if score >= NEAR_MISS_MIN:
+        group_pairs.append((a, b, score))
+
+# sort and write group-level near-misses
+group_pairs_sorted = sorted(group_pairs, key=lambda x: x[2], reverse=True)
+gp_csv = OUT_DIR / "near_miss_group_pairs.csv"
+with open(gp_csv, "w", encoding="utf-8", newline="") as fh:
+    writer = csv.DictWriter(fh, fieldnames=["group_a", "group_b", "label_a", "label_b", "size_a", "size_b", "score"])
+    writer.writeheader()
+    for a,b,sc in group_pairs_sorted:
+        writer.writerow({
+            "group_a": a, "group_b": b,
+            "label_a": group_reprs[a]["label"],
+            "label_b": group_reprs[b]["label"],
+            "size_a": group_reprs[a]["size"],
+            "size_b": group_reprs[b]["size"],
+            "score": f"{sc:.4f}"
+        })
+print("Wrote group-level near-miss csv:", gp_csv)
+
+# 2) Mention-level cross-group near-miss pairs (top K)
+pairs = []
+mention_items = []
+# prepare mention list with resolved group id
+for ent in entities_raw:
+    mid = ent.get("id")
+    rid = resolve_map.get(mid) or f"UNRES_{mid}"
+    mention_items.append({
+        "id": mid,
+        "rid": rid,
+        "name": ent.get("entity_name","") or "",
+        "desc": ent.get("entity_description","") or ""
+    })
+
+# For efficiency, compare only candidate group pairs (from group_pairs_sorted). If none, fallback to top groups.
+candidate_group_pairs = [ (a,b) for (a,b,sc) in group_pairs_sorted ]
+if not candidate_group_pairs:
+    top_groups = [g["resolved_id"] for g in merged_groups_sorted[:50]]
+    candidate_group_pairs = list(itertools.combinations(top_groups, 2))
+
+# build map group->members (mention dicts)
+group_to_mentions = defaultdict(list)
+for m in mention_items:
+    group_to_mentions[m["rid"]].append(m)
+
+# compute mention-level scores for candidate group pairs
+for a,b in candidate_group_pairs:
+    membs_a = group_to_mentions.get(a, [])
+    membs_b = group_to_mentions.get(b, [])
+    # skip trivial empty groups
+    if not membs_a or not membs_b:
+        continue
+    # cap per-group comparisons to avoid explosion
+    cap = 40
+    membs_a_sample = membs_a[:cap]
+    membs_b_sample = membs_b[:cap]
+    for ma in membs_a_sample:
+        for mb in membs_b_sample:
+            name_score = seq_ratio(ma["name"], mb["name"])
+            comp_score = composite_string_sim(ma["name"], mb["name"], ma["desc"], mb["desc"])
+            if comp_score >= NEAR_MISS_MIN:
+                pairs.append({
+                    "mention_a": ma["id"], "mention_b": mb["id"],
+                    "group_a": a, "group_b": b,
+                    "name_a": ma["name"], "name_b": mb["name"],
+                    "desc_a": ma["desc"], "desc_b": mb["desc"],
+                    "score": comp_score,
+                    "name_ratio": name_score
+                })
+
+pairs_filtered = [p for p in pairs if p["score"] >= NEAR_MISS_MIN]
+pairs_sorted = sorted(pairs_filtered, key=lambda x: x["score"], reverse=True)
+
+pairs_csv = OUT_DIR / "near_miss_pairs.csv"
+with open(pairs_csv, "w", encoding="utf-8", newline="") as fh:
+    fieldnames = ["mention_a","mention_b","group_a","group_b","name_a","name_b","score","name_ratio"]
+    writer = csv.DictWriter(fh, fieldnames=fieldnames)
+    writer.writeheader()
+    for p in pairs_sorted:
+        writer.writerow({
+            "mention_a": p["mention_a"],
+            "mention_b": p["mention_b"],
+            "group_a": p["group_a"],
+            "group_b": p["group_b"],
+            "name_a": p["name_a"],
+            "name_b": p["name_b"],
+            "score": f"{p['score']:.4f}",
+            "name_ratio": f"{p['name_ratio']:.4f}"
+        })
+print("Wrote mention-level near-miss pairs:", pairs_csv)
+
+# 3) Merge suggestions: aggregate group-level + mention-level evidence
+group_evidence = defaultdict(list)
+for p in pairs_sorted:
+    key = tuple(sorted([p["group_a"], p["group_b"]]))
+    group_evidence[key].append(p["score"])
+
+suggestions = []
+for (a,b,sc) in group_pairs_sorted:
+    key = tuple(sorted([a,b]))
+    mention_scores = group_evidence.get(key, [])
+    best_m = max(mention_scores) if mention_scores else 0.0
+    combined = sc * 0.6 + best_m * 0.4
+    suggestions.append({"group_a": key[0], "group_b": key[1], "group_score": sc, "best_mention_score": best_m, "combined_score": combined})
+
+# also include group pairs that only came from mention evidence
+for key, mention_scores in group_evidence.items():
+    if not any((key[0]==g[0] and key[1]==g[1]) or (key[0]==g[1] and key[1]==g[0]) for g in [(gp[0],gp[1]) for gp in group_pairs_sorted]):
+        best_m = max(mention_scores)
+        combined = best_m
+        suggestions.append({"group_a": key[0], "group_b": key[1], "group_score": None, "best_mention_score": best_m, "combined_score": combined})
+
+suggestions_sorted = sorted(suggestions, key=lambda x: (x["combined_score"] or 0.0), reverse=True)[:TOP_K_SUGGESTIONS]
+sugg_out = OUT_DIR / "merge_suggestions.jsonl"
+with open(sugg_out, "w", encoding="utf-8") as fh:
+    for s in suggestions_sorted:
+        fh.write(json.dumps(s, ensure_ascii=False) + "\n")
+print("Wrote merge suggestions:", sugg_out)
+
+gp_top_csv = OUT_DIR / "near_miss_group_pairs_top.csv"
+with open(gp_top_csv, "w", encoding="utf-8", newline="") as fh:
+    writer = csv.DictWriter(fh, fieldnames=["group_a","group_b","label_a","label_b","size_a","size_b","score"])
+    writer.writeheader()
+    for a,b,sc in group_pairs_sorted[:TOP_K_SUGGESTIONS]:
+        writer.writerow({
+            "group_a": a, "group_b": b,
+            "label_a": group_reprs[a]["label"], "label_b": group_reprs[b]["label"],
+            "size_a": group_reprs[a]["size"], "size_b": group_reprs[b]["size"],
+            "score": f"{sc:.4f}"
+        })
+print("Wrote top group-level near-miss csv:", gp_top_csv)
+
+# ------------------ NEW: Potential wrong merges (internal group coherence) ------------------
+potential_wrong = []
+for g in merged_groups_sorted:
+    if g["size"] <= 1:
+        continue
+    # compute mean pairwise similarity among members (names+descs)
+    member_pairs = []
+    members = g["members"]
+    for a_idx in range(len(members)):
+        for b_idx in range(a_idx+1, len(members)):
+            ma = members[a_idx]
+            mb = members[b_idx]
+            sc = composite_string_sim(ma.get("entity_name",""), mb.get("entity_name",""),
+                                      ma.get("entity_description",""), mb.get("entity_description",""))
+            member_pairs.append(sc)
+    mean_internal = float(statistics.mean(member_pairs)) if member_pairs else 0.0
+    if mean_internal < NEAR_MISS_MIN:
+        potential_wrong.append({
+            "resolved_id": g["resolved_id"],
+            "label": g["label"],
+            "size": g["size"],
+            "mean_internal_member_similarity": mean_internal,
+            "sample_members": [m.get("entity_name","") for m in members[:8]]
+        })
+
+# write potential wrong merges jsonl & csv
+pw_jsonl = OUT_DIR / "potential_wrong_merges.jsonl"
+with open(pw_jsonl, "w", encoding="utf-8") as fh:
+    for p in potential_wrong:
+        fh.write(json.dumps(p, ensure_ascii=False) + "\n")
+pw_csv = OUT_DIR / "potential_wrong_merges.csv"
+with open(pw_csv, "w", encoding="utf-8", newline="") as fh:
+    writer = csv.DictWriter(fh, fieldnames=["resolved_id","label","size","mean_internal_member_similarity","sample_members"])
+    writer.writeheader()
+    for p in potential_wrong:
+        writer.writerow({
+            "resolved_id": p["resolved_id"],
+            "label": p["label"],
+            "size": p["size"],
+            "mean_internal_member_similarity": f"{p['mean_internal_member_similarity']:.4f}",
+            "sample_members": " | ".join(p["sample_members"])
+        })
+print("Wrote potential wrong merges:", pw_jsonl, pw_csv)
+
+# ------------------ Optional: Save clusters_processed copy ------------------
+if clusters_processed:
+    cp_out = OUT_DIR / "clusters_processed_copy.jsonl"
+    with open(cp_out, "w", encoding="utf-8") as fh:
+        for c in clusters_processed:
+            fh.write(json.dumps(c, ensure_ascii=False) + "\n")
+    print("Wrote clusters_processed copy:", cp_out)
+
+# ------------------ Final console summary ------------------
+print("\n=== QUICK INSPECTION ===")
+print("original mentions:", len(entities_raw))
+print("resolved groups:", len(merged_groups_sorted))
+print("potential wrong merges (count):", len(potential_wrong))
+print("top 10 resolved groups (label -- size -- resolved_id):")
+for g in merged_groups_sorted[:10]:
+    print(f"  {g['label'][:70]:70s}  size={g['size']:3d}  id={g['resolved_id']}")
+print("\nFiles written to:", OUT_DIR)
+print(" - resolved_entity_table.csv")
+print(" - merged_groups_full.json(.jsonl)")
+print(" - merged_groups_by_size.csv")
+print(" - singletons_unresolved.csv")
+print(" - merged_groups_full_annotated.json(.jsonl/.csv)")
+print(" - top_resolved_stats.json")
+print(" - near_miss_pairs.csv")
+print(" - near_miss_group_pairs.csv  (and _top.csv)")
+print(" - merge_suggestions.jsonl")
+print(" - potential_wrong_merges.jsonl / .csv")
+if clusters_for_review:
+    print(" - clusters_flagged_for_review.jsonl")
+if LLM_DEBUG_DIR.exists():
+    print(" - LLM debug dir (exists):", LLM_DEBUG_DIR)
+print("========================\n")
+
+
+
+#endregion#? V4
+#?#########################  End  ##########################
+
+
+
+
+
 
 
 
@@ -4500,6 +7199,7 @@ if clusters_review:
 #?#########################  End  ##########################
 
 
+#?######################### Start ##########################
 #region:#?   Entity Resolution V
 
 
