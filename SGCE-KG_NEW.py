@@ -318,7 +318,7 @@ RUN(extract_relevant_text, "/home/mabolhas/MyReposOnSOL/SGCE-KG/data/API 571.pdf
 
 
 
-#?######################### Start ##########################
+#*######################### Start ##########################
 #region:#?   from json text to chunks V0
 
 
@@ -445,11 +445,11 @@ RUN(
 
 
 #endregion#? from json text to chunks V0
-#?#########################  End  ##########################
+#*#########################  End  ##########################
 
 
 
-#?######################### Start ##########################
+#*######################### Start ##########################
 #region:#?   Statistic and information about the input (API 571)
 
 # load this file and compute WORD-based statistics
@@ -746,7 +746,7 @@ RUN(compute_section_stats, "/home/mabolhas/MyReposOnSOL/SGCE-KG/data/pdf_to_json
 
 
 #endregion#? Statistic and information about the input (API 571)
-#?#########################  End  ##########################
+#*########################  End  ##########################
 
 
 
@@ -1075,6 +1075,22 @@ RUN(embed_and_index_chunks,
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #?######################### Start ##########################
 #region:#?   Entity Recognition V6 - Broader hint better prmpting
 
@@ -1088,9 +1104,9 @@ from openai import OpenAI
 from datetime import datetime
 
 # ---------- CONFIG: paths ----------
-CHUNKS_JSONL =  "/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Chunks/chunks_sentence.jsonl"
-ENTITIES_OUT = "/home/mabolhas/MyReposOnSOL/SGCE-KG/data/KG/entities_raw.jsonl"
-DEFAULT_DEBUG_DIR = "/home/mabolhas/MyReposOnSOL/SGCE-KG/data/KG/entity_raw_debug_prompts_outputs"
+CHUNKS_JSONL =      "/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Chunks/chunks_sentence.jsonl"
+ENTITIES_OUT =      "/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities/Ent_Raw_0/entities_raw.jsonl"
+DEFAULT_DEBUG_DIR = "/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities/Ent_Raw_0/entity_raw_debug_prompts_outputs"
 
 # ---------- OPENAI client (load key from env or fallback file path) ----------
 def _load_openai_key(envvar: str = "OPENAI_API_KEY", fallback_path: str = "/home/mabolhas/MyReposOnSOL/SGCE-KG/.env") -> str:
@@ -1505,6 +1521,3737 @@ if __name__ == "__main__":
 
 
 #?######################### Start ##########################
+#region:#?   Embedding and clustering recognized entities - Forced HDBSCAN
+
+"""
+embed_and_cluster_entities_force_hdbscan.py
+
+Forces HDBSCAN clustering (no fixed-K fallback) with:
+  HDBSCAN_MIN_CLUSTER_SIZE = 5
+  HDBSCAN_MIN_SAMPLES = 1
+
+UMAP reduction is optional (recommended).
+"""
+
+import os
+import json
+import argparse
+from pathlib import Path
+from typing import List, Dict
+import numpy as np
+from tqdm import tqdm
+
+import torch
+from transformers import AutoTokenizer, AutoModel
+from sklearn.preprocessing import normalize
+
+# --- required clustering lib ---
+try:
+    import hdbscan
+except Exception as e:
+    raise RuntimeError("hdbscan is required for this script. Install with `pip install hdbscan`") from e
+
+# optional but recommended
+try:
+    import umap
+    UMAP_AVAILABLE = True
+except Exception:
+    UMAP_AVAILABLE = False
+
+# ------------------ Config / Hyperparams ------------------
+WEIGHTS = {"name": 0.45, "desc": 0.25, "ctx": 0.25, "type": 0.05}
+EMBED_MODEL = "BAAI/bge-large-en-v1.5"   # change if needed
+BATCH_SIZE = 32
+DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
+
+# Force HDBSCAN params
+HDBSCAN_MIN_CLUSTER_SIZE = 5
+HDBSCAN_MIN_SAMPLES = 1
+HDBSCAN_METRIC = "euclidean"   # we will normalize vectors so euclidean ~ cosine
+
+# UMAP (optional)
+USE_UMAP = True
+UMAP_N_COMPONENTS = 64
+UMAP_N_NEIGHBORS = 15
+UMAP_MIN_DIST = 0.0
+
+# ------------------ Helpers ------------------
+def load_entities(path: str) -> List[Dict]:
+    p = Path(path)
+    assert p.exists(), f"entities file not found: {p}"
+    out = []
+    with open(p, "r", encoding="utf-8") as fh:
+        for line in fh:
+            line = line.strip()
+            if not line:
+                continue
+            out.append(json.loads(line))
+    return out
+
+def safe_text(e: Dict, key: str) -> str:
+    v = e.get(key)
+    if v is None:
+        return ""
+    if isinstance(v, (list, dict)):
+        return json.dumps(v, ensure_ascii=False)
+    return str(v)
+
+def mean_pool(token_embeddings: torch.Tensor, attention_mask: torch.Tensor):
+    input_mask_expanded = attention_mask.unsqueeze(-1).expand(token_embeddings.size()).float()
+    sum_embeddings = torch.sum(token_embeddings * input_mask_expanded, 1)
+    sum_mask = torch.clamp(input_mask_expanded.sum(1), min=1e-9)
+    return sum_embeddings / sum_mask
+
+# ------------------ Embedder ------------------
+class HFEmbedder:
+    def __init__(self, model_name: str = EMBED_MODEL, device: str = DEVICE):
+        print(f"[Embedder] loading model {model_name} on {device} ...")
+        self.device = device
+        self.tokenizer = AutoTokenizer.from_pretrained(model_name, use_fast=True)
+        self.model = AutoModel.from_pretrained(model_name)
+        self.model.to(device)
+        self.model.eval()
+        for p in self.model.parameters():
+            p.requires_grad = False
+
+    @torch.no_grad()
+    def encode_batch(self, texts: List[str], batch_size: int = BATCH_SIZE) -> np.ndarray:
+        embs = []
+        for i in range(0, len(texts), batch_size):
+            batch = texts[i:i+batch_size]
+            enc = self.tokenizer(batch, padding=True, truncation=True, return_tensors="pt", max_length=1024)
+            input_ids = enc["input_ids"].to(self.device)
+            attention_mask = enc["attention_mask"].to(self.device)
+            out = self.model(input_ids=input_ids, attention_mask=attention_mask, return_dict=True)
+            token_embeds = out.last_hidden_state
+            pooled = mean_pool(token_embeds, attention_mask)
+            pooled = pooled.cpu().numpy()
+            embs.append(pooled)
+        embs = np.vstack(embs)
+        embs = normalize(embs, axis=1)
+        return embs
+
+# ------------------ Build fields & combine embeddings ------------------
+def build_field_texts(entities: List[Dict]):
+    names, descs, ctxs, types = [], [], [], []
+    for e in entities:
+        names.append(safe_text(e, "entity_name") or safe_text(e, "entity_name_original") or "")
+        descs.append(safe_text(e, "entity_description") or "")
+        ctxs.append(safe_text(e, "text_span") or safe_text(e, "context_phrase") or safe_text(e, "used_context_excerpt") or "")
+        types.append(safe_text(e, "entity_type_hint") or safe_text(e, "entity_type") or "")
+    return names, descs, ctxs, types
+
+def compute_combined_embeddings(embedder: HFEmbedder, entities: List[Dict], weights=WEIGHTS):
+    names, descs, ctxs, types = build_field_texts(entities)
+    D_ref = None
+    # encode each field (if empty, make zeros)
+    print("[compute] encoding name field ...")
+    emb_name = embedder.encode_batch(names) if any(t.strip() for t in names) else None
+    D_ref = emb_name.shape[1] if emb_name is not None else None
+
+    print("[compute] encoding desc field ...")
+    emb_desc = embedder.encode_batch(descs) if any(t.strip() for t in descs) else None
+    if D_ref is None and emb_desc is not None:
+        D_ref = emb_desc.shape[1]
+
+    print("[compute] encoding ctx field ...")
+    emb_ctx = embedder.encode_batch(ctxs) if any(t.strip() for t in ctxs) else None
+    if D_ref is None and emb_ctx is not None:
+        D_ref = emb_ctx.shape[1]
+
+    print("[compute] encoding type field ...")
+    emb_type = embedder.encode_batch(types) if any(t.strip() for t in types) else None
+    if D_ref is None and emb_type is not None:
+        D_ref = emb_type.shape[1]
+
+    if D_ref is None:
+        raise ValueError("All fields empty — cannot embed")
+
+    # helper to make arrays shape (N, D_ref)
+    def _ensure(arr):
+        if arr is None:
+            return np.zeros((len(entities), D_ref))
+        if arr.shape[1] != D_ref:
+            raise ValueError("embedding dimension mismatch")
+        return arr
+
+    emb_name = _ensure(emb_name)
+    emb_desc = _ensure(emb_desc)
+    emb_ctx  = _ensure(emb_ctx)
+    emb_type = _ensure(emb_type)
+
+    w_name = weights.get("name", 0.0)
+    w_desc = weights.get("desc", 0.0)
+    w_ctx  = weights.get("ctx", 0.0)
+    w_type = weights.get("type", 0.0)
+    Wsum = w_name + w_desc + w_ctx + w_type
+    if Wsum <= 0:
+        raise ValueError("Sum of weights must be > 0")
+    w_name /= Wsum; w_desc /= Wsum; w_ctx /= Wsum; w_type /= Wsum
+
+    combined = (w_name * emb_name) + (w_desc * emb_desc) + (w_ctx * emb_ctx) + (w_type * emb_type)
+    combined = normalize(combined, axis=1)
+    return combined
+
+# ------------------ Forced HDBSCAN clustering ------------------
+def run_hdbscan(embeddings: np.ndarray,
+                min_cluster_size: int = HDBSCAN_MIN_CLUSTER_SIZE,
+                min_samples: int = HDBSCAN_MIN_SAMPLES,
+                metric: str = HDBSCAN_METRIC,
+                use_umap: bool = USE_UMAP):
+    print(f"[cluster] forcing HDBSCAN min_cluster_size={min_cluster_size} min_samples={min_samples} metric={metric} use_umap={use_umap}")
+    X = embeddings
+    if use_umap:
+        if not UMAP_AVAILABLE:
+            print("[cluster] WARNING: UMAP not available — running HDBSCAN on original embeddings")
+        else:
+            print("[cluster] running UMAP reduction ->", UMAP_N_COMPONENTS, "dims")
+            reducer = umap.UMAP(n_components=UMAP_N_COMPONENTS, n_neighbors=UMAP_N_NEIGHBORS,
+                                min_dist=UMAP_MIN_DIST, metric='cosine', random_state=42)
+            X = reducer.fit_transform(X)
+            print("[cluster] UMAP done, X.shape=", X.shape)
+
+    clusterer = hdbscan.HDBSCAN(
+        min_cluster_size=min_cluster_size,
+        min_samples=min_samples,
+        metric=metric,
+        cluster_selection_method='eom'
+    )
+    labels = clusterer.fit_predict(X)
+    probs = getattr(clusterer, "probabilities_", None)
+    return labels, probs, clusterer
+
+def save_entities_with_clusters(entities: List[Dict], labels: np.ndarray, out_jsonl: str, clusters_summary_path: str):
+    outp = Path(out_jsonl)
+    outp.parent.mkdir(parents=True, exist_ok=True)
+    with open(outp, "w", encoding="utf-8") as fh:
+        for e, lab in zip(entities, labels):
+            out = dict(e)
+            out["_cluster_id"] = int(lab)
+            fh.write(json.dumps(out, ensure_ascii=False) + "\n")
+    # summary
+    summary = {}
+    for idx, lab in enumerate(labels):
+        summary.setdefault(int(lab), []).append(entities[idx].get("entity_name") or f"En_{idx}")
+    with open(clusters_summary_path, "w", encoding="utf-8") as fh:
+        json.dump({"n_entities": len(entities), "n_clusters": len(summary), "clusters": {str(k): v for k, v in summary.items()}}, fh, ensure_ascii=False, indent=2)
+    print(f"[save] wrote {out_jsonl} and summary {clusters_summary_path}")
+
+# ------------------ Main entry (CLI + notebook-safe) ------------------
+def main_cli(args):
+    entities = load_entities(args.entities_in)
+    print(f"Loaded {len(entities)} entities from {args.entities_in}")
+
+    embedder = HFEmbedder(model_name=EMBED_MODEL, device=DEVICE)
+    combined = compute_combined_embeddings(embedder, entities, weights=WEIGHTS)
+    print("Combined embeddings shape:", combined.shape)
+
+    # force HDBSCAN (ignore args.use_method)
+    labels, probs, clusterer = run_hdbscan(combined,
+                                          min_cluster_size=HDBSCAN_MIN_CLUSTER_SIZE,
+                                          min_samples=HDBSCAN_MIN_SAMPLES,
+                                          metric=HDBSCAN_METRIC,
+                                          use_umap=USE_UMAP if args.use_umap else False)
+
+    # diagnostics
+    import numpy as np
+    from collections import Counter
+    labels_arr = np.array(labels)
+    n = len(labels_arr)
+    n_clusters = len(set(labels_arr)) - (1 if -1 in labels_arr else 0)
+    n_noise = int((labels_arr == -1).sum())
+    print(f"[diagnostic] clusters (excl -1): {n_clusters}  noise: {n_noise} ({n_noise/n*100:.1f}%)")
+    counts = Counter(labels_arr)
+    top = sorted(((lab, sz) for lab, sz in counts.items() if lab != -1), key=lambda x: x[1], reverse=True)[:10]
+    print("[diagnostic] top cluster sizes:", top)
+
+    save_entities_with_clusters(entities, labels_arr, args.out_jsonl, args.clusters_summary)
+    print("Clustering finished.")
+
+
+
+if __name__ == "__main__":
+    import sys
+    # Notebook-friendly defaults when running inside ipykernel
+    if "ipykernel" in sys.argv[0] or "ipython" in sys.argv[0]:
+        class Args:
+            # change these defaults if you want different notebook behavior
+            entities_in = "/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities/Ent_Raw_0/entities_raw.jsonl"
+            out_jsonl = "/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities/Ent_1st/Ent_Clustering_1st/entities_clustered.jsonl"
+            clusters_summary = "/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities/Ent_1st/Ent_Clustering_1st/clusters_summary.json"
+            use_umap = True   # toggle UMAP inside notebook easily by editing this
+        args = Args()
+        print("[main] running in notebook mode with defaults:")
+        print(f"  entities_in     = {args.entities_in}")
+        print(f"  out_jsonl        = {args.out_jsonl}")
+        print(f"  clusters_summary = {args.clusters_summary}")
+        print(f"  use_umap         = {args.use_umap}")
+        main_cli(args)
+    else:
+        # Running as a normal script -> parse CLI args
+        import argparse
+        parser = argparse.ArgumentParser()
+        parser.add_argument("--entities_in", type=str, default="/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities/Ent_Raw_0/entities_raw.jsonl")
+        parser.add_argument("--out_jsonl", type=str, default="/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities/Ent_1st/Ent_Clustering_1st/entities_clustered.jsonl")
+        parser.add_argument("--clusters_summary", type=str, default="/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities/Ent_1st/Ent_Clustering_1st/clusters_summary.json")
+        parser.add_argument("--use_umap", action="store_true", help="Enable UMAP reduction before clustering (recommended)")
+        parsed = parser.parse_args()
+        # convert parsed Namespace to simple Args-like object expected by main_cli
+        class ArgsFromCLI:
+            entities_in = parsed.entities_in
+            out_jsonl = parsed.out_jsonl
+            clusters_summary = parsed.clusters_summary
+            use_umap = bool(parsed.use_umap)
+        args = ArgsFromCLI()
+        main_cli(args)
+
+
+#endregion#? Embedding and clustering recognized entities - Forced HDBSCAN
+#?#########################  End  ##########################
+
+
+
+
+
+#?######################### Start ##########################
+#region:#?   Diagnostics for entities_clustered
+
+# Diagnostics for entities_clustered.jsonl
+import json
+from collections import Counter, defaultdict
+from pathlib import Path
+import numpy as np
+
+IN = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities/Ent_1st/Ent_Clustering_1st/entities_clustered.jsonl")  # change path if needed
+assert IN.exists(), f"{IN} not found"
+
+ents = []
+with open(IN, "r", encoding="utf-8") as fh:
+    for line in fh:
+        if line.strip():
+            ents.append(json.loads(line))
+
+n = len(ents)
+labels = [e.get("_cluster_id", -1) for e in ents]
+labels_arr = np.array(labels)
+n_clusters = len(set(labels_arr)) - (1 if -1 in labels_arr else 0)
+n_noise = int((labels_arr == -1).sum())
+print(f"n_entities: {n}, n_clusters (excl -1): {n_clusters}, noise_count: {n_noise} ({n_noise/n*100:.1f}%)")
+
+counts = Counter(labels)
+# basic distribution
+sizes = sorted([sz for lab, sz in counts.items() if lab != -1], reverse=True)
+print("Cluster size stats: min, median, mean, max =", min(sizes), np.median(sizes), np.mean(sizes), max(sizes))
+
+# top clusters
+top = sorted(((lab, sz) for lab, sz in counts.items() if lab != -1), key=lambda x: x[1], reverse=True)[:15]
+print("\nTop 15 clusters (label, size):")
+for lab, sz in top:
+    print(" ", lab, sz)
+
+# sample members for top 6 clusters
+by_label = defaultdict(list)
+for i,e in enumerate(ents):
+    lab = labels[i]
+    name = e.get("entity_name") or e.get("entity_description") or e.get("text_span") or f"En_{i}"
+    by_label[lab].append(name)
+
+print("\nExamples for top clusters:")
+for lab, sz in top[:6]:
+    print(f"\nCluster {lab} size={sz}:")
+    for v in by_label[lab][:8]:
+        print("  -", v)
+
+# small clusters count
+small_count = sum(1 for lab,sz in counts.items() if lab != -1 and sz <= 2)
+print(f"\nClusters with size <= 2: {small_count}")
+
+
+#endregion#? Diagnostics for entities_clustered
+#?#########################  End  ##########################
+
+
+
+
+
+
+#?######################### Start ##########################
+#region:#?   Entity Resolution - V100 -  local sub-clustering and chunk-text inclusion.
+
+
+# orchestrator_with_chunk_texts_v100.py
+"""
+Entity resolution orchestrator with robust local sub-clustering, chunk-text inclusion,
+token safety guard, and tqdm progress bars.
+
+Usage:
+  - In notebook: run the file / import and call orchestrate()
+  - From CLI: python orchestrator_with_chunk_texts_v100.py [--entities_in ...] [--chunks ...] [--use_umap]
+
+Requirements:
+  pip install torch transformers sentencepiece tqdm hdbscan umap-learn scikit-learn openai
+"""
+
+import os
+import json
+import uuid
+import time
+import math
+from pathlib import Path
+from collections import defaultdict
+from typing import List, Dict
+
+import numpy as np
+from tqdm import tqdm
+
+# transformers embedder
+import torch
+from transformers import AutoTokenizer, AutoModel
+from sklearn.preprocessing import normalize
+
+# clustering
+try:
+    import hdbscan
+except Exception:
+    raise RuntimeError("hdbscan is required. Install with `pip install hdbscan`")
+try:
+    import umap
+    UMAP_AVAILABLE = True
+except Exception:
+    UMAP_AVAILABLE = False
+
+# OpenAI client loader (reuses your pattern)
+from openai import OpenAI
+
+def _load_openai_key(envvar: str = "OPENAI_API_KEY", fallback_path: str = "/home/mabolhas/MyReposOnSOL/SGCE-KG/.env") -> str:
+    key = os.getenv(envvar, fallback_path)
+    if isinstance(key, str) and Path(key).exists():
+        try:
+            txt = Path(key).read_text(encoding="utf-8").strip()
+            if txt:
+                return txt
+        except Exception:
+            pass
+    return key
+
+OPENAI_KEY = _load_openai_key()
+if not OPENAI_KEY or not isinstance(OPENAI_KEY, str) or len(OPENAI_KEY) < 10:
+    print("⚠️  OPENAI API key not found or seems invalid. Set OPENAI_API_KEY env or place key in fallback file path.")
+client = OpenAI(api_key=OPENAI_KEY)
+
+# ---------------- Paths & config ----------------
+CLUSTERED_IN = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities/Ent_1st/Ent_Clustering_1st/entities_clustered.jsonl")   # input (from previous clustering)
+CHUNKS_JSONL = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Chunks/chunks_sentence.jsonl")
+
+ENT_OUT = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities/Ent_1st/Ent_Resolved_1st/entities_resolved.jsonl")
+CANON_OUT = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities/Ent_1st/Ent_Resolved_1st/canonical_entities.jsonl")
+LOG_OUT = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities/Ent_1st/Ent_Resolved_1st/resolution_log.jsonl")
+
+WEIGHTS = {"name": 0.45, "desc": 0.25, "ctx": 0.25, "type": 0.05}
+EMBED_MODEL = "BAAI/bge-large-en-v1.5"
+BATCH_SIZE = 32
+DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
+
+# local HDBSCAN
+LOCAL_HDBSCAN_MIN_CLUSTER_SIZE = 2
+LOCAL_HDBSCAN_MIN_SAMPLES = 1
+LOCAL_HDBSCAN_METRIC = "euclidean"
+
+# UMAP options
+LOCAL_USE_UMAP = False   # default OFF for robustness; enable via CLI --use_umap
+UMAP_DIMS = 32
+UMAP_NEIGHBORS = 10
+UMAP_MIN_DIST = 0.0
+UMAP_MIN_SAMPLES_TO_RUN = 25  # only run UMAP when cluster size >= this
+
+# LLM / prompt
+MODEL = "gpt-4o"
+TEMPERATURE = 0.0
+MAX_TOKENS = 800
+
+# orchestration thresholds (as requested)
+MAX_CLUSTER_PROMPT = 15        # coarse cluster size threshold to trigger local sub-clustering
+MAX_MEMBERS_PER_PROMPT = 10    # <= 10 entities per LLM call
+TRUNC_CHUNK_CHARS = 400
+INCLUDE_PREV_CHUNKS = 0
+
+# token safety
+PROMPT_TOKEN_LIMIT = 2200  # rough char/4 estimate threshold
+
+# ---------------- Utility functions ----------------
+def load_chunks(chunks_jsonl_path: Path) -> List[Dict]:
+    assert chunks_jsonl_path.exists(), f"Chunks file not found: {chunks_jsonl_path}"
+    chunks = []
+    with open(chunks_jsonl_path, "r", encoding="utf-8") as fh:
+        for line in fh:
+            if line.strip():
+                chunks.append(json.loads(line))
+    return chunks
+
+def safe_text(e: Dict, key: str) -> str:
+    v = e.get(key)
+    if v is None:
+        return ""
+    if isinstance(v, (list, dict)):
+        return json.dumps(v, ensure_ascii=False)
+    return str(v)
+
+# ---------------- HF embedder ----------------
+def mean_pool(token_embeddings: torch.Tensor, attention_mask: torch.Tensor):
+    input_mask_expanded = attention_mask.unsqueeze(-1).expand(token_embeddings.size()).float()
+    sum_embeddings = torch.sum(token_embeddings * input_mask_expanded, 1)
+    sum_mask = torch.clamp(input_mask_expanded.sum(1), min=1e-9)
+    return sum_embeddings / sum_mask
+
+class HFEmbedder:
+    def __init__(self, model_name: str = EMBED_MODEL, device: str = DEVICE):
+        print(f"[Embedder] loading model {model_name} on {device} ...")
+        self.device = device
+        self.tokenizer = AutoTokenizer.from_pretrained(model_name, use_fast=True)
+        self.model = AutoModel.from_pretrained(model_name)
+        self.model.to(device)
+        self.model.eval()
+        for p in self.model.parameters():
+            p.requires_grad = False
+
+    @torch.no_grad()
+    def encode_batch(self, texts: List[str], batch_size: int = BATCH_SIZE) -> np.ndarray:
+        if len(texts) == 0:
+            # fallback dimension guess
+            return np.zeros((0, self.model.config.hidden_size if hasattr(self.model.config, 'hidden_size') else 1024))
+        embs = []
+        for i in range(0, len(texts), batch_size):
+            batch = texts[i:i+batch_size]
+            enc = self.tokenizer(batch, padding=True, truncation=True, return_tensors="pt", max_length=1024)
+            input_ids = enc["input_ids"].to(self.device)
+            attention_mask = enc["attention_mask"].to(self.device)
+            out = self.model(input_ids=input_ids, attention_mask=attention_mask, return_dict=True)
+            token_embeds = out.last_hidden_state
+            pooled = mean_pool(token_embeds, attention_mask)
+            pooled = pooled.cpu().numpy()
+            embs.append(pooled)
+        embs = np.vstack(embs)
+        embs = normalize(embs, axis=1)
+        return embs
+
+def build_field_texts(entities: List[Dict]):
+    names, descs, ctxs, types = [], [], [], []
+    for e in entities:
+        names.append(safe_text(e, "entity_name") or safe_text(e, "entity_name_original") or "")
+        descs.append(safe_text(e, "entity_description") or "")
+        ctxs.append(safe_text(e, "text_span") or safe_text(e, "context_phrase") or safe_text(e, "used_context_excerpt") or "")
+        types.append(safe_text(e, "entity_type_hint") or safe_text(e, "entity_type") or "")
+    return names, descs, ctxs, types
+
+def compute_combined_embeddings(embedder: HFEmbedder, entities: List[Dict], weights=WEIGHTS) -> np.ndarray:
+    names, descs, ctxs, types = build_field_texts(entities)
+    emb_name = embedder.encode_batch(names) if any(t.strip() for t in names) else None
+    emb_desc = embedder.encode_batch(descs) if any(t.strip() for t in descs) else None
+    emb_ctx  = embedder.encode_batch(ctxs)  if any(t.strip() for t in ctxs) else None
+    emb_type = embedder.encode_batch(types) if any(t.strip() for t in types) else None
+
+    D = None
+    for arr in (emb_name, emb_desc, emb_ctx, emb_type):
+        if arr is not None and arr.shape[0] > 0:
+            D = arr.shape[1]
+            break
+    if D is None:
+        raise ValueError("No textual field produced embeddings; check your entity fields")
+
+    def _ensure(arr):
+        if arr is None:
+            return np.zeros((len(entities), D))
+        if arr.shape[1] != D:
+            raise ValueError("embedding dim mismatch")
+        return arr
+
+    emb_name = _ensure(emb_name)
+    emb_desc = _ensure(emb_desc)
+    emb_ctx  = _ensure(emb_ctx)
+    emb_type = _ensure(emb_type)
+
+    w_name = weights.get("name", 0.0)
+    w_desc = weights.get("desc", 0.0)
+    w_ctx  = weights.get("ctx", 0.0)
+    w_type = weights.get("type", 0.0)
+    Wsum = w_name + w_desc + w_ctx + w_type
+    if Wsum <= 0:
+        raise ValueError("invalid weights")
+    w_name /= Wsum; w_desc /= Wsum; w_ctx /= Wsum; w_type /= Wsum
+
+    combined = (w_name * emb_name) + (w_desc * emb_desc) + (w_ctx * emb_ctx) + (w_type * emb_type)
+    combined = normalize(combined, axis=1)
+    return combined
+
+# ---------------- robust local_subcluster ----------------
+def local_subcluster(cluster_entities: List[Dict],
+                     entity_id_to_index: Dict[str, int],
+                     all_embeddings: np.ndarray,
+                     min_cluster_size: int = LOCAL_HDBSCAN_MIN_CLUSTER_SIZE,
+                     min_samples: int = LOCAL_HDBSCAN_MIN_SAMPLES,
+                     use_umap: bool = LOCAL_USE_UMAP,
+                     umap_dims: int = UMAP_DIMS):
+    from collections import defaultdict
+    from sklearn.preprocessing import normalize as _normalize
+
+    idxs = [entity_id_to_index[e["id"]] for e in cluster_entities]
+    X = all_embeddings[idxs]
+    X = _normalize(X, axis=1)
+    n = X.shape[0]
+
+    if n <= 1:
+        return {0: list(cluster_entities)} if n==1 else {-1: []}
+
+    min_cluster_size = min(min_cluster_size, max(2, n))
+    if min_samples is None:
+        min_samples = max(1, int(min_cluster_size * 0.1))
+    else:
+        min_samples = min(min_samples, max(1, n-1))
+
+    X_sub = X
+    if use_umap and UMAP_AVAILABLE and n >= UMAP_MIN_SAMPLES_TO_RUN:
+        n_components = min(umap_dims, max(2, n - 4))  # keep k <= n-4 for safety
+        try:
+            reducer = umap.UMAP(n_components=n_components,
+                                n_neighbors=min(UMAP_NEIGHBORS, max(2, n-1)),
+                                min_dist=UMAP_MIN_DIST,
+                                metric='cosine',
+                                random_state=42)
+            X_sub = reducer.fit_transform(X)
+        except Exception as e:
+            print(f"[local_subcluster] UMAP failed for n={n}, n_components={n_components} -> fallback without UMAP. Err: {e}")
+            X_sub = X
+    else:
+        if use_umap and UMAP_AVAILABLE and n < UMAP_MIN_SAMPLES_TO_RUN:
+            print(f"[local_subcluster] skipping UMAP for n={n} (threshold {UMAP_MIN_SAMPLES_TO_RUN})")
+
+    try:
+        clusterer = hdbscan.HDBSCAN(min_cluster_size=min_cluster_size,
+                                    min_samples=min_samples,
+                                    metric=LOCAL_HDBSCAN_METRIC,
+                                    cluster_selection_method='eom')
+        labels = clusterer.fit_predict(X_sub)
+    except Exception as e:
+        print(f"[local_subcluster] HDBSCAN failed for n={n} -> fallback single cluster. Err: {e}")
+        return {0: list(cluster_entities)}
+
+    groups = defaultdict(list)
+    for ent, lab in zip(cluster_entities, labels):
+        groups[int(lab)].append(ent)
+    return groups
+
+# ------------------ LLM helpers ------------------
+def call_llm_with_prompt(prompt: str, model: str = MODEL, temperature: float = TEMPERATURE, max_tokens: int = MAX_TOKENS) -> str:
+    try:
+        response = client.chat.completions.create(
+            model=model,
+            messages=[{"role":"user", "content": prompt}],
+            temperature=temperature,
+            max_tokens=max_tokens
+        )
+        txt = response.choices[0].message.content
+        return txt
+    except Exception as e:
+        print("LLM call error:", e)
+        return ""
+
+def extract_json_array(text: str):
+    if not text:
+        return None
+    text = text.strip()
+    start = text.find('[')
+    end = text.rfind(']')
+    if start != -1 and end != -1 and end > start:
+        candidate = text[start:end+1]
+        try:
+            return json.loads(candidate)
+        except Exception:
+            pass
+    try:
+        return json.loads(text)
+    except Exception:
+        return None
+
+# ---------------- Prompt building ----------------
+PROMPT_TEMPLATE = """You are a careful knowledge-graph resolver.
+Given the following small cohesive group of candidate entity mentions, decide which ones to MERGE into a single canonical entity, which to MODIFY, and which to KEEP.
+
+Return ONLY a JSON ARRAY. Each element must be one of:
+- MergeEntities: {{ "action":"MergeEntities", "entity_ids":[...], "canonical_name":"...", "canonical_description":"...", "canonical_type":"...", "rationale":"..." }}
+- ModifyEntity: {{ "action":"ModifyEntity", "entity_id":"...", "new_name":"...", "new_description":"...", "new_type_hint":"...", "rationale":"..." }}
+- KeepEntity: {{ "action":"KeepEntity", "entity_id":"...", "rationale":"..." }}
+
+Rules:
+- Use ONLY the provided information (name/desc/type_hint/confidence/text_span/chunk_text).
+- Be conservative: if unsure, KEEP rather than MERGE.
+- If merging, ensure merged items truly refer to the same concept.
+- Provide short rationale for each action (1-2 sentences).
+
+Group members (id | name | type_hint | confidence | desc | text_span | chunk_text [truncated]):
+{members_json}
+
+Return JSON array only (no commentary).
+"""
+
+def build_member_with_chunk(m: Dict, chunks_index: Dict[str, Dict]) -> Dict:
+    chunk_text = ""
+    chunk_id = m.get("chunk_id")
+    if chunk_id:
+        ch = chunks_index.get(chunk_id)
+        if ch:
+            ct = ch.get("text","")
+            if INCLUDE_PREV_CHUNKS and isinstance(ch.get("chunk_index_in_section", None), int):
+                pass
+            chunk_text = " ".join(ct.split())
+            if len(chunk_text) > TRUNC_CHUNK_CHARS:
+                chunk_text = chunk_text[:TRUNC_CHUNK_CHARS].rsplit(" ",1)[0] + "..."
+    return {
+        "id": m.get("id"),
+        "name": m.get("entity_name"),
+        "type_hint": m.get("entity_type_hint"),
+        "confidence": m.get("confidence_score"),
+        "desc": m.get("entity_description"),
+        "text_span": m.get("text_span"),
+        "chunk_text": chunk_text
+    }
+
+# ------------------ apply actions ----------------
+def apply_actions(members: List[Dict], actions: List[Dict], entities_by_id: Dict[str, Dict],
+                  canonical_store: List[Dict], log_entries: List[Dict]):
+    ts = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+    for act in (actions or []):
+        typ = act.get("action")
+        if typ == "MergeEntities":
+            ids = act.get("entity_ids", [])
+            canonical_name = act.get("canonical_name")
+            canonical_desc = act.get("canonical_description", "")
+            canonical_type = act.get("canonical_type", "")
+            rationale = act.get("rationale", "")
+            can_id = "Can_" + uuid.uuid4().hex[:8]
+            canonical = {
+                "canonical_id": can_id,
+                "canonical_name": canonical_name,
+                "canonical_description": canonical_desc,
+                "canonical_type": canonical_type,
+                "source": "LLM_resolution_v100",
+                "rationale": rationale,
+                "timestamp": ts
+            }
+            canonical_store.append(canonical)
+            for eid in ids:
+                ent = entities_by_id.get(eid)
+                if ent:
+                    ent["canonical_id"] = can_id
+                    ent["resolved_action"] = "merged"
+                    ent["resolution_rationale"] = rationale
+                    ent["resolved_time"] = ts
+            log_entries.append({"time": ts, "action": "merge", "canonical_id": can_id, "merged_ids": ids, "rationale": rationale})
+        elif typ == "ModifyEntity":
+            eid = act.get("entity_id")
+            ent = entities_by_id.get(eid)
+            if ent:
+                new_name = act.get("new_name")
+                new_desc = act.get("new_description")
+                new_type = act.get("new_type_hint")
+                rationale = act.get("rationale","")
+                if new_name:
+                    ent["entity_name"] = new_name
+                if new_desc:
+                    ent["entity_description"] = new_desc
+                if new_type:
+                    ent["entity_type_hint"] = new_type
+                ent["resolved_action"] = "modified"
+                ent["resolution_rationale"] = rationale
+                ent["resolved_time"] = ts
+                log_entries.append({"time": ts, "action": "modify", "entity_id": eid, "rationale": rationale})
+        elif typ == "KeepEntity":
+            eid = act.get("entity_id")
+            ent = entities_by_id.get(eid)
+            rationale = act.get("rationale","")
+            if ent:
+                ent["resolved_action"] = "kept"
+                ent["resolution_rationale"] = rationale
+                ent["resolved_time"] = ts
+                log_entries.append({"time": ts, "action": "keep", "entity_id": eid, "rationale": rationale})
+        else:
+            log_entries.append({"time": ts, "action": "unknown", "payload": act})
+
+# ------------------ Orchestration main ----------------
+def orchestrate():
+    print("Loading clustered entities from:", CLUSTERED_IN)
+    entities = []
+    with open(CLUSTERED_IN, "r", encoding="utf-8") as fh:
+        for line in fh:
+            if line.strip():
+                entities.append(json.loads(line))
+    n_entities = len(entities)
+    print("Loaded entities:", n_entities)
+
+    print("Loading chunks from:", CHUNKS_JSONL)
+    chunks = load_chunks(CHUNKS_JSONL) if CHUNKS_JSONL.exists() else []
+    chunks_index = {c.get("id"): c for c in chunks}
+    print("Loaded chunks:", len(chunks))
+
+    entities_by_id = {e["id"]: e for e in entities}
+    entity_id_to_index = {e["id"]: i for i, e in enumerate(entities)}
+
+    embedder = HFEmbedder(model_name=EMBED_MODEL, device=DEVICE)
+    combined_embeddings = compute_combined_embeddings(embedder, entities, weights=WEIGHTS)
+    print("Combined embeddings shape:", combined_embeddings.shape)
+
+    by_cluster = defaultdict(list)
+    for e in entities:
+        by_cluster[e.get("_cluster_id")].append(e)
+
+    canonical_store = []
+    log_entries = []
+
+    cluster_ids = sorted([k for k in by_cluster.keys() if k != -1])
+    noise_count = len(by_cluster.get(-1, []))
+    print("Clusters to resolve (excluding noise):", len(cluster_ids), "noise_count:", noise_count)
+
+    # outer progress bar over clusters
+    with tqdm(cluster_ids, desc="Clusters", unit="cluster") as pbar_clusters:
+        for cid in pbar_clusters:
+            members = by_cluster[cid]
+            size = len(members)
+            pbar_clusters.set_postfix(cluster=cid, size=size)
+            # decide path: direct prompt chunks OR local sub-cluster
+            if size <= MAX_CLUSTER_PROMPT:
+                # number of prompts for this coarse cluster
+                n_prompts = math.ceil(size / MAX_MEMBERS_PER_PROMPT)
+                with tqdm(range(n_prompts), desc=f"Cluster {cid} prompts", leave=False, unit="prompt") as pbar_prompts:
+                    for i in pbar_prompts:
+                        s = i * MAX_MEMBERS_PER_PROMPT
+                        chunk = members[s:s+MAX_MEMBERS_PER_PROMPT]
+                        payload = [build_member_with_chunk(m, chunks_index) for m in chunk]
+                        members_json = json.dumps(payload, ensure_ascii=False, indent=2)
+                        prompt = PROMPT_TEMPLATE.format(members_json=members_json)
+                        est_tokens = max(1, int(len(prompt) / 4))
+                        pbar_prompts.set_postfix(est_tokens=est_tokens, chunk_size=len(chunk))
+                        if est_tokens > PROMPT_TOKEN_LIMIT:
+                            # skip LLM call, conservative
+                            for m in chunk:
+                                log_entries.append({"time": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+                                                    "action":"skip_large_prompt_keep", "entity_id": m["id"],
+                                                    "reason": f"est_tokens {est_tokens} > limit {PROMPT_TOKEN_LIMIT}"})
+                                m["resolved_action"] = "kept_skipped_prompt"
+                                m["resolution_rationale"] = f"Prompt too large (est_tokens={est_tokens})"
+                            continue
+                        llm_out = call_llm_with_prompt(prompt)
+                        actions = extract_json_array(llm_out)
+                        if actions is None:
+                            actions = [{"action":"KeepEntity","entity_id": m["id"], "rationale":"LLM parse failed; conservatively kept"} for m in chunk]
+                        apply_actions(chunk, actions, entities_by_id, canonical_store, log_entries)
+            else:
+                # large cluster -> local sub-cluster
+                subgroups = local_subcluster(members, entity_id_to_index, combined_embeddings,
+                                            min_cluster_size=LOCAL_HDBSCAN_MIN_CLUSTER_SIZE,
+                                            min_samples=LOCAL_HDBSCAN_MIN_SAMPLES,
+                                            use_umap=LOCAL_USE_UMAP, umap_dims=UMAP_DIMS)
+                # iterate subgroups sorted by size desc
+                sub_items = sorted(subgroups.items(), key=lambda x: -len(x[1]))
+                with tqdm(sub_items, desc=f"Cluster {cid} subclusters", leave=False, unit="sub") as pbar_subs:
+                    for sublab, submembers in pbar_subs:
+                        subsize = len(submembers)
+                        pbar_subs.set_postfix(sublab=sublab, subsize=subsize)
+                        if sublab == -1:
+                            for m in submembers:
+                                m["resolved_action"] = "kept_noise_local"
+                                m["resolution_rationale"] = "Local-subcluster noise preserved"
+                                log_entries.append({"time": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+                                                    "action":"keep_noise_local", "entity_id": m["id"], "cluster": cid})
+                            continue
+                        # prompts for this subcluster
+                        n_prompts = math.ceil(subsize / MAX_MEMBERS_PER_PROMPT)
+                        with tqdm(range(n_prompts), desc=f"Sub {sublab} prompts", leave=False, unit="prompt") as pbar_sub_prompts:
+                            for i in pbar_sub_prompts:
+                                s = i * MAX_MEMBERS_PER_PROMPT
+                                chunk = submembers[s:s+MAX_MEMBERS_PER_PROMPT]
+                                payload = [build_member_with_chunk(m, chunks_index) for m in chunk]
+                                members_json = json.dumps(payload, ensure_ascii=False, indent=2)
+                                prompt = PROMPT_TEMPLATE.format(members_json=members_json)
+                                est_tokens = max(1, int(len(prompt) / 4))
+                                pbar_sub_prompts.set_postfix(est_tokens=est_tokens, chunk_size=len(chunk))
+                                if est_tokens > PROMPT_TOKEN_LIMIT:
+                                    for m in chunk:
+                                        log_entries.append({"time": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+                                                            "action":"skip_large_prompt_keep", "entity_id": m["id"],
+                                                            "reason": f"est_tokens {est_tokens} > limit {PROMPT_TOKEN_LIMIT}"})
+                                        m["resolved_action"] = "kept_skipped_prompt"
+                                        m["resolution_rationale"] = f"Prompt too large (est_tokens={est_tokens})"
+                                    continue
+                                llm_out = call_llm_with_prompt(prompt)
+                                actions = extract_json_array(llm_out)
+                                if actions is None:
+                                    actions = [{"action":"KeepEntity","entity_id": m["id"], "rationale":"LLM parse failed; conservatively kept"} for m in chunk]
+                                apply_actions(chunk, actions, entities_by_id, canonical_store, log_entries)
+
+    # global noise handling
+    for nent in by_cluster.get(-1, []):
+        ent = entities_by_id[nent["id"]]
+        ent["resolved_action"] = "kept_noise_global"
+        ent["resolution_rationale"] = "Global noise preserved for manual review"
+        log_entries.append({"time": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()), "action":"keep_noise_global", "entity_id": ent["id"]})
+
+    # write outputs
+    final_entities = list(entities_by_id.values())
+    ENT_OUT.parent.mkdir(parents=True, exist_ok=True)
+    with open(ENT_OUT, "w", encoding="utf-8") as fh:
+        for e in final_entities:
+            fh.write(json.dumps(e, ensure_ascii=False) + "\n")
+    with open(CANON_OUT, "w", encoding="utf-8") as fh:
+        for c in canonical_store:
+            fh.write(json.dumps(c, ensure_ascii=False) + "\n")
+    with open(LOG_OUT, "a", encoding="utf-8") as fh:
+        for lg in log_entries:
+            fh.write(json.dumps(lg, ensure_ascii=False) + "\n")
+
+    print("\nResolution finished. Wrote:", ENT_OUT, CANON_OUT, LOG_OUT)
+
+# ------------------ Notebook/CLI entry ----------------
+if __name__ == "__main__":
+    import sys
+    if "ipykernel" in sys.argv[0] or "ipython" in sys.argv[0]:
+        print("[main] Running in notebook mode with defaults.")
+        orchestrate()
+    else:
+        import argparse
+        parser = argparse.ArgumentParser()
+        parser.add_argument("--entities_in", type=str, default=str(CLUSTERED_IN))
+        parser.add_argument("--chunks", type=str, default=str(CHUNKS_JSONL))
+        parser.add_argument("--out_entities", type=str, default=str(ENT_OUT))
+        parser.add_argument("--canon_out", type=str, default=str(CANON_OUT))
+        parser.add_argument("--log_out", type=str, default=str(LOG_OUT))
+        parser.add_argument("--use_umap", action="store_true", help="Enable local UMAP inside sub-clustering (only for large clusters)")
+        parser.add_argument("--prompt_token_limit", type=int, default=PROMPT_TOKEN_LIMIT)
+        parser.add_argument("--max_members_per_prompt", type=int, default=MAX_MEMBERS_PER_PROMPT)
+        args = parser.parse_args()
+
+        CLUSTERED_IN = Path(args.entities_in)
+        CHUNKS_JSONL = Path(args.chunks)
+        ENT_OUT = Path(args.out_entities)
+        CANON_OUT = Path(args.canon_out)
+        LOG_OUT = Path(args.log_out)
+        PROMPT_TOKEN_LIMIT = args.prompt_token_limit
+        MAX_MEMBERS_PER_PROMPT = args.max_members_per_prompt
+        if args.use_umap:
+            LOCAL_USE_UMAP = True
+        orchestrate()
+
+
+
+
+
+
+#endregion#? Entity Resolution - V100 - local sub-clustering and chunk-text inclusion.
+#?#########################  End  ##########################
+
+
+
+
+#?######################### Start ##########################
+#region:#?   Analyze_entity_resolution
+
+
+#!/usr/bin/env python3
+"""
+analyze_entity_resolution.py
+
+Creates entResAnalysis/ with:
+ - merged_groups.json     : mapping canonical_id -> list of member entities (full objects)
+ - merged_groups.csv      : flat CSV: canonical_id, member_id, member_name, desc, type, confidence, _cluster_id, resolved_action
+ - canonical_summary.csv  : canonical_id, canonical_name, canonical_type, n_members, example_members
+ - actions_summary.json   : counts per resolved_action
+ - type_distribution.csv  : counts per entity_type_hint (for merged vs kept)
+ - charts: merges_hist.png, actions_pie.png
+
+Usage:
+  python analyze_entity_resolution.py
+"""
+
+import json
+from pathlib import Path
+from collections import defaultdict, Counter
+import csv
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# --------- Config / paths ----------
+ENT_RES_FILE = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities/Ent_1st/Ent_Resolved_1st/entities_resolved.jsonl")
+CANON_FILE = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities/Ent_1st/Ent_Resolved_1st/canonical_entities.jsonl")
+OUT_DIR = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities/Ent_1st/Ent_1st_Analysis")
+OUT_DIR.mkdir(parents=True, exist_ok=True)
+
+# --------- Helpers ----------
+def load_jsonl(path):
+    data = []
+    with open(path, "r", encoding="utf-8") as fh:
+        for ln in fh:
+            ln = ln.strip()
+            if not ln:
+                continue
+            try:
+                data.append(json.loads(ln))
+            except Exception as e:
+                print("skip line (json error):", e)
+    return data
+
+# --------- Load data ----------
+print("Loading files...")
+entities = load_jsonl(ENT_RES_FILE) if ENT_RES_FILE.exists() else []
+canons = load_jsonl(CANON_FILE) if CANON_FILE.exists() else []
+
+print(f"Loaded {len(entities)} entities, {len(canons)} canonical records")
+
+# index canonical metadata if present
+canon_meta = {c.get("canonical_id"): c for c in canons}
+
+# --------- Build merged groups ----------
+merged = defaultdict(list)       # canonical_id -> list of entity dicts
+unmerged = []                    # entities without canonical_id
+for e in entities:
+    cid = e.get("canonical_id")
+    if cid:
+        merged[cid].append(e)
+    else:
+        unmerged.append(e)
+
+# Save merged_groups.json
+with open(OUT_DIR / "merged_groups.json", "w", encoding="utf-8") as fh:
+    json.dump({k: v for k,v in merged.items()}, fh, ensure_ascii=False, indent=2)
+
+# Save merged_groups.csv (flat)
+csv_fields = ["canonical_id", "canonical_name", "member_id", "member_name", "member_desc",
+              "member_type", "confidence_score", "_cluster_id", "resolved_action", "resolution_rationale"]
+with open(OUT_DIR / "merged_groups.csv", "w", newline='', encoding="utf-8") as fh:
+    writer = csv.DictWriter(fh, fieldnames=csv_fields)
+    writer.writeheader()
+    for cid, members in merged.items():
+        canon_name = canon_meta.get(cid, {}).get("canonical_name", "")
+        for m in members:
+            writer.writerow({
+                "canonical_id": cid,
+                "canonical_name": canon_name,
+                "member_id": m.get("id"),
+                "member_name": m.get("entity_name"),
+                "member_desc": m.get("entity_description"),
+                "member_type": m.get("entity_type_hint"),
+                "confidence_score": m.get("confidence_score"),
+                "_cluster_id": m.get("_cluster_id"),
+                "resolved_action": m.get("resolved_action"),
+                "resolution_rationale": m.get("resolution_rationale","")
+            })
+
+# Save canonical_summary.csv
+canon_rows = []
+for cid, members in merged.items():
+    row = {
+        "canonical_id": cid,
+        "canonical_name": canon_meta.get(cid, {}).get("canonical_name", ""),
+        "canonical_type": canon_meta.get(cid, {}).get("canonical_type", ""),
+        "n_members": len(members),
+        "example_members": " | ".join([m.get("entity_name","") for m in members[:5]])
+    }
+    canon_rows.append(row)
+canon_df = pd.DataFrame(canon_rows).sort_values("n_members", ascending=False)
+canon_df.to_csv(OUT_DIR / "canonical_summary.csv", index=False)
+
+# Save actions summary
+action_counts = Counter([e.get("resolved_action","<none>") for e in entities])
+with open(OUT_DIR / "actions_summary.json", "w", encoding="utf-8") as fh:
+    json.dump(action_counts, fh, ensure_ascii=False, indent=2)
+
+# Save type distribution (merged vs unmerged)
+def type_counter(list_of_entities):
+    c = Counter()
+    for e in list_of_entities:
+        t = e.get("entity_type_hint") or "<unknown>"
+        c[t] += 1
+    return c
+
+merged_types = type_counter([m for members in merged.values() for m in members])
+unmerged_types = type_counter(unmerged)
+
+# write as CSV table
+all_types = sorted(set(list(merged_types.keys()) + list(unmerged_types.keys())))
+with open(OUT_DIR / "type_distribution.csv", "w", newline='', encoding="utf-8") as fh:
+    w = csv.writer(fh)
+    w.writerow(["type", "merged_count", "unmerged_count"])
+    for t in all_types:
+        w.writerow([t, merged_types.get(t,0), unmerged_types.get(t,0)])
+
+# --------- Quick stats & charts ----------
+# 1) Histogram of canonical cluster sizes
+sizes = [len(members) for members in merged.values()]
+if len(sizes) == 0:
+    print("No merged canonical groups found. Exiting chart generation.")
+else:
+    plt.figure(figsize=(6,4))
+    plt.hist(sizes, bins=range(1, max(sizes)+2), edgecolor='black')
+    plt.title("Distribution of canonical cluster sizes (# members)")
+    plt.xlabel("members per canonical entity")
+    plt.ylabel("count")
+    plt.tight_layout()
+    plt.savefig(OUT_DIR / "merges_hist.png", dpi=150)
+    plt.close()
+
+# 2) Pie chart of resolved_action counts (top actions)
+actions_df = pd.DataFrame(action_counts.items(), columns=["action","count"]).sort_values("count", ascending=False)
+plt.figure(figsize=(6,6))
+top_actions = actions_df.head(6)
+plt.pie(top_actions["count"], labels=top_actions["action"], autopct="%1.1f%%", startangle=140)
+plt.title("Top resolved_action distribution")
+plt.tight_layout()
+plt.savefig(OUT_DIR / "actions_pie.png", dpi=150)
+plt.close()
+
+# 3) Top canonical groups CSV (top 50)
+canon_df.head(50).to_csv(OUT_DIR / "top50_canonical.csv", index=False)
+
+# 4) A simple mapping file for quick inspection: canonical_id -> [member names]
+simple_map = {cid: [m.get("entity_name") for m in members] for cid,members in merged.items()}
+with open(OUT_DIR / "canonical_to_members_sample.json", "w", encoding="utf-8") as fh:
+    json.dump(simple_map, fh, ensure_ascii=False, indent=2)
+
+# 5) Save unmerged entities (for manual review)
+with open(OUT_DIR / "unmerged_entities.jsonl", "w", encoding="utf-8") as fh:
+    for e in unmerged:
+        fh.write(json.dumps(e, ensure_ascii=False) + "\n")
+
+# ---------- Print short summary ----------
+print("Analysis saved to:", OUT_DIR)
+print("Counts:")
+print(" - total entities:", len(entities))
+print(" - canonical groups (merged):", len(merged))
+print(" - unmerged entities:", len(unmerged))
+print("Top 10 canonical groups (id, size):")
+for cid, members in canon_df[["canonical_id","n_members"]].head(10).itertuples(index=False, name=None):
+    print(" ", cid, members)
+
+# optional: show top 10 actions
+print("Top actions:")
+for a,cnt in action_counts.most_common(10):
+    print(" ", a, cnt)
+
+print("\nFiles produced (entResAnalysis/):")
+for p in sorted(OUT_DIR.iterdir()):
+    print(" ", p.name)
+
+
+#endregion#? Analyze_entity_resolution
+#?#########################  End  ##########################
+
+
+
+
+
+
+
+
+
+
+#?######################### Start ##########################
+#region:#?   Entites after first resolution
+
+
+
+
+#!/usr/bin/env python3
+# create_second_run_input.py
+"""
+Create reduced input for second-pass pipeline.
+
+Outputs in folder: 2nd_run/
+ - entities_raw_second_run.jsonl   (one record per canonical or singleton)
+ - canonical_members_map.json
+ - summary.json
+"""
+
+import json
+from pathlib import Path
+from collections import defaultdict, Counter
+
+# ---------- CONFIG ----------
+ENT_RES = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities/Ent_1st/Ent_Resolved_1st/entities_resolved.jsonl")
+CANON = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities/Ent_1st/Ent_Resolved_1st/canonical_entities.jsonl")
+OUT_DIR = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities/Ent_1st/Ent_1st_Ouput")
+OUT_DIR.mkdir(exist_ok=True, parents=True)
+
+OUT_ENT_RAW = OUT_DIR / "entities_raw_second_run.jsonl"
+OUT_CANON_MAP = OUT_DIR / "canonical_members_map.json"
+OUT_SUMMARY = OUT_DIR / "summary.json"
+
+# ---------- helpers ----------
+def load_jsonl(path: Path):
+    items = []
+    if not path.exists():
+        raise FileNotFoundError(f"Missing file: {path}")
+    with open(path, "r", encoding="utf-8") as fh:
+        for ln in fh:
+            ln = ln.strip()
+            if not ln:
+                continue
+            items.append(json.loads(ln))
+    return items
+
+def safe_get(e, k, default=""):
+    v = e.get(k)
+    if v is None:
+        return default
+    return v
+
+# ---------- load ----------
+print("Loading resolved entities...")
+entities = load_jsonl(ENT_RES)
+print("Loading canonical entities (if exists)...")
+canons = load_jsonl(CANON) if CANON.exists() else []
+
+# build canonical metadata index
+canon_meta = {c.get("canonical_id"): c for c in canons}
+
+# group members by canonical_id
+members_by_canon = defaultdict(list)
+singletons = []
+for e in entities:
+    cid = e.get("canonical_id")
+    if cid:
+        members_by_canon[cid].append(e)
+    else:
+        singletons.append(e)
+
+print(f"Found {len(members_by_canon)} canonical groups and {len(singletons)} singletons (unmerged entities).")
+
+# Build representative records
+representatives = []
+
+# 1) canonical representatives
+for cid, members in members_by_canon.items():
+    meta = canon_meta.get(cid, {})
+    canonical_name = meta.get("canonical_name") or safe_get(members[0], "entity_name")
+    canonical_desc = meta.get("canonical_description") or safe_get(members[0], "entity_description", "")
+    canonical_type = meta.get("canonical_type") or safe_get(members[0], "entity_type_hint", "")
+    # Collect up to 5 example member text spans and names for context
+    example_spans = []
+    example_names = []
+    for m in members[:5]:
+        if m.get("text_span"):
+            example_spans.append(m.get("text_span"))
+        example_names.append(m.get("entity_name") or m.get("entity_name_original") or m.get("id"))
+    # create representative record (fields align with original entity shape)
+    rep = {
+        "id": f"CanRep_{cid}",            # synthetic id for the representative
+        "canonical_id": cid,
+        "entity_name": canonical_name,
+        "entity_description": canonical_desc,
+        "entity_type_hint": canonical_type,
+        "member_count": len(members),
+        "example_member_names": example_names,
+        "example_member_spans": example_spans,
+        # provenance: list of member ids (small sample) and full count
+        "member_ids_sample": [m.get("id") for m in members[:10]],
+        "_cluster_id": None,
+        "_notes": "representative for canonical group"
+    }
+    representatives.append(rep)
+
+# 2) include singletons as they are (but normalize fields)
+single_rep_list = []
+for s in singletons:
+    rep = {
+        "id": s.get("id"),
+        "entity_name": safe_get(s, "entity_name"),
+        "entity_description": safe_get(s, "entity_description", ""),
+        "entity_type_hint": safe_get(s, "entity_type_hint", ""),
+        "member_count": 1,
+        "example_member_names": [safe_get(s, "entity_name")],
+        "example_member_spans": [safe_get(s, "text_span")],
+        "member_ids_sample": [s.get("id")],
+        "_cluster_id": s.get("_cluster_id"),
+        "_notes": "singleton (no canonical_id)"
+    }
+    single_rep_list.append(rep)
+
+# combined list: canonical reps + singletons
+combined = representatives + single_rep_list
+
+# write out entities_raw_second_run.jsonl
+with open(OUT_ENT_RAW, "w", encoding="utf-8") as fh:
+    for rec in combined:
+        fh.write(json.dumps(rec, ensure_ascii=False) + "\n")
+
+# write canonical members map for audit
+canon_map = {cid: [m.get("id") for m in members] for cid, members in members_by_canon.items()}
+with open(OUT_CANON_MAP, "w", encoding="utf-8") as fh:
+    json.dump(canon_map, fh, ensure_ascii=False, indent=2)
+
+# write summary
+summary = {
+    "n_original_entities": len(entities),
+    "n_canonical_groups": len(members_by_canon),
+    "n_singletons": len(singletons),
+    "n_representatives_written": len(combined),
+    "path_entities_raw_second_run": str(OUT_ENT_RAW),
+    "path_canonical_members_map": str(OUT_CANON_MAP)
+}
+with open(OUT_SUMMARY, "w", encoding="utf-8") as fh:
+    json.dump(summary, fh, ensure_ascii=False, indent=2)
+
+print("Wrote:", OUT_ENT_RAW)
+print("Wrote:", OUT_CANON_MAP)
+print("Wrote:", OUT_SUMMARY)
+print("Summary:", summary)
+
+
+
+
+
+
+#endregion#? Entites after first resolution
+#?#########################  End  ##########################
+
+
+
+
+
+
+#?######################### Start ##########################
+#region:#?   RE RUN: Embedding and clustering recognized entities - Forced HDBSCAN - 2nd_run
+
+#!/usr/bin/env python3
+"""
+embed_and_cluster_entities_force_hdbscan_second_run.py
+
+Ready-to-run script for the SECOND RUN that:
+ - Uses the reduced representative input produced in `2nd_run/entities_raw_second_run.jsonl`
+ - Forces HDBSCAN clustering (no fixed-K fallback)
+ - Optional UMAP reduction
+ - Uses BAAI/bge-large-en-v1.5 by default (changeable)
+ - Shows progress with tqdm
+
+How to run:
+  - Notebook: run the file / import and call main_cli with defaults
+  - CLI: python embed_and_cluster_entities_force_hdbscan_second_run.py --entities_in 2nd_run/entities_raw_second_run.jsonl
+"""
+
+import os
+import json
+from pathlib import Path
+from typing import List, Dict
+import numpy as np
+from tqdm import tqdm
+
+import torch
+from transformers import AutoTokenizer, AutoModel
+from sklearn.preprocessing import normalize
+
+# clustering libs
+try:
+    import hdbscan
+except Exception as e:
+    raise RuntimeError("hdbscan is required. Install with `pip install hdbscan`") from e
+
+try:
+    import umap
+    UMAP_AVAILABLE = True
+except Exception:
+    UMAP_AVAILABLE = False
+
+# ------------------ Config / Hyperparams ------------------
+WEIGHTS = {"name": 0.45, "desc": 0.25, "ctx": 0.25, "type": 0.05}
+EMBED_MODEL = "BAAI/bge-large-en-v1.5"   # change if needed
+BATCH_SIZE = 32
+DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
+
+# Forced HDBSCAN params (as requested)
+HDBSCAN_MIN_CLUSTER_SIZE = 2
+HDBSCAN_MIN_SAMPLES = 1
+HDBSCAN_METRIC = "euclidean"   # embeddings normalized -> euclidean ~ cosine
+
+# UMAP (optional)
+USE_UMAP_DEFAULT = False
+UMAP_N_COMPONENTS = 64
+UMAP_N_NEIGHBORS = 15
+UMAP_MIN_DIST = 0.0
+
+# ------------------ Helpers ------------------
+def load_entities(path: str) -> List[Dict]:
+    p = Path(path)
+    assert p.exists(), f"entities file not found: {p}"
+    out = []
+    with open(p, "r", encoding="utf-8") as fh:
+        for line in fh:
+            line = line.strip()
+            if not line:
+                continue
+            out.append(json.loads(line))
+    return out
+
+def safe_text(e: Dict, key: str) -> str:
+    v = e.get(key)
+    if v is None:
+        return ""
+    if isinstance(v, (list, dict)):
+        return json.dumps(v, ensure_ascii=False)
+    return str(v)
+
+def mean_pool(token_embeddings: torch.Tensor, attention_mask: torch.Tensor):
+    input_mask_expanded = attention_mask.unsqueeze(-1).expand(token_embeddings.size()).float()
+    sum_embeddings = torch.sum(token_embeddings * input_mask_expanded, 1)
+    sum_mask = torch.clamp(input_mask_expanded.sum(1), min=1e-9)
+    return sum_embeddings / sum_mask
+
+# ------------------ Embedder ------------------
+class HFEmbedder:
+    def __init__(self, model_name: str = EMBED_MODEL, device: str = DEVICE):
+        print(f"[Embedder] loading model {model_name} on {device} ...")
+        self.device = device
+        try:
+            self.tokenizer = AutoTokenizer.from_pretrained(model_name, use_fast=True)
+            self.model = AutoModel.from_pretrained(model_name)
+        except Exception as e:
+            raise RuntimeError(f"Failed to load model {model_name}: {e}")
+        self.model.to(device)
+        self.model.eval()
+        for p in self.model.parameters():
+            p.requires_grad = False
+
+    @torch.no_grad()
+    def encode_batch(self, texts: List[str], batch_size: int = BATCH_SIZE) -> np.ndarray:
+        if len(texts) == 0:
+            # fallback dim guess 1024
+            D = getattr(self.model.config, "hidden_size", 1024)
+            return np.zeros((0, D))
+        embs = []
+        # progress-friendly batching
+        for i in range(0, len(texts), batch_size):
+            batch = texts[i:i+batch_size]
+            enc = self.tokenizer(batch, padding=True, truncation=True, return_tensors="pt", max_length=1024)
+            input_ids = enc["input_ids"].to(self.device)
+            attention_mask = enc["attention_mask"].to(self.device)
+            out = self.model(input_ids=input_ids, attention_mask=attention_mask, return_dict=True)
+            token_embeds = out.last_hidden_state  # (B, T, D)
+            pooled = mean_pool(token_embeds, attention_mask)  # (B, D)
+            pooled = pooled.cpu().numpy()
+            embs.append(pooled)
+        embs = np.vstack(embs)
+        embs = normalize(embs, axis=1)
+        return embs
+
+# ------------------ Build fields & combine embeddings ------------------
+def build_field_texts(entities: List[Dict]):
+    names, descs, ctxs, types = [], [], [], []
+    for e in entities:
+        names.append(safe_text(e, "entity_name") or safe_text(e, "entity_name_original") or "")
+        descs.append(safe_text(e, "entity_description") or "")
+        # use example_member_spans if available (representative input)
+        ctxs.append(safe_text(e, "example_member_spans") or safe_text(e, "text_span") or "")
+        types.append(safe_text(e, "entity_type_hint") or safe_text(e, "entity_type") or "")
+    return names, descs, ctxs, types
+
+def compute_combined_embeddings(embedder: HFEmbedder, entities: List[Dict], weights=WEIGHTS):
+    names, descs, ctxs, types = build_field_texts(entities)
+    D_ref = None
+
+    print("[compute] encoding name field ...")
+    emb_name = embedder.encode_batch(names) if any(t.strip() for t in names) else None
+    if emb_name is not None:
+        D_ref = emb_name.shape[1]
+
+    print("[compute] encoding desc field ...")
+    emb_desc = embedder.encode_batch(descs) if any(t.strip() for t in descs) else None
+    if D_ref is None and emb_desc is not None:
+        D_ref = emb_desc.shape[1]
+
+    print("[compute] encoding ctx field ...")
+    emb_ctx = embedder.encode_batch(ctxs) if any(t.strip() for t in ctxs) else None
+    if D_ref is None and emb_ctx is not None:
+        D_ref = emb_ctx.shape[1]
+
+    print("[compute] encoding type field ...")
+    emb_type = embedder.encode_batch(types) if any(t.strip() for t in types) else None
+    if D_ref is None and emb_type is not None:
+        D_ref = emb_type.shape[1]
+
+    if D_ref is None:
+        raise ValueError("All textual fields empty — cannot embed")
+
+    def _ensure(arr):
+        if arr is None:
+            return np.zeros((len(entities), D_ref))
+        if arr.shape[1] != D_ref:
+            raise ValueError("embedding dimension mismatch")
+        return arr
+
+    emb_name = _ensure(emb_name)
+    emb_desc = _ensure(emb_desc)
+    emb_ctx  = _ensure(emb_ctx)
+    emb_type = _ensure(emb_type)
+
+    w_name = weights.get("name", 0.0)
+    w_desc = weights.get("desc", 0.0)
+    w_ctx  = weights.get("ctx", 0.0)
+    w_type = weights.get("type", 0.0)
+    Wsum = w_name + w_desc + w_ctx + w_type
+    if Wsum <= 0:
+        raise ValueError("Sum of weights must be > 0")
+    w_name /= Wsum; w_desc /= Wsum; w_ctx /= Wsum; w_type /= Wsum
+
+    combined = (w_name * emb_name) + (w_desc * emb_desc) + (w_ctx * emb_ctx) + (w_type * emb_type)
+    combined = normalize(combined, axis=1)
+    return combined
+
+# ------------------ Forced HDBSCAN clustering ------------------
+def run_hdbscan(embeddings: np.ndarray,
+                min_cluster_size: int = HDBSCAN_MIN_CLUSTER_SIZE,
+                min_samples: int = HDBSCAN_MIN_SAMPLES,
+                metric: str = HDBSCAN_METRIC,
+                use_umap: bool = False):
+    print(f"[cluster] HDBSCAN min_cluster_size={min_cluster_size} min_samples={min_samples} metric={metric} use_umap={use_umap}")
+    X = embeddings
+    if use_umap:
+        if not UMAP_AVAILABLE:
+            print("[cluster] WARNING: UMAP not available — running HDBSCAN on original embeddings")
+        else:
+            # safe n_components: don't exceed n_samples-4
+            n_samples = X.shape[0]
+            n_components = min(UMAP_N_COMPONENTS, max(2, n_samples - 4))
+            print(f"[cluster] running UMAP reduction -> {n_components} dims (safe for n={n_samples})")
+            reducer = umap.UMAP(n_components=n_components, n_neighbors=min(UMAP_N_NEIGHBORS, max(2, n_samples-1)),
+                                min_dist=UMAP_MIN_DIST, metric='cosine', random_state=42)
+            X = reducer.fit_transform(X)
+            print("[cluster] UMAP done, X.shape=", X.shape)
+
+    clusterer = hdbscan.HDBSCAN(
+        min_cluster_size=min_cluster_size,
+        min_samples=min_samples,
+        metric=metric,
+        cluster_selection_method='eom'
+    )
+    labels = clusterer.fit_predict(X)
+    probs = getattr(clusterer, "probabilities_", None)
+    return labels, probs, clusterer
+
+def save_entities_with_clusters(entities: List[Dict], labels: np.ndarray, out_jsonl: str, clusters_summary_path: str):
+    outp = Path(out_jsonl)
+    outp.parent.mkdir(parents=True, exist_ok=True)
+    with open(outp, "w", encoding="utf-8") as fh:
+        for e, lab in zip(entities, labels):
+            out = dict(e)
+            out["_cluster_id"] = int(lab)
+            fh.write(json.dumps(out, ensure_ascii=False) + "\n")
+    # summary
+    summary = {}
+    for idx, lab in enumerate(labels):
+        summary.setdefault(int(lab), []).append(entities[idx].get("entity_name") or f"En_{idx}")
+    with open(clusters_summary_path, "w", encoding="utf-8") as fh:
+        json.dump({"n_entities": len(entities), "n_clusters": len(summary), "clusters": {str(k): v for k, v in summary.items()}}, fh, ensure_ascii=False, indent=2)
+    print(f"[save] wrote {out_jsonl} and summary {clusters_summary_path}")
+
+# ------------------ Main flow ------------------
+def main_cli(args):
+    entities = load_entities(args.entities_in)
+    print(f"Loaded {len(entities)} entities from {args.entities_in}")
+
+    embedder = HFEmbedder(model_name=EMBED_MODEL, device=DEVICE)
+
+    # compute combined embeddings with progress bars per field
+    print("Computing combined embeddings (this may take a while)...")
+    combined = compute_combined_embeddings(embedder, entities, weights=WEIGHTS)
+    print("Combined embeddings shape:", combined.shape)
+
+    labels, probs, clusterer = run_hdbscan(combined,
+                                          min_cluster_size=HDBSCAN_MIN_CLUSTER_SIZE,
+                                          min_samples=HDBSCAN_MIN_SAMPLES,
+                                          metric=HDBSCAN_METRIC,
+                                          use_umap=args.use_umap if hasattr(args, "use_umap") else USE_UMAP_DEFAULT)
+
+    # diagnostics
+    import numpy as _np
+    from collections import Counter
+    labels_arr = _np.array(labels)
+    n = len(labels_arr)
+    n_clusters = len(set(labels_arr)) - (1 if -1 in labels_arr else 0)
+    n_noise = int((labels_arr == -1).sum())
+    print(f"[diagnostic] clusters (excl -1): {n_clusters}  noise: {n_noise} ({n_noise/n*100:.1f}%)")
+    counts = Counter(labels_arr)
+    top = sorted(((lab, sz) for lab, sz in counts.items() if lab != -1), key=lambda x: x[1], reverse=True)[:10]
+    print("[diagnostic] top cluster sizes:", top)
+
+    save_entities_with_clusters(entities, labels_arr, args.out_jsonl, args.clusters_summary)
+    print("Clustering finished.")
+
+# ------------------ Entry point (notebook-friendly) ------------------
+if __name__ == "__main__":
+    import sys
+    if "ipykernel" in sys.argv[0] or "ipython" in sys.argv[0]:
+        class Args:
+            entities_in = "/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities/Ent_1st/Ent_1st_Ouput/entities_raw_second_run.jsonl"
+            out_jsonl = "/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities/Ent_2nd/Ent_Clustering_2nd/entities_clustered_second_run.jsonl"
+            clusters_summary = "/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities/Ent_2nd/Ent_Clustering_2nd/clusters_summary_second_run.json"
+            use_umap = USE_UMAP_DEFAULT
+        args = Args()
+        print("[main] running in notebook mode with defaults:")
+        print(f"  entities_in     = {args.entities_in}")
+        print(f"  out_jsonl       = {args.out_jsonl}")
+        print(f"  clusters_summary= {args.clusters_summary}")
+        print(f"  use_umap        = {args.use_umap}")
+        main_cli(args)
+    else:
+        import argparse
+        parser = argparse.ArgumentParser()
+        parser.add_argument("--entities_in", type=str, default="/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities/Ent_1st/Ent_1st_Ouput/entities_raw_second_run.jsonl")
+        parser.add_argument("--out_jsonl", type=str, default="/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities/Ent_1st/Ent_1st_Ouput/entities_clustered_second_run.jsonl")
+        parser.add_argument("--clusters_summary", type=str, default="/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities/Ent_1st/Ent_1st_Ouput/clusters_summary_second_run.json")
+        parser.add_argument("--use_umap", action="store_true", help="Enable UMAP reduction before clustering (optional)")
+        parsed = parser.parse_args()
+        # convert to args-like object
+        class ArgsFromCLI:
+            entities_in = parsed.entities_in
+            out_jsonl = parsed.out_jsonl
+            clusters_summary = parsed.clusters_summary
+            use_umap = bool(parsed.use_umap)
+        args = ArgsFromCLI()
+        main_cli(args)
+
+
+#endregion#? RE RUN: Embedding and clustering recognized entities - Forced HDBSCAN - 2nd_run
+#?#########################  End  ##########################
+
+
+
+
+#?######################### Start ##########################
+#region:#? Diagnostics for entities_clustered (v2)
+
+# Diagnostics for entities_clustered_second_run.jsonl (v2)
+import json
+from collections import Counter, defaultdict
+from pathlib import Path
+import numpy as np
+
+IN = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities/Ent_2nd/Ent_Clustering_2nd/entities_clustered_second_run.jsonl")  # second-run clustered output
+assert IN.exists(), f"{IN} not found — run the second-run clustering first."
+
+ents = []
+with open(IN, "r", encoding="utf-8") as fh:
+    for line in fh:
+        if line.strip():
+            ents.append(json.loads(line))
+
+n = len(ents)
+labels = [e.get("_cluster_id", -1) for e in ents]
+labels_arr = np.array(labels)
+n_clusters = len(set(labels_arr)) - (1 if -1 in labels_arr else 0)
+n_noise = int((labels_arr == -1).sum())
+print(f"n_entities: {n}, n_clusters (excl -1): {n_clusters}, noise_count: {n_noise} ({n_noise/n*100:.1f}%)")
+
+counts = Counter(labels)
+# compute cluster size stats (exclude noise)
+cluster_sizes = [sz for lab, sz in counts.items() if lab != -1]
+if cluster_sizes:
+    print("Cluster size stats: min, median, mean, max =", min(cluster_sizes), np.median(cluster_sizes), np.mean(cluster_sizes), max(cluster_sizes))
+else:
+    print("No non-noise clusters found.")
+
+# top clusters
+top = sorted(((lab, sz) for lab, sz in counts.items() if lab != -1), key=lambda x: x[1], reverse=True)[:15]
+print("\nTop 15 clusters (label, size):")
+for lab, sz in top:
+    print(" ", lab, sz)
+
+# sample members for top 6 clusters
+by_label = defaultdict(list)
+for i, e in enumerate(ents):
+    lab = labels[i]
+    name = e.get("entity_name") or e.get("entity_description") or e.get("example_member_names", [None])[0] or f"En_{i}"
+    by_label[lab].append(name)
+
+print("\nExamples for top clusters:")
+for lab, sz in top[:6]:
+    print(f"\nCluster {lab} size={sz}:")
+    for v in by_label[lab][:8]:
+        print("  -", v)
+
+# small clusters count
+small_count = sum(1 for lab, sz in counts.items() if lab != -1 and sz <= 2)
+print(f"\nClusters with size <= 2: {small_count}")
+
+
+#endregion#? Diagnostics for entities_clustered (v2)
+#?######################### End ##########################
+
+
+
+
+#?######################### Start ##########################
+#region:#?   RE RUN: Entity Resolution - V100 -          V2
+
+# orchestrator_with_chunk_texts_v100_v2.py
+"""
+Entity resolution orchestrator v100 (V2 defaults).
+
+- Defaults read from 2nd_run/entities_clustered_second_run.jsonl
+- Ensures chunk text is loaded and attached to every entity where possible
+- LOCAL_HDBSCAN_MIN_CLUSTER_SIZE is set to 2 (for second run)
+- Writes final "full" resolved output with all original fields needed for the next step
+- Has tqdm progress bars and safe token checks
+
+Usage (notebook):
+    from orchestrator_with_chunk_texts_v100_v2 import orchestrate
+    orchestrate()
+
+Usage (CLI):
+    python orchestrator_with_chunk_texts_v100_v2.py --entities_in 2nd_run/entities_clustered_second_run.jsonl
+"""
+
+import os
+import json
+import uuid
+import time
+import math
+from pathlib import Path
+from collections import defaultdict
+from typing import List, Dict
+
+import numpy as np
+from tqdm import tqdm
+
+# transformers embedder
+import torch
+from transformers import AutoTokenizer, AutoModel
+from sklearn.preprocessing import normalize
+
+# clustering
+try:
+    import hdbscan
+except Exception:
+    raise RuntimeError("hdbscan is required. Install with `pip install hdbscan`")
+try:
+    import umap
+    UMAP_AVAILABLE = True
+except Exception:
+    UMAP_AVAILABLE = False
+
+# OpenAI client loader
+from openai import OpenAI
+
+def _load_openai_key(envvar: str = "OPENAI_API_KEY", fallback_path: str = "/home/mabolhas/MyReposOnSOL/SGCE-KG/.env") -> str:
+    key = os.getenv(envvar, fallback_path)
+    if isinstance(key, str) and Path(key).exists():
+        try:
+            txt = Path(key).read_text(encoding="utf-8").strip()
+            if txt:
+                return txt
+        except Exception:
+            pass
+    return key
+
+OPENAI_KEY = _load_openai_key()
+if not OPENAI_KEY or not isinstance(OPENAI_KEY, str) or len(OPENAI_KEY) < 10:
+    print("⚠️  OPENAI API key not found or seems invalid. Set OPENAI_API_KEY env or place key in fallback file path.")
+client = OpenAI(api_key=OPENAI_KEY)
+
+# ---------------- Paths & config (V2 defaults) ----------------
+CLUSTERED_IN = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities/Ent_2nd/Ent_Clustering_2nd/entities_clustered_second_run.jsonl")   # default second-run clustered input
+CHUNKS_JSONL = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Chunks/chunks_sentence.jsonl")
+
+OUT_DIR = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities/Ent_2nd/Ent_Resolved_2nd")
+OUT_DIR.mkdir(parents=True, exist_ok=True)
+
+ENT_OUT = OUT_DIR / "entities_resolved_v2.jsonl"
+CANON_OUT = OUT_DIR / "canonical_entities_v2.jsonl"
+LOG_OUT = OUT_DIR / "resolution_log_v2.jsonl"
+FULL_OUT = OUT_DIR / "entities_resolved_full_v2.jsonl"   # final output containing all fields needed downstream
+
+# Embedding & weights
+WEIGHTS = {"name": 0.45, "desc": 0.25, "ctx": 0.25, "type": 0.05}
+EMBED_MODEL = "BAAI/bge-large-en-v1.5"
+BATCH_SIZE = 32
+DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
+
+# local HDBSCAN - adjusted for second run (you asked)
+LOCAL_HDBSCAN_MIN_CLUSTER_SIZE = 2
+LOCAL_HDBSCAN_MIN_SAMPLES = 1
+LOCAL_HDBSCAN_METRIC = "euclidean"
+
+# UMAP options
+LOCAL_USE_UMAP = False
+UMAP_DIMS = 32
+UMAP_NEIGHBORS = 10
+UMAP_MIN_DIST = 0.0
+UMAP_MIN_SAMPLES_TO_RUN = 25  # only run UMAP when local cluster size >= this
+
+# LLM / prompt
+MODEL = "gpt-4o"
+TEMPERATURE = 0.0
+MAX_TOKENS = 800
+
+# orchestration thresholds
+MAX_CLUSTER_PROMPT = 15
+MAX_MEMBERS_PER_PROMPT = 6   # you wanted smaller prompts; set to 6
+TRUNC_CHUNK_CHARS = 400
+INCLUDE_PREV_CHUNKS = 0
+
+# token safety (rough)
+PROMPT_TOKEN_LIMIT = 2200  # char/4 ~ tokens threshold
+
+# ---------------- Utility functions ----------------
+def load_chunks(chunks_jsonl_path: Path) -> List[Dict]:
+    assert chunks_jsonl_path.exists(), f"Chunks file not found: {chunks_jsonl_path}"
+    chunks = []
+    with open(chunks_jsonl_path, "r", encoding="utf-8") as fh:
+        for line in fh:
+            if line.strip():
+                chunks.append(json.loads(line))
+    return chunks
+
+def safe_text(e: Dict, key: str) -> str:
+    v = e.get(key)
+    if v is None:
+        return ""
+    if isinstance(v, (list, dict)):
+        return json.dumps(v, ensure_ascii=False)
+    return str(v)
+
+# ---------------- HF embedder ----------------
+def mean_pool(token_embeddings: torch.Tensor, attention_mask: torch.Tensor):
+    input_mask_expanded = attention_mask.unsqueeze(-1).expand(token_embeddings.size()).float()
+    sum_embeddings = torch.sum(token_embeddings * input_mask_expanded, 1)
+    sum_mask = torch.clamp(input_mask_expanded.sum(1), min=1e-9)
+    return sum_embeddings / sum_mask
+
+class HFEmbedder:
+    def __init__(self, model_name: str = EMBED_MODEL, device: str = DEVICE):
+        print(f"[Embedder] loading model {model_name} on {device} ...")
+        self.device = device
+        self.tokenizer = AutoTokenizer.from_pretrained(model_name, use_fast=True)
+        self.model = AutoModel.from_pretrained(model_name)
+        self.model.to(device)
+        self.model.eval()
+        for p in self.model.parameters():
+            p.requires_grad = False
+
+    @torch.no_grad()
+    def encode_batch(self, texts: List[str], batch_size: int = BATCH_SIZE) -> np.ndarray:
+        if len(texts) == 0:
+            return np.zeros((0, self.model.config.hidden_size if hasattr(self.model.config, 'hidden_size') else 1024))
+        embs = []
+        for i in range(0, len(texts), batch_size):
+            batch = texts[i:i+batch_size]
+            enc = self.tokenizer(batch, padding=True, truncation=True, return_tensors="pt", max_length=1024)
+            input_ids = enc["input_ids"].to(self.device)
+            attention_mask = enc["attention_mask"].to(self.device)
+            out = self.model(input_ids=input_ids, attention_mask=attention_mask, return_dict=True)
+            token_embeds = out.last_hidden_state
+            pooled = mean_pool(token_embeds, attention_mask)
+            pooled = pooled.cpu().numpy()
+            embs.append(pooled)
+        embs = np.vstack(embs)
+        embs = normalize(embs, axis=1)
+        return embs
+
+def build_field_texts(entities: List[Dict]):
+    names, descs, ctxs, types = [], [], [], []
+    for e in entities:
+        names.append(safe_text(e, "entity_name") or safe_text(e, "entity_name_original") or "")
+        descs.append(safe_text(e, "entity_description") or "")
+        ctxs.append(safe_text(e, "text_span") or safe_text(e, "context_phrase") or safe_text(e, "used_context_excerpt") or "")
+        types.append(safe_text(e, "entity_type_hint") or safe_text(e, "entity_type") or "")
+    return names, descs, ctxs, types
+
+def compute_combined_embeddings(embedder: HFEmbedder, entities: List[Dict], weights=WEIGHTS) -> np.ndarray:
+    names, descs, ctxs, types = build_field_texts(entities)
+    emb_name = embedder.encode_batch(names) if any(t.strip() for t in names) else None
+    emb_desc = embedder.encode_batch(descs) if any(t.strip() for t in descs) else None
+    emb_ctx  = embedder.encode_batch(ctxs)  if any(t.strip() for t in ctxs) else None
+    emb_type = embedder.encode_batch(types) if any(t.strip() for t in types) else None
+
+    D = None
+    for arr in (emb_name, emb_desc, emb_ctx, emb_type):
+        if arr is not None and arr.shape[0] > 0:
+            D = arr.shape[1]
+            break
+    if D is None:
+        raise ValueError("No textual field produced embeddings; check your entity fields")
+
+    def _ensure(arr):
+        if arr is None:
+            return np.zeros((len(entities), D))
+        if arr.shape[1] != D:
+            raise ValueError("embedding dim mismatch")
+        return arr
+
+    emb_name = _ensure(emb_name)
+    emb_desc = _ensure(emb_desc)
+    emb_ctx  = _ensure(emb_ctx)
+    emb_type = _ensure(emb_type)
+
+    w_name = weights.get("name", 0.0)
+    w_desc = weights.get("desc", 0.0)
+    w_ctx = weights.get("ctx", 0.0)
+    w_type = weights.get("type", 0.0)
+    Wsum = w_name + w_desc + w_ctx + w_type
+    if Wsum <= 0:
+        raise ValueError("invalid weights")
+    w_name /= Wsum; w_desc /= Wsum; w_ctx /= Wsum; w_type /= Wsum
+
+    combined = (w_name * emb_name) + (w_desc * emb_desc) + (w_ctx * emb_ctx) + (w_type * emb_type)
+    combined = normalize(combined, axis=1)
+    return combined
+
+# ---------------- robust local_subcluster ----------------
+def local_subcluster(cluster_entities: List[Dict],
+                     entity_id_to_index: Dict[str, int],
+                     all_embeddings: np.ndarray,
+                     min_cluster_size: int = LOCAL_HDBSCAN_MIN_CLUSTER_SIZE,
+                     min_samples: int = LOCAL_HDBSCAN_MIN_SAMPLES,
+                     use_umap: bool = LOCAL_USE_UMAP,
+                     umap_dims: int = UMAP_DIMS):
+    from collections import defaultdict
+    from sklearn.preprocessing import normalize as _normalize
+
+    idxs = [entity_id_to_index[e["id"]] for e in cluster_entities]
+    X = all_embeddings[idxs]
+    X = _normalize(X, axis=1)
+    n = X.shape[0]
+
+    if n <= 1:
+        return {0: list(cluster_entities)} if n == 1 else {-1: []}
+
+    min_cluster_size = min(min_cluster_size, max(2, n))
+    if min_samples is None:
+        min_samples = max(1, int(min_cluster_size * 0.1))
+    else:
+        min_samples = min(min_samples, max(1, n - 1))
+
+    X_sub = X
+    if use_umap and UMAP_AVAILABLE and n >= UMAP_MIN_SAMPLES_TO_RUN:
+        n_components = min(umap_dims, max(2, n - 4))
+        try:
+            reducer = umap.UMAP(n_components=n_components,
+                                n_neighbors=min(UMAP_NEIGHBORS, max(2, n - 1)),
+                                min_dist=UMAP_MIN_DIST,
+                                metric='cosine',
+                                random_state=42)
+            X_sub = reducer.fit_transform(X)
+        except Exception as e:
+            print(f"[local_subcluster] UMAP failed for n={n}, n_components={n_components} -> fallback without UMAP. Err: {e}")
+            X_sub = X
+    else:
+        if use_umap and UMAP_AVAILABLE and n < UMAP_MIN_SAMPLES_TO_RUN:
+            print(f"[local_subcluster] skipping UMAP for n={n} (threshold {UMAP_MIN_SAMPLES_TO_RUN})")
+
+    try:
+        clusterer = hdbscan.HDBSCAN(min_cluster_size=min_cluster_size,
+                                    min_samples=min_samples,
+                                    metric=LOCAL_HDBSCAN_METRIC,
+                                    cluster_selection_method='eom')
+        labels = clusterer.fit_predict(X_sub)
+    except Exception as e:
+        print(f"[local_subcluster] HDBSCAN failed for n={n} -> fallback single cluster. Err: {e}")
+        return {0: list(cluster_entities)}
+
+    groups = defaultdict(list)
+    for ent, lab in zip(cluster_entities, labels):
+        groups[int(lab)].append(ent)
+    return groups
+
+# ------------------ LLM helpers ----------------
+def call_llm_with_prompt(prompt: str, model: str = MODEL, temperature: float = TEMPERATURE, max_tokens: int = MAX_TOKENS) -> str:
+    try:
+        response = client.chat.completions.create(
+            model=model,
+            messages=[{"role":"user", "content": prompt}],
+            temperature=temperature,
+            max_tokens=max_tokens
+        )
+        txt = response.choices[0].message.content
+        return txt
+    except Exception as e:
+        print("LLM call error:", e)
+        return ""
+
+def extract_json_array(text: str):
+    if not text:
+        return None
+    text = text.strip()
+    start = text.find('[')
+    end = text.rfind(']')
+    if start != -1 and end != -1 and end > start:
+        candidate = text[start:end+1]
+        try:
+            return json.loads(candidate)
+        except Exception:
+            pass
+    try:
+        return json.loads(text)
+    except Exception:
+        return None
+
+# ---------------- Prompt building ----------------
+PROMPT_TEMPLATE = """You are a careful knowledge-graph resolver.
+Given the following small cohesive group of candidate entity mentions, decide which ones to MERGE into a single canonical entity, which to MODIFY, and which to KEEP.
+
+Return ONLY a JSON ARRAY. Each element must be one of:
+- MergeEntities: {{ "action":"MergeEntities", "entity_ids":[...], "canonical_name":"...", "canonical_description":"...", "canonical_type":"...", "rationale":"..." }}
+- ModifyEntity: {{ "action":"ModifyEntity", "entity_id":"...", "new_name":"...", "new_description":"...", "new_type_hint":"...", "rationale":"..." }}
+- KeepEntity: {{ "action":"KeepEntity", "entity_id":"...", "rationale":"..." }}
+
+Rules:
+- Use ONLY the provided information (name/desc/type_hint/confidence/text_span/chunk_text).
+- Be conservative: if unsure, KEEP rather than MERGE.
+- Provide short rationale for each action (1-2 sentences).
+
+Group members (id | name | type_hint | confidence | desc | text_span | chunk_text [truncated]):
+{members_json}
+
+Return JSON array only (no commentary).
+"""
+
+def build_member_with_chunk(m: Dict, chunks_index: Dict[str, Dict]) -> Dict:
+    chunk_text = ""
+    chunk_id = m.get("chunk_id")
+    if chunk_id:
+        ch = chunks_index.get(chunk_id)
+        if ch:
+            ct = ch.get("text", "")
+            if INCLUDE_PREV_CHUNKS and isinstance(ch.get("chunk_index_in_section", None), int):
+                # optional: include previous chunk(s) - omitted for cost
+                pass
+            chunk_text = " ".join(ct.split())
+            if len(chunk_text) > TRUNC_CHUNK_CHARS:
+                chunk_text = chunk_text[:TRUNC_CHUNK_CHARS].rsplit(" ", 1)[0] + "..."
+    return {
+        "id": m.get("id"),
+        "name": m.get("entity_name"),
+        "type_hint": m.get("entity_type_hint"),
+        "confidence": m.get("confidence_score"),
+        "desc": m.get("entity_description"),
+        "text_span": m.get("text_span"),
+        "chunk_text": chunk_text
+    }
+
+# ------------------ apply actions ----------------
+def apply_actions(members: List[Dict], actions: List[Dict], entities_by_id: Dict[str, Dict],
+                  canonical_store: List[Dict], log_entries: List[Dict]):
+    ts = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+    for act in (actions or []):
+        typ = act.get("action")
+        if typ == "MergeEntities":
+            ids = act.get("entity_ids", [])
+            canonical_name = act.get("canonical_name")
+            canonical_desc = act.get("canonical_description", "")
+            canonical_type = act.get("canonical_type", "")
+            rationale = act.get("rationale", "")
+            can_id = "Can_" + uuid.uuid4().hex[:8]
+            canonical = {
+                "canonical_id": can_id,
+                "canonical_name": canonical_name,
+                "canonical_description": canonical_desc,
+                "canonical_type": canonical_type,
+                "source": "LLM_resolution_v100_v2",
+                "rationale": rationale,
+                "timestamp": ts
+            }
+            canonical_store.append(canonical)
+            for eid in ids:
+                ent = entities_by_id.get(eid)
+                if ent:
+                    ent["canonical_id"] = can_id
+                    ent["resolved_action"] = "merged"
+                    ent["resolution_rationale"] = rationale
+                    ent["resolved_time"] = ts
+            log_entries.append({"time": ts, "action": "merge", "canonical_id": can_id, "merged_ids": ids, "rationale": rationale})
+        elif typ == "ModifyEntity":
+            eid = act.get("entity_id")
+            ent = entities_by_id.get(eid)
+            if ent:
+                new_name = act.get("new_name")
+                new_desc = act.get("new_description")
+                new_type = act.get("new_type_hint")
+                rationale = act.get("rationale","")
+                if new_name:
+                    ent["entity_name"] = new_name
+                if new_desc:
+                    ent["entity_description"] = new_desc
+                if new_type:
+                    ent["entity_type_hint"] = new_type
+                ent["resolved_action"] = "modified"
+                ent["resolution_rationale"] = rationale
+                ent["resolved_time"] = ts
+                log_entries.append({"time": ts, "action": "modify", "entity_id": eid, "rationale": rationale})
+        elif typ == "KeepEntity":
+            eid = act.get("entity_id")
+            ent = entities_by_id.get(eid)
+            rationale = act.get("rationale","")
+            if ent:
+                ent["resolved_action"] = "kept"
+                ent["resolution_rationale"] = rationale
+                ent["resolved_time"] = ts
+                log_entries.append({"time": ts, "action": "keep", "entity_id": eid, "rationale": rationale})
+        else:
+            log_entries.append({"time": ts, "action": "unknown", "payload": act})
+
+# ------------------ Orchestration main ----------------
+def orchestrate(entities_in: Path = CLUSTERED_IN, chunks_path: Path = CHUNKS_JSONL,
+                ent_out: Path = ENT_OUT, canon_out: Path = CANON_OUT,
+                log_out: Path = LOG_OUT, full_out: Path = FULL_OUT,
+                use_umap: bool = LOCAL_USE_UMAP):
+    print("Loading clustered entities from:", entities_in)
+    entities = []
+    with open(entities_in, "r", encoding="utf-8") as fh:
+        for line in fh:
+            if line.strip():
+                entities.append(json.loads(line))
+    print("Loaded entities:", len(entities))
+
+    print("Loading chunks from:", chunks_path)
+    chunks = load_chunks(chunks_path) if chunks_path.exists() else []
+    print("Loaded chunks:", len(chunks))
+    chunks_index = {c.get("id"): c for c in chunks}
+
+    # attach chunk_text for completeness (so final output has it)
+    for e in entities:
+        cid = e.get("chunk_id")
+        if cid and cid in chunks_index:
+            e["_chunk_text_truncated"] = (" ".join(chunks_index[cid].get("text","").split()))[:TRUNC_CHUNK_CHARS]
+        else:
+            e["_chunk_text_truncated"] = ""
+
+    entities_by_id = {e["id"]: e for e in entities}
+    entity_id_to_index = {e["id"]: i for i, e in enumerate(entities)}
+
+    embedder = HFEmbedder(model_name=EMBED_MODEL, device=DEVICE)
+    combined_embeddings = compute_combined_embeddings(embedder, entities, weights=WEIGHTS)
+    print("Combined embeddings shape:", combined_embeddings.shape)
+
+    by_cluster = defaultdict(list)
+    for e in entities:
+        by_cluster[e.get("_cluster_id")].append(e)
+
+    canonical_store = []
+    log_entries = []
+
+    cluster_ids = sorted([k for k in by_cluster.keys() if k != -1])
+    noise_count = len(by_cluster.get(-1, []))
+    print("Clusters to resolve (excluding noise):", len(cluster_ids), "noise_count:", noise_count)
+
+    # iterate clusters with tqdm
+    with tqdm(cluster_ids, desc="Clusters", unit="cluster") as pbar_clusters:
+        for cid in pbar_clusters:
+            members = by_cluster[cid]
+            size = len(members)
+            pbar_clusters.set_postfix(cluster=cid, size=size)
+
+            if size <= MAX_CLUSTER_PROMPT:
+                n_prompts = math.ceil(size / MAX_MEMBERS_PER_PROMPT)
+                with tqdm(range(n_prompts), desc=f"Cluster {cid} prompts", leave=False, unit="prompt") as pbar_prompts:
+                    for i in pbar_prompts:
+                        s = i * MAX_MEMBERS_PER_PROMPT
+                        chunk = members[s:s+MAX_MEMBERS_PER_PROMPT]
+                        payload = [build_member_with_chunk(m, chunks_index) for m in chunk]
+                        members_json = json.dumps(payload, ensure_ascii=False, indent=2)
+                        prompt = PROMPT_TEMPLATE.format(members_json=members_json)
+                        est_tokens = max(1, int(len(prompt) / 4))
+                        pbar_prompts.set_postfix(est_tokens=est_tokens, chunk_size=len(chunk))
+                        if est_tokens > PROMPT_TOKEN_LIMIT:
+                            for m in chunk:
+                                log_entries.append({"time": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+                                                    "action":"skip_large_prompt_keep", "entity_id": m["id"],
+                                                    "reason": f"est_tokens {est_tokens} > limit {PROMPT_TOKEN_LIMIT}"})
+                                m["resolved_action"] = "kept_skipped_prompt"
+                                m["resolution_rationale"] = f"Prompt too large (est_tokens={est_tokens})"
+                            continue
+                        llm_out = call_llm_with_prompt(prompt)
+                        actions = extract_json_array(llm_out)
+                        if actions is None:
+                            actions = [{"action":"KeepEntity","entity_id": m["id"], "rationale":"LLM parse failed; conservatively kept"} for m in chunk]
+                        apply_actions(chunk, actions, entities_by_id, canonical_store, log_entries)
+            else:
+                # local sub-cluster
+                subgroups = local_subcluster(members, entity_id_to_index, combined_embeddings,
+                                            min_cluster_size=LOCAL_HDBSCAN_MIN_CLUSTER_SIZE,
+                                            min_samples=LOCAL_HDBSCAN_MIN_SAMPLES,
+                                            use_umap=use_umap, umap_dims=UMAP_DIMS)
+                sub_items = sorted(subgroups.items(), key=lambda x: -len(x[1]))
+                with tqdm(sub_items, desc=f"Cluster {cid} subclusters", leave=False, unit="sub") as pbar_subs:
+                    for sublab, submembers in pbar_subs:
+                        subsize = len(submembers)
+                        pbar_subs.set_postfix(sublab=sublab, subsize=subsize)
+                        if sublab == -1:
+                            for m in submembers:
+                                m["resolved_action"] = "kept_noise_local"
+                                m["resolution_rationale"] = "Local-subcluster noise preserved"
+                                log_entries.append({"time": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+                                                    "action":"keep_noise_local", "entity_id": m["id"], "cluster": cid})
+                            continue
+                        n_prompts = math.ceil(subsize / MAX_MEMBERS_PER_PROMPT)
+                        with tqdm(range(n_prompts), desc=f"Sub {sublab} prompts", leave=False, unit="prompt") as pbar_sub_prompts:
+                            for i in pbar_sub_prompts:
+                                s = i * MAX_MEMBERS_PER_PROMPT
+                                chunk = submembers[s:s+MAX_MEMBERS_PER_PROMPT]
+                                payload = [build_member_with_chunk(m, chunks_index) for m in chunk]
+                                members_json = json.dumps(payload, ensure_ascii=False, indent=2)
+                                prompt = PROMPT_TEMPLATE.format(members_json=members_json)
+                                est_tokens = max(1, int(len(prompt) / 4))
+                                pbar_sub_prompts.set_postfix(est_tokens=est_tokens, chunk_size=len(chunk))
+                                if est_tokens > PROMPT_TOKEN_LIMIT:
+                                    for m in chunk:
+                                        log_entries.append({"time": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+                                                            "action":"skip_large_prompt_keep", "entity_id": m["id"],
+                                                            "reason": f"est_tokens {est_tokens} > limit {PROMPT_TOKEN_LIMIT}"})
+                                        m["resolved_action"] = "kept_skipped_prompt"
+                                        m["resolution_rationale"] = f"Prompt too large (est_tokens={est_tokens})"
+                                    continue
+                                llm_out = call_llm_with_prompt(prompt)
+                                actions = extract_json_array(llm_out)
+                                if actions is None:
+                                    actions = [{"action":"KeepEntity","entity_id": m["id"], "rationale":"LLM parse failed; conservatively kept"} for m in chunk]
+                                apply_actions(chunk, actions, entities_by_id, canonical_store, log_entries)
+
+    # global noise handling
+    for nent in by_cluster.get(-1, []):
+        ent = entities_by_id[nent["id"]]
+        ent["resolved_action"] = "kept_noise_global"
+        ent["resolution_rationale"] = "Global noise preserved for manual review"
+        log_entries.append({"time": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()), "action":"keep_noise_global", "entity_id": ent["id"]})
+
+    # Final: ensure full output contains everything we might need downstream:
+    # include original keys plus added resolution fields and truncated chunk text
+    final_entities = list(entities_by_id.values())
+
+    # Write standard outputs
+    with open(ent_out, "w", encoding="utf-8") as fh:
+        for e in final_entities:
+            fh.write(json.dumps(e, ensure_ascii=False) + "\n")
+    with open(canon_out, "w", encoding="utf-8") as fh:
+        for c in canonical_store:
+            fh.write(json.dumps(c, ensure_ascii=False) + "\n")
+    with open(log_out, "a", encoding="utf-8") as fh:
+        for lg in log_entries:
+            fh.write(json.dumps(lg, ensure_ascii=False) + "\n")
+
+    # Write FULL output used by next pipeline stage:
+    # For each entity, include: id, entity_name, entity_description, entity_type_hint, confidence_score,
+    # chunk_id, chunk_text_truncated, ref_index, chunk_index_in_section, ref_title, original_raw_llm_if_any, canonical_id, resolved_action
+    with open(full_out, "w", encoding="utf-8") as fh:
+        for e in final_entities:
+            full = {
+                "id": e.get("id"),
+                "entity_name": e.get("entity_name"),
+                "entity_description": e.get("entity_description"),
+                "entity_type_hint": e.get("entity_type_hint"),
+                "confidence_score": e.get("confidence_score"),
+                "chunk_id": e.get("chunk_id"),
+                "chunk_text_truncated": e.get("_chunk_text_truncated", ""),
+                "ref_index": e.get("ref_index"),
+                "chunk_index_in_section": e.get("chunk_index_in_section"),
+                "ref_title": e.get("ref_title"),
+                "text_span": e.get("text_span"),
+                "used_context_excerpt": e.get("used_context_excerpt"),
+                "canonical_id": e.get("canonical_id"),
+                "resolved_action": e.get("resolved_action"),
+                "resolution_rationale": e.get("resolution_rationale"),
+                "_raw_llm": e.get("_raw_llm")
+            }
+            fh.write(json.dumps(full, ensure_ascii=False) + "\n")
+
+    print("\nResolution finished. Wrote:", ent_out, canon_out, log_out, full_out)
+
+# ------------------ Notebook/CLI entry ----------------
+if __name__ == "__main__":
+    import sys
+    import argparse
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--entities_in", type=str, default=str(CLUSTERED_IN))
+    parser.add_argument("--chunks", type=str, default=str(CHUNKS_JSONL))
+    parser.add_argument("--out_entities", type=str, default=str(ENT_OUT))
+    parser.add_argument("--canon_out", type=str, default=str(CANON_OUT))
+    parser.add_argument("--log_out", type=str, default=str(LOG_OUT))
+    parser.add_argument("--full_out", type=str, default=str(FULL_OUT))
+    parser.add_argument("--use_umap", action="store_true", help="Enable local UMAP inside sub-clustering")
+    parser.add_argument("--prompt_token_limit", type=int, default=PROMPT_TOKEN_LIMIT)
+    parser.add_argument("--max_members_per_prompt", type=int, default=MAX_MEMBERS_PER_PROMPT)
+    args = parser.parse_args()
+
+    CLUSTERED_IN = Path(args.entities_in)
+    CHUNKS_JSONL = Path(args.chunks)
+    ENT_OUT = Path(args.out_entities)
+    CANON_OUT = Path(args.canon_out)
+    LOG_OUT = Path(args.log_out)
+    FULL_OUT = Path(args.full_out)
+    PROMPT_TOKEN_LIMIT = args.prompt_token_limit
+    MAX_MEMBERS_PER_PROMPT = args.max_members_per_prompt
+    if args.use_umap:
+        LOCAL_USE_UMAP = True
+
+    orchestrate(entities_in=CLUSTERED_IN, chunks_path=CHUNKS_JSONL,
+                ent_out=ENT_OUT, canon_out=CANON_OUT, log_out=LOG_OUT, full_out=FULL_OUT,
+                use_umap=LOCAL_USE_UMAP)
+
+
+
+#endregion#? RE RUN: Entity Resolution - V100 -          V2
+#?#########################  End  ##########################
+
+
+
+
+
+
+
+
+#?######################### Start ##########################
+#region:#?   Analyze_entity_resolution        -    V2
+
+#!/usr/bin/env python3
+"""
+analyze_entity_resolution_v2.py
+
+Analysis for V2 entity-resolution outputs. Place this script next to your repo root
+and run. It reads resolved/clustered/canonical files from 2nd_run/ by default and
+writes a comprehensive analysis into 2nd_run/entResAnalysis/.
+
+Outputs (examples):
+ - merged_groups.json        : canonical_id -> list of full member entity dicts
+ - merged_groups.csv         : flat CSV with one row per merged member
+ - canonical_summary.csv     : per-canonical metadata and examples
+ - actions_summary.json      : counts per resolved_action
+ - type_distribution.csv     : distribution of entity_type_hint for merged vs unmerged
+ - merges_hist.png           : histogram of canonical group sizes
+ - actions_pie.png           : pie chart of top actions
+ - top50_canonical.csv       : top 50 canonical groups
+ - canonical_to_members_sample.json : simple mapping for quick inspection
+ - unmerged_entities.jsonl   : entities not assigned to any canonical (kept singletons)
+ - raw_to_v2_comparison.csv  : for each original raw entity (if provided) whether it was merged and where
+ - per_cluster_stats.csv     : stats grouped by coarse _cluster_id (if present)
+"""
+
+import json
+from pathlib import Path
+from collections import defaultdict, Counter
+import csv
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from typing import List, Dict, Any
+
+# ---------------- Config: file locations (update if needed) ----------------
+BASE = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities/Ent_2nd/Ent_Resolved_2nd")
+BASE.mkdir(parents=True, exist_ok=True)
+
+# Expected inputs (V2)
+ENT_RES_FILE = BASE / "entities_resolved_v2.jsonl"        # output of orchestrator V2 (full entities with canonical_id etc.)
+CANON_FILE = BASE / "canonical_entities_v2.jsonl"         # canonical records created by orchestrator V2
+CLUSTERED_FILE = BASE / "entities_clustered_second_run.jsonl"  # clustered input used for orchestrator (optional but useful)
+RAW_FILE = BASE / "entities_raw_second_run.jsonl"         # original raw entities from 2nd run (optional; helpful for comparisons)
+
+# Output analysis folder
+OUT_DIR = BASE / "/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities/Ent_2nd/Ent_2nd_Analysis"
+OUT_DIR.mkdir(parents=True, exist_ok=True)
+
+# ---------------- Helpers ----------------
+def load_jsonl(path: Path) -> List[Dict[str, Any]]:
+    data = []
+    if not path.exists():
+        return data
+    with open(path, "r", encoding="utf-8") as fh:
+        for ln in fh:
+            ln = ln.strip()
+            if not ln:
+                continue
+            try:
+                data.append(json.loads(ln))
+            except Exception as e:
+                print(f"[warn] skipping jsonl line in {path}: {e}")
+    return data
+
+def save_json(obj, path: Path):
+    with open(path, "w", encoding="utf-8") as fh:
+        json.dump(obj, fh, ensure_ascii=False, indent=2)
+
+def write_csv_rows(path: Path, fieldnames: List[str], rows: List[Dict[str, Any]]):
+    with open(path, "w", newline="", encoding="utf-8") as fh:
+        writer = csv.DictWriter(fh, fieldnames=fieldnames)
+        writer.writeheader()
+        for r in rows:
+            writer.writerow(r)
+
+# ---------------- Load inputs ----------------
+print("Loading inputs...")
+entities_res = load_jsonl(ENT_RES_FILE)
+canonals = load_jsonl(CANON_FILE)
+clustered = load_jsonl(CLUSTERED_FILE)
+raw_entities = load_jsonl(RAW_FILE)
+
+print(f"Loaded: resolved={len(entities_res)} canonical={len(canonals)} clustered={len(clustered)} raw={len(raw_entities)}")
+
+# Build dicts
+entities_by_id = {e.get("id"): e for e in entities_res}
+canon_by_id = {c.get("canonical_id"): c for c in canonals}
+
+# ---------------- Build merged groups & unmerged ----------------
+merged = defaultdict(list)   # canonical_id -> list of member entities
+unmerged = []                # entities without canonical_id (singletons kept)
+
+for e in entities_res:
+    cid = e.get("canonical_id")
+    if cid:
+        merged[cid].append(e)
+    else:
+        unmerged.append(e)
+
+# Save merged_groups.json (full objects)
+save_json({k: v for k, v in merged.items()}, OUT_DIR / "merged_groups.json")
+
+# ---------------- Flatten merged groups to CSV ----------------
+csv_fields = [
+    "canonical_id", "canonical_name",
+    "member_id", "member_name", "member_desc", "member_type",
+    "confidence_score", "_cluster_id", "resolved_action", "resolution_rationale", "source_ref"
+]
+rows = []
+for cid, members in merged.items():
+    canon_name = canon_by_id.get(cid, {}).get("canonical_name", "")
+    for m in members:
+        rows.append({
+            "canonical_id": cid,
+            "canonical_name": canon_name,
+            "member_id": m.get("id"),
+            "member_name": m.get("entity_name"),
+            "member_desc": m.get("entity_description"),
+            "member_type": m.get("entity_type_hint"),
+            "confidence_score": m.get("confidence_score"),
+            "_cluster_id": m.get("_cluster_id"),
+            "resolved_action": m.get("resolved_action"),
+            "resolution_rationale": m.get("resolution_rationale",""),
+            "source_ref": m.get("chunk_id") or m.get("ref_index") or ""
+        })
+
+write_csv_rows(OUT_DIR / "merged_groups.csv", csv_fields, rows)
+
+# ---------------- canonical_summary.csv ----------------
+canon_rows = []
+for cid, members in merged.items():
+    cmeta = canon_by_id.get(cid, {})
+    example_names = " | ".join([m.get("entity_name","") for m in members[:6]])
+    canon_rows.append({
+        "canonical_id": cid,
+        "canonical_name": cmeta.get("canonical_name",""),
+        "canonical_type": cmeta.get("canonical_type",""),
+        "n_members": len(members),
+        "example_members": example_names,
+        "rationale": cmeta.get("rationale","")
+    })
+canon_df = pd.DataFrame(canon_rows).sort_values("n_members", ascending=False)
+canon_df.to_csv(OUT_DIR / "canonical_summary.csv", index=False)
+
+# ---------------- actions_summary.json ----------------
+action_counts = Counter([e.get("resolved_action","<none>") for e in entities_res])
+save_json(dict(action_counts), OUT_DIR / "actions_summary.json")
+
+# ---------------- type distribution (merged vs unmerged) ----------------
+def type_counter(list_of_entities: List[Dict[str,Any]]):
+    c = Counter()
+    for e in list_of_entities:
+        t = e.get("entity_type_hint") or "<unknown>"
+        c[t] += 1
+    return c
+
+merged_types = type_counter([m for members in merged.values() for m in members])
+unmerged_types = type_counter(unmerged)
+all_types = sorted(set(list(merged_types.keys()) + list(unmerged_types.keys())))
+
+with open(OUT_DIR / "type_distribution.csv", "w", newline="", encoding="utf-8") as fh:
+    w = csv.writer(fh)
+    w.writerow(["type", "merged_count", "unmerged_count"])
+    for t in all_types:
+        w.writerow([t, merged_types.get(t,0), unmerged_types.get(t,0)])
+
+# ---------------- Quick stats & charts ----------------
+# 1) Histogram: canonical group sizes
+sizes = [len(members) for members in merged.values()]
+if sizes:
+    plt.figure(figsize=(6,4))
+    plt.hist(sizes, bins=range(1, max(sizes)+2), edgecolor='black', align='left')
+    plt.title("Distribution of canonical group sizes (# members)")
+    plt.xlabel("members per canonical entity")
+    plt.ylabel("count")
+    plt.tight_layout()
+    plt.savefig(OUT_DIR / "merges_hist.png", dpi=150)
+    plt.close()
+
+# 2) Pie: top actions
+actions_df = pd.DataFrame(list(action_counts.items()), columns=["action","count"]).sort_values("count", ascending=False)
+plt.figure(figsize=(6,6))
+top_actions = actions_df.head(8)
+plt.pie(top_actions["count"], labels=top_actions["action"], autopct="%1.1f%%", startangle=140)
+plt.title("Top resolved_action distribution")
+plt.tight_layout()
+plt.savefig(OUT_DIR / "actions_pie.png", dpi=150)
+plt.close()
+
+# 3) Top canonical groups CSV (top 50)
+canon_df.head(50).to_csv(OUT_DIR / "top50_canonical.csv", index=False)
+
+# 4) Simple mapping sample
+simple_map = {cid: [m.get("entity_name") for m in members[:20]] for cid,members in merged.items()}
+save_json(simple_map, OUT_DIR / "canonical_to_members_sample.json")
+
+# 5) Save unmerged entities for manual review
+with open(OUT_DIR / "unmerged_entities.jsonl", "w", encoding="utf-8") as fh:
+    for e in unmerged:
+        fh.write(json.dumps(e, ensure_ascii=False) + "\n")
+
+# ---------------- Per-cluster summary (if _cluster_id exists) ----------------
+per_cluster = defaultdict(list)
+for e in entities_res:
+    lab = e.get("_cluster_id", None)
+    per_cluster[lab].append(e)
+per_cluster_rows = []
+for lab, members in sorted(per_cluster.items(), key=lambda x: (x[0] is None, x[0])):
+    n_total = len(members)
+    n_merged = sum(1 for m in members if m.get("canonical_id"))
+    n_kept = sum(1 for m in members if not m.get("canonical_id"))
+    action_counts_cluster = Counter([m.get("resolved_action","<none>") for m in members])
+    per_cluster_rows.append({
+        "_cluster_id": lab,
+        "n_members": n_total,
+        "n_merged": n_merged,
+        "n_kept": n_kept,
+        "top_actions": ";".join(f"{k}:{v}" for k,v in action_counts_cluster.most_common(5))
+    })
+per_cluster_df = pd.DataFrame(per_cluster_rows)
+per_cluster_df.to_csv(OUT_DIR / "per_cluster_stats.csv", index=False)
+
+# ---------------- Raw -> V2 comparison (if raw file provided) ----------------
+# We want a table where each raw entity id maps to final canonical_id (if any),
+# final entity_id (if modified), resolution action, cluster id, etc.
+if raw_entities:
+    # Build a lookup from member names or unique ids: prefer id matching
+    # raw entities often had same 'id' as later records; check both scenarios.
+    raw_map = {r.get("id"): r for r in raw_entities if r.get("id")}
+    rows_cmp = []
+    for raw in raw_entities:
+        rid = raw.get("id")
+        # Find resolved entity: try exact id match; else try to match by name
+        resolved = entities_by_id.get(rid)
+        if resolved is None:
+            # fallback: try to match by name (casefold)
+            raw_name = (raw.get("entity_name") or "").strip().casefold()
+            candidates = [e for e in entities_res if (e.get("entity_name") or "").strip().casefold() == raw_name]
+            resolved = candidates[0] if candidates else None
+        rows_cmp.append({
+            "raw_id": rid,
+            "raw_name": raw.get("entity_name"),
+            "raw_desc": raw.get("entity_description"),
+            "resolved_exists": bool(resolved),
+            "resolved_id": resolved.get("id") if resolved else "",
+            "canonical_id": resolved.get("canonical_id") if resolved else "",
+            "resolved_action": resolved.get("resolved_action") if resolved else "",
+            "_cluster_id": resolved.get("_cluster_id") if resolved else "",
+            "notes": ""
+        })
+    cmp_df = pd.DataFrame(rows_cmp)
+    cmp_df.to_csv(OUT_DIR / "raw_to_v2_comparison.csv", index=False)
+
+# ---------------- Some additional helpful views ----------------
+# 1) Ranked merges by size
+ranked = sorted(((cid, len(members)) for cid,members in merged.items()), key=lambda x: -x[1])
+with open(OUT_DIR / "ranked_merges.txt", "w", encoding="utf-8") as fh:
+    for cid, sz in ranked:
+        fh.write(f"{cid}\t{sz}\t{canon_by_id.get(cid,{}).get('canonical_name','')}\n")
+
+# 2) Save canonical entities file copy (for convenience)
+if canonals:
+    save_json(canonals, OUT_DIR / "canonical_entities_v2_copy.json")
+
+# 3) Summary print
+print("\n=== Analysis summary ===")
+print("analysis folder:", OUT_DIR)
+print("total resolved entities:", len(entities_res))
+print("canonical groups (merged):", len(merged))
+print("unmerged singletons:", len(unmerged))
+print("canonical summary top-10:")
+if not canon_df.empty:
+    print(canon_df.head(10).to_string(index=False))
+print("\nTop action counts:")
+for a,cnt in action_counts.most_common(10):
+    print(" ", a, cnt)
+
+# 4) List produced files
+print("\nFiles produced:")
+for p in sorted(OUT_DIR.iterdir()):
+    print(" ", p.name)
+
+print("\nDone.")
+
+
+#endregion#? Analyze_entity_resolution        -    V2
+#?#########################  End  ##########################
+
+
+
+
+#?######################### Start ##########################
+#region:#?   Entites after second run -    V2
+
+
+#!/usr/bin/env python3
+# create_second_run_input_v2.py
+"""
+Create reduced input (representative entities) after the SECOND resolution run.
+
+Outputs in folder: 2nd_run/
+ - entities_raw_second_run.jsonl   (one record per canonical representative OR singleton final entity)
+ - canonical_members_map_v2.json   (canonical_id -> full list of member ids)
+ - summary_v2.json                 (counts and paths)
+
+Notes:
+ - The script will try to locate the SECOND-RUN resolved entities file from a few likely paths.
+ - If you know the exact path, set the RESOLVED_V2_PATH variable or pass it via environment before running.
+"""
+
+import json
+from pathlib import Path
+from collections import defaultdict, Counter
+from typing import List, Dict, Any
+import sys
+import os
+
+
+# ----------------- Config / candidate input paths -----------------
+# Set these to your desired locations
+RESOLVED_BASE = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities/Ent_2nd/Ent_Resolved_2nd")
+RESOLVED_BASE.mkdir(exist_ok=True, parents=True)
+
+OUT_DIR = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities/Ent_2nd/Ent_2nd_Ouput")
+OUT_DIR.mkdir(exist_ok=True, parents=True)
+
+# candidate locations (searched in order) for resolved second-run
+CANDIDATES = [
+    RESOLVED_BASE / "entities_resolved.jsonl",
+    RESOLVED_BASE / "entities_resolved_v2.jsonl",
+    RESOLVED_BASE / "entities_resolved_second_run.jsonl",
+    RESOLVED_BASE / "entities_resolved_second_run_final.jsonl",
+    Path("entities_resolved_v2.jsonl"),
+    Path("entities_resolved_second_run.jsonl"),
+    Path("entities_resolved.jsonl"),
+]
+
+# canonical records (optional) - absolute or relative paths (no incorrect BASE_DIR / "/abs" concatenation)
+CANDIDON_CANON = [
+    Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities/Ent_2nd/Ent_Resolved_2nd/canonical_entities_v2.jsonl"),
+    Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities/Ent_1st/Ent_Resolved_1st/canonical_entities.jsonl"),
+    Path("canonical_entities_v2.jsonl"),
+    Path("canonical_entities.jsonl"),
+]
+
+# outputs
+OUT_ENT_RAW = OUT_DIR / "entities_raw_second_run.jsonl"
+OUT_CANON_MAP = OUT_DIR / "canonical_members_map_v2.json"
+OUT_SUMMARY = OUT_DIR / "summary_v2.json"
+
+# optional: raw/clustered inputs from this run (if present) to enrich representative
+RAW_CANDIDATES = [
+    RESOLVED_BASE / "entities_raw_second_run_source.jsonl",
+    RESOLVED_BASE / "entities_raw_second_run.jsonl",
+    RESOLVED_BASE / "entities_raw.jsonl",
+    Path("entities_raw_second_run.jsonl"),
+]
+
+
+#!tree /home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities
+
+
+# ----------------- helpers -----------------
+def load_jsonl(path: Path) -> List[Dict[str, Any]]:
+    items = []
+    if not path.exists():
+        return items
+    with open(path, "r", encoding="utf-8") as fh:
+        for ln in fh:
+            ln = ln.strip()
+            if not ln:
+                continue
+            try:
+                items.append(json.loads(ln))
+            except Exception as e:
+                print(f"[warn] skipping invalid json line in {path}: {e}")
+    return items
+
+def write_jsonl(path: Path, rows: List[Dict[str, Any]]):
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with open(path, "w", encoding="utf-8") as fh:
+        for r in rows:
+            fh.write(json.dumps(r, ensure_ascii=False) + "\n")
+
+def write_json(path: Path, obj: Any):
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with open(path, "w", encoding="utf-8") as fh:
+        json.dump(obj, fh, ensure_ascii=False, indent=2)
+
+# ----------------- locate inputs -----------------
+resolved_v2_path = None
+for p in CANDIDATES:
+    if p.exists():
+        resolved_v2_path = p
+        break
+
+if resolved_v2_path is None:
+    print("ERROR: Could not find a second-run resolved entities file in any of the candidate locations:")
+    for p in CANDIDATES:
+        print("  -", p)
+    sys.exit(1)
+
+print("Using resolved entities (second-run):", resolved_v2_path)
+
+# optional canonical file
+canon_path = None
+for p in CANDIDON_CANON:
+    if p.exists():
+        canon_path = p
+        break
+if canon_path:
+    print("Using canonical records:", canon_path)
+else:
+    print("No canonical records file found (canonical records optional).")
+
+# optional raw/clustered inputs for enrichment (best-effort)
+raw_source_path = None
+for p in RAW_CANDIDATES:
+    if p.exists():
+        raw_source_path = p
+        break
+if raw_source_path:
+    print("Using raw/clustered source (for enrichment) from:", raw_source_path)
+else:
+    print("No raw/clustered source file found in candidates (enrichment skipped if absent).")
+
+# ----------------- load data -----------------
+resolved = load_jsonl(resolved_v2_path)
+canon_records = load_jsonl(canon_path) if canon_path else []
+raw_source = load_jsonl(raw_source_path) if raw_source_path else []
+
+print(f"Loaded: resolved={len(resolved)}, canonical_records={len(canon_records)}, raw_source={len(raw_source)}")
+
+# build maps for quick lookup
+resolved_map = {r.get("id"): r for r in resolved if r.get("id")}
+raw_map = {r.get("id"): r for r in raw_source if r.get("id")}
+
+# canonical_members from canonical records (if present) - prefer these lists when available
+canonical_members = defaultdict(list)  # canonical_id -> list(member_ids)
+for c in canon_records:
+    cid = c.get("canonical_id")
+    # canonical record may store "members", "member_ids", "merged_ids" or similar
+    members = c.get("members") or c.get("member_ids") or c.get("merged_ids") or c.get("members_ids") or []
+    if cid:
+        if isinstance(members, list):
+            canonical_members[cid].extend(members)
+        else:
+            # sometimes members may be stored as comma-separated string
+            if isinstance(members, str) and members.strip():
+                canonical_members[cid].extend([x.strip() for x in members.split(",") if x.strip()])
+
+# Build reverse map: member_id -> canonical_id (if known from canonical records)
+member_to_canon = {}
+for cid, mids in canonical_members.items():
+    for m in mids:
+        member_to_canon[m] = cid
+
+# ----------------- build representatives -----------------
+representatives = []   # final rows to write (one per final entity)
+canon_map_out = {}     # canonical_id -> full member ids (unioned)
+
+# First, group resolved rows that share the same canonical_id (some resolved rows may still hold canonical_id)
+by_canon = defaultdict(list)
+singletons = []
+
+for r in resolved:
+    cid = r.get("canonical_id")
+    if cid:
+        by_canon[cid].append(r)
+    else:
+        # Entities without canonical_id: treat as singleton representative but keep member history if present
+        singletons.append(r)
+
+# For canonical groups: build a single representative per canonical_id
+for cid, members in by_canon.items():
+    # gather member ids (prefer canonical_records list if available, else union of member fields in resolved members)
+    mids = []
+    if canonical_members.get(cid):
+        mids = list(dict.fromkeys(canonical_members[cid]))  # dedupe preserve order
+    else:
+        # collect from resolved members (fields like merged_from, member_ids, merged_ids, members)
+        for m in members:
+            for fld in ("member_ids","merged_ids","merged_from","members"):
+                val = m.get(fld)
+                if isinstance(val, list):
+                    for mm in val:
+                        if mm and mm not in mids:
+                            mids.append(mm)
+            # also include this resolved row's id
+            rid = m.get("id")
+            if rid and rid not in mids:
+                mids.append(rid)
+    # as a final fallback, ensure member ids include the resolved rows' ids
+    for m in members:
+        if m.get("id") and m.get("id") not in mids:
+            mids.append(m.get("id"))
+
+    canon_map_out[cid] = mids
+
+    # try to infer canonical metadata (name/desc/type) from canonical record if present, else from highest-confidence member
+    canon_meta = {}
+    for rec in canon_records:
+        if rec.get("canonical_id") == cid:
+            canon_meta = rec
+            break
+
+    # choose canonical_name/desc/type: prefer canon_meta, else choose member with highest confidence
+    canonical_name = canon_meta.get("canonical_name") if canon_meta.get("canonical_name") else None
+    canonical_desc = canon_meta.get("canonical_description") if canon_meta.get("canonical_description") else None
+    canonical_type = canon_meta.get("canonical_type") if canon_meta.get("canonical_type") else None
+
+    if not canonical_name:
+        # pick member with highest confidence (if any)
+        sorted_members = sorted(members, key=lambda x: float(x.get("confidence_score") or 0.0), reverse=True)
+        if sorted_members:
+            canonical_name = canonical_name or sorted_members[0].get("entity_name")
+            canonical_desc = canonical_desc or sorted_members[0].get("entity_description")
+            canonical_type = canonical_type or sorted_members[0].get("entity_type_hint")
+
+    # Build representative record (keep provenance info)
+    rep = {
+        "id": f"CanRep_{cid}",
+        "canonical_id": cid,
+        "entity_name": canonical_name,
+        "entity_description": canonical_desc,
+        "entity_type_hint": canonical_type,
+        "member_count": len(mids),
+        "member_ids": mids,
+        "member_sample": [],
+        "member_details_sample": [],
+        "_notes": "representative for canonical group (second-run)"
+    }
+
+    # attach up to 8 member samples with best available fields
+    samp = []
+    samp_details = []
+    for mid in mids[:8]:
+        src = resolved_map.get(mid) or raw_map.get(mid) or {}
+        samp.append(src.get("entity_name") or mid)
+        samp_details.append({
+            "id": mid,
+            "name": src.get("entity_name"),
+            "description": src.get("entity_description"),
+            "type": src.get("entity_type_hint"),
+            "confidence": src.get("confidence_score"),
+            "chunk_id": src.get("chunk_id") or src.get("source_chunk_id") or src.get("ref_index")
+        })
+    rep["member_sample"] = samp
+    rep["member_details_sample"] = samp_details
+
+    representatives.append(rep)
+
+# Now singletons: normalize and include metadata + any merged history fields
+for s in singletons:
+    # collect any member lists embedded in the singleton (if it was previously a rep with member_ids)
+    mids = []
+    for fld in ("member_ids","merged_ids","merged_from","members"):
+        val = s.get(fld)
+        if isinstance(val, list):
+            for mm in val:
+                if mm and mm not in mids:
+                    mids.append(mm)
+    if not mids:
+        mids = [s.get("id")]
+
+    rep = {
+        "id": s.get("id"),
+        "canonical_id": s.get("canonical_id") or None,
+        "entity_name": s.get("entity_name"),
+        "entity_description": s.get("entity_description"),
+        "entity_type_hint": s.get("entity_type_hint"),
+        "member_count": len(mids),
+        "member_ids": mids,
+        "member_sample": [s.get("entity_name")],
+        "member_details_sample": [{
+            "id": s.get("id"),
+            "name": s.get("entity_name"),
+            "description": s.get("entity_description"),
+            "type": s.get("entity_type_hint"),
+            "confidence": s.get("confidence_score"),
+            "chunk_id": s.get("chunk_id") or s.get("source_chunk_id") or s.get("ref_index")
+        }],
+        "_notes": "singleton (no canonical group in second-run)"
+    }
+    representatives.append(rep)
+
+# final ordering: prefer canonical reps first then singletons
+# but keep as is (representatives already contains canonical then singletons)
+
+# ----------------- write outputs -----------------
+write_jsonl(OUT_ENT_RAW, representatives)
+write_json(OUT_CANON_MAP, canon_map_out)
+
+summary = {
+    "resolved_v2_path": str(resolved_v2_path),
+    "resolved_v2_count": len(resolved),
+    "n_canonical_groups": len(by_canon),
+    "n_singletons": len(singletons),
+    "n_representatives_written": len(representatives),
+    "path_entities_raw_second_run": str(OUT_ENT_RAW),
+    "path_canonical_members_map_v2": str(OUT_CANON_MAP)
+}
+write_json(OUT_SUMMARY, summary)
+
+print("Wrote representatives for second-run to:", OUT_ENT_RAW)
+print("Wrote canonical members map to:", OUT_CANON_MAP)
+print("Wrote summary to:", OUT_SUMMARY)
+print("Summary:", summary)
+
+
+#endregion#? Entites after second run -    V2
+#?#########################  End  ##########################
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#?######################### Start ##########################
+#region:#?   Final Analysis
+
+
+#!/usr/bin/env python3
+"""
+create_final_comp_analysis.py
+
+Produces a consolidated analysis folder "FinalCompAnalysis" inside:
+  /home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities/Overall_After_Two_Run/FinalCompAnalysis
+
+What it does:
+- Locates the best-guess input files produced across your two resolution runs
+  (resolved entities, canonical records, clustered inputs, raw inputs, analysis outputs)
+- Builds a master JSONL (and JSON) file with one row per final entity after second-run resolution.
+  Each entity row contains: id, entity_name, entity_description, entity_type_hint, confidence_score,
+  chunk_ids (list), member_ids (list of merged ids across runs), canonical_id (if any),
+  resolved_action, resolution_rationale, _cluster_id, chunk_text_truncated, ref_index, chunk_index_in_section,
+  ref_title, _raw_llm (if present), and any other fields present in the entity record.
+- Produces CSV summaries and simple plots (merges histogram, actions pie).
+- Copies available diagnostic/analysis files into the FinalCompAnalysis folder.
+- Writes a README.md and a short markdown summary report.
+
+Notes:
+- The script is defensive: it tries multiple candidate paths (based on your repo files)
+  and continues even if some files are missing or inconsistent.
+- Requires: pandas, matplotlib (install with pip if missing).
+"""
+
+import json
+import shutil
+from pathlib import Path
+from collections import defaultdict, Counter
+import itertools
+import logging
+import csv
+
+# Optional plotting libs
+try:
+    import pandas as pd
+    import matplotlib.pyplot as plt
+except Exception as e:
+    pd = None
+    plt = None
+
+# ---------- Config: target output folder ----------
+BASE_TARGET = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities/Overall_After_Two_Run")
+FINAL_DIR = BASE_TARGET / "FinalCompAnalysis"
+FINAL_DIR.mkdir(parents=True, exist_ok=True)
+
+LOG_PATH = FINAL_DIR / "create_final_comp_analysis.log"
+logging.basicConfig(level=logging.INFO, filename=str(LOG_PATH), filemode="w",
+                    format="%(asctime)s %(levelname)s: %(message)s")
+console = logging.StreamHandler()
+console.setLevel(logging.INFO)
+formatter = logging.Formatter("%(levelname)s: %(message)s")
+console.setFormatter(formatter)
+logging.getLogger("").addHandler(console)
+
+logging.info("Starting FinalCompAnalysis builder")
+logging.info(f"Output folder: {FINAL_DIR}")
+
+# ---------- Candidate input paths (from repo context) ----------
+# We'll try to load from these candidate paths in order; the first matching file is used.
+CANDIDATE_RESOLVED = [
+    Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities/Ent_2nd/Ent_Resolved_2nd/entities_resolved_v2.jsonl"),
+    Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities/Ent_2nd/Ent_Resolved_2nd/entities_resolved.jsonl"),
+    Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities/Ent_2nd/Ent_Resolved_2nd/entities_resolved_second_run.jsonl"),
+    Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities/Ent_2nd/Ent_Resolved_2nd/entities_resolved_second_run_final.jsonl"),
+    Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities/Ent_1st/Ent_Resolved_1st/entities_resolved.jsonl"),
+]
+
+CANDIDATE_CANON = [
+    Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities/Ent_2nd/Ent_Resolved_2nd/canonical_entities_v2.jsonl"),
+    Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities/Ent_1st/Ent_Resolved_1st/canonical_entities.jsonl"),
+    Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities/Ent_2nd/Ent_Resolved_2nd/canonical_entities.jsonl"),
+]
+
+CANDIDATE_CLUSTERED = [
+    Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities/Ent_2nd/Ent_Clustering_2nd/entities_clustered_second_run.jsonl"),
+    Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities/Ent_1st/Ent_Clustering_1st/entities_clustered.jsonl"),
+    Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities/Ent_1st/Ent_Clustering_1st/entities_clustered.jsonl"),
+]
+
+CANDIDATE_RAW_REPS = [
+    Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities/Ent_2nd/Ent_2nd_Ouput/entities_raw_second_run.jsonl"),
+    Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities/Ent_1st/Ent_1st_Ouput/entities_raw_second_run.jsonl"),
+    Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities/Ent_1st/Ent_Resolved_1st/entities_raw.jsonl"),
+]
+
+CANDIDATE_ANALYSIS_DIRS = [
+    Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities/Ent_2nd/Ent_2nd_Analysis"),
+    Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities/Ent_1st/Ent_1st_Analysis"),
+    Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities/Ent_1st/Ent_Resolved_1st"),
+    Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities/Ent_2nd/Ent_Resolved_2nd"),
+]
+
+# also look for any json/csv/png in the Entities tree (as fallback copy)
+SEARCH_ROOT = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities")
+
+# ---------- helpers ----------
+def find_first_existing(paths):
+    for p in paths:
+        if p.exists():
+            logging.info(f"Found: {p}")
+            return p
+    logging.warning("No candidate file found in provided list.")
+    return None
+
+def load_jsonl(path):
+    items = []
+    if not path or not path.exists():
+        logging.warning(f"load_jsonl: missing {path}")
+        return items
+    with open(path, "r", encoding="utf-8") as fh:
+        for ln in fh:
+            ln = ln.strip()
+            if not ln:
+                continue
+            try:
+                items.append(json.loads(ln))
+            except Exception as e:
+                logging.warning(f"Skipping invalid json line in {path}: {e}")
+    logging.info(f"Loaded {len(items)} records from {path.name}")
+    return items
+
+def write_jsonl(path, rows):
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with open(path, "w", encoding="utf-8") as fh:
+        for r in rows:
+            fh.write(json.dumps(r, ensure_ascii=False) + "\n")
+    logging.info(f"Wrote JSONL: {path} ({len(rows)} rows)")
+
+def write_json(path, obj):
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with open(path, "w", encoding="utf-8") as fh:
+        json.dump(obj, fh, ensure_ascii=False, indent=2)
+    logging.info(f"Wrote JSON: {path}")
+
+# copy file safely
+def safe_copy(src: Path, dst_dir: Path):
+    try:
+        if not src.exists():
+            return None
+        dst = dst_dir / src.name
+        shutil.copy2(src, dst)
+        logging.info(f"Copied {src} -> {dst}")
+        return dst
+    except Exception as e:
+        logging.warning(f"Failed to copy {src}: {e}")
+        return None
+
+# ---------- Locate inputs ----------
+resolved_path = find_first_existing(CANDIDATE_RESOLVED)
+canon_path = find_first_existing(CANDIDATE_CANON)
+clustered_path = find_first_existing(CANDIDATE_CLUSTERED)
+raw_rep_path = find_first_existing(CANDIDATE_RAW_REPS)
+
+# Also attempt to find 'entities_resolved_full_v2.jsonl' or similar "full" outputs referenced in your code:
+additional_full_candidates = list(SEARCH_ROOT.glob("**/*entities_resolved*_full*.jsonl")) + list(SEARCH_ROOT.glob("**/*entities_resolved_v2*.jsonl"))
+if additional_full_candidates:
+    # prefer ones under Ent_Resolved_2nd
+    additional_full = sorted(additional_full_candidates, key=lambda p: ("Ent_Resolved_2nd" in str(p), str(p)), reverse=True)
+    if additional_full:
+        chosen = additional_full[0]
+        if resolved_path is None:
+            resolved_path = chosen
+            logging.info(f"Selected additional resolved candidate: {chosen}")
+
+# Load files if present
+resolved = load_jsonl(resolved_path) if resolved_path else []
+canons = load_jsonl(canon_path) if canon_path else []
+clustered = load_jsonl(clustered_path) if clustered_path else []
+raw_reps = load_jsonl(raw_rep_path) if raw_rep_path else []
+
+# also try to load first-run resolved/canon if available to recover member history
+first_run_resolved_candidates = list(SEARCH_ROOT.glob("**/Ent_Resolved_1st/**/entities_resolved*.jsonl"))
+first_run_canon_candidates = list(SEARCH_ROOT.glob("**/Ent_Resolved_1st/**/canonical_entities*.jsonl"))
+first_run_resolved = load_jsonl(first_run_resolved_candidates[0]) if first_run_resolved_candidates else []
+first_run_canons = load_jsonl(first_run_canon_candidates[0]) if first_run_canon_candidates else []
+
+# ---------- Build maps to aggregate member histories ----------
+# We'll try to aggregate member ids that were merged across runs by checking:
+# - canonical records 'member_ids' / 'merged_ids' fields
+# - resolved entity fields that include 'member_ids', 'merged_ids', 'merged_from', etc.
+member_to_canonical = {}
+canonical_members = defaultdict(list)
+
+def aggregate_from_canonical_records(canon_list):
+    for c in canon_list:
+        cid = c.get("canonical_id") or c.get("canonical") or c.get("id")
+        if not cid:
+            continue
+        # possible member fields
+        members = []
+        for fld in ("members","member_ids","merged_ids","merged_from","merged"):
+            val = c.get(fld)
+            if isinstance(val, list):
+                members.extend(val)
+            elif isinstance(val, str) and val.strip():
+                # try to split by comma or space
+                parts = [x.strip() for x in val.split(",") if x.strip()]
+                if parts:
+                    members.extend(parts)
+        # also some canonical records may embed 'members' as objects
+        if not members:
+            # try keys like 'members_details'
+            md = c.get("members_details") or c.get("members_info")
+            if isinstance(md, list):
+                for m in md:
+                    mid = m.get("id") or m.get("member_id")
+                    if mid:
+                        members.append(mid)
+        # dedupe and add
+        if members:
+            seen = []
+            for m in members:
+                if m and m not in seen:
+                    seen.append(m)
+            canonical_members[cid].extend(seen)
+            for m in seen:
+                member_to_canonical[m] = cid
+
+# aggregate from canonical files (both runs)
+aggregate_from_canonical_records(canons)
+aggregate_from_canonical_records(first_run_canons)
+
+# Also scan resolved entities for any member lists embedded per-entity and populate canonical_members mapping
+def aggregate_from_resolved(resolved_list):
+    for r in resolved_list:
+        cid = r.get("canonical_id")
+        if cid:
+            # check fields for explicit member lists
+            for fld in ("member_ids","merged_ids","merged_from","members"):
+                val = r.get(fld)
+                if isinstance(val, list):
+                    for m in val:
+                        if m and m not in canonical_members[cid]:
+                            canonical_members[cid].append(m)
+                            member_to_canonical[m] = cid
+            # if not present, include this resolved record id as member
+            if r.get("id") and r.get("id") not in canonical_members[cid]:
+                canonical_members[cid].append(r.get("id"))
+                member_to_canonical[r.get("id")] = cid
+
+aggregate_from_resolved(resolved)
+aggregate_from_resolved(first_run_resolved)
+
+logging.info(f"Aggregated {len(canonical_members)} canonical groups from available records")
+
+# ---------- Build master entity list (one row per *final* entity after second-run) ----------
+# Strategy:
+# - If 'resolved' contains final entities (it should), use those as primary rows
+# - For each final entity, collect:
+#     * all known member_ids (from entity fields and canonical_members)
+#     * chunk_ids found in member records (search in resolved + first-run + raw reps)
+#     * best available metadata (name/desc/type/confidence) preferring canonical metadata then highest-confidence member
+# - If resolved is empty, fall back to 'raw_reps' or first_run_resolved etc.
+
+# helper to collect member ids for a resolved entity
+def collect_member_ids(entity):
+    mids = set()
+    # fields on the entity itself
+    for fld in ("member_ids","merged_ids","merged_from","members","member_ids_sample"):
+        val = entity.get(fld)
+        if isinstance(val, list):
+            for m in val:
+                if m:
+                    mids.add(m)
+        elif isinstance(val, str) and val.strip():
+            # comma-separated fallback
+            for m in [x.strip() for x in val.split(",") if x.strip()]:
+                mids.add(m)
+    # if entity has canonical_id, include canonical_members map
+    cid = entity.get("canonical_id")
+    if cid and canonical_members.get(cid):
+        for m in canonical_members[cid]:
+            mids.add(m)
+    # include this entity id itself
+    if entity.get("id"):
+        mids.add(entity.get("id"))
+    return list(mids)
+
+# helper to gather chunk ids from member records (search in available sources)
+# We'll build a small index from all loaded sources mapping id -> record
+index_by_id = {}
+for lst in (resolved, first_run_resolved, raw_reps):
+    for r in lst:
+        rid = r.get("id")
+        if rid:
+            index_by_id[rid] = r
+
+# also attempt to index clustered input items
+for lst in (clustered,):
+    for r in lst:
+        rid = r.get("id")
+        if rid:
+            index_by_id.setdefault(rid, r)
+
+def collect_chunk_ids_for_members(member_ids):
+    chunk_ids = set()
+    for mid in member_ids:
+        rec = index_by_id.get(mid)
+        if not rec:
+            # maybe mid is itself a chunk id (some workflows used chunk id as member id)
+            # if it resembles 'Ch_' or present in chunks folder, keep it too
+            if isinstance(mid, str) and mid.startswith("Ch_"):
+                chunk_ids.add(mid)
+            continue
+        # candidate chunk id fields
+        for fld in ("chunk_id","source_chunk_id","chunk_ids","ref_index","chunk_id_list"):
+            val = rec.get(fld)
+            if isinstance(val, list):
+                chunk_ids.update([v for v in val if v])
+            elif isinstance(val, str) and val.strip():
+                # maybe a single chunk id or comma-separated
+                if "," in val:
+                    chunk_ids.update([x.strip() for x in val.split(",") if x.strip()])
+                else:
+                    chunk_ids.add(val)
+        # some records include 'ref_index' as provenance (add it)
+        if rec.get("ref_index"):
+            chunk_ids.add(str(rec.get("ref_index")))
+    return list(chunk_ids)
+
+# If resolved list is empty, choose fallback source for "final" entities
+primary_entities = resolved if resolved else (raw_reps if raw_reps else first_run_resolved)
+
+if not primary_entities:
+    logging.error("No primary entity source found (resolved / raw reps / first-run). Exiting.")
+    raise SystemExit(1)
+
+master_rows = []
+for ent in primary_entities:
+    # base copy of entity
+    row = dict(ent)  # preserve all existing fields
+    # ensure id present
+    eid = row.get("id") or row.get("entity_id") or row.get("canonical_id") or f"Row_{len(master_rows)+1}"
+    row["id"] = eid
+
+    # collect member ids (merges over both runs)
+    mids = collect_member_ids(row)
+    # also check canonical_members mapping by matching row.id if it is a member of some canonical
+    if row.get("id") in member_to_canonical:
+        cid = member_to_canonical[row.get("id")]
+        for m in canonical_members.get(cid, []):
+            if m not in mids:
+                mids.append(m)
+
+    # also try to collect members from canonical record if this row has canonical_id
+    if row.get("canonical_id") and canonical_members.get(row.get("canonical_id")):
+        for m in canonical_members[row.get("canonical_id")]:
+            if m not in mids:
+                mids.append(m)
+
+    row["member_ids_all"] = sorted(list(dict.fromkeys(mids)))  # dedupe preserve order
+
+    # collect chunk ids for those members
+    chunk_ids = collect_chunk_ids_for_members(row["member_ids_all"])
+    row["chunk_ids_all"] = sorted(list(dict.fromkeys(chunk_ids)))
+
+    # best metadata: pick canonical metadata if canonical exists
+    cid = row.get("canonical_id")
+    if cid:
+        canon_meta = next((c for c in canons if (c.get("canonical_id") == cid or c.get("id") == cid)), None)
+        if canon_meta:
+            # prefer canonical name/desc/type if present
+            if canon_meta.get("canonical_name"):
+                row["canonical_name"] = canon_meta.get("canonical_name")
+            if canon_meta.get("canonical_description"):
+                row["canonical_description"] = canon_meta.get("canonical_description")
+            if canon_meta.get("canonical_type"):
+                row["canonical_type"] = canon_meta.get("canonical_type")
+
+    # ensure canonical_id is present (maybe mapping exists)
+    if not row.get("canonical_id"):
+        # maybe this row's id maps to a canonical via member_to_canonical
+        mapped_cid = member_to_canonical.get(row.get("id"))
+        if mapped_cid:
+            row["canonical_id"] = mapped_cid
+
+    # ensure some canonical_name present (from canonical map or highest-confidence member)
+    if not row.get("canonical_name"):
+        # choose highest-confidence member's name if available
+        best = None
+        best_conf = -1.0
+        for mid in row["member_ids_all"]:
+            rec = index_by_id.get(mid)
+            if rec:
+                try:
+                    conf = float(rec.get("confidence_score") or 0.0)
+                except Exception:
+                    conf = 0.0
+                if conf > best_conf:
+                    best_conf = conf
+                    best = rec
+        if best:
+            row.setdefault("canonical_name", best.get("entity_name") or best.get("entity_name_original"))
+
+    # normalize some common fields
+    row["entity_name"] = row.get("entity_name") or row.get("canonical_name") or row.get("id")
+    row["entity_description"] = row.get("entity_description") or row.get("canonical_description") or ""
+    row["entity_type_hint"] = row.get("entity_type_hint") or row.get("canonical_type") or ""
+    # confidence: prefer explicit field else try best member confidence
+    if row.get("confidence_score") is None:
+        best_conf = None
+        for mid in row["member_ids_all"]:
+            rec = index_by_id.get(mid)
+            if rec:
+                try:
+                    c = float(rec.get("confidence_score") or 0.0)
+                except Exception:
+                    c = 0.0
+                if best_conf is None or c > best_conf:
+                    best_conf = c
+        row["confidence_score"] = best_conf if best_conf is not None else None
+
+    # chunk_text_truncated (if available as _chunk_text_truncated or similar)
+    row["chunk_text_truncated"] = row.get("_chunk_text_truncated") or row.get("chunk_text_truncated") or ""
+
+    master_rows.append(row)
+
+logging.info(f"Built master rows: {len(master_rows)} final entities")
+
+# ---------- Write master JSONL + JSON ----------
+MASTER_JSONL = FINAL_DIR / "final_entities_master.jsonl"
+MASTER_JSON = FINAL_DIR / "final_entities_master.json"
+
+write_jsonl(MASTER_JSONL, master_rows)
+write_json(MASTER_JSON, master_rows)
+
+# ---------- Produce simple summaries & plots ----------
+# 1) canonical_summary.csv (one row per canonical group present in master)
+canon_summary_rows = []
+for cid, members in canonical_members.items():
+    # find canonical metadata if available
+    cmeta = next((c for c in canons if c.get("canonical_id") == cid or c.get("id") == cid), {})
+    canon_summary_rows.append({
+        "canonical_id": cid,
+        "canonical_name": cmeta.get("canonical_name") or "",
+        "canonical_type": cmeta.get("canonical_type") or "",
+        "n_members": len(members),
+        "member_sample": " | ".join(members[:10]),
+        "rationale": cmeta.get("rationale") or ""
+    })
+
+CANON_SUM_CSV = FINAL_DIR / "canonical_summary.csv"
+with open(CANON_SUM_CSV, "w", newline="", encoding="utf-8") as fh:
+    fieldnames = ["canonical_id","canonical_name","canonical_type","n_members","member_sample","rationale"]
+    writer = csv.DictWriter(fh, fieldnames=fieldnames)
+    writer.writeheader()
+    for r in canon_summary_rows:
+        writer.writerow(r)
+logging.info(f"Wrote canonical summary CSV: {CANON_SUM_CSV}")
+
+# 2) merged_groups.json (copy canonical_members mapping)
+MERGED_GROUPS_JSON = FINAL_DIR / "merged_groups_by_canonical.json"
+write_json(MERGED_GROUPS_JSON, canonical_members)
+
+# 3) actions summary from master (resolved_action distribution)
+action_counts = Counter()
+for r in master_rows:
+    action_counts.update([r.get("resolved_action") or "<none>"])
+
+ACTIONS_JSON = FINAL_DIR / "actions_summary.json"
+write_json(ACTIONS_JSON, dict(action_counts))
+
+# 4) produce plots if matplotlib available
+if plt is not None and pd is not None:
+    try:
+        # merges histogram
+        sizes = [len(v) for v in canonical_members.values()] if canonical_members else []
+        if sizes:
+            plt.figure(figsize=(6,4))
+            plt.hist(sizes, bins=range(1, max(sizes)+2), edgecolor="black", align="left")
+            plt.title("Distribution of canonical group sizes (# members)")
+            plt.xlabel("members per canonical entity")
+            plt.ylabel("count")
+            plt.tight_layout()
+            merges_hist = FINAL_DIR / "merges_hist.png"
+            plt.savefig(merges_hist, dpi=150)
+            plt.close()
+            logging.info(f"Wrote plot: {merges_hist}")
+
+        # actions pie (top 8)
+        if action_counts:
+            actions_df = pd.DataFrame(action_counts.items(), columns=["action","count"]).sort_values("count", ascending=False)
+            top_actions = actions_df.head(8)
+            plt.figure(figsize=(6,6))
+            plt.pie(top_actions["count"], labels=top_actions["action"], autopct="%1.1f%%", startangle=140)
+            plt.title("Top resolved_action distribution")
+            plt.tight_layout()
+            actions_pie = FINAL_DIR / "actions_pie.png"
+            plt.savefig(actions_pie, dpi=150)
+            plt.close()
+            logging.info(f"Wrote plot: {actions_pie}")
+    except Exception as e:
+        logging.warning(f"Plot generation failed: {e}")
+else:
+    logging.warning("pandas/matplotlib not available; skipping plot generation. Install them with pip to enable plots.")
+
+# ---------- Copy over any existing analysis files into FinalCompAnalysis ----------
+# Copy common filenames / filetypes from Entities tree that look useful (csv,json,png,md)
+copied = []
+for pattern in ("**/*entResAnalysis*.json", "**/*entResAnalysis*.csv", "**/*entResAnalysis*.png",
+                "**/*analysis*.json", "**/*analysis*.csv", "**/*Analysis*.png", "**/*clusters_summary*.json",
+                "**/*canonical_entities*.jsonl", "**/*canonical_entities*.json", "**/*entities_resolved*.jsonl",
+                "**/*entities_clustered*.jsonl", "**/*merged_groups*.json", "**/*top50_canonical*.csv"):
+    for p in SEARCH_ROOT.glob(pattern):
+        # avoid copying master outputs we just created
+        if FINAL_DIR in p.parents:
+            continue
+        dst = FINAL_DIR / p.name
+        try:
+            shutil.copy2(p, dst)
+            copied.append(p)
+        except Exception as e:
+            logging.warning(f"Failed to copy {p}: {e}")
+
+logging.info(f"Copied {len(copied)} existing analysis files into output folder (if any)")
+
+# ---------- Create a small README and summary markdown ----------
+README = FINAL_DIR / "README.md"
+report_md = FINAL_DIR / "FinalCompAnalysis_Summary.md"
+
+readme_text = f"""# FinalCompAnalysis
+
+Folder generated by `create_final_comp_analysis.py`
+
+Location: `{FINAL_DIR}`
+
+Contents:
+- `final_entities_master.jsonl` : master entity file (one JSON object per final entity after the second run).
+- `final_entities_master.json`  : same as above but stored as a JSON array.
+- `canonical_summary.csv`      : summary per canonical group (member counts, sample).
+- `merged_groups_by_canonical.json` : mapping canonical_id -> member ids aggregated from available records.
+- `actions_summary.json`       : distribution of resolution actions (counts).
+- `merges_hist.png`, `actions_pie.png` : diagnostic plots (if generated).
+- Copied analysis files from repo (if found).
+
+How to use:
+1. Use `final_entities_master.jsonl` as the input for your next step (class identification).
+2. Use `canonical_summary.csv` and `merged_groups_by_canonical.json` for reporting in your paper (ACL).
+"""
+
+write_json(README, {"note": "See FinalCompAnalysis_Summary.md for human readable summary"})  # also write JSON for machine-readability
+with open(README, "w", encoding="utf-8") as fh:
+    fh.write(readme_text)
+logging.info(f"Wrote README: {README}")
+
+# human-readable report
+report_lines = []
+report_lines.append("# FinalCompAnalysis Summary\n")
+report_lines.append(f"**Output folder:** `{FINAL_DIR}`\n")
+report_lines.append(f"- Master rows (final entities): **{len(master_rows)}**\n")
+report_lines.append(f"- Canonical groups aggregated: **{len(canonical_members)}**\n")
+report_lines.append(f"- Action counts: {dict(action_counts)}\n")
+report_lines.append("\n## Input files used (first matches from candidate lists)\n")
+report_lines.append(f"- resolved (primary): `{resolved_path}`\n")
+report_lines.append(f"- canonical records: `{canon_path}`\n")
+report_lines.append(f"- clustered input (if any): `{clustered_path}`\n")
+report_lines.append(f"- raw/reps used (if any): `{raw_rep_path}`\n")
+report_lines.append("\n## Files produced\n")
+for f in sorted(FINAL_DIR.iterdir()):
+    report_lines.append(f"- `{f.name}`")
+report_md_text = "\n".join(report_lines)
+with open(report_md, "w", encoding="utf-8") as fh:
+    fh.write(report_md_text)
+logging.info(f"Wrote summary report: {report_md}")
+
+# ---------- Final log output to console ----------
+logging.info("FinalCompAnalysis build complete.")
+logging.info(f"See folder: {FINAL_DIR}")
+logging.info("If something is missing, run the script again after making sure the repo files exist at expected locations.")
+
+# Exit
+
+
+
+
+
+#endregion#? Final Analysis
+#?#########################  End  ##########################
+
+
+
+
+#?######################### Start ##########################
+#region:#?   
+
+
+#!/usr/bin/env python3
+"""
+count_final_entities_after_two_runs.py
+
+Finds second-run resolution outputs (common candidate paths used in your repo),
+computes final-entity counts (representatives, canonical groups, singletons),
+and writes a JSON summary to the requested folder:
+
+/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities/Overall_After_Two_Run
+
+Outputs:
+ - summary_counts.json   : counts + simple stats
+ - details_report.txt    : short human-readable explanation (same text printed)
+
+Usage:
+  python count_final_entities_after_two_runs.py
+"""
+
+import json
+from pathlib import Path
+from collections import defaultdict, Counter
+import statistics
+
+# ---------- Candidate paths (copied/derived from your project scripts) ----------
+CANDIDATE_REPRESENTATIVE_FILES = [
+    Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities/Ent_2nd/Ent_2nd_Ouput/entities_raw_second_run.jsonl"),
+    Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities/Ent_2nd/Ent_1st_Ouput/entities_raw_second_run.jsonl"),
+    Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities/Ent_1st/Ent_1st_Ouput/entities_raw_second_run.jsonl"),
+    Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities/Ent_2nd/Ent_Resolved_2nd/entities_raw_second_run.jsonl"),
+    # fallbacks
+    Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities/Ent_2nd/Ent_Resolved_2nd/entities_resolved_v2.jsonl"),
+    Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities/Ent_2nd/Ent_Resolved_2nd/entities_resolved.jsonl"),
+    Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities/Ent_2nd/Ent_Resolved_2nd/entities_resolved_second_run.jsonl"),
+]
+
+CANDIDATE_RESOLVED_FILES = [
+    Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities/Ent_2nd/Ent_Resolved_2nd/entities_resolved_v2.jsonl"),
+    Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities/Ent_2nd/Ent_Resolved_2nd/entities_resolved.jsonl"),
+    Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities/Ent_1st/Ent_Resolved_1st/entities_resolved.jsonl"),
+]
+
+CANDIDATE_CANONICAL_FILES = [
+    Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities/Ent_2nd/Ent_Resolved_2nd/canonical_entities_v2.jsonl"),
+    Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities/Ent_1st/Ent_Resolved_1st/canonical_entities.jsonl"),
+    Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities/Ent_2nd/Ent_Resolved_2nd/canonical_entities.jsonl"),
+]
+
+OUT_DIR = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities/Overall_After_Two_Run")
+OUT_DIR.mkdir(parents=True, exist_ok=True)
+
+# ---------- helpers ----------
+def load_jsonl(path: Path):
+    items = []
+    if not path.exists():
+        return items
+    with open(path, "r", encoding="utf-8") as fh:
+        for ln in fh:
+            ln = ln.strip()
+            if not ln:
+                continue
+            try:
+                items.append(json.loads(ln))
+            except Exception as e:
+                # skip invalid lines but report
+                print(f"[warn] failed to parse line in {path}: {e}")
+    return items
+
+def first_existing(paths):
+    for p in paths:
+        if p.exists():
+            return p
+    return None
+
+# ---------- load best candidate files ----------
+rep_file = first_existing(CANDIDATE_REPRESENTATIVE_FILES)
+resolved_file = first_existing(CANDIDATE_RESOLVED_FILES)
+canon_file = first_existing(CANDIDATE_CANONICAL_FILES)
+
+print("Detected files:")
+print("  representative file:", rep_file)
+print("  resolved file:", resolved_file)
+print("  canonical file:", canon_file)
+
+# ---------- compute counts using most-informative available file ----------
+summary = {
+    "used_rep_file": str(rep_file) if rep_file else None,
+    "used_resolved_file": str(resolved_file) if resolved_file else None,
+    "used_canonical_file": str(canon_file) if canon_file else None,
+    "counts": {}
+}
+
+if rep_file:
+    # representative file is ideal: one row per final entity (canonical representative OR singleton)
+    reps = load_jsonl(rep_file)
+    n_final = len(reps)
+    # try to get breakdown if fields present
+    n_canonical_reps = sum(1 for r in reps if r.get("canonical_id"))
+    n_singletons = n_final - n_canonical_reps
+    member_counts = []
+    for r in reps:
+        mc = 0
+        # many of your reps use member_ids, member_count, or member_ids_sample
+        if isinstance(r.get("member_count"), int):
+            mc = int(r.get("member_count"))
+        elif isinstance(r.get("member_ids"), list):
+            mc = len(r.get("member_ids"))
+        elif isinstance(r.get("member_ids"), str):
+            try:
+                mc = len(json.loads(r.get("member_ids")))
+            except Exception:
+                mc = 1
+        else:
+            # fallback assume single
+            mc = 1
+        member_counts.append(mc)
+    total_merged_members = sum(member_counts)
+    avg_members_per_final = statistics.mean(member_counts) if member_counts else 0
+    median_members = statistics.median(member_counts) if member_counts else 0
+
+    summary["counts"].update({
+        "final_entities_count": n_final,
+        "canonical_representative_count": n_canonical_reps,
+        "singleton_count": n_singletons,
+        "total_merged_raw_members_across_all_final_entities": total_merged_members,
+        "avg_raw_members_per_final_entity": avg_members_per_final,
+        "median_raw_members_per_final_entity": median_members
+    })
+
+elif resolved_file:
+    # resolved file likely contains many original entity rows with canonical_id assignment.
+    resolved = load_jsonl(resolved_file)
+    n_rows = len(resolved)
+    canonical_ids = set([r.get("canonical_id") for r in resolved if r.get("canonical_id")])
+    n_canonical_groups = len(canonical_ids)
+    singletons = [r for r in resolved if not r.get("canonical_id")]
+    n_singletons = len(singletons)
+    # final entities (canonical groups + singletons)
+    n_final = n_canonical_groups + n_singletons
+
+    # compute members per canonical if possible (by scanning canonical ids)
+    members_per_canon = defaultdict(int)
+    for r in resolved:
+        cid = r.get("canonical_id")
+        if cid:
+            members_per_canon[cid] += 1
+    member_counts = list(members_per_canon.values())
+    total_merged_members = sum(member_counts)
+    avg_members = statistics.mean(member_counts) if member_counts else 0
+    median_members = statistics.median(member_counts) if member_counts else 0
+
+    summary["counts"].update({
+        "final_entities_count": n_final,
+        "canonical_group_count": n_canonical_groups,
+        "singleton_count": n_singletons,
+        "total_rows_in_resolved_file": n_rows,
+        "total_merged_members_counted_from_resolved": total_merged_members,
+        "avg_members_per_canonical_group": avg_members,
+        "median_members_per_canonical_group": median_members
+    })
+else:
+    # no files found: fallback -> report zero and suggest check
+    summary["counts"].update({
+        "final_entities_count": 0,
+        "note": "No representative or resolved files found in candidate paths. Check paths."
+    })
+
+# ---------- write summary json + details report ----------
+out_json = OUT_DIR / "summary_counts.json"
+with open(out_json, "w", encoding="utf-8") as fh:
+    json.dump(summary, fh, ensure_ascii=False, indent=2)
+
+# also write a short human-readable explanation
+explanation_lines = []
+explanation_lines.append("Final-entities summary (computed automatically)")
+explanation_lines.append("="*60)
+if summary["counts"].get("final_entities_count") is not None:
+    explanation_lines.append(f"Final entities (count): {summary['counts']['final_entities_count']}")
+    if summary["used_rep_file"]:
+        explanation_lines.append(f"Derived from representative file: {summary['used_rep_file']}")
+        explanation_lines.append(f" - canonical representatives: {summary['counts'].get('canonical_representative_count')}")
+        explanation_lines.append(f" - singletons: {summary['counts'].get('singleton_count')}")
+        explanation_lines.append(f" - total original rows aggregated (sum of member_count): {summary['counts'].get('total_merged_raw_members_across_all_final_entities')}")
+        explanation_lines.append(f" - avg members per final entity: {summary['counts'].get('avg_raw_members_per_final_entity')}")
+    elif summary["used_resolved_file"]:
+        explanation_lines.append(f"Derived from resolved file: {summary['used_resolved_file']}")
+        explanation_lines.append(f" - canonical groups: {summary['counts'].get('canonical_group_count')}")
+        explanation_lines.append(f" - singletons: {summary['counts'].get('singleton_count')}")
+        explanation_lines.append(f" - total rows in resolved file: {summary['counts'].get('total_rows_in_resolved_file')}")
+        explanation_lines.append(f" - total members aggregated into canonical groups (counted from resolved rows): {summary['counts'].get('total_merged_members_counted_from_resolved')}")
+else:
+    explanation_lines.append("No input files found in candidate paths. Please check the repo paths and rerun.")
+
+explanation_lines.append("")
+# Short WHY explanation
+explanation_lines.append("Why this count? (short explanation)")
+explanation_lines.append("- The 'final entities' after two resolution runs is defined as the number of canonical representatives")
+explanation_lines.append("  (each representing a merged group of original raw entities) PLUS the number of singletons (entities not merged).")
+explanation_lines.append("- If a 'representative' file exists (one row per final entity), it's the cleanest source and is used directly.")
+explanation_lines.append("- If only a resolved file exists (many original rows with canonical_id assignments), we compute the number of unique canonical_ids")
+explanation_lines.append("  and add the rows without canonical_id (singletons).")
+explanation_lines.append("- Differences from expectations can come from:")
+explanation_lines.append("  * incomplete canonical records (some canonical groups may be recorded in separate canonical files)")
+explanation_lines.append("  * inconsistencies in file naming/locations (your repo has multiple candidate paths; this script chooses the first match)")
+explanation_lines.append("  * some resolved rows might still carry original ids or member lists; the script approximates member_count when possible.")
+explanation_lines.append("")
+explanation_lines.append("If you want a different definition of 'final entity' (e.g., only canonical groups, or deduping by name), tell me and I will adapt the script.")
+
+out_txt = OUT_DIR / "details_report.txt"
+with open(out_txt, "w", encoding="utf-8") as fh:
+    fh.write("\n".join(explanation_lines))
+
+# final print to console
+print("\nSummary written to:", out_json)
+print("Details report written to:", out_txt)
+print("\n" + "\n".join(explanation_lines[:12]))  # print the first few lines for quick glance
+
+
+
+#endregion#? 
+#?#########################  End  ##########################
+
+
+
+
+
+#!############################################# Start Chapter ##################################################
+#region:#!   Creepy Resolutions
+
+
+
+#*######################### Start ##########################
 #region:#?   Entity Resolution V0
 
 #!/usr/bin/env python3
@@ -2195,16 +5942,11 @@ if __name__ == "__main__":
 
 
 #endregion#? Entity Resolution V0
-#?#########################  End  ##########################
+#*#########################  End  ##########################
 
 
-
-
-
-
-
-#?######################### Start ##########################
-#region:#?   Entity Resolution V1
+#*######################### Start ##########################
+#region:#?   Entity Resolution V1  -  Last before Rerun
 
 
 
@@ -2927,12 +6669,12 @@ if __name__ == "__main__":
 
 
 
-#endregion#? Entity Resolution V1
-#?#########################  End  ##########################
+#endregion#? Entity Resolution V1  -  Last before Rerun
+#*#########################  End  ##########################
 
 
 
-#?######################### Start ##########################
+#*######################### Start ##########################
 #region:#?   Rerun Entity Resolution V1
 
 
@@ -3432,12 +7174,12 @@ if __name__ == "__main__":
 
 
 #endregion#? Rerun Entity Resolution V1
-#?#########################  End  ##########################
+#*#########################  End  ##########################
 
 
 
 #?######################### Start ##########################
-#region:#?   Run + Rerun
+#region:#?   Run + Rerun merged
 
 
 
@@ -4369,27 +8111,232 @@ if __name__ == "__main__":
     main()
 
 
-#endregion#? Run + Rerun
+#endregion#? Run + Rerun merged
 #?#########################  End  ##########################
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #?######################### Start ##########################
+#region:#?   postmerge_final_resolved
+
+#!/usr/bin/env python3
+"""
+postmerge_final_resolved.py
+
+Deterministic post-processing to merge very-similar final resolved entities.
+Outputs:
+ - entities_resolved_final_postmerged.jsonl
+ - resolve_map_final_postmerged.json
+ - postmerge_candidates_for_review.csv
+"""
+
+from pathlib import Path
+import json, itertools, uuid
+from collections import defaultdict
+import numpy as np
+
+# ---------- CONFIG ----------
+BASE = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/entity-resolved")
+INPUT = BASE / "entities_resolved_final.jsonl"
+OUT_JSONL = BASE / "entities_resolved_final_postmerged.jsonl"
+OUT_MAP = BASE / "resolve_map_final_postmerged.json"
+REVIEW_CSV = BASE / "postmerge_candidates_for_review.csv"
+
+# thresholds
+JACCARD_AUTO = 0.90    # token jaccard >= this -> auto-merge
+EMB_AUTO     = 0.92    # embedding cosine >= this -> auto-merge (optional)
+BORDER_LOW   = 0.85    # borderline start (write to review)
+USE_EMBED    = True    # set False to skip embeddings (fast)
+
+# Embedding model (only if USE_EMBED)
+EMBED_MODEL = "BAAI/bge-large-en-v1.5"
+USE_CUDA = True
+BATCH_EMBED = 64
+
+# ---------- helpers ----------
+def load_jsonl(path):
+    items = []
+    if not path.exists(): return items
+    with open(path,"r",encoding="utf-8") as fh:
+        for ln in fh:
+            ln=ln.strip()
+            if not ln: continue
+            items.append(json.loads(ln))
+    return items
+
+def save_jsonl(path, items):
+    with open(path,"w",encoding="utf-8") as fh:
+        for it in items:
+            fh.write(json.dumps(it, ensure_ascii=False) + "\n")
+
+def save_json(path, obj):
+    with open(path,"w",encoding="utf-8") as fh:
+        json.dump(obj, fh, ensure_ascii=False, indent=2)
+
+def normalize_label(s):
+    if not s: return ""
+    return " ".join(s.strip().lower().split())
+
+def token_jaccard(a,b):
+    sa = set(a.split())
+    sb = set(b.split())
+    if not sa and not sb: return 0.0
+    inter = sa & sb
+    uni = sa | sb
+    return float(len(inter))/len(uni)
+
+# optional embeddings
+if USE_EMBED:
+    try:
+        import torch
+        from transformers import AutoTokenizer, AutoModel
+        device = "cuda" if (USE_CUDA and torch.cuda.is_available()) else "cpu"
+        tok = AutoTokenizer.from_pretrained(EMBED_MODEL, use_fast=True)
+        model = AutoModel.from_pretrained(EMBED_MODEL).to(device)
+        model.eval()
+        @torch.no_grad()
+        def embed(texts, batch_size=BATCH_EMBED):
+            out_vecs=[]
+            for i in range(0,len(texts),batch_size):
+                batch = texts[i:i+batch_size]
+                enc = tok(batch, padding=True, truncation=True, return_tensors="pt").to(device)
+                res = model(**enc)
+                emb = res.last_hidden_state if hasattr(res,"last_hidden_state") else res.hidden_states[-1]
+                mask = enc["attention_mask"].unsqueeze(-1)
+                emb = emb * mask
+                summed = emb.sum(dim=1)
+                denom = mask.sum(dim=1).clamp(min=1)
+                mean = summed/denom
+                mean = torch.nn.functional.normalize(mean, p=2, dim=1)
+                out_vecs.append(mean.cpu().numpy().astype("float32"))
+            if out_vecs:
+                return np.vstack(out_vecs)
+            return np.zeros((0, model.config.hidden_size), dtype="float32")
+    except Exception as e:
+        print("Embedding unavailable, will skip embeddings. Err:",e)
+        USE_EMBED=False
+
+# ---------- main ----------
+items = load_jsonl(INPUT)
+print("Loaded final resolved:", len(items))
+
+# build maps
+id_to_obj = { it["id_final"]: it for it in items }
+ids = list(id_to_obj.keys())
+labels = { i: normalize_label(id_to_obj[i].get("label","")) for i in ids }
+
+# 1) deterministic exact label collapse
+from collections import defaultdict
+label_buckets = defaultdict(list)
+for rid, lab in labels.items():
+    label_buckets[lab].append(rid)
+
+uf_parent = {rid:rid for rid in ids}
+def uf_find(a):
+    while uf_parent[a]!=a:
+        uf_parent[a] = uf_parent[uf_parent[a]]
+        a = uf_parent[a]
+    return a
+def uf_union(a,b):
+    ra,rb = uf_find(a), uf_find(b)
+    if ra!=rb:
+        uf_parent[rb]=ra
+
+# merge identical labels deterministically
+for lab, bucket in label_buckets.items():
+    if not lab: continue
+    if len(bucket)>1:
+        base=bucket[0]
+        for other in bucket[1:]:
+            uf_union(base, other)
+
+# prepare candidate pairs (only pairs with different roots now)
+pairs = []
+for i,j in itertools.combinations(ids,2):
+    if uf_find(i)==uf_find(j): continue
+    lab_i = labels[i]; lab_j = labels[j]
+    jacc = token_jaccard(lab_i, lab_j)
+    pairs.append((i,j,jacc))
+
+# optional embed labels for better signal
+emb_map = {}
+if USE_EMBED and pairs:
+    label_texts = [ labels[r] or id_to_obj[r].get("label","") or "" for r in ids ]
+    emb_all = embed(label_texts)
+    for idx,r in enumerate(ids):
+        emb_map[r] = emb_all[idx]
+
+# evaluate and auto-merge by thresholds, collect borderline
+borderline = []
+for i,j,jacc in pairs:
+    emb_score = None
+    if USE_EMBED and i in emb_map and j in emb_map:
+        va = emb_map[i]; vb = emb_map[j]
+        denom = (np.linalg.norm(va)*np.linalg.norm(vb))
+        emb_score = float(np.dot(va, vb)/(denom+1e-12)) if denom>0 else 0.0
+    # decide primary score
+    score = emb_score if emb_score is not None else jacc
+    # auto-merge rules
+    if (emb_score is not None and emb_score >= EMB_AUTO) or (emb_score is None and jacc >= JACCARD_AUTO):
+        uf_union(i,j)
+    else:
+        # borderline if between BORDER_LOW and thresholds -> write for review
+        low = BORDER_LOW
+        high = EMB_AUTO if emb_score is not None else JACCARD_AUTO
+        if score >= low and score < high:
+            borderline.append({"group_a":i,"group_b":j,"label_a":id_to_obj[i].get("label"),"label_b":id_to_obj[j].get("label"),"size_a":len(id_to_obj[i].get("members",[])),"size_b":len(id_to_obj[j].get("members",[])),"jaccard":jacc,"emb_score":emb_score})
+
+# produce merged groups
+merged = defaultdict(list)
+for rid in ids:
+    root = uf_find(rid)
+    merged[root].append(rid)
+
+# build new final resolved objects by collapsing members of merged roots
+final_objs = []
+final_map = {}
+for new_root, rep_ids in merged.items():
+    # collect all mention members from rep groups
+    all_mentions = []
+    labels_candidates = []
+    descs = []
+    for rep in rep_ids:
+        obj = id_to_obj[rep]
+        all_mentions.extend(obj.get("members",[]))
+        labels_candidates.append(obj.get("label") or "")
+        descs.append(obj.get("description") or "")
+    # pick canonical label (longest non-empty or first)
+    label = next((l for l in labels_candidates if l), labels_candidates[0]) if labels_candidates else f"Res_{new_root}"
+    description = next((d for d in descs if d), "")
+    new_id = f"ResEntFinalPM_{uuid.uuid4().hex[:8]}"
+    members_unique = list(dict.fromkeys(all_mentions))
+    final_obj = {"id_final": new_id, "label": label, "description": description, "members": members_unique, "flag":"resolved_entity_postmerged"}
+    final_objs.append(final_obj)
+    for m in members_unique:
+        final_map[m] = new_id
+
+# save outputs
+save_jsonl(OUT_JSONL, final_objs)
+save_json(OUT_MAP, final_map)
+
+# write review CSV
+import csv
+with open(REVIEW_CSV, "w", newline="", encoding="utf-8") as fh:
+    w = csv.DictWriter(fh, fieldnames=["group_a","group_b","label_a","label_b","size_a","size_b","jaccard","emb_score"])
+    w.writeheader()
+    for r in borderline:
+        w.writerow(r)
+
+print("Wrote postmerged:", OUT_JSONL)
+print("Wrote resolve map:", OUT_MAP)
+print("Wrote review CSV:", REVIEW_CSV)
+print("Final groups:", len(final_objs))
+
+
+#endregion#? postmerge_final_resolved
+#?#########################  End  ##########################
+
+
+#*######################### Start ##########################
 #region:#?   Resolution Analysis Full V0
 
 
@@ -4666,10 +8613,10 @@ print("========================\n")
 
 
 #endregion#? 
-#?#########################  End  ##########################
+#*#########################  End  ##########################
 
 
-#?######################### Start ##########################
+#*######################### Start ##########################
 #region:#?   Resolution Analysis Full V0 - merge source
 
 #!/usr/bin/env python3
@@ -4799,10 +8746,10 @@ print(" -", OUT_CSV)
 
 
 #endregion#? Resolution Analysis - merge source
-#?#########################  End  ##########################
+#*#########################  End  ##########################
 
 
-#?######################### Start ##########################
+#*######################### Start ##########################
 #region:#?   Resolution Analysis Full V0
 
 
@@ -4879,18 +8826,10 @@ for row in hist[:6]:
 
 
 #endregion#? Analysis
-#?#########################  End  ##########################
+#*#########################  End  ##########################
 
 
-
-
-
-
-
-
-
-
-#?######################### Start ##########################
+#*######################### Start ##########################
 #region:#?   Analysis V1
 
 
@@ -5308,12 +9247,11 @@ print("========================\n")
 
 
 #endregion#? Analysis V1
-#?#########################  End  ##########################
-
+#*#########################  End  ##########################
 
 
 #?######################### Start ##########################
-#region:#?   Analysis V2
+#region:#?   Analysis V2 - Last before Rerun
 
 
 
@@ -5350,9 +9288,9 @@ import statistics
 # ------------------ Config / paths (change if needed) ------------------
 BASE_DIR = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/entity-resolved")
 ENT_RAW = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/KG/entities_raw-entResTestssmaller.jsonl")
-ENT_RESOLVED_JSONL = BASE_DIR / "entities_resolved.jsonl"
-RESOLVE_MAP = BASE_DIR / "resolve_map.json"
-HISTORY = BASE_DIR / "resolution_history.jsonl"
+ENT_RESOLVED_JSONL = BASE_DIR / "entities_resolved_final_postmerged.jsonl"
+RESOLVE_MAP = BASE_DIR / "resolve_map_final_postmerged.json"
+HISTORY = BASE_DIR / "resolution_history_final_postmerged.jsonl"
 CLUSTERS_PROCESSED = BASE_DIR / "clusters_processed.jsonl"
 CLUSTERS_FOR_REVIEW = BASE_DIR / "clusters_for_review.jsonl"
 LLM_DEBUG_DIR = BASE_DIR / "llm_debug"
@@ -5900,12 +9838,11 @@ if LLM_DEBUG_DIR.exists():
 print("========================\n")
 
 
-#endregion#? Analysis V2
+#endregion#? Analysis V2 - Last before Rerun
 #?#########################  End  ##########################
 
 
-
-#?######################### Start ##########################
+#*######################### Start ##########################
 #region:#?   Analysis V3 - for merged resolution 
 
 
@@ -6525,11 +10462,25 @@ print("========================\n")
 
 
 #endregion#? Analysis V3 - for merged resolution
+#*#########################  End  ##########################
+
+
+
+
+
+#endregion#! Creepy Resolutions
+#!#############################################  End Chapter  ##################################################
+
+
+
+
+
+
+#?######################### Start ##########################
+#region:#?   
+
+#endregion#? 
 #?#########################  End  ##########################
-
-
-
-
 
 
 
@@ -6539,651 +10490,10 @@ print("========================\n")
 
 
 #?######################### Start ##########################
-#region:#?   v4
+#region:#?   
 
-#!/usr/bin/env python3
-"""
-analyze_entity_resolution_combined_with_nearmiss.py
-
-Same as previous analysis script, but adds "near-miss" detection:
- - identifies mention-level pairs across different resolved groups whose
-   textual similarity indicates they might deserve a merge (but weren't merged).
- - computes group-level similarity (representative labels) and suggests top group merges.
- - detects "potential wrong merges": resolved groups whose internal mean pairwise
-   similarity is below NEAR_MISS_MIN (these may be incorrectly merged).
-
-Outputs (in OUT_DIR):
- - near_miss_pairs.csv
- - near_miss_group_pairs.csv
- - merge_suggestions.jsonl
- - potential_wrong_merges.jsonl, potential_wrong_merges.csv
- + all previous analysis outputs (resolved_entity_table.csv, merged_groups_full.json, ...)
-
-Notes:
- - Uses string-based similarity (difflib.SequenceMatcher + token Jaccard).
-"""
-import json
-from pathlib import Path
-from collections import defaultdict, Counter
-import csv
-import math
-import argparse
-from difflib import SequenceMatcher
-import itertools
-import statistics
-from typing import List, Dict, Any
-
-# ------------------ Config / paths (change if needed) ------------------
-# BASE_DIR = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/entity-resolved/entities_resolved_final.jsonl")
-# ENT_RAW = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/KG/entities_raw-entResTestssmaller.jsonl")
-# ENT_RESOLVED_JSONL = BASE_DIR / "entities_resolved_final.jsonl"
-# RESOLVE_MAP = BASE_DIR / "resolve_map.json"
-# HISTORY = BASE_DIR / "resolution_history.jsonl"
-# CLUSTERS_PROCESSED = BASE_DIR / "clusters_processed.jsonl"
-# CLUSTERS_FOR_REVIEW = BASE_DIR / "clusters_for_review.jsonl"
-# LLM_DEBUG_DIR = BASE_DIR / "llm_debug"
-
-# ------------------ Config / paths (change if needed) ------------------
-BASE_DIR = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/entity-resolved")
-ENT_RAW = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/KG/entities_raw-entResTestssmaller.jsonl")
-
-# NOTE: use the final two-stage outputs produced by your pipeline
-OUT_DIR = BASE_DIR / "analysis"
-OUT_DIR.mkdir(parents=True, exist_ok=True)
-
-ENT_RESOLVED_JSONL = OUT_DIR / "entities_resolved_final.jsonl"
-RESOLVE_MAP = OUT_DIR / "resolve_map_final.json"
-HISTORY = OUT_DIR / "resolution_history_full.jsonl"
-
-CLUSTERS_PROCESSED = BASE_DIR / "clusters_processed.jsonl"
-CLUSTERS_FOR_REVIEW = BASE_DIR / "clusters_for_review.jsonl"
-LLM_DEBUG_DIR = BASE_DIR / "llm_debug"
-
-
-
-
-OUT_DIR = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/entity-resolved/analysis")
-OUT_DIR.mkdir(parents=True, exist_ok=True)
-
-# Near-miss thresholds (string-similarity based)
-NEAR_MISS_MIN = 0.70   # lower bound to consider "close"
-NEAR_MISS_MAX = 0.94   # if > this we may have expected a merge (tunable)
-TOP_K_SUGGESTIONS = 200  # how many top candidates to write to suggestions
-
-# ------------------ Helpers ------------------
-def load_jsonl(path: Path) -> List[Dict[str, Any]]:
-    items = []
-    if not path.exists():
-        return items
-    with open(path, "r", encoding="utf-8") as fh:
-        for ln in fh:
-            ln = ln.strip()
-            if not ln:
-                continue
-            try:
-                items.append(json.loads(ln))
-            except Exception:
-                try:
-                    items.append(json.loads(ln.replace("'", '"')))
-                except Exception:
-                    print(f"[WARN] failed to parse line in {path}: {ln[:120]!r}")
-    return items
-
-def load_json(path: Path):
-    if not path.exists():
-        return None
-    with open(path, "r", encoding="utf-8") as fh:
-        return json.load(fh)
-
-def normalize_surface(s):
-    if not s:
-        return ""
-    return " ".join(s.strip().lower().split())
-
-def seq_ratio(a: str, b: str) -> float:
-    a = (a or "").strip()
-    b = (b or "").strip()
-    if not a or not b:
-        return 0.0
-    return SequenceMatcher(None, a, b).ratio()
-
-def token_jaccard(a: str, b: str) -> float:
-    a_tokens = set([t for t in (a or "").lower().split() if t])
-    b_tokens = set([t for t in (b or "").lower().split() if t])
-    if not a_tokens or not b_tokens:
-        return 0.0
-    inter = a_tokens.intersection(b_tokens)
-    uni = a_tokens.union(b_tokens)
-    return len(inter) / len(uni)
-
-def composite_string_sim(name_a: str, name_b: str, desc_a: str, desc_b: str, weights=None) -> float:
-    """
-    Lightweight composite similarity using sequence ratio and token jaccard on names and descriptions.
-    weights default tuned to prefer name similarity.
-    """
-    if weights is None:
-        weights = {"name_seq":0.5, "name_jac":0.25, "desc_seq":0.15, "desc_jac":0.10}
-    n_seq = seq_ratio(name_a, name_b)
-    n_jac = token_jaccard(name_a, name_b)
-    d_seq = seq_ratio(desc_a, desc_b)
-    d_jac = token_jaccard(desc_a or "", desc_b or "")
-    score = (n_seq * weights["name_seq"] + n_jac * weights["name_jac"] +
-             d_seq * weights["desc_seq"] + d_jac * weights["desc_jac"])
-    return float(score)
-
-# ------------------ Load inputs ------------------
-print("Loading input files (defaults shown in script)...")
-entities_raw = load_jsonl(ENT_RAW)
-print(f" - original mentions: {len(entities_raw)}  (ENT_RAW: {ENT_RAW})")
-
-resolved_records = load_jsonl(ENT_RESOLVED_JSONL)
-print(f" - canonical resolved records: {len(resolved_records)}  (ENT_RESOLVED_JSONL: {ENT_RESOLVED_JSONL})")
-
-resolve_map = load_json(RESOLVE_MAP) or {}
-print(f" - resolve_map entries: {len(resolve_map)}  (RESOLVE_MAP: {RESOLVE_MAP})")
-
-history = load_jsonl(HISTORY)
-print(f" - history entries: {len(history)}  (HISTORY: {HISTORY})")
-
-clusters_processed = load_jsonl(CLUSTERS_PROCESSED)
-if clusters_processed:
-    print(f" - clusters_processed entries: {len(clusters_processed)}  (CLUSTERS_PROCESSED: {CLUSTERS_PROCESSED})")
-else:
-    print(f" - clusters_processed missing or empty (CLUSTERS_PROCESSED: {CLUSTERS_PROCESSED})")
-
-clusters_for_review = load_jsonl(CLUSTERS_FOR_REVIEW)
-if clusters_for_review:
-    print(f" - clusters_for_review entries: {len(clusters_for_review)}  (CLUSTERS_FOR_REVIEW: {CLUSTERS_FOR_REVIEW})")
-
-entities_by_id = { e.get("id"): e for e in entities_raw }
-resolved_by_newid = { r.get("id_final"): r for r in resolved_records }
-
-for r in resolved_by_newid.values():
-    r.setdefault("label", r.get("label") or r.get("id_final"))
-    r.setdefault("aliases", r.get("aliases") or [])
-    r.setdefault("members", r.get("members") or [])
-    r.setdefault("description", r.get("description") or "")
-
-# ------------------ Existing analysis (unchanged) ------------------
-csv_path = OUT_DIR / "resolved_entity_table.csv"
-fields = [
-    "original_id", "resolved_id", "resolved_label", "resolved_size", "resolved_aliases",
-    "entity_name", "entity_description", "entity_type_hint", "chunk_id", "mention_confidence", "member_confidence"
-]
-with open(csv_path, "w", encoding="utf-8", newline="") as fh:
-    writer = csv.DictWriter(fh, fieldnames=fields)
-    writer.writeheader()
-    for ent in entities_raw:
-        eid = ent.get("id")
-        rid = resolve_map.get(eid)
-        rlabel = ""
-        rsize = ""
-        raliases = ""
-        member_conf = None
-        if rid and rid in resolved_by_newid:
-            rec = resolved_by_newid[rid]
-            rlabel = rec.get("label","")
-            rsize = len(rec.get("members",[]))
-            raliases = "|".join(rec.get("aliases",[]))
-            member_conf = rec.get("member_confidence", {}).get(eid) if isinstance(rec.get("member_confidence", {}), dict) else None
-        row = {
-            "original_id": eid,
-            "resolved_id": rid or "",
-            "resolved_label": rlabel,
-            "resolved_size": rsize,
-            "resolved_aliases": raliases,
-            "entity_name": ent.get("entity_name",""),
-            "entity_description": ent.get("entity_description",""),
-            "entity_type_hint": ent.get("entity_type_hint",""),
-            "chunk_id": ent.get("chunk_id") or ent.get("source_chunk") or ent.get("chunk") or "",
-            "mention_confidence": ent.get("confidence_score") if ent.get("confidence_score") is not None else "",
-            "member_confidence": member_conf if member_conf is not None else ""
-        }
-        writer.writerow(row)
-print("Wrote:", csv_path)
-
-# Build groups
-groups = defaultdict(list)
-for orig_id in entities_by_id:
-    rid = resolve_map.get(orig_id)
-    if rid:
-        groups[rid].append(orig_id)
-    else:
-        groups[f"UNRESOLVED_{orig_id}"].append(orig_id)
-
-merged_groups = []
-for rid, members in groups.items():
-    resolved_rec = resolved_by_newid.get(rid)
-    label = resolved_rec.get("label") if resolved_rec else None
-    aliases = resolved_rec.get("aliases") if resolved_rec else []
-    resolved_desc = resolved_rec.get("description") if resolved_rec else ""
-    member_objs = []
-    for mid in members:
-        m = entities_by_id.get(mid, {})
-        member_objs.append({
-            "id": mid,
-            "entity_name": m.get("entity_name",""),
-            "entity_description": m.get("entity_description",""),
-            "entity_type_hint": m.get("entity_type_hint",""),
-            "chunk_id": m.get("chunk_id") or m.get("source_chunk") or m.get("chunk") or "",
-            "mention_confidence": m.get("confidence_score"),
-            "member_confidence": (resolved_by_newid.get(rid, {}).get("member_confidence", {}).get(mid) if rid in resolved_by_newid else None)
-        })
-    merged_groups.append({
-        "resolved_id": rid,
-        "label": label or f"UNRESOLVED_GROUP_{rid}",
-        "aliases": aliases,
-        "members": member_objs,
-        "size": len(member_objs),
-        "resolved_description": resolved_desc
-    })
-
-merged_groups_sorted = sorted(merged_groups, key=lambda x: x["size"], reverse=True)
-
-out_json = OUT_DIR / "merged_groups_full.json"
-with open(out_json, "w", encoding="utf-8") as fh:
-    json.dump(merged_groups_sorted, fh, indent=2, ensure_ascii=False)
-out_jsonl = OUT_DIR / "merged_groups_full.jsonl"
-with open(out_jsonl, "w", encoding="utf-8") as fh:
-    for g in merged_groups_sorted:
-        fh.write(json.dumps(g, ensure_ascii=False) + "\n")
-print("Wrote merged groups files.")
-
-csv_groups = OUT_DIR / "merged_groups_by_size.csv"
-with open(csv_groups, "w", encoding="utf-8", newline="") as fh:
-    fieldnames = ["resolved_id", "label", "size", "aliases", "sample_member_names"]
-    writer = csv.DictWriter(fh, fieldnames=fieldnames)
-    writer.writeheader()
-    for g in merged_groups_sorted:
-        sample_names = "; ".join([m.get("entity_name","") for m in g["members"][:6]])
-        writer.writerow({
-            "resolved_id": g["resolved_id"],
-            "label": g["label"],
-            "size": g["size"],
-            "aliases": "|".join(g.get("aliases",[])),
-            "sample_member_names": sample_names
-        })
-print("Wrote:", csv_groups)
-
-singletons_path = OUT_DIR / "singletons_unresolved.csv"
-with open(singletons_path, "w", encoding="utf-8", newline="") as fh:
-    fieldnames = ["original_id", "entity_name", "entity_description", "entity_type_hint", "chunk_id", "mention_confidence"]
-    writer = csv.DictWriter(fh, fieldnames=fieldnames)
-    writer.writeheader()
-    for g in merged_groups_sorted:
-        if g["size"] == 1 and (str(g["resolved_id"]).startswith("UNRESOLVED_") or g["label"].startswith("UNRESOLVED_")):
-            m = g["members"][0]
-            writer.writerow({
-                "original_id": m.get("id"),
-                "entity_name": m.get("entity_name",""),
-                "entity_description": m.get("entity_description",""),
-                "entity_type_hint": m.get("entity_type_hint",""),
-                "chunk_id": m.get("chunk_id",""),
-                "mention_confidence": m.get("mention_confidence","")
-            })
-print("Wrote:", singletons_path)
-
-# ------------------ Annotate merge sources (unchanged) ------------------
-entity_sources = defaultdict(list)
-for h in history:
-    act = (h.get("action") or "").lower()
-    if act == "auto_merge":
-        mids = h.get("member_ids") or h.get("merged_ids") or h.get("members") or []
-        for m in mids:
-            entity_sources[m].append("auto")
-    elif act == "merge_entities":
-        mids = h.get("merged_ids") or h.get("member_ids") or []
-        for m in mids:
-            entity_sources[m].append("llm")
-    elif act in ("applied_merge_group", "applied_merge"):
-        mids = h.get("member_ids") or h.get("merged_ids") or []
-        for m in mids:
-            entity_sources[m].append("llm")
-    elif act == "rename_entity":
-        eid = h.get("entity_id")
-        if eid:
-            entity_sources[eid].append("llm")
-    elif act == "kept_singleton":
-        eid = h.get("entity_id")
-        if eid:
-            entity_sources[eid].append("none")
-    elif act == "left_unchanged_low_sim":
-        for m in h.get("members", []) or []:
-            entity_sources[m].append("none")
-    elif act == "keep_entity":
-        eid = h.get("entity_id")
-        if eid:
-            entity_sources[eid].append("llm")
-    else:
-        mids = h.get("merged_ids") or h.get("member_ids") or []
-        for m in mids:
-            entity_sources[m].append("llm" if act and "auto" not in act else "auto")
-
-annotated = []
-csv_rows = []
-for g in merged_groups_sorted:
-    members = g["members"]
-    src_counter = Counter()
-    for m in members:
-        mid = m["id"]
-        for src in entity_sources.get(mid, []):
-            src_counter[src] += 1
-    if not src_counter:
-        resolution_source = "singleton"
-    elif len(src_counter) == 1:
-        resolution_source = next(iter(src_counter))
-    else:
-        resolution_source = "mixed"
-    g2 = dict(g)
-    g2["resolution_source"] = resolution_source
-    g2["auto_merge_count"] = src_counter.get("auto", 0)
-    g2["llm_merge_count"] = src_counter.get("llm", 0)
-    annotated.append(g2)
-    csv_rows.append({
-        "resolved_id": g2["resolved_id"],
-        "label": g2["label"],
-        "size": g2["size"],
-        "resolution_source": resolution_source,
-        "auto_merge_count": g2["auto_merge_count"],
-        "llm_merge_count": g2["llm_merge_count"],
-        "sample_members": "; ".join(m["entity_name"] for m in members[:5])
-    })
-
-OUT_ANNOT_JSON = OUT_DIR / "merged_groups_full_annotated.json"
-OUT_ANNOT_JSONL = OUT_DIR / "merged_groups_full_annotated.jsonl"
-OUT_ANNOT_CSV = OUT_DIR / "merged_groups_by_source.csv"
-
-with open(OUT_ANNOT_JSON, "w", encoding="utf-8") as fh:
-    json.dump(annotated, fh, indent=2, ensure_ascii=False)
-with open(OUT_ANNOT_JSONL, "w", encoding="utf-8") as fh:
-    for g in annotated:
-        fh.write(json.dumps(g, ensure_ascii=False) + "\n")
-with open(OUT_ANNOT_CSV, "w", encoding="utf-8", newline="") as fh:
-    fieldnames = ["resolved_id", "label", "size", "resolution_source", "auto_merge_count", "llm_merge_count", "sample_members"]
-    writer = csv.DictWriter(fh, fieldnames=fieldnames)
-    writer.writeheader()
-    for r in csv_rows:
-        writer.writerow(r)
-print("Wrote annotated merged groups.")
-
-# ------------------ Stats (unchanged) ------------------
-size_counts = Counter([g["size"] for g in merged_groups_sorted])
-top_labels = [{"label":g["label"], "size":g["size"], "resolved_id": g["resolved_id"]} for g in merged_groups_sorted[:50]]
-type_dist = Counter([ e.get("entity_type_hint") or "None" for e in entities_raw ])
-confidence_vals = []
-for e in entities_raw:
-    cs = e.get("confidence_score")
-    try:
-        if cs is not None:
-            confidence_vals.append(float(cs))
-    except Exception:
-        pass
-
-conf_summary = {}
-if confidence_vals:
-    conf_summary = {
-        "count": len(confidence_vals),
-        "mean": sum(confidence_vals)/len(confidence_vals),
-        "min": min(confidence_vals),
-        "max": max(confidence_vals)
-    }
-
-stats = {
-    "n_original_mentions": len(entities_raw),
-    "n_resolved_groups": len(merged_groups_sorted),
-    "size_distribution": dict(size_counts),
-    "top_resolved_samples": top_labels,
-    "type_distribution_sample": type_dist.most_common(40),
-    "confidence_summary": conf_summary,
-    "history_action_counts": Counter([h.get("action") for h in history])
-}
-
-stats_out = OUT_DIR / "top_resolved_stats.json"
-with open(stats_out, "w", encoding="utf-8") as fh:
-    json.dump(stats, fh, indent=2, ensure_ascii=False)
-print("Wrote:", stats_out)
-
-# ------------------ NEW: Near-miss detection ------------------
-
-# Build representative label/desc for each group:
-group_reprs = {}
-for g in merged_groups_sorted:
-    rid = g["resolved_id"]
-    label = g.get("label") or ""
-    desc = g.get("resolved_description") or ""
-    # fallback to first member
-    if (not label or label.startswith("UNRESOLVED_")) and g["members"]:
-        label = label if label and not label.startswith("UNRESOLVED_") else (g["members"][0].get("entity_name") or "")
-    if (not desc) and g["members"]:
-        desc = desc or (g["members"][0].get("entity_description") or "")
-    group_reprs[rid] = {"label": str(label), "desc": str(desc), "size": g["size"], "members": [m["id"] for m in g["members"]]}
-
-# 1) Group-level similarity (representative labels)
-group_pairs = []
-group_ids = list(group_reprs.keys())
-for a, b in itertools.combinations(group_ids, 2):
-    la = group_reprs[a]["label"]
-    lb = group_reprs[b]["label"]
-    da = group_reprs[a]["desc"]
-    db = group_reprs[b]["desc"]
-    score = composite_string_sim(la, lb, da, db)
-    if score >= NEAR_MISS_MIN:
-        group_pairs.append((a, b, score))
-
-# sort and write group-level near-misses
-group_pairs_sorted = sorted(group_pairs, key=lambda x: x[2], reverse=True)
-gp_csv = OUT_DIR / "near_miss_group_pairs.csv"
-with open(gp_csv, "w", encoding="utf-8", newline="") as fh:
-    writer = csv.DictWriter(fh, fieldnames=["group_a", "group_b", "label_a", "label_b", "size_a", "size_b", "score"])
-    writer.writeheader()
-    for a,b,sc in group_pairs_sorted:
-        writer.writerow({
-            "group_a": a, "group_b": b,
-            "label_a": group_reprs[a]["label"],
-            "label_b": group_reprs[b]["label"],
-            "size_a": group_reprs[a]["size"],
-            "size_b": group_reprs[b]["size"],
-            "score": f"{sc:.4f}"
-        })
-print("Wrote group-level near-miss csv:", gp_csv)
-
-# 2) Mention-level cross-group near-miss pairs (top K)
-pairs = []
-mention_items = []
-# prepare mention list with resolved group id
-for ent in entities_raw:
-    mid = ent.get("id")
-    rid = resolve_map.get(mid) or f"UNRES_{mid}"
-    mention_items.append({
-        "id": mid,
-        "rid": rid,
-        "name": ent.get("entity_name","") or "",
-        "desc": ent.get("entity_description","") or ""
-    })
-
-# For efficiency, compare only candidate group pairs (from group_pairs_sorted). If none, fallback to top groups.
-candidate_group_pairs = [ (a,b) for (a,b,sc) in group_pairs_sorted ]
-if not candidate_group_pairs:
-    top_groups = [g["resolved_id"] for g in merged_groups_sorted[:50]]
-    candidate_group_pairs = list(itertools.combinations(top_groups, 2))
-
-# build map group->members (mention dicts)
-group_to_mentions = defaultdict(list)
-for m in mention_items:
-    group_to_mentions[m["rid"]].append(m)
-
-# compute mention-level scores for candidate group pairs
-for a,b in candidate_group_pairs:
-    membs_a = group_to_mentions.get(a, [])
-    membs_b = group_to_mentions.get(b, [])
-    # skip trivial empty groups
-    if not membs_a or not membs_b:
-        continue
-    # cap per-group comparisons to avoid explosion
-    cap = 40
-    membs_a_sample = membs_a[:cap]
-    membs_b_sample = membs_b[:cap]
-    for ma in membs_a_sample:
-        for mb in membs_b_sample:
-            name_score = seq_ratio(ma["name"], mb["name"])
-            comp_score = composite_string_sim(ma["name"], mb["name"], ma["desc"], mb["desc"])
-            if comp_score >= NEAR_MISS_MIN:
-                pairs.append({
-                    "mention_a": ma["id"], "mention_b": mb["id"],
-                    "group_a": a, "group_b": b,
-                    "name_a": ma["name"], "name_b": mb["name"],
-                    "desc_a": ma["desc"], "desc_b": mb["desc"],
-                    "score": comp_score,
-                    "name_ratio": name_score
-                })
-
-pairs_filtered = [p for p in pairs if p["score"] >= NEAR_MISS_MIN]
-pairs_sorted = sorted(pairs_filtered, key=lambda x: x["score"], reverse=True)
-
-pairs_csv = OUT_DIR / "near_miss_pairs.csv"
-with open(pairs_csv, "w", encoding="utf-8", newline="") as fh:
-    fieldnames = ["mention_a","mention_b","group_a","group_b","name_a","name_b","score","name_ratio"]
-    writer = csv.DictWriter(fh, fieldnames=fieldnames)
-    writer.writeheader()
-    for p in pairs_sorted:
-        writer.writerow({
-            "mention_a": p["mention_a"],
-            "mention_b": p["mention_b"],
-            "group_a": p["group_a"],
-            "group_b": p["group_b"],
-            "name_a": p["name_a"],
-            "name_b": p["name_b"],
-            "score": f"{p['score']:.4f}",
-            "name_ratio": f"{p['name_ratio']:.4f}"
-        })
-print("Wrote mention-level near-miss pairs:", pairs_csv)
-
-# 3) Merge suggestions: aggregate group-level + mention-level evidence
-group_evidence = defaultdict(list)
-for p in pairs_sorted:
-    key = tuple(sorted([p["group_a"], p["group_b"]]))
-    group_evidence[key].append(p["score"])
-
-suggestions = []
-for (a,b,sc) in group_pairs_sorted:
-    key = tuple(sorted([a,b]))
-    mention_scores = group_evidence.get(key, [])
-    best_m = max(mention_scores) if mention_scores else 0.0
-    combined = sc * 0.6 + best_m * 0.4
-    suggestions.append({"group_a": key[0], "group_b": key[1], "group_score": sc, "best_mention_score": best_m, "combined_score": combined})
-
-# also include group pairs that only came from mention evidence
-for key, mention_scores in group_evidence.items():
-    if not any((key[0]==g[0] and key[1]==g[1]) or (key[0]==g[1] and key[1]==g[0]) for g in [(gp[0],gp[1]) for gp in group_pairs_sorted]):
-        best_m = max(mention_scores)
-        combined = best_m
-        suggestions.append({"group_a": key[0], "group_b": key[1], "group_score": None, "best_mention_score": best_m, "combined_score": combined})
-
-suggestions_sorted = sorted(suggestions, key=lambda x: (x["combined_score"] or 0.0), reverse=True)[:TOP_K_SUGGESTIONS]
-sugg_out = OUT_DIR / "merge_suggestions.jsonl"
-with open(sugg_out, "w", encoding="utf-8") as fh:
-    for s in suggestions_sorted:
-        fh.write(json.dumps(s, ensure_ascii=False) + "\n")
-print("Wrote merge suggestions:", sugg_out)
-
-gp_top_csv = OUT_DIR / "near_miss_group_pairs_top.csv"
-with open(gp_top_csv, "w", encoding="utf-8", newline="") as fh:
-    writer = csv.DictWriter(fh, fieldnames=["group_a","group_b","label_a","label_b","size_a","size_b","score"])
-    writer.writeheader()
-    for a,b,sc in group_pairs_sorted[:TOP_K_SUGGESTIONS]:
-        writer.writerow({
-            "group_a": a, "group_b": b,
-            "label_a": group_reprs[a]["label"], "label_b": group_reprs[b]["label"],
-            "size_a": group_reprs[a]["size"], "size_b": group_reprs[b]["size"],
-            "score": f"{sc:.4f}"
-        })
-print("Wrote top group-level near-miss csv:", gp_top_csv)
-
-# ------------------ NEW: Potential wrong merges (internal group coherence) ------------------
-potential_wrong = []
-for g in merged_groups_sorted:
-    if g["size"] <= 1:
-        continue
-    # compute mean pairwise similarity among members (names+descs)
-    member_pairs = []
-    members = g["members"]
-    for a_idx in range(len(members)):
-        for b_idx in range(a_idx+1, len(members)):
-            ma = members[a_idx]
-            mb = members[b_idx]
-            sc = composite_string_sim(ma.get("entity_name",""), mb.get("entity_name",""),
-                                      ma.get("entity_description",""), mb.get("entity_description",""))
-            member_pairs.append(sc)
-    mean_internal = float(statistics.mean(member_pairs)) if member_pairs else 0.0
-    if mean_internal < NEAR_MISS_MIN:
-        potential_wrong.append({
-            "resolved_id": g["resolved_id"],
-            "label": g["label"],
-            "size": g["size"],
-            "mean_internal_member_similarity": mean_internal,
-            "sample_members": [m.get("entity_name","") for m in members[:8]]
-        })
-
-# write potential wrong merges jsonl & csv
-pw_jsonl = OUT_DIR / "potential_wrong_merges.jsonl"
-with open(pw_jsonl, "w", encoding="utf-8") as fh:
-    for p in potential_wrong:
-        fh.write(json.dumps(p, ensure_ascii=False) + "\n")
-pw_csv = OUT_DIR / "potential_wrong_merges.csv"
-with open(pw_csv, "w", encoding="utf-8", newline="") as fh:
-    writer = csv.DictWriter(fh, fieldnames=["resolved_id","label","size","mean_internal_member_similarity","sample_members"])
-    writer.writeheader()
-    for p in potential_wrong:
-        writer.writerow({
-            "resolved_id": p["resolved_id"],
-            "label": p["label"],
-            "size": p["size"],
-            "mean_internal_member_similarity": f"{p['mean_internal_member_similarity']:.4f}",
-            "sample_members": " | ".join(p["sample_members"])
-        })
-print("Wrote potential wrong merges:", pw_jsonl, pw_csv)
-
-# ------------------ Optional: Save clusters_processed copy ------------------
-if clusters_processed:
-    cp_out = OUT_DIR / "clusters_processed_copy.jsonl"
-    with open(cp_out, "w", encoding="utf-8") as fh:
-        for c in clusters_processed:
-            fh.write(json.dumps(c, ensure_ascii=False) + "\n")
-    print("Wrote clusters_processed copy:", cp_out)
-
-# ------------------ Final console summary ------------------
-print("\n=== QUICK INSPECTION ===")
-print("original mentions:", len(entities_raw))
-print("resolved groups:", len(merged_groups_sorted))
-print("potential wrong merges (count):", len(potential_wrong))
-print("top 10 resolved groups (label -- size -- resolved_id):")
-for g in merged_groups_sorted[:10]:
-    print(f"  {g['label'][:70]:70s}  size={g['size']:3d}  id={g['resolved_id']}")
-print("\nFiles written to:", OUT_DIR)
-print(" - resolved_entity_table.csv")
-print(" - merged_groups_full.json(.jsonl)")
-print(" - merged_groups_by_size.csv")
-print(" - singletons_unresolved.csv")
-print(" - merged_groups_full_annotated.json(.jsonl/.csv)")
-print(" - top_resolved_stats.json")
-print(" - near_miss_pairs.csv")
-print(" - near_miss_group_pairs.csv  (and _top.csv)")
-print(" - merge_suggestions.jsonl")
-print(" - potential_wrong_merges.jsonl / .csv")
-if clusters_for_review:
-    print(" - clusters_flagged_for_review.jsonl")
-if LLM_DEBUG_DIR.exists():
-    print(" - LLM debug dir (exists):", LLM_DEBUG_DIR)
-print("========================\n")
-
-
-
-#endregion#? V4
+#endregion#? 
 #?#########################  End  ##########################
-
-
-
-
 
 
 
@@ -7193,18 +10503,12 @@ print("========================\n")
 
 
 #?######################### Start ##########################
-#region:#?   Entity Resolution V0
+#region:#?   
 
-#endregion#? Entity Resolution V0
+#endregion#? 
 #?#########################  End  ##########################
 
 
-#?######################### Start ##########################
-#region:#?   Entity Resolution V
-
-
-#endregion#? Entity Resolution V
-#?#########################  End  ##########################
 
 
 
@@ -7212,22 +10516,24 @@ print("========================\n")
 
 
 #?######################### Start ##########################
-#region:#?   Entity Resolution V
+#region:#?   
 
-
-#endregion#? Entity Resolution V
+#endregion#? 
 #?#########################  End  ##########################
+
+
+
 
 
 
 
 
 #?######################### Start ##########################
-#region:#?   Entity Resolution V
+#region:#?   
 
-
-#endregion#? Entity Resolution V
+#endregion#? 
 #?#########################  End  ##########################
+
 
 
 
@@ -7262,6 +10568,7 @@ print("========================\n")
 #?######################### Start ##########################
 #region:#?   Relation Recognition
 
+
 #endregion#? Relation Recognition
 #?#########################  End  ##########################
 
@@ -7272,6 +10579,8 @@ print("========================\n")
 
 #?######################### Start ##########################
 #region:#?   KG Assembly
+
+
 
 #endregion#? KG Assembly
 #?#########################  End  ##########################
