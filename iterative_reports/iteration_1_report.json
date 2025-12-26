@@ -1,0 +1,19 @@
+{
+  "iteration": 1,
+  "start_time": 1766704204.9437652,
+  "steps": {
+    "load_pipeline": {
+      "ok": false,
+      "error": "Pipeline file not found: /home/mabolhas/MyReposOnSOL/SGCE-KG/pipeline.py"
+    },
+    "embed": {
+      "ok": false,
+      "msg": "Function lookup/call failed: No callable among candidates: ['main_cli', 'main_embed', 'embed_main', 'run_embedding', 'run_embed_and_cluster', 'run_embed_cluster', 'embed_and_cluster_main', 'compute_and_cluster', 'main']. Subprocess fallback also failed: Command '['python', '/home/mabolhas/MyReposOnSOL/SGCE-KG/pipeline.py', '--stage', 'embed', '--entities_in', '/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities/Ent_Raw_0/entities_raw.jsonl', '--out_jsonl', '/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities/Ent_1st/Ent_Clustering_1st/entities_clustered.jsonl', '--clusters_summary', '/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities/Ent_1st/Ent_Clustering_1st/clusters_summary.json']' returned non-zero exit status 2."
+    },
+    "resolve": {
+      "ok": false,
+      "msg": "Function lookup/call failed: No callable among candidates: ['orchestrate', 'resolve_main', 'main_resolve', 'run_resolution', 'main']. Subprocess fallback also failed: Command '['python', '/home/mabolhas/MyReposOnSOL/SGCE-KG/pipeline.py', '--stage', 'resolve', '--entities_in', '/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities/Ent_1st/Ent_Clustering_1st/entities_clustered.jsonl', '--out_entities', '/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities/Ent_1st/Ent_Resolved_1st/entities_resolved.jsonl', '--canon_out', '/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities/Ent_1st/Ent_Resolved_1st/canonical_entities.jsonl']' returned non-zero exit status 2."
+    }
+  },
+  "error": "Expected outputs not found (resolved or canonical files). Stopping."
+}
