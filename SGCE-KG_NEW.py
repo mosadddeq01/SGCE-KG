@@ -7883,25 +7883,6 @@ print("Summary:", summary)
 
 
 
-#endregion#! Old Ent Res Manual Re Run
-#!#############################################  End Chapter  ##################################################
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -8499,6 +8480,27 @@ logging.info("If something is missing, run the script again after making sure th
 
 
 
+#endregion#! Old Ent Res Manual Re Run
+#!#############################################  End Chapter  ##################################################
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -8518,129 +8520,122 @@ logging.info("If something is missing, run the script again after making sure th
 
 
 
-
-
-#?######################### Start ##########################
-#region:#?    Embed_and_cluster_final_entities
-
+#*######################### Start ##########################
+#region:#?   Cls Rec V1
 
 #!/usr/bin/env python3
 """
-embed_and_cluster_final_entities.py
+classrec_iterative.py
 
-- INPUT: final_entities_master.jsonl (your consolidated, resolved entities)
-- ACTIONS:
-    1) Build weighted text per-entity using fields: name, desc, ctx, type and WEIGHTS
-    2) Embed each field using an HF model (default: BAAI/bge-large-en-v1.5) and combine with weights
-    3) Optionally run UMAP reduction
-    4) Cluster combined vectors with HDBSCAN (variable K / density-based — no fixed K)
-    5) Save:
-        - clustered entities JSONL with `_cluster_id` field under:
-          /home/mabolhas/MyReposOnSOL/SGCE-KG/data/Classes/ResEnt_Clustering/entities_clustered_final.jsonl
-        - clusters summary JSON under same folder
-        - combined embeddings .npy (same folder) for later nearest-neighbor retrieval
-        - optionally build a FAISS index file (if faiss installed)
-- NOTE: This script is self-contained and follows the patterns in your repo.
-- Adjust the CONFIG below as needed.
-
-Author: adapted to your pipeline and requests
+Iterative Class Recognition (ClassRec) aligned with your pipeline.
+- Input: resolved entities JSONL (one entity object per line) at:
+    /home/mabolhas/MyReposOnSOL/SGCE-KG/data/Classes/Cls_Input/cls_input_entities.jsonl
+- Output directory:
+    /home/mabolhas/MyReposOnSOL/SGCE-KG/data/Classes/Cls_Rec
+Produces:
+ - class_candidates.jsonl   (LLM-suggested classes, one JSON object per line)
+ - cluster_to_members.json  (coarse cluster summary used for first pass)
+ - remaining_entities.jsonl (entities left after process)
 """
 
-import os
 import json
-from pathlib import Path
-from typing import List, Dict, Optional, Tuple
-import numpy as np
+import os
+import time
 import uuid
-import sys
+from pathlib import Path
+from typing import List, Dict, Tuple
 
-# Transformer / torch embedder
+import numpy as np
 import torch
 from transformers import AutoTokenizer, AutoModel
 from sklearn.preprocessing import normalize
 
-# Clustering and reduction
+# clustering libs
 try:
     import hdbscan
-except Exception as e:
-    raise RuntimeError("hdbscan is required. Install with `pip install hdbscan`") from e
-
+except Exception:
+    raise RuntimeError("hdbscan required: pip install hdbscan")
 try:
     import umap
     UMAP_AVAILABLE = True
 except Exception:
     UMAP_AVAILABLE = False
 
-# Optional: faiss (for fast nearest neighbor retrieval later)
-try:
-    import faiss
-    FAISS_AVAILABLE = True
-except Exception:
-    FAISS_AVAILABLE = False
+# OpenAI client (same pattern as your other scripts)
+from openai import OpenAI
 
-# ------------------ CONFIG ------------------
-# input final entities (use your FinalCompAnalysis master)
-ENTITIES_IN = "/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities/Overall_After_Two_Run/FinalCompAnalysis/final_entities_master.jsonl"
-
-# output folder (as requested)
-OUT_DIR = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Classes/ResEnt_Clustering")
+# ----------------------------- CONFIG -----------------------------
+INPUT_PATH = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Classes/Cls_Input/cls_input_entities.jsonl")
+OUT_DIR = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Classes/Cls_Rec")
 OUT_DIR.mkdir(parents=True, exist_ok=True)
 
-OUT_CLUSTERED_JSONL = OUT_DIR / "entities_clustered_final.jsonl"
-OUT_CLUSTERS_SUMMARY = OUT_DIR / "clusters_summary_final.json"
-OUT_EMBEDDINGS_NPY = OUT_DIR / "entities_embeds_combined.npy"
-OUT_FAISS_INDEX = OUT_DIR / "entities_faiss.index"  # optional, only if faiss available
+CLASS_CANDIDATES_OUT = OUT_DIR / "class_candidates.jsonl"
+CLUSTER_SUMMARY_OUT = OUT_DIR / "cluster_to_members.json"
+REMAINING_ENTITIES_OUT = OUT_DIR / "remaining_entities.jsonl"
 
-# Embedding model (change if you prefer)
-EMBED_MODEL = os.environ.get("EMBED_MODEL", "BAAI/bge-large-en-v1.5")
+# embedder / model
+EMBED_MODEL = "BAAI/bge-large-en-v1.5"
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
-
-# weights you specified (we will normalize them inside code)
-WEIGHTS = {"name": 0.45, "desc": 0.25, "ctx": 0.25, "type": 0.05}
-
-# Batching
 BATCH_SIZE = 32
+WEIGHTS = {"name": 0.40, "desc": 0.25, "ctx": 0.35}
 
-# HDBSCAN params (force density-based clusters; user asked variable-K)
-HDBSCAN_MIN_CLUSTER_SIZE = 2
+# HDBSCAN + UMAP
+HDBSCAN_MIN_CLUSTER_SIZE = 4
 HDBSCAN_MIN_SAMPLES = 1
-HDBSCAN_METRIC = "euclidean"   # embeddings will be normalized so euclidean ~ cosine
-
-# UMAP params (optional)
+HDBSCAN_METRIC = "euclidean"
 USE_UMAP = True
 UMAP_N_COMPONENTS = 64
-UMAP_N_NEIGHBORS = 15
+UMAP_N_NEIGHBORS = 8
 UMAP_MIN_DIST = 0.0
 
-# Save intermediate per-field embeddings? (saves memory but may be large)
-SAVE_FIELD_EMBS = False
+# local subcluster
+MAX_CLUSTER_SIZE_FOR_LOCAL = 30
+LOCAL_HDBSCAN_MIN_CLUSTER_SIZE = 2
+LOCAL_HDBSCAN_MIN_SAMPLES = 1
 
-# ------------------ Helpers ------------------
-def load_jsonl(path: str) -> List[Dict]:
-    p = Path(path)
-    assert p.exists(), f"file not found: {p}"
-    out = []
-    with open(p, "r", encoding="utf-8") as fh:
-        for ln in fh:
-            ln = ln.strip()
-            if not ln:
-                continue
-            out.append(json.loads(ln))
-    return out
+# prompt and LLM / limits
+OPENAI_MODEL = "gpt-4o"
+OPENAI_TEMPERATURE = 0.0
+LLM_MAX_TOKENS = 800
+MAX_MEMBERS_PER_PROMPT = 10
+PROMPT_CHAR_PER_TOKEN = 4          # crude estimate
+MAX_PROMPT_TOKENS_EST = 2500
 
-def safe_text(e: Dict, key: str) -> str:
-    v = e.get(key)
-    if v is None:
-        return ""
-    if isinstance(v, list) or isinstance(v, dict):
-        # preserve some structure but short
+# iteration control
+MAX_RECLUSTER_ROUNDS = 8  # safety cap to avoid infinite loops
+VERBOSE = True
+
+# ------------------------ OpenAI client loader -----------------------
+def _load_openai_key(envvar: str = "OPENAI_API_KEY", fallback_path: str = "/home/mabolhas/MyReposOnSOL/SGCE-KG/.env"):
+    key = os.getenv(envvar, fallback_path)
+    if isinstance(key, str) and Path(key).exists():
         try:
-            return json.dumps(v, ensure_ascii=False)
+            txt = Path(key).read_text(encoding="utf-8").strip()
+            if txt:
+                return txt
         except Exception:
-            return str(v)
-    return str(v)
+            pass
+    return key
 
-# ------------------ HF embedder (mean pooling) ------------------
+OPENAI_KEY = _load_openai_key()
+if not OPENAI_KEY or not isinstance(OPENAI_KEY, str) or len(OPENAI_KEY) < 10:
+    print("⚠️ OPENAI key missing or short. Set OPENAI_API_KEY or put key in fallback file.")
+client = OpenAI(api_key=OPENAI_KEY)
+
+def call_llm(prompt: str, model: str = OPENAI_MODEL, temperature: float = OPENAI_TEMPERATURE, max_tokens: int = LLM_MAX_TOKENS) -> str:
+    try:
+        resp = client.chat.completions.create(
+            model=model,
+            messages=[{"role": "user", "content": prompt}],
+            temperature=temperature,
+            max_tokens=max_tokens
+        )
+        return resp.choices[0].message.content
+    except Exception as e:
+        print("LLM call error:", e)
+        return ""
+
+# ------------------------- HF Embedder ------------------------------
 def mean_pool(token_embeddings: torch.Tensor, attention_mask: torch.Tensor):
     input_mask_expanded = attention_mask.unsqueeze(-1).expand(token_embeddings.size()).float()
     sum_embeddings = torch.sum(token_embeddings * input_mask_expanded, 1)
@@ -8648,8 +8643,8 @@ def mean_pool(token_embeddings: torch.Tensor, attention_mask: torch.Tensor):
     return sum_embeddings / sum_mask
 
 class HFEmbedder:
-    def __init__(self, model_name: str = EMBED_MODEL, device: str = DEVICE):
-        print(f"[embedder] loading {model_name} on {device}")
+    def __init__(self, model_name=EMBED_MODEL, device=DEVICE):
+        if VERBOSE: print(f"[embedder] loading {model_name} on {device}")
         self.device = device
         self.tokenizer = AutoTokenizer.from_pretrained(model_name, use_fast=True)
         self.model = AutoModel.from_pretrained(model_name)
@@ -8659,269 +8654,2398 @@ class HFEmbedder:
             p.requires_grad = False
 
     @torch.no_grad()
-    def encode_texts(self, texts: List[str], batch_size: int = BATCH_SIZE, max_length: int = 1024) -> np.ndarray:
-        """
-        Encode list of texts to numpy (N, D). Uses mean pooling over last_hidden_state.
-        """
-        all_embs = []
+    def encode_batch(self, texts: List[str], batch_size: int = BATCH_SIZE) -> np.ndarray:
+        if len(texts) == 0:
+            D = getattr(self.model.config, "hidden_size", 1024)
+            return np.zeros((0, D))
+        embs = []
         for i in range(0, len(texts), batch_size):
             batch = texts[i:i+batch_size]
-            enc = self.tokenizer(batch, padding=True, truncation=True, return_tensors="pt", max_length=max_length)
+            enc = self.tokenizer(batch, padding=True, truncation=True, return_tensors="pt", max_length=1024)
             input_ids = enc["input_ids"].to(self.device)
             attention_mask = enc["attention_mask"].to(self.device)
             out = self.model(input_ids=input_ids, attention_mask=attention_mask, return_dict=True)
-            token_embeds = out.last_hidden_state  # (B, L, D)
-            pooled = mean_pool(token_embeds, attention_mask)  # (B, D)
-            emb = pooled.cpu().numpy()
-            all_embs.append(emb)
-        embs = np.vstack(all_embs)
-        # L2 normalize
+            token_embeds = out.last_hidden_state
+            pooled = mean_pool(token_embeds, attention_mask)
+            embs.append(pooled.cpu().numpy())
+        embs = np.vstack(embs)
         embs = normalize(embs, axis=1)
         return embs
 
-# ------------------ Field builder & combined embedding ------------------
-def build_field_texts(entities: List[Dict]) -> Tuple[List[str], List[str], List[str], List[str]]:
-    names, descs, ctxs, types = [], [], [], []
+# ---------------------- IO helpers ----------------------------------
+def load_entities(path: Path) -> List[Dict]:
+    assert path.exists(), f"Input not found: {path}"
+    ents = []
+    with open(path, "r", encoding="utf-8") as fh:
+        for line in fh:
+            if line.strip():
+                ents.append(json.loads(line))
+    return ents
+
+def safe_text(e: Dict, k: str) -> str:
+    v = e.get(k)
+    if v is None:
+        return ""
+    if isinstance(v, (list, dict)):
+        return json.dumps(v, ensure_ascii=False)
+    return str(v)
+
+def build_field_texts(entities: List[Dict]) -> Tuple[List[str], List[str], List[str]]:
+    names, descs, ctxs = [], [], []
     for e in entities:
-        # prefer canonical fields from your master file
-        name = safe_text(e, "entity_name") or safe_text(e, "canonical_name") or ""
-        desc = safe_text(e, "entity_description") or ""
-        # context: try chunk_text_truncated, text_span, used_context_excerpt, example_member_spans
-        ctx = safe_text(e, "chunk_text_truncated") or safe_text(e, "text_span") or safe_text(e, "used_context_excerpt") or safe_text(e, "example_member_spans") or ""
-        etype = safe_text(e, "entity_type_hint") or safe_text(e, "canonical_type") or ""
-        names.append(name)
-        descs.append(desc)
-        ctxs.append(ctx)
-        types.append(etype)
-    return names, descs, ctxs, types
+        names.append(safe_text(e, "entity_name") or "")
+        descs.append(safe_text(e, "entity_description") or "")
+        resolution = safe_text(e, "resolution_context") or safe_text(e, "text_span") or safe_text(e, "context_phrase") or ""
+        et = safe_text(e, "entity_type_hint") or ""
+        # node props to text
+        node_props = e.get("node_properties") or []
+        node_props_text = ""
+        if isinstance(node_props, list) and node_props:
+            pieces = []
+            for np in node_props:
+                if isinstance(np, dict):
+                    pname = np.get("prop_name") or np.get("name") or ""
+                    pval = np.get("prop_value") or np.get("value") or ""
+                    if pname and pval:
+                        pieces.append(f"{pname}:{pval}")
+                    elif pname:
+                        pieces.append(pname)
+            if pieces:
+                node_props_text = " | ".join(pieces)
+        parts = []
+        if et:
+            parts.append(f"[TYPE:{et}]")
+        if resolution:
+            parts.append(resolution)
+        if node_props_text:
+            parts.append(node_props_text)
+        ctxs.append(" ; ".join(parts))
+    return names, descs, ctxs
 
-def compute_combined_embeddings(embedder: HFEmbedder, entities: List[Dict], weights: Dict[str, float]) -> np.ndarray:
-    names, descs, ctxs, types = build_field_texts(entities)
-    D_ref = None
+def compute_combined_embeddings(embedder: HFEmbedder, entities: List[Dict], weights=WEIGHTS) -> np.ndarray:
+    names, descs, ctxs = build_field_texts(entities)
+    emb_name = embedder.encode_batch(names) if any(t.strip() for t in names) else None
+    emb_desc = embedder.encode_batch(descs) if any(t.strip() for t in descs) else None
+    emb_ctx  = embedder.encode_batch(ctxs)  if any(t.strip() for t in ctxs) else None
 
-    # encode each present field; if a field is entirely empty, treat as zeros
-    emb_name = embedder.encode_texts(names) if any(t.strip() for t in names) else None
-    if emb_name is not None:
-        D_ref = emb_name.shape[1]
-    emb_desc = embedder.encode_texts(descs) if any(t.strip() for t in descs) else None
-    if D_ref is None and emb_desc is not None:
-        D_ref = emb_desc.shape[1]
-    emb_ctx = embedder.encode_texts(ctxs) if any(t.strip() for t in ctxs) else None
-    if D_ref is None and emb_ctx is not None:
-        D_ref = emb_ctx.shape[1]
-    emb_type = embedder.encode_texts(types) if any(t.strip() for t in types) else None
-    if D_ref is None and emb_type is not None:
-        D_ref = emb_type.shape[1]
-
-    if D_ref is None:
-        raise ValueError("All entity fields empty — cannot embed")
+    D = None
+    for arr in (emb_name, emb_desc, emb_ctx):
+        if arr is not None and arr.shape[0] > 0:
+            D = arr.shape[1]; break
+    if D is None:
+        raise ValueError("No textual field produced embeddings")
 
     def _ensure(arr):
         if arr is None:
-            return np.zeros((len(entities), D_ref), dtype=np.float32)
-        if arr.shape[1] != D_ref:
-            raise ValueError("embedding dimension mismatch")
-        return arr.astype(np.float32)
+            return np.zeros((len(entities), D))
+        if arr.shape[1] != D:
+            raise ValueError("embedding dim mismatch")
+        return arr
 
-    emb_name = _ensure(emb_name)
-    emb_desc = _ensure(emb_desc)
-    emb_ctx = _ensure(emb_ctx)
-    emb_type = _ensure(emb_type)
+    emb_name = _ensure(emb_name); emb_desc = _ensure(emb_desc); emb_ctx = _ensure(emb_ctx)
+    w_name = weights.get("name", 0.0); w_desc = weights.get("desc", 0.0); w_ctx = weights.get("ctx", 0.0)
+    Wsum = w_name + w_desc + w_ctx
+    if Wsum <= 0: raise ValueError("invalid weights")
+    w_name /= Wsum; w_desc /= Wsum; w_ctx /= Wsum
 
-    # normalize provided weights to sum to 1
-    w_name = weights.get("name", 0.0)
-    w_desc = weights.get("desc", 0.0)
-    w_ctx = weights.get("ctx", 0.0)
-    w_type = weights.get("type", 0.0)
-    Wsum = w_name + w_desc + w_ctx + w_type
-    if Wsum <= 0:
-        raise ValueError("Sum of WEIGHTS must be > 0")
-    w_name /= Wsum; w_desc /= Wsum; w_ctx /= Wsum; w_type /= Wsum
-
-    combined = (w_name * emb_name) + (w_desc * emb_desc) + (w_ctx * emb_ctx) + (w_type * emb_type)
+    combined = (w_name * emb_name) + (w_desc * emb_desc) + (w_ctx * emb_ctx)
     combined = normalize(combined, axis=1)
-    return combined.astype(np.float32)
+    return combined
 
-# ------------------ Clustering ------------------
-def run_hdbscan(embeddings: np.ndarray,
-                min_cluster_size: int = HDBSCAN_MIN_CLUSTER_SIZE,
-                min_samples: int = HDBSCAN_MIN_SAMPLES,
-                metric: str = HDBSCAN_METRIC,
-                use_umap: bool = USE_UMAP,
-                umap_dims: int = UMAP_N_COMPONENTS) -> Tuple[np.ndarray, Optional[np.ndarray], object]:
+def run_hdbscan(embeddings: np.ndarray, min_cluster_size=HDBSCAN_MIN_CLUSTER_SIZE, min_samples=HDBSCAN_MIN_SAMPLES,
+                metric=HDBSCAN_METRIC, use_umap=USE_UMAP) -> Tuple[np.ndarray, object]:
     X = embeddings
-    if use_umap:
-        if not UMAP_AVAILABLE:
-            print("[cluster] UMAP not available — running HDBSCAN on original embeddings")
-        else:
-            print(f"[cluster] running UMAP -> {umap_dims} dims")
-            reducer = umap.UMAP(n_components=umap_dims, n_neighbors=UMAP_N_NEIGHBORS,
-                                min_dist=UMAP_MIN_DIST, metric='cosine', random_state=42)
-            X = reducer.fit_transform(X)
-            print("[cluster] UMAP done; reduced shape:", X.shape)
-    clusterer = hdbscan.HDBSCAN(min_cluster_size=min_cluster_size,
-                                min_samples=min_samples,
-                                metric=metric,
-                                cluster_selection_method='eom')
+    if use_umap and UMAP_AVAILABLE and X.shape[0] >= 5:
+        reducer = umap.UMAP(n_components=min(UMAP_N_COMPONENTS, max(2, X.shape[0]-1)),
+                            n_neighbors=min(UMAP_N_NEIGHBORS, max(2, X.shape[0]-1)),
+                            min_dist=UMAP_MIN_DIST,
+                            metric='cosine', random_state=42)
+        X = reducer.fit_transform(X)
+    clusterer = hdbscan.HDBSCAN(min_cluster_size=min_cluster_size, min_samples=min_samples, metric=metric, cluster_selection_method='eom')
     labels = clusterer.fit_predict(X)
-    probs = getattr(clusterer, "probabilities_", None)
-    return labels, probs, clusterer
+    return labels, clusterer
 
-# ------------------ Persistence helpers ------------------
-def save_clustered_entities(entities: List[Dict], labels: np.ndarray, out_jsonl: Path, clusters_summary_path: Path):
-    out_jsonl.parent.mkdir(parents=True, exist_ok=True)
-    with open(out_jsonl, "w", encoding="utf-8") as fh:
-        for e, lab in zip(entities, labels):
-            rec = dict(e)
-            rec["_cluster_id"] = int(lab)
-            fh.write(json.dumps(rec, ensure_ascii=False) + "\n")
-    # build simple summary
-    summary = {}
-    for idx, lab in enumerate(labels):
-        summary.setdefault(int(lab), []).append(entities[idx].get("entity_name") or f"En_{idx}")
-    clusters_summary_path.parent.mkdir(parents=True, exist_ok=True)
-    with open(clusters_summary_path, "w", encoding="utf-8") as fh:
-        json.dump({"n_entities": len(entities),
-                   "n_clusters_including_noise": len(summary),
-                   "clusters": {str(k): v for k, v in summary.items()}}, fh, ensure_ascii=False, indent=2)
-    print(f"[save] wrote clustered entities to {out_jsonl} and summary to {clusters_summary_path}")
+# ------------------ Prompt (revised) --------------------------------
+CLASS_PROMPT_TEMPLATE = """
+You are a careful schema/ontology suggester.
 
-def save_embeddings(embeddings: np.ndarray, path: Path):
-    np.save(str(path), embeddings)
-    print(f"[save] saved embeddings to {path} (shape={embeddings.shape})")
+Goal (short): given a small list of entity mentions (name + short description + evidence excerpt),
+suggest zero or more *class* concepts that summarize natural groups among these members.
 
-def build_faiss_index(embeddings: np.ndarray, out_index_path: Path, use_gpu: bool = False):
-    if not FAISS_AVAILABLE:
-        print("[faiss] not available; skipping index build")
-        return
-    d = embeddings.shape[1]
-    index = faiss.IndexFlatIP(d)  # inner product since vectors normalized -> cosine
-    if use_gpu:
+Important rule about WHEN TO CREATE A CLASS:
+- Prefer classes that have at least TWO members that naturally belong together.
+- **Only** create a single-member class when your input contains exactly ONE entity (i.e., you were given only one member).
+- If you are given multiple members but you think one member could be a standalone class, do NOT create a class for it now; leave it unassigned. Single-member classes are allowed only in the single-entity prompt case.
+
+How we define 'useful' classes (guide for granularity):
+- Not too broad (avoid "everything" or overly general labels).
+- Not too narrow (avoid trivial singletons when a meaningful group exists).
+- A useful class should allow different entities to connect to the same schema concept (practical reuse).
+
+Return ONLY a JSON ARRAY. Each element must be an object with keys:
+ - class_label (string): short canonical class name (1-3 words)
+ - class_description (string): 1-2 sentence description explaining the class
+ - member_ids (array[string]): entity ids (must be members from the provided list)
+ - confidence (float): 0.0-1.0 estimate of confidence
+ - evidence_excerpt (string): 5-30 word excerpt that supports why these members form this class (optional)
+
+Rules:
+- Use ONLY the provided members (do not invent other ids or outside facts).
+- Aim for non-overlapping classes when possible (overlap allowed if really justified).
+- If you cannot propose any sensible class, return an empty array [].
+- Keep labels short and meaningful; use description to give nuance.
+
+Members (one per line: id | name | description | evidence_excerpt):
+{members_block}
+
+Return JSON array only.
+"""
+
+def build_members_block(members: List[Dict]) -> str:
+    rows = []
+    for m in members:
+        eid = m.get("id")
+        name = (m.get("entity_name") or "")[:120].replace("\n"," ")
+        desc = (m.get("entity_description") or "")[:300].replace("\n"," ")
+        evidence = (m.get("resolution_context") or m.get("context_phrase") or "")[:300].replace("\n"," ")
+        rows.append(f"{eid} | {name} | {desc} | {evidence}")
+    return "\n".join(rows)
+
+def parse_json_array_from_text(txt: str):
+    if not txt:
+        return None
+    s = txt.strip()
+    # remove fences
+    if s.startswith("```"):
+        s = s.strip("`")
+    start = s.find('[')
+    end = s.rfind(']')
+    if start != -1 and end != -1 and end > start:
+        cand = s[start:end+1]
         try:
-            res = faiss.StandardGpuResources()
-            index = faiss.index_cpu_to_gpu(res, 0, index)
-        except Exception as e:
-            print("[faiss] GPU init failed; falling back to CPU index:", e)
-    index.add(embeddings)
-    faiss.write_index(index if not use_gpu else faiss.index_gpu_to_cpu(index), str(out_index_path))
-    print(f"[faiss] wrote index to {out_index_path}")
-
-# ------------------ Main routine ------------------
-def main(
-    entities_in: str = ENTITIES_IN,
-    out_dir: Path = OUT_DIR,
-    weights: Dict[str, float] = WEIGHTS,
-    embed_model: str = EMBED_MODEL,
-    use_umap: bool = USE_UMAP,
-    umap_dims: int = UMAP_N_COMPONENTS,
-    hdb_min_cluster: int = HDBSCAN_MIN_CLUSTER_SIZE,
-    hdb_min_samples: int = HDBSCAN_MIN_SAMPLES,
-    save_faiss: bool = True
-):
-    print("[main] loading entities:", entities_in)
-    entities = load_jsonl(entities_in)
-    print(f"[main] loaded {len(entities)} entities")
-
-    # instantiate embedder
-    embedder = HFEmbedder(model_name=embed_model, device=DEVICE)
-
-    # compute combined embeddings
-    combined = compute_combined_embeddings(embedder, entities, weights=weights)
-    print("[main] combined embeddings shape:", combined.shape)
-
-    # save combined embeddings for later (nearest neighbor retrieval during class recognition)
-    save_embeddings(combined, out_dir / OUT_EMBEDDINGS_NPY.name)
-
-    # cluster with HDBSCAN (variable number of clusters)
-    labels, probs, clusterer = run_hdbscan(combined,
-                                          min_cluster_size=hdb_min_cluster,
-                                          min_samples=hdb_min_samples,
-                                          metric=HDBSCAN_METRIC,
-                                          use_umap=use_umap,
-                                          umap_dims=umap_dims)
-    labels_arr = np.array(labels)
-
-    # diagnostics print
-    n = len(labels_arr)
-    n_clusters = len(set(labels_arr)) - (1 if -1 in labels_arr else 0)
-    n_noise = int((labels_arr == -1).sum())
-    print(f"[diagnostic] clusters (excl -1): {n_clusters}; noise: {n_noise} ({n_noise/n*100:.1f}%)")
-    from collections import Counter
-    counts = Counter(labels_arr)
-    top = sorted(((lab, sz) for lab, sz in counts.items() if lab != -1), key=lambda x: x[1], reverse=True)[:10]
-    print("[diagnostic] top cluster sizes:", top)
-
-    # save clustered entities + summary
-    save_clustered_entities(entities, labels_arr, out_dir / OUT_CLUSTERED_JSONL.name, out_dir / OUT_CLUSTERS_SUMMARY.name)
-
-    # optionally build FAISS index for later top-K retrieval (useful for class recognition)
-    if save_faiss:
-        build_faiss_index(combined, out_dir / OUT_FAISS_INDEX.name, use_gpu=False)
-
-    print("[main] done.")
-
-
-# ------------------ Safe CLI entry (replace your existing __main__ block) ------------------
-if __name__ == "__main__":
-    import argparse
-    import sys
-
-    parser = argparse.ArgumentParser(description="Embed & HDBSCAN-cluster final entities (variable K).")
-    parser.add_argument("--entities_in", type=str, default=ENTITIES_IN)
-    parser.add_argument("--out_dir", type=str, default=str(OUT_DIR))
-    parser.add_argument("--embed_model", type=str, default=EMBED_MODEL)
-    parser.add_argument("--use_umap", action="store_true", default=USE_UMAP)
-    parser.add_argument("--umap_dims", type=int, default=UMAP_N_COMPONENTS)
-    parser.add_argument("--hdb_min_cluster", type=int, default=HDBSCAN_MIN_CLUSTER_SIZE)
-    parser.add_argument("--hdb_min_samples", type=int, default=HDBSCAN_MIN_SAMPLES)
-    parser.add_argument("--no_faiss", action="store_true", help="Do not attempt to build a FAISS index")
-    # Use parse_known_args so ipykernel / jupyter launcher args (like --f=...) are ignored
-    args, unknown = parser.parse_known_args()
-
-    # If we are inside an ipykernel (Jupyter), optionally override defaults for quick testing:
-    in_ipykernel = False
+            return json.loads(cand)
+        except Exception:
+            pass
     try:
-        # ipykernel sets this module
-        import ipykernel  # type: ignore
-        in_ipykernel = True
+        return json.loads(s)
     except Exception:
-        in_ipykernel = False
+        return None
 
-    if in_ipykernel:
-        print("[INFO] Running inside ipykernel / Jupyter. Unknown argv ignored:", unknown)
-        # If you want notebook-friendly defaults different from CLI, set them here:
-        # (they already default to ENTITIES_IN and OUT_DIR defined above)
-        # Example (uncomment to override in notebook):
-        # args.entities_in = "/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities/Overall_After_Two_Run/FinalCompAnalysis/final_entities_master.jsonl"
-        # args.out_dir = str(OUT_DIR)
-    else:
-        # Running from terminal -> show any unknown args (should be none)
-        if unknown:
-            print("[WARN] Unknown args ignored:", unknown)
+# ------------------- Worker: process a chunk of members --------------------
+def process_member_chunk_llm(members: List[Dict], single_entity_mode: bool = False) -> List[Dict]:
+    """
+    members: list of entity dicts (these must contain id/name/desc/resolution_context)
+    single_entity_mode: if True the prompt will be for a single entity (allowed to propose a single-member class)
+    Returns: list of class candidate dicts produced by LLM (may be empty)
+    """
+    members_block = build_members_block(members)
+    prompt = CLASS_PROMPT_TEMPLATE.format(members_block=members_block)
+    est_tokens = max(1, int(len(prompt) / PROMPT_CHAR_PER_TOKEN))
+    if est_tokens > MAX_PROMPT_TOKENS_EST:
+        if VERBOSE: print(f"[warning] prompt too large (est_tokens={est_tokens}) -> skipping chunk of size {len(members)}")
+        return []
+    llm_out = call_llm(prompt)
+    arr = parse_json_array_from_text(llm_out)
+    if not arr:
+        return []
+    candidates = []
+    for c in arr:
+        label = c.get("class_label") or c.get("label") or c.get("name")
+        if not label:
+            continue
+        member_ids = c.get("member_ids") or c.get("members") or []
+        confidence = float(c.get("confidence")) if c.get("confidence") is not None else 0.0
+        desc = c.get("class_description") or c.get("description") or ""
+        ev = c.get("evidence_excerpt") or ""
+        candidate = {
+            "candidate_id": "ClsC_" + uuid.uuid4().hex[:8],
+            "class_label": label,
+            "class_description": desc,
+            "member_ids": member_ids,
+            "confidence": confidence,
+            "evidence_excerpt": ev,
+            "created_from_ids": [m["id"] for m in members],
+            "timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+        }
+        candidates.append(candidate)
+    return candidates
 
-    # Ensure output dir exists
-    OUT_DIR = Path(args.out_dir)
-    OUT_DIR.mkdir(parents=True, exist_ok=True)
+# -------------------- Main iterative orchestration -----------------------
+def classrec_iterative_main():
+    entities = load_entities(INPUT_PATH)
+    print(f"[start] loaded {len(entities)} entities from {INPUT_PATH}")
 
-    # Override module-level config variables with CLI values
-    ENTITIES_IN = args.entities_in
-    EMBED_MODEL = args.embed_model
+    # ensure ids
+    for e in entities:
+        if "id" not in e:
+            e["id"] = "En_" + uuid.uuid4().hex[:8]
 
-    # Run main
-    main(
-        entities_in=ENTITIES_IN,
-        out_dir=OUT_DIR,
-        weights=WEIGHTS,
-        embed_model=EMBED_MODEL,
-        use_umap=bool(args.use_umap),
-        umap_dims=int(args.umap_dims),
-        hdb_min_cluster=int(args.hdb_min_cluster),
-        hdb_min_samples=int(args.hdb_min_samples),
-        save_faiss=not args.no_faiss
-    )
+    # prepare embedder and embeddings
+    embedder = HFEmbedder(model_name=EMBED_MODEL, device=DEVICE)
+    combined_emb = compute_combined_embeddings(embedder, entities, weights=WEIGHTS)
+    print("[info] embeddings computed, shape:", combined_emb.shape)
+
+    # initial coarse clustering
+    labels, _ = run_hdbscan(combined_emb, min_cluster_size=HDBSCAN_MIN_CLUSTER_SIZE, min_samples=HDBSCAN_MIN_SAMPLES, use_umap=USE_UMAP)
+    print("[info] initial clustering done. unique labels:", len(set(labels)))
+
+    # cluster membership mapping
+    cluster_to_indices = {}
+    for idx, lab in enumerate(labels):
+        cluster_to_indices.setdefault(int(lab), []).append(idx)
+
+    # bookkeeping sets
+    seen_by_llm = set()               # seen by LLM (appeared in any prompt)
+    assigned_entity_ids = set()       # entities assigned to some class
+    class_candidates = []             # accumulated candidates
+
+    # process non-noise clusters first (lab != -1)
+    def process_cluster_indices(indices: List[int]):
+        nonlocal class_candidates, seen_by_llm, assigned_entity_ids
+        # if small cluster -> chunk directly
+        if len(indices) <= MAX_CLUSTER_SIZE_FOR_LOCAL:
+            # chunk into MAX_MEMBERS_PER_PROMPT
+            for i in range(0, len(indices), MAX_MEMBERS_PER_PROMPT):
+                chunk_idxs = indices[i:i+MAX_MEMBERS_PER_PROMPT]
+                members = [entities[j] for j in chunk_idxs]
+                # call LLM and collect classes
+                candidates = process_member_chunk_llm(members, single_entity_mode=(len(members)==1))
+                # record seen ids
+                for m in members:
+                    seen_by_llm.add(m["id"])
+                # record produced classes and assigned members
+                for c in candidates:
+                    # keep only classes that reference at least two member_ids if chunk size>1, otherwise allow 1-member if chunk was single
+                    mids = c.get("member_ids", [])
+                    # Filter out any member ids not in provided members (safety)
+                    mids = [mid for mid in mids if mid in [m["id"] for m in members]]
+                    if not mids:
+                        continue
+                    if len(members) == 1:
+                        # single-entity prompt: allow 1-member classes
+                        pass
+                    else:
+                        # multi-entity prompt: enforce >=2 members
+                        if len(mids) < 2:
+                            # LLM proposed a 1-member class while given many members -> ignore (as instructed)
+                            continue
+                    # accept class
+                    c["member_ids"] = mids
+                    class_candidates.append(c)
+                    for mid in mids:
+                        assigned_entity_ids.add(mid)
+        else:
+            # large cluster: local HDBSCAN subcluster
+            sub_emb = combined_emb[indices]
+            try:
+                local_lab = hdbscan.HDBSCAN(min_cluster_size=max(2, LOCAL_HDBSCAN_MIN_CLUSTER_SIZE),
+                                            min_samples=LOCAL_HDBSCAN_MIN_SAMPLES,
+                                            metric="euclidean", cluster_selection_method='eom')
+                local_labels = local_lab.fit_predict(sub_emb)
+            except Exception:
+                local_labels = np.zeros(len(indices), dtype=int)
+            # group by local label and process non-noise local groups
+            local_groups = {}
+            for i_local, lab_local in enumerate(local_labels):
+                local_groups.setdefault(int(lab_local), []).append(indices[i_local])
+            for llab, idxs in local_groups.items():
+                if llab == -1:
+                    # skip local noise here; will be processed in later iterative passes
+                    # but still mark them as seen by being included? NO: they were not shown to LLM in local grouping
+                    # we'll not mark them as seen here
+                    continue
+                # process each subgroup (recursive)
+                process_cluster_indices(idxs)
+
+    # initial pass: process all non-noise coarse clusters
+    for lab, idxs in sorted(cluster_to_indices.items(), key=lambda x: x[0]):
+        if lab == -1:
+            continue
+        if VERBOSE: print(f"[pass0] processing coarse cluster {lab} size={len(idxs)}")
+        process_cluster_indices(idxs)
+
+    # iterative recluster loop:
+    # remaining_entities = (original - assigned) and also include those that were seen_by_llm but not assigned
+    all_entity_ids = [e["id"] for e in entities]
+    # initial set of unassigned includes cluster -1 plus seen-but-unassigned
+    initial_noise_indices = cluster_to_indices.get(-1, [])
+    # track indices (not ids) to recluster
+    def ids_to_indices(id_list):
+        id_to_idx = {e["id"]: i for i, e in enumerate(entities)}
+        return [id_to_idx[iid] for iid in id_list if iid in id_to_idx]
+
+    round_num = 0
+    while round_num < MAX_RECLUSTER_ROUNDS:
+        round_num += 1
+        # construct current pool indices: (original noise indices) + (seen-by-llm but not assigned)
+        seen_but_unassigned_ids = list(seen_by_llm - assigned_entity_ids)
+        pool_ids = set([entities[i]["id"] for i in initial_noise_indices] + seen_but_unassigned_ids)
+        # remove already-assigned just-in-case
+        pool_ids = [pid for pid in pool_ids if pid not in assigned_entity_ids]
+        if not pool_ids:
+            if VERBOSE: print(f"[iter {round_num}] pool empty -> stopping recluster loop")
+            break
+        pool_indices = ids_to_indices(pool_ids)
+        if not pool_indices:
+            if VERBOSE: print(f"[iter {round_num}] pool indices empty -> stopping")
+            break
+
+        if VERBOSE: print(f"[iter {round_num}] reclustering pool size={len(pool_indices)} (noise + seen-but-unassigned)")
+
+        # build sub-emb and cluster them
+        sub_emb = combined_emb[pool_indices]
+        try:
+            labels_sub, _ = run_hdbscan(sub_emb, min_cluster_size=2, min_samples=1, use_umap=False)
+        except Exception:
+            labels_sub = np.zeros(len(pool_indices), dtype=int)
+
+        # map label -> indices (global)
+        sub_cluster_map = {}
+        for local_i, lab_sub in enumerate(labels_sub):
+            global_idx = pool_indices[local_i]
+            sub_cluster_map.setdefault(int(lab_sub), []).append(global_idx)
+
+        new_classes_in_round = 0
+        # process non-noise subclusters
+        for lab_sub, gidxs in sorted(sub_cluster_map.items(), key=lambda x: (x[0]==-1, x[0])):
+            if lab_sub == -1:
+                continue
+            if VERBOSE: print(f"[iter {round_num}] processing subcluster {lab_sub} size={len(gidxs)}")
+            # process cluster indices normally (this will call LLM)
+            before_assigned = len(assigned_entity_ids)
+            process_cluster_indices(gidxs)
+            after_assigned = len(assigned_entity_ids)
+            new_classes_in_round += (after_assigned - before_assigned)
+
+        if new_classes_in_round == 0:
+            if VERBOSE: print(f"[iter {round_num}] no new assignments produced this round -> stopping recluster loop")
+            break
+        else:
+            if VERBOSE: print(f"[iter {round_num}] new assignments this round: {new_classes_in_round}")
+            # continue to next round to try to resolve more
+
+    # After iterative reclustering, prepare final remaining entity list:
+    assigned_ids = set(assigned_entity_ids)
+    remaining_entities = [e for e in entities if e["id"] not in assigned_ids]
+
+    # FINAL single-entity pass: allow single-member class proposals
+    if VERBOSE: print(f"[final] single-entity pass on {len(remaining_entities)} remaining entities")
+    for e in remaining_entities:
+        # single-entity prompt
+        candidates = process_member_chunk_llm([e], single_entity_mode=True)
+        # accept classes produced for this single-entity prompt
+        for c in candidates:
+            # ensure member_ids valid: if LLM returned different id, normalize to the entity id we provided
+            if not c.get("member_ids"):
+                c["member_ids"] = [e["id"]]
+            # accept
+            class_candidates.append(c)
+            assigned_entity_ids.update(c["member_ids"])
+
+    # recompute remaining after single-entity pass
+    assigned_ids = set(assigned_entity_ids)
+    remaining_entities = [e for e in entities if e["id"] not in assigned_ids]
+
+    # Save outputs
+    with open(CLASS_CANDIDATES_OUT, "w", encoding="utf-8") as fh:
+        for c in class_candidates:
+            fh.write(json.dumps(c, ensure_ascii=False) + "\n")
+    # coarse cluster summary output for inspection
+    cluster_summary = {int(k): [entities[i]["id"] for i in v] for k, v in sorted(cluster_to_indices.items(), key=lambda x: x[0])}
+    with open(CLUSTER_SUMMARY_OUT, "w", encoding="utf-8") as fh:
+        json.dump(cluster_summary, fh, ensure_ascii=False, indent=2)
+
+    with open(REMAINING_ENTITIES_OUT, "w", encoding="utf-8") as fh:
+        for e in remaining_entities:
+            fh.write(json.dumps(e, ensure_ascii=False) + "\n")
+
+    print(f"[done] wrote {len(class_candidates)} class candidates -> {CLASS_CANDIDATES_OUT}")
+    print(f"[done] wrote coarse cluster summary -> {CLUSTER_SUMMARY_OUT}")
+    print(f"[done] wrote {len(remaining_entities)} remaining entities -> {REMAINING_ENTITIES_OUT}")
 
 
-#endregion#?  Embed_and_cluster_final_entities
+if __name__ == "__main__":
+    classrec_iterative_main()
+
+
+#endregion#? Cls Rec V1
+#*#########################  End  ##########################
+
+
+
+
+#*######################### Start ##########################
+#region:#?   Cls Rec V2
+
+#!/usr/bin/env python3
+"""
+classrec_iterative.py  (REVISED)
+
+Iterative Class Recognition (ClassRec) aligned with your pipeline.
+
+Input:
+  /home/mabolhas/MyReposOnSOL/SGCE-KG/data/Classes/Cls_Input/cls_input_entities.jsonl
+
+Outputs (directory):
+  /home/mabolhas/MyReposOnSOL/SGCE-KG/data/Classes/Cls_Rec/
+    - class_candidates.jsonl          (LLM-suggested classes; each line = JSON object)
+    - initial_cluster_entities.json   (coarse initial clusters; full entity objects included)
+    - recluster_round_{i}.json        (recluster outputs for each iterative round)
+    - final_unassigned.jsonl          (full entity objects that remain unassigned after single-entity pass)
+"""
+
+import json
+import os
+import time
+import uuid
+from pathlib import Path
+from typing import List, Dict, Tuple
+
+import numpy as np
+import torch
+from transformers import AutoTokenizer, AutoModel
+from sklearn.preprocessing import normalize
+
+# clustering libs
+try:
+    import hdbscan
+except Exception:
+    raise RuntimeError("hdbscan required: pip install hdbscan")
+try:
+    import umap
+    UMAP_AVAILABLE = True
+except Exception:
+    UMAP_AVAILABLE = False
+
+# OpenAI client (same pattern)
+from openai import OpenAI
+
+# ----------------------------- CONFIG -----------------------------
+INPUT_PATH = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Classes/Cls_Input/cls_input_entities.jsonl")
+OUT_DIR = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Classes/Cls_Rec")
+OUT_DIR.mkdir(parents=True, exist_ok=True)
+
+CLASS_CANDIDATES_OUT = OUT_DIR / "class_candidates.jsonl"
+INITIAL_CLUSTER_OUT = OUT_DIR / "initial_cluster_entities.json"
+RECLUSTER_PREFIX = OUT_DIR / "recluster_round_"
+FINAL_UNASSIGNED_OUT = OUT_DIR / "final_unassigned.jsonl"
+
+# embedder / model
+EMBED_MODEL = "BAAI/bge-large-en-v1.5"
+DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
+BATCH_SIZE = 32
+WEIGHTS = {"name": 0.40, "desc": 0.25, "ctx": 0.35}
+
+# HDBSCAN + UMAP
+HDBSCAN_MIN_CLUSTER_SIZE = 4
+HDBSCAN_MIN_SAMPLES = 1
+HDBSCAN_METRIC = "euclidean"
+USE_UMAP = True
+UMAP_N_COMPONENTS = 64
+UMAP_N_NEIGHBORS = 8
+UMAP_MIN_DIST = 0.0
+
+# local subcluster
+MAX_CLUSTER_SIZE_FOR_LOCAL = 30
+LOCAL_HDBSCAN_MIN_CLUSTER_SIZE = 2
+LOCAL_HDBSCAN_MIN_SAMPLES = 1
+
+# prompt and LLM / limits
+OPENAI_MODEL = "gpt-4o"
+OPENAI_TEMPERATURE = 0.0
+LLM_MAX_TOKENS = 800
+MAX_MEMBERS_PER_PROMPT = 10
+PROMPT_CHAR_PER_TOKEN = 4          # crude estimate
+MAX_PROMPT_TOKENS_EST = 2500
+
+# iteration control
+MAX_RECLUSTER_ROUNDS = 8  # safety cap
+VERBOSE = True
+
+# ------------------------ OpenAI client loader -----------------------
+def _load_openai_key(envvar: str = "OPENAI_API_KEY", fallback_path: str = "/home/mabolhas/MyReposOnSOL/SGCE-KG/.env"):
+    key = os.getenv(envvar, fallback_path)
+    if isinstance(key, str) and Path(key).exists():
+        try:
+            txt = Path(key).read_text(encoding="utf-8").strip()
+            if txt:
+                return txt
+        except Exception:
+            pass
+    return key
+
+OPENAI_KEY = _load_openai_key()
+if not OPENAI_KEY or not isinstance(OPENAI_KEY, str) or len(OPENAI_KEY) < 10:
+    print("⚠️ OPENAI key missing or short. Set OPENAI_API_KEY or put key in fallback file.")
+client = OpenAI(api_key=OPENAI_KEY)
+
+def call_llm(prompt: str, model: str = OPENAI_MODEL, temperature: float = OPENAI_TEMPERATURE, max_tokens: int = LLM_MAX_TOKENS) -> str:
+    try:
+        resp = client.chat.completions.create(
+            model=model,
+            messages=[{"role": "user", "content": prompt}],
+            temperature=temperature,
+            max_tokens=max_tokens
+        )
+        return resp.choices[0].message.content
+    except Exception as e:
+        print("LLM call error:", e)
+        return ""
+
+# ------------------------- HF Embedder ------------------------------
+def mean_pool(token_embeddings: torch.Tensor, attention_mask: torch.Tensor):
+    input_mask_expanded = attention_mask.unsqueeze(-1).expand(token_embeddings.size()).float()
+    sum_embeddings = torch.sum(token_embeddings * input_mask_expanded, 1)
+    sum_mask = torch.clamp(input_mask_expanded.sum(1), min=1e-9)
+    return sum_embeddings / sum_mask
+
+class HFEmbedder:
+    def __init__(self, model_name=EMBED_MODEL, device=DEVICE):
+        if VERBOSE: print(f"[embedder] loading {model_name} on {device}")
+        self.device = device
+        self.tokenizer = AutoTokenizer.from_pretrained(model_name, use_fast=True)
+        self.model = AutoModel.from_pretrained(model_name)
+        self.model.to(device)
+        self.model.eval()
+        for p in self.model.parameters():
+            p.requires_grad = False
+
+    @torch.no_grad()
+    def encode_batch(self, texts: List[str], batch_size: int = BATCH_SIZE) -> np.ndarray:
+        if len(texts) == 0:
+            D = getattr(self.model.config, "hidden_size", 1024)
+            return np.zeros((0, D))
+        embs = []
+        for i in range(0, len(texts), batch_size):
+            batch = texts[i:i+batch_size]
+            enc = self.tokenizer(batch, padding=True, truncation=True, return_tensors="pt", max_length=1024)
+            input_ids = enc["input_ids"].to(self.device)
+            attention_mask = enc["attention_mask"].to(self.device)
+            out = self.model(input_ids=input_ids, attention_mask=attention_mask, return_dict=True)
+            token_embeds = out.last_hidden_state
+            pooled = mean_pool(token_embeds, attention_mask)
+            embs.append(pooled.cpu().numpy())
+        embs = np.vstack(embs)
+        embs = normalize(embs, axis=1)
+        return embs
+
+# ---------------------- IO helpers ----------------------------------
+def load_entities(path: Path) -> List[Dict]:
+    assert path.exists(), f"Input not found: {path}"
+    ents = []
+    with open(path, "r", encoding="utf-8") as fh:
+        for line in fh:
+            if line.strip():
+                ents.append(json.loads(line))
+    return ents
+
+def safe_text(e: Dict, k: str) -> str:
+    v = e.get(k)
+    if v is None:
+        return ""
+    if isinstance(v, (list, dict)):
+        return json.dumps(v, ensure_ascii=False)
+    return str(v)
+
+def build_field_texts(entities: List[Dict]) -> Tuple[List[str], List[str], List[str]]:
+    names, descs, ctxs = [], [], []
+    for e in entities:
+        names.append(safe_text(e, "entity_name") or "")
+        descs.append(safe_text(e, "entity_description") or "")
+        resolution = safe_text(e, "resolution_context") or safe_text(e, "text_span") or safe_text(e, "context_phrase") or ""
+        et = safe_text(e, "entity_type_hint") or ""
+        node_props = e.get("node_properties") or []
+        node_props_text = ""
+        if isinstance(node_props, list) and node_props:
+            pieces = []
+            for np in node_props:
+                if isinstance(np, dict):
+                    pname = np.get("prop_name") or np.get("name") or ""
+                    pval = np.get("prop_value") or np.get("value") or ""
+                    if pname and pval:
+                        pieces.append(f"{pname}:{pval}")
+                    elif pname:
+                        pieces.append(pname)
+            if pieces:
+                node_props_text = " | ".join(pieces)
+        parts = []
+        if et:
+            parts.append(f"[TYPE:{et}]")
+        if resolution:
+            parts.append(resolution)
+        if node_props_text:
+            parts.append(node_props_text)
+        ctxs.append(" ; ".join(parts))
+    return names, descs, ctxs
+
+def compute_combined_embeddings(embedder: HFEmbedder, entities: List[Dict], weights=WEIGHTS) -> np.ndarray:
+    names, descs, ctxs = build_field_texts(entities)
+    emb_name = embedder.encode_batch(names) if any(t.strip() for t in names) else None
+    emb_desc = embedder.encode_batch(descs) if any(t.strip() for t in descs) else None
+    emb_ctx  = embedder.encode_batch(ctxs)  if any(t.strip() for t in ctxs) else None
+
+    D = None
+    for arr in (emb_name, emb_desc, emb_ctx):
+        if arr is not None and arr.shape[0] > 0:
+            D = arr.shape[1]; break
+    if D is None:
+        raise ValueError("No textual field produced embeddings")
+
+    def _ensure(arr):
+        if arr is None:
+            return np.zeros((len(entities), D))
+        if arr.shape[1] != D:
+            raise ValueError("embedding dim mismatch")
+        return arr
+
+    emb_name = _ensure(emb_name); emb_desc = _ensure(emb_desc); emb_ctx = _ensure(emb_ctx)
+    w_name = weights.get("name", 0.0); w_desc = weights.get("desc", 0.0); w_ctx = weights.get("ctx", 0.0)
+    Wsum = w_name + w_desc + w_ctx
+    if Wsum <= 0: raise ValueError("invalid weights")
+    w_name /= Wsum; w_desc /= Wsum; w_ctx /= Wsum
+
+    combined = (w_name * emb_name) + (w_desc * emb_desc) + (w_ctx * emb_ctx)
+    combined = normalize(combined, axis=1)
+    return combined
+
+def run_hdbscan(embeddings: np.ndarray, min_cluster_size=HDBSCAN_MIN_CLUSTER_SIZE, min_samples=HDBSCAN_MIN_SAMPLES,
+                metric=HDBSCAN_METRIC, use_umap=USE_UMAP) -> Tuple[np.ndarray, object]:
+    X = embeddings
+    if use_umap and UMAP_AVAILABLE and X.shape[0] >= 5:
+        reducer = umap.UMAP(n_components=min(UMAP_N_COMPONENTS, max(2, X.shape[0]-1)),
+                            n_neighbors=min(UMAP_N_NEIGHBORS, max(2, X.shape[0]-1)),
+                            min_dist=UMAP_MIN_DIST,
+                            metric='cosine', random_state=42)
+        X = reducer.fit_transform(X)
+    clusterer = hdbscan.HDBSCAN(min_cluster_size=min_cluster_size, min_samples=min_samples, metric=metric, cluster_selection_method='eom')
+    labels = clusterer.fit_predict(X)
+    return labels, clusterer
+
+# ------------------ Prompt (REVISED to be MUST) -----------------------
+CLASS_PROMPT_TEMPLATE = """
+You are a careful schema/ontology suggester.
+
+Goal (short): given a small list of entity mentions (name + short description + evidence excerpt),
+suggest zero or more *class* concepts that summarize natural groups among these members.
+
+Important rule about WHEN TO CREATE A CLASS (ENFORCED):
+- When the prompt contains MULTIPLE members you MUST create only classes that contain TWO OR MORE members.
+- You MUST NOT create a single-member class in a prompt that contains multiple members.
+- The ONLY situation in which a single-member class is allowed is when the input prompt contains EXACTLY ONE entity (single-entity mode).
+
+How we define 'useful' classes (guide for granularity):
+- Not too broad (avoid "everything" or overly general labels).
+- Not too narrow (avoid trivial singletons when a meaningful group exists).
+- A useful class should allow different entities to connect to the same schema concept (practical reuse).
+
+Return ONLY a JSON ARRAY. Each element must be an object with keys:
+ - class_label (string): short canonical class name (1-3 words)
+ - class_description (string): 1-2 sentence description explaining the class
+ - member_ids (array[string]): entity ids (must be members from the provided list)
+ - confidence (float): 0.0-1.0 estimate of confidence
+ - evidence_excerpt (string): 5-30 word excerpt that supports why these members form this class (optional)
+
+Rules:
+- Use ONLY the provided members (do not invent other ids or outside facts).
+- Aim for non-overlapping classes when possible (overlap allowed if really justified).
+- If you cannot propose any sensible class, return an empty array [].
+- Keep labels short and meaningful; use description to give nuance.
+
+Members (one per line: id | name | description | evidence_excerpt):
+{members_block}
+
+Return JSON array only.
+"""
+
+def build_members_block(members: List[Dict]) -> str:
+    rows = []
+    for m in members:
+        eid = m.get("id")
+        name = (m.get("entity_name") or "")[:120].replace("\n"," ")
+        desc = (m.get("entity_description") or "")[:300].replace("\n"," ")
+        evidence = (m.get("resolution_context") or m.get("context_phrase") or "")[:300].replace("\n"," ")
+        rows.append(f"{eid} | {name} | {desc} | {evidence}")
+    return "\n".join(rows)
+
+def parse_json_array_from_text(txt: str):
+    if not txt:
+        return None
+    s = txt.strip()
+    # remove fences
+    if s.startswith("```"):
+        s = s.strip("`")
+    start = s.find('[')
+    end = s.rfind(']')
+    if start != -1 and end != -1 and end > start:
+        cand = s[start:end+1]
+        try:
+            return json.loads(cand)
+        except Exception:
+            pass
+    try:
+        return json.loads(s)
+    except Exception:
+        return None
+
+# ------------------- Worker: process a chunk of members --------------------
+def process_member_chunk_llm(members: List[Dict], single_entity_mode: bool = False) -> List[Dict]:
+    members_block = build_members_block(members)
+    prompt = CLASS_PROMPT_TEMPLATE.format(members_block=members_block)
+    est_tokens = max(1, int(len(prompt) / PROMPT_CHAR_PER_TOKEN))
+    if est_tokens > MAX_PROMPT_TOKENS_EST:
+        if VERBOSE: print(f"[warning] prompt too large (est_tokens={est_tokens}) -> skipping chunk of size {len(members)}")
+        return []
+    llm_out = call_llm(prompt)
+    arr = parse_json_array_from_text(llm_out)
+    if not arr:
+        return []
+    candidates = []
+    provided_ids = {m["id"] for m in members}
+    for c in arr:
+        label = c.get("class_label") or c.get("label") or c.get("name")
+        if not label:
+            continue
+        member_ids = c.get("member_ids") or c.get("members") or []
+        # sanitize: keep only member ids that were in provided list
+        member_ids = [mid for mid in member_ids if mid in provided_ids]
+        if not member_ids:
+            continue
+        # Enforce rule: if multi-member prompt (len(members)>1), require >=2 member_ids
+        if not single_entity_mode and len(members) > 1 and len(member_ids) < 2:
+            # reject this candidate as it violates the MUST rule
+            continue
+        confidence = float(c.get("confidence")) if c.get("confidence") is not None else 0.0
+        desc = c.get("class_description") or c.get("description") or ""
+        ev = c.get("evidence_excerpt") or ""
+        candidate = {
+            "candidate_id": "ClsC_" + uuid.uuid4().hex[:8],
+            "class_label": label,
+            "class_description": desc,
+            "member_ids": member_ids,
+            "confidence": confidence,
+            "evidence_excerpt": ev,
+            "timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+        }
+        candidates.append(candidate)
+    return candidates
+
+# -------------------- Utility: write cluster files (full entity objects) -----------
+def write_cluster_summary(path: Path, cluster_map: Dict[int, List[int]], entities: List[Dict]):
+    """
+    Writes a JSON file with:
+    {
+      "n_entities": N,
+      "n_clusters": K,
+      "clusters": {
+         "0": [ <entityobj compact line>, <entityobj compact line>, ... ],
+         "1": [ ... ]
+      }
+    }
+    Each entity object is the full entity dict from input (compact single-line JSON for each entity)
+    """
+    n_entities = len(entities)
+    clusters = {}
+    for k, idxs in sorted(cluster_map.items(), key=lambda x: x[0]):
+        arr = []
+        for i in idxs:
+            ent = entities[i]
+            arr.append(ent)  # full object
+        clusters[str(k)] = arr
+    meta = {"n_entities": n_entities, "n_clusters": len(clusters), "clusters": clusters}
+    # write top-level pretty but ensure entity objects are compact in arrays
+    # We'll dump manually to control entity formatting: pretty top-level, but array elements compact single-line
+    with open(path, "w", encoding="utf-8") as fh:
+        fh.write('{\n')
+        fh.write(f'  "n_entities": {meta["n_entities"]},\n')
+        fh.write(f'  "n_clusters": {meta["n_clusters"]},\n')
+        fh.write('  "clusters": {\n')
+        cluster_items = list(clusters.items())
+        for ci, (k, ents) in enumerate(cluster_items):
+            fh.write(f'    "{k}": [\n')
+            for ei, ent in enumerate(ents):
+                ent_json = json.dumps(ent, ensure_ascii=False, separators=(",", ": "))
+                fh.write(f'      {ent_json}')
+                if ei < len(ents) - 1:
+                    fh.write(',\n')
+                else:
+                    fh.write('\n')
+            fh.write('    ]')
+            if ci < len(cluster_items) - 1:
+                fh.write(',\n')
+            else:
+                fh.write('\n')
+        fh.write('  }\n')
+        fh.write('}\n')
+
+# -------------------- Main iterative orchestration -----------------------
+def classrec_iterative_main():
+    entities = load_entities(INPUT_PATH)
+    print(f"[start] loaded {len(entities)} entities from {INPUT_PATH}")
+
+    # ensure ids exist
+    for e in entities:
+        if "id" not in e:
+            e["id"] = "En_" + uuid.uuid4().hex[:8]
+
+    # prepare embedder and embeddings
+    embedder = HFEmbedder(model_name=EMBED_MODEL, device=DEVICE)
+    combined_emb = compute_combined_embeddings(embedder, entities, weights=WEIGHTS)
+    print("[info] embeddings computed, shape:", combined_emb.shape)
+
+    # initial coarse clustering
+    labels, _ = run_hdbscan(combined_emb, min_cluster_size=HDBSCAN_MIN_CLUSTER_SIZE, min_samples=HDBSCAN_MIN_SAMPLES, use_umap=USE_UMAP)
+    print("[info] initial clustering done. unique labels:", len(set(labels)))
+
+    # cluster membership mapping
+    cluster_to_indices = {}
+    for idx, lab in enumerate(labels):
+        cluster_to_indices.setdefault(int(lab), []).append(idx)
+
+    # save initial clustering with full entity objects
+    write_cluster_summary(INITIAL_CLUSTER_OUT, cluster_to_indices, entities)
+    if VERBOSE: print(f"[write] initial cluster file -> {INITIAL_CLUSTER_OUT}")
+
+    # bookkeeping sets
+    seen_by_llm = set()
+    assigned_entity_ids = set()
+    class_candidates = []
+
+    # helper to map id->index
+    id_to_index = {e["id"]: i for i, e in enumerate(entities)}
+
+    # worker to process a list of global indices
+    def process_cluster_indices(indices: List[int]):
+        nonlocal class_candidates, seen_by_llm, assigned_entity_ids
+        if len(indices) == 0:
+            return
+        # chunk handling for moderate clusters
+        if len(indices) <= MAX_CLUSTER_SIZE_FOR_LOCAL:
+            for i in range(0, len(indices), MAX_MEMBERS_PER_PROMPT):
+                chunk_idxs = indices[i:i+MAX_MEMBERS_PER_PROMPT]
+                members = [entities[j] for j in chunk_idxs]
+                # call LLM
+                candidates = process_member_chunk_llm(members, single_entity_mode=(len(members) == 1))
+                # mark seen
+                for m in members:
+                    seen_by_llm.add(m["id"])
+                # accept candidates and attach member_entities
+                for c in candidates:
+                    mids = c.get("member_ids", [])
+                    # attach full member entity objects
+                    member_entities = [entities[id_to_index[mid]] for mid in mids if mid in id_to_index]
+                    if not member_entities:
+                        continue
+                    c["member_entities"] = member_entities
+                    # append candidate and mark assigned entities
+                    class_candidates.append(c)
+                    for mid in mids:
+                        assigned_entity_ids.add(mid)
+        else:
+            # large cluster -> local subcluster via HDBSCAN
+            sub_emb = combined_emb[indices]
+            try:
+                local_lab = hdbscan.HDBSCAN(min_cluster_size=max(2, LOCAL_HDBSCAN_MIN_CLUSTER_SIZE),
+                                            min_samples=LOCAL_HDBSCAN_MIN_SAMPLES,
+                                            metric="euclidean", cluster_selection_method='eom')
+                local_labels = local_lab.fit_predict(sub_emb)
+            except Exception:
+                local_labels = np.zeros(len(indices), dtype=int)
+            local_groups = {}
+            for i_local, lab_local in enumerate(local_labels):
+                local_groups.setdefault(int(lab_local), []).append(indices[i_local])
+            for llab, idxs in local_groups.items():
+                if llab == -1:
+                    continue
+                process_cluster_indices(idxs)
+
+    # initial pass: all non-noise clusters
+    for lab, idxs in sorted(cluster_to_indices.items(), key=lambda x: x[0]):
+        if lab == -1:
+            continue
+        if VERBOSE: print(f"[pass0] processing coarse cluster {lab} size={len(idxs)}")
+        process_cluster_indices(idxs)
+
+    # iterative recluster loop: combine original noise (-1) + seen-but-unassigned
+    initial_noise_indices = cluster_to_indices.get(-1, [])
+    round_num = 0
+    while round_num < MAX_RECLUSTER_ROUNDS:
+        round_num += 1
+        seen_but_unassigned_ids = list(seen_by_llm - assigned_entity_ids)
+        pool_ids = set([entities[i]["id"] for i in initial_noise_indices] + seen_but_unassigned_ids)
+        pool_ids = [pid for pid in pool_ids if pid not in assigned_entity_ids]
+        if not pool_ids:
+            if VERBOSE: print(f"[iter {round_num}] pool empty -> stopping recluster loop")
+            break
+        pool_indices = [id_to_index[pid] for pid in pool_ids if pid in id_to_index]
+        if not pool_indices:
+            if VERBOSE: print(f"[iter {round_num}] pool indices empty -> stopping")
+            break
+
+        if VERBOSE: print(f"[iter {round_num}] reclustering pool size={len(pool_indices)}")
+        sub_emb = combined_emb[pool_indices]
+        try:
+            labels_sub, _ = run_hdbscan(sub_emb, min_cluster_size=2, min_samples=1, use_umap=False)
+        except Exception:
+            labels_sub = np.zeros(len(pool_indices), dtype=int)
+
+        # map label -> global indices
+        sub_cluster_map = {}
+        for local_i, lab_sub in enumerate(labels_sub):
+            global_idx = pool_indices[local_i]
+            sub_cluster_map.setdefault(int(lab_sub), []).append(global_idx)
+
+        # save this recluster round summary (full entities)
+        recluster_path = Path(f"{RECLUSTER_PREFIX}{round_num}.json")
+        write_cluster_summary(recluster_path, sub_cluster_map, entities)
+        if VERBOSE: print(f"[write] recluster round {round_num} -> {recluster_path}")
+
+        new_assignments = 0
+        # process non-noise subclusters
+        for lab_sub, gidxs in sorted(sub_cluster_map.items(), key=lambda x: (x[0]==-1, x[0])):
+            if lab_sub == -1:
+                continue
+            before = len(assigned_entity_ids)
+            if VERBOSE: print(f"[iter {round_num}] processing subcluster {lab_sub} size={len(gidxs)}")
+            process_cluster_indices(gidxs)
+            after = len(assigned_entity_ids)
+            new_assignments += (after - before)
+
+        if new_assignments == 0:
+            if VERBOSE: print(f"[iter {round_num}] no new assignments -> stopping recluster loop")
+            break
+        else:
+            if VERBOSE: print(f"[iter {round_num}] new assignments this round: {new_assignments}")
+            # continue loop to try to resolve more
+
+    # Final single-entity pass: allow single-member class proposals for remaining entities
+    assigned_ids = set(assigned_entity_ids)
+    remaining_entities = [e for e in entities if e["id"] not in assigned_ids]
+    if VERBOSE: print(f"[final] single-entity pass on {len(remaining_entities)} remaining entities")
+    for e in remaining_entities:
+        candidates = process_member_chunk_llm([e], single_entity_mode=True)
+        for c in candidates:
+            # ensure member_ids valid (fall back to provided id)
+            if not c.get("member_ids"):
+                c["member_ids"] = [e["id"]]
+            # attach full member_entities
+            mids = c["member_ids"]
+            member_entities = [entities[id_to_index[mid]] for mid in mids if mid in id_to_index]
+            c["member_entities"] = member_entities or [e]
+            class_candidates.append(c)
+            for mid in c["member_ids"]:
+                assigned_entity_ids.add(mid)
+
+    # recompute final remaining after single-entity pass
+    assigned_ids = set(assigned_entity_ids)
+    final_remaining = [e for e in entities if e["id"] not in assigned_ids]
+
+    # Save class candidates (each line = JSON)
+    with open(CLASS_CANDIDATES_OUT, "w", encoding="utf-8") as fh:
+        for c in class_candidates:
+            # remove any internal-only fields if present (none should be)
+            fh.write(json.dumps(c, ensure_ascii=False) + "\n")
+    print(f"[write] class candidates -> {CLASS_CANDIDATES_OUT}  (count={len(class_candidates)})")
+
+    # Save final remaining unassigned full entities
+    with open(FINAL_UNASSIGNED_OUT, "w", encoding="utf-8") as fh:
+        for e in final_remaining:
+            fh.write(json.dumps(e, ensure_ascii=False) + "\n")
+    print(f"[write] final unassigned entities -> {FINAL_UNASSIGNED_OUT}  (count={len(final_remaining)})")
+
+    print("[done] ClassRec iterative finished.")
+
+if __name__ == "__main__":
+    classrec_iterative_main()
+
+
+
+#endregion#? Cls Rec V2
+#*#########################  End  ##########################
+
+
+
+
+
+
+#*######################### Start ##########################
+#region:#?   Cls Rec V3
+
+
+#!/usr/bin/env python3
+
+
+"""
+classrec_iterative_v3.py
+
+Iterative Class Recognition (ClassRec) with per-iteration class outputs
+matching the cluster-file visual/JSON format and including class metadata
+(label/desc/confidence/evidence + source cluster id).
+"""
+
+import json
+import os
+import time
+import uuid
+from pathlib import Path
+from typing import List, Dict, Tuple, Optional
+
+import numpy as np
+import torch
+from transformers import AutoTokenizer, AutoModel
+from sklearn.preprocessing import normalize
+
+# clustering libs
+try:
+    import hdbscan
+except Exception:
+    raise RuntimeError("hdbscan required: pip install hdbscan")
+try:
+    import umap
+    UMAP_AVAILABLE = True
+except Exception:
+    UMAP_AVAILABLE = False
+
+# OpenAI client
+from openai import OpenAI
+
+# ----------------------------- CONFIG -----------------------------
+INPUT_PATH = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Classes/Cls_Input/cls_input_entities.jsonl")
+OUT_DIR = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Classes/Cls_Rec")
+OUT_DIR.mkdir(parents=True, exist_ok=True)
+
+CLASS_CANDIDATES_OUT = OUT_DIR / "class_candidates.jsonl"
+INITIAL_CLUSTER_OUT = OUT_DIR / "initial_cluster_entities.json"
+RECLUSTER_PREFIX = OUT_DIR / "recluster_round_"
+CLASSES_PREFIX = OUT_DIR / "classes_round_"
+REMAINING_OUT = OUT_DIR / "remaining_entities.jsonl"
+
+# embedder / model
+EMBED_MODEL = "BAAI/bge-large-en-v1.5"
+DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
+BATCH_SIZE = 32
+WEIGHTS = {"name": 0.40, "desc": 0.25, "ctx": 0.35}
+
+# HDBSCAN + UMAP
+HDBSCAN_MIN_CLUSTER_SIZE = 4
+HDBSCAN_MIN_SAMPLES = 1
+HDBSCAN_METRIC = "euclidean"
+USE_UMAP = True
+UMAP_N_COMPONENTS = 64
+UMAP_N_NEIGHBORS = 8
+UMAP_MIN_DIST = 0.0
+
+# local subcluster
+MAX_CLUSTER_SIZE_FOR_LOCAL = 30
+LOCAL_HDBSCAN_MIN_CLUSTER_SIZE = 2
+LOCAL_HDBSCAN_MIN_SAMPLES = 1
+
+# prompt and LLM / limits
+OPENAI_MODEL = "gpt-4o"
+OPENAI_TEMPERATURE = 0.0
+LLM_MAX_TOKENS = 800
+MAX_MEMBERS_PER_PROMPT = 10
+PROMPT_CHAR_PER_TOKEN = 4          # crude estimate
+MAX_PROMPT_TOKENS_EST = 2500
+
+# iteration control
+MAX_RECLUSTER_ROUNDS = 12  # safety cap
+VERBOSE = True
+
+# ------------------------ OpenAI client loader -----------------------
+def _load_openai_key(envvar: str = "OPENAI_API_KEY", fallback_path: str = "/home/mabolhas/MyReposOnSOL/SGCE-KG/.env"):
+    key = os.getenv(envvar, fallback_path)
+    if isinstance(key, str) and Path(key).exists():
+        try:
+            txt = Path(key).read_text(encoding="utf-8").strip()
+            if txt:
+                return txt
+        except Exception:
+            pass
+    return key
+
+OPENAI_KEY = _load_openai_key()
+if not OPENAI_KEY or not isinstance(OPENAI_KEY, str) or len(OPENAI_KEY) < 10:
+    print("⚠️ OPENAI key missing or short. Set OPENAI_API_KEY or put key in fallback file.")
+client = OpenAI(api_key=OPENAI_KEY)
+
+def call_llm(prompt: str, model: str = OPENAI_MODEL, temperature: float = OPENAI_TEMPERATURE, max_tokens: int = LLM_MAX_TOKENS) -> str:
+    try:
+        resp = client.chat.completions.create(
+            model=model,
+            messages=[{"role": "user", "content": prompt}],
+            temperature=temperature,
+            max_tokens=max_tokens
+        )
+        return resp.choices[0].message.content
+    except Exception as e:
+        print("LLM call error:", e)
+        return ""
+
+# ------------------------- HF Embedder ------------------------------
+def mean_pool(token_embeddings: torch.Tensor, attention_mask: torch.Tensor):
+    input_mask_expanded = attention_mask.unsqueeze(-1).expand(token_embeddings.size()).float()
+    sum_embeddings = torch.sum(token_embeddings * input_mask_expanded, 1)
+    sum_mask = torch.clamp(input_mask_expanded.sum(1), min=1e-9)
+    return sum_embeddings / sum_mask
+
+class HFEmbedder:
+    def __init__(self, model_name=EMBED_MODEL, device=DEVICE):
+        if VERBOSE: print(f"[embedder] loading {model_name} on {device}")
+        self.device = device
+        self.tokenizer = AutoTokenizer.from_pretrained(model_name, use_fast=True)
+        self.model = AutoModel.from_pretrained(model_name)
+        self.model.to(device)
+        self.model.eval()
+        for p in self.model.parameters():
+            p.requires_grad = False
+
+    @torch.no_grad()
+    def encode_batch(self, texts: List[str], batch_size: int = BATCH_SIZE) -> np.ndarray:
+        if len(texts) == 0:
+            D = getattr(self.model.config, "hidden_size", 1024)
+            return np.zeros((0, D))
+        embs = []
+        for i in range(0, len(texts), batch_size):
+            batch = texts[i:i+batch_size]
+            enc = self.tokenizer(batch, padding=True, truncation=True, return_tensors="pt", max_length=1024)
+            input_ids = enc["input_ids"].to(self.device)
+            attention_mask = enc["attention_mask"].to(self.device)
+            out = self.model(input_ids=input_ids, attention_mask=attention_mask, return_dict=True)
+            token_embeds = out.last_hidden_state
+            pooled = mean_pool(token_embeds, attention_mask)
+            embs.append(pooled.cpu().numpy())
+        embs = np.vstack(embs)
+        embs = normalize(embs, axis=1)
+        return embs
+
+# ---------------------- IO helpers ----------------------------------
+def load_entities(path: Path) -> List[Dict]:
+    assert path.exists(), f"Input not found: {path}"
+    ents = []
+    with open(path, "r", encoding="utf-8") as fh:
+        for line in fh:
+            if line.strip():
+                ents.append(json.loads(line))
+    return ents
+
+def safe_text(e: Dict, k: str) -> str:
+    v = e.get(k)
+    if v is None:
+        return ""
+    if isinstance(v, (list, dict)):
+        return json.dumps(v, ensure_ascii=False)
+    return str(v)
+
+def build_field_texts(entities: List[Dict]) -> Tuple[List[str], List[str], List[str]]:
+    names, descs, ctxs = [], [], []
+    for e in entities:
+        names.append(safe_text(e, "entity_name"        ) or "")
+        descs.append(safe_text(e, "entity_description" ) or "")
+        resolution = safe_text(e, "resolution_context" ) or safe_text(e, "text_span") or safe_text(e, "context_phrase") or ""
+        et = safe_text(e,         "entity_type_hint"   ) or ""
+        node_props = e.get(       "node_properties"    ) or []
+        node_props_text = ""
+        if isinstance(node_props, list) and node_props:
+            pieces = []
+            for np in node_props:
+                if isinstance(np, dict):
+                    pname = np.get("prop_name") or np.get("name") or ""
+                    pval = np.get("prop_value") or np.get("value") or ""
+                    if pname and pval:
+                        pieces.append(f"{pname}:{pval}")
+                    elif pname:
+                        pieces.append(pname)
+            if pieces:
+                node_props_text = " | ".join(pieces)
+        parts = []
+        if et:
+            parts.append(f"[TYPE:{et}]")
+        if resolution:
+            parts.append(resolution)
+        if node_props_text:
+            parts.append(node_props_text)
+        ctxs.append(" ; ".join(parts))
+    return names, descs, ctxs
+
+def compute_combined_embeddings(embedder: HFEmbedder, entities: List[Dict], weights=WEIGHTS) -> np.ndarray:
+    names, descs, ctxs = build_field_texts(entities)
+    emb_name = embedder.encode_batch(names) if any(t.strip() for t in names) else None
+    emb_desc = embedder.encode_batch(descs) if any(t.strip() for t in descs) else None
+    emb_ctx  = embedder.encode_batch(ctxs)  if any(t.strip() for t in ctxs) else None
+
+    D = None
+    for arr in (emb_name, emb_desc, emb_ctx):
+        if arr is not None and arr.shape[0] > 0:
+            D = arr.shape[1]; break
+    if D is None:
+        raise ValueError("No textual field produced embeddings")
+
+    def _ensure(arr):
+        if arr is None:
+            return np.zeros((len(entities), D))
+        if arr.shape[1] != D:
+            raise ValueError("embedding dim mismatch")
+        return arr
+
+    emb_name = _ensure(emb_name); emb_desc = _ensure(emb_desc); emb_ctx = _ensure(emb_ctx)
+    w_name = weights.get("name", 0.0); w_desc = weights.get("desc", 0.0); w_ctx = weights.get("ctx", 0.0)
+    Wsum = w_name + w_desc + w_ctx
+    if Wsum <= 0: raise ValueError("invalid weights")
+    w_name /= Wsum; w_desc /= Wsum; w_ctx /= Wsum
+
+    combined = (w_name * emb_name) + (w_desc * emb_desc) + (w_ctx * emb_ctx)
+    combined = normalize(combined, axis=1)
+    return combined
+
+def run_hdbscan(embeddings: np.ndarray, min_cluster_size=HDBSCAN_MIN_CLUSTER_SIZE, min_samples=HDBSCAN_MIN_SAMPLES,
+                metric=HDBSCAN_METRIC, use_umap=USE_UMAP) -> Tuple[np.ndarray, object]:
+    X = embeddings
+    if use_umap and UMAP_AVAILABLE and X.shape[0] >= 5:
+        reducer = umap.UMAP(n_components=min(UMAP_N_COMPONENTS, max(2, X.shape[0]-1)),
+                            n_neighbors=min(UMAP_N_NEIGHBORS, max(2, X.shape[0]-1)),
+                            min_dist=UMAP_MIN_DIST,
+                            metric='cosine', random_state=42)
+        X = reducer.fit_transform(X)
+    clusterer = hdbscan.HDBSCAN(min_cluster_size=min_cluster_size, min_samples=min_samples, metric=metric, cluster_selection_method='eom')
+    labels = clusterer.fit_predict(X)
+    return labels, clusterer
+
+# ------------------ Prompt (REVISED to be MUST) -----------------------
+CLASS_PROMPT_TEMPLATE = """
+You are a careful schema / ontology suggester. Be conservative and precise.
+
+Goal (short)
+Given a small list of entity mentions (name + short description + evidence excerpt), suggest zero or more *class* concepts that summarize *natural, practically useful* groups among these members.
+
+Hard rule about WHEN TO CREATE A CLASS (ENFORCED)
+- If the input contains MULTIPLE members, you MUST only propose classes that contain **TWO OR MORE** members.
+- You MUST NOT invent or return a single-member class when the input contains multiple members.
+- The ONLY time a single-member class is allowed is when the input prompt contains **EXACTLY ONE** entity (single-entity mode).
+
+Primary principle (do not force-fit)
+- **Do not** change or broaden a proposed class label just to make room for extra entities. If an entity does not genuinely belong, omit it.
+- It is preferable to **not** propose a class at all than to propose a loose/broad class that subsumes heterogeneous entities.
+- Entities omitted here are *not* lost — they will be revisited in later reclustering/single-entity passes and may find better classmates. Do not "burn" entities by forcing them into a poor class.
+
+What makes a *useful* class (guidance on granularity)
+- Not so broad that it includes everything (avoid generic catch-alls).
+- Not so narrow that it becomes an unusable singleton (except single-entity mode).
+- Should enable practical reuse: different entities of this class could be connected to the same schema concept and benefit downstream tasks.
+
+Label style & description guidance
+- `class_label`: short, noun-phrase (1–3 words), Title Case (e.g., "Bearing Wear", "Cooling System").
+- `class_description`: 1–2 sentences describing the defining properties and boundaries of the class (what is in / what is out).
+- `evidence_excerpt`: a short 5–30 word excerpt explaining why these members belong together (can be drawn from the provided evidence).
+
+Output format (REQUIRED)
+Return ONLY a JSON ARRAY. Each element must be an object with these keys:
+ - class_label (string) — short canonical class name (1–3 words)
+ - class_description (string) — 1–2 sentence explanation of the class
+ - member_ids (array[string]) — entity ids (must be from the provided list)
+ - confidence (float) — 0.0–1.0 estimate of confidence
+ - evidence_excerpt (string, optional) — short supporting excerpt
+
+Hard rules
+- Use ONLY the provided members (do NOT invent ids or fetch outside facts).
+- Member ids in `member_ids` must come from the input list; discard any external ids.
+- If you cannot propose any sensible class, return an empty array `[]`.
+- Prefer **non-overlapping** classes when possible; small, justified overlap is allowed but explain via the description/evidence.
+- If a candidate class would require renaming into a much broader label to include marginal members, **reject** that merge — instead omit the marginal members.
+
+Operational notes for scoring & downstream use
+- Give honest confidence scores: higher when members share explicit lexical/semantic evidence; lower for looser semantic groupings.
+- Keep labels short and stable; avoid ad-hoc punctuation or excessively long names.
+- Provide concise evidence to help later canonicalization and merging.
+
+Members (one per line: id | name | description | evidence_excerpt):
+{members_block}
+
+Return JSON array only.
+"""
+
+
+def build_members_block(members: List[Dict]) -> str:
+    rows = []
+    for m in members:
+        eid = m.get("id")
+        name = (m.get("entity_name") or "")[:120].replace("\n"," ")
+        desc = (m.get("entity_description") or "")[:300].replace("\n"," ")
+        evidence = (m.get("resolution_context") or m.get("context_phrase") or "")[:300].replace("\n"," ")
+        rows.append(f"{eid} | {name} | {desc} | {evidence}")
+    return "\n".join(rows)
+
+def parse_json_array_from_text(txt: str):
+    if not txt:
+        return None
+    s = txt.strip()
+    if s.startswith("```"):
+        s = s.strip("`")
+    start = s.find('[')
+    end = s.rfind(']')
+    if start != -1 and end != -1 and end > start:
+        cand = s[start:end+1]
+        try:
+            return json.loads(cand)
+        except Exception:
+            pass
+    try:
+        return json.loads(s)
+    except Exception:
+        return None
+
+# ------------------- Worker: process a chunk of members --------------------
+def process_member_chunk_llm(members: List[Dict], single_entity_mode: bool = False) -> List[Dict]:
+    members_block = build_members_block(members)
+    prompt = CLASS_PROMPT_TEMPLATE.format(members_block=members_block)
+    est_tokens = max(1, int(len(prompt) / PROMPT_CHAR_PER_TOKEN))
+    if est_tokens > MAX_PROMPT_TOKENS_EST:
+        if VERBOSE: print(f"[warning] prompt too large (est_tokens={est_tokens}) -> skipping chunk of size {len(members)}")
+        return []
+    llm_out = call_llm(prompt)
+    arr = parse_json_array_from_text(llm_out)
+    if not arr:
+        return []
+    candidates = []
+    provided_ids = {m["id"] for m in members}
+    for c in arr:
+        label = c.get("class_label") or c.get("label") or c.get("name")
+        if not label:
+            continue
+        member_ids = c.get("member_ids") or c.get("members") or []
+        # sanitize: keep only member ids that were in provided list
+        member_ids = [mid for mid in member_ids if mid in provided_ids]
+        if not member_ids:
+            continue
+        # Enforce rule: if multi-member prompt (len(members)>1), require >=2 member_ids
+        if not single_entity_mode and len(members) > 1 and len(member_ids) < 2:
+            # reject this candidate as it violates the MUST rule
+            continue
+        confidence = float(c.get("confidence")) if c.get("confidence") is not None else 0.0
+        desc = c.get("class_description") or c.get("description") or ""
+        ev = c.get("evidence_excerpt") or ""
+        candidate = {
+            "candidate_id": "ClsC_" + uuid.uuid4().hex[:8],
+            "class_label": label,
+            "class_description": desc,
+            "member_ids": member_ids,
+            "confidence": confidence,
+            "evidence_excerpt": ev,
+            "timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+        }
+        candidates.append(candidate)
+    return candidates
+
+# -------------------- Utility: write cluster files (full entity objects) -----------
+def write_cluster_summary(path: Path, cluster_map: Dict[int, List[int]], entities: List[Dict]):
+    n_entities = len(entities)
+    clusters = {}
+    for k, idxs in sorted(cluster_map.items(), key=lambda x: x[0]):
+        arr = []
+        for i in idxs:
+            ent = entities[i]
+            arr.append(ent)
+        clusters[str(k)] = arr
+    meta = {"n_entities": n_entities, "n_clusters": len(clusters), "clusters": clusters}
+    with open(path, "w", encoding="utf-8") as fh:
+        fh.write('{\n')
+        fh.write(f'  "n_entities": {meta["n_entities"]},\n')
+        fh.write(f'  "n_clusters": {meta["n_clusters"]},\n')
+        fh.write('  "clusters": {\n')
+        cluster_items = list(clusters.items())
+        for ci, (k, ents) in enumerate(cluster_items):
+            fh.write(f'    "{k}": [\n')
+            for ei, ent in enumerate(ents):
+                ent_json = json.dumps(ent, ensure_ascii=False, separators=(",", ": "))
+                fh.write(f'      {ent_json}')
+                if ei < len(ents) - 1:
+                    fh.write(',\n')
+                else:
+                    fh.write('\n')
+            fh.write('    ]')
+            if ci < len(cluster_items) - 1:
+                fh.write(',\n')
+            else:
+                fh.write('\n')
+        fh.write('  }\n')
+        fh.write('}\n')
+
+def write_classes_round(path: Path, candidates: List[Dict], entities: List[Dict], id_to_index: Dict[str,int]):
+    """
+    Write classes in an enriched cluster-like visual form:
+    {
+      "n_classes": <int>,
+      "n_members_total": <int>,
+      "classes": {
+         "<candidate_id>": {
+             "class_label": "...",
+             "class_description": "...",
+             "confidence": 0.9,
+             "evidence_excerpt": "...",
+             "source_cluster_id": <int|null>,
+             "members": [ <full entity obj>, ... ]
+         },
+         ...
+      }
+    }
+    """
+    classes_map = {}
+    total_members = 0
+    for c in candidates:
+        cid = c.get("candidate_id") or ("ClsC_" + uuid.uuid4().hex[:8])
+        mids = c.get("member_ids", [])
+        member_objs = []
+        for mid in mids:
+            if mid in id_to_index:
+                member_objs.append(entities[id_to_index[mid]])
+        if not member_objs:
+            continue
+        # gather metadata (ensure keys exist)
+        meta = {
+            "class_label": c.get("class_label", ""),
+            "class_description": c.get("class_description", ""),
+            "confidence": float(c.get("confidence", 0.0)),
+            "evidence_excerpt": c.get("evidence_excerpt", ""),
+            "source_cluster_id": c.get("source_cluster_id", None),
+            "members": member_objs
+        }
+        classes_map[cid] = meta
+        total_members += len(member_objs)
+    meta = {"n_classes": len(classes_map), "n_members_total": total_members, "classes": classes_map}
+    # write in requested visual format: pretty top-level, compact entity lines
+    with open(path, "w", encoding="utf-8") as fh:
+        fh.write('{\n')
+        fh.write(f'  "n_classes": {meta["n_classes"]},\n')
+        fh.write(f'  "n_members_total": {meta["n_members_total"]},\n')
+        fh.write('  "classes": {\n')
+        items = list(classes_map.items())
+        for ci, (k, cls_meta) in enumerate(items):
+            fh.write(f'    "{k}": {{\n')
+            # write metadata fields
+            fh.write(f'      "class_label": {json.dumps(cls_meta["class_label"], ensure_ascii=False)},\n')
+            fh.write(f'      "class_description": {json.dumps(cls_meta["class_description"], ensure_ascii=False)},\n')
+            fh.write(f'      "confidence": {json.dumps(cls_meta["confidence"], ensure_ascii=False)},\n')
+            fh.write(f'      "evidence_excerpt": {json.dumps(cls_meta["evidence_excerpt"], ensure_ascii=False)},\n')
+            fh.write(f'      "source_cluster_id": {json.dumps(cls_meta["source_cluster_id"], ensure_ascii=False)},\n')
+            fh.write(f'      "members": [\n')
+            for ei, ent in enumerate(cls_meta["members"]):
+                ent_json = json.dumps(ent, ensure_ascii=False, separators=(",", ": "))
+                fh.write(f'        {ent_json}')
+                if ei < len(cls_meta["members"]) - 1:
+                    fh.write(',\n')
+                else:
+                    fh.write('\n')
+            fh.write('      ]\n')
+            fh.write('    }')
+            if ci < len(items) - 1:
+                fh.write(',\n')
+            else:
+                fh.write('\n')
+        fh.write('  }\n')
+        fh.write('}\n')
+
+# -------------------- Main iterative orchestration -----------------------
+def classrec_iterative_main():
+    entities = load_entities(INPUT_PATH)
+    print(f"[start] loaded {len(entities)} entities from {INPUT_PATH}")
+
+    # ensure ids exist
+    for e in entities:
+        if "id" not in e:
+            e["id"] = "En_" + uuid.uuid4().hex[:8]
+
+    # id -> index
+    id_to_index = {e["id"]: i for i, e in enumerate(entities)}
+
+    # prepare embedder and embeddings
+    embedder = HFEmbedder(model_name=EMBED_MODEL, device=DEVICE)
+    combined_emb = compute_combined_embeddings(embedder, entities, weights=WEIGHTS)
+    print("[info] embeddings computed, shape:", combined_emb.shape)
+
+    # initial coarse clustering
+    labels, _ = run_hdbscan(combined_emb, min_cluster_size=HDBSCAN_MIN_CLUSTER_SIZE, min_samples=HDBSCAN_MIN_SAMPLES, use_umap=USE_UMAP)
+    print("[info] initial clustering done. unique labels:", len(set(labels)))
+
+    # cluster membership mapping
+    cluster_to_indices = {}
+    for idx, lab in enumerate(labels):
+        cluster_to_indices.setdefault(int(lab), []).append(idx)
+
+    # save initial clustering with full entity objects
+    write_cluster_summary(INITIAL_CLUSTER_OUT, cluster_to_indices, entities)
+    if VERBOSE: print(f"[write] initial cluster file -> {INITIAL_CLUSTER_OUT}")
+
+    # bookkeeping sets
+    seen_by_llm = set()         # entity ids that were passed to LLM at least once
+    assigned_entity_ids = set() # entity ids assigned into class candidates
+    all_candidates = []         # cumulative across rounds (to write class_candidates.jsonl)
+
+    # local helper to call LLM on member list and return candidates (and mark seen/assigned)
+    def call_and_record(members_indices: List[int], source_cluster: Optional[int]=None, single_entity_mode: bool=False) -> List[Dict]:
+        nonlocal seen_by_llm, assigned_entity_ids, all_candidates
+        if not members_indices:
+            return []
+        members = [entities[i] for i in members_indices]
+        # call LLM in chunks if large
+        results = []
+        for i in range(0, len(members), MAX_MEMBERS_PER_PROMPT):
+            chunk = members[i:i+MAX_MEMBERS_PER_PROMPT]
+            chunk_indices = members_indices[i:i+MAX_MEMBERS_PER_PROMPT]
+            # mark seen
+            for m in chunk:
+                seen_by_llm.add(m["id"])
+            candidates = process_member_chunk_llm(chunk, single_entity_mode=single_entity_mode)
+            # attach member_entities, source_cluster and record assigned ids
+            for c in candidates:
+                mids = c.get("member_ids", [])
+                member_entities = [entities[id_to_index[mid]] for mid in mids if mid in id_to_index]
+                if not member_entities:
+                    continue
+                # attach full members and source cluster id for traceability
+                c["member_entities"] = member_entities
+                c["source_cluster_id"] = source_cluster
+                all_candidates.append(c)
+                for mid in mids:
+                    assigned_entity_ids.add(mid)
+                results.append(c)
+        return results
+
+    # ---------- Round 0: initial pass over non-noise coarse clusters ----------
+    round0_candidates = []
+    if VERBOSE: print("[round0] processing coarse non-noise clusters")
+    for lab, idxs in sorted(cluster_to_indices.items(), key=lambda x: x[0]):
+        if lab == -1:
+            continue
+        if VERBOSE: print(f"[round0] cluster {lab} size={len(idxs)}")
+        # if cluster large, do local subcluster; else call directly
+        if len(idxs) > MAX_CLUSTER_SIZE_FOR_LOCAL:
+            # local subcluster
+            try:
+                sub_emb = combined_emb[idxs]
+                local_clusterer = hdbscan.HDBSCAN(min_cluster_size=max(2, LOCAL_HDBSCAN_MIN_CLUSTER_SIZE),
+                                                  min_samples=LOCAL_HDBSCAN_MIN_SAMPLES, metric='euclidean', cluster_selection_method='eom')
+                local_labels = local_clusterer.fit_predict(sub_emb)
+            except Exception:
+                local_labels = np.zeros(len(idxs), dtype=int)
+            local_map = {}
+            for i_local, lab_local in enumerate(local_labels):
+                global_idx = idxs[i_local]
+                local_map.setdefault(int(lab_local), []).append(global_idx)
+            for sublab, subidxs in local_map.items():
+                if sublab == -1:
+                    continue
+                # source cluster id set to coarse cluster `lab` and sublab appended as tuple (lab, sublab)
+                source_id = {"coarse_cluster": lab, "local_subcluster": int(sublab)}
+                cand = call_and_record(subidxs, source_cluster=source_id, single_entity_mode=(len(subidxs) == 1))
+                round0_candidates.extend(cand)
+        else:
+            source_id = {"coarse_cluster": lab, "local_subcluster": None}
+            cand = call_and_record(idxs, source_cluster=source_id, single_entity_mode=(len(idxs) == 1))
+            round0_candidates.extend(cand)
+
+    # save classes for round 0
+    classes_round0_path = Path(f"{CLASSES_PREFIX}0.json")
+    write_classes_round(classes_round0_path, round0_candidates, entities, id_to_index)
+    if VERBOSE: print(f"[write] classes round 0 -> {classes_round0_path}")
+
+    # ---------- Iterative recluster rounds ----------
+    # initial pool: original noise (cluster -1) + seen but unassigned
+    original_noise_indices = cluster_to_indices.get(-1, [])
+    round_num = 0
+    while round_num < MAX_RECLUSTER_ROUNDS:
+        round_num += 1
+        # pool composition: original noise + seen-but-unassigned
+        seen_but_unassigned = list(seen_by_llm - assigned_entity_ids)
+        pool_ids = {entities[i]["id"] for i in original_noise_indices}
+        pool_ids.update(seen_but_unassigned)
+        # remove already assigned
+        pool_ids = [pid for pid in pool_ids if pid not in assigned_entity_ids]
+        if not pool_ids:
+            if VERBOSE: print(f"[reclust {round_num}] pool empty -> stopping")
+            break
+        pool_indices = [id_to_index[pid] for pid in pool_ids if pid in id_to_index]
+        if not pool_indices:
+            if VERBOSE: print(f"[reclust {round_num}] no valid pool indices -> stopping")
+            break
+
+        if VERBOSE: print(f"[reclust {round_num}] reclustering pool size={len(pool_indices)}")
+        # recluster pool (conservative min size 2)
+        try:
+            sub_emb = combined_emb[pool_indices]
+            labels_sub, _ = run_hdbscan(sub_emb, min_cluster_size=2, min_samples=1, use_umap=False)
+        except Exception:
+            labels_sub = np.zeros(len(pool_indices), dtype=int)
+
+        # build map label->global indices
+        sub_cluster_map = {}
+        for local_i, lab_sub in enumerate(labels_sub):
+            global_idx = pool_indices[local_i]
+            sub_cluster_map.setdefault(int(lab_sub), []).append(global_idx)
+
+        # save recluster summary
+        recluster_path = Path(f"{RECLUSTER_PREFIX}{round_num}.json")
+        write_cluster_summary(recluster_path, sub_cluster_map, entities)
+        if VERBOSE: print(f"[write] recluster round {round_num} -> {recluster_path}")
+
+        # process each non-noise subcluster and collect classes for this round
+        round_candidates = []
+        new_classes_count = 0
+        for lab_sub, gidxs in sorted(sub_cluster_map.items(), key=lambda x: (x[0]==-1, x[0])):
+            if lab_sub == -1:
+                continue
+            if VERBOSE: print(f"[reclust {round_num}] processing subcluster {lab_sub} size={len(gidxs)}")
+            # source cluster id set to recluster round + subcluster label
+            source_id = {"recluster_round": round_num, "subcluster": int(lab_sub)}
+            cand = call_and_record(gidxs, source_cluster=source_id, single_entity_mode=(len(gidxs) == 1))
+            round_candidates.extend(cand)
+            new_classes_count += len(cand)
+
+        # save classes found this round in enriched format
+        classes_round_path = Path(f"{CLASSES_PREFIX}{round_num}.json")
+        write_classes_round(classes_round_path, round_candidates, entities, id_to_index)
+        if VERBOSE: print(f"[write] classes round {round_num} -> {classes_round_path}  (new_classes={new_classes_count})")
+
+        if new_classes_count == 0:
+            if VERBOSE: print(f"[reclust {round_num}] no new classes -> stopping recluster loop")
+            break
+        # otherwise continue to next recluster round (pool will be recomputed)
+
+    # ---------- Final single-entity pass ----------
+    # remaining after all reclustering rounds: entities not assigned yet
+    remaining_after_reclustering = [e for e in entities if e["id"] not in assigned_entity_ids]
+    if VERBOSE: print(f"[single pass] remaining entities (before single-entity pass): {len(remaining_after_reclustering)}")
+
+    single_candidates = []
+    for e in remaining_after_reclustering:
+        source_id = {"single_pass": True}
+        cand = call_and_record([id_to_index[e["id"]]], source_cluster=source_id, single_entity_mode=True)
+        single_candidates.extend(cand)
+
+    # save classes from single-entity pass
+    classes_single_path = Path(f"{CLASSES_PREFIX}single.json")
+    write_classes_round(classes_single_path, single_candidates, entities, id_to_index)
+    if VERBOSE: print(f"[write] classes round single -> {classes_single_path}")
+
+    # ---------- Write cumulative class candidates file (line-per-candidate) ----------
+    with open(CLASS_CANDIDATES_OUT, "w", encoding="utf-8") as fh:
+        for c in all_candidates:
+            fh.write(json.dumps(c, ensure_ascii=False) + "\n")
+    if VERBOSE: print(f"[write] cumulative class_candidates -> {CLASS_CANDIDATES_OUT} (count={len(all_candidates)})")
+
+    # ---------- Final remaining entities (never assigned after full pipeline) ----------
+    final_remaining = [e for e in entities if e["id"] not in assigned_entity_ids]
+    with open(REMAINING_OUT, "w", encoding="utf-8") as fh:
+        for e in final_remaining:
+            fh.write(json.dumps(e, ensure_ascii=False) + "\n")
+    if VERBOSE: print(f"[write] final remaining entities -> {REMAINING_OUT} (count={len(final_remaining)})")
+
+    print("[done] ClassRec iterative v3 finished.")
+
+if __name__ == "__main__":
+    classrec_iterative_main()
+
+
+
+#endregion#? Cls Rec V3
+#*#########################  End  ##########################
+
+
+
+
+
+#?######################### Start ##########################
+#region:#?   Cls Rec V4 - Class hint type included
+
+#!/usr/bin/env python3
+"""
+classrec_iterative_v4.py
+
+Iterative Class Recognition (ClassRec) with per-iteration class outputs
+matching the cluster-file visual/JSON format and including class metadata
+(label/desc/confidence/evidence + source cluster id + class_type_hint).
+
+This is a fix for KeyError caused by unescaped braces in the prompt template.
+All literal braces in the prompt are escaped ({{ and }}), except {members_block}.
+"""
+
+import json
+import os
+import time
+import uuid
+from pathlib import Path
+from typing import List, Dict, Tuple, Optional
+
+import numpy as np
+import torch
+from transformers import AutoTokenizer, AutoModel
+from sklearn.preprocessing import normalize
+
+# clustering libs
+try:
+    import hdbscan
+except Exception:
+    raise RuntimeError("hdbscan required: pip install hdbscan")
+try:
+    import umap
+    UMAP_AVAILABLE = True
+except Exception:
+    UMAP_AVAILABLE = False
+
+# OpenAI client
+from openai import OpenAI
+
+# ----------------------------- CONFIG -----------------------------
+INPUT_PATH = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Classes/Cls_Input/cls_input_entities.jsonl")
+OUT_DIR = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Classes/Cls_Rec")
+OUT_DIR.mkdir(parents=True, exist_ok=True)
+
+CLASS_CANDIDATES_OUT = OUT_DIR / "class_candidates.jsonl"
+INITIAL_CLUSTER_OUT = OUT_DIR / "initial_cluster_entities.json"
+RECLUSTER_PREFIX = OUT_DIR / "recluster_round_"
+CLASSES_PREFIX = OUT_DIR / "classes_round_"
+REMAINING_OUT = OUT_DIR / "remaining_entities.jsonl"
+
+# embedder / model
+EMBED_MODEL = "BAAI/bge-large-en-v1.5"
+DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
+BATCH_SIZE = 32
+WEIGHTS = {"name": 0.40, "desc": 0.25, "ctx": 0.35}
+
+# HDBSCAN + UMAP
+HDBSCAN_MIN_CLUSTER_SIZE = 4
+HDBSCAN_MIN_SAMPLES = 1
+HDBSCAN_METRIC = "euclidean"
+USE_UMAP = True
+UMAP_N_COMPONENTS = 64
+UMAP_N_NEIGHBORS = 8
+UMAP_MIN_DIST = 0.0
+
+# local subcluster
+MAX_CLUSTER_SIZE_FOR_LOCAL = 30
+LOCAL_HDBSCAN_MIN_CLUSTER_SIZE = 2
+LOCAL_HDBSCAN_MIN_SAMPLES = 1
+
+# prompt and LLM / limits
+OPENAI_MODEL = "gpt-4o"
+OPENAI_TEMPERATURE = 0.0
+LLM_MAX_TOKENS = 800
+MAX_MEMBERS_PER_PROMPT = 10
+PROMPT_CHAR_PER_TOKEN = 4          # crude estimate
+MAX_PROMPT_TOKENS_EST = 2500
+
+# iteration control
+MAX_RECLUSTER_ROUNDS = 12  # safety cap
+VERBOSE = True
+
+# ------------------------ OpenAI client loader -----------------------
+def _load_openai_key(envvar: str = "OPENAI_API_KEY", fallback_path: str = "/home/mabolhas/MyReposOnSOL/SGCE-KG/.env"):
+    key = os.getenv(envvar, fallback_path)
+    if isinstance(key, str) and Path(key).exists():
+        try:
+            txt = Path(key).read_text(encoding="utf-8").strip()
+            if txt:
+                return txt
+        except Exception:
+            pass
+    return key
+
+OPENAI_KEY = _load_openai_key()
+if not OPENAI_KEY or not isinstance(OPENAI_KEY, str) or len(OPENAI_KEY) < 10:
+    print("⚠️ OPENAI key missing or short. Set OPENAI_API_KEY or put key in fallback file.")
+client = OpenAI(api_key=OPENAI_KEY)
+
+def call_llm(prompt: str, model: str = OPENAI_MODEL, temperature: float = OPENAI_TEMPERATURE, max_tokens: int = LLM_MAX_TOKENS) -> str:
+    try:
+        resp = client.chat.completions.create(
+            model=model,
+            messages=[{"role": "user", "content": prompt}],
+            temperature=temperature,
+            max_tokens=max_tokens
+        )
+        return resp.choices[0].message.content
+    except Exception as e:
+        print("LLM call error:", e)
+        return ""
+
+# ------------------------- HF Embedder ------------------------------
+def mean_pool(token_embeddings: torch.Tensor, attention_mask: torch.Tensor):
+    input_mask_expanded = attention_mask.unsqueeze(-1).expand(token_embeddings.size()).float()
+    sum_embeddings = torch.sum(token_embeddings * input_mask_expanded, 1)
+    sum_mask = torch.clamp(input_mask_expanded.sum(1), min=1e-9)
+    return sum_embeddings / sum_mask
+
+class HFEmbedder:
+    def __init__(self, model_name=EMBED_MODEL, device=DEVICE):
+        if VERBOSE: print(f"[embedder] loading {model_name} on {device}")
+        self.device = device
+        self.tokenizer = AutoTokenizer.from_pretrained(model_name, use_fast=True)
+        self.model = AutoModel.from_pretrained(model_name)
+        self.model.to(device)
+        self.model.eval()
+        for p in self.model.parameters():
+            p.requires_grad = False
+
+    @torch.no_grad()
+    def encode_batch(self, texts: List[str], batch_size: int = BATCH_SIZE) -> np.ndarray:
+        if len(texts) == 0:
+            D = getattr(self.model.config, "hidden_size", 1024)
+            return np.zeros((0, D))
+        embs = []
+        for i in range(0, len(texts), batch_size):
+            batch = texts[i:i+batch_size]
+            enc = self.tokenizer(batch, padding=True, truncation=True, return_tensors="pt", max_length=1024)
+            input_ids = enc["input_ids"].to(self.device)
+            attention_mask = enc["attention_mask"].to(self.device)
+            out = self.model(input_ids=input_ids, attention_mask=attention_mask, return_dict=True)
+            token_embeds = out.last_hidden_state
+            pooled = mean_pool(token_embeds, attention_mask)
+            embs.append(pooled.cpu().numpy())
+        embs = np.vstack(embs)
+        embs = normalize(embs, axis=1)
+        return embs
+
+# ---------------------- IO helpers ----------------------------------
+def load_entities(path: Path) -> List[Dict]:
+    assert path.exists(), f"Input not found: {path}"
+    ents = []
+    with open(path, "r", encoding="utf-8") as fh:
+        for line in fh:
+            if line.strip():
+                ents.append(json.loads(line))
+    return ents
+
+def safe_text(e: Dict, k: str) -> str:
+    v = e.get(k)
+    if v is None:
+        return ""
+    if isinstance(v, (list, dict)):
+        return json.dumps(v, ensure_ascii=False)
+    return str(v)
+
+def build_field_texts(entities: List[Dict]) -> Tuple[List[str], List[str], List[str]]:
+    names, descs, ctxs = [], [], []
+    for e in entities:
+        names.append(safe_text(e, "entity_name") or "")
+        descs.append(safe_text(e, "entity_description") or "")
+        resolution = safe_text(e, "resolution_context") or safe_text(e, "text_span") or safe_text(e, "context_phrase") or ""
+        et = safe_text(e, "entity_type_hint") or ""
+        node_props = e.get("node_properties") or []
+        node_props_text = ""
+        if isinstance(node_props, list) and node_props:
+            pieces = []
+            for np in node_props:
+                if isinstance(np, dict):
+                    pname = np.get("prop_name") or np.get("name") or ""
+                    pval = np.get("prop_value") or np.get("value") or ""
+                    if pname and pval:
+                        pieces.append(f"{pname}:{pval}")
+                    elif pname:
+                        pieces.append(pname)
+            if pieces:
+                node_props_text = " | ".join(pieces)
+        parts = []
+        if et:
+            parts.append(f"[TYPE:{et}]")
+        if resolution:
+            parts.append(resolution)
+        if node_props_text:
+            parts.append(node_props_text)
+        ctxs.append(" ; ".join(parts))
+    return names, descs, ctxs
+
+def compute_combined_embeddings(embedder: HFEmbedder, entities: List[Dict], weights=WEIGHTS) -> np.ndarray:
+    names, descs, ctxs = build_field_texts(entities)
+    emb_name = embedder.encode_batch(names) if any(t.strip() for t in names) else None
+    emb_desc = embedder.encode_batch(descs) if any(t.strip() for t in descs) else None
+    emb_ctx  = embedder.encode_batch(ctxs)  if any(t.strip() for t in ctxs) else None
+
+    D = None
+    for arr in (emb_name, emb_desc, emb_ctx):
+        if arr is not None and arr.shape[0] > 0:
+            D = arr.shape[1]; break
+    if D is None:
+        raise ValueError("No textual field produced embeddings")
+
+    def _ensure(arr):
+        if arr is None:
+            return np.zeros((len(entities), D))
+        if arr.shape[1] != D:
+            raise ValueError("embedding dim mismatch")
+        return arr
+
+    emb_name = _ensure(emb_name); emb_desc = _ensure(emb_desc); emb_ctx = _ensure(emb_ctx)
+    w_name = weights.get("name", 0.0); w_desc = weights.get("desc", 0.0); w_ctx = weights.get("ctx", 0.0)
+    Wsum = w_name + w_desc + w_ctx
+    if Wsum <= 0: raise ValueError("invalid weights")
+    w_name /= Wsum; w_desc /= Wsum; w_ctx /= Wsum
+
+    combined = (w_name * emb_name) + (w_desc * emb_desc) + (w_ctx * emb_ctx)
+    combined = normalize(combined, axis=1)
+    return combined
+
+def run_hdbscan(embeddings: np.ndarray, min_cluster_size=HDBSCAN_MIN_CLUSTER_SIZE, min_samples=HDBSCAN_MIN_SAMPLES,
+                metric=HDBSCAN_METRIC, use_umap=USE_UMAP) -> Tuple[np.ndarray, object]:
+    X = embeddings
+    if use_umap and UMAP_AVAILABLE and X.shape[0] >= 5:
+        reducer = umap.UMAP(n_components=min(UMAP_N_COMPONENTS, max(2, X.shape[0]-1)),
+                            n_neighbors=min(UMAP_N_NEIGHBORS, max(2, X.shape[0]-1)),
+                            min_dist=UMAP_MIN_DIST,
+                            metric='cosine', random_state=42)
+        X = reducer.fit_transform(X)
+    clusterer = hdbscan.HDBSCAN(min_cluster_size=min_cluster_size, min_samples=min_samples, metric=metric, cluster_selection_method='eom')
+    labels = clusterer.fit_predict(X)
+    return labels, clusterer
+
+# ------------------ Prompt (REVISED to be MUST) -----------------------
+# NOTE: all literal braces are escaped ({{ and }}) except {members_block}
+CLASS_PROMPT_TEMPLATE = """
+You are a careful schema / ontology suggester.
+Your job is to induce a meaningful, reusable schema from entity-level evidence.
+Be conservative, precise, and resist over-generalization.
+
+=====================
+INPUT YOU ARE GIVEN
+=====================
+
+Each entity you see is already a resolved entity from a previous pipeline stage.
+For each entity, you are given the following fields:
+
+- entity_id: (string) unique id for the entity.
+- entity_name: (string) short canonical entity-level name.
+- entity_description: (string) concise explanation of the entity.
+- resolution_context: (string) a 20–120 word excerpt explaining why this entity was named this way;
+  this is the PRIMARY semantic evidence.
+- entity_type_hint: (string) a weak, local hint about entity role (e.g., Material, Component, FailureMechanism).
+  This is a suggestion only and may be incorrect.
+- node_properties: (optional) small list/dict of intrinsic properties (e.g., grade:304).
+
+=====================
+YOUR TASK
+=====================
+
+Given a small group of entities, suggest ZERO or more classes that group entities
+which genuinely belong together in a practical, reusable way.
+
+Important rules (ENFORCED):
+- If the input contains MULTIPLE entities:
+  -> You MUST ONLY create classes that contain TWO OR MORE members.
+  -> You MUST NOT create a single-member class when multiple entities are present.
+- The ONLY situation where a single-member class is allowed:
+  -> When the input contains EXACTLY ONE entity (single-entity mode).
+
+Do NOT force entities into classes by broadening or renaming a class to "fit" them.
+If an entity does not clearly belong, omit it — it will be revisited later.
+
+SINGLE-ENTITY MODE (IMPORTANT)
+- You are receiving EXACTLY ONE entity in this prompt. In this case you SHOULD produce exactly one class that contains that entity (a single-member class). 
+- The single-member class must include: class_label, class_description, class_type_hint (if possible), member_ids (use the provided entity_id), and a confidence value.  
+- Do NOT invent other entity_ids; use the entity_id exactly as provided. If you judge that no sensible class exists, still return a short single-member class using a conservative label like "Misc: <entity_name>" with low confidence (e.g., 0.10) rather than returning an empty array. This helps downstream experiments while keeping the class low-weight.
+
+
+=====================
+TWO-LEVEL SCHEMA
+=====================
+
+We are building a TWO-LEVEL schema:
+
+Level 1 (Classes): groups of entities (e.g., "High-Temperature Corrosion")
+Level 2 (Class_Type_Hint): an upper-level connector that groups classes (e.g., "Failure Mechanism")
+
+- Class_Type_Hint is NOT the same as entity_type_hint.
+- Infer Class_Type_Hint from the class members; do NOT blindly copy entity_type_hint.
+
+=====================
+OUTPUT FORMAT (REQUIRED)
+=====================
+
+Return ONLY a JSON ARRAY.
+
+Each element must have:
+- class_label (string): short canonical name (1-3 words)
+- class_description (string): 1–2 sentences explaining membership & distinction
+- class_type_hint (string): upper-level family (e.g., "Failure Mechanism")
+- member_ids (array[string]): entity_ids from the input that belong to this class
+- confidence (float): 0.0–1.0 confidence estimate
+- evidence_excerpt (string, optional): brief excerpt (5–30 words) that supports the grouping
+
+HARD OUTPUT RULES:
+- Use ONLY provided entity_ids.
+- member_ids MUST be from the input.
+- Prefer non-overlapping classes; small overlap allowed only if justified.
+- If no sensible class, return [].
+
+=====================
+EXAMPLES
+=====================
+
+GOOD:
+Input entities:
+- graphitization (En_1)
+- sulfidation    (En_2)
+
+Output:
+[
+  {{
+    "class_label": "High-Temperature Degradation",
+    "class_description": "Material degradation mechanisms at elevated temperatures (graphitization, sulfidation).",
+    "class_type_hint": "Failure Mechanism",
+    "member_ids": ["En_1","En_2"],
+    "confidence": 0.87
+  }}
+]
+
+BAD (DO NOT DO):
+Entities: graphitization, pressure gauge
+-> Do NOT output a broad "Equipment Issue" that forces both into one class. Prefer [].
+
+=====================
+ENTITIES
+=====================
+
+Each entity below is provided as:
+- entity_id
+- entity_name
+- entity_description
+- resolution_context
+- entity_type_hint
+- node_properties
+
+Entities:
+{members_block}
+
+Return JSON array only.
+"""
+
+def build_members_block(members: List[Dict]) -> str:
+    rows = []
+    for m in members:
+        eid = m.get("id", "")
+        name = (m.get("entity_name") or "")[:120].replace("\n", " ")
+        desc = (m.get("entity_description") or "")[:300].replace("\n", " ")
+        res = (m.get("resolution_context") or m.get("context_phrase") or "")[:400].replace("\n", " ")
+        et = (m.get("entity_type_hint") or "")[:80].replace("\n", " ")
+        node_props = m.get("node_properties") or []
+        np_txt = json.dumps(node_props, ensure_ascii=False) if node_props else ""
+        rows.append(f"{eid} | {name} | {desc} | {res} | {et} | {np_txt}")
+    return "\n".join(rows)
+
+def parse_json_array_from_text(txt: str):
+    if not txt:
+        return None
+    s = txt.strip()
+    if s.startswith("```"):
+        s = s.strip("`")
+    start = s.find('[')
+    end = s.rfind(']')
+    if start != -1 and end != -1 and end > start:
+        cand = s[start:end+1]
+        try:
+            return json.loads(cand)
+        except Exception:
+            pass
+    try:
+        return json.loads(s)
+    except Exception:
+        return None
+
+# ------------------- Worker: process a chunk of members --------------------
+def process_member_chunk_llm(members: List[Dict], single_entity_mode: bool = False) -> List[Dict]:
+    members_block = build_members_block(members)
+    prompt = CLASS_PROMPT_TEMPLATE.format(members_block=members_block)
+    est_tokens = max(1, int(len(prompt) / PROMPT_CHAR_PER_TOKEN))
+    if est_tokens > MAX_PROMPT_TOKENS_EST:
+        if VERBOSE: print(f"[warning] prompt too large (est_tokens={est_tokens}) -> skipping chunk of size {len(members)}")
+        return []
+    llm_out = call_llm(prompt)
+    arr = parse_json_array_from_text(llm_out)
+    if not arr:
+        return []
+    candidates = []
+    provided_ids = {m.get("id") for m in members}
+    for c in arr:
+        label = c.get("class_label") or c.get("label") or c.get("name")
+        if not label:
+            continue
+        member_ids = c.get("member_ids") or c.get("members") or []
+        member_ids = [mid for mid in member_ids if mid in provided_ids]
+        if not member_ids:
+            continue
+        if not single_entity_mode and len(members) > 1 and len(member_ids) < 2:
+            continue
+        confidence = float(c.get("confidence", 0.0)) if c.get("confidence") is not None else 0.0
+        desc = c.get("class_description") or c.get("description") or ""
+        ev = c.get("evidence_excerpt") or ""
+        class_type = c.get("class_type_hint") or c.get("class_type") or ""
+        candidate = {
+            "candidate_id": "ClsC_" + uuid.uuid4().hex[:8],
+            "class_label": label,
+            "class_description": desc,
+            "class_type_hint": class_type,
+            "member_ids": member_ids,
+            "confidence": confidence,
+            "evidence_excerpt": ev,
+            "timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+        }
+        candidates.append(candidate)
+    return candidates
+
+# -------------------- Utility: write cluster files (full entity objects) -----------
+def write_cluster_summary(path: Path, cluster_map: Dict[int, List[int]], entities: List[Dict]):
+    n_entities = len(entities)
+    clusters = {}
+    for k, idxs in sorted(cluster_map.items(), key=lambda x: x[0]):
+        arr = []
+        for i in idxs:
+            ent = entities[i]
+            arr.append(ent)
+        clusters[str(k)] = arr
+    meta = {"n_entities": n_entities, "n_clusters": len(clusters), "clusters": clusters}
+    with open(path, "w", encoding="utf-8") as fh:
+        fh.write('{\n')
+        fh.write(f'  "n_entities": {meta["n_entities"]},\n')
+        fh.write(f'  "n_clusters": {meta["n_clusters"]},\n')
+        fh.write('  "clusters": {\n')
+        cluster_items = list(clusters.items())
+        for ci, (k, ents) in enumerate(cluster_items):
+            fh.write(f'    "{k}": [\n')
+            for ei, ent in enumerate(ents):
+                ent_json = json.dumps(ent, ensure_ascii=False, separators=(",", ": "))
+                fh.write(f'      {ent_json}')
+                if ei < len(ents) - 1:
+                    fh.write(',\n')
+                else:
+                    fh.write('\n')
+            fh.write('    ]')
+            if ci < len(cluster_items) - 1:
+                fh.write(',\n')
+            else:
+                fh.write('\n')
+        fh.write('  }\n')
+        fh.write('}\n')
+
+def write_classes_round(path: Path, candidates: List[Dict], entities: List[Dict], id_to_index: Dict[str,int]):
+    classes_map = {}
+    total_members = 0
+    for c in candidates:
+        cid = c.get("candidate_id") or ("ClsC_" + uuid.uuid4().hex[:8])
+        mids = c.get("member_ids", [])
+        member_objs = []
+        for mid in mids:
+            if mid in id_to_index:
+                member_objs.append(entities[id_to_index[mid]])
+        if not member_objs:
+            continue
+        meta = {
+            "class_label": c.get("class_label", ""),
+            "class_description": c.get("class_description", ""),
+            "class_type_hint": c.get("class_type_hint", ""),
+            "confidence": float(c.get("confidence", 0.0)),
+            "evidence_excerpt": c.get("evidence_excerpt", ""),
+            "source_cluster_id": c.get("source_cluster_id", None),
+            "members": member_objs
+        }
+        classes_map[cid] = meta
+        total_members += len(member_objs)
+    meta = {"n_classes": len(classes_map), "n_members_total": total_members, "classes": classes_map}
+    with open(path, "w", encoding="utf-8") as fh:
+        fh.write('{\n')
+        fh.write(f'  "n_classes": {meta["n_classes"]},\n')
+        fh.write(f'  "n_members_total": {meta["n_members_total"]},\n')
+        fh.write('  "classes": {\n')
+        items = list(classes_map.items())
+        for ci, (k, cls_meta) in enumerate(items):
+            fh.write(f'    "{k}": {{\n')
+            fh.write(f'      "class_label": {json.dumps(cls_meta["class_label"], ensure_ascii=False)},\n')
+            fh.write(f'      "class_description": {json.dumps(cls_meta["class_description"], ensure_ascii=False)},\n')
+            fh.write(f'      "class_type_hint": {json.dumps(cls_meta["class_type_hint"], ensure_ascii=False)},\n')
+            fh.write(f'      "confidence": {json.dumps(cls_meta["confidence"], ensure_ascii=False)},\n')
+            fh.write(f'      "evidence_excerpt": {json.dumps(cls_meta["evidence_excerpt"], ensure_ascii=False)},\n')
+            fh.write(f'      "source_cluster_id": {json.dumps(cls_meta["source_cluster_id"], ensure_ascii=False)},\n')
+            fh.write(f'      "members": [\n')
+            for ei, ent in enumerate(cls_meta["members"]):
+                ent_json = json.dumps(ent, ensure_ascii=False, separators=(",", ": "))
+                fh.write(f'        {ent_json}')
+                if ei < len(cls_meta["members"]) - 1:
+                    fh.write(',\n')
+                else:
+                    fh.write('\n')
+            fh.write('      ]\n')
+            fh.write('    }')
+            if ci < len(items) - 1:
+                fh.write(',\n')
+            else:
+                fh.write('\n')
+        fh.write('  }\n')
+        fh.write('}\n')
+
+# -------------------- Main iterative orchestration -----------------------
+def classrec_iterative_main():
+    entities = load_entities(INPUT_PATH)
+    print(f"[start] loaded {len(entities)} entities from {INPUT_PATH}")
+
+    for e in entities:
+        if "id" not in e:
+            e["id"] = "En_" + uuid.uuid4().hex[:8]
+
+    id_to_index = {e["id"]: i for i, e in enumerate(entities)}
+
+    embedder = HFEmbedder(model_name=EMBED_MODEL, device=DEVICE)
+    combined_emb = compute_combined_embeddings(embedder, entities, weights=WEIGHTS)
+    print("[info] embeddings computed, shape:", combined_emb.shape)
+
+    labels, _ = run_hdbscan(combined_emb, min_cluster_size=HDBSCAN_MIN_CLUSTER_SIZE, min_samples=HDBSCAN_MIN_SAMPLES, use_umap=USE_UMAP)
+    print("[info] initial clustering done. unique labels:", len(set(labels)))
+
+    cluster_to_indices = {}
+    for idx, lab in enumerate(labels):
+        cluster_to_indices.setdefault(int(lab), []).append(idx)
+
+    write_cluster_summary(INITIAL_CLUSTER_OUT, cluster_to_indices, entities)
+    if VERBOSE: print(f"[write] initial cluster file -> {INITIAL_CLUSTER_OUT}")
+
+    seen_by_llm = set()
+    assigned_entity_ids = set()
+    all_candidates = []
+
+    def call_and_record(members_indices: List[int], source_cluster: Optional[object]=None, single_entity_mode: bool=False) -> List[Dict]:
+        nonlocal seen_by_llm, assigned_entity_ids, all_candidates
+        if not members_indices:
+            return []
+        members = [entities[i] for i in members_indices]
+        results = []
+        for i in range(0, len(members), MAX_MEMBERS_PER_PROMPT):
+            chunk = members[i:i+MAX_MEMBERS_PER_PROMPT]
+            for m in chunk:
+                if m.get("id"):
+                    seen_by_llm.add(m["id"])
+            candidates = process_member_chunk_llm(chunk, single_entity_mode=single_entity_mode)
+            for c in candidates:
+                mids = c.get("member_ids", [])
+                member_entities = [entities[id_to_index[mid]] for mid in mids if mid in id_to_index]
+                if not member_entities:
+                    continue
+                c["member_entities"] = member_entities
+                c["source_cluster_id"] = source_cluster
+                all_candidates.append(c)
+                for mid in mids:
+                    assigned_entity_ids.add(mid)
+                results.append(c)
+        return results
+
+    round0_candidates = []
+    if VERBOSE: print("[round0] processing coarse non-noise clusters")
+    for lab, idxs in sorted(cluster_to_indices.items(), key=lambda x: x[0]):
+        if lab == -1:
+            continue
+        if VERBOSE: print(f"[round0] cluster {lab} size={len(idxs)}")
+        if len(idxs) > MAX_CLUSTER_SIZE_FOR_LOCAL:
+            try:
+                sub_emb = combined_emb[idxs]
+                local_clusterer = hdbscan.HDBSCAN(min_cluster_size=max(2, LOCAL_HDBSCAN_MIN_CLUSTER_SIZE),
+                                                  min_samples=LOCAL_HDBSCAN_MIN_SAMPLES, metric='euclidean', cluster_selection_method='eom')
+                local_labels = local_clusterer.fit_predict(sub_emb)
+            except Exception:
+                local_labels = np.zeros(len(idxs), dtype=int)
+            local_map = {}
+            for i_local, lab_local in enumerate(local_labels):
+                global_idx = idxs[i_local]
+                local_map.setdefault(int(lab_local), []).append(global_idx)
+            for sublab, subidxs in local_map.items():
+                if sublab == -1:
+                    continue
+                source_id = {"coarse_cluster": int(lab), "local_subcluster": int(sublab)}
+                cand = call_and_record(subidxs, source_cluster=source_id, single_entity_mode=(len(subidxs) == 1))
+                round0_candidates.extend(cand)
+        else:
+            source_id = {"coarse_cluster": int(lab), "local_subcluster": None}
+            cand = call_and_record(idxs, source_cluster=source_id, single_entity_mode=(len(idxs) == 1))
+            round0_candidates.extend(cand)
+
+    classes_round0_path = Path(f"{CLASSES_PREFIX}0.json")
+    write_classes_round(classes_round0_path, round0_candidates, entities, id_to_index)
+    if VERBOSE: print(f"[write] classes round 0 -> {classes_round0_path}")
+
+    original_noise_indices = cluster_to_indices.get(-1, [])
+    round_num = 0
+    while round_num < MAX_RECLUSTER_ROUNDS:
+        round_num += 1
+        seen_but_unassigned = list(seen_by_llm - assigned_entity_ids)
+        pool_ids = {entities[i]["id"] for i in original_noise_indices}
+        pool_ids.update(seen_but_unassigned)
+        pool_ids = [pid for pid in pool_ids if pid not in assigned_entity_ids]
+        if not pool_ids:
+            if VERBOSE: print(f"[reclust {round_num}] pool empty -> stopping")
+            break
+        pool_indices = [id_to_index[pid] for pid in pool_ids if pid in id_to_index]
+        if not pool_indices:
+            if VERBOSE: print(f"[reclust {round_num}] no valid pool indices -> stopping")
+            break
+
+        if VERBOSE: print(f"[reclust {round_num}] reclustering pool size={len(pool_indices)}")
+        try:
+            sub_emb = combined_emb[pool_indices]
+            labels_sub, _ = run_hdbscan(sub_emb, min_cluster_size=2, min_samples=1, use_umap=False)
+        except Exception:
+            labels_sub = np.zeros(len(pool_indices), dtype=int)
+
+        sub_cluster_map = {}
+        for local_i, lab_sub in enumerate(labels_sub):
+            global_idx = pool_indices[local_i]
+            sub_cluster_map.setdefault(int(lab_sub), []).append(global_idx)
+
+        recluster_path = Path(f"{RECLUSTER_PREFIX}{round_num}.json")
+        write_cluster_summary(recluster_path, sub_cluster_map, entities)
+        if VERBOSE: print(f"[write] recluster round {round_num} -> {recluster_path}")
+
+        round_candidates = []
+        new_classes_count = 0
+        for lab_sub, gidxs in sorted(sub_cluster_map.items(), key=lambda x: (x[0]==-1, x[0])):
+            if lab_sub == -1:
+                continue
+            if VERBOSE: print(f"[reclust {round_num}] processing subcluster {lab_sub} size={len(gidxs)}")
+            source_id = {"recluster_round": int(round_num), "subcluster": int(lab_sub)}
+            cand = call_and_record(gidxs, source_cluster=source_id, single_entity_mode=(len(gidxs) == 1))
+            round_candidates.extend(cand)
+            new_classes_count += len(cand)
+
+        classes_round_path = Path(f"{CLASSES_PREFIX}{round_num}.json")
+        write_classes_round(classes_round_path, round_candidates, entities, id_to_index)
+        if VERBOSE: print(f"[write] classes round {round_num} -> {classes_round_path}  (new_classes={new_classes_count})")
+
+        if new_classes_count == 0:
+            if VERBOSE: print(f"[reclust {round_num}] no new classes -> stopping recluster loop")
+            break
+
+    remaining_after_reclustering = [e for e in entities if e["id"] not in assigned_entity_ids]
+    if VERBOSE: print(f"[single pass] remaining entities (before single-entity pass): {len(remaining_after_reclustering)}")
+
+    single_candidates = []
+    for e in remaining_after_reclustering:
+        source_id = {"single_pass": True}
+        cand = call_and_record([id_to_index[e["id"]]], source_cluster=source_id, single_entity_mode=True)
+        single_candidates.extend(cand)
+
+    classes_single_path = Path(f"{CLASSES_PREFIX}single.json")
+    write_classes_round(classes_single_path, single_candidates, entities, id_to_index)
+    if VERBOSE: print(f"[write] classes round single -> {classes_single_path}")
+
+    with open(CLASS_CANDIDATES_OUT, "w", encoding="utf-8") as fh:
+        for c in all_candidates:
+            fh.write(json.dumps(c, ensure_ascii=False) + "\n")
+    if VERBOSE: print(f"[write] cumulative class_candidates -> {CLASS_CANDIDATES_OUT} (count={len(all_candidates)})")
+
+    final_remaining = [e for e in entities if e["id"] not in assigned_entity_ids]
+    with open(REMAINING_OUT, "w", encoding="utf-8") as fh:
+        for e in final_remaining:
+            fh.write(json.dumps(e, ensure_ascii=False) + "\n")
+    if VERBOSE: print(f"[write] final remaining entities -> {REMAINING_OUT} (count={len(final_remaining)})")
+
+    print("[done] ClassRec iterative v4 finished.")
+
+if __name__ == "__main__":
+    classrec_iterative_main()
+
+
+#endregion#? Cls Rec V4 - Class hint type included
 #?#########################  End  ##########################
 
 
@@ -8929,109 +11053,2237 @@ if __name__ == "__main__":
 
 
 
-#?######################### Start ##########################
-#region:#?   Utilities for Entity Identification
 
+#?######################### Start ##########################
+#region:#?   Create input for Cls Res from per-round classes
+
+
+
+
+#!/usr/bin/env python3
+"""
+merge_classes_for_cls_res.py
+
+Merge per-round classes files (classes_round_*.json) into a single
+JSONL + JSON file suitable as input to the next step (Cls Res).
+
+Output:
+ - /home/mabolhas/MyReposOnSOL/SGCE-KG/data/Classes/Cls_Rec/classes_for_cls_res.jsonl
+ - /home/mabolhas/MyReposOnSOL/SGCE-KG/data/Classes/Cls_Rec/classes_for_cls_res.json
+"""
 
 import json
 from pathlib import Path
+from collections import defaultdict
 
-FINAL_ENTITIES = "/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities/Overall_After_Two_Run/FinalCompAnalysis/final_entities_master.jsonl"
+ROOT = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Classes/Cls_Rec")
+PATTERN = "classes_round_*.json"
+OUT_JSONL = ROOT / "classes_for_cls_res.jsonl"
+OUT_JSON  = ROOT / "classes_for_cls_res.json"
 
-def print_entities_by_name(name: str, case_sensitive: bool = False):
-    p = Path(FINAL_ENTITIES)
-    assert p.exists(), f"File not found: {p}"
-
-    matches = []
-    with open(p, "r", encoding="utf-8") as fh:
-        for ln in fh:
-            if not ln.strip():
-                continue
-            row = json.loads(ln)
-            ent_name = row.get("entity_name", "")
-
-            if case_sensitive:
-                ok = ent_name == name
+def read_classes_file(p: Path):
+    """
+    Reads a classes_round file in the format produced by write_classes_round.
+    Returns dict candidate_id -> class_meta (with members list of full entity objects)
+    """
+    try:
+        j = json.loads(p.read_text(encoding="utf-8"))
+    except Exception as e:
+        print(f"[warn] failed to parse {p}: {e}")
+        return {}
+    classes = j.get("classes") or {}
+    out = {}
+    for cid, meta in classes.items():
+        # meta expected to contain class_label, class_description, class_type_hint, confidence, evidence_excerpt, source_cluster_id, members
+        # ensure members is list
+        members = meta.get("members") or []
+        # normalize member objects: ensure each has an "id"
+        members_norm = []
+        for m in members:
+            if isinstance(m, dict) and "id" in m:
+                members_norm.append(m)
             else:
-                ok = ent_name.lower() == name.lower()
+                # skip bad members
+                continue
+        out[cid] = {
+            "candidate_id": cid,
+            "class_label": meta.get("class_label", "") or "",
+            "class_description": meta.get("class_description", "") or "",
+            "class_type_hint": meta.get("class_type_hint", "") or "",
+            "confidence": float(meta.get("confidence", 0.0) or 0.0),
+            "evidence_excerpt": meta.get("evidence_excerpt", "") or "",
+            "source_cluster_id": meta.get("source_cluster_id", None),
+            "members": members_norm,
+            # provenance: where we loaded it from
+            "_source_file": str(p)
+        }
+    return out
 
-            if ok:
-                matches.append(row)
+def merge_classes(all_classes_by_file):
+    """
+    Merge classes by (label, class_type_hint) normalized key.
+    If same key seen multiple times:
+      - union members (unique by id)
+      - take class_description from the instance with highest confidence (tie -> latest file appearance)
+      - confidence = max(confidences)
+      - evidence_excerpt: prefer higher confidence's excerpt
+      - source_files: list
+      - candidate_ids: list of contributing candidate ids
+    """
+    merged = {}
+    key_to_ids = defaultdict(list)  # for debugging
+    for cid, c in all_classes_by_file.items():
+        key = (c["class_label"].strip().lower(), (c.get("class_type_hint") or "").strip().lower())
+        if key not in merged:
+            merged[key] = {
+                "canonical_class_label": c["class_label"],
+                "class_type_hint": c.get("class_type_hint", ""),
+                "class_description": c.get("class_description", ""),
+                "confidence": c.get("confidence", 0.0),
+                "evidence_excerpt": c.get("evidence_excerpt", "") or "",
+                "members_by_id": {m["id"]: m for m in c.get("members", [])},
+                "candidate_ids": [c["candidate_id"]],
+                "source_files": [c.get("_source_file")],
+            }
+        else:
+            cur = merged[key]
+            # union members
+            for m in c.get("members", []):
+                cur["members_by_id"][m["id"]] = m
+            # update confidence & description/evidence if this c has higher confidence
+            if c.get("confidence", 0.0) > cur["confidence"]:
+                cur["confidence"] = c.get("confidence", 0.0)
+                # replace description/evidence with higher-confidence one
+                if c.get("class_description"):
+                    cur["class_description"] = c.get("class_description", cur["class_description"])
+                if c.get("evidence_excerpt"):
+                    cur["evidence_excerpt"] = c.get("evidence_excerpt", cur["evidence_excerpt"])
+            # append provenance
+            cur["candidate_ids"].append(c["candidate_id"])
+            sf = c.get("_source_file")
+            if sf and sf not in cur["source_files"]:
+                cur["source_files"].append(sf)
+        key_to_ids[key].append(cid)
 
-    print(f"\nFound {len(matches)} matching rows for entity_name = '{name}'\n")
-    for i, r in enumerate(matches, 1):
-        print(f"--- Match {i} ---")
-        print(json.dumps(r, ensure_ascii=False, indent=2))
+    # convert merged to output list
+    out_list = []
+    for key, v in merged.items():
+        members = list(v["members_by_id"].values())
+        out_obj = {
+            "class_label": v["canonical_class_label"],
+            "class_type_hint": v["class_type_hint"],
+            "class_description": v.get("class_description",""),
+            "confidence": float(v.get("confidence",0.0)),
+            "evidence_excerpt": v.get("evidence_excerpt",""),
+            "member_ids": [m["id"] for m in members],
+            "members": members,
+            "candidate_ids": v.get("candidate_ids", []),
+            "source_files": v.get("source_files", [])
+        }
+        out_list.append(out_obj)
+    return out_list
 
-# ---------------- Example ----------------
+def main():
+    files = sorted(ROOT.glob(PATTERN))
+    if not files:
+        print(f"[error] no files found matching {PATTERN} in {ROOT}")
+        return
+    print(f"[info] found {len(files)} files. Reading...")
+    all_classes = {}
+    total_classes = 0
+    for f in files:
+        cls_map = read_classes_file(f)
+        if not cls_map:
+            continue
+        for cid, c in cls_map.items():
+            # ensure candidate id unique by prefixing file if collided
+            if cid in all_classes:
+                cid_new = f"{Path(c['_source_file']).stem}__{cid}"
+                c["candidate_id"] = cid_new
+                all_classes[cid_new] = c
+            else:
+                all_classes[cid] = c
+        total_classes += len(cls_map)
+    print(f"[info] collected {len(all_classes)} raw class entries (from {total_classes} source classes). Merging...")
+
+    merged = merge_classes(all_classes)
+    print(f"[info] merged -> {len(merged)} classes. Writing outputs...")
+
+    # write JSONL (one merged class per line) and JSON (array)
+    with open(OUT_JSONL, "w", encoding="utf-8") as fh_jsonl, open(OUT_JSON, "w", encoding="utf-8") as fh_json:
+        for c in merged:
+            fh_jsonl.write(json.dumps(c, ensure_ascii=False) + "\n")
+        fh_json.write(json.dumps(merged, ensure_ascii=False, indent=2))
+
+    # summary
+    total_members = sum(len(c.get("members", [])) for c in merged)
+    print(f"[done] wrote {OUT_JSONL} and {OUT_JSON}.")
+    print(f"       classes: {len(merged)}, total member objects (post-merge, possibly duplicated across classes): {total_members}")
+
 if __name__ == "__main__":
-    print_entities_by_name(
-        name="graphitization",
-        case_sensitive=False
-    )
-    
-    
-    
-    
-    
+    main()
 
 
-path = "/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities/Ent_Raw_0/entities_raw.jsonl"
-x = "RT"
-
-ids = []
-
-with open(path, "r", encoding="utf-8") as f:
-    for line in f:
-        r = json.loads(line)
-        if r.get("entity_name") == x:
-            ids.append(f'"{r.get("chunk_id")}"')
-
-print(", ".join(ids))
- 
-    
+#endregion#? Create input for Cls Res from per-round classes
+#?#########################  End  ##########################
 
 
 
 
 
 
+#?######################### Start ##########################
+#region:#?   Cls Res - Class Resolution
+
+
+#!/usr/bin/env python3
+"""
+class_resolution.py
+
+Class Resolution (Cls Res)
+
+- Loads per-round classes JSON produced by ClassRec (e.g., classes_round_0.json).
+- Loads entity inputs (cls_input_entities.jsonl) to have entity metadata available.
+- Embeds class candidates (class_label, class_description, class_type_hint, evidence_excerpt)
+  plus compact member summaries (id/name/desc/type) folded into ctx.
+- Clusters class candidates with HDBSCAN (optional UMAP).
+- Iterates clusters (exclude -1 noise); for each cluster:
+    - sends a JSON prompt to the LLM asking it to return an ORDERED list of function calls (Merge/Create/Reassign/Modify),
+    - parses the JSON response and executes each function in order locally,
+    - writes canonical/merged classes and a resolution log.
+- Writes outputs to CLASSES_RES_DIR.
+
+Author: assistant (based on your pipeline)
+"""
+import os
+import json
+import uuid
+import time
+from pathlib import Path
+from typing import List, Dict, Tuple, Optional
+
+# ---- ML/embedding libs (same style as other scripts) ----
+import numpy as np
+try:
+    import hdbscan
+except Exception:
+    raise RuntimeError("hdbscan required - pip install hdbscan")
+try:
+    import umap
+    UMAP_AVAILABLE = True
+except Exception:
+    UMAP_AVAILABLE = False
+
+import torch
+from transformers import AutoTokenizer, AutoModel
+from sklearn.preprocessing import normalize
+
+# ---- OpenAI client loader (reuse your pattern) ----
+from openai import OpenAI
+
+def _load_openai_key(envvar: str = "OPENAI_API_KEY", fallback_path: str = "/home/mabolhas/MyReposOnSOL/SGCE-KG/.env") -> str:
+    key = os.getenv(envvar, fallback_path)
+    if isinstance(key, str) and Path(key).exists():
+        try:
+            txt = Path(key).read_text(encoding="utf-8").strip()
+            if txt:
+                return txt
+        except Exception:
+            pass
+    return key
+
+OPENAI_KEY = _load_openai_key()
+if not OPENAI_KEY or not isinstance(OPENAI_KEY, str) or len(OPENAI_KEY) < 10:
+    print("⚠️ OPENAI API key missing or short. Set OPENAI_API_KEY or put key in fallback file.")
+client = OpenAI(api_key=OPENAI_KEY)
+
+# ---- Paths (edit if needed) ----
+CLASSES_ROUND_FILE = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Classes/Cls_Rec/classes_round_0.json")
+CLS_INPUT_ENTITIES = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Classes/Cls_Input/cls_input_entities.jsonl")
+CLASSES_RES_DIR = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Classes/Cls_Res")
+CLASSES_RES_DIR.mkdir(parents=True, exist_ok=True)
+OUT_CLASSES_JSONL = CLASSES_RES_DIR / "classes_resolved.jsonl"
+OUT_CANONICAL_JSONL = CLASSES_RES_DIR / "canonical_classes.jsonl"
+OUT_LOG_JSONL = CLASSES_RES_DIR / "cls_res_log.jsonl"
+
+# ---- Embedding / clustering config (tweakable) ----
+EMBED_MODEL = "BAAI/bge-large-en-v1.5"   # same default you used elsewhere
+DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
+BATCH_SIZE = 32
+WEIGHTS = {"label": 0.35, "desc": 0.25, "evidence": 0.10, "members": 0.30}  # tuneable
+USE_UMAP = True
+UMAP_DIMS = 64
+HDBSCAN_MIN_CLUSTER_SIZE = 3
+HDBSCAN_MIN_SAMPLES = 1
+HDBSCAN_METRIC = "euclidean"
+
+# ---- LLM / prompt params ----
+LLM_MODEL = "gpt-4o"
+LLM_TEMPERATURE = 0.0
+LLM_MAX_TOKENS = 1000
+PROMPT_CHAR_PER_TOKEN = 4
+MAX_PROMPT_TOKENS_EST = 2500
+TRUNC_FIELD = 400  # truncate long descriptions/evidence to keep prompt compact
+
+# ---- Helpers: file loaders ----
+def load_json(path: Path):
+    j = json.loads(path.read_text(encoding="utf-8"))
+    return j
+
+def load_jsonl(path: Path) -> List[Dict]:
+    out = []
+    if not path.exists():
+        return out
+    with open(path, "r", encoding="utf-8") as fh:
+        for line in fh:
+            if line.strip():
+                out.append(json.loads(line))
+    return out
+
+# ---- HF embedder (same pattern) ----
+def mean_pool(token_embeddings: torch.Tensor, attention_mask: torch.Tensor):
+    input_mask_expanded = attention_mask.unsqueeze(-1).expand(token_embeddings.size()).float()
+    sum_embeddings = torch.sum(token_embeddings * input_mask_expanded, 1)
+    sum_mask = torch.clamp(input_mask_expanded.sum(1), min=1e-9)
+    return sum_embeddings / sum_mask
+
+class HFEmbedder:
+    def __init__(self, model_name: str = EMBED_MODEL, device: str = DEVICE):
+        print(f"[Embedder] loading {model_name} on {device} ...")
+        self.device = device
+        self.tokenizer = AutoTokenizer.from_pretrained(model_name, use_fast=True)
+        self.model = AutoModel.from_pretrained(model_name)
+        self.model.to(device)
+        self.model.eval()
+        for p in self.model.parameters():
+            p.requires_grad = False
+
+    @torch.no_grad()
+    def encode_batch(self, texts: List[str], batch_size: int = BATCH_SIZE) -> np.ndarray:
+        if len(texts) == 0:
+            D = getattr(self.model.config, "hidden_size", 1024)
+            return np.zeros((0, D))
+        embs = []
+        for i in range(0, len(texts), batch_size):
+            batch = texts[i:i+batch_size]
+            enc = self.tokenizer(batch, padding=True, truncation=True, return_tensors="pt", max_length=1024)
+            input_ids = enc["input_ids"].to(self.device)
+            attention_mask = enc["attention_mask"].to(self.device)
+            out = self.model(input_ids=input_ids, attention_mask=attention_mask, return_dict=True)
+            token_embeds = out.last_hidden_state
+            pooled = mean_pool(token_embeds, attention_mask)
+            embs.append(pooled.cpu().numpy())
+        embs = np.vstack(embs)
+        embs = normalize(embs, axis=1)
+        return embs
+
+# ---- Build class text fields for embedding ----
+def safe_truncate(s, n=TRUNC_FIELD):
+    if not s:
+        return ""
+    s = str(s).replace("\n", " ").strip()
+    if len(s) <= n:
+        return s
+    return s[:n].rsplit(" ", 1)[0] + "..."
+
+def build_class_field_texts(classes: List[Dict]) -> Tuple[List[str], List[str], List[str], List[str]]:
+    """
+    Build lists:
+      - label_texts
+      - desc_texts
+      - evidence_texts
+      - members_texts (combined short summaries of members)
+    """
+    labels, descs, evids, members = [], [], [], []
+    for c in classes:
+        labels.append(safe_truncate(c.get("class_label",""), 120))
+        descs.append(safe_truncate(c.get("class_description",""), TRUNC_FIELD))
+        evids.append(safe_truncate(c.get("evidence_excerpt",""), TRUNC_FIELD))
+        # build compact members text: id:name:shortdesc:type; join with " | "
+        mems = c.get("members", []) or []
+        pieces = []
+        for m in mems:
+            mid = m.get("id","")
+            mname = safe_truncate(m.get("entity_name",""), 50)
+            mdesc = safe_truncate(m.get("entity_description",""), 120)
+            mtype = safe_truncate(m.get("entity_type_hint",""), 30)
+            piece = f"{mid}:{mname}"
+            if mdesc:
+                piece += f" ({mdesc})"
+            if mtype:
+                piece += f" [{mtype}]"
+            pieces.append(piece)
+        members_text = " | ".join(pieces) if pieces else ""
+        members.append(safe_truncate(members_text, TRUNC_FIELD))
+    return labels, descs, evids, members
+
+def compute_class_embeddings(embedder: HFEmbedder, classes: List[Dict], weights=WEIGHTS) -> np.ndarray:
+    labels, descs, evids, members = build_class_field_texts(classes)
+    emb_label = embedder.encode_batch(labels) if any(t.strip() for t in labels) else None
+    emb_desc = embedder.encode_batch(descs) if any(t.strip() for t in descs) else None
+    emb_evid = embedder.encode_batch(evids) if any(t.strip() for t in evids) else None
+    emb_mems = embedder.encode_batch(members) if any(t.strip() for t in members) else None
+
+    # find D
+    D = None
+    for arr in (emb_label, emb_desc, emb_evid, emb_mems):
+        if arr is not None and arr.shape[0] > 0:
+            D = arr.shape[1]; break
+    if D is None:
+        raise ValueError("No textual field produced embeddings")
+
+    def _ensure(arr):
+        if arr is None:
+            return np.zeros((len(classes), D))
+        if arr.shape[1] != D:
+            raise ValueError("embedding dim mismatch")
+        return arr
+
+    emb_label = _ensure(emb_label); emb_desc = _ensure(emb_desc); emb_evid = _ensure(emb_evid); emb_mems = _ensure(emb_mems)
+
+    w_label = weights.get("label", 0.0)
+    w_desc = weights.get("desc", 0.0)
+    w_evid = weights.get("evidence", 0.0)
+    w_mems = weights.get("members", 0.0)
+    Wsum = w_label + w_desc + w_evid + w_mems
+    if Wsum <= 0:
+        raise ValueError("invalid weights sum")
+    w_label /= Wsum; w_desc /= Wsum; w_evid /= Wsum; w_mems /= Wsum
+
+    combined = (w_label * emb_label) + (w_desc * emb_desc) + (w_evid * emb_evid) + (w_mems * emb_mems)
+    combined = normalize(combined, axis=1)
+    return combined
+
+# ---- clustering helper ----
+def run_hdbscan(embeddings: np.ndarray, min_cluster_size=HDBSCAN_MIN_CLUSTER_SIZE, min_samples=HDBSCAN_MIN_SAMPLES, use_umap=USE_UMAP):
+    X = embeddings
+    if use_umap and UMAP_AVAILABLE and X.shape[0] >= 5:
+        reducer = umap.UMAP(n_components=min(UMAP_DIMS, max(2, X.shape[0]-1)),
+                            n_neighbors=min(15, max(2, X.shape[0]-1)),
+                            min_dist=0.0,
+                            metric='cosine', random_state=42)
+        X = reducer.fit_transform(X)
+    clusterer = hdbscan.HDBSCAN(min_cluster_size=min_cluster_size, min_samples=min_samples, metric=HDBSCAN_METRIC, cluster_selection_method='eom')
+    labels = clusterer.fit_predict(X)
+    return labels, clusterer
+
+# ---- LLM call & robust JSON extraction ----
+def call_llm(prompt: str, model: str = LLM_MODEL, temperature: float = LLM_TEMPERATURE, max_tokens: int = LLM_MAX_TOKENS) -> str:
+    try:
+        resp = client.chat.completions.create(
+            model=model,
+            messages=[{"role":"user","content":prompt}],
+            temperature=temperature,
+            max_tokens=max_tokens
+        )
+        return resp.choices[0].message.content
+    except Exception as e:
+        print("LLM call error:", e)
+        return ""
+
+def extract_json_from_text(text: str):
+    """Try to extract the first JSON array or object from model text."""
+    if not text:
+        return None
+    s = text.strip()
+    # remove fenced codeblocks
+    if s.startswith("```"):
+        s = s.strip("`")
+    # find first '[' and matching ']' or '{' and matching '}'
+    idx_arr_start = s.find("[")
+    idx_obj_start = s.find("{")
+    candidate = None
+    if idx_arr_start != -1:
+        # heuristically take last ']' after start
+        idx_arr_end = s.rfind("]")
+        if idx_arr_end != -1 and idx_arr_end > idx_arr_start:
+            candidate = s[idx_arr_start:idx_arr_end+1]
+    if candidate is None and idx_obj_start != -1:
+        idx_obj_end = s.rfind("}")
+        if idx_obj_end != -1 and idx_obj_end > idx_obj_start:
+            candidate = s[idx_obj_start:idx_obj_end+1]
+    if candidate:
+        try:
+            return json.loads(candidate)
+        except Exception:
+            pass
+    # fallback try full parse
+    try:
+        return json.loads(s)
+    except Exception:
+        return None
+
+# ---- Allowed functions: implement them ----
+def fn_merge_classes(state_classes: Dict[str, Dict], class_ids: List[str], new_name: str, new_desc: str, new_class_type_hint: str, canonical_store: List[Dict], log: List[Dict]):
+    # create canonical class id
+    can_id = "CanCls_" + uuid.uuid4().hex[:8]
+    timestamp = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+    members = []
+    source_ids = []
+    for cid in class_ids:
+        c = state_classes.get(cid)
+        if not c:
+            continue
+        source_ids.append(cid)
+        for m in c.get("members", []):
+            members.append(m)
+        # mark original as merged
+        c["_merged_into"] = can_id
+    # dedupe members by id, preserve order
+    seen = set(); uniq_members = []
+    for m in members:
+        mid = m.get("id")
+        if mid and mid not in seen:
+            seen.add(mid); uniq_members.append(m)
+    canonical = {
+        "canonical_id": can_id,
+        "canonical_name": new_name,
+        "canonical_description": new_desc,
+        "canonical_type_hint": new_class_type_hint,
+        "members": uniq_members,
+        "source_class_ids": source_ids,
+        "timestamp": timestamp,
+        "source": "cls_res_merge"
+    }
+    canonical_store.append(canonical)
+    # add canonical to state_classes as new class
+    state_classes[can_id] = {
+        "id": can_id,
+        "class_label": new_name,
+        "class_description": new_desc,
+        "class_type_hint": new_class_type_hint,
+        "members": uniq_members,
+        "_is_canonical": True,
+        "created_time": timestamp
+    }
+    log.append({"time": timestamp, "action": "merge_classes", "merged": source_ids, "created": can_id})
+    return can_id
+
+def fn_create_class(state_classes: Dict[str, Dict], name: str, desc: str, class_type_hint: str, member_ids: List[str], entities_index: Dict[str, Dict], log: List[Dict]):
+    cid = "ClsC_" + uuid.uuid4().hex[:8]
+    members = []
+    for mid in member_ids or []:
+        ent = entities_index.get(mid)
+        if ent:
+            members.append(ent)
+    ts = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+    state_classes[cid] = {
+        "id": cid,
+        "class_label": name,
+        "class_description": desc,
+        "class_type_hint": class_type_hint,
+        "members": members,
+        "created_time": ts
+    }
+    log.append({"time": ts, "action": "create_class", "created": cid, "member_ids": member_ids})
+    return cid
+
+def fn_reassign_entity(state_classes: Dict[str, Dict], entity_id: str, from_class_id: Optional[str], to_class_id: str, entities_index: Dict[str, Dict], log: List[Dict]):
+    ts = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+    ent = entities_index.get(entity_id)
+    if ent is None:
+        log.append({"time": ts, "action": "reassign_entity_failed", "reason": "entity_not_found", "entity_id": entity_id})
+        return False
+    # remove from from_class_id if provided
+    if from_class_id and from_class_id in state_classes:
+        members = state_classes[from_class_id].get("members", [])
+        state_classes[from_class_id]["members"] = [m for m in members if m.get("id") != entity_id]
+    # add to to_class_id
+    if to_class_id not in state_classes:
+        # create placeholder class
+        state_classes[to_class_id] = {"id": to_class_id, "class_label": to_class_id, "class_description": "", "class_type_hint": "", "members": []}
+    # ensure not duplicate
+    if not any(m.get("id") == entity_id for m in state_classes[to_class_id].get("members", [])):
+        state_classes[to_class_id]["members"].append(ent)
+    log.append({"time": ts, "action": "reassign_entity", "entity_id": entity_id, "from": from_class_id, "to": to_class_id})
+    return True
+
+def fn_modify_class(state_classes: Dict[str, Dict], class_id: str, new_name: Optional[str], new_desc: Optional[str], new_type: Optional[str], log: List[Dict]):
+    ts = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+    c = state_classes.get(class_id)
+    if not c:
+        log.append({"time": ts, "action": "modify_class_failed", "reason": "class_not_found", "class_id": class_id})
+        return False
+    if new_name:
+        c["class_label"] = new_name
+    if new_desc:
+        c["class_description"] = new_desc
+    if new_type:
+        c["class_type_hint"] = new_type
+    log.append({"time": ts, "action": "modify_class", "class_id": class_id, "new_name": new_name, "new_desc": bool(new_desc), "new_type": new_type})
+    return True
+
+# ---- Orchestration: main loop ----
+PROMPT_TEMPLATE = """
+You are a careful class resolver assistant. You are given a SMALL GROUP of class candidates (each with id, label, description, class_type_hint, evidence_excerpt, and a list of member entities where each member has id, entity_name, entity_description, and entity_type_hint).
+
+Your job: return an ORDERED LIST of ACTIONS (JSON array). Each action must be one of the allowed functions listed below. The ordering matters: your top-to-bottom list will be executed sequentially by the orchestrator.
+
+ALLOWED ACTIONS (JSON objects):
+- MergeClasses: {{ "fn":"MergeClasses", "class_ids":[...], "new_name":"...", "new_desc":"...", "new_class_type_hint":"..." }}
+- CreateClass: {{ "fn":"CreateClass", "name":"...", "desc":"...", "class_type_hint":"...", "member_ids":[...] }}
+- ReassignEntity: {{ "fn":"ReassignEntity", "entity_id":"...", "from_class_id": "...|null", "to_class_id":"..." }}
+- ModifyClass: {{ "fn":"ModifyClass", "class_id":"...", "new_name": "...|null", "new_desc": "...|null", "new_class_type_hint":"...|null" }}
+
+RULES:
+1) Only use functions above. Do NOT invent other function names.
+2) When merging, prefer merging obvious duplicates / near-duplicates. If you propose a merge, always provide a good short new_name and new_desc (1-2 sentences).
+3) If you create a class, choose a concise label (1-3 words) and short description and optionally attach member_ids (use provided entity ids).
+4) When reassigning entities, include exact entity_id and the from/to class ids from the provided input (if unsure, use null for from_class_id to indicate attach-only).
+5) When modifying, provide only fields you want changed.
+6) Try to minimize unnecessary changes. Be conservative.
+
+INPUT (classes in this cluster):
+{cluster_json}
+
+Return ONLY a JSON array (no markdown). Keep the array small and clearly justified.
+"""
+
+def orchestrate_class_resolution():
+    # load classes file
+    if not CLASSES_ROUND_FILE.exists():
+        raise FileNotFoundError(f"Classes file not found: {CLASSES_ROUND_FILE}")
+    classes_round = load_json(CLASSES_ROUND_FILE)
+    # classes_round expected format: { "n_classes":..., "classes": { "<cid>": {...}, ... } } (as produced earlier)
+    raw_classes_map = classes_round.get("classes", {}) if isinstance(classes_round, dict) else {}
+    # flatten into list of class dicts with members as list
+    classes = []
+    for cid, meta in raw_classes_map.items():
+        c = dict(meta)
+        c["id"] = cid
+        # ensure members are full objects or at least id/name/desc/type
+        members = c.get("members") or []
+        normalized_members = []
+        for m in members:
+            if isinstance(m, dict) and "id" in m:
+                normalized_members.append({
+                    "id": m.get("id"),
+                    "entity_name": m.get("entity_name",""),
+                    "entity_description": m.get("entity_description",""),
+                    "entity_type_hint": m.get("entity_type_hint","")
+                })
+        c["members"] = normalized_members
+        classes.append(c)
+
+    # load entity index (to use when we create/reassign)
+    entities = {}
+    for e in load_jsonl(CLS_INPUT_ENTITIES):
+        entities[e.get("id")] = e
+
+    # build embeddings for classes
+    embedder = HFEmbedder(model_name=EMBED_MODEL, device=DEVICE)
+    combined = compute_class_embeddings(embedder, classes, weights=WEIGHTS)
+    labels, clusterer = run_hdbscan(combined)
+    print(f"[cls_res] clustered {len(classes)} classes -> unique labels: {len(set(labels))}")
+
+    # prepare mutable state: class id -> class dict
+    state_classes = {c["id"]: c for c in classes}
+    canonical_store = []
+    log_entries = []
+
+    # group by cluster label (including -1)
+    cluster_map = {}
+    for idx, lab in enumerate(labels):
+        cluster_map.setdefault(int(lab), []).append(idx)
+
+    cluster_ids = sorted([k for k in cluster_map.keys() if k != -1])
+    print(f"[cls_res] resolving {len(cluster_ids)} clusters (skipping -1 noise)")
+
+    for cid in cluster_ids:
+        idxs = cluster_map[cid]
+        cluster_classes = [classes[i] for i in idxs]
+        # build compact JSON input for LLM (we pass ALL member objects with id/name/desc/type)
+        cluster_payload = []
+        for c in cluster_classes:
+            cluster_payload.append({
+                "id": c.get("id"),
+                "class_label": c.get("class_label",""),
+                "class_description": c.get("class_description",""),
+                "class_type_hint": c.get("class_type_hint",""),
+                "evidence_excerpt": c.get("evidence_excerpt",""),
+                "members": c.get("members", [])
+            })
+        cluster_json = json.dumps(cluster_payload, ensure_ascii=False, indent=2)
+        prompt = PROMPT_TEMPLATE.format(cluster_json=cluster_json)
+        est_tokens = max(1, int(len(prompt) / PROMPT_CHAR_PER_TOKEN))
+        if est_tokens > MAX_PROMPT_TOKENS_EST:
+            # fail safe: if prompt too large, skip and log
+            log_entries.append({"time": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()), "action":"skip_cluster_prompt_too_large", "cluster": cid, "est_tokens": est_tokens})
+            print(f"[cls_res] skipped cluster {cid} - prompt too large (est {est_tokens} tokens)")
+            continue
+
+        print(f"[cls_res] calling LLM for cluster {cid} (size={len(cluster_classes)}) ...")
+        llm_out = call_llm(prompt)
+        actions = extract_json_from_text(llm_out)
+        if not actions or not isinstance(actions, list):
+            # fallback: no actions -> keep classes as-is, log conservative keep
+            log_entries.append({"time": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()), "action":"no_actions_from_llm", "cluster": cid})
+            print(f"[cls_res] LLM returned no actionable JSON for cluster {cid}; skipping")
+            continue
+
+        # execute actions in order
+        for act in actions:
+            if not isinstance(act, dict):
+                continue
+            fn = act.get("fn") or act.get("action") or ""
+            fn = fn.strip()
+            try:
+                if fn == "MergeClasses" or fn.lower()=="mergeclasses":
+                    class_ids = act.get("class_ids", []) or []
+                    new_name = act.get("new_name") or act.get("name") or ("Merged_" + uuid.uuid4().hex[:6])
+                    new_desc = act.get("new_desc") or act.get("description") or ""
+                    new_type = act.get("new_class_type_hint") or act.get("new_class_type") or ""
+                    can_id = fn_merge_classes(state_classes, class_ids, new_name, new_desc, new_type, canonical_store, log_entries)
+                    print(f"[cls_res] MergeClasses -> {can_id} from {class_ids}")
+                elif fn == "CreateClass" or fn.lower()=="createclass":
+                    name = act.get("name") or act.get("class_label") or ("NewClass_" + uuid.uuid4().hex[:6])
+                    desc = act.get("desc") or act.get("description") or ""
+                    ctype = act.get("class_type_hint") or ""
+                    member_ids = act.get("member_ids", []) or []
+                    new_cid = fn_create_class(state_classes, name, desc, ctype, member_ids, entities, log_entries)
+                    print(f"[cls_res] CreateClass -> {new_cid} (members={len(member_ids)})")
+                elif fn == "ReassignEntity" or fn.lower()=="reassignentity":
+                    entity_id = act.get("entity_id")
+                    from_c = act.get("from_class_id")
+                    to_c = act.get("to_class_id")
+                    ok = fn_reassign_entity(state_classes, entity_id, from_c, to_c, entities, log_entries)
+                    print(f"[cls_res] ReassignEntity {entity_id} -> {to_c} (ok={ok})")
+                elif fn == "ModifyClass" or fn.lower()=="modifyclass":
+                    class_id = act.get("class_id")
+                    new_name = act.get("new_name")
+                    new_desc = act.get("new_desc")
+                    new_type = act.get("new_class_type_hint")
+                    ok = fn_modify_class(state_classes, class_id, new_name, new_desc, new_type, log_entries)
+                    print(f"[cls_res] ModifyClass {class_id} (ok={ok})")
+                else:
+                    # unknown action -> log and skip
+                    log_entries.append({"time": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()), "action":"unknown_fn", "payload": act, "cluster": cid})
+                    print(f"[cls_res] unknown function requested by LLM: {fn} -> skipped")
+            except Exception as e:
+                log_entries.append({"time": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()), "action":"fn_exec_error", "fn": fn, "error": str(e)})
+                print(f"[cls_res] error executing {fn}: {e}")
+
+    # After cluster loop: collect resolved classes (state_classes)
+    final_classes = list(state_classes.values())
+    # write outputs
+    with open(OUT_CLASSES_JSONL, "w", encoding="utf-8") as fh:
+        for c in final_classes:
+            fh.write(json.dumps(c, ensure_ascii=False) + "\n")
+    with open(OUT_CANONICAL_JSONL, "w", encoding="utf-8") as fh:
+        for can in canonical_store:
+            fh.write(json.dumps(can, ensure_ascii=False) + "\n")
+    with open(OUT_LOG_JSONL, "a", encoding="utf-8") as fh:
+        for lg in log_entries:
+            fh.write(json.dumps(lg, ensure_ascii=False) + "\n")
+
+    print(f"[cls_res] finished. Wrote: {OUT_CLASSES_JSONL}, {OUT_CANONICAL_JSONL}, {OUT_LOG_JSONL}")
+
+if __name__ == "__main__":
+    orchestrate_class_resolution()
+
+
+#endregion#? Cls Res - Class Resolution
+#?#########################  End  ##########################
 
 
 
 
+
+
+
+#?######################### Start ##########################
+#region:#?   Cls Res V2
+
+
+
+#!/usr/bin/env python3
+"""
+classres_iterative_v1.py
+
+Class Resolution (Cls Res) — cluster class candidates, ask LLM to
+order a sequence of functions (merge/create/reassign/modify) for each cluster,
+then execute those functions locally and produce final resolved classes.
+
+Input:
+  /home/mabolhas/MyReposOnSOL/SGCE-KG/data/Classes/Cls_Rec/classes_for_cls_res.json
+
+Output (written under OUT_DIR):
+  - per-cluster decisions: cluster_<N>_decisions.json
+  - per-cluster raw llm output: cluster_<N>_llm_raw.txt
+  - cumulative action log: cls_res_action_log.jsonl
+  - final resolved classes: final_classes_resolved.json and .jsonl
+"""
 
 import json
+import os
+import re
+import time
+import uuid
+from pathlib import Path
+from typing import List, Dict, Any, Optional, Tuple
 
-chunks_in = "/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Chunks/chunks_sentence.jsonl"
-chunks_out = "/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Chunks/chunks_sentence_TEST.jsonl"
+import numpy as np
+import torch
+from sklearn.preprocessing import normalize
 
-keep_ids = {
-    "Ch_000003","Ch_000038","Ch_000039","Ch_000040","Ch_000042","Ch_000043",
-    "Ch_000045","Ch_000047","Ch_000048","Ch_000050","Ch_000051","Ch_000052",
-    "Ch_000053","Ch_000054","Ch_000055","Ch_000060","Ch_000061","Ch_000062",
-    "Ch_000064","Ch_000074","Ch_000075","Ch_000098","Ch_000099","Ch_000164",
-    "Ch_000172","Ch_000173","Ch_000180","Ch_000192","Ch_000193","Ch_000210",
-    "Ch_000222"
+# clustering libs
+try:
+    import hdbscan
+except Exception:
+    raise RuntimeError("hdbscan required: pip install hdbscan")
+try:
+    import umap
+    UMAP_AVAILABLE = True
+except Exception:
+    UMAP_AVAILABLE = False
+
+# transformers embedder (reuse same embedder pattern as ClassRec)
+from transformers import AutoTokenizer, AutoModel
+
+# OpenAI client (same style as your previous script)
+try:
+    from openai import OpenAI
+except Exception:
+    OpenAI = None
+
+# ----------------------------- CONFIG -----------------------------
+INPUT_CLASSES = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Classes/Cls_Rec/classes_for_cls_res.json")
+SRC_ENTITIES_PATH = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Classes/Cls_Input/cls_input_entities.jsonl")
+OUT_DIR = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Classes/Cls_Res")
+OUT_DIR.mkdir(parents=True, exist_ok=True)
+RAW_LLM_DIR = OUT_DIR / "llm_raw"
+RAW_LLM_DIR.mkdir(exist_ok=True)
+
+# Embedding model (changeable)
+EMBED_MODEL = "BAAI/bge-large-en-v1.5"
+DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
+BATCH_SIZE = 32
+
+# Weights for fields used to build class text for embeddings (you can edit)
+# fields: class_label, class_desc, class_type_hint, evidence_excerpt, members_agg
+CLASS_EMB_WEIGHTS = {
+    "label": 0.30,
+    "desc": 0.25,
+    "type_hint": 0.10,
+    "evidence": 0.05,
+    "members": 0.30
 }
 
-with open(chunks_in, "r", encoding="utf-8") as fin, \
-     open(chunks_out, "w", encoding="utf-8") as fout:
-    for line in fin:
-        r = json.loads(line)
-        if r.get("id") in keep_ids:
-            fout.write(json.dumps(r, ensure_ascii=False) + "\n")
+# clustering params
+USE_UMAP = True
+UMAP_N_COMPONENTS = 64
+UMAP_N_NEIGHBORS = 8
+UMAP_MIN_DIST = 0.0
+HDBSCAN_MIN_CLUSTER_SIZE = 2
+HDBSCAN_MIN_SAMPLES = 1
+HDBSCAN_METRIC = "euclidean"
 
-print("Done.")
+# LLM / OpenAI
+OPENAI_MODEL = "gpt-4o"
+OPENAI_TEMPERATURE = 0.0
+LLM_MAX_TOKENS = 800
+OPENAI_API_KEY_ENV = "OPENAI_API_KEY"
+
+# behavioral flags
+VERBOSE = True
+WRITE_INTERMEDIATE = True
+
+# ---------------------- Helpers: OpenAI key loader ---------------------
+def _load_openai_key(envvar: str = OPENAI_API_KEY_ENV, fallback_path: str = "/home/mabolhas/MyReposOnSOL/SGCE-KG/.env"):
+    key = os.getenv(envvar, None)
+    if key:
+        return key
+    # fallback: try file
+    if Path(fallback_path).exists():
+        txt = Path(fallback_path).read_text(encoding="utf-8").strip()
+        if txt:
+            return txt
+    return None
+
+OPENAI_KEY = _load_openai_key()
+if OpenAI is not None and OPENAI_KEY:
+    client = OpenAI(api_key=OPENAI_KEY)
+else:
+    client = None
+    if VERBOSE:
+        print("⚠️ OpenAI client not initialized (missing package or API key). LLM calls will fail unless OpenAI client is available.")
+
+def call_llm(prompt: str, model: str = OPENAI_MODEL, temperature: float = OPENAI_TEMPERATURE, max_tokens: int = LLM_MAX_TOKENS) -> str:
+    if client is None:
+        raise RuntimeError("OpenAI client not available. Set OPENAI_API_KEY and install openai package.")
+    try:
+        resp = client.chat.completions.create(
+            model=model,
+            messages=[{"role":"user","content":prompt}],
+            temperature=temperature,
+            max_tokens=max_tokens
+        )
+        return resp.choices[0].message.content
+    except Exception as e:
+        print("LLM call error:", e)
+        return ""
+
+# ---------------------- HF Embedder (same style as ClassRec) -------------
+def mean_pool(token_embeddings: torch.Tensor, attention_mask: torch.Tensor):
+    input_mask_expanded = attention_mask.unsqueeze(-1).expand(token_embeddings.size()).float()
+    sum_embeddings = torch.sum(token_embeddings * input_mask_expanded, 1)
+    sum_mask = torch.clamp(input_mask_expanded.sum(1), min=1e-9)
+    return sum_embeddings / sum_mask
+
+class HFEmbedder:
+    def __init__(self, model_name=EMBED_MODEL, device=DEVICE):
+        if VERBOSE: print(f"[embedder] loading {model_name} on {device}")
+        self.device = device
+        self.tokenizer = AutoTokenizer.from_pretrained(model_name, use_fast=True)
+        self.model = AutoModel.from_pretrained(model_name)
+        self.model.to(device)
+        self.model.eval()
+        for p in self.model.parameters():
+            p.requires_grad = False
+
+    @torch.no_grad()
+    def encode_batch(self, texts: List[str], batch_size: int = BATCH_SIZE) -> np.ndarray:
+        if len(texts) == 0:
+            D = getattr(self.model.config, "hidden_size", 1024)
+            return np.zeros((0, D))
+        embs = []
+        for i in range(0, len(texts), batch_size):
+            batch = texts[i:i+batch_size]
+            enc = self.tokenizer(batch, padding=True, truncation=True, return_tensors="pt", max_length=1024)
+            input_ids = enc["input_ids"].to(self.device)
+            attention_mask = enc["attention_mask"].to(self.device)
+            out = self.model(input_ids=input_ids, attention_mask=attention_mask, return_dict=True)
+            token_embeds = out.last_hidden_state
+            pooled = mean_pool(token_embeds, attention_mask)
+            embs.append(pooled.cpu().numpy())
+        embs = np.vstack(embs)
+        embs = normalize(embs, axis=1)
+        return embs
+
+# ---------------------- IO helpers -------------------------------------
+def load_json(path: Path):
+    return json.loads(path.read_text(encoding="utf-8"))
+
+def safe_str(s: Optional[str]) -> str:
+    if not s:
+        return ""
+    return str(s).replace("\n", " ").strip()
+
+def compact_member_info(member: Dict) -> Dict:
+    # Only pass id, name, desc, entity_type_hint to LLM prompt
+    return {
+        "id": member.get("id"),
+        "entity_name": safe_str(member.get("entity_name", ""))[:180],
+        "entity_description": safe_str(member.get("entity_description", ""))[:400],
+        "entity_type_hint": safe_str(member.get("entity_type_hint", ""))[:80]
+    }
+
+# ---------------------- Build class texts & embeddings ------------------
+def build_class_texts(classes: List[Dict]) -> Tuple[List[str], List[str], List[str], List[str], List[str]]:
+    labels, descs, types, evids, members_agg = [], [], [], [], []
+    for c in classes:
+        labels.append(safe_str(c.get("class_label",""))[:120])
+        descs.append(safe_str(c.get("class_description",""))[:300])
+        types.append(safe_str(c.get("class_type_hint",""))[:80])
+        evids.append(safe_str(c.get("evidence_excerpt",""))[:200])
+        # aggregate member short texts
+        mems = c.get("members", []) or []
+        mem_texts = []
+        for m in mems:
+            name = safe_str(m.get("entity_name",""))
+            desc = safe_str(m.get("entity_description",""))
+            etype = safe_str(m.get("entity_type_hint",""))
+            mem_texts.append(f"{name} ({etype}) - {desc[:120]}")
+        members_agg.append(" ; ".join(mem_texts)[:1000])
+    return labels, descs, types, evids, members_agg
+
+def compute_class_embeddings(embedder: HFEmbedder, classes: List[Dict], weights: Dict[str,float]) -> np.ndarray:
+    labels, descs, types, evids, members_agg = build_class_texts(classes)
+    emb_label = embedder.encode_batch(labels) if any(t.strip() for t in labels) else None
+    emb_desc  = embedder.encode_batch(descs)  if any(t.strip() for t in descs) else None
+    emb_type  = embedder.encode_batch(types)  if any(t.strip() for t in types) else None
+    emb_evid  = embedder.encode_batch(evids)  if any(t.strip() for t in evids) else None
+    emb_mem   = embedder.encode_batch(members_agg) if any(t.strip() for t in members_agg) else None
+
+    # determine D
+    D = None
+    for arr in (emb_label, emb_desc, emb_type, emb_evid, emb_mem):
+        if arr is not None and arr.shape[0] > 0:
+            D = arr.shape[1]; break
+    if D is None:
+        raise ValueError("No textual fields produced embeddings for classes")
+
+    def ensure(arr):
+        if arr is None:
+            return np.zeros((len(classes), D))
+        if arr.shape[1] != D:
+            raise ValueError("embedding dim mismatch")
+        return arr
+
+    emb_label = ensure(emb_label); emb_desc = ensure(emb_desc); emb_type = ensure(emb_type)
+    emb_evid = ensure(emb_evid); emb_mem = ensure(emb_mem)
+
+    w_label = weights.get("label",0.0); w_desc = weights.get("desc",0.0)
+    w_type = weights.get("type_hint",0.0); w_evid = weights.get("evidence",0.0)
+    w_mem  = weights.get("members",0.0)
+    W = w_label + w_desc + w_type + w_evid + w_mem
+    if W <= 0: raise ValueError("invalid class emb weights")
+    w_label /= W; w_desc /= W; w_type /= W; w_evid /= W; w_mem /= W
+
+    combined = (w_label*emb_label) + (w_desc*emb_desc) + (w_type*emb_type) + (w_evid*emb_evid) + (w_mem*emb_mem)
+    combined = normalize(combined, axis=1)
+    return combined
+
+# ---------------------- clustering -------------------------------------
+def run_hdbscan(embeddings: np.ndarray, min_cluster_size=HDBSCAN_MIN_CLUSTER_SIZE, min_samples=HDBSCAN_MIN_SAMPLES,
+                metric=HDBSCAN_METRIC, use_umap=USE_UMAP) -> Tuple[np.ndarray, object]:
+    X = embeddings
+    N = X.shape[0]
+    # Decide whether to attempt UMAP: require N reasonably larger than target dims/neighbors
+    if use_umap and UMAP_AVAILABLE and N >= 6:
+        # choose n_components and n_neighbors safely relative to N
+        safe_n_components = min(UMAP_N_COMPONENTS, max(2, N - 2))  # leave small margin
+        safe_n_neighbors = min(UMAP_N_NEIGHBORS, max(2, N - 1))
+        try:
+            reducer = umap.UMAP(
+                n_components=safe_n_components,
+                n_neighbors=safe_n_neighbors,
+                min_dist=UMAP_MIN_DIST,
+                metric='cosine',
+                random_state=42
+            )
+            X_reduced = reducer.fit_transform(X)
+            if X_reduced is not None and X_reduced.shape[0] == N:
+                X = X_reduced
+            else:
+                if VERBOSE:
+                    print(f"[warn] UMAP returned invalid shape {None if X_reduced is None else X_reduced.shape}; skipping UMAP")
+        except Exception as e:
+            # Catch UMAP failures (including the scipy eigh TypeError) and continue with original embeddings
+            if VERBOSE:
+                print(f"[warn] UMAP failed (N={N}, safe_n_components={safe_n_components}, safe_n_neighbors={safe_n_neighbors}): {e}. Proceeding without UMAP.")
+            X = embeddings  # fallback
+    else:
+        if use_umap and UMAP_AVAILABLE and VERBOSE:
+            print(f"[info] Skipping UMAP (N={N} < 6) to avoid unstable spectral computations.")
+    # Run HDBSCAN on X (either reduced or original)
+    clusterer = hdbscan.HDBSCAN(min_cluster_size=min_cluster_size, min_samples=min_samples, metric=metric, cluster_selection_method='eom')
+    labels = clusterer.fit_predict(X)
+    return labels, clusterer
+
+
+
+# ---------------------- LLM prompt template -----------------------------
+# LLM MUST return a JSON array of objects describing ordered function calls.
+# Example:
+# [
+#   {"function": "merge_classes", "args": {"class_ids":["ClsA","ClsB"], "new_name":"X", "new_description":"...", "new_class_type_hint":"Material"}},
+#   {"function": "reassign_entities", "args": {"entity_ids":["En_1"], "from_class_id":"ClsA", "to_class_id":"ClsC"}}
+# ]
+#
+# Allowed functions: merge_classes, create_class, reassign_entities, modify_class
+CLSRES_PROMPT_TEMPLATE = """
+You are a careful class resolver assistant.
+Input: a set of candidate classes (with metadata) that appear to belong to the same cluster.
+Your job: produce an ordered sequence of function calls (JSON array) that, if executed in order, will best resolve duplicates, ambiguous labels, and mis-assigned members in this cluster.
+
+IMPORTANT CONSERVATISM RULE
+- Only order a function if a real change is necessary.
+- If a class (or entity assignment) is already correct and coherent, DO NOT order any function for it.
+- It is valid and encouraged to return an EMPTY ARRAY [] if no changes are needed for this cluster.
+- Do NOT “clean up”, rephrase, or reorganize classes unless there is a concrete semantic problem.
+
+
+-- Important:
+- Return ONLY valid JSON: an array of objects.
+- Each object must have:
+   - "function": one of ["merge_classes","create_class","reassign_entities","modify_class"]
+   - "args": an object with named arguments (see below).
+
+-- Allowed functions and required args:
+1) merge_classes: args = {
+      "class_ids": [<existing_class_ids>],
+      "new_name": <string or null>,
+      "new_description": <string or null>,
+      "new_class_type_hint": <string or null>
+   }
+   Semantics: create a single merged class from the union of members.
+
+2) create_class: args = {
+      "name": <string>,
+      "description": <string or null>,
+      "class_type_hint": <string or null>,
+      "member_ids": [<entity ids>]  # optional
+   }
+
+3) reassign_entities: args = {
+      "entity_ids": [<entity ids>],
+      "from_class_id": <existing_class_id or null>,
+      "to_class_id": <existing_or_new_class_id>
+   }
+
+4) modify_class: args = {
+      "class_id": <existing_class_id>,
+      "new_name": <string or null>,
+      "new_description": <string or null>,
+      "new_class_type_hint": <string or null>
+   }
+
+-- Validation rules I will apply after you respond:
+- I will only accept entity ids that are present in the provided member lists.
+- I will only accept class_ids that exist in the provided cluster (except 'to_class_id' for create_class results where I'll use the returned new id).
+- I will ignore any function objects that are malformed.
+
+-- Strategy notes:
+- Prefer merging obviously-duplicate classes (same meaning, small label variation).
+- Prefer reassigning mis-assigned members instead of making broad classes.
+- If two classes have substantial overlapping members and complementary descriptions, merge them and set an inclusive name.
+- Be conservative: if uncertain, create a new narrow class rather than forcing a broad change.
+
+-- Input CLASSES (each includes: candidate_id, class_label, class_description, class_type_hint, confidence, evidence_excerpt, member_ids, members [full member objects]):
+{cluster_block}
+
+Return the ordered function list JSON array only.
+"""
+
+def sanitize_json_like(text: str) -> Optional[Any]:
+    # crude sanitizer: extract first [...] region and try loads. Fix common trailing commas and smart quotes.
+    if not text or not text.strip():
+        return None
+    s = text.strip()
+    # replace smart quotes
+    s = s.replace("“", '"').replace("”", '"').replace("‘","'").replace("’","'")
+    # find first [ ... ] block
+    start = s.find('[')
+    end = s.rfind(']')
+    cand = s
+    if start != -1 and end != -1 and end > start:
+        cand = s[start:end+1]
+    # remove trailing commas before closing braces/brackets
+    cand = re.sub(r",\s*([\]}])", r"\1", cand)
+    try:
+        return json.loads(cand)
+    except Exception:
+        # try eval fallback (risky) -> don't do it. Return None
+        return None
+
+# ---------------------- Action executors --------------------------------
+def execute_merge_classes(all_classes: Dict[str, Dict], class_ids: List[str], new_name: Optional[str], new_desc: Optional[str], new_type: Optional[str]) -> str:
+    # validate class ids
+    class_ids = [cid for cid in class_ids if cid in all_classes]
+    if not class_ids:
+        raise ValueError("merge_classes: no valid class_ids provided")
+    # create new candidate id
+    new_cid = "ClsR_" + uuid.uuid4().hex[:8]
+    # union members
+    members_map = {}
+    confidence = 0.0
+    evidence = ""
+    desc_choice = None
+    type_choice = new_type or ""
+    for cid in class_ids:
+        c = all_classes[cid]
+        confidence = max(confidence, float(c.get("confidence",0.0)))
+        if c.get("evidence_excerpt") and not evidence:
+            evidence = c.get("evidence_excerpt")
+        if c.get("class_description") and desc_choice is None:
+            desc_choice = c.get("class_description")
+        for m in c.get("members", []):
+            members_map[m["id"]] = m
+    # prefer provided new_desc if any
+    if new_desc:
+        desc_choice = new_desc
+    # prefer provided new_name else take first label
+    new_label = new_name or all_classes[class_ids[0]].get("class_label","MergedClass")
+    if not new_type:
+        # attempt to choose highest-confidence type_hint present
+        for cid in class_ids:
+            if all_classes[cid].get("class_type_hint"):
+                type_choice = all_classes[cid].get("class_type_hint")
+                break
+    merged_obj = {
+        "candidate_id": new_cid,
+        "class_label": new_label,
+        "class_description": desc_choice or "",
+        "class_type_hint": type_choice or "",
+        "confidence": float(confidence),
+        "evidence_excerpt": evidence or "",
+        "member_ids": list(members_map.keys()),
+        "members": list(members_map.values()),
+        "candidate_ids": class_ids,
+        "merged_from": class_ids,
+        "_merged_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+    }
+    # remove old classes and insert new one
+    for cid in class_ids:
+        all_classes.pop(cid, None)
+    all_classes[new_cid] = merged_obj
+    return new_cid
+
+def execute_create_class(all_classes: Dict[str, Dict], name: str, description: Optional[str], class_type_hint: Optional[str], member_ids: Optional[List[str]], id_to_entity: Dict[str, Dict]) -> str:
+    new_cid = "ClsR_" + uuid.uuid4().hex[:8]
+    members = []
+    mids = member_ids or []
+    for mid in mids:
+        ent = id_to_entity.get(mid)
+        if ent:
+            members.append(ent)
+    obj = {
+        "candidate_id": new_cid,
+        "class_label": name,
+        "class_description": description or "",
+        "class_type_hint": class_type_hint or "",
+        "confidence": 0.5,
+        "evidence_excerpt": "",
+        "member_ids": [m["id"] for m in members],
+        "members": members,
+        "candidate_ids": [],
+        "_created_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+    }
+    all_classes[new_cid] = obj
+    return new_cid
+
+def execute_reassign_entities(all_classes: Dict[str, Dict], entity_ids: List[str], from_class_id: Optional[str], to_class_id: str, id_to_entity: Dict[str, Dict]):
+    # If from_class_id is None, we will remove entity from any class that contains it
+    for cid, c in list(all_classes.items()):
+        if from_class_id and cid != from_class_id:
+            continue
+        # remove the entity ids from this class
+        before = set(c.get("member_ids", []))
+        new_members = [m for m in c.get("members", []) if m["id"] not in set(entity_ids)]
+        new_member_ids = [m["id"] for m in new_members]
+        c["members"] = new_members
+        c["member_ids"] = new_member_ids
+        all_classes[cid] = c
+    # add to destination
+    if to_class_id not in all_classes:
+        raise ValueError(f"reassign_entities: to_class_id {to_class_id} not found")
+    dest = all_classes[to_class_id]
+    # deduplicate
+    existing = {m["id"] for m in dest.get("members", [])}
+    for eid in entity_ids:
+        if eid in existing:
+            continue
+        ent = id_to_entity.get(eid)
+        if ent:
+            dest.setdefault("members", []).append(ent)
+            dest.setdefault("member_ids", []).append(eid)
+    dest["confidence"] = max(dest.get("confidence",0.0), 0.4)
+    all_classes[to_class_id] = dest
+
+def execute_modify_class(all_classes: Dict[str, Dict], class_id: str, new_name: Optional[str], new_desc: Optional[str], new_type: Optional[str]):
+    if class_id not in all_classes:
+        raise ValueError(f"modify_class: class_id {class_id} not found")
+    c = all_classes[class_id]
+    if new_name:
+        c["class_label"] = new_name
+    if new_desc:
+        c["class_description"] = new_desc
+    if new_type:
+        c["class_type_hint"] = new_type
+    all_classes[class_id] = c
+
+# ---------------------- Main orchestration ------------------------------
+def classres_main():
+    # load classes
+    if not INPUT_CLASSES.exists():
+        raise FileNotFoundError(f"Input classes file not found: {INPUT_CLASSES}")
+    classes_list = load_json(INPUT_CLASSES)
+    print(f"[start] loaded {len(classes_list)} merged candidate classes from {INPUT_CLASSES}")
+
+    # build id->entity map (from members contained in classes); optionally load src entity file if needed
+    id_to_entity = {}
+    for c in classes_list:
+        for m in c.get("members", []):
+            if isinstance(m, dict) and m.get("id"):
+                id_to_entity[m["id"]] = m
+
+    # ensure classes have candidate_id keys
+    all_classes: Dict[str, Dict] = {}
+    for c in classes_list:
+        cid = c.get("candidate_id") or ("ClsC_" + uuid.uuid4().hex[:8])
+        # normalize member list to objects
+        members = c.get("members", []) or []
+        # ensure member_ids
+        mids = [m["id"] for m in members if isinstance(m, dict) and m.get("id")]
+        c["member_ids"] = mids
+        c["members"] = members
+        all_classes[cid] = c
+
+    # embedder
+    embedder = HFEmbedder(model_name=EMBED_MODEL, device=DEVICE)
+    class_objs = list(all_classes.values())
+    class_ids_order = list(all_classes.keys())
+    combined_emb = compute_class_embeddings(embedder, class_objs, CLASS_EMB_WEIGHTS)
+    print("[info] class embeddings computed shape:", combined_emb.shape)
+
+    # clustering
+    labels, clusterer = run_hdbscan(combined_emb, min_cluster_size=HDBSCAN_MIN_CLUSTER_SIZE, min_samples=HDBSCAN_MIN_SAMPLES, use_umap=USE_UMAP)
+    print("[info] clustering done. unique labels:", set(labels))
+
+    # map cluster -> class ids
+    cluster_to_classids = {}
+    for idx, lab in enumerate(labels):
+        cid = class_ids_order[idx]
+        cluster_to_classids.setdefault(int(lab), []).append(cid)
+
+    # prepare action log
+    action_log_path = OUT_DIR / "cls_res_action_log.jsonl"
+    if action_log_path.exists():
+        action_log_path.unlink()
+
+    # iterate clusters (skip -1 initially)
+    cluster_keys = sorted([k for k in cluster_to_classids.keys() if k != -1])
+    cluster_keys += [-1]  # append noise at end
+    for cluster_label in cluster_keys:
+        class_ids = cluster_to_classids.get(cluster_label, [])
+        if not class_ids:
+            continue
+        print(f"[cluster] {cluster_label} -> {len(class_ids)} classes")
+        # build cluster block to pass to LLM
+        cluster_classes = []
+        for cid in class_ids:
+            c = all_classes.get(cid)
+            if not c:
+                continue
+            # compact members
+            members_compact = [compact_member_info(m) for m in c.get("members", [])]
+            cluster_classes.append({
+                "candidate_id": cid,
+                "class_label": c.get("class_label",""),
+                "class_description": c.get("class_description",""),
+                "class_type_hint": c.get("class_type_hint",""),
+                "confidence": float(c.get("confidence",0.0)),
+                "evidence_excerpt": c.get("evidence_excerpt",""),
+                "member_ids": c.get("member_ids", []),
+                "members": members_compact
+            })
+        cluster_block = json.dumps(cluster_classes, ensure_ascii=False, indent=2)
+        # prompt = CLSRES_PROMPT_TEMPLATE.format(cluster_block=cluster_block)
+        # safer substitution: do not use str.format which treats braces as placeholders
+        prompt = CLSRES_PROMPT_TEMPLATE.replace("{cluster_block}", cluster_block)
+
+
+        # log prompt
+        prompt_path = RAW_LLM_DIR / f"cluster_{cluster_label}_prompt.txt"
+        prompt_path.write_text(prompt, encoding="utf-8")
+
+        # call LLM
+        raw_out = ""
+        try:
+            raw_out = call_llm(prompt)
+        except Exception as e:
+            print(f"[warning] LLM call failed for cluster {cluster_label}: {e}")
+            raw_out = ""
+
+        # write raw output
+        raw_path = RAW_LLM_DIR / f"cluster_{cluster_label}_llm_raw.txt"
+        raw_path.write_text(raw_out, encoding="utf-8")
+
+        # try parse/sanitize
+        parsed = sanitize_json_like(raw_out)
+        if parsed is None:
+            # if cluster is singletons, consider no-op; else log and skip
+            print(f"[warn] failed to parse LLM output for cluster {cluster_label}; skipping automated actions for this cluster.")
+            # still write a decision file with raw output
+            dec_path = OUT_DIR / f"cluster_{cluster_label}_decisions.json"
+            dec_path.write_text(json.dumps({"cluster_label": cluster_label, "raw_llm": raw_out}, ensure_ascii=False, indent=2), encoding="utf-8")
+            continue
+
+        # execute parsed function list in order
+        decisions = []
+        for step in parsed:
+            if not isinstance(step, dict): continue
+            fn = step.get("function")
+            args = step.get("args", {}) or {}
+            try:
+                if fn == "merge_classes":
+                    cids = args.get("class_ids", [])
+                    new_name = args.get("new_name")
+                    new_desc = args.get("new_description")
+                    new_type = args.get("new_class_type_hint")
+                    # validate provided class ids: ensure they are in this cluster or globally present
+                    valid_cids = [cid for cid in cids if cid in all_classes]
+                    if not valid_cids:
+                        raise ValueError("no valid class_ids for merge")
+                    new_cid = execute_merge_classes(all_classes, valid_cids, new_name, new_desc, new_type)
+                    decisions.append({"action":"merge_classes","input_class_ids": valid_cids, "result_class_id": new_cid})
+                elif fn == "create_class":
+                    name = args.get("name")
+                    desc = args.get("description")
+                    t = args.get("class_type_hint")
+                    mids = args.get("member_ids", []) or []
+                    # filter mids to known entity ids
+                    mids_valid = [m for m in mids if m in id_to_entity]
+                    new_cid = execute_create_class(all_classes, name, desc, t, mids_valid, id_to_entity)
+                    decisions.append({"action":"create_class","result_class_id": new_cid, "member_ids_added": mids_valid})
+                elif fn == "reassign_entities":
+                    eids = args.get("entity_ids", []) or []
+                    from_c = args.get("from_class_id")
+                    to_c = args.get("to_class_id")
+                    # ensure eids valid
+                    eids_valid = [e for e in eids if e in id_to_entity]
+                    # if to_c is not present but matches pattern of created class in prior decisions, allow it
+                    if to_c not in all_classes:
+                        # check if to_c is one of the new classes created earlier in this cluster run
+                        # We support referencing the new class id returned earlier as result_class_id
+                        # If not found, error
+                        raise ValueError(f"to_class_id {to_c} not found")
+                    execute_reassign_entities(all_classes, eids_valid, from_c, to_c, id_to_entity)
+                    decisions.append({"action":"reassign_entities","entity_ids": eids_valid, "from": from_c, "to": to_c})
+                elif fn == "modify_class":
+                    cid = args.get("class_id")
+                    new_name = args.get("new_name")
+                    new_desc = args.get("new_description")
+                    new_type = args.get("new_class_type_hint")
+                    execute_modify_class(all_classes, cid, new_name, new_desc, new_type)
+                    decisions.append({"action":"modify_class","class_id": cid, "new_name": new_name})
+                else:
+                    # unknown function -> skip
+                    decisions.append({"action":"skip_unknown","raw": step})
+            except Exception as e:
+                decisions.append({"action":"error_executing","function": fn, "error": str(e), "input": step})
+
+        # write decisions file for this cluster
+        dec_path = OUT_DIR / f"cluster_{cluster_label}_decisions.json"
+        dec_obj = {
+            "cluster_label": cluster_label,
+            "cluster_classes": cluster_classes,
+            "llm_raw": raw_out,
+            "parsed_steps": parsed,
+            "executed_decisions": decisions,
+            "timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+        }
+        dec_path.write_text(json.dumps(dec_obj, ensure_ascii=False, indent=2), encoding="utf-8")
+
+        # append to action log
+        with open(action_log_path, "a", encoding="utf-8") as fh:
+            fh.write(json.dumps(dec_obj, ensure_ascii=False) + "\n")
+
+    # After all clusters processed: write final classes output
+    final_classes = list(all_classes.values())
+    out_json = OUT_DIR / "final_classes_resolved.json"
+    out_jsonl = OUT_DIR / "final_classes_resolved.jsonl"
+    out_json.write_text(json.dumps(final_classes, ensure_ascii=False, indent=2), encoding="utf-8")
+    with open(out_jsonl, "w", encoding="utf-8") as fh:
+        for c in final_classes:
+            fh.write(json.dumps(c, ensure_ascii=False) + "\n")
+    print(f"[done] wrote final resolved classes -> {out_json}  (count={len(final_classes)})")
+    print(f"[done] action log -> {action_log_path}")
+
+if __name__ == "__main__":
+    classres_main()
 
 
 
 
-
-
-
-#endregion#? Utilities for Entity Identification
+#endregion#? Cls Res V2
 #?#########################  End  ##########################
+
+
+
+
+
+
+
+
+
+#?######################### Start ##########################
+#region:#?   Cls Res V3 
+
+
+
+#!/usr/bin/env python3
+"""
+classres_iterative_v2.py
+
+Class Resolution (Cls Res) — cluster class candidates, ask LLM to
+order a sequence of functions (merge/create/reassign/modify) for each cluster,
+then execute those functions locally and produce final resolved classes.
+
+Input:
+  /home/mabolhas/MyReposOnSOL/SGCE-KG/data/Classes/Cls_Rec/classes_for_cls_res.json
+
+Output (written under OUT_DIR):
+  - per-cluster decisions: cluster_<N>_decisions.json
+  - per-cluster raw llm output: cluster_<N>_llm_raw.txt
+  - cumulative action log: cls_res_action_log.jsonl
+  - final resolved classes: final_classes_resolved.json and .jsonl
+"""
+
+import json
+import os
+import re
+import time
+import uuid
+from pathlib import Path
+from typing import List, Dict, Any, Optional, Tuple
+
+import numpy as np
+import torch
+from sklearn.preprocessing import normalize
+
+# clustering libs
+try:
+    import hdbscan
+except Exception:
+    raise RuntimeError("hdbscan required: pip install hdbscan")
+try:
+    import umap
+    UMAP_AVAILABLE = True
+except Exception:
+    UMAP_AVAILABLE = False
+
+# transformers embedder (reuse same embedder pattern as ClassRec)
+from transformers import AutoTokenizer, AutoModel
+
+# OpenAI client (same style as your previous script)
+try:
+    from openai import OpenAI
+except Exception:
+    OpenAI = None
+
+# ----------------------------- CONFIG -----------------------------
+INPUT_CLASSES = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Classes/Cls_Rec/classes_for_cls_res.json")
+SRC_ENTITIES_PATH = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Classes/Cls_Input/cls_input_entities.jsonl")
+OUT_DIR = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Classes/Cls_Res")
+OUT_DIR.mkdir(parents=True, exist_ok=True)
+RAW_LLM_DIR = OUT_DIR / "llm_raw"
+RAW_LLM_DIR.mkdir(exist_ok=True)
+
+# Embedding model (changeable)
+EMBED_MODEL = "BAAI/bge-large-en-v1.5"
+DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
+BATCH_SIZE = 32
+
+# Weights for fields used to build class text for embeddings (you can edit)
+# fields: class_label, class_desc, class_type_hint, evidence_excerpt, members_agg
+CLASS_EMB_WEIGHTS = {
+    "label": 0.30,
+    "desc": 0.25,
+    "type_hint": 0.10,
+    "evidence": 0.05,
+    "members": 0.30
+}
+
+# clustering params
+USE_UMAP = True
+UMAP_N_COMPONENTS = 64
+UMAP_N_NEIGHBORS = 8
+UMAP_MIN_DIST = 0.0
+HDBSCAN_MIN_CLUSTER_SIZE = 2
+HDBSCAN_MIN_SAMPLES = 1
+HDBSCAN_METRIC = "euclidean"
+
+# LLM / OpenAI
+OPENAI_MODEL = "gpt-4o"
+OPENAI_TEMPERATURE = 0.0
+LLM_MAX_TOKENS = 800
+OPENAI_API_KEY_ENV = "OPENAI_API_KEY"
+
+# behavioral flags
+VERBOSE = True
+WRITE_INTERMEDIATE = True
+
+# ---------------------- Helpers: OpenAI key loader ---------------------
+def _load_openai_key(envvar: str = OPENAI_API_KEY_ENV, fallback_path: str = "/home/mabolhas/MyReposOnSOL/SGCE-KG/.env"):
+    key = os.getenv(envvar, None)
+    if key:
+        return key
+    # fallback: try file
+    if Path(fallback_path).exists():
+        txt = Path(fallback_path).read_text(encoding="utf-8").strip()
+        if txt:
+            return txt
+    return None
+
+OPENAI_KEY = _load_openai_key()
+if OpenAI is not None and OPENAI_KEY:
+    client = OpenAI(api_key=OPENAI_KEY)
+else:
+    client = None
+    if VERBOSE:
+        print("⚠️ OpenAI client not initialized (missing package or API key). LLM calls will fail unless OpenAI client is available.")
+
+def call_llm(prompt: str, model: str = OPENAI_MODEL, temperature: float = OPENAI_TEMPERATURE, max_tokens: int = LLM_MAX_TOKENS) -> str:
+    if client is None:
+        raise RuntimeError("OpenAI client not available. Set OPENAI_API_KEY and install openai package.")
+    try:
+        resp = client.chat.completions.create(
+            model=model,
+            messages=[{"role":"user","content":prompt}],
+            temperature=temperature,
+            max_tokens=max_tokens
+        )
+        return resp.choices[0].message.content
+    except Exception as e:
+        print("LLM call error:", e)
+        return ""
+
+# ---------------------- HF Embedder (same style as ClassRec) -------------
+def mean_pool(token_embeddings: torch.Tensor, attention_mask: torch.Tensor):
+    input_mask_expanded = attention_mask.unsqueeze(-1).expand(token_embeddings.size()).float()
+    sum_embeddings = torch.sum(token_embeddings * input_mask_expanded, 1)
+    sum_mask = torch.clamp(input_mask_expanded.sum(1), min=1e-9)
+    return sum_embeddings / sum_mask
+
+class HFEmbedder:
+    def __init__(self, model_name=EMBED_MODEL, device=DEVICE):
+        if VERBOSE: print(f"[embedder] loading {model_name} on {device}")
+        self.device = device
+        self.tokenizer = AutoTokenizer.from_pretrained(model_name, use_fast=True)
+        self.model = AutoModel.from_pretrained(model_name)
+        self.model.to(device)
+        self.model.eval()
+        for p in self.model.parameters():
+            p.requires_grad = False
+
+    @torch.no_grad()
+    def encode_batch(self, texts: List[str], batch_size: int = BATCH_SIZE) -> np.ndarray:
+        if len(texts) == 0:
+            D = getattr(self.model.config, "hidden_size", 1024)
+            return np.zeros((0, D))
+        embs = []
+        for i in range(0, len(texts), batch_size):
+            batch = texts[i:i+batch_size]
+            enc = self.tokenizer(batch, padding=True, truncation=True, return_tensors="pt", max_length=1024)
+            input_ids = enc["input_ids"].to(self.device)
+            attention_mask = enc["attention_mask"].to(self.device)
+            out = self.model(input_ids=input_ids, attention_mask=attention_mask, return_dict=True)
+            token_embeds = out.last_hidden_state
+            pooled = mean_pool(token_embeds, attention_mask)
+            embs.append(pooled.cpu().numpy())
+        embs = np.vstack(embs)
+        embs = normalize(embs, axis=1)
+        return embs
+
+# ---------------------- IO helpers -------------------------------------
+def load_json(path: Path):
+    return json.loads(path.read_text(encoding="utf-8"))
+
+def safe_str(s: Optional[str]) -> str:
+    if not s:
+        return ""
+    return str(s).replace("\n", " ").strip()
+
+def compact_member_info(member: Dict) -> Dict:
+    # Only pass id, name, desc, entity_type_hint to LLM prompt
+    return {
+        "id": member.get("id"),
+        "entity_name": safe_str(member.get("entity_name", ""))[:180],
+        "entity_description": safe_str(member.get("entity_description", ""))[:400],
+        "entity_type_hint": safe_str(member.get("entity_type_hint", ""))[:80]
+    }
+
+# ---------------------- Build class texts & embeddings ------------------
+def build_class_texts(classes: List[Dict]) -> Tuple[List[str], List[str], List[str], List[str], List[str]]:
+    labels, descs, types, evids, members_agg = [], [], [], [], []
+    for c in classes:
+        labels.append(safe_str(c.get("class_label",""))[:120])
+        descs.append(safe_str(c.get("class_description",""))[:300])
+        types.append(safe_str(c.get("class_type_hint",""))[:80])
+        evids.append(safe_str(c.get("evidence_excerpt",""))[:200])
+        # aggregate member short texts
+        mems = c.get("members", []) or []
+        mem_texts = []
+        for m in mems:
+            name = safe_str(m.get("entity_name",""))
+            desc = safe_str(m.get("entity_description",""))
+            etype = safe_str(m.get("entity_type_hint",""))
+            mem_texts.append(f"{name} ({etype}) - {desc[:120]}")
+        members_agg.append(" ; ".join(mem_texts)[:1000])
+    return labels, descs, types, evids, members_agg
+
+def compute_class_embeddings(embedder: HFEmbedder, classes: List[Dict], weights: Dict[str,float]) -> np.ndarray:
+    labels, descs, types, evids, members_agg = build_class_texts(classes)
+    emb_label = embedder.encode_batch(labels) if any(t.strip() for t in labels) else None
+    emb_desc  = embedder.encode_batch(descs)  if any(t.strip() for t in descs) else None
+    emb_type  = embedder.encode_batch(types)  if any(t.strip() for t in types) else None
+    emb_evid  = embedder.encode_batch(evids)  if any(t.strip() for t in evids) else None
+    emb_mem   = embedder.encode_batch(members_agg) if any(t.strip() for t in members_agg) else None
+
+    # determine D
+    D = None
+    for arr in (emb_label, emb_desc, emb_type, emb_evid, emb_mem):
+        if arr is not None and arr.shape[0] > 0:
+            D = arr.shape[1]; break
+    if D is None:
+        raise ValueError("No textual fields produced embeddings for classes")
+
+    def ensure(arr):
+        if arr is None:
+            return np.zeros((len(classes), D))
+        if arr.shape[1] != D:
+            raise ValueError("embedding dim mismatch")
+        return arr
+
+    emb_label = ensure(emb_label); emb_desc = ensure(emb_desc); emb_type = ensure(emb_type)
+    emb_evid = ensure(emb_evid); emb_mem = ensure(emb_mem)
+
+    w_label = weights.get("label",0.0); w_desc = weights.get("desc",0.0)
+    w_type = weights.get("type_hint",0.0); w_evid = weights.get("evidence",0.0)
+    w_mem  = weights.get("members",0.0)
+    W = w_label + w_desc + w_type + w_evid + w_mem
+    if W <= 0: raise ValueError("invalid class emb weights")
+    w_label /= W; w_desc /= W; w_type /= W; w_evid /= W; w_mem /= W
+
+    combined = (w_label*emb_label) + (w_desc*emb_desc) + (w_type*emb_type) + (w_evid*emb_evid) + (w_mem*emb_mem)
+    combined = normalize(combined, axis=1)
+    return combined
+
+# ---------------------- clustering -------------------------------------
+def run_hdbscan(embeddings: np.ndarray, min_cluster_size=HDBSCAN_MIN_CLUSTER_SIZE, min_samples=HDBSCAN_MIN_SAMPLES,
+                metric=HDBSCAN_METRIC, use_umap=USE_UMAP) -> Tuple[np.ndarray, object]:
+    X = embeddings
+    N = X.shape[0]
+    # Decide whether to attempt UMAP: require N reasonably larger than target dims/neighbors
+    if use_umap and UMAP_AVAILABLE and N >= 6:
+        # choose n_components and n_neighbors safely relative to N
+        safe_n_components = min(UMAP_N_COMPONENTS, max(2, N - 2))  # leave small margin
+        safe_n_neighbors = min(UMAP_N_NEIGHBORS, max(2, N - 1))
+        try:
+            reducer = umap.UMAP(
+                n_components=safe_n_components,
+                n_neighbors=safe_n_neighbors,
+                min_dist=UMAP_MIN_DIST,
+                metric='cosine',
+                random_state=42
+            )
+            X_reduced = reducer.fit_transform(X)
+            if X_reduced is not None and X_reduced.shape[0] == N:
+                X = X_reduced
+            else:
+                if VERBOSE:
+                    print(f"[warn] UMAP returned invalid shape {None if X_reduced is None else X_reduced.shape}; skipping UMAP")
+        except Exception as e:
+            # Catch UMAP failures (including the scipy eigh TypeError) and continue with original embeddings
+            if VERBOSE:
+                print(f"[warn] UMAP failed (N={N}, safe_n_components={safe_n_components}, safe_n_neighbors={safe_n_neighbors}): {e}. Proceeding without UMAP.")
+            X = embeddings  # fallback
+    else:
+        if use_umap and UMAP_AVAILABLE and VERBOSE:
+            print(f"[info] Skipping UMAP (N={N} < 6) to avoid unstable spectral computations.")
+    # Run HDBSCAN on X (either reduced or original)
+    clusterer = hdbscan.HDBSCAN(min_cluster_size=min_cluster_size, min_samples=min_samples, metric=metric, cluster_selection_method='eom')
+    labels = clusterer.fit_predict(X)
+    return labels, clusterer
+
+# ---------------------- LLM prompt template (confirmed) -----------------
+CLSRES_PROMPT_TEMPLATE = """
+You are a careful class resolution assistant.
+
+You are given a set of candidate CLASSES that appear to belong,
+or may plausibly belong, to the same semantic cluster.
+This grouping is NOT guaranteed to be correct and should be treated as suggestive,
+not definitive.
+
+Your task is to conservatively refine the schema using this tentative grouping.
+
+========================
+SCHEMA STRUCTURE (CRITICAL)
+========================
+
+We are building a TWO-LAYER SCHEMA over entities:
+
+Level 0: Class_Group        (connects related classes)
+Level 1: Classes            (group entities)
+Level 2: Entities
+
+Structure:
+Class_Group
+  └── Class
+        └── Entity
+
+- Class_Group is the PRIMARY mechanism for connecting related classes.
+- Classes that share a Class_Group are considered semantically related.
+- This relationship propagates to their entities.
+
+========================
+IMPORTANT FIELD DISTINCTIONS
+========================
+
+- class_type_hint (existing field):
+  A local, descriptive hint assigned to each class in isolation.
+  It is often noisy, incomplete, and inconsistent across classes.
+  Do NOT assume it is globally correct or reusable.
+
+- Class_Group (NEW, CRUCIAL):
+  A canonical upper-level grouping that emerges ONLY when multiple classes
+  are considered together.
+  It is used to connect related classes into a coherent schema.
+  Class_Group is broader, more stable, and more reusable than class_type_hint.
+
+Class_Group is NOT a synonym of class_type_hint.
+
+========================
+YOUR PRIMARY TASK
+========================
+
+For the given cluster of classes:
+
+1) Assess whether any structural changes are REQUIRED:
+   - merge truly duplicate or near-duplicate classes
+   - reassign clearly mis-assigned entities
+   - create a new class ONLY if strictly necessary
+   - modify class metadata ONLY if meaningfully incorrect
+
+2) ALWAYS assess and assign an appropriate Class_Group:
+   - If Class_Group is missing, null, or marked as TBD → you MUST assign it.
+   - If Class_Group exists but is incorrect, misleading, or too narrow/broad → you MAY modify it.
+   - If everything else is correct, assigning or confirming Class_Group ALONE is sufficient.
+
+Class_Group assignment is the MINIMUM expected outcome of this step.
+
+========================
+IMPORTANT CONSERVATISM RULE
+========================
+
+- Only order a function if a real semantic change is necessary.
+- Do NOT perform cosmetic edits or unnecessary normalization.
+- Do NOT rephrase labels or descriptions unless meaningfully wrong.
+- If classes and entity memberships are already correct:
+  → DO NOT order merge, create, reassign, or modify actions beyond Class_Group.
+
+BALANCE & ORDERING (SHORT)
+- Class_Group is required, but do NOT stop there: if there is clear evidence (overlapping members, contradictory descriptions, high-confidence mismatch) perform merges/reassigns/creates/modifies as needed.
+- If you perform any structural changes, do them first; always include a final modify_class that sets or confirms the Class_Group as the last step for the cluster.
+
+
+========================
+AVAILABLE FUNCTIONS
+========================
+
+Return ONLY a JSON ARRAY of ordered function calls.
+
+Each object must have:
+- "function": one of
+  ["merge_classes", "create_class", "reassign_entities", "modify_class"]
+- "args": arguments as defined below.
+
+1) merge_classes
+args = {
+  "class_ids": [<existing_class_ids>],
+  "new_name": <string or null>,
+  "new_description": <string or null>,
+  "new_class_type_hint": <string or null>
+}
+
+2) create_class
+args = {
+  "name": <string>,
+  "description": <string or null>,
+  "class_type_hint": <string or null>,
+  "member_ids": [<entity_ids>]   # optional
+}
+
+3) reassign_entities
+args = {
+  "entity_ids": [<entity_ids>],
+  "from_class_id": <existing_class_id or null>,
+  "to_class_id": <existing_or_new_class_id>
+}
+
+4) modify_class
+args = {
+  "class_id": <existing_class_id>,
+  "new_name": <string or null>,
+  "new_description": <string or null>,
+  "new_class_type_hint": <string or null>,
+  "new_class_group": <string>
+}
+
+
+========================
+VALIDATION RULES
+========================
+
+- Use ONLY provided class_ids and entity_ids.
+- Do NOT invent new entity ids or functions.
+- Order matters: later steps may depend on earlier ones.
+
+========================
+STRATEGY GUIDANCE
+========================
+
+- Merge classes ONLY when they are genuinely redundant.
+- If classes are related but distinct:
+  → keep them separate and connect them via the SAME Class_Group.
+- Think in terms of schema connectivity, not cleanup.
+
+========================
+INPUT CLASSES
+========================
+
+Each class includes:
+- candidate_id
+- class_label
+- class_description
+- class_type_hint
+- class_group (may be null or "TBD")
+- confidence
+- evidence_excerpt
+- member_ids
+- members (entity id, name, description, type)
+
+{cluster_block}
+
+========================
+OUTPUT
+========================
+
+Return ONLY the JSON array of ordered function calls.
+Return [] ONLY if you are absolutely certain that even Class_Group is already correct.
+"""
+
+def sanitize_json_like(text: str) -> Optional[Any]:
+    # crude sanitizer: extract first [...] region and try loads. Fix common trailing commas and smart quotes.
+    if not text or not text.strip():
+        return None
+    s = text.strip()
+    # replace smart quotes
+    s = s.replace("“", '"').replace("”", '"').replace("‘","'").replace("’","'")
+    # find first [ ... ] block
+    start = s.find('[')
+    end = s.rfind(']')
+    cand = s
+    if start != -1 and end != -1 and end > start:
+        cand = s[start:end+1]
+    # remove trailing commas before closing braces/brackets
+    cand = re.sub(r",\s*([\]}])", r"\1", cand)
+    try:
+        return json.loads(cand)
+    except Exception:
+        # try eval fallback (risky) -> don't do it. Return None
+        return None
+
+# ---------------------- Action executors --------------------------------
+def execute_merge_classes(all_classes: Dict[str, Dict], class_ids: List[str], new_name: Optional[str], new_desc: Optional[str], new_type: Optional[str]) -> str:
+    # validate class ids
+    class_ids = [cid for cid in class_ids if cid in all_classes]
+    if not class_ids:
+        raise ValueError("merge_classes: no valid class_ids provided")
+    # create new candidate id
+    new_cid = "ClsR_" + uuid.uuid4().hex[:8]
+    # union members
+    members_map = {}
+    confidence = 0.0
+    evidence = ""
+    desc_choice = None
+    type_choice = new_type or ""
+    class_group_choice = None
+    for cid in class_ids:
+        c = all_classes[cid]
+        confidence = max(confidence, float(c.get("confidence",0.0)))
+        if c.get("evidence_excerpt") and not evidence:
+            evidence = c.get("evidence_excerpt")
+        if c.get("class_description") and desc_choice is None:
+            desc_choice = c.get("class_description")
+        # prefer an existing class_group if all share same - else keep TBD
+        cg = c.get("class_group")
+        if cg and cg not in ("", "TBD", None):
+            if class_group_choice is None:
+                class_group_choice = cg
+            elif class_group_choice != cg:
+                # conflicting groups -> keep TBD unless new provided
+                class_group_choice = class_group_choice  # keep first
+        for m in c.get("members", []):
+            members_map[m["id"]] = m
+    # prefer provided new_desc if any
+    if new_desc:
+        desc_choice = new_desc
+    # prefer provided new_name else take first label
+    new_label = new_name or all_classes[class_ids[0]].get("class_label","MergedClass")
+    if not new_type:
+        # attempt to choose highest-confidence type_hint present
+        for cid in class_ids:
+            if all_classes[cid].get("class_type_hint"):
+                type_choice = all_classes[cid].get("class_type_hint")
+                break
+    merged_obj = {
+        "candidate_id": new_cid,
+        "class_label": new_label,
+        "class_description": desc_choice or "",
+        "class_type_hint": type_choice or "",
+        "class_group": class_group_choice or "TBD",
+        "confidence": float(confidence),
+        "evidence_excerpt": evidence or "",
+        "member_ids": list(members_map.keys()),
+        "members": list(members_map.values()),
+        "candidate_ids": class_ids,
+        "merged_from": class_ids,
+        "_merged_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+    }
+    # remove old classes and insert new one
+    for cid in class_ids:
+        all_classes.pop(cid, None)
+    all_classes[new_cid] = merged_obj
+    return new_cid
+
+def execute_create_class(all_classes: Dict[str, Dict], name: str, description: Optional[str], class_type_hint: Optional[str], member_ids: Optional[List[str]], id_to_entity: Dict[str, Dict]) -> str:
+    new_cid = "ClsR_" + uuid.uuid4().hex[:8]
+    members = []
+    mids = member_ids or []
+    for mid in mids:
+        ent = id_to_entity.get(mid)
+        if ent:
+            members.append(ent)
+    obj = {
+        "candidate_id": new_cid,
+        "class_label": name,
+        "class_description": description or "",
+        "class_type_hint": class_type_hint or "",
+        "class_group": "TBD",
+        "confidence": 0.5,
+        "evidence_excerpt": "",
+        "member_ids": [m["id"] for m in members],
+        "members": members,
+        "candidate_ids": [],
+        "_created_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+    }
+    all_classes[new_cid] = obj
+    return new_cid
+
+def execute_reassign_entities(all_classes: Dict[str, Dict], entity_ids: List[str], from_class_id: Optional[str], to_class_id: str, id_to_entity: Dict[str, Dict]):
+    # If from_class_id is None, we will remove entity from any class that contains it
+    for cid, c in list(all_classes.items()):
+        if from_class_id and cid != from_class_id:
+            continue
+        # remove the entity ids from this class
+        before = set(c.get("member_ids", []))
+        new_members = [m for m in c.get("members", []) if m["id"] not in set(entity_ids)]
+        new_member_ids = [m["id"] for m in new_members]
+        c["members"] = new_members
+        c["member_ids"] = new_member_ids
+        all_classes[cid] = c
+    # add to destination
+    if to_class_id not in all_classes:
+        raise ValueError(f"reassign_entities: to_class_id {to_class_id} not found")
+    dest = all_classes[to_class_id]
+    # deduplicate
+    existing = {m["id"] for m in dest.get("members", [])}
+    for eid in entity_ids:
+        if eid in existing:
+            continue
+        ent = id_to_entity.get(eid)
+        if ent:
+            dest.setdefault("members", []).append(ent)
+            dest.setdefault("member_ids", []).append(eid)
+    dest["confidence"] = max(dest.get("confidence",0.0), 0.4)
+    all_classes[to_class_id] = dest
+
+def execute_modify_class(all_classes: Dict[str, Dict], class_id: str, new_name: Optional[str], new_desc: Optional[str], new_type: Optional[str], new_class_group: Optional[str]):
+    if class_id not in all_classes:
+        raise ValueError(f"modify_class: class_id {class_id} not found")
+    c = all_classes[class_id]
+    if new_name:
+        c["class_label"] = new_name
+    if new_desc:
+        c["class_description"] = new_desc
+    if new_type:
+        c["class_type_hint"] = new_type
+    if new_class_group:
+        c["class_group"] = new_class_group
+    all_classes[class_id] = c
+
+# ---------------------- Main orchestration ------------------------------
+def classres_main():
+    # load classes
+    if not INPUT_CLASSES.exists():
+        raise FileNotFoundError(f"Input classes file not found: {INPUT_CLASSES}")
+    classes_list = load_json(INPUT_CLASSES)
+    print(f"[start] loaded {len(classes_list)} merged candidate classes from {INPUT_CLASSES}")
+
+    # build id->entity map (from members contained in classes); optionally load src entity file if needed
+    id_to_entity = {}
+    for c in classes_list:
+        for m in c.get("members", []):
+            if isinstance(m, dict) and m.get("id"):
+                id_to_entity[m["id"]] = m
+
+    # ensure classes have candidate_id keys and class_group field
+    all_classes: Dict[str, Dict] = {}
+    for c in classes_list:
+        cid = c.get("candidate_id") or ("ClsC_" + uuid.uuid4().hex[:8])
+        # normalize member list to objects
+        members = c.get("members", []) or []
+        # ensure member_ids
+        mids = [m["id"] for m in members if isinstance(m, dict) and m.get("id")]
+        c["member_ids"] = mids
+        c["members"] = members
+        # ensure class_group present
+        if "class_group" not in c or c.get("class_group") in (None, ""):
+            c["class_group"] = "TBD"
+        all_classes[cid] = c
+
+    # embedder
+    embedder = HFEmbedder(model_name=EMBED_MODEL, device=DEVICE)
+    class_objs = list(all_classes.values())
+    class_ids_order = list(all_classes.keys())
+    combined_emb = compute_class_embeddings(embedder, class_objs, CLASS_EMB_WEIGHTS)
+    print("[info] class embeddings computed shape:", combined_emb.shape)
+
+    # clustering
+    labels, clusterer = run_hdbscan(combined_emb, min_cluster_size=HDBSCAN_MIN_CLUSTER_SIZE, min_samples=HDBSCAN_MIN_SAMPLES, use_umap=USE_UMAP)
+    print("[info] clustering done. unique labels:", set(labels))
+
+    # map cluster -> class ids
+    cluster_to_classids = {}
+    for idx, lab in enumerate(labels):
+        cid = class_ids_order[idx]
+        cluster_to_classids.setdefault(int(lab), []).append(cid)
+
+    # prepare action log
+    action_log_path = OUT_DIR / "cls_res_action_log.jsonl"
+    if action_log_path.exists():
+        action_log_path.unlink()
+
+    # iterate clusters (skip -1 initially)
+    cluster_keys = sorted([k for k in cluster_to_classids.keys() if k != -1])
+    cluster_keys += [-1]  # append noise at end
+    for cluster_label in cluster_keys:
+        class_ids = cluster_to_classids.get(cluster_label, [])
+        if not class_ids:
+            continue
+        print(f"[cluster] {cluster_label} -> {len(class_ids)} classes")
+        # build cluster block to pass to LLM
+        cluster_classes = []
+        for cid in class_ids:
+            c = all_classes.get(cid)
+            if not c:
+                continue
+            # compact members
+            members_compact = [compact_member_info(m) for m in c.get("members", [])]
+            cluster_classes.append({
+                "candidate_id": cid,
+                "class_label": c.get("class_label",""),
+                "class_description": c.get("class_description",""),
+                "class_type_hint": c.get("class_type_hint",""),
+                "class_group": c.get("class_group","TBD"),
+                "confidence": float(c.get("confidence",0.0)),
+                "evidence_excerpt": c.get("evidence_excerpt",""),
+                "member_ids": c.get("member_ids", []),
+                "members": members_compact
+            })
+        cluster_block = json.dumps(cluster_classes, ensure_ascii=False, indent=2)
+        # safer substitution: do not use str.format which treats braces as placeholders
+        prompt = CLSRES_PROMPT_TEMPLATE.replace("{cluster_block}", cluster_block)
+
+        # log prompt
+        prompt_path = RAW_LLM_DIR / f"cluster_{cluster_label}_prompt.txt"
+        prompt_path.write_text(prompt, encoding="utf-8")
+
+        # call LLM
+        raw_out = ""
+        try:
+            raw_out = call_llm(prompt)
+        except Exception as e:
+            print(f"[warning] LLM call failed for cluster {cluster_label}: {e}")
+            raw_out = ""
+
+        # write raw output
+        raw_path = RAW_LLM_DIR / f"cluster_{cluster_label}_llm_raw.txt"
+        raw_path.write_text(raw_out, encoding="utf-8")
+
+        # try parse/sanitize
+        parsed = sanitize_json_like(raw_out)
+        if parsed is None:
+            # if cluster is singletons, consider no-op; else log and skip
+            print(f"[warn] failed to parse LLM output for cluster {cluster_label}; skipping automated actions for this cluster.")
+            # still write a decision file with raw output
+            dec_path = OUT_DIR / f"cluster_{cluster_label}_decisions.json"
+            dec_path.write_text(json.dumps({"cluster_label": cluster_label, "raw_llm": raw_out}, ensure_ascii=False, indent=2), encoding="utf-8")
+            continue
+
+        # execute parsed function list in order
+        decisions = []
+        for step in parsed:
+            if not isinstance(step, dict): continue
+            fn = step.get("function")
+            args = step.get("args", {}) or {}
+            try:
+                if fn == "merge_classes":
+                    cids = args.get("class_ids", [])
+                    new_name = args.get("new_name")
+                    new_desc = args.get("new_description")
+                    new_type = args.get("new_class_type_hint")
+                    # validate provided class ids: ensure they are in this cluster or globally present
+                    valid_cids = [cid for cid in cids if cid in all_classes]
+                    if not valid_cids:
+                        raise ValueError("no valid class_ids for merge")
+                    new_cid = execute_merge_classes(all_classes, valid_cids, new_name, new_desc, new_type)
+                    decisions.append({"action":"merge_classes","input_class_ids": valid_cids, "result_class_id": new_cid})
+                elif fn == "create_class":
+                    name = args.get("name")
+                    desc = args.get("description")
+                    t = args.get("class_type_hint")
+                    mids = args.get("member_ids", []) or []
+                    # filter mids to known entity ids
+                    mids_valid = [m for m in mids if m in id_to_entity]
+                    new_cid = execute_create_class(all_classes, name, desc, t, mids_valid, id_to_entity)
+                    decisions.append({"action":"create_class","result_class_id": new_cid, "member_ids_added": mids_valid})
+                elif fn == "reassign_entities":
+                    eids = args.get("entity_ids", []) or []
+                    from_c = args.get("from_class_id")
+                    to_c = args.get("to_class_id")
+                    # ensure eids valid
+                    eids_valid = [e for e in eids if e in id_to_entity]
+                    # to_c must exist
+                    if to_c not in all_classes:
+                        raise ValueError(f"to_class_id {to_c} not found")
+                    execute_reassign_entities(all_classes, eids_valid, from_c, to_c, id_to_entity)
+                    decisions.append({"action":"reassign_entities","entity_ids": eids_valid, "from": from_c, "to": to_c})
+                elif fn == "modify_class":
+                    cid = args.get("class_id")
+                    new_name = args.get("new_name")
+                    new_desc = args.get("new_description")
+                    new_type = args.get("new_class_type_hint")
+                    new_group = args.get("new_class_group")
+                    execute_modify_class(all_classes, cid, new_name, new_desc, new_type, new_group)
+                    decisions.append({"action":"modify_class","class_id": cid, "new_name": new_name, "new_class_group": new_group})
+                else:
+                    # unknown function -> skip
+                    decisions.append({"action":"skip_unknown","raw": step})
+            except Exception as e:
+                decisions.append({"action":"error_executing","function": fn, "error": str(e), "input": step})
+
+        # write decisions file for this cluster
+        dec_path = OUT_DIR / f"cluster_{cluster_label}_decisions.json"
+        dec_obj = {
+            "cluster_label": cluster_label,
+            "cluster_classes": cluster_classes,
+            "llm_raw": raw_out,
+            "parsed_steps": parsed,
+            "executed_decisions": decisions,
+            "timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+        }
+        dec_path.write_text(json.dumps(dec_obj, ensure_ascii=False, indent=2), encoding="utf-8")
+
+        # append to action log
+        with open(action_log_path, "a", encoding="utf-8") as fh:
+            fh.write(json.dumps(dec_obj, ensure_ascii=False) + "\n")
+
+    # After all clusters processed: write final classes output
+    final_classes = list(all_classes.values())
+    out_json = OUT_DIR / "final_classes_resolved.json"
+    out_jsonl = OUT_DIR / "final_classes_resolved.jsonl"
+    out_json.write_text(json.dumps(final_classes, ensure_ascii=False, indent=2), encoding="utf-8")
+    with open(out_jsonl, "w", encoding="utf-8") as fh:
+        for c in final_classes:
+            fh.write(json.dumps(c, ensure_ascii=False) + "\n")
+    print(f"[done] wrote final resolved classes -> {out_json}  (count={len(final_classes)})")
+    print(f"[done] action log -> {action_log_path}")
+
+if __name__ == "__main__":
+    classres_main()
+
+
+
+#endregion#? Cls Res V3
+#?#########################  End  ##########################
+
+
+
+
 
 
 
@@ -9044,12 +13296,6 @@ print("Done.")
 
 
 
-
-#?######################### Start ##########################
-#region:#?   
-
-#endregion#? 
-#?#########################  End  ##########################
 
 
 

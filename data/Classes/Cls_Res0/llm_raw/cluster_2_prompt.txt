@@ -1,0 +1,141 @@
+
+You are a careful class resolver assistant.
+Input: a set of candidate classes (with metadata) that appear to belong to the same cluster.
+Your job: produce an ordered sequence of function calls (JSON array) that, if executed in order, will best resolve duplicates, ambiguous labels, and mis-assigned members in this cluster.
+
+IMPORTANT CONSERVATISM RULE
+- Only order a function if a real change is necessary.
+- If a class (or entity assignment) is already correct and coherent, DO NOT order any function for it.
+- It is valid and encouraged to return an EMPTY ARRAY [] if no changes are needed for this cluster.
+- Do NOT “clean up”, rephrase, or reorganize classes unless there is a concrete semantic problem.
+
+
+-- Important:
+- Return ONLY valid JSON: an array of objects.
+- Each object must have:
+   - "function": one of ["merge_classes","create_class","reassign_entities","modify_class"]
+   - "args": an object with named arguments (see below).
+
+-- Allowed functions and required args:
+1) merge_classes: args = {
+      "class_ids": [<existing_class_ids>],
+      "new_name": <string or null>,
+      "new_description": <string or null>,
+      "new_class_type_hint": <string or null>
+   }
+   Semantics: create a single merged class from the union of members.
+
+2) create_class: args = {
+      "name": <string>,
+      "description": <string or null>,
+      "class_type_hint": <string or null>,
+      "member_ids": [<entity ids>]  # optional
+   }
+
+3) reassign_entities: args = {
+      "entity_ids": [<entity ids>],
+      "from_class_id": <existing_class_id or null>,
+      "to_class_id": <existing_or_new_class_id>
+   }
+
+4) modify_class: args = {
+      "class_id": <existing_class_id>,
+      "new_name": <string or null>,
+      "new_description": <string or null>,
+      "new_class_type_hint": <string or null>
+   }
+
+-- Validation rules I will apply after you respond:
+- I will only accept entity ids that are present in the provided member lists.
+- I will only accept class_ids that exist in the provided cluster (except 'to_class_id' for create_class results where I'll use the returned new id).
+- I will ignore any function objects that are malformed.
+
+-- Strategy notes:
+- Prefer merging obviously-duplicate classes (same meaning, small label variation).
+- Prefer reassigning mis-assigned members instead of making broad classes.
+- If two classes have substantial overlapping members and complementary descriptions, merge them and set an inclusive name.
+- Be conservative: if uncertain, create a new narrow class rather than forcing a broad change.
+
+-- Input CLASSES (each includes: candidate_id, class_label, class_description, class_type_hint, confidence, evidence_excerpt, member_ids, members [full member objects]):
+[
+  {
+    "candidate_id": "ClsC_ba97abc2",
+    "class_label": "External Corrosion",
+    "class_description": "Corrosion mechanisms affecting external surfaces, including underground or submerged systems and beneath insulation.",
+    "class_type_hint": "Damage Mechanism",
+    "confidence": 0.85,
+    "evidence_excerpt": "Corrosion on external surfaces and beneath insulation.",
+    "member_ids": [
+      "En_9574d8b7",
+      "En_d504ed6b"
+    ],
+    "members": [
+      {
+        "id": "En_9574d8b7",
+        "entity_name": "external corrosion",
+        "entity_description": "Corrosion occurring on the outer surfaces of underground or submerged metallic piping systems.",
+        "entity_type_hint": "DamageMechanism"
+      },
+      {
+        "id": "En_d504ed6b",
+        "entity_name": "corrosion under thermal insulation",
+        "entity_description": "Corrosion that occurs beneath insulation materials, often exacerbated by trapped moisture.",
+        "entity_type_hint": "DamageMechanism"
+      }
+    ]
+  },
+  {
+    "candidate_id": "ClsC_138bcce4",
+    "class_label": "High-Temperature Corrosion",
+    "class_description": "Corrosion mechanisms occurring at elevated temperatures, including oxidation and sulfidation.",
+    "class_type_hint": "Damage Mechanism",
+    "confidence": 0.9,
+    "evidence_excerpt": "Corrosion at high temperatures, affecting material integrity.",
+    "member_ids": [
+      "En_56c0bd49",
+      "En_fefc46ef",
+      "En_baec7c0b"
+    ],
+    "members": [
+      {
+        "id": "En_56c0bd49",
+        "entity_name": "oxidation",
+        "entity_description": "A chemical reaction that stainless steels resist due to their alloy content.",
+        "entity_type_hint": "DamageMechanism"
+      },
+      {
+        "id": "En_fefc46ef",
+        "entity_name": "sulfidation",
+        "entity_description": "A chemical reaction that stainless steels resist due to their alloy content.",
+        "entity_type_hint": "DamageMechanism"
+      },
+      {
+        "id": "En_baec7c0b",
+        "entity_name": "High Temperature Corrosion",
+        "entity_description": "Corrosion occurring at elevated temperatures, affecting material integrity.",
+        "entity_type_hint": "DamageMechanism"
+      }
+    ]
+  },
+  {
+    "candidate_id": "ClsC_8b2d4c9d",
+    "class_label": "Heat Affected Zone",
+    "class_description": "The Heat Affected Zone (HAZ) is the area of base metal near a weld that has not melted but has undergone changes in microstructure and mechanical properties due to welding heat.",
+    "class_type_hint": "Component",
+    "confidence": 0.95,
+    "evidence_excerpt": "",
+    "member_ids": [
+      "En_1f762ea0"
+    ],
+    "members": [
+      {
+        "id": "En_1f762ea0",
+        "entity_name": "Heat Affected Zone (HAZ)",
+        "entity_description": "The portion of the base metal adjacent to a weld with altered microstructure and properties due to welding heat.",
+        "entity_type_hint": "Component"
+      }
+    ]
+  }
+]
+
+Return the ordered function list JSON array only.

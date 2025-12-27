@@ -1,0 +1,167 @@
+
+You are a careful class resolver assistant.
+Input: a set of candidate classes (with metadata) that appear to belong to the same cluster.
+Your job: produce an ordered sequence of function calls (JSON array) that, if executed in order, will best resolve duplicates, ambiguous labels, and mis-assigned members in this cluster.
+
+IMPORTANT CONSERVATISM RULE
+- Only order a function if a real change is necessary.
+- If a class (or entity assignment) is already correct and coherent, DO NOT order any function for it.
+- It is valid and encouraged to return an EMPTY ARRAY [] if no changes are needed for this cluster.
+- Do NOT “clean up”, rephrase, or reorganize classes unless there is a concrete semantic problem.
+
+
+-- Important:
+- Return ONLY valid JSON: an array of objects.
+- Each object must have:
+   - "function": one of ["merge_classes","create_class","reassign_entities","modify_class"]
+   - "args": an object with named arguments (see below).
+
+-- Allowed functions and required args:
+1) merge_classes: args = {
+      "class_ids": [<existing_class_ids>],
+      "new_name": <string or null>,
+      "new_description": <string or null>,
+      "new_class_type_hint": <string or null>
+   }
+   Semantics: create a single merged class from the union of members.
+
+2) create_class: args = {
+      "name": <string>,
+      "description": <string or null>,
+      "class_type_hint": <string or null>,
+      "member_ids": [<entity ids>]  # optional
+   }
+
+3) reassign_entities: args = {
+      "entity_ids": [<entity ids>],
+      "from_class_id": <existing_class_id or null>,
+      "to_class_id": <existing_or_new_class_id>
+   }
+
+4) modify_class: args = {
+      "class_id": <existing_class_id>,
+      "new_name": <string or null>,
+      "new_description": <string or null>,
+      "new_class_type_hint": <string or null>
+   }
+
+-- Validation rules I will apply after you respond:
+- I will only accept entity ids that are present in the provided member lists.
+- I will only accept class_ids that exist in the provided cluster (except 'to_class_id' for create_class results where I'll use the returned new id).
+- I will ignore any function objects that are malformed.
+
+-- Strategy notes:
+- Prefer merging obviously-duplicate classes (same meaning, small label variation).
+- Prefer reassigning mis-assigned members instead of making broad classes.
+- If two classes have substantial overlapping members and complementary descriptions, merge them and set an inclusive name.
+- Be conservative: if uncertain, create a new narrow class rather than forcing a broad change.
+
+-- Input CLASSES (each includes: candidate_id, class_label, class_description, class_type_hint, confidence, evidence_excerpt, member_ids, members [full member objects]):
+[
+  {
+    "candidate_id": "ClsC_1e71775d",
+    "class_label": "Corrosive Acids",
+    "class_description": "Highly corrosive acids requiring specific materials for safe handling and storage.",
+    "class_type_hint": "Material",
+    "confidence": 0.9,
+    "evidence_excerpt": "require specific materials to safely manage these corrosive substances.",
+    "member_ids": [
+      "En_cad09535",
+      "En_99c85915"
+    ],
+    "members": [
+      {
+        "id": "En_cad09535",
+        "entity_name": "sulfuric acid",
+        "entity_description": "A strong acid used in various industrial processes, requiring specific materials for safe handling.",
+        "entity_type_hint": "Material"
+      },
+      {
+        "id": "En_99c85915",
+        "entity_name": "hydrofluoric acid",
+        "entity_description": "A highly corrosive acid used in industrial applications, requiring special materials for safe handling and storage.",
+        "entity_type_hint": "Material"
+      }
+    ]
+  },
+  {
+    "candidate_id": "ClsC_449087ba",
+    "class_label": "Amine Treating Chemicals",
+    "class_description": "Chemicals used in amine treating processes to remove H2S and CO2 from hydrocarbon streams.",
+    "class_type_hint": "Chemical",
+    "confidence": 0.95,
+    "evidence_excerpt": "used in amine treating to remove H2S and CO2.",
+    "member_ids": [
+      "En_b6489a63",
+      "En_a38530be",
+      "En_24fd3367"
+    ],
+    "members": [
+      {
+        "id": "En_b6489a63",
+        "entity_name": "diethanolamine (DEA)",
+        "entity_description": "A chemical used in amine treating to remove H2S and CO2 from hydrocarbon streams.",
+        "entity_type_hint": "Chemical"
+      },
+      {
+        "id": "En_a38530be",
+        "entity_name": "methyldiethanolamine",
+        "entity_description": "A chemical used in amine treating to remove H2S and CO2 from hydrocarbon streams.",
+        "entity_type_hint": "Material"
+      },
+      {
+        "id": "En_24fd3367",
+        "entity_name": "monoethanolamine",
+        "entity_description": "A chemical used in amine treating to remove H2S and CO2 from hydrocarbon streams.",
+        "entity_type_hint": "Material"
+      }
+    ]
+  },
+  {
+    "candidate_id": "ClsC_fe7cee99",
+    "class_label": "Sour Water Treatment",
+    "class_description": "Processes and substances involved in the treatment of sour water containing hydrogen sulfide.",
+    "class_type_hint": "Process",
+    "confidence": 0.88,
+    "evidence_excerpt": "treating sour water by removing contaminants.",
+    "member_ids": [
+      "En_da73a6e7",
+      "En_3b78069f"
+    ],
+    "members": [
+      {
+        "id": "En_da73a6e7",
+        "entity_name": "sour water",
+        "entity_description": "Water containing hydrogen sulfide and other sulfur compounds, often requiring treatment.",
+        "entity_type_hint": "Environment"
+      },
+      {
+        "id": "En_3b78069f",
+        "entity_name": "sour water stripper",
+        "entity_description": "A process unit used to remove hydrogen sulfide and ammonia from sour water.",
+        "entity_type_hint": "ProcessUnit"
+      }
+    ]
+  },
+  {
+    "candidate_id": "ClsC_92dfb983",
+    "class_label": "Vacuum Distillation Unit",
+    "class_description": "A process unit designed to separate components at reduced pressure to lower their boiling points.",
+    "class_type_hint": "Process Unit",
+    "confidence": 0.95,
+    "evidence_excerpt": "",
+    "member_ids": [
+      "En_c71fc6d7"
+    ],
+    "members": [
+      {
+        "id": "En_c71fc6d7",
+        "entity_name": "vacuum distillation unit",
+        "entity_description": "A process unit that separates components at reduced pressure to lower boiling points.",
+        "entity_type_hint": "ProcessUnit"
+      }
+    ]
+  }
+]
+
+Return the ordered function list JSON array only.

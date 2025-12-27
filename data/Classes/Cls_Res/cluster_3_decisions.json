@@ -1,0 +1,251 @@
+{
+  "cluster_label": 3,
+  "cluster_classes": [
+    {
+      "candidate_id": "ClsC_8539b276",
+      "class_label": "Hydrogen-Induced Cracking",
+      "class_description": "Cracking mechanisms in metals caused by hydrogen, including SOHIC and HIC.",
+      "class_type_hint": "Damage Mechanism",
+      "class_group": "TBD",
+      "confidence": 0.85,
+      "evidence_excerpt": "Cracking in hydrogen-exposed steel, often near welds.",
+      "member_ids": [
+        "Can_04c94b79",
+        "En_d0d2d7c7"
+      ],
+      "members": [
+        {
+          "id": "Can_04c94b79",
+          "entity_name": "Stress Oriented Hydrogen Induced Cracking (SOHIC)",
+          "entity_description": "A type of cracking in steel caused by the presence of hydrogen and stress, often near welds, characterized by cracks aligned nearly perpendicular to stress.",
+          "entity_type_hint": "DamageMechanism"
+        },
+        {
+          "id": "En_d0d2d7c7",
+          "entity_name": "Hydrogen Induced Cracking (HIC)",
+          "entity_description": "Stepwise internal cracks in metal connecting hydrogen blisters, occurring without external stress.",
+          "entity_type_hint": "DamageMechanism"
+        }
+      ]
+    },
+    {
+      "candidate_id": "ClsC_85408f3d",
+      "class_label": "Sulfide and Acid Stress Cracking",
+      "class_description": "Cracking mechanisms in metals due to sulfide and acid environments, including sulfide stress cracking and polythionic acid stress corrosion cracking.",
+      "class_type_hint": "Damage Mechanism",
+      "class_group": "TBD",
+      "confidence": 0.82,
+      "evidence_excerpt": "Cracking in sulfide and acid environments.",
+      "member_ids": [
+        "En_a9e4aa90",
+        "En_c7aaaee0"
+      ],
+      "members": [
+        {
+          "id": "En_a9e4aa90",
+          "entity_name": "sulfide stress cracking",
+          "entity_description": "A form of hydrogen embrittlement that occurs in metals exposed to sulfide environments.",
+          "entity_type_hint": "DamageMechanism"
+        },
+        {
+          "id": "En_c7aaaee0",
+          "entity_name": "polythionic acid stress corrosion cracking",
+          "entity_description": "A type of corrosion that affects austenitic stainless steels and other austenitic alloys during shutdowns.",
+          "entity_type_hint": "DamageMechanism"
+        }
+      ]
+    },
+    {
+      "candidate_id": "ClsC_6a15b766",
+      "class_label": "Environmental Cracking",
+      "class_description": "Cracking mechanisms in metals due to environmental factors, including wet H2S environments and carbon steel weldments.",
+      "class_type_hint": "Damage Mechanism",
+      "class_group": "TBD",
+      "confidence": 0.8,
+      "evidence_excerpt": "Cracking in corrosive environments.",
+      "member_ids": [
+        "En_19cc48f3",
+        "En_1a88e9ed"
+      ],
+      "members": [
+        {
+          "id": "En_19cc48f3",
+          "entity_name": "cracking in wet H2S environments",
+          "entity_description": "Cracking of pressure vessels in environments containing wet hydrogen sulfide.",
+          "entity_type_hint": "DamageMechanism"
+        },
+        {
+          "id": "En_1a88e9ed",
+          "entity_name": "environmental cracking of carbon steel weldments",
+          "entity_description": "Cracking that occurs in carbon steel weldments due to environmental factors in corrosive environments.",
+          "entity_type_hint": "DamageMechanism"
+        }
+      ]
+    },
+    {
+      "candidate_id": "ClsC_41306787",
+      "class_label": "General Stress Corrosion Cracking",
+      "class_description": "Cracking mechanisms in materials due to stress and corrosive environments, including stress corrosion cracking and environment assisted cracking.",
+      "class_type_hint": "Damage Mechanism",
+      "class_group": "TBD",
+      "confidence": 0.83,
+      "evidence_excerpt": "Cracking due to stress and corrosive environments.",
+      "member_ids": [
+        "En_a608496c",
+        "En_038f5dc2"
+      ],
+      "members": [
+        {
+          "id": "En_a608496c",
+          "entity_name": "stress corrosion cracking",
+          "entity_description": "A failure mechanism where cracks form in a material due to the combined effects of tensile stress and a corrosive environment.",
+          "entity_type_hint": "DamageMechanism"
+        },
+        {
+          "id": "En_038f5dc2",
+          "entity_name": "Environment Assisted Cracking",
+          "entity_description": "Cracking of materials facilitated by environmental conditions.",
+          "entity_type_hint": "DamageMechanism"
+        }
+      ]
+    },
+    {
+      "candidate_id": "ClsC_74df9470",
+      "class_label": "Material Damage Mechanisms",
+      "class_description": "Mechanisms causing material degradation, including mechanical, metallurgical, and thickness loss processes.",
+      "class_type_hint": "Failure Mechanism",
+      "class_group": "TBD",
+      "confidence": 0.85,
+      "evidence_excerpt": "The mechanisms are divided into sections: a) Mechanical and Metallurgical Failure, b) Uniform or Localized Loss of Thickness.",
+      "member_ids": [
+        "En_6a5f3538",
+        "En_8ed6cfa3"
+      ],
+      "members": [
+        {
+          "id": "En_6a5f3538",
+          "entity_name": "Mechanical and Metallurgical Failure",
+          "entity_description": "Failure mechanisms related to mechanical and metallurgical processes in various industries.",
+          "entity_type_hint": "DamageMechanism"
+        },
+        {
+          "id": "En_8ed6cfa3",
+          "entity_name": "Uniform or Localized Loss of Thickness",
+          "entity_description": "A damage mechanism involving the reduction of material thickness, either uniformly or in specific areas.",
+          "entity_type_hint": "DamageMechanism"
+        }
+      ]
+    }
+  ],
+  "llm_raw": "```json\n[\n  {\n    \"modify_class\": {\n      \"class_id\": \"ClsC_8539b276\",\n      \"new_name\": null,\n      \"new_description\": null,\n      \"new_class_type_hint\": null,\n      \"new_class_group\": \"Environmental and Stress Cracking\"\n    }\n  },\n  {\n    \"modify_class\": {\n      \"class_id\": \"ClsC_85408f3d\",\n      \"new_name\": null,\n      \"new_description\": null,\n      \"new_class_type_hint\": null,\n      \"new_class_group\": \"Environmental and Stress Cracking\"\n    }\n  },\n  {\n    \"modify_class\": {\n      \"class_id\": \"ClsC_6a15b766\",\n      \"new_name\": null,\n      \"new_description\": null,\n      \"new_class_type_hint\": null,\n      \"new_class_group\": \"Environmental and Stress Cracking\"\n    }\n  },\n  {\n    \"modify_class\": {\n      \"class_id\": \"ClsC_41306787\",\n      \"new_name\": null,\n      \"new_description\": null,\n      \"new_class_type_hint\": null,\n      \"new_class_group\": \"Environmental and Stress Cracking\"\n    }\n  },\n  {\n    \"modify_class\": {\n      \"class_id\": \"ClsC_74df9470\",\n      \"new_name\": null,\n      \"new_description\": null,\n      \"new_class_type_hint\": null,\n      \"new_class_group\": \"Material Damage Mechanisms\"\n    }\n  }\n]\n```",
+  "parsed_steps": [
+    {
+      "modify_class": {
+        "class_id": "ClsC_8539b276",
+        "new_name": null,
+        "new_description": null,
+        "new_class_type_hint": null,
+        "new_class_group": "Environmental and Stress Cracking"
+      }
+    },
+    {
+      "modify_class": {
+        "class_id": "ClsC_85408f3d",
+        "new_name": null,
+        "new_description": null,
+        "new_class_type_hint": null,
+        "new_class_group": "Environmental and Stress Cracking"
+      }
+    },
+    {
+      "modify_class": {
+        "class_id": "ClsC_6a15b766",
+        "new_name": null,
+        "new_description": null,
+        "new_class_type_hint": null,
+        "new_class_group": "Environmental and Stress Cracking"
+      }
+    },
+    {
+      "modify_class": {
+        "class_id": "ClsC_41306787",
+        "new_name": null,
+        "new_description": null,
+        "new_class_type_hint": null,
+        "new_class_group": "Environmental and Stress Cracking"
+      }
+    },
+    {
+      "modify_class": {
+        "class_id": "ClsC_74df9470",
+        "new_name": null,
+        "new_description": null,
+        "new_class_type_hint": null,
+        "new_class_group": "Material Damage Mechanisms"
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "skip_unknown",
+      "raw": {
+        "modify_class": {
+          "class_id": "ClsC_8539b276",
+          "new_name": null,
+          "new_description": null,
+          "new_class_type_hint": null,
+          "new_class_group": "Environmental and Stress Cracking"
+        }
+      }
+    },
+    {
+      "action": "skip_unknown",
+      "raw": {
+        "modify_class": {
+          "class_id": "ClsC_85408f3d",
+          "new_name": null,
+          "new_description": null,
+          "new_class_type_hint": null,
+          "new_class_group": "Environmental and Stress Cracking"
+        }
+      }
+    },
+    {
+      "action": "skip_unknown",
+      "raw": {
+        "modify_class": {
+          "class_id": "ClsC_6a15b766",
+          "new_name": null,
+          "new_description": null,
+          "new_class_type_hint": null,
+          "new_class_group": "Environmental and Stress Cracking"
+        }
+      }
+    },
+    {
+      "action": "skip_unknown",
+      "raw": {
+        "modify_class": {
+          "class_id": "ClsC_41306787",
+          "new_name": null,
+          "new_description": null,
+          "new_class_type_hint": null,
+          "new_class_group": "Environmental and Stress Cracking"
+        }
+      }
+    },
+    {
+      "action": "skip_unknown",
+      "raw": {
+        "modify_class": {
+          "class_id": "ClsC_74df9470",
+          "new_name": null,
+          "new_description": null,
+          "new_class_type_hint": null,
+          "new_class_group": "Material Damage Mechanisms"
+        }
+      }
+    }
+  ],
+  "timestamp": "2025-12-27T01:15:29Z"
+}

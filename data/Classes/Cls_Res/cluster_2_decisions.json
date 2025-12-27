@@ -1,0 +1,155 @@
+{
+  "cluster_label": 2,
+  "cluster_classes": [
+    {
+      "candidate_id": "ClsC_04377676",
+      "class_label": "External Corrosion",
+      "class_description": "Corrosion mechanisms affecting external surfaces, including underground or submerged systems and beneath insulation.",
+      "class_type_hint": "Damage Mechanism",
+      "class_group": "TBD",
+      "confidence": 0.85,
+      "evidence_excerpt": "Corrosion on external surfaces and beneath insulation.",
+      "member_ids": [
+        "En_9574d8b7",
+        "En_d504ed6b"
+      ],
+      "members": [
+        {
+          "id": "En_9574d8b7",
+          "entity_name": "external corrosion",
+          "entity_description": "Corrosion occurring on the outer surfaces of underground or submerged metallic piping systems.",
+          "entity_type_hint": "DamageMechanism"
+        },
+        {
+          "id": "En_d504ed6b",
+          "entity_name": "corrosion under thermal insulation",
+          "entity_description": "Corrosion that occurs beneath insulation materials, often exacerbated by trapped moisture.",
+          "entity_type_hint": "DamageMechanism"
+        }
+      ]
+    },
+    {
+      "candidate_id": "ClsC_bc4e879e",
+      "class_label": "High-Temperature Corrosion",
+      "class_description": "Corrosion mechanisms occurring at elevated temperatures, including oxidation and sulfidation.",
+      "class_type_hint": "Damage Mechanism",
+      "class_group": "TBD",
+      "confidence": 0.9,
+      "evidence_excerpt": "Corrosion at high temperatures, affecting material integrity.",
+      "member_ids": [
+        "En_56c0bd49",
+        "En_fefc46ef",
+        "En_baec7c0b"
+      ],
+      "members": [
+        {
+          "id": "En_56c0bd49",
+          "entity_name": "oxidation",
+          "entity_description": "A chemical reaction that stainless steels resist due to their alloy content.",
+          "entity_type_hint": "DamageMechanism"
+        },
+        {
+          "id": "En_fefc46ef",
+          "entity_name": "sulfidation",
+          "entity_description": "A chemical reaction that stainless steels resist due to their alloy content.",
+          "entity_type_hint": "DamageMechanism"
+        },
+        {
+          "id": "En_baec7c0b",
+          "entity_name": "High Temperature Corrosion",
+          "entity_description": "Corrosion occurring at elevated temperatures, affecting material integrity.",
+          "entity_type_hint": "DamageMechanism"
+        }
+      ]
+    },
+    {
+      "candidate_id": "ClsC_427e52ef",
+      "class_label": "Heat Affected Zone",
+      "class_description": "The Heat Affected Zone (HAZ) is the area of base metal near a weld that has not melted but has undergone changes in microstructure and mechanical properties due to welding heat.",
+      "class_type_hint": "Component",
+      "class_group": "TBD",
+      "confidence": 0.95,
+      "evidence_excerpt": "",
+      "member_ids": [
+        "En_1f762ea0"
+      ],
+      "members": [
+        {
+          "id": "En_1f762ea0",
+          "entity_name": "Heat Affected Zone (HAZ)",
+          "entity_description": "The portion of the base metal adjacent to a weld with altered microstructure and properties due to welding heat.",
+          "entity_type_hint": "Component"
+        }
+      ]
+    }
+  ],
+  "llm_raw": "```json\n[\n  {\n    \"modify_class\": {\n      \"class_id\": \"ClsC_04377676\",\n      \"new_name\": null,\n      \"new_description\": null,\n      \"new_class_type_hint\": null,\n      \"new_class_group\": \"Corrosion Mechanisms\"\n    }\n  },\n  {\n    \"modify_class\": {\n      \"class_id\": \"ClsC_bc4e879e\",\n      \"new_name\": null,\n      \"new_description\": null,\n      \"new_class_type_hint\": null,\n      \"new_class_group\": \"Corrosion Mechanisms\"\n    }\n  },\n  {\n    \"modify_class\": {\n      \"class_id\": \"ClsC_427e52ef\",\n      \"new_name\": null,\n      \"new_description\": null,\n      \"new_class_type_hint\": null,\n      \"new_class_group\": \"Welding and Heat Affected Zones\"\n    }\n  }\n]\n```",
+  "parsed_steps": [
+    {
+      "modify_class": {
+        "class_id": "ClsC_04377676",
+        "new_name": null,
+        "new_description": null,
+        "new_class_type_hint": null,
+        "new_class_group": "Corrosion Mechanisms"
+      }
+    },
+    {
+      "modify_class": {
+        "class_id": "ClsC_bc4e879e",
+        "new_name": null,
+        "new_description": null,
+        "new_class_type_hint": null,
+        "new_class_group": "Corrosion Mechanisms"
+      }
+    },
+    {
+      "modify_class": {
+        "class_id": "ClsC_427e52ef",
+        "new_name": null,
+        "new_description": null,
+        "new_class_type_hint": null,
+        "new_class_group": "Welding and Heat Affected Zones"
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "skip_unknown",
+      "raw": {
+        "modify_class": {
+          "class_id": "ClsC_04377676",
+          "new_name": null,
+          "new_description": null,
+          "new_class_type_hint": null,
+          "new_class_group": "Corrosion Mechanisms"
+        }
+      }
+    },
+    {
+      "action": "skip_unknown",
+      "raw": {
+        "modify_class": {
+          "class_id": "ClsC_bc4e879e",
+          "new_name": null,
+          "new_description": null,
+          "new_class_type_hint": null,
+          "new_class_group": "Corrosion Mechanisms"
+        }
+      }
+    },
+    {
+      "action": "skip_unknown",
+      "raw": {
+        "modify_class": {
+          "class_id": "ClsC_427e52ef",
+          "new_name": null,
+          "new_description": null,
+          "new_class_type_hint": null,
+          "new_class_group": "Welding and Heat Affected Zones"
+        }
+      }
+    }
+  ],
+  "timestamp": "2025-12-27T01:15:27Z"
+}
