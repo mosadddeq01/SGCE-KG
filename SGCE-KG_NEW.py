@@ -6,11 +6,6 @@
 
 
 
-#!############################################# Start Chapter ##################################################
-#region:#!   SGCE-KG Generator
-
-
-
 
 #!############################################# Start Chapter ##################################################
 #region:#!   Entity Identification
@@ -1978,26 +1973,6 @@ if __name__ == "__main__":
 
 #endregion#? Entity Recognition V6 - Broader hint better prmpting
 #*#########################  End  ##########################
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -11232,7 +11207,7 @@ if __name__ == "__main__":
 
 
 
-#?######################### Start ##########################
+#*######################### Start ##########################
 #region:#?   Cls Res - Class Resolution
 
 
@@ -11783,7 +11758,7 @@ if __name__ == "__main__":
 
 
 #endregion#? Cls Res - Class Resolution
-#?#########################  End  ##########################
+#*#########################  End  ##########################
 
 
 
@@ -11791,7 +11766,7 @@ if __name__ == "__main__":
 
 
 
-#?######################### Start ##########################
+#*######################### Start ##########################
 #region:#?   Cls Res V2
 
 
@@ -12478,7 +12453,7 @@ if __name__ == "__main__":
 
 
 #endregion#? Cls Res V2
-#?#########################  End  ##########################
+#*#########################  End  ##########################
 
 
 
@@ -12488,7 +12463,7 @@ if __name__ == "__main__":
 
 
 
-#?######################### Start ##########################
+#*######################### Start ##########################
 #region:#?   Cls Res V3 
 
 
@@ -13279,7 +13254,7 @@ if __name__ == "__main__":
 
 
 #endregion#? Cls Res V3
-#?#########################  End  ##########################
+#*#########################  End  ##########################
 
 
 
@@ -13287,14 +13262,7 @@ if __name__ == "__main__":
 
 
 
-
-
-
-
-
-
-
-#?######################### Start ##########################
+#*######################### Start ##########################
 #region:#?   Cls Res V4 
 
 #!/usr/bin/env python3
@@ -14279,14 +14247,14 @@ if __name__ == "__main__":
     classres_main()
 
 #endregion#? Cls Res V4
-#?#########################  End  ##########################
+#*#########################  End  ##########################
 
 
 
 
 
 
-#?######################### Start ##########################
+#*######################### Start ##########################
 #region:#?   Cls Res V5  
 
 #!/usr/bin/env python3
@@ -15332,14 +15300,14 @@ if __name__ == "__main__":
     classres_main()
 
 #endregion#? Cls Res V5
-#?#########################  End  ##########################
+#*#########################  End  ##########################
 
 
 
 
 
 
-#?######################### Start ##########################
+#*######################### Start ##########################
 #region:#?   Cls Res V6  - Split added - Remark for more expressevity
 
 #!/usr/bin/env python3
@@ -16548,7 +16516,7 @@ if __name__ == "__main__":
     classres_main()
 
 #endregion#? Cls Res V6
-#?#########################  End  ##########################
+#*#########################  End  ##########################
 
 
 
@@ -18235,6 +18203,1608 @@ def run_pipeline_iteratively():
 
 
 
+
+#!############################################# Start Chapter ##################################################
+#region:#!   Relation Identification
+
+
+
+
+#*######################### Start ##########################
+#region:#?   Rel Rec v1
+
+
+#!/usr/bin/env python3
+"""
+Relation Recognition (Rel Rec)
+
+- Reads:
+    - entities_with_class.jsonl
+    - chunks_sentence.jsonl
+- For each chunk, finds entities that occur in that chunk.
+- Calls an LLM (OpenAI Responses API) to extract directed relations between those entities.
+- Writes:
+    - relations_raw.jsonl  (one JSON object per relation instance)
+
+Requirements:
+    pip install openai
+
+Environment:
+    export OPENAI_API_KEY="sk-..."
+
+Adjust paths & MODEL_NAME as needed.
+"""
+
+import argparse
+import json
+import logging
+import uuid
+from collections import defaultdict
+from typing import Any, Dict, Iterable, List, Tuple
+
+from openai import OpenAI
+
+# -----------------------------------------------------------------------------
+# Config
+# -----------------------------------------------------------------------------
+
+MODEL_NAME = "gpt-5.1"   # or any other model you use
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(message)s",
+)
+logger = logging.getLogger(__name__)
+
+
+# -----------------------------------------------------------------------------
+# Data loading
+# -----------------------------------------------------------------------------
+
+def load_entities_by_chunk(
+    entities_path: str,
+) -> Tuple[Dict[str, List[Dict[str, Any]]], Dict[str, Dict[str, Any]]]:
+    """
+    Load entities_with_class.jsonl and build:
+
+    - entities_by_chunk:  chunk_id -> list of entity dicts (for that chunk)
+    - entities_by_id:     entity_id -> entity dict (global)
+
+    Each entity dict contains:
+        entity_id, entity_name, entity_description, entity_type_hint,
+        class_id, class_label, class_group, chunk_ids
+    """
+    entities_by_chunk: Dict[str, List[Dict[str, Any]]] = defaultdict(list)
+    entities_by_id: Dict[str, Dict[str, Any]] = {}
+
+    logger.info("Loading entities from %s", entities_path)
+    with open(entities_path, "r", encoding="utf-8") as f:
+        for line in f:
+            line = line.strip()
+            if not line:
+                continue
+            rec = json.loads(line)
+
+            entity_id = rec["entity_id"]
+            ent = rec["entity"]
+
+            entity_record = {
+                "entity_id": entity_id,
+                "entity_name": ent.get("entity_name"),
+                "entity_description": ent.get("entity_description"),
+                "entity_type_hint": ent.get("entity_type_hint"),
+                "class_id": rec.get("class_id"),
+                "class_label": rec.get("class_label"),
+                "class_group": rec.get("class_group"),
+                "chunk_ids": ent.get("chunk_id", []),
+            }
+
+            entities_by_id[entity_id] = entity_record
+
+            for ch_id in entity_record["chunk_ids"]:
+                entities_by_chunk[ch_id].append(entity_record)
+
+    logger.info(
+        "Loaded %d entities, mapped to %d chunks",
+        len(entities_by_id),
+        len(entities_by_chunk),
+    )
+    return entities_by_chunk, entities_by_id
+
+
+def iter_chunks(chunks_path: str) -> Iterable[Dict[str, Any]]:
+    """
+    Yield chunks from chunks_sentence.jsonl.
+
+    Expected fields include (example):
+        {
+          "id": "Ch_000001",
+          "ref_index": 0,
+          "ref_title": "2.1 Standards",
+          "text": "...",
+          ...
+        }
+    """
+    logger.info("Streaming chunks from %s", chunks_path)
+    with open(chunks_path, "r", encoding="utf-8") as f:
+        for line in f:
+            line = line.strip()
+            if not line:
+                continue
+            yield json.loads(line)
+
+
+# -----------------------------------------------------------------------------
+# LLM Prompt & Call
+# -----------------------------------------------------------------------------
+
+REL_REC_INSTRUCTIONS = """
+You are an expert relation extractor for a technical, industrial knowledge graph.
+
+You are given:
+- A single text chunk from a technical document.
+- A list of resolved entities that appear in that chunk.
+  Each entity has: entity_id, entity_name, entity_description, class_label, class_group.
+
+Your task:
+- Identify ZERO or MORE directed relations between the entities in this chunk.
+- A relation is a meaningful, text-supported connection between a HEAD (subject) entity
+  and a TAIL (object) entity.
+- The graph is DIRECTED. You must choose the appropriate subject_entity_id and object_entity_id
+  based on how the text is written.
+
+Very important:
+- DO NOT invent new entities. Only use the provided entity_ids.
+- Prefer high recall but stay grounded in the text.
+- Do NOT include information as an entity property here; everything non-intrinsic
+  should go on the relation instance as qualifiers.
+
+Relation naming:
+- relation_name should be a short, normalized phrase describing the core semantic relation,
+  for example: "causes", "leads_to", "occurs_in", "is_part_of", "used_for", "located_in".
+- relation_surface should be the exact phrase or minimal text span from the chunk that expresses
+  the relation (e.g., "leads to", "results in", "is part of").
+- DO NOT put qualifiers (e.g., "at high temperature", "during startup", "may") into relation_name.
+  Those must go into the qualifiers dict.
+
+Relation hint type:
+- rel_hint_type is a coarse type chosen from:
+  ["causal", "structural", "procedural", "temporal", "descriptive", "conditional", "other"].
+
+Qualifiers:
+For each relation, fill this dict (values are strings or null):
+
+  "qualifiers": {
+    "TemporalQualifier": "... or null",
+    "SpatialQualifier": "... or null",
+    "OperationalConstraint": "... or null",
+    "ConditionExpression": "... or null",
+    "UncertaintyQualifier": "... or null",
+    "CausalHint": "... or null",
+    "LogicalMarker": "... or null"
+  }
+
+Meanings:
+- TemporalQualifier: when something happens (during heating, after 1000h, at 25°C).
+- SpatialQualifier: where (near weld, in HAZ, at inner bore).
+- OperationalConstraint: operating conditions (elevated temperature, high load, startup).
+- ConditionExpression: conditional or threshold clauses (e.g. "temperature > 450°C",
+  "if hydrogen partial pressure is high").
+- UncertaintyQualifier: may, likely, suspected, possible.
+- CausalHint: lexical causal phrase beyond the main verb ("due to", "caused by", "results from").
+- LogicalMarker: if, when, unless, despite, however.
+
+Other fields:
+- confidence: float between 0 and 1 (how sure you are).
+- rel_desc: 1–2 sentence human-readable description of the relation.
+- resolution_context: short text to help later relation resolution / canonicalization
+  (e.g., how you chose the direction, or how this phrasing relates to other paraphrases).
+- justification: short explanation of how the chunk text supports this relation.
+- remark: optional free-text comment (or null) for anything noteworthy.
+
+Output format:
+- You MUST output a single JSON object with exactly one top-level key "relations":
+  {
+    "relations": [ ...relation objects... ]
+  }
+
+- Each relation object MUST have this exact shape (all keys present, use null if not applicable):
+
+  {
+    "subject_entity_id": "En_...",
+    "object_entity_id": "En_...",
+    "relation_surface": "string",
+    "relation_name": "string",
+    "rel_desc": "string",
+    "rel_hint_type": "causal | structural | procedural | temporal | descriptive | conditional | other",
+    "confidence": 0.0,
+    "resolution_context": "string or null",
+    "justification": "string or null",
+    "remark": "string or null",
+    "qualifiers": {
+      "TemporalQualifier": "string or null",
+      "SpatialQualifier": "string or null",
+      "OperationalConstraint": "string or null",
+      "ConditionExpression": "string or null",
+      "UncertaintyQualifier": "string or null",
+      "CausalHint": "string or null",
+      "LogicalMarker": "string or null"
+    },
+    "evidence_excerpt": "short excerpt from the chunk text (<= 40 words)"
+  }
+
+- subject_entity_id and object_entity_id MUST be chosen from the provided entities.
+- If there are no relations, return:  {"relations": []}
+
+Be concise but complete. At most 20 relations per chunk.
+Return ONLY valid JSON. No extra commentary.
+"""
+
+
+def call_llm_extract_relations_for_chunk(
+    client: OpenAI,
+    model: str,
+    chunk: Dict[str, Any],
+    entities: List[Dict[str, Any]],
+) -> List[Dict[str, Any]]:
+    """
+    Call the LLM using the Responses API to extract relations for a single chunk.
+
+    Returns a list of relation dicts (without relation_id, chunk_id, or class info added yet).
+    """
+    if not entities or len(entities) < 2:
+        return []
+
+    payload = {
+        "chunk_id": chunk["id"],
+        "chunk_text": chunk.get("text", ""),
+        "entities": [
+            {
+                "entity_id": e["entity_id"],
+                "entity_name": e["entity_name"],
+                "entity_description": e["entity_description"],
+                "class_label": e["class_label"],
+                "class_group": e["class_group"],
+            }
+            for e in entities
+        ],
+    }
+
+    try:
+        response = client.responses.create(
+            model=model,
+            reasoning={"effort": "low"},
+            input=[
+                {
+                    "role": "developer",
+                    "content": REL_REC_INSTRUCTIONS,
+                },
+                {
+                    "role": "user",
+                    "content": json.dumps(payload, ensure_ascii=False),
+                },
+            ],
+        )
+    except Exception as e:
+        logger.error("LLM call failed for chunk %s: %s", chunk["id"], e)
+        return []
+
+    raw_text = response.output_text
+    if not raw_text:
+        logger.warning("Empty response for chunk %s", chunk["id"])
+        return []
+
+    try:
+        parsed = json.loads(raw_text)
+    except json.JSONDecodeError:
+        logger.error(
+            "Failed to parse JSON for chunk %s. Raw response:\n%s",
+            chunk["id"],
+            raw_text,
+        )
+        return []
+
+    relations = parsed.get("relations", [])
+    if not isinstance(relations, list):
+        logger.error(
+            "Expected 'relations' to be a list for chunk %s. Got: %r",
+            chunk["id"],
+            type(relations),
+        )
+        return []
+
+    return relations
+
+
+# -----------------------------------------------------------------------------
+# Main pipeline
+# -----------------------------------------------------------------------------
+
+def run_rel_rec(
+    entities_path: str,
+    chunks_path: str,
+    output_path: str,
+    model: str = MODEL_NAME,
+) -> None:
+    """
+    Full Relation Recognition pipeline:
+
+    - load entities_by_chunk, entities_by_id
+    - iterate over chunks
+    - for each chunk, call LLM to extract relations
+    - enrich relations with relation_id, chunk_id, subject/object class info
+    - write to relations_raw.jsonl
+    """
+    entities_by_chunk, entities_by_id = load_entities_by_chunk(entities_path)
+    client = OpenAI()
+
+    n_chunks = 0
+    n_chunks_called = 0
+    n_relations = 0
+
+    logger.info("Writing relations to %s", output_path)
+    with open(output_path, "w", encoding="utf-8") as out_f:
+        for chunk in iter_chunks(chunks_path):
+            n_chunks += 1
+            chunk_id = chunk["id"]
+            chunk_entities = entities_by_chunk.get(chunk_id, [])
+
+            if len(chunk_entities) < 2:
+                continue  # cannot form relations
+
+            n_chunks_called += 1
+            logger.info(
+                "Chunk %s: %d entities -> calling LLM", chunk_id, len(chunk_entities)
+            )
+
+            relations = call_llm_extract_relations_for_chunk(
+                client=client,
+                model=model,
+                chunk=chunk,
+                entities=chunk_entities,
+            )
+
+            for rel in relations:
+                # Basic validation of required LLM fields
+                subj_id = rel.get("subject_entity_id")
+                obj_id = rel.get("object_entity_id")
+                if subj_id not in entities_by_id or obj_id not in entities_by_id:
+                    logger.warning(
+                        "Skipping relation with unknown entity ids in chunk %s: %s",
+                        chunk_id,
+                        rel,
+                    )
+                    continue
+
+                # Enrich with KG-level metadata
+                rel["relation_id"] = f"RelR_{uuid.uuid4().hex[:12]}"
+                rel["chunk_id"] = chunk_id
+
+                subj = entities_by_id[subj_id]
+                obj = entities_by_id[obj_id]
+
+                rel.setdefault("subject_class_group", subj.get("class_group"))
+                rel.setdefault("subject_class_label", subj.get("class_label"))
+                rel.setdefault("object_class_group", obj.get("class_group"))
+                rel.setdefault("object_class_label", obj.get("class_label"))
+
+                out_f.write(json.dumps(rel, ensure_ascii=False) + "\n")
+                n_relations += 1
+
+    logger.info(
+        "Rel Rec done. Chunks: %d, chunks_with_LLM: %d, relations: %d",
+        n_chunks,
+        n_chunks_called,
+        n_relations,
+    )
+
+
+# -----------------------------------------------------------------------------
+# CLI
+# -----------------------------------------------------------------------------
+
+def parse_args() -> argparse.Namespace:
+    p = argparse.ArgumentParser(description="Relation Recognition (Rel Rec)")
+    p.add_argument(
+        "--entities",
+        required=True,
+        help="/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Classes/Cls_Res_IterativeRuns/overall_summary/entities_with_class.jsonl",
+    )
+    p.add_argument(
+        "--chunks",
+        required=True,
+        help="/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Chunks/chunks_sentence.jsonl",
+    )
+    p.add_argument(
+        "--output",
+        required=True,
+        help="/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Relations/Rel Rec/relations_raw.jsonl",
+    )
+    p.add_argument(
+        "--model",
+        default=MODEL_NAME,
+        help=f"Model name (default: {MODEL_NAME})",
+    )
+    return p.parse_args()
+
+
+run_rel_rec(
+    entities_path="/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Classes/Cls_Res_IterativeRuns/overall_summary/entities_with_class.jsonl",
+    chunks_path="/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Chunks/chunks_sentence.jsonl",
+    output_path="/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Relations/Rel Rec/relations_raw.jsonl",
+    model="gpt-5.1"
+)
+
+
+#endregion#? Rel Rec v1
+#*#########################  End  ##########################
+
+
+
+
+
+#*######################### Start ##########################
+#region:#?   Rel Rec v2 (context-enriched, high-recall)
+
+#!/usr/bin/env python3
+"""
+Relation Recognition (Rel Rec) — Context-Enriched KG
+
+- Reads:
+    - entities_with_class.jsonl
+    - chunks_sentence.jsonl
+- For each chunk, finds entities that occur in that chunk.
+- Calls an LLM (OpenAI Responses API) to extract directed relations between those entities.
+- Writes:
+    - relations_raw.jsonl  (one JSON object per relation instance)
+
+Key design:
+- Entities are ALREADY resolved and guaranteed to belong to their chunks.
+- This is the LAST time we look at the raw chunk text.
+- We aim for HIGH RECALL and rich QUALIFIERS (context-enriched KG).
+- Intrinsic node properties were already handled in entity stages; here we treat
+  almost everything else as relation-level context.
+
+Requirements:
+    pip install openai
+
+Environment:
+    export OPENAI_API_KEY="sk-..."
+
+Adjust paths & MODEL_NAME as needed.
+"""
+
+import argparse
+import json
+import logging
+import uuid
+from collections import defaultdict
+from typing import Any, Dict, Iterable, List, Tuple
+
+from openai import OpenAI
+
+# -----------------------------------------------------------------------------
+# Config
+# -----------------------------------------------------------------------------
+
+MODEL_NAME = "gpt-5.1"   # or any other model you use
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(message)s",
+)
+logger = logging.getLogger(__name__)
+
+
+# -----------------------------------------------------------------------------
+# Data loading
+# -----------------------------------------------------------------------------
+
+def load_entities_by_chunk(
+    entities_path: str,
+) -> Tuple[Dict[str, List[Dict[str, Any]]], Dict[str, Dict[str, Any]]]:
+    """
+    Load entities_with_class.jsonl and build:
+
+    - entities_by_chunk:  chunk_id -> list of entity dicts (for that chunk)
+    - entities_by_id:     entity_id -> entity dict (global)
+
+    Each entity dict contains:
+        entity_id, entity_name, entity_description, entity_type_hint,
+        class_id, class_label, class_group, chunk_ids
+    """
+    entities_by_chunk: Dict[str, List[Dict[str, Any]]] = defaultdict(list)
+    entities_by_id: Dict[str, Dict[str, Any]] = {}
+
+    logger.info("Loading entities from %s", entities_path)
+    with open(entities_path, "r", encoding="utf-8") as f:
+        for line in f:
+            line = line.strip()
+            if not line:
+                continue
+            rec = json.loads(line)
+
+            entity_id = rec["entity_id"]
+            ent = rec["entity"]
+
+            entity_record = {
+                "entity_id": entity_id,
+                "entity_name": ent.get("entity_name"),
+                "entity_description": ent.get("entity_description"),
+                "entity_type_hint": ent.get("entity_type_hint"),
+                "class_id": rec.get("class_id"),
+                "class_label": rec.get("class_label"),
+                "class_group": rec.get("class_group"),
+                "chunk_ids": ent.get("chunk_id", []),
+            }
+
+            entities_by_id[entity_id] = entity_record
+
+            for ch_id in entity_record["chunk_ids"]:
+                entities_by_chunk[ch_id].append(entity_record)
+
+    logger.info(
+        "Loaded %d entities, mapped to %d chunks",
+        len(entities_by_id),
+        len(entities_by_chunk),
+    )
+    return entities_by_chunk, entities_by_id
+
+
+def iter_chunks(chunks_path: str) -> Iterable[Dict[str, Any]]:
+    """
+    Yield chunks from chunks_sentence.jsonl.
+
+    Expected fields include (example):
+        {
+          "id": "Ch_000001",
+          "ref_index": 0,
+          "ref_title": "2.1 Standards",
+          "text": "...",
+          ...
+        }
+    """
+    logger.info("Streaming chunks from %s", chunks_path)
+    with open(chunks_path, "r", encoding="utf-8") as f:
+        for line in f:
+            line = line.strip()
+            if not line:
+                continue
+            yield json.loads(line)
+
+
+# -----------------------------------------------------------------------------
+# LLM Prompt & Call
+# -----------------------------------------------------------------------------
+
+REL_REC_INSTRUCTIONS = """
+You are an expert relation extractor for a CONTEXT-ENRICHED knowledge graph.
+
+High-level setting:
+- The entities you see are ALREADY resolved and guaranteed to belong to this chunk.
+  They may not always appear with exactly the same surface form in the text,
+  but you must **trust** that they are conceptually present in this chunk.
+- This is the FINAL stage that has direct access to the raw chunk text.
+  After this, we will NOT revisit the chunk for more information.
+- Our goal is to capture as MUCH context as possible:
+  relations PLUS rich qualifiers (conditions, constraints, uncertainty, etc.).
+
+Your inputs:
+- A single text chunk from a technical document.
+- A list of resolved entities that appear in that chunk.
+  Each entity has: entity_id, entity_name, entity_description, class_label, class_group.
+
+Your main task:
+- Identify ZERO or MORE **directed** relations between the entities in this chunk.
+- A relation is a meaningful, text-supported connection between a HEAD (subject) entity
+  and a TAIL (object) entity.
+- The graph is DIRECTED. You must choose subject_entity_id and object_entity_id
+  based on how the text expresses the relationship.
+
+Very important principles:
+
+1) TRUST THE ENTITIES (we performed entity resolution)
+   - We have already run entity recognition & resolution upstream; the provided entities are canonical / resolved mentions derived from the document.
+   - Do NOT question whether an entity belongs to this chunk. The exact surface string may not appear verbatim in the chunk because:
+       * the entity was canonicalized (normalized) during entity resolution,
+       * the chunk uses synonyms, abbreviations, pronouns, or implicit references,
+       * the entity was merged from multiple mentions across the section.
+   - Use the provided entity_name, entity_description, class_label, and class_group to recognize mentions and evidence even when the exact surface form is absent.
+   - You may create relations between any pair of provided entities if the chunk text supports the relation conceptually — prefer recall over rejecting a plausible relation solely because the surface token doesn't match exactly.
+
+
+2) HIGH RECALL & COVERAGE
+   - Assume that almost all informational content in the chunk should end up in the KG
+     either as a relation or as qualifiers on relations.
+   - It is BETTER to propose a relation with lower confidence (and explain your doubts)
+     than to miss a real relation or important qualifier.
+   - If you are unsure, still output the relation with lower `confidence` and explain
+     your uncertainty in `justification` and/or `remark`.
+
+3) QUALIFIERS LIVE ON RELATIONS
+   - Intrinsic node properties were (mostly) already captured during entity recognition/resolution.
+   - Here, we treat almost all remaining contextual information as relation-level qualifiers.
+   - Do NOT try to create or modify entity properties. If you spot something that looks like a
+     missing intrinsic property, mention it in `remark` instead of modeling it as a property.
+
+4) CAPTURE QUALIFIERS EVEN IF THE RELATION IS UNCERTAIN
+   - If you clearly see a contextual piece (condition, constraint, etc.) that SHOULD be attached
+     to some relation but you struggle to identify the exact relation type:
+       * Make a best-effort guess for the relation_name between the most relevant entities.
+       * Set a lower `confidence`.
+       * In `remark`, clearly state that this relation was primarily created to capture that qualifier
+         and describe the issue (e.g., "relation type uncertain", "heuristic guess").
+   - This ensures we do not lose important context even when relation semantics are fuzzy.
+
+5) DO NOT BE OVERLY BIASED BY EXAMPLES
+   - Any examples of relation names or qualifier values in this prompt are **illustrative, not exhaustive**.
+   - You are free to propose any relation_name that is semantically appropriate.
+   - The list of rel_hint_type options is a small set of coarse types for grouping, NOT a limit on what you
+     can express in relation_name.
+
+-------------------------------------------
+Relation naming (VERY IMPORTANT):
+-------------------------------------------
+- relation_name:
+    - A short, normalized phrase describing the CORE semantic relation between subject and object.
+    - Examples (NOT exhaustive): "causes", "leads_to", "occurs_in", "is_part_of", "used_for", "located_in",
+      "prevents", "requires", "correlates_with", "associated_with"...
+    - Do NOT include qualifiers like "at high temperature", "during startup", "may" in relation_name.
+
+- relation_surface:
+    - The exact phrase or minimal text span from the chunk that expresses the relation.
+    - Examples (NOT exhaustive): "leads to", "results in", "is part of", "used for controlling", "associated with".
+
+-------------------------------------------
+Relation hint type (rel_hint_type):
+-------------------------------------------
+- A short free-form hint describing the nature of the relation
+  (e.g., causal, dependency, containment, usage, constraint, correlation, requirement, etc.).
+- This is ONLY a hint to help later relation resolution and grouping.
+- There is NO fixed list; choose whatever best fits the relation.
+- If unsure, still provide your best guess and explain uncertainty in justification.
+- It is a short phrase (1–3 words), not a sentence.
+
+-------------------------------------------
+Qualifiers:
+-------------------------------------------
+For each relation, fill this dict (values are strings or null):
+
+  "qualifiers": {
+    "TemporalQualifier": "... or null",
+    "SpatialQualifier": "... or null",
+    "OperationalConstraint": "... or null",
+    "ConditionExpression": "... or null",
+    "UncertaintyQualifier": "... or null",
+    "CausalHint": "... or null",
+    "LogicalMarker": "... or null",
+    "OtherQualifier": "expectedType: value or null"
+  }
+
+Meanings (examples are illustrative, NOT exhaustive):
+- TemporalQualifier:
+    when something holds:
+      e.g., "during heating", "after 1000h", "at 25°C", "in long-term exposure".
+- SpatialQualifier:
+    where something holds:
+      e.g., "near weld", "in heat-affected zone", "at inner bore".
+- OperationalConstraint:
+    operating/environmental conditions:
+      e.g., "elevated temperature", "high load", "low humidity", "during startup".
+- ConditionExpression:
+    explicit conditional or threshold clauses:
+      e.g., "temperature > 450°C", "if hydrogen partial pressure is high".
+- UncertaintyQualifier:
+    modality / hedging:
+      e.g., "may", "likely", "suspected", "possible".
+- CausalHint:
+    lexical causal cues beyond the main verb:
+      e.g., "due to", "caused by", "results from".
+- LogicalMarker:
+    discourse/logic markers:
+      e.g., "if", "when", "unless", "despite", "however", "nevertheless".
+- OtherQualifier:
+    use this as a catch-all when a qualifier does not fit into the above categories.
+    In this case, encode a short description, for example:
+      "OtherQualifier": "expectedType: value"
+
+If there are multiple "other" qualifiers, you may combine them in a single string.
+
+-------------------------------------------
+Other fields (and how to use them):
+-------------------------------------------
+
+- confidence:
+    - float between 0 and 1 (your estimated confidence that this relation is correctly captured).
+    - When in doubt, still output the relation but with a lower confidence (e.g., 0.2–0.4).
+
+- rel_desc:
+    - 1–2 sentence human-readable description of the relation instance.
+
+- resolution_context:
+    - Short text to help later relation resolution / canonicalization.
+    - Example uses:
+        * how you chose the direction (why entity A -> entity B, not vice versa),
+        * how this phrasing relates to other paraphrases,
+        * a hint about grouping with similar relations.
+
+- justification:
+    - A short explanation of how and where the chunk text supports this relation.
+    - Also state your doubts here if you are unsure ("text is ambiguous about cause vs correlation", etc.).
+
+- remark:
+    - Optional free-text comment for anything noteworthy or outside your strict task:
+        * "relation created primarily to capture condition X"
+        * "this looks like an intrinsic property of entity Y that might have been missed earlier"
+        * "not clear if this is causal or merely correlational"
+
+-------------------------------------------
+Output format:
+-------------------------------------------
+
+- You MUST output a single JSON object with exactly one top-level key "relations":
+  {
+    "relations": [ ...relation objects... ]
+  }
+
+- Each relation object MUST have this exact shape (all keys present, use null if not applicable):
+
+  {
+    "subject_entity_id": "En_...",
+    "object_entity_id": "En_...",
+    "relation_surface": "string",
+    "relation_name": "string",
+    "rel_desc": "string",
+    "rel_hint_type": "string",
+    "confidence": 0.0,
+    "resolution_context": "string or null",
+    "justification": "string or null",
+    "remark": "string or null",
+    "qualifiers": {
+      "TemporalQualifier": "string or null",
+      "SpatialQualifier": "string or null",
+      "OperationalConstraint": "string or null",
+      "ConditionExpression": "string or null",
+      "UncertaintyQualifier": "string or null",
+      "CausalHint": "string or null",
+      "LogicalMarker": "string or null",
+      "OtherQualifier": "string or null"
+    },
+    "evidence_excerpt": "short excerpt from the chunk text (<= 40 words)"
+  }
+
+
+- subject_entity_id and object_entity_id MUST be chosen from the provided entities.
+- You may propose relations between ANY pair of provided entities if the chunk supports it.
+- If there are no relations at all, return:  {"relations": []}
+- rel_hint_type must be a short phrase (1–3 words), not a sentence.
+
+Coverage:
+- Try to cover ALL meaningful connections and contextual information that can be attached
+  to those connections, even if it means producing low-confidence relations with detailed remarks.
+
+Return ONLY valid JSON. No extra commentary.
+"""
+
+
+def call_llm_extract_relations_for_chunk(
+    client: OpenAI,
+    model: str,
+    chunk: Dict[str, Any],
+    entities: List[Dict[str, Any]],
+) -> List[Dict[str, Any]]:
+    """
+    Call the LLM using the Responses API to extract relations for a single chunk.
+
+    Returns a list of relation dicts (without relation_id, chunk_id, or class info added yet).
+    """
+    if not entities or len(entities) < 2:
+        return []
+
+    payload = {
+        "chunk_id": chunk["id"],
+        "chunk_text": chunk.get("text", ""),
+        "entities": [
+            {
+                "entity_id": e["entity_id"],
+                "entity_name": e["entity_name"],
+                "entity_description": e["entity_description"],
+                "class_label": e["class_label"],
+                "class_group": e["class_group"],
+            }
+            for e in entities
+        ],
+    }
+
+    try:
+        response = client.responses.create(
+            model=model,
+            reasoning={"effort": "low"},
+            input=[
+                {
+                    "role": "developer",
+                    "content": REL_REC_INSTRUCTIONS,
+                },
+                {
+                    "role": "user",
+                    "content": json.dumps(payload, ensure_ascii=False),
+                },
+            ],
+        )
+    except Exception as e:
+        logger.error("LLM call failed for chunk %s: %s", chunk["id"], e)
+        return []
+
+    raw_text = response.output_text
+    if not raw_text:
+        logger.warning("Empty response for chunk %s", chunk["id"])
+        return []
+
+    try:
+        parsed = json.loads(raw_text)
+    except json.JSONDecodeError:
+        logger.error(
+            "Failed to parse JSON for chunk %s. Raw response:\n%s",
+            chunk["id"],
+            raw_text,
+        )
+        return []
+
+    relations = parsed.get("relations", [])
+    if not isinstance(relations, list):
+        logger.error(
+            "Expected 'relations' to be a list for chunk %s. Got: %r",
+            chunk["id"],
+            type(relations),
+        )
+        return []
+
+    return relations
+
+
+# -----------------------------------------------------------------------------
+# Main pipeline
+# -----------------------------------------------------------------------------
+
+def run_rel_rec(
+    entities_path: str,
+    chunks_path: str,
+    output_path: str,
+    model: str = MODEL_NAME,
+) -> None:
+    """
+    Full Relation Recognition pipeline:
+
+    - load entities_by_chunk, entities_by_id
+    - iterate over chunks
+    - for each chunk, call LLM to extract relations
+    - enrich relations with relation_id, chunk_id, subject/object class info
+    - write to relations_raw.jsonl
+    """
+    entities_by_chunk, entities_by_id = load_entities_by_chunk(entities_path)
+    client = OpenAI()
+
+    n_chunks = 0
+    n_chunks_called = 0
+    n_relations = 0
+
+    logger.info("Writing relations to %s", output_path)
+    with open(output_path, "w", encoding="utf-8") as out_f:
+        for chunk in iter_chunks(chunks_path):
+            n_chunks += 1
+            chunk_id = chunk["id"]
+            chunk_entities = entities_by_chunk.get(chunk_id, [])
+
+            if len(chunk_entities) < 2:
+                continue  # cannot form relations
+
+            n_chunks_called += 1
+            logger.info(
+                "Chunk %s: %d entities -> calling LLM", chunk_id, len(chunk_entities)
+            )
+
+            relations = call_llm_extract_relations_for_chunk(
+                client=client,
+                model=model,
+                chunk=chunk,
+                entities=chunk_entities,
+            )
+
+            for rel in relations:
+                # Basic validation of required LLM fields
+                subj_id = rel.get("subject_entity_id")
+                obj_id = rel.get("object_entity_id")
+                if subj_id not in entities_by_id or obj_id not in entities_by_id:
+                    logger.warning(
+                        "Skipping relation with unknown entity ids in chunk %s: %s",
+                        chunk_id,
+                        rel,
+                    )
+                    continue
+
+                # Normalize qualifiers structure to always have all keys
+                expected_qual_keys = [
+                    "TemporalQualifier",
+                    "SpatialQualifier",
+                    "OperationalConstraint",
+                    "ConditionExpression",
+                    "UncertaintyQualifier",
+                    "CausalHint",
+                    "LogicalMarker",
+                    "OtherQualifier",
+                ]
+                q = rel.get("qualifiers") or {}
+                if not isinstance(q, dict):
+                    q = {}
+                for k in expected_qual_keys:
+                    q.setdefault(k, None)
+                rel["qualifiers"] = q
+
+                # Enrich with KG-level metadata
+                rel["relation_id"] = f"RelR_{uuid.uuid4().hex[:12]}"
+                rel["chunk_id"] = chunk_id
+
+                subj = entities_by_id[subj_id]
+                obj = entities_by_id[obj_id]
+
+                rel.setdefault("subject_class_group", subj.get("class_group"))
+                rel.setdefault("subject_class_label", subj.get("class_label"))
+                rel.setdefault("object_class_group", obj.get("class_group"))
+                rel.setdefault("object_class_label", obj.get("class_label"))
+
+                out_f.write(json.dumps(rel, ensure_ascii=False) + "\n")
+                n_relations += 1
+
+    logger.info(
+        "Rel Rec done. Chunks: %d, chunks_with_LLM: %d, relations: %d",
+        n_chunks,
+        n_chunks_called,
+        n_relations,
+    )
+
+
+# -----------------------------------------------------------------------------
+# CLI (optional for terminal use; in notebooks call run_rel_rec(...) directly)
+# -----------------------------------------------------------------------------
+
+def parse_args() -> argparse.Namespace:
+    p = argparse.ArgumentParser(description="Relation Recognition (Rel Rec)")
+    p.add_argument(
+        "--entities",
+        required=True,
+        help="Path to entities_with_class.jsonl",
+    )
+    p.add_argument(
+        "--chunks",
+        required=True,
+        help="Path to chunks_sentence.jsonl",
+    )
+    p.add_argument(
+        "--output",
+        required=True,
+        help="Path to output relations_raw.jsonl",
+    )
+    p.add_argument(
+        "--model",
+        default=MODEL_NAME,
+        help=f"Model name (default: {MODEL_NAME})",
+    )
+    return p.parse_args()
+
+
+# In VSCode / Jupyter, you typically call run_rel_rec(...) directly like this:
+run_rel_rec(
+    entities_path="/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Classes/Cls_Res_IterativeRuns/overall_summary/entities_with_class.jsonl",
+    chunks_path="/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Chunks/chunks_sentence.jsonl",
+    output_path="/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Relations/Rel Rec/relations_raw.jsonl",
+    model="gpt-5.1"
+)
+
+#endregion#? Rel Rec v2
+#*#########################  End  ##########################
+
+
+
+
+
+
+#?######################### Start ##########################
+#region:#?   Rel Rec v3 (context-enriched, high-recall)
+
+#!/usr/bin/env python3
+"""
+Relation Recognition (Rel Rec) — Context-Enriched KG
+
+- Reads:
+    - entities_with_class.jsonl
+    - chunks_sentence.jsonl
+- For each chunk, finds entities that occur in that chunk.
+- Calls an LLM (OpenAI Responses API) to extract directed relations between those entities.
+- Writes:
+    - relations_raw.jsonl  (one JSON object per relation instance)
+
+Key design:
+- Entities are ALREADY resolved and guaranteed to belong to their chunks.
+- This is the LAST time we look at the raw chunk text.
+- We aim for HIGH RECALL and rich QUALIFIERS (context-enriched KG).
+- Intrinsic node properties were already handled in entity stages; here we treat
+  almost everything else as relation-level context.
+
+Requirements:
+    pip install openai
+
+Environment:
+    export OPENAI_API_KEY="sk-..."
+
+Adjust paths & MODEL_NAME as needed.
+"""
+
+import argparse
+import json
+import logging
+import uuid
+from collections import defaultdict
+from typing import Any, Dict, Iterable, List, Tuple
+
+from openai import OpenAI
+
+# -----------------------------------------------------------------------------
+# Config
+# -----------------------------------------------------------------------------
+
+MODEL_NAME = "gpt-5.1"   # or any other model you use
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(message)s",
+)
+logger = logging.getLogger(__name__)
+
+
+# -----------------------------------------------------------------------------
+# Data loading
+# -----------------------------------------------------------------------------
+
+def load_entities_by_chunk(
+    entities_path: str,
+) -> Tuple[Dict[str, List[Dict[str, Any]]], Dict[str, Dict[str, Any]]]:
+    """
+    Load entities_with_class.jsonl and build:
+
+    - entities_by_chunk:  chunk_id -> list of entity dicts (for that chunk)
+    - entities_by_id:     entity_id -> entity dict (global)
+
+    Each entity dict contains:
+        entity_id, entity_name, entity_description, 
+        class_id, class_label, class_group, chunk_ids, node_properties
+    """
+    entities_by_chunk: Dict[str, List[Dict[str, Any]]] = defaultdict(list)
+    entities_by_id: Dict[str, Dict[str, Any]] = {}
+
+    logger.info("Loading entities from %s", entities_path)
+    with open(entities_path, "r", encoding="utf-8") as f:
+        for line in f:
+            line = line.strip()
+            if not line:
+                continue
+            rec = json.loads(line)
+
+            entity_id = rec["entity_id"]
+            ent = rec["entity"]
+
+            entity_record = {
+                "entity_id": entity_id,
+                "entity_name": ent.get("entity_name"),
+                "entity_description": ent.get("entity_description"),
+                # "entity_type_hint": ent.get("entity_type_hint"),
+                "class_id": rec.get("class_id"),
+                "class_label": rec.get("class_label"),
+                "class_group": rec.get("class_group"),
+                "chunk_ids": ent.get("chunk_id", []),
+                "node_properties": ent.get("node_properties", []),
+            }
+
+            entities_by_id[entity_id] = entity_record
+
+            for ch_id in entity_record["chunk_ids"]:
+                entities_by_chunk[ch_id].append(entity_record)
+
+    logger.info(
+        "Loaded %d entities, mapped to %d chunks",
+        len(entities_by_id),
+        len(entities_by_chunk),
+    )
+    return entities_by_chunk, entities_by_id
+
+
+def iter_chunks(chunks_path: str) -> Iterable[Dict[str, Any]]:
+    """
+    Yield chunks from chunks_sentence.jsonl.
+
+    Expected fields include (example):
+        {
+          "id": "Ch_000001",
+          "ref_index": 0,
+          "ref_title": "2.1 Standards",
+          "text": "...",
+          ...
+        }
+    """
+    logger.info("Streaming chunks from %s", chunks_path)
+    with open(chunks_path, "r", encoding="utf-8") as f:
+        for line in f:
+            line = line.strip()
+            if not line:
+                continue
+            yield json.loads(line)
+
+
+# -----------------------------------------------------------------------------
+# LLM Prompt & Call
+# -----------------------------------------------------------------------------
+
+REL_REC_INSTRUCTIONS = """
+You are an expert relation extractor for a CONTEXT-ENRICHED knowledge graph.
+
+High-level setting:
+- The entities you see are ALREADY resolved and guaranteed to belong to this chunk.
+  They may not always appear with exactly the same surface form in the text,
+  but you must **trust** that they are conceptually present in this chunk.
+- This is the FINAL stage that has direct access to the raw chunk text.
+  After this, we will NOT revisit the chunk for more information.
+- Our goal is to capture as MUCH context as possible:
+  relations PLUS rich qualifiers (conditions, constraints, uncertainty, etc.).
+
+Your inputs:
+- A single text chunk from a technical document.
+- A list of resolved entities that appear in that chunk.
+- Each entity has: entity_id, entity_name, entity_description, class_label, class_group.
+    entity_id, entity_name, entity_description.
+
+Your main task:
+- Identify ZERO or MORE **directed** relations between the entities in this chunk.
+- A relation is a meaningful, text-supported connection between a HEAD (subject) entity
+  and a TAIL (object) entity.
+- The graph is DIRECTED. You must choose subject_entity_id and object_entity_id
+  based on how the text expresses the relationship.
+
+Very important principles:
+
+1) TRUST THE ENTITIES (we performed entity resolution)
+   - We have already run entity recognition & resolution upstream; the provided entities are canonical / resolved mentions derived from the document.
+   - Do NOT question whether an entity belongs to this chunk. The exact surface string may not appear verbatim in the chunk because:
+       * the entity was canonicalized (normalized) during entity resolution,
+       * the chunk uses synonyms, abbreviations, pronouns, or implicit references,
+       * the entity was merged from multiple mentions across the section.
+   - Use the provided entity_name, entity_description,
+     class_label, and class_group to recognize mentions and evidence even when the exact surface form is absent.
+   - You may create relations between any pair of provided entities if the chunk text supports the relation conceptually — prefer recall over rejecting a plausible relation solely because the surface token doesn't match exactly.
+
+2) HIGH RECALL & COVERAGE
+   - Assume that almost all informational content in the chunk should end up in the KG
+     either as a relation or as qualifiers on relations.
+   - It is BETTER to propose a relation with lower confidence (and explain your doubts)
+     than to miss a real relation or important qualifier.
+   - If you are unsure, still output the relation with lower `confidence` and explain
+     your uncertainty in `justification` and/or `remark`.
+
+3) QUALIFIERS LIVE ON RELATIONS
+   - Intrinsic node properties were (mostly) already captured during entity recognition/resolution.
+   - Here, we treat almost all remaining contextual information as relation-level qualifiers.
+   - Do NOT try to create or modify entity properties. If you spot something that looks like a
+     missing intrinsic property, mention it in `remark` instead of modeling it as a property.
+
+4) CAPTURE QUALIFIERS EVEN IF THE RELATION IS UNCERTAIN
+   - If you clearly see a contextual piece (condition, constraint, etc.) that SHOULD be attached
+     to some relation but you struggle to identify the exact relation type:
+       * Make a best-effort guess for the relation_name between the most relevant entities.
+       * Set a lower `confidence`.
+       * In `remark`, clearly state that this relation was primarily created to capture that qualifier
+         and describe the issue (e.g., "relation type uncertain", "heuristic guess").
+   - This ensures we do not lose important context even when relation semantics are fuzzy.
+
+5) DO NOT BE OVERLY BIASED BY EXAMPLES
+   - Any examples of relation names or qualifier values in this prompt are **illustrative, not exhaustive**.
+   - You are free to propose any relation_name that is semantically appropriate.
+   - The rel_hint_type options is a small hint types for later grouping, NOT a limit on what you
+     can express in relation_name.
+
+
+-------------------------------------------
+Relation naming (VERY IMPORTANT):
+-------------------------------------------
+- relation_name:
+    - A short, normalized phrase describing the CORE semantic relation between subject and object.
+    - Examples (NOT exhaustive): "causes", "leads_to", "occurs_in", "is_part_of", "used_for", "located_in",
+      "prevents", "requires", "correlates_with", "associated_with"...
+    - Do NOT include qualifiers like "at high temperature", "during startup", "may" in relation_name.
+
+- relation_surface:
+    - The exact phrase or minimal text span from the chunk that expresses the relation.
+    - Examples (NOT exhaustive): "leads to", "results in", "is part of", "used for controlling", "associated with".
+
+-------------------------------------------
+Relation hint type (rel_hint_type):
+-------------------------------------------
+- A short free-form hint describing the nature of the relation
+  (e.g., causal, dependency, containment, usage, constraint, correlation, requirement, etc.).
+- This is ONLY a hint to help later relation resolution and grouping.
+- There is NO fixed list; choose whatever best fits the relation.
+- If unsure, still provide your best guess and explain uncertainty in justification.
+- It is a short phrase (1–3 words), not a sentence.
+
+-------------------------------------------
+Qualifiers:
+-------------------------------------------
+For each relation, fill this dict (values are strings or null):
+
+  "qualifiers": {
+    "TemporalQualifier": "... or null",
+    "SpatialQualifier": "... or null",
+    "OperationalConstraint": "... or null",
+    "ConditionExpression": "... or null",
+    "UncertaintyQualifier": "... or null",
+    "CausalHint": "... or null",
+    "LogicalMarker": "... or null",
+    "OtherQualifier": "expectedType: value or null"
+  }
+
+Meanings (examples are illustrative, NOT exhaustive):
+- TemporalQualifier:
+    when something holds:
+      e.g., "during heating", "after 1000h", "at 25°C", "in long-term exposure".
+- SpatialQualifier:
+    where something holds:
+      e.g., "near weld", "in heat-affected zone", "at inner bore".
+- OperationalConstraint:
+    operating/environmental conditions:
+      e.g., "elevated temperature", "high load", "low humidity", "during startup".
+- ConditionExpression:
+    explicit conditional or threshold clauses:
+      e.g., "temperature > 450°C", "if hydrogen partial pressure is high".
+- UncertaintyQualifier:
+    modality / hedging:
+      e.g., "may", "likely", "suspected", "possible".
+- CausalHint:
+    lexical causal cues beyond the main verb:
+      e.g., "due to", "caused by", "results from".
+- LogicalMarker:
+    discourse/logic markers:
+      e.g., "if", "when", "unless", "despite", "however", "nevertheless".
+- OtherQualifier:
+    use this as a catch-all when a qualifier does not fit into the above categories.
+    In this case, encode a short description, for example:
+      "OtherQualifier": "expectedType: value"
+
+If there are multiple "other" qualifiers, you may combine them in a single string.
+
+-------------------------------------------
+Other fields (and how to use them):
+-------------------------------------------
+
+- confidence:
+    - float between 0 and 1 (your estimated confidence that this relation is correctly captured).
+    - When in doubt, still output the relation but with a lower confidence (e.g., 0.2–0.4).
+
+- rel_desc:
+    - 1–2 sentence human-readable description of the relation instance.
+
+- resolution_context:
+    - Short text to help later relation resolution / canonicalization.
+    - Example uses:
+        * how you chose the direction (why entity A -> entity B, not vice versa),
+        * how this phrasing relates to other paraphrases,
+        * a hint about grouping with similar relations.
+
+- justification:
+    - A short explanation of how and where the chunk text supports this relation.
+    - Also state your doubts here if you are unsure ("text is ambiguous about cause vs correlation", etc.).
+
+- remark:
+    - Optional free-text comment for anything noteworthy or outside your strict task:
+        * "relation created primarily to capture condition X"
+        * "this looks like an intrinsic property of entity Y that might have been missed earlier"
+        * "not clear if this is causal or merely correlational"
+
+-------------------------------------------
+Output format:
+-------------------------------------------
+
+- You MUST output a single JSON object with exactly one top-level key "relations":
+  {
+    "relations": [ ...relation objects... ]
+  }
+
+- Each relation object MUST have this exact shape (all keys present, use null if not applicable):
+
+  {
+    "subject_entity_id": "En_...",
+    "object_entity_id": "En_...",
+    "relation_surface": "string",
+    "relation_name": "string",
+    "rel_desc": "string",
+    "rel_hint_type": "string",
+    "confidence": 0.0,
+    "resolution_context": "string or null",
+    "justification": "string or null",
+    "remark": "string or null",
+    "qualifiers": {
+      "TemporalQualifier": "string or null",
+      "SpatialQualifier": "string or null",
+      "OperationalConstraint": "string or null",
+      "ConditionExpression": "string or null",
+      "UncertaintyQualifier": "string or null",
+      "CausalHint": "string or null",
+      "LogicalMarker": "string or null",
+      "OtherQualifier": "string or null"
+    },
+    "evidence_excerpt": "short excerpt from the chunk text (<= 40 words)"
+  }
+
+- subject_entity_id and object_entity_id MUST be chosen from the provided entities.
+- You may propose relations between ANY pair of provided entities if the chunk supports it.
+- If there are no relations at all, return:  {"relations": []}
+- rel_hint_type must be a short phrase (1–3 words), not a sentence.
+
+Coverage:
+- Try to cover ALL meaningful connections and contextual information that can be attached
+  to those connections, even if it means producing low-confidence relations with detailed remarks.
+
+Return ONLY valid JSON. No extra commentary.
+"""
+
+
+def call_llm_extract_relations_for_chunk(
+    client: OpenAI,
+    model: str,
+    chunk: Dict[str, Any],
+    entities: List[Dict[str, Any]],
+) -> List[Dict[str, Any]]:
+    """
+    Call the LLM using the Responses API to extract relations for a single chunk.
+
+    Returns a list of relation dicts (without relation_id, chunk_id, or class info added yet).
+    """
+    if not entities or len(entities) < 2:
+        return []
+
+    payload = {
+        "chunk_id": chunk["id"],
+        "chunk_text": chunk.get("text", ""),
+        "entities": [
+            {
+                "entity_id": e["entity_id"],
+                "entity_name": e["entity_name"],
+                "entity_description": e["entity_description"],
+                "class_label": e["class_label"],
+                "class_group": e["class_group"],
+                "node_properties": e.get("node_properties", []),
+            }
+            for e in entities
+        ],
+    }
+
+    try:
+        response = client.responses.create(
+            model=model,
+            reasoning={"effort": "low"},
+            input=[
+                {
+                    "role": "developer",
+                    "content": REL_REC_INSTRUCTIONS,
+                },
+                {
+                    "role": "user",
+                    "content": json.dumps(payload, ensure_ascii=False),
+                },
+            ],
+        )
+    except Exception as e:
+        logger.error("LLM call failed for chunk %s: %s", chunk["id"], e)
+        return []
+
+    raw_text = response.output_text
+    if not raw_text:
+        logger.warning("Empty response for chunk %s", chunk["id"])
+        return []
+
+    try:
+        parsed = json.loads(raw_text)
+    except json.JSONDecodeError:
+        logger.error(
+            "Failed to parse JSON for chunk %s. Raw response:\n%s",
+            chunk["id"],
+            raw_text,
+        )
+        return []
+
+    relations = parsed.get("relations", [])
+    if not isinstance(relations, list):
+        logger.error(
+            "Expected 'relations' to be a list for chunk %s. Got: %r",
+            chunk["id"],
+            type(relations),
+        )
+        return []
+
+    return relations
+
+
+# -----------------------------------------------------------------------------
+# Main pipeline
+# -----------------------------------------------------------------------------
+
+def run_rel_rec(
+    entities_path: str,
+    chunks_path: str,
+    output_path: str,
+    model: str = MODEL_NAME,
+) -> None:
+    """
+    Full Relation Recognition pipeline:
+
+    - load entities_by_chunk, entities_by_id
+    - iterate over chunks
+    - for each chunk, call LLM to extract relations
+    - enrich relations with relation_id, chunk_id, subject/object class info
+    - write to relations_raw.jsonl (streaming, flushed after each chunk)
+    """
+    entities_by_chunk, entities_by_id = load_entities_by_chunk(entities_path)
+    client = OpenAI()
+
+    n_chunks = 0
+    n_chunks_called = 0
+    n_relations = 0
+
+    logger.info("Writing relations to %s", output_path)
+    with open(output_path, "w", encoding="utf-8") as out_f:
+        for chunk in iter_chunks(chunks_path):
+            n_chunks += 1
+            chunk_id = chunk["id"]
+            chunk_entities = entities_by_chunk.get(chunk_id, [])
+
+            if len(chunk_entities) < 2:
+                continue  # cannot form relations
+
+            n_chunks_called += 1
+            logger.info(
+                "Chunk %s: %d entities -> calling LLM", chunk_id, len(chunk_entities)
+            )
+
+            relations = call_llm_extract_relations_for_chunk(
+                client=client,
+                model=model,
+                chunk=chunk,
+                entities=chunk_entities,
+            )
+
+            for rel in relations:
+                # Basic validation of required LLM fields
+                subj_id = rel.get("subject_entity_id")
+                obj_id = rel.get("object_entity_id")
+                if subj_id not in entities_by_id or obj_id not in entities_by_id:
+                    logger.warning(
+                        "Skipping relation with unknown entity ids in chunk %s: %s",
+                        chunk_id,
+                        rel,
+                    )
+                    continue
+
+                # Normalize qualifiers structure to always have all keys
+                expected_qual_keys = [
+                    "TemporalQualifier",
+                    "SpatialQualifier",
+                    "OperationalConstraint",
+                    "ConditionExpression",
+                    "UncertaintyQualifier",
+                    "CausalHint",
+                    "LogicalMarker",
+                    "OtherQualifier",
+                ]
+                q = rel.get("qualifiers") or {}
+                if not isinstance(q, dict):
+                    q = {}
+                for k in expected_qual_keys:
+                    q.setdefault(k, None)
+                rel["qualifiers"] = q
+
+                # Enrich with KG-level metadata
+                rel["relation_id"] = f"RelR_{uuid.uuid4().hex[:12]}"
+                rel["chunk_id"] = chunk_id
+
+                subj = entities_by_id[subj_id]
+                obj = entities_by_id[obj_id]
+
+                # Add class/group metadata
+                rel.setdefault("subject_class_group", subj.get("class_group"))
+                rel.setdefault("subject_class_label", subj.get("class_label"))
+                rel.setdefault("object_class_group", obj.get("class_group"))
+                rel.setdefault("object_class_label", obj.get("class_label"))
+
+                # Add entity names for convenience in relations_raw.jsonl
+                rel.setdefault("subject_entity_name", subj.get("entity_name"))
+                rel.setdefault("object_entity_name", obj.get("entity_name"))
+
+                out_f.write(json.dumps(rel, ensure_ascii=False) + "\n")
+                n_relations += 1
+
+            # flush after each chunk so data is written incrementally
+            # out_f.flush()
+
+    logger.info(
+        "Rel Rec done. Chunks: %d, chunks_with_LLM: %d, relations: %d",
+        n_chunks,
+        n_chunks_called,
+        n_relations,
+    )
+
+
+
+# -----------------------------------------------------------------------------
+# CLI (optional for terminal use; in notebooks call run_rel_rec(...) directly)
+# -----------------------------------------------------------------------------
+
+def parse_args() -> argparse.Namespace:
+    p = argparse.ArgumentParser(description="Relation Recognition (Rel Rec)")
+    p.add_argument(
+        "--entities",
+        required=True,
+        help="Path to entities_with_class.jsonl",
+    )
+    p.add_argument(
+        "--chunks",
+        required=True,
+        help="Path to chunks_sentence.jsonl",
+    )
+    p.add_argument(
+        "--output",
+        required=True,
+        help="Path to output relations_raw.jsonl",
+    )
+    p.add_argument(
+        "--model",
+        default=MODEL_NAME,
+        help=f"Model name (default: {MODEL_NAME})",
+    )
+    return p.parse_args()
+
+
+# In VSCode / Jupyter, you typically call run_rel_rec(...) directly like this:
+run_rel_rec(
+    entities_path="/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Classes/Cls_Res_IterativeRuns/overall_summary/entities_with_class.jsonl",
+    chunks_path="/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Chunks/chunks_sentence.jsonl",
+    output_path="/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Relations/Rel Rec/relations_raw.jsonl",
+    model="gpt-5.1"
+)
+
+#endregion#? Rel Rec v3
+#?#########################  End  ##########################
+
+
+#endregion#! Relation Identification
+#!#############################################  End Chapter  ##################################################
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #?######################### Start ##########################
 #region:#?   
 
@@ -18248,63 +19818,6 @@ def run_pipeline_iteratively():
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#?######################### Start ##########################
-#region:#?   Class Recognition
-
-#endregion#? Class Recognition
-#?#########################  End  ##########################
-
-
-
-
-
-
-
-
-
-
-
-#?######################### Start ##########################
-#region:#?   Relation Recognition
-
-
-#endregion#? Relation Recognition
-#?#########################  End  ##########################
-
-
-
-
-
-
-#?######################### Start ##########################
-#region:#?   KG Assembly
-
-
-
-#endregion#? KG Assembly
-#?#########################  End  ##########################
-
-
-
-
-
-
-#endregion:#!   SGCE-KG Generator
-#!#############################################  End Chapter  ##################################################
 
 
 
@@ -18402,25 +19915,11 @@ def run_pipeline_iteratively():
 
 
 
-
-
-
-
-
-
-
-
 #?######################### Start ##########################
-#region:#?   OpenAi API
+#region:#?   
 
-
-#endregion#? OpenAi API
+#endregion#? 
 #?#########################  End  ##########################
-
-
-
-
-
 
 
 
