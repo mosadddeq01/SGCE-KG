@@ -1,0 +1,171 @@
+[
+  {
+    "function": "merge_classes",
+    "args": {
+      "class_ids": ["ClsC_79b9f732", "ClsC_416df87c"],
+      "provisional_id": "MERGE(ClsC_79b9f732|ClsC_416df87c)",
+      "new_name": "High-Temperature and General Corrosion Mechanisms",
+      "new_description": "Corrosion mechanisms including general, oxidation, and sulfidation processes, particularly those resisted by stainless steels and high-temperature alloys.",
+      "new_class_type_hint": "Damage Mechanism",
+      "justification": "Significant entity overlap (oxidation, sulfidation) and highly similar descriptions indicate these classes represent the same underlying corrosion mechanisms at high temperature and general conditions.",
+      "remark": null,
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "MERGE(ClsC_79b9f732|ClsC_416df87c)",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Corrosion Mechanisms",
+      "remark": null,
+      "justification": "Assigning unified Class_Group 'Corrosion Mechanisms' to merged corrosion mechanism class for schema consistency.",
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_0f03619b",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Corrosion Mechanisms",
+      "remark": null,
+      "justification": "Class describes external corrosion mechanisms and should be grouped with other corrosion mechanism classes.",
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_1ee4b113",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Refining Chemicals and Process Units",
+      "remark": null,
+      "justification": "Class correctly describes corrosive acids as materials; Class_Group is appropriate and confirmed.",
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_efead2a4",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Welded Component Features",
+      "remark": null,
+      "justification": "Class correctly describes a welded component feature; Class_Group is appropriate and confirmed.",
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_57081982",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Inspection & Testing Methods",
+      "remark": null,
+      "justification": "Class correctly describes inspection/testing methods; Class_Group is appropriate and confirmed.",
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_c30efb71",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Material Cracking Mechanisms",
+      "remark": null,
+      "justification": "Class describes hydrogen-induced cracking mechanisms and fits with other cracking mechanism classes.",
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_c37765b2",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Material Cracking Mechanisms",
+      "remark": null,
+      "justification": "Class describes sulfide and acid stress cracking, which is a material cracking mechanism.",
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_891085f7",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Material Cracking Mechanisms",
+      "remark": null,
+      "justification": "Class describes environmental cracking, which is a material cracking mechanism.",
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_7ab81703",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Material Cracking Mechanisms",
+      "remark": null,
+      "justification": "Class describes general stress corrosion cracking, which is a material cracking mechanism.",
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_1875ae69",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Material Damage Mechanisms",
+      "remark": null,
+      "justification": "Class is a high-level grouping for material damage mechanisms and should be assigned to the corresponding Class_Group.",
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsR_00a308af",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Material Damage Mechanisms",
+      "remark": null,
+      "justification": "Class describes mechanical and metallurgical failure mechanisms and should be grouped under Material Damage Mechanisms.",
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsR_362f2ddd",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Material Damage Mechanisms",
+      "remark": null,
+      "justification": "Class describes thickness loss mechanisms and should be grouped under Material Damage Mechanisms.",
+      "confidence": 0.95
+    }
+  }
+]

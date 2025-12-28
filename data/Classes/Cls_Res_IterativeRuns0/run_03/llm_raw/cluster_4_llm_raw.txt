@@ -1,0 +1,74 @@
+[
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_8a37548a",
+      "new_name": "Graphitization-Susceptible Steels",
+      "new_description": "Steels prone to graphitization, including carbon, 0.5Mo, and low alloy C-Mo steels, which lose strength and ductility due to microstructural changes.",
+      "new_class_type_hint": "Material",
+      "new_class_group": "Steel Types and High-Temperature Metallurgical Phenomena",
+      "remark": null,
+      "justification": "Current Class_Group is too narrow; broadening to 'Steel Types and High-Temperature Metallurgical Phenomena' better connects related classes and allows for future expansion.",
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_d685324c",
+      "new_name": "High-Temperature Steels",
+      "new_description": "Steels engineered for high-temperature environments, including low alloy and quenched and tempered types, valued for strength and creep resistance and relevant to graphitization phenomena.",
+      "new_class_type_hint": "Material",
+      "new_class_group": "Steel Types and High-Temperature Metallurgical Phenomena",
+      "remark": null,
+      "justification": "Class_Group should match that of 'Graphitization-Susceptible Steels' as both classes cover overlapping steel types and metallurgical phenomena at high temperature.",
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "split_class",
+    "args": {
+      "source_class_id": "ClsC_8a37548a",
+      "splits": [
+        {
+          "name": "Low Alloy Steels (General)",
+          "description": "Low alloy steels with up to 9% chromium and other alloys for high temperature strength and creep resistance, not specifically defined by graphitization susceptibility.",
+          "class_type_hint": "Material",
+          "member_ids": [
+            "En_7ecdae42"
+          ],
+          "provisional_id": "SPLIT_LowAlloyGeneral"
+        }
+      ],
+      "justification": "Entity 'low alloy steel' (En_7ecdae42) is a broad category not always graphitization-susceptible; splitting it out clarifies the distinction between general low alloy steels and those specifically prone to graphitization.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "SPLIT_LowAlloyGeneral",
+      "new_name": "Low Alloy Steels (General)",
+      "new_description": "Low alloy steels with up to 9% chromium and other alloys for high temperature strength and creep resistance, not specifically defined by graphitization susceptibility.",
+      "new_class_type_hint": "Material",
+      "new_class_group": "Steel Types and High-Temperature Metallurgical Phenomena",
+      "remark": null,
+      "justification": "Assigning the new split class to the same Class_Group for schema coherence.",
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_efead2a4",
+      "new_name": "Heat Affected Zone (HAZ)",
+      "new_description": "The area of base metal near a weld that has not melted but has undergone changes in microstructure and mechanical properties due to welding heat.",
+      "new_class_type_hint": "Component",
+      "new_class_group": "Welded Component Features",
+      "remark": null,
+      "justification": "Class_Group is appropriate and distinct from the steel material classes; no merge or reassignment needed.",
+      "confidence": 0.98
+    }
+  }
+]

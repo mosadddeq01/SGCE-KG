@@ -1,0 +1,99 @@
+[
+  {
+    "function": "split_class",
+    "args": {
+      "source_class_id": "ClsC_184b995e",
+      "splits": [
+        {
+          "name": "Austenitic Structure",
+          "description": "Metallurgical structure: austenite, found in 300 Series stainless steels and nickel base alloys.",
+          "class_type_hint": "MetallurgicalStructure",
+          "member_ids": ["Can_2acbb9eb"],
+          "provisional_id": "SPLIT_184b995e_Austenitic"
+        },
+        {
+          "name": "Ferritic Structure",
+          "description": "Metallurgical structure: ferrite, found in carbon and low alloy steels and many 400 series stainless steels.",
+          "class_type_hint": "MetallurgicalStructure",
+          "member_ids": ["Can_449bd7c2"],
+          "provisional_id": "SPLIT_184b995e_Ferritic"
+        },
+        {
+          "name": "Martensitic Structure",
+          "description": "Metallurgical structure: martensite, found in some stainless steels.",
+          "class_type_hint": "MetallurgicalStructure",
+          "member_ids": ["Can_c3c96b1a"],
+          "provisional_id": "SPLIT_184b995e_Martensitic"
+        }
+      ],
+      "justification": "ClsC_184b995e is overloaded, grouping three distinct metallurgical structures that are better represented as separate classes for schema clarity.",
+      "remark": null,
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_e02e2ae6",
+      "new_name": "Stainless Steel Types",
+      "new_description": "Various types of stainless steels categorized by their metallurgical structures, including austenitic, ferritic, martensitic, and duplex.",
+      "new_class_type_hint": "Material",
+      "new_class_group": "Steel Metallurgy",
+      "remark": null,
+      "justification": "Assigning a domain-meaningful Class_Group to connect stainless steel types with their metallurgical context.",
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_daf6c9f8",
+      "new_name": "Corrosion-Resistant Alloys",
+      "new_description": "Alloys known for their resistance to corrosion, including stainless steels, duplex stainless steels, and nickel base alloys.",
+      "new_class_type_hint": "Material",
+      "new_class_group": "Steel Metallurgy",
+      "remark": null,
+      "justification": "Assigning the same Class_Group as stainless steel types to reflect their metallurgical and material relationship.",
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "SPLIT_184b995e_Austenitic",
+      "new_name": "Austenitic Structure",
+      "new_description": "Metallurgical structure: austenite, found in 300 Series stainless steels and nickel base alloys.",
+      "new_class_type_hint": "MetallurgicalStructure",
+      "new_class_group": "Steel Metallurgy",
+      "remark": null,
+      "justification": "Assigning Class_Group to the split metallurgical structure class for schema connectivity.",
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "SPLIT_184b995e_Ferritic",
+      "new_name": "Ferritic Structure",
+      "new_description": "Metallurgical structure: ferrite, found in carbon and low alloy steels and many 400 series stainless steels.",
+      "new_class_type_hint": "MetallurgicalStructure",
+      "new_class_group": "Steel Metallurgy",
+      "remark": null,
+      "justification": "Assigning Class_Group to the split metallurgical structure class for schema connectivity.",
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "SPLIT_184b995e_Martensitic",
+      "new_name": "Martensitic Structure",
+      "new_description": "Metallurgical structure: martensite, found in some stainless steels.",
+      "new_class_type_hint": "MetallurgicalStructure",
+      "new_class_group": "Steel Metallurgy",
+      "remark": null,
+      "justification": "Assigning Class_Group to the split metallurgical structure class for schema connectivity.",
+      "confidence": 0.95
+    }
+  }
+]

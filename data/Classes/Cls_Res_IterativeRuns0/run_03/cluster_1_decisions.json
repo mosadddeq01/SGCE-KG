@@ -1,0 +1,487 @@
+{
+  "cluster_label": 1,
+  "cluster_classes": [
+    {
+      "candidate_id": "ClsC_0f03619b",
+      "class_label": "External Corrosion Mechanisms",
+      "class_description": "Corrosion mechanisms affecting external surfaces, including underground, submerged, and beneath insulation systems.",
+      "class_type_hint": "Damage Mechanism",
+      "class_group": "Corrosion Mechanisms",
+      "confidence": 0.85,
+      "evidence_excerpt": "Corrosion on external surfaces and beneath insulation.",
+      "member_ids": [
+        "En_9574d8b7",
+        "En_d504ed6b"
+      ],
+      "members": [
+        {
+          "id": "En_9574d8b7",
+          "entity_name": "external corrosion",
+          "entity_description": "Corrosion occurring on the outer surfaces of underground or submerged metallic piping systems.",
+          "entity_type_hint": "DamageMechanism"
+        },
+        {
+          "id": "En_d504ed6b",
+          "entity_name": "corrosion under thermal insulation",
+          "entity_description": "Corrosion that occurs beneath insulation materials, often exacerbated by trapped moisture.",
+          "entity_type_hint": "DamageMechanism"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_c30efb71",
+      "class_label": "Hydrogen-Induced Cracking",
+      "class_description": "Cracking mechanisms in metals caused by hydrogen, including SOHIC and HIC.",
+      "class_type_hint": "Damage Mechanism",
+      "class_group": "Material Cracking Mechanisms",
+      "confidence": 0.85,
+      "evidence_excerpt": "Cracking in hydrogen-exposed steel, often near welds.",
+      "member_ids": [
+        "Can_04c94b79",
+        "En_d0d2d7c7"
+      ],
+      "members": [
+        {
+          "id": "Can_04c94b79",
+          "entity_name": "Stress Oriented Hydrogen Induced Cracking (SOHIC)",
+          "entity_description": "A type of cracking in steel caused by the presence of hydrogen and stress, often near welds, characterized by cracks aligned nearly perpendicular to stress.",
+          "entity_type_hint": "DamageMechanism"
+        },
+        {
+          "id": "En_d0d2d7c7",
+          "entity_name": "Hydrogen Induced Cracking (HIC)",
+          "entity_description": "Stepwise internal cracks in metal connecting hydrogen blisters, occurring without external stress.",
+          "entity_type_hint": "DamageMechanism"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_c37765b2",
+      "class_label": "Sulfide and Acid Stress Cracking",
+      "class_description": "Cracking mechanisms in metals due to sulfide and acid environments, including sulfide stress cracking and polythionic acid stress corrosion cracking.",
+      "class_type_hint": "Damage Mechanism",
+      "class_group": "Material Cracking Mechanisms",
+      "confidence": 0.82,
+      "evidence_excerpt": "Cracking in sulfide and acid environments.",
+      "member_ids": [
+        "En_a9e4aa90",
+        "En_c7aaaee0"
+      ],
+      "members": [
+        {
+          "id": "En_a9e4aa90",
+          "entity_name": "sulfide stress cracking",
+          "entity_description": "A form of hydrogen embrittlement that occurs in metals exposed to sulfide environments.",
+          "entity_type_hint": "DamageMechanism"
+        },
+        {
+          "id": "En_c7aaaee0",
+          "entity_name": "polythionic acid stress corrosion cracking",
+          "entity_description": "A type of corrosion that affects austenitic stainless steels and other austenitic alloys during shutdowns.",
+          "entity_type_hint": "DamageMechanism"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_891085f7",
+      "class_label": "Environmental Cracking",
+      "class_description": "Cracking mechanisms in metals due to environmental factors, including wet H2S environments and carbon steel weldments.",
+      "class_type_hint": "Damage Mechanism",
+      "class_group": "Material Cracking Mechanisms",
+      "confidence": 0.8,
+      "evidence_excerpt": "Cracking in corrosive environments.",
+      "member_ids": [
+        "En_19cc48f3",
+        "En_1a88e9ed"
+      ],
+      "members": [
+        {
+          "id": "En_19cc48f3",
+          "entity_name": "cracking in wet H2S environments",
+          "entity_description": "Cracking of pressure vessels in environments containing wet hydrogen sulfide.",
+          "entity_type_hint": "DamageMechanism"
+        },
+        {
+          "id": "En_1a88e9ed",
+          "entity_name": "environmental cracking of carbon steel weldments",
+          "entity_description": "Cracking that occurs in carbon steel weldments due to environmental factors in corrosive environments.",
+          "entity_type_hint": "DamageMechanism"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_7ab81703",
+      "class_label": "General Stress Corrosion Cracking",
+      "class_description": "Cracking mechanisms in materials due to stress and corrosive environments, including stress corrosion cracking and environment assisted cracking.",
+      "class_type_hint": "Damage Mechanism",
+      "class_group": "Material Cracking Mechanisms",
+      "confidence": 0.83,
+      "evidence_excerpt": "Cracking due to stress and corrosive environments.",
+      "member_ids": [
+        "En_a608496c",
+        "En_038f5dc2"
+      ],
+      "members": [
+        {
+          "id": "En_a608496c",
+          "entity_name": "stress corrosion cracking",
+          "entity_description": "A failure mechanism where cracks form in a material due to the combined effects of tensile stress and a corrosive environment.",
+          "entity_type_hint": "DamageMechanism"
+        },
+        {
+          "id": "En_038f5dc2",
+          "entity_name": "Environment Assisted Cracking",
+          "entity_description": "Cracking of materials facilitated by environmental conditions.",
+          "entity_type_hint": "DamageMechanism"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_57081982",
+      "class_label": "Non-Destructive Testing Methods",
+      "class_description": "Methods used to inspect materials for defects without causing damage, including radiographic, ultrasonic, visual, and magnetic particle testing.",
+      "class_type_hint": "Inspection Method",
+      "class_group": "Inspection & Testing Methods",
+      "confidence": 0.95,
+      "evidence_excerpt": "Methods in the FOCUS chunk for detecting defects.",
+      "member_ids": [
+        "En_374342ee",
+        "En_a40dec03",
+        "En_23dad6fc",
+        "En_84774ba7",
+        "En_b3df3885"
+      ],
+      "members": [
+        {
+          "id": "En_374342ee",
+          "entity_name": "radiographic testing",
+          "entity_description": "A non-destructive testing method using X-rays or gamma rays to view the internal structure of a component.",
+          "entity_type_hint": "InspectionMethod"
+        },
+        {
+          "id": "En_a40dec03",
+          "entity_name": "shear wave ultrasonic testing",
+          "entity_description": "An ultrasonic testing method using shear waves to detect flaws in materials.",
+          "entity_type_hint": "InspectionMethod"
+        },
+        {
+          "id": "En_23dad6fc",
+          "entity_name": "ultrasonic testing",
+          "entity_description": "A non-destructive testing method using high-frequency sound waves to detect internal flaws.",
+          "entity_type_hint": "InspectionMethod"
+        },
+        {
+          "id": "En_84774ba7",
+          "entity_name": "visual inspection",
+          "entity_description": "A non-destructive testing method involving the visual examination of a component.",
+          "entity_type_hint": "InspectionMethod"
+        },
+        {
+          "id": "En_b3df3885",
+          "entity_name": "wet fluorescent magnetic particle testing",
+          "entity_description": "A non-destructive testing method using fluorescent particles to detect surface and near-surface defects.",
+          "entity_type_hint": "InspectionMethod"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_06470fae",
+      "class_label": "Graphitization Phenomena",
+      "class_description": "Processes involving the transformation of carbide phases into graphite nodules in steels at elevated temperatures, leading to loss of strength and ductility.",
+      "class_type_hint": "Material Transformation",
+      "class_group": "Steel Graphitization and High-Temperature Steel Phenomena",
+      "confidence": 0.92,
+      "evidence_excerpt": "Transformation of carbide phases into graphite nodules.",
+      "member_ids": [
+        "En_d2a9115d",
+        "Can_3476493c"
+      ],
+      "members": [
+        {
+          "id": "En_d2a9115d",
+          "entity_name": "graphitization",
+          "entity_description": "Change in microstructure of carbon and 0.5Mo steels causing loss of strength and ductility.",
+          "entity_type_hint": "DamageMechanism"
+        },
+        {
+          "id": "Can_3476493c",
+          "entity_name": "graphite nodules",
+          "entity_description": "Result of carbide phase decomposition in steels at elevated temperatures, forming graphite nodules.",
+          "entity_type_hint": "Component"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsR_7b56e1d4",
+      "class_label": "High-Temperature and General Corrosion Mechanisms",
+      "class_description": "Corrosion mechanisms including general, oxidation, and sulfidation processes, particularly those resisted by stainless steels and high-temperature alloys.",
+      "class_type_hint": "Damage Mechanism",
+      "class_group": "Corrosion Mechanisms",
+      "confidence": 0.9,
+      "evidence_excerpt": "Corrosion at high temperatures, affecting material integrity.",
+      "member_ids": [
+        "En_56c0bd49",
+        "En_fefc46ef",
+        "En_baec7c0b",
+        "En_2b400819"
+      ],
+      "members": [
+        {
+          "id": "En_56c0bd49",
+          "entity_name": "oxidation",
+          "entity_description": "A chemical reaction that stainless steels resist due to their alloy content.",
+          "entity_type_hint": "DamageMechanism"
+        },
+        {
+          "id": "En_fefc46ef",
+          "entity_name": "sulfidation",
+          "entity_description": "A chemical reaction that stainless steels resist due to their alloy content.",
+          "entity_type_hint": "DamageMechanism"
+        },
+        {
+          "id": "En_baec7c0b",
+          "entity_name": "High Temperature Corrosion",
+          "entity_description": "Corrosion occurring at elevated temperatures, affecting material integrity.",
+          "entity_type_hint": "DamageMechanism"
+        },
+        {
+          "id": "En_2b400819",
+          "entity_name": "general corrosion",
+          "entity_description": "A broad process that stainless steels resist due to their alloy content, encompassing various forms like oxidation and sulfidation.",
+          "entity_type_hint": "DamageMechanism"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsR_97afc1e4",
+      "class_label": "Material Damage Mechanisms",
+      "class_description": "Mechanisms causing material degradation, including mechanical, metallurgical, and thickness loss processes.",
+      "class_type_hint": "Failure Mechanism",
+      "class_group": "Material Damage Mechanisms",
+      "confidence": 0.85,
+      "evidence_excerpt": "The mechanisms are divided into sections: a) Mechanical and Metallurgical Failure, b) Uniform or Localized Loss of Thickness.",
+      "member_ids": [
+        "En_6a5f3538",
+        "En_8ed6cfa3"
+      ],
+      "members": [
+        {
+          "id": "En_6a5f3538",
+          "entity_name": "Mechanical and Metallurgical Failure",
+          "entity_description": "Failure mechanisms related to mechanical and metallurgical processes in various industries.",
+          "entity_type_hint": "DamageMechanism"
+        },
+        {
+          "id": "En_8ed6cfa3",
+          "entity_name": "Uniform or Localized Loss of Thickness",
+          "entity_description": "A damage mechanism involving the reduction of material thickness, either uniformly or in specific areas.",
+          "entity_type_hint": "DamageMechanism"
+        }
+      ],
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_0f03619b\",\n      \"new_name\": \"External Corrosion Mechanisms\",\n      \"new_description\": \"Corrosion mechanisms affecting external surfaces, including underground, submerged, and beneath insulation systems.\",\n      \"new_class_type_hint\": \"Damage Mechanism\",\n      \"new_class_group\": \"Corrosion Mechanisms\",\n      \"remark\": null,\n      \"justification\": \"Class_Group is already correct and specific for this class, no change needed.\",\n      \"confidence\": 0.95\n    }\n  },\n  {\n    \"function\": \"merge_classes\",\n    \"args\": {\n      \"class_ids\": [\n        \"ClsC_c30efb71\",\n        \"ClsC_c37765b2\",\n        \"ClsC_891085f7\",\n        \"ClsC_7ab81703\"\n      ],\n      \"provisional_id\": \"MERGE(ClsC_c30efb71|ClsC_c37765b2|ClsC_891085f7|ClsC_7ab81703)\",\n      \"new_name\": \"Environmental and Stress-Related Cracking Mechanisms\",\n      \"new_description\": \"Cracking mechanisms in metals due to hydrogen, sulfide, acid, stress, and environmental factors, including SOHIC, HIC, sulfide stress cracking, polythionic acid stress corrosion cracking, stress corrosion cracking, and environment assisted cracking.\",\n      \"new_class_type_hint\": \"Damage Mechanism\",\n      \"justification\": \"All four classes describe closely related cracking mechanisms in metals caused by environmental, chemical, and stress factors, with significant overlap in scope and entity types; merging will reduce redundancy and clarify schema.\",\n      \"remark\": null,\n      \"confidence\": 0.97\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"MERGE(ClsC_c30efb71|ClsC_c37765b2|ClsC_891085f7|ClsC_7ab81703)\",\n      \"new_name\": \"Environmental and Stress-Related Cracking Mechanisms\",\n      \"new_description\": \"Cracking mechanisms in metals due to hydrogen, sulfide, acid, stress, and environmental factors, including SOHIC, HIC, sulfide stress cracking, polythionic acid stress corrosion cracking, stress corrosion cracking, and environment assisted cracking.\",\n      \"new_class_type_hint\": \"Damage Mechanism\",\n      \"new_class_group\": \"Material Cracking Mechanisms\",\n      \"remark\": null,\n      \"justification\": \"Assigning unified Class_Group to merged class for schema consistency.\",\n      \"confidence\": 0.97\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_06470fae\",\n      \"new_name\": \"Graphitization Phenomena\",\n      \"new_description\": \"Processes involving the transformation of carbide phases into graphite nodules in steels at elevated temperatures, leading to loss of strength and ductility.\",\n      \"new_class_type_hint\": \"Material Transformation\",\n      \"new_class_group\": \"Steel Graphitization and High-Temperature Steel Phenomena\",\n      \"remark\": null,\n      \"justification\": \"Class_Group is already specific and appropriate for this class.\",\n      \"confidence\": 0.95\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_57081982\",\n      \"new_name\": \"Non-Destructive Testing Methods\",\n      \"new_description\": \"Methods used to inspect materials for defects without causing damage, including radiographic, ultrasonic, visual, and magnetic particle testing.\",\n      \"new_class_type_hint\": \"Inspection Method\",\n      \"new_class_group\": \"Inspection & Testing Methods\",\n      \"remark\": null,\n      \"justification\": \"Class_Group is already correct and specific for this class.\",\n      \"confidence\": 0.95\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsR_7b56e1d4\",\n      \"new_name\": \"High-Temperature and General Corrosion Mechanisms\",\n      \"new_description\": \"Corrosion mechanisms including general, oxidation, and sulfidation processes, particularly those resisted by stainless steels and high-temperature alloys.\",\n      \"new_class_type_hint\": \"Damage Mechanism\",\n      \"new_class_group\": \"Corrosion Mechanisms\",\n      \"remark\": null,\n      \"justification\": \"Class_Group is already correct and specific for this class.\",\n      \"confidence\": 0.95\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsR_97afc1e4\",\n      \"new_name\": \"Material Damage Mechanisms\",\n      \"new_description\": \"Mechanisms causing material degradation, including mechanical, metallurgical, and thickness loss processes.\",\n      \"new_class_type_hint\": \"Failure Mechanism\",\n      \"new_class_group\": \"Material Damage Mechanisms\",\n      \"remark\": null,\n      \"justification\": \"Class_Group is already correct and specific for this class.\",\n      \"confidence\": 0.95\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_0f03619b",
+        "new_name": "External Corrosion Mechanisms",
+        "new_description": "Corrosion mechanisms affecting external surfaces, including underground, submerged, and beneath insulation systems.",
+        "new_class_type_hint": "Damage Mechanism",
+        "new_class_group": "Corrosion Mechanisms",
+        "remark": null,
+        "justification": "Class_Group is already correct and specific for this class, no change needed.",
+        "confidence": 0.95
+      }
+    },
+    {
+      "function": "merge_classes",
+      "args": {
+        "class_ids": [
+          "ClsC_c30efb71",
+          "ClsC_c37765b2",
+          "ClsC_891085f7",
+          "ClsC_7ab81703"
+        ],
+        "provisional_id": "MERGE(ClsC_c30efb71|ClsC_c37765b2|ClsC_891085f7|ClsC_7ab81703)",
+        "new_name": "Environmental and Stress-Related Cracking Mechanisms",
+        "new_description": "Cracking mechanisms in metals due to hydrogen, sulfide, acid, stress, and environmental factors, including SOHIC, HIC, sulfide stress cracking, polythionic acid stress corrosion cracking, stress corrosion cracking, and environment assisted cracking.",
+        "new_class_type_hint": "Damage Mechanism",
+        "justification": "All four classes describe closely related cracking mechanisms in metals caused by environmental, chemical, and stress factors, with significant overlap in scope and entity types; merging will reduce redundancy and clarify schema.",
+        "remark": null,
+        "confidence": 0.97
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "MERGE(ClsC_c30efb71|ClsC_c37765b2|ClsC_891085f7|ClsC_7ab81703)",
+        "new_name": "Environmental and Stress-Related Cracking Mechanisms",
+        "new_description": "Cracking mechanisms in metals due to hydrogen, sulfide, acid, stress, and environmental factors, including SOHIC, HIC, sulfide stress cracking, polythionic acid stress corrosion cracking, stress corrosion cracking, and environment assisted cracking.",
+        "new_class_type_hint": "Damage Mechanism",
+        "new_class_group": "Material Cracking Mechanisms",
+        "remark": null,
+        "justification": "Assigning unified Class_Group to merged class for schema consistency.",
+        "confidence": 0.97
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_06470fae",
+        "new_name": "Graphitization Phenomena",
+        "new_description": "Processes involving the transformation of carbide phases into graphite nodules in steels at elevated temperatures, leading to loss of strength and ductility.",
+        "new_class_type_hint": "Material Transformation",
+        "new_class_group": "Steel Graphitization and High-Temperature Steel Phenomena",
+        "remark": null,
+        "justification": "Class_Group is already specific and appropriate for this class.",
+        "confidence": 0.95
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_57081982",
+        "new_name": "Non-Destructive Testing Methods",
+        "new_description": "Methods used to inspect materials for defects without causing damage, including radiographic, ultrasonic, visual, and magnetic particle testing.",
+        "new_class_type_hint": "Inspection Method",
+        "new_class_group": "Inspection & Testing Methods",
+        "remark": null,
+        "justification": "Class_Group is already correct and specific for this class.",
+        "confidence": 0.95
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsR_7b56e1d4",
+        "new_name": "High-Temperature and General Corrosion Mechanisms",
+        "new_description": "Corrosion mechanisms including general, oxidation, and sulfidation processes, particularly those resisted by stainless steels and high-temperature alloys.",
+        "new_class_type_hint": "Damage Mechanism",
+        "new_class_group": "Corrosion Mechanisms",
+        "remark": null,
+        "justification": "Class_Group is already correct and specific for this class.",
+        "confidence": 0.95
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsR_97afc1e4",
+        "new_name": "Material Damage Mechanisms",
+        "new_description": "Mechanisms causing material degradation, including mechanical, metallurgical, and thickness loss processes.",
+        "new_class_type_hint": "Failure Mechanism",
+        "new_class_group": "Material Damage Mechanisms",
+        "remark": null,
+        "justification": "Class_Group is already correct and specific for this class.",
+        "confidence": 0.95
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_0f03619b",
+      "class_id_resolved": "ClsC_0f03619b",
+      "new_name": "External Corrosion Mechanisms",
+      "new_description": "Corrosion mechanisms affecting external surfaces, including underground, submerged, and beneath insulation systems.",
+      "new_class_type_hint": "Damage Mechanism",
+      "new_class_group": "Corrosion Mechanisms",
+      "remark": null,
+      "justification": "Class_Group is already correct and specific for this class, no change needed.",
+      "confidence": 0.95
+    },
+    {
+      "action": "merge_classes",
+      "input_class_ids": [
+        "ClsC_c30efb71",
+        "ClsC_c37765b2",
+        "ClsC_891085f7",
+        "ClsC_7ab81703"
+      ],
+      "result_class_id": "ClsR_4fa9351f",
+      "provisional_id": "MERGE(ClsC_c30efb71|ClsC_c37765b2|ClsC_891085f7|ClsC_7ab81703)",
+      "justification": "All four classes describe closely related cracking mechanisms in metals caused by environmental, chemical, and stress factors, with significant overlap in scope and entity types; merging will reduce redundancy and clarify schema.",
+      "remark": null,
+      "confidence": 0.97
+    },
+    {
+      "action": "modify_class",
+      "class_id": "MERGE(ClsC_c30efb71|ClsC_c37765b2|ClsC_891085f7|ClsC_7ab81703)",
+      "class_id_resolved": "ClsR_4fa9351f",
+      "new_name": "Environmental and Stress-Related Cracking Mechanisms",
+      "new_description": "Cracking mechanisms in metals due to hydrogen, sulfide, acid, stress, and environmental factors, including SOHIC, HIC, sulfide stress cracking, polythionic acid stress corrosion cracking, stress corrosion cracking, and environment assisted cracking.",
+      "new_class_type_hint": "Damage Mechanism",
+      "new_class_group": "Material Cracking Mechanisms",
+      "remark": null,
+      "justification": "Assigning unified Class_Group to merged class for schema consistency.",
+      "confidence": 0.97
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_06470fae",
+      "class_id_resolved": "ClsC_06470fae",
+      "new_name": "Graphitization Phenomena",
+      "new_description": "Processes involving the transformation of carbide phases into graphite nodules in steels at elevated temperatures, leading to loss of strength and ductility.",
+      "new_class_type_hint": "Material Transformation",
+      "new_class_group": "Steel Graphitization and High-Temperature Steel Phenomena",
+      "remark": null,
+      "justification": "Class_Group is already specific and appropriate for this class.",
+      "confidence": 0.95
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_57081982",
+      "class_id_resolved": "ClsC_57081982",
+      "new_name": "Non-Destructive Testing Methods",
+      "new_description": "Methods used to inspect materials for defects without causing damage, including radiographic, ultrasonic, visual, and magnetic particle testing.",
+      "new_class_type_hint": "Inspection Method",
+      "new_class_group": "Inspection & Testing Methods",
+      "remark": null,
+      "justification": "Class_Group is already correct and specific for this class.",
+      "confidence": 0.95
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsR_7b56e1d4",
+      "class_id_resolved": "ClsR_7b56e1d4",
+      "new_name": "High-Temperature and General Corrosion Mechanisms",
+      "new_description": "Corrosion mechanisms including general, oxidation, and sulfidation processes, particularly those resisted by stainless steels and high-temperature alloys.",
+      "new_class_type_hint": "Damage Mechanism",
+      "new_class_group": "Corrosion Mechanisms",
+      "remark": null,
+      "justification": "Class_Group is already correct and specific for this class.",
+      "confidence": 0.95
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsR_97afc1e4",
+      "class_id_resolved": "ClsR_97afc1e4",
+      "new_name": "Material Damage Mechanisms",
+      "new_description": "Mechanisms causing material degradation, including mechanical, metallurgical, and thickness loss processes.",
+      "new_class_type_hint": "Failure Mechanism",
+      "new_class_group": "Material Damage Mechanisms",
+      "remark": null,
+      "justification": "Class_Group is already correct and specific for this class.",
+      "confidence": 0.95
+    }
+  ],
+  "provisional_to_real": {
+    "MERGE(ClsC_c30efb71|ClsC_c37765b2|ClsC_891085f7|ClsC_7ab81703)": "ClsR_4fa9351f",
+    "ClsC_c30efb71": "ClsR_4fa9351f",
+    "ClsC_c37765b2": "ClsR_4fa9351f",
+    "ClsC_891085f7": "ClsR_4fa9351f",
+    "ClsC_7ab81703": "ClsR_4fa9351f"
+  },
+  "timestamp": "2025-12-28T00:04:09Z"
+}

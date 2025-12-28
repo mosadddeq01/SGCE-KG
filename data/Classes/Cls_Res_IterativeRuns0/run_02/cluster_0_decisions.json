@@ -1,0 +1,290 @@
+{
+  "cluster_label": 0,
+  "cluster_classes": [
+    {
+      "candidate_id": "ClsC_7e6ece2a",
+      "class_label": "Amine Treating Chemicals",
+      "class_description": "Chemicals used in amine treating processes to remove H2S and CO2 from hydrocarbon streams.",
+      "class_type_hint": "Chemical",
+      "class_group": "Refining Process Chemicals and Units",
+      "confidence": 0.95,
+      "evidence_excerpt": "used in amine treating to remove H2S and CO2.",
+      "member_ids": [
+        "En_b6489a63",
+        "En_a38530be",
+        "En_24fd3367"
+      ],
+      "members": [
+        {
+          "id": "En_b6489a63",
+          "entity_name": "diethanolamine (DEA)",
+          "entity_description": "A chemical used in amine treating to remove H2S and CO2 from hydrocarbon streams.",
+          "entity_type_hint": "Chemical"
+        },
+        {
+          "id": "En_a38530be",
+          "entity_name": "methyldiethanolamine",
+          "entity_description": "A chemical used in amine treating to remove H2S and CO2 from hydrocarbon streams.",
+          "entity_type_hint": "Material"
+        },
+        {
+          "id": "En_24fd3367",
+          "entity_name": "monoethanolamine",
+          "entity_description": "A chemical used in amine treating to remove H2S and CO2 from hydrocarbon streams.",
+          "entity_type_hint": "Material"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_b0e6fee5",
+      "class_label": "Sour Water Treatment",
+      "class_description": "Processes and substances involved in the treatment of sour water containing hydrogen sulfide.",
+      "class_type_hint": "Process",
+      "class_group": "Refining Chemicals and Process Units",
+      "confidence": 0.88,
+      "evidence_excerpt": "treating sour water by removing contaminants.",
+      "member_ids": [],
+      "members": [],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_e3c642a8",
+      "class_label": "Vacuum Distillation Unit",
+      "class_description": "A process unit designed to separate components at reduced pressure to lower their boiling points.",
+      "class_type_hint": "Process Unit",
+      "class_group": "Refining Process Chemicals and Units",
+      "confidence": 0.95,
+      "evidence_excerpt": "",
+      "member_ids": [
+        "En_c71fc6d7"
+      ],
+      "members": [
+        {
+          "id": "En_c71fc6d7",
+          "entity_name": "vacuum distillation unit",
+          "entity_description": "A process unit that separates components at reduced pressure to lower boiling points.",
+          "entity_type_hint": "ProcessUnit"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsR_08b1321b",
+      "class_label": "Sour Water",
+      "class_description": "Water containing hydrogen sulfide and other sulfur compounds, often requiring treatment.",
+      "class_type_hint": "Environment",
+      "class_group": "Refining Process Chemicals and Units",
+      "confidence": 0.88,
+      "evidence_excerpt": "treating sour water by removing contaminants.",
+      "member_ids": [
+        "En_da73a6e7"
+      ],
+      "members": [
+        {
+          "id": "En_da73a6e7",
+          "entity_name": "sour water",
+          "entity_description": "Water containing hydrogen sulfide and other sulfur compounds, often requiring treatment.",
+          "entity_type_hint": "Environment"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsR_0f9f0d76",
+      "class_label": "Sour Water Stripper",
+      "class_description": "A process unit used to remove hydrogen sulfide and ammonia from sour water.",
+      "class_type_hint": "Process Unit",
+      "class_group": "Refining Process Chemicals and Units",
+      "confidence": 0.88,
+      "evidence_excerpt": "treating sour water by removing contaminants.",
+      "member_ids": [
+        "En_3b78069f"
+      ],
+      "members": [
+        {
+          "id": "En_3b78069f",
+          "entity_name": "sour water stripper",
+          "entity_description": "A process unit used to remove hydrogen sulfide and ammonia from sour water.",
+          "entity_type_hint": "ProcessUnit"
+        }
+      ],
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_b0e6fee5\",\n      \"new_name\": \"Sour Water Treatment Processes\",\n      \"new_description\": \"Processes involved in the treatment of sour water containing hydrogen sulfide, including associated chemicals and units.\",\n      \"new_class_type_hint\": \"Process\",\n      \"new_class_group\": \"Refining Process Chemicals and Units\",\n      \"remark\": null,\n      \"justification\": \"Class_group for 'Sour Water Treatment' is inconsistent with the other classes in this cluster; aligning to 'Refining Process Chemicals and Units' for schema coherence.\",\n      \"confidence\": 0.95\n    }\n  },\n  {\n    \"function\": \"split_class\",\n    \"args\": {\n      \"source_class_id\": \"ClsC_7e6ece2a\",\n      \"splits\": [\n        {\n          \"name\": \"Amine Chemicals\",\n          \"description\": \"Chemicals used as amines in treating processes to remove H2S and CO2 from hydrocarbon streams.\",\n          \"class_type_hint\": \"Chemical\",\n          \"member_ids\": [\n            \"En_b6489a63\",\n            \"En_a38530be\",\n            \"En_24fd3367\"\n          ],\n          \"provisional_id\": \"SPLIT_AmineChemicals\"\n        }\n      ],\n      \"justification\": \"The class 'Amine Treating Chemicals' is overloaded; splitting to clarify that these are specifically amine chemicals, not all chemicals used in amine treating processes.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"SPLIT_AmineChemicals\",\n      \"new_name\": \"Amine Chemicals\",\n      \"new_description\": \"Chemicals used as amines in treating processes to remove H2S and CO2 from hydrocarbon streams.\",\n      \"new_class_type_hint\": \"Chemical\",\n      \"new_class_group\": \"Refining Process Chemicals and Units\",\n      \"remark\": null,\n      \"justification\": \"Clarifies the class label and aligns class_group with the rest of the cluster.\",\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_e3c642a8\",\n      \"new_name\": \"Vacuum Distillation Unit\",\n      \"new_description\": \"A process unit designed to separate components at reduced pressure to lower their boiling points.\",\n      \"new_class_type_hint\": \"Process Unit\",\n      \"new_class_group\": \"Refining Process Chemicals and Units\",\n      \"remark\": null,\n      \"justification\": \"Confirming class_group and metadata for schema consistency.\",\n      \"confidence\": 0.95\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsR_08b1321b\",\n      \"new_name\": \"Sour Water\",\n      \"new_description\": \"Water containing hydrogen sulfide and other sulfur compounds, often requiring treatment.\",\n      \"new_class_type_hint\": \"Environment\",\n      \"new_class_group\": \"Refining Process Chemicals and Units\",\n      \"remark\": null,\n      \"justification\": \"Confirming class_group and metadata for schema consistency.\",\n      \"confidence\": 0.95\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsR_0f9f0d76\",\n      \"new_name\": \"Sour Water Stripper\",\n      \"new_description\": \"A process unit used to remove hydrogen sulfide and ammonia from sour water.\",\n      \"new_class_type_hint\": \"Process Unit\",\n      \"new_class_group\": \"Refining Process Chemicals and Units\",\n      \"remark\": null,\n      \"justification\": \"Confirming class_group and metadata for schema consistency.\",\n      \"confidence\": 0.95\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_b0e6fee5",
+        "new_name": "Sour Water Treatment Processes",
+        "new_description": "Processes involved in the treatment of sour water containing hydrogen sulfide, including associated chemicals and units.",
+        "new_class_type_hint": "Process",
+        "new_class_group": "Refining Process Chemicals and Units",
+        "remark": null,
+        "justification": "Class_group for 'Sour Water Treatment' is inconsistent with the other classes in this cluster; aligning to 'Refining Process Chemicals and Units' for schema coherence.",
+        "confidence": 0.95
+      }
+    },
+    {
+      "function": "split_class",
+      "args": {
+        "source_class_id": "ClsC_7e6ece2a",
+        "splits": [
+          {
+            "name": "Amine Chemicals",
+            "description": "Chemicals used as amines in treating processes to remove H2S and CO2 from hydrocarbon streams.",
+            "class_type_hint": "Chemical",
+            "member_ids": [
+              "En_b6489a63",
+              "En_a38530be",
+              "En_24fd3367"
+            ],
+            "provisional_id": "SPLIT_AmineChemicals"
+          }
+        ],
+        "justification": "The class 'Amine Treating Chemicals' is overloaded; splitting to clarify that these are specifically amine chemicals, not all chemicals used in amine treating processes.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "SPLIT_AmineChemicals",
+        "new_name": "Amine Chemicals",
+        "new_description": "Chemicals used as amines in treating processes to remove H2S and CO2 from hydrocarbon streams.",
+        "new_class_type_hint": "Chemical",
+        "new_class_group": "Refining Process Chemicals and Units",
+        "remark": null,
+        "justification": "Clarifies the class label and aligns class_group with the rest of the cluster.",
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_e3c642a8",
+        "new_name": "Vacuum Distillation Unit",
+        "new_description": "A process unit designed to separate components at reduced pressure to lower their boiling points.",
+        "new_class_type_hint": "Process Unit",
+        "new_class_group": "Refining Process Chemicals and Units",
+        "remark": null,
+        "justification": "Confirming class_group and metadata for schema consistency.",
+        "confidence": 0.95
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsR_08b1321b",
+        "new_name": "Sour Water",
+        "new_description": "Water containing hydrogen sulfide and other sulfur compounds, often requiring treatment.",
+        "new_class_type_hint": "Environment",
+        "new_class_group": "Refining Process Chemicals and Units",
+        "remark": null,
+        "justification": "Confirming class_group and metadata for schema consistency.",
+        "confidence": 0.95
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsR_0f9f0d76",
+        "new_name": "Sour Water Stripper",
+        "new_description": "A process unit used to remove hydrogen sulfide and ammonia from sour water.",
+        "new_class_type_hint": "Process Unit",
+        "new_class_group": "Refining Process Chemicals and Units",
+        "remark": null,
+        "justification": "Confirming class_group and metadata for schema consistency.",
+        "confidence": 0.95
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_b0e6fee5",
+      "class_id_resolved": "ClsC_b0e6fee5",
+      "new_name": "Sour Water Treatment Processes",
+      "new_description": "Processes involved in the treatment of sour water containing hydrogen sulfide, including associated chemicals and units.",
+      "new_class_type_hint": "Process",
+      "new_class_group": "Refining Process Chemicals and Units",
+      "remark": null,
+      "justification": "Class_group for 'Sour Water Treatment' is inconsistent with the other classes in this cluster; aligning to 'Refining Process Chemicals and Units' for schema coherence.",
+      "confidence": 0.95
+    },
+    {
+      "action": "split_class",
+      "source_class_id": "ClsC_7e6ece2a",
+      "source_class_id_resolved": "ClsC_7e6ece2a",
+      "created_classes": [
+        {
+          "new_class_id": "ClsR_0a1e9fdb",
+          "provisional_id": "SPLIT_AmineChemicals",
+          "member_ids": [
+            "En_b6489a63",
+            "En_a38530be",
+            "En_24fd3367"
+          ]
+        }
+      ],
+      "justification": "The class 'Amine Treating Chemicals' is overloaded; splitting to clarify that these are specifically amine chemicals, not all chemicals used in amine treating processes.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "modify_class",
+      "class_id": "SPLIT_AmineChemicals",
+      "class_id_resolved": "ClsR_0a1e9fdb",
+      "new_name": "Amine Chemicals",
+      "new_description": "Chemicals used as amines in treating processes to remove H2S and CO2 from hydrocarbon streams.",
+      "new_class_type_hint": "Chemical",
+      "new_class_group": "Refining Process Chemicals and Units",
+      "remark": null,
+      "justification": "Clarifies the class label and aligns class_group with the rest of the cluster.",
+      "confidence": 0.9
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_e3c642a8",
+      "class_id_resolved": "ClsC_e3c642a8",
+      "new_name": "Vacuum Distillation Unit",
+      "new_description": "A process unit designed to separate components at reduced pressure to lower their boiling points.",
+      "new_class_type_hint": "Process Unit",
+      "new_class_group": "Refining Process Chemicals and Units",
+      "remark": null,
+      "justification": "Confirming class_group and metadata for schema consistency.",
+      "confidence": 0.95
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsR_08b1321b",
+      "class_id_resolved": "ClsR_08b1321b",
+      "new_name": "Sour Water",
+      "new_description": "Water containing hydrogen sulfide and other sulfur compounds, often requiring treatment.",
+      "new_class_type_hint": "Environment",
+      "new_class_group": "Refining Process Chemicals and Units",
+      "remark": null,
+      "justification": "Confirming class_group and metadata for schema consistency.",
+      "confidence": 0.95
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsR_0f9f0d76",
+      "class_id_resolved": "ClsR_0f9f0d76",
+      "new_name": "Sour Water Stripper",
+      "new_description": "A process unit used to remove hydrogen sulfide and ammonia from sour water.",
+      "new_class_type_hint": "Process Unit",
+      "new_class_group": "Refining Process Chemicals and Units",
+      "remark": null,
+      "justification": "Confirming class_group and metadata for schema consistency.",
+      "confidence": 0.95
+    }
+  ],
+  "provisional_to_real": {
+    "SPLIT_AmineChemicals": "ClsR_0a1e9fdb"
+  },
+  "timestamp": "2025-12-28T00:03:25Z"
+}

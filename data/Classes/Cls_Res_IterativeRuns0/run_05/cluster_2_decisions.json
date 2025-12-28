@@ -1,0 +1,97 @@
+{
+  "cluster_label": 2,
+  "cluster_classes": [
+    {
+      "candidate_id": "ClsC_e02e2ae6",
+      "class_label": "Stainless Steel Metallurgical Families",
+      "class_description": "Major metallurgical families of stainless steels, such as austenitic, ferritic, martensitic, and duplex types, grouped by their microstructure and alloying elements.",
+      "class_type_hint": "Metallurgical Family",
+      "class_group": "Steel Metallurgical Families",
+      "confidence": 0.95,
+      "evidence_excerpt": "Austenitic, ferritic, and martensitic stainless steels are specific families within stainless steels.",
+      "member_ids": [],
+      "members": [],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_184b995e",
+      "class_label": "Steel Metallurgical Structure Types",
+      "class_description": "Parent category for metallurgical structure types in steels, grouping austenitic, ferritic, and martensitic structures. This class should not directly contain entities, but should serve as a container for the specific structure classes below.",
+      "class_type_hint": "MetallurgicalStructureCategory",
+      "class_group": "Steel Metallurgical Structures",
+      "confidence": 0.9,
+      "evidence_excerpt": "Austenitic, ferritic, and martensitic are metallurgical structures in steels.",
+      "member_ids": [],
+      "members": [],
+      "remarks": [
+        "This class is a parent category and should not directly contain entities; it should group the specific structure classes below.",
+        "This class is a parent grouping and should not directly contain entities; ensure it is used only as a container for the specific structure classes.",
+        "This class is a schema-level parent and should be enforced as an abstract/container class, not for direct entity assignment."
+      ]
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"merge_classes\",\n    \"args\": {\n      \"class_ids\": [\"ClsC_e02e2ae6\", \"ClsC_184b995e\"],\n      \"provisional_id\": \"MERGE(ClsC_e02e2ae6|ClsC_184b995e)\",\n      \"new_name\": \"Steel Metallurgical Families and Structures\",\n      \"new_description\": \"Unified class for major metallurgical families and structure types in steels, including austenitic, ferritic, martensitic, and duplex, grouped by microstructure and alloying elements. Serves as a parent category for specific structure classes.\",\n      \"new_class_type_hint\": \"Metallurgical Family/Structure Category\",\n      \"justification\": \"Both classes describe the same high-level metallurgical groupings in steels (austenitic, ferritic, martensitic, duplex), with overlapping scope and no entities; maintaining two is redundant.\",\n      \"remark\": \"Merged to eliminate redundant parent/umbrella classes for steel metallurgical families/structures.\",\n      \"confidence\": 0.95\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"MERGE(ClsC_e02e2ae6|ClsC_184b995e)\",\n      \"new_name\": null,\n      \"new_description\": null,\n      \"new_class_type_hint\": null,\n      \"new_class_group\": \"Steel Metallurgical Families\",\n      \"remark\": null,\n      \"justification\": \"Assigning canonical Class_Group to merged class for schema consistency.\",\n      \"confidence\": 0.95\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "merge_classes",
+      "args": {
+        "class_ids": [
+          "ClsC_e02e2ae6",
+          "ClsC_184b995e"
+        ],
+        "provisional_id": "MERGE(ClsC_e02e2ae6|ClsC_184b995e)",
+        "new_name": "Steel Metallurgical Families and Structures",
+        "new_description": "Unified class for major metallurgical families and structure types in steels, including austenitic, ferritic, martensitic, and duplex, grouped by microstructure and alloying elements. Serves as a parent category for specific structure classes.",
+        "new_class_type_hint": "Metallurgical Family/Structure Category",
+        "justification": "Both classes describe the same high-level metallurgical groupings in steels (austenitic, ferritic, martensitic, duplex), with overlapping scope and no entities; maintaining two is redundant.",
+        "remark": "Merged to eliminate redundant parent/umbrella classes for steel metallurgical families/structures.",
+        "confidence": 0.95
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "MERGE(ClsC_e02e2ae6|ClsC_184b995e)",
+        "new_name": null,
+        "new_description": null,
+        "new_class_type_hint": null,
+        "new_class_group": "Steel Metallurgical Families",
+        "remark": null,
+        "justification": "Assigning canonical Class_Group to merged class for schema consistency.",
+        "confidence": 0.95
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "merge_classes",
+      "input_class_ids": [
+        "ClsC_e02e2ae6",
+        "ClsC_184b995e"
+      ],
+      "result_class_id": "ClsR_1c1ccd62",
+      "provisional_id": "MERGE(ClsC_e02e2ae6|ClsC_184b995e)",
+      "justification": "Both classes describe the same high-level metallurgical groupings in steels (austenitic, ferritic, martensitic, duplex), with overlapping scope and no entities; maintaining two is redundant.",
+      "remark": "Merged to eliminate redundant parent/umbrella classes for steel metallurgical families/structures.",
+      "confidence": 0.95
+    },
+    {
+      "action": "modify_class",
+      "class_id": "MERGE(ClsC_e02e2ae6|ClsC_184b995e)",
+      "class_id_resolved": "ClsR_1c1ccd62",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Steel Metallurgical Families",
+      "remark": null,
+      "justification": "Assigning canonical Class_Group to merged class for schema consistency.",
+      "confidence": 0.95
+    }
+  ],
+  "provisional_to_real": {
+    "MERGE(ClsC_e02e2ae6|ClsC_184b995e)": "ClsR_1c1ccd62",
+    "ClsC_e02e2ae6": "ClsR_1c1ccd62",
+    "ClsC_184b995e": "ClsR_1c1ccd62"
+  },
+  "timestamp": "2025-12-28T00:05:26Z"
+}

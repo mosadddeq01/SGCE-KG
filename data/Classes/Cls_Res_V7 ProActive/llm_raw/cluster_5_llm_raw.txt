@@ -1,0 +1,77 @@
+[
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_23f4b838",
+      "new_name": "Stainless Steel Types",
+      "new_description": "Various types of stainless steels categorized by their metallurgical structures, including austenitic, ferritic, and martensitic.",
+      "new_class_type_hint": "Material",
+      "new_class_group": "Steel Metallurgy",
+      "remark": null,
+      "justification": "Assigning Class_Group 'Steel Metallurgy' to connect stainless steel types to related metallurgical structure classes.",
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_7eb3547f",
+      "new_name": "Metallurgical Structures in Steels",
+      "new_description": "Metallurgical structures found in steels, including austenitic, ferritic, and martensitic, which determine material properties and corrosion resistance.",
+      "new_class_type_hint": "MetallurgicalStructure",
+      "new_class_group": "Steel Metallurgy",
+      "remark": null,
+      "justification": "Assigning Class_Group 'Steel Metallurgy' to connect metallurgical structure concepts to stainless steel types and corrosion-resistant alloys.",
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_7b01a4f7",
+      "new_name": "Corrosion-Resistant Alloys",
+      "new_description": "Alloys known for their resistance to corrosion, including stainless steels, duplex stainless steels, and nickel base alloys.",
+      "new_class_type_hint": "Material",
+      "new_class_group": "Steel Metallurgy",
+      "remark": null,
+      "justification": "Assigning Class_Group 'Steel Metallurgy' to connect corrosion-resistant alloys to stainless steel types and metallurgical structures.",
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "split_class",
+    "args": {
+      "source_class_id": "ClsC_7eb3547f",
+      "splits": [
+        {
+          "name": "Martensitic Metallurgical Structure",
+          "description": "Martensitic structure as found in steels, especially stainless steels.",
+          "class_type_hint": "MetallurgicalStructure",
+          "member_ids": ["Can_c3c96b1a"],
+          "provisional_id": "SPLIT_Martensitic"
+        },
+        {
+          "name": "Austenitic and Ferritic Metallurgical Structures",
+          "description": "Austenitic and ferritic structures as found in steels.",
+          "class_type_hint": "MetallurgicalStructure",
+          "member_ids": ["Can_2acbb9eb", "Can_449bd7c2"],
+          "provisional_id": "SPLIT_Austenitic_Ferritic"
+        }
+      ],
+      "justification": "Splitting 'Metallurgical Structures' class because martensitic is a distinct structure with different properties and is sometimes treated separately in metallurgy literature.",
+      "remark": null,
+      "confidence": 0.85
+    }
+  },
+  {
+    "function": "reassign_entities",
+    "args": {
+      "entity_ids": ["Can_c3c96b1a"],
+      "from_class_id": "ClsC_7eb3547f",
+      "to_class_id": "SPLIT_Martensitic",
+      "justification": "Martensitic structure is distinct and should be separated for clarity and schema precision.",
+      "remark": null,
+      "confidence": 0.85
+    }
+  }
+]

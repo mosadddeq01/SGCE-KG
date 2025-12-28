@@ -1,0 +1,80 @@
+[
+  {
+    "function": "merge_classes",
+    "args": {
+      "class_ids": ["ClsC_b60ec55d", "ClsC_fe182f8c", "ClsC_5170d333"],
+      "provisional_id": "MERGE(ClsC_b60ec55d|ClsC_fe182f8c|ClsC_5170d333)",
+      "new_name": "Engineering and Industry Standards",
+      "new_description": "Comprehensive standards and codes for construction, inspection, integrity assessment, and safe operation of equipment and structures in engineering and industrial settings.",
+      "new_class_type_hint": "Standard",
+      "justification": "All three classes group standards and codes for construction, inspection, and assessment in engineering/industrial contexts, with overlapping scope and no clear separation; merging eliminates redundancy and clarifies schema.",
+      "remark": null,
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "MERGE(ClsC_b60ec55d|ClsC_fe182f8c|ClsC_5170d333)",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Engineering Standards & Reference Materials",
+      "remark": null,
+      "justification": "Assigns a clear, domain-appropriate Class_Group connecting standards and reference materials relevant to engineering and industry.",
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "merge_classes",
+    "args": {
+      "class_ids": ["ClsC_03853fbf", "ClsC_91b98947", "ClsC_7d180b44"],
+      "provisional_id": "MERGE(ClsC_03853fbf|ClsC_91b98947|ClsC_7d180b44)",
+      "new_name": "Engineering Reference Materials",
+      "new_description": "Reference handbooks, manuals, and publications providing technical information on metals, corrosion, failure analysis, and material behavior for engineering applications.",
+      "new_class_type_hint": "Reference Material",
+      "justification": "These classes all contain reference materials (ASM, ASTM, corrosion) used for technical guidance in engineering; entity overlap (e.g., ASM Vol 13, ASTM MNL41) and similar scope justify merging.",
+      "remark": null,
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "MERGE(ClsC_03853fbf|ClsC_91b98947|ClsC_7d180b44)",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Engineering Standards & Reference Materials",
+      "remark": null,
+      "justification": "Assigns the same Class_Group as the merged standards class, reflecting their close relationship in engineering technical documentation.",
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_57081982",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Inspection & Testing Methods",
+      "remark": null,
+      "justification": "Assigns a clear, domain-appropriate Class_Group for inspection and testing methods, distinct from standards and reference materials.",
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_8edcb6d1",
+      "new_name": "Fitness-For-Service Reports",
+      "new_description": "Reports detailing fitness-for-service evaluation procedures for pressure vessels, tanks, and piping.",
+      "new_class_type_hint": "Report",
+      "new_class_group": "Engineering Standards & Reference Materials",
+      "remark": null,
+      "justification": "Renames and reclassifies the class for clarity, and assigns it to the same Class_Group as standards and reference materials due to its technical evaluation focus.",
+      "confidence": 0.9
+    }
+  }
+]

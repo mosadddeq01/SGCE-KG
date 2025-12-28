@@ -1,0 +1,256 @@
+{
+  "cluster_label": 0,
+  "cluster_classes": [
+    {
+      "candidate_id": "ClsC_7e6ece2a",
+      "class_label": "Amine Treating Chemicals",
+      "class_description": "Chemicals used in amine treating processes to remove H2S and CO2 from hydrocarbon streams.",
+      "class_type_hint": "Chemical",
+      "class_group": "Refining Chemicals and Process Units",
+      "confidence": 0.95,
+      "evidence_excerpt": "used in amine treating to remove H2S and CO2.",
+      "member_ids": [
+        "En_b6489a63",
+        "En_a38530be",
+        "En_24fd3367"
+      ],
+      "members": [
+        {
+          "id": "En_b6489a63",
+          "entity_name": "diethanolamine (DEA)",
+          "entity_description": "A chemical used in amine treating to remove H2S and CO2 from hydrocarbon streams.",
+          "entity_type_hint": "Chemical"
+        },
+        {
+          "id": "En_a38530be",
+          "entity_name": "methyldiethanolamine",
+          "entity_description": "A chemical used in amine treating to remove H2S and CO2 from hydrocarbon streams.",
+          "entity_type_hint": "Material"
+        },
+        {
+          "id": "En_24fd3367",
+          "entity_name": "monoethanolamine",
+          "entity_description": "A chemical used in amine treating to remove H2S and CO2 from hydrocarbon streams.",
+          "entity_type_hint": "Material"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_b0e6fee5",
+      "class_label": "Sour Water Treatment",
+      "class_description": "Processes and substances involved in the treatment of sour water containing hydrogen sulfide.",
+      "class_type_hint": "Process",
+      "class_group": "Refining Chemicals and Process Units",
+      "confidence": 0.88,
+      "evidence_excerpt": "treating sour water by removing contaminants.",
+      "member_ids": [],
+      "members": [],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_e3c642a8",
+      "class_label": "Vacuum Distillation Unit",
+      "class_description": "A process unit designed to separate components at reduced pressure to lower their boiling points.",
+      "class_type_hint": "Process Unit",
+      "class_group": "Refining Chemicals and Process Units",
+      "confidence": 0.95,
+      "evidence_excerpt": "",
+      "member_ids": [
+        "En_c71fc6d7"
+      ],
+      "members": [
+        {
+          "id": "En_c71fc6d7",
+          "entity_name": "vacuum distillation unit",
+          "entity_description": "A process unit that separates components at reduced pressure to lower boiling points.",
+          "entity_type_hint": "ProcessUnit"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsR_08b1321b",
+      "class_label": "Sour Water",
+      "class_description": "Water containing hydrogen sulfide and other sulfur compounds, often requiring treatment.",
+      "class_type_hint": "Environment",
+      "class_group": "Refining Chemicals and Process Units",
+      "confidence": 0.88,
+      "evidence_excerpt": "treating sour water by removing contaminants.",
+      "member_ids": [
+        "En_da73a6e7"
+      ],
+      "members": [
+        {
+          "id": "En_da73a6e7",
+          "entity_name": "sour water",
+          "entity_description": "Water containing hydrogen sulfide and other sulfur compounds, often requiring treatment.",
+          "entity_type_hint": "Environment"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsR_0f9f0d76",
+      "class_label": "Sour Water Stripper",
+      "class_description": "A process unit used to remove hydrogen sulfide and ammonia from sour water.",
+      "class_type_hint": "Process Unit",
+      "class_group": "Refining Chemicals and Process Units",
+      "confidence": 0.88,
+      "evidence_excerpt": "treating sour water by removing contaminants.",
+      "member_ids": [
+        "En_3b78069f"
+      ],
+      "members": [
+        {
+          "id": "En_3b78069f",
+          "entity_name": "sour water stripper",
+          "entity_description": "A process unit used to remove hydrogen sulfide and ammonia from sour water.",
+          "entity_type_hint": "ProcessUnit"
+        }
+      ],
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"split_class\",\n    \"args\": {\n      \"source_class_id\": \"ClsC_b0e6fee5\",\n      \"splits\": [\n        {\n          \"name\": \"Sour Water Treatment Processes\",\n          \"description\": \"Processes involved in the treatment of sour water containing hydrogen sulfide.\",\n          \"class_type_hint\": \"Process\",\n          \"member_ids\": [],\n          \"provisional_id\": \"SPLIT(ClsC_b0e6fee5)_Process\"\n        },\n        {\n          \"name\": \"Sour Water Treatment Chemicals\",\n          \"description\": \"Chemicals and substances used in the treatment of sour water containing hydrogen sulfide.\",\n          \"class_type_hint\": \"Chemical\",\n          \"member_ids\": [],\n          \"provisional_id\": \"SPLIT(ClsC_b0e6fee5)_Chemical\"\n        }\n      ],\n      \"justification\": \"The class 'Sour Water Treatment' is overloaded, referring both to processes and to substances/chemicals; splitting clarifies the schema and aligns with other class distinctions.\",\n      \"remark\": null,\n      \"confidence\": 0.85\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_7e6ece2a\",\n      \"new_name\": \"Amine Treating Chemicals\",\n      \"new_description\": null,\n      \"new_class_type_hint\": null,\n      \"new_class_group\": \"Refining Process Chemicals and Units\",\n      \"remark\": null,\n      \"justification\": \"Refined Class_Group name to be more canonical and reusable across related classes.\",\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_e3c642a8\",\n      \"new_name\": \"Vacuum Distillation Unit\",\n      \"new_description\": null,\n      \"new_class_type_hint\": null,\n      \"new_class_group\": \"Refining Process Chemicals and Units\",\n      \"remark\": null,\n      \"justification\": \"Refined Class_Group name for consistency and broader schema connectivity.\",\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsR_08b1321b\",\n      \"new_name\": \"Sour Water\",\n      \"new_description\": null,\n      \"new_class_type_hint\": null,\n      \"new_class_group\": \"Refining Process Chemicals and Units\",\n      \"remark\": null,\n      \"justification\": \"Refined Class_Group name for consistency and broader schema connectivity.\",\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsR_0f9f0d76\",\n      \"new_name\": \"Sour Water Stripper\",\n      \"new_description\": null,\n      \"new_class_type_hint\": null,\n      \"new_class_group\": \"Refining Process Chemicals and Units\",\n      \"remark\": null,\n      \"justification\": \"Refined Class_Group name for consistency and broader schema connectivity.\",\n      \"confidence\": 0.9\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "split_class",
+      "args": {
+        "source_class_id": "ClsC_b0e6fee5",
+        "splits": [
+          {
+            "name": "Sour Water Treatment Processes",
+            "description": "Processes involved in the treatment of sour water containing hydrogen sulfide.",
+            "class_type_hint": "Process",
+            "member_ids": [],
+            "provisional_id": "SPLIT(ClsC_b0e6fee5)_Process"
+          },
+          {
+            "name": "Sour Water Treatment Chemicals",
+            "description": "Chemicals and substances used in the treatment of sour water containing hydrogen sulfide.",
+            "class_type_hint": "Chemical",
+            "member_ids": [],
+            "provisional_id": "SPLIT(ClsC_b0e6fee5)_Chemical"
+          }
+        ],
+        "justification": "The class 'Sour Water Treatment' is overloaded, referring both to processes and to substances/chemicals; splitting clarifies the schema and aligns with other class distinctions.",
+        "remark": null,
+        "confidence": 0.85
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_7e6ece2a",
+        "new_name": "Amine Treating Chemicals",
+        "new_description": null,
+        "new_class_type_hint": null,
+        "new_class_group": "Refining Process Chemicals and Units",
+        "remark": null,
+        "justification": "Refined Class_Group name to be more canonical and reusable across related classes.",
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_e3c642a8",
+        "new_name": "Vacuum Distillation Unit",
+        "new_description": null,
+        "new_class_type_hint": null,
+        "new_class_group": "Refining Process Chemicals and Units",
+        "remark": null,
+        "justification": "Refined Class_Group name for consistency and broader schema connectivity.",
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsR_08b1321b",
+        "new_name": "Sour Water",
+        "new_description": null,
+        "new_class_type_hint": null,
+        "new_class_group": "Refining Process Chemicals and Units",
+        "remark": null,
+        "justification": "Refined Class_Group name for consistency and broader schema connectivity.",
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsR_0f9f0d76",
+        "new_name": "Sour Water Stripper",
+        "new_description": null,
+        "new_class_type_hint": null,
+        "new_class_group": "Refining Process Chemicals and Units",
+        "remark": null,
+        "justification": "Refined Class_Group name for consistency and broader schema connectivity.",
+        "confidence": 0.9
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "split_class",
+      "source_class_id": "ClsC_b0e6fee5",
+      "source_class_id_resolved": "ClsC_b0e6fee5",
+      "created_classes": [],
+      "justification": "The class 'Sour Water Treatment' is overloaded, referring both to processes and to substances/chemicals; splitting clarifies the schema and aligns with other class distinctions.",
+      "remark": null,
+      "confidence": 0.85
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_7e6ece2a",
+      "class_id_resolved": "ClsC_7e6ece2a",
+      "new_name": "Amine Treating Chemicals",
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Refining Process Chemicals and Units",
+      "remark": null,
+      "justification": "Refined Class_Group name to be more canonical and reusable across related classes.",
+      "confidence": 0.9
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_e3c642a8",
+      "class_id_resolved": "ClsC_e3c642a8",
+      "new_name": "Vacuum Distillation Unit",
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Refining Process Chemicals and Units",
+      "remark": null,
+      "justification": "Refined Class_Group name for consistency and broader schema connectivity.",
+      "confidence": 0.9
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsR_08b1321b",
+      "class_id_resolved": "ClsR_08b1321b",
+      "new_name": "Sour Water",
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Refining Process Chemicals and Units",
+      "remark": null,
+      "justification": "Refined Class_Group name for consistency and broader schema connectivity.",
+      "confidence": 0.9
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsR_0f9f0d76",
+      "class_id_resolved": "ClsR_0f9f0d76",
+      "new_name": "Sour Water Stripper",
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Refining Process Chemicals and Units",
+      "remark": null,
+      "justification": "Refined Class_Group name for consistency and broader schema connectivity.",
+      "confidence": 0.9
+    }
+  ],
+  "provisional_to_real": {},
+  "timestamp": "2025-12-28T00:02:43Z"
+}

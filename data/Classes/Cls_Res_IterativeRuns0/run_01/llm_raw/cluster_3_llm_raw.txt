@@ -1,0 +1,125 @@
+[
+  {
+    "function": "split_class",
+    "args": {
+      "source_class_id": "ClsC_e02e2ae6",
+      "splits": [
+        {
+          "name": "Austenitic Stainless Steels",
+          "description": "Stainless steels with austenitic structure, including 300 Series types.",
+          "class_type_hint": "Material",
+          "member_ids": ["En_d9cbe1b8"],
+          "provisional_id": "SPLIT_AUSTENITIC"
+        },
+        {
+          "name": "Ferritic Stainless Steels",
+          "description": "Stainless steels with ferritic structure, including 400 Series types.",
+          "class_type_hint": "Material",
+          "member_ids": ["En_31c964a4"],
+          "provisional_id": "SPLIT_FERRITIC"
+        },
+        {
+          "name": "Martensitic Stainless Steels",
+          "description": "Stainless steels with martensitic structure, including Types 410, 420, 440, etc.",
+          "class_type_hint": "Material",
+          "member_ids": ["En_e3269efb"],
+          "provisional_id": "SPLIT_MARTENSITIC"
+        }
+      ],
+      "justification": "ClsC_e02e2ae6 is overloaded, grouping distinct stainless steel types by metallurgical structure; splitting enables clearer mapping to structure-based classes.",
+      "remark": null,
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_184b995e",
+      "new_name": "Steel Metallurgical Structures",
+      "new_description": "Metallurgical structures found in steels, including austenitic, ferritic, and martensitic.",
+      "new_class_type_hint": "MetallurgicalStructure",
+      "new_class_group": "Steel Metallurgy",
+      "remark": null,
+      "justification": "Class label and group updated for clarity and to align with other structure-based classes.",
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "SPLIT_AUSTENITIC",
+      "new_name": "Austenitic Stainless Steels",
+      "new_description": "Stainless steels with austenitic structure, including 300 Series types.",
+      "new_class_type_hint": "Material",
+      "new_class_group": "Steel Metallurgy",
+      "remark": null,
+      "justification": "Assigning Class_Group to new split class for schema consistency.",
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "SPLIT_FERRITIC",
+      "new_name": "Ferritic Stainless Steels",
+      "new_description": "Stainless steels with ferritic structure, including 400 Series types.",
+      "new_class_type_hint": "Material",
+      "new_class_group": "Steel Metallurgy",
+      "remark": null,
+      "justification": "Assigning Class_Group to new split class for schema consistency.",
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "SPLIT_MARTENSITIC",
+      "new_name": "Martensitic Stainless Steels",
+      "new_description": "Stainless steels with martensitic structure, including Types 410, 420, 440, etc.",
+      "new_class_type_hint": "Material",
+      "new_class_group": "Steel Metallurgy",
+      "remark": null,
+      "justification": "Assigning Class_Group to new split class for schema consistency.",
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsR_0d0a8df1",
+      "new_name": "Austenitic Structure",
+      "new_description": "Metallurgical structure: austenite, found in 300 Series stainless steels and nickel base alloys.",
+      "new_class_type_hint": "MetallurgicalStructure",
+      "new_class_group": "Steel Metallurgy",
+      "remark": null,
+      "justification": "Confirming and standardizing Class_Group for all metallurgical structure classes.",
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsR_dfcac651",
+      "new_name": "Ferritic Structure",
+      "new_description": "Metallurgical structure: ferrite, found in carbon and low alloy steels and many 400 series stainless steels.",
+      "new_class_type_hint": "MetallurgicalStructure",
+      "new_class_group": "Steel Metallurgy",
+      "remark": null,
+      "justification": "Confirming and standardizing Class_Group for all metallurgical structure classes.",
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsR_bf18e8ef",
+      "new_name": "Martensitic Structure",
+      "new_description": "Metallurgical structure: martensite, found in some stainless steels.",
+      "new_class_type_hint": "MetallurgicalStructure",
+      "new_class_group": "Steel Metallurgy",
+      "remark": null,
+      "justification": "Confirming and standardizing Class_Group for all metallurgical structure classes.",
+      "confidence": 0.9
+    }
+  }
+]

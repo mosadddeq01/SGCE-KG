@@ -1,0 +1,125 @@
+{
+  "cluster_label": -1,
+  "cluster_classes": [
+    {
+      "candidate_id": "ClsC_d685324c",
+      "class_label": "High-Temperature Steels",
+      "class_description": "Steels designed for high temperature applications, including low alloy and quenched and tempered types.",
+      "class_type_hint": "Material",
+      "class_group": "TBD",
+      "confidence": 0.8,
+      "evidence_excerpt": "Used for high temperature strength and creep resistance.",
+      "member_ids": [
+        "En_a458e346",
+        "En_7ecdae42"
+      ],
+      "members": [
+        {
+          "id": "En_a458e346",
+          "entity_name": "quenched and tempered 2-1/4Cr-1Mo steel",
+          "entity_description": "A type of steel used for thick wall reactor vessels in petroleum refinery processes.",
+          "entity_type_hint": "Material"
+        },
+        {
+          "id": "En_7ecdae42",
+          "entity_name": "low alloy steel",
+          "entity_description": "Steels with up to 9% chromium and other alloys for high temperature strength and creep resistance.",
+          "entity_type_hint": "Material"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_416df87c",
+      "class_label": "General Corrosion",
+      "class_description": "Broad corrosion processes that stainless steels resist, including oxidation and sulfidation.",
+      "class_type_hint": "Damage Mechanism",
+      "class_group": "TBD",
+      "confidence": 0.88,
+      "evidence_excerpt": "Stainless steels resist various forms of corrosion.",
+      "member_ids": [
+        "En_2b400819",
+        "En_56c0bd49",
+        "En_fefc46ef"
+      ],
+      "members": [
+        {
+          "id": "En_2b400819",
+          "entity_name": "general corrosion",
+          "entity_description": "A broad process that stainless steels resist due to their alloy content, encompassing various forms like oxidation and sulfidation.",
+          "entity_type_hint": "DamageMechanism"
+        },
+        {
+          "id": "En_56c0bd49",
+          "entity_name": "oxidation",
+          "entity_description": "A chemical reaction that stainless steels resist due to their alloy content.",
+          "entity_type_hint": "DamageMechanism"
+        },
+        {
+          "id": "En_fefc46ef",
+          "entity_name": "sulfidation",
+          "entity_description": "A chemical reaction that stainless steels resist due to their alloy content.",
+          "entity_type_hint": "DamageMechanism"
+        }
+      ],
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_d685324c\",\n      \"new_name\": \"High-Temperature Steels\",\n      \"new_description\": \"Steels engineered for use in high-temperature environments, including low alloy and quenched and tempered types, valued for strength and creep resistance.\",\n      \"new_class_type_hint\": \"Material\",\n      \"new_class_group\": \"Metallurgical Materials and Degradation\",\n      \"remark\": null,\n      \"justification\": \"Assigning a domain-meaningful Class_Group to connect materials and their associated degradation mechanisms, as both classes relate to high-temperature metallurgy and its challenges.\",\n      \"confidence\": 0.95\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_416df87c\",\n      \"new_name\": \"General Corrosion Mechanisms\",\n      \"new_description\": \"Corrosion processes, including oxidation and sulfidation, that are resisted by stainless steels and other high-temperature alloys.\",\n      \"new_class_type_hint\": \"Damage Mechanism\",\n      \"new_class_group\": \"Metallurgical Materials and Degradation\",\n      \"remark\": null,\n      \"justification\": \"Assigning the same Class_Group as the related material class to reflect their close relationship in high-temperature metallurgical contexts.\",\n      \"confidence\": 0.95\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_d685324c",
+        "new_name": "High-Temperature Steels",
+        "new_description": "Steels engineered for use in high-temperature environments, including low alloy and quenched and tempered types, valued for strength and creep resistance.",
+        "new_class_type_hint": "Material",
+        "new_class_group": "Metallurgical Materials and Degradation",
+        "remark": null,
+        "justification": "Assigning a domain-meaningful Class_Group to connect materials and their associated degradation mechanisms, as both classes relate to high-temperature metallurgy and its challenges.",
+        "confidence": 0.95
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_416df87c",
+        "new_name": "General Corrosion Mechanisms",
+        "new_description": "Corrosion processes, including oxidation and sulfidation, that are resisted by stainless steels and other high-temperature alloys.",
+        "new_class_type_hint": "Damage Mechanism",
+        "new_class_group": "Metallurgical Materials and Degradation",
+        "remark": null,
+        "justification": "Assigning the same Class_Group as the related material class to reflect their close relationship in high-temperature metallurgical contexts.",
+        "confidence": 0.95
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_d685324c",
+      "class_id_resolved": "ClsC_d685324c",
+      "new_name": "High-Temperature Steels",
+      "new_description": "Steels engineered for use in high-temperature environments, including low alloy and quenched and tempered types, valued for strength and creep resistance.",
+      "new_class_type_hint": "Material",
+      "new_class_group": "Metallurgical Materials and Degradation",
+      "remark": null,
+      "justification": "Assigning a domain-meaningful Class_Group to connect materials and their associated degradation mechanisms, as both classes relate to high-temperature metallurgy and its challenges.",
+      "confidence": 0.95
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_416df87c",
+      "class_id_resolved": "ClsC_416df87c",
+      "new_name": "General Corrosion Mechanisms",
+      "new_description": "Corrosion processes, including oxidation and sulfidation, that are resisted by stainless steels and other high-temperature alloys.",
+      "new_class_type_hint": "Damage Mechanism",
+      "new_class_group": "Metallurgical Materials and Degradation",
+      "remark": null,
+      "justification": "Assigning the same Class_Group as the related material class to reflect their close relationship in high-temperature metallurgical contexts.",
+      "confidence": 0.95
+    }
+  ],
+  "provisional_to_real": {},
+  "timestamp": "2025-12-28T00:02:27Z"
+}

@@ -1,0 +1,208 @@
+{
+  "cluster_label": 6,
+  "cluster_classes": [
+    {
+      "candidate_id": "ClsC_c57a96c1",
+      "class_label": "External Corrosion Mechanisms",
+      "class_description": "Corrosion mechanisms affecting external surfaces, including corrosion under insulation and on underground or submerged systems.",
+      "class_type_hint": "Damage Mechanism",
+      "class_group": "Corrosion Mechanisms",
+      "confidence": 0.85,
+      "evidence_excerpt": "Corrosion on external surfaces and beneath insulation.",
+      "member_ids": [
+        "En_9574d8b7",
+        "En_d504ed6b"
+      ],
+      "members": [
+        {
+          "id": "En_9574d8b7",
+          "entity_name": "external corrosion",
+          "entity_description": "Corrosion occurring on the outer surfaces of underground or submerged metallic piping systems.",
+          "entity_type_hint": "DamageMechanism"
+        },
+        {
+          "id": "En_d504ed6b",
+          "entity_name": "corrosion under thermal insulation",
+          "entity_description": "Corrosion that occurs beneath insulation materials, often exacerbated by trapped moisture.",
+          "entity_type_hint": "DamageMechanism"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_79ac2db8",
+      "class_label": "High-Temperature Corrosion Mechanisms",
+      "class_description": "Corrosion mechanisms occurring at elevated temperatures, including oxidation and sulfidation, affecting material integrity.",
+      "class_type_hint": "Damage Mechanism",
+      "class_group": "Corrosion Mechanisms",
+      "confidence": 0.9,
+      "evidence_excerpt": "Corrosion at high temperatures, affecting material integrity.",
+      "member_ids": [
+        "En_56c0bd49",
+        "En_fefc46ef",
+        "En_baec7c0b"
+      ],
+      "members": [
+        {
+          "id": "En_56c0bd49",
+          "entity_name": "oxidation",
+          "entity_description": "A chemical reaction that stainless steels resist due to their alloy content.",
+          "entity_type_hint": "DamageMechanism"
+        },
+        {
+          "id": "En_fefc46ef",
+          "entity_name": "sulfidation",
+          "entity_description": "A chemical reaction that stainless steels resist due to their alloy content.",
+          "entity_type_hint": "DamageMechanism"
+        },
+        {
+          "id": "En_baec7c0b",
+          "entity_name": "High Temperature Corrosion",
+          "entity_description": "Corrosion occurring at elevated temperatures, affecting material integrity.",
+          "entity_type_hint": "DamageMechanism"
+        }
+      ],
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"split_class\",\n    \"args\": {\n      \"source_class_id\": \"ClsC_79ac2db8\",\n      \"splits\": [\n        {\n          \"name\": \"Oxidation and Sulfidation Mechanisms\",\n          \"description\": \"Corrosion mechanisms at high temperature specifically involving oxidation and sulfidation reactions.\",\n          \"class_type_hint\": \"Damage Mechanism\",\n          \"member_ids\": [\n            \"En_56c0bd49\",\n            \"En_fefc46ef\"\n          ],\n          \"provisional_id\": \"SPLIT(ClsC_79ac2db8)_OxidationSulfidation\"\n        },\n        {\n          \"name\": \"General High-Temperature Corrosion\",\n          \"description\": \"Corrosion mechanisms at high temperature not limited to oxidation or sulfidation.\",\n          \"class_type_hint\": \"Damage Mechanism\",\n          \"member_ids\": [\n            \"En_baec7c0b\"\n          ],\n          \"provisional_id\": \"SPLIT(ClsC_79ac2db8)_GeneralHTCorrosion\"\n        }\n      ],\n      \"justification\": \"ClsC_79ac2db8 is overloaded: 'oxidation' and 'sulfidation' are specific mechanisms, while 'High Temperature Corrosion' is a broader category; splitting improves schema clarity.\",\n      \"remark\": null,\n      \"confidence\": 0.95\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_c57a96c1\",\n      \"new_name\": \"External Corrosion Mechanisms\",\n      \"new_description\": \"Corrosion mechanisms affecting external surfaces, including corrosion under insulation and on underground or submerged systems.\",\n      \"new_class_type_hint\": \"Damage Mechanism\",\n      \"new_class_group\": \"Corrosion Mechanisms\",\n      \"remark\": null,\n      \"justification\": \"Confirming and clarifying class_group for ClsC_c57a96c1 to ensure schema consistency after split.\",\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"SPLIT(ClsC_79ac2db8)_OxidationSulfidation\",\n      \"new_name\": \"Oxidation and Sulfidation Mechanisms\",\n      \"new_description\": \"Corrosion mechanisms at high temperature specifically involving oxidation and sulfidation reactions.\",\n      \"new_class_type_hint\": \"Damage Mechanism\",\n      \"new_class_group\": \"Corrosion Mechanisms\",\n      \"remark\": null,\n      \"justification\": \"Assigning correct class_group to new split class for schema connectivity.\",\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"SPLIT(ClsC_79ac2db8)_GeneralHTCorrosion\",\n      \"new_name\": \"General High-Temperature Corrosion\",\n      \"new_description\": \"Corrosion mechanisms at high temperature not limited to oxidation or sulfidation.\",\n      \"new_class_type_hint\": \"Damage Mechanism\",\n      \"new_class_group\": \"Corrosion Mechanisms\",\n      \"remark\": null,\n      \"justification\": \"Assigning correct class_group to new split class for schema connectivity.\",\n      \"confidence\": 0.9\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "split_class",
+      "args": {
+        "source_class_id": "ClsC_79ac2db8",
+        "splits": [
+          {
+            "name": "Oxidation and Sulfidation Mechanisms",
+            "description": "Corrosion mechanisms at high temperature specifically involving oxidation and sulfidation reactions.",
+            "class_type_hint": "Damage Mechanism",
+            "member_ids": [
+              "En_56c0bd49",
+              "En_fefc46ef"
+            ],
+            "provisional_id": "SPLIT(ClsC_79ac2db8)_OxidationSulfidation"
+          },
+          {
+            "name": "General High-Temperature Corrosion",
+            "description": "Corrosion mechanisms at high temperature not limited to oxidation or sulfidation.",
+            "class_type_hint": "Damage Mechanism",
+            "member_ids": [
+              "En_baec7c0b"
+            ],
+            "provisional_id": "SPLIT(ClsC_79ac2db8)_GeneralHTCorrosion"
+          }
+        ],
+        "justification": "ClsC_79ac2db8 is overloaded: 'oxidation' and 'sulfidation' are specific mechanisms, while 'High Temperature Corrosion' is a broader category; splitting improves schema clarity.",
+        "remark": null,
+        "confidence": 0.95
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_c57a96c1",
+        "new_name": "External Corrosion Mechanisms",
+        "new_description": "Corrosion mechanisms affecting external surfaces, including corrosion under insulation and on underground or submerged systems.",
+        "new_class_type_hint": "Damage Mechanism",
+        "new_class_group": "Corrosion Mechanisms",
+        "remark": null,
+        "justification": "Confirming and clarifying class_group for ClsC_c57a96c1 to ensure schema consistency after split.",
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "SPLIT(ClsC_79ac2db8)_OxidationSulfidation",
+        "new_name": "Oxidation and Sulfidation Mechanisms",
+        "new_description": "Corrosion mechanisms at high temperature specifically involving oxidation and sulfidation reactions.",
+        "new_class_type_hint": "Damage Mechanism",
+        "new_class_group": "Corrosion Mechanisms",
+        "remark": null,
+        "justification": "Assigning correct class_group to new split class for schema connectivity.",
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "SPLIT(ClsC_79ac2db8)_GeneralHTCorrosion",
+        "new_name": "General High-Temperature Corrosion",
+        "new_description": "Corrosion mechanisms at high temperature not limited to oxidation or sulfidation.",
+        "new_class_type_hint": "Damage Mechanism",
+        "new_class_group": "Corrosion Mechanisms",
+        "remark": null,
+        "justification": "Assigning correct class_group to new split class for schema connectivity.",
+        "confidence": 0.9
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "split_class",
+      "source_class_id": "ClsC_79ac2db8",
+      "source_class_id_resolved": "ClsC_79ac2db8",
+      "created_classes": [
+        {
+          "new_class_id": "ClsR_f183943d",
+          "provisional_id": "SPLIT(ClsC_79ac2db8)_OxidationSulfidation",
+          "member_ids": [
+            "En_56c0bd49",
+            "En_fefc46ef"
+          ]
+        },
+        {
+          "new_class_id": "ClsR_a28908bf",
+          "provisional_id": "SPLIT(ClsC_79ac2db8)_GeneralHTCorrosion",
+          "member_ids": [
+            "En_baec7c0b"
+          ]
+        }
+      ],
+      "justification": "ClsC_79ac2db8 is overloaded: 'oxidation' and 'sulfidation' are specific mechanisms, while 'High Temperature Corrosion' is a broader category; splitting improves schema clarity.",
+      "remark": null,
+      "confidence": 0.95
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_c57a96c1",
+      "class_id_resolved": "ClsC_c57a96c1",
+      "new_name": "External Corrosion Mechanisms",
+      "new_description": "Corrosion mechanisms affecting external surfaces, including corrosion under insulation and on underground or submerged systems.",
+      "new_class_type_hint": "Damage Mechanism",
+      "new_class_group": "Corrosion Mechanisms",
+      "remark": null,
+      "justification": "Confirming and clarifying class_group for ClsC_c57a96c1 to ensure schema consistency after split.",
+      "confidence": 0.9
+    },
+    {
+      "action": "modify_class",
+      "class_id": "SPLIT(ClsC_79ac2db8)_OxidationSulfidation",
+      "class_id_resolved": "ClsR_f183943d",
+      "new_name": "Oxidation and Sulfidation Mechanisms",
+      "new_description": "Corrosion mechanisms at high temperature specifically involving oxidation and sulfidation reactions.",
+      "new_class_type_hint": "Damage Mechanism",
+      "new_class_group": "Corrosion Mechanisms",
+      "remark": null,
+      "justification": "Assigning correct class_group to new split class for schema connectivity.",
+      "confidence": 0.9
+    },
+    {
+      "action": "modify_class",
+      "class_id": "SPLIT(ClsC_79ac2db8)_GeneralHTCorrosion",
+      "class_id_resolved": "ClsR_a28908bf",
+      "new_name": "General High-Temperature Corrosion",
+      "new_description": "Corrosion mechanisms at high temperature not limited to oxidation or sulfidation.",
+      "new_class_type_hint": "Damage Mechanism",
+      "new_class_group": "Corrosion Mechanisms",
+      "remark": null,
+      "justification": "Assigning correct class_group to new split class for schema connectivity.",
+      "confidence": 0.9
+    }
+  ],
+  "provisional_to_real": {
+    "SPLIT(ClsC_79ac2db8)_OxidationSulfidation": "ClsR_f183943d",
+    "SPLIT(ClsC_79ac2db8)_GeneralHTCorrosion": "ClsR_a28908bf"
+  },
+  "timestamp": "2025-12-28T00:23:00Z"
+}

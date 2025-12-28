@@ -1,0 +1,358 @@
+{
+  "cluster_label": 3,
+  "cluster_classes": [
+    {
+      "candidate_id": "ClsC_7d8ac253",
+      "class_label": "Hydrogen-Induced Cracking",
+      "class_description": "Cracking mechanisms in metals caused by hydrogen, including SOHIC and HIC.",
+      "class_type_hint": "Damage Mechanism",
+      "class_group": "TBD",
+      "confidence": 0.85,
+      "evidence_excerpt": "Cracking in hydrogen-exposed steel, often near welds.",
+      "member_ids": [
+        "Can_04c94b79",
+        "En_d0d2d7c7"
+      ],
+      "members": [
+        {
+          "id": "Can_04c94b79",
+          "entity_name": "Stress Oriented Hydrogen Induced Cracking (SOHIC)",
+          "entity_description": "A type of cracking in steel caused by the presence of hydrogen and stress, often near welds, characterized by cracks aligned nearly perpendicular to stress.",
+          "entity_type_hint": "DamageMechanism"
+        },
+        {
+          "id": "En_d0d2d7c7",
+          "entity_name": "Hydrogen Induced Cracking (HIC)",
+          "entity_description": "Stepwise internal cracks in metal connecting hydrogen blisters, occurring without external stress.",
+          "entity_type_hint": "DamageMechanism"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_03e60d10",
+      "class_label": "Sulfide and Acid Stress Cracking",
+      "class_description": "Cracking mechanisms in metals due to sulfide and acid environments, including sulfide stress cracking and polythionic acid stress corrosion cracking.",
+      "class_type_hint": "Damage Mechanism",
+      "class_group": "TBD",
+      "confidence": 0.82,
+      "evidence_excerpt": "Cracking in sulfide and acid environments.",
+      "member_ids": [
+        "En_a9e4aa90",
+        "En_c7aaaee0"
+      ],
+      "members": [
+        {
+          "id": "En_a9e4aa90",
+          "entity_name": "sulfide stress cracking",
+          "entity_description": "A form of hydrogen embrittlement that occurs in metals exposed to sulfide environments.",
+          "entity_type_hint": "DamageMechanism"
+        },
+        {
+          "id": "En_c7aaaee0",
+          "entity_name": "polythionic acid stress corrosion cracking",
+          "entity_description": "A type of corrosion that affects austenitic stainless steels and other austenitic alloys during shutdowns.",
+          "entity_type_hint": "DamageMechanism"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_e9a1c8ba",
+      "class_label": "Environmental Cracking",
+      "class_description": "Cracking mechanisms in metals due to environmental factors, including wet H2S environments and carbon steel weldments.",
+      "class_type_hint": "Damage Mechanism",
+      "class_group": "TBD",
+      "confidence": 0.8,
+      "evidence_excerpt": "Cracking in corrosive environments.",
+      "member_ids": [
+        "En_19cc48f3",
+        "En_1a88e9ed"
+      ],
+      "members": [
+        {
+          "id": "En_19cc48f3",
+          "entity_name": "cracking in wet H2S environments",
+          "entity_description": "Cracking of pressure vessels in environments containing wet hydrogen sulfide.",
+          "entity_type_hint": "DamageMechanism"
+        },
+        {
+          "id": "En_1a88e9ed",
+          "entity_name": "environmental cracking of carbon steel weldments",
+          "entity_description": "Cracking that occurs in carbon steel weldments due to environmental factors in corrosive environments.",
+          "entity_type_hint": "DamageMechanism"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_47ffa62a",
+      "class_label": "General Stress Corrosion Cracking",
+      "class_description": "Cracking mechanisms in materials due to stress and corrosive environments, including stress corrosion cracking and environment assisted cracking.",
+      "class_type_hint": "Damage Mechanism",
+      "class_group": "TBD",
+      "confidence": 0.83,
+      "evidence_excerpt": "Cracking due to stress and corrosive environments.",
+      "member_ids": [
+        "En_a608496c",
+        "En_038f5dc2"
+      ],
+      "members": [
+        {
+          "id": "En_a608496c",
+          "entity_name": "stress corrosion cracking",
+          "entity_description": "A failure mechanism where cracks form in a material due to the combined effects of tensile stress and a corrosive environment.",
+          "entity_type_hint": "DamageMechanism"
+        },
+        {
+          "id": "En_038f5dc2",
+          "entity_name": "Environment Assisted Cracking",
+          "entity_description": "Cracking of materials facilitated by environmental conditions.",
+          "entity_type_hint": "DamageMechanism"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_26300b9e",
+      "class_label": "Material Damage Mechanisms",
+      "class_description": "Mechanisms causing material degradation, including mechanical, metallurgical, and thickness loss processes.",
+      "class_type_hint": "Failure Mechanism",
+      "class_group": "TBD",
+      "confidence": 0.85,
+      "evidence_excerpt": "The mechanisms are divided into sections: a) Mechanical and Metallurgical Failure, b) Uniform or Localized Loss of Thickness.",
+      "member_ids": [
+        "En_6a5f3538",
+        "En_8ed6cfa3"
+      ],
+      "members": [
+        {
+          "id": "En_6a5f3538",
+          "entity_name": "Mechanical and Metallurgical Failure",
+          "entity_description": "Failure mechanisms related to mechanical and metallurgical processes in various industries.",
+          "entity_type_hint": "DamageMechanism"
+        },
+        {
+          "id": "En_8ed6cfa3",
+          "entity_name": "Uniform or Localized Loss of Thickness",
+          "entity_description": "A damage mechanism involving the reduction of material thickness, either uniformly or in specific areas.",
+          "entity_type_hint": "DamageMechanism"
+        }
+      ],
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"split_class\",\n    \"args\": {\n      \"source_class_id\": \"ClsC_26300b9e\",\n      \"splits\": [\n        {\n          \"name\": \"Mechanical and Metallurgical Failure Mechanisms\",\n          \"description\": \"Failure mechanisms related to mechanical and metallurgical processes.\",\n          \"class_type_hint\": \"Damage Mechanism\",\n          \"member_ids\": [\"En_6a5f3538\"],\n          \"provisional_id\": \"SPLIT_MechanicalMetallurgical_26300b9e\"\n        },\n        {\n          \"name\": \"Thickness Loss Mechanisms\",\n          \"description\": \"Mechanisms involving uniform or localized loss of material thickness.\",\n          \"class_type_hint\": \"Damage Mechanism\",\n          \"member_ids\": [\"En_8ed6cfa3\"],\n          \"provisional_id\": \"SPLIT_ThicknessLoss_26300b9e\"\n        }\n      ],\n      \"justification\": \"ClsC_26300b9e is overloaded, grouping unrelated mechanisms (mechanical/metallurgical failure vs. thickness loss); splitting improves schema coherence.\",\n      \"remark\": null,\n      \"confidence\": 0.95\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_7d8ac253\",\n      \"new_name\": \"Hydrogen-Induced Cracking Mechanisms\",\n      \"new_description\": \"Cracking mechanisms in metals caused by hydrogen, including SOHIC and HIC.\",\n      \"new_class_type_hint\": \"Damage Mechanism\",\n      \"new_class_group\": \"Environmental Cracking Mechanisms\",\n      \"remark\": null,\n      \"justification\": \"Assigning a more precise Class_Group to connect hydrogen-related cracking with other environmental cracking classes.\",\n      \"confidence\": 0.95\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_03e60d10\",\n      \"new_name\": \"Sulfide and Acid Stress Cracking Mechanisms\",\n      \"new_description\": \"Cracking mechanisms in metals due to sulfide and acid environments, including sulfide stress cracking and polythionic acid stress corrosion cracking.\",\n      \"new_class_type_hint\": \"Damage Mechanism\",\n      \"new_class_group\": \"Environmental Cracking Mechanisms\",\n      \"remark\": null,\n      \"justification\": \"Assigning to the same Class_Group as other environmental cracking mechanisms for schema consistency.\",\n      \"confidence\": 0.95\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_e9a1c8ba\",\n      \"new_name\": \"Environmental Cracking Mechanisms\",\n      \"new_description\": \"Cracking mechanisms in metals due to environmental factors, including wet H2S environments and carbon steel weldments.\",\n      \"new_class_type_hint\": \"Damage Mechanism\",\n      \"new_class_group\": \"Environmental Cracking Mechanisms\",\n      \"remark\": null,\n      \"justification\": \"Class_Group assignment aligns with other classes focused on environmental cracking.\",\n      \"confidence\": 0.95\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_47ffa62a\",\n      \"new_name\": \"General Stress Corrosion Cracking Mechanisms\",\n      \"new_description\": \"Cracking mechanisms in materials due to stress and corrosive environments, including stress corrosion cracking and environment assisted cracking.\",\n      \"new_class_type_hint\": \"Damage Mechanism\",\n      \"new_class_group\": \"Environmental Cracking Mechanisms\",\n      \"remark\": null,\n      \"justification\": \"Assigning to the same Class_Group as other environmental cracking classes for schema connectivity.\",\n      \"confidence\": 0.95\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"SPLIT_MechanicalMetallurgical_26300b9e\",\n      \"new_name\": \"Mechanical and Metallurgical Failure Mechanisms\",\n      \"new_description\": \"Failure mechanisms related to mechanical and metallurgical processes.\",\n      \"new_class_type_hint\": \"Damage Mechanism\",\n      \"new_class_group\": \"Material Failure Mechanisms\",\n      \"remark\": null,\n      \"justification\": \"Assigning a distinct Class_Group for mechanical/metallurgical failure mechanisms, separate from environmental cracking.\",\n      \"confidence\": 0.95\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"SPLIT_ThicknessLoss_26300b9e\",\n      \"new_name\": \"Thickness Loss Mechanisms\",\n      \"new_description\": \"Mechanisms involving uniform or localized loss of material thickness.\",\n      \"new_class_type_hint\": \"Damage Mechanism\",\n      \"new_class_group\": \"Material Loss Mechanisms\",\n      \"remark\": null,\n      \"justification\": \"Assigning a distinct Class_Group for thickness loss mechanisms, as this is a different degradation mode from cracking or mechanical failure.\",\n      \"confidence\": 0.95\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "split_class",
+      "args": {
+        "source_class_id": "ClsC_26300b9e",
+        "splits": [
+          {
+            "name": "Mechanical and Metallurgical Failure Mechanisms",
+            "description": "Failure mechanisms related to mechanical and metallurgical processes.",
+            "class_type_hint": "Damage Mechanism",
+            "member_ids": [
+              "En_6a5f3538"
+            ],
+            "provisional_id": "SPLIT_MechanicalMetallurgical_26300b9e"
+          },
+          {
+            "name": "Thickness Loss Mechanisms",
+            "description": "Mechanisms involving uniform or localized loss of material thickness.",
+            "class_type_hint": "Damage Mechanism",
+            "member_ids": [
+              "En_8ed6cfa3"
+            ],
+            "provisional_id": "SPLIT_ThicknessLoss_26300b9e"
+          }
+        ],
+        "justification": "ClsC_26300b9e is overloaded, grouping unrelated mechanisms (mechanical/metallurgical failure vs. thickness loss); splitting improves schema coherence.",
+        "remark": null,
+        "confidence": 0.95
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_7d8ac253",
+        "new_name": "Hydrogen-Induced Cracking Mechanisms",
+        "new_description": "Cracking mechanisms in metals caused by hydrogen, including SOHIC and HIC.",
+        "new_class_type_hint": "Damage Mechanism",
+        "new_class_group": "Environmental Cracking Mechanisms",
+        "remark": null,
+        "justification": "Assigning a more precise Class_Group to connect hydrogen-related cracking with other environmental cracking classes.",
+        "confidence": 0.95
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_03e60d10",
+        "new_name": "Sulfide and Acid Stress Cracking Mechanisms",
+        "new_description": "Cracking mechanisms in metals due to sulfide and acid environments, including sulfide stress cracking and polythionic acid stress corrosion cracking.",
+        "new_class_type_hint": "Damage Mechanism",
+        "new_class_group": "Environmental Cracking Mechanisms",
+        "remark": null,
+        "justification": "Assigning to the same Class_Group as other environmental cracking mechanisms for schema consistency.",
+        "confidence": 0.95
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_e9a1c8ba",
+        "new_name": "Environmental Cracking Mechanisms",
+        "new_description": "Cracking mechanisms in metals due to environmental factors, including wet H2S environments and carbon steel weldments.",
+        "new_class_type_hint": "Damage Mechanism",
+        "new_class_group": "Environmental Cracking Mechanisms",
+        "remark": null,
+        "justification": "Class_Group assignment aligns with other classes focused on environmental cracking.",
+        "confidence": 0.95
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_47ffa62a",
+        "new_name": "General Stress Corrosion Cracking Mechanisms",
+        "new_description": "Cracking mechanisms in materials due to stress and corrosive environments, including stress corrosion cracking and environment assisted cracking.",
+        "new_class_type_hint": "Damage Mechanism",
+        "new_class_group": "Environmental Cracking Mechanisms",
+        "remark": null,
+        "justification": "Assigning to the same Class_Group as other environmental cracking classes for schema connectivity.",
+        "confidence": 0.95
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "SPLIT_MechanicalMetallurgical_26300b9e",
+        "new_name": "Mechanical and Metallurgical Failure Mechanisms",
+        "new_description": "Failure mechanisms related to mechanical and metallurgical processes.",
+        "new_class_type_hint": "Damage Mechanism",
+        "new_class_group": "Material Failure Mechanisms",
+        "remark": null,
+        "justification": "Assigning a distinct Class_Group for mechanical/metallurgical failure mechanisms, separate from environmental cracking.",
+        "confidence": 0.95
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "SPLIT_ThicknessLoss_26300b9e",
+        "new_name": "Thickness Loss Mechanisms",
+        "new_description": "Mechanisms involving uniform or localized loss of material thickness.",
+        "new_class_type_hint": "Damage Mechanism",
+        "new_class_group": "Material Loss Mechanisms",
+        "remark": null,
+        "justification": "Assigning a distinct Class_Group for thickness loss mechanisms, as this is a different degradation mode from cracking or mechanical failure.",
+        "confidence": 0.95
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "split_class",
+      "source_class_id": "ClsC_26300b9e",
+      "source_class_id_resolved": "ClsC_26300b9e",
+      "created_classes": [
+        {
+          "new_class_id": "ClsR_0b6df3b1",
+          "provisional_id": "SPLIT_MechanicalMetallurgical_26300b9e",
+          "member_ids": [
+            "En_6a5f3538"
+          ]
+        },
+        {
+          "new_class_id": "ClsR_3fd3a011",
+          "provisional_id": "SPLIT_ThicknessLoss_26300b9e",
+          "member_ids": [
+            "En_8ed6cfa3"
+          ]
+        }
+      ],
+      "justification": "ClsC_26300b9e is overloaded, grouping unrelated mechanisms (mechanical/metallurgical failure vs. thickness loss); splitting improves schema coherence.",
+      "remark": null,
+      "confidence": 0.95
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_7d8ac253",
+      "class_id_resolved": "ClsC_7d8ac253",
+      "new_name": "Hydrogen-Induced Cracking Mechanisms",
+      "new_description": "Cracking mechanisms in metals caused by hydrogen, including SOHIC and HIC.",
+      "new_class_type_hint": "Damage Mechanism",
+      "new_class_group": "Environmental Cracking Mechanisms",
+      "remark": null,
+      "justification": "Assigning a more precise Class_Group to connect hydrogen-related cracking with other environmental cracking classes.",
+      "confidence": 0.95
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_03e60d10",
+      "class_id_resolved": "ClsC_03e60d10",
+      "new_name": "Sulfide and Acid Stress Cracking Mechanisms",
+      "new_description": "Cracking mechanisms in metals due to sulfide and acid environments, including sulfide stress cracking and polythionic acid stress corrosion cracking.",
+      "new_class_type_hint": "Damage Mechanism",
+      "new_class_group": "Environmental Cracking Mechanisms",
+      "remark": null,
+      "justification": "Assigning to the same Class_Group as other environmental cracking mechanisms for schema consistency.",
+      "confidence": 0.95
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_e9a1c8ba",
+      "class_id_resolved": "ClsC_e9a1c8ba",
+      "new_name": "Environmental Cracking Mechanisms",
+      "new_description": "Cracking mechanisms in metals due to environmental factors, including wet H2S environments and carbon steel weldments.",
+      "new_class_type_hint": "Damage Mechanism",
+      "new_class_group": "Environmental Cracking Mechanisms",
+      "remark": null,
+      "justification": "Class_Group assignment aligns with other classes focused on environmental cracking.",
+      "confidence": 0.95
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_47ffa62a",
+      "class_id_resolved": "ClsC_47ffa62a",
+      "new_name": "General Stress Corrosion Cracking Mechanisms",
+      "new_description": "Cracking mechanisms in materials due to stress and corrosive environments, including stress corrosion cracking and environment assisted cracking.",
+      "new_class_type_hint": "Damage Mechanism",
+      "new_class_group": "Environmental Cracking Mechanisms",
+      "remark": null,
+      "justification": "Assigning to the same Class_Group as other environmental cracking classes for schema connectivity.",
+      "confidence": 0.95
+    },
+    {
+      "action": "modify_class",
+      "class_id": "SPLIT_MechanicalMetallurgical_26300b9e",
+      "class_id_resolved": "ClsR_0b6df3b1",
+      "new_name": "Mechanical and Metallurgical Failure Mechanisms",
+      "new_description": "Failure mechanisms related to mechanical and metallurgical processes.",
+      "new_class_type_hint": "Damage Mechanism",
+      "new_class_group": "Material Failure Mechanisms",
+      "remark": null,
+      "justification": "Assigning a distinct Class_Group for mechanical/metallurgical failure mechanisms, separate from environmental cracking.",
+      "confidence": 0.95
+    },
+    {
+      "action": "modify_class",
+      "class_id": "SPLIT_ThicknessLoss_26300b9e",
+      "class_id_resolved": "ClsR_3fd3a011",
+      "new_name": "Thickness Loss Mechanisms",
+      "new_description": "Mechanisms involving uniform or localized loss of material thickness.",
+      "new_class_type_hint": "Damage Mechanism",
+      "new_class_group": "Material Loss Mechanisms",
+      "remark": null,
+      "justification": "Assigning a distinct Class_Group for thickness loss mechanisms, as this is a different degradation mode from cracking or mechanical failure.",
+      "confidence": 0.95
+    }
+  ],
+  "provisional_to_real": {
+    "SPLIT_MechanicalMetallurgical_26300b9e": "ClsR_0b6df3b1",
+    "SPLIT_ThicknessLoss_26300b9e": "ClsR_3fd3a011"
+  },
+  "timestamp": "2025-12-28T00:22:06Z"
+}

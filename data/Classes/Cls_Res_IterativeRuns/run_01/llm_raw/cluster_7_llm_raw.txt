@@ -1,0 +1,95 @@
+[
+  {
+    "function": "split_class",
+    "args": {
+      "source_class_id": "ClsC_03e60d10",
+      "splits": [
+        {
+          "name": "Sulfide Stress Cracking Mechanisms",
+          "description": "Cracking mechanisms in metals due to sulfide environments, including sulfide stress cracking.",
+          "class_type_hint": "Damage Mechanism",
+          "member_ids": ["En_a9e4aa90"],
+          "provisional_id": "SPLIT_SSC_ClsC_03e60d10"
+        },
+        {
+          "name": "Acid Stress Corrosion Cracking Mechanisms",
+          "description": "Cracking mechanisms in metals due to acid environments, including polythionic acid stress corrosion cracking.",
+          "class_type_hint": "Damage Mechanism",
+          "member_ids": ["En_c7aaaee0"],
+          "provisional_id": "SPLIT_ASCC_ClsC_03e60d10"
+        }
+      ],
+      "justification": "ClsC_03e60d10 is overloaded, grouping sulfide and acid mechanisms that are distinct in cause and industry treatment; splitting improves schema clarity.",
+      "remark": null,
+      "confidence": 0.92
+    }
+  },
+  {
+    "function": "merge_classes",
+    "args": {
+      "class_ids": [
+        "ClsC_7d8ac253",
+        "SPLIT_SSC_ClsC_03e60d10"
+      ],
+      "provisional_id": "MERGE_Hydrogen_Sulfide_Cracking",
+      "new_name": "Hydrogen and Sulfide-Induced Cracking Mechanisms",
+      "new_description": "Cracking mechanisms in metals caused by hydrogen and/or sulfide environments, including SOHIC, HIC, and sulfide stress cracking.",
+      "new_class_type_hint": "Damage Mechanism",
+      "justification": "SOHIC, HIC, and sulfide stress cracking are closely related hydrogen/sulfide-induced mechanisms, often co-occurring and treated together in industry standards.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "MERGE_Hydrogen_Sulfide_Cracking",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Environmental Cracking Mechanisms",
+      "remark": null,
+      "justification": "Assigns correct Class_Group to merged hydrogen/sulfide-induced cracking class for schema consistency.",
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "SPLIT_ASCC_ClsC_03e60d10",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Environmental Cracking Mechanisms",
+      "remark": null,
+      "justification": "Assigns correct Class_Group to acid stress corrosion cracking class for schema consistency.",
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_e9a1c8ba",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Environmental Cracking Mechanisms",
+      "remark": null,
+      "justification": "Confirms and standardizes Class_Group for general environmental cracking mechanisms.",
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_47ffa62a",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Environmental Cracking Mechanisms",
+      "remark": null,
+      "justification": "Confirms and standardizes Class_Group for general stress corrosion cracking mechanisms.",
+      "confidence": 0.95
+    }
+  }
+]

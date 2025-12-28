@@ -1,0 +1,150 @@
+{
+  "cluster_label": 4,
+  "cluster_classes": [
+    {
+      "candidate_id": "ClsR_e53925aa",
+      "class_label": "Austenitic Stainless Steels",
+      "class_description": "Stainless steels with austenitic structure, including 300 Series types such as 304, 316, 321, and 347.",
+      "class_type_hint": "Material Subfamily",
+      "class_group": "Stainless Steels",
+      "confidence": 0.95,
+      "evidence_excerpt": "Austenitic, ferritic, and martensitic stainless steels are specific families within stainless steels.",
+      "member_ids": [
+        "En_d9cbe1b8"
+      ],
+      "members": [
+        {
+          "id": "En_d9cbe1b8",
+          "entity_name": "austenitic stainless steels",
+          "entity_description": "300 Series stainless steels including Types 304, 304L, 304H, 309, 310, 316, 316L, 316H, 321, 321H, 347, and 347H.",
+          "entity_type_hint": "Material"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsR_48556d3c",
+      "class_label": "Ferritic Stainless Steels",
+      "class_description": "Stainless steels with ferritic structure, including 400 Series types such as 405, 409, 430, 442, and 446.",
+      "class_type_hint": "Material Subfamily",
+      "class_group": "Stainless Steels",
+      "confidence": 0.95,
+      "evidence_excerpt": "Austenitic, ferritic, and martensitic stainless steels are specific families within stainless steels.",
+      "member_ids": [
+        "En_31c964a4"
+      ],
+      "members": [
+        {
+          "id": "En_31c964a4",
+          "entity_name": "ferritic stainless steels",
+          "entity_description": "A family of stainless steels including Types 405, 409, 430, 442, and 446.",
+          "entity_type_hint": "Material"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsR_4cc34fd2",
+      "class_label": "Martensitic Stainless Steels",
+      "class_description": "Stainless steels with martensitic structure, including Types 410, 420, 440, etc.",
+      "class_type_hint": "Material Subfamily",
+      "class_group": "Stainless Steels",
+      "confidence": 0.95,
+      "evidence_excerpt": "Austenitic, ferritic, and martensitic stainless steels are specific families within stainless steels.",
+      "member_ids": [
+        "En_e3269efb"
+      ],
+      "members": [
+        {
+          "id": "En_e3269efb",
+          "entity_name": "martensitic stainless steel",
+          "entity_description": "A type of stainless steel that includes Types 410, 410S, 416, 420, 440A, 440B, and 440C.",
+          "entity_type_hint": "Material"
+        }
+      ],
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsR_e53925aa\",\n      \"new_name\": \"Austenitic Stainless Steels\",\n      \"new_description\": \"Stainless steels with austenitic structure, including 300 Series types such as 304, 316, 321, and 347.\",\n      \"new_class_type_hint\": \"Material Subfamily\",\n      \"new_class_group\": \"Stainless Steel Families\",\n      \"remark\": null,\n      \"justification\": \"The current class_group 'Stainless Steels' is too broad; these classes represent subfamilies within stainless steels, so a more precise Class_Group 'Stainless Steel Families' is warranted.\",\n      \"confidence\": 0.95\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsR_48556d3c\",\n      \"new_name\": \"Ferritic Stainless Steels\",\n      \"new_description\": \"Stainless steels with ferritic structure, including 400 Series types such as 405, 409, 430, 442, and 446.\",\n      \"new_class_type_hint\": \"Material Subfamily\",\n      \"new_class_group\": \"Stainless Steel Families\",\n      \"remark\": null,\n      \"justification\": \"Aligning class_group to 'Stainless Steel Families' for consistency and to reflect the subfamily structure within stainless steels.\",\n      \"confidence\": 0.95\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsR_4cc34fd2\",\n      \"new_name\": \"Martensitic Stainless Steels\",\n      \"new_description\": \"Stainless steels with martensitic structure, including Types 410, 420, 440, etc.\",\n      \"new_class_type_hint\": \"Material Subfamily\",\n      \"new_class_group\": \"Stainless Steel Families\",\n      \"remark\": null,\n      \"justification\": \"Assigning the more precise Class_Group 'Stainless Steel Families' to reflect the relationship among these subfamilies.\",\n      \"confidence\": 0.95\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsR_e53925aa",
+        "new_name": "Austenitic Stainless Steels",
+        "new_description": "Stainless steels with austenitic structure, including 300 Series types such as 304, 316, 321, and 347.",
+        "new_class_type_hint": "Material Subfamily",
+        "new_class_group": "Stainless Steel Families",
+        "remark": null,
+        "justification": "The current class_group 'Stainless Steels' is too broad; these classes represent subfamilies within stainless steels, so a more precise Class_Group 'Stainless Steel Families' is warranted.",
+        "confidence": 0.95
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsR_48556d3c",
+        "new_name": "Ferritic Stainless Steels",
+        "new_description": "Stainless steels with ferritic structure, including 400 Series types such as 405, 409, 430, 442, and 446.",
+        "new_class_type_hint": "Material Subfamily",
+        "new_class_group": "Stainless Steel Families",
+        "remark": null,
+        "justification": "Aligning class_group to 'Stainless Steel Families' for consistency and to reflect the subfamily structure within stainless steels.",
+        "confidence": 0.95
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsR_4cc34fd2",
+        "new_name": "Martensitic Stainless Steels",
+        "new_description": "Stainless steels with martensitic structure, including Types 410, 420, 440, etc.",
+        "new_class_type_hint": "Material Subfamily",
+        "new_class_group": "Stainless Steel Families",
+        "remark": null,
+        "justification": "Assigning the more precise Class_Group 'Stainless Steel Families' to reflect the relationship among these subfamilies.",
+        "confidence": 0.95
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_class",
+      "class_id": "ClsR_e53925aa",
+      "class_id_resolved": "ClsR_e53925aa",
+      "new_name": "Austenitic Stainless Steels",
+      "new_description": "Stainless steels with austenitic structure, including 300 Series types such as 304, 316, 321, and 347.",
+      "new_class_type_hint": "Material Subfamily",
+      "new_class_group": "Stainless Steel Families",
+      "remark": null,
+      "justification": "The current class_group 'Stainless Steels' is too broad; these classes represent subfamilies within stainless steels, so a more precise Class_Group 'Stainless Steel Families' is warranted.",
+      "confidence": 0.95
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsR_48556d3c",
+      "class_id_resolved": "ClsR_48556d3c",
+      "new_name": "Ferritic Stainless Steels",
+      "new_description": "Stainless steels with ferritic structure, including 400 Series types such as 405, 409, 430, 442, and 446.",
+      "new_class_type_hint": "Material Subfamily",
+      "new_class_group": "Stainless Steel Families",
+      "remark": null,
+      "justification": "Aligning class_group to 'Stainless Steel Families' for consistency and to reflect the subfamily structure within stainless steels.",
+      "confidence": 0.95
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsR_4cc34fd2",
+      "class_id_resolved": "ClsR_4cc34fd2",
+      "new_name": "Martensitic Stainless Steels",
+      "new_description": "Stainless steels with martensitic structure, including Types 410, 420, 440, etc.",
+      "new_class_type_hint": "Material Subfamily",
+      "new_class_group": "Stainless Steel Families",
+      "remark": null,
+      "justification": "Assigning the more precise Class_Group 'Stainless Steel Families' to reflect the relationship among these subfamilies.",
+      "confidence": 0.95
+    }
+  ],
+  "provisional_to_real": {},
+  "timestamp": "2025-12-28T00:04:59Z"
+}

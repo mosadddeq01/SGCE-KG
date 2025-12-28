@@ -1,0 +1,96 @@
+[
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_57081982",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Inspection & Testing Methods",
+      "remark": null,
+      "justification": "Class_Group is already correctly set for 'Non-Destructive Testing Methods', which is distinct from the standards/reference material classes.",
+      "confidence": 0.98
+    }
+  },
+  {
+    "function": "merge_classes",
+    "args": {
+      "class_ids": [
+        "ClsR_63bd630e",
+        "ClsR_a711b454"
+      ],
+      "provisional_id": "MERGE(ClsR_63bd630e|ClsR_a711b454)",
+      "new_name": "Pressure Vessel Standards",
+      "new_description": "Standards and codes for the construction, inspection, integrity assessment, and safe operation of pressure vessels and related equipment.",
+      "new_class_type_hint": "Standard",
+      "justification": "ClsR_63bd630e is an empty, generic class with a description overlapping entirely with ClsR_a711b454, which contains all relevant entities; merging removes redundancy and clarifies schema.",
+      "remark": null,
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "MERGE(ClsR_63bd630e|ClsR_a711b454)",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Engineering Standards & Reference Materials",
+      "remark": null,
+      "justification": "Merged class should retain the correct Class_Group for standards and reference materials.",
+      "confidence": 0.98
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsR_a8a3b6e5",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Engineering Standards & Reference Materials",
+      "remark": null,
+      "justification": "Class_Group is already correct for 'Engineering Reference Materials', which is distinct but related to other standards classes.",
+      "confidence": 0.98
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsR_0d61bff5",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Engineering Standards & Reference Materials",
+      "remark": null,
+      "justification": "Class_Group is already correct for 'Corrosion and Risk-Based Standards'.",
+      "confidence": 0.98
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsR_a9817748",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Engineering Standards & Reference Materials",
+      "remark": null,
+      "justification": "Class_Group is already correct for 'Fitness-For-Service Standards and Reports'.",
+      "confidence": 0.98
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsR_1de157d2",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Engineering Standards & Reference Materials",
+      "remark": null,
+      "justification": "Class_Group is already correct for 'General Engineering Standards'.",
+      "confidence": 0.98
+    }
+  }
+]

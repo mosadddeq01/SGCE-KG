@@ -1,0 +1,444 @@
+
+You are a careful class resolution assistant.
+
+You are given a set of candidate CLASSES that appear to belong,
+or may plausibly belong, to the same semantic cluster.
+This grouping is NOT guaranteed to be correct and should be treated as suggestive,
+not definitive.
+
+Your task is to conservatively refine the schema using this tentative grouping.
+
+========================
+SCHEMA STRUCTURE (CRITICAL)
+========================
+
+We are building a TWO-LAYER SCHEMA over entities:
+
+Level 0: Class_Group        (connects related classes)
+Level 1: Classes            (group entities)
+Level 2: Entities
+
+Structure:
+Class_Group
+  └── Class
+        └── Entity
+
+- Class_Group is the PRIMARY mechanism for connecting related classes.
+- Classes that share a Class_Group are considered semantically related.
+- This relationship propagates to their entities.
+
+========================
+IMPORTANT FIELD DISTINCTIONS
+========================
+
+- class_type_hint (existing field):
+  A local, descriptive hint assigned to each class in isolation.
+  It is often noisy, incomplete, and inconsistent across classes.
+  Do NOT assume it is globally correct or reusable.
+
+- Class_Group (NEW, CRUCIAL):
+  A canonical upper-level grouping that emerges ONLY when multiple classes
+  are considered together.
+  It is used to connect related classes into a coherent schema.
+  Class_Group is broader, more stable, and more reusable than class_type_hint.
+
+Class_Group is NOT a synonym of class_type_hint.
+
+========================
+YOUR PRIMARY TASK
+========================
+
+For the given cluster of classes:
+
+1) Assess whether any structural changes are REQUIRED:
+   - merge truly duplicate or near-duplicate classes
+   - reassign clearly mis-assigned entities
+   - create a new class ONLY if strictly necessary
+   - modify class metadata ONLY if meaningfully incorrect
+
+2) ALWAYS assess and assign an appropriate Class_Group:
+   - If Class_Group is missing, null, or marked as TBD → you MUST assign it.
+   - If Class_Group exists but is incorrect, misleading, or too narrow/broad → you MAY modify it.
+   - If everything else is correct, assigning or confirming Class_Group ALONE is sufficient.
+
+Class_Group assignment is the MINIMUM expected outcome of this step.
+
+========================
+IMPORTANT CONSERVATISM RULE
+========================
+
+- Only order a function if a real semantic change is necessary.
+- Do NOT perform cosmetic edits or unnecessary normalization.
+- Do NOT rephrase labels or descriptions unless meaningfully wrong.
+- If classes and entity memberships are already correct:
+  → DO NOT order merge, create, reassign, or modify actions beyond Class_Group.
+
+BALANCE & ORDERING (SHORT)
+- Class_Group is required, but do NOT stop there: if there is clear evidence (overlapping members, contradictory descriptions, high-confidence mismatch) perform merges/reassigns/creates/modifies as needed.
+- If you perform any structural changes, do them first; always include a final modify_class that sets or confirms the Class_Group as the last step for the cluster.
+
+
+========================
+AVAILABLE FUNCTIONS
+========================
+
+Return ONLY a JSON ARRAY of ordered function calls.
+
+Each object must have:
+- "function": one of
+  ["merge_classes", "create_class", "reassign_entities", "modify_class"]
+- "args": arguments as defined below.
+
+1) merge_classes
+args = {
+  "class_ids": [<existing_class_ids>],
+  "new_name": <string or null>,
+  "new_description": <string or null>,
+  "new_class_type_hint": <string or null>
+}
+
+2) create_class
+args = {
+  "name": <string>,
+  "description": <string or null>,
+  "class_type_hint": <string or null>,
+  "member_ids": [<entity_ids>]   # optional
+}
+
+3) reassign_entities
+args = {
+  "entity_ids": [<entity_ids>],
+  "from_class_id": <existing_class_id or null>,
+  "to_class_id": <existing_or_new_class_id>
+}
+
+4) modify_class
+args = {
+  "class_id": <existing_class_id>,
+  "new_name": <string or null>,
+  "new_description": <string or null>,
+  "new_class_type_hint": <string or null>,
+  "new_class_group": <string>
+}
+
+
+========================
+VALIDATION RULES
+========================
+
+- Use ONLY provided class_ids and entity_ids.
+- Do NOT invent new entity ids or functions.
+- Order matters: later steps may depend on earlier ones.
+
+========================
+STRATEGY GUIDANCE
+========================
+
+- Merge classes ONLY when they are genuinely redundant.
+- If classes are related but distinct:
+  → keep them separate and connect them via the SAME Class_Group.
+- Think in terms of schema connectivity, not cleanup.
+
+========================
+INPUT CLASSES
+========================
+
+Each class includes:
+- candidate_id
+- class_label
+- class_description
+- class_type_hint
+- class_group (may be null or "TBD")
+- confidence
+- evidence_excerpt
+- member_ids
+- members (entity id, name, description, type)
+
+[
+  {
+    "candidate_id": "ClsC_da991b68",
+    "class_label": "Pressure Vessel Standards",
+    "class_description": "Standards and codes related to the construction and inspection of pressure vessels in various industries.",
+    "class_type_hint": "Standard",
+    "class_group": "TBD",
+    "confidence": 0.85,
+    "evidence_excerpt": "Codes for calculating heater tube thickness and construction of pressure vessels.",
+    "member_ids": [
+      "En_3508599f",
+      "En_3d8a8447"
+    ],
+    "members": [
+      {
+        "id": "En_3508599f",
+        "entity_name": "API 530",
+        "entity_description": "Pressure Vessel Inspection Code for calculating heater tube thickness in petroleum refineries.",
+        "entity_type_hint": "Standard"
+      },
+      {
+        "id": "En_3d8a8447",
+        "entity_name": "ASME Boiler and Pressure Vessel Code Section VIII",
+        "entity_description": "Rules for construction of pressure vessels.",
+        "entity_type_hint": "Standard"
+      }
+    ]
+  },
+  {
+    "candidate_id": "ClsC_e32f4a47",
+    "class_label": "Industry Standards",
+    "class_description": "A collection of standards and guidelines for assessing equipment integrity, risk, and safe operation in industrial settings.",
+    "class_type_hint": "Standard",
+    "class_group": "TBD",
+    "confidence": 0.95,
+    "evidence_excerpt": "Standards for equipment integrity, risk, and safe operation.",
+    "member_ids": [
+      "En_95198f7a",
+      "En_e5fa14ee",
+      "En_45419999",
+      "En_658db0c3",
+      "En_4e2351be",
+      "En_1a045908",
+      "En_e947261b"
+    ],
+    "members": [
+      {
+        "id": "En_95198f7a",
+        "entity_name": "RP 579",
+        "entity_description": "Fitness-For-Service standard for assessing the integrity of equipment.",
+        "entity_type_hint": "Standard"
+      },
+      {
+        "id": "En_e5fa14ee",
+        "entity_name": "Publ. 581",
+        "entity_description": "Risk-Based Inspection - Base Resource Document for risk assessment.",
+        "entity_type_hint": "Standard"
+      },
+      {
+        "id": "En_45419999",
+        "entity_name": "RP 751",
+        "entity_description": "Guidelines for the safe operation of hydrofluoric acid alkylation units.",
+        "entity_type_hint": "Standard"
+      },
+      {
+        "id": "En_658db0c3",
+        "entity_name": "RP 932-B",
+        "entity_description": "Guidelines for corrosion control in hydroprocessing reactor effluent air cooler systems.",
+        "entity_type_hint": "Standard"
+      },
+      {
+        "id": "En_4e2351be",
+        "entity_name": "RP 934",
+        "entity_description": "Requirements for materials and fabrication of heavy wall pressure vessels for high temperature and pressure service.",
+        "entity_type_hint": "Standard"
+      },
+      {
+        "id": "En_1a045908",
+        "entity_name": "RP 941",
+        "entity_description": "Standard for steels used in hydrogen service at elevated temperatures and pressures.",
+        "entity_type_hint": "Standard"
+      },
+      {
+        "id": "En_e947261b",
+        "entity_name": "RP 945",
+        "entity_description": "Guidelines for avoiding environmental cracking in amine units.",
+        "entity_type_hint": "Standard"
+      }
+    ]
+  },
+  {
+    "candidate_id": "ClsC_29f7ab69",
+    "class_label": "ASM Metals Handbooks",
+    "class_description": "A series of reference volumes providing comprehensive information on metals, including properties, corrosion, and failure analysis.",
+    "class_type_hint": "Reference Material",
+    "class_group": "TBD",
+    "confidence": 0.95,
+    "evidence_excerpt": "ASM Metals Handbook volumes cover properties, corrosion, and failure analysis.",
+    "member_ids": [
+      "En_5be2b70d",
+      "En_529021da",
+      "En_b3dfb229"
+    ],
+    "members": [
+      {
+        "id": "En_5be2b70d",
+        "entity_name": "ASM Metals Handbook Volume 1",
+        "entity_description": "Reference for properties and selection of iron, steels, and high-performance alloys.",
+        "entity_type_hint": "Reference"
+      },
+      {
+        "id": "En_529021da",
+        "entity_name": "ASM Metals Handbook Volume 13",
+        "entity_description": "Reference for corrosion in petroleum refining and petrochemical operations.",
+        "entity_type_hint": "Reference"
+      },
+      {
+        "id": "En_b3dfb229",
+        "entity_name": "ASM Metals Handbook Volume 11",
+        "entity_description": "Reference for failure analysis and prevention.",
+        "entity_type_hint": "Reference"
+      }
+    ]
+  },
+  {
+    "candidate_id": "ClsC_ef89e821",
+    "class_label": "Corrosion References",
+    "class_description": "Publications focused on corrosion in the petrochemical industry, providing guidelines and analysis.",
+    "class_type_hint": "Reference Material",
+    "class_group": "TBD",
+    "confidence": 0.9,
+    "evidence_excerpt": "Focus on corrosion in petrochemical operations.",
+    "member_ids": [
+      "En_529021da",
+      "En_cae45bdb"
+    ],
+    "members": [
+      {
+        "id": "En_529021da",
+        "entity_name": "ASM Metals Handbook Volume 13",
+        "entity_description": "Reference for corrosion in petroleum refining and petrochemical operations.",
+        "entity_type_hint": "Reference"
+      },
+      {
+        "id": "En_cae45bdb",
+        "entity_name": "ASTM MNL41",
+        "entity_description": "Manual on corrosion in the petrochemical industry.",
+        "entity_type_hint": "Reference"
+      }
+    ]
+  },
+  {
+    "candidate_id": "ClsC_4dc3521c",
+    "class_label": "ASTM Publications",
+    "class_description": "ASTM publications providing specialized studies and manuals on material behavior and industry practices.",
+    "class_type_hint": "Reference Material",
+    "class_group": "TBD",
+    "confidence": 0.88,
+    "evidence_excerpt": "ASTM manuals and studies on material behavior.",
+    "member_ids": [
+      "En_cae45bdb",
+      "En_e9ced1af"
+    ],
+    "members": [
+      {
+        "id": "En_cae45bdb",
+        "entity_name": "ASTM MNL41",
+        "entity_description": "Manual on corrosion in the petrochemical industry.",
+        "entity_type_hint": "Reference"
+      },
+      {
+        "id": "En_e9ced1af",
+        "entity_name": "ASTM STP1428",
+        "entity_description": "Study on thermo-mechanical fatigue behavior of materials.",
+        "entity_type_hint": "Reference"
+      }
+    ]
+  },
+  {
+    "candidate_id": "ClsC_e80bca6e",
+    "class_label": "Non-Destructive Testing Methods",
+    "class_description": "Methods used to inspect materials for defects without causing damage, including radiographic, ultrasonic, visual, and magnetic particle testing.",
+    "class_type_hint": "Inspection Method",
+    "class_group": "TBD",
+    "confidence": 0.95,
+    "evidence_excerpt": "Methods in the FOCUS chunk for detecting defects.",
+    "member_ids": [
+      "En_374342ee",
+      "En_a40dec03",
+      "En_23dad6fc",
+      "En_84774ba7",
+      "En_b3df3885"
+    ],
+    "members": [
+      {
+        "id": "En_374342ee",
+        "entity_name": "radiographic testing",
+        "entity_description": "A non-destructive testing method using X-rays or gamma rays to view the internal structure of a component.",
+        "entity_type_hint": "InspectionMethod"
+      },
+      {
+        "id": "En_a40dec03",
+        "entity_name": "shear wave ultrasonic testing",
+        "entity_description": "An ultrasonic testing method using shear waves to detect flaws in materials.",
+        "entity_type_hint": "InspectionMethod"
+      },
+      {
+        "id": "En_23dad6fc",
+        "entity_name": "ultrasonic testing",
+        "entity_description": "A non-destructive testing method using high-frequency sound waves to detect internal flaws.",
+        "entity_type_hint": "InspectionMethod"
+      },
+      {
+        "id": "En_84774ba7",
+        "entity_name": "visual inspection",
+        "entity_description": "A non-destructive testing method involving the visual examination of a component.",
+        "entity_type_hint": "InspectionMethod"
+      },
+      {
+        "id": "En_b3df3885",
+        "entity_name": "wet fluorescent magnetic particle testing",
+        "entity_description": "A non-destructive testing method using fluorescent particles to detect surface and near-surface defects.",
+        "entity_type_hint": "InspectionMethod"
+      }
+    ]
+  },
+  {
+    "candidate_id": "ClsC_7ad0102a",
+    "class_label": "Engineering Standards",
+    "class_description": "Standards providing guidelines and rules for construction and assessment in engineering applications.",
+    "class_type_hint": "Standard",
+    "class_group": "TBD",
+    "confidence": 0.85,
+    "evidence_excerpt": "Standards for construction and assessment in engineering.",
+    "member_ids": [
+      "En_cc2f7cce",
+      "En_02b98d5e",
+      "En_89226ca0"
+    ],
+    "members": [
+      {
+        "id": "En_cc2f7cce",
+        "entity_name": "Std. 660",
+        "entity_description": "Standard for Shell and Tube Heat Exchangers used in general refinery service.",
+        "entity_type_hint": "Standard"
+      },
+      {
+        "id": "En_02b98d5e",
+        "entity_name": "ASME Boiler and Pressure Vessel Code Section III",
+        "entity_description": "Rules for construction of nuclear power plant components.",
+        "entity_type_hint": "Standard"
+      },
+      {
+        "id": "En_89226ca0",
+        "entity_name": "BSI 7910",
+        "entity_description": "Guidance on methods for assessing the acceptability of flaws in fusion welded structures.",
+        "entity_type_hint": "Standard"
+      }
+    ]
+  },
+  {
+    "candidate_id": "ClsC_c34652de",
+    "class_label": "Misc: MPC Report FS-26",
+    "class_description": "A specific report detailing fitness-for-service evaluation procedures for pressure vessels, tanks, and piping.",
+    "class_type_hint": "Document",
+    "class_group": "TBD",
+    "confidence": 0.1,
+    "evidence_excerpt": "",
+    "member_ids": [
+      "En_c25b73ff"
+    ],
+    "members": [
+      {
+        "id": "En_c25b73ff",
+        "entity_name": "MPC Report FS-26",
+        "entity_description": "Fitness-For-Service evaluation procedures for operating pressure vessels, tanks, and piping.",
+        "entity_type_hint": "Report"
+      }
+    ]
+  }
+]
+
+========================
+OUTPUT
+========================
+
+Return ONLY the JSON array of ordered function calls.
+Return [] ONLY if you are absolutely certain that even Class_Group is already correct.

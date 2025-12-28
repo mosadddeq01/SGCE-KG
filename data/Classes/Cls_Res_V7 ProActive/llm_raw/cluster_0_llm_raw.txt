@@ -1,0 +1,117 @@
+[
+  {
+    "function": "merge_classes",
+    "args": {
+      "class_ids": ["ClsC_041ae728", "ClsC_d0e41ba2"],
+      "provisional_id": "MERGE(ClsC_041ae728|ClsC_d0e41ba2)",
+      "new_name": "Metals and Corrosion Reference Handbooks",
+      "new_description": "Comprehensive reference volumes and publications on metals, corrosion, and failure analysis in industrial and petrochemical contexts.",
+      "new_class_type_hint": "Reference Material",
+      "justification": "Significant entity overlap (ASM Metals Handbook Volume 13) and highly similar scope (metals, corrosion, failure analysis) indicate these are not meaningfully distinct and should be merged for schema clarity.",
+      "remark": null,
+      "confidence": 0.98
+    }
+  },
+  {
+    "function": "reassign_entities",
+    "args": {
+      "entity_ids": ["En_cae45bdb"],
+      "from_class_id": "ClsC_cbc859c9",
+      "to_class_id": "MERGE(ClsC_041ae728|ClsC_d0e41ba2)",
+      "justification": "ASTM MNL41 is a corrosion reference and fits better in the merged Metals and Corrosion Reference Handbooks class than in ASTM Publications, which should focus on ASTM's broader studies/manuals.",
+      "remark": null,
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "MERGE(ClsC_041ae728|ClsC_d0e41ba2)",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Engineering Reference Materials",
+      "remark": null,
+      "justification": "Assigning a clear, domain-appropriate Class_Group to the merged reference handbooks class.",
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_cbc859c9",
+      "new_name": "ASTM Technical Publications",
+      "new_description": "ASTM publications providing specialized studies and manuals on material behavior and industry practices, excluding corrosion handbooks.",
+      "new_class_type_hint": "Reference Material",
+      "new_class_group": "Engineering Reference Materials",
+      "remark": null,
+      "justification": "Refined class label and description to clarify scope after reassigning corrosion manual; assigned to the same Class_Group as other reference materials.",
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_f1cbc9ff",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Inspection and Testing Methods",
+      "remark": null,
+      "justification": "Assigning a domain-appropriate Class_Group for non-destructive testing methods.",
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_bf786e1a",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Engineering Standards and Codes",
+      "remark": null,
+      "justification": "Assigning a clear Class_Group for pressure vessel standards, reflecting their domain.",
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_00143728",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Engineering Standards and Codes",
+      "remark": null,
+      "justification": "Assigning the same Class_Group as other engineering standards for schema connectivity.",
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_637c5641",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Engineering Standards and Codes",
+      "remark": null,
+      "justification": "Assigning to the same Class_Group as other engineering standards for schema consistency.",
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_632da03b",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Engineering Standards and Codes",
+      "remark": "This class contains only a single report; consider merging or reassigning in a future iteration if more evidence emerges.",
+      "justification": "Assigning to the Engineering Standards and Codes Class_Group for now, as the report is directly related to fitness-for-service standards.",
+      "confidence": 0.8
+    }
+  }
+]

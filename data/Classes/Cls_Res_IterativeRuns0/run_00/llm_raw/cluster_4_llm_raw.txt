@@ -1,0 +1,67 @@
+[
+  {
+    "function": "merge_classes",
+    "args": {
+      "class_ids": ["ClsC_7aa14dd5"],
+      "provisional_id": "MERGE(En_f6aa95ca|En_417e7d84)",
+      "new_name": "Chromium in Steel",
+      "new_description": "Chromium as an alloying element in steel, providing resistance to oxidation, corrosion, and eliminating graphitization.",
+      "new_class_type_hint": "Material",
+      "justification": "Both entities in ClsC_7aa14dd5 are 'chromium' with nearly identical descriptions and roles in steel; they are duplicates and should be merged into a single class.",
+      "remark": "Duplicate 'chromium' entities merged for clarity.",
+      "confidence": 0.98
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_8a37548a",
+      "new_name": "Graphitization-Susceptible Steels",
+      "new_description": "Steels that are prone to graphitization, a microstructural change causing loss of strength and ductility.",
+      "new_class_type_hint": "Material",
+      "new_class_group": "Steel Graphitization",
+      "remark": null,
+      "justification": "Assigning a domain-meaningful Class_Group to connect all classes related to graphitization in steels.",
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_06470fae",
+      "new_name": "Graphitization Phenomena",
+      "new_description": "Processes involving the transformation of carbide phases into graphite nodules in steels at elevated temperatures.",
+      "new_class_type_hint": "Material Transformation",
+      "new_class_group": "Steel Graphitization",
+      "remark": null,
+      "justification": "Assigning to the same Class_Group as other graphitization-related classes for schema coherence.",
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "MERGE(En_f6aa95ca|En_417e7d84)",
+      "new_name": "Chromium in Steel",
+      "new_description": "Chromium as an alloying element in steel, providing resistance to oxidation, corrosion, and eliminating graphitization.",
+      "new_class_type_hint": "Material",
+      "new_class_group": "Steel Graphitization",
+      "remark": null,
+      "justification": "Chromium's role in preventing graphitization in steel justifies grouping it with other graphitization-related classes.",
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_4e86b0e2",
+      "new_name": "Titanium",
+      "new_description": "A strong, lightweight, and corrosion-resistant metal used in various applications.",
+      "new_class_type_hint": "Material",
+      "new_class_group": "Metals",
+      "remark": null,
+      "justification": "Titanium is not directly related to graphitization in steels and should be grouped under a broader 'Metals' Class_Group.",
+      "confidence": 0.9
+    }
+  }
+]

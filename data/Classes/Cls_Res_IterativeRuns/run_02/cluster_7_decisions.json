@@ -1,0 +1,185 @@
+{
+  "cluster_label": 7,
+  "cluster_classes": [
+    {
+      "candidate_id": "ClsC_c57a96c1",
+      "class_label": "External Corrosion Mechanisms",
+      "class_description": "Corrosion mechanisms affecting external surfaces, including corrosion under insulation and on underground or submerged systems.",
+      "class_type_hint": "Damage Mechanism",
+      "class_group": "Corrosion Mechanisms",
+      "confidence": 0.85,
+      "evidence_excerpt": "Corrosion on external surfaces and beneath insulation.",
+      "member_ids": [
+        "En_9574d8b7",
+        "En_d504ed6b"
+      ],
+      "members": [
+        {
+          "id": "En_9574d8b7",
+          "entity_name": "external corrosion",
+          "entity_description": "Corrosion occurring on the outer surfaces of underground or submerged metallic piping systems.",
+          "entity_type_hint": "DamageMechanism"
+        },
+        {
+          "id": "En_d504ed6b",
+          "entity_name": "corrosion under thermal insulation",
+          "entity_description": "Corrosion that occurs beneath insulation materials, often exacerbated by trapped moisture.",
+          "entity_type_hint": "DamageMechanism"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_c5aee02f",
+      "class_label": "General Corrosion Mechanisms",
+      "class_description": "Corrosion mechanisms such as oxidation and sulfidation that stainless steels resist.",
+      "class_type_hint": "Damage Mechanism",
+      "class_group": "Corrosion Mechanisms",
+      "confidence": 0.88,
+      "evidence_excerpt": "Stainless steels resist various forms of corrosion.",
+      "member_ids": [
+        "En_2b400819",
+        "En_56c0bd49",
+        "En_fefc46ef"
+      ],
+      "members": [
+        {
+          "id": "En_2b400819",
+          "entity_name": "general corrosion",
+          "entity_description": "A broad process that stainless steels resist due to their alloy content, encompassing various forms like oxidation and sulfidation.",
+          "entity_type_hint": "DamageMechanism"
+        },
+        {
+          "id": "En_56c0bd49",
+          "entity_name": "oxidation",
+          "entity_description": "A chemical reaction that stainless steels resist due to their alloy content.",
+          "entity_type_hint": "DamageMechanism"
+        },
+        {
+          "id": "En_fefc46ef",
+          "entity_name": "sulfidation",
+          "entity_description": "A chemical reaction that stainless steels resist due to their alloy content.",
+          "entity_type_hint": "DamageMechanism"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsR_f183943d",
+      "class_label": "Oxidation and Sulfidation Mechanisms",
+      "class_description": "Corrosion mechanisms at high temperature specifically involving oxidation and sulfidation reactions.",
+      "class_type_hint": "Damage Mechanism",
+      "class_group": "Corrosion Mechanisms",
+      "confidence": 0.9,
+      "evidence_excerpt": "Corrosion at high temperatures, affecting material integrity.",
+      "member_ids": [
+        "En_56c0bd49",
+        "En_fefc46ef"
+      ],
+      "members": [
+        {
+          "id": "En_56c0bd49",
+          "entity_name": "oxidation",
+          "entity_description": "A chemical reaction that stainless steels resist due to their alloy content.",
+          "entity_type_hint": "DamageMechanism"
+        },
+        {
+          "id": "En_fefc46ef",
+          "entity_name": "sulfidation",
+          "entity_description": "A chemical reaction that stainless steels resist due to their alloy content.",
+          "entity_type_hint": "DamageMechanism"
+        }
+      ],
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"merge_classes\",\n    \"args\": {\n      \"class_ids\": [\"ClsC_c5aee02f\", \"ClsR_f183943d\"],\n      \"provisional_id\": \"MERGE(ClsC_c5aee02f|ClsR_f183943d)\",\n      \"new_name\": \"Oxidation and Sulfidation Corrosion Mechanisms\",\n      \"new_description\": \"Corrosion mechanisms involving oxidation and sulfidation, including high-temperature reactions and general resistance in stainless steels.\",\n      \"new_class_type_hint\": \"Damage Mechanism\",\n      \"justification\": \"Both classes cover oxidation and sulfidation as corrosion mechanisms, with identical entities (En_56c0bd49, En_fefc46ef) and overlapping descriptions; merging eliminates redundancy and clarifies schema.\",\n      \"remark\": null,\n      \"confidence\": 0.98\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"MERGE(ClsC_c5aee02f|ClsR_f183943d)\",\n      \"new_name\": null,\n      \"new_description\": null,\n      \"new_class_type_hint\": null,\n      \"new_class_group\": \"Corrosion Mechanisms\",\n      \"remark\": null,\n      \"justification\": \"Assigning the correct Class_Group to the merged class for schema consistency.\",\n      \"confidence\": 1.0\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_c57a96c1\",\n      \"new_name\": null,\n      \"new_description\": null,\n      \"new_class_type_hint\": null,\n      \"new_class_group\": \"Corrosion Mechanisms\",\n      \"remark\": null,\n      \"justification\": \"Confirming and standardizing Class_Group for the external corrosion mechanisms class to ensure schema connectivity.\",\n      \"confidence\": 1.0\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "merge_classes",
+      "args": {
+        "class_ids": [
+          "ClsC_c5aee02f",
+          "ClsR_f183943d"
+        ],
+        "provisional_id": "MERGE(ClsC_c5aee02f|ClsR_f183943d)",
+        "new_name": "Oxidation and Sulfidation Corrosion Mechanisms",
+        "new_description": "Corrosion mechanisms involving oxidation and sulfidation, including high-temperature reactions and general resistance in stainless steels.",
+        "new_class_type_hint": "Damage Mechanism",
+        "justification": "Both classes cover oxidation and sulfidation as corrosion mechanisms, with identical entities (En_56c0bd49, En_fefc46ef) and overlapping descriptions; merging eliminates redundancy and clarifies schema.",
+        "remark": null,
+        "confidence": 0.98
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "MERGE(ClsC_c5aee02f|ClsR_f183943d)",
+        "new_name": null,
+        "new_description": null,
+        "new_class_type_hint": null,
+        "new_class_group": "Corrosion Mechanisms",
+        "remark": null,
+        "justification": "Assigning the correct Class_Group to the merged class for schema consistency.",
+        "confidence": 1.0
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_c57a96c1",
+        "new_name": null,
+        "new_description": null,
+        "new_class_type_hint": null,
+        "new_class_group": "Corrosion Mechanisms",
+        "remark": null,
+        "justification": "Confirming and standardizing Class_Group for the external corrosion mechanisms class to ensure schema connectivity.",
+        "confidence": 1.0
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "merge_classes",
+      "input_class_ids": [
+        "ClsC_c5aee02f",
+        "ClsR_f183943d"
+      ],
+      "result_class_id": "ClsR_b15e595e",
+      "provisional_id": "MERGE(ClsC_c5aee02f|ClsR_f183943d)",
+      "justification": "Both classes cover oxidation and sulfidation as corrosion mechanisms, with identical entities (En_56c0bd49, En_fefc46ef) and overlapping descriptions; merging eliminates redundancy and clarifies schema.",
+      "remark": null,
+      "confidence": 0.98
+    },
+    {
+      "action": "modify_class",
+      "class_id": "MERGE(ClsC_c5aee02f|ClsR_f183943d)",
+      "class_id_resolved": "ClsR_b15e595e",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Corrosion Mechanisms",
+      "remark": null,
+      "justification": "Assigning the correct Class_Group to the merged class for schema consistency.",
+      "confidence": 1.0
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_c57a96c1",
+      "class_id_resolved": "ClsC_c57a96c1",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Corrosion Mechanisms",
+      "remark": null,
+      "justification": "Confirming and standardizing Class_Group for the external corrosion mechanisms class to ensure schema connectivity.",
+      "confidence": 1.0
+    }
+  ],
+  "provisional_to_real": {
+    "MERGE(ClsC_c5aee02f|ClsR_f183943d)": "ClsR_b15e595e",
+    "ClsC_c5aee02f": "ClsR_b15e595e",
+    "ClsR_f183943d": "ClsR_b15e595e"
+  },
+  "timestamp": "2025-12-28T00:23:58Z"
+}

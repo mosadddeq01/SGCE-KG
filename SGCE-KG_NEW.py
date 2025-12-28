@@ -12576,7 +12576,7 @@ HDBSCAN_MIN_SAMPLES = 1
 HDBSCAN_METRIC = "euclidean"
 
 # LLM / OpenAI
-OPENAI_MODEL = "gpt-4o"
+OPENAI_MODEL = "gpt-4.1" # "gpt-5.2-pro" #"gpt-4o"
 OPENAI_TEMPERATURE = 0.0
 LLM_MAX_TOKENS = 800
 OPENAI_API_KEY_ENV = "OPENAI_API_KEY"
@@ -13288,11 +13288,4932 @@ if __name__ == "__main__":
 
 
 
-#?######################### Start ##########################
-#region:#?   
 
-#endregion#? 
+
+
+
+
+
+#?######################### Start ##########################
+#region:#?   Cls Res V4 
+
+#!/usr/bin/env python3
+"""
+classres_iterative_v4.py
+
+Class Resolution (Cls Res) — cluster class candidates, ask LLM to
+order a sequence of functions (merge/create/reassign/modify) for each cluster,
+then execute those functions locally and produce final resolved classes.
+
+Key features:
+- TWO-LAYER SCHEMA: Class_Group -> Classes -> Entities
+- class_label treated as provisional; may be revised if evidence suggests a clearer name.
+- LLM orders structural + schema actions using a small function vocabulary.
+- Provisional IDs for newly created/merged classes so later steps can refer to them.
+- Conservative behavior with strong validation and logging.
+
+Input:
+  /home/mabolhas/MyReposOnSOL/SGCE-KG/data/Classes/Cls_Rec/classes_for_cls_res.json
+
+Output (written under OUT_DIR):
+  - per-cluster decisions: cluster_<N>_decisions.json
+  - per-cluster raw llm output: llm_raw/cluster_<N>_llm_raw.txt
+  - per-cluster prompts: llm_raw/cluster_<N>_prompt.txt
+  - cumulative action log: cls_res_action_log.jsonl
+  - final resolved classes: final_classes_resolved.json and .jsonl
+"""
+
+import json
+import os
+import re
+import time
+import uuid
+from pathlib import Path
+from typing import List, Dict, Any, Optional, Tuple
+
+import numpy as np
+import torch
+from sklearn.preprocessing import normalize
+
+# clustering libs
+try:
+    import hdbscan
+except Exception:
+    raise RuntimeError("hdbscan required: pip install hdbscan")
+try:
+    import umap
+    UMAP_AVAILABLE = True
+except Exception:
+    UMAP_AVAILABLE = False
+
+# transformers embedder (reuse same embedder pattern as ClassRec)
+from transformers import AutoTokenizer, AutoModel
+
+# OpenAI client (same style as your previous script)
+try:
+    from openai import OpenAI
+except Exception:
+    OpenAI = None
+
+# ----------------------------- CONFIG -----------------------------
+INPUT_CLASSES = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Classes/Cls_Rec/classes_for_cls_res.json")
+SRC_ENTITIES_PATH = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Classes/Cls_Input/cls_input_entities.jsonl")
+OUT_DIR = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Classes/Cls_Res")
+OUT_DIR.mkdir(parents=True, exist_ok=True)
+RAW_LLM_DIR = OUT_DIR / "llm_raw"
+RAW_LLM_DIR.mkdir(exist_ok=True)
+
+# Embedding model (changeable)
+EMBED_MODEL = "BAAI/bge-large-en-v1.5"
+DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
+BATCH_SIZE = 32
+
+# Weights for fields used to build class text for embeddings (you can edit)
+# fields: class_label, class_desc, class_type_hint, evidence_excerpt, members_agg
+CLASS_EMB_WEIGHTS = {
+    "label": 0.30,
+    "desc": 0.25,
+    "type_hint": 0.10,
+    "evidence": 0.05,
+    "members": 0.30
+}
+
+# clustering params
+USE_UMAP = True
+UMAP_N_COMPONENTS = 64
+UMAP_N_NEIGHBORS = 8
+UMAP_MIN_DIST = 0.0
+HDBSCAN_MIN_CLUSTER_SIZE = 2
+HDBSCAN_MIN_SAMPLES = 1
+HDBSCAN_METRIC = "euclidean"
+
+# LLM / OpenAI
+OPENAI_MODEL = "gpt-4.1"  # adjust as needed
+OPENAI_TEMPERATURE = 0.0
+LLM_MAX_TOKENS = 3000
+OPENAI_API_KEY_ENV = "OPENAI_API_KEY"
+
+# behavioral flags
+VERBOSE = True
+WRITE_INTERMEDIATE = True
+
+# ---------------------- Helpers: OpenAI key loader ---------------------
+def _load_openai_key(envvar: str = OPENAI_API_KEY_ENV, fallback_path: str = "/home/mabolhas/MyReposOnSOL/SGCE-KG/.env"):
+    key = os.getenv(envvar, None)
+    if key:
+        return key
+    # fallback: try file
+    if Path(fallback_path).exists():
+        txt = Path(fallback_path).read_text(encoding="utf-8").strip()
+        if txt:
+            return txt
+    return None
+
+OPENAI_KEY = _load_openai_key()
+if OpenAI is not None and OPENAI_KEY:
+    client = OpenAI(api_key=OPENAI_KEY)
+else:
+    client = None
+    if VERBOSE:
+        print("⚠️ OpenAI client not initialized (missing package or API key). LLM calls will fail unless OpenAI client is available.")
+
+def call_llm(prompt: str, model: str = OPENAI_MODEL, temperature: float = OPENAI_TEMPERATURE, max_tokens: int = LLM_MAX_TOKENS) -> str:
+    if client is None:
+        raise RuntimeError("OpenAI client not available. Set OPENAI_API_KEY and install openai package.")
+    try:
+        resp = client.chat.completions.create(
+            model=model,
+            messages=[{"role":"user","content":prompt}],
+            temperature=temperature,
+            max_tokens=max_tokens
+        )
+        return resp.choices[0].message.content
+    except Exception as e:
+        print("LLM call error:", e)
+        return ""
+
+# ---------------------- HF Embedder (same style as ClassRec) -------------
+def mean_pool(token_embeddings: torch.Tensor, attention_mask: torch.Tensor):
+    input_mask_expanded = attention_mask.unsqueeze(-1).expand(token_embeddings.size()).float()
+    sum_embeddings = torch.sum(token_embeddings * input_mask_expanded, 1)
+    sum_mask = torch.clamp(input_mask_expanded.sum(1), min=1e-9)
+    return sum_embeddings / sum_mask
+
+class HFEmbedder:
+    def __init__(self, model_name=EMBED_MODEL, device=DEVICE):
+        if VERBOSE: print(f"[embedder] loading {model_name} on {device}")
+        self.device = device
+        self.tokenizer = AutoTokenizer.from_pretrained(model_name, use_fast=True)
+        self.model = AutoModel.from_pretrained(model_name)
+        self.model.to(device)
+        self.model.eval()
+        for p in self.model.parameters():
+            p.requires_grad = False
+
+    @torch.no_grad()
+    def encode_batch(self, texts: List[str], batch_size: int = BATCH_SIZE) -> np.ndarray:
+        if len(texts) == 0:
+            D = getattr(self.model.config, "hidden_size", 1024)
+            return np.zeros((0, D))
+        embs = []
+        for i in range(0, len(texts), batch_size):
+            batch = texts[i:i+batch_size]
+            enc = self.tokenizer(batch, padding=True, truncation=True, return_tensors="pt", max_length=1024)
+            input_ids = enc["input_ids"].to(self.device)
+            attention_mask = enc["attention_mask"].to(self.device)
+            out = self.model(input_ids=input_ids, attention_mask=attention_mask, return_dict=True)
+            token_embeds = out.last_hidden_state
+            pooled = mean_pool(token_embeds, attention_mask)
+            embs.append(pooled.cpu().numpy())
+        embs = np.vstack(embs)
+        embs = normalize(embs, axis=1)
+        return embs
+
+# ---------------------- IO helpers -------------------------------------
+def load_json(path: Path):
+    return json.loads(path.read_text(encoding="utf-8"))
+
+def safe_str(s: Optional[str]) -> str:
+    if not s:
+        return ""
+    return str(s).replace("\n", " ").strip()
+
+def compact_member_info(member: Dict) -> Dict:
+    # Only pass id, name, desc, entity_type_hint to LLM prompt
+    return {
+        "id": member.get("id"),
+        "entity_name": safe_str(member.get("entity_name", ""))[:180],
+        "entity_description": safe_str(member.get("entity_description", ""))[:400],
+        "entity_type_hint": safe_str(member.get("entity_type_hint", ""))[:80]
+    }
+
+# ---------------------- Build class texts & embeddings ------------------
+def build_class_texts(classes: List[Dict]) -> Tuple[List[str], List[str], List[str], List[str], List[str]]:
+    labels, descs, types, evids, members_agg = [], [], [], [], []
+    for c in classes:
+        labels.append(safe_str(c.get("class_label",""))[:120])
+        descs.append(safe_str(c.get("class_description",""))[:300])
+        types.append(safe_str(c.get("class_type_hint",""))[:80])
+        evids.append(safe_str(c.get("evidence_excerpt",""))[:200])
+        # aggregate member short texts
+        mems = c.get("members", []) or []
+        mem_texts = []
+        for m in mems:
+            name = safe_str(m.get("entity_name",""))
+            desc = safe_str(m.get("entity_description",""))
+            etype = safe_str(m.get("entity_type_hint",""))
+            mem_texts.append(f"{name} ({etype}) - {desc[:120]}")
+        members_agg.append(" ; ".join(mem_texts)[:1000])
+    return labels, descs, types, evids, members_agg
+
+def compute_class_embeddings(embedder: HFEmbedder, classes: List[Dict], weights: Dict[str,float]) -> np.ndarray:
+    labels, descs, types, evids, members_agg = build_class_texts(classes)
+    emb_label = embedder.encode_batch(labels) if any(t.strip() for t in labels) else None
+    emb_desc  = embedder.encode_batch(descs)  if any(t.strip() for t in descs) else None
+    emb_type  = embedder.encode_batch(types)  if any(t.strip() for t in types) else None
+    emb_evid  = embedder.encode_batch(evids)  if any(t.strip() for t in evids) else None
+    emb_mem   = embedder.encode_batch(members_agg) if any(t.strip() for t in members_agg) else None
+
+    # determine D
+    D = None
+    for arr in (emb_label, emb_desc, emb_type, emb_evid, emb_mem):
+        if arr is not None and arr.shape[0] > 0:
+            D = arr.shape[1]; break
+    if D is None:
+        raise ValueError("No textual fields produced embeddings for classes")
+
+    def ensure(arr):
+        if arr is None:
+            return np.zeros((len(classes), D))
+        if arr.shape[1] != D:
+            raise ValueError("embedding dim mismatch")
+        return arr
+
+    emb_label = ensure(emb_label); emb_desc = ensure(emb_desc); emb_type = ensure(emb_type)
+    emb_evid = ensure(emb_evid); emb_mem = ensure(emb_mem)
+
+    w_label = weights.get("label",0.0); w_desc = weights.get("desc",0.0)
+    w_type = weights.get("type_hint",0.0); w_evid = weights.get("evidence",0.0)
+    w_mem  = weights.get("members",0.0)
+    W = w_label + w_desc + w_type + w_evid + w_mem
+    if W <= 0: raise ValueError("invalid class emb weights")
+    w_label /= W; w_desc /= W; w_type /= W; w_evid /= W; w_mem /= W
+
+    combined = (w_label*emb_label) + (w_desc*emb_desc) + (w_type*emb_type) + (w_evid*emb_evid) + (w_mem*emb_mem)
+    combined = normalize(combined, axis=1)
+    return combined
+
+# ---------------------- clustering -------------------------------------
+def run_hdbscan(embeddings: np.ndarray, min_cluster_size=HDBSCAN_MIN_CLUSTER_SIZE, min_samples=HDBSCAN_MIN_SAMPLES,
+                metric=HDBSCAN_METRIC, use_umap=USE_UMAP) -> Tuple[np.ndarray, object]:
+    X = embeddings
+    N = X.shape[0]
+    # Decide whether to attempt UMAP: require N reasonably larger than target dims/neighbors
+    if use_umap and UMAP_AVAILABLE and N >= 6:
+        # choose n_components and n_neighbors safely relative to N
+        safe_n_components = min(UMAP_N_COMPONENTS, max(2, N - 2))  # leave small margin
+        safe_n_neighbors = min(UMAP_N_NEIGHBORS, max(2, N - 1))
+        try:
+            reducer = umap.UMAP(
+                n_components=safe_n_components,
+                n_neighbors=safe_n_neighbors,
+                min_dist=UMAP_MIN_DIST,
+                metric='cosine',
+                random_state=42
+            )
+            X_reduced = reducer.fit_transform(X)
+            if X_reduced is not None and X_reduced.shape[0] == N:
+                X = X_reduced
+            else:
+                if VERBOSE:
+                    print(f"[warn] UMAP returned invalid shape {None if X_reduced is None else X_reduced.shape}; skipping UMAP")
+        except Exception as e:
+            # Catch UMAP failures (including the scipy eigh TypeError) and continue with original embeddings
+            if VERBOSE:
+                print(f"[warn] UMAP failed (N={N}, safe_n_components={safe_n_components}, safe_n_neighbors={safe_n_neighbors}): {e}. Proceeding without UMAP.")
+            X = embeddings  # fallback
+    else:
+        if use_umap and UMAP_AVAILABLE and VERBOSE:
+            print(f"[info] Skipping UMAP (N={N} < 6) to avoid unstable spectral computations.")
+    # Run HDBSCAN on X (either reduced or original)
+    clusterer = hdbscan.HDBSCAN(min_cluster_size=min_cluster_size, min_samples=min_samples, metric=metric, cluster_selection_method='eom')
+    labels = clusterer.fit_predict(X)
+    return labels, clusterer
+
+# ---------------------- LLM prompt template (confirmed + extended) ------
+CLSRES_PROMPT_TEMPLATE = """
+You are a careful class resolution assistant.
+You are given a set of candidate CLASSES that appear to belong,
+or may plausibly belong, to the same semantic cluster.
+
+The cluster grouping you are given is only *suggestive* and may be incorrect — your job is to resolve, correct, and produce a coherent schema from the evidence.
+
+This is an iterative process — act now with well-justified structural corrections (include a short justification), rather than deferring small but meaningful fixes.
+
+Your CRUCIAL task is to refine the schema using this tentative grouping.
+
+========================
+SCHEMA STRUCTURE (CRITICAL)
+========================
+
+We are building a TWO-LAYER SCHEMA over entities:
+
+Level 0: Class_Group        (connects related classes)
+Level 1: Classes            (group entities)
+Level 2: Entities
+
+Structure:
+Class_Group
+  └── Class
+        └── Entity
+
+- Class_Group is the PRIMARY mechanism for connecting related classes.
+- Classes that share a Class_Group are considered semantically related.
+- This relationship propagates to their entities.
+
+========================
+IMPORTANT FIELD DISTINCTIONS
+========================
+
+- class_type_hint (existing field):
+  A local, descriptive hint assigned to each class in isolation.
+  It is often noisy, incomplete, and inconsistent across classes.
+  Do NOT assume it is globally correct or reusable.
+
+- class_label:
+  Existing class_label values are PROVISIONAL names.
+  You MAY revise them when entity evidence suggests a clearer or a better canonical label.
+
+- Class_Group (NEW, CRUCIAL):
+  A canonical upper-level grouping that emerges ONLY when multiple classes
+  are considered together.
+  It is used to connect related classes into a coherent schema.
+  Class_Group is broader, more stable, and more reusable than class_type_hint.
+
+Class_Group is NOT a synonym of class_type_hint.
+
+========================
+YOUR PRIMARY TASK
+========================
+
+Note: the provided cluster grouping is tentative and may be wrong — 
+you must correct it as needed to produce a coherent Class_Group → Class → Entity schema.
+
+
+For the given cluster of classes:
+
+
+1) Assess whether any structural changes are REQUIRED:
+   - merge duplicate or near-duplicate classes
+   - reassign clearly mis-assigned entities
+   - create a new class when necessary
+   - modify class metadata when meaningfully incorrect
+
+2) ALWAYS assess and assign an appropriate Class_Group:
+   - If Class_Group is missing, null, or marked as TBD → you MUST assign it.
+   - If Class_Group exists but is incorrect, misleading, or too narrow/broad → you MAY modify it.
+   - If everything else is correct (which is not the case most of the time), assigning or confirming Class_Group ALONE is sufficient.
+
+========================
+SOME CONSERVATISM RULES (They should not make you passive)
+========================
+
+- Only order a function if a real semantic change is necessary.
+- Do NOT perform cosmetic edits or unnecessary normalization.
+
+You MAY perform multiple structural actions in one cluster
+(e.g., merge + rename + reassign), but when needed.
+
+========================
+MERGING & OVERLAP HEURISTICS
+========================
+
+- Entity overlap alone does not automatically require merging.
+- Merge when evidence indicates the SAME underlying concepts
+  (e.g., near-identical semantics, interchangeable usage, or redundant distinctions).
+- Reassignment is appropriate when overlap reveals mis-typed or mis-scoped entities,
+  even if classes should remain separate.
+
+
+Quick heuristic:
+- Same concept → merge.
+- Different concept, same domain → keep separate classes with the SAME Class_Group.
+- Different domain → different Class_Group.
+
+Avoid vague Class_Group names (e.g., "Misc", "General", "Other").
+Prefer domain-meaningful groupings that help connect related classes.
+
+========================
+AVAILABLE FUNCTIONS
+========================
+
+Return ONLY a JSON ARRAY of ordered function calls.
+
+Each object must have:
+- "function": one of
+  ["merge_classes", "create_class", "reassign_entities", "modify_class"]
+- "args": arguments as defined below.
+
+ID HANDLING RULES
+- You MUST NOT invent real class IDs.
+- You MUST use ONLY class_ids that appear in the input CLASSES (candidate_id values),
+  except when referring to newly merged or created classes.
+- When you need to refer to a newly merged or created class in later steps,
+  you MUST assign a provisional_id (any consistent string).
+- Use the same provisional_id whenever referencing that new class again.
+
+Example (pattern, not required verbatim):
+
+{
+  "function": "merge_classes",
+  "args": {
+    "class_ids": ["ClsC_da991b68", "ClsC_e32f4a47"],
+    "provisional_id": "MERGE(ClsC_da991b68|ClsC_e32f4a47)",
+    "new_name": "...",
+    "new_description": "...",
+    "new_class_type_hint": "Standard"
+  }
+}
+
+Later:
+
+{
+  "function": "reassign_entities",
+  "args": {
+    "entity_ids": ["En_xxx"],
+    "from_class_id": "ClsC_e32f4a47",
+    "to_class_id": "MERGE(ClsC_da991b68|ClsC_e32f4a47)"
+  }
+}
+
+We will internally map provisional_id → real class id.
+
+------------------------
+Function definitions
+------------------------
+
+JUSTIFICATION REQUIREMENT
+- Every function call MUST include a one-line "justification" explaining why the action is necessary.
+- This justification should cite concrete evidence (entity overlap, conflicting descriptions, mis-scoped members, etc.).
+- The justification is required for ALL actions, including merge, create, reassign, and modify.
+
+
+1) merge_classes
+args = {
+  "class_ids": [<existing_class_ids>],   # MUST contain at least 2 valid ids
+  "provisional_id": <string or null>,    # how you will refer to the new class later
+  "new_name": <string or null>,
+  "new_description": <string or null>,
+  "new_class_type_hint": <string or null>
+}
+
+2) create_class
+args = {
+  "name": <string>,
+  "description": <string or null>,
+  "class_type_hint": <string or null>,
+  "member_ids": [<entity_ids>]   # optional, must be from provided entities
+  "provisional_id": <string or null>   # how you will refer to this new class later
+}
+
+3) reassign_entities
+args = {
+  "entity_ids": [<entity_ids>],
+  "from_class_id": <existing_class_id or provisional_id or null>,
+  "to_class_id": <existing_class_id or provisional_id>
+}
+
+4) modify_class
+args = {
+  "class_id": <existing_class_id or provisional_id>,
+  "new_name": <string or null>,
+  "new_description": <string or null>,
+  "new_class_type_hint": <string or null>,
+  "new_class_group": <string or null>
+}
+
+NOTE:
+- Class_Group is normally set or updated via modify_class.
+- Assigning or confirming Class_Group is also REQUIRED for every cluster unless it is already clearly correct.
+- Optionally include "confidence": <0.0-1.0> and "justification": "<one-line reason>" in each function's args to help downstream acceptance.
+
+
+========================
+VALIDATION RULES
+========================
+
+- Use ONLY provided entity_ids and class_ids (candidate_id values) for existing classes.
+- For new classes, use provisional_id handles and be consistent.
+- Order matters: later steps may depend on earlier ones.
+- merge_classes with fewer than 2 valid class_ids will be ignored.
+
+========================
+STRATEGY GUIDANCE
+========================
+
+- Prefer assigning/adjusting Class_Group over heavy structural changes.
+- Merge classes ONLY when they are genuinely redundant (same concept).
+- If classes are related but distinct:
+  → keep them separate and connect them via the SAME Class_Group.
+- Think in terms of schema connectivity, not cosmetic cleanup.
+
+========================
+INPUT CLASSES
+========================
+
+Each class includes:
+- candidate_id
+- class_label
+- class_description
+- class_type_hint
+- class_group (may be null or "TBD")
+- confidence
+- evidence_excerpt
+- member_ids
+- members (entity id, name, description, type)
+
+{cluster_block}
+
+========================
+OUTPUT
+========================
+
+Return ONLY the JSON array of ordered function calls.
+Return [] only if you are highly confident (>very strong evidence) that no change is needed. 
+If any ambiguous or conflicting evidence exists, return a concrete ordered action list (you may include low-confidence recommendations with brief justification).
+"""
+
+def sanitize_json_like(text: str) -> Optional[Any]:
+    # crude sanitizer: extract first [...] region and try loads. Fix common trailing commas and smart quotes.
+    if not text or not text.strip():
+        return None
+    s = text.strip()
+    # replace smart quotes
+    s = s.replace("“", '"').replace("”", '"').replace("‘","'").replace("’","'")
+    # find first [ ... ] block
+    start = s.find('[')
+    end = s.rfind(']')
+    cand = s
+    if start != -1 and end != -1 and end > start:
+        cand = s[start:end+1]
+    # remove trailing commas before closing braces/brackets
+    cand = re.sub(r",\s*([\]}])", r"\1", cand)
+    try:
+        return json.loads(cand)
+    except Exception:
+        return None
+
+# ---------------------- Action executors --------------------------------
+def execute_merge_classes(
+    all_classes: Dict[str, Dict],
+    class_ids: List[str],
+    new_name: Optional[str],
+    new_desc: Optional[str],
+    new_type: Optional[str]
+) -> str:
+    # validate class ids
+    class_ids = [cid for cid in class_ids if cid in all_classes]
+    if len(class_ids) < 2:
+        raise ValueError("merge_classes: need at least 2 valid class_ids")
+    # create new candidate id
+    new_cid = "ClsR_" + uuid.uuid4().hex[:8]
+    # union members
+    members_map = {}
+    confidence = 0.0
+    evidence = ""
+    desc_choice = None
+    type_choice = new_type or ""
+    class_group_choice = None
+
+    for cid in class_ids:
+        c = all_classes[cid]
+        confidence = max(confidence, float(c.get("confidence", 0.0)))
+        if c.get("evidence_excerpt") and not evidence:
+            evidence = c.get("evidence_excerpt")
+        if c.get("class_description") and desc_choice is None:
+            desc_choice = c.get("class_description")
+        # prefer an existing class_group if all share same - else keep TBD
+        cg = c.get("class_group")
+        if cg and cg not in ("", "TBD", None):
+            if class_group_choice is None:
+                class_group_choice = cg
+            elif class_group_choice != cg:
+                # conflicting groups -> keep the first, will be fixable by modify_class
+                class_group_choice = class_group_choice
+        for m in c.get("members", []):
+            members_map[m["id"]] = m
+
+    # prefer provided new_desc if any
+    if new_desc:
+        desc_choice = new_desc
+    # prefer provided new_name else take first label
+    new_label = new_name or all_classes[class_ids[0]].get("class_label", "MergedClass")
+    if not new_type:
+        # attempt to choose highest-confidence type_hint present
+        for cid in class_ids:
+            if all_classes[cid].get("class_type_hint"):
+                type_choice = all_classes[cid].get("class_type_hint")
+                break
+
+    merged_obj = {
+        "candidate_id": new_cid,
+        "class_label": new_label,
+        "class_description": desc_choice or "",
+        "class_type_hint": type_choice or "",
+        "class_group": class_group_choice or "TBD",
+        "confidence": float(confidence),
+        "evidence_excerpt": evidence or "",
+        "member_ids": list(members_map.keys()),
+        "members": list(members_map.values()),
+        "candidate_ids": class_ids,
+        "merged_from": class_ids,
+        "_merged_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+    }
+    # remove old classes and insert new one
+    for cid in class_ids:
+        all_classes.pop(cid, None)
+    all_classes[new_cid] = merged_obj
+    return new_cid
+
+def execute_create_class(
+    all_classes: Dict[str, Dict],
+    name: str,
+    description: Optional[str],
+    class_type_hint: Optional[str],
+    member_ids: Optional[List[str]],
+    id_to_entity: Dict[str, Dict]
+) -> str:
+    if not name:
+        raise ValueError("create_class: 'name' is required")
+    new_cid = "ClsR_" + uuid.uuid4().hex[:8]
+    members = []
+    mids = member_ids or []
+    for mid in mids:
+        ent = id_to_entity.get(mid)
+        if ent:
+            members.append(ent)
+    obj = {
+        "candidate_id": new_cid,
+        "class_label": name,
+        "class_description": description or "",
+        "class_type_hint": class_type_hint or "",
+        "class_group": "TBD",
+        "confidence": 0.5,
+        "evidence_excerpt": "",
+        "member_ids": [m["id"] for m in members],
+        "members": members,
+        "candidate_ids": [],
+        "_created_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+    }
+    all_classes[new_cid] = obj
+    return new_cid
+
+def execute_reassign_entities(
+    all_classes: Dict[str, Dict],
+    entity_ids: List[str],
+    from_class_id: Optional[str],
+    to_class_id: str,
+    id_to_entity: Dict[str, Dict]
+):
+    # If from_class_id is None, we will remove entity from any class that contains it
+    for cid, c in list(all_classes.items()):
+        if from_class_id and cid != from_class_id:
+            continue
+        new_members = [m for m in c.get("members", []) if m["id"] not in set(entity_ids)]
+        new_member_ids = [m["id"] for m in new_members]
+        c["members"] = new_members
+        c["member_ids"] = new_member_ids
+        all_classes[cid] = c
+    # add to destination
+    if to_class_id not in all_classes:
+        raise ValueError(f"reassign_entities: to_class_id {to_class_id} not found")
+    dest = all_classes[to_class_id]
+    # deduplicate
+    existing = {m["id"] for m in dest.get("members", [])}
+    for eid in entity_ids:
+        if eid in existing:
+            continue
+        ent = id_to_entity.get(eid)
+        if ent:
+            dest.setdefault("members", []).append(ent)
+            dest.setdefault("member_ids", []).append(eid)
+    dest["confidence"] = max(dest.get("confidence", 0.0), 0.4)
+    all_classes[to_class_id] = dest
+
+def execute_modify_class(
+    all_classes: Dict[str, Dict],
+    class_id: str,
+    new_name: Optional[str],
+    new_desc: Optional[str],
+    new_type: Optional[str],
+    new_class_group: Optional[str]
+):
+    if class_id not in all_classes:
+        raise ValueError(f"modify_class: class_id {class_id} not found")
+    c = all_classes[class_id]
+    if new_name:
+        c["class_label"] = new_name
+    if new_desc:
+        c["class_description"] = new_desc
+    if new_type:
+        c["class_type_hint"] = new_type
+    if new_class_group:
+        c["class_group"] = new_class_group
+    all_classes[class_id] = c
+
+# helper to resolve real class ID (handles provisional IDs)
+def resolve_class_id(
+    raw_id: Optional[str],
+    all_classes: Dict[str, Dict],
+    provisional_to_real: Dict[str, str],
+    allow_missing: bool = False
+) -> Optional[str]:
+    if raw_id is None:
+        return None
+    real = provisional_to_real.get(raw_id, raw_id)
+    if real not in all_classes and not allow_missing:
+        raise ValueError(f"resolve_class_id: {raw_id} (resolved to {real}) not found in all_classes")
+    return real
+
+# ---------------------- Main orchestration ------------------------------
+def classres_main():
+    # load classes
+    if not INPUT_CLASSES.exists():
+        raise FileNotFoundError(f"Input classes file not found: {INPUT_CLASSES}")
+    classes_list = load_json(INPUT_CLASSES)
+    print(f"[start] loaded {len(classes_list)} merged candidate classes from {INPUT_CLASSES}")
+
+    # build id->entity map (from members contained in classes); optionally load src entity file if needed
+    id_to_entity = {}
+    for c in classes_list:
+        for m in c.get("members", []):
+            if isinstance(m, dict) and m.get("id"):
+                id_to_entity[m["id"]] = m
+
+    # ensure classes have candidate_id keys and class_group field
+    all_classes: Dict[str, Dict] = {}
+    for c in classes_list:
+        cid = c.get("candidate_id") or ("ClsC_" + uuid.uuid4().hex[:8])
+        # normalize member list to objects
+        members = c.get("members", []) or []
+        # ensure member_ids
+        mids = [m["id"] for m in members if isinstance(m, dict) and m.get("id")]
+        c["member_ids"] = mids
+        c["members"] = members
+        # ensure class_group present
+        if "class_group" not in c or c.get("class_group") in (None, ""):
+            c["class_group"] = "TBD"
+        all_classes[cid] = c
+
+    # embedder
+    embedder = HFEmbedder(model_name=EMBED_MODEL, device=DEVICE)
+    class_objs = list(all_classes.values())
+    class_ids_order = list(all_classes.keys())
+    combined_emb = compute_class_embeddings(embedder, class_objs, CLASS_EMB_WEIGHTS)
+    print("[info] class embeddings computed shape:", combined_emb.shape)
+
+    # clustering
+    labels, clusterer = run_hdbscan(
+        combined_emb,
+        min_cluster_size=HDBSCAN_MIN_CLUSTER_SIZE,
+        min_samples=HDBSCAN_MIN_SAMPLES,
+        use_umap=USE_UMAP
+    )
+    print("[info] clustering done. unique labels:", set(labels))
+
+    # map cluster -> class ids
+    cluster_to_classids: Dict[int, List[str]] = {}
+    for idx, lab in enumerate(labels):
+        cid = class_ids_order[idx]
+        cluster_to_classids.setdefault(int(lab), []).append(cid)
+
+    # prepare action log
+    action_log_path = OUT_DIR / "cls_res_action_log.jsonl"
+    if action_log_path.exists():
+        action_log_path.unlink()
+
+    # iterate clusters (skip -1 initially)
+    cluster_keys = sorted([k for k in cluster_to_classids.keys() if k != -1])
+    cluster_keys += [-1]  # append noise at end
+
+    for cluster_label in cluster_keys:
+        class_ids = cluster_to_classids.get(cluster_label, [])
+        if not class_ids:
+            continue
+        print(f"[cluster] {cluster_label} -> {len(class_ids)} classes")
+
+        # build cluster block to pass to LLM
+        cluster_classes = []
+        for cid in class_ids:
+            c = all_classes.get(cid)
+            if not c:
+                continue
+            members_compact = [compact_member_info(m) for m in c.get("members", [])]
+            cluster_classes.append({
+                "candidate_id": cid,
+                "class_label": c.get("class_label", ""),
+                "class_description": c.get("class_description", ""),
+                "class_type_hint": c.get("class_type_hint", ""),
+                "class_group": c.get("class_group", "TBD"),
+                "confidence": float(c.get("confidence", 0.0)),
+                "evidence_excerpt": c.get("evidence_excerpt", ""),
+                "member_ids": c.get("member_ids", []),
+                "members": members_compact
+            })
+
+        cluster_block = json.dumps(cluster_classes, ensure_ascii=False, indent=2)
+        # safer substitution: do not use str.format which treats braces as placeholders
+        prompt = CLSRES_PROMPT_TEMPLATE.replace("{cluster_block}", cluster_block)
+
+        # log prompt
+        prompt_path = RAW_LLM_DIR / f"cluster_{cluster_label}_prompt.txt"
+        prompt_path.write_text(prompt, encoding="utf-8")
+
+        # call LLM
+        raw_out = ""
+        try:
+            raw_out = call_llm(prompt)
+        except Exception as e:
+            print(f"[warning] LLM call failed for cluster {cluster_label}: {e}")
+            raw_out = ""
+
+        # write raw output
+        raw_path = RAW_LLM_DIR / f"cluster_{cluster_label}_llm_raw.txt"
+        raw_path.write_text(raw_out, encoding="utf-8")
+
+        # try parse/sanitize
+        parsed = sanitize_json_like(raw_out)
+        if parsed is None:
+            print(f"[warn] failed to parse LLM output for cluster {cluster_label}; skipping automated actions for this cluster.")
+            dec_path = OUT_DIR / f"cluster_{cluster_label}_decisions.json"
+            dec_path.write_text(
+                json.dumps({"cluster_label": cluster_label, "raw_llm": raw_out}, ensure_ascii=False, indent=2),
+                encoding="utf-8"
+            )
+            continue
+
+        # mapping from provisional_id -> real class id (per cluster)
+        provisional_to_real: Dict[str, str] = {}
+        decisions: List[Dict[str, Any]] = []
+
+        # execute parsed function list in order
+        for step in parsed:
+            if not isinstance(step, dict):
+                continue
+            fn = step.get("function")
+            args = step.get("args", {}) or {}
+            try:
+                if fn == "merge_classes":
+                    cids_raw = args.get("class_ids", []) or []
+                    new_name = args.get("new_name")
+                    new_desc = args.get("new_description")
+                    new_type = args.get("new_class_type_hint")
+                    prov_id = args.get("provisional_id")
+
+                    # resolve any potential provisional IDs in class_ids (ideally they should be real)
+                    cids_real = [provisional_to_real.get(cid, cid) for cid in cids_raw]
+                    valid_cids = [cid for cid in cids_real if cid in all_classes]
+
+                    if len(valid_cids) < 2:
+                        # enforce executor rule: skip if < 2
+                        decisions.append({
+                            "action": "merge_skip_too_few",
+                            "requested_class_ids": cids_raw,
+                            "valid_class_ids": valid_cids
+                        })
+                        continue
+
+                    new_cid = execute_merge_classes(all_classes, valid_cids, new_name, new_desc, new_type)
+                    if prov_id:
+                        provisional_to_real[prov_id] = new_cid
+
+                    decisions.append({
+                        "action": "merge_classes",
+                        "input_class_ids": valid_cids,
+                        "result_class_id": new_cid,
+                        "provisional_id": prov_id
+                    })
+
+                elif fn == "create_class":
+                    name = args.get("name")
+                    desc = args.get("description")
+                    t = args.get("class_type_hint")
+                    mids = args.get("member_ids", []) or []
+                    prov_id = args.get("provisional_id")
+
+                    # filter mids to known entity ids
+                    mids_valid = [m for m in mids if m in id_to_entity]
+                    new_cid = execute_create_class(all_classes, name, desc, t, mids_valid, id_to_entity)
+                    if prov_id:
+                        provisional_to_real[prov_id] = new_cid
+
+                    decisions.append({
+                        "action": "create_class",
+                        "result_class_id": new_cid,
+                        "provisional_id": prov_id,
+                        "member_ids_added": mids_valid
+                    })
+
+                elif fn == "reassign_entities":
+                    eids = args.get("entity_ids", []) or []
+                    from_c_raw = args.get("from_class_id")
+                    to_c_raw = args.get("to_class_id")
+
+                    # ensure eids valid
+                    eids_valid = [e for e in eids if e in id_to_entity]
+
+                    # resolve class ids (handle provisional ids)
+                    from_c = resolve_class_id(from_c_raw, all_classes, provisional_to_real, allow_missing=True)
+                    to_c = resolve_class_id(to_c_raw, all_classes, provisional_to_real, allow_missing=False)
+
+                    execute_reassign_entities(all_classes, eids_valid, from_c, to_c, id_to_entity)
+                    decisions.append({
+                        "action": "reassign_entities",
+                        "entity_ids": eids_valid,
+                        "from": from_c_raw,
+                        "from_resolved": from_c,
+                        "to": to_c_raw,
+                        "to_resolved": to_c
+                    })
+
+                elif fn == "modify_class":
+                    cid_raw = args.get("class_id")
+                    new_name = args.get("new_name")
+                    new_desc = args.get("new_description")
+                    new_type = args.get("new_class_type_hint")
+                    new_group = args.get("new_class_group")
+
+                    cid_real = resolve_class_id(cid_raw, all_classes, provisional_to_real, allow_missing=False)
+                    execute_modify_class(all_classes, cid_real, new_name, new_desc, new_type, new_group)
+
+                    decisions.append({
+                        "action": "modify_class",
+                        "class_id": cid_raw,
+                        "class_id_resolved": cid_real,
+                        "new_name": new_name,
+                        "new_class_group": new_group
+                    })
+
+                else:
+                    # unknown function -> skip
+                    decisions.append({"action": "skip_unknown_function", "raw": step})
+
+            except Exception as e:
+                decisions.append({
+                    "action": "error_executing",
+                    "function": fn,
+                    "error": str(e),
+                    "input": step
+                })
+
+        # write decisions file for this cluster
+        dec_path = OUT_DIR / f"cluster_{cluster_label}_decisions.json"
+        dec_obj = {
+            "cluster_label": cluster_label,
+            "cluster_classes": cluster_classes,
+            "llm_raw": raw_out,
+            "parsed_steps": parsed,
+            "executed_decisions": decisions,
+            "provisional_to_real": provisional_to_real,
+            "timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+        }
+        dec_path.write_text(json.dumps(dec_obj, ensure_ascii=False, indent=2), encoding="utf-8")
+
+        # append to action log
+        with open(action_log_path, "a", encoding="utf-8") as fh:
+            fh.write(json.dumps(dec_obj, ensure_ascii=False) + "\n")
+
+    # After all clusters processed: write final classes output
+    final_classes = list(all_classes.values())
+    out_json = OUT_DIR / "final_classes_resolved.json"
+    out_jsonl = OUT_DIR / "final_classes_resolved.jsonl"
+    out_json.write_text(json.dumps(final_classes, ensure_ascii=False, indent=2), encoding="utf-8")
+    with open(out_jsonl, "w", encoding="utf-8") as fh:
+        for c in final_classes:
+            fh.write(json.dumps(c, ensure_ascii=False) + "\n")
+
+    print(f"[done] wrote final resolved classes -> {out_json}  (count={len(final_classes)})")
+    print(f"[done] action log -> {action_log_path}")
+
+if __name__ == "__main__":
+    classres_main()
+
+#endregion#? Cls Res V4
 #?#########################  End  ##########################
+
+
+
+
+
+
+#?######################### Start ##########################
+#region:#?   Cls Res V5  
+
+#!/usr/bin/env python3
+"""
+classres_iterative_v5.py
+
+Class Resolution (Cls Res) — cluster class candidates, ask LLM to
+order a sequence of functions (merge/create/reassign/modify) for each cluster,
+then execute those functions locally and produce final resolved classes.
+
+Key features:
+- TWO-LAYER SCHEMA: Class_Group -> Classes -> Entities
+- class_label treated as provisional; may be revised if evidence suggests a clearer name.
+- LLM orders structural + schema actions using a small function vocabulary.
+- Provisional IDs for newly created/merged classes so later steps can refer to them.
+- Conservative behavior with strong validation and logging.
+
+Input:
+  /home/mabolhas/MyReposOnSOL/SGCE-KG/data/Classes/Cls_Rec/classes_for_cls_res.json
+
+Output (written under OUT_DIR):
+  - per-cluster decisions: cluster_<N>_decisions.json
+  - per-cluster raw llm output: llm_raw/cluster_<N>_llm_raw.txt
+  - per-cluster prompts: llm_raw/cluster_<N>_prompt.txt
+  - cumulative action log: cls_res_action_log.jsonl
+  - final resolved classes: final_classes_resolved.json and .jsonl
+"""
+
+import json
+import os
+import re
+import time
+import uuid
+from pathlib import Path
+from typing import List, Dict, Any, Optional, Tuple
+
+import numpy as np
+import torch
+from sklearn.preprocessing import normalize
+
+# clustering libs
+try:
+    import hdbscan
+except Exception:
+    raise RuntimeError("hdbscan required: pip install hdbscan")
+try:
+    import umap
+    UMAP_AVAILABLE = True
+except Exception:
+    UMAP_AVAILABLE = False
+
+# transformers embedder (reuse same embedder pattern as ClassRec)
+from transformers import AutoTokenizer, AutoModel
+
+# OpenAI client (same style as your previous script)
+try:
+    from openai import OpenAI
+except Exception:
+    OpenAI = None
+
+# ----------------------------- CONFIG -----------------------------
+INPUT_CLASSES = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Classes/Cls_Rec/classes_for_cls_res.json")
+SRC_ENTITIES_PATH = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Classes/Cls_Input/cls_input_entities.jsonl")
+OUT_DIR = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Classes/Cls_Res")
+OUT_DIR.mkdir(parents=True, exist_ok=True)
+RAW_LLM_DIR = OUT_DIR / "llm_raw"
+RAW_LLM_DIR.mkdir(exist_ok=True)
+
+# Embedding model (changeable)
+EMBED_MODEL = "BAAI/bge-large-en-v1.5"
+DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
+BATCH_SIZE = 32
+
+# Weights for fields used to build class text for embeddings
+CLASS_EMB_WEIGHTS = {
+    "label": 0.30,
+    "desc": 0.25,
+    "type_hint": 0.10,
+    "evidence": 0.05,
+    "members": 0.30
+}
+
+# clustering params
+USE_UMAP = True
+UMAP_N_COMPONENTS = 64
+UMAP_N_NEIGHBORS = 8
+UMAP_MIN_DIST = 0.0
+HDBSCAN_MIN_CLUSTER_SIZE = 2
+HDBSCAN_MIN_SAMPLES = 1
+HDBSCAN_METRIC = "euclidean"
+
+# LLM / OpenAI
+OPENAI_MODEL = "gpt-4.1"  # adjust as needed
+OPENAI_TEMPERATURE = 0.0
+LLM_MAX_TOKENS = 3000
+OPENAI_API_KEY_ENV = "OPENAI_API_KEY"
+
+# behavioral flags
+VERBOSE = True
+WRITE_INTERMEDIATE = True
+
+# ---------------------- Helpers: OpenAI key loader ---------------------
+def _load_openai_key(envvar: str = OPENAI_API_KEY_ENV, fallback_path: str = "/home/mabolhas/MyReposOnSOL/SGCE-KG/.env"):
+    key = os.getenv(envvar, None)
+    if key:
+        return key
+    # fallback: try file
+    if Path(fallback_path).exists():
+        txt = Path(fallback_path).read_text(encoding="utf-8").strip()
+        if txt:
+            return txt
+    return None
+
+OPENAI_KEY = _load_openai_key()
+if OpenAI is not None and OPENAI_KEY:
+    client = OpenAI(api_key=OPENAI_KEY)
+else:
+    client = None
+    if VERBOSE:
+        print("⚠️ OpenAI client not initialized (missing package or API key). LLM calls will fail unless OpenAI client is available.")
+
+def call_llm(prompt: str, model: str = OPENAI_MODEL, temperature: float = OPENAI_TEMPERATURE, max_tokens: int = LLM_MAX_TOKENS) -> str:
+    if client is None:
+        raise RuntimeError("OpenAI client not available. Set OPENAI_API_KEY and install openai package.")
+    try:
+        resp = client.chat.completions.create(
+            model=model,
+            messages=[{"role": "user", "content": prompt}],
+            temperature=temperature,
+            max_tokens=max_tokens
+        )
+        return resp.choices[0].message.content
+    except Exception as e:
+        print("LLM call error:", e)
+        return ""
+
+# ---------------------- HF Embedder (same style as ClassRec) -------------
+def mean_pool(token_embeddings: torch.Tensor, attention_mask: torch.Tensor):
+    input_mask_expanded = attention_mask.unsqueeze(-1).expand(token_embeddings.size()).float()
+    sum_embeddings = torch.sum(token_embeddings * input_mask_expanded, 1)
+    sum_mask = torch.clamp(input_mask_expanded.sum(1), min=1e-9)
+    return sum_embeddings / sum_mask
+
+class HFEmbedder:
+    def __init__(self, model_name=EMBED_MODEL, device=DEVICE):
+        if VERBOSE:
+            print(f"[embedder] loading {model_name} on {device}")
+        self.device = device
+        self.tokenizer = AutoTokenizer.from_pretrained(model_name, use_fast=True)
+        self.model = AutoModel.from_pretrained(model_name)
+        self.model.to(device)
+        self.model.eval()
+        for p in self.model.parameters():
+            p.requires_grad = False
+
+    @torch.no_grad()
+    def encode_batch(self, texts: List[str], batch_size: int = BATCH_SIZE) -> np.ndarray:
+        if len(texts) == 0:
+            D = getattr(self.model.config, "hidden_size", 1024)
+            return np.zeros((0, D))
+        embs = []
+        for i in range(0, len(texts), batch_size):
+            batch = texts[i:i + batch_size]
+            enc = self.tokenizer(batch, padding=True, truncation=True,
+                                 return_tensors="pt", max_length=1024)
+            input_ids = enc["input_ids"].to(self.device)
+            attention_mask = enc["attention_mask"].to(self.device)
+            out = self.model(input_ids=input_ids, attention_mask=attention_mask, return_dict=True)
+            token_embeds = out.last_hidden_state
+            pooled = mean_pool(token_embeds, attention_mask)
+            embs.append(pooled.cpu().numpy())
+        embs = np.vstack(embs)
+        embs = normalize(embs, axis=1)
+        return embs
+
+# ---------------------- IO helpers -------------------------------------
+def load_json(path: Path):
+    return json.loads(path.read_text(encoding="utf-8"))
+
+def safe_str(s: Optional[str]) -> str:
+    if not s:
+        return ""
+    return str(s).replace("\n", " ").strip()
+
+def compact_member_info(member: Dict) -> Dict:
+    # Only pass id, name, desc, entity_type_hint to LLM prompt
+    return {
+        "id": member.get("id"),
+        "entity_name": safe_str(member.get("entity_name", ""))[:180],
+        "entity_description": safe_str(member.get("entity_description", ""))[:400],
+        "entity_type_hint": safe_str(member.get("entity_type_hint", ""))[:80]
+    }
+
+# ---------------------- Build class texts & embeddings ------------------
+def build_class_texts(classes: List[Dict]) -> Tuple[List[str], List[str], List[str], List[str], List[str]]:
+    labels, descs, types, evids, members_agg = [], [], [], [], []
+    for c in classes:
+        labels.append(safe_str(c.get("class_label", ""))[:120])
+        descs.append(safe_str(c.get("class_description", ""))[:300])
+        types.append(safe_str(c.get("class_type_hint", ""))[:80])
+        evids.append(safe_str(c.get("evidence_excerpt", ""))[:200])
+        mems = c.get("members", []) or []
+        mem_texts = []
+        for m in mems:
+            name = safe_str(m.get("entity_name", ""))
+            desc = safe_str(m.get("entity_description", ""))
+            etype = safe_str(m.get("entity_type_hint", ""))
+            mem_texts.append(f"{name} ({etype}) - {desc[:120]}")
+        members_agg.append(" ; ".join(mem_texts)[:1000])
+    return labels, descs, types, evids, members_agg
+
+def compute_class_embeddings(embedder: HFEmbedder, classes: List[Dict], weights: Dict[str, float]) -> np.ndarray:
+    labels, descs, types, evids, members_agg = build_class_texts(classes)
+    emb_label = embedder.encode_batch(labels) if any(t.strip() for t in labels) else None
+    emb_desc = embedder.encode_batch(descs) if any(t.strip() for t in descs) else None
+    emb_type = embedder.encode_batch(types) if any(t.strip() for t in types) else None
+    emb_evid = embedder.encode_batch(evids) if any(t.strip() for t in evids) else None
+    emb_mem = embedder.encode_batch(members_agg) if any(t.strip() for t in members_agg) else None
+
+    # determine D
+    D = None
+    for arr in (emb_label, emb_desc, emb_type, emb_evid, emb_mem):
+        if arr is not None and arr.shape[0] > 0:
+            D = arr.shape[1]
+            break
+    if D is None:
+        raise ValueError("No textual fields produced embeddings for classes")
+
+    def ensure(arr):
+        if arr is None:
+            return np.zeros((len(classes), D))
+        if arr.shape[1] != D:
+            raise ValueError("embedding dim mismatch")
+        return arr
+
+    emb_label = ensure(emb_label)
+    emb_desc = ensure(emb_desc)
+    emb_type = ensure(emb_type)
+    emb_evid = ensure(emb_evid)
+    emb_mem = ensure(emb_mem)
+
+    w_label = weights.get("label", 0.0)
+    w_desc = weights.get("desc", 0.0)
+    w_type = weights.get("type_hint", 0.0)
+    w_evid = weights.get("evidence", 0.0)
+    w_mem = weights.get("members", 0.0)
+    W = w_label + w_desc + w_type + w_evid + w_mem
+    if W <= 0:
+        raise ValueError("invalid class emb weights")
+    w_label /= W
+    w_desc /= W
+    w_type /= W
+    w_evid /= W
+    w_mem /= W
+
+    combined = (
+        w_label * emb_label
+        + w_desc * emb_desc
+        + w_type * emb_type
+        + w_evid * emb_evid
+        + w_mem * emb_mem
+    )
+    combined = normalize(combined, axis=1)
+    return combined
+
+# ---------------------- clustering -------------------------------------
+def run_hdbscan(
+    embeddings: np.ndarray,
+    min_cluster_size: int = HDBSCAN_MIN_CLUSTER_SIZE,
+    min_samples: int = HDBSCAN_MIN_SAMPLES,
+    metric: str = HDBSCAN_METRIC,
+    use_umap: bool = USE_UMAP
+) -> Tuple[np.ndarray, object]:
+    X = embeddings
+    N = X.shape[0]
+    # Decide whether to attempt UMAP
+    if use_umap and UMAP_AVAILABLE and N >= 6:
+        safe_n_components = min(UMAP_N_COMPONENTS, max(2, N - 2))
+        safe_n_neighbors = min(UMAP_N_NEIGHBORS, max(2, N - 1))
+        try:
+            reducer = umap.UMAP(
+                n_components=safe_n_components,
+                n_neighbors=safe_n_neighbors,
+                min_dist=UMAP_MIN_DIST,
+                metric="cosine",
+                random_state=42
+            )
+            X_reduced = reducer.fit_transform(X)
+            if X_reduced is not None and X_reduced.shape[0] == N:
+                X = X_reduced
+            else:
+                if VERBOSE:
+                    print(f"[warn] UMAP returned invalid shape {None if X_reduced is None else X_reduced.shape}; skipping UMAP")
+        except Exception as e:
+            if VERBOSE:
+                print(f"[warn] UMAP failed (N={N}, n_comp={safe_n_components}, n_nei={safe_n_neighbors}): {e}. Proceeding without UMAP.")
+            X = embeddings
+    else:
+        if use_umap and UMAP_AVAILABLE and VERBOSE:
+            print(f"[info] Skipping UMAP (N={N} < 6) to avoid unstable spectral computations.")
+    clusterer = hdbscan.HDBSCAN(
+        min_cluster_size=min_cluster_size,
+        min_samples=min_samples,
+        metric=metric,
+        cluster_selection_method="eom"
+    )
+    labels = clusterer.fit_predict(X)
+    return labels, clusterer
+
+# ---------------------- LLM prompt template (confirmed + extended) ------
+CLSRES_PROMPT_TEMPLATE = """
+You are a careful class resolution assistant.
+You are given a set of candidate CLASSES that appear to belong,
+or may plausibly belong, to the same semantic cluster.
+
+The cluster grouping you are given is only *suggestive* and may be incorrect — your job is to resolve, correct, and produce a coherent schema from the evidence.
+
+This is an iterative process — act now with well-justified structural corrections (include a short justification), rather than deferring small but meaningful fixes.
+
+Your CRUCIAL task is to refine the schema using this tentative grouping.
+
+========================
+SCHEMA STRUCTURE (CRITICAL)
+========================
+
+We are building a TWO-LAYER SCHEMA over entities:
+
+Level 0: Class_Group        (connects related classes)
+Level 1: Classes            (group entities)
+Level 2: Entities
+
+Structure:
+Class_Group
+  └── Class
+        └── Entity
+
+- Class_Group is the PRIMARY mechanism for connecting related classes.
+- Classes that share a Class_Group are considered semantically related.
+- This relationship propagates to their entities.
+
+========================
+IMPORTANT FIELD DISTINCTIONS
+========================
+
+- class_type_hint (existing field):
+  A local, descriptive hint assigned to each class in isolation.
+  It is often noisy, incomplete, and inconsistent across classes.
+  Do NOT assume it is globally correct or reusable.
+
+- class_label:
+  Existing class_label values are PROVISIONAL names.
+  You MAY revise them when entity evidence suggests a clearer or a better canonical label.
+
+- Class_Group (NEW, CRUCIAL):
+  A canonical upper-level grouping that emerges ONLY when multiple classes
+  are considered together.
+  It is used to connect related classes into a coherent schema.
+  Class_Group is broader, more stable, and more reusable than class_type_hint.
+
+Class_Group is NOT a synonym of class_type_hint.
+
+========================
+YOUR PRIMARY TASK
+========================
+
+Note: the provided cluster grouping is tentative and may be wrong — 
+you must correct it as needed to produce a coherent Class_Group → Class → Entity schema.
+
+For the given cluster of classes:
+
+1) Assess whether any structural changes are REQUIRED:
+   - merge duplicate or near-duplicate classes
+   - reassign clearly mis-assigned entities
+   - create a new class when necessary
+   - modify class metadata when meaningfully incorrect
+
+2) ALWAYS assess and assign an appropriate Class_Group:
+   - If Class_Group is missing, null, or marked as TBD → you MUST assign it.
+   - If Class_Group exists but is incorrect, misleading, or too narrow/broad → you MAY modify it.
+   - If everything else is correct (which is not the case most of the time), assigning or confirming Class_Group ALONE is sufficient.
+
+========================
+SOME CONSERVATISM RULES (They should not make you passive)
+========================
+
+- Only order a function if a real semantic change is necessary.
+- Do NOT perform cosmetic edits or unnecessary normalization.
+
+You MAY perform multiple structural actions in one cluster
+(e.g., merge + rename + reassign), when needed.
+
+========================
+MERGING & OVERLAP HEURISTICS
+========================
+
+- Entity overlap alone does not automatically require merging.
+- Merge when evidence indicates the SAME underlying concepts
+  (e.g., near-identical semantics, interchangeable usage, or redundant distinctions).
+- Reassignment is appropriate when overlap reveals mis-typed or mis-scoped entities,
+  even if classes should remain separate.
+
+Quick heuristic:
+- Same concept → merge.
+- Different concept, same domain → keep separate classes with the SAME Class_Group.
+- Different domain → different Class_Group.
+
+Avoid vague Class_Group names (e.g., "Misc", "General", "Other").
+Prefer domain-meaningful groupings that help connect related classes.
+
+If a class should be collapsed or weakened but has no clear merge partner, DO NOT use merge_classes;
+instead, reassign its entities to better classes and leave the class unchanged or empty.
+
+IMPORTANT:
+- You MUST NOT call merge_classes with only one class_id.
+- If you only want to update or clarify a single class (e.g., it already contains redundant entities),
+  use modify_class instead, and leave class_ids out of merge_classes.
+- Do NOT use merge_classes to clean up or deduplicate entities inside one class.
+
+
+========================
+AVAILABLE FUNCTIONS
+========================
+
+Return ONLY a JSON ARRAY of ordered function calls.
+
+Each object must have:
+- "function": one of
+  ["merge_classes", "create_class", "reassign_entities", "modify_class"]
+- "args": arguments as defined below.
+
+ID HANDLING RULES
+- You MUST NOT invent real class IDs.
+- You MUST use ONLY class_ids that appear in the input CLASSES (candidate_id values),
+  except when referring to newly merged or created classes.
+- When you need to refer to a newly merged or created class in later steps,
+  you MUST assign a provisional_id (any consistent string).
+- Use the same provisional_id whenever referencing that new class again.
+- After you merge classes into a new class, you should NOT continue to treat the original
+  class_ids as separate entities; refer to the new merged class via its provisional_id.
+
+Example (pattern, not required verbatim):
+
+{
+  "function": "merge_classes",
+  "args": {
+    "class_ids": ["ClsC_da991b68", "ClsC_e32f4a47"],
+    "provisional_id": "MERGE(ClsC_da991b68|ClsC_e32f4a47)",
+    "new_name": "...",
+    "new_description": "...",
+    "new_class_type_hint": "Standard",
+    "justification": "One-line reason citing entity overlap and semantic equivalence.",
+    "confidence": 0.95
+  }
+}
+
+Later:
+
+{
+  "function": "reassign_entities",
+  "args": {
+    "entity_ids": ["En_xxx"],
+    "from_class_id": "ClsC_e32f4a47",
+    "to_class_id": "MERGE(ClsC_da991b68|ClsC_e32f4a47)",
+    "justification": "Why this entity fits better in the merged class.",
+    "confidence": 0.9
+  }
+}
+
+We will internally map provisional_id → real class id.
+
+------------------------
+Function definitions
+------------------------
+
+JUSTIFICATION REQUIREMENT
+- Every function call MUST include:
+    "justification": "<one-line reason>"
+  explaining why the action is necessary.
+- This justification should cite concrete evidence (entity overlap, conflicting descriptions, mis-scoped members, etc.).
+- You MAY also include "confidence": <0.0–1.0> to indicate your belief in the action.
+
+1) merge_classes
+args = {
+  "class_ids": [<existing_class_ids>],   # MUST contain at least 2 valid ids
+  "provisional_id": <string or null>,    # how you will refer to the new class later
+  "new_name": <string or null>,
+  "new_description": <string or null>,
+  "new_class_type_hint": <string or null>,
+  "justification": <string>,
+  "confidence": <number between 0 and 1, optional>
+}
+
+2) create_class
+args = {
+  "name": <string>,
+  "description": <string or null>,
+  "class_type_hint": <string or null>,
+  "member_ids": [<entity_ids>],          # optional, must be from provided entities
+  "provisional_id": <string or null>,    # how you will refer to this new class later
+  "justification": <string>,
+  "confidence": <number between 0 and 1, optional>
+}
+
+3) reassign_entities
+args = {
+  "entity_ids": [<entity_ids>],
+  "from_class_id": <existing_class_id or provisional_id or null>,
+  "to_class_id": <existing_class_id or provisional_id>,
+  "justification": <string>,
+  "confidence": <number between 0 and 1, optional>
+}
+
+4) modify_class
+args = {
+  "class_id": <existing_class_id or provisional_id>,
+  "new_name": <string or null>,
+  "new_description": <string or null>,
+  "new_class_type_hint": <string or null>,
+  "new_class_group": <string or null>,
+  "justification": <string>,
+  "confidence": <number between 0 and 1, optional>
+}
+
+NOTE:
+- Class_Group is normally set or updated via modify_class.
+- Assigning or confirming Class_Group is also REQUIRED for every cluster unless it is already clearly correct.
+
+========================
+VALIDATION RULES
+========================
+
+- Use ONLY provided entity_ids and class_ids (candidate_id values) for existing classes.
+- For new classes, use provisional_id handles and be consistent.
+- Order matters: later steps may depend on earlier ones.
+- merge_classes with fewer than 2 valid class_ids will be ignored.
+
+========================
+STRATEGY GUIDANCE
+========================
+
+- Prefer assigning/adjusting Class_Group over heavy structural changes.
+- Merge classes ONLY when they are genuinely redundant (same concept).
+- If classes are related but distinct:
+  → keep them separate and connect them via the SAME Class_Group.
+- Think in terms of schema connectivity, not cosmetic cleanup.
+
+========================
+INPUT CLASSES
+========================
+
+Each class includes:
+- candidate_id
+- class_label
+- class_description
+- class_type_hint
+- class_group (may be null or "TBD")
+- confidence
+- evidence_excerpt
+- member_ids
+- members (entity id, name, description, type)
+
+{cluster_block}
+
+========================
+OUTPUT
+========================
+
+Return ONLY the JSON array of ordered function calls.
+Return [] only if you are highly confident (> very strong evidence) that no change is needed.
+If any ambiguous or conflicting evidence exists, return a concrete ordered action list
+(with justifications and, optionally, confidence scores).
+"""
+
+def sanitize_json_like(text: str) -> Optional[Any]:
+    # crude sanitizer: extract first [...] region and try loads. Fix common trailing commas and smart quotes.
+    if not text or not text.strip():
+        return None
+    s = text.strip()
+    # replace smart quotes
+    s = s.replace("“", '"').replace("”", '"').replace("‘", "'").replace("’", "'")
+    # find first [ ... ] block
+    start = s.find("[")
+    end = s.rfind("]")
+    cand = s
+    if start != -1 and end != -1 and end > start:
+        cand = s[start:end + 1]
+    # remove trailing commas before closing braces/brackets
+    cand = re.sub(r",\s*([\]}])", r"\1", cand)
+    try:
+        return json.loads(cand)
+    except Exception:
+        return None
+
+# ---------------------- Action executors --------------------------------
+def execute_merge_classes(
+    all_classes: Dict[str, Dict],
+    class_ids: List[str],
+    new_name: Optional[str],
+    new_desc: Optional[str],
+    new_type: Optional[str]
+) -> str:
+    # validate class ids
+    class_ids = [cid for cid in class_ids if cid in all_classes]
+    if len(class_ids) < 2:
+        raise ValueError("merge_classes: need at least 2 valid class_ids")
+    # create new candidate id
+    new_cid = "ClsR_" + uuid.uuid4().hex[:8]
+    # union members
+    members_map: Dict[str, Dict] = {}
+    confidence = 0.0
+    evidence = ""
+    desc_choice = None
+    type_choice = new_type or ""
+    class_group_choice = None
+
+    for cid in class_ids:
+        c = all_classes[cid]
+        confidence = max(confidence, float(c.get("confidence", 0.0)))
+        if c.get("evidence_excerpt") and not evidence:
+            evidence = c.get("evidence_excerpt")
+        if c.get("class_description") and desc_choice is None:
+            desc_choice = c.get("class_description")
+        cg = c.get("class_group")
+        if cg and cg not in ("", "TBD", None):
+            if class_group_choice is None:
+                class_group_choice = cg
+            elif class_group_choice != cg:
+                # conflicting groups -> keep the first, fixable later by modify_class
+                class_group_choice = class_group_choice
+        for m in c.get("members", []):
+            members_map[m["id"]] = m
+
+    if new_desc:
+        desc_choice = new_desc
+    new_label = new_name or all_classes[class_ids[0]].get("class_label", "MergedClass")
+    if not new_type:
+        for cid in class_ids:
+            if all_classes[cid].get("class_type_hint"):
+                type_choice = all_classes[cid].get("class_type_hint")
+                break
+
+    merged_obj = {
+        "candidate_id": new_cid,
+        "class_label": new_label,
+        "class_description": desc_choice or "",
+        "class_type_hint": type_choice or "",
+        "class_group": class_group_choice or "TBD",
+        "confidence": float(confidence),
+        "evidence_excerpt": evidence or "",
+        "member_ids": list(members_map.keys()),
+        "members": list(members_map.values()),
+        "candidate_ids": class_ids,
+        "merged_from": class_ids,
+        "_merged_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+    }
+    for cid in class_ids:
+        all_classes.pop(cid, None)
+    all_classes[new_cid] = merged_obj
+    return new_cid
+
+def execute_create_class(
+    all_classes: Dict[str, Dict],
+    name: str,
+    description: Optional[str],
+    class_type_hint: Optional[str],
+    member_ids: Optional[List[str]],
+    id_to_entity: Dict[str, Dict]
+) -> str:
+    if not name:
+        raise ValueError("create_class: 'name' is required")
+    new_cid = "ClsR_" + uuid.uuid4().hex[:8]
+    members = []
+    mids = member_ids or []
+    for mid in mids:
+        ent = id_to_entity.get(mid)
+        if ent:
+            members.append(ent)
+    obj = {
+        "candidate_id": new_cid,
+        "class_label": name,
+        "class_description": description or "",
+        "class_type_hint": class_type_hint or "",
+        "class_group": "TBD",
+        "confidence": 0.5,
+        "evidence_excerpt": "",
+        "member_ids": [m["id"] for m in members],
+        "members": members,
+        "candidate_ids": [],
+        "_created_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+    }
+    all_classes[new_cid] = obj
+    return new_cid
+
+def execute_reassign_entities(
+    all_classes: Dict[str, Dict],
+    entity_ids: List[str],
+    from_class_id: Optional[str],
+    to_class_id: str,
+    id_to_entity: Dict[str, Dict]
+):
+    # remove from source(s)
+    for cid, c in list(all_classes.items()):
+        if from_class_id and cid != from_class_id:
+            continue
+        new_members = [m for m in c.get("members", []) if m["id"] not in set(entity_ids)]
+        new_member_ids = [m["id"] for m in new_members]
+        c["members"] = new_members
+        c["member_ids"] = new_member_ids
+        all_classes[cid] = c
+    # add to destination
+    if to_class_id not in all_classes:
+        raise ValueError(f"reassign_entities: to_class_id {to_class_id} not found")
+    dest = all_classes[to_class_id]
+    existing = {m["id"] for m in dest.get("members", [])}
+    for eid in entity_ids:
+        if eid in existing:
+            continue
+        ent = id_to_entity.get(eid)
+        if ent:
+            dest.setdefault("members", []).append(ent)
+            dest.setdefault("member_ids", []).append(eid)
+    dest["confidence"] = max(dest.get("confidence", 0.0), 0.4)
+    all_classes[to_class_id] = dest
+
+def execute_modify_class(
+    all_classes: Dict[str, Dict],
+    class_id: str,
+    new_name: Optional[str],
+    new_desc: Optional[str],
+    new_type: Optional[str],
+    new_class_group: Optional[str]
+):
+    if class_id not in all_classes:
+        raise ValueError(f"modify_class: class_id {class_id} not found")
+    c = all_classes[class_id]
+    if new_name:
+        c["class_label"] = new_name
+    if new_desc:
+        c["class_description"] = new_desc
+    if new_type:
+        c["class_type_hint"] = new_type
+    if new_class_group:
+        c["class_group"] = new_class_group
+    all_classes[class_id] = c
+
+# helper to resolve real class ID (handles provisional IDs and retired IDs)
+def resolve_class_id(
+    raw_id: Optional[str],
+    all_classes: Dict[str, Dict],
+    provisional_to_real: Dict[str, str],
+    allow_missing: bool = False
+) -> Optional[str]:
+    if raw_id is None:
+        return None
+    real = provisional_to_real.get(raw_id, raw_id)
+    if real not in all_classes and not allow_missing:
+        raise ValueError(f"resolve_class_id: {raw_id} (resolved to {real}) not found in all_classes")
+    return real
+
+# ---------------------- Main orchestration ------------------------------
+def classres_main():
+    # load classes
+    if not INPUT_CLASSES.exists():
+        raise FileNotFoundError(f"Input classes file not found: {INPUT_CLASSES}")
+    classes_list = load_json(INPUT_CLASSES)
+    print(f"[start] loaded {len(classes_list)} merged candidate classes from {INPUT_CLASSES}")
+
+    # build id->entity map (from members)
+    id_to_entity: Dict[str, Dict] = {}
+    for c in classes_list:
+        for m in c.get("members", []):
+            if isinstance(m, dict) and m.get("id"):
+                id_to_entity[m["id"]] = m
+
+    # ensure classes have candidate_id keys and class_group field
+    all_classes: Dict[str, Dict] = {}
+    for c in classes_list:
+        cid = c.get("candidate_id") or ("ClsC_" + uuid.uuid4().hex[:8])
+        members = c.get("members", []) or []
+        mids = [m["id"] for m in members if isinstance(m, dict) and m.get("id")]
+        c["member_ids"] = mids
+        c["members"] = members
+        if "class_group" not in c or c.get("class_group") in (None, ""):
+            c["class_group"] = "TBD"
+        c["candidate_id"] = cid
+        all_classes[cid] = c
+
+    # embedder
+    embedder = HFEmbedder(model_name=EMBED_MODEL, device=DEVICE)
+    class_objs = list(all_classes.values())
+    class_ids_order = list(all_classes.keys())
+    combined_emb = compute_class_embeddings(embedder, class_objs, CLASS_EMB_WEIGHTS)
+    print("[info] class embeddings computed shape:", combined_emb.shape)
+
+    # clustering
+    labels, clusterer = run_hdbscan(
+        combined_emb,
+        min_cluster_size=HDBSCAN_MIN_CLUSTER_SIZE,
+        min_samples=HDBSCAN_MIN_SAMPLES,
+        use_umap=USE_UMAP
+    )
+    print("[info] clustering done. unique labels:", set(labels))
+
+    # map cluster -> class ids
+    cluster_to_classids: Dict[int, List[str]] = {}
+    for idx, lab in enumerate(labels):
+        cid = class_ids_order[idx]
+        cluster_to_classids.setdefault(int(lab), []).append(cid)
+
+    # prepare action log
+    action_log_path = OUT_DIR / "cls_res_action_log.jsonl"
+    if action_log_path.exists():
+        action_log_path.unlink()
+
+    # iterate clusters (skip -1 initially)
+    cluster_keys = sorted([k for k in cluster_to_classids.keys() if k != -1])
+    cluster_keys += [-1]  # append noise at end
+
+    for cluster_label in cluster_keys:
+        class_ids = cluster_to_classids.get(cluster_label, [])
+        if not class_ids:
+            continue
+        print(f"[cluster] {cluster_label} -> {len(class_ids)} classes")
+
+        # build cluster block to pass to LLM
+        cluster_classes = []
+        for cid in class_ids:
+            c = all_classes.get(cid)
+            if not c:
+                continue
+            members_compact = [compact_member_info(m) for m in c.get("members", [])]
+            cluster_classes.append({
+                "candidate_id": cid,
+                "class_label": c.get("class_label", ""),
+                "class_description": c.get("class_description", ""),
+                "class_type_hint": c.get("class_type_hint", ""),
+                "class_group": c.get("class_group", "TBD"),
+                "confidence": float(c.get("confidence", 0.0)),
+                "evidence_excerpt": c.get("evidence_excerpt", ""),
+                "member_ids": c.get("member_ids", []),
+                "members": members_compact
+            })
+
+        cluster_block = json.dumps(cluster_classes, ensure_ascii=False, indent=2)
+        prompt = CLSRES_PROMPT_TEMPLATE.replace("{cluster_block}", cluster_block)
+
+        # log prompt
+        prompt_path = RAW_LLM_DIR / f"cluster_{cluster_label}_prompt.txt"
+        prompt_path.write_text(prompt, encoding="utf-8")
+
+        # call LLM
+        raw_out = ""
+        try:
+            raw_out = call_llm(prompt)
+        except Exception as e:
+            print(f"[warning] LLM call failed for cluster {cluster_label}: {e}")
+            raw_out = ""
+
+        # write raw output
+        raw_path = RAW_LLM_DIR / f"cluster_{cluster_label}_llm_raw.txt"
+        raw_path.write_text(raw_out, encoding="utf-8")
+
+        # try parse/sanitize
+        parsed = sanitize_json_like(raw_out)
+        if parsed is None:
+            print(f"[warn] failed to parse LLM output for cluster {cluster_label}; skipping automated actions for this cluster.")
+            dec_path = OUT_DIR / f"cluster_{cluster_label}_decisions.json"
+            dec_path.write_text(
+                json.dumps({"cluster_label": cluster_label, "raw_llm": raw_out}, ensure_ascii=False, indent=2),
+                encoding="utf-8"
+            )
+            continue
+
+        # mapping from provisional_id (and retired ids) -> real class id (per cluster)
+        provisional_to_real: Dict[str, str] = {}
+        decisions: List[Dict[str, Any]] = []
+
+        # execute parsed function list in order
+        for step in parsed:
+            if not isinstance(step, dict):
+                continue
+            fn = step.get("function")
+            args = step.get("args", {}) or {}
+
+            justification = args.get("justification")
+            confidence_val = args.get("confidence", None)
+
+            try:
+                if fn == "merge_classes":
+                    cids_raw = args.get("class_ids", []) or []
+                    new_name = args.get("new_name")
+                    new_desc = args.get("new_description")
+                    new_type = args.get("new_class_type_hint")
+                    prov_id = args.get("provisional_id")
+
+                    # resolve any potential provisional IDs in class_ids
+                    cids_real = [provisional_to_real.get(cid, cid) for cid in cids_raw]
+                    valid_cids = [cid for cid in cids_real if cid in all_classes]
+
+                    if len(valid_cids) < 2:
+                        decisions.append({
+                            "action": "merge_skip_too_few",
+                            "requested_class_ids": cids_raw,
+                            "valid_class_ids": valid_cids,
+                            "justification": justification,
+                            "confidence": confidence_val
+                        })
+                        continue
+
+                    new_cid = execute_merge_classes(all_classes, valid_cids, new_name, new_desc, new_type)
+
+                    # map provisional id -> new class id
+                    if prov_id:
+                        provisional_to_real[prov_id] = new_cid
+                    # also map old real ids -> new id so later references can still resolve
+                    for old in valid_cids:
+                        provisional_to_real.setdefault(old, new_cid)
+
+                    decisions.append({
+                        "action": "merge_classes",
+                        "input_class_ids": valid_cids,
+                        "result_class_id": new_cid,
+                        "provisional_id": prov_id,
+                        "justification": justification,
+                        "confidence": confidence_val
+                    })
+
+                elif fn == "create_class":
+                    name = args.get("name")
+                    desc = args.get("description")
+                    t = args.get("class_type_hint")
+                    mids = args.get("member_ids", []) or []
+                    prov_id = args.get("provisional_id")
+
+                    mids_valid = [m for m in mids if m in id_to_entity]
+                    new_cid = execute_create_class(all_classes, name, desc, t, mids_valid, id_to_entity)
+
+                    if prov_id:
+                        provisional_to_real[prov_id] = new_cid
+
+                    decisions.append({
+                        "action": "create_class",
+                        "result_class_id": new_cid,
+                        "provisional_id": prov_id,
+                        "member_ids_added": mids_valid,
+                        "justification": justification,
+                        "confidence": confidence_val
+                    })
+
+                elif fn == "reassign_entities":
+                    eids = args.get("entity_ids", []) or []
+                    from_c_raw = args.get("from_class_id")
+                    to_c_raw = args.get("to_class_id")
+
+                    eids_valid = [e for e in eids if e in id_to_entity]
+
+                    from_c = resolve_class_id(from_c_raw, all_classes, provisional_to_real, allow_missing=True)
+                    to_c = resolve_class_id(to_c_raw, all_classes, provisional_to_real, allow_missing=False)
+
+                    execute_reassign_entities(all_classes, eids_valid, from_c, to_c, id_to_entity)
+
+                    decisions.append({
+                        "action": "reassign_entities",
+                        "entity_ids": eids_valid,
+                        "from": from_c_raw,
+                        "from_resolved": from_c,
+                        "to": to_c_raw,
+                        "to_resolved": to_c,
+                        "justification": justification,
+                        "confidence": confidence_val
+                    })
+
+                elif fn == "modify_class":
+                    cid_raw = args.get("class_id")
+                    new_name = args.get("new_name")
+                    new_desc = args.get("new_description")
+                    new_type = args.get("new_class_type_hint")
+                    new_group = args.get("new_class_group")
+
+                    cid_real = resolve_class_id(cid_raw, all_classes, provisional_to_real, allow_missing=False)
+                    execute_modify_class(all_classes, cid_real, new_name, new_desc, new_type, new_group)
+
+                    decisions.append({
+                        "action": "modify_class",
+                        "class_id": cid_raw,
+                        "class_id_resolved": cid_real,
+                        "new_name": new_name,
+                        "new_description": new_desc,
+                        "new_class_type_hint": new_type,
+                        "new_class_group": new_group,
+                        "justification": justification,
+                        "confidence": confidence_val
+                    })
+
+                else:
+                    decisions.append({
+                        "action": "skip_unknown_function",
+                        "raw": step,
+                        "justification": justification,
+                        "confidence": confidence_val
+                    })
+
+            except Exception as e:
+                decisions.append({
+                    "action": "error_executing",
+                    "function": fn,
+                    "error": str(e),
+                    "input": step,
+                    "justification": justification,
+                    "confidence": confidence_val
+                })
+
+        # write decisions file for this cluster
+        dec_path = OUT_DIR / f"cluster_{cluster_label}_decisions.json"
+        dec_obj = {
+            "cluster_label": cluster_label,
+            "cluster_classes": cluster_classes,
+            "llm_raw": raw_out,
+            "parsed_steps": parsed,
+            "executed_decisions": decisions,
+            "provisional_to_real": provisional_to_real,
+            "timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+        }
+        dec_path.write_text(json.dumps(dec_obj, ensure_ascii=False, indent=2), encoding="utf-8")
+
+        # append to action log
+        with open(action_log_path, "a", encoding="utf-8") as fh:
+            fh.write(json.dumps(dec_obj, ensure_ascii=False) + "\n")
+
+    # After all clusters processed: write final classes output
+    final_classes = list(all_classes.values())
+    out_json = OUT_DIR / "final_classes_resolved.json"
+    out_jsonl = OUT_DIR / "final_classes_resolved.jsonl"
+    out_json.write_text(json.dumps(final_classes, ensure_ascii=False, indent=2), encoding="utf-8")
+    with open(out_jsonl, "w", encoding="utf-8") as fh:
+        for c in final_classes:
+            fh.write(json.dumps(c, ensure_ascii=False) + "\n")
+
+    print(f"[done] wrote final resolved classes -> {out_json}  (count={len(final_classes)})")
+    print(f"[done] action log -> {action_log_path}")
+
+if __name__ == "__main__":
+    classres_main()
+
+#endregion#? Cls Res V5
+#?#########################  End  ##########################
+
+
+
+
+
+
+#?######################### Start ##########################
+#region:#?   Cls Res V6  - Split added - Remark for more expressevity
+
+#!/usr/bin/env python3
+"""
+classres_iterative_v6.py
+
+Class Resolution (Cls Res) — cluster class candidates, ask LLM to
+order a sequence of functions (merge/create/reassign/modify/split) for each cluster,
+then execute those functions locally and produce final resolved classes.
+
+Key features:
+- TWO-LAYER SCHEMA: Class_Group -> Classes -> Entities
+- class_label treated as provisional; may be revised if evidence suggests a clearer name.
+- LLM orders structural + schema actions using a small function vocabulary.
+- Provisional IDs for newly created/merged/split classes so later steps can refer to them.
+- 'remarks' channel so the LLM can flag out-of-scope or higher-level concerns without
+  misusing structural functions.
+- Conservative behavior with strong validation and logging.
+
+Input:
+  /home/mabolhas/MyReposOnSOL/SGCE-KG/data/Classes/Cls_Rec/classes_for_cls_res.json
+
+Output (written under OUT_DIR):
+  - per-cluster decisions: cluster_<N>_decisions.json
+  - per-cluster raw llm output: llm_raw/cluster_<N>_llm_raw.txt
+  - per-cluster prompts: llm_raw/cluster_<N>_prompt.txt
+  - cumulative action log: cls_res_action_log.jsonl
+  - final resolved classes: final_classes_resolved.json and .jsonl
+"""
+
+import json
+import os
+import re
+import time
+import uuid
+from pathlib import Path
+from typing import List, Dict, Any, Optional, Tuple
+
+import numpy as np
+import torch
+from sklearn.preprocessing import normalize
+
+# clustering libs
+try:
+    import hdbscan
+except Exception:
+    raise RuntimeError("hdbscan required: pip install hdbscan")
+try:
+    import umap
+    UMAP_AVAILABLE = True
+except Exception:
+    UMAP_AVAILABLE = False
+
+# transformers embedder (reuse same embedder pattern as ClassRec)
+from transformers import AutoTokenizer, AutoModel
+
+# OpenAI client (same style as your previous script)
+try:
+    from openai import OpenAI
+except Exception:
+    OpenAI = None
+
+# ----------------------------- CONFIG -----------------------------
+INPUT_CLASSES = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Classes/Cls_Rec/classes_for_cls_res.json")
+SRC_ENTITIES_PATH = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Classes/Cls_Input/cls_input_entities.jsonl")
+OUT_DIR = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Classes/Cls_Res")
+OUT_DIR.mkdir(parents=True, exist_ok=True)
+RAW_LLM_DIR = OUT_DIR / "llm_raw"
+RAW_LLM_DIR.mkdir(exist_ok=True)
+
+# Embedding model (changeable)
+EMBED_MODEL = "BAAI/bge-large-en-v1.5"
+DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
+BATCH_SIZE = 32
+
+# Weights for fields used to build class text for embeddings
+CLASS_EMB_WEIGHTS = {
+    "label": 0.30,
+    "desc": 0.25,
+    "type_hint": 0.10,
+    "evidence": 0.05,
+    "members": 0.30
+}
+
+# clustering params
+USE_UMAP = True
+UMAP_N_COMPONENTS = 64
+UMAP_N_NEIGHBORS = 8
+UMAP_MIN_DIST = 0.0
+HDBSCAN_MIN_CLUSTER_SIZE = 2
+HDBSCAN_MIN_SAMPLES = 1
+HDBSCAN_METRIC = "euclidean"
+
+# LLM / OpenAI
+OPENAI_MODEL = "gpt-4.1"  # adjust as needed
+OPENAI_TEMPERATURE = 0.0
+LLM_MAX_TOKENS = 3000
+OPENAI_API_KEY_ENV = "OPENAI_API_KEY"
+
+# behavioral flags
+VERBOSE = True
+WRITE_INTERMEDIATE = True
+
+# ---------------------- Helpers: OpenAI key loader ---------------------
+def _load_openai_key(envvar: str = OPENAI_API_KEY_ENV, fallback_path: str = "/home/mabolhas/MyReposOnSOL/SGCE-KG/.env"):
+    key = os.getenv(envvar, None)
+    if key:
+        return key
+    # fallback: try file
+    if Path(fallback_path).exists():
+        txt = Path(fallback_path).read_text(encoding="utf-8").strip()
+        if txt:
+            return txt
+    return None
+
+OPENAI_KEY = _load_openai_key()
+if OpenAI is not None and OPENAI_KEY:
+    client = OpenAI(api_key=OPENAI_KEY)
+else:
+    client = None
+    if VERBOSE:
+        print("⚠️ OpenAI client not initialized (missing package or API key). LLM calls will fail unless OpenAI client is available.")
+
+def call_llm(prompt: str, model: str = OPENAI_MODEL, temperature: float = OPENAI_TEMPERATURE, max_tokens: int = LLM_MAX_TOKENS) -> str:
+    if client is None:
+        raise RuntimeError("OpenAI client not available. Set OPENAI_API_KEY and install openai package.")
+    try:
+        resp = client.chat.completions.create(
+            model=model,
+            messages=[{"role": "user", "content": prompt}],
+            temperature=temperature,
+            max_tokens=max_tokens
+        )
+        return resp.choices[0].message.content
+    except Exception as e:
+        print("LLM call error:", e)
+        return ""
+
+# ---------------------- HF Embedder (same style as ClassRec) -------------
+def mean_pool(token_embeddings: torch.Tensor, attention_mask: torch.Tensor):
+    input_mask_expanded = attention_mask.unsqueeze(-1).expand(token_embeddings.size()).float()
+    sum_embeddings = torch.sum(token_embeddings * input_mask_expanded, 1)
+    sum_mask = torch.clamp(input_mask_expanded.sum(1), min=1e-9)
+    return sum_embeddings / sum_mask
+
+class HFEmbedder:
+    def __init__(self, model_name=EMBED_MODEL, device=DEVICE):
+        if VERBOSE:
+            print(f"[embedder] loading {model_name} on {device}")
+        self.device = device
+        self.tokenizer = AutoTokenizer.from_pretrained(model_name, use_fast=True)
+        self.model = AutoModel.from_pretrained(model_name)
+        self.model.to(device)
+        self.model.eval()
+        for p in self.model.parameters():
+            p.requires_grad = False
+
+    @torch.no_grad()
+    def encode_batch(self, texts: List[str], batch_size: int = BATCH_SIZE) -> np.ndarray:
+        if len(texts) == 0:
+            D = getattr(self.model.config, "hidden_size", 1024)
+            return np.zeros((0, D))
+        embs = []
+        for i in range(0, len(texts), batch_size):
+            batch = texts[i:i + batch_size]
+            enc = self.tokenizer(batch, padding=True, truncation=True,
+                                 return_tensors="pt", max_length=1024)
+            input_ids = enc["input_ids"].to(self.device)
+            attention_mask = enc["attention_mask"].to(self.device)
+            out = self.model(input_ids=input_ids, attention_mask=attention_mask, return_dict=True)
+            token_embeds = out.last_hidden_state
+            pooled = mean_pool(token_embeds, attention_mask)
+            embs.append(pooled.cpu().numpy())
+        embs = np.vstack(embs)
+        embs = normalize(embs, axis=1)
+        return embs
+
+# ---------------------- IO helpers -------------------------------------
+def load_json(path: Path):
+    return json.loads(path.read_text(encoding="utf-8"))
+
+def safe_str(s: Optional[str]) -> str:
+    if not s:
+        return ""
+    return str(s).replace("\n", " ").strip()
+
+def compact_member_info(member: Dict) -> Dict:
+    # Only pass id, name, desc, entity_type_hint to LLM prompt
+    return {
+        "id": member.get("id"),
+        "entity_name": safe_str(member.get("entity_name", ""))[:180],
+        "entity_description": safe_str(member.get("entity_description", ""))[:400],
+        "entity_type_hint": safe_str(member.get("entity_type_hint", ""))[:80]
+    }
+
+# ---------------------- Build class texts & embeddings ------------------
+def build_class_texts(classes: List[Dict]) -> Tuple[List[str], List[str], List[str], List[str], List[str]]:
+    labels, descs, types, evids, members_agg = [], [], [], [], []
+    for c in classes:
+        labels.append(safe_str(c.get("class_label", ""))[:120])
+        descs.append(safe_str(c.get("class_description", ""))[:300])
+        types.append(safe_str(c.get("class_type_hint", ""))[:80])
+        evids.append(safe_str(c.get("evidence_excerpt", ""))[:200])
+        mems = c.get("members", []) or []
+        mem_texts = []
+        for m in mems:
+            name = safe_str(m.get("entity_name", ""))
+            desc = safe_str(m.get("entity_description", ""))
+            etype = safe_str(m.get("entity_type_hint", ""))
+            mem_texts.append(f"{name} ({etype}) - {desc[:120]}")
+        members_agg.append(" ; ".join(mem_texts)[:1000])
+    return labels, descs, types, evids, members_agg
+
+def compute_class_embeddings(embedder: HFEmbedder, classes: List[Dict], weights: Dict[str, float]) -> np.ndarray:
+    labels, descs, types, evids, members_agg = build_class_texts(classes)
+    emb_label = embedder.encode_batch(labels) if any(t.strip() for t in labels) else None
+    emb_desc = embedder.encode_batch(descs) if any(t.strip() for t in descs) else None
+    emb_type = embedder.encode_batch(types) if any(t.strip() for t in types) else None
+    emb_evid = embedder.encode_batch(evids) if any(t.strip() for t in evids) else None
+    emb_mem = embedder.encode_batch(members_agg) if any(t.strip() for t in members_agg) else None
+
+    # determine D
+    D = None
+    for arr in (emb_label, emb_desc, emb_type, emb_evid, emb_mem):
+        if arr is not None and arr.shape[0] > 0:
+            D = arr.shape[1]
+            break
+    if D is None:
+        raise ValueError("No textual fields produced embeddings for classes")
+
+    def ensure(arr):
+        if arr is None:
+            return np.zeros((len(classes), D))
+        if arr.shape[1] != D:
+            raise ValueError("embedding dim mismatch")
+        return arr
+
+    emb_label = ensure(emb_label)
+    emb_desc = ensure(emb_desc)
+    emb_type = ensure(emb_type)
+    emb_evid = ensure(emb_evid)
+    emb_mem = ensure(emb_mem)
+
+    w_label = weights.get("label", 0.0)
+    w_desc = weights.get("desc", 0.0)
+    w_type = weights.get("type_hint", 0.0)
+    w_evid = weights.get("evidence", 0.0)
+    w_mem = weights.get("members", 0.0)
+    W = w_label + w_desc + w_type + w_evid + w_mem
+    if W <= 0:
+        raise ValueError("invalid class emb weights")
+    w_label /= W
+    w_desc /= W
+    w_type /= W
+    w_evid /= W
+    w_mem /= W
+
+    combined = (
+        w_label * emb_label
+        + w_desc * emb_desc
+        + w_type * emb_type
+        + w_evid * emb_evid
+        + w_mem * emb_mem
+    )
+    combined = normalize(combined, axis=1)
+    return combined
+
+# ---------------------- clustering -------------------------------------
+def run_hdbscan(
+    embeddings: np.ndarray,
+    min_cluster_size: int = HDBSCAN_MIN_CLUSTER_SIZE,
+    min_samples: int = HDBSCAN_MIN_SAMPLES,
+    metric: str = HDBSCAN_METRIC,
+    use_umap: bool = USE_UMAP
+) -> Tuple[np.ndarray, object]:
+    X = embeddings
+    N = X.shape[0]
+    # Decide whether to attempt UMAP
+    if use_umap and UMAP_AVAILABLE and N >= 6:
+        safe_n_components = min(UMAP_N_COMPONENTS, max(2, N - 2))
+        safe_n_neighbors = min(UMAP_N_NEIGHBORS, max(2, N - 1))
+        try:
+            reducer = umap.UMAP(
+                n_components=safe_n_components,
+                n_neighbors=safe_n_neighbors,
+                min_dist=UMAP_MIN_DIST,
+                metric="cosine",
+                random_state=42
+            )
+            X_reduced = reducer.fit_transform(X)
+            if X_reduced is not None and X_reduced.shape[0] == N:
+                X = X_reduced
+            else:
+                if VERBOSE:
+                    print(f"[warn] UMAP returned invalid shape {None if X_reduced is None else X_reduced.shape}; skipping UMAP")
+        except Exception as e:
+            if VERBOSE:
+                print(f"[warn] UMAP failed (N={N}, n_comp={safe_n_components}, n_nei={safe_n_neighbors}): {e}. Proceeding without UMAP.")
+            X = embeddings
+    else:
+        if use_umap and UMAP_AVAILABLE and VERBOSE:
+            print(f"[info] Skipping UMAP (N={N} < 6) to avoid unstable spectral computations.")
+    clusterer = hdbscan.HDBSCAN(
+        min_cluster_size=min_cluster_size,
+        min_samples=min_samples,
+        metric=metric,
+        cluster_selection_method="eom"
+    )
+    labels = clusterer.fit_predict(X)
+    return labels, clusterer
+
+# ---------------------- LLM prompt template (confirmed + extended) ------
+CLSRES_PROMPT_TEMPLATE = """
+You are a proactive class-resolution assistant.
+You are given a set of candidate CLASSES that appear to belong,or may plausibly belong, to the same semantic cluster.
+Your job is to produce a clear, *actionable* ordered list of schema edits for the given cluster.  
+Do NOT be passive.  If the evidence supports structural change (merge / split / reassign / create), you MUST propose it.  
+
+Only return [] if there is extremely strong evidence that NO change is needed (rare).
+
+
+The cluster grouping you are given is only *suggestive* and may be incorrect — your job is to resolve, correct, and produce a coherent schema from the evidence.
+
+This is an iterative process — act now with well-justified structural corrections (include a short justification), rather than deferring small but meaningful fixes.
+
+Your CRUCIAL task is to refine the schema using this tentative grouping.
+
+========================
+SCHEMA STRUCTURE (CRITICAL)
+========================
+
+We are building a TWO-LAYER SCHEMA over entities:
+
+Level 0: Class_Group        (connects related classes)
+Level 1: Classes            (group entities)
+Level 2: Entities
+
+Structure:
+Class_Group
+  └── Class
+        └── Entity
+
+- Class_Group is the PRIMARY mechanism for connecting related classes.
+- Classes that share a Class_Group are considered semantically related.
+- This relationship propagates to their entities.
+
+========================
+IMPORTANT FIELD DISTINCTIONS
+========================
+
+- class_type_hint (existing field):
+  A local, descriptive hint assigned to each class in isolation.
+  It is often noisy, incomplete, and inconsistent across classes.
+  Do NOT assume it is globally correct or reusable.
+
+- class_label:
+  Existing class_label values are PROVISIONAL names.
+  You MAY revise them when entity evidence suggests a clearer or a better canonical label.
+
+- Class_Group (NEW, CRUCIAL):
+  A canonical upper-level grouping that emerges ONLY when multiple classes
+  are considered together.
+  It is used to connect related classes into a coherent schema.
+  Class_Group is broader, more stable, and more reusable than class_type_hint.
+
+- remarks (optional, internal):
+  Free-text notes attached to a class, used to flag important issues that are
+  outside the scope of structural changes (e.g., suspected entity-level duplicates
+  that should be checked elsewhere).
+
+Class_Group is NOT a synonym of class_type_hint.
+
+========================
+YOUR PRIMARY TASK
+========================
+
+Note: the provided cluster grouping is tentative and may be wrong — 
+you must correct it as needed to produce a coherent Class_Group → Class → Entity schema.
+
+For the given cluster of classes:
+
+1) Assess whether any structural changes are REQUIRED:
+   - merge duplicate or near-duplicate classes
+   - reassign clearly mis-assigned entities
+   - create a new class when necessary
+   - split an overloaded class into more coherent subclasses when justified
+   - modify class metadata when meaningfully incorrect
+
+2) ALWAYS assess and assign an appropriate Class_Group:
+   - If Class_Group is missing, null, or marked as TBD → you MUST assign it.
+   - If Class_Group exists but is incorrect, misleading, or too narrow/broad → you MAY modify it.
+   - If everything else is correct (which is not the case most of the time), assigning or confirming Class_Group ALONE is sufficient.
+
+3) If you notice important issues that are OUTSIDE the scope of these functions
+   (e.g., upstream entity resolution that you suspect is wrong, or entities that
+   look identical but should not be changed here), DO NOT try to fix them via merge or reassign.
+   Instead, attach a human-facing remark via modify_class (using the 'remark' field)
+   so that a human can review it later.
+
+========================
+SOME CONSERVATISM RULES (They should not make you passive)
+========================
+
+
+- Always try to attempt structural proposals (merge/split/reassign/create) unless the cluster truly is already optimal.
+- Do NOT perform cosmetic edits or unnecessary normalization.
+
+You MAY perform multiple structural actions in one cluster
+(e.g., merge + rename + reassign + split), when needed.
+
+
+
+========================
+MERGING & OVERLAP HEURISTICS
+========================
+
+- Entity overlap alone does not automatically require merging.
+- Merge when evidence indicates the SAME underlying concepts
+  (e.g., near-identical semantics, interchangeable usage, or redundant distinctions).
+- Reassignment is appropriate when overlap reveals mis-typed or mis-scoped entities,
+  even if classes should remain separate.
+
+Quick heuristic:
+- Same concept → merge.
+- Different concept, same domain → keep separate classes with the SAME Class_Group.
+- Different domain → different Class_Group.
+
+Avoid vague Class_Group names (e.g., "Misc", "General", "Other").
+Prefer domain-meaningful groupings that help connect related classes.
+
+If a class should be collapsed or weakened but has no clear merge partner, DO NOT use merge_classes;
+instead, reassign its entities to better classes and/or add a remark for human review.
+
+IMPORTANT:
+- You MUST NOT call merge_classes with only one class_id.
+- merge_classes is ONLY for merging TWO OR MORE existing classes into ONE new class.
+- If you only want to update or clarify a single class (for example, its label, description,
+  type hint, class_group, or remarks), use modify_class instead.
+- Do NOT use merge_classes to clean up or deduplicate entities inside one class.
+
+========================
+AVAILABLE FUNCTIONS
+========================
+
+Return ONLY a JSON ARRAY of ordered function calls.
+
+Each object must have:
+- "function": one of
+  ["merge_classes", "create_class", "reassign_entities", "modify_class", "split_class"]
+- "args": arguments as defined below.
+
+ID HANDLING RULES
+- You MUST NOT invent real class IDs.
+- You MUST use ONLY class_ids that appear in the input CLASSES (candidate_id values),
+  except when referring to newly merged/created/split classes.
+- When you need to refer to a newly merged/created/split class in later steps,
+  you MUST assign a provisional_id (any consistent string).
+- Use the same provisional_id whenever referencing that new class again.
+- After you merge classes into a new class, you should NOT continue to treat the original
+  class_ids as separate entities; refer to the new merged class via its provisional_id.
+
+Example (pattern, not required verbatim):
+
+{
+  "function": "merge_classes",
+  "args": {
+    "class_ids": ["ClsC_da991b68", "ClsC_e32f4a47"],
+    "provisional_id": "MERGE(ClsC_da991b68|ClsC_e32f4a47)",
+    "new_name": "...",
+    "new_description": "...",
+    "new_class_type_hint": "Standard",
+    "justification": "One-line reason citing entity overlap and semantic equivalence.",
+    "confidence": 0.95
+  }
+}
+
+Later:
+
+{
+  "function": "reassign_entities",
+  "args": {
+    "entity_ids": ["En_xxx"],
+    "from_class_id": "ClsC_e32f4a47",
+    "to_class_id": "MERGE(ClsC_da991b68|ClsC_e32f4a47)",
+    "justification": "Why this entity fits better in the merged class.",
+    "confidence": 0.9
+  }
+}
+
+We will internally map provisional_id → real class id.
+
+------------------------
+Function definitions
+------------------------
+
+JUSTIFICATION REQUIREMENT
+- Every function call MUST include:
+    "justification": "<one-line reason>"
+  explaining why the action is necessary.
+- This justification should cite concrete evidence (entity overlap, conflicting descriptions,
+  mis-scoped members, missing Class_Group, overloaded classes, etc.).
+- You MAY also include "confidence": <0.0–1.0> to indicate your belief in the action.
+
+1) merge_classes
+args = {
+  "class_ids": [<existing_class_ids>],   # MUST contain at least 2 valid ids
+  "provisional_id": <string or null>,    # how you will refer to the new class later
+  "new_name": <string or null>,
+  "new_description": <string or null>,
+  "new_class_type_hint": <string or null>,
+  "justification": <string>,
+  "remark": <string or null>,            # optional: attach a human-facing remark/flag
+  "confidence": <number between 0 and 1, optional>
+}
+
+2) create_class
+args = {
+  "name": <string>,
+  "description": <string or null>,
+  "class_type_hint": <string or null>,
+  "member_ids": [<entity_ids>],          # optional, must be from provided entities
+  "provisional_id": <string or null>,    # how you will refer to this new class later
+  "justification": <string>,
+  "remark": <string or null>,            # optional: attach a human-facing remark/flag
+  "confidence": <number between 0 and 1, optional>
+}
+
+3) reassign_entities
+args = {
+  "entity_ids": [<entity_ids>],
+  "from_class_id": <existing_class_id or provisional_id or null>,
+  "to_class_id": <existing_class_id or provisional_id>,
+  "justification": <string>,
+  "remark": <string or null>,            # optional: attach a human-facing remark/flag
+  "confidence": <number between 0 and 1, optional>
+}
+
+4) modify_class
+args = {
+  "class_id": <existing_class_id or provisional_id>,
+  "new_name": <string or null>,
+  "new_description": <string or null>,
+  "new_class_type_hint": <string or null>,
+  "new_class_group": <string or null>,
+  "remark": <string or null>,            # optional: attach a human-facing remark/flag
+  "justification": <string>,
+  "confidence": <number between 0 and 1, optional>
+}
+
+- Use modify_class with 'remark' (and no structural change) when you want to flag
+  issues that are outside the scope of this step (e.g., suspected entity-level duplicates).
+
+5) split_class
+args = {
+  "source_class_id": <existing_class_id or provisional_id>,
+  "splits": [
+    {
+      "name": <string or null>,
+      "description": <string or null>,
+      "class_type_hint": <string or null>,
+      "member_ids": [<entity_ids>],      # must be from source_class member_ids
+      "provisional_id": <string or null> # how you will refer to this new split class
+    },
+    ...
+  ],
+  "justification": <string>,
+  "remark": <string or null>,            # optional: attach a human-facing remark/flag
+
+  "confidence": <number between 0 and 1, optional>
+}
+
+Semantics of split_class:
+- Use split_class when a single class is overloaded and should be divided into
+  narrower, more coherent classes.
+- Entities listed in splits[*].member_ids MUST come from the source_class's member_ids.
+- The specified entities are REMOVED from the source_class and grouped into new classes.
+- Any members not mentioned in any split remain in the source_class.
+
+NOTE:
+- Class_Group is normally set or updated via modify_class.
+- Assigning or confirming Class_Group is also REQUIRED for every cluster unless it is already clearly correct.
+
+========================
+VALIDATION RULES
+========================
+
+- Use ONLY provided entity_ids and class_ids (candidate_id values) for existing classes.
+- For new classes, use provisional_id handles and be consistent.
+- Order matters: later steps may depend on earlier ones.
+- merge_classes with fewer than 2 valid class_ids will be ignored.
+
+========================
+STRATEGY GUIDANCE
+========================
+
+- Prefer assigning/adjusting Class_Group over heavy structural changes when both are valid.
+- Merge classes ONLY when they are genuinely redundant (same concept).
+- Use split_class when a class clearly bundles multiple distinct concepts that should be separated.
+- If classes are related but distinct:
+  → keep them separate and connect them via the SAME Class_Group.
+- Think in terms of schema connectivity and meaningful structure, not cosmetic cleanup.
+- If in doubt about structural change but you see a potential issue, use modify_class with a 'remark'
+  rather than forcing an uncertain structural edit.
+
+========================
+INPUT CLASSES
+========================
+
+Each class includes:
+- candidate_id
+- class_label
+- class_description
+- class_type_hint
+- class_group (may be null or "TBD")
+- confidence
+- evidence_excerpt
+- member_ids
+- members (entity id, name, description, type)
+- remarks (optional list of prior remarks)
+
+{cluster_block}
+
+========================
+OUTPUT
+========================
+
+Return ONLY the JSON array of ordered function calls.
+Return [] only if you are highly confident (> very strong evidence) that no change is needed.
+If any ambiguous or conflicting evidence exists, return a concrete ordered action list
+(with justifications and, optionally, confidence scores).
+"""
+
+def sanitize_json_like(text: str) -> Optional[Any]:
+    # crude sanitizer: extract first [...] region and try loads. Fix common trailing commas and smart quotes.
+    if not text or not text.strip():
+        return None
+    s = text.strip()
+    # replace smart quotes
+    s = s.replace("“", '"').replace("”", '"').replace("‘", "'").replace("’", "'")
+    # find first [ ... ] block
+    start = s.find("[")
+    end = s.rfind("]")
+    cand = s
+    if start != -1 and end != -1 and end > start:
+        cand = s[start:end + 1]
+    # remove trailing commas before closing braces/brackets
+    cand = re.sub(r",\s*([\]}])", r"\1", cand)
+    try:
+        return json.loads(cand)
+    except Exception:
+        return None
+
+# ---------------------- Action executors --------------------------------
+def execute_merge_classes(
+    all_classes: Dict[str, Dict],
+    class_ids: List[str],
+    new_name: Optional[str],
+    new_desc: Optional[str],
+    new_type: Optional[str]
+) -> str:
+    # validate class ids
+    class_ids = [cid for cid in class_ids if cid in all_classes]
+    if len(class_ids) < 2:
+        raise ValueError("merge_classes: need at least 2 valid class_ids")
+    new_cid = "ClsR_" + uuid.uuid4().hex[:8]
+    members_map: Dict[str, Dict] = {}
+    confidence = 0.0
+    evidence = ""
+    desc_choice = None
+    type_choice = new_type or ""
+    class_group_choice = None
+
+    for cid in class_ids:
+        c = all_classes[cid]
+        confidence = max(confidence, float(c.get("confidence", 0.0)))
+        if c.get("evidence_excerpt") and not evidence:
+            evidence = c.get("evidence_excerpt")
+        if c.get("class_description") and desc_choice is None:
+            desc_choice = c.get("class_description")
+        cg = c.get("class_group")
+        if cg and cg not in ("", "TBD", None):
+            if class_group_choice is None:
+                class_group_choice = cg
+            elif class_group_choice != cg:
+                # conflicting groups -> keep first; fixable later by modify_class
+                class_group_choice = class_group_choice
+        for m in c.get("members", []):
+            members_map[m["id"]] = m
+
+    if new_desc:
+        desc_choice = new_desc
+    new_label = new_name or all_classes[class_ids[0]].get("class_label", "MergedClass")
+    if not new_type:
+        for cid in class_ids:
+            if all_classes[cid].get("class_type_hint"):
+                type_choice = all_classes[cid].get("class_type_hint")
+                break
+
+    merged_obj = {
+        "candidate_id": new_cid,
+        "class_label": new_label,
+        "class_description": desc_choice or "",
+        "class_type_hint": type_choice or "",
+        "class_group": class_group_choice or "TBD",
+        "confidence": float(confidence),
+        "evidence_excerpt": evidence or "",
+        "member_ids": list(members_map.keys()),
+        "members": list(members_map.values()),
+        "candidate_ids": class_ids,
+        "merged_from": class_ids,
+        "remarks": [],
+        "_merged_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+    }
+    for cid in class_ids:
+        all_classes.pop(cid, None)
+    all_classes[new_cid] = merged_obj
+    return new_cid
+
+def execute_create_class(
+    all_classes: Dict[str, Dict],
+    name: str,
+    description: Optional[str],
+    class_type_hint: Optional[str],
+    member_ids: Optional[List[str]],
+    id_to_entity: Dict[str, Dict]
+) -> str:
+    if not name:
+        raise ValueError("create_class: 'name' is required")
+    new_cid = "ClsR_" + uuid.uuid4().hex[:8]
+    members = []
+    mids = member_ids or []
+    for mid in mids:
+        ent = id_to_entity.get(mid)
+        if ent:
+            members.append(ent)
+    obj = {
+        "candidate_id": new_cid,
+        "class_label": name,
+        "class_description": description or "",
+        "class_type_hint": class_type_hint or "",
+        "class_group": "TBD",
+        "confidence": 0.5,
+        "evidence_excerpt": "",
+        "member_ids": [m["id"] for m in members],
+        "members": members,
+        "candidate_ids": [],
+        "remarks": [],
+        "_created_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+    }
+    all_classes[new_cid] = obj
+    return new_cid
+
+def execute_reassign_entities(
+    all_classes: Dict[str, Dict],
+    entity_ids: List[str],
+    from_class_id: Optional[str],
+    to_class_id: str,
+    id_to_entity: Dict[str, Dict]
+):
+    # remove from source(s)
+    for cid, c in list(all_classes.items()):
+        if from_class_id and cid != from_class_id:
+            continue
+        new_members = [m for m in c.get("members", []) if m["id"] not in set(entity_ids)]
+        new_member_ids = [m["id"] for m in new_members]
+        c["members"] = new_members
+        c["member_ids"] = new_member_ids
+        all_classes[cid] = c
+    # add to destination
+    if to_class_id not in all_classes:
+        raise ValueError(f"reassign_entities: to_class_id {to_class_id} not found")
+    dest = all_classes[to_class_id]
+    existing = {m["id"] for m in dest.get("members", [])}
+    for eid in entity_ids:
+        if eid in existing:
+            continue
+        ent = id_to_entity.get(eid)
+        if ent:
+            dest.setdefault("members", []).append(ent)
+            dest.setdefault("member_ids", []).append(eid)
+    dest["confidence"] = max(dest.get("confidence", 0.0), 0.4)
+    all_classes[to_class_id] = dest
+
+def execute_modify_class(
+    all_classes: Dict[str, Dict],
+    class_id: str,
+    new_name: Optional[str],
+    new_desc: Optional[str],
+    new_type: Optional[str],
+    new_class_group: Optional[str],
+    new_remark: Optional[str]
+):
+    if class_id not in all_classes:
+        raise ValueError(f"modify_class: class_id {class_id} not found")
+    c = all_classes[class_id]
+    if new_name:
+        c["class_label"] = new_name
+    if new_desc:
+        c["class_description"] = new_desc
+    if new_type:
+        c["class_type_hint"] = new_type
+    if new_class_group:
+        c["class_group"] = new_class_group
+    if new_remark:
+        existing = c.get("remarks")
+        if existing is None:
+            existing = []
+        elif not isinstance(existing, list):
+            existing = [str(existing)]
+        existing.append(str(new_remark))
+        c["remarks"] = existing
+    all_classes[class_id] = c
+
+def execute_split_class(
+    all_classes: Dict[str, Dict],
+    source_class_id: str,
+    splits_specs: List[Dict[str, Any]]
+) -> List[Tuple[str, Optional[str], List[str]]]:
+    """
+    Split a source class into several new classes.
+    Returns list of (new_class_id, provisional_id, member_ids_used) for each created class.
+    """
+    if source_class_id not in all_classes:
+        raise ValueError(f"split_class: source_class_id {source_class_id} not found")
+    src = all_classes[source_class_id]
+    src_members = src.get("members", []) or []
+    src_member_map = {m["id"]: m for m in src_members if isinstance(m, dict) and m.get("id")}
+    used_ids: set = set()
+    created: List[Tuple[str, Optional[str], List[str]]] = []
+
+    for spec in splits_specs:
+        if not isinstance(spec, dict):
+            continue
+        name = spec.get("name")
+        desc = spec.get("description")
+        th = spec.get("class_type_hint") or src.get("class_type_hint", "")
+        mids_raw = spec.get("member_ids", []) or []
+        prov_id = spec.get("provisional_id")
+        # use only members that belong to source and are not already used
+        valid_mids = []
+        for mid in mids_raw:
+            if mid in src_member_map and mid not in used_ids:
+                valid_mids.append(mid)
+        if not valid_mids:
+            continue
+        members = [src_member_map[mid] for mid in valid_mids]
+        new_cid = "ClsR_" + uuid.uuid4().hex[:8]
+        obj = {
+            "candidate_id": new_cid,
+            "class_label": name or src.get("class_label", "SplitClass"),
+            "class_description": desc or src.get("class_description", ""),
+            "class_type_hint": th or src.get("class_type_hint", ""),
+            "class_group": src.get("class_group", "TBD"),
+            "confidence": src.get("confidence", 0.5),
+            "evidence_excerpt": src.get("evidence_excerpt", ""),
+            "member_ids": valid_mids,
+            "members": members,
+            "candidate_ids": [],
+            "remarks": [],
+            "_split_from": source_class_id,
+            "_created_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+        }
+        all_classes[new_cid] = obj
+        used_ids.update(valid_mids)
+        created.append((new_cid, prov_id, valid_mids))
+
+    if used_ids:
+        remaining_members = [m for m in src_members if m["id"] not in used_ids]
+        src["members"] = remaining_members
+        src["member_ids"] = [m["id"] for m in remaining_members]
+        all_classes[source_class_id] = src
+
+    return created
+
+# helper to resolve real class ID (handles provisional IDs and retired IDs)
+def resolve_class_id(
+    raw_id: Optional[str],
+    all_classes: Dict[str, Dict],
+    provisional_to_real: Dict[str, str],
+    allow_missing: bool = False
+) -> Optional[str]:
+    if raw_id is None:
+        return None
+    real = provisional_to_real.get(raw_id, raw_id)
+    if real not in all_classes and not allow_missing:
+        raise ValueError(f"resolve_class_id: {raw_id} (resolved to {real}) not found in all_classes")
+    return real
+
+# ---------------------- Main orchestration ------------------------------
+def classres_main():
+    # load classes
+    if not INPUT_CLASSES.exists():
+        raise FileNotFoundError(f"Input classes file not found: {INPUT_CLASSES}")
+    classes_list = load_json(INPUT_CLASSES)
+    print(f"[start] loaded {len(classes_list)} merged candidate classes from {INPUT_CLASSES}")
+
+    # build id->entity map (from members)
+    id_to_entity: Dict[str, Dict] = {}
+    for c in classes_list:
+        for m in c.get("members", []):
+            if isinstance(m, dict) and m.get("id"):
+                id_to_entity[m["id"]] = m
+
+    # ensure classes have candidate_id keys, class_group field, and remarks field
+    all_classes: Dict[str, Dict] = {}
+    for c in classes_list:
+        cid = c.get("candidate_id") or ("ClsC_" + uuid.uuid4().hex[:8])
+        members = c.get("members", []) or []
+        mids = [m["id"] for m in members if isinstance(m, dict) and m.get("id")]
+        c["member_ids"] = mids
+        c["members"] = members
+        if "class_group" not in c or c.get("class_group") in (None, ""):
+            c["class_group"] = "TBD"
+        # normalize remarks
+        if "remarks" not in c or c["remarks"] is None:
+            c["remarks"] = []
+        elif not isinstance(c["remarks"], list):
+            c["remarks"] = [str(c["remarks"])]
+        c["candidate_id"] = cid
+        all_classes[cid] = c
+
+    # embedder
+    embedder = HFEmbedder(model_name=EMBED_MODEL, device=DEVICE)
+    class_objs = list(all_classes.values())
+    class_ids_order = list(all_classes.keys())
+    combined_emb = compute_class_embeddings(embedder, class_objs, CLASS_EMB_WEIGHTS)
+    print("[info] class embeddings computed shape:", combined_emb.shape)
+
+    # clustering
+    labels, clusterer = run_hdbscan(
+        combined_emb,
+        min_cluster_size=HDBSCAN_MIN_CLUSTER_SIZE,
+        min_samples=HDBSCAN_MIN_SAMPLES,
+        use_umap=USE_UMAP
+    )
+    print("[info] clustering done. unique labels:", set(labels))
+
+    # map cluster -> class ids
+    cluster_to_classids: Dict[int, List[str]] = {}
+    for idx, lab in enumerate(labels):
+        cid = class_ids_order[idx]
+        cluster_to_classids.setdefault(int(lab), []).append(cid)
+
+    # prepare action log
+    action_log_path = OUT_DIR / "cls_res_action_log.jsonl"
+    if action_log_path.exists():
+        action_log_path.unlink()
+
+    # iterate clusters (skip -1 initially)
+    cluster_keys = sorted([k for k in cluster_to_classids.keys() if k != -1])
+    cluster_keys += [-1]  # append noise at end
+
+    for cluster_label in cluster_keys:
+        class_ids = cluster_to_classids.get(cluster_label, [])
+        if not class_ids:
+            continue
+        print(f"[cluster] {cluster_label} -> {len(class_ids)} classes")
+
+        # build cluster block to pass to LLM
+        cluster_classes = []
+        for cid in class_ids:
+            c = all_classes.get(cid)
+            if not c:
+                continue
+            members_compact = [compact_member_info(m) for m in c.get("members", [])]
+            cluster_classes.append({
+                "candidate_id": cid,
+                "class_label": c.get("class_label", ""),
+                "class_description": c.get("class_description", ""),
+                "class_type_hint": c.get("class_type_hint", ""),
+                "class_group": c.get("class_group", "TBD"),
+                "confidence": float(c.get("confidence", 0.0)),
+                "evidence_excerpt": c.get("evidence_excerpt", ""),
+                "member_ids": c.get("member_ids", []),
+                "members": members_compact,
+                "remarks": c.get("remarks", [])
+            })
+
+        cluster_block = json.dumps(cluster_classes, ensure_ascii=False, indent=2)
+        prompt = CLSRES_PROMPT_TEMPLATE.replace("{cluster_block}", cluster_block)
+
+        # log prompt
+        prompt_path = RAW_LLM_DIR / f"cluster_{cluster_label}_prompt.txt"
+        prompt_path.write_text(prompt, encoding="utf-8")
+
+        # call LLM
+        raw_out = ""
+        try:
+            raw_out = call_llm(prompt)
+        except Exception as e:
+            print(f"[warning] LLM call failed for cluster {cluster_label}: {e}")
+            raw_out = ""
+
+        # write raw output
+        raw_path = RAW_LLM_DIR / f"cluster_{cluster_label}_llm_raw.txt"
+        raw_path.write_text(raw_out, encoding="utf-8")
+
+        # try parse/sanitize
+        parsed = sanitize_json_like(raw_out)
+        if parsed is None:
+            print(f"[warn] failed to parse LLM output for cluster {cluster_label}; skipping automated actions for this cluster.")
+            dec_path = OUT_DIR / f"cluster_{cluster_label}_decisions.json"
+            dec_path.write_text(
+                json.dumps({"cluster_label": cluster_label, "raw_llm": raw_out}, ensure_ascii=False, indent=2),
+                encoding="utf-8"
+            )
+            continue
+
+        # mapping from provisional_id (and retired ids) -> real class id (per cluster)
+        provisional_to_real: Dict[str, str] = {}
+        decisions: List[Dict[str, Any]] = []
+
+        # execute parsed function list in order
+        for step in parsed:
+            if not isinstance(step, dict):
+                continue
+            fn = step.get("function")
+            args = step.get("args", {}) or {}
+
+            justification = args.get("justification")
+            confidence_val = args.get("confidence", None)
+
+            try:
+                if fn == "merge_classes":
+                    cids_raw = args.get("class_ids", []) or []
+                    new_name = args.get("new_name")
+                    new_desc = args.get("new_description")
+                    new_type = args.get("new_class_type_hint")
+                    prov_id = args.get("provisional_id")
+
+                    # resolve any potential provisional IDs in class_ids
+                    cids_real = [provisional_to_real.get(cid, cid) for cid in cids_raw]
+                    valid_cids = [cid for cid in cids_real if cid in all_classes]
+
+                    if len(valid_cids) < 2:
+                        decisions.append({
+                            "action": "merge_skip_too_few",
+                            "requested_class_ids": cids_raw,
+                            "valid_class_ids": valid_cids,
+                            "justification": justification,
+                            "confidence": confidence_val
+                        })
+                        continue
+
+                    new_cid = execute_merge_classes(all_classes, valid_cids, new_name, new_desc, new_type)
+
+                    # map provisional id -> new class id
+                    if prov_id:
+                        provisional_to_real[prov_id] = new_cid
+                    # also map old real ids -> new id so later references can still resolve
+                    for old in valid_cids:
+                        provisional_to_real.setdefault(old, new_cid)
+
+                    decisions.append({
+                        "action": "merge_classes",
+                        "input_class_ids": valid_cids,
+                        "result_class_id": new_cid,
+                        "provisional_id": prov_id,
+                        "justification": justification,
+                        "confidence": confidence_val
+                    })
+
+                elif fn == "create_class":
+                    name = args.get("name")
+                    desc = args.get("description")
+                    t = args.get("class_type_hint")
+                    mids = args.get("member_ids", []) or []
+                    prov_id = args.get("provisional_id")
+
+                    mids_valid = [m for m in mids if m in id_to_entity]
+                    new_cid = execute_create_class(all_classes, name, desc, t, mids_valid, id_to_entity)
+
+                    if prov_id:
+                        provisional_to_real[prov_id] = new_cid
+
+                    decisions.append({
+                        "action": "create_class",
+                        "result_class_id": new_cid,
+                        "provisional_id": prov_id,
+                        "member_ids_added": mids_valid,
+                        "justification": justification,
+                        "confidence": confidence_val
+                    })
+
+                elif fn == "reassign_entities":
+                    eids = args.get("entity_ids", []) or []
+                    from_c_raw = args.get("from_class_id")
+                    to_c_raw = args.get("to_class_id")
+
+                    eids_valid = [e for e in eids if e in id_to_entity]
+
+                    from_c = resolve_class_id(from_c_raw, all_classes, provisional_to_real, allow_missing=True)
+                    to_c = resolve_class_id(to_c_raw, all_classes, provisional_to_real, allow_missing=False)
+
+                    execute_reassign_entities(all_classes, eids_valid, from_c, to_c, id_to_entity)
+
+                    decisions.append({
+                        "action": "reassign_entities",
+                        "entity_ids": eids_valid,
+                        "from": from_c_raw,
+                        "from_resolved": from_c,
+                        "to": to_c_raw,
+                        "to_resolved": to_c,
+                        "justification": justification,
+                        "confidence": confidence_val
+                    })
+
+                elif fn == "modify_class":
+                    cid_raw = args.get("class_id")
+                    new_name = args.get("new_name")
+                    new_desc = args.get("new_description")
+                    new_type = args.get("new_class_type_hint")
+                    new_group = args.get("new_class_group")
+                    new_remark = args.get("remark")
+
+                    cid_real = resolve_class_id(cid_raw, all_classes, provisional_to_real, allow_missing=False)
+                    execute_modify_class(all_classes, cid_real, new_name, new_desc, new_type, new_group, new_remark)
+
+                    decisions.append({
+                        "action": "modify_class",
+                        "class_id": cid_raw,
+                        "class_id_resolved": cid_real,
+                        "new_name": new_name,
+                        "new_description": new_desc,
+                        "new_class_type_hint": new_type,
+                        "new_class_group": new_group,
+                        "remark": new_remark,
+                        "justification": justification,
+                        "confidence": confidence_val
+                    })
+
+                elif fn == "split_class":
+                    source_raw = args.get("source_class_id")
+                    splits_specs = args.get("splits", []) or []
+
+                    source_real = resolve_class_id(source_raw, all_classes, provisional_to_real, allow_missing=False)
+                    created = execute_split_class(all_classes, source_real, splits_specs)
+
+                    created_summary = []
+                    for new_cid, prov_id, mids_used in created:
+                        if prov_id:
+                            provisional_to_real[prov_id] = new_cid
+                        created_summary.append({
+                            "new_class_id": new_cid,
+                            "provisional_id": prov_id,
+                            "member_ids": mids_used
+                        })
+
+                    decisions.append({
+                        "action": "split_class",
+                        "source_class_id": source_raw,
+                        "source_class_id_resolved": source_real,
+                        "created_classes": created_summary,
+                        "justification": justification,
+                        "confidence": confidence_val
+                    })
+
+                else:
+                    decisions.append({
+                        "action": "skip_unknown_function",
+                        "raw": step,
+                        "justification": justification,
+                        "confidence": confidence_val
+                    })
+
+            except Exception as e:
+                decisions.append({
+                    "action": "error_executing",
+                    "function": fn,
+                    "error": str(e),
+                    "input": step,
+                    "justification": justification,
+                    "confidence": confidence_val
+                })
+
+        # write decisions file for this cluster
+        dec_path = OUT_DIR / f"cluster_{cluster_label}_decisions.json"
+        dec_obj = {
+            "cluster_label": cluster_label,
+            "cluster_classes": cluster_classes,
+            "llm_raw": raw_out,
+            "parsed_steps": parsed,
+            "executed_decisions": decisions,
+            "provisional_to_real": provisional_to_real,
+            "timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+        }
+        dec_path.write_text(json.dumps(dec_obj, ensure_ascii=False, indent=2), encoding="utf-8")
+
+        # append to action log
+        with open(action_log_path, "a", encoding="utf-8") as fh:
+            fh.write(json.dumps(dec_obj, ensure_ascii=False) + "\n")
+
+    # After all clusters processed: write final classes output
+    final_classes = list(all_classes.values())
+    out_json = OUT_DIR / "final_classes_resolved.json"
+    out_jsonl = OUT_DIR / "final_classes_resolved.jsonl"
+    out_json.write_text(json.dumps(final_classes, ensure_ascii=False, indent=2), encoding="utf-8")
+    with open(out_jsonl, "w", encoding="utf-8") as fh:
+        for c in final_classes:
+            fh.write(json.dumps(c, ensure_ascii=False) + "\n")
+
+    print(f"[done] wrote final resolved classes -> {out_json}  (count={len(final_classes)})")
+    print(f"[done] action log -> {action_log_path}")
+
+if __name__ == "__main__":
+    classres_main()
+
+#endregion#? Cls Res V6
+#?#########################  End  ##########################
+
+
+
+
+
+
+
+
+#?######################### Start ##########################
+#region:#?   Cls Res V7  - Split + Remark + Summary
+
+#!/usr/bin/env python3
+"""
+classres_iterative_v7.py
+
+Class Resolution (Cls Res) — cluster class candidates, ask LLM to
+order a sequence of functions (merge/create/reassign/modify/split) for each cluster,
+then execute those functions locally and produce final resolved classes.
+
+Key features:
+- TWO-LAYER SCHEMA: Class_Group -> Classes -> Entities
+- class_label treated as provisional; may be revised if evidence suggests a clearer name.
+- LLM orders structural + schema actions using a small function vocabulary.
+- Provisional IDs for newly created/merged/split classes so later steps can refer to them.
+- 'remarks' channel so the LLM can flag out-of-scope or higher-level concerns without
+  misusing structural functions.
+- Conservative behavior with strong validation and logging.
+- Summary folder with aggregated decisions and useful statistics.
+
+Input:
+  /home/mabolhas/MyReposOnSOL/SGCE-KG/data/Classes/Cls_Rec/classes_for_cls_res.json
+
+Output (written under OUT_DIR):
+  - per-cluster decisions: cluster_<N>_decisions.json
+  - per-cluster raw llm output: llm_raw/cluster_<N>_llm_raw.txt
+  - per-cluster prompts: llm_raw/cluster_<N>_prompt.txt
+  - cumulative action log: cls_res_action_log.jsonl
+  - final resolved classes: final_classes_resolved.json and .jsonl
+  - summary/all_clusters_decisions.json (aggregated decisions)
+  - summary/stats_summary.json (aggregate statistics)
+"""
+
+import json
+import os
+import re
+import time
+import uuid
+from pathlib import Path
+from typing import List, Dict, Any, Optional, Tuple
+
+import numpy as np
+import torch
+from sklearn.preprocessing import normalize
+
+# clustering libs
+try:
+    import hdbscan
+except Exception:
+    raise RuntimeError("hdbscan required: pip install hdbscan")
+try:
+    import umap
+    UMAP_AVAILABLE = True
+except Exception:
+    UMAP_AVAILABLE = False
+
+# transformers embedder (reuse same embedder pattern as ClassRec)
+from transformers import AutoTokenizer, AutoModel
+
+# OpenAI client (same style as your previous script)
+try:
+    from openai import OpenAI
+except Exception:
+    OpenAI = None
+
+# ----------------------------- CONFIG -----------------------------
+INPUT_CLASSES = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Classes/Cls_Rec/classes_for_cls_res.json")
+#INPUT_CLASSES = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Classes/Cls_Rec/classes_for_cls_res-Wrong.json")
+SRC_ENTITIES_PATH = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Classes/Cls_Input/cls_input_entities.jsonl")
+OUT_DIR = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Classes/Cls_Res")
+OUT_DIR.mkdir(parents=True, exist_ok=True)
+RAW_LLM_DIR = OUT_DIR / "llm_raw"
+RAW_LLM_DIR.mkdir(exist_ok=True)
+
+# Embedding model (changeable)
+EMBED_MODEL = "BAAI/bge-large-en-v1.5"
+DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
+BATCH_SIZE = 32
+
+# Weights for fields used to build class text for embeddings
+CLASS_EMB_WEIGHTS = {
+    "label": 0.30,
+    "desc": 0.25,
+    "type_hint": 0.10,
+    "evidence": 0.05,
+    "members": 0.30
+}
+
+# clustering params
+USE_UMAP = True
+UMAP_N_COMPONENTS = 64
+UMAP_N_NEIGHBORS = 8
+UMAP_MIN_DIST = 0.0
+HDBSCAN_MIN_CLUSTER_SIZE = 2
+HDBSCAN_MIN_SAMPLES = 1
+HDBSCAN_METRIC = "euclidean"
+
+# LLM / OpenAI
+OPENAI_MODEL = "gpt-4.1"  # adjust as needed
+OPENAI_TEMPERATURE = 0.0
+LLM_MAX_TOKENS = 3000
+OPENAI_API_KEY_ENV = "OPENAI_API_KEY"
+
+# behavioral flags
+VERBOSE = True
+WRITE_INTERMEDIATE = True
+
+# ---------------------- Helpers: OpenAI key loader ---------------------
+def _load_openai_key(envvar: str = OPENAI_API_KEY_ENV, fallback_path: str = "/home/mabolhas/MyReposOnSOL/SGCE-KG/.env"):
+    key = os.getenv(envvar, None)
+    if key:
+        return key
+    # fallback: try file
+    if Path(fallback_path).exists():
+        txt = Path(fallback_path).read_text(encoding="utf-8").strip()
+        if txt:
+            return txt
+    return None
+
+OPENAI_KEY = _load_openai_key()
+if OpenAI is not None and OPENAI_KEY:
+    client = OpenAI(api_key=OPENAI_KEY)
+else:
+    client = None
+    if VERBOSE:
+        print("⚠️ OpenAI client not initialized (missing package or API key). LLM calls will fail unless OpenAI client is available.")
+
+def call_llm(prompt: str, model: str = OPENAI_MODEL, temperature: float = OPENAI_TEMPERATURE, max_tokens: int = LLM_MAX_TOKENS) -> str:
+    if client is None:
+        raise RuntimeError("OpenAI client not available. Set OPENAI_API_KEY and install openai package.")
+    try:
+        resp = client.chat.completions.create(
+            model=model,
+            messages=[{"role": "user", "content": prompt}],
+            temperature=temperature,
+            max_tokens=max_tokens
+        )
+        return resp.choices[0].message.content
+    except Exception as e:
+        print("LLM call error:", e)
+        return ""
+
+# ---------------------- HF Embedder (same style as ClassRec) -------------
+def mean_pool(token_embeddings: torch.Tensor, attention_mask: torch.Tensor):
+    input_mask_expanded = attention_mask.unsqueeze(-1).expand(token_embeddings.size()).float()
+    sum_embeddings = torch.sum(token_embeddings * input_mask_expanded, 1)
+    sum_mask = torch.clamp(input_mask_expanded.sum(1), min=1e-9)
+    return sum_embeddings / sum_mask
+
+class HFEmbedder:
+    def __init__(self, model_name=EMBED_MODEL, device=DEVICE):
+        if VERBOSE:
+            print(f"[embedder] loading {model_name} on {device}")
+        self.device = device
+        self.tokenizer = AutoTokenizer.from_pretrained(model_name, use_fast=True)
+        self.model = AutoModel.from_pretrained(model_name)
+        self.model.to(device)
+        self.model.eval()
+        for p in self.model.parameters():
+            p.requires_grad = False
+
+    @torch.no_grad()
+    def encode_batch(self, texts: List[str], batch_size: int = BATCH_SIZE) -> np.ndarray:
+        if len(texts) == 0:
+            D = getattr(self.model.config, "hidden_size", 1024)
+            return np.zeros((0, D))
+        embs = []
+        for i in range(0, len(texts), batch_size):
+            batch = texts[i:i + batch_size]
+            enc = self.tokenizer(batch, padding=True, truncation=True,
+                                 return_tensors="pt", max_length=1024)
+            input_ids = enc["input_ids"].to(self.device)
+            attention_mask = enc["attention_mask"].to(self.device)
+            out = self.model(input_ids=input_ids, attention_mask=attention_mask, return_dict=True)
+            token_embeds = out.last_hidden_state
+            pooled = mean_pool(token_embeds, attention_mask)
+            embs.append(pooled.cpu().numpy())
+        embs = np.vstack(embs)
+        embs = normalize(embs, axis=1)
+        return embs
+
+# ---------------------- IO helpers -------------------------------------
+def load_json(path: Path):
+    return json.loads(path.read_text(encoding="utf-8"))
+
+def safe_str(s: Optional[str]) -> str:
+    if not s:
+        return ""
+    return str(s).replace("\n", " ").strip()
+
+def compact_member_info(member: Dict) -> Dict:
+    # Only pass id, name, desc, entity_type_hint to LLM prompt
+    return {
+        "id": member.get("id"),
+        "entity_name": safe_str(member.get("entity_name", ""))[:180],
+        "entity_description": safe_str(member.get("entity_description", ""))[:400],
+        "entity_type_hint": safe_str(member.get("entity_type_hint", ""))[:80]
+    }
+
+# ---------------------- Build class texts & embeddings ------------------
+def build_class_texts(classes: List[Dict]) -> Tuple[List[str], List[str], List[str], List[str], List[str]]:
+    labels, descs, types, evids, members_agg = [], [], [], [], []
+    for c in classes:
+        labels.append(safe_str(c.get("class_label", ""))[:120])
+        descs.append(safe_str(c.get("class_description", ""))[:300])
+        types.append(safe_str(c.get("class_type_hint", ""))[:80])
+        evids.append(safe_str(c.get("evidence_excerpt", ""))[:200])
+        mems = c.get("members", []) or []
+        mem_texts = []
+        for m in mems:
+            name = safe_str(m.get("entity_name", ""))
+            desc = safe_str(m.get("entity_description", ""))
+            etype = safe_str(m.get("entity_type_hint", ""))
+            mem_texts.append(f"{name} ({etype}) - {desc[:120]}")
+        members_agg.append(" ; ".join(mem_texts)[:1000])
+    return labels, descs, types, evids, members_agg
+
+def compute_class_embeddings(embedder: HFEmbedder, classes: List[Dict], weights: Dict[str, float]) -> np.ndarray:
+    labels, descs, types, evids, members_agg = build_class_texts(classes)
+    emb_label = embedder.encode_batch(labels) if any(t.strip() for t in labels) else None
+    emb_desc = embedder.encode_batch(descs) if any(t.strip() for t in descs) else None
+    emb_type = embedder.encode_batch(types) if any(t.strip() for t in types) else None
+    emb_evid = embedder.encode_batch(evids) if any(t.strip() for t in evids) else None
+    emb_mem = embedder.encode_batch(members_agg) if any(t.strip() for t in members_agg) else None
+
+    # determine D
+    D = None
+    for arr in (emb_label, emb_desc, emb_type, emb_evid, emb_mem):
+        if arr is not None and arr.shape[0] > 0:
+            D = arr.shape[1]
+            break
+    if D is None:
+        raise ValueError("No textual fields produced embeddings for classes")
+
+    def ensure(arr):
+        if arr is None:
+            return np.zeros((len(classes), D))
+        if arr.shape[1] != D:
+            raise ValueError("embedding dim mismatch")
+        return arr
+
+    emb_label = ensure(emb_label)
+    emb_desc = ensure(emb_desc)
+    emb_type = ensure(emb_type)
+    emb_evid = ensure(emb_evid)
+    emb_mem = ensure(emb_mem)
+
+    w_label = weights.get("label", 0.0)
+    w_desc = weights.get("desc", 0.0)
+    w_type = weights.get("type_hint", 0.0)
+    w_evid = weights.get("evidence", 0.0)
+    w_mem = weights.get("members", 0.0)
+    W = w_label + w_desc + w_type + w_evid + w_mem
+    if W <= 0:
+        raise ValueError("invalid class emb weights")
+    w_label /= W
+    w_desc /= W
+    w_type /= W
+    w_evid /= W
+    w_mem /= W
+
+    combined = (
+        w_label * emb_label
+        + w_desc * emb_desc
+        + w_type * emb_type
+        + w_evid * emb_evid
+        + w_mem * emb_mem
+    )
+    combined = normalize(combined, axis=1)
+    return combined
+
+# ---------------------- clustering -------------------------------------
+def run_hdbscan(
+    embeddings: np.ndarray,
+    min_cluster_size: int = HDBSCAN_MIN_CLUSTER_SIZE,
+    min_samples: int = HDBSCAN_MIN_SAMPLES,
+    metric: str = HDBSCAN_METRIC,
+    use_umap: bool = USE_UMAP
+) -> Tuple[np.ndarray, object]:
+    X = embeddings
+    N = X.shape[0]
+    # Decide whether to attempt UMAP
+    if use_umap and UMAP_AVAILABLE and N >= 6:
+        safe_n_components = min(UMAP_N_COMPONENTS, max(2, N - 2))
+        safe_n_neighbors = min(UMAP_N_NEIGHBORS, max(2, N - 1))
+        try:
+            reducer = umap.UMAP(
+                n_components=safe_n_components,
+                n_neighbors=safe_n_neighbors,
+                min_dist=UMAP_MIN_DIST,
+                metric="cosine",
+                random_state=42
+            )
+            X_reduced = reducer.fit_transform(X)
+            if X_reduced is not None and X_reduced.shape[0] == N:
+                X = X_reduced
+            else:
+                if VERBOSE:
+                    print(f"[warn] UMAP returned invalid shape {None if X_reduced is None else X_reduced.shape}; skipping UMAP")
+        except Exception as e:
+            if VERBOSE:
+                print(f"[warn] UMAP failed (N={N}, n_comp={safe_n_components}, n_nei={safe_n_neighbors}): {e}. Proceeding without UMAP.")
+            X = embeddings
+    else:
+        if use_umap and UMAP_AVAILABLE and VERBOSE:
+            print(f"[info] Skipping UMAP (N={N} < 6) to avoid unstable spectral computations.")
+    clusterer = hdbscan.HDBSCAN(
+        min_cluster_size=min_cluster_size,
+        min_samples=min_samples,
+        metric=metric,
+        cluster_selection_method="eom"
+    )
+    labels = clusterer.fit_predict(X)
+    return labels, clusterer
+
+# ---------------------- LLM prompt template (extended) ------------------
+CLSRES_PROMPT_TEMPLATE = """
+You are a very proactive class-resolution assistant.
+You are given a set of candidate CLASSES that appear to belong, or may plausibly belong, to the same semantic cluster.
+Your job is to produce a clear, *actionable* ordered list of schema edits for the given cluster.
+Do NOT be passive. If the evidence supports structural change (merge / split / reassign / create), you MUST propose it.
+
+Only return [] if there is extremely strong evidence that NO change is needed (rare).
+
+The cluster grouping you are given is only *suggestive* and may be incorrect — your job is to resolve, correct, and produce a coherent schema from the evidence.
+
+This is an iterative process — act now with well-justified structural corrections (include a short justification), rather than deferring small but meaningful fixes.
+This step will be repeated in later iterations; reasonable but imperfect changes can be corrected later.
+It is worse to miss a necessary change than to propose a well-justified change that might be slightly adjusted later.
+
+Your CRUCIAL task is to refine the schema using this tentative grouping.
+
+========================
+SCHEMA STRUCTURE (CRITICAL)
+========================
+
+We are building a TWO-LAYER SCHEMA over entities:
+
+Level 0: Class_Group        (connects related classes)
+Level 1: Classes            (group entities)
+Level 2: Entities
+
+Structure:
+Class_Group
+  └── Class
+        └── Entity
+
+- Class_Group is the PRIMARY mechanism for connecting related classes.
+- Classes that share a Class_Group are considered semantically related.
+- This relationship propagates to their entities.
+
+========================
+IMPORTANT FIELD DISTINCTIONS
+========================
+
+- class_type_hint (existing field):
+  A local, descriptive hint assigned to each class in isolation.
+  It is often noisy, incomplete, and inconsistent across classes.
+  Do NOT assume it is globally correct or reusable.
+
+- class_label:
+  Existing class_label values are PROVISIONAL names.
+  You MAY revise them when entity evidence suggests a clearer or a better canonical label.
+
+- Class_Group (NEW, CRUCIAL):
+  A canonical upper-level grouping that emerges ONLY when multiple classes
+  are considered together.
+  It is used to connect related classes into a coherent schema.
+  Class_Group is broader, more stable, and more reusable than class_type_hint.
+
+- remarks (optional, internal):
+  Free-text notes attached to a class, used to flag important issues that are
+  outside the scope of structural changes (e.g., suspected entity-level duplicates
+  that should be checked elsewhere).
+
+Class_Group is NOT a synonym of class_type_hint.
+
+========================
+YOUR PRIMARY TASK
+========================
+
+Note: the provided cluster grouping is tentative and may be wrong — 
+you must correct it as needed to produce a coherent Class_Group → Class → Entity schema.
+
+For the given cluster of classes:
+
+1) Assess whether any structural changes are REQUIRED:
+   - merge duplicate or near-duplicate classes
+   - reassign clearly mis-assigned entities
+   - create a new class when necessary
+   - split an overloaded class into more coherent subclasses when justified
+   - modify class metadata when meaningfully incorrect
+
+2) ALWAYS assess and assign an appropriate Class_Group:
+   - If Class_Group is missing, null, or marked as TBD → you MUST assign it.
+   - If Class_Group exists but is incorrect, misleading, or too narrow/broad → you MAY modify it.
+   - If everything else is correct (which is not the case most of the time), assigning or confirming Class_Group ALONE is sufficient.
+
+3) If you notice important issues that are OUTSIDE the scope of these functions
+   (e.g., upstream entity resolution that you suspect is wrong, or entities that
+   look identical but should not be changed here), DO NOT try to fix them via merge or reassign.
+   Instead, attach a human-facing remark via modify_class (using the 'remark' field)
+   so that a human can review it later.
+
+========================
+SOME CONSERVATISM RULES (They should not make you passive)
+========================
+
+- Always try to attempt structural proposals (merge/split/reassign/create) unless the cluster truly is already optimal.
+- Do NOT perform cosmetic edits or unnecessary normalization.
+
+You MAY perform multiple structural actions in one cluster
+(e.g., merge + rename + reassign + split), when needed.
+
+========================
+MERGING & OVERLAP HEURISTICS
+========================
+
+- Entity overlap alone does not automatically require merging.
+- Merge when evidence indicates the SAME underlying concepts
+  (e.g., near-identical semantics, interchangeable usage, or redundant distinctions).
+- Reassignment is appropriate when overlap reveals mis-typed or mis-scoped entities,
+  even if classes should remain separate.
+
+Quick heuristic:
+- Same concept → merge.
+- Different concept, same domain → keep separate classes with the SAME Class_Group.
+- Different domain → different Class_Group.
+
+Avoid vague Class_Group names (e.g., "Misc", "General", "Other").
+Prefer domain-meaningful groupings that help connect related classes.
+
+If a class should be collapsed or weakened but has no clear merge partner, DO NOT use merge_classes;
+instead, reassign its entities to better classes and/or add a remark for human review.
+
+IMPORTANT:
+- You MUST NOT call merge_classes with only one class_id.
+- merge_classes is ONLY for merging TWO OR MORE existing classes into ONE new class.
+- If you only want to update or clarify a single class (for example, its label, description,
+  type hint, class_group, or remarks), use modify_class instead.
+- Do NOT use merge_classes to clean up or deduplicate entities inside one class.
+
+========================
+AVAILABLE FUNCTIONS
+========================
+
+Return ONLY a JSON ARRAY of ordered function calls.
+
+Each object must have:
+- "function": one of
+  ["merge_classes", "create_class", "reassign_entities", "modify_class", "split_class"]
+- "args": arguments as defined below.
+
+ID HANDLING RULES
+- You MUST NOT invent real class IDs.
+- You MUST use ONLY class_ids that appear in the input CLASSES (candidate_id values),
+  except when referring to newly merged/created/split classes.
+- When you need to refer to a newly merged/created/split class in later steps,
+  you MUST assign a provisional_id (any consistent string).
+- Use the same provisional_id whenever referencing that new class again.
+- After you merge classes into a new class, you should NOT continue to treat the original
+  class_ids as separate entities; refer to the new merged class via its provisional_id.
+
+Example (pattern, not required verbatim):
+
+{
+  "function": "merge_classes",
+  "args": {
+    "class_ids": ["ClsC_da991b68", "ClsC_e32f4a47"],
+    "provisional_id": "MERGE(ClsC_da991b68|ClsC_e32f4a47)",
+    "new_name": "...",
+    "new_description": "...",
+    "new_class_type_hint": "Standard",
+    "justification": "One-line reason citing entity overlap and semantic equivalence.",
+    "remark": null,
+    "confidence": 0.95
+  }
+}
+
+Later:
+
+{
+  "function": "reassign_entities",
+  "args": {
+    "entity_ids": ["En_xxx"],
+    "from_class_id": "ClsC_e32f4a47",
+    "to_class_id": "MERGE(ClsC_da991b68|ClsC_e32f4a47)",
+    "justification": "Why this entity fits better in the merged class.",
+    "remark": null,
+    "confidence": 0.9
+  }
+}
+
+We will internally map provisional_id → real class id.
+
+------------------------
+Function definitions
+------------------------
+
+JUSTIFICATION REQUIREMENT
+- Every function call MUST include:
+    "justification": "<one-line reason>"
+  explaining why the action is necessary.
+- This justification should cite concrete evidence (entity overlap, conflicting descriptions,
+  mis-scoped members, missing Class_Group, overloaded classes, etc.).
+- You MAY also include "confidence": <0.0–1.0> to indicate your belief in the action.
+- You MAY include "remark" to provide a short human-facing note.
+
+1) merge_classes
+args = {
+  "class_ids": [<existing_class_ids>],   # MUST contain at least 2 valid ids
+  "provisional_id": <string or null>,    # how you will refer to the new class later
+  "new_name": <string or null>,
+  "new_description": <string or null>,
+  "new_class_type_hint": <string or null>,
+  "justification": <string>,
+  "remark": <string or null>,            # optional: attach a human-facing remark/flag
+  "confidence": <number between 0 and 1, optional>
+}
+
+2) create_class
+args = {
+  "name": <string>,
+  "description": <string or null>,
+  "class_type_hint": <string or null>,
+  "member_ids": [<entity_ids>],          # optional, must be from provided entities
+  "provisional_id": <string or null>,    # how you will refer to this new class later
+  "justification": <string>,
+  "remark": <string or null>,            # optional: attach a human-facing remark/flag
+  "confidence": <number between 0 and 1, optional>
+}
+
+3) reassign_entities
+args = {
+  "entity_ids": [<entity_ids>],
+  "from_class_id": <existing_class_id or provisional_id or null>,
+  "to_class_id": <existing_class_id or provisional_id>,
+  "justification": <string>,
+  "remark": <string or null>,            # optional: attach a human-facing remark/flag
+  "confidence": <number between 0 and 1, optional>
+}
+
+4) modify_class
+args = {
+  "class_id": <existing_class_id or provisional_id>,
+  "new_name": <string or null>,
+  "new_description": <string or null>,
+  "new_class_type_hint": <string or null>,
+  "new_class_group": <string or null>,
+  "remark": <string or null>,            # optional: attach a human-facing remark/flag
+  "justification": <string>,
+  "confidence": <number between 0 and 1, optional>
+}
+
+- Use modify_class with 'remark' (and no structural change) when you want to flag
+  issues that are outside the scope of this step (e.g., suspected entity-level duplicates).
+
+5) split_class
+args = {
+  "source_class_id": <existing_class_id or provisional_id>,
+  "splits": [
+    {
+      "name": <string or null>,
+      "description": <string or null>,
+      "class_type_hint": <string or null>,
+      "member_ids": [<entity_ids>],      # must be from source_class member_ids
+      "provisional_id": <string or null> # how you will refer to this new split class
+    },
+    ...
+  ],
+  "justification": <string>,
+  "remark": <string or null>,            # optional: attach a human-facing remark/flag
+  "confidence": <number between 0 and 1, optional>
+}
+
+Semantics of split_class:
+- Use split_class when a single class is overloaded and should be divided into
+  narrower, more coherent classes.
+- Entities listed in splits[*].member_ids MUST come from the source_class's member_ids.
+- The specified entities are REMOVED from the source_class and grouped into new classes.
+- Any members not mentioned in any split remain in the source_class.
+
+NOTE:
+- Class_Group is normally set or updated via modify_class.
+- Assigning or confirming Class_Group is also REQUIRED for every cluster unless it is already clearly correct.
+
+========================
+VALIDATION RULES
+========================
+
+- Use ONLY provided entity_ids and class_ids (candidate_id values) for existing classes.
+- For new classes, use provisional_id handles and be consistent.
+- Order matters: later steps may depend on earlier ones.
+- merge_classes with fewer than 2 valid class_ids will be ignored.
+
+========================
+STRATEGY GUIDANCE
+========================
+
+- Prefer assigning/adjusting Class_Group over heavy structural changes when both are valid.
+- Merge classes ONLY when they are genuinely redundant (same concept).
+- Use split_class when a class clearly bundles multiple distinct concepts that should be separated.
+- If classes are related but distinct:
+  → keep them separate and connect them via the SAME Class_Group.
+- Think in terms of schema connectivity and meaningful structure, not cosmetic cleanup.
+- If in doubt about structural change but you see a potential issue, use modify_class with a 'remark'
+  rather than forcing an uncertain structural edit.
+
+========================
+INPUT CLASSES
+========================
+
+Each class includes:
+- candidate_id
+- class_label
+- class_description
+- class_type_hint
+- class_group (may be null or "TBD")
+- confidence
+- evidence_excerpt
+- member_ids
+- members (entity id, name, description, type)
+- remarks (optional list of prior remarks)
+
+{cluster_block}
+
+========================
+OUTPUT
+========================
+
+Return ONLY the JSON array of ordered function calls.
+Return [] only if you are highly confident (> very strong evidence) that no change is needed.
+If any ambiguous or conflicting evidence exists, return a concrete ordered action list
+(with justifications and, optionally, confidence scores).
+You are a very proactive class-resolution assistant. You are not called very proactive only by using modify_class for new_class_group. You must use other functions as well to be called a proactive class-resolution assistant.
+
+"""
+
+def sanitize_json_like(text: str) -> Optional[Any]:
+    # crude sanitizer: extract first [...] region and try loads. Fix common trailing commas and smart quotes.
+    if not text or not text.strip():
+        return None
+    s = text.strip()
+    # replace smart quotes
+    s = s.replace("“", '"').replace("”", '"').replace("‘", "'").replace("’", "'")
+    # find first [ ... ] block
+    start = s.find("[")
+    end = s.rfind("]")
+    cand = s
+    if start != -1 and end != -1 and end > start:
+        cand = s[start:end + 1]
+    # remove trailing commas before closing braces/brackets
+    cand = re.sub(r",\s*([\]}])", r"\1", cand)
+    try:
+        return json.loads(cand)
+    except Exception:
+        return None
+
+# ---------------------- Action executors --------------------------------
+def execute_merge_classes(
+    all_classes: Dict[str, Dict],
+    class_ids: List[str],
+    new_name: Optional[str],
+    new_desc: Optional[str],
+    new_type: Optional[str]
+) -> str:
+    # validate class ids
+    class_ids = [cid for cid in class_ids if cid in all_classes]
+    if len(class_ids) < 2:
+        raise ValueError("merge_classes: need at least 2 valid class_ids")
+    new_cid = "ClsR_" + uuid.uuid4().hex[:8]
+    members_map: Dict[str, Dict] = {}
+    confidence = 0.0
+    evidence = ""
+    desc_choice = None
+    type_choice = new_type or ""
+    class_group_choice = None
+
+    for cid in class_ids:
+        c = all_classes[cid]
+        confidence = max(confidence, float(c.get("confidence", 0.0)))
+        if c.get("evidence_excerpt") and not evidence:
+            evidence = c.get("evidence_excerpt")
+        if c.get("class_description") and desc_choice is None:
+            desc_choice = c.get("class_description")
+        cg = c.get("class_group")
+        if cg and cg not in ("", "TBD", None):
+            if class_group_choice is None:
+                class_group_choice = cg
+            elif class_group_choice != cg:
+                # conflicting groups -> keep first; fixable later by modify_class
+                class_group_choice = class_group_choice
+        for m in c.get("members", []):
+            members_map[m["id"]] = m
+
+    if new_desc:
+        desc_choice = new_desc
+    new_label = new_name or all_classes[class_ids[0]].get("class_label", "MergedClass")
+    if not new_type:
+        for cid in class_ids:
+            if all_classes[cid].get("class_type_hint"):
+                type_choice = all_classes[cid].get("class_type_hint")
+                break
+
+    merged_obj = {
+        "candidate_id": new_cid,
+        "class_label": new_label,
+        "class_description": desc_choice or "",
+        "class_type_hint": type_choice or "",
+        "class_group": class_group_choice or "TBD",
+        "confidence": float(confidence),
+        "evidence_excerpt": evidence or "",
+        "member_ids": list(members_map.keys()),
+        "members": list(members_map.values()),
+        "candidate_ids": class_ids,
+        "merged_from": class_ids,
+        "remarks": [],
+        "_merged_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+    }
+    for cid in class_ids:
+        all_classes.pop(cid, None)
+    all_classes[new_cid] = merged_obj
+    return new_cid
+
+def execute_create_class(
+    all_classes: Dict[str, Dict],
+    name: str,
+    description: Optional[str],
+    class_type_hint: Optional[str],
+    member_ids: Optional[List[str]],
+    id_to_entity: Dict[str, Dict]
+) -> str:
+    if not name:
+        raise ValueError("create_class: 'name' is required")
+    new_cid = "ClsR_" + uuid.uuid4().hex[:8]
+    members = []
+    mids = member_ids or []
+    for mid in mids:
+        ent = id_to_entity.get(mid)
+        if ent:
+            members.append(ent)
+    obj = {
+        "candidate_id": new_cid,
+        "class_label": name,
+        "class_description": description or "",
+        "class_type_hint": class_type_hint or "",
+        "class_group": "TBD",
+        "confidence": 0.5,
+        "evidence_excerpt": "",
+        "member_ids": [m["id"] for m in members],
+        "members": members,
+        "candidate_ids": [],
+        "remarks": [],
+        "_created_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+    }
+    all_classes[new_cid] = obj
+    return new_cid
+
+def execute_reassign_entities(
+    all_classes: Dict[str, Dict],
+    entity_ids: List[str],
+    from_class_id: Optional[str],
+    to_class_id: str,
+    id_to_entity: Dict[str, Dict]
+):
+    # remove from source(s)
+    for cid, c in list(all_classes.items()):
+        if from_class_id and cid != from_class_id:
+            continue
+        new_members = [m for m in c.get("members", []) if m["id"] not in set(entity_ids)]
+        new_member_ids = [m["id"] for m in new_members]
+        c["members"] = new_members
+        c["member_ids"] = new_member_ids
+        all_classes[cid] = c
+    # add to destination
+    if to_class_id not in all_classes:
+        raise ValueError(f"reassign_entities: to_class_id {to_class_id} not found")
+    dest = all_classes[to_class_id]
+    existing = {m["id"] for m in dest.get("members", [])}
+    for eid in entity_ids:
+        if eid in existing:
+            continue
+        ent = id_to_entity.get(eid)
+        if ent:
+            dest.setdefault("members", []).append(ent)
+            dest.setdefault("member_ids", []).append(eid)
+    dest["confidence"] = max(dest.get("confidence", 0.0), 0.4)
+    all_classes[to_class_id] = dest
+
+def execute_modify_class(
+    all_classes: Dict[str, Dict],
+    class_id: str,
+    new_name: Optional[str],
+    new_desc: Optional[str],
+    new_type: Optional[str],
+    new_class_group: Optional[str],
+    new_remark: Optional[str]
+):
+    if class_id not in all_classes:
+        raise ValueError(f"modify_class: class_id {class_id} not found")
+    c = all_classes[class_id]
+    if new_name:
+        c["class_label"] = new_name
+    if new_desc:
+        c["class_description"] = new_desc
+    if new_type:
+        c["class_type_hint"] = new_type
+    if new_class_group:
+        c["class_group"] = new_class_group
+    if new_remark:
+        existing = c.get("remarks")
+        if existing is None:
+            existing = []
+        elif not isinstance(existing, list):
+            existing = [str(existing)]
+        existing.append(str(new_remark))
+        c["remarks"] = existing
+    all_classes[class_id] = c
+
+def execute_split_class(
+    all_classes: Dict[str, Dict],
+    source_class_id: str,
+    splits_specs: List[Dict[str, Any]]
+) -> List[Tuple[str, Optional[str], List[str]]]:
+    """
+    Split a source class into several new classes.
+    Returns list of (new_class_id, provisional_id, member_ids_used) for each created class.
+    """
+    if source_class_id not in all_classes:
+        raise ValueError(f"split_class: source_class_id {source_class_id} not found")
+    src = all_classes[source_class_id]
+    src_members = src.get("members", []) or []
+    src_member_map = {m["id"]: m for m in src_members if isinstance(m, dict) and m.get("id")}
+    used_ids: set = set()
+    created: List[Tuple[str, Optional[str], List[str]]] = []
+
+    for spec in splits_specs:
+        if not isinstance(spec, dict):
+            continue
+        name = spec.get("name")
+        desc = spec.get("description")
+        th = spec.get("class_type_hint") or src.get("class_type_hint", "")
+        mids_raw = spec.get("member_ids", []) or []
+        prov_id = spec.get("provisional_id")
+        # use only members that belong to source and are not already used
+        valid_mids = []
+        for mid in mids_raw:
+            if mid in src_member_map and mid not in used_ids:
+                valid_mids.append(mid)
+        if not valid_mids:
+            continue
+        members = [src_member_map[mid] for mid in valid_mids]
+        new_cid = "ClsR_" + uuid.uuid4().hex[:8]
+        obj = {
+            "candidate_id": new_cid,
+            "class_label": name or src.get("class_label", "SplitClass"),
+            "class_description": desc or src.get("class_description", ""),
+            "class_type_hint": th or src.get("class_type_hint", ""),
+            "class_group": src.get("class_group", "TBD"),
+            "confidence": src.get("confidence", 0.5),
+            "evidence_excerpt": src.get("evidence_excerpt", ""),
+            "member_ids": valid_mids,
+            "members": members,
+            "candidate_ids": [],
+            "remarks": [],
+            "_split_from": source_class_id,
+            "_created_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+        }
+        all_classes[new_cid] = obj
+        used_ids.update(valid_mids)
+        created.append((new_cid, prov_id, valid_mids))
+
+    if used_ids:
+        remaining_members = [m for m in src_members if m["id"] not in used_ids]
+        src["members"] = remaining_members
+        src["member_ids"] = [m["id"] for m in remaining_members]
+        all_classes[source_class_id] = src
+
+    return created
+
+# helper to resolve real class ID (handles provisional IDs and retired IDs)
+def resolve_class_id(
+    raw_id: Optional[str],
+    all_classes: Dict[str, Dict],
+    provisional_to_real: Dict[str, str],
+    allow_missing: bool = False
+) -> Optional[str]:
+    if raw_id is None:
+        return None
+    real = provisional_to_real.get(raw_id, raw_id)
+    if real not in all_classes and not allow_missing:
+        raise ValueError(f"resolve_class_id: {raw_id} (resolved to {real}) not found in all_classes")
+    return real
+
+# ---------------------- Main orchestration ------------------------------
+def classres_main():
+    # load classes
+    if not INPUT_CLASSES.exists():
+        raise FileNotFoundError(f"Input classes file not found: {INPUT_CLASSES}")
+    classes_list = load_json(INPUT_CLASSES)
+    print(f"[start] loaded {len(classes_list)} merged candidate classes from {INPUT_CLASSES}")
+
+    # build id->entity map (from members)
+    id_to_entity: Dict[str, Dict] = {}
+    for c in classes_list:
+        for m in c.get("members", []):
+            if isinstance(m, dict) and m.get("id"):
+                id_to_entity[m["id"]] = m
+
+    # ensure classes have candidate_id keys, class_group field, and remarks field
+    all_classes: Dict[str, Dict] = {}
+    for c in classes_list:
+        cid = c.get("candidate_id") or ("ClsC_" + uuid.uuid4().hex[:8])
+        members = c.get("members", []) or []
+        mids = [m["id"] for m in members if isinstance(m, dict) and m.get("id")]
+        c["member_ids"] = mids
+        c["members"] = members
+        if "class_group" not in c or c.get("class_group") in (None, ""):
+            c["class_group"] = "TBD"
+        # normalize remarks
+        if "remarks" not in c or c["remarks"] is None:
+            c["remarks"] = []
+        elif not isinstance(c["remarks"], list):
+            c["remarks"] = [str(c["remarks"])]
+        c["candidate_id"] = cid
+        all_classes[cid] = c
+
+    # embedder
+    embedder = HFEmbedder(model_name=EMBED_MODEL, device=DEVICE)
+    class_objs = list(all_classes.values())
+    class_ids_order = list(all_classes.keys())
+    combined_emb = compute_class_embeddings(embedder, class_objs, CLASS_EMB_WEIGHTS)
+    print("[info] class embeddings computed shape:", combined_emb.shape)
+
+    # clustering
+    labels, clusterer = run_hdbscan(
+        combined_emb,
+        min_cluster_size=HDBSCAN_MIN_CLUSTER_SIZE,
+        min_samples=HDBSCAN_MIN_SAMPLES,
+        use_umap=USE_UMAP
+    )
+    print("[info] clustering done. unique labels:", set(labels))
+
+    # map cluster -> class ids
+    cluster_to_classids: Dict[int, List[str]] = {}
+    for idx, lab in enumerate(labels):
+        cid = class_ids_order[idx]
+        cluster_to_classids.setdefault(int(lab), []).append(cid)
+
+    # prepare action log
+    action_log_path = OUT_DIR / "cls_res_action_log.jsonl"
+    if action_log_path.exists():
+        action_log_path.unlink()
+
+    # iterate clusters (skip -1 initially)
+    cluster_keys = sorted([k for k in cluster_to_classids.keys() if k != -1])
+    cluster_keys += [-1]  # append noise at end
+
+    for cluster_label in cluster_keys:
+        class_ids = cluster_to_classids.get(cluster_label, [])
+        if not class_ids:
+            continue
+        print(f"[cluster] {cluster_label} -> {len(class_ids)} classes")
+
+        # build cluster block to pass to LLM
+        cluster_classes = []
+        for cid in class_ids:
+            c = all_classes.get(cid)
+            if not c:
+                continue
+            members_compact = [compact_member_info(m) for m in c.get("members", [])]
+            cluster_classes.append({
+                "candidate_id": cid,
+                "class_label": c.get("class_label", ""),
+                "class_description": c.get("class_description", ""),
+                "class_type_hint": c.get("class_type_hint", ""),
+                "class_group": c.get("class_group", "TBD"),
+                "confidence": float(c.get("confidence", 0.0)),
+                "evidence_excerpt": c.get("evidence_excerpt", ""),
+                "member_ids": c.get("member_ids", []),
+                "members": members_compact,
+                "remarks": c.get("remarks", [])
+            })
+
+        cluster_block = json.dumps(cluster_classes, ensure_ascii=False, indent=2)
+        prompt = CLSRES_PROMPT_TEMPLATE.replace("{cluster_block}", cluster_block)
+
+        # log prompt
+        prompt_path = RAW_LLM_DIR / f"cluster_{cluster_label}_prompt.txt"
+        prompt_path.write_text(prompt, encoding="utf-8")
+
+        # call LLM
+        raw_out = ""
+        try:
+            raw_out = call_llm(prompt)
+        except Exception as e:
+            print(f"[warning] LLM call failed for cluster {cluster_label}: {e}")
+            raw_out = ""
+
+        # write raw output
+        raw_path = RAW_LLM_DIR / f"cluster_{cluster_label}_llm_raw.txt"
+        raw_path.write_text(raw_out, encoding="utf-8")
+
+        # try parse/sanitize
+        parsed = sanitize_json_like(raw_out)
+        if parsed is None:
+            print(f"[warn] failed to parse LLM output for cluster {cluster_label}; skipping automated actions for this cluster.")
+            dec_path = OUT_DIR / f"cluster_{cluster_label}_decisions.json"
+            dec_path.write_text(
+                json.dumps({"cluster_label": cluster_label, "raw_llm": raw_out}, ensure_ascii=False, indent=2),
+                encoding="utf-8"
+            )
+            continue
+
+        # mapping from provisional_id (and retired ids) -> real class id (per cluster)
+        provisional_to_real: Dict[str, str] = {}
+        decisions: List[Dict[str, Any]] = []
+
+        # execute parsed function list in order
+        for step in parsed:
+            if not isinstance(step, dict):
+                continue
+            fn = step.get("function")
+            args = step.get("args", {}) or {}
+
+            justification = args.get("justification")
+            confidence_val = args.get("confidence", None)
+            remark_val = args.get("remark")
+
+            try:
+                if fn == "merge_classes":
+                    cids_raw = args.get("class_ids", []) or []
+                    new_name = args.get("new_name")
+                    new_desc = args.get("new_description")
+                    new_type = args.get("new_class_type_hint")
+                    prov_id = args.get("provisional_id")
+
+                    # resolve any potential provisional IDs in class_ids
+                    cids_real = [provisional_to_real.get(cid, cid) for cid in cids_raw]
+                    valid_cids = [cid for cid in cids_real if cid in all_classes]
+
+                    if len(valid_cids) < 2:
+                        decisions.append({
+                            "action": "merge_skip_too_few",
+                            "requested_class_ids": cids_raw,
+                            "valid_class_ids": valid_cids,
+                            "justification": justification,
+                            "remark": remark_val,
+                            "confidence": confidence_val
+                        })
+                        continue
+
+                    new_cid = execute_merge_classes(all_classes, valid_cids, new_name, new_desc, new_type)
+
+                    # map provisional id -> new class id
+                    if prov_id:
+                        provisional_to_real[prov_id] = new_cid
+                    # also map old real ids -> new id so later references can still resolve
+                    for old in valid_cids:
+                        provisional_to_real.setdefault(old, new_cid)
+
+                    decisions.append({
+                        "action": "merge_classes",
+                        "input_class_ids": valid_cids,
+                        "result_class_id": new_cid,
+                        "provisional_id": prov_id,
+                        "justification": justification,
+                        "remark": remark_val,
+                        "confidence": confidence_val
+                    })
+
+                elif fn == "create_class":
+                    name = args.get("name")
+                    desc = args.get("description")
+                    t = args.get("class_type_hint")
+                    mids = args.get("member_ids", []) or []
+                    prov_id = args.get("provisional_id")
+
+                    mids_valid = [m for m in mids if m in id_to_entity]
+                    new_cid = execute_create_class(all_classes, name, desc, t, mids_valid, id_to_entity)
+
+                    if prov_id:
+                        provisional_to_real[prov_id] = new_cid
+
+                    decisions.append({
+                        "action": "create_class",
+                        "result_class_id": new_cid,
+                        "provisional_id": prov_id,
+                        "member_ids_added": mids_valid,
+                        "justification": justification,
+                        "remark": remark_val,
+                        "confidence": confidence_val
+                    })
+
+                elif fn == "reassign_entities":
+                    eids = args.get("entity_ids", []) or []
+                    from_c_raw = args.get("from_class_id")
+                    to_c_raw = args.get("to_class_id")
+
+                    eids_valid = [e for e in eids if e in id_to_entity]
+
+                    from_c = resolve_class_id(from_c_raw, all_classes, provisional_to_real, allow_missing=True)
+                    to_c = resolve_class_id(to_c_raw, all_classes, provisional_to_real, allow_missing=False)
+
+                    execute_reassign_entities(all_classes, eids_valid, from_c, to_c, id_to_entity)
+
+                    decisions.append({
+                        "action": "reassign_entities",
+                        "entity_ids": eids_valid,
+                        "from": from_c_raw,
+                        "from_resolved": from_c,
+                        "to": to_c_raw,
+                        "to_resolved": to_c,
+                        "justification": justification,
+                        "remark": remark_val,
+                        "confidence": confidence_val
+                    })
+
+                elif fn == "modify_class":
+                    cid_raw = args.get("class_id")
+                    new_name = args.get("new_name")
+                    new_desc = args.get("new_description")
+                    new_type = args.get("new_class_type_hint")
+                    new_group = args.get("new_class_group")
+                    new_remark = args.get("remark")
+
+                    cid_real = resolve_class_id(cid_raw, all_classes, provisional_to_real, allow_missing=False)
+                    execute_modify_class(all_classes, cid_real, new_name, new_desc, new_type, new_group, new_remark)
+
+                    decisions.append({
+                        "action": "modify_class",
+                        "class_id": cid_raw,
+                        "class_id_resolved": cid_real,
+                        "new_name": new_name,
+                        "new_description": new_desc,
+                        "new_class_type_hint": new_type,
+                        "new_class_group": new_group,
+                        "remark": new_remark,
+                        "justification": justification,
+                        "confidence": confidence_val
+                    })
+
+                elif fn == "split_class":
+                    source_raw = args.get("source_class_id")
+                    splits_specs = args.get("splits", []) or []
+
+                    source_real = resolve_class_id(source_raw, all_classes, provisional_to_real, allow_missing=False)
+                    created = execute_split_class(all_classes, source_real, splits_specs)
+
+                    created_summary = []
+                    for new_cid, prov_id, mids_used in created:
+                        if prov_id:
+                            provisional_to_real[prov_id] = new_cid
+                        created_summary.append({
+                            "new_class_id": new_cid,
+                            "provisional_id": prov_id,
+                            "member_ids": mids_used
+                        })
+
+                    decisions.append({
+                        "action": "split_class",
+                        "source_class_id": source_raw,
+                        "source_class_id_resolved": source_real,
+                        "created_classes": created_summary,
+                        "justification": justification,
+                        "remark": remark_val,
+                        "confidence": confidence_val
+                    })
+
+                else:
+                    decisions.append({
+                        "action": "skip_unknown_function",
+                        "raw": step,
+                        "justification": justification,
+                        "remark": remark_val,
+                        "confidence": confidence_val
+                    })
+
+            except Exception as e:
+                decisions.append({
+                    "action": "error_executing",
+                    "function": fn,
+                    "error": str(e),
+                    "input": step,
+                    "justification": justification,
+                    "remark": remark_val,
+                    "confidence": confidence_val
+                })
+
+        # write decisions file for this cluster
+        dec_path = OUT_DIR / f"cluster_{cluster_label}_decisions.json"
+        dec_obj = {
+            "cluster_label": cluster_label,
+            "cluster_classes": cluster_classes,
+            "llm_raw": raw_out,
+            "parsed_steps": parsed,
+            "executed_decisions": decisions,
+            "provisional_to_real": provisional_to_real,
+            "timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+        }
+        dec_path.write_text(json.dumps(dec_obj, ensure_ascii=False, indent=2), encoding="utf-8")
+
+        # append to action log
+        with open(action_log_path, "a", encoding="utf-8") as fh:
+            fh.write(json.dumps(dec_obj, ensure_ascii=False) + "\n")
+
+    # After all clusters processed: write final classes output
+    final_classes = list(all_classes.values())
+    out_json = OUT_DIR / "final_classes_resolved.json"
+    out_jsonl = OUT_DIR / "final_classes_resolved.jsonl"
+    out_json.write_text(json.dumps(final_classes, ensure_ascii=False, indent=2), encoding="utf-8")
+    with open(out_jsonl, "w", encoding="utf-8") as fh:
+        for c in final_classes:
+            fh.write(json.dumps(c, ensure_ascii=False) + "\n")
+
+    print(f"[done] wrote final resolved classes -> {out_json}  (count={len(final_classes)})")
+    print(f"[done] action log -> {action_log_path}")
+
+    # ---------------------- SUMMARY AGGREGATION -------------------------
+    summary_dir = OUT_DIR / "summary"
+    summary_dir.mkdir(exist_ok=True)
+
+    # Aggregate all per-cluster decision files
+    cluster_decisions: List[Dict[str, Any]] = []
+    for path in sorted(OUT_DIR.glob("cluster_*_decisions.json")):
+        try:
+            obj = json.loads(path.read_text(encoding="utf-8"))
+            cluster_decisions.append(obj)
+        except Exception as e:
+            print(f"[warn] failed to read {path}: {e}")
+
+    # Write aggregated decisions (same per-cluster structure, just as a list)
+    all_clusters_decisions_path = summary_dir / "all_clusters_decisions.json"
+    all_clusters_decisions_path.write_text(
+        json.dumps(cluster_decisions, ensure_ascii=False, indent=2),
+        encoding="utf-8"
+    )
+
+    # Compute statistics
+    total_clusters = len(cluster_decisions)
+    actions_by_type: Dict[str, int] = {}
+    total_remarks = 0
+    clusters_with_any_decisions = 0
+    clusters_with_structural = 0
+    clusters_only_classgroup = 0
+
+    structural_actions = {"merge_classes", "create_class", "reassign_entities", "split_class"}
+
+    for cd in cluster_decisions:
+        decs = cd.get("executed_decisions", [])
+        if not decs:
+            continue
+        clusters_with_any_decisions += 1
+        has_structural = False
+        only_classgroup = True
+
+        for d in decs:
+            act = d.get("action")
+            actions_by_type[act] = actions_by_type.get(act, 0) + 1
+
+            # count remarks if present
+            rem = d.get("remark")
+            if rem:
+                total_remarks += 1
+
+            if act in structural_actions:
+                has_structural = True
+                only_classgroup = False
+            elif act == "modify_class":
+                new_group = d.get("new_class_group")
+                new_name = d.get("new_name")
+                new_desc = d.get("new_description")
+                new_type = d.get("new_class_type_hint")
+                # "only class group" means the only change is class_group (no name/desc/type/remark change)
+                # remark alone is allowed
+                if not new_group or new_name or new_desc or new_type:
+                    only_classgroup = False
+            else:
+                # merge_skip_too_few, error_executing, skip_unknown_function, etc.
+                only_classgroup = False
+
+        if has_structural:
+            clusters_with_structural += 1
+        if only_classgroup:
+            clusters_only_classgroup += 1
+
+    total_structural_actions = sum(
+        count for act, count in actions_by_type.items() if act in structural_actions
+    )
+    total_errors = actions_by_type.get("error_executing", 0)
+
+    stats = {
+        "total_clusters": total_clusters,
+        "total_clusters_with_any_decisions": clusters_with_any_decisions,
+        "total_clusters_with_structural_changes": clusters_with_structural,
+        "total_clusters_only_class_group_updates": clusters_only_classgroup,
+        "total_actions_by_type": actions_by_type,
+        "total_structural_actions": total_structural_actions,
+        "total_errors": total_errors,
+        "total_remarks_logged": total_remarks,
+        "generated_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+    }
+
+    stats_path = summary_dir / "stats_summary.json"
+    stats_path.write_text(json.dumps(stats, ensure_ascii=False, indent=2), encoding="utf-8")
+
+    print(f"[done] summary decisions -> {all_clusters_decisions_path}")
+    print(f"[done] summary stats -> {stats_path}")
+
+if __name__ == "__main__":
+    classres_main()
+
+#endregion#? Cls Res V7
+#?#########################  End  ##########################
+
+
+
+
+
+
+
+
+
+
+
+#?######################### Start ##########################
+#region:#?   Multi Run Cls Res
+
+# =========================
+# Iterative runner for ClassRes (UPDATED final-summary exports)
+# Paste this into the same file after V7 (replaces prior runner's final summary block)
+# =========================
+
+import json
+import time
+from pathlib import Path
+from typing import Any, Dict, List, Optional
+
+# -----------------------
+# CONFIG - reuse or override
+# -----------------------
+BASE_INPUT_CLASSES = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Classes/Cls_Rec/classes_for_cls_res.json")
+EXPERIMENT_ROOT = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Classes/Cls_Res_IterativeRuns")
+
+MAX_RUNS: int = 3
+STRUCTURAL_CHANGE_THRESHOLD: Optional[int] = 0
+TOTAL_ACTIONS_THRESHOLD: Optional[int] = None
+MAX_NO_CHANGE_RUNS: Optional[int] = 1
+
+FINAL_CLASSES_FILENAME = "final_classes_resolved.json"
+ACTION_LOG_FILENAME = "cls_res_action_log.jsonl"
+
+# -----------------------
+# Helpers (same as before)
+# -----------------------
+def _write_json(path: Path, obj: Any) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(obj, ensure_ascii=False, indent=2), encoding="utf-8")
+
+def _load_json(path: Path) -> Any:
+    return json.loads(path.read_text(encoding="utf-8"))
+
+def _safe_json_load_line(line: str) -> Optional[Dict]:
+    line = line.strip()
+    if not line:
+        return None
+    try:
+        return json.loads(line)
+    except Exception:
+        return None
+
+def compute_run_summary_from_action_log(action_log_path: Path) -> Dict[str, Any]:
+    summary = {
+        "total_clusters": 0,
+        "total_clusters_with_any_decisions": 0,
+        "total_clusters_with_structural_changes": 0,
+        "total_clusters_only_class_group_updates": 0,
+        "total_actions_by_type": {},
+        "total_structural_actions": 0,
+        "total_errors": 0,
+        "total_remarks_logged": 0,
+        "generated_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+    }
+    if not action_log_path.exists():
+        return summary
+
+    with action_log_path.open("r", encoding="utf-8") as fh:
+        for line in fh:
+            obj = _safe_json_load_line(line)
+            if not obj:
+                continue
+            summary["total_clusters"] += 1
+            executed = obj.get("executed_decisions", []) or []
+            if executed:
+                summary["total_clusters_with_any_decisions"] += 1
+
+            structural_here = 0
+            only_class_group_updates = True
+            remarks_here = 0
+
+            for entry in executed:
+                action = entry.get("action")
+                summary["total_actions_by_type"].setdefault(action, 0)
+                summary["total_actions_by_type"][action] += 1
+
+                if action in ("merge_classes", "create_class", "reassign_entities", "split_class"):
+                    structural_here += 1
+                    only_class_group_updates = False
+                elif action == "modify_class":
+                    new_name = entry.get("new_name")
+                    new_desc = entry.get("new_description")
+                    new_type = entry.get("new_class_type_hint")
+                    new_group = entry.get("new_class_group")
+                    remark = entry.get("remark") or None
+                    if remark:
+                        remarks_here += 1
+                    if any([new_name, new_desc, new_type]):
+                        only_class_group_updates = False
+                elif action == "error_executing":
+                    summary["total_errors"] += 1
+                    only_class_group_updates = False
+                # count explicit remark fields
+                if isinstance(entry, dict) and entry.get("remark"):
+                    remarks_here += 1
+
+            summary["total_structural_actions"] += structural_here
+            if structural_here > 0:
+                summary["total_clusters_with_structural_changes"] += 1
+            if only_class_group_updates and executed:
+                summary["total_clusters_only_class_group_updates"] += 1
+            summary["total_remarks_logged"] += remarks_here
+
+    return summary
+
+# -----------------------
+# New: overall export helpers
+# -----------------------
+def _build_entity_lookup_from_input(input_path: Path) -> Dict[str, Dict]:
+    """
+    Build map entity_id -> full entity object from the original input classes file.
+    This lets us recover fields like chunk_id, resolution_context when final classes may
+    only contain compact member info.
+    """
+    entity_map: Dict[str, Dict] = {}
+    if not input_path.exists():
+        return entity_map
+    try:
+        arr = _load_json(input_path)
+        for c in arr:
+            for m in c.get("members", []) or []:
+                if isinstance(m, dict) and m.get("id"):
+                    entity_map[m["id"]] = m
+    except Exception:
+        # best-effort: ignore on error
+        pass
+    return entity_map
+
+def _aggregate_final_classes_and_entities(final_classes_path: Path, base_input_path: Path) -> Dict[str, Any]:
+    """
+    Return dict with:
+      - classes: final classes array (as in final_classes_resolved.json)
+      - entities_map: map entity_id -> merged full entity info (pull fields from classes and original input)
+    """
+    classes = []
+    entities_map: Dict[str, Dict] = {}
+    if final_classes_path.exists():
+        try:
+            classes = _load_json(final_classes_path)
+        except Exception:
+            classes = []
+
+    # build lookup from original input to backfill entity fields
+    input_entity_lookup = _build_entity_lookup_from_input(base_input_path)
+
+    # iterate classes and collect members, merge any available entity fields
+    for c in classes:
+        members = c.get("members", []) or []
+        for m in members:
+            mid = m.get("id") if isinstance(m, dict) else None
+            if not mid:
+                continue
+            # start with the member object from final classes (may be compact)
+            merged = dict(m) if isinstance(m, dict) else {"id": mid}
+            # if original input had richer info, copy missing fields
+            original = input_entity_lookup.get(mid)
+            if original:
+                for k, v in original.items():
+                    if k not in merged or merged.get(k) in (None, "", []):
+                        merged[k] = v
+            # attach class pointers (class id, label, class_group)
+            merged["_class_id"] = c.get("candidate_id") or c.get("candidate_id") or None
+            merged["_class_label"] = c.get("class_label")
+            merged["_class_group"] = c.get("class_group")
+            entities_map[mid] = merged
+
+    # also include any entities that were in the input but not present in final classes
+    for mid, original in input_entity_lookup.items():
+        if mid not in entities_map:
+            merged = dict(original)
+            merged["_class_id"] = None
+            merged["_class_label"] = None
+            merged["_class_group"] = None
+            entities_map[mid] = merged
+
+    return {"classes": classes, "entities_map": entities_map}
+
+def _write_entities_with_class_jsonl(entities_map: Dict[str, Dict], out_path: Path) -> None:
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    with out_path.open("w", encoding="utf-8") as fh:
+        for eid, ent in entities_map.items():
+            rec = {
+                "entity_id": eid,
+                "entity": ent,
+                "class_id": ent.get("_class_id"),
+                "class_label": ent.get("_class_label"),
+                "class_group": ent.get("_class_group")
+            }
+            fh.write(json.dumps(rec, ensure_ascii=False) + "\n")
+
+# -----------------------
+# Main runner (same loop as before, but calls enhanced final exporter)
+# -----------------------
+def run_pipeline_iteratively():
+    EXPERIMENT_ROOT.mkdir(parents=True, exist_ok=True)
+    overall_runs: List[Dict[str, Any]] = []
+    no_change_streak = 0
+    current_input_path = BASE_INPUT_CLASSES
+
+    for run_idx in range(MAX_RUNS):
+        print("\n" + "=" * 36)
+        print(f"=== RUN {run_idx:02d} ===")
+        print("=" * 36)
+
+        run_dir = EXPERIMENT_ROOT / f"run_{run_idx:02d}"
+        run_dir.mkdir(parents=True, exist_ok=True)
+
+        # set globals used by your pipeline
+        globals()["INPUT_CLASSES"] = current_input_path
+        globals()["OUT_DIR"] = run_dir
+        globals()["RAW_LLM_DIR"] = run_dir / "llm_raw"
+        globals()["RAW_LLM_DIR"].mkdir(parents=True, exist_ok=True)
+
+        # call the pipeline's main function (assumes classres_main defined already)
+        print(f"[run {run_idx}] calling classres_main() with INPUT_CLASSES={current_input_path} OUT_DIR={run_dir}")
+        classres_main()
+
+        final_classes_path = run_dir / FINAL_CLASSES_FILENAME
+        action_log_path = run_dir / ACTION_LOG_FILENAME
+
+        run_summary = compute_run_summary_from_action_log(action_log_path)
+        run_summary["run_index"] = run_idx
+        run_summary["run_path"] = str(run_dir)
+        run_summary["final_classes_path"] = str(final_classes_path) if final_classes_path.exists() else None
+
+        summary_dir = run_dir / "summary"
+        summary_dir.mkdir(parents=True, exist_ok=True)
+        run_summary_path = summary_dir / "cls_res_summary.json"
+        _write_json(run_summary_path, run_summary)
+
+        overall_runs.append({"run_index": run_idx, "run_dir": str(run_dir), "summary_path": str(run_summary_path)})
+
+        total_structural = int(run_summary.get("total_structural_actions", 0))
+        total_actions = int(sum(run_summary.get("total_actions_by_type", {}).values() or []))
+
+        print(f"[run {run_idx}] total_structural_actions = {total_structural}")
+        print(f"[run {run_idx}] total_actions = {total_actions}")
+
+        is_no_change = False
+        if STRUCTURAL_CHANGE_THRESHOLD is not None and total_structural <= STRUCTURAL_CHANGE_THRESHOLD:
+            is_no_change = True
+        if TOTAL_ACTIONS_THRESHOLD is not None and total_actions <= TOTAL_ACTIONS_THRESHOLD:
+            is_no_change = True
+
+        if MAX_NO_CHANGE_RUNS is not None:
+            if is_no_change:
+                no_change_streak += 1
+            else:
+                no_change_streak = 0
+
+            print(f"[run {run_idx}] no_change_streak = {no_change_streak} (threshold {MAX_NO_CHANGE_RUNS})")
+            if no_change_streak >= MAX_NO_CHANGE_RUNS:
+                print(f"[stop] Convergence achieved after run {run_idx} (no_change_streak={no_change_streak}).")
+                current_input_path = final_classes_path if final_classes_path.exists() else current_input_path
+                break
+
+        if final_classes_path.exists():
+            current_input_path = final_classes_path
+        else:
+            print(f"[warn] final classes file not found for run {run_idx}. Stopping iterative runs.")
+            break
+
+    # -----------------------
+    # ENHANCED FINAL EXPORTS
+    # -----------------------
+    overall_dir = EXPERIMENT_ROOT / "overall_summary"
+    overall_dir.mkdir(parents=True, exist_ok=True)
+
+    # collect per-run summaries (read the run summary JSON files)
+    per_run_stats: List[Dict[str, Any]] = []
+    for r in overall_runs:
+        sp = Path(r["summary_path"])
+        if sp.exists():
+            try:
+                per_run_stats.append(_load_json(sp))
+            except Exception:
+                per_run_stats.append({"run_index": r["run_index"], "error": "failed to load summary"})
+
+    # aggregate overall stats (summing counts)
+    aggregated = {
+        "total_runs_executed": len(per_run_stats),
+        "sum_total_clusters": sum([p.get("total_clusters", 0) for p in per_run_stats]),
+        "sum_structural_actions": sum([p.get("total_structural_actions", 0) for p in per_run_stats]),
+        "sum_errors": sum([p.get("total_errors", 0) for p in per_run_stats]),
+        "sum_remarks": sum([p.get("total_remarks_logged", 0) for p in per_run_stats]),
+        "by_run": per_run_stats,
+        "generated_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+    }
+
+    stats_path = overall_dir / "stats.json"
+    _write_json(stats_path, aggregated)
+
+    # Build classes + entities bundle for downstream relation stage
+    final_classes = []
+    if current_input_path.exists():
+        try:
+            final_classes = _load_json(current_input_path)
+        except Exception:
+            final_classes = []
+
+    classes_and_entities = _aggregate_final_classes_and_entities(current_input_path, BASE_INPUT_CLASSES)
+    classes_and_entities_path = overall_dir / "classes_and_entities.json"
+    _write_json(classes_and_entities_path, classes_and_entities)
+
+    # write entities+class mapping as jsonl for downstream tools
+    entities_with_class_path = overall_dir / "entities_with_class.jsonl"
+    _write_entities_with_class_jsonl(classes_and_entities.get("entities_map", {}), entities_with_class_path)
+
+    # also write the final_classes array alone for convenience
+    final_classes_path_out = overall_dir / "final_classes_resolved.json"
+    _write_json(final_classes_path_out, final_classes)
+
+    print(f"\n[done] Overall stats written to: {stats_path}")
+    print(f"[done] Classes+entities bundle written to: {classes_and_entities_path}")
+    print(f"[done] Entities jsonl (entity + class info) written to: {entities_with_class_path}")
+    print(f"[done] Final classes (copy) written to: {final_classes_path_out}")
+
+# -----------------------
+# To run: call run_pipeline_iteratively() after pasting this block.
+# -----------------------
+
+
+
+#endregion#? Multi Run Cls Res
+#?#########################  End  ##########################
+
+
 
 
 
@@ -13481,6 +18402,20 @@ if __name__ == "__main__":
 
 
 
+
+
+
+
+
+
+
+
+#?######################### Start ##########################
+#region:#?   OpenAi API
+
+
+#endregion#? OpenAi API
+#?#########################  End  ##########################
 
 
 

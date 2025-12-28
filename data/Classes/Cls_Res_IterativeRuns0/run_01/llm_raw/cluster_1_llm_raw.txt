@@ -1,0 +1,112 @@
+[
+  {
+    "function": "split_class",
+    "args": {
+      "source_class_id": "ClsR_7870491c",
+      "splits": [
+        {
+          "name": "Fitness-For-Service Standards",
+          "description": "Standards and codes specifically addressing fitness-for-service and integrity assessment of equipment.",
+          "class_type_hint": "Standard",
+          "member_ids": ["En_95198f7a"],
+          "provisional_id": "SPLIT_FFS_Standards"
+        },
+        {
+          "name": "Pressure Vessel and Construction Standards",
+          "description": "Standards and codes for construction, inspection, and operation of pressure vessels and related equipment.",
+          "class_type_hint": "Standard",
+          "member_ids": [
+            "En_3508599f",
+            "En_3d8a8447",
+            "En_4e2351be",
+            "En_1a045908",
+            "En_cc2f7cce",
+            "En_02b98d5e",
+            "En_89226ca0"
+          ],
+          "provisional_id": "SPLIT_PV_Standards"
+        },
+        {
+          "name": "Corrosion and Risk-Based Standards",
+          "description": "Standards and guidelines for corrosion control, risk-based inspection, and safe operation in industrial settings.",
+          "class_type_hint": "Standard",
+          "member_ids": [
+            "En_e5fa14ee",
+            "En_45419999",
+            "En_658db0c3",
+            "En_e947261b"
+          ],
+          "provisional_id": "SPLIT_Corrosion_RBI_Standards"
+        }
+      ],
+      "justification": "The class 'Engineering and Industry Standards' is overloaded, containing distinct subdomains: fitness-for-service, pressure vessel/construction, and corrosion/risk-based standards. Splitting improves schema clarity and aligns with entity semantics.",
+      "remark": null,
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "merge_classes",
+    "args": {
+      "class_ids": ["ClsC_8edcb6d1", "SPLIT_FFS_Standards"],
+      "provisional_id": "MERGE_FFS_Reports_Standards",
+      "new_name": "Fitness-For-Service Standards and Reports",
+      "new_description": "Standards and reports detailing fitness-for-service evaluation procedures and integrity assessment for pressure vessels, tanks, and piping.",
+      "new_class_type_hint": "Standard/Report",
+      "justification": "Both classes focus on fitness-for-service evaluation and integrity assessment, with one being a standard and the other a report; merging reflects their semantic overlap and practical interchangeability.",
+      "remark": null,
+      "confidence": 0.92
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "MERGE_FFS_Reports_Standards",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Engineering Standards & Reference Materials",
+      "remark": null,
+      "justification": "Assigning/confirming correct Class_Group for merged Fitness-For-Service class.",
+      "confidence": 1.0
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "SPLIT_PV_Standards",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Engineering Standards & Reference Materials",
+      "remark": null,
+      "justification": "Assigning/confirming correct Class_Group for Pressure Vessel and Construction Standards.",
+      "confidence": 1.0
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "SPLIT_Corrosion_RBI_Standards",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Engineering Standards & Reference Materials",
+      "remark": null,
+      "justification": "Assigning/confirming correct Class_Group for Corrosion and Risk-Based Standards.",
+      "confidence": 1.0
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsR_a8a3b6e5",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Engineering Standards & Reference Materials",
+      "remark": null,
+      "justification": "Class_Group is already correct for Engineering Reference Materials; confirming assignment.",
+      "confidence": 1.0
+    }
+  }
+]

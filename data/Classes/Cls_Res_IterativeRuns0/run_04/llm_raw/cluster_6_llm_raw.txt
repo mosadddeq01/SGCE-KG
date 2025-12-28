@@ -1,0 +1,93 @@
+[
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_06470fae",
+      "new_name": "Graphitization Phenomena in Steels",
+      "new_description": "Processes and mechanisms involving the transformation of carbide phases into graphite nodules in steels at elevated temperatures, leading to loss of strength and ductility.",
+      "new_class_type_hint": "Material Transformation",
+      "new_class_group": "Steel Types and High-Temperature Metallurgical Phenomena",
+      "remark": null,
+      "justification": "Class_Group for this class is currently inconsistent with the other steel/graphitization classes; unifying under 'Steel Types and High-Temperature Metallurgical Phenomena' clarifies the schema and connects related classes.",
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "reassign_entities",
+    "args": {
+      "entity_ids": [
+        "En_417e7d84"
+      ],
+      "from_class_id": "ClsR_562937c7",
+      "to_class_id": "ClsC_8a37548a",
+      "justification": "Entity 'chromium' (En_417e7d84) is described as an element added to steel to eliminate graphitization, which is directly relevant to graphitization-susceptible steels rather than general corrosion resistance; it fits better in 'Graphitization-Susceptible Steels'.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsR_562937c7",
+      "new_name": "Corrosion-Resistant Metals and Alloys",
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Corrosion and Corrosion-Resistant Materials",
+      "remark": null,
+      "justification": "Class_Group is already appropriate for this class; no change needed except to confirm and lock in the grouping after entity reassignment.",
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_8a37548a",
+      "new_name": "Graphitization-Susceptible Steels and Inhibiting Elements",
+      "new_description": "Steels prone to graphitization, including carbon, 0.5Mo, and low alloy C-Mo steels, as well as alloying elements (e.g., chromium) that inhibit graphitization.",
+      "new_class_type_hint": "Material",
+      "new_class_group": "Steel Types and High-Temperature Metallurgical Phenomena",
+      "remark": null,
+      "justification": "Class now includes both susceptible steels and elements that inhibit graphitization (after entity reassignment); updating name and description for clarity.",
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_d685324c",
+      "new_name": "High-Temperature Steels",
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Steel Types and High-Temperature Metallurgical Phenomena",
+      "remark": null,
+      "justification": "Class_Group is already appropriate and consistent with related classes; confirming and locking in grouping.",
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsR_f9d168bf",
+      "new_name": "Low Alloy Steels (General)",
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Steel Types and High-Temperature Metallurgical Phenomena",
+      "remark": null,
+      "justification": "Class_Group is already appropriate and consistent with related classes; confirming and locking in grouping.",
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_efead2a4",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Welded Component Features",
+      "remark": null,
+      "justification": "Class_Group is already appropriate for this class; confirming and locking in grouping.",
+      "confidence": 0.95
+    }
+  }
+]

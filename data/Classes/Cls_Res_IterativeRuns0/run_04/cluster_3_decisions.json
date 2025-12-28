@@ -1,0 +1,195 @@
+{
+  "cluster_label": 3,
+  "cluster_classes": [
+    {
+      "candidate_id": "ClsC_184b995e",
+      "class_label": "Steel Metallurgical Structure Types",
+      "class_description": "Parent category for metallurgical structure types in steels, grouping austenitic, ferritic, and martensitic structures. Should not directly contain entities.",
+      "class_type_hint": "MetallurgicalStructureCategory",
+      "class_group": "Steel Metallurgical Structures",
+      "confidence": 0.9,
+      "evidence_excerpt": "Austenitic, ferritic, and martensitic are metallurgical structures in steels.",
+      "member_ids": [],
+      "members": [],
+      "remarks": [
+        "This class is a parent category and should not directly contain entities; it should group the specific structure classes below.",
+        "This class is a parent grouping and should not directly contain entities; ensure it is used only as a container for the specific structure classes.",
+        "This class is a schema-level parent and should be enforced as an abstract/container class, not for direct entity assignment."
+      ]
+    },
+    {
+      "candidate_id": "ClsR_0d0a8df1",
+      "class_label": "Austenitic Steel Structure",
+      "class_description": "Austenitic metallurgical structure found in steels, especially 300 Series stainless steels and nickel base alloys.",
+      "class_type_hint": "MetallurgicalStructure",
+      "class_group": "Steel Metallurgical Structures",
+      "confidence": 0.9,
+      "evidence_excerpt": "Austenitic, ferritic, and martensitic are metallurgical structures in steels.",
+      "member_ids": [
+        "Can_2acbb9eb"
+      ],
+      "members": [
+        {
+          "id": "Can_2acbb9eb",
+          "entity_name": "austenitic",
+          "entity_description": "A type of metallurgical structure (austenite) found in 300 Series stainless steels and nickel base alloys, known for its corrosion resistance.",
+          "entity_type_hint": "MetallurgicalStructure"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsR_dfcac651",
+      "class_label": "Ferritic Steel Structure",
+      "class_description": "Ferritic metallurgical structure found in carbon and low alloy steels and many 400 series stainless steels.",
+      "class_type_hint": "MetallurgicalStructure",
+      "class_group": "Steel Metallurgical Structures",
+      "confidence": 0.9,
+      "evidence_excerpt": "Austenitic, ferritic, and martensitic are metallurgical structures in steels.",
+      "member_ids": [
+        "Can_449bd7c2"
+      ],
+      "members": [
+        {
+          "id": "Can_449bd7c2",
+          "entity_name": "ferritic",
+          "entity_description": "A type of metallurgical structure (ferrite) found in carbon and low alloy steels and many 400 series stainless steels, known for its corrosion resistance.",
+          "entity_type_hint": "MetallurgicalStructure"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsR_bf18e8ef",
+      "class_label": "Martensitic Steel Structure",
+      "class_description": "Martensitic metallurgical structure found in some stainless steels.",
+      "class_type_hint": "MetallurgicalStructure",
+      "class_group": "Steel Metallurgical Structures",
+      "confidence": 0.9,
+      "evidence_excerpt": "Austenitic, ferritic, and martensitic are metallurgical structures in steels.",
+      "member_ids": [
+        "Can_c3c96b1a"
+      ],
+      "members": [
+        {
+          "id": "Can_c3c96b1a",
+          "entity_name": "martensitic",
+          "entity_description": "A metallurgical structure (martensite) found in some stainless steels, known for its corrosion resistance.",
+          "entity_type_hint": "Material"
+        }
+      ],
+      "remarks": [
+        "Entity Can_c3c96b1a has entity_type_hint 'Material' instead of 'MetallurgicalStructure'; review for possible mis-typing.",
+        "Entity Can_c3c96b1a has entity_type_hint 'Material' instead of 'MetallurgicalStructure'; review for possible mis-typing.",
+        "Entity Can_c3c96b1a has entity_type_hint 'Material' instead of 'MetallurgicalStructure'; review for possible mis-typing at the entity level."
+      ]
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_184b995e\",\n      \"new_name\": \"Steel Metallurgical Structure Types\",\n      \"new_description\": \"Parent category for metallurgical structure types in steels, grouping austenitic, ferritic, and martensitic structures. This class should not directly contain entities, but should serve as a container for the specific structure classes below.\",\n      \"new_class_type_hint\": \"MetallurgicalStructureCategory\",\n      \"new_class_group\": \"Steel Metallurgical Structures\",\n      \"remark\": \"This class is a schema-level parent and should be enforced as an abstract/container class, not for direct entity assignment.\",\n      \"justification\": \"Class is a parent grouping and should be enforced as an abstract/container class; clarify its role in the schema.\",\n      \"confidence\": 0.95\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsR_0d0a8df1\",\n      \"new_name\": \"Austenitic Steel Structure\",\n      \"new_description\": \"Austenitic metallurgical structure found in steels, especially 300 Series stainless steels and nickel base alloys.\",\n      \"new_class_type_hint\": \"MetallurgicalStructure\",\n      \"new_class_group\": \"Steel Metallurgical Structures\",\n      \"remark\": null,\n      \"justification\": \"Class is correctly scoped as a specific metallurgical structure; confirm and clarify class_group.\",\n      \"confidence\": 0.95\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsR_dfcac651\",\n      \"new_name\": \"Ferritic Steel Structure\",\n      \"new_description\": \"Ferritic metallurgical structure found in carbon and low alloy steels and many 400 series stainless steels.\",\n      \"new_class_type_hint\": \"MetallurgicalStructure\",\n      \"new_class_group\": \"Steel Metallurgical Structures\",\n      \"remark\": null,\n      \"justification\": \"Class is correctly scoped as a specific metallurgical structure; confirm and clarify class_group.\",\n      \"confidence\": 0.95\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsR_bf18e8ef\",\n      \"new_name\": \"Martensitic Steel Structure\",\n      \"new_description\": \"Martensitic metallurgical structure found in some stainless steels.\",\n      \"new_class_type_hint\": \"MetallurgicalStructure\",\n      \"new_class_group\": \"Steel Metallurgical Structures\",\n      \"remark\": \"Entity Can_c3c96b1a has entity_type_hint 'Material' instead of 'MetallurgicalStructure'; review for possible mis-typing at the entity level.\",\n      \"justification\": \"Class is correctly scoped, but entity type hint inconsistency should be reviewed for entity Can_c3c96b1a.\",\n      \"confidence\": 0.9\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_184b995e",
+        "new_name": "Steel Metallurgical Structure Types",
+        "new_description": "Parent category for metallurgical structure types in steels, grouping austenitic, ferritic, and martensitic structures. This class should not directly contain entities, but should serve as a container for the specific structure classes below.",
+        "new_class_type_hint": "MetallurgicalStructureCategory",
+        "new_class_group": "Steel Metallurgical Structures",
+        "remark": "This class is a schema-level parent and should be enforced as an abstract/container class, not for direct entity assignment.",
+        "justification": "Class is a parent grouping and should be enforced as an abstract/container class; clarify its role in the schema.",
+        "confidence": 0.95
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsR_0d0a8df1",
+        "new_name": "Austenitic Steel Structure",
+        "new_description": "Austenitic metallurgical structure found in steels, especially 300 Series stainless steels and nickel base alloys.",
+        "new_class_type_hint": "MetallurgicalStructure",
+        "new_class_group": "Steel Metallurgical Structures",
+        "remark": null,
+        "justification": "Class is correctly scoped as a specific metallurgical structure; confirm and clarify class_group.",
+        "confidence": 0.95
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsR_dfcac651",
+        "new_name": "Ferritic Steel Structure",
+        "new_description": "Ferritic metallurgical structure found in carbon and low alloy steels and many 400 series stainless steels.",
+        "new_class_type_hint": "MetallurgicalStructure",
+        "new_class_group": "Steel Metallurgical Structures",
+        "remark": null,
+        "justification": "Class is correctly scoped as a specific metallurgical structure; confirm and clarify class_group.",
+        "confidence": 0.95
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsR_bf18e8ef",
+        "new_name": "Martensitic Steel Structure",
+        "new_description": "Martensitic metallurgical structure found in some stainless steels.",
+        "new_class_type_hint": "MetallurgicalStructure",
+        "new_class_group": "Steel Metallurgical Structures",
+        "remark": "Entity Can_c3c96b1a has entity_type_hint 'Material' instead of 'MetallurgicalStructure'; review for possible mis-typing at the entity level.",
+        "justification": "Class is correctly scoped, but entity type hint inconsistency should be reviewed for entity Can_c3c96b1a.",
+        "confidence": 0.9
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_184b995e",
+      "class_id_resolved": "ClsC_184b995e",
+      "new_name": "Steel Metallurgical Structure Types",
+      "new_description": "Parent category for metallurgical structure types in steels, grouping austenitic, ferritic, and martensitic structures. This class should not directly contain entities, but should serve as a container for the specific structure classes below.",
+      "new_class_type_hint": "MetallurgicalStructureCategory",
+      "new_class_group": "Steel Metallurgical Structures",
+      "remark": "This class is a schema-level parent and should be enforced as an abstract/container class, not for direct entity assignment.",
+      "justification": "Class is a parent grouping and should be enforced as an abstract/container class; clarify its role in the schema.",
+      "confidence": 0.95
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsR_0d0a8df1",
+      "class_id_resolved": "ClsR_0d0a8df1",
+      "new_name": "Austenitic Steel Structure",
+      "new_description": "Austenitic metallurgical structure found in steels, especially 300 Series stainless steels and nickel base alloys.",
+      "new_class_type_hint": "MetallurgicalStructure",
+      "new_class_group": "Steel Metallurgical Structures",
+      "remark": null,
+      "justification": "Class is correctly scoped as a specific metallurgical structure; confirm and clarify class_group.",
+      "confidence": 0.95
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsR_dfcac651",
+      "class_id_resolved": "ClsR_dfcac651",
+      "new_name": "Ferritic Steel Structure",
+      "new_description": "Ferritic metallurgical structure found in carbon and low alloy steels and many 400 series stainless steels.",
+      "new_class_type_hint": "MetallurgicalStructure",
+      "new_class_group": "Steel Metallurgical Structures",
+      "remark": null,
+      "justification": "Class is correctly scoped as a specific metallurgical structure; confirm and clarify class_group.",
+      "confidence": 0.95
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsR_bf18e8ef",
+      "class_id_resolved": "ClsR_bf18e8ef",
+      "new_name": "Martensitic Steel Structure",
+      "new_description": "Martensitic metallurgical structure found in some stainless steels.",
+      "new_class_type_hint": "MetallurgicalStructure",
+      "new_class_group": "Steel Metallurgical Structures",
+      "remark": "Entity Can_c3c96b1a has entity_type_hint 'Material' instead of 'MetallurgicalStructure'; review for possible mis-typing at the entity level.",
+      "justification": "Class is correctly scoped, but entity type hint inconsistency should be reviewed for entity Can_c3c96b1a.",
+      "confidence": 0.9
+    }
+  ],
+  "provisional_to_real": {},
+  "timestamp": "2025-12-28T00:04:56Z"
+}

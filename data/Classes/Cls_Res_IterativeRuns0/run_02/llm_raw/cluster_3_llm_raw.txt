@@ -1,0 +1,54 @@
+[
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_8a37548a",
+      "new_name": "Graphitization-Susceptible Steels",
+      "new_description": "Steels prone to graphitization, including carbon, 0.5Mo, and low alloy C-Mo steels, which lose strength and ductility due to microstructural changes.",
+      "new_class_type_hint": "Material",
+      "new_class_group": "Steel Graphitization and High-Temperature Steel Phenomena",
+      "remark": null,
+      "justification": "Class_Group 'Steel Graphitization' is too narrow; entities and evidence show overlap with high-temperature steel performance and damage mechanisms, so a broader Class_Group is needed.",
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_d685324c",
+      "new_name": "High-Temperature Steels",
+      "new_description": "Steels engineered for high-temperature environments, including low alloy and quenched and tempered types, valued for strength and creep resistance and relevant to graphitization phenomena.",
+      "new_class_type_hint": "Material",
+      "new_class_group": "Steel Graphitization and High-Temperature Steel Phenomena",
+      "remark": null,
+      "justification": "Class_Group should be broadened to connect high-temperature steels with graphitization-susceptible steels, as both are semantically and technically linked in the evidence.",
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_06470fae",
+      "new_name": "Graphitization Phenomena",
+      "new_description": "Processes involving the transformation of carbide phases into graphite nodules in steels at elevated temperatures, leading to loss of strength and ductility.",
+      "new_class_type_hint": "Material Transformation",
+      "new_class_group": "Steel Graphitization and High-Temperature Steel Phenomena",
+      "remark": null,
+      "justification": "Class_Group should be broadened to encompass both material and transformation phenomena relevant to high-temperature steel performance and graphitization.",
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_efead2a4",
+      "new_name": "Heat Affected Zone (HAZ)",
+      "new_description": "The area of base metal near a weld that has not melted but has undergone changes in microstructure and mechanical properties due to welding heat.",
+      "new_class_type_hint": "Component",
+      "new_class_group": "Welded Component Features",
+      "remark": null,
+      "justification": "This class is unrelated to the steel graphitization and high-temperature steel phenomena cluster and should remain in its current, distinct Class_Group.",
+      "confidence": 1.0
+    }
+  }
+]

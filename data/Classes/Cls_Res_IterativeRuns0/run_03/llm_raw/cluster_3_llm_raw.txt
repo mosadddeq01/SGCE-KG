@@ -1,0 +1,54 @@
+[
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_1ee4b113",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Corrosion and Corrosion-Resistant Materials",
+      "remark": null,
+      "justification": "Assigning a more precise and unifying Class_Group to connect corrosive acids and corrosion-resistant metals, as both are fundamentally related to corrosion phenomena and material compatibility.",
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsR_562937c7",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Corrosion and Corrosion-Resistant Materials",
+      "remark": null,
+      "justification": "Assigning the same Class_Group as corrosive acids, as this class covers materials designed to resist the effects of corrosive substances.",
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsR_f33298d3",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Corrosion and Corrosion-Resistant Materials",
+      "remark": null,
+      "justification": "Assigning Class_Group to connect duplex stainless steels with other corrosion-related classes, as duplex stainless steels are a subclass of corrosion-resistant metals.",
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "remark",
+    "args": {
+      "class_id": "ClsR_562937c7",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": null,
+      "remark": "Potential entity-level duplication: 'chromium' appears twice with slightly different descriptions. Human review recommended.",
+      "justification": "Flagging possible duplicate entities within the class for human review.",
+      "confidence": 0.8
+    }
+  }
+]
