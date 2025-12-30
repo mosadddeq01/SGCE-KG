@@ -1,0 +1,19 @@
+[
+  {
+    "function": "set_rel_schema",
+    "args": {
+      "relation_ids": [
+        "RelR_7b6d773fe742",
+        "RelR_e71b6b450b41",
+        "RelR_1383761175ce"
+      ],
+      "canonical_rel_name": "resists_corrosion",
+      "canonical_rel_desc": "Indicates that a material or alloy exhibits resistance to a specified corrosion mechanism or type of corrosion under given conditions.",
+      "rel_cls": "corrosion_resistance_relation",
+      "rel_cls_group": "INTERACTION",
+      "justification": "All three relation instances share the same subject (Stainless Steel), the same predicate wording ('resists' / 'are resistant to'), and the same semantic type (resistance to corrosion processes). The objects differ only in the specific corrosion mechanism (oxidation, sulfidation, general corrosion), which fits naturally as different targets of the same canonical predicate. A single canonical_rel_name 'resists_corrosion' generalizes this behavior without encoding specific mechanisms. The class 'corrosion_resistance_relation' captures that this is a performance/behavior relation between a material and a corrosion mechanism, and 'INTERACTION' is an appropriate broad group since it describes how the material interacts with (i.e., withstands) a degrading environment or mechanism.",
+      "remark": null,
+      "confidence": 0.95
+    }
+  }
+]

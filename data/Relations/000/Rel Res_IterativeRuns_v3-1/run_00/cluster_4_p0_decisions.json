@@ -1,0 +1,181 @@
+{
+  "cluster_label": "4_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_5360101d9970",
+      "relation_name": "grouped_with",
+      "rel_desc": "Mechanical and Metallurgical Failure and Uniform or Localized Loss of Thickness are presented as peer sections within the same list of damage mechanisms.",
+      "rel_hint_type": "co-classification",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "Mechanical and Metallurgical Failure",
+      "object_entity_name": "Uniform or Localized Loss of Thickness",
+      "subject_class_label": "Mechanical and Metallurgical Failure Mechanisms",
+      "subject_class_group": "Material Damage Mechanisms",
+      "object_class_label": "Thickness Loss Mechanisms",
+      "object_class_group": "Material Damage Mechanisms",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "DocumentStructure: listed as peer damage mechanism categories in the same section"
+      },
+      "confidence": 0.68,
+      "remarks": [
+        "Relation reflects document-level grouping rather than a causal or hierarchical dependency; direction is arbitrary and used only to encode co-membership."
+      ]
+    },
+    {
+      "relation_id": "RelR_c1c38551b527",
+      "relation_name": "grouped_with",
+      "rel_desc": "Uniform or Localized Loss of Thickness and High Temperature Corrosion are presented as peer sections within the same list of damage mechanisms.",
+      "rel_hint_type": "co-classification",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "Uniform or Localized Loss of Thickness",
+      "object_entity_name": "High Temperature Corrosion",
+      "subject_class_label": "Thickness Loss Mechanisms",
+      "subject_class_group": "Material Damage Mechanisms",
+      "object_class_label": "High-Temperature Corrosion Mechanisms",
+      "object_class_group": "Corrosion Mechanisms",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "DocumentStructure: co-listed as damage mechanism categories"
+      },
+      "confidence": 0.68,
+      "remarks": [
+        "Relation mainly encodes co-membership in the same list; not implying any causal or structural dependency between the mechanisms."
+      ]
+    },
+    {
+      "relation_id": "RelR_008fca8f9ba4",
+      "relation_name": "grouped_with",
+      "rel_desc": "High Temperature Corrosion and Environment Assisted Cracking are presented as peer sections within the same list of damage mechanisms.",
+      "rel_hint_type": "co-classification",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "High Temperature Corrosion",
+      "object_entity_name": "Environment Assisted Cracking",
+      "subject_class_label": "High-Temperature Corrosion Mechanisms",
+      "subject_class_group": "Corrosion Mechanisms",
+      "object_class_label": "Stress Corrosion and Environment Assisted Cracking Mechanisms",
+      "object_class_group": "Environmental Cracking Mechanisms",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "DocumentStructure: both are subsections under the same damage mechanisms section"
+      },
+      "confidence": 0.68,
+      "remarks": [
+        "Relation created to capture that both mechanisms are co-classified in the same document section; direction is arbitrary."
+      ]
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_5360101d9970\",\n        \"RelR_c1c38551b527\",\n        \"RelR_008fca8f9ba4\"\n      ],\n      \"canonical_rel_name\": \"grouped_with\",\n      \"canonical_rel_desc\": \"Indicates that two entities are presented or classified together as peer categories within the same document section or list, without implying causal, hierarchical, or compositional dependence. The relation is symmetric and direction is arbitrary.\",\n      \"justification\": \"All three relations explicitly describe co-listed, peer damage mechanism categories within the same document section or list, with remarks noting that direction is arbitrary and the semantics are document-level grouping rather than causal or hierarchical. They share identical predicate meaning (document-based co-grouping), so they should use a single symmetric canonical predicate 'grouped_with'.\",\n      \"remark\": \"Normalized these co-classification edges to a symmetric document-grouping predicate for consistent KG usage.\",\n      \"confidence\": 0.96\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_5360101d9970\",\n        \"RelR_c1c38551b527\",\n        \"RelR_008fca8f9ba4\"\n      ],\n      \"rel_cls\": \"document_coclassification_relation\",\n      \"justification\": \"Each relation connects damage mechanism categories that are co-listed as peer sections or subsections in the same document, with qualifiers and remarks emphasizing document structure and co-classification. This fits a dedicated class for document-based co-classification/grouping rather than causal, hierarchical, or compositional relations.\",\n      \"remark\": \"Class captures generic document-structure-based grouping used for peer categories, especially damage mechanisms.\",\n      \"confidence\": 0.95\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_5360101d9970\",\n        \"RelR_c1c38551b527\",\n        \"RelR_008fca8f9ba4\"\n      ],\n      \"rel_cls_group\": \"ASSOCIATION\",\n      \"justification\": \"The relations encode that mechanisms are co-presented or co-classified in the same document context, which is a non-causal, non-hierarchical associative link. This is best captured as an ASSOCIATION-type group.\",\n      \"remark\": \"Explicitly marked as ASSOCIATION to distinguish these from causal, compositional, or taxonomic edges in the KG.\",\n      \"confidence\": 0.96\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_5360101d9970",
+          "RelR_c1c38551b527",
+          "RelR_008fca8f9ba4"
+        ],
+        "canonical_rel_name": "grouped_with",
+        "canonical_rel_desc": "Indicates that two entities are presented or classified together as peer categories within the same document section or list, without implying causal, hierarchical, or compositional dependence. The relation is symmetric and direction is arbitrary.",
+        "justification": "All three relations explicitly describe co-listed, peer damage mechanism categories within the same document section or list, with remarks noting that direction is arbitrary and the semantics are document-level grouping rather than causal or hierarchical. They share identical predicate meaning (document-based co-grouping), so they should use a single symmetric canonical predicate 'grouped_with'.",
+        "remark": "Normalized these co-classification edges to a symmetric document-grouping predicate for consistent KG usage.",
+        "confidence": 0.96
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_5360101d9970",
+          "RelR_c1c38551b527",
+          "RelR_008fca8f9ba4"
+        ],
+        "rel_cls": "document_coclassification_relation",
+        "justification": "Each relation connects damage mechanism categories that are co-listed as peer sections or subsections in the same document, with qualifiers and remarks emphasizing document structure and co-classification. This fits a dedicated class for document-based co-classification/grouping rather than causal, hierarchical, or compositional relations.",
+        "remark": "Class captures generic document-structure-based grouping used for peer categories, especially damage mechanisms.",
+        "confidence": 0.95
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_5360101d9970",
+          "RelR_c1c38551b527",
+          "RelR_008fca8f9ba4"
+        ],
+        "rel_cls_group": "ASSOCIATION",
+        "justification": "The relations encode that mechanisms are co-presented or co-classified in the same document context, which is a non-causal, non-hierarchical associative link. This is best captured as an ASSOCIATION-type group.",
+        "remark": "Explicitly marked as ASSOCIATION to distinguish these from causal, compositional, or taxonomic edges in the KG.",
+        "confidence": 0.96
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_5360101d9970",
+        "RelR_c1c38551b527",
+        "RelR_008fca8f9ba4"
+      ],
+      "canonical_rel_name": "grouped_with",
+      "canonical_rel_desc": "Indicates that two entities are presented or classified together as peer categories within the same document section or list, without implying causal, hierarchical, or compositional dependence. The relation is symmetric and direction is arbitrary.",
+      "justification": "All three relations explicitly describe co-listed, peer damage mechanism categories within the same document section or list, with remarks noting that direction is arbitrary and the semantics are document-level grouping rather than causal or hierarchical. They share identical predicate meaning (document-based co-grouping), so they should use a single symmetric canonical predicate 'grouped_with'.",
+      "remark": "Normalized these co-classification edges to a symmetric document-grouping predicate for consistent KG usage.",
+      "confidence": 0.96
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_5360101d9970",
+        "RelR_c1c38551b527",
+        "RelR_008fca8f9ba4"
+      ],
+      "rel_cls": "document_coclassification_relation",
+      "justification": "Each relation connects damage mechanism categories that are co-listed as peer sections or subsections in the same document, with qualifiers and remarks emphasizing document structure and co-classification. This fits a dedicated class for document-based co-classification/grouping rather than causal, hierarchical, or compositional relations.",
+      "remark": "Class captures generic document-structure-based grouping used for peer categories, especially damage mechanisms.",
+      "confidence": 0.95
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_5360101d9970",
+        "RelR_c1c38551b527",
+        "RelR_008fca8f9ba4"
+      ],
+      "rel_cls_group": "ASSOCIATION",
+      "justification": "The relations encode that mechanisms are co-presented or co-classified in the same document context, which is a non-causal, non-hierarchical associative link. This is best captured as an ASSOCIATION-type group.",
+      "remark": "Explicitly marked as ASSOCIATION to distinguish these from causal, compositional, or taxonomic edges in the KG.",
+      "confidence": 0.96
+    }
+  ],
+  "timestamp": "2025-12-29T20:04:13Z"
+}

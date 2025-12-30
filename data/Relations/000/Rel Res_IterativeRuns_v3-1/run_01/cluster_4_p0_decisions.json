@@ -1,0 +1,96 @@
+{
+  "cluster_label": "4_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_338e547f321f",
+      "relation_name": "alters_microstructure_of",
+      "rel_desc": "Graphitization alters the microstructure of carbon steels after long-term operation, degrading their mechanical properties.",
+      "rel_hint_type": "structural_change",
+      "canonical_rel_name": "modifies_microstructure_of",
+      "canonical_rel_desc": "A process changes or modifies the microstructure of a material, without specifying the exact product phases formed.",
+      "rel_cls": "microstructural_transformation_relation",
+      "rel_cls_group": "MODIFICATION",
+      "subject_entity_name": "graphitization",
+      "object_entity_name": "carbon steel",
+      "subject_class_label": "Graphitization (Process)",
+      "subject_class_group": "Steel Metallurgy and Degradation",
+      "object_class_label": "Graphitization-Susceptible Steels",
+      "object_class_group": "Steel Metallurgy and Degradation",
+      "qualifiers": {
+        "TemporalQualifier": "after long-term operation",
+        "SpatialQualifier": null,
+        "OperationalConstraint": "operation in the 800°F to 1100°F (427°C to 593°C) range",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "that may cause a loss in strength, ductility, and/or creep resistance",
+        "LogicalMarker": null,
+        "OtherQualifier": "DamageType: mechanical property degradation"
+      },
+      "confidence": 0.9,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_29b3c1c25656",
+      "relation_name": "alters_microstructure_of",
+      "rel_desc": "Graphitization alters the microstructure of 0.5Mo steels during long-term high-temperature operation.",
+      "rel_hint_type": "structural_change",
+      "canonical_rel_name": "modifies_microstructure_of",
+      "canonical_rel_desc": "A process changes or modifies the microstructure of a material, without specifying the exact product phases formed.",
+      "rel_cls": "microstructural_transformation_relation",
+      "rel_cls_group": "MODIFICATION",
+      "subject_entity_name": "graphitization",
+      "object_entity_name": "0.5Mo steel",
+      "subject_class_label": "Graphitization (Process)",
+      "subject_class_group": "Steel Metallurgy and Degradation",
+      "object_class_label": "Graphitization-Susceptible Steels",
+      "object_class_group": "Steel Metallurgy and Degradation",
+      "qualifiers": {
+        "TemporalQualifier": "after long-term operation",
+        "SpatialQualifier": null,
+        "OperationalConstraint": "operation in the 800°F to 1100°F (427°C to 593°C) range",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "may cause",
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "DamageType: loss in strength, ductility, and/or creep resistance"
+      },
+      "confidence": 0.9,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_a45fb4ca81de",
+      "relation_name": "produces",
+      "rel_desc": "Graphitization corresponds to decomposition of carbide phases into graphite nodules, effectively producing graphite nodules in the steel.",
+      "rel_hint_type": "transformation",
+      "canonical_rel_name": "produces_microstructural_feature",
+      "canonical_rel_desc": "A process leads to the formation or production of a specific microstructural feature or phase in a material.",
+      "rel_cls": "microstructural_transformation_relation",
+      "rel_cls_group": "MODIFICATION",
+      "subject_entity_name": "graphitization",
+      "object_entity_name": "graphite nodules",
+      "subject_class_label": "Graphitization (Process)",
+      "subject_class_group": "Steel Metallurgy and Degradation",
+      "object_class_label": "Graphite Nodules (Product)",
+      "object_class_group": "Steel Metallurgy and Degradation",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "in these steels",
+        "OperationalConstraint": "at elevated temperatures",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "decompose into",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.82,
+      "remarks": [
+        "Carbide phases are not an explicit entity; relation framed between graphitization and graphite nodules to preserve transformation context.",
+        "Carbide phases are not an explicit entity; relation framed between graphitization and graphite nodules to preserve transformation context."
+      ]
+    }
+  ],
+  "llm_raw": "[]",
+  "parsed_steps": [],
+  "executed_decisions": [],
+  "timestamp": "2025-12-29T20:04:50Z"
+}

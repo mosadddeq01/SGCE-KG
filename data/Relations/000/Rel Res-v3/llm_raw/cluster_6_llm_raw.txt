@@ -1,0 +1,64 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_96a7cdcaa41e"],
+      "canonical_rel_name": "is_microstructurally_similar_to",
+      "canonical_rel_desc": "Indicates that the subject material exhibits a microstructure that is similar in type or characteristics to that of the object material, possibly in a specific context such as weld metal or heat-affected zones.",
+      "justification": "The relation describes that welds of austenitic stainless steels may show a duplex (austenitic-ferritic) structure, conceptually linking them to duplex stainless steels via microstructural similarity rather than direct compositional identity or classification. A canonical predicate focused on microstructural similarity captures this meaning more precisely than the generic 'associated_with'.",
+      "remark": "Kept the predicate generic to allow reuse for other microstructural similarity links while respecting the contextual qualifiers (e.g., only in welds, and with uncertainty).",
+      "confidence": 0.8
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_f080c3c67c9c"],
+      "canonical_rel_name": "contains_alloying_element",
+      "canonical_rel_desc": "Indicates that the subject alloy or material contains the object element as an intentional alloying constituent, with some (possibly variable) concentration.",
+      "justification": "The instance explicitly states that stainless steels contain chromium as an alloying element, matching the existing raw relation_name. Promoting this to the canonical predicate standardizes how such composition links are represented across alloys and elements.",
+      "remark": null,
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": ["RelR_96a7cdcaa41e"],
+      "rel_cls": "microstructure_association_relation",
+      "justification": "The canonical predicate 'is_microstructurally_similar_to' expresses a relationship based on similarity of microstructure (duplex-type austenitic-ferritic structure) between two materials. This belongs to a family of relations that associate entities via microstructural characteristics, without implying identity or direct compositional linkage.",
+      "remark": "This class can later also cover predicates like 'has_similar_microstructure_to', 'shares_microstructural_features_with', etc.",
+      "confidence": 0.8
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": ["RelR_f080c3c67c9c"],
+      "rel_cls": "composition_relation",
+      "justification": "The canonical predicate 'contains_alloying_element' is a prototypical composition link, indicating that an alloy includes a specific chemical element as part of its formulation. This fits a broader family of relations describing material composition and constituent content.",
+      "remark": "This class can coherently group other predicates such as 'contains_element', 'has_matrix_element', or 'has_nominal_composition_component'.",
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": ["RelR_96a7cdcaa41e"],
+      "rel_cls_group": "ASSOCIATION",
+      "justification": "The relation encodes a conceptual and structural association based on microstructural similarity between two material families, without asserting identity, causality, or strict compositional inclusion. This fits best under a broad ASSOCIATION group.",
+      "remark": "Although microstructural in nature, the highest-level semantics is that of a non-identical association between material classes.",
+      "confidence": 0.8
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": ["RelR_f080c3c67c9c"],
+      "rel_cls_group": "COMPOSITION",
+      "justification": "The relation concerns the inclusion of chromium as an alloying element within stainless steel, a paradigmatic example of a compositional link between an alloy and its constituent element.",
+      "remark": null,
+      "confidence": 0.98
+    }
+  }
+]

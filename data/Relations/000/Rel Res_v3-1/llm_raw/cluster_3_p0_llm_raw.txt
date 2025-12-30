@@ -1,0 +1,75 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_862422bffa70"],
+      "canonical_rel_name": "is_functional_alternative_to",
+      "canonical_rel_desc": "Indicates that two entities can be used in place of one another for the same functional role in a given application context.",
+      "justification": "The relation describes methyldiethanolamine and monoethanolamine serving similar functional roles in amine treating and being usable as alternatives; a predicate emphasizing functional substitutability best captures this.",
+      "remark": "Direction is arbitrary in this symmetric relation; canonical name is chosen to express functional interchangeability.",
+      "confidence": 0.8
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_362f6e35c9d7"],
+      "canonical_rel_name": "has_subtype",
+      "canonical_rel_desc": "Indicates that the subject is a broader class or category that includes the object as a more specific subtype or member category.",
+      "justification": "Here, stainless steel is explicitly described as having duplex stainless steel as one of its categories; the direction is from broader class to included subtype, so 'has_subtype' is appropriate.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_39cf0ff7f895"],
+      "canonical_rel_name": "is_subtype_of",
+      "canonical_rel_desc": "Indicates that the subject is a more specific subtype or category within the broader class represented by the object.",
+      "justification": "This relation explicitly states that duplex stainless steel is within the broader class of stainless steel; with subject=duplex and object=stainless, the canonical predicate should be the subtype-to-supertype direction.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": ["RelR_362f6e35c9d7", "RelR_39cf0ff7f895"],
+      "rel_cls": "material_taxonomy_relation",
+      "justification": "Both relations express hierarchical taxonomic links between material classes (stainless steel and duplex stainless steel), one from class to subtype and the other from subtype to class; they belong to the same material taxonomy family.",
+      "remark": null,
+      "confidence": 0.92
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": ["RelR_362f6e35c9d7", "RelR_39cf0ff7f895"],
+      "rel_cls_group": "IDENTITY",
+      "justification": "Taxonomic subclass/superclass relations between material categories express identity-like hierarchical classification, fitting an IDENTITY-style group (covering type-subtype and class-membership structures).",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": ["RelR_862422bffa70"],
+      "rel_cls": "functional_equivalence_relation",
+      "justification": "The relation captures that two chemicals serve the same function in a process and can substitute for each other, which is a functional equivalence/alternative family of relations.",
+      "remark": null,
+      "confidence": 0.8
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": ["RelR_862422bffa70"],
+      "rel_cls_group": "USAGE",
+      "justification": "The connection is about how the chemicals are used in the same application context (amine treating) rather than their composition or structure, so it best fits a broad USAGE-oriented group.",
+      "remark": null,
+      "confidence": 0.78
+    }
+  }
+]

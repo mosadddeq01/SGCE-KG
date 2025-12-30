@@ -1,0 +1,205 @@
+{
+  "cluster_label": "6_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_96a7cdcaa41e",
+      "relation_name": "associated_with",
+      "rel_desc": "Welds of austenitic stainless steels may exhibit a duplex-type (austenitic-ferritic) structure, linking them conceptually to duplex stainless steels.",
+      "rel_hint_type": "structural",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "austenitic stainless steels",
+      "object_entity_name": "duplex stainless steel",
+      "subject_class_label": "Austenitic Stainless Steels",
+      "subject_class_group": "Stainless Steel Classification",
+      "object_class_label": "Corrosion-Resistant Alloys",
+      "object_class_group": "Corrosion-Resistant Metals and Alloys",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "in welds of 300 Series stainless steels",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "may",
+        "CausalHint": null,
+        "LogicalMarker": "may",
+        "OtherQualifier": "MicrostructureContext: weld metal/heat-affected zone duplex (austenitic-ferritic) structure"
+      },
+      "confidence": 0.55,
+      "remarks": [
+        "Relation created mainly to capture that welds of austenitic stainless steels can show a duplex (austenitic-ferritic) microstructure; semantic mapping to the duplex stainless steel family is approximate."
+      ]
+    },
+    {
+      "relation_id": "RelR_f080c3c67c9c",
+      "relation_name": "contains_alloying_element",
+      "rel_desc": "Stainless steels contain varying amounts of chromium as an alloying element.",
+      "rel_hint_type": "composition",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "Stainless Steel",
+      "object_entity_name": "chromium",
+      "subject_class_label": "Corrosion-Resistant Alloys",
+      "subject_class_group": "Corrosion-Resistant Metals and Alloys",
+      "object_class_label": "Chromium (Element)",
+      "object_class_group": "Corrosion-Resistant Metals and Alloys",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": "varying amounts",
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "CompositionContext: alloy content in stainless steels"
+      },
+      "confidence": 0.94,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_96a7cdcaa41e\"],\n      \"canonical_rel_name\": \"has_similar_microstructure_to\",\n      \"canonical_rel_desc\": \"Indicates that the subject material exhibits a microstructural state that is similar to or analogous to that of the object material, without implying strict identity of composition or grade.\",\n      \"justification\": \"The description states that welds of austenitic stainless steels may exhibit a duplex (austenitic-ferritic) structure, conceptually linking them to duplex stainless steels via similarity of microstructure rather than identity or composition. A predicate emphasizing microstructural similarity best captures this semantics.\",\n      \"remark\": \"This relation captures a conceptual microstructural analogy between austenitic stainless steel welds and duplex stainless steels, not strict grade equivalence.\",\n      \"confidence\": 0.78\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_96a7cdcaa41e\"],\n      \"rel_cls\": \"microstructure_relation\",\n      \"justification\": \"The link is based on both materials exhibiting a duplex (austenitic-ferritic) structure in certain regions (weld metal/HAZ). This is fundamentally about microstructural characteristics, so a microstructure-focused relation class is appropriate.\",\n      \"remark\": null,\n      \"confidence\": 0.82\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_96a7cdcaa41e\"],\n      \"rel_cls_group\": \"ASSOCIATION\",\n      \"justification\": \"The relation expresses a conceptual association via similar microstructure between two alloy families; it does not assert compositional containment, causality, or hierarchy, but rather a structural analogy. This fits best under a broad ASSOCIATION group.\",\n      \"remark\": null,\n      \"confidence\": 0.8\n    }\n  },\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_f080c3c67c9c\"],\n      \"canonical_rel_name\": \"contains_alloying_element\",\n      \"canonical_rel_desc\": \"Indicates that the subject alloy contains the object chemical element as an intentional alloying constituent in its composition.\",\n      \"justification\": \"The relation explicitly states that stainless steels contain chromium as an alloying element. The existing raw relation_name already matches this semantics well and can be adopted as the normalized canonical predicate.\",\n      \"remark\": null,\n      \"confidence\": 0.97\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_f080c3c67c9c\"],\n      \"rel_cls\": \"alloying_element_relation\",\n      \"justification\": \"The subject is an alloy class (stainless steel) and the object is a chemical element (chromium) present as an alloying addition. This is a prototypical alloying-element composition relation, so a specific class for alloying element links is appropriate.\",\n      \"remark\": null,\n      \"confidence\": 0.97\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_f080c3c67c9c\"],\n      \"rel_cls_group\": \"COMPOSITION\",\n      \"justification\": \"The relation concerns which element is contained within the alloy, i.e., the compositional makeup of stainless steel. This clearly falls under a broad COMPOSITION group.\",\n      \"remark\": null,\n      \"confidence\": 0.99\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_96a7cdcaa41e"
+        ],
+        "canonical_rel_name": "has_similar_microstructure_to",
+        "canonical_rel_desc": "Indicates that the subject material exhibits a microstructural state that is similar to or analogous to that of the object material, without implying strict identity of composition or grade.",
+        "justification": "The description states that welds of austenitic stainless steels may exhibit a duplex (austenitic-ferritic) structure, conceptually linking them to duplex stainless steels via similarity of microstructure rather than identity or composition. A predicate emphasizing microstructural similarity best captures this semantics.",
+        "remark": "This relation captures a conceptual microstructural analogy between austenitic stainless steel welds and duplex stainless steels, not strict grade equivalence.",
+        "confidence": 0.78
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_96a7cdcaa41e"
+        ],
+        "rel_cls": "microstructure_relation",
+        "justification": "The link is based on both materials exhibiting a duplex (austenitic-ferritic) structure in certain regions (weld metal/HAZ). This is fundamentally about microstructural characteristics, so a microstructure-focused relation class is appropriate.",
+        "remark": null,
+        "confidence": 0.82
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_96a7cdcaa41e"
+        ],
+        "rel_cls_group": "ASSOCIATION",
+        "justification": "The relation expresses a conceptual association via similar microstructure between two alloy families; it does not assert compositional containment, causality, or hierarchy, but rather a structural analogy. This fits best under a broad ASSOCIATION group.",
+        "remark": null,
+        "confidence": 0.8
+      }
+    },
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_f080c3c67c9c"
+        ],
+        "canonical_rel_name": "contains_alloying_element",
+        "canonical_rel_desc": "Indicates that the subject alloy contains the object chemical element as an intentional alloying constituent in its composition.",
+        "justification": "The relation explicitly states that stainless steels contain chromium as an alloying element. The existing raw relation_name already matches this semantics well and can be adopted as the normalized canonical predicate.",
+        "remark": null,
+        "confidence": 0.97
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_f080c3c67c9c"
+        ],
+        "rel_cls": "alloying_element_relation",
+        "justification": "The subject is an alloy class (stainless steel) and the object is a chemical element (chromium) present as an alloying addition. This is a prototypical alloying-element composition relation, so a specific class for alloying element links is appropriate.",
+        "remark": null,
+        "confidence": 0.97
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_f080c3c67c9c"
+        ],
+        "rel_cls_group": "COMPOSITION",
+        "justification": "The relation concerns which element is contained within the alloy, i.e., the compositional makeup of stainless steel. This clearly falls under a broad COMPOSITION group.",
+        "remark": null,
+        "confidence": 0.99
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_96a7cdcaa41e"
+      ],
+      "canonical_rel_name": "has_similar_microstructure_to",
+      "canonical_rel_desc": "Indicates that the subject material exhibits a microstructural state that is similar to or analogous to that of the object material, without implying strict identity of composition or grade.",
+      "justification": "The description states that welds of austenitic stainless steels may exhibit a duplex (austenitic-ferritic) structure, conceptually linking them to duplex stainless steels via similarity of microstructure rather than identity or composition. A predicate emphasizing microstructural similarity best captures this semantics.",
+      "remark": "This relation captures a conceptual microstructural analogy between austenitic stainless steel welds and duplex stainless steels, not strict grade equivalence.",
+      "confidence": 0.78
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_96a7cdcaa41e"
+      ],
+      "rel_cls": "microstructure_relation",
+      "justification": "The link is based on both materials exhibiting a duplex (austenitic-ferritic) structure in certain regions (weld metal/HAZ). This is fundamentally about microstructural characteristics, so a microstructure-focused relation class is appropriate.",
+      "remark": null,
+      "confidence": 0.82
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_96a7cdcaa41e"
+      ],
+      "rel_cls_group": "ASSOCIATION",
+      "justification": "The relation expresses a conceptual association via similar microstructure between two alloy families; it does not assert compositional containment, causality, or hierarchy, but rather a structural analogy. This fits best under a broad ASSOCIATION group.",
+      "remark": null,
+      "confidence": 0.8
+    },
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_f080c3c67c9c"
+      ],
+      "canonical_rel_name": "contains_alloying_element",
+      "canonical_rel_desc": "Indicates that the subject alloy contains the object chemical element as an intentional alloying constituent in its composition.",
+      "justification": "The relation explicitly states that stainless steels contain chromium as an alloying element. The existing raw relation_name already matches this semantics well and can be adopted as the normalized canonical predicate.",
+      "remark": null,
+      "confidence": 0.97
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_f080c3c67c9c"
+      ],
+      "rel_cls": "alloying_element_relation",
+      "justification": "The subject is an alloy class (stainless steel) and the object is a chemical element (chromium) present as an alloying addition. This is a prototypical alloying-element composition relation, so a specific class for alloying element links is appropriate.",
+      "remark": null,
+      "confidence": 0.97
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_f080c3c67c9c"
+      ],
+      "rel_cls_group": "COMPOSITION",
+      "justification": "The relation concerns which element is contained within the alloy, i.e., the compositional makeup of stainless steel. This clearly falls under a broad COMPOSITION group.",
+      "remark": null,
+      "confidence": 0.99
+    }
+  ],
+  "timestamp": "2025-12-29T20:04:31Z"
+}

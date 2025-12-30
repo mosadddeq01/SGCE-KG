@@ -1,0 +1,13 @@
+[
+  {
+    "function": "add_rel_remark",
+    "args": {
+      "relation_ids": [
+        "RelR_caa4eec09380"
+      ],
+      "remark": "Upstream extraction infers that low alloy steels are a relevant host material for Hydrogen Induced Cracking (HIC), but the source text only explicitly mentions steels in general. Consider human review to confirm that HIC should be explicitly linked to low alloy steels as a family, or whether a more generic steel host entity would be preferable.",
+      "justification": "The current relation assumes low alloy steel as a representative subset of steels susceptible to HIC, while the supporting text does not explicitly restrict or name low alloy steels. This semantic leap is noted in the existing remarks and the confidence score is low (0.38), so an explicit flag for potential over-specification is helpful for later curation.",
+      "confidence": 0.8
+    }
+  }
+]

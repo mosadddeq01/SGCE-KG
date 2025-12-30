@@ -1,0 +1,54 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_c4bd0eecf18e",
+        "RelR_d3bbaeb2df23",
+        "RelR_cc53169ea6f4",
+        "RelR_d39cfe6239e1",
+        "RelR_f33b7d004979",
+        "RelR_d531fbfb64b2"
+      ],
+      "canonical_rel_name": "has_metallurgical_structure",
+      "canonical_rel_desc": "Indicates that an alloy or steel grade possesses a particular metallurgical/microstructural phase or structure (e.g., austenitic, ferritic, martensitic) under specified conditions.",
+      "justification": "All relations link a stainless steel type or category to a specific metallurgical phase or structure (austenitic, ferritic, martensitic) as a defining microstructural characteristic, often with qualifiers like room temperature or mixed structure; they are semantically identical and can share one canonical predicate.",
+      "remark": null,
+      "confidence": 0.97
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_c4bd0eecf18e",
+        "RelR_d3bbaeb2df23",
+        "RelR_cc53169ea6f4",
+        "RelR_d39cfe6239e1",
+        "RelR_f33b7d004979",
+        "RelR_d531fbfb64b2"
+      ],
+      "rel_cls": "microstructure_relation",
+      "justification": "Each relation expresses a link between an alloy/steel grade and its microstructural/metallurgical phase (austenitic, ferritic, martensitic), which is a specific type of structure-related relation best grouped under a microstructure-focused class.",
+      "remark": null,
+      "confidence": 0.96
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_c4bd0eecf18e",
+        "RelR_d3bbaeb2df23",
+        "RelR_cc53169ea6f4",
+        "RelR_d39cfe6239e1",
+        "RelR_f33b7d004979",
+        "RelR_d531fbfb64b2"
+      ],
+      "rel_cls_group": "STRUCTURE",
+      "justification": "The semantics center on the structural/microstructural nature of the materials (their metallurgical structure), not composition, causality, or usage; thus they belong to a broad structural group.",
+      "remark": null,
+      "confidence": 0.96
+    }
+  }
+]

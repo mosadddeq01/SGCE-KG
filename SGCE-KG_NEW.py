@@ -18133,6 +18133,7 @@ def run_pipeline_iteratively():
             except Exception:
                 per_run_stats.append({"run_index": r["run_index"], "error": "failed to load summary"})
 
+
     # aggregate overall stats (summing counts)
     aggregated = {
         "total_runs_executed": len(per_run_stats),
@@ -18171,6 +18172,8 @@ def run_pipeline_iteratively():
     print(f"[done] Classes+entities bundle written to: {classes_and_entities_path}")
     print(f"[done] Entities jsonl (entity + class info) written to: {entities_with_class_path}")
     print(f"[done] Final classes (copy) written to: {final_classes_path_out}")
+
+
 
 # -----------------------
 # To run: call run_pipeline_iteratively() after pasting this block.
@@ -19208,7 +19211,7 @@ run_rel_rec(
 
 
 
-#?######################### Start ##########################
+#*######################### Start ##########################
 #region:#?   Rel Rec v3 (context-enriched, high-recall)
 
 #!/usr/bin/env python3
@@ -19554,6 +19557,10 @@ Return ONLY valid JSON. No extra commentary.
 """
 
 
+
+
+
+
 def call_llm_extract_relations_for_chunk(
     client: OpenAI,
     model: str,
@@ -19777,8 +19784,5213 @@ run_rel_rec(
     model="gpt-5.1"
 )
 
-#endregion#? Rel Rec v3
+#endregion#? Rel Rec v3 (context-enriched, high-recall)
+#*#########################  End  ##########################
+
+
+
+
+#?######################### Start ##########################
+#region:#?   Rel Rec v4 - Prompt change (Better Rel Naming)
+
+#!/usr/bin/env python3
+"""
+Relation Recognition (Rel Rec) — Context-Enriched KG
+
+- Reads:
+    - entities_with_class.jsonl
+    - chunks_sentence.jsonl
+- For each chunk, finds entities that occur in that chunk.
+- Calls an LLM (OpenAI Responses API) to extract directed relations between those entities.
+- Writes:
+    - relations_raw.jsonl  (one JSON object per relation instance)
+
+Key design:
+- Entities are ALREADY resolved and guaranteed to belong to their chunks.
+- This is the LAST time we look at the raw chunk text.
+- We aim for HIGH RECALL and rich QUALIFIERS (context-enriched KG).
+- Intrinsic node properties were already handled in entity stages; here we treat
+  almost everything else as relation-level context.
+
+Requirements:
+    pip install openai
+
+Environment:
+    export OPENAI_API_KEY="sk-..."
+
+Adjust paths & MODEL_NAME as needed.
+"""
+
+import argparse
+import json
+import logging
+import uuid
+from collections import defaultdict
+from typing import Any, Dict, Iterable, List, Tuple
+
+from openai import OpenAI
+
+# -----------------------------------------------------------------------------
+# Config
+# -----------------------------------------------------------------------------
+
+MODEL_NAME = "gpt-5.1"   # or any other model you use
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(message)s",
+)
+logger = logging.getLogger(__name__)
+
+
+# -----------------------------------------------------------------------------
+# Data loading
+# -----------------------------------------------------------------------------
+
+def load_entities_by_chunk(
+    entities_path: str,
+) -> Tuple[Dict[str, List[Dict[str, Any]]], Dict[str, Dict[str, Any]]]:
+    """
+    Load entities_with_class.jsonl and build:
+
+    - entities_by_chunk:  chunk_id -> list of entity dicts (for that chunk)
+    - entities_by_id:     entity_id -> entity dict (global)
+
+    Each entity dict contains:
+        entity_id, entity_name, entity_description, 
+        class_id, class_label, class_group, chunk_ids, node_properties
+    """
+    entities_by_chunk: Dict[str, List[Dict[str, Any]]] = defaultdict(list)
+    entities_by_id: Dict[str, Dict[str, Any]] = {}
+
+    logger.info("Loading entities from %s", entities_path)
+    with open(entities_path, "r", encoding="utf-8") as f:
+        for line in f:
+            line = line.strip()
+            if not line:
+                continue
+            rec = json.loads(line)
+
+            entity_id = rec["entity_id"]
+            ent = rec["entity"]
+
+            entity_record = {
+                "entity_id": entity_id,
+                "entity_name": ent.get("entity_name"),
+                "entity_description": ent.get("entity_description"),
+                # "entity_type_hint": ent.get("entity_type_hint"),
+                "class_id": rec.get("class_id"),
+                "class_label": rec.get("class_label"),
+                "class_group": rec.get("class_group"),
+                "chunk_ids": ent.get("chunk_id", []),
+                "node_properties": ent.get("node_properties", []),
+            }
+
+            entities_by_id[entity_id] = entity_record
+
+            for ch_id in entity_record["chunk_ids"]:
+                entities_by_chunk[ch_id].append(entity_record)
+
+    logger.info(
+        "Loaded %d entities, mapped to %d chunks",
+        len(entities_by_id),
+        len(entities_by_chunk),
+    )
+    return entities_by_chunk, entities_by_id
+
+
+def iter_chunks(chunks_path: str) -> Iterable[Dict[str, Any]]:
+    """
+    Yield chunks from chunks_sentence.jsonl.
+
+    Expected fields include (example):
+        {
+          "id": "Ch_000001",
+          "ref_index": 0,
+          "ref_title": "2.1 Standards",
+          "text": "...",
+          ...
+        }
+    """
+    logger.info("Streaming chunks from %s", chunks_path)
+    with open(chunks_path, "r", encoding="utf-8") as f:
+        for line in f:
+            line = line.strip()
+            if not line:
+                continue
+            yield json.loads(line)
+
+
+# -----------------------------------------------------------------------------
+# LLM Prompt & Call
+# -----------------------------------------------------------------------------
+
+REL_REC_INSTRUCTIONS = """
+You are an expert relation extractor for a CONTEXT-ENRICHED knowledge graph.
+
+High-level setting:
+- The entities you see are ALREADY resolved and guaranteed to belong to this chunk.
+  They may not always appear with exactly the same surface form in the text,
+  but you must **trust** that they are conceptually present in this chunk.
+- This is the FINAL stage that has direct access to the raw chunk text.
+  After this, we will NOT revisit the chunk for more information.
+- Our goal is to capture as MUCH context as possible:
+  relations PLUS rich qualifiers (conditions, constraints, uncertainty, etc.).
+
+Your inputs:
+- A single text chunk from a technical document.
+- A list of resolved entities that appear in that chunk.
+- Each entity has: entity_id, entity_name, entity_description, class_label, class_group.
+
+Your main task:
+- Identify ZERO or MORE **directed** relations between the entities in this chunk.
+- A relation is a meaningful, text-supported connection between a HEAD (subject) entity
+  and a TAIL (object) entity.
+- The graph is DIRECTED. You must choose subject_entity_id and object_entity_id
+  based on how the text expresses the relationship.
+  Note: Some relations may be conceptually symmetric or bidirectional; in such cases,
+  choose a reasonable subject → object direction for representation purposes,
+  and explain any ambiguity in justification or remark.
+
+
+Very important principles:
+
+1) TRUST THE ENTITIES (we performed entity resolution)
+   - We have already run entity recognition & resolution upstream; the provided entities are canonical / resolved mentions derived from the document.
+   - Do NOT question whether an entity belongs to this chunk. The exact surface string may not appear verbatim in the chunk because:
+       * the entity was canonicalized (normalized) during entity resolution,
+       * the chunk uses synonyms, abbreviations, pronouns, or implicit references,
+       * the entity was merged from multiple mentions across the section.
+   - Use the provided entity_name, entity_description,
+     class_label, and class_group to recognize mentions and evidence even when the exact surface form is absent.
+   - You may create relations between any pair of provided entities if the chunk text supports the relation conceptually — prefer recall over rejecting a plausible relation solely because the surface token doesn't match exactly.
+
+2) HIGH RECALL & COVERAGE (discover first, refine later)
+   - Assume that almost all informational content in the chunk should end up in the KG
+     either as a relation or as qualifiers on relations.
+   - Do NOT limit discovery based on naming concerns.
+   - It is BETTER to propose a relation with lower confidence (and explain your doubts)
+     than to miss a real relation or important qualifier.
+   - If you are unsure, still output the relation with lower `confidence` and explain
+     your uncertainty in `justification` and/or `remark`.
+
+3) QUALIFIERS LIVE ON RELATIONS
+   - Intrinsic node properties were (mostly) already captured during entity recognition/resolution.
+   - Here, we treat almost all remaining contextual information as relation-level qualifiers.
+   - Do NOT try to create or modify entity properties.
+   - If you spot something that looks like a missing intrinsic property,
+     mention it in `remark` instead of modeling it as a property.
+
+4) CAPTURE QUALIFIERS EVEN IF THE RELATION IS UNCERTAIN
+   - If you clearly see a contextual piece (condition, constraint, etc.) that SHOULD be attached
+     to some relation but you struggle to identify the exact relation semantics:
+       * Make a best-effort guess for the relation_name between the most relevant entities.
+       * Set a lower `confidence`.
+       * In `remark`, clearly state that this relation was primarily created to capture that qualifier
+         and describe the issue (e.g., "relation semantics unclear", "heuristic relation choice").
+   - This ensures we do not lose important context even when relation semantics are fuzzy.
+
+5) DO NOT BE OVERLY BIASED BY EXAMPLES
+   - Any examples of relation names, relation types, or qualifier values in this prompt are
+     **illustrative, not exhaustive**.
+   - You are free to discover ANY relation that is supported by the text.
+   - Guidance below affects how relations should be *expressed*, not which relations you should find.
+
+
+-------------------------------------------
+Relation naming (VERY IMPORTANT):
+-------------------------------------------
+- relation_name:
+    - A short, normalized phrase describing the CORE semantic relation between subject and object.
+    - The goal is NOT to restrict which relations you discover,
+      but to express discovered relations in a reusable, abstract form.
+    - relation_name SHOULD be something that could reasonably apply to many different
+      entity pairs across the corpus, even if the surface wording differs.
+    - If the relation meaning is specific to this instance,
+      capture that specificity in rel_desc, qualifiers, or remark — not in relation_name.
+    - Examples (NOT exhaustive): "causes", "occurs_in", "is_part_of", "used_for",
+      "located_in", "prevents", "requires", "correlates_with", "associated_with".
+    - Do NOT include qualifiers like "at high temperature", "during startup", "may"
+      in relation_name.
+
+- relation_surface:
+    - The exact phrase or minimal text span from the chunk that expresses the relation.
+    - This MAY be instance-specific and does NOT need to be reusable.
+    - Examples (NOT exhaustive): "leads to", "results in", "is part of",
+      "used for controlling", "associated with".
+
+
+-------------------------------------------
+Relation hint type (rel_hint_type):
+-------------------------------------------
+- A short free-form hint describing the nature of the relation
+  (e.g., causal, dependency, containment, usage, constraint, correlation, requirement, etc.).
+- This is ONLY a hint to help later relation resolution and grouping.
+- There is NO fixed list; choose whatever best fits the relation.
+- If unsure, still provide your best guess and explain uncertainty in justification.
+- It must be a short phrase (1–3 words), not a sentence.
+
+
+-------------------------------------------
+Qualifiers:
+-------------------------------------------
+For each relation, fill this dict (values are strings or null):
+
+  "qualifiers": {
+    "TemporalQualifier": "... or null",
+    "SpatialQualifier": "... or null",
+    "OperationalConstraint": "... or null",
+    "ConditionExpression": "... or null",
+    "UncertaintyQualifier": "... or null",
+    "CausalHint": "... or null",
+    "LogicalMarker": "... or null",
+    "OtherQualifier": "expectedType: value or null"
+  }
+
+Meanings (examples are illustrative, NOT exhaustive):
+- TemporalQualifier:
+    when something holds (e.g., "during heating", "after 1000h", "at 25°C").
+- SpatialQualifier:
+    where something holds (e.g., "near weld", "in heat-affected zone").
+- OperationalConstraint:
+    operating or environmental conditions (e.g., "elevated temperature", "high load").
+- ConditionExpression:
+    explicit conditional or threshold clauses (e.g., "temperature > 450°C").
+- UncertaintyQualifier:
+    modality or hedging (e.g., "may", "likely", "suspected").
+- CausalHint:
+    lexical causal cues beyond the main verb (e.g., "due to", "caused by").
+- LogicalMarker:
+    discourse or logic markers (e.g., "if", "when", "unless").
+- OtherQualifier:
+    use when a qualifier does not fit the above categories
+    (encode both expected type and value, e.g., "MeasurementContext: laboratory test").
+
+If there are multiple "other" qualifiers, you may combine them in a single string.
+
+
+-------------------------------------------
+Other fields (and how to use them):
+-------------------------------------------
+- confidence:
+    - float between 0 and 1 (your estimated confidence that this relation is correctly captured).
+    - When in doubt, still output the relation but with a lower confidence (e.g., 0.2–0.4).
+
+- rel_desc:
+    - A brief instance-level explanation of how the subject and object are related here.
+    - This is evidence-oriented and may mention the specific entities involved.
+
+- resolution_context:
+    - Short text intended to help later relation resolution / canonicalization
+      (e.g., why a certain direction was chosen, or how this phrasing compares to others).
+
+- justification:
+    - Explanation of how the chunk text supports this relation.
+    - Also state doubts here if semantics are ambiguous.
+
+- remark:
+    - Free-text notes for meta-issues or edge cases:
+        * "relation created mainly to capture qualifier X"
+        * "may reflect document organization rather than domain semantics"
+        * "possible intrinsic property not captured upstream"
+
+
+-------------------------------------------
+Output format:
+-------------------------------------------
+- You MUST output a single JSON object with exactly one top-level key "relations":
+  { "relations": [ ... ] }
+
+- Each relation object MUST have this exact shape (all keys present, use null if not applicable):
+
+  {
+    "subject_entity_id": "En_...",
+    "object_entity_id": "En_...",
+    "relation_surface": "string",
+    "relation_name": "string",
+    "rel_desc": "string",
+    "rel_hint_type": "string",
+    "confidence": 0.0,
+    "resolution_context": "string or null",
+    "justification": "string or null",
+    "remark": "string or null",
+    "qualifiers": {
+      "TemporalQualifier": "string or null",
+      "SpatialQualifier": "string or null",
+      "OperationalConstraint": "string or null",
+      "ConditionExpression": "string or null",
+      "UncertaintyQualifier": "string or null",
+      "CausalHint": "string or null",
+      "LogicalMarker": "string or null",
+      "OtherQualifier": "string or null"
+    },
+    "evidence_excerpt": "short excerpt from the chunk text (<= 40 words)"
+  }
+
+- subject_entity_id and object_entity_id MUST be chosen from the provided entities.
+- You may propose relations between ANY pair of provided entities if the chunk supports it.
+- If there are no relations at all, return: { "relations": [] }
+- rel_hint_type must be a short phrase (1–3 words), not a sentence.
+
+Coverage:
+- Try to cover ALL meaningful connections and contextual information that can be attached
+  to those connections, even if it means producing low-confidence relations with detailed remarks.
+
+Return ONLY valid JSON. No extra commentary.
+"""
+
+
+
+
+def call_llm_extract_relations_for_chunk(
+    client: OpenAI,
+    model: str,
+    chunk: Dict[str, Any],
+    entities: List[Dict[str, Any]],
+) -> List[Dict[str, Any]]:
+    """
+    Call the LLM using the Responses API to extract relations for a single chunk.
+
+    Returns a list of relation dicts (without relation_id, chunk_id, or class info added yet).
+    """
+    if not entities or len(entities) < 2:
+        return []
+
+    payload = {
+        "chunk_id": chunk["id"],
+        "chunk_text": chunk.get("text", ""),
+        "entities": [
+            {
+                "entity_id": e["entity_id"],
+                "entity_name": e["entity_name"],
+                "entity_description": e["entity_description"],
+                "class_label": e["class_label"],
+                "class_group": e["class_group"],
+                "node_properties": e.get("node_properties", []),
+            }
+            for e in entities
+        ],
+    }
+
+    try:
+        response = client.responses.create(
+            model=model,
+            reasoning={"effort": "low"},
+            input=[
+                {
+                    "role": "developer",
+                    "content": REL_REC_INSTRUCTIONS,
+                },
+                {
+                    "role": "user",
+                    "content": json.dumps(payload, ensure_ascii=False),
+                },
+            ],
+        )
+    except Exception as e:
+        logger.error("LLM call failed for chunk %s: %s", chunk["id"], e)
+        return []
+
+    raw_text = response.output_text
+    if not raw_text:
+        logger.warning("Empty response for chunk %s", chunk["id"])
+        return []
+
+    try:
+        parsed = json.loads(raw_text)
+    except json.JSONDecodeError:
+        logger.error(
+            "Failed to parse JSON for chunk %s. Raw response:\n%s",
+            chunk["id"],
+            raw_text,
+        )
+        return []
+
+    relations = parsed.get("relations", [])
+    if not isinstance(relations, list):
+        logger.error(
+            "Expected 'relations' to be a list for chunk %s. Got: %r",
+            chunk["id"],
+            type(relations),
+        )
+        return []
+
+    return relations
+
+
+# -----------------------------------------------------------------------------
+# Main pipeline
+# -----------------------------------------------------------------------------
+
+def run_rel_rec(
+    entities_path: str,
+    chunks_path: str,
+    output_path: str,
+    model: str = MODEL_NAME,
+) -> None:
+    """
+    Full Relation Recognition pipeline:
+
+    - load entities_by_chunk, entities_by_id
+    - iterate over chunks
+    - for each chunk, call LLM to extract relations
+    - enrich relations with relation_id, chunk_id, subject/object class info
+    - write to relations_raw.jsonl (streaming, flushed after each chunk)
+    """
+    entities_by_chunk, entities_by_id = load_entities_by_chunk(entities_path)
+    client = OpenAI()
+
+    n_chunks = 0
+    n_chunks_called = 0
+    n_relations = 0
+
+    logger.info("Writing relations to %s", output_path)
+    with open(output_path, "w", encoding="utf-8") as out_f:
+        for chunk in iter_chunks(chunks_path):
+            n_chunks += 1
+            chunk_id = chunk["id"]
+            chunk_entities = entities_by_chunk.get(chunk_id, [])
+
+            if len(chunk_entities) < 2:
+                continue  # cannot form relations
+
+            n_chunks_called += 1
+            logger.info(
+                "Chunk %s: %d entities -> calling LLM", chunk_id, len(chunk_entities)
+            )
+
+            relations = call_llm_extract_relations_for_chunk(
+                client=client,
+                model=model,
+                chunk=chunk,
+                entities=chunk_entities,
+            )
+
+            for rel in relations:
+                # Basic validation of required LLM fields
+                subj_id = rel.get("subject_entity_id")
+                obj_id = rel.get("object_entity_id")
+                if subj_id not in entities_by_id or obj_id not in entities_by_id:
+                    logger.warning(
+                        "Skipping relation with unknown entity ids in chunk %s: %s",
+                        chunk_id,
+                        rel,
+                    )
+                    continue
+
+                # Normalize qualifiers structure to always have all keys
+                expected_qual_keys = [
+                    "TemporalQualifier",
+                    "SpatialQualifier",
+                    "OperationalConstraint",
+                    "ConditionExpression",
+                    "UncertaintyQualifier",
+                    "CausalHint",
+                    "LogicalMarker",
+                    "OtherQualifier",
+                ]
+                q = rel.get("qualifiers") or {}
+                if not isinstance(q, dict):
+                    q = {}
+                for k in expected_qual_keys:
+                    q.setdefault(k, None)
+                rel["qualifiers"] = q
+
+                # Enrich with KG-level metadata
+                rel["relation_id"] = f"RelR_{uuid.uuid4().hex[:12]}"
+                rel["chunk_id"] = chunk_id
+
+                subj = entities_by_id[subj_id]
+                obj = entities_by_id[obj_id]
+
+                # Add class/group metadata
+                rel.setdefault("subject_class_group", subj.get("class_group"))
+                rel.setdefault("subject_class_label", subj.get("class_label"))
+                rel.setdefault("object_class_group", obj.get("class_group"))
+                rel.setdefault("object_class_label", obj.get("class_label"))
+
+                # Add entity names for convenience in relations_raw.jsonl
+                rel.setdefault("subject_entity_name", subj.get("entity_name"))
+                rel.setdefault("object_entity_name", obj.get("entity_name"))
+
+                out_f.write(json.dumps(rel, ensure_ascii=False) + "\n")
+                n_relations += 1
+
+            # flush after each chunk so data is written incrementally
+            # out_f.flush()
+
+    logger.info(
+        "Rel Rec done. Chunks: %d, chunks_with_LLM: %d, relations: %d",
+        n_chunks,
+        n_chunks_called,
+        n_relations,
+    )
+
+
+
+# -----------------------------------------------------------------------------
+# CLI (optional for terminal use; in notebooks call run_rel_rec(...) directly)
+# -----------------------------------------------------------------------------
+
+def parse_args() -> argparse.Namespace:
+    p = argparse.ArgumentParser(description="Relation Recognition (Rel Rec)")
+    p.add_argument(
+        "--entities",
+        required=True,
+        help="Path to entities_with_class.jsonl",
+    )
+    p.add_argument(
+        "--chunks",
+        required=True,
+        help="Path to chunks_sentence.jsonl",
+    )
+    p.add_argument(
+        "--output",
+        required=True,
+        help="Path to output relations_raw.jsonl",
+    )
+    p.add_argument(
+        "--model",
+        default=MODEL_NAME,
+        help=f"Model name (default: {MODEL_NAME})",
+    )
+    return p.parse_args()
+
+
+# In VSCode / Jupyter, you typically call run_rel_rec(...) directly like this:
+run_rel_rec(
+    entities_path="/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Classes/Cls_Res_IterativeRuns/overall_summary/entities_with_class.jsonl",
+    chunks_path="/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Chunks/chunks_sentence.jsonl",
+    output_path="/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Relations/Rel Rec/relations_raw.jsonl",
+    model="gpt-5.1"
+)
+
+#endregion#? Rel Rec v4 - Prompt change (Better Rel Naming)
 #?#########################  End  ##########################
+
+
+
+
+
+
+
+
+#*######################### Start ##########################
+#region:#?   Rel Res V2  - Canonical + Class + Group
+
+#!/usr/bin/env python3
+"""
+relres_iterative_v2.py
+
+Relation Resolution (Rel Res) — cluster relation instances, ask LLM to
+assign/normalize:
+
+  - canonical_rel_name    (normalized predicate used on KG edges)
+  - canonical_rel_desc    (reusable description of that predicate)
+  - rel_cls               (relation class, groups canonical_rel_names)
+  - rel_cls_group         (broad group like COMPOSITION, CAUSALITY, ...)
+
+while preserving:
+
+  - relation_name         (raw name from Rel Rec)
+  - rel_desc              (instance-level description)
+  - all qualifiers, head/tail, etc.
+
+Key properties:
+- We NEVER remove relation instances; we only enrich them with schema.
+- canonical_rel_name is what will be used as edge label in the KG.
+- rel_cls / rel_cls_group give you a 2-layer schema for relations.
+- Multi-run friendly: TBD fields can be filled in the first run, refined later.
+
+Input:
+  /home/mabolhas/MyReposOnSOL/SGCE-KG/data/Relations/Rel Rec/relations_raw.jsonl
+
+Output (under OUT_DIR):
+  - per-cluster decisions: cluster_<N>_decisions.json
+  - per-cluster raw llm output: llm_raw/cluster_<N>_llm_raw.txt
+  - per-cluster prompts: llm_raw/cluster_<N>_prompt.txt
+  - cumulative action log: rel_res_action_log.jsonl
+  - final resolved relations: relations_resolved.json and .jsonl
+  - summary/all_clusters_decisions.json
+  - summary/stats_summary.json
+"""
+
+import json
+import os
+import re
+import time
+import uuid
+from pathlib import Path
+from typing import List, Dict, Any, Optional, Tuple
+
+import numpy as np
+import torch
+from sklearn.preprocessing import normalize
+
+# clustering libs
+try:
+    import hdbscan
+except Exception:
+    raise RuntimeError("hdbscan required: pip install hdbscan")
+try:
+    import umap
+    UMAP_AVAILABLE = True
+except Exception:
+    UMAP_AVAILABLE = False
+
+# transformers embedder
+from transformers import AutoTokenizer, AutoModel
+
+# OpenAI client (responses API, like Rel Rec)
+try:
+    from openai import OpenAI
+except Exception:
+    OpenAI = None
+
+# ----------------------------- CONFIG -----------------------------
+
+INPUT_RELATIONS = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Relations/Rel Rec/relations_raw.jsonl")
+OUT_DIR = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Relations/Rel Res")
+OUT_DIR.mkdir(parents=True, exist_ok=True)
+RAW_LLM_DIR = OUT_DIR / "llm_raw"
+RAW_LLM_DIR.mkdir(exist_ok=True)
+
+# Embedding model (changeable)
+EMBED_MODEL = "BAAI/bge-large-en-v1.5"
+DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
+BATCH_SIZE = 32
+
+# Weights for buckets used to build relation embeddings
+# Bucket meanings:
+#   rel_text      = relation_name + rel_desc
+#   head_tail     = subject/object names + class info
+#   hint_canonical= rel_hint_type + canonical_rel_name + canonical_rel_desc + rel_cls
+REL_EMB_WEIGHTS = {
+    "rel_text": 0.40,
+    "head_tail": 0.20,
+    "hint_canonical": 0.40,
+}
+
+# clustering params
+USE_UMAP = True
+UMAP_N_COMPONENTS = 64
+UMAP_N_NEIGHBORS = 8
+UMAP_MIN_DIST = 0.0
+HDBSCAN_MIN_CLUSTER_SIZE = 2
+HDBSCAN_MIN_SAMPLES = 1
+HDBSCAN_METRIC = "euclidean"
+
+# LLM / OpenAI
+OPENAI_MODEL = "gpt-5.1"  # adjust as needed
+OPENAI_TEMPERATURE = 0.0
+LLM_MAX_OUTPUT_TOKENS = 3000
+OPENAI_API_KEY_ENV = "OPENAI_API_KEY"
+
+VERBOSE = True
+
+# ---------------------- Helpers: OpenAI client ---------------------
+
+def _load_openai_key(envvar: str = OPENAI_API_KEY_ENV, fallback_path: str = "/home/mabolhas/MyReposOnSOL/SGCE-KG/.env"):
+    key = os.getenv(envvar, None)
+    if key:
+        return key
+    if Path(fallback_path).exists():
+        txt = Path(fallback_path).read_text(encoding="utf-8").strip()
+        if txt:
+            return txt
+    return None
+
+OPENAI_KEY = _load_openai_key()
+if OpenAI is not None and OPENAI_KEY:
+    client = OpenAI(api_key=OPENAI_KEY)
+else:
+    client = None
+    if VERBOSE:
+        print("⚠️ OpenAI client not initialized (missing package or API key). LLM calls will fail unless OpenAI client is available.")
+
+def call_llm(prompt: str, model: str = OPENAI_MODEL, temperature: float = OPENAI_TEMPERATURE, max_output_tokens: int = LLM_MAX_OUTPUT_TOKENS) -> str:
+    """
+    Use OpenAI Responses API (like Rel Rec) with a single developer prompt and a single user block.
+    prompt is passed as developer; a dummy user block is added for symmetry.
+    """
+    if client is None:
+        raise RuntimeError("OpenAI client not available. Set OPENAI_API_KEY and install openai package.")
+    try:
+        resp = client.responses.create(
+            model=model,
+            reasoning={"effort": "low"},
+            max_output_tokens=max_output_tokens,
+            input=[
+                {"role": "developer", "content": prompt},
+                {"role": "user", "content": "Return the JSON array of function calls now."},
+            ],
+        )
+        return resp.output_text or ""
+    except Exception as e:
+        print("LLM call error:", e)
+        return ""
+
+# ---------------------- HF Embedder --------------------------------
+
+def mean_pool(token_embeddings: torch.Tensor, attention_mask: torch.Tensor):
+    input_mask_expanded = attention_mask.unsqueeze(-1).expand(token_embeddings.size()).float()
+    sum_embeddings = torch.sum(token_embeddings * input_mask_expanded, 1)
+    sum_mask = torch.clamp(input_mask_expanded.sum(1), min=1e-9)
+    return sum_embeddings / sum_mask
+
+class HFEmbedder:
+    def __init__(self, model_name=EMBED_MODEL, device=DEVICE):
+        if VERBOSE:
+            print(f"[embedder] loading {model_name} on {device}")
+        self.device = device
+        self.tokenizer = AutoTokenizer.from_pretrained(model_name, use_fast=True)
+        self.model = AutoModel.from_pretrained(model_name)
+        self.model.to(device)
+        self.model.eval()
+        for p in self.model.parameters():
+            p.requires_grad = False
+
+    @property
+    def dim(self) -> int:
+        return getattr(self.model.config, "hidden_size", 1024)
+
+    @torch.no_grad()
+    def encode_batch(self, texts: List[str], batch_size: int = BATCH_SIZE) -> np.ndarray:
+        """
+        Encode a list of texts into L2-normalized embeddings.
+        """
+        if len(texts) == 0:
+            D = self.dim
+            return np.zeros((0, D))
+        embs = []
+        for i in range(0, len(texts), batch_size):
+            batch = texts[i:i + batch_size]
+            enc = self.tokenizer(
+                batch,
+                padding=True,
+                truncation=True,
+                return_tensors="pt",
+                max_length=512,
+            )
+            input_ids = enc["input_ids"].to(self.device)
+            attention_mask = enc["attention_mask"].to(self.device)
+            out = self.model(input_ids=input_ids, attention_mask=attention_mask, return_dict=True)
+            token_embeds = out.last_hidden_state
+            pooled = mean_pool(token_embeds, attention_mask)
+            embs.append(pooled.cpu().numpy())
+        embs = np.vstack(embs)
+        embs = normalize(embs, axis=1)
+        return embs
+
+# ---------------------- IO helpers ---------------------------------
+
+def load_relations(path: Path) -> List[Dict[str, Any]]:
+    """
+    Load relations_raw.jsonl and ensure schema-related fields exist:
+
+      - canonical_rel_name (default "TBD")
+      - canonical_rel_desc (default "")
+      - rel_cls (default "TBD")
+      - rel_cls_group (default "TBD")
+      - remarks (list of strings)
+    """
+    rels: List[Dict[str, Any]] = []
+    if not path.exists():
+        raise FileNotFoundError(f"Relations file not found: {path}")
+    with path.open("r", encoding="utf-8") as f:
+        for line in f:
+            line = line.strip()
+            if not line:
+                continue
+            obj = json.loads(line)
+            # ensure relation_id exists
+            rid = obj.get("relation_id") or ("RelR_" + uuid.uuid4().hex[:8])
+            obj["relation_id"] = rid
+
+            # ensure schema fields
+            if "canonical_rel_name" not in obj or obj.get("canonical_rel_name") in (None, "", " "):
+                obj["canonical_rel_name"] = "TBD"
+            if "canonical_rel_desc" not in obj or obj.get("canonical_rel_desc") is None:
+                obj["canonical_rel_desc"] = ""
+            if "rel_cls" not in obj or obj.get("rel_cls") in (None, "", " "):
+                obj["rel_cls"] = "TBD"
+            if "rel_cls_group" not in obj or obj.get("rel_cls_group") in (None, "", " "):
+                obj["rel_cls_group"] = "TBD"
+
+            # normalize remarks
+            initial_remark = obj.get("remark")
+            remarks = obj.get("remarks")
+            norm_remarks: List[str] = []
+            if isinstance(remarks, list):
+                norm_remarks.extend([str(r) for r in remarks if r])
+            elif isinstance(remarks, str) and remarks.strip():
+                norm_remarks.append(remarks.strip())
+            if isinstance(initial_remark, str) and initial_remark.strip():
+                norm_remarks.append(initial_remark.strip())
+            obj["remarks"] = norm_remarks
+
+            rels.append(obj)
+    if VERBOSE:
+        print(f"[start] loaded {len(rels)} relations from {path}")
+    return rels
+
+def safe_str(s: Optional[str]) -> str:
+    if not s:
+        return ""
+    return str(s).replace("\n", " ").strip()
+
+# ---------------------- Build relation texts & embeddings ----------
+
+def build_relation_texts(relations: List[Dict[str, Any]]) -> Tuple[List[str], List[str], List[str]]:
+    """
+    Build three text buckets for each relation:
+
+    - rel_text:      relation_name + rel_desc
+    - head_tail:     head/tail entity names + class labels/groups
+    - hint_canonical:rel_hint_type + canonical_rel_name + canonical_rel_desc + rel_cls
+    """
+    rel_texts, head_tail_texts, hint_texts = [], [], []
+
+    for r in relations:
+        # rel_text
+        rname = safe_str(r.get("relation_name", ""))
+        rdesc = safe_str(r.get("rel_desc", ""))
+        rel_text = (rname + ". " + rdesc).strip()
+        rel_texts.append(rel_text[:512])
+
+        # head_tail
+        subj_name = safe_str(r.get("subject_entity_name", ""))
+        subj_cl = safe_str(r.get("subject_class_label", ""))
+        subj_cg = safe_str(r.get("subject_class_group", ""))
+        obj_name = safe_str(r.get("object_entity_name", ""))
+        obj_cl = safe_str(r.get("object_class_label", ""))
+        obj_cg = safe_str(r.get("object_class_group", ""))
+
+        head_tail = f"{subj_name} ({subj_cl}, {subj_cg}) -> {obj_name} ({obj_cl}, {obj_cg})"
+        head_tail_texts.append(head_tail[:512])
+
+        # hint_canonical
+        hint_parts = []
+        for key in ["rel_hint_type", "canonical_rel_name", "canonical_rel_desc", "rel_cls"]:
+            val = safe_str(r.get(key, ""))
+            if val and val.upper() != "TBD":
+                hint_parts.append(val)
+        hint_text = " ; ".join(hint_parts)
+        hint_texts.append(hint_text[:512])
+
+    return rel_texts, head_tail_texts, hint_texts
+
+def compute_relation_embeddings(embedder: HFEmbedder, relations: List[Dict[str, Any]], weights: Dict[str, float]) -> np.ndarray:
+    """
+    Compute combined embeddings for relations using three buckets with fixed weights.
+    """
+    N = len(relations)
+    if N == 0:
+        raise ValueError("No relations to embed")
+
+    rel_texts, head_tail_texts, hint_texts = build_relation_texts(relations)
+
+    def any_nonempty(lst: List[str]) -> bool:
+        return any(safe_str(t) for t in lst)
+
+    emb_rel = embedder.encode_batch(rel_texts) if any_nonempty(rel_texts) else None
+    emb_ht = embedder.encode_batch(head_tail_texts) if any_nonempty(head_tail_texts) else None
+    emb_hint = embedder.encode_batch(hint_texts) if any_nonempty(hint_texts) else None
+
+    # Determine dimensionality
+    D = embedder.dim
+    combined = np.zeros((N, D), dtype=np.float32)
+
+    def add_bucket(emb: Optional[np.ndarray], weight: float):
+        nonlocal combined
+        if emb is None:
+            return
+        if emb.shape[0] != N:
+            raise ValueError("embedding row mismatch")
+        # embeddings from encode_batch are already L2-normalized row-wise
+        combined += weight * emb
+
+    add_bucket(emb_rel, weights.get("rel_text", 0.0))
+    add_bucket(emb_ht, weights.get("head_tail", 0.0))
+    add_bucket(emb_hint, weights.get("hint_canonical", 0.0))
+
+    # Final row-normalization to keep cosine distances meaningful
+    combined = normalize(combined, axis=1)
+    return combined
+
+# ---------------------- clustering ---------------------------------
+
+def run_hdbscan(
+    embeddings: np.ndarray,
+    min_cluster_size: int = HDBSCAN_MIN_CLUSTER_SIZE,
+    min_samples: int = HDBSCAN_MIN_SAMPLES,
+    metric: str = HDBSCAN_METRIC,
+    use_umap: bool = USE_UMAP
+) -> Tuple[np.ndarray, object]:
+    X = embeddings
+    N = X.shape[0]
+    if use_umap and UMAP_AVAILABLE and N >= 6:
+        safe_n_components = min(UMAP_N_COMPONENTS, max(2, N - 2))
+        safe_n_neighbors = min(UMAP_N_NEIGHBORS, max(2, N - 1))
+        try:
+            reducer = umap.UMAP(
+                n_components=safe_n_components,
+                n_neighbors=safe_n_neighbors,
+                min_dist=UMAP_MIN_DIST,
+                metric="cosine",
+                random_state=42
+            )
+            X_reduced = reducer.fit_transform(X)
+            if X_reduced is not None and X_reduced.shape[0] == N:
+                X = X_reduced
+            else:
+                if VERBOSE:
+                    print(f"[warn] UMAP returned invalid shape; skipping UMAP")
+        except Exception as e:
+            if VERBOSE:
+                print(f"[warn] UMAP failed (N={N}): {e}. Proceeding without UMAP.")
+            X = embeddings
+    clusterer = hdbscan.HDBSCAN(
+        min_cluster_size=min_cluster_size,
+        min_samples=min_samples,
+        metric=metric,
+        cluster_selection_method="eom"
+    )
+    labels = clusterer.fit_predict(X)
+    return labels, clusterer
+
+# ---------------------- LLM prompt template ------------------------
+
+RELRES_PROMPT_TEMPLATE = """
+You are a very proactive RELATION-RESOLUTION assistant.
+
+You are given a CLUSTER of relation INSTANCES from a context-enriched technical KG.
+Each relation instance already connects specific subject and object entities, and has:
+
+- relation_id
+- relation_name        (raw, from Relation Recognition)
+- rel_desc             (instance-level description)
+- rel_hint_type        (short free-form hint)
+- canonical_rel_name   (TBD or already set)
+- canonical_rel_desc   (TBD or already set)
+- rel_cls              (TBD or already set)
+- rel_cls_group        (TBD or already set)
+- subject_entity_name, object_entity_name
+- subject_class_label, subject_class_group
+- object_class_label, object_class_group
+- qualifiers (temporal, spatial, etc.)
+- confidence, remarks, etc.
+
+IMPORTANT:
+- SUBJECT and OBJECT are already resolved entities. You MUST NOT change them.
+- We NEVER delete relation instances. We only enrich them with schema (canonical name, class, group).
+- relation_name and rel_desc are EVIDENCE and should normally NOT be overwritten.
+- canonical_rel_name is the normalized predicate that will be used as the KG edge label.
+- rel_cls and rel_cls_group give a two-layer schema for relations:
+    relation_instance → canonical_rel_name → rel_cls → rel_cls_group
+
+Your job for THIS CLUSTER:
+1) Group semantically equivalent or near-equivalent relation instances.
+2) For each group, assign or refine:
+   - canonical_rel_name   (normalized predicate)
+   - canonical_rel_desc   (reusable description of that predicate)
+   - rel_cls              (e.g., "structure_relation", "corrosion_resistance_relation")
+   - rel_cls_group        (broad group like COMPOSITION, CAUSALITY, IDENTITY, TEMPORALITY,
+                           SPATIALITY, AGENCY, INTERACTION, ASSOCIATION, MODIFICATION, etc.)
+3) Be conservative with overwriting existing canonical info:
+   - If fields are "TBD", you SHOULD set them.
+   - If fields are already set but clearly wrong or too narrow/broad, you MAY refine them.
+
+We will apply your instructions by executing function calls on the relation objects.
+You MUST return an ordered JSON ARRAY of function calls with the following functions ONLY:
+
+--------------------------------
+AVAILABLE FUNCTIONS
+--------------------------------
+
+1) set_rel_schema
+   Use this to ASSIGN or UPDATE schema fields for one or more relation instances,
+   especially when canonical_rel_name / rel_cls / rel_cls_group are currently "TBD".
+
+   args = {
+     "relation_ids": [<relation_id>...],            # REQUIRED, at least 1
+     "canonical_rel_name": <string or null>,        # normalized predicate used for KG edge
+     "canonical_rel_desc": <string or null>,        # reusable description of this predicate
+     "rel_cls": <string or null>,                   # relation class (e.g., "structure_relation")
+     "rel_cls_group": <string or null>,             # broad group (e.g., "COMPOSITION")
+     "justification": <string>,                     # REQUIRED: why this grouping & naming makes sense
+     "remark": <string or null>,                    # optional: human-facing notes
+     "confidence": <number between 0 and 1, optional>
+   }
+
+   Notes:
+   - canonical_rel_name should be a short predicate-like phrase, useful as an edge label.
+   - canonical_rel_desc should generalize across all relation_ids you include in this call.
+   - rel_cls is a more abstract class for similar predicates (e.g., grouping several canonical names).
+   - rel_cls_group is even more abstract (COMPOSITION, CAUSALITY, etc.).
+
+2) modify_relation
+   Use this to REFINE or CORRECT schema for one or more relation instances, or to attach remarks.
+   For example, adjusting rel_cls_group, tweaking canonical_rel_desc, or rarely correcting a bad relation_name.
+
+   args = {
+     "relation_ids": [<relation_id>...],            # REQUIRED, at least 1
+     "canonical_rel_name": <string or null>,        # OPTIONAL: new canonical name
+     "canonical_rel_desc": <string or null>,        # OPTIONAL: new canonical description
+     "rel_cls": <string or null>,                   # OPTIONAL: new relation class
+     "rel_cls_group": <string or null>,             # OPTIONAL: new broad group
+     "new_relation_name": <string or null>,         # OPTIONAL: ONLY if absolutely necessary
+     "original_relation_name": <string or null>,    # REQUIRED if you change relation_name
+     "justification": <string>,                     # REQUIRED: why this modification is needed
+     "remark": <string or null>,                    # optional: notes / flags
+     "confidence": <number between 0 and 1, optional>
+   }
+
+   Notes:
+   - You should RARELY change relation_name (raw). Only do so if it is clearly malformed,
+     misleading, or not a real predicate. In that case, you MUST provide original_relation_name
+     and explain why the change is necessary.
+   - Use modify_relation to refine or correct previously set canonical/schema fields.
+
+--------------------------------
+GENERAL GUIDANCE
+--------------------------------
+
+- THINK CLUSTER-WIDE:
+  - Prefer grouping multiple relation_ids in a single set_rel_schema call when they clearly
+    share the same canonical_rel_name / rel_cls / rel_cls_group.
+  - If some instances are outliers, you can give them different canonical_rel_name or rel_cls.
+
+- CANONICAL_REL_NAME:
+  - Short, predicate-style, reusable across many entity pairs (e.g., "occurs_in", "resists",
+    "has_metallurgical_structure", "is_subtype_of").
+  - DO NOT include qualifiers like "at high temperature": qualifiers live in the qualifiers dict.
+  - This is what we will put on the KG edge as the predicate.
+
+- CANONICAL_REL_DESC:
+  - 1–2 sentences describing the general meaning of the canonical_rel_name, independent
+    of specific entities in this cluster.
+
+- REL_CLS:
+  - A more abstract class that groups semantically similar canonical predicates.
+    For example, "has_metallurgical_structure", "has_phase", "has_microstructure_component"
+    might all belong to rel_cls = "structure_relation".
+
+- REL_CLS_GROUP:
+  - A very broad, high-level category, open-ended but typically one of:
+    COMPOSITION, CAUSALITY, IDENTITY, TEMPORALITY, SPATIALITY,
+    AGENCY, INTERACTION, ASSOCIATION, MODIFICATION, USAGE, REQUIREMENT, etc.
+  - This list is illustrative, NOT exhaustive. You may use other sensible names.
+
+- DO NOT:
+  - Do NOT delete relations.
+  - Do NOT change subject or object.
+  - Do NOT move qualifiers to nodes; qualifiers stay with the relation instances.
+  - Do NOT be passive. If there is semantic structure to expose, you MUST propose schema.
+
+--------------------------------
+INPUT RELATIONS (CLUSTER)
+--------------------------------
+
+Below is the JSON array of relation instances in this cluster:
+
+{cluster_block}
+
+--------------------------------
+OUTPUT
+--------------------------------
+
+Return ONLY a JSON ARRAY of function calls, e.g.:
+
+[
+  {
+    "function": "set_rel_schema",
+    "args": { ... }
+  },
+  {
+    "function": "modify_relation",
+    "args": { ... }
+  }
+]
+
+- If the cluster is already perfect (rare), you MAY return [].
+- Every call MUST include a "justification".
+- Use "remark" to flag any issues or uncertainties that are outside the scope of these functions.
+"""
+
+def sanitize_json_array(text: str) -> Optional[Any]:
+    """
+    Extract and parse the first JSON array from the text.
+    Very similar to what you used in ClassRes: grab [ ... ] block, fix simple trailing commas.
+    """
+    if not text or not text.strip():
+        return None
+    s = text.strip()
+    # replace smart quotes
+    s = s.replace("“", '"').replace("”", '"').replace("‘", "'").replace("’", "'")
+    start = s.find("[")
+    end = s.rfind("]")
+    if start == -1 or end == -1 or end <= start:
+        return None
+    cand = s[start:end + 1]
+    # remove trailing commas before closing braces/brackets
+    cand = re.sub(r",\s*([\]}])", r"\1", cand)
+    try:
+        return json.loads(cand)
+    except Exception:
+        return None
+
+# ---------------------- Action executors ----------------------------
+
+def execute_set_rel_schema(
+    rel_by_id: Dict[str, Dict[str, Any]],
+    relation_ids: List[str],
+    canonical_rel_name: Optional[str],
+    canonical_rel_desc: Optional[str],
+    rel_cls: Optional[str],
+    rel_cls_group: Optional[str]
+):
+    for rid in relation_ids:
+        if rid not in rel_by_id:
+            continue
+        r = rel_by_id[rid]
+        if canonical_rel_name is not None and canonical_rel_name.strip():
+            r["canonical_rel_name"] = canonical_rel_name.strip()
+        if canonical_rel_desc is not None:
+            r["canonical_rel_desc"] = canonical_rel_desc.strip()
+        if rel_cls is not None and rel_cls.strip():
+            r["rel_cls"] = rel_cls.strip()
+        if rel_cls_group is not None and rel_cls_group.strip():
+            r["rel_cls_group"] = rel_cls_group.strip()
+        rel_by_id[rid] = r
+
+def execute_modify_relation(
+    rel_by_id: Dict[str, Dict[str, Any]],
+    relation_ids: List[str],
+    canonical_rel_name: Optional[str],
+    canonical_rel_desc: Optional[str],
+    rel_cls: Optional[str],
+    rel_cls_group: Optional[str],
+    new_relation_name: Optional[str],
+    original_relation_name: Optional[str]
+):
+    for rid in relation_ids:
+        if rid not in rel_by_id:
+            continue
+        r = rel_by_id[rid]
+
+        if canonical_rel_name is not None and canonical_rel_name.strip():
+            r["canonical_rel_name"] = canonical_rel_name.strip()
+        if canonical_rel_desc is not None:
+            r["canonical_rel_desc"] = canonical_rel_desc.strip()
+        if rel_cls is not None and rel_cls.strip():
+            r["rel_cls"] = rel_cls.strip()
+        if rel_cls_group is not None and rel_cls_group.strip():
+            r["rel_cls_group"] = rel_cls_group.strip()
+
+        if new_relation_name is not None and new_relation_name.strip():
+            # preserve original if not already stored
+            if "original_relation_name" not in r:
+                if original_relation_name:
+                    r["original_relation_name"] = original_relation_name
+                else:
+                    r["original_relation_name"] = r.get("relation_name", "")
+            r["relation_name"] = new_relation_name.strip()
+
+        rel_by_id[rid] = r
+
+# ---------------------- Main orchestration -------------------------
+
+def relres_main():
+    # load relations
+    relations = load_relations(INPUT_RELATIONS)
+    rel_by_id: Dict[str, Dict[str, Any]] = {r["relation_id"]: r for r in relations}
+
+    # embedder
+    embedder = HFEmbedder(model_name=EMBED_MODEL, device=DEVICE)
+    rel_ids_order = [r["relation_id"] for r in relations]
+    combined_emb = compute_relation_embeddings(embedder, relations, REL_EMB_WEIGHTS)
+    print("[info] relation embeddings computed shape:", combined_emb.shape)
+
+    # clustering
+    labels, clusterer = run_hdbscan(
+        combined_emb,
+        min_cluster_size=HDBSCAN_MIN_CLUSTER_SIZE,
+        min_samples=HDBSCAN_MIN_SAMPLES,
+        use_umap=USE_UMAP
+    )
+    unique_labels = sorted(set(labels))
+    print("[info] clustering done. unique labels:", unique_labels)
+
+    # map cluster -> relation ids
+    cluster_to_relids: Dict[int, List[str]] = {}
+    for idx, lab in enumerate(labels):
+        rid = rel_ids_order[idx]
+        cluster_to_relids.setdefault(int(lab), []).append(rid)
+
+    # action log
+    action_log_path = OUT_DIR / "rel_res_action_log.jsonl"
+    if action_log_path.exists():
+        action_log_path.unlink()
+
+    # iterate clusters (skip noise -1 first)
+    cluster_keys = [k for k in cluster_to_relids.keys() if k != -1]
+    cluster_keys = sorted(cluster_keys)
+    if -1 in cluster_to_relids:
+        cluster_keys.append(-1)
+
+    for cluster_label in cluster_keys:
+        rel_ids = cluster_to_relids.get(cluster_label, [])
+        if not rel_ids:
+            continue
+        print(f"[cluster] {cluster_label} -> {len(rel_ids)} relations")
+
+        # build cluster block for prompt (compact representation)
+        cluster_relations = []
+        for rid in rel_ids:
+            r = rel_by_id.get(rid)
+            if not r:
+                continue
+            cluster_relations.append({
+                "relation_id": r["relation_id"],
+                "relation_name": safe_str(r.get("relation_name", "")),
+                "rel_desc": safe_str(r.get("rel_desc", "")),
+                "rel_hint_type": safe_str(r.get("rel_hint_type", "")),
+                "canonical_rel_name": safe_str(r.get("canonical_rel_name", "")),
+                "canonical_rel_desc": safe_str(r.get("canonical_rel_desc", "")),
+                "rel_cls": safe_str(r.get("rel_cls", "")),
+                "rel_cls_group": safe_str(r.get("rel_cls_group", "")),
+                "subject_entity_name": safe_str(r.get("subject_entity_name", "")),
+                "object_entity_name": safe_str(r.get("object_entity_name", "")),
+                "subject_class_label": safe_str(r.get("subject_class_label", "")),
+                "subject_class_group": safe_str(r.get("subject_class_group", "")),
+                "object_class_label": safe_str(r.get("object_class_label", "")),
+                "object_class_group": safe_str(r.get("object_class_group", "")),
+                "qualifiers": r.get("qualifiers", {}),
+                "confidence": float(r.get("confidence", 0.0)),
+                "remarks": r.get("remarks", [])
+            })
+
+        cluster_block = json.dumps(cluster_relations, ensure_ascii=False, indent=2)
+        prompt = RELRES_PROMPT_TEMPLATE.replace("{cluster_block}", cluster_block)
+
+        # log prompt
+        prompt_path = RAW_LLM_DIR / f"cluster_{cluster_label}_prompt.txt"
+        prompt_path.write_text(prompt, encoding="utf-8")
+
+        # call LLM
+        raw_out = ""
+        try:
+            raw_out = call_llm(prompt)
+        except Exception as e:
+            print(f"[warning] LLM call failed for cluster {cluster_label}: {e}")
+            raw_out = ""
+
+        # write raw output
+        raw_path = RAW_LLM_DIR / f"cluster_{cluster_label}_llm_raw.txt"
+        raw_path.write_text(raw_out, encoding="utf-8")
+
+        parsed = sanitize_json_array(raw_out)
+        if parsed is None:
+            print(f"[warn] failed to parse LLM output for cluster {cluster_label}; skipping automated actions for this cluster.")
+            dec_path = OUT_DIR / f"cluster_{cluster_label}_decisions.json"
+            dec_path.write_text(
+                json.dumps({"cluster_label": cluster_label, "raw_llm": raw_out}, ensure_ascii=False, indent=2),
+                encoding="utf-8"
+            )
+            continue
+
+        decisions: List[Dict[str, Any]] = []
+
+        # execute parsed function list in order
+        for step in parsed:
+            if not isinstance(step, dict):
+                continue
+            fn = step.get("function")
+            args = step.get("args", {}) or {}
+            justification = args.get("justification")
+            confidence_val = args.get("confidence", None)
+            remark_val = args.get("remark")
+
+            try:
+                if fn == "set_rel_schema":
+                    rel_ids_raw = args.get("relation_ids", []) or []
+                    canon_name = args.get("canonical_rel_name")
+                    canon_desc = args.get("canonical_rel_desc")
+                    rel_cls = args.get("rel_cls")
+                    rel_cls_group = args.get("rel_cls_group")
+
+                    rel_ids_valid = [rid for rid in rel_ids_raw if rid in rel_by_id]
+                    if not rel_ids_valid:
+                        decisions.append({
+                            "action": "set_rel_schema_skip_no_valid_relations",
+                            "requested_relation_ids": rel_ids_raw,
+                            "justification": justification,
+                            "remark": remark_val,
+                            "confidence": confidence_val
+                        })
+                        continue
+
+                    execute_set_rel_schema(rel_by_id, rel_ids_valid, canon_name, canon_desc, rel_cls, rel_cls_group)
+
+                    decisions.append({
+                        "action": "set_rel_schema",
+                        "relation_ids": rel_ids_valid,
+                        "canonical_rel_name": canon_name,
+                        "canonical_rel_desc": canon_desc,
+                        "rel_cls": rel_cls,
+                        "rel_cls_group": rel_cls_group,
+                        "justification": justification,
+                        "remark": remark_val,
+                        "confidence": confidence_val
+                    })
+
+                elif fn == "modify_relation":
+                    rel_ids_raw = args.get("relation_ids", []) or []
+                    canon_name = args.get("canonical_rel_name")
+                    canon_desc = args.get("canonical_rel_desc")
+                    rel_cls = args.get("rel_cls")
+                    rel_cls_group = args.get("rel_cls_group")
+                    new_rel_name = args.get("new_relation_name")
+                    orig_rel_name = args.get("original_relation_name")
+
+                    rel_ids_valid = [rid for rid in rel_ids_raw if rid in rel_by_id]
+                    if not rel_ids_valid:
+                        decisions.append({
+                            "action": "modify_relation_skip_no_valid_relations",
+                            "requested_relation_ids": rel_ids_raw,
+                            "justification": justification,
+                            "remark": remark_val,
+                            "confidence": confidence_val
+                        })
+                        continue
+
+                    execute_modify_relation(
+                        rel_by_id,
+                        rel_ids_valid,
+                        canon_name,
+                        canon_desc,
+                        rel_cls,
+                        rel_cls_group,
+                        new_rel_name,
+                        orig_rel_name
+                    )
+
+                    decisions.append({
+                        "action": "modify_relation",
+                        "relation_ids": rel_ids_valid,
+                        "canonical_rel_name": canon_name,
+                        "canonical_rel_desc": canon_desc,
+                        "rel_cls": rel_cls,
+                        "rel_cls_group": rel_cls_group,
+                        "new_relation_name": new_rel_name,
+                        "original_relation_name": orig_rel_name,
+                        "justification": justification,
+                        "remark": remark_val,
+                        "confidence": confidence_val
+                    })
+
+                else:
+                    decisions.append({
+                        "action": "skip_unknown_function",
+                        "function": fn,
+                        "raw": step,
+                        "justification": justification,
+                        "remark": remark_val,
+                        "confidence": confidence_val
+                    })
+
+            except Exception as e:
+                decisions.append({
+                    "action": "error_executing",
+                    "function": fn,
+                    "error": str(e),
+                    "input": step,
+                    "justification": justification,
+                    "remark": remark_val,
+                    "confidence": confidence_val
+                })
+
+        # write decisions file for this cluster
+        dec_path = OUT_DIR / f"cluster_{cluster_label}_decisions.json"
+        dec_obj = {
+            "cluster_label": cluster_label,
+            "cluster_relations": cluster_relations,
+            "llm_raw": raw_out,
+            "parsed_steps": parsed,
+            "executed_decisions": decisions,
+            "timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+        }
+        dec_path.write_text(json.dumps(dec_obj, ensure_ascii=False, indent=2), encoding="utf-8")
+
+        # append to action log
+        with action_log_path.open("a", encoding="utf-8") as fh:
+            fh.write(json.dumps(dec_obj, ensure_ascii=False) + "\n")
+
+    # After all clusters processed: write final relations output
+    final_relations = list(rel_by_id.values())
+    out_json = OUT_DIR / "relations_resolved.json"
+    out_jsonl = OUT_DIR / "relations_resolved.jsonl"
+    out_json.write_text(json.dumps(final_relations, ensure_ascii=False, indent=2), encoding="utf-8")
+    with out_jsonl.open("w", encoding="utf-8") as fh:
+        for r in final_relations:
+            fh.write(json.dumps(r, ensure_ascii=False) + "\n")
+
+    print(f"[done] wrote final resolved relations -> {out_json}  (count={len(final_relations)})")
+    print(f"[done] action log -> {action_log_path}")
+
+    # ---------------------- SUMMARY AGGREGATION ---------------------
+
+    summary_dir = OUT_DIR / "summary"
+    summary_dir.mkdir(exist_ok=True)
+
+    cluster_decisions: List[Dict[str, Any]] = []
+    for path in sorted(OUT_DIR.glob("cluster_*_decisions.json")):
+        try:
+            obj = json.loads(path.read_text(encoding="utf-8"))
+            cluster_decisions.append(obj)
+        except Exception as e:
+            print(f"[warn] failed to read {path}: {e}")
+
+    all_clusters_decisions_path = summary_dir / "all_clusters_decisions.json"
+    all_clusters_decisions_path.write_text(
+        json.dumps(cluster_decisions, ensure_ascii=False, indent=2),
+        encoding="utf-8"
+    )
+
+    total_clusters = len(cluster_decisions)
+    actions_by_type: Dict[str, int] = {}
+    total_remarks = 0
+    clusters_with_any_decisions = 0
+
+    for cd in cluster_decisions:
+        decs = cd.get("executed_decisions", [])
+        if not decs:
+            continue
+        clusters_with_any_decisions += 1
+        for d in decs:
+            act = d.get("action")
+            actions_by_type[act] = actions_by_type.get(act, 0) + 1
+            rem = d.get("remark")
+            if rem:
+                total_remarks += 1
+
+    total_errors = actions_by_type.get("error_executing", 0)
+
+    stats = {
+        "total_clusters": total_clusters,
+        "total_clusters_with_any_decisions": clusters_with_any_decisions,
+        "total_actions_by_type": actions_by_type,
+        "total_errors": total_errors,
+        "total_remarks_logged": total_remarks,
+        "generated_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+    }
+
+    stats_path = summary_dir / "stats_summary.json"
+    stats_path.write_text(json.dumps(stats, ensure_ascii=False, indent=2), encoding="utf-8")
+
+    print(f"[done] summary decisions -> {all_clusters_decisions_path}")
+    print(f"[done] summary stats -> {stats_path}")
+
+if __name__ == "__main__":
+    relres_main()
+
+#endregion#? Rel Res V2  - Canonical + Class + Group
+#*#########################  End  ##########################
+
+
+
+
+
+
+#*######################### Start ##########################
+#region:#?   Rel Res V3  - Canonical + RelCls + RelClsGroup + Schema
+
+#!/usr/bin/env python3
+"""
+relres_iterative_v3.py
+
+Relation Resolution (Rel Res) — cluster relation instances, ask LLM to
+assign/normalize:
+
+  - canonical_rel_name    (normalized predicate used on KG edges)
+  - canonical_rel_desc    (reusable description of that predicate)
+  - rel_cls               (relation class, groups canonical_rel_names)
+  - rel_cls_group         (broad group like COMPOSITION, CAUSALITY, ...)
+
+while preserving:
+
+  - relation_name         (raw name from Rel Rec)
+  - rel_desc              (instance-level description)
+  - qualifiers, head/tail, etc.
+
+Key properties:
+- We NEVER remove relation instances; we only enrich them with schema.
+- canonical_rel_name is what will be used as edge label in the KG.
+- rel_cls / rel_cls_group give you a 2-layer schema for relations.
+- Multi-run friendly: TBD fields can be filled in the first run, refined later.
+
+Input:
+  /home/mabolhas/MyReposOnSOL/SGCE-KG/data/Relations/Rel Rec/relations_raw.jsonl
+
+Output (under OUT_DIR):
+  - per-cluster decisions: cluster_<N>_decisions.json
+  - per-cluster raw llm output: llm_raw/cluster_<N>_llm_raw.txt
+  - per-cluster prompts: llm_raw/cluster_<N>_prompt.txt
+  - cumulative action log: rel_res_action_log.jsonl
+  - final resolved relations: relations_resolved.json and .jsonl
+  - summary/all_clusters_decisions.json
+  - summary/stats_summary.json
+  - summary/canonical_rel_schema.json
+  - summary/rel_cls_schema.json
+  - summary/rel_cls_group_schema.json
+"""
+
+import json
+import os
+import re
+import time
+import uuid
+from pathlib import Path
+from typing import List, Dict, Any, Optional, Tuple
+
+import numpy as np
+import torch
+from sklearn.preprocessing import normalize
+
+# clustering libs
+try:
+    import hdbscan
+except Exception:
+    raise RuntimeError("hdbscan required: pip install hdbscan")
+try:
+    import umap
+    UMAP_AVAILABLE = True
+except Exception:
+    UMAP_AVAILABLE = False
+
+# transformers embedder
+from transformers import AutoTokenizer, AutoModel
+
+# OpenAI client (responses API, same style as Rel Rec)
+try:
+    from openai import OpenAI
+except Exception:
+    OpenAI = None
+
+# ----------------------------- CONFIG -----------------------------
+
+INPUT_RELATIONS = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Relations/Rel Rec/relations_raw.jsonl")
+OUT_DIR = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Relations/Rel Res")
+OUT_DIR.mkdir(parents=True, exist_ok=True)
+RAW_LLM_DIR = OUT_DIR / "llm_raw"
+RAW_LLM_DIR.mkdir(exist_ok=True)
+
+# Embedding model (changeable)
+EMBED_MODEL = "BAAI/bge-large-en-v1.5"
+DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
+BATCH_SIZE = 32
+
+# Weights for buckets used to build relation embeddings
+# Buckets:
+#   name            = relation_name
+#   desc            = rel_desc
+#   head_tail       = subject/object names + class info
+#   hint_canonical  = rel_hint_type + canonical_rel_name + canonical_rel_desc + rel_cls
+REL_EMB_WEIGHTS = {
+    "name": 0.25,
+    "desc": 0.15,
+    "head_tail": 0.20,
+    "hint_canonical": 0.40,
+}
+
+# clustering params
+USE_UMAP = True
+UMAP_N_COMPONENTS = 64
+UMAP_N_NEIGHBORS = 8
+UMAP_MIN_DIST = 0.0
+HDBSCAN_MIN_CLUSTER_SIZE = 2
+HDBSCAN_MIN_SAMPLES = 1
+HDBSCAN_METRIC = "euclidean"
+
+# LLM / OpenAI
+OPENAI_MODEL = "gpt-5.1"  # adjust as needed
+OPENAI_TEMPERATURE = 0.0
+LLM_MAX_OUTPUT_TOKENS = 3000
+OPENAI_API_KEY_ENV = "OPENAI_API_KEY"
+
+VERBOSE = True
+
+# ---------------------- Helpers: OpenAI client ---------------------
+
+def _load_openai_key(envvar: str = OPENAI_API_KEY_ENV, fallback_path: str = "/home/mabolhas/MyReposOnSOL/SGCE-KG/.env"):
+    key = os.getenv(envvar, None)
+    if key:
+        return key
+    if Path(fallback_path).exists():
+        txt = Path(fallback_path).read_text(encoding="utf-8").strip()
+        if txt:
+            return txt
+    return None
+
+OPENAI_KEY = _load_openai_key()
+if OpenAI is not None and OPENAI_KEY:
+    client = OpenAI(api_key=OPENAI_KEY)
+else:
+    client = None
+    if VERBOSE:
+        print("⚠️ OpenAI client not initialized (missing package or API key). LLM calls will fail unless OpenAI client is available.")
+
+def call_llm(prompt: str, model: str = OPENAI_MODEL, temperature: float = OPENAI_TEMPERATURE, max_output_tokens: int = LLM_MAX_OUTPUT_TOKENS) -> str:
+    """
+    Use OpenAI Responses API with a single developer prompt and a small user nudge.
+    """
+    if client is None:
+        raise RuntimeError("OpenAI client not available. Set OPENAI_API_KEY and install openai package.")
+    try:
+        resp = client.responses.create(
+            model=model,
+            reasoning={"effort": "low"},
+            max_output_tokens=max_output_tokens,
+            input=[
+                {"role": "developer", "content": prompt},
+                {"role": "user", "content": "Return the JSON array of function calls now."},
+            ],
+        )
+        return resp.output_text or ""
+    except Exception as e:
+        print("LLM call error:", e)
+        return ""
+
+# ---------------------- HF Embedder --------------------------------
+
+def mean_pool(token_embeddings: torch.Tensor, attention_mask: torch.Tensor):
+    input_mask_expanded = attention_mask.unsqueeze(-1).expand(token_embeddings.size()).float()
+    sum_embeddings = torch.sum(token_embeddings * input_mask_expanded, 1)
+    sum_mask = torch.clamp(input_mask_expanded.sum(1), min=1e-9)
+    return sum_embeddings / sum_mask
+
+class HFEmbedder:
+    def __init__(self, model_name=EMBED_MODEL, device=DEVICE):
+        if VERBOSE:
+            print(f"[embedder] loading {model_name} on {device}")
+        self.device = device
+        self.tokenizer = AutoTokenizer.from_pretrained(model_name, use_fast=True)
+        self.model = AutoModel.from_pretrained(model_name)
+        self.model.to(device)
+        self.model.eval()
+        for p in self.model.parameters():
+            p.requires_grad = False
+
+    @property
+    def dim(self) -> int:
+        return getattr(self.model.config, "hidden_size", 1024)
+
+    @torch.no_grad()
+    def encode_batch(self, texts: List[str], batch_size: int = BATCH_SIZE) -> np.ndarray:
+        """
+        Encode a list of texts into L2-normalized embeddings.
+        """
+        if len(texts) == 0:
+            D = self.dim
+            return np.zeros((0, D))
+        embs = []
+        for i in range(0, len(texts), batch_size):
+            batch = texts[i:i + batch_size]
+            enc = self.tokenizer(
+                batch,
+                padding=True,
+                truncation=True,
+                return_tensors="pt",
+                max_length=512,
+            )
+            input_ids = enc["input_ids"].to(self.device)
+            attention_mask = enc["attention_mask"].to(self.device)
+            out = self.model(input_ids=input_ids, attention_mask=attention_mask, return_dict=True)
+            token_embeds = out.last_hidden_state
+            pooled = mean_pool(token_embeds, attention_mask)
+            embs.append(pooled.cpu().numpy())
+        embs = np.vstack(embs)
+        embs = normalize(embs, axis=1)
+        return embs
+
+# ---------------------- IO helpers ---------------------------------
+
+def load_relations(path: Path) -> List[Dict[str, Any]]:
+    """
+    Load relations_raw.jsonl and ensure schema-related fields exist:
+
+      - canonical_rel_name (default "TBD")
+      - canonical_rel_desc (default "")
+      - rel_cls (default "TBD")
+      - rel_cls_group (default "TBD")
+      - remarks (list of strings)
+    """
+    rels: List[Dict[str, Any]] = []
+    if not path.exists():
+        raise FileNotFoundError(f"Relations file not found: {path}")
+    with path.open("r", encoding="utf-8") as f:
+        for line in f:
+            line = line.strip()
+            if not line:
+                continue
+            obj = json.loads(line)
+            # ensure relation_id exists
+            rid = obj.get("relation_id") or ("RelR_" + uuid.uuid4().hex[:8])
+            obj["relation_id"] = rid
+
+            # ensure schema fields
+            if "canonical_rel_name" not in obj or str(obj.get("canonical_rel_name", "")).strip() == "":
+                obj["canonical_rel_name"] = "TBD"
+            if "canonical_rel_desc" not in obj or obj.get("canonical_rel_desc") is None:
+                obj["canonical_rel_desc"] = ""
+            if "rel_cls" not in obj or str(obj.get("rel_cls", "")).strip() == "":
+                obj["rel_cls"] = "TBD"
+            if "rel_cls_group" not in obj or str(obj.get("rel_cls_group", "")).strip() == "":
+                obj["rel_cls_group"] = "TBD"
+
+            # normalize remarks: merge original remark + remarks list into a 'remarks' list
+            initial_remark = obj.get("remark")
+            remarks = obj.get("remarks")
+            norm_remarks: List[str] = []
+            if isinstance(remarks, list):
+                norm_remarks.extend([str(r) for r in remarks if r])
+            elif isinstance(remarks, str) and remarks.strip():
+                norm_remarks.append(remarks.strip())
+            if isinstance(initial_remark, str) and initial_remark.strip():
+                norm_remarks.append(initial_remark.strip())
+            obj["remarks"] = norm_remarks
+
+            rels.append(obj)
+    if VERBOSE:
+        print(f"[start] loaded {len(rels)} relations from {path}")
+    return rels
+
+def safe_str(s: Optional[str]) -> str:
+    if not s:
+        return ""
+    return str(s).replace("\n", " ").strip()
+
+# ---------------------- Build relation texts & embeddings ----------
+
+def build_relation_texts(
+    relations: List[Dict[str, Any]]
+) -> Tuple[List[str], List[str], List[str], List[str]]:
+    """
+    Build four text buckets for each relation:
+
+    - name_texts:       relation_name
+    - desc_texts:       rel_desc
+    - head_tail_texts:  head/tail entity + class info
+    - hint_texts:       rel_hint_type + canonical_rel_name + canonical_rel_desc + rel_cls
+    """
+    name_texts, desc_texts, head_tail_texts, hint_texts = [], [], [], []
+
+    for r in relations:
+        # name
+        rname = safe_str(r.get("relation_name", ""))
+        name_texts.append(rname[:256])
+
+        # desc
+        rdesc = safe_str(r.get("rel_desc", ""))
+        desc_texts.append(rdesc[:512])
+
+        # head_tail
+        subj_name = safe_str(r.get("subject_entity_name", ""))
+        subj_cl = safe_str(r.get("subject_class_label", ""))
+        subj_cg = safe_str(r.get("subject_class_group", ""))
+        obj_name = safe_str(r.get("object_entity_name", ""))
+        obj_cl = safe_str(r.get("object_class_label", ""))
+        obj_cg = safe_str(r.get("object_class_group", ""))
+
+        head_tail = f"{subj_name} ({subj_cl}, {subj_cg}) -> {obj_name} ({obj_cl}, {obj_cg})"
+        head_tail_texts.append(head_tail[:512])
+
+        # hint_canonical
+        hint_parts = []
+        for key in ["rel_hint_type", "canonical_rel_name", "canonical_rel_desc", "rel_cls"]:
+            val = safe_str(r.get(key, ""))
+            if val and val.upper() != "TBD":
+                hint_parts.append(val)
+        hint_text = " ; ".join(hint_parts)
+        hint_texts.append(hint_text[:512])
+
+    return name_texts, desc_texts, head_tail_texts, hint_texts
+
+def any_nonempty(lst: List[str]) -> bool:
+    return any(safe_str(t) for t in lst)
+
+def compute_relation_embeddings(
+    embedder: HFEmbedder,
+    relations: List[Dict[str, Any]],
+    weights: Dict[str, float]
+) -> np.ndarray:
+    """
+    Compute combined embeddings for relations using four buckets with fixed weights.
+    """
+    N = len(relations)
+    if N == 0:
+        raise ValueError("No relations to embed")
+
+    name_texts, desc_texts, head_tail_texts, hint_texts = build_relation_texts(relations)
+
+    emb_name = embedder.encode_batch(name_texts) if any_nonempty(name_texts) else None
+    emb_desc = embedder.encode_batch(desc_texts) if any_nonempty(desc_texts) else None
+    emb_ht = embedder.encode_batch(head_tail_texts) if any_nonempty(head_tail_texts) else None
+    emb_hint = embedder.encode_batch(hint_texts) if any_nonempty(hint_texts) else None
+
+    D = embedder.dim
+    combined = np.zeros((N, D), dtype=np.float32)
+
+    def add_bucket(emb: Optional[np.ndarray], weight: float):
+        nonlocal combined
+        if emb is None:
+            return
+        if emb.shape[0] != N:
+            raise ValueError("embedding row mismatch")
+        combined += weight * emb  # emb already row-normalized
+
+    add_bucket(emb_name, weights.get("name", 0.0))
+    add_bucket(emb_desc, weights.get("desc", 0.0))
+    add_bucket(emb_ht, weights.get("head_tail", 0.0))
+    add_bucket(emb_hint, weights.get("hint_canonical", 0.0))
+
+    # Final row-normalization to keep cosine distances meaningful
+    combined = normalize(combined, axis=1)
+    return combined
+
+# ---------------------- clustering ---------------------------------
+
+def run_hdbscan(
+    embeddings: np.ndarray,
+    min_cluster_size: int = HDBSCAN_MIN_CLUSTER_SIZE,
+    min_samples: int = HDBSCAN_MIN_SAMPLES,
+    metric: str = HDBSCAN_METRIC,
+    use_umap: bool = USE_UMAP
+) -> Tuple[np.ndarray, object]:
+    X = embeddings
+    N = X.shape[0]
+    if use_umap and UMAP_AVAILABLE and N >= 6:
+        safe_n_components = min(UMAP_N_COMPONENTS, max(2, N - 2))
+        safe_n_neighbors = min(UMAP_N_NEIGHBORS, max(2, N - 1))
+        try:
+            reducer = umap.UMAP(
+                n_components=safe_n_components,
+                n_neighbors=safe_n_neighbors,
+                min_dist=UMAP_MIN_DIST,
+                metric="cosine",
+                random_state=42
+            )
+            X_reduced = reducer.fit_transform(X)
+            if X_reduced is not None and X_reduced.shape[0] == N:
+                X = X_reduced
+            else:
+                if VERBOSE:
+                    print(f"[warn] UMAP returned invalid shape; skipping UMAP")
+        except Exception as e:
+            if VERBOSE:
+                print(f"[warn] UMAP failed (N={N}): {e}. Proceeding without UMAP.")
+            X = embeddings
+    clusterer = hdbscan.HDBSCAN(
+        min_cluster_size=min_cluster_size,
+        min_samples=min_samples,
+        metric=metric,
+        cluster_selection_method="eom"
+    )
+    labels = clusterer.fit_predict(X)
+    return labels, clusterer
+
+# ---------------------- LLM prompt template ------------------------
+
+RELRES_PROMPT_TEMPLATE = """
+You are a very proactive RELATION-RESOLUTION assistant.
+
+You are given a CLUSTER of relation INSTANCES from a context-enriched technical KG.
+Each relation instance already connects specific subject and object entities, and has:
+
+- relation_id
+- relation_name        (raw, from Relation Recognition)
+- rel_desc             (instance-level description)
+- rel_hint_type        (short free-form hint)
+- canonical_rel_name   (TBD or already set)
+- canonical_rel_desc   (TBD or already set)
+- rel_cls              (TBD or already set)
+- rel_cls_group        (TBD or already set)
+- subject_entity_name, object_entity_name
+- subject_class_label, subject_class_group
+- object_class_label, object_class_group
+- qualifiers (temporal, spatial, etc.)
+- confidence, remarks, etc.
+
+IMPORTANT:
+- SUBJECT and OBJECT are already resolved entities. You MUST NOT change them.
+- We NEVER delete relation instances. We only enrich them with schema.
+- relation_name and rel_desc are EVIDENCE and should normally NOT be overwritten.
+- canonical_rel_name is the normalized predicate that will be used as the KG edge label.
+- rel_cls and rel_cls_group give a two-layer schema for relations:
+    instance → canonical_rel_name → rel_cls → rel_cls_group.
+
+CRUCIAL DISTINCTION (SCOPE):
+- canonical_rel_name: groups relations that use essentially the SAME predicate meaning.
+  (fine-grained, predicate-level)
+- rel_cls: groups multiple canonical relations into a broader FAMILY of similar predicates.
+  (coarser; a rel_cls usually covers MULTIPLE canonical_rel_name values)
+- rel_cls_group: groups relation classes into very broad semantic DIMENSIONS
+  (e.g., COMPOSITION, CAUSALITY, IDENTITY, TEMPORALITY, SPATIALITY, AGENCY, INTERACTION,
+   ASSOCIATION, MODIFICATION, USAGE, REQUIREMENT, etc.).
+
+Therefore:
+- The set of relations that share a canonical_rel_name is usually SMALLER than the set
+  that share a rel_cls.
+- The set that share a rel_cls is usually SMALLER than the set that share a rel_cls_group.
+- You should think about and assign CANONICAL, CLASS, and GROUP **independently**, even if
+  they sometimes align.
+
+Your job for THIS CLUSTER:
+1) Group semantically equivalent or near-equivalent relation INSTANCES to assign canonical_rel_name.
+2) Group canonical relations into rel_cls families (even if they come from different canonical names).
+3) Assign broad rel_cls_group categories to classes or directly to instances when appropriate.
+4) Be conservative with overwriting existing canonical / class / group info:
+   - If fields are "TBD", you SHOULD set them.
+   - If fields are already set but clearly wrong or too narrow/broad, you MAY refine them.
+
+We will apply your instructions by executing function calls on the relation objects.
+You MUST return an ordered JSON ARRAY of function calls using ONLY the following functions:
+
+--------------------------------
+AVAILABLE FUNCTIONS
+--------------------------------
+
+1) set_canonical_rel
+   Use this when you want to SET or ALIGN canonical_rel_name / canonical_rel_desc
+   for one or more relation instances (especially when values are "TBD").
+
+   args = {
+     "relation_ids": [<relation_id>...],        # REQUIRED, at least 1
+     "canonical_rel_name": <string>,           # REQUIRED, normalized predicate for KG edge
+     "canonical_rel_desc": <string or null>,   # OPTIONAL, reusable description of this predicate
+     "justification": <string>,                # REQUIRED: why these instances share this canonical predicate
+     "remark": <string or null>,               # optional human-facing notes
+     "confidence": <number between 0 and 1, optional>
+   }
+
+   Notes:
+   - canonical_rel_name should be a short predicate-style phrase, e.g. "occurs_in",
+     "resists", "has_metallurgical_structure", "is_subtype_of".
+   - Do NOT include qualifiers (e.g., "at high temperature") here. They stay in the qualifiers dict.
+   - Use this on relatively TIGHT groups of semantically equivalent predicates.
+
+
+2) set_rel_cls
+   Use this when you want to SET or ALIGN rel_cls for one or more instances,
+   grouping them into a broader relation class (family).
+
+   args = {
+     "relation_ids": [<relation_id>...],        # REQUIRED, at least 1
+     "rel_cls": <string>,                      # REQUIRED: class name (e.g., "structure_relation")
+     "justification": <string>,                # REQUIRED: why these instances belong to this class
+     "remark": <string or null>,               # optional notes
+     "confidence": <number between 0 and 1, optional>
+   }
+
+   Notes:
+   - A rel_cls usually covers MULTIPLE canonical_rel_name values, not just one.
+   - Think of rel_cls as a conceptual family: e.g. "structure_relation",
+     "corrosion_resistance_relation", "hierarchy_relation", etc.
+   - You can assign the same rel_cls to relations with different canonical_rel_name
+     if they express the same type of conceptual link.
+
+
+3) set_rel_cls_group
+   Use this when you want to SET or ALIGN rel_cls_group for one or more instances
+   (or their classes), using a very broad semantic category.
+
+   args = {
+     "relation_ids": [<relation_id>...],        # REQUIRED, at least 1
+     "rel_cls_group": <string>,                # REQUIRED: broad group (e.g., "COMPOSITION")
+     "justification": <string>,                # REQUIRED: why this group fits
+     "remark": <string or null>,               # optional notes
+     "confidence": <number between 0 and 1, optional>
+   }
+
+   Notes:
+   - rel_cls_group is broad and somewhat orthogonal.
+   - Typical groups: COMPOSITION, CAUSALITY, IDENTITY, TEMPORALITY, SPATIALITY, AGENCY,
+     INTERACTION, ASSOCIATION, MODIFICATION, USAGE, REQUIREMENT, etc.
+   - This list is illustrative, NOT exhaustive. You may propose other sensible group names.
+
+
+4) modify_rel_schema
+   Use this to REFINE or CORRECT existing schema fields for one or more relations
+   (canonical_rel_name / canonical_rel_desc / rel_cls / rel_cls_group),
+   or in rare cases to adjust a bad relation_name.
+
+   args = {
+     "relation_ids": [<relation_id>...],            # REQUIRED, at least 1
+     "canonical_rel_name": <string or null>,        # OPTIONAL: new canonical name
+     "canonical_rel_desc": <string or null>,        # OPTIONAL: new canonical description
+     "rel_cls": <string or null>,                   # OPTIONAL: new relation class
+     "rel_cls_group": <string or null>,             # OPTIONAL: new broad group
+     "new_relation_name": <string or null>,         # OPTIONAL: ONLY if raw relation_name is malformed
+     "original_relation_name": <string or null>,    # REQUIRED if you change relation_name
+     "justification": <string>,                     # REQUIRED: why this modification is needed
+     "remark": <string or null>,                    # optional notes / flags
+     "confidence": <number between 0 and 1, optional>
+   }
+
+   Notes:
+   - You should RARELY change relation_name (raw). Only do so if it is clearly malformed,
+     misleading, or not a real predicate. In that case, you MUST provide original_relation_name
+     and explain why the change is necessary.
+   - Use this when fields are already set but need refinement.
+
+
+5) add_rel_remark
+   Use this when you ONLY want to attach a human-facing remark / caveat / TODO
+   without changing any schema fields.
+
+   args = {
+     "relation_ids": [<relation_id>...],        # REQUIRED, at least 1
+     "remark": <string>,                        # REQUIRED: the remark text
+     "justification": <string>,                # REQUIRED: why this remark is useful
+     "confidence": <number between 0 and 1, optional>
+   }
+
+   Notes:
+   - Use this for issues outside scope (e.g., upstream entity resolution suspicion), or
+     to flag ambiguous or borderline cases for later human review.
+
+--------------------------------
+GENERAL GUIDANCE
+--------------------------------
+
+- THINK CLUSTER-WIDE:
+  - Use set_canonical_rel on tight groups of semantically equivalent predicates.
+  - Use set_rel_cls on broader groups that may span multiple canonical_rel_name values.
+  - Use set_rel_cls_group on even broader groups, typically across many classes.
+
+- CANONICAL_REL_NAME:
+  - Short, predicate-like, reusable across many entity pairs.
+  - This is what we will put on the KG edge as the predicate.
+
+- CANONICAL_REL_DESC:
+  - 1–2 sentences describing the general meaning of the canonical_rel_name,
+    independent of specific entities.
+
+- REL_CLS:
+  - A more abstract class that groups semantically similar canonical predicates.
+  - Example: "structure_relation" for has_metallurgical_structure, has_phase, has_microstructure_component.
+
+- REL_CLS_GROUP:
+  - A very broad, high-level category.
+  - COMPOSITION, CAUSALITY, IDENTITY, TEMPORALITY, SPATIALITY, AGENCY, INTERACTION,
+    ASSOCIATION, MODIFICATION, USAGE, REQUIREMENT, etc.
+
+- DO NOT:
+  - Do NOT delete relations.
+  - Do NOT change subject or object.
+  - Do NOT move qualifiers to nodes; qualifiers stay attached to relation instances.
+  - Do NOT be passive. If there is semantic structure to expose, you MUST propose schema.
+
+--------------------------------
+INPUT RELATIONS (CLUSTER)
+--------------------------------
+
+Below is the JSON array of relation instances in this cluster:
+
+{cluster_block}
+
+--------------------------------
+OUTPUT
+--------------------------------
+
+Return ONLY the JSON ARRAY of function calls, e.g.:
+
+[
+  {
+    "function": "set_canonical_rel",
+    "args": { ... }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": { ... }
+  },
+  ...
+]
+
+- If the cluster is already perfect (rare), you MAY return [].
+- Every call MUST include a "justification".
+- Use "remark" (or add_rel_remark) to flag issues or uncertainties that are outside
+  the scope of these functions.
+"""
+
+def sanitize_json_array(text: str) -> Optional[Any]:
+    """
+    Extract and parse the first JSON array from the text.
+    Grab [ ... ] block, fix simple trailing commas, and json.loads.
+    """
+    if not text or not text.strip():
+        return None
+    s = text.strip()
+    # replace smart quotes
+    s = s.replace("“", '"').replace("”", '"').replace("‘", "'").replace("’", "'")
+    start = s.find("[")
+    end = s.rfind("]")
+    if start == -1 or end == -1 or end <= start:
+        return None
+    cand = s[start:end + 1]
+    # remove trailing commas before closing braces/brackets
+    cand = re.sub(r",\s*([\]}])", r"\1", cand)
+    try:
+        return json.loads(cand)
+    except Exception:
+        return None
+
+# ---------------------- Action executors ----------------------------
+
+def execute_set_canonical_rel(
+    rel_by_id: Dict[str, Dict[str, Any]],
+    relation_ids: List[str],
+    canonical_rel_name: Optional[str],
+    canonical_rel_desc: Optional[str],
+):
+    if canonical_rel_name is None:
+        return
+    canon_name = canonical_rel_name.strip()
+    if not canon_name:
+        return
+    for rid in relation_ids:
+        if rid not in rel_by_id:
+            continue
+        r = rel_by_id[rid]
+        r["canonical_rel_name"] = canon_name
+        if canonical_rel_desc is not None:
+            r["canonical_rel_desc"] = canonical_rel_desc.strip()
+        rel_by_id[rid] = r
+
+def execute_set_rel_cls(
+    rel_by_id: Dict[str, Dict[str, Any]],
+    relation_ids: List[str],
+    rel_cls: Optional[str],
+):
+    if rel_cls is None:
+        return
+    cls_name = rel_cls.strip()
+    if not cls_name:
+        return
+    for rid in relation_ids:
+        if rid not in rel_by_id:
+            continue
+        r = rel_by_id[rid]
+        r["rel_cls"] = cls_name
+        rel_by_id[rid] = r
+
+def execute_set_rel_cls_group(
+    rel_by_id: Dict[str, Dict[str, Any]],
+    relation_ids: List[str],
+    rel_cls_group: Optional[str],
+):
+    if rel_cls_group is None:
+        return
+    grp_name = rel_cls_group.strip()
+    if not grp_name:
+        return
+    for rid in relation_ids:
+        if rid not in rel_by_id:
+            continue
+        r = rel_by_id[rid]
+        r["rel_cls_group"] = grp_name
+        rel_by_id[rid] = r
+
+def execute_modify_rel_schema(
+    rel_by_id: Dict[str, Dict[str, Any]],
+    relation_ids: List[str],
+    canonical_rel_name: Optional[str],
+    canonical_rel_desc: Optional[str],
+    rel_cls: Optional[str],
+    rel_cls_group: Optional[str],
+    new_relation_name: Optional[str],
+    original_relation_name: Optional[str],
+):
+    for rid in relation_ids:
+        if rid not in rel_by_id:
+            continue
+        r = rel_by_id[rid]
+
+        if canonical_rel_name is not None and canonical_rel_name.strip():
+            r["canonical_rel_name"] = canonical_rel_name.strip()
+        if canonical_rel_desc is not None:
+            r["canonical_rel_desc"] = canonical_rel_desc.strip()
+        if rel_cls is not None and rel_cls.strip():
+            r["rel_cls"] = rel_cls.strip()
+        if rel_cls_group is not None and rel_cls_group.strip():
+            r["rel_cls_group"] = rel_cls_group.strip()
+
+        if new_relation_name is not None and new_relation_name.strip():
+            # preserve original if not already stored
+            if "original_relation_name" not in r:
+                if original_relation_name:
+                    r["original_relation_name"] = original_relation_name
+                else:
+                    r["original_relation_name"] = r.get("relation_name", "")
+            r["relation_name"] = new_relation_name.strip()
+
+        rel_by_id[rid] = r
+
+def execute_add_rel_remark(
+    rel_by_id: Dict[str, Dict[str, Any]],
+    relation_ids: List[str],
+    remark: Optional[str],
+):
+    if remark is None:
+        return
+    txt = remark.strip()
+    if not txt:
+        return
+    for rid in relation_ids:
+        if rid not in rel_by_id:
+            continue
+        r = rel_by_id[rid]
+        existing = r.get("remarks")
+        if existing is None:
+            existing = []
+        elif not isinstance(existing, list):
+            existing = [str(existing)]
+        existing.append(txt)
+        r["remarks"] = existing
+        rel_by_id[rid] = r
+
+# ---------------------- Main orchestration -------------------------
+
+def relres_main():
+    # load relations
+    relations = load_relations(INPUT_RELATIONS)
+    rel_by_id: Dict[str, Dict[str, Any]] = {r["relation_id"]: r for r in relations}
+
+    # embedder
+    embedder = HFEmbedder(model_name=EMBED_MODEL, device=DEVICE)
+    rel_ids_order = [r["relation_id"] for r in relations]
+    combined_emb = compute_relation_embeddings(embedder, relations, REL_EMB_WEIGHTS)
+    print("[info] relation embeddings computed shape:", combined_emb.shape)
+
+    # clustering
+    labels, clusterer = run_hdbscan(
+        combined_emb,
+        min_cluster_size=HDBSCAN_MIN_CLUSTER_SIZE,
+        min_samples=HDBSCAN_MIN_SAMPLES,
+        use_umap=USE_UMAP
+    )
+    unique_labels = sorted(set(labels))
+    print("[info] clustering done. unique labels:", unique_labels)
+
+    # map cluster -> relation ids
+    cluster_to_relids: Dict[int, List[str]] = {}
+    for idx, lab in enumerate(labels):
+        rid = rel_ids_order[idx]
+        cluster_to_relids.setdefault(int(lab), []).append(rid)
+
+    # action log
+    action_log_path = OUT_DIR / "rel_res_action_log.jsonl"
+    if action_log_path.exists():
+        action_log_path.unlink()
+
+    # iterate clusters (skip noise -1 first)
+    cluster_keys = [k for k in cluster_to_relids.keys() if k != -1]
+    cluster_keys = sorted(cluster_keys)
+    if -1 in cluster_to_relids:
+        cluster_keys.append(-1)
+
+    for cluster_label in cluster_keys:
+        rel_ids = cluster_to_relids.get(cluster_label, [])
+        if not rel_ids:
+            continue
+        print(f"[cluster] {cluster_label} -> {len(rel_ids)} relations")
+
+        # build cluster block for prompt (compact representation)
+        cluster_relations = []
+        for rid in rel_ids:
+            r = rel_by_id.get(rid)
+            if not r:
+                continue
+            cluster_relations.append({
+                "relation_id": r["relation_id"],
+                "relation_name": safe_str(r.get("relation_name", "")),
+                "rel_desc": safe_str(r.get("rel_desc", "")),
+                "rel_hint_type": safe_str(r.get("rel_hint_type", "")),
+                "canonical_rel_name": safe_str(r.get("canonical_rel_name", "")),
+                "canonical_rel_desc": safe_str(r.get("canonical_rel_desc", "")),
+                "rel_cls": safe_str(r.get("rel_cls", "")),
+                "rel_cls_group": safe_str(r.get("rel_cls_group", "")),
+                "subject_entity_name": safe_str(r.get("subject_entity_name", "")),
+                "object_entity_name": safe_str(r.get("object_entity_name", "")),
+                "subject_class_label": safe_str(r.get("subject_class_label", "")),
+                "subject_class_group": safe_str(r.get("subject_class_group", "")),
+                "object_class_label": safe_str(r.get("object_class_label", "")),
+                "object_class_group": safe_str(r.get("object_class_group", "")),
+                "qualifiers": r.get("qualifiers", {}),
+                "confidence": float(r.get("confidence", 0.0)),
+                "remarks": r.get("remarks", [])
+            })
+
+        cluster_block = json.dumps(cluster_relations, ensure_ascii=False, indent=2)
+        prompt = RELRES_PROMPT_TEMPLATE.replace("{cluster_block}", cluster_block)
+
+        # log prompt
+        prompt_path = RAW_LLM_DIR / f"cluster_{cluster_label}_prompt.txt"
+        prompt_path.write_text(prompt, encoding="utf-8")
+
+        # call LLM
+        raw_out = ""
+        try:
+            raw_out = call_llm(prompt)
+        except Exception as e:
+            print(f"[warning] LLM call failed for cluster {cluster_label}: {e}")
+            raw_out = ""
+
+        # write raw output
+        raw_path = RAW_LLM_DIR / f"cluster_{cluster_label}_llm_raw.txt"
+        raw_path.write_text(raw_out, encoding="utf-8")
+
+        parsed = sanitize_json_array(raw_out)
+        if parsed is None:
+            print(f"[warn] failed to parse LLM output for cluster {cluster_label}; skipping automated actions for this cluster.")
+            dec_path = OUT_DIR / f"cluster_{cluster_label}_decisions.json"
+            dec_path.write_text(
+                json.dumps({"cluster_label": cluster_label, "raw_llm": raw_out}, ensure_ascii=False, indent=2),
+                encoding="utf-8"
+            )
+            continue
+
+        decisions: List[Dict[str, Any]] = []
+
+        # execute parsed function list in order
+        for step in parsed:
+            if not isinstance(step, dict):
+                continue
+            fn = step.get("function")
+            args = step.get("args", {}) or {}
+            justification = args.get("justification")
+            confidence_val = args.get("confidence", None)
+            remark_val = args.get("remark")
+
+            try:
+                if fn == "set_canonical_rel":
+                    rel_ids_raw = args.get("relation_ids", []) or []
+                    canon_name = args.get("canonical_rel_name")
+                    canon_desc = args.get("canonical_rel_desc")
+                    rel_ids_valid = [rid for rid in rel_ids_raw if rid in rel_by_id]
+
+                    if not rel_ids_valid or canon_name is None:
+                        decisions.append({
+                            "action": "set_canonical_rel_skip",
+                            "requested_relation_ids": rel_ids_raw,
+                            "canonical_rel_name": canon_name,
+                            "justification": justification,
+                            "remark": remark_val,
+                            "confidence": confidence_val
+                        })
+                        continue
+
+                    execute_set_canonical_rel(rel_by_id, rel_ids_valid, canon_name, canon_desc)
+
+                    decisions.append({
+                        "action": "set_canonical_rel",
+                        "relation_ids": rel_ids_valid,
+                        "canonical_rel_name": canon_name,
+                        "canonical_rel_desc": canon_desc,
+                        "justification": justification,
+                        "remark": remark_val,
+                        "confidence": confidence_val
+                    })
+
+                elif fn == "set_rel_cls":
+                    rel_ids_raw = args.get("relation_ids", []) or []
+                    rel_cls = args.get("rel_cls")
+                    rel_ids_valid = [rid for rid in rel_ids_raw if rid in rel_by_id]
+
+                    if not rel_ids_valid or rel_cls is None:
+                        decisions.append({
+                            "action": "set_rel_cls_skip",
+                            "requested_relation_ids": rel_ids_raw,
+                            "rel_cls": rel_cls,
+                            "justification": justification,
+                            "remark": remark_val,
+                            "confidence": confidence_val
+                        })
+                        continue
+
+                    execute_set_rel_cls(rel_by_id, rel_ids_valid, rel_cls)
+
+                    decisions.append({
+                        "action": "set_rel_cls",
+                        "relation_ids": rel_ids_valid,
+                        "rel_cls": rel_cls,
+                        "justification": justification,
+                        "remark": remark_val,
+                        "confidence": confidence_val
+                    })
+
+                elif fn == "set_rel_cls_group":
+                    rel_ids_raw = args.get("relation_ids", []) or []
+                    rel_cls_group = args.get("rel_cls_group")
+                    rel_ids_valid = [rid for rid in rel_ids_raw if rid in rel_by_id]
+
+                    if not rel_ids_valid or rel_cls_group is None:
+                        decisions.append({
+                            "action": "set_rel_cls_group_skip",
+                            "requested_relation_ids": rel_ids_raw,
+                            "rel_cls_group": rel_cls_group,
+                            "justification": justification,
+                            "remark": remark_val,
+                            "confidence": confidence_val
+                        })
+                        continue
+
+                    execute_set_rel_cls_group(rel_by_id, rel_ids_valid, rel_cls_group)
+
+                    decisions.append({
+                        "action": "set_rel_cls_group",
+                        "relation_ids": rel_ids_valid,
+                        "rel_cls_group": rel_cls_group,
+                        "justification": justification,
+                        "remark": remark_val,
+                        "confidence": confidence_val
+                    })
+
+                elif fn == "modify_rel_schema":
+                    rel_ids_raw = args.get("relation_ids", []) or []
+                    canon_name = args.get("canonical_rel_name")
+                    canon_desc = args.get("canonical_rel_desc")
+                    rel_cls = args.get("rel_cls")
+                    rel_cls_group = args.get("rel_cls_group")
+                    new_rel_name = args.get("new_relation_name")
+                    orig_rel_name = args.get("original_relation_name")
+
+                    rel_ids_valid = [rid for rid in rel_ids_raw if rid in rel_by_id]
+                    if not rel_ids_valid:
+                        decisions.append({
+                            "action": "modify_rel_schema_skip_no_valid_relations",
+                            "requested_relation_ids": rel_ids_raw,
+                            "justification": justification,
+                            "remark": remark_val,
+                            "confidence": confidence_val
+                        })
+                        continue
+
+                    execute_modify_rel_schema(
+                        rel_by_id,
+                        rel_ids_valid,
+                        canon_name,
+                        canon_desc,
+                        rel_cls,
+                        rel_cls_group,
+                        new_rel_name,
+                        orig_rel_name
+                    )
+
+                    decisions.append({
+                        "action": "modify_rel_schema",
+                        "relation_ids": rel_ids_valid,
+                        "canonical_rel_name": canon_name,
+                        "canonical_rel_desc": canon_desc,
+                        "rel_cls": rel_cls,
+                        "rel_cls_group": rel_cls_group,
+                        "new_relation_name": new_rel_name,
+                        "original_relation_name": orig_rel_name,
+                        "justification": justification,
+                        "remark": remark_val,
+                        "confidence": confidence_val
+                    })
+
+                elif fn == "add_rel_remark":
+                    rel_ids_raw = args.get("relation_ids", []) or []
+                    rel_ids_valid = [rid for rid in rel_ids_raw if rid in rel_by_id]
+                    remark_text = args.get("remark")
+
+                    if not rel_ids_valid or not remark_text:
+                        decisions.append({
+                            "action": "add_rel_remark_skip",
+                            "requested_relation_ids": rel_ids_raw,
+                            "remark": remark_text,
+                            "justification": justification,
+                            "confidence": confidence_val
+                        })
+                        continue
+
+                    execute_add_rel_remark(rel_by_id, rel_ids_valid, remark_text)
+
+                    decisions.append({
+                        "action": "add_rel_remark",
+                        "relation_ids": rel_ids_valid,
+                        "remark": remark_text,
+                        "justification": justification,
+                        "confidence": confidence_val
+                    })
+
+                else:
+                    decisions.append({
+                        "action": "skip_unknown_function",
+                        "function": fn,
+                        "raw": step,
+                        "justification": justification,
+                        "remark": remark_val,
+                        "confidence": confidence_val
+                    })
+
+            except Exception as e:
+                decisions.append({
+                    "action": "error_executing",
+                    "function": fn,
+                    "error": str(e),
+                    "input": step,
+                    "justification": justification,
+                    "remark": remark_val,
+                    "confidence": confidence_val
+                })
+
+        # write decisions file for this cluster
+        dec_path = OUT_DIR / f"cluster_{cluster_label}_decisions.json"
+        dec_obj = {
+            "cluster_label": cluster_label,
+            "cluster_relations": cluster_relations,
+            "llm_raw": raw_out,
+            "parsed_steps": parsed,
+            "executed_decisions": decisions,
+            "timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+        }
+        dec_path.write_text(json.dumps(dec_obj, ensure_ascii=False, indent=2), encoding="utf-8")
+
+        # append to action log
+        with action_log_path.open("a", encoding="utf-8") as fh:
+            fh.write(json.dumps(dec_obj, ensure_ascii=False) + "\n")
+
+    # After all clusters processed: write final relations output
+    final_relations = list(rel_by_id.values())
+    out_json = OUT_DIR / "relations_resolved.json"
+    out_jsonl = OUT_DIR / "relations_resolved.jsonl"
+    out_json.write_text(json.dumps(final_relations, ensure_ascii=False, indent=2), encoding="utf-8")
+    with out_jsonl.open("w", encoding="utf-8") as fh:
+        for r in final_relations:
+            fh.write(json.dumps(r, ensure_ascii=False) + "\n")
+
+    print(f"[done] wrote final resolved relations -> {out_json}  (count={len(final_relations)})")
+    print(f"[done] action log -> {action_log_path}")
+
+    # ---------------------- SUMMARY AGGREGATION ---------------------
+
+    summary_dir = OUT_DIR / "summary"
+    summary_dir.mkdir(exist_ok=True)
+
+    # Aggregate per-cluster decisions
+    cluster_decisions: List[Dict[str, Any]] = []
+    for path in sorted(OUT_DIR.glob("cluster_*_decisions.json")):
+        try:
+            obj = json.loads(path.read_text(encoding="utf-8"))
+            cluster_decisions.append(obj)
+        except Exception as e:
+            print(f"[warn] failed to read {path}: {e}")
+
+    all_clusters_decisions_path = summary_dir / "all_clusters_decisions.json"
+    all_clusters_decisions_path.write_text(
+        json.dumps(cluster_decisions, ensure_ascii=False, indent=2),
+        encoding="utf-8"
+    )
+
+    total_clusters = len(cluster_decisions)
+    actions_by_type: Dict[str, int] = {}
+    total_remarks = 0
+    clusters_with_any_decisions = 0
+
+    for cd in cluster_decisions:
+        decs = cd.get("executed_decisions", [])
+        if not decs:
+            continue
+        clusters_with_any_decisions += 1
+        for d in decs:
+            act = d.get("action")
+            actions_by_type[act] = actions_by_type.get(act, 0) + 1
+            rem = d.get("remark")
+            if rem:
+                total_remarks += 1
+
+    total_errors = actions_by_type.get("error_executing", 0)
+
+    stats = {
+        "total_clusters": total_clusters,
+        "total_clusters_with_any_decisions": clusters_with_any_decisions,
+        "total_actions_by_type": actions_by_type,
+        "total_errors": total_errors,
+        "total_remarks_logged": total_remarks,
+        "generated_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+    }
+
+    stats_path = summary_dir / "stats_summary.json"
+    stats_path.write_text(json.dumps(stats, ensure_ascii=False, indent=2), encoding="utf-8")
+
+    print(f"[done] summary decisions -> {all_clusters_decisions_path}")
+    print(f"[done] summary stats -> {stats_path}")
+
+    # ---------------------- SCHEMA AGGREGATION ----------------------
+
+    # 1) Canonical relation schema
+    canonical_map: Dict[str, Dict[str, Any]] = {}
+    for r in final_relations:
+        cname = safe_str(r.get("canonical_rel_name", ""))
+        if not cname or cname.upper() == "TBD":
+            continue
+        cdesc = safe_str(r.get("canonical_rel_desc", ""))
+        rel_cls = safe_str(r.get("rel_cls", ""))
+        rel_grp = safe_str(r.get("rel_cls_group", ""))
+        rid = r.get("relation_id")
+
+        entry = canonical_map.setdefault(cname, {
+            "canonical_rel_name": cname,
+            "canonical_rel_desc_candidates": set(),
+            "rel_cls_set": set(),
+            "rel_cls_group_set": set(),
+            "relation_ids": []
+        })
+        if cdesc:
+            entry["canonical_rel_desc_candidates"].add(cdesc)
+        if rel_cls and rel_cls.upper() != "TBD":
+            entry["rel_cls_set"].add(rel_cls)
+        if rel_grp and rel_grp.upper() != "TBD":
+            entry["rel_cls_group_set"].add(rel_grp)
+        if rid:
+            entry["relation_ids"].append(rid)
+
+    canonical_schema = []
+    for cname, info in canonical_map.items():
+        desc_candidates = list(info["canonical_rel_desc_candidates"])
+        chosen_desc = desc_candidates[0] if desc_candidates else ""
+        canonical_schema.append({
+            "canonical_rel_name": cname,
+            "canonical_rel_desc": chosen_desc,
+            "rel_cls": sorted(info["rel_cls_set"]),
+            "rel_cls_group": sorted(info["rel_cls_group_set"]),
+            "instance_count": len(info["relation_ids"]),
+            "example_relation_ids": info["relation_ids"][:10]
+        })
+
+    canonical_schema_path = summary_dir / "canonical_rel_schema.json"
+    canonical_schema_path.write_text(
+        json.dumps(canonical_schema, ensure_ascii=False, indent=2),
+        encoding="utf-8"
+    )
+
+    # 2) Relation class schema
+    cls_map: Dict[str, Dict[str, Any]] = {}
+    for r in final_relations:
+        cls_name = safe_str(r.get("rel_cls", ""))
+        if not cls_name or cls_name.upper() == "TBD":
+            continue
+        grp_name = safe_str(r.get("rel_cls_group", ""))
+        cname = safe_str(r.get("canonical_rel_name", ""))
+        rid = r.get("relation_id")
+
+        entry = cls_map.setdefault(cls_name, {
+            "rel_cls": cls_name,
+            "rel_cls_group_set": set(),
+            "canonical_rel_names": set(),
+            "relation_ids": []
+        })
+        if grp_name and grp_name.upper() != "TBD":
+            entry["rel_cls_group_set"].add(grp_name)
+        if cname and cname.upper() != "TBD":
+            entry["canonical_rel_names"].add(cname)
+        if rid:
+            entry["relation_ids"].append(rid)
+
+    cls_schema = []
+    for cls_name, info in cls_map.items():
+        cls_schema.append({
+            "rel_cls": cls_name,
+            "rel_cls_group": sorted(info["rel_cls_group_set"]),
+            "canonical_rel_names": sorted(info["canonical_rel_names"]),
+            "instance_count": len(info["relation_ids"]),
+            "example_relation_ids": info["relation_ids"][:10]
+        })
+
+    cls_schema_path = summary_dir / "rel_cls_schema.json"
+    cls_schema_path.write_text(
+        json.dumps(cls_schema, ensure_ascii=False, indent=2),
+        encoding="utf-8"
+    )
+
+    # 3) Relation class group schema
+    grp_map: Dict[str, Dict[str, Any]] = {}
+    for r in final_relations:
+        grp_name = safe_str(r.get("rel_cls_group", ""))
+        if not grp_name or grp_name.upper() == "TBD":
+            continue
+        cls_name = safe_str(r.get("rel_cls", ""))
+        cname = safe_str(r.get("canonical_rel_name", ""))
+        rid = r.get("relation_id")
+
+        entry = grp_map.setdefault(grp_name, {
+            "rel_cls_group": grp_name,
+            "rel_cls_set": set(),
+            "canonical_rel_names": set(),
+            "relation_ids": []
+        })
+        if cls_name and cls_name.upper() != "TBD":
+            entry["rel_cls_set"].add(cls_name)
+        if cname and cname.upper() != "TBD":
+            entry["canonical_rel_names"].add(cname)
+        if rid:
+            entry["relation_ids"].append(rid)
+
+    grp_schema = []
+    for grp_name, info in grp_map.items():
+        grp_schema.append({
+            "rel_cls_group": grp_name,
+            "rel_cls": sorted(info["rel_cls_set"]),
+            "canonical_rel_names": sorted(info["canonical_rel_names"]),
+            "instance_count": len(info["relation_ids"]),
+            "example_relation_ids": info["relation_ids"][:10]
+        })
+
+    grp_schema_path = summary_dir / "rel_cls_group_schema.json"
+    grp_schema_path.write_text(
+        json.dumps(grp_schema, ensure_ascii=False, indent=2),
+        encoding="utf-8"
+    )
+
+    print(f"[done] canonical relation schema -> {canonical_schema_path}")
+    print(f"[done] relation class schema -> {cls_schema_path}")
+    print(f"[done] relation class group schema -> {grp_schema_path}")
+
+if __name__ == "__main__":
+    relres_main()
+
+#endregion#?   Rel Res V3  - Canonical + RelCls + RelClsGroup + Schema
+#*#########################  End  ##########################
+
+
+
+
+
+
+
+#?######################### Start ##########################
+#region:#?   Rel Res V4  - Canonical + RelCls + RelClsGroup + Schema + LocalSubcluster
+
+#!/usr/bin/env python3
+"""
+relres_iterative_v4.py
+
+Relation Resolution (Rel Res) — cluster relation instances, ask LLM to
+assign/normalize:
+
+  - canonical_rel_name    (normalized predicate used on KG edges)
+  - canonical_rel_desc    (reusable description of that predicate)
+  - rel_cls               (relation class, groups canonical_rel_names)
+  - rel_cls_group         (broad group like COMPOSITION, CAUSALITY, ...)
+
+while preserving:
+
+  - relation_name         (raw name from Rel Rec)
+  - rel_desc              (instance-level description)
+  - qualifiers, head/tail, etc.
+
+Key properties:
+- We NEVER remove relation instances; we only enrich them with schema.
+- canonical_rel_name is what will be used as edge label in the KG.
+- rel_cls / rel_cls_group give you a 2-layer schema for relations.
+- Multi-run friendly: TBD fields can be filled in the first run, refined later.
+- Uses global HDBSCAN + optional local subclustering + MAX_MEMBERS_PER_PROMPT
+  so LLM chunks stay reasonably small.
+
+Input:
+  /home/mabolhas/MyReposOnSOL/SGCE-KG/data/Relations/Rel Rec/relations_raw.jsonl
+
+Output (under OUT_DIR):
+  - per-(cluster,local,part) decisions: cluster_<ID>_decisions.json
+  - per-(cluster,local,part) raw llm output: llm_raw/cluster_<ID>_llm_raw.txt
+  - per-(cluster,local,part) prompts: llm_raw/cluster_<ID>_prompt.txt
+  - cumulative action log: rel_res_action_log.jsonl
+  - final resolved relations: relations_resolved.json and .jsonl
+  - summary/all_clusters_decisions.json
+  - summary/stats_summary.json
+  - summary/canonical_rel_schema.json
+  - summary/rel_cls_schema.json
+  - summary/rel_cls_group_schema.json
+"""
+
+import json
+import os
+import re
+import time
+import uuid
+from pathlib import Path
+from typing import List, Dict, Any, Optional, Tuple
+
+import numpy as np
+import torch
+from sklearn.preprocessing import normalize
+
+# clustering libs
+try:
+    import hdbscan
+except Exception:
+    raise RuntimeError("hdbscan required: pip install hdbscan")
+try:
+    import umap
+    UMAP_AVAILABLE = True
+except Exception:
+    UMAP_AVAILABLE = False
+
+# transformers embedder
+from transformers import AutoTokenizer, AutoModel
+
+# OpenAI client (Responses API)
+try:
+    from openai import OpenAI
+except Exception:
+    OpenAI = None
+
+# ----------------------------- CONFIG -----------------------------
+
+INPUT_RELATIONS = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Relations/Rel Rec/relations_raw.jsonl")
+OUT_DIR = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Relations/Rel Res")
+OUT_DIR.mkdir(parents=True, exist_ok=True)
+RAW_LLM_DIR = OUT_DIR / "llm_raw"
+RAW_LLM_DIR.mkdir(exist_ok=True)
+
+# Embedding model
+EMBED_MODEL = "BAAI/bge-large-en-v1.5"
+DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
+BATCH_SIZE = 32
+
+# Weights for buckets used to build relation embeddings
+# Buckets:
+#   name            = relation_name
+#   desc            = rel_desc
+#   head_tail       = subject/object names + class info
+#   hint_canonical  = rel_hint_type + canonical_rel_name + canonical_rel_desc + rel_cls
+REL_EMB_WEIGHTS = {
+    "name": 0.25,
+    "desc": 0.15,
+    "head_tail": 0.20,
+    "hint_canonical": 0.40,
+}
+
+# Global clustering params
+USE_UMAP = True
+UMAP_N_COMPONENTS = 64
+UMAP_N_NEIGHBORS = 8
+UMAP_MIN_DIST = 0.0
+HDBSCAN_MIN_CLUSTER_SIZE = 2
+HDBSCAN_MIN_SAMPLES = 1
+HDBSCAN_METRIC = "euclidean"
+
+# Local subcluster params (when a cluster is very large)
+MAX_CLUSTER_SIZE_FOR_LOCAL = 30
+LOCAL_HDBSCAN_MIN_CLUSTER_SIZE = 2
+LOCAL_HDBSCAN_MIN_SAMPLES = 1
+
+# LLM prompt chunking
+MAX_MEMBERS_PER_PROMPT = 10  # max relation instances per LLM call
+
+# LLM / OpenAI
+OPENAI_MODEL = "gpt-5.1"
+OPENAI_TEMPERATURE = 0.0
+LLM_MAX_OUTPUT_TOKENS = 3000
+OPENAI_API_KEY_ENV = "OPENAI_API_KEY"
+
+VERBOSE = True
+
+# ---------------------- Helpers: OpenAI client ---------------------
+
+def _load_openai_key(envvar: str = OPENAI_API_KEY_ENV, fallback_path: str = "/home/mabolhas/MyReposOnSOL/SGCE-KG/.env"):
+    key = os.getenv(envvar, None)
+    if key:
+        return key
+    if Path(fallback_path).exists():
+        txt = Path(fallback_path).read_text(encoding="utf-8").strip()
+        if txt:
+            return txt
+    return None
+
+OPENAI_KEY = _load_openai_key()
+if OpenAI is not None and OPENAI_KEY:
+    client = OpenAI(api_key=OPENAI_KEY)
+else:
+    client = None
+    if VERBOSE:
+        print("⚠️ OpenAI client not initialized (missing package or API key). LLM calls will fail unless OpenAI client is available.")
+
+def call_llm(prompt: str, model: str = OPENAI_MODEL, temperature: float = OPENAI_TEMPERATURE, max_output_tokens: int = LLM_MAX_OUTPUT_TOKENS) -> str:
+    """
+    Use OpenAI Responses API with a single developer prompt and a small user nudge.
+    """
+    if client is None:
+        raise RuntimeError("OpenAI client not available. Set OPENAI_API_KEY and install openai package.")
+    try:
+        resp = client.responses.create(
+            model=model,
+            reasoning={"effort": "low"},
+            max_output_tokens=max_output_tokens,
+            input=[
+                {"role": "developer", "content": prompt},
+                {"role": "user", "content": "Return ONLY the JSON array of function calls now."},
+            ],
+        )
+        return resp.output_text or ""
+    except Exception as e:
+        print("LLM call error:", e)
+        return ""
+
+# ---------------------- HF Embedder --------------------------------
+
+def mean_pool(token_embeddings: torch.Tensor, attention_mask: torch.Tensor):
+    input_mask_expanded = attention_mask.unsqueeze(-1).expand(token_embeddings.size()).float()
+    sum_embeddings = torch.sum(token_embeddings * input_mask_expanded, 1)
+    sum_mask = torch.clamp(input_mask_expanded.sum(1), min=1e-9)
+    return sum_embeddings / sum_mask
+
+class HFEmbedder:
+    def __init__(self, model_name=EMBED_MODEL, device=DEVICE):
+        if VERBOSE:
+            print(f"[embedder] loading {model_name} on {device}")
+        self.device = device
+        self.tokenizer = AutoTokenizer.from_pretrained(model_name, use_fast=True)
+        self.model = AutoModel.from_pretrained(model_name)
+        self.model.to(device)
+        self.model.eval()
+        for p in self.model.parameters():
+            p.requires_grad = False
+
+    @property
+    def dim(self) -> int:
+        return getattr(self.model.config, "hidden_size", 1024)
+
+    @torch.no_grad()
+    def encode_batch(self, texts: List[str], batch_size: int = BATCH_SIZE) -> np.ndarray:
+        """
+        Encode a list of texts into L2-normalized embeddings.
+        """
+        if len(texts) == 0:
+            D = self.dim
+            return np.zeros((0, D))
+        embs = []
+        for i in range(0, len(texts), batch_size):
+            batch = texts[i:i + batch_size]
+            enc = self.tokenizer(
+                batch,
+                padding=True,
+                truncation=True,
+                return_tensors="pt",
+                max_length=512,
+            )
+            input_ids = enc["input_ids"].to(self.device)
+            attention_mask = enc["attention_mask"].to(self.device)
+            out = self.model(input_ids=input_ids, attention_mask=attention_mask, return_dict=True)
+            token_embeds = out.last_hidden_state
+            pooled = mean_pool(token_embeds, attention_mask)
+            embs.append(pooled.cpu().numpy())
+        embs = np.vstack(embs)
+        embs = normalize(embs, axis=1)
+        return embs
+
+# ---------------------- IO helpers ---------------------------------
+
+def load_relations(path: Path) -> List[Dict[str, Any]]:
+    """
+    Load relations_raw.jsonl and ensure schema-related fields exist:
+
+      - canonical_rel_name (default "TBD")
+      - canonical_rel_desc (default "")
+      - rel_cls (default "TBD")
+      - rel_cls_group (default "TBD")
+      - remarks (list of strings)
+    """
+    rels: List[Dict[str, Any]] = []
+    if not path.exists():
+        raise FileNotFoundError(f"Relations file not found: {path}")
+    with path.open("r", encoding="utf-8") as f:
+        for line in f:
+            line = line.strip()
+            if not line:
+                continue
+            obj = json.loads(line)
+            # ensure relation_id exists
+            rid = obj.get("relation_id") or ("RelR_" + uuid.uuid4().hex[:8])
+            obj["relation_id"] = rid
+
+            # ensure schema fields
+            if "canonical_rel_name" not in obj or str(obj.get("canonical_rel_name", "")).strip() == "":
+                obj["canonical_rel_name"] = "TBD"
+            if "canonical_rel_desc" not in obj or obj.get("canonical_rel_desc") is None:
+                obj["canonical_rel_desc"] = ""
+            if "rel_cls" not in obj or str(obj.get("rel_cls", "")).strip() == "":
+                obj["rel_cls"] = "TBD"
+            if "rel_cls_group" not in obj or str(obj.get("rel_cls_group", "")).strip() == "":
+                obj["rel_cls_group"] = "TBD"
+
+            # normalize remarks: merge original remark + remarks list into a 'remarks' list
+            initial_remark = obj.get("remark")
+            remarks = obj.get("remarks")
+            norm_remarks: List[str] = []
+            if isinstance(remarks, list):
+                norm_remarks.extend([str(r) for r in remarks if r])
+            elif isinstance(remarks, str) and remarks.strip():
+                norm_remarks.append(remarks.strip())
+            if isinstance(initial_remark, str) and initial_remark.strip():
+                norm_remarks.append(initial_remark.strip())
+            obj["remarks"] = norm_remarks
+
+            rels.append(obj)
+    if VERBOSE:
+        print(f"[start] loaded {len(rels)} relations from {path}")
+    return rels
+
+def safe_str(s: Optional[str]) -> str:
+    if not s:
+        return ""
+    return str(s).replace("\n", " ").strip()
+
+# ---------------------- Build relation texts & embeddings ----------
+
+def build_relation_texts(
+    relations: List[Dict[str, Any]]
+) -> Tuple[List[str], List[str], List[str], List[str]]:
+    """
+    Build four text buckets for each relation:
+
+    - name_texts:       relation_name
+    - desc_texts:       rel_desc
+    - head_tail_texts:  head/tail entity + class info
+    - hint_texts:       rel_hint_type + canonical_rel_name + canonical_rel_desc + rel_cls
+    """
+    name_texts, desc_texts, head_tail_texts, hint_texts = [], [], [], []
+
+    for r in relations:
+        # name
+        rname = safe_str(r.get("relation_name", ""))
+        name_texts.append(rname[:256])
+
+        # desc
+        rdesc = safe_str(r.get("rel_desc", ""))
+        desc_texts.append(rdesc[:512])
+
+        # head_tail
+        subj_name = safe_str(r.get("subject_entity_name", ""))
+        subj_cl = safe_str(r.get("subject_class_label", ""))
+        subj_cg = safe_str(r.get("subject_class_group", ""))
+        obj_name = safe_str(r.get("object_entity_name", ""))
+        obj_cl = safe_str(r.get("object_class_label", ""))
+        obj_cg = safe_str(r.get("object_class_group", ""))
+
+        head_tail = f"{subj_name} ({subj_cl}, {subj_cg}) -> {obj_name} ({obj_cl}, {obj_cg})"
+        head_tail_texts.append(head_tail[:512])
+
+        # hint_canonical
+        hint_parts = []
+        for key in ["rel_hint_type", "canonical_rel_name", "canonical_rel_desc", "rel_cls"]:
+            val = safe_str(r.get(key, ""))
+            if val and val.upper() != "TBD":
+                hint_parts.append(val)
+        hint_text = " ; ".join(hint_parts)
+        hint_texts.append(hint_text[:512])
+
+    return name_texts, desc_texts, head_tail_texts, hint_texts
+
+def any_nonempty(lst: List[str]) -> bool:
+    return any(safe_str(t) for t in lst)
+
+def compute_relation_embeddings(
+    embedder: HFEmbedder,
+    relations: List[Dict[str, Any]],
+    weights: Dict[str, float]
+) -> np.ndarray:
+    """
+    Compute combined embeddings for relations using four buckets with fixed weights.
+    """
+    N = len(relations)
+    if N == 0:
+        raise ValueError("No relations to embed")
+
+    name_texts, desc_texts, head_tail_texts, hint_texts = build_relation_texts(relations)
+
+    emb_name = embedder.encode_batch(name_texts) if any_nonempty(name_texts) else None
+    emb_desc = embedder.encode_batch(desc_texts) if any_nonempty(desc_texts) else None
+    emb_ht = embedder.encode_batch(head_tail_texts) if any_nonempty(head_tail_texts) else None
+    emb_hint = embedder.encode_batch(hint_texts) if any_nonempty(hint_texts) else None
+
+    D = embedder.dim
+    combined = np.zeros((N, D), dtype=np.float32)
+
+    def add_bucket(emb: Optional[np.ndarray], weight: float):
+        nonlocal combined
+        if emb is None:
+            return
+        if emb.shape[0] != N:
+            raise ValueError("embedding row mismatch")
+        combined += weight * emb  # emb already row-normalized
+
+    add_bucket(emb_name, weights.get("name", 0.0))
+    add_bucket(emb_desc, weights.get("desc", 0.0))
+    add_bucket(emb_ht, weights.get("head_tail", 0.0))
+    add_bucket(emb_hint, weights.get("hint_canonical", 0.0))
+
+    combined = normalize(combined, axis=1)
+    return combined
+
+# ---------------------- clustering ---------------------------------
+
+def run_hdbscan(
+    embeddings: np.ndarray,
+    min_cluster_size: int = HDBSCAN_MIN_CLUSTER_SIZE,
+    min_samples: int = HDBSCAN_MIN_SAMPLES,
+    metric: str = HDBSCAN_METRIC,
+    use_umap: bool = USE_UMAP
+) -> Tuple[np.ndarray, object]:
+    X = embeddings
+    N = X.shape[0]
+    if use_umap and UMAP_AVAILABLE and N >= 6:
+        safe_n_components = min(UMAP_N_COMPONENTS, max(2, N - 2))
+        safe_n_neighbors = min(UMAP_N_NEIGHBORS, max(2, N - 1))
+        try:
+            reducer = umap.UMAP(
+                n_components=safe_n_components,
+                n_neighbors=safe_n_neighbors,
+                min_dist=UMAP_MIN_DIST,
+                metric="cosine",
+                random_state=42
+            )
+            X_reduced = reducer.fit_transform(X)
+            if X_reduced is not None and X_reduced.shape[0] == N:
+                X = X_reduced
+            else:
+                if VERBOSE:
+                    print(f"[warn] UMAP returned invalid shape; skipping UMAP")
+        except Exception as e:
+            if VERBOSE:
+                print(f"[warn] UMAP failed (N={N}): {e}. Proceeding without UMAP.")
+            X = embeddings
+    clusterer = hdbscan.HDBSCAN(
+        min_cluster_size=min_cluster_size,
+        min_samples=min_samples,
+        metric=metric,
+        cluster_selection_method="eom"
+    )
+    labels = clusterer.fit_predict(X)
+    return labels, clusterer
+
+# ---------------------- LLM prompt template ------------------------
+
+RELRES_PROMPT_TEMPLATE = """
+You are a very proactive RELATION-RESOLUTION assistant, and an expert in knowledge graphs (KGs) and schema (ontology) design.
+
+You are given a CLUSTER of relation INSTANCES from a context-enriched technical KG.
+Each relation instance already connects specific subject and object entities, and has:
+
+- relation_id
+- relation_name        (raw, from Relation Recognition; may be noisy)
+- rel_desc             (instance-level description; may be verbose)
+- rel_hint_type        (short free-form hint; may be noisy)
+- canonical_rel_name   (often "TBD" initially)
+- canonical_rel_desc   (often empty initially)
+- rel_cls              (often "TBD" initially)
+- rel_cls_group        (often "TBD" initially)
+- subject_entity_name, object_entity_name
+- subject_class_label, subject_class_group
+- object_class_label, object_class_group
+- qualifiers (temporal, spatial, etc.)
+- confidence, remarks, etc.
+
+IMPORTANT CONTEXT ABOUT THE PIPELINE
+------------------------------------
+- ALL these fields (especially relation_name, rel_desc, and rel_hint_type) were
+  generated by previous LLM stages. They are **approximate** and may be:
+    - awkward in wording,
+    - too specific,
+    - too generic,
+    - or slightly wrong.
+- This step follows a "generate first, refine later" philosophy.
+  Your job is to **refine, disambiguate, normalize, and improve human readability as a KG expert**, not to copy the wording blindly.
+- Use upstream fields (especially relation_name, rel_desc, and rel_hint_type) as **semantic hints**, not as final label candidates AT ALL!
+
+MULTI-RUN / REFINEMENT INSTRUCTIONS (READ ONLY WHEN THE FOLLOWING FIELDS ARE ALREADY FILLED: canonical_rel_name, canonical_rel_desc, rel_cls, rel_cls_group)
+- Only read/apply the following guidance when at least one of the fields above is NOT "TBD" for relations in this chunk. It means we are in a refinement run.
+- Do NOT be passive: if any pre-filled value is inconsistent, ambiguous, or improvable, you MUST propose a correction (use modify_rel_schema) with a concise justification.
+- Only return [] if there is extremely strong evidence that no change is required (this is rare).
+- This is an iterative process — act now with well-justified corrections using modify_rel_schema (include a short justification), rather than deferring small but meaningful fixes.
+- This step will be repeated in later iterations; reasonable but imperfect changes can be corrected later. It is worse to miss a necessary change than to propose a well-justified change that might be slightly adjusted later.
+
+
+ABOUT CLUSTERS (CRITICAL)
+-------------------------
+- The cluster you see is produced automatically from embeddings.
+- The cluster is **only suggestive**, NOT a hard class:
+    - It may contain multiple different canonical relations.
+    - It may contain multiple different relation classes.
+    - It may contain multiple different relation class groups.
+- Your task is **NOT**:
+    - "Find ONE canonical_rel_name that covers (almost) all relations in the cluster."
+    - "Force all relations in the cluster into the same rel_cls or rel_cls_group."
+- Your task **IS**:
+    - For EACH relation instance, decide what canonical_rel_name, rel_cls,
+      and rel_cls_group are appropriate (especially from the lens of a KG and Schema expert).
+    - If some instances do NOT naturally share semantics, assign them different
+      canonical_rel_name / rel_cls / rel_cls_group, even though they are
+      in the same cluster.
+    - If some other instances in the cluster naturally share exactly the same
+      semantics, group them together in the same function call.
+
+CRUCIAL DISTINCTION (SCOPE)
+---------------------------
+We use a 3-layer abstraction for relations:
+
+1) canonical_rel_name
+   - Fine-grained, predicate-level.
+   - Groups relations that use essentially the SAME predicate meaning and direction.
+   - This is the predicate that will be used as the edge label in the KG.
+   - Examples: "occurs_in", "resists", "provides_resistance_to", "is_subtype_of",
+     "has_metallurgical_structure", "grouped_with".
+
+2) rel_cls
+   - A broader relation CLASS that may cover multiple canonical_rel_name values.
+   - Think of this as a family of similar predicates.
+   - Examples (illustrative): "alloying_element_relation", "microstructure_relation",
+     "hierarchy_relation", "corrosion_resistance_relation", "document_series_relation".
+   - IMPORTANT: rel_cls should be more specific than broad groups, but more general
+     than a single canonical_rel_name.
+
+3) rel_cls_group
+   - Very broad semantic DIMENSIONS:
+       COMPOSITION, CAUSALITY, IDENTITY, TEMPORALITY, SPATIALITY, AGENCY,
+       ASSOCIATION, MODIFICATION, USAGE, REQUIREMENT, etc.
+   - This list is illustrative, NOT exhaustive.
+   - Example:
+       canonical_rel_name: "contains_alloying_element"
+       rel_cls:            "alloying_element_relation"
+       rel_cls_group:      "COMPOSITION"
+
+RELATION-BY-RELATION THINKING (SUPER IMPORTANT)
+-----------------------------------------------
+For every relation instance in the cluster, conceptually ask:
+
+1) What is the **best canonical predicate** (canonical_rel_name) for THIS instance,
+   ignoring awkward wording in relation_name / rel_hint_type?
+2) Which broader **relation class** (rel_cls) best describes this connection?
+3) Which **rel_cls_group** (COMPOSITION, CAUSALITY, etc.) does it belong to?
+
+Then:
+- If you see other instances in the cluster with the **same semantics**, you may
+  include them in the same function call (same canonical_rel_name / rel_cls / rel_cls_group).
+- Do NOT try to find one label that covers ALL instances in the cluster.
+
+NOISY HINTS AND HOW TO USE THEM
+-------------------------------
+- relation_name, rel_desc, rel_hint_type are hints, not perfect labels.
+- Examples of bad patterns that you should NOT copy directly:
+    - rel_hint_type = "co-classification" → this is awkward wording; interpret it
+      as "these things are grouped together as co-equal categories" and choose
+      a better canonical name / class (e.g., "grouped_with" with rel_cls
+      "coequal_category_relation", rel_cls_group "ASSOCIATION" or "IDENTITY").
+    - rel_hint_type = "causal" → this suggests rel_cls_group "CAUSALITY",
+      but is NOT a good canonical_rel_name or rel_cls by itself.
+- Also avoid redundant patterns like:
+    - rel_cls = "composition_relation" when rel_cls_group = "COMPOSITION".
+      In that case, choose a more specific rel_cls label, e.g.,
+      "alloying_element_relation" or "microstructure_relation".
+
+DEDUPLICATION & NORMALIZATION
+-----------------------------
+- Within a cluster, if you see multiple predicate variants that are semantically
+  the same (e.g., "has_subtype", "is_subtype_of"), you MUST normalize them
+  to **one** canonical_rel_name and apply it consistently:
+    - For hierarchical relations, prefer a single consistent style, e.g., "is_subtype_of".
+- Avoid creating trivial variants that only differ in small wording:
+    - Do NOT keep both "provides_resistance_to" and "improves_resistance_to"
+      if they are used identically for the same semantic link; pick one.
+- Avoid rel_cls that simply repeats rel_cls_group with "_relation" added
+  (e.g., "composition_relation" when rel_cls_group is "COMPOSITION").
+
+WHAT YOU NEVER CHANGE
+----------------------
+- SUBJECT and OBJECT entities are fixed; you MUST NOT change them.
+- You NEVER delete relation instances.
+- You NEVER move qualifiers from relations onto nodes; qualifiers stay on the
+  relation instance.
+
+YOUR FUNCTION VOCABULARY
+------------------------
+You must return an ordered JSON ARRAY of function calls using ONLY:
+
+1) set_canonical_rel
+2) set_rel_cls
+3) set_rel_cls_group
+4) modify_rel_schema
+5) add_rel_remark
+
+Think RELATION-BY-RELATION first, and only group multiple relation_ids into the
+same function call when you are genuinely sure they share the same semantics.
+
+--------------------------------
+FUNCTION DEFINITIONS
+--------------------------------
+
+1) set_canonical_rel
+   Use this when you want to SET or ALIGN canonical_rel_name / canonical_rel_desc
+   for one or more relation instances (especially when values are "TBD").
+
+   args = {
+     "relation_ids": [<relation_id>...],        # REQUIRED, at least 1
+     "canonical_rel_name": <string>,           # REQUIRED, normalized predicate for KG edge
+     "canonical_rel_desc": <string or null>,   # OPTIONAL, reusable description of this predicate
+     "justification": <string>,                # REQUIRED: why these instances share this canonical predicate
+     "remark": <string or null>,               # optional human-facing notes
+     "confidence": <number between 0 and 1, optional>
+   }
+
+   Notes:
+   - canonical_rel_name should be a short predicate-style phrase, e.g. "occurs_in",
+     "resists", "provides_resistance_to", "is_subtype_of", "has_metallurgical_structure".
+   - Do NOT include qualifiers (e.g., "at high temperature") here.
+   - Use this on relatively TIGHT groups of semantically equivalent predicates.
+   - It is perfectly fine to call set_canonical_rel with a **single** relation_id
+     when others in the cluster do not share the semantics.
+
+
+2) set_rel_cls
+   Use this when you want to SET or ALIGN rel_cls for one or more instances,
+   grouping them into a broader relation class (family).
+
+   args = {
+     "relation_ids": [<relation_id>...],        # REQUIRED, at least 1
+     "rel_cls": <string>,                      # REQUIRED: class name (e.g., "structure_relation")
+     "justification": <string>,                # REQUIRED: why these instances belong to this class
+     "remark": <string or null>,               # optional notes
+     "confidence": <number between 0 and 1, optional>
+   }
+
+   Notes:
+   - A rel_cls usually covers MULTIPLE canonical_rel_name values, not just one.
+   - Think of rel_cls as a conceptual family: e.g. "alloying_element_relation",
+     "microstructure_relation", "document_series_relation".
+   - Do NOT simply repeat rel_cls_group (e.g. avoid "composition_relation" when
+     rel_cls_group is "COMPOSITION") unless there is truly no more specific
+     and meaningful class you can provide.
+
+
+3) set_rel_cls_group
+   Use this when you want to SET or ALIGN rel_cls_group for one or more instances
+   (or their classes), using a very broad semantic category.
+
+   args = {
+     "relation_ids": [<relation_id>...],        # REQUIRED, at least 1
+     "rel_cls_group": <string>,                # REQUIRED: broad group (e.g., "COMPOSITION")
+     "justification": <string>,                # REQUIRED: why this group fits
+     "remark": <string or null>,               # optional notes
+     "confidence": <number between 0 and 1, optional>
+   }
+
+   Notes:
+   - rel_cls_group is broad and somewhat orthogonal.
+   - Typical groups: COMPOSITION, CAUSALITY, IDENTITY, TEMPORALITY, SPATIALITY,
+     AGENCY, INTERACTION, ASSOCIATION, MODIFICATION, USAGE, REQUIREMENT, etc.
+   - General hints like rel_hint_type="causal" are better mapped to rel_cls_group
+     (CAUSALITY) than to canonical_rel_name.
+
+
+4) modify_rel_schema
+   Use this to REFINE or CORRECT existing schema fields for one or more relations
+   (canonical_rel_name / canonical_rel_desc / rel_cls / rel_cls_group).
+
+   args = {
+     "relation_ids": [<relation_id>...],            # REQUIRED, at least 1
+     "canonical_rel_name": <string or null>,        # OPTIONAL: new canonical name
+     "canonical_rel_desc": <string or null>,        # OPTIONAL: new canonical description
+     "rel_cls": <string or null>,                   # OPTIONAL: new relation class
+     "rel_cls_group": <string or null>,             # OPTIONAL: new broad group
+     "justification": <string>,                     # REQUIRED: why this modification is needed
+     "remark": <string or null>,                    # optional notes / flags
+     "confidence": <number between 0 and 1, optional>
+   }
+
+   Notes:
+   - Do NOT be passive: if any pre-filled value is inconsistent, ambiguous, or improvable, you MUST propose a correction using modify_rel_schema.
+   - This is iterative: make well-justified corrections now (include a short justification); later runs may further refine them. 
+   - It is worse to miss a necessary change than to propose a justified change that might be slightly adjusted later.
+   - You MUST NOT try to change (poor) relation_names. As long as the canonical_rel_name, rel_cls, and rel_cls_group are fine, we are good. 
+     But if they need correction, YOU MUST use modify_rel_schema to correct them. We will not use raw relation name in the KG. 
+   - You MAY use this to normalize even minor variants (e.g., consolidate "has_subtype"
+   and "is_subtype_of" to "is_subtype_of") when needed. We want consistent schema.
+   
+
+
+5) add_rel_remark
+   Use this when you ONLY want to attach a human-facing remark / caveat / TODO
+   without changing any schema fields.
+
+   args = {
+     "relation_ids": [<relation_id>...],        # REQUIRED, at least 1
+     "remark": <string>,                        # REQUIRED: the remark text
+     "justification": <string>,                # REQUIRED: why this remark is useful
+     "confidence": <number between 0 and 1, optional>
+   }
+
+   Notes:
+   - Use this for issues outside scope (e.g., upstream entity resolution suspicion), or
+     to flag ambiguous or borderline cases for later human review.
+
+--------------------------------
+INPUT RELATIONS (THIS CHUNK)
+--------------------------------
+
+Below is the JSON array of relation instances in THIS PART of a cluster
+(we split very large clusters into smaller chunks just to keep the prompt size manageable):
+
+{cluster_block}
+
+--------------------------------
+OUTPUT
+--------------------------------
+
+Return ONLY the JSON ARRAY of function calls, e.g.:
+
+[
+  {
+    "function": "set_canonical_rel",
+    "args": { ... }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": { ... }
+  },
+  ...
+]
+
+- If this chunk is already perfect (rare), you MAY return [].
+- Every call MUST include a "justification".
+- Use "remark" (or add_rel_remark) to flag issues or uncertainties that are outside
+  the scope of these functions.
+"""
+
+def sanitize_json_array(text: str) -> Optional[Any]:
+    """
+    Extract and parse the first JSON array from the text.
+    Grab [ ... ] block, fix simple trailing commas, and json.loads.
+    """
+    if not text or not text.strip():
+        return None
+    s = text.strip()
+    # replace smart quotes
+    s = s.replace("“", '"').replace("”", '"').replace("‘", "'").replace("’", "'")
+    start = s.find("[")
+    end = s.rfind("]")
+    if start == -1 or end == -1 or end <= start:
+        return None
+    cand = s[start:end + 1]
+    # remove trailing commas before closing braces/brackets
+    cand = re.sub(r",\s*([\]}])", r"\1", cand)
+    try:
+        return json.loads(cand)
+    except Exception:
+        return None
+
+# ---------------------- Action executors ----------------------------
+
+def execute_set_canonical_rel(
+    rel_by_id: Dict[str, Dict[str, Any]],
+    relation_ids: List[str],
+    canonical_rel_name: Optional[str],
+    canonical_rel_desc: Optional[str],
+):
+    if canonical_rel_name is None:
+        return
+    canon_name = canonical_rel_name.strip()
+    if not canon_name:
+        return
+    for rid in relation_ids:
+        if rid not in rel_by_id:
+            continue
+        r = rel_by_id[rid]
+        r["canonical_rel_name"] = canon_name
+        if canonical_rel_desc is not None:
+            r["canonical_rel_desc"] = canonical_rel_desc.strip()
+        rel_by_id[rid] = r
+
+def execute_set_rel_cls(
+    rel_by_id: Dict[str, Dict[str, Any]],
+    relation_ids: List[str],
+    rel_cls: Optional[str],
+):
+    if rel_cls is None:
+        return
+    cls_name = rel_cls.strip()
+    if not cls_name:
+        return
+    for rid in relation_ids:
+        if rid not in rel_by_id:
+            continue
+        r = rel_by_id[rid]
+        r["rel_cls"] = cls_name
+        rel_by_id[rid] = r
+
+def execute_set_rel_cls_group(
+    rel_by_id: Dict[str, Dict[str, Any]],
+    relation_ids: List[str],
+    rel_cls_group: Optional[str],
+):
+    if rel_cls_group is None:
+        return
+    grp_name = rel_cls_group.strip()
+    if not grp_name:
+        return
+    for rid in relation_ids:
+        if rid not in rel_by_id:
+            continue
+        r = rel_by_id[rid]
+        r["rel_cls_group"] = grp_name
+        rel_by_id[rid] = r
+
+def execute_modify_rel_schema(
+    rel_by_id: Dict[str, Dict[str, Any]],
+    relation_ids: List[str],
+    canonical_rel_name: Optional[str],
+    canonical_rel_desc: Optional[str],
+    rel_cls: Optional[str],
+    rel_cls_group: Optional[str],
+    new_relation_name: Optional[str],
+    original_relation_name: Optional[str],
+):
+    for rid in relation_ids:
+        if rid not in rel_by_id:
+            continue
+        r = rel_by_id[rid]
+
+        if canonical_rel_name is not None and canonical_rel_name.strip():
+            r["canonical_rel_name"] = canonical_rel_name.strip()
+        if canonical_rel_desc is not None:
+            r["canonical_rel_desc"] = canonical_rel_desc.strip()
+        if rel_cls is not None and rel_cls.strip():
+            r["rel_cls"] = rel_cls.strip()
+        if rel_cls_group is not None and rel_cls_group.strip():
+            r["rel_cls_group"] = rel_cls_group.strip()
+
+        if new_relation_name is not None and new_relation_name.strip():
+            if "original_relation_name" not in r:
+                if original_relation_name:
+                    r["original_relation_name"] = original_relation_name
+                else:
+                    r["original_relation_name"] = r.get("relation_name", "")
+            r["relation_name"] = new_relation_name.strip()
+
+        rel_by_id[rid] = r
+
+def execute_add_rel_remark(
+    rel_by_id: Dict[str, Dict[str, Any]],
+    relation_ids: List[str],
+    remark: Optional[str],
+):
+    if remark is None:
+        return
+    txt = remark.strip()
+    if not txt:
+        return
+    for rid in relation_ids:
+        if rid not in rel_by_id:
+            continue
+        r = rel_by_id[rid]
+        existing = r.get("remarks")
+        if existing is None:
+            existing = []
+        elif not isinstance(existing, list):
+            existing = [str(existing)]
+        existing.append(txt)
+        r["remarks"] = existing
+        rel_by_id[rid] = r
+
+# ---------------------- Main orchestration -------------------------
+
+def relres_main():
+    # load relations
+    relations = load_relations(INPUT_RELATIONS)
+    rel_by_id: Dict[str, Dict[str, Any]] = {r["relation_id"]: r for r in relations}
+
+    # embedder
+    embedder = HFEmbedder(model_name=EMBED_MODEL, device=DEVICE)
+    rel_ids_order = [r["relation_id"] for r in relations]
+    rel_id_to_index = {rid: i for i, rid in enumerate(rel_ids_order)}
+    combined_emb = compute_relation_embeddings(embedder, relations, REL_EMB_WEIGHTS)
+    print("[info] relation embeddings computed shape:", combined_emb.shape)
+
+    # global clustering
+    labels, clusterer = run_hdbscan(
+        combined_emb,
+        min_cluster_size=HDBSCAN_MIN_CLUSTER_SIZE,
+        min_samples=HDBSCAN_MIN_SAMPLES,
+        use_umap=USE_UMAP
+    )
+    unique_labels = sorted(set(labels))
+    print("[info] global clustering done. unique labels:", unique_labels)
+
+    # map cluster -> relation ids
+    cluster_to_relids: Dict[int, List[str]] = {}
+    for idx, lab in enumerate(labels):
+        rid = rel_ids_order[idx]
+        cluster_to_relids.setdefault(int(lab), []).append(rid)
+
+    # action log
+    action_log_path = OUT_DIR / "rel_res_action_log.jsonl"
+    if action_log_path.exists():
+        action_log_path.unlink()
+
+    # helper to process a subset of relation ids with LLM (one prompt)
+    def run_llm_on_subset(sub_rel_ids: List[str], cluster_label_str: str):
+        if not sub_rel_ids:
+            return
+
+        # build compact representation for this chunk
+        cluster_relations = []
+        for rid in sub_rel_ids:
+            r = rel_by_id.get(rid)
+            if not r:
+                continue
+            cluster_relations.append({
+                "relation_id": r["relation_id"],
+                "relation_name": safe_str(r.get("relation_name", "")),
+                "rel_desc": safe_str(r.get("rel_desc", "")),
+                "rel_hint_type": safe_str(r.get("rel_hint_type", "")),
+                "canonical_rel_name": safe_str(r.get("canonical_rel_name", "")),
+                "canonical_rel_desc": safe_str(r.get("canonical_rel_desc", "")),
+                "rel_cls": safe_str(r.get("rel_cls", "")),
+                "rel_cls_group": safe_str(r.get("rel_cls_group", "")),
+                "subject_entity_name": safe_str(r.get("subject_entity_name", "")),
+                "object_entity_name": safe_str(r.get("object_entity_name", "")),
+                "subject_class_label": safe_str(r.get("subject_class_label", "")),
+                "subject_class_group": safe_str(r.get("subject_class_group", "")),
+                "object_class_label": safe_str(r.get("object_class_label", "")),
+                "object_class_group": safe_str(r.get("object_class_group", "")),
+                "qualifiers": r.get("qualifiers", {}),
+                "confidence": float(r.get("confidence", 0.0)),
+                "remarks": r.get("remarks", [])
+            })
+
+        if not cluster_relations:
+            return
+
+        cluster_block = json.dumps(cluster_relations, ensure_ascii=False, indent=2)
+        prompt = RELRES_PROMPT_TEMPLATE.replace("{cluster_block}", cluster_block)
+
+        # log prompt
+        prompt_path = RAW_LLM_DIR / f"cluster_{cluster_label_str}_prompt.txt"
+        prompt_path.write_text(prompt, encoding="utf-8")
+
+        # call LLM
+        raw_out = ""
+        try:
+            raw_out = call_llm(prompt)
+        except Exception as e:
+            print(f"[warning] LLM call failed for {cluster_label_str}: {e}")
+            raw_out = ""
+
+        # write raw output
+        raw_path = RAW_LLM_DIR / f"cluster_{cluster_label_str}_llm_raw.txt"
+        raw_path.write_text(raw_out, encoding="utf-8")
+
+        parsed = sanitize_json_array(raw_out)
+        if parsed is None:
+            print(f"[warn] failed to parse LLM output for chunk {cluster_label_str}; skipping automated actions for this chunk.")
+            dec_path = OUT_DIR / f"cluster_{cluster_label_str}_decisions.json"
+            dec_path.write_text(
+                json.dumps({"cluster_label": cluster_label_str, "raw_llm": raw_out}, ensure_ascii=False, indent=2),
+                encoding="utf-8"
+            )
+            return
+
+        decisions: List[Dict[str, Any]] = []
+
+        # execute parsed function list in order
+        for step in parsed:
+            if not isinstance(step, dict):
+                continue
+            fn = step.get("function")
+            args = step.get("args", {}) or {}
+            justification = args.get("justification")
+            confidence_val = args.get("confidence", None)
+            remark_val = args.get("remark")
+
+            try:
+                if fn == "set_canonical_rel":
+                    rel_ids_raw = args.get("relation_ids", []) or []
+                    canon_name = args.get("canonical_rel_name")
+                    canon_desc = args.get("canonical_rel_desc")
+                    rel_ids_valid = [rid for rid in rel_ids_raw if rid in rel_by_id]
+
+                    if not rel_ids_valid or canon_name is None:
+                        decisions.append({
+                            "action": "set_canonical_rel_skip",
+                            "requested_relation_ids": rel_ids_raw,
+                            "canonical_rel_name": canon_name,
+                            "justification": justification,
+                            "remark": remark_val,
+                            "confidence": confidence_val
+                        })
+                        continue
+
+                    execute_set_canonical_rel(rel_by_id, rel_ids_valid, canon_name, canon_desc)
+
+                    decisions.append({
+                        "action": "set_canonical_rel",
+                        "relation_ids": rel_ids_valid,
+                        "canonical_rel_name": canon_name,
+                        "canonical_rel_desc": canon_desc,
+                        "justification": justification,
+                        "remark": remark_val,
+                        "confidence": confidence_val
+                    })
+
+                elif fn == "set_rel_cls":
+                    rel_ids_raw = args.get("relation_ids", []) or []
+                    rel_cls = args.get("rel_cls")
+                    rel_ids_valid = [rid for rid in rel_ids_raw if rid in rel_by_id]
+
+                    if not rel_ids_valid or rel_cls is None:
+                        decisions.append({
+                            "action": "set_rel_cls_skip",
+                            "requested_relation_ids": rel_ids_raw,
+                            "rel_cls": rel_cls,
+                            "justification": justification,
+                            "remark": remark_val,
+                            "confidence": confidence_val
+                        })
+                        continue
+
+                    execute_set_rel_cls(rel_by_id, rel_ids_valid, rel_cls)
+
+                    decisions.append({
+                        "action": "set_rel_cls",
+                        "relation_ids": rel_ids_valid,
+                        "rel_cls": rel_cls,
+                        "justification": justification,
+                        "remark": remark_val,
+                        "confidence": confidence_val
+                    })
+
+                elif fn == "set_rel_cls_group":
+                    rel_ids_raw = args.get("relation_ids", []) or []
+                    rel_cls_group = args.get("rel_cls_group")
+                    rel_ids_valid = [rid for rid in rel_ids_raw if rid in rel_by_id]
+
+                    if not rel_ids_valid or rel_cls_group is None:
+                        decisions.append({
+                            "action": "set_rel_cls_group_skip",
+                            "requested_relation_ids": rel_ids_raw,
+                            "rel_cls_group": rel_cls_group,
+                            "justification": justification,
+                            "remark": remark_val,
+                            "confidence": confidence_val
+                        })
+                        continue
+
+                    execute_set_rel_cls_group(rel_by_id, rel_ids_valid, rel_cls_group)
+
+                    decisions.append({
+                        "action": "set_rel_cls_group",
+                        "relation_ids": rel_ids_valid,
+                        "rel_cls_group": rel_cls_group,
+                        "justification": justification,
+                        "remark": remark_val,
+                        "confidence": confidence_val
+                    })
+
+                elif fn == "modify_rel_schema":
+                    rel_ids_raw = args.get("relation_ids", []) or []
+                    canon_name = args.get("canonical_rel_name")
+                    canon_desc = args.get("canonical_rel_desc")
+                    rel_cls = args.get("rel_cls")
+                    rel_cls_group = args.get("rel_cls_group")
+                    new_rel_name = args.get("new_relation_name")
+                    orig_rel_name = args.get("original_relation_name")
+
+                    rel_ids_valid = [rid for rid in rel_ids_raw if rid in rel_by_id]
+                    if not rel_ids_valid:
+                        decisions.append({
+                            "action": "modify_rel_schema_skip_no_valid_relations",
+                            "requested_relation_ids": rel_ids_raw,
+                            "justification": justification,
+                            "remark": remark_val,
+                            "confidence": confidence_val
+                        })
+                        continue
+
+                    execute_modify_rel_schema(
+                        rel_by_id,
+                        rel_ids_valid,
+                        canon_name,
+                        canon_desc,
+                        rel_cls,
+                        rel_cls_group,
+                        new_rel_name,
+                        orig_rel_name
+                    )
+
+                    decisions.append({
+                        "action": "modify_rel_schema",
+                        "relation_ids": rel_ids_valid,
+                        "canonical_rel_name": canon_name,
+                        "canonical_rel_desc": canon_desc,
+                        "rel_cls": rel_cls,
+                        "rel_cls_group": rel_cls_group,
+                        "new_relation_name": new_rel_name,
+                        "original_relation_name": orig_rel_name,
+                        "justification": justification,
+                        "remark": remark_val,
+                        "confidence": confidence_val
+                    })
+
+                elif fn == "add_rel_remark":
+                    rel_ids_raw = args.get("relation_ids", []) or []
+                    rel_ids_valid = [rid for rid in rel_ids_raw if rid in rel_by_id]
+                    remark_text = args.get("remark")
+
+                    if not rel_ids_valid or not remark_text:
+                        decisions.append({
+                            "action": "add_rel_remark_skip",
+                            "requested_relation_ids": rel_ids_raw,
+                            "remark": remark_text,
+                            "justification": justification,
+                            "confidence": confidence_val
+                        })
+                        continue
+
+                    execute_add_rel_remark(rel_by_id, rel_ids_valid, remark_text)
+
+                    decisions.append({
+                        "action": "add_rel_remark",
+                        "relation_ids": rel_ids_valid,
+                        "remark": remark_text,
+                        "justification": justification,
+                        "confidence": confidence_val
+                    })
+
+                else:
+                    decisions.append({
+                        "action": "skip_unknown_function",
+                        "function": fn,
+                        "raw": step,
+                        "justification": justification,
+                        "remark": remark_val,
+                        "confidence": confidence_val
+                    })
+
+            except Exception as e:
+                decisions.append({
+                    "action": "error_executing",
+                    "function": fn,
+                    "error": str(e),
+                    "input": step,
+                    "justification": justification,
+                    "remark": remark_val,
+                    "confidence": confidence_val
+                })
+
+        # write decisions file for this chunk
+        dec_path = OUT_DIR / f"cluster_{cluster_label_str}_decisions.json"
+        dec_obj = {
+            "cluster_label": cluster_label_str,
+            "cluster_relations": cluster_relations,
+            "llm_raw": raw_out,
+            "parsed_steps": parsed,
+            "executed_decisions": decisions,
+            "timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+        }
+        dec_path.write_text(json.dumps(dec_obj, ensure_ascii=False, indent=2), encoding="utf-8")
+
+        # append to global action log
+        with action_log_path.open("a", encoding="utf-8") as fh:
+            fh.write(json.dumps(dec_obj, ensure_ascii=False) + "\n")
+
+    # iterate clusters (skip noise -1 first, then noise)
+    cluster_keys = [k for k in cluster_to_relids.keys() if k != -1]
+    cluster_keys = sorted(cluster_keys)
+    if -1 in cluster_to_relids:
+        cluster_keys.append(-1)
+
+    for cluster_label in cluster_keys:
+        rel_ids_global = cluster_to_relids.get(cluster_label, [])
+        if not rel_ids_global:
+            continue
+        print(f"[cluster] {cluster_label} -> {len(rel_ids_global)} relations")
+
+        # local subclustering for large clusters
+        if len(rel_ids_global) > MAX_CLUSTER_SIZE_FOR_LOCAL:
+            print(f"[cluster] {cluster_label}: size {len(rel_ids_global)} > {MAX_CLUSTER_SIZE_FOR_LOCAL}, running local HDBSCAN")
+            idxs = [rel_id_to_index[rid] for rid in rel_ids_global]
+            try:
+                sub_emb = combined_emb[idxs]
+                local_clusterer = hdbscan.HDBSCAN(
+                    min_cluster_size=max(2, LOCAL_HDBSCAN_MIN_CLUSTER_SIZE),
+                    min_samples=LOCAL_HDBSCAN_MIN_SAMPLES,
+                    metric="euclidean",
+                    cluster_selection_method="eom"
+                )
+                local_labels = local_clusterer.fit_predict(sub_emb)
+            except Exception as e:
+                print(f"[warn] local HDBSCAN failed for cluster {cluster_label}: {e}. Treating as single group.")
+                local_labels = np.zeros(len(idxs), dtype=int)
+
+            local_map: Dict[int, List[str]] = {}
+            for i_local, lab_local in enumerate(local_labels):
+                rid = rel_ids_global[i_local]
+                local_map.setdefault(int(lab_local), []).append(rid)
+
+            for lab_local, local_rel_ids in sorted(local_map.items(), key=lambda x: x[0]):
+                label_prefix = f"{cluster_label}_loc{lab_local}"
+                # split into chunks for LLM
+                for part_idx in range(0, len(local_rel_ids), MAX_MEMBERS_PER_PROMPT):
+                    part_rel_ids = local_rel_ids[part_idx:part_idx + MAX_MEMBERS_PER_PROMPT]
+                    chunk_label = f"{label_prefix}_p{part_idx//MAX_MEMBERS_PER_PROMPT}"
+                    print(f"[cluster] {chunk_label}: processing {len(part_rel_ids)} relations")
+                    run_llm_on_subset(part_rel_ids, chunk_label)
+
+        else:
+            label_prefix = str(cluster_label)
+            for part_idx in range(0, len(rel_ids_global), MAX_MEMBERS_PER_PROMPT):
+                part_rel_ids = rel_ids_global[part_idx:part_idx + MAX_MEMBERS_PER_PROMPT]
+                chunk_label = f"{label_prefix}_p{part_idx//MAX_MEMBERS_PER_PROMPT}"
+                print(f"[cluster] {chunk_label}: processing {len(part_rel_ids)} relations")
+                run_llm_on_subset(part_rel_ids, chunk_label)
+
+    # After all chunks processed: write final relations output
+    final_relations = list(rel_by_id.values())
+    out_json = OUT_DIR / "relations_resolved.json"
+    out_jsonl = OUT_DIR / "relations_resolved.jsonl"
+    out_json.write_text(json.dumps(final_relations, ensure_ascii=False, indent=2), encoding="utf-8")
+    with out_jsonl.open("w", encoding="utf-8") as fh:
+        for r in final_relations:
+            fh.write(json.dumps(r, ensure_ascii=False) + "\n")
+
+    print(f"[done] wrote final resolved relations -> {out_json}  (count={len(final_relations)})")
+    print(f"[done] action log -> {action_log_path}")
+
+    # ---------------------- SUMMARY AGGREGATION ---------------------
+
+    summary_dir = OUT_DIR / "summary"
+    summary_dir.mkdir(exist_ok=True)
+
+    # Aggregate per-chunk decision files
+    cluster_decisions: List[Dict[str, Any]] = []
+    for path in sorted(OUT_DIR.glob("cluster_*_decisions.json")):
+        try:
+            obj = json.loads(path.read_text(encoding="utf-8"))
+            cluster_decisions.append(obj)
+        except Exception as e:
+            print(f"[warn] failed to read {path}: {e}")
+
+    all_clusters_decisions_path = summary_dir / "all_clusters_decisions.json"
+    all_clusters_decisions_path.write_text(
+        json.dumps(cluster_decisions, ensure_ascii=False, indent=2),
+        encoding="utf-8"
+    )
+
+    total_clusters = len(cluster_decisions)  # here "cluster" means one LLM chunk
+    actions_by_type: Dict[str, int] = {}
+    total_remarks = 0
+    clusters_with_any_decisions = 0
+
+    for cd in cluster_decisions:
+        decs = cd.get("executed_decisions", [])
+        if not decs:
+            continue
+        clusters_with_any_decisions += 1
+        for d in decs:
+            act = d.get("action")
+            actions_by_type[act] = actions_by_type.get(act, 0) + 1
+            rem = d.get("remark")
+            if rem:
+                total_remarks += 1
+
+    total_errors = actions_by_type.get("error_executing", 0)
+
+    stats = {
+        "total_chunks": total_clusters,
+        "total_chunks_with_any_decisions": clusters_with_any_decisions,
+        "total_actions_by_type": actions_by_type,
+        "total_errors": total_errors,
+        "total_remarks_logged": total_remarks,
+        "generated_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+    }
+
+    stats_path = summary_dir / "stats_summary.json"
+    stats_path.write_text(json.dumps(stats, ensure_ascii=False, indent=2), encoding="utf-8")
+
+    print(f"[done] summary decisions -> {all_clusters_decisions_path}")
+    print(f"[done] summary stats -> {stats_path}")
+
+    # ---------------------- SCHEMA AGGREGATION ----------------------
+
+    # 1) Canonical relation schema
+    canonical_map: Dict[str, Dict[str, Any]] = {}
+    for r in final_relations:
+        cname = safe_str(r.get("canonical_rel_name", ""))
+        if not cname or cname.upper() == "TBD":
+            continue
+        cdesc = safe_str(r.get("canonical_rel_desc", ""))
+        rel_cls = safe_str(r.get("rel_cls", ""))
+        rel_grp = safe_str(r.get("rel_cls_group", ""))
+        rid = r.get("relation_id")
+
+        entry = canonical_map.setdefault(cname, {
+            "canonical_rel_name": cname,
+            "canonical_rel_desc_candidates": set(),
+            "rel_cls_set": set(),
+            "rel_cls_group_set": set(),
+            "relation_ids": []
+        })
+        if cdesc:
+            entry["canonical_rel_desc_candidates"].add(cdesc)
+        if rel_cls and rel_cls.upper() != "TBD":
+            entry["rel_cls_set"].add(rel_cls)
+        if rel_grp and rel_grp.upper() != "TBD":
+            entry["rel_cls_group_set"].add(rel_grp)
+        if rid:
+            entry["relation_ids"].append(rid)
+
+    canonical_schema = []
+    for cname, info in canonical_map.items():
+        desc_candidates = list(info["canonical_rel_desc_candidates"])
+        chosen_desc = desc_candidates[0] if desc_candidates else ""
+        canonical_schema.append({
+            "canonical_rel_name": cname,
+            "canonical_rel_desc": chosen_desc,
+            "rel_cls": sorted(info["rel_cls_set"]),
+            "rel_cls_group": sorted(info["rel_cls_group_set"]),
+            "instance_count": len(info["relation_ids"]),
+            "example_relation_ids": info["relation_ids"][:10]
+        })
+
+    canonical_schema_path = summary_dir / "canonical_rel_schema.json"
+    canonical_schema_path.write_text(
+        json.dumps(canonical_schema, ensure_ascii=False, indent=2),
+        encoding="utf-8"
+    )
+
+    # 2) Relation class schema
+    cls_map: Dict[str, Dict[str, Any]] = {}
+    for r in final_relations:
+        cls_name = safe_str(r.get("rel_cls", ""))
+        if not cls_name or cls_name.upper() == "TBD":
+            continue
+        grp_name = safe_str(r.get("rel_cls_group", ""))
+        cname = safe_str(r.get("canonical_rel_name", ""))
+        rid = r.get("relation_id")
+
+        entry = cls_map.setdefault(cls_name, {
+            "rel_cls": cls_name,
+            "rel_cls_group_set": set(),
+            "canonical_rel_names": set(),
+            "relation_ids": []
+        })
+        if grp_name and grp_name.upper() != "TBD":
+            entry["rel_cls_group_set"].add(grp_name)
+        if cname and cname.upper() != "TBD":
+            entry["canonical_rel_names"].add(cname)
+        if rid:
+            entry["relation_ids"].append(rid)
+
+    cls_schema = []
+    for cls_name, info in cls_map.items():
+        cls_schema.append({
+            "rel_cls": cls_name,
+            "rel_cls_group": sorted(info["rel_cls_group_set"]),
+            "canonical_rel_names": sorted(info["canonical_rel_names"]),
+            "instance_count": len(info["relation_ids"]),
+            "example_relation_ids": info["relation_ids"][:10]
+        })
+
+    cls_schema_path = summary_dir / "rel_cls_schema.json"
+    cls_schema_path.write_text(
+        json.dumps(cls_schema, ensure_ascii=False, indent=2),
+        encoding="utf-8"
+    )
+
+    # 3) Relation class group schema
+    grp_map: Dict[str, Dict[str, Any]] = {}
+    for r in final_relations:
+        grp_name = safe_str(r.get("rel_cls_group", ""))
+        if not grp_name or grp_name.upper() == "TBD":
+            continue
+        cls_name = safe_str(r.get("rel_cls", ""))
+        cname = safe_str(r.get("canonical_rel_name", ""))
+        rid = r.get("relation_id")
+
+        entry = grp_map.setdefault(grp_name, {
+            "rel_cls_group": grp_name,
+            "rel_cls_set": set(),
+            "canonical_rel_names": set(),
+            "relation_ids": []
+        })
+        if cls_name and cls_name.upper() != "TBD":
+            entry["rel_cls_set"].add(cls_name)
+        if cname and cname.upper() != "TBD":
+            entry["canonical_rel_names"].add(cname)
+        if rid:
+            entry["relation_ids"].append(rid)
+
+    grp_schema = []
+    for grp_name, info in grp_map.items():
+        grp_schema.append({
+            "rel_cls_group": grp_name,
+            "rel_cls": sorted(info["rel_cls_set"]),
+            "canonical_rel_names": sorted(info["canonical_rel_names"]),
+            "instance_count": len(info["relation_ids"]),
+            "example_relation_ids": info["relation_ids"][:10]
+        })
+
+    grp_schema_path = summary_dir / "rel_cls_group_schema.json"
+    grp_schema_path.write_text(
+        json.dumps(grp_schema, ensure_ascii=False, indent=2),
+        encoding="utf-8"
+    )
+
+    print(f"[done] canonical relation schema -> {canonical_schema_path}")
+    print(f"[done] relation class schema -> {cls_schema_path}")
+    print(f"[done] relation class group schema -> {grp_schema_path}")
+
+# if __name__ == "__main__":
+#     relres_main()
+
+#endregion#?   Rel Res V4  - Canonical + RelCls + RelClsGroup + Schema + LocalSubcluster
+#?#########################  End  ##########################
+
+
+
+
+
+
+#?######################### Start ##########################
+#region:#?   Multi Run Rel Res
+
+import json
+import time
+from pathlib import Path
+from typing import Any, Dict, List, Optional
+
+# -----------------------
+# CONFIG - Rel Res iterative
+# -----------------------
+
+# First-run input: raw relations from Rel Rec
+BASE_INPUT_RELATIONS = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Relations/Rel Rec/relations_raw.jsonl")
+
+# Root for iterative runs; each run gets its own subfolder
+EXPERIMENT_ROOT = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Relations/Rel Res_IterativeRuns")
+
+MAX_RUNS: int = 3
+
+# If total schema-modifying actions in a run <= SCHEMA_CHANGE_THRESHOLD,
+# that run is considered "no-change" w.r.t schema.
+SCHEMA_CHANGE_THRESHOLD: Optional[int] = 0
+
+# Optional: if total actions (including skips, remarks, etc.) <= this threshold,
+# you may also treat the run as "no-change".
+TOTAL_ACTIONS_THRESHOLD: Optional[int] = None
+
+# Stop after this many consecutive "no-change" runs (if not None)
+MAX_NO_CHANGE_RUNS: Optional[int] = 1
+
+FINAL_RELATIONS_FILENAME_JSON = "relations_resolved.json"
+FINAL_RELATIONS_FILENAME_JSONL = "relations_resolved.jsonl"
+ACTION_LOG_FILENAME = "rel_res_action_log.jsonl"
+
+# -----------------------
+# Helpers
+# -----------------------
+
+def _write_json(path: Path, obj: Any) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(obj, ensure_ascii=False, indent=2), encoding="utf-8")
+
+def _load_json(path: Path) -> Any:
+    return json.loads(path.read_text(encoding="utf-8"))
+
+def _safe_json_load_line(line: str) -> Optional[Dict]:
+    line = line.strip()
+    if not line:
+        return None
+    try:
+        return json.loads(line)
+    except Exception:
+        return None
+
+def compute_run_summary_from_action_log(action_log_path: Path) -> Dict[str, Any]:
+    """
+    Summarize a single Rel Res run based on rel_res_action_log.jsonl.
+
+    We treat the following actions as "schema-modifying":
+      - set_canonical_rel
+      - set_rel_cls
+      - set_rel_cls_group
+      - modify_rel_schema
+
+    Remarks-only:
+      - add_rel_remark
+
+    Everything else (skips, errors, unknown) is counted but not schema-changing.
+    """
+    summary = {
+        "total_chunks": 0,                          # each line ~ one LLM chunk
+        "total_chunks_with_any_decisions": 0,
+        "total_chunks_with_schema_changes": 0,
+        "total_actions_by_type": {},
+        "total_schema_actions": 0,
+        "total_remark_actions": 0,                  # add_rel_remark calls
+        "total_errors": 0,
+        "total_remarks_logged": 0,                  # remark fields in actions
+        "generated_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+    }
+    if not action_log_path.exists():
+        return summary
+
+    schema_actions = {"set_canonical_rel", "set_rel_cls", "set_rel_cls_group", "modify_rel_schema"}
+
+    with action_log_path.open("r", encoding="utf-8") as fh:
+        for line in fh:
+            obj = _safe_json_load_line(line)
+            if not obj:
+                continue
+            summary["total_chunks"] += 1
+            executed = obj.get("executed_decisions", []) or []
+            if executed:
+                summary["total_chunks_with_any_decisions"] += 1
+
+            schema_here = 0
+            remark_actions_here = 0
+            remarks_logged_here = 0
+
+            for entry in executed:
+                action = entry.get("action")
+                summary["total_actions_by_type"].setdefault(action, 0)
+                summary["total_actions_by_type"][action] += 1
+
+                if action in schema_actions:
+                    schema_here += 1
+                elif action == "add_rel_remark":
+                    remark_actions_here += 1
+                elif action == "error_executing":
+                    summary["total_errors"] += 1
+
+                # count explicit remark fields
+                if isinstance(entry, dict) and entry.get("remark"):
+                    remarks_logged_here += 1
+
+            summary["total_schema_actions"] += schema_here
+            summary["total_remark_actions"] += remark_actions_here
+            if schema_here > 0:
+                summary["total_chunks_with_schema_changes"] += 1
+            summary["total_remarks_logged"] += remarks_logged_here
+
+    return summary
+
+# -----------------------
+# Main iterative runner for Rel Res
+# -----------------------
+
+def run_relres_iteratively():
+    """
+    Run relres_main() multiple times, feeding the previous run's
+    relations_resolved.jsonl as the next run's input, until convergence
+    or MAX_RUNS is reached.
+
+    Convergence is defined via:
+      - SCHEMA_CHANGE_THRESHOLD
+      - TOTAL_ACTIONS_THRESHOLD
+      - MAX_NO_CHANGE_RUNS
+    """
+    from pathlib import Path  # ensure Path is in local scope if importing externally
+
+    EXPERIMENT_ROOT.mkdir(parents=True, exist_ok=True)
+
+    overall_runs: List[Dict[str, Any]] = []
+    no_change_streak = 0
+
+    # First run input is the raw relations from Rel Rec
+    current_input_path = BASE_INPUT_RELATIONS
+    last_run_dir: Optional[Path] = None
+
+    for run_idx in range(MAX_RUNS):
+        print("\n" + "=" * 36)
+        print(f"=== REL RES RUN {run_idx:02d} ===")
+        print("=" * 36)
+
+        run_dir = EXPERIMENT_ROOT / f"run_{run_idx:02d}"
+        run_dir.mkdir(parents=True, exist_ok=True)
+        last_run_dir = run_dir
+
+        # Set globals used by Rel Res V4 pipeline
+        globals()["INPUT_RELATIONS"] = current_input_path
+        globals()["OUT_DIR"] = run_dir
+        globals()["RAW_LLM_DIR"] = run_dir / "llm_raw"
+        globals()["RAW_LLM_DIR"].mkdir(parents=True, exist_ok=True)
+
+        # Call the pipeline's main function (assumes relres_main defined already)
+        print(f"[run {run_idx}] calling relres_main() with INPUT_RELATIONS={current_input_path} OUT_DIR={run_dir}")
+        relres_main()
+
+        final_relations_json = run_dir / FINAL_RELATIONS_FILENAME_JSON
+        final_relations_jsonl = run_dir / FINAL_RELATIONS_FILENAME_JSONL
+        action_log_path = run_dir / ACTION_LOG_FILENAME
+
+        run_summary = compute_run_summary_from_action_log(action_log_path)
+        run_summary["run_index"] = run_idx
+        run_summary["run_path"] = str(run_dir)
+        run_summary["final_relations_json"] = str(final_relations_json) if final_relations_json.exists() else None
+        run_summary["final_relations_jsonl"] = str(final_relations_jsonl) if final_relations_jsonl.exists() else None
+
+        summary_dir = run_dir / "summary"
+        summary_dir.mkdir(parents=True, exist_ok=True)
+        run_summary_path = summary_dir / "rel_res_summary.json"
+        _write_json(run_summary_path, run_summary)
+
+        overall_runs.append({
+            "run_index": run_idx,
+            "run_dir": str(run_dir),
+            "summary_path": str(run_summary_path)
+        })
+
+        total_schema = int(run_summary.get("total_schema_actions", 0))
+        total_actions = int(sum(run_summary.get("total_actions_by_type", {}).values() or []))
+
+        print(f"[run {run_idx}] total_schema_actions = {total_schema}")
+        print(f"[run {run_idx}] total_actions = {total_actions}")
+
+        # Determine if this run counts as "no-change"
+        is_no_change = False
+        if SCHEMA_CHANGE_THRESHOLD is not None and total_schema <= SCHEMA_CHANGE_THRESHOLD:
+            is_no_change = True
+        if TOTAL_ACTIONS_THRESHOLD is not None and total_actions <= TOTAL_ACTIONS_THRESHOLD:
+            is_no_change = True
+
+        if MAX_NO_CHANGE_RUNS is not None:
+            if is_no_change:
+                no_change_streak += 1
+            else:
+                no_change_streak = 0
+
+            print(f"[run {run_idx}] no_change_streak = {no_change_streak} (threshold {MAX_NO_CHANGE_RUNS})")
+            if no_change_streak >= MAX_NO_CHANGE_RUNS:
+                print(f"[stop] Rel Res convergence achieved after run {run_idx} (no_change_streak={no_change_streak}).")
+                # still update current_input_path for downstream use
+                if final_relations_jsonl.exists():
+                    current_input_path = final_relations_jsonl
+                break
+
+        # Prepare next-run input
+        if final_relations_jsonl.exists():
+            current_input_path = final_relations_jsonl
+        else:
+            print(f"[warn] final relations jsonl not found for run {run_idx}. Stopping iterative runs.")
+            break
+
+    # -----------------------
+    # OVERALL SUMMARY EXPORTS
+    # -----------------------
+    overall_dir = EXPERIMENT_ROOT / "overall_summary"
+    overall_dir.mkdir(parents=True, exist_ok=True)
+
+    # collect per-run summaries
+    per_run_stats: List[Dict[str, Any]] = []
+    for r in overall_runs:
+        sp = Path(r["summary_path"])
+        if sp.exists():
+            try:
+                per_run_stats.append(_load_json(sp))
+            except Exception:
+                per_run_stats.append({"run_index": r["run_index"], "error": "failed to load summary"})
+
+    aggregated = {
+        "total_runs_executed": len(per_run_stats),
+        "sum_total_chunks": sum([p.get("total_chunks", 0) for p in per_run_stats]),
+        "sum_total_schema_actions": sum([p.get("total_schema_actions", 0) for p in per_run_stats]),
+        "sum_total_errors": sum([p.get("total_errors", 0) for p in per_run_stats]),
+        "sum_total_remarks_logged": sum([p.get("total_remarks_logged", 0) for p in per_run_stats]),
+        "by_run": per_run_stats,
+        "generated_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+    }
+
+    stats_path = overall_dir / "stats.json"
+    _write_json(stats_path, aggregated)
+
+    # Copy final relations + schema from the last run
+    if last_run_dir is not None:
+        final_relations_json = last_run_dir / FINAL_RELATIONS_FILENAME_JSON
+        final_relations_jsonl = last_run_dir / FINAL_RELATIONS_FILENAME_JSONL
+        final_summary_dir = last_run_dir / "summary"
+
+        final_relations = []
+        if final_relations_json.exists():
+            try:
+                final_relations = _load_json(final_relations_json)
+            except Exception:
+                final_relations = []
+
+        # write a copy of final relations into overall_summary
+        final_relations_path_out = overall_dir / "relations_resolved.json"
+        final_relations_jsonl_path_out = overall_dir / "relations_resolved.jsonl"
+        _write_json(final_relations_path_out, final_relations)
+
+        if final_relations_jsonl.exists():
+            # copy jsonl line-by-line
+            with final_relations_jsonl.open("r", encoding="utf-8") as src, \
+                 final_relations_jsonl_path_out.open("w", encoding="utf-8") as dst:
+                for line in src:
+                    dst.write(line)
+
+        # also copy the latest schema files for convenience
+        canonical_schema_src = final_summary_dir / "canonical_rel_schema.json"
+        rel_cls_schema_src = final_summary_dir / "rel_cls_schema.json"
+        rel_cls_group_schema_src = final_summary_dir / "rel_cls_group_schema.json"
+
+        if canonical_schema_src.exists():
+            canonical_schema = _load_json(canonical_schema_src)
+            _write_json(overall_dir / "canonical_rel_schema.json", canonical_schema)
+
+        if rel_cls_schema_src.exists():
+            cls_schema = _load_json(rel_cls_schema_src)
+            _write_json(overall_dir / "rel_cls_schema.json", cls_schema)
+
+        if rel_cls_group_schema_src.exists():
+            grp_schema = _load_json(rel_cls_group_schema_src)
+            _write_json(overall_dir / "rel_cls_group_schema.json", grp_schema)
+
+        print(f"\n[done] Overall stats written to: {stats_path}")
+        print(f"[done] Final relations (copy) written to: {final_relations_path_out}")
+        print(f"[done] Final relations jsonl (copy) written to: {final_relations_jsonl_path_out}")
+        print(f"[done] Final canonical_rel_schema copied to overall_summary (if present)")
+        print(f"[done] Final rel_cls_schema copied to overall_summary (if present)")
+        print(f"[done] Final rel_cls_group_schema copied to overall_summary (if present)")
+    else:
+        print("[warn] No runs executed; nothing to export to overall_summary.")
+
+# -----------------------
+# To run: call 
+run_relres_iteratively() 
+# after pasting this block.
+# -----------------------
+
+#endregion#?   Multi Run Rel Res
+#?#########################  End  ##########################
+
+
+
+
+#?######################### Start ##########################
+#region:#?   KG Bundle Export
+
+"""
+KG Bundle Export
+
+Collect everything needed from the whole KG pipeline into ONE file:
+- Classes + entities (from final Class Res overall_summary)
+- Chunks (for evidence and document structure)
+- Relations (from final Rel Res overall_summary, including qualifiers, canonical fields, etc.)
+- Relation schema (canonical_rel_schema, rel_cls_schema, rel_cls_group_schema)
+
+Output:
+  /home/mabolhas/MyReposOnSOL/SGCE-KG/data/KG/kg_bundle.json
+
+This file is intended as the single input for downstream KG-construction code.
+"""
+
+import json
+import time
+from pathlib import Path
+from typing import Any, Dict, List, Optional
+
+
+# -----------------------
+# Paths / Config
+# -----------------------
+
+# Final classes + entities after iterative Class Res
+CLS_RES_OVERALL_DIR = Path(
+    "/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Classes/Cls_Res_IterativeRuns/overall_summary"
+    )
+CLASSES_AND_ENTITIES_PATH = CLS_RES_OVERALL_DIR / "classes_and_entities.json"
+
+# Chunks (sentence-level)
+CHUNKS_PATH = Path(
+    "/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Chunks/chunks_sentence.jsonl"
+)
+
+# Final relations + relation schemas after iterative Rel Res
+REL_RES_OVERALL_DIR = Path(
+    "/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Relations/Rel Res_IterativeRuns/overall_summary"
+)
+RELATIONS_RESOLVED_JSONL = REL_RES_OVERALL_DIR / "relations_resolved.jsonl"
+RELATIONS_RESOLVED_JSON = REL_RES_OVERALL_DIR / "relations_resolved.json"
+
+CANONICAL_REL_SCHEMA_PATH = REL_RES_OVERALL_DIR / "canonical_rel_schema.json"
+REL_CLS_SCHEMA_PATH = REL_RES_OVERALL_DIR / "rel_cls_schema.json"
+REL_CLS_GROUP_SCHEMA_PATH = REL_RES_OVERALL_DIR / "rel_cls_group_schema.json"
+
+# Where to write the final bundle
+KG_BUNDLE_OUT = Path(
+    "/home/mabolhas/MyReposOnSOL/SGCE-KG/data/KG/kg_bundle.json"
+)
+
+
+# -----------------------
+# Small helpers
+# -----------------------
+
+def _load_json(path: Path, default: Any) -> Any:
+    if not path.exists():
+        return default
+    try:
+        return json.loads(path.read_text(encoding="utf-8"))
+    except Exception:
+        return default
+
+def _safe_json_load_line(line: str) -> Optional[Dict]:
+    line = line.strip()
+    if not line:
+        return None
+    try:
+        return json.loads(line)
+    except Exception:
+        return None
+
+
+# -----------------------
+# Core export function
+# -----------------------
+
+def build_kg_bundle() -> None:
+    """
+    Build a single JSON "kg_bundle.json" that contains:
+
+    {
+      "metadata": {...},
+      "classes": [...],
+      "entities_map": {...},
+      "chunks": { chunk_id: { ...chunk fields... }, ... },
+      "relations": [...],
+      "canonical_rel_schema": [... or {}],
+      "rel_cls_schema": [... or {}],
+      "rel_cls_group_schema": [... or {}]
+    }
+
+    Relations are taken from the final Rel Res output and are expected to already
+    contain:
+      - relation_id
+      - subject_entity_id / object_entity_id
+      - relation_name (raw)
+      - canonical_rel_name / canonical_rel_desc (if filled by Rel Res)
+      - rel_cls, rel_cls_group (if filled)
+      - qualifiers dict
+      - chunk_id
+      - evidence_excerpt
+      - any other fields kept by the pipeline (rel_desc, rel_hint_type, etc.)
+    """
+
+    # 1) Load final classes + entities
+    classes_and_entities = _load_json(CLASSES_AND_ENTITIES_PATH, default={"classes": [], "entities_map": {}})
+    classes: List[Dict[str, Any]] = classes_and_entities.get("classes", []) or []
+    entities_map: Dict[str, Dict[str, Any]] = classes_and_entities.get("entities_map", {}) or {}
+
+    print(f"[KG bundle] Loaded {len(classes)} classes and {len(entities_map)} entities from {CLASSES_AND_ENTITIES_PATH}")
+
+    # 2) Load chunks
+    chunks_by_id: Dict[str, Dict[str, Any]] = {}
+    if CHUNKS_PATH.exists():
+        with CHUNKS_PATH.open("r", encoding="utf-8") as fh:
+            for line in fh:
+                obj = _safe_json_load_line(line)
+                if not obj:
+                    continue
+                cid = obj.get("id")
+                if cid:
+                    chunks_by_id[cid] = obj
+        print(f"[KG bundle] Loaded {len(chunks_by_id)} chunks from {CHUNKS_PATH}")
+    else:
+        print(f"[KG bundle] WARNING: chunks file not found at {CHUNKS_PATH}, 'chunks' will be empty.")
+
+    # 3) Load final relations (prefer jsonl; fallback to json)
+    relations: List[Dict[str, Any]] = []
+    if RELATIONS_RESOLVED_JSONL.exists():
+        with RELATIONS_RESOLVED_JSONL.open("r", encoding="utf-8") as fh:
+            for line in fh:
+                obj = _safe_json_load_line(line)
+                if obj:
+                    relations.append(obj)
+        print(f"[KG bundle] Loaded {len(relations)} relations from {RELATIONS_RESOLVED_JSONL}")
+    elif RELATIONS_RESOLVED_JSON.exists():
+        relations = _load_json(RELATIONS_RESOLVED_JSON, default=[])
+        if not isinstance(relations, list):
+            relations = []
+        print(f"[KG bundle] Loaded {len(relations)} relations from {RELATIONS_RESOLVED_JSON}")
+    else:
+        print(f"[KG bundle] WARNING: no final relations file found in {REL_RES_OVERALL_DIR}, 'relations' will be empty.")
+
+    # 4) Load relation schemas (canonical / class / group)
+    canonical_rel_schema = _load_json(CANONICAL_REL_SCHEMA_PATH, default=[])
+    rel_cls_schema = _load_json(REL_CLS_SCHEMA_PATH, default=[])
+    rel_cls_group_schema = _load_json(REL_CLS_GROUP_SCHEMA_PATH, default=[])
+
+    print(f"[KG bundle] canonical_rel_schema size: {len(canonical_rel_schema) if isinstance(canonical_rel_schema, list) else 'dict'}")
+    print(f"[KG bundle] rel_cls_schema size: {len(rel_cls_schema) if isinstance(rel_cls_schema, list) else 'dict'}")
+    print(f"[KG bundle] rel_cls_group_schema size: {len(rel_cls_group_schema) if isinstance(rel_cls_group_schema, list) else 'dict'}")
+
+    # 5) Assemble bundle
+    bundle = {
+        "metadata": {
+            "generated_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+            "source_paths": {
+                "classes_and_entities": str(CLASSES_AND_ENTITIES_PATH),
+                "chunks": str(CHUNKS_PATH),
+                "relations_resolved_jsonl": str(RELATIONS_RESOLVED_JSONL),
+                "relations_resolved_json": str(RELATIONS_RESOLVED_JSON),
+                "canonical_rel_schema": str(CANONICAL_REL_SCHEMA_PATH),
+                "rel_cls_schema": str(REL_CLS_SCHEMA_PATH),
+                "rel_cls_group_schema": str(REL_CLS_GROUP_SCHEMA_PATH),
+            },
+        },
+        "classes": classes,
+        "entities_map": entities_map,
+        "chunks": chunks_by_id,
+        "relations": relations,
+        "canonical_rel_schema": canonical_rel_schema,
+        "rel_cls_schema": rel_cls_schema,
+        "rel_cls_group_schema": rel_cls_group_schema,
+    }
+
+    # 6) Write out
+    KG_BUNDLE_OUT.parent.mkdir(parents=True, exist_ok=True)
+    KG_BUNDLE_OUT.write_text(json.dumps(bundle, ensure_ascii=False, indent=2), encoding="utf-8")
+    print(f"[KG bundle] Written KG bundle to {KG_BUNDLE_OUT}")
+
+
+# After defining everything, you can call:
+build_kg_bundle()
+
+#endregion#?   KG Bundle Export
+#?#########################  End  ##########################
+
+
+
+
+
+
+
+
+
+#?######################### Start ##########################
+#region:#?   Csv V2
+
+
+# Jupyter cell: regenerate a properly quoted rels.csv from relations_resolved.jsonl
+import json, csv
+from pathlib import Path
+
+relations_jl = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Relations/Rel Res_IterativeRuns/overall_summary/relations_resolved.jsonl")
+out_csv = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/KG/rels_fixed.csv")
+
+if not relations_jl.exists():
+    raise FileNotFoundError(relations_jl)
+
+rows = []
+with relations_jl.open("r", encoding="utf-8") as fh:
+    for ln in fh:
+        ln = ln.strip()
+        if not ln:
+            continue
+        try:
+            obj = json.loads(ln)
+        except Exception:
+            # try if the whole file is one JSON array
+            try:
+                arr = json.loads(ln)
+                if isinstance(arr, list):
+                    for o in arr:
+                        rows.append(o)
+                continue
+            except Exception:
+                raise
+        # if the object wraps relations list
+        if isinstance(obj, dict) and "relations" in obj and isinstance(obj["relations"], list):
+            rows.extend(obj["relations"])
+        elif isinstance(obj, list):
+            rows.extend(obj)
+        else:
+            rows.append(obj)
+
+print(f"Loaded {len(rows)} relation objects.")
+
+def safe_str(x):
+    if x is None:
+        return ""
+    if isinstance(x, (dict, list)):
+        return json.dumps(x, ensure_ascii=False)
+    return str(x)
+
+# Build normalized rows for CSV using the same field names your Cypher expects
+out_rows = []
+for r in rows:
+    subj = r.get("subject_entity_id") or r.get("subject_id") or r.get("subject_entity") or r.get("subject_entity_name") or r.get("subject")
+    objt = r.get("object_entity_id")  or r.get("object_id")  or r.get("object_entity")  or r.get("object_entity_name") or r.get("object")
+    # ensure simple strings
+    relation_row = {
+        "relation_id": safe_str(r.get("relation_id") or r.get("id") or r.get("rid") or ""),
+        "start_id": safe_str(subj),
+        "end_id": safe_str(objt),
+        "raw_relation_name": safe_str(r.get("relation_name") or r.get("rel_name") or ""),
+        "canonical_rel_name": safe_str(r.get("canonical_rel_name") or r.get("canonical") or ""),
+        "canonical_rel_desc": safe_str(r.get("canonical_rel_desc") or r.get("canonical_desc") or ""),
+        "rel_cls": safe_str(r.get("rel_cls") or r.get("relation_class") or ""),
+        "rel_cls_group": safe_str(r.get("rel_cls_group") or r.get("relation_class_group") or r.get("rel_group") or ""),
+        "rel_hint_type": safe_str(r.get("rel_hint_type") or r.get("hint") or ""),
+        "confidence": safe_str(r.get("confidence") if r.get("confidence") not in (None, "") else ""),
+        "resolution_context": safe_str(r.get("resolution_context") or r.get("resolution") or ""),
+        "justification": safe_str(r.get("justification") or ""),
+        "remark": safe_str(r.get("remark") or r.get("remarks") or ""),
+        "evidence_excerpt": safe_str(r.get("evidence_excerpt") or r.get("evidence") or ""),
+        "chunk_id": safe_str(r.get("chunk_id") or r.get("source_chunk") or r.get("context_chunk") or ""),
+        "qualifiers": json.dumps(r.get("qualifiers") or r.get("qualifier") or {}, ensure_ascii=False),
+        "rel_desc": safe_str(r.get("rel_desc") or r.get("relation_description") or ""),
+        "raw_relation_object": json.dumps(r, ensure_ascii=False)
+    }
+    out_rows.append(relation_row)
+
+# Write CSV with QUOTE_ALL (ensures internal quotes are doubled)
+fieldnames = list(out_rows[0].keys()) if out_rows else [
+    "relation_id","start_id","end_id","raw_relation_name","canonical_rel_name","canonical_rel_desc",
+    "rel_cls","rel_cls_group","rel_hint_type","confidence","resolution_context","justification",
+    "remark","evidence_excerpt","chunk_id","qualifiers","rel_desc","raw_relation_object"
+]
+
+with out_csv.open("w", encoding="utf-8", newline="") as fh:
+    writer = csv.DictWriter(fh, fieldnames=fieldnames, quoting=csv.QUOTE_ALL)
+    writer.writeheader()
+    for r in out_rows:
+        writer.writerow(r)
+
+print("Wrote:", out_csv)
+# quick sanity-read first row via csv.reader
+import itertools
+with out_csv.open("r", encoding="utf-8") as fh:
+    rdr = csv.reader(fh)
+    header = next(rdr)
+    first = next(rdr, None)
+print("Header cols:", len(header), "Sample row fields parsed:", len(first) if first else 0)
+
+
+#endregion#? Csv V2
+#?#########################  End  ##########################
+
+
+
+
+
+
+#?######################### Start ##########################
+#region:#?   CSV v3
+
+
+import json, csv
+from pathlib import Path
+
+relations_jl = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Relations/Rel Res_IterativeRuns/overall_summary/relations_resolved.jsonl")
+out_csv = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/KG/rels_fixed_no_raw.csv")
+
+rows = []
+with relations_jl.open("r", encoding="utf-8") as fh:
+    for ln in fh:
+        ln = ln.strip()
+        if not ln:
+            continue
+        try:
+            obj = json.loads(ln)
+        except Exception:
+            try:
+                arr = json.loads(ln)
+                if isinstance(arr, list):
+                    rows.extend(arr)
+                continue
+            except Exception:
+                raise
+        if isinstance(obj, dict) and "relations" in obj and isinstance(obj["relations"], list):
+            rows.extend(obj["relations"])
+        elif isinstance(obj, list):
+            rows.extend(obj)
+        else:
+            rows.append(obj)
+
+def safe_str(x):
+    if x is None:
+        return ""
+    if isinstance(x, (dict, list)):
+        return json.dumps(x, ensure_ascii=False)
+    return str(x)
+
+out_rows = []
+for r in rows:
+    subj = r.get("subject_entity_id") or r.get("subject_id") or r.get("subject_entity") or r.get("subject_entity_name") or r.get("subject")
+    objt = r.get("object_entity_id")  or r.get("object_id")  or r.get("object_entity")  or r.get("object_entity_name") or r.get("object")
+    relation_row = {
+        "relation_id": safe_str(r.get("relation_id") or r.get("id") or r.get("rid") or ""),
+        "start_id": safe_str(subj),
+        "end_id": safe_str(objt),
+        "raw_relation_name": safe_str(r.get("relation_name") or r.get("rel_name") or ""),
+        "canonical_rel_name": safe_str(r.get("canonical_rel_name") or r.get("canonical") or ""),
+        "canonical_rel_desc": safe_str(r.get("canonical_rel_desc") or r.get("canonical_desc") or ""),
+        "rel_cls": safe_str(r.get("rel_cls") or r.get("relation_class") or ""),
+        "rel_cls_group": safe_str(r.get("rel_cls_group") or r.get("relation_class_group") or r.get("rel_group") or ""),
+        "rel_hint_type": safe_str(r.get("rel_hint_type") or r.get("hint") or ""),
+        "confidence": safe_str(r.get("confidence") if r.get("confidence") not in (None, "") else ""),
+        "resolution_context": safe_str(r.get("resolution_context") or r.get("resolution") or ""),
+        "justification": safe_str(r.get("justification") or ""),
+        "remark": safe_str(r.get("remark") or r.get("remarks") or ""),
+        "evidence_excerpt": safe_str(r.get("evidence_excerpt") or r.get("evidence") or ""),
+        "chunk_id": safe_str(r.get("chunk_id") or r.get("source_chunk") or r.get("context_chunk") or ""),
+        "qualifiers": json.dumps(r.get("qualifiers") or r.get("qualifier") or {}, ensure_ascii=False),
+        "rel_desc": safe_str(r.get("rel_desc") or r.get("relation_description") or "")
+        # NOTE: raw_relation_object omitted
+    }
+    out_rows.append(relation_row)
+
+fieldnames = list(out_rows[0].keys()) if out_rows else [
+    "relation_id","start_id","end_id","raw_relation_name","canonical_rel_name","canonical_rel_desc",
+    "rel_cls","rel_cls_group","rel_hint_type","confidence","resolution_context","justification",
+    "remark","evidence_excerpt","chunk_id","qualifiers","rel_desc"
+]
+
+with out_csv.open("w", encoding="utf-8", newline="") as fh:
+    writer = csv.DictWriter(fh, fieldnames=fieldnames, quoting=csv.QUOTE_ALL)
+    writer.writeheader()
+    for r in out_rows:
+        writer.writerow(r)
+
+print("Wrote:", out_csv)
+
+
+
+
+#endregion#? CSV v3
+#?#########################  End  ##########################
+
+
+
+
+
+
+
+
+
+#?######################### Start ##########################
+#region:#?   CSV relations + nodes for Neo4j KG import - V4
+
+
+
+
+# Combined generator for relations + nodes CSV
+# Uses ONLY paths you already showed.
+
+import json, csv
+from pathlib import Path
+
+# Source JSONL (same as your V2/V3)
+relations_jl = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Relations/Rel Res_IterativeRuns/overall_summary/relations_resolved.jsonl")
+
+# Outputs
+rels_out_csv  = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/KG/rels_fixed_no_raw.csv")
+nodes_out_csv = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/KG/nodes.csv")
+
+def safe_str(x):
+    if x is None:
+        return ""
+    if isinstance(x, (dict, list)):
+        return json.dumps(x, ensure_ascii=False)
+    return str(x)
+
+def first_non_empty(obj, keys):
+    """Return the first non-empty value among obj[key] for keys."""
+    for k in keys:
+        if k in obj and obj[k] not in (None, ""):
+            return obj[k]
+    return None
+
+# --- Load relation objects (same robustness as your code) ---
+rows = []
+if not relations_jl.exists():
+    raise FileNotFoundError(relations_jl)
+
+with relations_jl.open("r", encoding="utf-8") as fh:
+    for ln in fh:
+        ln = ln.strip()
+        if not ln:
+            continue
+        try:
+            obj = json.loads(ln)
+        except Exception:
+            # line might be a JSON array
+            try:
+                arr = json.loads(ln)
+                if isinstance(arr, list):
+                    rows.extend(arr)
+                continue
+            except Exception:
+                raise
+        # If wrapper has "relations" list
+        if isinstance(obj, dict) and "relations" in obj and isinstance(obj["relations"], list):
+            rows.extend(obj["relations"])
+        elif isinstance(obj, list):
+            rows.extend(obj)
+        else:
+            rows.append(obj)
+
+print(f"Loaded {len(rows)} relation objects.")
+
+# --- Build relations CSV + collect entity info at the same time ---
+
+rels_rows = []
+entities = {}  # entity_id -> {entity_id, entity_name, entity_description, class_label, class_group, seen_in_chunks:set}
+
+for r in rows:
+    # IDs for subject and object
+    subj = r.get("subject_entity_id") or r.get("subject_id") or r.get("subject_entity") or r.get("subject_entity_name") or r.get("subject")
+    objt = r.get("object_entity_id")  or r.get("object_id")  or r.get("object_entity")  or r.get("object_entity_name") or r.get("object")
+    subj_id = safe_str(subj)
+    objt_id = safe_str(objt)
+
+    # chunk_id (used later to build seen_in_chunks for nodes)
+    chunk_id_val = r.get("chunk_id") or r.get("source_chunk") or r.get("context_chunk") or None
+    chunk_id = safe_str(chunk_id_val)
+
+    # --- relation row (this is your V3 structure, no raw_relation_object) ---
+    relation_row = {
+        "relation_id": safe_str(r.get("relation_id") or r.get("id") or r.get("rid") or ""),
+        "start_id":    subj_id,
+        "end_id":      objt_id,
+        "raw_relation_name":   safe_str(r.get("relation_name") or r.get("rel_name") or ""),
+        "canonical_rel_name":  safe_str(r.get("canonical_rel_name") or r.get("canonical") or ""),
+        "canonical_rel_desc":  safe_str(r.get("canonical_rel_desc") or r.get("canonical_desc") or ""),
+        "rel_cls":             safe_str(r.get("rel_cls") or r.get("relation_class") or ""),
+        "rel_cls_group":       safe_str(r.get("rel_cls_group") or r.get("relation_class_group") or r.get("rel_group") or ""),
+        "rel_hint_type":       safe_str(r.get("rel_hint_type") or r.get("hint") or ""),
+        "confidence":          safe_str(r.get("confidence") if r.get("confidence") not in (None, "") else ""),
+        "resolution_context":  safe_str(r.get("resolution_context") or r.get("resolution") or ""),
+        "justification":       safe_str(r.get("justification") or ""),
+        "remark":              safe_str(r.get("remark") or r.get("remarks") or ""),
+        "evidence_excerpt":    safe_str(r.get("evidence_excerpt") or r.get("evidence") or ""),
+        "chunk_id":            chunk_id,
+        "qualifiers":          json.dumps(r.get("qualifiers") or r.get("qualifier") or {}, ensure_ascii=False),
+        "rel_desc":            safe_str(r.get("rel_desc") or r.get("relation_description") or "")
+    }
+    rels_rows.append(relation_row)
+
+    # --- helper: update one entity record from this relation row ---
+    def update_entity(side_prefix, entity_id):
+        if not entity_id:
+            return
+
+        ent = entities.get(entity_id)
+        if ent is None:
+            ent = {
+                "entity_id":          entity_id,
+                "entity_name":        "",
+                "entity_description": "",
+                "class_label":        "",
+                "class_group":        "",
+                "seen_in_chunks":     set()
+            }
+            entities[entity_id] = ent
+
+        if side_prefix == "subject":
+            name_keys        = ["subject_entity_name", "subject_name", "subject"]
+            desc_keys        = ["subject_entity_description", "subject_description", "subject_desc", "subject_entity_desc"]
+            class_label_keys = ["subject_class_label", "subject_entity_class", "subject_entity_type", "subject_label", "subject_cls"]
+            class_group_keys = ["subject_class_group", "subject_entity_group", "subject_group", "subject_cls_group"]
+        else:
+            name_keys        = ["object_entity_name", "object_name", "object"]
+            desc_keys        = ["object_entity_description", "object_description", "object_desc", "object_entity_desc"]
+            class_label_keys = ["object_class_label", "object_entity_class", "object_entity_type", "object_label", "object_cls"]
+            class_group_keys = ["object_class_group", "object_entity_group", "object_group", "object_cls_group"]
+
+        if not ent["entity_name"]:
+            name_val = first_non_empty(r, name_keys)
+            if name_val is not None:
+                ent["entity_name"] = safe_str(name_val)
+
+        if not ent["entity_description"]:
+            desc_val = first_non_empty(r, desc_keys)
+            if desc_val is not None:
+                ent["entity_description"] = safe_str(desc_val)
+
+        if not ent["class_label"]:
+            cls_val = first_non_empty(r, class_label_keys)
+            if cls_val is not None:
+                ent["class_label"] = safe_str(cls_val)
+
+        if not ent["class_group"]:
+            grp_val = first_non_empty(r, class_group_keys)
+            if grp_val is not None:
+                ent["class_group"] = safe_str(grp_val)
+
+        if chunk_id:
+            ent["seen_in_chunks"].add(chunk_id)
+
+    # update both ends
+    update_entity("subject", subj_id)
+    update_entity("object", objt_id)
+
+print(f"Collected {len(rels_rows)} relation rows.")
+print(f"Collected {len(entities)} unique entities from relations.")
+
+# --- Write relations CSV (rels_fixed_no_raw.csv) ---
+
+rel_fieldnames = [
+    "relation_id","start_id","end_id","raw_relation_name","canonical_rel_name","canonical_rel_desc",
+    "rel_cls","rel_cls_group","rel_hint_type","confidence","resolution_context","justification",
+    "remark","evidence_excerpt","chunk_id","qualifiers","rel_desc"
+]
+
+rels_out_csv.parent.mkdir(parents=True, exist_ok=True)
+with rels_out_csv.open("w", encoding="utf-8", newline="") as fh:
+    writer = csv.DictWriter(fh, fieldnames=rel_fieldnames, quoting=csv.QUOTE_ALL)
+    writer.writeheader()
+    for rrow in rels_rows:
+        writer.writerow(rrow)
+
+print("Wrote relations CSV:", rels_out_csv)
+
+# --- Write nodes CSV (nodes.csv) ---
+
+node_fieldnames = [
+    "entity_id","entity_name","entity_description","class_label","class_group","seen_in_chunks"
+]
+
+nodes_out_csv.parent.mkdir(parents=True, exist_ok=True)
+with nodes_out_csv.open("w", encoding="utf-8", newline="") as fh:
+    writer = csv.DictWriter(fh, fieldnames=node_fieldnames, quoting=csv.QUOTE_ALL)
+    writer.writeheader()
+    for ent in entities.values():
+        row = {
+            "entity_id":          ent["entity_id"],
+            "entity_name":        ent["entity_name"],
+            "entity_description": ent["entity_description"],
+            "class_label":        ent["class_label"],
+            "class_group":        ent["class_group"],
+            # store as JSON list string, so Neo4j can parse with apoc.convert.fromJsonList
+            "seen_in_chunks":     json.dumps(sorted(ent["seen_in_chunks"]), ensure_ascii=False),
+        }
+        writer.writerow(row)
+
+print("Wrote nodes CSV:", nodes_out_csv)
+
+
+
+#endregion#? CSV relations + nodes for Neo4j KG import - V4
+#?#########################  End  ##########################
+
+
+
+
+
+
+
+
+#?######################### Start ##########################
+#region:#?   Cypher Queries - V4
+
+MATCH (n)
+DETACH DELETE n;
+
+
+
+
+
+
+
+
+
+
+LOAD CSV WITH HEADERS FROM 'file:///nodes.csv' AS row
+CALL (row) {
+  WITH row
+  // skip empty rows
+  WITH row WHERE row.entity_id IS NOT NULL AND row.entity_id <> ''
+  MERGE (e:Entity {entity_id: row.entity_id})
+  SET
+    e.name              = row.entity_name,
+    e.description       = row.entity_description,
+    e.class_label       = row.class_label,
+    e.class_group       = row.class_group,
+    e.seen_in_chunks    = apoc.convert.fromJsonList(row.seen_in_chunks)
+} IN TRANSACTIONS OF 1000 ROWS;
+
+
+
+
+
+
+
+LOAD CSV WITH HEADERS FROM 'file:///rels_fixed_no_raw.csv' AS row
+CALL (row) {
+  WITH row
+  // skip rows missing endpoints
+  WITH row WHERE row.start_id IS NOT NULL AND row.start_id <> '' AND row.end_id IS NOT NULL AND row.end_id <> ''
+  MATCH (s:Entity {entity_id: row.start_id})
+  MATCH (o:Entity {entity_id: row.end_id})
+  MERGE (s)-[r:RELATION {relation_id: row.relation_id}]->(o)
+  WITH r, row, apoc.convert.fromJsonMap(row.qualifiers) AS qmap
+  SET
+    r.raw_name           = row.raw_relation_name,
+    r.canonical_name     = row.canonical_rel_name,
+    r.canonical_desc     = row.canonical_rel_desc,
+    r.rel_cls            = row.rel_cls,
+    r.rel_cls_group      = row.rel_cls_group,
+    r.rel_hint_type      = row.rel_hint_type,
+    r.confidence         = CASE row.confidence WHEN "" THEN NULL ELSE toFloat(row.confidence) END,
+    r.description        = row.rel_desc,
+    r.resolution_context = row.resolution_context,
+    r.justification      = row.justification,
+    r.remark             = row.remark,
+    r.evidence_excerpt   = row.evidence_excerpt,
+    r.chunk_id           = row.chunk_id,
+    r.qualifiers_json    = row.qualifiers
+  WITH r, qmap
+  FOREACH (k IN keys(qmap) |
+    SET r['qual_' + k] = toString(qmap[k])
+  )
+} IN TRANSACTIONS OF 1000 ROWS;
+
+
+
+
+
+
+MATCH (n)
+RETURN n
+
+
+
+
+
+MATCH (n)-[r]->(m)
+RETURN n, r, m
+
+
+
+
+
+
+#endregion#? Cypher Queries
+#?#########################  End  ##########################
+
+
+
+
+
+
+
+
 
 
 #endregion#! Relation Identification

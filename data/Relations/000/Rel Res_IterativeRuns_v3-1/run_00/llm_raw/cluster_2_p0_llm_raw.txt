@@ -1,0 +1,57 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_338e547f321f",
+        "RelR_29b3c1c25656"
+      ],
+      "canonical_rel_name": "modifies_microstructure_of",
+      "canonical_rel_desc": "A process changes or modifies the microstructure of a material, without specifying the exact product phases formed.",
+      "justification": "Both relations describe graphitization changing the microstructure of susceptible steels during long-term high-temperature operation. The semantic focus is microstructural alteration of the steel, not explicitly the product phase. A normalized predicate 'modifies_microstructure_of' captures this consistently.",
+      "remark": "Normalized from the more specific wording 'alters_microstructure_of' to a reusable predicate.",
+      "confidence": 0.92
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_a45fb4ca81de"
+      ],
+      "canonical_rel_name": "produces_microstructural_feature",
+      "canonical_rel_desc": "A process leads to the formation or production of a specific microstructural feature or phase in a material.",
+      "justification": "This relation expresses that graphitization decomposes carbide phases and results in graphite nodules. The key semantics are that the process produces a particular microstructural feature, which is well captured by 'produces_microstructural_feature'.",
+      "remark": "More specific than a generic 'produces' predicate, indicating microstructural products.",
+      "confidence": 0.88
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_338e547f321f",
+        "RelR_29b3c1c25656",
+        "RelR_a45fb4ca81de"
+      ],
+      "rel_cls": "microstructural_transformation_relation",
+      "justification": "All three relations involve graphitization as a metallurgical degradation process that changes steel microstructure, either by modifying the bulk microstructure or producing graphite nodules. They belong to the same broader family of microstructural transformation/degradation relations.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_338e547f321f",
+        "RelR_29b3c1c25656",
+        "RelR_a45fb4ca81de"
+      ],
+      "rel_cls_group": "MODIFICATION",
+      "justification": "Each relation describes a process modifying the state of a material: altering its microstructure or producing new microstructural features. This fits the broad category of state/structure modification rather than pure composition or identity.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  }
+]

@@ -1,0 +1,57 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_ccb0e0161188",
+        "RelR_c426520a3c91",
+        "RelR_7c9bc782fce9",
+        "RelR_caa4eec09380",
+        "RelR_704fe359a26f",
+        "RelR_81f81efb1983",
+        "RelR_c686532b051c"
+      ],
+      "canonical_rel_name": "occurs_in_material",
+      "canonical_rel_desc": "Indicates that a microstructure, damage mechanism, process, or product phase occurs in or is present within a given material or alloy family.",
+      "justification": "In all instances, the subject is a structure, mechanism, process, or product (e.g., austenitic structure, ferritic structure, HIC, graphitization, graphite nodules) and the object is a material or alloy class (e.g., austenitic stainless steels, duplex stainless steel, low alloy steel, carbon steel). The semantics are consistently that the phenomenon occurs in or is present within that material. A single canonical predicate 'occurs_in_material' captures this shared meaning while remaining specific to occurrence within materials.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_ccb0e0161188",
+        "RelR_c426520a3c91",
+        "RelR_7c9bc782fce9",
+        "RelR_caa4eec09380",
+        "RelR_704fe359a26f",
+        "RelR_81f81efb1983",
+        "RelR_c686532b051c"
+      ],
+      "rel_cls": "phenomenon_occurrence_in_material_relation",
+      "justification": "Each relation links a phenomenon (microstructure, cracking mechanism, degradation process, or product phase) to a material or alloy where it occurs. Grouping them under a broader class 'phenomenon_occurrence_in_material_relation' captures this family of predicates without being as broad as a generic spatial or association relation.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_ccb0e0161188",
+        "RelR_c426520a3c91",
+        "RelR_7c9bc782fce9",
+        "RelR_caa4eec09380",
+        "RelR_704fe359a26f",
+        "RelR_81f81efb1983",
+        "RelR_c686532b051c"
+      ],
+      "rel_cls_group": "SPATIALITY",
+      "justification": "The core semantics are about where a phenomenon is present (i.e., its occurrence within a particular material or alloy), which fits a broad spatial/contextual dimension better than causality or composition. Therefore these relations belong under the SPATIALITY group.",
+      "remark": null,
+      "confidence": 0.88
+    }
+  }
+]

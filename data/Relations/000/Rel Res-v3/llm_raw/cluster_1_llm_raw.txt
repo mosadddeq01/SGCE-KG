@@ -1,0 +1,81 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_7b6d773fe742",
+        "RelR_e71b6b450b41",
+        "RelR_1383761175ce"
+      ],
+      "canonical_rel_name": "resists",
+      "canonical_rel_desc": "Indicates that the subject has intrinsic resistance to, or is less affected by, the damaging or corrosive action of the object (e.g., a corrosion mechanism).",
+      "justification": "All three relations share the same raw predicate 'resists' and describe stainless steel being resistant to specific or general corrosion mechanisms (oxidation, sulfidation, general corrosion) depending on alloy content. They express the same predicate meaning: a material exhibiting resistance to a degradation mechanism.",
+      "remark": "Qualifiers such as dependence on alloy content remain instance-level; the canonical predicate captures generic corrosion resistance.",
+      "confidence": 0.96
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_529c638c696d",
+        "RelR_0f937d199405",
+        "RelR_d3ce89b75d87"
+      ],
+      "canonical_rel_name": "confers_resistance_to",
+      "canonical_rel_desc": "Indicates that the subject, typically an alloying element or modifier, causally contributes to or increases the resistance of a material system to the specified damaging or corrosive mechanism.",
+      "justification": "These three relations share the raw predicate 'provides_resistance_to' and describe chromium, when present as an alloying element in stainless steels, causally contributing to resistance against oxidation, sulfidation, or general corrosion. The common semantics is that the subject confers or enhances resistance to a degradation mechanism, distinct from merely having resistance itself.",
+      "remark": "The canonical name is normalized to 'confers_resistance_to' to capture the causal, contributory nature of the alloying element’s effect on corrosion resistance.",
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_4fb5553cfff8"
+      ],
+      "canonical_rel_name": "prevents_process",
+      "canonical_rel_desc": "Indicates that the subject inhibits, suppresses, or effectively prevents the occurrence of a specified degradation or metallurgical process in the given material context.",
+      "justification": "This relation describes chromium addition preventing graphitization in low alloy C-Mo steels. This is semantically an inhibition or prevention of a specific degradation/metallurgical process, not just a generic resistance. A dedicated canonical predicate 'prevents_process' best captures this inhibitory effect.",
+      "remark": "Context qualifiers (steel type, chromium level) are kept at instance level; the canonical predicate focuses on process prevention.",
+      "confidence": 0.93
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_7b6d773fe742",
+        "RelR_e71b6b450b41",
+        "RelR_1383761175ce",
+        "RelR_529c638c696d",
+        "RelR_0f937d199405",
+        "RelR_d3ce89b75d87",
+        "RelR_4fb5553cfff8"
+      ],
+      "rel_cls": "degradation_resistance_relation",
+      "justification": "All relations in the cluster link materials or alloying elements to damaging processes (corrosion mechanisms or graphitization) in a way that expresses resistance, mitigation, or outright prevention of degradation. Although they use different canonical predicates ('resists', 'confers_resistance_to', 'prevents_process'), they belong to the same conceptual family: relations about inhibiting or resisting degradation processes.",
+      "remark": "This class intentionally spans both intrinsic resistance and causally conferred resistance, as well as explicit process prevention, to unify degradation-mitigation semantics.",
+      "confidence": 0.94
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_7b6d773fe742",
+        "RelR_e71b6b450b41",
+        "RelR_1383761175ce",
+        "RelR_529c638c696d",
+        "RelR_0f937d199405",
+        "RelR_d3ce89b75d87",
+        "RelR_4fb5553cfff8"
+      ],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "Each relation expresses a causal or quasi-causal influence on degradation processes: stainless steels resist corrosion mechanisms due to alloy content, chromium confers resistance to corrosion when alloyed, and chromium addition prevents graphitization. These are best grouped under a broad causal/inhibitory dimension rather than mere association.",
+      "remark": "Although some instances are phrased as properties (resistance) rather than explicit causes, the corrosion context and qualifiers (e.g., alloy content, role as alloying element) indicate an underlying causal mechanism of degradation mitigation.",
+      "confidence": 0.92
+    }
+  }
+]

@@ -1,0 +1,202 @@
+[
+  {
+    "canonical_rel_name": "has_metallurgical_structure",
+    "canonical_rel_desc": "Indicates that an alloy or steel grade possesses a particular metallurgical/microstructural phase or structure (e.g., austenitic, ferritic, martensitic) under specified conditions.",
+    "rel_cls": [
+      "microstructure_relation"
+    ],
+    "rel_cls_group": [
+      "STRUCTURE"
+    ],
+    "instance_count": 6,
+    "example_relation_ids": [
+      "RelR_c4bd0eecf18e",
+      "RelR_d3bbaeb2df23",
+      "RelR_cc53169ea6f4",
+      "RelR_d39cfe6239e1",
+      "RelR_f33b7d004979",
+      "RelR_d531fbfb64b2"
+    ]
+  },
+  {
+    "canonical_rel_name": "occurs_in",
+    "canonical_rel_desc": "The subject phase, microstructural feature, damage mechanism, or process occurs within or in association with the object material or alloy, which serves as its host environment.",
+    "rel_cls": [
+      "phenomenon_in_material_relation"
+    ],
+    "rel_cls_group": [
+      "SPATIALITY"
+    ],
+    "instance_count": 7,
+    "example_relation_ids": [
+      "RelR_ccb0e0161188",
+      "RelR_c426520a3c91",
+      "RelR_7c9bc782fce9",
+      "RelR_caa4eec09380",
+      "RelR_704fe359a26f",
+      "RelR_81f81efb1983",
+      "RelR_c686532b051c"
+    ]
+  },
+  {
+    "canonical_rel_name": "has_similar_microstructure_to",
+    "canonical_rel_desc": "Indicates that the subject material exhibits a microstructural state that is similar to or analogous to that of the object material, without implying strict identity of composition or grade.",
+    "rel_cls": [
+      "microstructure_relation"
+    ],
+    "rel_cls_group": [
+      "ASSOCIATION"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_96a7cdcaa41e"
+    ]
+  },
+  {
+    "canonical_rel_name": "is_functional_alternative_to",
+    "canonical_rel_desc": "Indicates that two materials or chemicals can be used interchangeably or as substitutes for the same technical function in a given application context.",
+    "rel_cls": [
+      "functional_substitution_relation"
+    ],
+    "rel_cls_group": [
+      "USAGE"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_862422bffa70"
+    ]
+  },
+  {
+    "canonical_rel_name": "has_subtype",
+    "canonical_rel_desc": "Indicates that a broader class or category includes the specified subtype or subclass as a member.",
+    "rel_cls": [
+      "material_taxonomy_relation"
+    ],
+    "rel_cls_group": [
+      "IDENTITY"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_362f6e35c9d7"
+    ]
+  },
+  {
+    "canonical_rel_name": "is_subtype_of",
+    "canonical_rel_desc": "Indicates that the subject is a more specific subtype or subclass within the broader class represented by the object.",
+    "rel_cls": [
+      "material_taxonomy_relation"
+    ],
+    "rel_cls_group": [
+      "IDENTITY"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_39cf0ff7f895"
+    ]
+  },
+  {
+    "canonical_rel_name": "contains_alloying_element",
+    "canonical_rel_desc": "Indicates that the subject alloy contains the object chemical element as an intentional alloying constituent in its composition.",
+    "rel_cls": [
+      "alloying_element_relation"
+    ],
+    "rel_cls_group": [
+      "COMPOSITION"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_f080c3c67c9c"
+    ]
+  },
+  {
+    "canonical_rel_name": "resists",
+    "canonical_rel_desc": "The subject material exhibits resistance to the specified corrosion mechanism under stated conditions.",
+    "rel_cls": [
+      "corrosion_resistance_relation"
+    ],
+    "rel_cls_group": [
+      "INTERACTION"
+    ],
+    "instance_count": 3,
+    "example_relation_ids": [
+      "RelR_7b6d773fe742",
+      "RelR_e71b6b450b41",
+      "RelR_1383761175ce"
+    ]
+  },
+  {
+    "canonical_rel_name": "provides_resistance_to",
+    "canonical_rel_desc": "The subject alloying element contributes causally to the resistance of an alloy or material against the specified corrosion mechanism.",
+    "rel_cls": [
+      "corrosion_resistance_relation"
+    ],
+    "rel_cls_group": [
+      "CAUSALITY"
+    ],
+    "instance_count": 3,
+    "example_relation_ids": [
+      "RelR_529c638c696d",
+      "RelR_0f937d199405",
+      "RelR_d3ce89b75d87"
+    ]
+  },
+  {
+    "canonical_rel_name": "grouped_with",
+    "canonical_rel_desc": "Indicates that two entities are presented or classified together as peer categories within the same document section or list, without implying causal, hierarchical, or compositional dependence. The relation is symmetric and direction is arbitrary.",
+    "rel_cls": [
+      "document_coclassification_relation"
+    ],
+    "rel_cls_group": [
+      "ASSOCIATION"
+    ],
+    "instance_count": 3,
+    "example_relation_ids": [
+      "RelR_5360101d9970",
+      "RelR_c1c38551b527",
+      "RelR_008fca8f9ba4"
+    ]
+  },
+  {
+    "canonical_rel_name": "modifies_microstructure_of",
+    "canonical_rel_desc": "A process changes or modifies the microstructure of a material, without specifying the exact product phases formed.",
+    "rel_cls": [
+      "microstructural_transformation_relation"
+    ],
+    "rel_cls_group": [
+      "MODIFICATION"
+    ],
+    "instance_count": 2,
+    "example_relation_ids": [
+      "RelR_338e547f321f",
+      "RelR_29b3c1c25656"
+    ]
+  },
+  {
+    "canonical_rel_name": "produces_microstructural_feature",
+    "canonical_rel_desc": "A process leads to the formation or production of a specific microstructural feature or phase in a material.",
+    "rel_cls": [
+      "microstructural_transformation_relation"
+    ],
+    "rel_cls_group": [
+      "MODIFICATION"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_a45fb4ca81de"
+    ]
+  },
+  {
+    "canonical_rel_name": "prevents",
+    "canonical_rel_desc": "The subject inhibits or effectively eliminates the occurrence of the specified degradation process under the given conditions.",
+    "rel_cls": [
+      "degradation_inhibition_relation"
+    ],
+    "rel_cls_group": [
+      "CAUSALITY"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_4fb5553cfff8"
+    ]
+  }
+]

@@ -1,0 +1,45 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_5360101d9970",
+        "RelR_c1c38551b527",
+        "RelR_008fca8f9ba4"
+      ],
+      "canonical_rel_name": "grouped_with",
+      "canonical_rel_desc": "Indicates that two entities are presented or classified together as peer categories within the same document section or list, without implying causal, hierarchical, or compositional dependence. The relation is symmetric and direction is arbitrary.",
+      "justification": "All three relations explicitly describe co-listed, peer damage mechanism categories within the same document section or list, with remarks noting that direction is arbitrary and the semantics are document-level grouping rather than causal or hierarchical. They share identical predicate meaning (document-based co-grouping), so they should use a single symmetric canonical predicate 'grouped_with'.",
+      "remark": "Normalized these co-classification edges to a symmetric document-grouping predicate for consistent KG usage.",
+      "confidence": 0.96
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_5360101d9970",
+        "RelR_c1c38551b527",
+        "RelR_008fca8f9ba4"
+      ],
+      "rel_cls": "document_coclassification_relation",
+      "justification": "Each relation connects damage mechanism categories that are co-listed as peer sections or subsections in the same document, with qualifiers and remarks emphasizing document structure and co-classification. This fits a dedicated class for document-based co-classification/grouping rather than causal, hierarchical, or compositional relations.",
+      "remark": "Class captures generic document-structure-based grouping used for peer categories, especially damage mechanisms.",
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_5360101d9970",
+        "RelR_c1c38551b527",
+        "RelR_008fca8f9ba4"
+      ],
+      "rel_cls_group": "ASSOCIATION",
+      "justification": "The relations encode that mechanisms are co-presented or co-classified in the same document context, which is a non-causal, non-hierarchical associative link. This is best captured as an ASSOCIATION-type group.",
+      "remark": "Explicitly marked as ASSOCIATION to distinguish these from causal, compositional, or taxonomic edges in the KG.",
+      "confidence": 0.96
+    }
+  }
+]

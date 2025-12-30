@@ -1,0 +1,239 @@
+{
+  "cluster_label": 2,
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_338e547f321f",
+      "relation_name": "alters_microstructure_of",
+      "rel_desc": "Graphitization alters the microstructure of carbon steels after long-term operation, degrading their mechanical properties.",
+      "rel_hint_type": "structural_change",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "graphitization",
+      "object_entity_name": "carbon steel",
+      "subject_class_label": "Graphitization (Process)",
+      "subject_class_group": "Steel Metallurgy and Degradation",
+      "object_class_label": "Graphitization-Susceptible Steels",
+      "object_class_group": "Steel Metallurgy and Degradation",
+      "qualifiers": {
+        "TemporalQualifier": "after long-term operation",
+        "SpatialQualifier": null,
+        "OperationalConstraint": "operation in the 800°F to 1100°F (427°C to 593°C) range",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "that may cause a loss in strength, ductility, and/or creep resistance",
+        "LogicalMarker": null,
+        "OtherQualifier": "DamageType: mechanical property degradation"
+      },
+      "confidence": 0.9,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_29b3c1c25656",
+      "relation_name": "alters_microstructure_of",
+      "rel_desc": "Graphitization alters the microstructure of 0.5Mo steels during long-term high-temperature operation.",
+      "rel_hint_type": "structural_change",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "graphitization",
+      "object_entity_name": "0.5Mo steel",
+      "subject_class_label": "Graphitization (Process)",
+      "subject_class_group": "Steel Metallurgy and Degradation",
+      "object_class_label": "Graphitization-Susceptible Steels",
+      "object_class_group": "Steel Metallurgy and Degradation",
+      "qualifiers": {
+        "TemporalQualifier": "after long-term operation",
+        "SpatialQualifier": null,
+        "OperationalConstraint": "operation in the 800°F to 1100°F (427°C to 593°C) range",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "may cause",
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "DamageType: loss in strength, ductility, and/or creep resistance"
+      },
+      "confidence": 0.9,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_a45fb4ca81de",
+      "relation_name": "produces",
+      "rel_desc": "Graphitization corresponds to decomposition of carbide phases into graphite nodules, effectively producing graphite nodules in the steel.",
+      "rel_hint_type": "transformation",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "graphitization",
+      "object_entity_name": "graphite nodules",
+      "subject_class_label": "Graphitization (Process)",
+      "subject_class_group": "Steel Metallurgy and Degradation",
+      "object_class_label": "Graphite Nodules (Product)",
+      "object_class_group": "Steel Metallurgy and Degradation",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "in these steels",
+        "OperationalConstraint": "at elevated temperatures",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "decompose into",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.82,
+      "remarks": [
+        "Carbide phases are not an explicit entity; relation framed between graphitization and graphite nodules to preserve transformation context."
+      ]
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_338e547f321f\",\n        \"RelR_29b3c1c25656\"\n      ],\n      \"canonical_rel_name\": \"alters_microstructure_of\",\n      \"canonical_rel_desc\": \"A process or condition changes the microstructure of a material, typically affecting its phases, morphology, or distribution of microstructural features.\",\n      \"justification\": \"Both relations describe the same predicate meaning: the process of graphitization changes the microstructure of a steel material. The phrasing and intent are equivalent across carbon steel and 0.5Mo steel, differing only in the specific steel type and operational qualifiers.\",\n      \"remark\": null,\n      \"confidence\": 0.97\n    }\n  },\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_a45fb4ca81de\"\n      ],\n      \"canonical_rel_name\": \"produces\",\n      \"canonical_rel_desc\": \"A process or entity generates or leads to the formation of a product, feature, or outcome.\",\n      \"justification\": \"This relation explicitly states that graphitization produces graphite nodules as a result of carbide decomposition. This is a standard producer–product predicate distinct from microstructure alteration.\",\n      \"remark\": null,\n      \"confidence\": 0.93\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_338e547f321f\",\n        \"RelR_29b3c1c25656\"\n      ],\n      \"rel_cls\": \"microstructure_modification_relation\",\n      \"justification\": \"Both relations capture how a degradation process modifies the microstructure of steels. They belong to a family of predicates concerned with changes to microstructural state (e.g., phase changes, feature coarsening, graphitization effects).\",\n      \"remark\": null,\n      \"confidence\": 0.95\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_a45fb4ca81de\"\n      ],\n      \"rel_cls\": \"transformation_product_relation\",\n      \"justification\": \"The relation expresses a transformation outcome where a process yields a specific product (graphite nodules). This fits a family of relations describing products or outputs of transformations or reactions.\",\n      \"remark\": null,\n      \"confidence\": 0.92\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_338e547f321f\",\n        \"RelR_29b3c1c25656\"\n      ],\n      \"rel_cls_group\": \"MODIFICATION\",\n      \"justification\": \"These relations concern the modification of an existing material’s internal state (its microstructure) rather than creating a new distinct product. This aligns with a broad modification category.\",\n      \"remark\": null,\n      \"confidence\": 0.94\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_a45fb4ca81de\"\n      ],\n      \"rel_cls_group\": \"CAUSALITY\",\n      \"justification\": \"The relation encodes a cause–effect link where the process (graphitization) causally leads to the formation of graphite nodules, fitting a broad causality/transformation outcome category.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_338e547f321f",
+          "RelR_29b3c1c25656"
+        ],
+        "canonical_rel_name": "alters_microstructure_of",
+        "canonical_rel_desc": "A process or condition changes the microstructure of a material, typically affecting its phases, morphology, or distribution of microstructural features.",
+        "justification": "Both relations describe the same predicate meaning: the process of graphitization changes the microstructure of a steel material. The phrasing and intent are equivalent across carbon steel and 0.5Mo steel, differing only in the specific steel type and operational qualifiers.",
+        "remark": null,
+        "confidence": 0.97
+      }
+    },
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_a45fb4ca81de"
+        ],
+        "canonical_rel_name": "produces",
+        "canonical_rel_desc": "A process or entity generates or leads to the formation of a product, feature, or outcome.",
+        "justification": "This relation explicitly states that graphitization produces graphite nodules as a result of carbide decomposition. This is a standard producer–product predicate distinct from microstructure alteration.",
+        "remark": null,
+        "confidence": 0.93
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_338e547f321f",
+          "RelR_29b3c1c25656"
+        ],
+        "rel_cls": "microstructure_modification_relation",
+        "justification": "Both relations capture how a degradation process modifies the microstructure of steels. They belong to a family of predicates concerned with changes to microstructural state (e.g., phase changes, feature coarsening, graphitization effects).",
+        "remark": null,
+        "confidence": 0.95
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_a45fb4ca81de"
+        ],
+        "rel_cls": "transformation_product_relation",
+        "justification": "The relation expresses a transformation outcome where a process yields a specific product (graphite nodules). This fits a family of relations describing products or outputs of transformations or reactions.",
+        "remark": null,
+        "confidence": 0.92
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_338e547f321f",
+          "RelR_29b3c1c25656"
+        ],
+        "rel_cls_group": "MODIFICATION",
+        "justification": "These relations concern the modification of an existing material's internal state (its microstructure) rather than creating a new distinct product. This aligns with a broad modification category.",
+        "remark": null,
+        "confidence": 0.94
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_a45fb4ca81de"
+        ],
+        "rel_cls_group": "CAUSALITY",
+        "justification": "The relation encodes a cause–effect link where the process (graphitization) causally leads to the formation of graphite nodules, fitting a broad causality/transformation outcome category.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_338e547f321f",
+        "RelR_29b3c1c25656"
+      ],
+      "canonical_rel_name": "alters_microstructure_of",
+      "canonical_rel_desc": "A process or condition changes the microstructure of a material, typically affecting its phases, morphology, or distribution of microstructural features.",
+      "justification": "Both relations describe the same predicate meaning: the process of graphitization changes the microstructure of a steel material. The phrasing and intent are equivalent across carbon steel and 0.5Mo steel, differing only in the specific steel type and operational qualifiers.",
+      "remark": null,
+      "confidence": 0.97
+    },
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_a45fb4ca81de"
+      ],
+      "canonical_rel_name": "produces",
+      "canonical_rel_desc": "A process or entity generates or leads to the formation of a product, feature, or outcome.",
+      "justification": "This relation explicitly states that graphitization produces graphite nodules as a result of carbide decomposition. This is a standard producer–product predicate distinct from microstructure alteration.",
+      "remark": null,
+      "confidence": 0.93
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_338e547f321f",
+        "RelR_29b3c1c25656"
+      ],
+      "rel_cls": "microstructure_modification_relation",
+      "justification": "Both relations capture how a degradation process modifies the microstructure of steels. They belong to a family of predicates concerned with changes to microstructural state (e.g., phase changes, feature coarsening, graphitization effects).",
+      "remark": null,
+      "confidence": 0.95
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_a45fb4ca81de"
+      ],
+      "rel_cls": "transformation_product_relation",
+      "justification": "The relation expresses a transformation outcome where a process yields a specific product (graphite nodules). This fits a family of relations describing products or outputs of transformations or reactions.",
+      "remark": null,
+      "confidence": 0.92
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_338e547f321f",
+        "RelR_29b3c1c25656"
+      ],
+      "rel_cls_group": "MODIFICATION",
+      "justification": "These relations concern the modification of an existing material's internal state (its microstructure) rather than creating a new distinct product. This aligns with a broad modification category.",
+      "remark": null,
+      "confidence": 0.94
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_a45fb4ca81de"
+      ],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "The relation encodes a cause–effect link where the process (graphitization) causally leads to the formation of graphite nodules, fitting a broad causality/transformation outcome category.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  ],
+  "timestamp": "2025-12-29T17:29:54Z"
+}

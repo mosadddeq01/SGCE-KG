@@ -1,0 +1,57 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_ccb0e0161188",
+        "RelR_c426520a3c91",
+        "RelR_7c9bc782fce9",
+        "RelR_caa4eec09380",
+        "RelR_704fe359a26f",
+        "RelR_81f81efb1983",
+        "RelR_c686532b051c"
+      ],
+      "canonical_rel_name": "occurs_in",
+      "canonical_rel_desc": "Indicates that a structure, phase, feature, or process is present in or takes place within a given material or material class.",
+      "justification": "All instances express the same predicate-level meaning: a metallurgical structure, cracking mechanism, degradation process, or microstructural product occurs in or is found within a specific steel or steel family. The direction is consistently 'phenomenon/structure → host material', so a single canonical predicate 'occurs_in' applies uniformly.",
+      "remark": "Used broadly for microstructures, cracking mechanisms, and degradation products occurring within steels or steel classes.",
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_ccb0e0161188",
+        "RelR_c426520a3c91",
+        "RelR_7c9bc782fce9",
+        "RelR_caa4eec09380",
+        "RelR_704fe359a26f",
+        "RelR_81f81efb1983",
+        "RelR_c686532b051c"
+      ],
+      "rel_cls": "material_occurrence_relation",
+      "justification": "Each relation links a structure or process (austenitic/ferritic structure, HIC, graphitization, graphite nodules) to the material in which it occurs (various steels). This is a consistent family describing where a metallurgical or degradation phenomenon occurs within materials.",
+      "remark": "Class groups all relations that specify the host material for a microstructure, defect, or process.",
+      "confidence": 0.93
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_ccb0e0161188",
+        "RelR_c426520a3c91",
+        "RelR_7c9bc782fce9",
+        "RelR_caa4eec09380",
+        "RelR_704fe359a26f",
+        "RelR_81f81efb1983",
+        "RelR_c686532b051c"
+      ],
+      "rel_cls_group": "SPATIALITY",
+      "justification": "Semantically these relations answer the question 'where does this structure or process occur?', i.e., they encode the spatial/host-material context (inside which steel or alloy the phenomenon is found). This aligns best with a broad spatial/location-oriented group rather than composition or causality.",
+      "remark": "Covers spatial/host-context links between phenomena and materials, even when the phenomena are processes rather than static structures.",
+      "confidence": 0.9
+    }
+  }
+]

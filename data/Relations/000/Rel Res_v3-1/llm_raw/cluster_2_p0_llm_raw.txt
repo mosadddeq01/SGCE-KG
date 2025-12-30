@@ -1,0 +1,64 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_338e547f321f", "RelR_29b3c1c25656"],
+      "canonical_rel_name": "alters_microstructure_of",
+      "canonical_rel_desc": "Indicates that a process or phenomenon changes the microstructure of a material.",
+      "justification": "Both relations describe graphitization changing the microstructure of steels under long-term high-temperature operation; the existing predicate wording already matches the intended semantics and can be standardized.",
+      "remark": null,
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_a45fb4ca81de"],
+      "canonical_rel_name": "produces_microstructural_feature",
+      "canonical_rel_desc": "Indicates that a process or transformation produces a specific microstructural feature in a material.",
+      "justification": "This relation describes graphitization as a transformation that results in graphite nodules; the core predicate is production/formation of a microstructural feature by a process.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": ["RelR_338e547f321f", "RelR_29b3c1c25656"],
+      "rel_cls": "microstructure_change_relation",
+      "justification": "These edges link a degradation process (graphitization) to steels whose microstructure is altered; they belong to a family of relations about changes to material microstructure.",
+      "remark": null,
+      "confidence": 0.94
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": ["RelR_a45fb4ca81de"],
+      "rel_cls": "phase_transformation_product_relation",
+      "justification": "The relation connects a phase transformation process (graphitization) with the microstructural product (graphite nodules), fitting a class of relations that express the products of phase or microstructural transformations.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": ["RelR_338e547f321f", "RelR_29b3c1c25656"],
+      "rel_cls_group": "MODIFICATION",
+      "justification": "Graphitization is described specifically as altering the microstructure of the steels, which is a structural modification of the material.",
+      "remark": null,
+      "confidence": 0.94
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": ["RelR_a45fb4ca81de"],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "The process of graphitization causes the formation of graphite nodules; the emphasis is on the process producing a product, a clear causal relationship.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  }
+]
