@@ -4869,7 +4869,7 @@ from typing import Any, Dict, List, Optional
 BASE_INPUT_CLASSES = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Classes/Cls_Rec/classes_for_cls_res.json")
 EXPERIMENT_ROOT = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Classes/Cls_Res_IterativeRuns")
 
-MAX_RUNS: int = 3
+MAX_RUNS: int = 4
 STRUCTURAL_CHANGE_THRESHOLD: Optional[int] = 0
 TOTAL_ACTIONS_THRESHOLD: Optional[int] = None
 MAX_NO_CHANGE_RUNS: Optional[int] = 1
