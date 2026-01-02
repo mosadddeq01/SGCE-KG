@@ -1,0 +1,57 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_7c72519d0c58",
+        "RelR_d7f799ddca5e"
+      ],
+      "canonical_rel_name": "exhibits_behavior",
+      "canonical_rel_desc": "Indicates that an organism or life stage displays or engages in a specific behavior.",
+      "justification": "Both relations link a butterfly (or its adult life stage) to its mating behavior, expressing that the subject displays that behavior. Normalizing to a single predicate 'exhibits_behavior' captures this shared semantics.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_52b36be4a12b"
+      ],
+      "canonical_rel_name": "lays_eggs_on",
+      "canonical_rel_desc": "Indicates that a female organism deposits its eggs on a specified substrate or host.",
+      "justification": "This relation connects female butterflies to host plants via the specific reproductive act of depositing eggs on those plants; a dedicated predicate 'lays_eggs_on' accurately and succinctly captures this oviposition behavior.",
+      "remark": null,
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_7c72519d0c58",
+        "RelR_d7f799ddca5e",
+        "RelR_52b36be4a12b"
+      ],
+      "rel_cls": "reproductive_behavior_relation",
+      "justification": "All three relations describe reproductive behaviors: mating behaviors in the first two and egg-laying (oviposition) behavior in the third. Grouping them under 'reproductive_behavior_relation' provides an appropriate mid-level semantic class.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_7c72519d0c58",
+        "RelR_d7f799ddca5e",
+        "RelR_52b36be4a12b"
+      ],
+      "rel_cls_group": "AGENCY",
+      "justification": "Each relation describes actions or behaviors performed by agents (butterflies or their life stage), not composition, identity, or pure association. The broad category 'AGENCY' best captures these behavior- and action-oriented links.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  }
+]

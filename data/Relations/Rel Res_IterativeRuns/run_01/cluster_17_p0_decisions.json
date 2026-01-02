@@ -1,0 +1,159 @@
+{
+  "cluster_label": "17_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_dd103285e1e9",
+      "relation_name": "describes",
+      "rel_desc": "The news report is about the escaped criminal.",
+      "rel_hint_type": "aboutness",
+      "canonical_rel_name": "is_about",
+      "canonical_rel_desc": "Indicates that a narrative, document, or discourse segment is about or concerns a particular topic, entity, or concept.",
+      "rel_cls": "aboutness_relation",
+      "rel_cls_group": "ASSOCIATION",
+      "subject_entity_name": "news report",
+      "object_entity_name": "escaped criminal",
+      "subject_class_label": "Hook Man Legend: Narrative Elements",
+      "subject_class_group": "Urban Legend: Hook Man",
+      "object_class_label": "Hook Man Legend: Narrative Elements",
+      "object_class_group": "Urban Legend: Hook Man",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "about",
+        "LogicalMarker": null,
+        "OtherQualifier": "WarningFunction: crime alert"
+      },
+      "confidence": 0.99,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_a840d2c878b2",
+      "relation_name": "concerns",
+      "rel_desc": "The tales focus on or are about the supernatural and the unknown.",
+      "rel_hint_type": "aboutness",
+      "canonical_rel_name": "is_about",
+      "canonical_rel_desc": "Indicates that a narrative, document, or discourse segment is about or concerns a particular topic, entity, or concept.",
+      "rel_cls": "aboutness_relation",
+      "rel_cls_group": "ASSOCIATION",
+      "subject_entity_name": "tales of the supernatural and the unknown",
+      "object_entity_name": "the unknown",
+      "subject_class_label": "Supernatural Narratives",
+      "subject_class_group": "Supernatural & Paranormal Domain",
+      "object_class_label": "Supernatural Concepts",
+      "object_class_group": "Supernatural & Paranormal Domain",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.9,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_b34bce086863",
+      "relation_name": "discusses",
+      "rel_desc": "The document section titled \"Ethical Dilemmas in AI Development\" is a discussion of ethical dilemmas in AI development as a concept.",
+      "rel_hint_type": "aboutness",
+      "canonical_rel_name": "is_about",
+      "canonical_rel_desc": "Indicates that a document or document segment has a particular concept as its primary topic or subject matter.",
+      "rel_cls": "document_topic_relation",
+      "rel_cls_group": "ABOUTNESS",
+      "subject_entity_name": "Ethical Dilemmas in AI Development",
+      "object_entity_name": "ethical dilemmas in AI development",
+      "subject_class_label": "AI Ethics Dilemma Documents",
+      "subject_class_group": "AI Ethics & Governance",
+      "object_class_label": "AI Ethics Dilemmas (Concept)",
+      "object_class_group": "AI Ethics & Governance",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "DocumentSegmentType: introductory overview of dilemmas"
+      },
+      "confidence": 0.92,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_6ae41532555a",
+      "relation_name": "discusses",
+      "rel_desc": "The document segment on ethical dilemmas in AI development also describes the rapid advancement and impacts of Artificial Intelligence.",
+      "rel_hint_type": "aboutness",
+      "canonical_rel_name": "is_about",
+      "canonical_rel_desc": "Indicates that a narrative, document, or discourse segment is about or concerns a particular topic, entity, or concept.",
+      "rel_cls": "aboutness_relation",
+      "rel_cls_group": "ASSOCIATION",
+      "subject_entity_name": "Ethical Dilemmas in AI Development",
+      "object_entity_name": "Artificial Intelligence",
+      "subject_class_label": "AI Ethics Dilemma Documents",
+      "subject_class_group": "AI Ethics & Governance",
+      "object_class_label": "Artificial Intelligence Technologies",
+      "object_class_group": "Artificial Intelligence Technologies & Applications",
+      "qualifiers": {
+        "TemporalQualifier": "in recent years",
+        "SpatialQualifier": null,
+        "OperationalConstraint": "across various industries and aspects of daily life",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "NarrativeRole: sets context for subsequent ethical discussion"
+      },
+      "confidence": 0.85,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_rel_schema\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_dd103285e1e9\",\n        \"RelR_a840d2c878b2\",\n        \"RelR_b34bce086863\",\n        \"RelR_6ae41532555a\"\n      ],\n      \"canonical_rel_name\": \"is_about\",\n      \"canonical_rel_desc\": \"Indicates that a narrative, document, or discourse segment has a particular topic, entity, or concept as its primary subject matter.\",\n      \"rel_cls\": \"document_topic_relation\",\n      \"rel_cls_group\": \"ABOUTNESS\",\n      \"justification\": \"All four relations link a narrative or document (or segment) to the topic or concept it discusses, describes, or concerns. They currently share the same canonical_rel_name 'is_about' but have slightly inconsistent canonical_rel_desc, rel_cls ('aboutness_relation' vs 'document_topic_relation'), and rel_cls_group ('ASSOCIATION' vs 'ABOUTNESS'). Unifying them under a single, precise description, a specific class 'document_topic_relation', and the broad group 'ABOUTNESS' yields a consistent schema for document–topic aboutness relations across these instances.\",\n      \"remark\": null,\n      \"confidence\": 0.96\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_rel_schema",
+      "args": {
+        "relation_ids": [
+          "RelR_dd103285e1e9",
+          "RelR_a840d2c878b2",
+          "RelR_b34bce086863",
+          "RelR_6ae41532555a"
+        ],
+        "canonical_rel_name": "is_about",
+        "canonical_rel_desc": "Indicates that a narrative, document, or discourse segment has a particular topic, entity, or concept as its primary subject matter.",
+        "rel_cls": "document_topic_relation",
+        "rel_cls_group": "ABOUTNESS",
+        "justification": "All four relations link a narrative or document (or segment) to the topic or concept it discusses, describes, or concerns. They currently share the same canonical_rel_name 'is_about' but have slightly inconsistent canonical_rel_desc, rel_cls ('aboutness_relation' vs 'document_topic_relation'), and rel_cls_group ('ASSOCIATION' vs 'ABOUTNESS'). Unifying them under a single, precise description, a specific class 'document_topic_relation', and the broad group 'ABOUTNESS' yields a consistent schema for document–topic aboutness relations across these instances.",
+        "remark": null,
+        "confidence": 0.96
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_rel_schema",
+      "relation_ids": [
+        "RelR_dd103285e1e9",
+        "RelR_a840d2c878b2",
+        "RelR_b34bce086863",
+        "RelR_6ae41532555a"
+      ],
+      "canonical_rel_name": "is_about",
+      "canonical_rel_desc": "Indicates that a narrative, document, or discourse segment has a particular topic, entity, or concept as its primary subject matter.",
+      "rel_cls": "document_topic_relation",
+      "rel_cls_group": "ABOUTNESS",
+      "new_relation_name": null,
+      "original_relation_name": null,
+      "justification": "All four relations link a narrative or document (or segment) to the topic or concept it discusses, describes, or concerns. They currently share the same canonical_rel_name 'is_about' but have slightly inconsistent canonical_rel_desc, rel_cls ('aboutness_relation' vs 'document_topic_relation'), and rel_cls_group ('ASSOCIATION' vs 'ABOUTNESS'). Unifying them under a single, precise description, a specific class 'document_topic_relation', and the broad group 'ABOUTNESS' yields a consistent schema for document–topic aboutness relations across these instances.",
+      "remark": null,
+      "confidence": 0.96
+    }
+  ],
+  "timestamp": "2026-01-02T09:22:50Z"
+}

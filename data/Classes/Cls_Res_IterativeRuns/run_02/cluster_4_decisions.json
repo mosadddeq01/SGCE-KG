@@ -2,255 +2,210 @@
   "cluster_label": 4,
   "cluster_classes": [
     {
-      "candidate_id": "ClsC_2bb0705d",
-      "class_label": "Corrosion-Resistant Alloys",
-      "class_description": "Alloys known for their resistance to corrosion, including stainless steels, nickel base alloys, and other corrosion-resistant metals.",
-      "class_type_hint": "Material",
-      "class_group": "Corrosion-Resistant Metals and Alloys",
-      "confidence": 0.88,
-      "evidence_excerpt": "Duplex stainless steel and nickel base alloys are known for corrosion resistance.",
+      "candidate_id": "ClsC_9205413b",
+      "class_label": "Butterfly Life Stages",
+      "class_description": "Distinct developmental stages in the butterfly life cycle, from egg to larval caterpillar, treated as organismal life stages rather than specific anatomical parts.",
+      "class_type_hint": "OrganismLifeStage",
+      "class_group": "Butterfly Life Cycle and Reproduction",
+      "confidence": 0.93,
+      "evidence_excerpt": "egg life stage and larval life stage (caterpillar) within the butterfly life cycle",
       "member_ids": [
-        "Can_0aec2541",
-        "Can_0441bbd6",
-        "En_2d1b9dea",
-        "En_66d2eb63"
+        "Can_10d615c2",
+        "Can_e076166c"
       ],
       "members": [
         {
-          "id": "Can_0aec2541",
-          "entity_name": "duplex stainless steel",
-          "entity_description": "A family of stainless steels with a mixed austenitic-ferritic structure, known for its corrosion resistance, including Alloy 2205, 2304, and 2507.",
-          "entity_type_hint": "Material"
+          "id": "Can_10d615c2",
+          "entity_name": "butterfly egg stage",
+          "entity_description": "The initial life stage of a butterfly during which the organism exists as eggs laid on host plants before hatching into larvae (caterpillars), with eggs varying in size, shape, and color by species.",
+          "entity_type_hint": "OrganismLifeStage"
         },
         {
-          "id": "Can_0441bbd6",
-          "entity_name": "Stainless Steel",
-          "entity_description": "A corrosion-resistant alloy of iron, chromium, and often nickel, known for its strength, durability, and resistance to oxidation, sulfidation, and other forms of corrosion.",
-          "entity_type_hint": "Material"
-        },
-        {
-          "id": "En_2d1b9dea",
-          "entity_name": "nickel base",
-          "entity_description": "A family of alloys with nickel as a major alloying element, including Alloys 200, 400, K-500, etc.",
-          "entity_type_hint": "Material"
+          "id": "Can_e076166c",
+          "entity_name": "caterpillar (butterfly larval stage)",
+          "entity_description": "The larval life stage of butterflies, beginning when the egg hatches into a caterpillar and encompassing the primary feeding, rapid growth, and preparation for pupation.",
+          "entity_type_hint": "OrganismLifeStage"
         }
       ],
       "remarks": []
     },
     {
-      "candidate_id": "ClsC_cca87da3",
-      "class_label": "Titanium (Metal)",
-      "class_description": "Titanium, a strong, lightweight, and corrosion-resistant metal used in various applications.",
-      "class_type_hint": "Material",
-      "class_group": "Corrosion-Resistant Metals and Alloys",
-      "confidence": 0.1,
-      "evidence_excerpt": "",
+      "candidate_id": "ClsR_8098889a",
+      "class_label": "Adult Butterfly Life Stage",
+      "class_description": "The adult (imago) stage of butterflies, including the general adult form, its immediate post-emergence period, and attributes such as typical lifespan and activity during this stage.",
+      "class_type_hint": "OrganismLifeStage",
+      "class_group": "Butterfly Life Cycle and Reproduction",
+      "confidence": 0.86,
+      "evidence_excerpt": "newly emerged adult butterfly… moment of beauty and grace in flight",
       "member_ids": [
-        "En_66d2eb63"
+        "En_4433b9d4",
+        "Can_9f2a4b9d",
+        "En_0e254da6",
+        "Can_690f4a29"
       ],
       "members": [
         {
-          "id": "En_66d2eb63",
-          "entity_name": "titanium",
-          "entity_description": "A strong, lightweight, and corrosion-resistant metal used in various applications.",
-          "entity_type_hint": "Material"
-        }
-      ],
-      "remarks": [
-        "Class is now empty after moving titanium to the main corrosion-resistant alloys class; review for deprecation or merge."
-      ]
-    },
-    {
-      "candidate_id": "ClsC_8a2ead3a",
-      "class_label": "Chromium in Steel",
-      "class_description": "Chromium as an alloying element in steel, providing resistance to oxidation, corrosion, and eliminating graphitization.",
-      "class_type_hint": "Material",
-      "class_group": "Steel Metallurgy and Degradation",
-      "confidence": 0.92,
-      "evidence_excerpt": "Chromium is an alloying element in stainless steels.",
-      "member_ids": [
-        "En_f6aa95ca",
-        "En_417e7d84"
-      ],
-      "members": [
-        {
-          "id": "En_f6aa95ca",
-          "entity_name": "chromium",
-          "entity_description": "An alloying element in stainless steels that provides resistance to oxidation and corrosion.",
-          "entity_type_hint": "Material"
+          "id": "En_4433b9d4",
+          "entity_name": "newly emerged adult butterfly",
+          "entity_description": "An adult butterfly immediately after leaving the chrysalis, before its wings have fully expanded and hardened.",
+          "entity_type_hint": "LifeStage"
         },
         {
-          "id": "En_417e7d84",
-          "entity_name": "chromium",
-          "entity_description": "Element added to steel to eliminate graphitization.",
-          "entity_type_hint": "Material"
+          "id": "Can_9f2a4b9d",
+          "entity_name": "adult butterflies",
+          "entity_description": "The fourth and final life stage of butterflies, when they are winged, sexually mature insects that feed (often on nectar), pollinate, and focus on mating and reproduction, typically living from a few days to a few weeks depending on species.",
+          "entity_type_hint": "Organism"
+        },
+        {
+          "id": "En_0e254da6",
+          "entity_name": "butterfly adult lifespan",
+          "entity_description": "The duration of the adult stage of a butterfly's life, typically from a few days to a few weeks depending on species.",
+          "entity_type_hint": "LifeStageAttribute"
+        },
+        {
+          "id": "Can_690f4a29",
+          "entity_name": "adult stage of a butterfly",
+          "entity_description": "The fourth and final life cycle stage of a butterfly, when the fully developed adult butterfly emerges from the chrysalis, flies, feeds, mates, and reproduces.",
+          "entity_type_hint": "LifeStage"
         }
       ],
       "remarks": []
     }
   ],
-  "llm_raw": "[\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_8a2ead3a\",\n      \"new_name\": \"Chromium (Alloying Element in Steel)\",\n      \"new_description\": \"Chromium as an alloying element in steel, providing resistance to oxidation, corrosion, and eliminating graphitization.\",\n      \"new_class_type_hint\": \"Alloying Element\",\n      \"new_class_group\": \"Corrosion-Resistant Metals and Alloys\",\n      \"remark\": null,\n      \"justification\": \"Class 'Chromium in Steel' is more appropriately grouped with other corrosion-resistant metals and alloys, as its primary role is to impart corrosion resistance; this aligns it with the other classes in the cluster.\",\n      \"confidence\": 0.95\n    }\n  },\n  {\n    \"function\": \"split_class\",\n    \"args\": {\n      \"source_class_id\": \"ClsC_8a2ead3a\",\n      \"splits\": [\n        {\n          \"name\": \"Chromium (Element)\",\n          \"description\": \"Chromium as a chemical element, not limited to its role in steel.\",\n          \"class_type_hint\": \"Element\",\n          \"member_ids\": [\n            \"En_f6aa95ca\"\n          ],\n          \"provisional_id\": \"SPLIT_Chromium_Element\"\n        },\n        {\n          \"name\": \"Chromium in Steel\",\n          \"description\": \"Chromium as an alloying element in steel, providing resistance to oxidation and corrosion.\",\n          \"class_type_hint\": \"Alloying Element\",\n          \"member_ids\": [\n            \"En_417e7d84\"\n          ],\n          \"provisional_id\": \"SPLIT_Chromium_in_Steel\"\n        }\n      ],\n      \"justification\": \"The class 'Chromium in Steel' contains entities that refer to both the general element and its specific role in steel; splitting clarifies these distinct concepts.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_2bb0705d\",\n      \"new_name\": \"Corrosion-Resistant Alloys\",\n      \"new_description\": \"Alloys and metals known for their resistance to corrosion, including stainless steels, nickel base alloys, titanium, and other corrosion-resistant metals.\",\n      \"new_class_type_hint\": \"Material\",\n      \"new_class_group\": \"Corrosion-Resistant Metals and Alloys\",\n      \"remark\": null,\n      \"justification\": \"Expanded description to explicitly include titanium, which is a key corrosion-resistant metal and is currently in a separate class.\",\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"reassign_entities\",\n    \"args\": {\n      \"entity_ids\": [\n        \"En_66d2eb63\"\n      ],\n      \"from_class_id\": \"ClsC_cca87da3\",\n      \"to_class_id\": \"ClsC_2bb0705d\",\n      \"justification\": \"Titanium is a prototypical corrosion-resistant metal and fits better in the broader 'Corrosion-Resistant Alloys' class alongside stainless steels and nickel base alloys.\",\n      \"remark\": null,\n      \"confidence\": 0.95\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_cca87da3\",\n      \"new_name\": \"Titanium (Metal)\",\n      \"new_description\": \"Class emptied after reassignment; consider deprecating or merging if no unique members remain.\",\n      \"new_class_type_hint\": \"Material\",\n      \"new_class_group\": \"Corrosion-Resistant Metals and Alloys\",\n      \"remark\": \"Class is now empty after moving titanium to the main corrosion-resistant alloys class; review for deprecation or merge.\",\n      \"justification\": \"After moving its only entity, this class is empty and should be reviewed for removal or merging.\",\n      \"confidence\": 0.9\n    }\n  }\n]",
+  "llm_raw": "[\n  {\n    \"function\": \"create_class\",\n    \"args\": {\n      \"name\": \"Butterfly Adult Stage Attributes\",\n      \"description\": \"Attributes and characteristics specific to the adult (imago) stage of butterflies, such as typical duration of the adult stage and related life-history parameters.\",\n      \"class_type_hint\": \"LifeStageAttribute\",\n      \"member_ids\": [\n        \"En_0e254da6\"\n      ],\n      \"provisional_id\": \"ClsC_ButterflyAdultStageAttributes\",\n      \"justification\": \"The entity 'butterfly adult lifespan' is an attribute of the adult stage rather than the life stage itself, so it should be moved into its own attribute-focused class.\",\n      \"remark\": null,\n      \"confidence\": 0.92\n    }\n  },\n  {\n    \"function\": \"reassign_entities\",\n    \"args\": {\n      \"entity_ids\": [\n        \"En_0e254da6\"\n      ],\n      \"from_class_id\": \"ClsR_8098889a\",\n      \"to_class_id\": \"ClsC_ButterflyAdultStageAttributes\",\n      \"justification\": \"Move 'butterfly adult lifespan' out of the Adult Butterfly Life Stage class into a new attribute-focused class, separating stages from their quantitative/descriptive attributes.\",\n      \"remark\": null,\n      \"confidence\": 0.93\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_ButterflyAdultStageAttributes\",\n      \"new_name\": null,\n      \"new_description\": null,\n      \"new_class_type_hint\": null,\n      \"new_class_group\": \"Butterfly Life Cycle and Reproduction\",\n      \"remark\": null,\n      \"justification\": \"Assign the new attribute-focused class to the same overarching butterfly life cycle domain as the life stage classes.\",\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_9205413b\",\n      \"new_name\": \"Early Butterfly Life Stages (Egg and Larva)\",\n      \"new_description\": \"The early developmental stages in the butterfly life cycle, specifically the egg and larval (caterpillar) stages, treated as organismal life stages rather than anatomical parts.\",\n      \"new_class_type_hint\": \"OrganismLifeStage\",\n      \"new_class_group\": \"Butterfly Life Cycle and Reproduction\",\n      \"remark\": null,\n      \"justification\": \"Clarify that this class covers only the egg and larval stages, distinguishing it more clearly from the adult stage class while keeping it in the same life cycle group.\",\n      \"confidence\": 0.88\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsR_8098889a\",\n      \"new_name\": \"Adult Butterfly Life Stage\",\n      \"new_description\": \"The adult (imago) stage of butterflies, including newly emerged adults and fully mature winged individuals that are capable of flight, feeding, and reproduction.\",\n      \"new_class_type_hint\": \"OrganismLifeStage\",\n      \"new_class_group\": \"Butterfly Life Cycle and Reproduction\",\n      \"remark\": null,\n      \"justification\": \"Refine the description to focus solely on the adult stage itself, now that lifespan has been moved to an attribute class, and ensure consistent life-stage typing within the same life cycle group.\",\n      \"confidence\": 0.9\n    }\n  }\n]",
   "parsed_steps": [
     {
-      "function": "modify_class",
+      "function": "create_class",
       "args": {
-        "class_id": "ClsC_8a2ead3a",
-        "new_name": "Chromium (Alloying Element in Steel)",
-        "new_description": "Chromium as an alloying element in steel, providing resistance to oxidation, corrosion, and eliminating graphitization.",
-        "new_class_type_hint": "Alloying Element",
-        "new_class_group": "Corrosion-Resistant Metals and Alloys",
-        "remark": null,
-        "justification": "Class 'Chromium in Steel' is more appropriately grouped with other corrosion-resistant metals and alloys, as its primary role is to impart corrosion resistance; this aligns it with the other classes in the cluster.",
-        "confidence": 0.95
-      }
-    },
-    {
-      "function": "split_class",
-      "args": {
-        "source_class_id": "ClsC_8a2ead3a",
-        "splits": [
-          {
-            "name": "Chromium (Element)",
-            "description": "Chromium as a chemical element, not limited to its role in steel.",
-            "class_type_hint": "Element",
-            "member_ids": [
-              "En_f6aa95ca"
-            ],
-            "provisional_id": "SPLIT_Chromium_Element"
-          },
-          {
-            "name": "Chromium in Steel",
-            "description": "Chromium as an alloying element in steel, providing resistance to oxidation and corrosion.",
-            "class_type_hint": "Alloying Element",
-            "member_ids": [
-              "En_417e7d84"
-            ],
-            "provisional_id": "SPLIT_Chromium_in_Steel"
-          }
+        "name": "Butterfly Adult Stage Attributes",
+        "description": "Attributes and characteristics specific to the adult (imago) stage of butterflies, such as typical duration of the adult stage and related life-history parameters.",
+        "class_type_hint": "LifeStageAttribute",
+        "member_ids": [
+          "En_0e254da6"
         ],
-        "justification": "The class 'Chromium in Steel' contains entities that refer to both the general element and its specific role in steel; splitting clarifies these distinct concepts.",
+        "provisional_id": "ClsC_ButterflyAdultStageAttributes",
+        "justification": "The entity 'butterfly adult lifespan' is an attribute of the adult stage rather than the life stage itself, so it should be moved into its own attribute-focused class.",
         "remark": null,
-        "confidence": 0.9
-      }
-    },
-    {
-      "function": "modify_class",
-      "args": {
-        "class_id": "ClsC_2bb0705d",
-        "new_name": "Corrosion-Resistant Alloys",
-        "new_description": "Alloys and metals known for their resistance to corrosion, including stainless steels, nickel base alloys, titanium, and other corrosion-resistant metals.",
-        "new_class_type_hint": "Material",
-        "new_class_group": "Corrosion-Resistant Metals and Alloys",
-        "remark": null,
-        "justification": "Expanded description to explicitly include titanium, which is a key corrosion-resistant metal and is currently in a separate class.",
-        "confidence": 0.9
+        "confidence": 0.92
       }
     },
     {
       "function": "reassign_entities",
       "args": {
         "entity_ids": [
-          "En_66d2eb63"
+          "En_0e254da6"
         ],
-        "from_class_id": "ClsC_cca87da3",
-        "to_class_id": "ClsC_2bb0705d",
-        "justification": "Titanium is a prototypical corrosion-resistant metal and fits better in the broader 'Corrosion-Resistant Alloys' class alongside stainless steels and nickel base alloys.",
+        "from_class_id": "ClsR_8098889a",
+        "to_class_id": "ClsC_ButterflyAdultStageAttributes",
+        "justification": "Move 'butterfly adult lifespan' out of the Adult Butterfly Life Stage class into a new attribute-focused class, separating stages from their quantitative/descriptive attributes.",
         "remark": null,
-        "confidence": 0.95
+        "confidence": 0.93
       }
     },
     {
       "function": "modify_class",
       "args": {
-        "class_id": "ClsC_cca87da3",
-        "new_name": "Titanium (Metal)",
-        "new_description": "Class emptied after reassignment; consider deprecating or merging if no unique members remain.",
-        "new_class_type_hint": "Material",
-        "new_class_group": "Corrosion-Resistant Metals and Alloys",
-        "remark": "Class is now empty after moving titanium to the main corrosion-resistant alloys class; review for deprecation or merge.",
-        "justification": "After moving its only entity, this class is empty and should be reviewed for removal or merging.",
+        "class_id": "ClsC_ButterflyAdultStageAttributes",
+        "new_name": null,
+        "new_description": null,
+        "new_class_type_hint": null,
+        "new_class_group": "Butterfly Life Cycle and Reproduction",
+        "remark": null,
+        "justification": "Assign the new attribute-focused class to the same overarching butterfly life cycle domain as the life stage classes.",
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_9205413b",
+        "new_name": "Early Butterfly Life Stages (Egg and Larva)",
+        "new_description": "The early developmental stages in the butterfly life cycle, specifically the egg and larval (caterpillar) stages, treated as organismal life stages rather than anatomical parts.",
+        "new_class_type_hint": "OrganismLifeStage",
+        "new_class_group": "Butterfly Life Cycle and Reproduction",
+        "remark": null,
+        "justification": "Clarify that this class covers only the egg and larval stages, distinguishing it more clearly from the adult stage class while keeping it in the same life cycle group.",
+        "confidence": 0.88
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsR_8098889a",
+        "new_name": "Adult Butterfly Life Stage",
+        "new_description": "The adult (imago) stage of butterflies, including newly emerged adults and fully mature winged individuals that are capable of flight, feeding, and reproduction.",
+        "new_class_type_hint": "OrganismLifeStage",
+        "new_class_group": "Butterfly Life Cycle and Reproduction",
+        "remark": null,
+        "justification": "Refine the description to focus solely on the adult stage itself, now that lifespan has been moved to an attribute class, and ensure consistent life-stage typing within the same life cycle group.",
         "confidence": 0.9
       }
     }
   ],
   "executed_decisions": [
     {
-      "action": "modify_class",
-      "class_id": "ClsC_8a2ead3a",
-      "class_id_resolved": "ClsC_8a2ead3a",
-      "new_name": "Chromium (Alloying Element in Steel)",
-      "new_description": "Chromium as an alloying element in steel, providing resistance to oxidation, corrosion, and eliminating graphitization.",
-      "new_class_type_hint": "Alloying Element",
-      "new_class_group": "Corrosion-Resistant Metals and Alloys",
-      "remark": null,
-      "justification": "Class 'Chromium in Steel' is more appropriately grouped with other corrosion-resistant metals and alloys, as its primary role is to impart corrosion resistance; this aligns it with the other classes in the cluster.",
-      "confidence": 0.95
-    },
-    {
-      "action": "split_class",
-      "source_class_id": "ClsC_8a2ead3a",
-      "source_class_id_resolved": "ClsC_8a2ead3a",
-      "created_classes": [
-        {
-          "new_class_id": "ClsR_ad7cb205",
-          "provisional_id": "SPLIT_Chromium_Element",
-          "member_ids": [
-            "En_f6aa95ca"
-          ]
-        },
-        {
-          "new_class_id": "ClsR_0be796eb",
-          "provisional_id": "SPLIT_Chromium_in_Steel",
-          "member_ids": [
-            "En_417e7d84"
-          ]
-        }
+      "action": "create_class",
+      "result_class_id": "ClsR_3dccc0e8",
+      "provisional_id": "ClsC_ButterflyAdultStageAttributes",
+      "member_ids_added": [
+        "En_0e254da6"
       ],
-      "justification": "The class 'Chromium in Steel' contains entities that refer to both the general element and its specific role in steel; splitting clarifies these distinct concepts.",
+      "justification": "The entity 'butterfly adult lifespan' is an attribute of the adult stage rather than the life stage itself, so it should be moved into its own attribute-focused class.",
       "remark": null,
-      "confidence": 0.9
-    },
-    {
-      "action": "modify_class",
-      "class_id": "ClsC_2bb0705d",
-      "class_id_resolved": "ClsC_2bb0705d",
-      "new_name": "Corrosion-Resistant Alloys",
-      "new_description": "Alloys and metals known for their resistance to corrosion, including stainless steels, nickel base alloys, titanium, and other corrosion-resistant metals.",
-      "new_class_type_hint": "Material",
-      "new_class_group": "Corrosion-Resistant Metals and Alloys",
-      "remark": null,
-      "justification": "Expanded description to explicitly include titanium, which is a key corrosion-resistant metal and is currently in a separate class.",
-      "confidence": 0.9
+      "confidence": 0.92
     },
     {
       "action": "reassign_entities",
       "entity_ids": [
-        "En_66d2eb63"
+        "En_0e254da6"
       ],
-      "from": "ClsC_cca87da3",
-      "from_resolved": "ClsC_cca87da3",
-      "to": "ClsC_2bb0705d",
-      "to_resolved": "ClsC_2bb0705d",
-      "justification": "Titanium is a prototypical corrosion-resistant metal and fits better in the broader 'Corrosion-Resistant Alloys' class alongside stainless steels and nickel base alloys.",
+      "from": "ClsR_8098889a",
+      "from_resolved": "ClsR_8098889a",
+      "to": "ClsC_ButterflyAdultStageAttributes",
+      "to_resolved": "ClsR_3dccc0e8",
+      "justification": "Move 'butterfly adult lifespan' out of the Adult Butterfly Life Stage class into a new attribute-focused class, separating stages from their quantitative/descriptive attributes.",
       "remark": null,
-      "confidence": 0.95
+      "confidence": 0.93
     },
     {
       "action": "modify_class",
-      "class_id": "ClsC_cca87da3",
-      "class_id_resolved": "ClsC_cca87da3",
-      "new_name": "Titanium (Metal)",
-      "new_description": "Class emptied after reassignment; consider deprecating or merging if no unique members remain.",
-      "new_class_type_hint": "Material",
-      "new_class_group": "Corrosion-Resistant Metals and Alloys",
-      "remark": "Class is now empty after moving titanium to the main corrosion-resistant alloys class; review for deprecation or merge.",
-      "justification": "After moving its only entity, this class is empty and should be reviewed for removal or merging.",
+      "class_id": "ClsC_ButterflyAdultStageAttributes",
+      "class_id_resolved": "ClsR_3dccc0e8",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Butterfly Life Cycle and Reproduction",
+      "remark": null,
+      "justification": "Assign the new attribute-focused class to the same overarching butterfly life cycle domain as the life stage classes.",
+      "confidence": 0.9
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_9205413b",
+      "class_id_resolved": "ClsC_9205413b",
+      "new_name": "Early Butterfly Life Stages (Egg and Larva)",
+      "new_description": "The early developmental stages in the butterfly life cycle, specifically the egg and larval (caterpillar) stages, treated as organismal life stages rather than anatomical parts.",
+      "new_class_type_hint": "OrganismLifeStage",
+      "new_class_group": "Butterfly Life Cycle and Reproduction",
+      "remark": null,
+      "justification": "Clarify that this class covers only the egg and larval stages, distinguishing it more clearly from the adult stage class while keeping it in the same life cycle group.",
+      "confidence": 0.88
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsR_8098889a",
+      "class_id_resolved": "ClsR_8098889a",
+      "new_name": "Adult Butterfly Life Stage",
+      "new_description": "The adult (imago) stage of butterflies, including newly emerged adults and fully mature winged individuals that are capable of flight, feeding, and reproduction.",
+      "new_class_type_hint": "OrganismLifeStage",
+      "new_class_group": "Butterfly Life Cycle and Reproduction",
+      "remark": null,
+      "justification": "Refine the description to focus solely on the adult stage itself, now that lifespan has been moved to an attribute class, and ensure consistent life-stage typing within the same life cycle group.",
       "confidence": 0.9
     }
   ],
   "provisional_to_real": {
-    "SPLIT_Chromium_Element": "ClsR_ad7cb205",
-    "SPLIT_Chromium_in_Steel": "ClsR_0be796eb"
+    "ClsC_ButterflyAdultStageAttributes": "ClsR_3dccc0e8"
   },
-  "timestamp": "2025-12-28T00:23:45Z"
+  "timestamp": "2026-01-02T08:40:39Z"
 }

@@ -1,0 +1,285 @@
+{
+  "n_classes": 22,
+  "n_members_total": 59,
+  "classes": {
+    "ClsC_50a7b3c0": {
+      "class_label": "Corrosive Acids",
+      "class_description": "Highly corrosive acids requiring specific materials for safe handling and storage.",
+      "class_type_hint": "Material",
+      "confidence": 0.9,
+      "evidence_excerpt": "require specific materials to safely manage these corrosive substances.",
+      "source_cluster_id": {"coarse_cluster": 0, "local_subcluster": null},
+      "members": [
+        {"id": "En_cad09535","entity_name": "sulfuric acid","entity_description": "A strong acid used in various industrial processes, requiring specific materials for safe handling.","entity_type_hint": "Material","confidence_score": 0.9,"resolution_context": "Materials of Construction for Handling Sulfuric Acid indicates the need for specific materials to safely manage this corrosive substance.","flag": "entity_raw","chunk_id": ["Ch_000002"],"node_properties": []},
+        {"id": "En_99c85915","entity_name": "hydrofluoric acid","entity_description": "A highly corrosive acid used in industrial applications, requiring special materials for safe handling and storage.","entity_type_hint": "Material","confidence_score": 0.9,"resolution_context": "Materials for Receiving, Handling, and Storing Hydrofluoric Acid highlights the need for specific materials to manage this dangerous acid.","flag": "entity_raw","chunk_id": ["Ch_000002"],"node_properties": []}
+      ]
+    },
+    "ClsC_28164899": {
+      "class_label": "Amine Treating Chemicals",
+      "class_description": "Chemicals used in amine treating processes to remove H2S and CO2 from hydrocarbon streams.",
+      "class_type_hint": "Chemical",
+      "confidence": 0.95,
+      "evidence_excerpt": "used in amine treating to remove H2S and CO2.",
+      "source_cluster_id": {"coarse_cluster": 0, "local_subcluster": null},
+      "members": [
+        {"id": "En_b6489a63","entity_name": "diethanolamine (DEA)","entity_description": "A chemical used in amine treating to remove H2S and CO2 from hydrocarbon streams.","entity_type_hint": "Chemical","confidence_score": 0.95,"resolution_context": "Diethanolamine (DEA) is used in amine treating to remove H2S and CO2 from hydrocarbon streams.","flag": "entity_raw","chunk_id": ["Ch_000003"],"node_properties": []},
+        {"id": "En_a38530be","entity_name": "methyldiethanolamine","entity_description": "A chemical used in amine treating to remove H2S and CO2 from hydrocarbon streams.","entity_type_hint": "Material","confidence_score": 0.9,"resolution_context": "Methyldiethanolamine (MDEA) is used in amine treating processes to remove hydrogen sulfide (H2S) and carbon dioxide (CO2) from hydrocarbon streams.","flag": "entity_raw","chunk_id": ["Ch_000005"],"node_properties": []},
+        {"id": "En_24fd3367","entity_name": "monoethanolamine","entity_description": "A chemical used in amine treating to remove H2S and CO2 from hydrocarbon streams.","entity_type_hint": "Material","confidence_score": 0.9,"resolution_context": "Monoethanolamine (MEA) is used in amine treating processes to remove hydrogen sulfide (H2S) and carbon dioxide (CO2) from hydrocarbon streams.","flag": "entity_raw","chunk_id": ["Ch_000005"],"node_properties": []}
+      ]
+    },
+    "ClsC_bf71b12d": {
+      "class_label": "Sour Water Treatment",
+      "class_description": "Processes and substances involved in the treatment of sour water containing hydrogen sulfide.",
+      "class_type_hint": "Process",
+      "confidence": 0.88,
+      "evidence_excerpt": "treating sour water by removing contaminants.",
+      "source_cluster_id": {"coarse_cluster": 0, "local_subcluster": null},
+      "members": [
+        {"id": "En_da73a6e7","entity_name": "sour water","entity_description": "Water containing hydrogen sulfide and other sulfur compounds, often requiring treatment.","entity_type_hint": "Environment","confidence_score": 0.95,"resolution_context": "SW – sour water is listed in the FOCUS chunk, indicating its presence as a byproduct in industrial processes requiring treatment.","flag": "entity_raw","chunk_id": ["Ch_000008"],"node_properties": []},
+        {"id": "En_3b78069f","entity_name": "sour water stripper","entity_description": "A process unit used to remove hydrogen sulfide and ammonia from sour water.","entity_type_hint": "ProcessUnit","confidence_score": 0.95,"resolution_context": "SWS – sour water stripper is mentioned in the FOCUS chunk, highlighting its function in treating sour water by removing contaminants.","flag": "entity_raw","chunk_id": ["Ch_000008"],"node_properties": []}
+      ]
+    },
+    "ClsC_46c980fc": {
+      "class_label": "Pressure Vessel Standards",
+      "class_description": "Standards and codes related to the construction and inspection of pressure vessels in various industries.",
+      "class_type_hint": "Standard",
+      "confidence": 0.85,
+      "evidence_excerpt": "Codes for calculating heater tube thickness and construction of pressure vessels.",
+      "source_cluster_id": {"coarse_cluster": 1, "local_subcluster": null},
+      "members": [
+        {"id": "En_3508599f","entity_name": "API 530","entity_description": "Pressure Vessel Inspection Code for calculating heater tube thickness in petroleum refineries.","entity_type_hint": "Standard","confidence_score": 0.95,"resolution_context": "API 530 Pressure Vessel Inspection Code is cited for calculating heater tube thickness in petroleum refineries.","flag": "entity_raw","chunk_id": ["Ch_000001"],"node_properties": []},
+        {"id": "En_3d8a8447","entity_name": "ASME Boiler and Pressure Vessel Code Section VIII","entity_description": "Rules for construction of pressure vessels.","entity_type_hint": "Standard","confidence_score": 0.95,"resolution_context": "ASME Boiler and Pressure Vessel Code Section VIII, Division I, provides rules for construction of pressure vessels.","flag": "entity_raw","chunk_id": ["Ch_000001"],"node_properties": []}
+      ]
+    },
+    "ClsC_841165e8": {
+      "class_label": "Industry Standards",
+      "class_description": "A collection of standards and guidelines for assessing equipment integrity, risk, and safe operation in industrial settings.",
+      "class_type_hint": "Standard",
+      "confidence": 0.95,
+      "evidence_excerpt": "Standards for equipment integrity, risk, and safe operation.",
+      "source_cluster_id": {"coarse_cluster": 2, "local_subcluster": null},
+      "members": [
+        {"id": "En_95198f7a","entity_name": "RP 579","entity_description": "Fitness-For-Service standard for assessing the integrity of equipment.","entity_type_hint": "Standard","confidence_score": 0.95,"resolution_context": "RP 579 Fitness-For-Service is a standard cited for assessing the integrity and serviceability of equipment.","flag": "entity_raw","chunk_id": ["Ch_000001"],"node_properties": []},
+        {"id": "En_e5fa14ee","entity_name": "Publ. 581","entity_description": "Risk-Based Inspection - Base Resource Document for risk assessment.","entity_type_hint": "Standard","confidence_score": 0.95,"resolution_context": "Publ. 581 Risk-Based Inspection is a base resource document for conducting risk assessments.","flag": "entity_raw","chunk_id": ["Ch_000001"],"node_properties": []},
+        {"id": "En_45419999","entity_name": "RP 751","entity_description": "Guidelines for the safe operation of hydrofluoric acid alkylation units.","entity_type_hint": "Standard","confidence_score": 0.95,"resolution_context": "RP 751 provides guidelines for the safe operation of hydrofluoric acid alkylation units.","flag": "entity_raw","chunk_id": ["Ch_000001"],"node_properties": []},
+        {"id": "En_658db0c3","entity_name": "RP 932-B","entity_description": "Guidelines for corrosion control in hydroprocessing reactor effluent air cooler systems.","entity_type_hint": "Standard","confidence_score": 0.95,"resolution_context": "RP 932-B provides guidelines for design, materials, fabrication, operation, and inspection for corrosion control in hydroprocessing reactor effluent air cooler systems.","flag": "entity_raw","chunk_id": ["Ch_000001"],"node_properties": []},
+        {"id": "En_4e2351be","entity_name": "RP 934","entity_description": "Requirements for materials and fabrication of heavy wall pressure vessels for high temperature and pressure service.","entity_type_hint": "Standard","confidence_score": 0.95,"resolution_context": "RP 934 outlines materials and fabrication requirements for 2-1/4 Cr-1Mo & 3Cr-1Mo steel heavy wall pressure vessels for high temperature, high pressure service.","flag": "entity_raw","chunk_id": ["Ch_000001"],"node_properties": []},
+        {"id": "En_1a045908","entity_name": "RP 941","entity_description": "Standard for steels used in hydrogen service at elevated temperatures and pressures.","entity_type_hint": "Standard","confidence_score": 0.95,"resolution_context": "RP 941 specifies steels for hydrogen service at elevated temperatures and pressures in petroleum refineries and petrochemical plants.","flag": "entity_raw","chunk_id": ["Ch_000001"],"node_properties": []},
+        {"id": "En_e947261b","entity_name": "RP 945","entity_description": "Guidelines for avoiding environmental cracking in amine units.","entity_type_hint": "Standard","confidence_score": 0.95,"resolution_context": "RP 945 provides guidelines for avoiding environmental cracking in amine units.","flag": "entity_raw","chunk_id": ["Ch_000001"],"node_properties": []}
+      ]
+    },
+    "ClsC_8d103eaf": {
+      "class_label": "Graphitization-Susceptible Steels",
+      "class_description": "Steels that are prone to graphitization, a microstructural change causing loss of strength and ductility.",
+      "class_type_hint": "Material",
+      "confidence": 0.85,
+      "evidence_excerpt": "Graphitization affects carbon, 0.5Mo, and low alloy C-Mo steels.",
+      "source_cluster_id": {"coarse_cluster": 3, "local_subcluster": null},
+      "members": [
+        {"id": "Can_2e6baaf9","entity_name": "carbon steel","entity_description": "Steels that do not have alloying elements intentionally added, but may contain small amounts of elements and are affected by graphitization under certain conditions.","entity_type_hint": "Material","confidence_score": 0.9,"resolution_context": "Both entities refer to carbon steel, with overlapping descriptions and contexts, indicating they are the same material.","flag": "entity_raw","chunk_id": ["Ch_000010","Ch_000010"],"node_properties": []},
+        {"id": "En_a532abae","entity_name": "0.5Mo steel","entity_description": "A type of steel that undergoes graphitization at elevated temperatures.","entity_type_hint": "Material","confidence_score": 0.85,"resolution_context": "Graphitization is a change in the microstructure of certain carbon steels and 0.5Mo steels after long-term operation in the 800oF to 1100oF range.","flag": "entity_raw","chunk_id": ["Ch_000010"],"node_properties": []},
+        {"id": "En_8b972f6a","entity_name": "low alloy C-Mo steel","entity_description": "A type of steel susceptible to graphitization, especially with up to 1% Mo.","entity_type_hint": "Material","confidence_score": 0.85,"resolution_context": "Graphitization has been found in low alloy C-Mo steels with up to 1% Mo.","flag": "entity_raw","chunk_id": ["Ch_000010"],"node_properties": []}
+      ]
+    },
+    "ClsC_491c0dcd": {
+      "class_label": "High-Temperature Steels",
+      "class_description": "Steels designed for high temperature applications, including low alloy and quenched and tempered types.",
+      "class_type_hint": "Material",
+      "confidence": 0.8,
+      "evidence_excerpt": "Used for high temperature strength and creep resistance.",
+      "source_cluster_id": {"coarse_cluster": 3, "local_subcluster": null},
+      "members": [
+        {"id": "En_a458e346","entity_name": "quenched and tempered 2-1/4Cr-1Mo steel","entity_description": "A type of steel used for thick wall reactor vessels in petroleum refinery processes.","entity_type_hint": "Material","confidence_score": 0.9,"resolution_context": "The Use of Quenched and Tempered 2-1/4Cr-1Mo Steel for Thick Wall Reactor Vessels in Petroleum Refinery Processes discusses the application of this specific steel type.","flag": "entity_raw","chunk_id": ["Ch_000002"],"node_properties": []},
+        {"id": "En_7ecdae42","entity_name": "low alloy steel","entity_description": "Steels with up to 9% chromium and other alloys for high temperature strength and creep resistance.","entity_type_hint": "Material","confidence_score": 0.93,"resolution_context": "Low alloy steel is defined as a family of steels with up to 9% chromium and other alloying elements, designed for high temperature strength and creep resistance, including specific compositions like C-0.5Mo and 9Cr-1Mo.","flag": "entity_raw","chunk_id": ["Ch_000004"],"node_properties": []}
+      ]
+    },
+    "ClsC_7b475d35": {
+      "class_label": "Stainless Steel Types",
+      "class_description": "Various types of stainless steels categorized by their metallurgical structures, including austenitic, ferritic, and martensitic.",
+      "class_type_hint": "Material",
+      "confidence": 0.95,
+      "evidence_excerpt": "Austenitic, ferritic, and martensitic stainless steels are specific families within stainless steels.",
+      "source_cluster_id": {"coarse_cluster": 4, "local_subcluster": null},
+      "members": [
+        {"id": "En_d9cbe1b8","entity_name": "austenitic stainless steels","entity_description": "300 Series stainless steels including Types 304, 304L, 304H, 309, 310, 316, 316L, 316H, 321, 321H, 347, and 347H.","entity_type_hint": "Material","confidence_score": 0.95,"resolution_context": "Austenitic stainless steels are the 300 Series stainless steels including Types 304, 304L, 304H, 309, 310, 316, 316L, 316H, 321, 321H, 347, and 347H.","flag": "entity_raw","chunk_id": ["Ch_000003"],"node_properties": []},
+        {"id": "En_31c964a4","entity_name": "ferritic stainless steels","entity_description": "A family of stainless steels including Types 405, 409, 430, 442, and 446.","entity_type_hint": "Material","confidence_score": 0.95,"resolution_context": "Ferritic stainless steels are mentioned as including specific types such as 405, 409, 430, 442, and 446, indicating a classification within stainless steels.","flag": "entity_raw","chunk_id": ["Ch_000004"],"node_properties": []},
+        {"id": "En_e3269efb","entity_name": "martensitic stainless steel","entity_description": "A type of stainless steel that includes Types 410, 410S, 416, 420, 440A, 440B, and 440C.","entity_type_hint": "Material","confidence_score": 0.95,"resolution_context": "Martensitic stainless steel includes Types 410, 410S, 416, 420, 440A, 440B, and 440C, indicating a specific family of stainless steels with martensitic structure.","flag": "entity_raw","chunk_id": ["Ch_000005"],"node_properties": []}
+      ]
+    },
+    "ClsC_6d0eae78": {
+      "class_label": "Metallurgical Structures",
+      "class_description": "Different metallurgical structures found in steels, including austenitic, ferritic, and martensitic, known for their corrosion resistance.",
+      "class_type_hint": "MetallurgicalStructure",
+      "confidence": 0.9,
+      "evidence_excerpt": "Austenitic, ferritic, and martensitic are metallurgical structures in steels.",
+      "source_cluster_id": {"coarse_cluster": 4, "local_subcluster": null},
+      "members": [
+        {"id": "Can_2acbb9eb","entity_name": "austenitic","entity_description": "A type of metallurgical structure (austenite) found in 300 Series stainless steels and nickel base alloys, known for its corrosion resistance.","entity_type_hint": "MetallurgicalStructure","confidence_score": 0.95,"resolution_context": "Both entities refer to the same metallurgical structure, austenite, found in stainless steels and nickel base alloys, with overlapping descriptions and contexts.","flag": "entity_raw","chunk_id": ["Ch_000003","Ch_000006"],"node_properties": []},
+        {"id": "Can_449bd7c2","entity_name": "ferritic","entity_description": "A type of metallurgical structure (ferrite) found in carbon and low alloy steels and many 400 series stainless steels, known for its corrosion resistance.","entity_type_hint": "MetallurgicalStructure","confidence_score": 0.95,"resolution_context": "Both entities refer to the same metallurgical structure known as ferritic, found in certain types of steels, and the descriptions complement each other.","flag": "entity_raw","chunk_id": ["Ch_000003","Ch_000006"],"node_properties": []},
+        {"id": "Can_c3c96b1a","entity_name": "martensitic","entity_description": "A metallurgical structure (martensite) found in some stainless steels, known for its corrosion resistance.","entity_type_hint": "Material","confidence_score": 0.9,"resolution_context": "Both entities describe 'martensitic' as a metallurgical structure found in stainless steels, with similar descriptions and contexts, indicating they refer to the same concept.","flag": "entity_raw","chunk_id": ["Ch_000004","Ch_000006"],"node_properties": []}
+      ]
+    },
+    "ClsC_8d17c7e9": {
+      "class_label": "Corrosion-Resistant Alloys",
+      "class_description": "Alloys known for their resistance to corrosion, including stainless steels and nickel base alloys.",
+      "class_type_hint": "Material",
+      "confidence": 0.88,
+      "evidence_excerpt": "Duplex stainless steel and nickel base alloys are known for corrosion resistance.",
+      "source_cluster_id": {"coarse_cluster": 4, "local_subcluster": null},
+      "members": [
+        {"id": "Can_0aec2541","entity_name": "duplex stainless steel","entity_description": "A family of stainless steels with a mixed austenitic-ferritic structure, known for its corrosion resistance, including Alloy 2205, 2304, and 2507.","entity_type_hint": "Material","confidence_score": 0.9,"resolution_context": "Both entities refer to the same concept of duplex stainless steel, characterized by a mixed austenitic-ferritic structure and known for corrosion resistance.","flag": "entity_raw","chunk_id": ["Ch_000003","Ch_000006"],"node_properties": []},
+        {"id": "Can_0441bbd6","entity_name": "Stainless Steel","entity_description": "A corrosion-resistant alloy of iron, chromium, and often nickel, known for its strength, durability, and resistance to oxidation, sulfidation, and other forms of corrosion.","entity_type_hint": "Material","confidence_score": 0.95,"resolution_context": "Both entities refer to the same material, stainless steel, characterized by its corrosion resistance and metallurgical structure. The descriptions and type hints align, indicating they are the same concept.","flag": "entity_raw","chunk_id": ["Ch_000006","Ch_000008"],"node_properties": []},
+        {"id": "En_2d1b9dea","entity_name": "nickel base","entity_description": "A family of alloys with nickel as a major alloying element, including Alloys 200, 400, K-500, etc.","entity_type_hint": "Material","confidence_score": 0.95,"resolution_context": "Nickel base alloys contain nickel as a major alloying element (>30%) and include Alloys 200, 400, K-500, 800, 800H, 825, 600, 600H, 617, 625, 718, X-750, and C276.","flag": "entity_raw","chunk_id": ["Ch_000005"],"node_properties": []}
+      ]
+    },
+    "ClsC_01bb9bf8": {
+      "class_label": "Misc: Titanium",
+      "class_description": "A single-member class for titanium, a strong, lightweight, and corrosion-resistant metal.",
+      "class_type_hint": "Material",
+      "confidence": 0.1,
+      "evidence_excerpt": "",
+      "source_cluster_id": {"coarse_cluster": 4, "local_subcluster": null},
+      "members": [
+        {"id": "En_66d2eb63","entity_name": "titanium","entity_description": "A strong, lightweight, and corrosion-resistant metal used in various applications.","entity_type_hint": "Material","confidence_score": 0.95,"resolution_context": "Ti – titanium is mentioned in the FOCUS chunk, referring to the metal known for its strength and corrosion resistance.","flag": "entity_raw","chunk_id": ["Ch_000008"],"node_properties": []}
+      ]
+    },
+    "ClsC_64664f46": {
+      "class_label": "External Corrosion",
+      "class_description": "Corrosion mechanisms affecting external surfaces, including underground or submerged systems and beneath insulation.",
+      "class_type_hint": "Damage Mechanism",
+      "confidence": 0.85,
+      "evidence_excerpt": "Corrosion on external surfaces and beneath insulation.",
+      "source_cluster_id": {"coarse_cluster": 5, "local_subcluster": null},
+      "members": [
+        {"id": "En_9574d8b7","entity_name": "external corrosion","entity_description": "Corrosion occurring on the outer surfaces of underground or submerged metallic piping systems.","entity_type_hint": "DamageMechanism","confidence_score": 0.9,"resolution_context": "Standard Recommended Practice: Control of External Corrosion on Underground or Submerged Metallic Piping Systems focuses on managing corrosion on external surfaces.","flag": "entity_raw","chunk_id": ["Ch_000002"],"node_properties": []},
+        {"id": "En_d504ed6b","entity_name": "corrosion under thermal insulation","entity_description": "Corrosion that occurs beneath insulation materials, often exacerbated by trapped moisture.","entity_type_hint": "DamageMechanism","confidence_score": 0.9,"resolution_context": "The Control of Corrosion Under Thermal Insulation, and Fireproofing – A Systems Approach addresses managing corrosion that occurs beneath insulation.","flag": "entity_raw","chunk_id": ["Ch_000002"],"node_properties": []}
+      ]
+    },
+    "ClsC_d1b822cc": {
+      "class_label": "High-Temperature Corrosion",
+      "class_description": "Corrosion mechanisms occurring at elevated temperatures, including oxidation and sulfidation.",
+      "class_type_hint": "Damage Mechanism",
+      "confidence": 0.9,
+      "evidence_excerpt": "Corrosion at high temperatures, affecting material integrity.",
+      "source_cluster_id": {"coarse_cluster": 5, "local_subcluster": null},
+      "members": [
+        {"id": "En_56c0bd49","entity_name": "oxidation","entity_description": "A chemical reaction that stainless steels resist due to their alloy content.","entity_type_hint": "DamageMechanism","confidence_score": 0.75,"resolution_context": "Stainless steels are described as having resistance to oxidation, a form of corrosion, due to their alloy content.","flag": "entity_raw","chunk_id": ["Ch_000006"],"node_properties": []},
+        {"id": "En_fefc46ef","entity_name": "sulfidation","entity_description": "A chemical reaction that stainless steels resist due to their alloy content.","entity_type_hint": "DamageMechanism","confidence_score": 0.75,"resolution_context": "Stainless steels are described as having resistance to sulfidation, a form of corrosion, due to their alloy content.","flag": "entity_raw","chunk_id": ["Ch_000006"],"node_properties": []},
+        {"id": "En_baec7c0b","entity_name": "High Temperature Corrosion","entity_description": "Corrosion occurring at elevated temperatures, affecting material integrity.","entity_type_hint": "DamageMechanism","confidence_score": 0.9,"resolution_context": "The mechanisms are divided into the following sections: c) High Temperature Corrosion, indicating a type of corrosion that occurs at high temperatures.","flag": "entity_raw","chunk_id": ["Ch_000009"],"node_properties": []}
+      ]
+    },
+    "ClsC_36d74a07": {
+      "class_label": "General Corrosion",
+      "class_description": "Broad corrosion processes that stainless steels resist, including oxidation and sulfidation.",
+      "class_type_hint": "Damage Mechanism",
+      "confidence": 0.88,
+      "evidence_excerpt": "Stainless steels resist various forms of corrosion.",
+      "source_cluster_id": {"coarse_cluster": 5, "local_subcluster": null},
+      "members": [
+        {"id": "En_2b400819","entity_name": "general corrosion","entity_description": "A broad process that stainless steels resist due to their alloy content, encompassing various forms like oxidation and sulfidation.","entity_type_hint": "DamageMechanism","confidence_score": 0.75,"resolution_context": "Stainless steels are described as having resistance to various forms of corrosion, including oxidation and sulfidation, due to their alloy content.","flag": "entity_raw","chunk_id": ["Ch_000006"],"node_properties": []},
+        {"id": "En_56c0bd49","entity_name": "oxidation","entity_description": "A chemical reaction that stainless steels resist due to their alloy content.","entity_type_hint": "DamageMechanism","confidence_score": 0.75,"resolution_context": "Stainless steels are described as having resistance to oxidation, a form of corrosion, due to their alloy content.","flag": "entity_raw","chunk_id": ["Ch_000006"],"node_properties": []},
+        {"id": "En_fefc46ef","entity_name": "sulfidation","entity_description": "A chemical reaction that stainless steels resist due to their alloy content.","entity_type_hint": "DamageMechanism","confidence_score": 0.75,"resolution_context": "Stainless steels are described as having resistance to sulfidation, a form of corrosion, due to their alloy content.","flag": "entity_raw","chunk_id": ["Ch_000006"],"node_properties": []}
+      ]
+    },
+    "ClsC_d5b1972c": {
+      "class_label": "Hydrogen-Induced Cracking",
+      "class_description": "Cracking mechanisms in metals caused by hydrogen, including SOHIC and HIC.",
+      "class_type_hint": "Damage Mechanism",
+      "confidence": 0.85,
+      "evidence_excerpt": "Cracking in hydrogen-exposed steel, often near welds.",
+      "source_cluster_id": {"coarse_cluster": 6, "local_subcluster": null},
+      "members": [
+        {"id": "Can_04c94b79","entity_name": "Stress Oriented Hydrogen Induced Cracking (SOHIC)","entity_description": "A type of cracking in steel caused by the presence of hydrogen and stress, often near welds, characterized by cracks aligned nearly perpendicular to stress.","entity_type_hint": "DamageMechanism","confidence_score": 0.95,"resolution_context": "Both entities describe the same damage mechanism, SOHIC, which involves stress-oriented cracking in hydrogen-exposed steel, often near welds.","flag": "entity_raw","chunk_id": ["Ch_000005","Ch_000008"],"node_properties": []},
+        {"id": "En_d0d2d7c7","entity_name": "Hydrogen Induced Cracking (HIC)","entity_description": "Stepwise internal cracks in metal connecting hydrogen blisters, occurring without external stress.","entity_type_hint": "DamageMechanism","confidence_score": 0.92,"resolution_context": "Hydrogen Induced Cracking (HIC) is characterized by internal cracks that connect hydrogen blisters in metal, forming without external stress and linking through a transgranular plastic shear mechanism.","flag": "entity_raw","chunk_id": ["Ch_000004"],"node_properties": []}
+      ]
+    },
+    "ClsC_f614f263": {
+      "class_label": "Sulfide and Acid Stress Cracking",
+      "class_description": "Cracking mechanisms in metals due to sulfide and acid environments, including sulfide stress cracking and polythionic acid stress corrosion cracking.",
+      "class_type_hint": "Damage Mechanism",
+      "confidence": 0.82,
+      "evidence_excerpt": "Cracking in sulfide and acid environments.",
+      "source_cluster_id": {"coarse_cluster": 6, "local_subcluster": null},
+      "members": [
+        {"id": "En_a9e4aa90","entity_name": "sulfide stress cracking","entity_description": "A form of hydrogen embrittlement that occurs in metals exposed to sulfide environments.","entity_type_hint": "DamageMechanism","confidence_score": 0.9,"resolution_context": "Materials Resistant to Sulfide Stress Cracking in Corrosive Petroleum Refining Environments indicates a focus on preventing this specific type of cracking in metals.","flag": "entity_raw","chunk_id": ["Ch_000002"],"node_properties": []},
+        {"id": "En_c7aaaee0","entity_name": "polythionic acid stress corrosion cracking","entity_description": "A type of corrosion that affects austenitic stainless steels and other austenitic alloys during shutdowns.","entity_type_hint": "DamageMechanism","confidence_score": 0.9,"resolution_context": "Protection of Austenitic Stainless Steels and Other Austenitic Alloys from Polythionic Acid Stress Corrosion Cracking during Shutdown of Refinery Equipment highlights the need to prevent this specific corrosion type.","flag": "entity_raw","chunk_id": ["Ch_000002"],"node_properties": []}
+      ]
+    },
+    "ClsC_43bb91d1": {
+      "class_label": "Environmental Cracking",
+      "class_description": "Cracking mechanisms in metals due to environmental factors, including wet H2S environments and carbon steel weldments.",
+      "class_type_hint": "Damage Mechanism",
+      "confidence": 0.8,
+      "evidence_excerpt": "Cracking in corrosive environments.",
+      "source_cluster_id": {"coarse_cluster": 6, "local_subcluster": null},
+      "members": [
+        {"id": "En_19cc48f3","entity_name": "cracking in wet H2S environments","entity_description": "Cracking of pressure vessels in environments containing wet hydrogen sulfide.","entity_type_hint": "DamageMechanism","confidence_score": 0.9,"resolution_context": "Guidelines for Detection, Repair and Mitigation of Cracking of Existing Petroleum Refinery Pressure Vessels in Wet H2S Environments focus on managing cracking in these specific conditions.","flag": "entity_raw","chunk_id": ["Ch_000002"],"node_properties": []},
+        {"id": "En_1a88e9ed","entity_name": "environmental cracking of carbon steel weldments","entity_description": "Cracking that occurs in carbon steel weldments due to environmental factors in corrosive environments.","entity_type_hint": "DamageMechanism","confidence_score": 0.9,"resolution_context": "Methods and Controls to Prevent in-Service Environmental Cracking of Carbon Steel Weldments in Corrosive Petroleum Refining Environments focus on preventing this type of cracking.","flag": "entity_raw","chunk_id": ["Ch_000002"],"node_properties": []}
+      ]
+    },
+    "ClsC_c396532f": {
+      "class_label": "General Stress Corrosion Cracking",
+      "class_description": "Cracking mechanisms in materials due to stress and corrosive environments, including stress corrosion cracking and environment assisted cracking.",
+      "class_type_hint": "Damage Mechanism",
+      "confidence": 0.83,
+      "evidence_excerpt": "Cracking due to stress and corrosive environments.",
+      "source_cluster_id": {"coarse_cluster": 6, "local_subcluster": null},
+      "members": [
+        {"id": "En_a608496c","entity_name": "stress corrosion cracking","entity_description": "A failure mechanism where cracks form in a material due to the combined effects of tensile stress and a corrosive environment.","entity_type_hint": "DamageMechanism","confidence_score": 0.95,"resolution_context": "SCC – stress corrosion cracking is mentioned in the FOCUS chunk, highlighting its role as a significant damage mechanism in materials under stress and corrosive conditions.","flag": "entity_raw","chunk_id": ["Ch_000008"],"node_properties": []},
+        {"id": "En_038f5dc2","entity_name": "Environment Assisted Cracking","entity_description": "Cracking of materials facilitated by environmental conditions.","entity_type_hint": "DamageMechanism","confidence_score": 0.9,"resolution_context": "The mechanisms are divided into the following sections: d) Environment Assisted Cracking, suggesting a type of cracking influenced by environmental factors.","flag": "entity_raw","chunk_id": ["Ch_000009"],"node_properties": []}
+      ]
+    },
+    "ClsC_76064dcd": {
+      "class_label": "ASM Metals Handbooks",
+      "class_description": "A series of reference volumes providing comprehensive information on metals, including properties, corrosion, and failure analysis.",
+      "class_type_hint": "Reference Material",
+      "confidence": 0.95,
+      "evidence_excerpt": "ASM Metals Handbook volumes cover properties, corrosion, and failure analysis.",
+      "source_cluster_id": {"coarse_cluster": 7, "local_subcluster": null},
+      "members": [
+        {"id": "En_5be2b70d","entity_name": "ASM Metals Handbook Volume 1","entity_description": "Reference for properties and selection of iron, steels, and high-performance alloys.","entity_type_hint": "Reference","confidence_score": 0.95,"resolution_context": "ASM Metals Handbook Volume 1 covers properties and selection of iron, steels, and high-performance alloys.","flag": "entity_raw","chunk_id": ["Ch_000001"],"node_properties": []},
+        {"id": "En_529021da","entity_name": "ASM Metals Handbook Volume 13","entity_description": "Reference for corrosion in petroleum refining and petrochemical operations.","entity_type_hint": "Reference","confidence_score": 0.95,"resolution_context": "ASM Metals Handbook Volume 13 focuses on corrosion in petroleum refining and petrochemical operations.","flag": "entity_raw","chunk_id": ["Ch_000001"],"node_properties": []},
+        {"id": "En_b3dfb229","entity_name": "ASM Metals Handbook Volume 11","entity_description": "Reference for failure analysis and prevention.","entity_type_hint": "Reference","confidence_score": 0.95,"resolution_context": "ASM Metals Handbook Volume 11 provides information on failure analysis and prevention.","flag": "entity_raw","chunk_id": ["Ch_000001"],"node_properties": []}
+      ]
+    },
+    "ClsC_b964059b": {
+      "class_label": "Corrosion References",
+      "class_description": "Publications focused on corrosion in the petrochemical industry, providing guidelines and analysis.",
+      "class_type_hint": "Reference Material",
+      "confidence": 0.9,
+      "evidence_excerpt": "Focus on corrosion in petrochemical operations.",
+      "source_cluster_id": {"coarse_cluster": 7, "local_subcluster": null},
+      "members": [
+        {"id": "En_529021da","entity_name": "ASM Metals Handbook Volume 13","entity_description": "Reference for corrosion in petroleum refining and petrochemical operations.","entity_type_hint": "Reference","confidence_score": 0.95,"resolution_context": "ASM Metals Handbook Volume 13 focuses on corrosion in petroleum refining and petrochemical operations.","flag": "entity_raw","chunk_id": ["Ch_000001"],"node_properties": []},
+        {"id": "En_cae45bdb","entity_name": "ASTM MNL41","entity_description": "Manual on corrosion in the petrochemical industry.","entity_type_hint": "Reference","confidence_score": 0.95,"resolution_context": "ASTM MNL41 is a manual on corrosion in the petrochemical industry.","flag": "entity_raw","chunk_id": ["Ch_000001"],"node_properties": []}
+      ]
+    },
+    "ClsC_53338a65": {
+      "class_label": "ASTM Publications",
+      "class_description": "ASTM publications providing specialized studies and manuals on material behavior and industry practices.",
+      "class_type_hint": "Reference Material",
+      "confidence": 0.88,
+      "evidence_excerpt": "ASTM manuals and studies on material behavior.",
+      "source_cluster_id": {"coarse_cluster": 7, "local_subcluster": null},
+      "members": [
+        {"id": "En_cae45bdb","entity_name": "ASTM MNL41","entity_description": "Manual on corrosion in the petrochemical industry.","entity_type_hint": "Reference","confidence_score": 0.95,"resolution_context": "ASTM MNL41 is a manual on corrosion in the petrochemical industry.","flag": "entity_raw","chunk_id": ["Ch_000001"],"node_properties": []},
+        {"id": "En_e9ced1af","entity_name": "ASTM STP1428","entity_description": "Study on thermo-mechanical fatigue behavior of materials.","entity_type_hint": "Reference","confidence_score": 0.95,"resolution_context": "ASTM STP1428 covers the thermo-mechanical fatigue behavior of materials.","flag": "entity_raw","chunk_id": ["Ch_000001"],"node_properties": []}
+      ]
+    },
+    "ClsC_f14658ce": {
+      "class_label": "Non-Destructive Testing Methods",
+      "class_description": "Methods used to inspect materials for defects without causing damage, including radiographic, ultrasonic, visual, and magnetic particle testing.",
+      "class_type_hint": "Inspection Method",
+      "confidence": 0.95,
+      "evidence_excerpt": "Methods in the FOCUS chunk for detecting defects.",
+      "source_cluster_id": {"coarse_cluster": 8, "local_subcluster": null},
+      "members": [
+        {"id": "En_374342ee","entity_name": "radiographic testing","entity_description": "A non-destructive testing method using X-rays or gamma rays to view the internal structure of a component.","entity_type_hint": "InspectionMethod","confidence_score": 0.95,"resolution_context": "RT – radiographic testing is listed as a method in the FOCUS chunk, indicating its use in inspecting materials for internal defects.","flag": "entity_raw","chunk_id": ["Ch_000008"],"node_properties": []},
+        {"id": "En_a40dec03","entity_name": "shear wave ultrasonic testing","entity_description": "An ultrasonic testing method using shear waves to detect flaws in materials.","entity_type_hint": "InspectionMethod","confidence_score": 0.95,"resolution_context": "SWUT – shear wave ultrasonic testing is identified in the FOCUS chunk, indicating its application in flaw detection using shear waves.","flag": "entity_raw","chunk_id": ["Ch_000008"],"node_properties": []},
+        {"id": "En_23dad6fc","entity_name": "ultrasonic testing","entity_description": "A non-destructive testing method using high-frequency sound waves to detect internal flaws.","entity_type_hint": "InspectionMethod","confidence_score": 0.95,"resolution_context": "UT – ultrasonic testing is listed in the FOCUS chunk, indicating its use in detecting internal defects in materials.","flag": "entity_raw","chunk_id": ["Ch_000008"],"node_properties": []},
+        {"id": "En_84774ba7","entity_name": "visual inspection","entity_description": "A non-destructive testing method involving the visual examination of a component.","entity_type_hint": "InspectionMethod","confidence_score": 0.95,"resolution_context": "VT – visual inspection is identified in the FOCUS chunk, indicating its use in examining components for surface defects.","flag": "entity_raw","chunk_id": ["Ch_000008"],"node_properties": []},
+        {"id": "En_b3df3885","entity_name": "wet fluorescent magnetic particle testing","entity_description": "A non-destructive testing method using fluorescent particles to detect surface and near-surface defects.","entity_type_hint": "InspectionMethod","confidence_score": 0.95,"resolution_context": "WFMT – wet fluorescent magnetic particle testing is listed in the FOCUS chunk, indicating its application in detecting defects using fluorescent particles.","flag": "entity_raw","chunk_id": ["Ch_000008"],"node_properties": []}
+      ]
+    }
+  }
+}

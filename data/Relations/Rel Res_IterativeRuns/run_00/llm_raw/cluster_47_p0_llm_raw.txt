@@ -1,0 +1,42 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_cd1c166e9cab",
+        "RelR_e90243220322"
+      ],
+      "canonical_rel_name": "is_contextual_factor_in",
+      "canonical_rel_desc": "Indicates that the subject impact or consideration functions as a contextual factor that must be weighed within the given ethical dilemma or decision context.",
+      "justification": "In both relations, the subject (improved efficiency, productivity) is described as a positive aspect that functions as a contextual factor within ethical dilemmas in AI development. A single predicate 'is_contextual_factor_in' captures this shared semantics more precisely than the raw 'is_aspect_of'.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_cd1c166e9cab",
+        "RelR_e90243220322"
+      ],
+      "rel_cls": "ethical_dilemma_context_relation",
+      "justification": "Both relations connect societal/economic impacts (efficiency, productivity) to an ethical dilemma construct as contextual factors. This is a recurring pattern where features or impacts form part of the context to be weighed in an ethical dilemma, warranting a dedicated class 'ethical_dilemma_context_relation'.",
+      "remark": null,
+      "confidence": 0.88
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_cd1c166e9cab",
+        "RelR_e90243220322"
+      ],
+      "rel_cls_group": "CONTEXTUALITY",
+      "justification": "The relations do not express causality or composition but rather that certain impacts are part of the contextual landscape of an ethical dilemma. This fits a broad group for contextual or situational linkage, here labeled 'CONTEXTUALITY'.",
+      "remark": null,
+      "confidence": 0.86
+    }
+  }
+]

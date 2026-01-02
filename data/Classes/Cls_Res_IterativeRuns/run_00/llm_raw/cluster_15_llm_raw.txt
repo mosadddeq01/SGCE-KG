@@ -1,0 +1,31 @@
+[
+  {
+    "function": "merge_classes",
+    "args": {
+      "class_ids": [
+        "ClsC_156953f1",
+        "ClsC_2c91cda1"
+      ],
+      "provisional_id": "MERGE(ClsC_156953f1|ClsC_2c91cda1)",
+      "new_name": "Butterfly Metamorphosis Anatomical Structures",
+      "new_description": "Biological and anatomical structures and materials involved in butterfly metamorphosis, including larval body structures, dissolved organs and liquefied material, the chrysalis, and newly forming tissues and appendages such as wings and antennae.",
+      "new_class_type_hint": "BiologicalStructure/MetamorphosisComponent",
+      "justification": "Both classes describe anatomical/biological components specifically involved in butterfly metamorphosis (caterpillar body, chrysalis, dissolving organs, liquefied material, new tissues, antennae) with no clear, stable conceptual boundary between them, so a single unified class for metamorphosis anatomical structures is more coherent.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "MERGE(ClsC_156953f1|ClsC_2c91cda1)",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Insect Metamorphosis Anatomy",
+      "remark": null,
+      "justification": "The merged class clearly belongs to a broader domain covering anatomical structures involved in insect (specifically butterfly) metamorphosis, so assigning a stable Class_Group improves schema connectivity.",
+      "confidence": 0.9
+    }
+  }
+]

@@ -1,0 +1,92 @@
+[
+  {
+    "function": "split_class",
+    "args": {
+      "source_class_id": "ClsC_edea542b",
+      "splits": [
+        {
+          "name": "AI-Affected Individuals",
+          "description": "Persons whose lives, rights, or opportunities may be affected by AI system decisions, without necessarily designing or operating the systems.",
+          "class_type_hint": "Stakeholder Category",
+          "member_ids": ["Can_cf564007"],
+          "provisional_id": "SPLIT_ClsC_edea542b_AFFECTED"
+        },
+        {
+          "name": "AI System Operators and Developers",
+          "description": "People or organizations that design, build, deploy, or directly operate AI systems (e.g., developers and users).",
+          "class_type_hint": "Stakeholder Category",
+          "member_ids": ["En_38023a87", "En_a3e5ecec"],
+          "provisional_id": "SPLIT_ClsC_edea542b_OPERATORS"
+        }
+      ],
+      "justification": "The original 'AI System Stakeholders' class conflates two distinct stakeholder roles—those merely affected by AI decisions and those who design or operate AI systems—so splitting improves conceptual clarity and downstream use.",
+      "remark": null,
+      "confidence": 0.86
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_43d1d6d8",
+      "new_name": "AI Regulations",
+      "new_description": "Formal legal and rule-based frameworks that govern the development, deployment, and use of AI technologies, including compliance obligations and enforcement mechanisms.",
+      "new_class_type_hint": "Governance Mechanism",
+      "new_class_group": "AI Governance and Stakeholders",
+      "remark": null,
+      "justification": "This class clearly represents legal governance instruments around AI, so assigning it to a broader 'AI Governance and Stakeholders' group connects it with related stakeholder classes.",
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "SPLIT_ClsC_edea542b_AFFECTED",
+      "new_name": "AI-Affected Individuals",
+      "new_description": "Persons whose lives, rights, or opportunities may be affected by AI system decisions, without necessarily designing or operating the systems.",
+      "new_class_type_hint": "Stakeholder Category",
+      "new_class_group": "AI Governance and Stakeholders",
+      "remark": null,
+      "justification": "The affected-individuals split is a stakeholder type within the same AI governance ecosystem, so it should share the 'AI Governance and Stakeholders' group with AI regulations and operator stakeholders.",
+      "confidence": 0.86
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "SPLIT_ClsC_edea542b_OPERATORS",
+      "new_name": "AI System Operators and Developers",
+      "new_description": "People or organizations that design, build, deploy, or directly operate AI systems (e.g., developers and users).",
+      "new_class_type_hint": "Stakeholder Category",
+      "new_class_group": "AI Governance and Stakeholders",
+      "remark": null,
+      "justification": "Developers and users are institutional stakeholders within the AI governance landscape, so assigning the same 'AI Governance and Stakeholders' group maintains a coherent upper-level schema.",
+      "confidence": 0.86
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_84499569",
+      "new_name": "Caterpillar Camouflage Strategies",
+      "new_description": "Defensive behavioral adaptations in which caterpillars visually blend into their environment, including general background matching and specific mimicry of plant parts such as twigs and leaves.",
+      "new_class_type_hint": "Behavioral Adaptation",
+      "new_class_group": "Caterpillar Biology and Defense",
+      "remark": null,
+      "justification": "This class covers defensive behaviors of caterpillars and should be grouped with related biological classes under a unified 'Caterpillar Biology and Defense' group rather than a narrower defense-only grouping.",
+      "confidence": 0.85
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsR_47615649",
+      "new_name": "Caterpillar Species",
+      "new_description": "Taxonomic species of caterpillars (larval lepidopterans), used to explain variation in larval traits such as body shape, size, and color.",
+      "new_class_type_hint": "Taxon",
+      "new_class_group": "Caterpillar Biology and Defense",
+      "remark": null,
+      "justification": "This class represents the taxonomic basis for variation in caterpillar traits and is closely related to defensive strategies, so aligning it under the same 'Caterpillar Biology and Defense' group connects morphology and behavior within one biological domain.",
+      "confidence": 0.8
+    }
+  }
+]

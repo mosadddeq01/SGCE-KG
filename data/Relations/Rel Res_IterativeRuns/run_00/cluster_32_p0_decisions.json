@@ -1,0 +1,271 @@
+{
+  "cluster_label": "32_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_caf1f7b84a8f",
+      "relation_name": "has_attribute",
+      "rel_desc": "Cultural groups have specific interests that influence tales.",
+      "rel_hint_type": "attribution",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "cultural groups",
+      "object_entity_name": "interests of different cultures",
+      "subject_class_label": "Cultural Groups Shaping Legends",
+      "subject_class_group": "Urban Legends Sociocultural Context",
+      "object_class_label": "Psychological and Cultural Constructs of Urban Legends",
+      "object_class_group": "Urban Legends – Folklore, Psychology & Scholarship",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "within each culture",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": "of",
+        "OtherQualifier": null
+      },
+      "confidence": 0.87,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_3a30f8130634",
+      "relation_name": "has_attribute",
+      "rel_desc": "Cultural groups possess distinctive fears that are reflected in tales.",
+      "rel_hint_type": "attribution",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "cultural groups",
+      "object_entity_name": "fears of different cultures",
+      "subject_class_label": "Cultural Groups Shaping Legends",
+      "subject_class_group": "Urban Legends Sociocultural Context",
+      "object_class_label": "Societal Fears and Anxieties in Legends",
+      "object_class_group": "Urban Legends Sociocultural Context",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "within each culture",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": "of",
+        "OtherQualifier": null
+      },
+      "confidence": 0.87,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_58dfeb5ae531",
+      "relation_name": "based_on",
+      "rel_desc": "The discrimination described is grounded in or targets race.",
+      "rel_hint_type": "attribution",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "discrimination",
+      "object_entity_name": "race",
+      "subject_class_label": "Discriminatory Treatment",
+      "subject_class_group": "AI Fairness, Bias & Data",
+      "object_class_label": "Protected Characteristics",
+      "object_class_group": "AI Fairness, Bias & Data",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "in hiring processes",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "based on",
+        "LogicalMarker": null,
+        "OtherQualifier": "Protected characteristic: race"
+      },
+      "confidence": 0.96,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_8fbdff5c20e9",
+      "relation_name": "based_on",
+      "rel_desc": "The discrimination described is grounded in or targets gender.",
+      "rel_hint_type": "attribution",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "discrimination",
+      "object_entity_name": "gender",
+      "subject_class_label": "Discriminatory Treatment",
+      "subject_class_group": "AI Fairness, Bias & Data",
+      "object_class_label": "Protected Characteristics",
+      "object_class_group": "AI Fairness, Bias & Data",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "in hiring processes",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "based on",
+        "LogicalMarker": null,
+        "OtherQualifier": "Protected characteristic: gender"
+      },
+      "confidence": 0.96,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_caf1f7b84a8f\",\n        \"RelR_3a30f8130634\"\n      ],\n      \"canonical_rel_name\": \"has_characteristic\",\n      \"canonical_rel_desc\": \"Links a group or entity to a defining or typical characteristic it possesses (e.g., interests, fears, values).\",\n      \"justification\": \"Both relations describe cultural groups possessing defining properties (interests, fears) rather than causal or compositional links, so a general predicate for characteristics is appropriate and reusable.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_caf1f7b84a8f\",\n        \"RelR_3a30f8130634\"\n      ],\n      \"rel_cls\": \"sociocultural_characteristic_relation\",\n      \"justification\": \"These relations connect cultural groups to their characteristic interests and fears, which are sociocultural properties shaping legends; they belong in a class specifically for sociocultural attributes.\",\n      \"remark\": null,\n      \"confidence\": 0.88\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_caf1f7b84a8f\",\n        \"RelR_3a30f8130634\"\n      ],\n      \"rel_cls_group\": \"ATTRIBUTION\",\n      \"justification\": \"Semantics are about attributing properties (interests, fears) to cultural groups, which fits an ATTRIBUTION-type broad group rather than causality or composition.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_58dfeb5ae531\",\n        \"RelR_8fbdff5c20e9\"\n      ],\n      \"canonical_rel_name\": \"is_based_on_attribute\",\n      \"canonical_rel_desc\": \"Connects an act or pattern of discrimination to the protected attribute (e.g., race, gender) that forms the basis or target of that discrimination.\",\n      \"justification\": \"Both relations describe discrimination being grounded in a specific protected characteristic (race or gender); a single predicate capturing the basis-attribute of discrimination keeps the schema consistent.\",\n      \"remark\": \"In downstream fairness-specific views, this predicate may be specialized further (e.g., is_based_on_protected_attribute).\",\n      \"confidence\": 0.94\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_58dfeb5ae531\",\n        \"RelR_8fbdff5c20e9\"\n      ],\n      \"rel_cls\": \"discrimination_basis_relation\",\n      \"justification\": \"These links specify what attribute discrimination is predicated on (race, gender), forming a coherent relation family distinct from generic attribution or association.\",\n      \"remark\": null,\n      \"confidence\": 0.93\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_58dfeb5ae531\",\n        \"RelR_8fbdff5c20e9\"\n      ],\n      \"rel_cls_group\": \"CAUSALITY\",\n      \"justification\": \"The wording 'based on' and the fairness context indicate a causal/explanatory role: the protected attribute is the reason or basis for discriminatory treatment, which aligns best with a CAUSALITY-type grouping.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_caf1f7b84a8f",
+          "RelR_3a30f8130634"
+        ],
+        "canonical_rel_name": "has_characteristic",
+        "canonical_rel_desc": "Links a group or entity to a defining or typical characteristic it possesses (e.g., interests, fears, values).",
+        "justification": "Both relations describe cultural groups possessing defining properties (interests, fears) rather than causal or compositional links, so a general predicate for characteristics is appropriate and reusable.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_caf1f7b84a8f",
+          "RelR_3a30f8130634"
+        ],
+        "rel_cls": "sociocultural_characteristic_relation",
+        "justification": "These relations connect cultural groups to their characteristic interests and fears, which are sociocultural properties shaping legends; they belong in a class specifically for sociocultural attributes.",
+        "remark": null,
+        "confidence": 0.88
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_caf1f7b84a8f",
+          "RelR_3a30f8130634"
+        ],
+        "rel_cls_group": "ATTRIBUTION",
+        "justification": "Semantics are about attributing properties (interests, fears) to cultural groups, which fits an ATTRIBUTION-type broad group rather than causality or composition.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_58dfeb5ae531",
+          "RelR_8fbdff5c20e9"
+        ],
+        "canonical_rel_name": "is_based_on_attribute",
+        "canonical_rel_desc": "Connects an act or pattern of discrimination to the protected attribute (e.g., race, gender) that forms the basis or target of that discrimination.",
+        "justification": "Both relations describe discrimination being grounded in a specific protected characteristic (race or gender); a single predicate capturing the basis-attribute of discrimination keeps the schema consistent.",
+        "remark": "In downstream fairness-specific views, this predicate may be specialized further (e.g., is_based_on_protected_attribute).",
+        "confidence": 0.94
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_58dfeb5ae531",
+          "RelR_8fbdff5c20e9"
+        ],
+        "rel_cls": "discrimination_basis_relation",
+        "justification": "These links specify what attribute discrimination is predicated on (race, gender), forming a coherent relation family distinct from generic attribution or association.",
+        "remark": null,
+        "confidence": 0.93
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_58dfeb5ae531",
+          "RelR_8fbdff5c20e9"
+        ],
+        "rel_cls_group": "CAUSALITY",
+        "justification": "The wording 'based on' and the fairness context indicate a causal/explanatory role: the protected attribute is the reason or basis for discriminatory treatment, which aligns best with a CAUSALITY-type grouping.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_caf1f7b84a8f",
+        "RelR_3a30f8130634"
+      ],
+      "canonical_rel_name": "has_characteristic",
+      "canonical_rel_desc": "Links a group or entity to a defining or typical characteristic it possesses (e.g., interests, fears, values).",
+      "justification": "Both relations describe cultural groups possessing defining properties (interests, fears) rather than causal or compositional links, so a general predicate for characteristics is appropriate and reusable.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_caf1f7b84a8f",
+        "RelR_3a30f8130634"
+      ],
+      "rel_cls": "sociocultural_characteristic_relation",
+      "justification": "These relations connect cultural groups to their characteristic interests and fears, which are sociocultural properties shaping legends; they belong in a class specifically for sociocultural attributes.",
+      "remark": null,
+      "confidence": 0.88
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_caf1f7b84a8f",
+        "RelR_3a30f8130634"
+      ],
+      "rel_cls_group": "ATTRIBUTION",
+      "justification": "Semantics are about attributing properties (interests, fears) to cultural groups, which fits an ATTRIBUTION-type broad group rather than causality or composition.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_58dfeb5ae531",
+        "RelR_8fbdff5c20e9"
+      ],
+      "canonical_rel_name": "is_based_on_attribute",
+      "canonical_rel_desc": "Connects an act or pattern of discrimination to the protected attribute (e.g., race, gender) that forms the basis or target of that discrimination.",
+      "justification": "Both relations describe discrimination being grounded in a specific protected characteristic (race or gender); a single predicate capturing the basis-attribute of discrimination keeps the schema consistent.",
+      "remark": "In downstream fairness-specific views, this predicate may be specialized further (e.g., is_based_on_protected_attribute).",
+      "confidence": 0.94
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_58dfeb5ae531",
+        "RelR_8fbdff5c20e9"
+      ],
+      "rel_cls": "discrimination_basis_relation",
+      "justification": "These links specify what attribute discrimination is predicated on (race, gender), forming a coherent relation family distinct from generic attribution or association.",
+      "remark": null,
+      "confidence": 0.93
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_58dfeb5ae531",
+        "RelR_8fbdff5c20e9"
+      ],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "The wording 'based on' and the fairness context indicate a causal/explanatory role: the protected attribute is the reason or basis for discriminatory treatment, which aligns best with a CAUSALITY-type grouping.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  ],
+  "timestamp": "2026-01-02T09:15:22Z"
+}

@@ -1,0 +1,165 @@
+{
+  "cluster_label": "4_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_96a7cdcaa41e",
+      "relation_name": "associated_with",
+      "rel_desc": "Welds of austenitic stainless steels may exhibit a duplex-type (austenitic-ferritic) structure, linking them conceptually to duplex stainless steels.",
+      "rel_hint_type": "structural",
+      "canonical_rel_name": "has_similar_microstructure_to",
+      "canonical_rel_desc": "Indicates that two material classes are conceptually related because they can exhibit similar or analogous microstructural features under certain conditions.",
+      "rel_cls": "microstructure_similarity_relation",
+      "rel_cls_group": "STRUCTURE",
+      "subject_entity_name": "austenitic stainless steels",
+      "object_entity_name": "duplex stainless steel",
+      "subject_class_label": "Austenitic Stainless Steels",
+      "subject_class_group": "Stainless Steel Classification",
+      "object_class_label": "Corrosion-Resistant Alloys",
+      "object_class_group": "Corrosion-Resistant Metals and Alloys",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "in welds of 300 Series stainless steels",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "may",
+        "CausalHint": null,
+        "LogicalMarker": "may",
+        "OtherQualifier": "MicrostructureContext: weld metal/heat-affected zone duplex (austenitic-ferritic) structure"
+      },
+      "confidence": 0.55,
+      "remarks": [
+        "Relation created mainly to capture that welds of austenitic stainless steels can show a duplex (austenitic-ferritic) microstructure; semantic mapping to the duplex stainless steel family is approximate.",
+        "Relation created mainly to capture that welds of austenitic stainless steels can show a duplex (austenitic-ferritic) microstructure; semantic mapping to the duplex stainless steel family is approximate.",
+        "Relation created mainly to capture that welds of austenitic stainless steels can show a duplex (austenitic-ferritic) microstructure; semantic mapping to the duplex stainless steel family is approximate."
+      ]
+    },
+    {
+      "relation_id": "RelR_862422bffa70",
+      "relation_name": "is_alternative_to",
+      "rel_desc": "Methyldiethanolamine and monoethanolamine are both used in amine treating to remove H2S and CO2 from hydrocarbon streams, indicating they serve similar functional roles and can be alternatives to each other.",
+      "rel_hint_type": "functional_similarity",
+      "canonical_rel_name": "is_functional_alternative_to",
+      "canonical_rel_desc": "Indicates that two materials or chemicals can serve the same functional role in a given application and may be substituted for one another.",
+      "rel_cls": "functional_substitution_relation",
+      "rel_cls_group": "USAGE",
+      "subject_entity_name": "methyldiethanolamine",
+      "object_entity_name": "monoethanolamine",
+      "subject_class_label": "Amine Treating Chemicals",
+      "subject_class_group": "Industrial Process Chemicals",
+      "object_class_label": "Amine Treating Chemicals",
+      "object_class_group": "Industrial Process Chemicals",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "ApplicationContext: amine treating of hydrocarbon streams for H2S and CO2 removal"
+      },
+      "confidence": 0.55,
+      "remarks": [
+        "Relation created to capture that these two amine treating chemicals share the same described use; semantics are approximated as an alternative/substitute relation since no explicit comparison wording is given.",
+        "Relation created to capture that these two amine treating chemicals share the same described use; semantics are approximated as an alternative/substitute relation since no explicit comparison wording is given.",
+        "Relation created to capture that these two amine treating chemicals share the same described use; semantics are approximated as an alternative/substitute relation since no explicit comparison wording is given."
+      ]
+    },
+    {
+      "relation_id": "RelR_362f6e35c9d7",
+      "relation_name": "has_category",
+      "rel_desc": "Duplex stainless steel is one of the four categories of stainless steels listed.",
+      "rel_hint_type": "taxonomic",
+      "canonical_rel_name": "is_subtype_of",
+      "canonical_rel_desc": "Indicates that the subject is a more specific subtype or category within the broader class represented by the object.",
+      "rel_cls": "material_taxonomy_relation",
+      "rel_cls_group": "IDENTITY",
+      "subject_entity_name": "Stainless Steel",
+      "object_entity_name": "duplex stainless steel",
+      "subject_class_label": "Corrosion-Resistant Alloys",
+      "subject_class_group": "Corrosion-Resistant Metals and Alloys",
+      "object_class_label": "Corrosion-Resistant Alloys",
+      "object_class_group": "Corrosion-Resistant Metals and Alloys",
+      "qualifiers": {
+        "TemporalQualifier": "at room temperature",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "characterized by",
+        "LogicalMarker": null,
+        "OtherQualifier": "CategoryType: stainless steel category"
+      },
+      "confidence": 0.88,
+      "remarks": [
+        "Although text just says 'duplex', entity is resolved as duplex stainless steel; relation captures the category membership.",
+        "Although text just says 'duplex', entity is resolved as duplex stainless steel; relation captures the category membership.",
+        "Although text just says 'duplex', entity is resolved as duplex stainless steel; relation captures the category membership."
+      ]
+    },
+    {
+      "relation_id": "RelR_39cf0ff7f895",
+      "relation_name": "is_subtype_of",
+      "rel_desc": "Duplex stainless steel is a subtype/category within the broader class of stainless steels.",
+      "rel_hint_type": "taxonomic",
+      "canonical_rel_name": "is_subtype_of",
+      "canonical_rel_desc": "Indicates that the subject is a more specific subtype or category within the broader class represented by the object.",
+      "rel_cls": "material_taxonomy_relation",
+      "rel_cls_group": "IDENTITY",
+      "subject_entity_name": "duplex stainless steel",
+      "object_entity_name": "Stainless Steel",
+      "subject_class_label": "Corrosion-Resistant Alloys",
+      "subject_class_group": "Corrosion-Resistant Metals and Alloys",
+      "object_class_label": "Corrosion-Resistant Alloys",
+      "object_class_group": "Corrosion-Resistant Metals and Alloys",
+      "qualifiers": {
+        "TemporalQualifier": "at room temperature",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "characterized by",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.82,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_rel_schema\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_362f6e35c9d7\"],\n      \"canonical_rel_name\": \"has_subtype\",\n      \"canonical_rel_desc\": \"Indicates that the subject is a broader class that includes the object as one of its more specific subtypes or categories.\",\n      \"rel_cls\": \"material_taxonomy_relation\",\n      \"rel_cls_group\": \"IDENTITY\",\n      \"justification\": \"The current canonical_rel_name 'is_subtype_of' is inconsistent with the subject/object direction for this instance: 'Stainless Steel' is a broader category and 'duplex stainless steel' is the subtype. To keep predicate semantics consistent with the definition (subject more specific than object), this relation should use a parent-to-child predicate such as 'has_subtype'. The relation class and group remain valid as taxonomic/identity semantics.\",\n      \"remark\": \"Normalized to a parent-to-subtype predicate to avoid directional inconsistency with other 'is_subtype_of' uses in the schema.\",\n      \"confidence\": 0.94\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_rel_schema",
+      "args": {
+        "relation_ids": [
+          "RelR_362f6e35c9d7"
+        ],
+        "canonical_rel_name": "has_subtype",
+        "canonical_rel_desc": "Indicates that the subject is a broader class that includes the object as one of its more specific subtypes or categories.",
+        "rel_cls": "material_taxonomy_relation",
+        "rel_cls_group": "IDENTITY",
+        "justification": "The current canonical_rel_name 'is_subtype_of' is inconsistent with the subject/object direction for this instance: 'Stainless Steel' is a broader category and 'duplex stainless steel' is the subtype. To keep predicate semantics consistent with the definition (subject more specific than object), this relation should use a parent-to-child predicate such as 'has_subtype'. The relation class and group remain valid as taxonomic/identity semantics.",
+        "remark": "Normalized to a parent-to-subtype predicate to avoid directional inconsistency with other 'is_subtype_of' uses in the schema.",
+        "confidence": 0.94
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_rel_schema",
+      "relation_ids": [
+        "RelR_362f6e35c9d7"
+      ],
+      "canonical_rel_name": "has_subtype",
+      "canonical_rel_desc": "Indicates that the subject is a broader class that includes the object as one of its more specific subtypes or categories.",
+      "rel_cls": "material_taxonomy_relation",
+      "rel_cls_group": "IDENTITY",
+      "new_relation_name": null,
+      "original_relation_name": null,
+      "justification": "The current canonical_rel_name 'is_subtype_of' is inconsistent with the subject/object direction for this instance: 'Stainless Steel' is a broader category and 'duplex stainless steel' is the subtype. To keep predicate semantics consistent with the definition (subject more specific than object), this relation should use a parent-to-child predicate such as 'has_subtype'. The relation class and group remain valid as taxonomic/identity semantics.",
+      "remark": "Normalized to a parent-to-subtype predicate to avoid directional inconsistency with other 'is_subtype_of' uses in the schema.",
+      "confidence": 0.94
+    }
+  ],
+  "timestamp": "2025-12-29T21:48:23Z"
+}

@@ -2,236 +2,334 @@
   "cluster_label": 1,
   "cluster_classes": [
     {
-      "candidate_id": "ClsC_a8158c68",
-      "class_label": "Graphitization-Susceptible Steels",
-      "class_description": "Steels that are prone to graphitization, a microstructural change causing loss of strength and ductility.",
-      "class_type_hint": "Material",
-      "class_group": "Steel Metallurgy and Degradation",
-      "confidence": 0.85,
-      "evidence_excerpt": "Graphitization affects carbon, 0.5Mo, and low alloy C-Mo steels.",
+      "candidate_id": "ClsC_8bffd2e0",
+      "class_label": "Cautionary Urban Legends",
+      "class_description": "Narrative stories that depict threats and negative consequences to warn audiences about risks in the world, especially through urban legend motifs.",
+      "class_type_hint": "Narrative Genre",
+      "class_group": "Cautionary Urban Legends – Child Luring Scenarios",
+      "confidence": 0.86,
+      "evidence_excerpt": "cautionary tales and dangers that lurk in the world around them",
       "member_ids": [
-        "Can_2e6baaf9",
-        "En_a532abae",
-        "En_8b972f6a"
+        "Can_6920b11a",
+        "En_1a731e82"
       ],
       "members": [
         {
-          "id": "Can_2e6baaf9",
-          "entity_name": "carbon steel",
-          "entity_description": "Steels that do not have alloying elements intentionally added, but may contain small amounts of elements and are affected by graphitization under certain conditions.",
-          "entity_type_hint": "Material"
+          "id": "Can_6920b11a",
+          "entity_name": "cautionary tales",
+          "entity_description": "Stories intended to warn audiences about risks, dangers, or undesirable behaviors, often by depicting negative consequences.",
+          "entity_type_hint": "Concept"
         },
         {
-          "id": "En_a532abae",
-          "entity_name": "0.5Mo steel",
-          "entity_description": "A type of steel that undergoes graphitization at elevated temperatures.",
-          "entity_type_hint": "Material"
-        },
-        {
-          "id": "En_8b972f6a",
-          "entity_name": "low alloy C-Mo steel",
-          "entity_description": "A type of steel susceptible to graphitization, especially with up to 1% Mo.",
-          "entity_type_hint": "Material"
+          "id": "En_1a731e82",
+          "entity_name": "dangers",
+          "entity_description": "Various threats, harms, or risks portrayed as lurking in the world in cautionary urban legends.",
+          "entity_type_hint": "Concept"
         }
       ],
       "remarks": []
     },
     {
-      "candidate_id": "ClsC_ae9f3d63",
-      "class_label": "High-Temperature Steels",
-      "class_description": "Steels designed for high temperature applications, including low alloy and quenched and tempered types.",
-      "class_type_hint": "Material",
-      "class_group": "Metallurgical Materials",
-      "confidence": 0.8,
-      "evidence_excerpt": "Used for high temperature strength and creep resistance.",
+      "candidate_id": "ClsC_1ff99f88",
+      "class_label": "Predatory Strangers and Child Victims",
+      "class_description": "Roles in cautionary urban legends where unfamiliar adults act as potential predators and children are portrayed as vulnerable targets.",
+      "class_type_hint": "Narrative Role",
+      "class_group": "Cautionary Urban Legends – Child Luring Scenarios",
+      "confidence": 0.9,
+      "evidence_excerpt": "unfamiliar adults depicted as potential predators who attempt to lure children",
       "member_ids": [
-        "En_a458e346",
-        "En_7ecdae42"
+        "En_ad1ae942",
+        "En_ef37b7fd"
       ],
       "members": [
         {
-          "id": "En_a458e346",
-          "entity_name": "quenched and tempered 2-1/4Cr-1Mo steel",
-          "entity_description": "A type of steel used for thick wall reactor vessels in petroleum refinery processes.",
-          "entity_type_hint": "Material"
+          "id": "En_ad1ae942",
+          "entity_name": "strangers",
+          "entity_description": "Unfamiliar adults depicted as potential predators who attempt to lure children in urban legend stories.",
+          "entity_type_hint": "Actor"
         },
         {
-          "id": "En_7ecdae42",
-          "entity_name": "low alloy steel",
-          "entity_description": "Steels with up to 9% chromium and other alloys for high temperature strength and creep resistance.",
-          "entity_type_hint": "Material"
+          "id": "En_ef37b7fd",
+          "entity_name": "children",
+          "entity_description": "Young people portrayed as vulnerable targets of predatory strangers in cautionary urban legends.",
+          "entity_type_hint": "Actor"
         }
       ],
       "remarks": []
     },
     {
-      "candidate_id": "ClsC_ea4e666c",
-      "class_label": "Graphitization Phenomena",
-      "class_description": "Processes involving the transformation of carbide phases into graphite nodules in steels at elevated temperatures.",
-      "class_type_hint": "Material Transformation",
-      "class_group": "Steel Metallurgy and Degradation",
-      "confidence": 0.92,
-      "evidence_excerpt": "Transformation of carbide phases into graphite nodules.",
+      "candidate_id": "ClsC_91ed630a",
+      "class_label": "Loved Ones (Protected Individuals)",
+      "class_description": "Family members or close associates that communities aim to protect by sharing urban legends and related cautionary stories.",
+      "class_type_hint": "Social Actor",
+      "class_group": "Urban Legend Social Actors and Groups",
+      "confidence": 0.64,
+      "evidence_excerpt": "communities can come together to protect themselves and their loved ones from perceived threats",
       "member_ids": [
-        "En_d2a9115d",
-        "Can_3476493c"
+        "En_47198d48"
       ],
       "members": [
         {
-          "id": "En_d2a9115d",
-          "entity_name": "graphitization",
-          "entity_description": "Change in microstructure of carbon and 0.5Mo steels causing loss of strength and ductility.",
-          "entity_type_hint": "DamageMechanism"
-        },
-        {
-          "id": "Can_3476493c",
-          "entity_name": "graphite nodules",
-          "entity_description": "Result of carbide phase decomposition in steels at elevated temperatures, forming graphite nodules.",
-          "entity_type_hint": "Component"
+          "id": "En_47198d48",
+          "entity_name": "loved ones",
+          "entity_description": "Family members or close associates that communities aim to protect by sharing legends.",
+          "entity_type_hint": "Actor"
         }
       ],
       "remarks": []
     },
     {
-      "candidate_id": "ClsC_8a2ead3a",
-      "class_label": "Chromium in Steel",
-      "class_description": "Chromium as an alloying element in steel, providing resistance to oxidation, corrosion, and eliminating graphitization.",
-      "class_type_hint": "Material",
-      "class_group": "TBD",
-      "confidence": 0.92,
-      "evidence_excerpt": "Chromium is an alloying element in stainless steels.",
+      "candidate_id": "ClsR_e3962c89",
+      "class_label": "Bait Objects in Child-Luring Urban Legends",
+      "class_description": "Tempting objects (such as candy) used by predators as bait to lure children in cautionary urban legend narratives.",
+      "class_type_hint": "Narrative Object",
+      "class_group": "Cautionary Urban Legends – Child Luring Scenarios",
+      "confidence": 0.78,
+      "evidence_excerpt": "Stories of strangers luring children with candy ... warn listeners about the dangers",
       "member_ids": [
-        "En_f6aa95ca",
-        "En_417e7d84"
+        "En_95d09649"
       ],
       "members": [
         {
-          "id": "En_f6aa95ca",
-          "entity_name": "chromium",
-          "entity_description": "An alloying element in stainless steels that provides resistance to oxidation and corrosion.",
-          "entity_type_hint": "Material"
-        },
+          "id": "En_95d09649",
+          "entity_name": "candy",
+          "entity_description": "Sweets used as bait by strangers in cautionary tales about child luring.",
+          "entity_type_hint": "Object"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsR_19f6228d",
+      "class_label": "Audience of Cautionary Urban Legends",
+      "class_description": "Listeners and audiences who receive the implied warnings and moral lessons from cautionary urban legend stories.",
+      "class_type_hint": "Narrative Role",
+      "class_group": "Cautionary Urban Legends – Child Luring Scenarios",
+      "confidence": 0.78,
+      "evidence_excerpt": "Stories of strangers luring children with candy ... warn listeners about the dangers",
+      "member_ids": [
+        "En_9dc9eb21"
+      ],
+      "members": [
         {
-          "id": "En_417e7d84",
-          "entity_name": "chromium",
-          "entity_description": "Element added to steel to eliminate graphitization.",
-          "entity_type_hint": "Material"
+          "id": "En_9dc9eb21",
+          "entity_name": "listeners",
+          "entity_description": "People who hear these urban legends and receive the implied warnings about danger.",
+          "entity_type_hint": "Actor"
         }
       ],
       "remarks": []
     }
   ],
-  "llm_raw": "[\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_ae9f3d63\",\n      \"new_name\": \"High-Temperature Steels\",\n      \"new_description\": \"Steels designed for high temperature applications, including low alloy and quenched and tempered types.\",\n      \"new_class_type_hint\": \"Material\",\n      \"new_class_group\": \"Steel Metallurgy and Degradation\",\n      \"remark\": null,\n      \"justification\": \"Class_Group 'Metallurgical Materials' is too broad and inconsistent with the other classes in this cluster, which all relate to steel metallurgy and degradation; aligning Class_Group improves schema connectivity.\",\n      \"confidence\": 0.95\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_8a2ead3a\",\n      \"new_name\": \"Chromium in Steel\",\n      \"new_description\": \"Chromium as an alloying element in steel, providing resistance to oxidation, corrosion, and eliminating graphitization.\",\n      \"new_class_type_hint\": \"Material\",\n      \"new_class_group\": \"Steel Metallurgy and Degradation\",\n      \"remark\": null,\n      \"justification\": \"Chromium's role is specifically in the context of steel metallurgy and graphitization prevention, so assigning to 'Steel Metallurgy and Degradation' Class_Group is appropriate.\",\n      \"confidence\": 0.95\n    }\n  },\n  {\n    \"function\": \"split_class\",\n    \"args\": {\n      \"source_class_id\": \"ClsC_ea4e666c\",\n      \"splits\": [\n        {\n          \"name\": \"Graphitization (Process)\",\n          \"description\": \"The process of carbide phase transformation into graphite nodules in steels at elevated temperatures.\",\n          \"class_type_hint\": \"DamageMechanism\",\n          \"member_ids\": [\"En_d2a9115d\"],\n          \"provisional_id\": \"SPLIT_GraphitizationProcess\"\n        },\n        {\n          \"name\": \"Graphite Nodules (Product)\",\n          \"description\": \"Graphite nodules formed as a result of graphitization in steels.\",\n          \"class_type_hint\": \"Component\",\n          \"member_ids\": [\"Can_3476493c\"],\n          \"provisional_id\": \"SPLIT_GraphiteNodules\"\n        }\n      ],\n      \"justification\": \"The class 'Graphitization Phenomena' is overloaded, containing both the process (graphitization) and its product (graphite nodules), which are distinct concepts and should be separated for schema clarity.\",\n      \"remark\": null,\n      \"confidence\": 0.98\n    }\n  }\n]",
+  "llm_raw": "[\n  {\n    \"function\": \"create_class\",\n    \"args\": {\n      \"name\": \"Child Victims in Cautionary Urban Legends\",\n      \"description\": \"Children portrayed as vulnerable targets or victims in cautionary urban legend narratives, particularly in child-luring scenarios.\",\n      \"class_type_hint\": \"Narrative Role\",\n      \"member_ids\": [\n        \"En_ef37b7fd\"\n      ],\n      \"provisional_id\": \"NEW_ChildVictims_UL\",\n      \"justification\": \"The current class 'Predatory Strangers and Child Victims' conflates two distinct narrative roles (predators and victims); a separate class for child victims improves role-level clarity while preserving the existing schema structure.\",\n      \"remark\": null,\n      \"confidence\": 0.88\n    }\n  },\n  {\n    \"function\": \"reassign_entities\",\n    \"args\": {\n      \"entity_ids\": [\n        \"En_ef37b7fd\"\n      ],\n      \"from_class_id\": \"ClsC_1ff99f88\",\n      \"to_class_id\": \"NEW_ChildVictims_UL\",\n      \"justification\": \"The entity 'children' is specifically the victim role and belongs in the newly created 'Child Victims in Cautionary Urban Legends' class rather than a mixed predator/victim class.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_1ff99f88\",\n      \"new_name\": \"Predatory Strangers in Cautionary Urban Legends\",\n      \"new_description\": \"Unfamiliar adults depicted as potential predators who attempt to lure or harm children in cautionary urban legend narratives.\",\n      \"new_class_type_hint\": \"Narrative Role\",\n      \"new_class_group\": \"Cautionary Urban Legends\",\n      \"remark\": null,\n      \"justification\": \"After moving the victim role to its own class, this class should be narrowed to the predator role and aligned under a unified 'Cautionary Urban Legends' class group shared across related narrative elements.\",\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"NEW_ChildVictims_UL\",\n      \"new_name\": null,\n      \"new_description\": null,\n      \"new_class_type_hint\": null,\n      \"new_class_group\": \"Cautionary Urban Legends\",\n      \"remark\": null,\n      \"justification\": \"The new child-victim role class belongs in the same overarching domain as the other cautionary-legend narrative roles and objects, so it should share the unified 'Cautionary Urban Legends' class group.\",\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_8bffd2e0\",\n      \"new_name\": null,\n      \"new_description\": null,\n      \"new_class_type_hint\": null,\n      \"new_class_group\": \"Cautionary Urban Legends\",\n      \"remark\": null,\n      \"justification\": \"This class describes the cautionary urban legend stories and the dangers they depict; aligning it to the broader 'Cautionary Urban Legends' class group connects it coherently with the related roles and objects.\",\n      \"confidence\": 0.86\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_91ed630a\",\n      \"new_name\": null,\n      \"new_description\": null,\n      \"new_class_type_hint\": null,\n      \"new_class_group\": \"Cautionary Urban Legends\",\n      \"remark\": null,\n      \"justification\": \"Loved ones as protected individuals are clearly part of the same cautionary urban-legend ecosystem as the predators, victims, and audiences; moving from the narrower 'Urban Legend Social Actors and Groups' to the unified 'Cautionary Urban Legends' class group makes cross-class relationships clearer.\",\n      \"confidence\": 0.8\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsR_e3962c89\",\n      \"new_name\": null,\n      \"new_description\": null,\n      \"new_class_type_hint\": null,\n      \"new_class_group\": \"Cautionary Urban Legends\",\n      \"remark\": null,\n      \"justification\": \"Bait objects like candy are specific narrative elements within the same cautionary urban legend domain, so their class group should be harmonized with the other related legend classes.\",\n      \"confidence\": 0.85\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsR_19f6228d\",\n      \"new_name\": null,\n      \"new_description\": null,\n      \"new_class_type_hint\": null,\n      \"new_class_group\": \"Cautionary Urban Legends\",\n      \"remark\": null,\n      \"justification\": \"The audience/listeners role is part of the same cautionary urban legend system as the narratives, predators, victims, bait objects, and protected loved ones; placing it under the unified 'Cautionary Urban Legends' class group connects all these interdependent roles.\",\n      \"confidence\": 0.85\n    }\n  }\n]",
   "parsed_steps": [
     {
-      "function": "modify_class",
+      "function": "create_class",
       "args": {
-        "class_id": "ClsC_ae9f3d63",
-        "new_name": "High-Temperature Steels",
-        "new_description": "Steels designed for high temperature applications, including low alloy and quenched and tempered types.",
-        "new_class_type_hint": "Material",
-        "new_class_group": "Steel Metallurgy and Degradation",
-        "remark": null,
-        "justification": "Class_Group 'Metallurgical Materials' is too broad and inconsistent with the other classes in this cluster, which all relate to steel metallurgy and degradation; aligning Class_Group improves schema connectivity.",
-        "confidence": 0.95
-      }
-    },
-    {
-      "function": "modify_class",
-      "args": {
-        "class_id": "ClsC_8a2ead3a",
-        "new_name": "Chromium in Steel",
-        "new_description": "Chromium as an alloying element in steel, providing resistance to oxidation, corrosion, and eliminating graphitization.",
-        "new_class_type_hint": "Material",
-        "new_class_group": "Steel Metallurgy and Degradation",
-        "remark": null,
-        "justification": "Chromium's role is specifically in the context of steel metallurgy and graphitization prevention, so assigning to 'Steel Metallurgy and Degradation' Class_Group is appropriate.",
-        "confidence": 0.95
-      }
-    },
-    {
-      "function": "split_class",
-      "args": {
-        "source_class_id": "ClsC_ea4e666c",
-        "splits": [
-          {
-            "name": "Graphitization (Process)",
-            "description": "The process of carbide phase transformation into graphite nodules in steels at elevated temperatures.",
-            "class_type_hint": "DamageMechanism",
-            "member_ids": [
-              "En_d2a9115d"
-            ],
-            "provisional_id": "SPLIT_GraphitizationProcess"
-          },
-          {
-            "name": "Graphite Nodules (Product)",
-            "description": "Graphite nodules formed as a result of graphitization in steels.",
-            "class_type_hint": "Component",
-            "member_ids": [
-              "Can_3476493c"
-            ],
-            "provisional_id": "SPLIT_GraphiteNodules"
-          }
+        "name": "Child Victims in Cautionary Urban Legends",
+        "description": "Children portrayed as vulnerable targets or victims in cautionary urban legend narratives, particularly in child-luring scenarios.",
+        "class_type_hint": "Narrative Role",
+        "member_ids": [
+          "En_ef37b7fd"
         ],
-        "justification": "The class 'Graphitization Phenomena' is overloaded, containing both the process (graphitization) and its product (graphite nodules), which are distinct concepts and should be separated for schema clarity.",
+        "provisional_id": "NEW_ChildVictims_UL",
+        "justification": "The current class 'Predatory Strangers and Child Victims' conflates two distinct narrative roles (predators and victims); a separate class for child victims improves role-level clarity while preserving the existing schema structure.",
         "remark": null,
-        "confidence": 0.98
+        "confidence": 0.88
+      }
+    },
+    {
+      "function": "reassign_entities",
+      "args": {
+        "entity_ids": [
+          "En_ef37b7fd"
+        ],
+        "from_class_id": "ClsC_1ff99f88",
+        "to_class_id": "NEW_ChildVictims_UL",
+        "justification": "The entity 'children' is specifically the victim role and belongs in the newly created 'Child Victims in Cautionary Urban Legends' class rather than a mixed predator/victim class.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_1ff99f88",
+        "new_name": "Predatory Strangers in Cautionary Urban Legends",
+        "new_description": "Unfamiliar adults depicted as potential predators who attempt to lure or harm children in cautionary urban legend narratives.",
+        "new_class_type_hint": "Narrative Role",
+        "new_class_group": "Cautionary Urban Legends",
+        "remark": null,
+        "justification": "After moving the victim role to its own class, this class should be narrowed to the predator role and aligned under a unified 'Cautionary Urban Legends' class group shared across related narrative elements.",
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "NEW_ChildVictims_UL",
+        "new_name": null,
+        "new_description": null,
+        "new_class_type_hint": null,
+        "new_class_group": "Cautionary Urban Legends",
+        "remark": null,
+        "justification": "The new child-victim role class belongs in the same overarching domain as the other cautionary-legend narrative roles and objects, so it should share the unified 'Cautionary Urban Legends' class group.",
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_8bffd2e0",
+        "new_name": null,
+        "new_description": null,
+        "new_class_type_hint": null,
+        "new_class_group": "Cautionary Urban Legends",
+        "remark": null,
+        "justification": "This class describes the cautionary urban legend stories and the dangers they depict; aligning it to the broader 'Cautionary Urban Legends' class group connects it coherently with the related roles and objects.",
+        "confidence": 0.86
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_91ed630a",
+        "new_name": null,
+        "new_description": null,
+        "new_class_type_hint": null,
+        "new_class_group": "Cautionary Urban Legends",
+        "remark": null,
+        "justification": "Loved ones as protected individuals are clearly part of the same cautionary urban-legend ecosystem as the predators, victims, and audiences; moving from the narrower 'Urban Legend Social Actors and Groups' to the unified 'Cautionary Urban Legends' class group makes cross-class relationships clearer.",
+        "confidence": 0.8
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsR_e3962c89",
+        "new_name": null,
+        "new_description": null,
+        "new_class_type_hint": null,
+        "new_class_group": "Cautionary Urban Legends",
+        "remark": null,
+        "justification": "Bait objects like candy are specific narrative elements within the same cautionary urban legend domain, so their class group should be harmonized with the other related legend classes.",
+        "confidence": 0.85
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsR_19f6228d",
+        "new_name": null,
+        "new_description": null,
+        "new_class_type_hint": null,
+        "new_class_group": "Cautionary Urban Legends",
+        "remark": null,
+        "justification": "The audience/listeners role is part of the same cautionary urban legend system as the narratives, predators, victims, bait objects, and protected loved ones; placing it under the unified 'Cautionary Urban Legends' class group connects all these interdependent roles.",
+        "confidence": 0.85
       }
     }
   ],
   "executed_decisions": [
     {
-      "action": "modify_class",
-      "class_id": "ClsC_ae9f3d63",
-      "class_id_resolved": "ClsC_ae9f3d63",
-      "new_name": "High-Temperature Steels",
-      "new_description": "Steels designed for high temperature applications, including low alloy and quenched and tempered types.",
-      "new_class_type_hint": "Material",
-      "new_class_group": "Steel Metallurgy and Degradation",
-      "remark": null,
-      "justification": "Class_Group 'Metallurgical Materials' is too broad and inconsistent with the other classes in this cluster, which all relate to steel metallurgy and degradation; aligning Class_Group improves schema connectivity.",
-      "confidence": 0.95
-    },
-    {
-      "action": "modify_class",
-      "class_id": "ClsC_8a2ead3a",
-      "class_id_resolved": "ClsC_8a2ead3a",
-      "new_name": "Chromium in Steel",
-      "new_description": "Chromium as an alloying element in steel, providing resistance to oxidation, corrosion, and eliminating graphitization.",
-      "new_class_type_hint": "Material",
-      "new_class_group": "Steel Metallurgy and Degradation",
-      "remark": null,
-      "justification": "Chromium's role is specifically in the context of steel metallurgy and graphitization prevention, so assigning to 'Steel Metallurgy and Degradation' Class_Group is appropriate.",
-      "confidence": 0.95
-    },
-    {
-      "action": "split_class",
-      "source_class_id": "ClsC_ea4e666c",
-      "source_class_id_resolved": "ClsC_ea4e666c",
-      "created_classes": [
-        {
-          "new_class_id": "ClsR_abc76e33",
-          "provisional_id": "SPLIT_GraphitizationProcess",
-          "member_ids": [
-            "En_d2a9115d"
-          ]
-        },
-        {
-          "new_class_id": "ClsR_831555ae",
-          "provisional_id": "SPLIT_GraphiteNodules",
-          "member_ids": [
-            "Can_3476493c"
-          ]
-        }
+      "action": "create_class",
+      "result_class_id": "ClsR_9e8fbe73",
+      "provisional_id": "NEW_ChildVictims_UL",
+      "member_ids_added": [
+        "En_ef37b7fd"
       ],
-      "justification": "The class 'Graphitization Phenomena' is overloaded, containing both the process (graphitization) and its product (graphite nodules), which are distinct concepts and should be separated for schema clarity.",
+      "justification": "The current class 'Predatory Strangers and Child Victims' conflates two distinct narrative roles (predators and victims); a separate class for child victims improves role-level clarity while preserving the existing schema structure.",
       "remark": null,
-      "confidence": 0.98
+      "confidence": 0.88
+    },
+    {
+      "action": "reassign_entities",
+      "entity_ids": [
+        "En_ef37b7fd"
+      ],
+      "from": "ClsC_1ff99f88",
+      "from_resolved": "ClsC_1ff99f88",
+      "to": "NEW_ChildVictims_UL",
+      "to_resolved": "ClsR_9e8fbe73",
+      "justification": "The entity 'children' is specifically the victim role and belongs in the newly created 'Child Victims in Cautionary Urban Legends' class rather than a mixed predator/victim class.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_1ff99f88",
+      "class_id_resolved": "ClsC_1ff99f88",
+      "new_name": "Predatory Strangers in Cautionary Urban Legends",
+      "new_description": "Unfamiliar adults depicted as potential predators who attempt to lure or harm children in cautionary urban legend narratives.",
+      "new_class_type_hint": "Narrative Role",
+      "new_class_group": "Cautionary Urban Legends",
+      "remark": null,
+      "justification": "After moving the victim role to its own class, this class should be narrowed to the predator role and aligned under a unified 'Cautionary Urban Legends' class group shared across related narrative elements.",
+      "confidence": 0.9
+    },
+    {
+      "action": "modify_class",
+      "class_id": "NEW_ChildVictims_UL",
+      "class_id_resolved": "ClsR_9e8fbe73",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Cautionary Urban Legends",
+      "remark": null,
+      "justification": "The new child-victim role class belongs in the same overarching domain as the other cautionary-legend narrative roles and objects, so it should share the unified 'Cautionary Urban Legends' class group.",
+      "confidence": 0.9
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_8bffd2e0",
+      "class_id_resolved": "ClsC_8bffd2e0",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Cautionary Urban Legends",
+      "remark": null,
+      "justification": "This class describes the cautionary urban legend stories and the dangers they depict; aligning it to the broader 'Cautionary Urban Legends' class group connects it coherently with the related roles and objects.",
+      "confidence": 0.86
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_91ed630a",
+      "class_id_resolved": "ClsC_91ed630a",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Cautionary Urban Legends",
+      "remark": null,
+      "justification": "Loved ones as protected individuals are clearly part of the same cautionary urban-legend ecosystem as the predators, victims, and audiences; moving from the narrower 'Urban Legend Social Actors and Groups' to the unified 'Cautionary Urban Legends' class group makes cross-class relationships clearer.",
+      "confidence": 0.8
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsR_e3962c89",
+      "class_id_resolved": "ClsR_e3962c89",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Cautionary Urban Legends",
+      "remark": null,
+      "justification": "Bait objects like candy are specific narrative elements within the same cautionary urban legend domain, so their class group should be harmonized with the other related legend classes.",
+      "confidence": 0.85
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsR_19f6228d",
+      "class_id_resolved": "ClsR_19f6228d",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Cautionary Urban Legends",
+      "remark": null,
+      "justification": "The audience/listeners role is part of the same cautionary urban legend system as the narratives, predators, victims, bait objects, and protected loved ones; placing it under the unified 'Cautionary Urban Legends' class group connects all these interdependent roles.",
+      "confidence": 0.85
     }
   ],
   "provisional_to_real": {
-    "SPLIT_GraphitizationProcess": "ClsR_abc76e33",
-    "SPLIT_GraphiteNodules": "ClsR_831555ae"
+    "NEW_ChildVictims_UL": "ClsR_9e8fbe73"
   },
-  "timestamp": "2025-12-28T00:22:41Z"
+  "timestamp": "2026-01-02T08:35:58Z"
 }

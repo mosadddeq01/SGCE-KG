@@ -1,0 +1,91 @@
+{
+  "cluster_label": "49_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_51fcfa0b345f",
+      "relation_name": "affects_belief_in",
+      "rel_desc": "Blurring the line between fact and fiction in stories influences listeners’ questioning of the existence of the supernatural.",
+      "rel_hint_type": "influence",
+      "canonical_rel_name": "influences_belief_in",
+      "canonical_rel_desc": "The subject affects the audience's belief or questioning regarding the existence or reality of the object.",
+      "rel_cls": "belief_influence_relation",
+      "rel_cls_group": "CAUSALITY",
+      "subject_entity_name": "line between fact and fiction",
+      "object_entity_name": "existence of the supernatural",
+      "subject_class_label": "Fact and Fiction in Narratives",
+      "subject_class_group": "Narrative Truth, Fiction, and History",
+      "object_class_label": "Supernatural Concepts",
+      "object_class_group": "Supernatural & Paranormal Domain",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "leaving listeners to wonder",
+        "CausalHint": "leaving",
+        "LogicalMarker": null,
+        "OtherQualifier": "AudienceEffect: prompts questioning of reality of supernatural phenomena"
+      },
+      "confidence": 0.86,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_c9efa6406fe6",
+      "relation_name": "determines",
+      "rel_desc": "The authenticity of urban legends determines or reflects the truth behind the stories.",
+      "rel_hint_type": "dependency",
+      "canonical_rel_name": "influences",
+      "canonical_rel_desc": "Indicates that the subject affects, shapes, or constrains the nature, degree, or assessment of the object.",
+      "rel_cls": "conceptual_influence_relation",
+      "rel_cls_group": "CAUSALITY",
+      "subject_entity_name": "authenticity of urban legends",
+      "object_entity_name": "truth behind the stories",
+      "subject_class_label": "Urban Legend Research and Analysis",
+      "subject_class_group": "Urban Legends – Folklore, Psychology & Scholarship",
+      "object_class_label": "Fact and Fiction in Narratives",
+      "object_class_group": "Narrative Truth, Fiction, and History",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "remain shrouded in mystery",
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.82,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_51fcfa0b345f\",\n        \"RelR_c9efa6406fe6\"\n      ],\n      \"rel_cls\": \"conceptual_influence_relation\",\n      \"justification\": \"Both relations express that one abstract or conceptual property (blurring fact/fiction; authenticity of urban legends) shapes or affects another conceptual state (belief in the supernatural; truth behind stories). Using a single, more general class 'conceptual_influence_relation' consistently across them avoids over-narrow specialization for belief-specific cases while preserving their shared causal-influence semantics.\",\n      \"remark\": null,\n      \"confidence\": 0.88\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_51fcfa0b345f",
+          "RelR_c9efa6406fe6"
+        ],
+        "rel_cls": "conceptual_influence_relation",
+        "justification": "Both relations express that one abstract or conceptual property (blurring fact/fiction; authenticity of urban legends) shapes or affects another conceptual state (belief in the supernatural; truth behind stories). Using a single, more general class 'conceptual_influence_relation' consistently across them avoids over-narrow specialization for belief-specific cases while preserving their shared causal-influence semantics.",
+        "remark": null,
+        "confidence": 0.88
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_51fcfa0b345f",
+        "RelR_c9efa6406fe6"
+      ],
+      "rel_cls": "conceptual_influence_relation",
+      "justification": "Both relations express that one abstract or conceptual property (blurring fact/fiction; authenticity of urban legends) shapes or affects another conceptual state (belief in the supernatural; truth behind stories). Using a single, more general class 'conceptual_influence_relation' consistently across them avoids over-narrow specialization for belief-specific cases while preserving their shared causal-influence semantics.",
+      "remark": null,
+      "confidence": 0.88
+    }
+  ],
+  "timestamp": "2026-01-02T09:25:05Z"
+}

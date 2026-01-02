@@ -1,0 +1,209 @@
+{
+  "cluster_label": 11,
+  "cluster_classes": [
+    {
+      "candidate_id": "ClsC_f3159e95",
+      "class_label": "AI Socioeconomic Impacts",
+      "class_description": "Societal and economic outcomes influenced by AI adoption, including positive effects like increased productivity and negative effects such as job displacement and inequality.",
+      "class_type_hint": "Societal Impact",
+      "class_group": "TBD",
+      "confidence": 0.93,
+      "evidence_excerpt": "AI technologies... bring benefits, such as improved efficiency and productivity, [and] raise concerns about job displacement, inequality",
+      "member_ids": [
+        "En_8b90e664",
+        "En_ab9dfae7",
+        "En_a9f68a35"
+      ],
+      "members": [
+        {
+          "id": "En_8b90e664",
+          "entity_name": "productivity",
+          "entity_description": "Amount of useful output or work achieved, which AI can help to increase.",
+          "entity_type_hint": "Benefit"
+        },
+        {
+          "id": "En_ab9dfae7",
+          "entity_name": "job displacement",
+          "entity_description": "Loss or shifting of employment roles caused by adoption of AI technologies.",
+          "entity_type_hint": "Phenomenon"
+        },
+        {
+          "id": "En_a9f68a35",
+          "entity_name": "inequality",
+          "entity_description": "Uneven distribution of opportunities, income, or power that may be exacerbated by AI.",
+          "entity_type_hint": "Phenomenon"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_c3af27b0",
+      "class_label": "AI Societal Impacts",
+      "class_description": "Concepts describing how AI technologies affect society, including benefits like efficiency gains and risks such as concentrated power among dominant actors.",
+      "class_type_hint": "Societal Impact",
+      "class_group": "TBD",
+      "confidence": 0.86,
+      "evidence_excerpt": "AI technologies have the potential to bring about significant benefits... they also raise concerns about... concentration of power",
+      "member_ids": [
+        "En_985f94b9",
+        "En_26270cf5"
+      ],
+      "members": [
+        {
+          "id": "En_985f94b9",
+          "entity_name": "improved efficiency",
+          "entity_description": "Increase in the effectiveness and speed of processes enabled by AI technologies.",
+          "entity_type_hint": "Benefit"
+        },
+        {
+          "id": "En_26270cf5",
+          "entity_name": "concentration of power",
+          "entity_description": "Accumulation of decision-making and economic influence in a small group due to AI.",
+          "entity_type_hint": "Phenomenon"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_e1ee2a50",
+      "class_label": "AI Societal Implications",
+      "class_description": "High-level concepts concerning how artificial intelligence affects society and the beneficial opportunities it offers, including both its broad societal impact and its potential to be harnessed for social good.",
+      "class_type_hint": "Socio-Technical Concept",
+      "class_group": "TBD",
+      "confidence": 0.78,
+      "evidence_excerpt": "broader societal implications of AI technologies and harnessing the potential of AI for the benefit of all",
+      "member_ids": [
+        "Can_6e521b24",
+        "En_d21dd85b"
+      ],
+      "members": [
+        {
+          "id": "Can_6e521b24",
+          "entity_name": "societal impact of AI technologies",
+          "entity_description": "The broad social, economic, cultural, and ethical consequences that artificial intelligence and its applications may have on society, communities, and social structures.",
+          "entity_type_hint": "Phenomenon"
+        },
+        {
+          "id": "En_d21dd85b",
+          "entity_name": "potential of AI",
+          "entity_description": "The beneficial capabilities and opportunities offered by artificial intelligence systems.",
+          "entity_type_hint": "Concept"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_5d345f2e",
+      "class_label": "AI Technology Harms",
+      "class_description": "Negative consequences, risks, and adverse impacts that can result from the development, deployment, or use of artificial intelligence technologies.",
+      "class_type_hint": "Risk Category",
+      "class_group": "TBD",
+      "confidence": 0.86,
+      "evidence_excerpt": "negative consequences and risks that may arise from the development and deployment of AI",
+      "member_ids": [
+        "En_1a97574a"
+      ],
+      "members": [
+        {
+          "id": "En_1a97574a",
+          "entity_name": "harms from AI technologies",
+          "entity_description": "Negative consequences and risks that may arise from the development and deployment of AI.",
+          "entity_type_hint": "FailureEvent"
+        }
+      ],
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"merge_classes\",\n    \"args\": {\n      \"class_ids\": [\n        \"ClsC_f3159e95\",\n        \"ClsC_c3af27b0\",\n        \"ClsC_e1ee2a50\"\n      ],\n      \"provisional_id\": \"MERGE(ClsC_f3159e95|ClsC_c3af27b0|ClsC_e1ee2a50)\",\n      \"new_name\": \"AI Societal and Economic Impacts\",\n      \"new_description\": \"Concepts describing how AI technologies affect society and the economy, including benefits such as productivity and efficiency gains and risks such as job displacement, inequality, and concentration of power, as well as broader societal implications and the potential of AI for social good.\",\n      \"new_class_type_hint\": \"Societal Impact\",\n      \"justification\": \"All three classes cover the same high-level concept of how AI affects society and the economy (benefits, risks, and broader implications), with strongly overlapping scopes and entities (productivity, efficiency, inequality, concentration of power, societal impact, potential of AI), so they should form a single unified class rather than three near-duplicate ones.\",\n      \"remark\": null,\n      \"confidence\": 0.92\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"MERGE(ClsC_f3159e95|ClsC_c3af27b0|ClsC_e1ee2a50)\",\n      \"new_name\": null,\n      \"new_description\": null,\n      \"new_class_type_hint\": null,\n      \"new_class_group\": \"AI_Impacts_and_Harms\",\n      \"remark\": null,\n      \"justification\": \"The merged class represents overall societal and economic impacts of AI and should be grouped with AI harms and risks under a shared higher-level Class_Group describing AI impacts and harms.\",\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_5d345f2e\",\n      \"new_name\": \"AI Harms and Risks\",\n      \"new_description\": \"Negative consequences, harms, and risks that can result from the development, deployment, or use of artificial intelligence technologies, including societal, economic, and individual-level impacts.\",\n      \"new_class_type_hint\": \"Risk/Impact Category\",\n      \"new_class_group\": \"AI_Impacts_and_Harms\",\n      \"remark\": null,\n      \"justification\": \"This class focuses on negative impacts of AI which are conceptually parallel to the societal and economic impacts class but limited to harms; renaming and slightly broadening the description while assigning the same Class_Group clarifies its role as the negative-impact counterpart within the shared AI impacts and harms domain.\",\n      \"confidence\": 0.88\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "merge_classes",
+      "args": {
+        "class_ids": [
+          "ClsC_f3159e95",
+          "ClsC_c3af27b0",
+          "ClsC_e1ee2a50"
+        ],
+        "provisional_id": "MERGE(ClsC_f3159e95|ClsC_c3af27b0|ClsC_e1ee2a50)",
+        "new_name": "AI Societal and Economic Impacts",
+        "new_description": "Concepts describing how AI technologies affect society and the economy, including benefits such as productivity and efficiency gains and risks such as job displacement, inequality, and concentration of power, as well as broader societal implications and the potential of AI for social good.",
+        "new_class_type_hint": "Societal Impact",
+        "justification": "All three classes cover the same high-level concept of how AI affects society and the economy (benefits, risks, and broader implications), with strongly overlapping scopes and entities (productivity, efficiency, inequality, concentration of power, societal impact, potential of AI), so they should form a single unified class rather than three near-duplicate ones.",
+        "remark": null,
+        "confidence": 0.92
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "MERGE(ClsC_f3159e95|ClsC_c3af27b0|ClsC_e1ee2a50)",
+        "new_name": null,
+        "new_description": null,
+        "new_class_type_hint": null,
+        "new_class_group": "AI_Impacts_and_Harms",
+        "remark": null,
+        "justification": "The merged class represents overall societal and economic impacts of AI and should be grouped with AI harms and risks under a shared higher-level Class_Group describing AI impacts and harms.",
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_5d345f2e",
+        "new_name": "AI Harms and Risks",
+        "new_description": "Negative consequences, harms, and risks that can result from the development, deployment, or use of artificial intelligence technologies, including societal, economic, and individual-level impacts.",
+        "new_class_type_hint": "Risk/Impact Category",
+        "new_class_group": "AI_Impacts_and_Harms",
+        "remark": null,
+        "justification": "This class focuses on negative impacts of AI which are conceptually parallel to the societal and economic impacts class but limited to harms; renaming and slightly broadening the description while assigning the same Class_Group clarifies its role as the negative-impact counterpart within the shared AI impacts and harms domain.",
+        "confidence": 0.88
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "merge_classes",
+      "input_class_ids": [
+        "ClsC_f3159e95",
+        "ClsC_c3af27b0",
+        "ClsC_e1ee2a50"
+      ],
+      "result_class_id": "ClsR_55e0fda9",
+      "provisional_id": "MERGE(ClsC_f3159e95|ClsC_c3af27b0|ClsC_e1ee2a50)",
+      "justification": "All three classes cover the same high-level concept of how AI affects society and the economy (benefits, risks, and broader implications), with strongly overlapping scopes and entities (productivity, efficiency, inequality, concentration of power, societal impact, potential of AI), so they should form a single unified class rather than three near-duplicate ones.",
+      "remark": null,
+      "confidence": 0.92
+    },
+    {
+      "action": "modify_class",
+      "class_id": "MERGE(ClsC_f3159e95|ClsC_c3af27b0|ClsC_e1ee2a50)",
+      "class_id_resolved": "ClsR_55e0fda9",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "AI_Impacts_and_Harms",
+      "remark": null,
+      "justification": "The merged class represents overall societal and economic impacts of AI and should be grouped with AI harms and risks under a shared higher-level Class_Group describing AI impacts and harms.",
+      "confidence": 0.9
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_5d345f2e",
+      "class_id_resolved": "ClsC_5d345f2e",
+      "new_name": "AI Harms and Risks",
+      "new_description": "Negative consequences, harms, and risks that can result from the development, deployment, or use of artificial intelligence technologies, including societal, economic, and individual-level impacts.",
+      "new_class_type_hint": "Risk/Impact Category",
+      "new_class_group": "AI_Impacts_and_Harms",
+      "remark": null,
+      "justification": "This class focuses on negative impacts of AI which are conceptually parallel to the societal and economic impacts class but limited to harms; renaming and slightly broadening the description while assigning the same Class_Group clarifies its role as the negative-impact counterpart within the shared AI impacts and harms domain.",
+      "confidence": 0.88
+    }
+  ],
+  "provisional_to_real": {
+    "MERGE(ClsC_f3159e95|ClsC_c3af27b0|ClsC_e1ee2a50)": "ClsR_55e0fda9",
+    "ClsC_f3159e95": "ClsR_55e0fda9",
+    "ClsC_c3af27b0": "ClsR_55e0fda9",
+    "ClsC_e1ee2a50": "ClsR_55e0fda9"
+  },
+  "timestamp": "2026-01-02T08:44:55Z"
+}

@@ -1,0 +1,71 @@
+{
+  "cluster_label": "32_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_a6687ed9e9e8",
+      "relation_name": "is_instance_of_stage",
+      "rel_desc": "The newly emerged adult butterfly represents the beginning of the adult life stage.",
+      "rel_hint_type": "stage membership",
+      "canonical_rel_name": "in_life_stage",
+      "canonical_rel_desc": "Indicates that an organism or individual is currently in a specific life stage within its life cycle.",
+      "rel_cls": "life_stage_membership_relation",
+      "rel_cls_group": "TEMPORALITY",
+      "subject_entity_name": "newly emerged adult butterfly",
+      "object_entity_name": "adult stage of a butterfly",
+      "subject_class_label": "Adult Butterfly Life Stage",
+      "subject_class_group": "Butterfly Biology & Life Cycle",
+      "object_class_label": "Adult Butterfly Life Stage",
+      "object_class_group": "Butterfly Biology & Life Cycle",
+      "qualifiers": {
+        "TemporalQualifier": "immediately after emergence from the chrysalis",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "implicit mapping from individual to life stage",
+        "CausalHint": null,
+        "LogicalMarker": "finally",
+        "OtherQualifier": null
+      },
+      "confidence": 0.8,
+      "remarks": [
+        "Direction chosen as individual (newly emerged adult) being part of the stage.",
+        "Direction chosen as individual (newly emerged adult) being part of the stage."
+      ]
+    },
+    {
+      "relation_id": "RelR_b7c3668c1002",
+      "relation_name": "includes_event",
+      "rel_desc": "The adult stage of a butterfly includes the event of taking its first flight.",
+      "rel_hint_type": "composition",
+      "canonical_rel_name": "includes_life_stage_event",
+      "canonical_rel_desc": "Indicates that a particular life stage includes or is characterized by a specific event or milestone.",
+      "rel_cls": "life_stage_composition_relation",
+      "rel_cls_group": "COMPOSITION",
+      "subject_entity_name": "adult stage of a butterfly",
+      "object_entity_name": "first flight",
+      "subject_class_label": "Adult Butterfly Life Stage",
+      "subject_class_group": "Butterfly Biology & Life Cycle",
+      "object_class_label": "Butterfly Emergence Processes",
+      "object_class_group": "Butterfly Metamorphosis, Anatomy, and Experiential States",
+      "qualifiers": {
+        "TemporalQualifier": "at onset of adult stage",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": "after emergence and wing development",
+        "UncertaintyQualifier": "implied, not explicit",
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.7,
+      "remarks": [
+        "Slight inference connecting first flight explicitly to adult stage.",
+        "Slight inference connecting first flight explicitly to adult stage."
+      ]
+    }
+  ],
+  "llm_raw": "[]",
+  "parsed_steps": [],
+  "executed_decisions": [],
+  "timestamp": "2026-01-02T09:23:40Z"
+}

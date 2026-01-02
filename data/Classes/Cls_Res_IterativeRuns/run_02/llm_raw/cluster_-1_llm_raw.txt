@@ -2,14 +2,14 @@
   {
     "function": "modify_class",
     "args": {
-      "class_id": "ClsC_ae9f3d63",
-      "new_name": "High-Temperature Steels",
-      "new_description": "Steels designed for high temperature applications, including low alloy and quenched and tempered types, used for high temperature strength and creep resistance.",
-      "new_class_type_hint": "Material",
-      "new_class_group": "Steel Metallurgy and Degradation",
-      "remark": "Class is currently coherent and well-scoped, but future review should check if 'low alloy steel' is too broad and may require splitting if more diverse members are added.",
-      "justification": "Class is internally consistent and already assigned to the correct Class_Group; no structural changes required, but flagging possible future need to split if 'low alloy steel' expands.",
-      "confidence": 0.95
+      "class_id": "ClsC_2d1cc363",
+      "new_name": "Adult butterflies (deprecated legacy aggregate)",
+      "new_description": "DEPRECATED legacy aggregate class that previously bundled general adult butterflies and female butterflies. All former members have been moved into more precise classes (e.g., 'Adult butterflies' and 'Female butterflies'). This class is retained only for backward compatibility and must not receive new members.",
+      "new_class_type_hint": "DeprecatedOrganismAggregate",
+      "new_class_group": "Butterfly Biology",
+      "remark": "This class is intentionally kept empty as a deprecated legacy aggregate; schema consumers should migrate to 'Adult butterflies' and 'Female butterflies' and avoid using this class going forward.",
+      "justification": "The class is an empty, deprecated legacy aggregate for adult butterflies; renaming and updating its type hint and description makes its deprecated status explicit and prevents future misuse while preserving it for backward compatibility.",
+      "confidence": 0.96
     }
   }
 ]

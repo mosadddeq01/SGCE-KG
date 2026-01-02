@@ -1,0 +1,181 @@
+{
+  "cluster_label": "14_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_9d3a9ef2a5d9",
+      "relation_name": "may_be_responsible_for",
+      "rel_desc": "Developers are proposed as possible bearers of accountability when AI systems err or cause harm.",
+      "rel_hint_type": "responsibility",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "developers",
+      "object_entity_name": "accountability",
+      "subject_class_label": "AI System Operators and Developers",
+      "subject_class_group": "AI Governance and Stakeholders",
+      "object_class_label": "AI Responsibility and Accountability Concepts",
+      "object_class_group": "AI Responsibility & Accountability",
+      "qualifiers": {
+        "TemporalQualifier": "when an AI system makes a mistake or causes harm",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": "if an AI system makes a mistake or causes harm",
+        "UncertaintyQualifier": "open question; 'Should it be'",
+        "CausalHint": "when ... makes a mistake or causes harm",
+        "LogicalMarker": "Should; when; or",
+        "OtherQualifier": null
+      },
+      "confidence": 0.7,
+      "remarks": [
+        "Relation primarily captures that developers are candidates in accountability allocation."
+      ]
+    },
+    {
+      "relation_id": "RelR_49fd09faa9f1",
+      "relation_name": "may_be_responsible_for",
+      "rel_desc": "Users are proposed as possible bearers of accountability when AI systems err or cause harm.",
+      "rel_hint_type": "responsibility",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "users",
+      "object_entity_name": "accountability",
+      "subject_class_label": "AI System Operators and Developers",
+      "subject_class_group": "AI Governance and Stakeholders",
+      "object_class_label": "AI Responsibility and Accountability Concepts",
+      "object_class_group": "AI Responsibility & Accountability",
+      "qualifiers": {
+        "TemporalQualifier": "when an AI system makes a mistake or causes harm",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": "if an AI system makes a mistake or causes harm",
+        "UncertaintyQualifier": "open question; 'Should it be'",
+        "CausalHint": "when ... makes a mistake or causes harm",
+        "LogicalMarker": "Should; when; or",
+        "OtherQualifier": null
+      },
+      "confidence": 0.7,
+      "remarks": [
+        "Potential, not asserted, responsibility."
+      ]
+    },
+    {
+      "relation_id": "RelR_a15d917b6384",
+      "relation_name": "may_be_responsible_for",
+      "rel_desc": "The AI system itself is proposed as a possible locus of accountability for its mistakes or harms.",
+      "rel_hint_type": "responsibility",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "AI system itself",
+      "object_entity_name": "accountability",
+      "subject_class_label": "AI Responsibility and Accountability Concepts",
+      "subject_class_group": "AI Responsibility & Accountability",
+      "object_class_label": "AI Responsibility and Accountability Concepts",
+      "object_class_group": "AI Responsibility & Accountability",
+      "qualifiers": {
+        "TemporalQualifier": "when an AI system makes a mistake or causes harm",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": "if an AI system makes a mistake or causes harm",
+        "UncertaintyQualifier": "open question; 'Should it be'",
+        "CausalHint": "when ... makes a mistake or causes harm",
+        "LogicalMarker": "or; when; Should",
+        "OtherQualifier": null
+      },
+      "confidence": 0.7,
+      "remarks": [
+        "Highly debated concept; here only noted as a considered option."
+      ]
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_9d3a9ef2a5d9\",\n        \"RelR_49fd09faa9f1\",\n        \"RelR_a15d917b6384\"\n      ],\n      \"canonical_rel_name\": \"is_candidate_bearer_of_accountability\",\n      \"canonical_rel_desc\": \"Indicates that the subject is considered a possible bearer of accountability or responsibility for outcomes associated with an AI system, without asserting that accountability is actually assigned.\",\n      \"justification\": \"All three relations describe different actors (developers, users, the AI system itself) being considered as possible loci of accountability when an AI system causes mistakes or harm. The semantics are identical: the subject is a candidate to carry accountability, not definitively assigned. A single canonical predicate that captures potential/considered accountability improves consistency and distinguishes it from definite responsibility.\",\n      \"remark\": \"Canonical predicate explicitly encodes that accountability is only potential or under consideration, aligning with the qualifiers indicating open questions and conditional scenarios.\",\n      \"confidence\": 0.89\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_9d3a9ef2a5d9\",\n        \"RelR_49fd09faa9f1\",\n        \"RelR_a15d917b6384\"\n      ],\n      \"rel_cls\": \"accountability_allocation_relation\",\n      \"justification\": \"Each relation concerns how accountability or responsibility for AI system errors or harms might be allocated among different possible subjects. This is more specific than a generic responsibility relation and captures the normative allocation dimension across multiple candidate bearers.\",\n      \"remark\": \"This class can also group other predicates about assigning, distributing, or contesting accountability around AI outcomes.\",\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_9d3a9ef2a5d9\",\n        \"RelR_49fd09faa9f1\",\n        \"RelR_a15d917b6384\"\n      ],\n      \"rel_cls_group\": \"RESPONSIBILITY\",\n      \"justification\": \"The core semantic dimension is about who holds or may hold responsibility/accountability for AI system outcomes, which fits a broad group focused on responsibility and liability rather than causality, composition, or identity.\",\n      \"remark\": \"If a standardized global vocabulary is later adopted, this group could be aligned with any higher-level category for responsibility/liability in governance ontologies.\",\n      \"confidence\": 0.88\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_9d3a9ef2a5d9",
+          "RelR_49fd09faa9f1",
+          "RelR_a15d917b6384"
+        ],
+        "canonical_rel_name": "is_candidate_bearer_of_accountability",
+        "canonical_rel_desc": "Indicates that the subject is considered a possible bearer of accountability or responsibility for outcomes associated with an AI system, without asserting that accountability is actually assigned.",
+        "justification": "All three relations describe different actors (developers, users, the AI system itself) being considered as possible loci of accountability when an AI system causes mistakes or harm. The semantics are identical: the subject is a candidate to carry accountability, not definitively assigned. A single canonical predicate that captures potential/considered accountability improves consistency and distinguishes it from definite responsibility.",
+        "remark": "Canonical predicate explicitly encodes that accountability is only potential or under consideration, aligning with the qualifiers indicating open questions and conditional scenarios.",
+        "confidence": 0.89
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_9d3a9ef2a5d9",
+          "RelR_49fd09faa9f1",
+          "RelR_a15d917b6384"
+        ],
+        "rel_cls": "accountability_allocation_relation",
+        "justification": "Each relation concerns how accountability or responsibility for AI system errors or harms might be allocated among different possible subjects. This is more specific than a generic responsibility relation and captures the normative allocation dimension across multiple candidate bearers.",
+        "remark": "This class can also group other predicates about assigning, distributing, or contesting accountability around AI outcomes.",
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_9d3a9ef2a5d9",
+          "RelR_49fd09faa9f1",
+          "RelR_a15d917b6384"
+        ],
+        "rel_cls_group": "RESPONSIBILITY",
+        "justification": "The core semantic dimension is about who holds or may hold responsibility/accountability for AI system outcomes, which fits a broad group focused on responsibility and liability rather than causality, composition, or identity.",
+        "remark": "If a standardized global vocabulary is later adopted, this group could be aligned with any higher-level category for responsibility/liability in governance ontologies.",
+        "confidence": 0.88
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_9d3a9ef2a5d9",
+        "RelR_49fd09faa9f1",
+        "RelR_a15d917b6384"
+      ],
+      "canonical_rel_name": "is_candidate_bearer_of_accountability",
+      "canonical_rel_desc": "Indicates that the subject is considered a possible bearer of accountability or responsibility for outcomes associated with an AI system, without asserting that accountability is actually assigned.",
+      "justification": "All three relations describe different actors (developers, users, the AI system itself) being considered as possible loci of accountability when an AI system causes mistakes or harm. The semantics are identical: the subject is a candidate to carry accountability, not definitively assigned. A single canonical predicate that captures potential/considered accountability improves consistency and distinguishes it from definite responsibility.",
+      "remark": "Canonical predicate explicitly encodes that accountability is only potential or under consideration, aligning with the qualifiers indicating open questions and conditional scenarios.",
+      "confidence": 0.89
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_9d3a9ef2a5d9",
+        "RelR_49fd09faa9f1",
+        "RelR_a15d917b6384"
+      ],
+      "rel_cls": "accountability_allocation_relation",
+      "justification": "Each relation concerns how accountability or responsibility for AI system errors or harms might be allocated among different possible subjects. This is more specific than a generic responsibility relation and captures the normative allocation dimension across multiple candidate bearers.",
+      "remark": "This class can also group other predicates about assigning, distributing, or contesting accountability around AI outcomes.",
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_9d3a9ef2a5d9",
+        "RelR_49fd09faa9f1",
+        "RelR_a15d917b6384"
+      ],
+      "rel_cls_group": "RESPONSIBILITY",
+      "justification": "The core semantic dimension is about who holds or may hold responsibility/accountability for AI system outcomes, which fits a broad group focused on responsibility and liability rather than causality, composition, or identity.",
+      "remark": "If a standardized global vocabulary is later adopted, this group could be aligned with any higher-level category for responsibility/liability in governance ontologies.",
+      "confidence": 0.88
+    }
+  ],
+  "timestamp": "2026-01-02T09:12:42Z"
+}

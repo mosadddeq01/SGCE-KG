@@ -1,0 +1,276 @@
+{
+  "cluster_label": "19_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_09bf81ea7663",
+      "relation_name": "involves",
+      "rel_desc": "Ethical dilemmas in AI development are said to arise from concerns that include accountability.",
+      "rel_hint_type": "conceptual-inclusion",
+      "canonical_rel_name": "involves_concern",
+      "canonical_rel_desc": "Indicates that a broader ethical dilemma includes a specific concern or issue (e.g., accountability) as one of its components.",
+      "rel_cls": "ethical_dilemma_issue_relation",
+      "rel_cls_group": "ASSOCIATION",
+      "subject_entity_name": "ethical dilemmas in AI development",
+      "object_entity_name": "accountability",
+      "subject_class_label": "AI Ethics Dilemmas (Concept)",
+      "subject_class_group": "AI Ethics & Governance",
+      "object_class_label": "AI Responsibility and Accountability Concepts",
+      "object_class_group": "AI Responsibility & Accountability",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": "in the development and deployment of AI technologies",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "stem from",
+        "LogicalMarker": null,
+        "OtherQualifier": "ConcernType: listed as one of multiple sources of dilemmas"
+      },
+      "confidence": 0.9,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_90a508212138",
+      "relation_name": "includes_issue",
+      "rel_desc": "Use of AI for surveillance purposes is presented as an example ethical dilemma in AI development.",
+      "rel_hint_type": "membership",
+      "canonical_rel_name": "includes_ethical_issue",
+      "canonical_rel_desc": "The subject is a broader set or category of ethical dilemmas in AI development that includes the object as a specific ethical issue or example.",
+      "rel_cls": "ethical_issue_membership_relation",
+      "rel_cls_group": "ASSOCIATION",
+      "subject_entity_name": "ethical dilemmas in AI development",
+      "object_entity_name": "surveillance purposes",
+      "subject_class_label": "AI Ethics Dilemmas (Concept)",
+      "subject_class_group": "AI Ethics & Governance",
+      "object_class_label": "Surveillance Purposes",
+      "object_class_group": "Artificial Intelligence Technologies & Applications",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": "For example",
+        "OtherQualifier": "EthicalConcernType: privacy and power abuse"
+      },
+      "confidence": 0.84,
+      "remarks": [
+        "Ethical framing inferred from section heading and context.",
+        "Ethical framing inferred from section heading and context."
+      ]
+    },
+    {
+      "relation_id": "RelR_9b870085ce73",
+      "relation_name": "includes_issue",
+      "rel_desc": "Biased data (as a manifestation of bias) is part of the ethical dilemmas in AI development.",
+      "rel_hint_type": "membership",
+      "canonical_rel_name": "includes_ethical_issue",
+      "canonical_rel_desc": "The subject is a broader set or category of ethical dilemmas in AI development that includes the object as a specific ethical issue or example.",
+      "rel_cls": "ethical_issue_membership_relation",
+      "rel_cls_group": "ASSOCIATION",
+      "subject_entity_name": "ethical dilemmas in AI development",
+      "object_entity_name": "biased data",
+      "subject_class_label": "AI Ethics Dilemmas (Concept)",
+      "subject_class_group": "AI Ethics & Governance",
+      "object_class_label": "Problematic Training Data",
+      "object_class_group": "AI Fairness, Bias & Data",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": "Another",
+        "OtherQualifier": "EthicalConcernType: bias in training data"
+      },
+      "confidence": 0.8,
+      "remarks": [
+        "Maps conceptual 'bias' to entity 'biased data'.",
+        "Maps conceptual 'bias' to entity 'biased data'."
+      ]
+    },
+    {
+      "relation_id": "RelR_7737479c6211",
+      "relation_name": "concerns",
+      "rel_desc": "The ethical dilemma of transparency is specifically situated within AI development and, by extension, AI systems.",
+      "rel_hint_type": "topic",
+      "canonical_rel_name": "concerns",
+      "canonical_rel_desc": "Indicates that an ethical issue or dilemma is about or pertains to a particular system, domain, or context.",
+      "rel_cls": "ethical_dilemma_scope_relation",
+      "rel_cls_group": "ABOUTNESS",
+      "subject_entity_name": "ethical dilemma of transparency in AI",
+      "object_entity_name": "AI systems",
+      "subject_class_label": "AI Transparency Ethics",
+      "subject_class_group": "AI Ethics: Privacy and Transparency",
+      "object_class_label": "AI Systems",
+      "object_class_group": "TBD",
+      "qualifiers": {
+        "TemporalQualifier": "during AI development",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.78,
+      "remarks": [
+        "AI development is not an explicit entity; AI systems used as proxy for development context.",
+        "AI development is not an explicit entity; AI systems used as proxy for development context."
+      ]
+    },
+    {
+      "relation_id": "RelR_28ef1083b1df",
+      "relation_name": "is_concern_in",
+      "rel_desc": "Job displacement is explicitly identified as a concern within the broader ethical dilemmas in AI development.",
+      "rel_hint_type": "issue_membership",
+      "canonical_rel_name": "is_ethical_issue_in",
+      "canonical_rel_desc": "The subject is a specific ethical issue or concern that is part of, or discussed within, the broader set or category of ethical dilemmas in AI development (the object).",
+      "rel_cls": "ethical_issue_membership_relation",
+      "rel_cls_group": "ASSOCIATION",
+      "subject_entity_name": "job displacement",
+      "object_entity_name": "ethical dilemmas in AI development",
+      "subject_class_label": "AI Societal and Economic Impacts",
+      "subject_class_group": "AI_Impacts_and_Harms",
+      "object_class_label": "AI Ethics Dilemmas (Concept)",
+      "object_class_group": "AI Ethics & Governance",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "societal level",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "raise concerns about",
+        "LogicalMarker": null,
+        "OtherQualifier": "EthicalContext: potential impact of AI on society in AI development"
+      },
+      "confidence": 0.93,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_7a7aebe13364",
+      "relation_name": "is_concern_in",
+      "rel_desc": "Inequality is explicitly identified as a concern within the broader ethical dilemmas in AI development.",
+      "rel_hint_type": "issue_membership",
+      "canonical_rel_name": "is_ethical_issue_in",
+      "canonical_rel_desc": "The subject is a specific ethical issue or concern that is part of, or discussed within, the broader set or category of ethical dilemmas in AI development (the object).",
+      "rel_cls": "ethical_issue_membership_relation",
+      "rel_cls_group": "ASSOCIATION",
+      "subject_entity_name": "inequality",
+      "object_entity_name": "ethical dilemmas in AI development",
+      "subject_class_label": "AI Societal and Economic Impacts",
+      "subject_class_group": "AI_Impacts_and_Harms",
+      "object_class_label": "AI Ethics Dilemmas (Concept)",
+      "object_class_group": "AI Ethics & Governance",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "societal level",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "raise concerns about",
+        "LogicalMarker": null,
+        "OtherQualifier": "EthicalContext: evaluation of AI’s societal impact"
+      },
+      "confidence": 0.93,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_a1ca51df1771",
+      "relation_name": "is_concern_in",
+      "rel_desc": "Concentration of power is explicitly identified as a concern within ethical dilemmas in AI development.",
+      "rel_hint_type": "issue_membership",
+      "canonical_rel_name": "is_ethical_issue_in",
+      "canonical_rel_desc": "The subject is a specific ethical issue or concern that is part of, or discussed within, the broader set or category of ethical dilemmas in AI development (the object).",
+      "rel_cls": "ethical_issue_membership_relation",
+      "rel_cls_group": "ASSOCIATION",
+      "subject_entity_name": "concentration of power",
+      "object_entity_name": "ethical dilemmas in AI development",
+      "subject_class_label": "AI Societal and Economic Impacts",
+      "subject_class_group": "AI_Impacts_and_Harms",
+      "object_class_label": "AI Ethics Dilemmas (Concept)",
+      "object_class_group": "AI Ethics & Governance",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "societal level",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "raise concerns about",
+        "LogicalMarker": null,
+        "OtherQualifier": "EthicalContext: potential impact of AI on society"
+      },
+      "confidence": 0.93,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_de6518c56893",
+      "relation_name": "involves",
+      "rel_desc": "Ethical dilemmas in AI development involve issues related to accountability.",
+      "rel_hint_type": "thematic_link",
+      "canonical_rel_name": "involves_concern",
+      "canonical_rel_desc": "Indicates that a broader ethical dilemma includes a specific concern or issue (e.g., accountability) as one of its components.",
+      "rel_cls": "ethical_dilemma_issue_relation",
+      "rel_cls_group": "ASSOCIATION",
+      "subject_entity_name": "ethical dilemmas in AI development",
+      "object_entity_name": "accountability",
+      "subject_class_label": "AI Ethics Dilemmas (Concept)",
+      "subject_class_group": "AI Ethics & Governance",
+      "object_class_label": "AI Responsibility and Accountability Concepts",
+      "object_class_group": "AI Responsibility & Accountability",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "in AI development",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "IssueCategory: part of the multifaceted nature of ethical dilemmas"
+      },
+      "confidence": 0.87,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_rel_schema\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_09bf81ea7663\",\n        \"RelR_de6518c56893\"\n      ],\n      \"canonical_rel_name\": \"includes_ethical_issue\",\n      \"canonical_rel_desc\": \"The subject is a broader set or category of ethical dilemmas in AI development that includes the object as a specific ethical issue or example.\",\n      \"rel_cls\": \"ethical_issue_membership_relation\",\n      \"rel_cls_group\": \"ASSOCIATION\",\n      \"justification\": \"These two relations have the same subject ('ethical dilemmas in AI development') and object ('accountability') and express the same membership semantics as the existing 'includes_ethical_issue' relations (RelR_90a508212138, RelR_9b870085ce73). Normalizing the canonical_rel_name and rel_cls removes an unnecessary predicate variant ('involves_concern') and consistently models all links where the broader ethical dilemmas category includes a specific ethical issue.\",\n      \"remark\": \"Consolidated predicate naming for all relations where 'ethical dilemmas in AI development' includes a specific concern, to avoid parallel but redundant predicates ('involves_concern' vs 'includes_ethical_issue').\",\n      \"confidence\": 0.9\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_rel_schema",
+      "args": {
+        "relation_ids": [
+          "RelR_09bf81ea7663",
+          "RelR_de6518c56893"
+        ],
+        "canonical_rel_name": "includes_ethical_issue",
+        "canonical_rel_desc": "The subject is a broader set or category of ethical dilemmas in AI development that includes the object as a specific ethical issue or example.",
+        "rel_cls": "ethical_issue_membership_relation",
+        "rel_cls_group": "ASSOCIATION",
+        "justification": "These two relations have the same subject ('ethical dilemmas in AI development') and object ('accountability') and express the same membership semantics as the existing 'includes_ethical_issue' relations (RelR_90a508212138, RelR_9b870085ce73). Normalizing the canonical_rel_name and rel_cls removes an unnecessary predicate variant ('involves_concern') and consistently models all links where the broader ethical dilemmas category includes a specific ethical issue.",
+        "remark": "Consolidated predicate naming for all relations where 'ethical dilemmas in AI development' includes a specific concern, to avoid parallel but redundant predicates ('involves_concern' vs 'includes_ethical_issue').",
+        "confidence": 0.9
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_rel_schema",
+      "relation_ids": [
+        "RelR_09bf81ea7663",
+        "RelR_de6518c56893"
+      ],
+      "canonical_rel_name": "includes_ethical_issue",
+      "canonical_rel_desc": "The subject is a broader set or category of ethical dilemmas in AI development that includes the object as a specific ethical issue or example.",
+      "rel_cls": "ethical_issue_membership_relation",
+      "rel_cls_group": "ASSOCIATION",
+      "new_relation_name": null,
+      "original_relation_name": null,
+      "justification": "These two relations have the same subject ('ethical dilemmas in AI development') and object ('accountability') and express the same membership semantics as the existing 'includes_ethical_issue' relations (RelR_90a508212138, RelR_9b870085ce73). Normalizing the canonical_rel_name and rel_cls removes an unnecessary predicate variant ('involves_concern') and consistently models all links where the broader ethical dilemmas category includes a specific ethical issue.",
+      "remark": "Consolidated predicate naming for all relations where 'ethical dilemmas in AI development' includes a specific concern, to avoid parallel but redundant predicates ('involves_concern' vs 'includes_ethical_issue').",
+      "confidence": 0.9
+    }
+  ],
+  "timestamp": "2026-01-02T09:23:03Z"
+}

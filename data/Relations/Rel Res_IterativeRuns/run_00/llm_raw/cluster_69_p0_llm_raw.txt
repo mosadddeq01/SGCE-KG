@@ -1,0 +1,51 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_6f9cfe211b66",
+        "RelR_6bd2ff1decf9",
+        "RelR_8025399d304b",
+        "RelR_d272cd370446",
+        "RelR_f7af10f818b3"
+      ],
+      "canonical_rel_name": "contributes_to",
+      "canonical_rel_desc": "Indicates that the subject is a causal or enabling factor that contributes to the occurrence, development, or degree of the object, without implying sole or deterministic causation.",
+      "justification": "All relations describe a causal or contributory influence from the subject (storytelling, intergenerational transmission, trade, travel, good scare) to an outcome or state (evolution of tales, interconnected societies, entertainment value). Using a single predicate 'contributes_to' consistently captures this non-deterministic causal contribution across instances.",
+      "remark": "The relation instance labeled 'leads_to' is normalized to 'contributes_to' for consistent representation of soft/partial causality.",
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_6f9cfe211b66",
+        "RelR_6bd2ff1decf9",
+        "RelR_8025399d304b",
+        "RelR_d272cd370446",
+        "RelR_f7af10f818b3"
+      ],
+      "rel_cls": "causal_influence_relation",
+      "justification": "Each relation expresses that the subject exerts a causal or contributory influence on the object (e.g., mechanisms such as trade or storytelling influencing social or narrative outcomes), fitting a shared class of causal influence relations.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_6f9cfe211b66",
+        "RelR_6bd2ff1decf9",
+        "RelR_8025399d304b",
+        "RelR_d272cd370446",
+        "RelR_f7af10f818b3"
+      ],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "The rel_hint_type is explicitly causal for all instances, and the descriptions clearly describe cause–effect or contributory relationships, so they belong in the broad CAUSALITY group.",
+      "remark": null,
+      "confidence": 0.95
+    }
+  }
+]

@@ -1,1 +1,18 @@
-[]
+[
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": [
+        "RelR_8057359329a5",
+        "RelR_80705e40909c"
+      ],
+      "canonical_rel_name": "influences_ethical_outcomes",
+      "canonical_rel_desc": "Indicates that the subject (e.g., AI systems or their design and bias-handling choices) causally influences ethical outcomes such as fairness and equity in decision-making contexts.",
+      "rel_cls": "ethical_outcome_influence_relation",
+      "rel_cls_group": "CAUSALITY",
+      "justification": "The existing canonical_rel_name 'influences_fairness_and_equity_outcomes' is overly specific and hard-codes both fairness and equity, while the two instances target different but related ethical concepts (fairness vs equity). Normalizing to 'influences_ethical_outcomes' yields a reusable predicate that still captures the causal influence on fairness/equity but remains accurate for each individual object.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  }
+]

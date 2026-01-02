@@ -1,0 +1,82 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_afe7c3e54753"],
+      "canonical_rel_name": "develops_into",
+      "canonical_rel_desc": "Indicates that an anatomical structure or life stage gradually changes and becomes another anatomical structure or life stage over the course of development.",
+      "justification": "This relation connects the caterpillar body to the butterfly as an end-stage of metamorphosis, describing a developmental progression rather than a simple material conversion. The predicate 'develops_into' captures life-stage morphological development with temporal progression.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_bc274f2902df"],
+      "canonical_rel_name": "transforms_into",
+      "canonical_rel_desc": "Indicates that a material or structure is converted into another material or structure, emphasizing physical or morphological transformation.",
+      "justification": "This instance describes the caterpillar's organs dissolving and becoming a soupy substance. The focus is on a physical conversion of material rather than a life-stage progression, so 'transforms_into' is the most precise predicate.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_8c14d18c8a06",
+        "RelR_9100d84b8533",
+        "RelR_3d558fb2e335"
+      ],
+      "canonical_rel_name": "is_developmental_source_of",
+      "canonical_rel_desc": "Indicates that one material or anatomical substrate serves as the developmental source or precursor from which another tissue or anatomical structure forms.",
+      "justification": "All three relations describe the soupy substance as the substrate from which new tissues, wings, and antennae form during metamorphosis. The semantics are developmental origin/precursor, so a single normalized predicate 'is_developmental_source_of' cleanly covers all of them in the same direction (source -> derived structure).",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_afe7c3e54753",
+        "RelR_bc274f2902df"
+      ],
+      "rel_cls": "morphological_transformation_relation",
+      "justification": "Both relations describe morphological or material transformation of one anatomical entity into another state (body into butterfly, organs into soupy substance). Grouping them under 'morphological_transformation_relation' captures this shared family of developmental/physical change predicates (develops_into, transforms_into).",
+      "remark": null,
+      "confidence": 0.86
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_8c14d18c8a06",
+        "RelR_9100d84b8533",
+        "RelR_3d558fb2e335"
+      ],
+      "rel_cls": "developmental_origin_relation",
+      "justification": "These relations consistently express that the soupy substance is the precursor material from which specific anatomical structures form. This fits a shared class describing developmental origin or precursor–product relationships between substrate and resulting tissues.",
+      "remark": null,
+      "confidence": 0.88
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_afe7c3e54753",
+        "RelR_bc274f2902df",
+        "RelR_8c14d18c8a06",
+        "RelR_9100d84b8533",
+        "RelR_3d558fb2e335"
+      ],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "All relations encode that one entity brings about or materially results in another (body causing butterfly form, organs becoming soupy substance, soupy substance generating new tissues and structures). These are best viewed as causal/developmental origin or transformation links, fitting the CAUSALITY group.",
+      "remark": null,
+      "confidence": 0.86
+    }
+  }
+]

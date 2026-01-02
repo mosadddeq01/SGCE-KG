@@ -1,15 +1,1 @@
-[
-  {
-    "function": "modify_rel_schema",
-    "args": {
-      "relation_ids": ["RelR_362f6e35c9d7"],
-      "canonical_rel_name": "is_subtype_of",
-      "canonical_rel_desc": "Indicates that the subject is a more specific subtype or category within the broader class represented by the object.",
-      "rel_cls": "material_taxonomy_relation",
-      "rel_cls_group": "IDENTITY",
-      "justification": "This relation is the inverse of RelR_39cf0ff7f895 and expresses the same taxonomic hierarchy. To maintain schema consistency, hierarchical material-category links should use a single canonical predicate 'is_subtype_of' with a shared description, regardless of direction in raw relation_name. The existing rel_cls and rel_cls_group are already appropriate for a taxonomic identity/hierarchy relation.",
-      "remark": "Normalized hierarchical material category relation to use the same canonical predicate 'is_subtype_of' as the inverse instance in this cluster.",
-      "confidence": 0.96
-    }
-  }
-]
+[]

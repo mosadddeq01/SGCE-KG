@@ -1,0 +1,305 @@
+{
+  "cluster_label": "31_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_59f0cf4b1acd",
+      "relation_name": "has_life_stage",
+      "rel_desc": "The butterfly has an adult stage as the final stage of its life cycle.",
+      "rel_hint_type": "life-stage",
+      "canonical_rel_name": "has_life_cycle_stage_type",
+      "canonical_rel_desc": "Indicates that an organism or taxonomic group has a specific stage type as part of its life cycle (e.g., egg, larva, pupa, adult), without implying a current temporal state of an individual.",
+      "rel_cls": "life_stage_membership_relation",
+      "rel_cls_group": "TEMPORALITY",
+      "subject_entity_name": "butterfly",
+      "object_entity_name": "adult stage of a butterfly",
+      "subject_class_label": "Adult butterflies",
+      "subject_class_group": "Butterfly Biology & Life Cycle",
+      "object_class_label": "Adult Butterfly Life Stage",
+      "object_class_group": "Butterfly Biology & Life Cycle",
+      "qualifiers": {
+        "TemporalQualifier": "final stage of the life cycle",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "SequenceContext: egg → larva → pupa → adult"
+      },
+      "confidence": 0.9,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_f849b185d587",
+      "relation_name": "has_life_stage",
+      "rel_desc": "The butterfly has a pupa stage as part of its life cycle.",
+      "rel_hint_type": "life-stage",
+      "canonical_rel_name": "has_life_cycle_stage_type",
+      "canonical_rel_desc": "Indicates that an organism or taxonomic group has a specific stage type as part of its life cycle (e.g., egg, larva, pupa, adult), without implying a current temporal state of an individual.",
+      "rel_cls": "life_stage_membership_relation",
+      "rel_cls_group": "TEMPORALITY",
+      "subject_entity_name": "butterfly",
+      "object_entity_name": "pupa stage of the butterfly life cycle",
+      "subject_class_label": "Adult butterflies",
+      "subject_class_group": "Butterfly Biology & Life Cycle",
+      "object_class_label": "Butterfly pupa (chrysalis) life stage",
+      "object_class_group": "TBD",
+      "qualifiers": {
+        "TemporalQualifier": "before the adult stage",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "SequenceContext: egg → larva → pupa → adult"
+      },
+      "confidence": 0.9,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_e98df9e87abe",
+      "relation_name": "precedes",
+      "rel_desc": "The pupa stage comes before the adult stage in the butterfly life cycle.",
+      "rel_hint_type": "temporal-order",
+      "canonical_rel_name": "precedes_in_life_cycle",
+      "canonical_rel_desc": "Indicates that one life stage occurs before another life stage in the ordered life cycle of an organism.",
+      "rel_cls": "temporal_order_relation",
+      "rel_cls_group": "TEMPORALITY",
+      "subject_entity_name": "pupa stage of the butterfly life cycle",
+      "object_entity_name": "adult stage of a butterfly",
+      "subject_class_label": "Butterfly pupa (chrysalis) life stage",
+      "subject_class_group": "TBD",
+      "object_class_label": "Adult Butterfly Life Stage",
+      "object_class_group": "Butterfly Biology & Life Cycle",
+      "qualifiers": {
+        "TemporalQualifier": "in the life cycle sequence",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "StageOrder: pupa is the third stage, adult is the fourth"
+      },
+      "confidence": 0.88,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_f21d9e53b149",
+      "relation_name": "is_stage_of",
+      "rel_desc": "The pupa stage is described as the third stage within the butterfly's life cycle.",
+      "rel_hint_type": "hierarchical",
+      "canonical_rel_name": "is_life_stage_of",
+      "canonical_rel_desc": "Indicates that a specific life stage belongs to and is part of the life cycle of a given organism.",
+      "rel_cls": "life_stage_membership_relation",
+      "rel_cls_group": "TEMPORALITY",
+      "subject_entity_name": "pupa stage of the butterfly life cycle",
+      "object_entity_name": "butterfly",
+      "subject_class_label": "Butterfly pupa (chrysalis) life stage",
+      "subject_class_group": "TBD",
+      "object_class_label": "Adult butterflies",
+      "object_class_group": "Butterfly Biology & Life Cycle",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": "third stage of the life cycle",
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.94,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_a6687ed9e9e8",
+      "relation_name": "is_instance_of_stage",
+      "rel_desc": "The newly emerged adult butterfly represents the beginning of the adult life stage.",
+      "rel_hint_type": "stage membership",
+      "canonical_rel_name": "in_life_stage",
+      "canonical_rel_desc": "Indicates that an organism or individual is currently in a specific life stage within its life cycle.",
+      "rel_cls": "life_stage_membership_relation",
+      "rel_cls_group": "TEMPORALITY",
+      "subject_entity_name": "newly emerged adult butterfly",
+      "object_entity_name": "adult stage of a butterfly",
+      "subject_class_label": "Adult Butterfly Life Stage",
+      "subject_class_group": "Butterfly Biology & Life Cycle",
+      "object_class_label": "Adult Butterfly Life Stage",
+      "object_class_group": "Butterfly Biology & Life Cycle",
+      "qualifiers": {
+        "TemporalQualifier": "immediately after emergence from the chrysalis",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "implicit mapping from individual to life stage",
+        "CausalHint": null,
+        "LogicalMarker": "finally",
+        "OtherQualifier": null
+      },
+      "confidence": 0.8,
+      "remarks": [
+        "Direction chosen as individual (newly emerged adult) being part of the stage.",
+        "Direction chosen as individual (newly emerged adult) being part of the stage.",
+        "Direction chosen as individual (newly emerged adult) being part of the stage."
+      ]
+    },
+    {
+      "relation_id": "RelR_8880eaf69ce7",
+      "relation_name": "life_stage_of",
+      "rel_desc": "The adult stage is a specific life stage of the butterfly.",
+      "rel_hint_type": "life-stage",
+      "canonical_rel_name": "is_life_stage_of",
+      "canonical_rel_desc": "Indicates that a specific life stage belongs to and is part of the life cycle of a given organism.",
+      "rel_cls": "life_stage_membership_relation",
+      "rel_cls_group": "TEMPORALITY",
+      "subject_entity_name": "adult stage of a butterfly",
+      "object_entity_name": "butterfly",
+      "subject_class_label": "Adult Butterfly Life Stage",
+      "subject_class_group": "Butterfly Biology & Life Cycle",
+      "object_class_label": "Adult butterflies",
+      "object_class_group": "Butterfly Biology & Life Cycle",
+      "qualifiers": {
+        "TemporalQualifier": "adult stage",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.95,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_6b77872b3c4f",
+      "relation_name": "has_lifespan",
+      "rel_desc": "The adult stage of a butterfly is characterized by a relatively short lifespan.",
+      "rel_hint_type": "attribute",
+      "canonical_rel_name": "has_lifespan",
+      "canonical_rel_desc": "Links a biological life stage or organism to its characteristic lifespan or longevity.",
+      "rel_cls": "life_history_attribute_relation",
+      "rel_cls_group": "ATTRIBUTE",
+      "subject_entity_name": "adult stage of a butterfly",
+      "object_entity_name": "butterfly adult lifespan",
+      "subject_class_label": "Adult Butterfly Life Stage",
+      "subject_class_group": "Butterfly Biology & Life Cycle",
+      "object_class_label": "Butterfly Adult Stage Attributes",
+      "object_class_group": "Butterfly Biology & Life Cycle",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": "ranging from a few days to a few weeks",
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.95,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_3148befa598a",
+      "relation_name": "life_stage_of",
+      "rel_desc": "The pupa stage is one of the sequential life stages of the butterfly.",
+      "rel_hint_type": "part_of_sequence",
+      "canonical_rel_name": "is_life_stage_of",
+      "canonical_rel_desc": "Indicates that a specific life stage belongs to and is part of the life cycle of a given organism.",
+      "rel_cls": "life_stage_membership_relation",
+      "rel_cls_group": "IDENTITY",
+      "subject_entity_name": "pupa stage of the butterfly life cycle",
+      "object_entity_name": "butterfly",
+      "subject_class_label": "Butterfly pupa (chrysalis) life stage",
+      "subject_class_group": "TBD",
+      "object_class_label": "Adult butterflies",
+      "object_class_group": "Butterfly Biology & Life Cycle",
+      "qualifiers": {
+        "TemporalQualifier": "between larva and adult butterfly stages",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": "From ... to ...",
+        "OtherQualifier": "SequencePosition: third stage in the described life cycle"
+      },
+      "confidence": 0.86,
+      "remarks": [
+        "Relation generalized from the listed life cycle sequence; life cycle entity itself is not explicitly modeled here.",
+        "Relation generalized from the listed life cycle sequence; life cycle entity itself is not explicitly modeled here.",
+        "Relation generalized from the listed life cycle sequence; life cycle entity itself is not explicitly modeled here."
+      ]
+    },
+    {
+      "relation_id": "RelR_ec1be2a64785",
+      "relation_name": "life_stage_of",
+      "rel_desc": "The adult stage represents the final life stage of the butterfly.",
+      "rel_hint_type": "part_of_sequence",
+      "canonical_rel_name": "is_life_stage_of",
+      "canonical_rel_desc": "Indicates that a specific life stage belongs to and is part of the life cycle of a given organism.",
+      "rel_cls": "life_stage_membership_relation",
+      "rel_cls_group": "TEMPORALITY",
+      "subject_entity_name": "adult stage of a butterfly",
+      "object_entity_name": "butterfly",
+      "subject_class_label": "Adult Butterfly Life Stage",
+      "subject_class_group": "Butterfly Biology & Life Cycle",
+      "object_class_label": "Adult butterflies",
+      "object_class_group": "Butterfly Biology & Life Cycle",
+      "qualifiers": {
+        "TemporalQualifier": "final stage in the life cycle",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": "From ... to ...",
+        "OtherQualifier": "SequencePosition: fourth and final life cycle stage"
+      },
+      "confidence": 0.86,
+      "remarks": [
+        "Sequence context suggests direction stage → organism.",
+        "Sequence context suggests direction stage → organism.",
+        "Sequence context suggests direction stage → organism."
+      ]
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_rel_schema\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_3148befa598a\"\n      ],\n      \"canonical_rel_name\": null,\n      \"canonical_rel_desc\": null,\n      \"rel_cls\": null,\n      \"rel_cls_group\": \"TEMPORALITY\",\n      \"justification\": \"This relation encodes a life stage (pupa) as part of the ordered life cycle of the butterfly, with qualifiers explicitly referencing its position between larva and adult stages. It is already classified under 'life_stage_membership_relation' like the other life stage edges, all of which use rel_cls_group = 'TEMPORALITY'. Using 'IDENTITY' here is inconsistent with those semantically similar relations and under-emphasizes the temporal/sequence aspect, so the group should be normalized to 'TEMPORALITY'.\",\n      \"remark\": \"Normalized rel_cls_group to match other life_stage_membership_relation instances that describe positions within a life cycle sequence.\",\n      \"confidence\": 0.93\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_rel_schema",
+      "args": {
+        "relation_ids": [
+          "RelR_3148befa598a"
+        ],
+        "canonical_rel_name": null,
+        "canonical_rel_desc": null,
+        "rel_cls": null,
+        "rel_cls_group": "TEMPORALITY",
+        "justification": "This relation encodes a life stage (pupa) as part of the ordered life cycle of the butterfly, with qualifiers explicitly referencing its position between larva and adult stages. It is already classified under 'life_stage_membership_relation' like the other life stage edges, all of which use rel_cls_group = 'TEMPORALITY'. Using 'IDENTITY' here is inconsistent with those semantically similar relations and under-emphasizes the temporal/sequence aspect, so the group should be normalized to 'TEMPORALITY'.",
+        "remark": "Normalized rel_cls_group to match other life_stage_membership_relation instances that describe positions within a life cycle sequence.",
+        "confidence": 0.93
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_rel_schema",
+      "relation_ids": [
+        "RelR_3148befa598a"
+      ],
+      "canonical_rel_name": null,
+      "canonical_rel_desc": null,
+      "rel_cls": null,
+      "rel_cls_group": "TEMPORALITY",
+      "new_relation_name": null,
+      "original_relation_name": null,
+      "justification": "This relation encodes a life stage (pupa) as part of the ordered life cycle of the butterfly, with qualifiers explicitly referencing its position between larva and adult stages. It is already classified under 'life_stage_membership_relation' like the other life stage edges, all of which use rel_cls_group = 'TEMPORALITY'. Using 'IDENTITY' here is inconsistent with those semantically similar relations and under-emphasizes the temporal/sequence aspect, so the group should be normalized to 'TEMPORALITY'.",
+      "remark": "Normalized rel_cls_group to match other life_stage_membership_relation instances that describe positions within a life cycle sequence.",
+      "confidence": 0.93
+    }
+  ],
+  "timestamp": "2026-01-02T09:27:45Z"
+}

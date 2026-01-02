@@ -1,0 +1,78 @@
+[
+  {
+    "function": "reassign_entities",
+    "args": {
+      "entity_ids": ["En_a6b6d796"],
+      "from_class_id": "ClsC_45c0e5cc",
+      "to_class_id": "ClsC_9fd36f44",
+      "justification": "The entity 'impact of urban legends on society' is an analytical concept and aligns directly with other analytical members (origins, authenticity, variations) in 'Urban Legend Studies', while the remaining member in its original class is a specific document.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_9fd36f44",
+      "new_name": "Urban Legend Research and Analysis",
+      "new_description": "Concepts concerned with the scholarly and analytical study of urban legends as a narrative and cultural phenomenon, including their origins, authenticity, variations, and social impact.",
+      "new_class_type_hint": "Conceptual Topic",
+      "new_class_group": "Urban Legend Folklore & Scholarship",
+      "remark": null,
+      "justification": "Renaming and slightly broadening the description incorporates the newly reassigned 'impact' concept and better reflects the class as the hub for analytic/scholarly aspects of urban legends, while setting an appropriate shared Class_Group.",
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_45c0e5cc",
+      "new_name": "Urban Legend Essay Document",
+      "new_description": "The specific written essay that explores the origins, impact, and endurance of urban legends, treated as a document-level information artifact.",
+      "new_class_type_hint": "Document",
+      "new_class_group": "Urban Legend Folklore & Scholarship",
+      "remark": "This class now intentionally represents the concrete essay/document only; analytic concepts previously mixed into this class have been moved to the analytic class.",
+      "justification": "After moving the analytic 'impact' concept out, this class is best scoped to the remaining member 'this essay', so renaming, retargeting the type_hint to Document, and assigning the shared Class_Group clarifies its role.",
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_6fe8e45c",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Urban Legend Folklore & Scholarship",
+      "remark": null,
+      "justification": "This class covers urban legends as modern folklore and their spread; it should share a Class_Group with related analytic, compositional, and documentary classes in the same domain.",
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_153ce73f",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Urban Legend Folklore & Scholarship",
+      "remark": null,
+      "justification": "This class captures elements involved in creating urban legends (historical figures, creativity), clearly within the same urban-legend folklore domain, so it should share the common Class_Group.",
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_9fd36f44",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Urban Legend Folklore & Scholarship",
+      "remark": null,
+      "justification": "Explicitly aligns the analytic/研究 class with the shared Class_Group connecting all urban-legend-related conceptual and documentary classes.",
+      "confidence": 0.9
+    }
+  }
+]

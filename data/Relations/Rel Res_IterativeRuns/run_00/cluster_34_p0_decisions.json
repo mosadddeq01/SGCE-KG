@@ -1,0 +1,165 @@
+{
+  "cluster_label": "34_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_beb2ddfd9435",
+      "relation_name": "shares",
+      "rel_desc": "Communities share stories (tales) among members.",
+      "rel_hint_type": "communication",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "communities",
+      "object_entity_name": "stories",
+      "subject_class_label": "Urban Legend Communities",
+      "subject_class_group": "Urban Legends Sociocultural Context",
+      "object_class_label": "Stories and Urban Legends",
+      "object_class_group": "Storytelling & Narrative Dissemination",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": "By sharing these tales",
+        "UncertaintyQualifier": null,
+        "CausalHint": "By",
+        "LogicalMarker": "By",
+        "OtherQualifier": "Effect: promotes community cohesion and protection"
+      },
+      "confidence": 0.97,
+      "remarks": [
+        "Assumes “these tales” refers to the previously mentioned stories/urban legends."
+      ]
+    },
+    {
+      "relation_id": "RelR_bee45680e312",
+      "relation_name": "reaches",
+      "rel_desc": "Stories disseminated online can reach a global audience.",
+      "rel_hint_type": "communication",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "stories",
+      "object_entity_name": "global audience",
+      "subject_class_label": "Stories and Urban Legends",
+      "subject_class_group": "Storytelling & Narrative Dissemination",
+      "object_class_label": "Story and Legend Audiences (including Cautionary Narratives)",
+      "object_class_group": "Storytelling & Narrative Dissemination",
+      "qualifiers": {
+        "TemporalQualifier": "in a matter of seconds",
+        "SpatialQualifier": "global (worldwide)",
+        "OperationalConstraint": "via internet and social media dissemination",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "can (potential reach)",
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "Speed: lightning speed"
+      },
+      "confidence": 0.97,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_beb2ddfd9435\"],\n      \"canonical_rel_name\": \"shares_stories\",\n      \"canonical_rel_desc\": \"Community or group circulates or communicates stories or narratives among its members.\",\n      \"justification\": \"The subject is a community and the object is stories; the description emphasizes that communities share tales among members, so a predicate focused on sharing narratives is appropriate and readable.\",\n      \"remark\": null,\n      \"confidence\": 0.93\n    }\n  },\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_bee45680e312\"],\n      \"canonical_rel_name\": \"reaches_audience\",\n      \"canonical_rel_desc\": \"A story or narrative attains exposure to, or becomes accessible by, an audience.\",\n      \"justification\": \"The subject is stories and the object is a global audience; the description explicitly states that stories disseminated online can reach a global audience, so a predicate expressing audience reach fits best.\",\n      \"remark\": null,\n      \"confidence\": 0.95\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_beb2ddfd9435\", \"RelR_bee45680e312\"],\n      \"rel_cls\": \"narrative_dissemination_relation\",\n      \"justification\": \"Both relations concern how stories are communicated or spread: one describes communities sharing stories, the other stories reaching a global audience. They naturally group into a class about dissemination of narratives.\",\n      \"remark\": null,\n      \"confidence\": 0.95\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_beb2ddfd9435\", \"RelR_bee45680e312\"],\n      \"rel_cls_group\": \"COMMUNICATION\",\n      \"justification\": \"Both predicates describe communication flows involving stories and recipients (community members or a global audience), so they belong in a broad communication-oriented relation group.\",\n      \"remark\": null,\n      \"confidence\": 0.96\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_beb2ddfd9435"
+        ],
+        "canonical_rel_name": "shares_stories",
+        "canonical_rel_desc": "Community or group circulates or communicates stories or narratives among its members.",
+        "justification": "The subject is a community and the object is stories; the description emphasizes that communities share tales among members, so a predicate focused on sharing narratives is appropriate and readable.",
+        "remark": null,
+        "confidence": 0.93
+      }
+    },
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_bee45680e312"
+        ],
+        "canonical_rel_name": "reaches_audience",
+        "canonical_rel_desc": "A story or narrative attains exposure to, or becomes accessible by, an audience.",
+        "justification": "The subject is stories and the object is a global audience; the description explicitly states that stories disseminated online can reach a global audience, so a predicate expressing audience reach fits best.",
+        "remark": null,
+        "confidence": 0.95
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_beb2ddfd9435",
+          "RelR_bee45680e312"
+        ],
+        "rel_cls": "narrative_dissemination_relation",
+        "justification": "Both relations concern how stories are communicated or spread: one describes communities sharing stories, the other stories reaching a global audience. They naturally group into a class about dissemination of narratives.",
+        "remark": null,
+        "confidence": 0.95
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_beb2ddfd9435",
+          "RelR_bee45680e312"
+        ],
+        "rel_cls_group": "COMMUNICATION",
+        "justification": "Both predicates describe communication flows involving stories and recipients (community members or a global audience), so they belong in a broad communication-oriented relation group.",
+        "remark": null,
+        "confidence": 0.96
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_beb2ddfd9435"
+      ],
+      "canonical_rel_name": "shares_stories",
+      "canonical_rel_desc": "Community or group circulates or communicates stories or narratives among its members.",
+      "justification": "The subject is a community and the object is stories; the description emphasizes that communities share tales among members, so a predicate focused on sharing narratives is appropriate and readable.",
+      "remark": null,
+      "confidence": 0.93
+    },
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_bee45680e312"
+      ],
+      "canonical_rel_name": "reaches_audience",
+      "canonical_rel_desc": "A story or narrative attains exposure to, or becomes accessible by, an audience.",
+      "justification": "The subject is stories and the object is a global audience; the description explicitly states that stories disseminated online can reach a global audience, so a predicate expressing audience reach fits best.",
+      "remark": null,
+      "confidence": 0.95
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_beb2ddfd9435",
+        "RelR_bee45680e312"
+      ],
+      "rel_cls": "narrative_dissemination_relation",
+      "justification": "Both relations concern how stories are communicated or spread: one describes communities sharing stories, the other stories reaching a global audience. They naturally group into a class about dissemination of narratives.",
+      "remark": null,
+      "confidence": 0.95
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_beb2ddfd9435",
+        "RelR_bee45680e312"
+      ],
+      "rel_cls_group": "COMMUNICATION",
+      "justification": "Both predicates describe communication flows involving stories and recipients (community members or a global audience), so they belong in a broad communication-oriented relation group.",
+      "remark": null,
+      "confidence": 0.96
+    }
+  ],
+  "timestamp": "2026-01-02T09:15:37Z"
+}

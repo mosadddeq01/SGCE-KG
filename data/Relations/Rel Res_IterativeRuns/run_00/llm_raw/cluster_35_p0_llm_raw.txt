@@ -1,0 +1,67 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_916616899601"],
+      "canonical_rel_name": "can_result_in",
+      "canonical_rel_desc": "Indicates that the subject situation or condition can lead to or result in the object outcome as a potential consequence.",
+      "justification": "This relation expresses that ethical dilemmas in AI development can lead to discriminatory outcomes under certain conditions, which is a causal consequence rather than a generic association. A canonical predicate 'can_result_in' captures this conditional causal effect without baking in qualifiers.",
+      "remark": null,
+      "confidence": 0.86
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_64e9f01e34f7",
+        "RelR_41423e5627ce",
+        "RelR_d8e2a208bac1"
+      ],
+      "canonical_rel_name": "impacts",
+      "canonical_rel_desc": "Indicates that the subject has an effect on the state or well-being of the object, typically in a societal or stakeholder context.",
+      "justification": "All three relations describe how different AI-related phenomena (ethical dilemmas, job displacement, inequality) have effects on communities. They share the same direction and semantics of societal impact, so a single canonical predicate 'impacts' is appropriate.",
+      "remark": null,
+      "confidence": 0.87
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": ["RelR_916616899601"],
+      "rel_cls": "ethical_consequence_relation",
+      "justification": "This relation links an ethical dilemma concept to a harmful outcome (discriminatory outcomes) described as a key consequence. A class focusing on consequences of ethical issues in AI is more specific and informative than a generic consequence or composition class.",
+      "remark": null,
+      "confidence": 0.8
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_64e9f01e34f7",
+        "RelR_41423e5627ce",
+        "RelR_d8e2a208bac1"
+      ],
+      "rel_cls": "societal_impact_relation",
+      "justification": "These relations all represent how AI-related phenomena affect communities and social groups. Grouping them under 'societal_impact_relation' captures that they are about impacts on societal stakeholders, independent of the specific impact type (ethical dilemmas, job displacement, inequality).",
+      "remark": null,
+      "confidence": 0.86
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_916616899601",
+        "RelR_64e9f01e34f7",
+        "RelR_41423e5627ce",
+        "RelR_d8e2a208bac1"
+      ],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "All four relations describe directional effects: ethical dilemmas can result in discriminatory outcomes, and phenomena like job displacement and inequality impact communities. These are causal/impact relations rather than static associations, fitting the CAUSALITY group.",
+      "remark": null,
+      "confidence": 0.88
+    }
+  }
+]

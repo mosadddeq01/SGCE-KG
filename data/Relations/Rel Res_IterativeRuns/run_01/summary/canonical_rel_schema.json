@@ -1,189 +1,1773 @@
 [
   {
-    "canonical_rel_name": "has_metallurgical_structure",
-    "canonical_rel_desc": "Indicates the metallurgical/microstructural phase type (e.g., austenitic, ferritic, martensitic, or mixed) that characterizes a metal or alloy under specified conditions.",
+    "canonical_rel_name": "has_life_cycle_stage_type",
+    "canonical_rel_desc": "Indicates that an organism or taxonomic group has a specific stage type as part of its life cycle (e.g., egg, larva, pupa, adult), without implying a current temporal state of an individual.",
     "rel_cls": [
-      "metallurgical_structure_relation"
+      "life_stage_membership_relation"
     ],
     "rel_cls_group": [
-      "STRUCTURE"
+      "TEMPORALITY"
+    ],
+    "instance_count": 2,
+    "example_relation_ids": [
+      "RelR_59f0cf4b1acd",
+      "RelR_f849b185d587"
+    ]
+  },
+  {
+    "canonical_rel_name": "precedes_in_life_cycle",
+    "canonical_rel_desc": "Indicates that one life stage occurs before another life stage in the ordered life cycle of an organism.",
+    "rel_cls": [
+      "temporal_order_relation"
+    ],
+    "rel_cls_group": [
+      "TEMPORALITY"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_e98df9e87abe"
+    ]
+  },
+  {
+    "canonical_rel_name": "oviposits_on",
+    "canonical_rel_desc": "Indicates that a female organism deposits its eggs on a specific substrate or host.",
+    "rel_cls": [
+      "reproductive_behavior_relation"
+    ],
+    "rel_cls_group": [
+      "AGENCY"
+    ],
+    "instance_count": 2,
+    "example_relation_ids": [
+      "RelR_debb207b84a8",
+      "RelR_52b36be4a12b"
+    ]
+  },
+  {
+    "canonical_rel_name": "provides_protection_from",
+    "canonical_rel_desc": "Indicates that the subject trait, structure, or behavior confers protection to a target (typically the organism or its offspring) by reducing harm or risk posed by the object (e.g., predators, environmental hazards).",
+    "rel_cls": [
+      "defensive_trait_relation"
+    ],
+    "rel_cls_group": [
+      "CAUSALITY"
+    ],
+    "instance_count": 4,
+    "example_relation_ids": [
+      "RelR_cccdc9addccb",
+      "RelR_d155e64427a2",
+      "RelR_1cbc46290af6",
+      "RelR_308cde1adf6b"
+    ]
+  },
+  {
+    "canonical_rel_name": "contributes_to",
+    "canonical_rel_desc": "Indicates that the subject process or activity is a contributing causal factor to the occurrence, maintenance, or magnitude of the object outcome or state.",
+    "rel_cls": [
+      "causal_influence_relation",
+      "ecosystem_function_relation"
+    ],
+    "rel_cls_group": [
+      "CAUSALITY"
+    ],
+    "instance_count": 11,
+    "example_relation_ids": [
+      "RelR_ca823f123534",
+      "RelR_adc14e4f5770",
+      "RelR_0bfb617913f4",
+      "RelR_4cdd2e15f147",
+      "RelR_6f9cfe211b66",
+      "RelR_6bd2ff1decf9",
+      "RelR_8025399d304b",
+      "RelR_d272cd370446",
+      "RelR_f7af10f818b3",
+      "RelR_1ab100f4d650"
+    ]
+  },
+  {
+    "canonical_rel_name": "acts_on_entity",
+    "canonical_rel_desc": "A biological or physical process that directly acts on or alters a material entity as its target or substrate.",
+    "rel_cls": [
+      "biological_process_target_relation"
+    ],
+    "rel_cls_group": [
+      "MODIFICATION"
+    ],
+    "instance_count": 2,
+    "example_relation_ids": [
+      "RelR_0f0eded4976d",
+      "RelR_ff4e4add3a2a"
+    ]
+  },
+  {
+    "canonical_rel_name": "results_in",
+    "canonical_rel_desc": "Denotes that a process causally leads to a specific outcome state, structure, or life stage.",
+    "rel_cls": [
+      "biological_process_outcome_relation"
+    ],
+    "rel_cls_group": [
+      "CAUSALITY"
     ],
     "instance_count": 6,
     "example_relation_ids": [
-      "RelR_c4bd0eecf18e",
-      "RelR_d3bbaeb2df23",
-      "RelR_cc53169ea6f4",
-      "RelR_d39cfe6239e1",
-      "RelR_f33b7d004979",
-      "RelR_d531fbfb64b2"
-    ]
-  },
-  {
-    "canonical_rel_name": "occurs_in_material",
-    "canonical_rel_desc": "Indicates that a microstructure, damage mechanism, process, or product phase occurs in or is present within a given material or alloy family.",
-    "rel_cls": [
-      "phenomenon_occurrence_in_material_relation"
-    ],
-    "rel_cls_group": [
-      "SPATIALITY"
-    ],
-    "instance_count": 7,
-    "example_relation_ids": [
-      "RelR_ccb0e0161188",
-      "RelR_c426520a3c91",
-      "RelR_7c9bc782fce9",
-      "RelR_caa4eec09380",
-      "RelR_704fe359a26f",
-      "RelR_81f81efb1983",
-      "RelR_c686532b051c"
-    ]
-  },
-  {
-    "canonical_rel_name": "has_similar_microstructure_to",
-    "canonical_rel_desc": "Indicates that two material classes are conceptually related because they can exhibit similar or analogous microstructural features under certain conditions.",
-    "rel_cls": [
-      "microstructure_similarity_relation"
-    ],
-    "rel_cls_group": [
-      "STRUCTURE"
-    ],
-    "instance_count": 1,
-    "example_relation_ids": [
-      "RelR_96a7cdcaa41e"
-    ]
-  },
-  {
-    "canonical_rel_name": "is_functional_alternative_to",
-    "canonical_rel_desc": "Indicates that two materials or chemicals can serve the same functional role in a given application and may be substituted for one another.",
-    "rel_cls": [
-      "functional_substitution_relation"
-    ],
-    "rel_cls_group": [
-      "USAGE"
-    ],
-    "instance_count": 1,
-    "example_relation_ids": [
-      "RelR_862422bffa70"
+      "RelR_e79e49632c59",
+      "RelR_78e7393f0734",
+      "RelR_e4a8ef0dc8b3",
+      "RelR_a7c1d8a2d6a4",
+      "RelR_6323e3607881",
+      "RelR_ff3746e8fcf1"
     ]
   },
   {
     "canonical_rel_name": "is_subtype_of",
-    "canonical_rel_desc": "Indicates that the subject is a more specific subtype or category within the broader class represented by the object.",
+    "canonical_rel_desc": "Indicates that the subject is a more specific subtype, kind, or form within the broader category represented by the object.",
     "rel_cls": [
-      "material_taxonomy_relation"
+      "taxonomic_subtype_relation"
     ],
     "rel_cls_group": [
-      "IDENTITY"
+      "HIERARCHY"
     ],
-    "instance_count": 2,
+    "instance_count": 5,
     "example_relation_ids": [
-      "RelR_362f6e35c9d7",
-      "RelR_39cf0ff7f895"
+      "RelR_bf6d759409fa",
+      "RelR_89f260736044",
+      "RelR_8deeeec9c025",
+      "RelR_28d2994fd29a",
+      "RelR_e84d90311c99"
     ]
   },
   {
-    "canonical_rel_name": "contains_alloying_element",
-    "canonical_rel_desc": "Indicates that an alloy or material contains a given chemical element as part of its intentional alloy composition.",
+    "canonical_rel_name": "resembles_in_appearance",
+    "canonical_rel_desc": "Subject is a type of mimicry strategy that visually resembles the object in appearance or form, typically for camouflage or concealment.",
     "rel_cls": [
-      "alloying_element_relation"
+      "mimicry_resemblance_relation"
+    ],
+    "rel_cls_group": [
+      "ASSOCIATION"
+    ],
+    "instance_count": 2,
+    "example_relation_ids": [
+      "RelR_eeeb624488dd",
+      "RelR_6d68f46ba528"
+    ]
+  },
+  {
+    "canonical_rel_name": "has_part",
+    "canonical_rel_desc": "Subject entity includes the object entity as a physical component or substructure.",
+    "rel_cls": [
+      "part_whole_relation"
+    ],
+    "rel_cls_group": [
+      "COMPOSITION"
+    ],
+    "instance_count": 5,
+    "example_relation_ids": [
+      "RelR_7f6ca4cc4b62",
+      "RelR_05a39f53d2c7",
+      "RelR_696ab2250695",
+      "RelR_444956d93803",
+      "RelR_b66dae949bec"
+    ]
+  },
+  {
+    "canonical_rel_name": "is_life_stage_of",
+    "canonical_rel_desc": "Indicates that a specific life stage belongs to and is part of the life cycle of a given organism.",
+    "rel_cls": [
+      "life_stage_membership_relation"
+    ],
+    "rel_cls_group": [
+      "IDENTITY",
+      "TEMPORALITY"
+    ],
+    "instance_count": 4,
+    "example_relation_ids": [
+      "RelR_f21d9e53b149",
+      "RelR_8880eaf69ce7",
+      "RelR_3148befa598a",
+      "RelR_ec1be2a64785"
+    ]
+  },
+  {
+    "canonical_rel_name": "occurs_during",
+    "canonical_rel_desc": "Indicates that a process or transformation takes place during a specific temporal phase or life stage.",
+    "rel_cls": [
+      "life_stage_occurrence_relation"
+    ],
+    "rel_cls_group": [
+      "TEMPORALITY"
+    ],
+    "instance_count": 2,
+    "example_relation_ids": [
+      "RelR_27d033e04d06",
+      "RelR_4545bd36cd1b"
+    ]
+  },
+  {
+    "canonical_rel_name": "causes_morphological_change_in",
+    "canonical_rel_desc": "A biological process causes structural or morphological change, including dissolution or reorganization, in anatomical structures of an organism.",
+    "rel_cls": [
+      "biological_development_causal_relation"
+    ],
+    "rel_cls_group": [
+      "CAUSALITY"
+    ],
+    "instance_count": 2,
+    "example_relation_ids": [
+      "RelR_a2ae78a4dc63",
+      "RelR_30f3df166726"
+    ]
+  },
+  {
+    "canonical_rel_name": "develops_into",
+    "canonical_rel_desc": "Indicates that an anatomical structure or life stage gradually changes and becomes another anatomical structure or life stage over the course of development.",
+    "rel_cls": [
+      "morphological_transformation_relation"
+    ],
+    "rel_cls_group": [
+      "MODIFICATION"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_afe7c3e54753"
+    ]
+  },
+  {
+    "canonical_rel_name": "located_at",
+    "canonical_rel_desc": "Indicates that the subject is situated at, on, or within the spatial region or physical substrate denoted by the object.",
+    "rel_cls": [
+      "spatial_location_relation"
+    ],
+    "rel_cls_group": [
+      "SPATIALITY"
+    ],
+    "instance_count": 3,
+    "example_relation_ids": [
+      "RelR_dc1c54bff52d",
+      "RelR_1e8726328e10",
+      "RelR_1bdfad65e09d"
+    ]
+  },
+  {
+    "canonical_rel_name": "transforms_into",
+    "canonical_rel_desc": "Indicates that a material or structure is converted into another material or structure, emphasizing physical or morphological transformation.",
+    "rel_cls": [
+      "morphological_transformation_relation"
+    ],
+    "rel_cls_group": [
+      "MODIFICATION"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_bc274f2902df"
+    ]
+  },
+  {
+    "canonical_rel_name": "is_developmental_source_of",
+    "canonical_rel_desc": "Indicates that one material or anatomical substrate serves as the developmental source or precursor from which another tissue or anatomical structure forms.",
+    "rel_cls": [
+      "developmental_origin_relation"
+    ],
+    "rel_cls_group": [
+      "CAUSALITY"
+    ],
+    "instance_count": 3,
+    "example_relation_ids": [
+      "RelR_8c14d18c8a06",
+      "RelR_9100d84b8533",
+      "RelR_3d558fb2e335"
+    ]
+  },
+  {
+    "canonical_rel_name": "results_in_life_stage",
+    "canonical_rel_desc": "Indicates that a biological process culminates in or brings about a particular life stage of an organism.",
+    "rel_cls": [
+      "life_cycle_transition_relation"
+    ],
+    "rel_cls_group": [
+      "CAUSALITY"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_f4ce4b8c02c5"
+    ]
+  },
+  {
+    "canonical_rel_name": "in_life_stage",
+    "canonical_rel_desc": "Indicates that an organism or individual is currently in a specific life stage within its life cycle.",
+    "rel_cls": [
+      "life_stage_membership_relation"
+    ],
+    "rel_cls_group": [
+      "TEMPORALITY"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_a6687ed9e9e8"
+    ]
+  },
+  {
+    "canonical_rel_name": "has_state",
+    "canonical_rel_desc": "Indicates that an entity currently possesses or is in a particular physical or experiential state.",
+    "rel_cls": [
+      "entity_state_relation"
+    ],
+    "rel_cls_group": [
+      "ASSOCIATION"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_19adc7bf5116"
+    ]
+  },
+  {
+    "canonical_rel_name": "is_state_of",
+    "canonical_rel_desc": "Links a specific state description to the underlying entity or part whose state it describes.",
+    "rel_cls": [
+      "entity_state_relation"
+    ],
+    "rel_cls_group": [
+      "ASSOCIATION"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_274280acb8b8"
+    ]
+  },
+  {
+    "canonical_rel_name": "participates_in_process",
+    "canonical_rel_desc": "A biological entity (organism, anatomical structure, or life stage) that undergoes or participates in a specific biological process.",
+    "rel_cls": [
+      "biological_process_participation_relation",
+      "process_participation_relation"
+    ],
+    "rel_cls_group": [
+      "AGENCY",
+      "PARTICIPATION"
+    ],
+    "instance_count": 2,
+    "example_relation_ids": [
+      "RelR_56bb3ee39078",
+      "RelR_8ef0f91ac606"
+    ]
+  },
+  {
+    "canonical_rel_name": "induces_state_change_in",
+    "canonical_rel_desc": "Indicates that a process or action causes a change from one state to another in the target entity.",
+    "rel_cls": [
+      "state_transition_relation"
+    ],
+    "rel_cls_group": [
+      "CAUSALITY"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_899c8db84b01"
+    ]
+  },
+  {
+    "canonical_rel_name": "enables",
+    "canonical_rel_desc": "Subject functionally enables or facilitates the occurrence or success of the object process/state, without implying strict determinism.",
+    "rel_cls": [
+      "capability_enabling_relation",
+      "ethical_governance_enabler_relation",
+      "functional_causality_relation"
+    ],
+    "rel_cls_group": [
+      "CAUSALITY"
+    ],
+    "instance_count": 9,
+    "example_relation_ids": [
+      "RelR_10a2451d8473",
+      "RelR_3249723f2ac7",
+      "RelR_7725d379faeb",
+      "RelR_845dea97687a",
+      "RelR_49d258a4616e",
+      "RelR_e54cfb0280b1",
+      "RelR_71e763e0951a",
+      "RelR_713e661e20f5",
+      "RelR_cc803de755e2"
+    ]
+  },
+  {
+    "canonical_rel_name": "performs_activity",
+    "canonical_rel_desc": "Indicates that an agent carries out or performs a specific activity or behavior.",
+    "rel_cls": [
+      "agent_activity_participation_relation"
+    ],
+    "rel_cls_group": [
+      "PARTICIPATION"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_154508b1708b"
+    ]
+  },
+  {
+    "canonical_rel_name": "includes_life_stage_event",
+    "canonical_rel_desc": "Indicates that a particular life stage includes or is characterized by a specific event or milestone.",
+    "rel_cls": [
+      "life_stage_composition_relation"
     ],
     "rel_cls_group": [
       "COMPOSITION"
     ],
     "instance_count": 1,
     "example_relation_ids": [
-      "RelR_f080c3c67c9c"
+      "RelR_b7c3668c1002"
     ]
   },
   {
-    "canonical_rel_name": "resists",
-    "canonical_rel_desc": "Subject material exhibits resistance to the specified corrosion or degradation mechanism under certain conditions.",
+    "canonical_rel_name": "feeds_on",
+    "canonical_rel_desc": "Subject organism consumes the object as a food resource.",
     "rel_cls": [
-      "degradation_mitigation_relation"
+      "feeding_biology_relation"
+    ],
+    "rel_cls_group": [
+      "INTERACTION"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_a6b026f37e4f"
+    ]
+  },
+  {
+    "canonical_rel_name": "used_for_feeding_on",
+    "canonical_rel_desc": "Subject structure is used as an instrument by the organism to feed on the object food resource.",
+    "rel_cls": [
+      "feeding_biology_relation"
+    ],
+    "rel_cls_group": [
+      "USAGE"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_f4ac7c3f9e60"
+    ]
+  },
+  {
+    "canonical_rel_name": "is_produced_by",
+    "canonical_rel_desc": "Indicates that the subject entity is generated or produced by the object entity.",
+    "rel_cls": [
+      "biological_production_relation"
     ],
     "rel_cls_group": [
       "CAUSALITY"
     ],
-    "instance_count": 3,
+    "instance_count": 2,
     "example_relation_ids": [
-      "RelR_7b6d773fe742",
-      "RelR_e71b6b450b41",
-      "RelR_1383761175ce"
+      "RelR_e7db8bd3804c",
+      "RelR_ba24b6e0d3d5"
     ]
   },
   {
-    "canonical_rel_name": "provides_resistance_to",
-    "canonical_rel_desc": "Subject (typically an alloying element or component) causally contributes to the resistance of a material system against a specified corrosion or degradation mechanism.",
+    "canonical_rel_name": "visits",
+    "canonical_rel_desc": "Indicates that an animal visits a plant structure (e.g., flowers), typically for feeding or other resource acquisition.",
     "rel_cls": [
-      "degradation_mitigation_relation"
+      "ecological_interaction_relation"
+    ],
+    "rel_cls_group": [
+      "INTERACTION"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_b06e6a8e25ae"
+    ]
+  },
+  {
+    "canonical_rel_name": "transfers",
+    "canonical_rel_desc": "Indicates that an agent moves or carries biological material (e.g., pollen) from one location or organism to another.",
+    "rel_cls": [
+      "ecological_interaction_relation"
+    ],
+    "rel_cls_group": [
+      "INTERACTION"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_cc74dfa66b87"
+    ]
+  },
+  {
+    "canonical_rel_name": "produces",
+    "canonical_rel_desc": "Indicates that the subject entity generates or produces the object entity as an output or result.",
+    "rel_cls": [
+      "biological_production_relation",
+      "system_output_relation"
+    ],
+    "rel_cls_group": [
+      "CAUSALITY",
+      "PRODUCTION"
+    ],
+    "instance_count": 3,
+    "example_relation_ids": [
+      "RelR_f49ab1c0c1ed",
+      "RelR_93d7c90d9d26",
+      "RelR_3b75b87b80cf"
+    ]
+  },
+  {
+    "canonical_rel_name": "is_food_source_for",
+    "canonical_rel_desc": "Indicates that the subject serves as a food resource for the predator group represented by the object within a trophic interaction.",
+    "rel_cls": [
+      "trophic_interaction_relation"
+    ],
+    "rel_cls_group": [
+      "INTERACTION"
+    ],
+    "instance_count": 3,
+    "example_relation_ids": [
+      "RelR_f2a8e6c98fe9",
+      "RelR_49c5c2326a8b",
+      "RelR_0a35505ddb42"
+    ]
+  },
+  {
+    "canonical_rel_name": "preys_on",
+    "canonical_rel_desc": "Indicates that the subject organism hunts, kills, and consumes the object organism as a food source (predation).",
+    "rel_cls": [
+      "trophic_interaction_relation"
+    ],
+    "rel_cls_group": [
+      "INTERACTION"
+    ],
+    "instance_count": 3,
+    "example_relation_ids": [
+      "RelR_33df4713543b",
+      "RelR_53eb75cf8ccb",
+      "RelR_b5008b5a9bda"
+    ]
+  },
+  {
+    "canonical_rel_name": "has_ecological_role",
+    "canonical_rel_desc": "Indicates that an organism exhibits a specific ecological or functional role within an ecosystem.",
+    "rel_cls": [
+      "ecological_role_relation"
+    ],
+    "rel_cls_group": [
+      "ASSOCIATION"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_9227ea6b14cf"
+    ]
+  },
+  {
+    "canonical_rel_name": "exhibits_behavior",
+    "canonical_rel_desc": "Indicates that an organism or life stage displays or engages in a specific behavior.",
+    "rel_cls": [
+      "reproductive_behavior_relation"
+    ],
+    "rel_cls_group": [
+      "AGENCY"
+    ],
+    "instance_count": 2,
+    "example_relation_ids": [
+      "RelR_7c72519d0c58",
+      "RelR_d7f799ddca5e"
+    ]
+  },
+  {
+    "canonical_rel_name": "has_characteristic_behavior",
+    "canonical_rel_desc": "Indicates that a life stage or entity is defined or typified by a particular behavior.",
+    "rel_cls": [
+      "behavioral_characterization_relation"
+    ],
+    "rel_cls_group": [
+      "ATTRIBUTE"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_1fe1a12fceaa"
+    ]
+  },
+  {
+    "canonical_rel_name": "performs_biological_process",
+    "canonical_rel_desc": "Indicates that an organism actively performs or executes a biological process or behavior.",
+    "rel_cls": [
+      "biological_process_participation_relation"
+    ],
+    "rel_cls_group": [
+      "PARTICIPATION"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_b98bacba7b1b"
+    ]
+  },
+  {
+    "canonical_rel_name": "has_lifespan",
+    "canonical_rel_desc": "Links a biological life stage or organism to its characteristic lifespan or longevity.",
+    "rel_cls": [
+      "life_history_attribute_relation"
+    ],
+    "rel_cls_group": [
+      "ATTRIBUTE"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_6b77872b3c4f"
+    ]
+  },
+  {
+    "canonical_rel_name": "depends_on",
+    "canonical_rel_desc": "Indicates that the value or characteristics of the subject are determined or constrained by the type or identity of the object.",
+    "rel_cls": [
+      "trait_dependency_relation"
     ],
     "rel_cls_group": [
       "CAUSALITY"
     ],
-    "instance_count": 3,
+    "instance_count": 1,
     "example_relation_ids": [
-      "RelR_529c638c696d",
-      "RelR_0f937d199405",
-      "RelR_d3ce89b75d87"
+      "RelR_32b8f325ca74"
     ]
   },
   {
-    "canonical_rel_name": "co_classified_with",
-    "canonical_rel_desc": "Indicates that two concepts are presented as peer categories or sections within the same classification or list (e.g., in a document), without implying causal, hierarchical, or structural dependency.",
+    "canonical_rel_name": "part_of",
+    "canonical_rel_desc": "Indicates that the subject entity is a component, aspect, or subset of the object entity, which represents a larger whole or system.",
     "rel_cls": [
-      "document_coclassification_relation"
+      "part_whole_relation"
+    ],
+    "rel_cls_group": [
+      "COMPOSITION"
+    ],
+    "instance_count": 3,
+    "example_relation_ids": [
+      "RelR_e4d4e35af547",
+      "RelR_a30ba2cfa5a0",
+      "RelR_080adccf8427"
+    ]
+  },
+  {
+    "canonical_rel_name": "facilitates_understanding_of",
+    "canonical_rel_desc": "Indicates that studying or considering an entity helps reveal, explain, or improve understanding of another concept or process.",
+    "rel_cls": [
+      "epistemic_relation"
+    ],
+    "rel_cls_group": [
+      "INFORMATION"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_c052c5237284"
+    ]
+  },
+  {
+    "canonical_rel_name": "exhibits_state",
+    "canonical_rel_desc": "Indicates that an entity manifestly displays or expresses a particular state (e.g., aesthetic, behavioral, or experiential) under certain conditions.",
+    "rel_cls": [
+      "entity_state_relation"
+    ],
+    "rel_cls_group": [
+      "ASSOCIATION"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_1575408e8b17"
+    ]
+  },
+  {
+    "canonical_rel_name": "has_characteristic",
+    "canonical_rel_desc": "Links a group or entity to a defining or typical characteristic it possesses (e.g., interests, fears, values).",
+    "rel_cls": [
+      "psychological_cultural_attribute_relation",
+      "sociocultural_characteristic_relation"
+    ],
+    "rel_cls_group": [
+      "ATTRIBUTE"
+    ],
+    "instance_count": 3,
+    "example_relation_ids": [
+      "RelR_f30e4e7be97d",
+      "RelR_caf1f7b84a8f",
+      "RelR_3a30f8130634"
+    ]
+  },
+  {
+    "canonical_rel_name": "has_psychological_attribute",
+    "canonical_rel_desc": "Links an entity (typically a person or group) to a psychological or mental attribute it exhibits.",
+    "rel_cls": [
+      "psychological_attribute_relation"
+    ],
+    "rel_cls_group": [
+      "ATTRIBUTE"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_ca51ef516e04"
+    ]
+  },
+  {
+    "canonical_rel_name": "has_member",
+    "canonical_rel_desc": "Indicates that the subject, typically a group or community, consists of or includes the members represented by the object.",
+    "rel_cls": [
+      "part_whole_relation"
+    ],
+    "rel_cls_group": [
+      "COMPOSITION"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_db7e9fb51f10"
+    ]
+  },
+  {
+    "canonical_rel_name": "analyzes",
+    "canonical_rel_desc": "A document or essay examines, evaluates, or analyzes a specific topic, phenomenon, or question as part of its thematic scope.",
+    "rel_cls": [
+      "document_thematic_scope_relation"
+    ],
+    "rel_cls_group": [
+      "ASSOCIATION"
+    ],
+    "instance_count": 2,
+    "example_relation_ids": [
+      "RelR_4aa6b71f4024",
+      "RelR_d79e62f5781d"
+    ]
+  },
+  {
+    "canonical_rel_name": "has_research_topic",
+    "canonical_rel_desc": "Indicates that an academic or scholarly field includes a given subject as one of its research topics.",
+    "rel_cls": [
+      "research_field_topic_relation"
+    ],
+    "rel_cls_group": [
+      "ASSOCIATION"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_c40291b62cd5"
+    ]
+  },
+  {
+    "canonical_rel_name": "circulates_in",
+    "canonical_rel_desc": "Indicates that an informational or cultural item circulates, is shared, or is transmitted within a given population or community context.",
+    "rel_cls": [
+      "cultural_dissemination_relation"
+    ],
+    "rel_cls_group": [
+      "DISSEMINATION"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_c379e2c55f1c"
+    ]
+  },
+  {
+    "canonical_rel_name": "has_temporal_origin_in",
+    "canonical_rel_desc": "Indicates that the origins or beginnings of a phenomenon can be traced to a particular historical period or time span.",
+    "rel_cls": [
+      "temporal_origin_relation"
+    ],
+    "rel_cls_group": [
+      "TEMPORALITY"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_3971f06e2bc8"
+    ]
+  },
+  {
+    "canonical_rel_name": "used_for",
+    "canonical_rel_desc": "Indicates that a technology or system is employed to achieve a particular purpose or function.",
+    "rel_cls": [
+      "functional_usage_relation"
+    ],
+    "rel_cls_group": [
+      "USAGE"
+    ],
+    "instance_count": 2,
+    "example_relation_ids": [
+      "RelR_64c60c5bae68",
+      "RelR_ac010e700426"
+    ]
+  },
+  {
+    "canonical_rel_name": "facilitates_dissemination_of",
+    "canonical_rel_desc": "Indicates that the subject enables, accelerates, or otherwise facilitates the dissemination or spread of the object (such as information, stories, or legends).",
+    "rel_cls": [
+      "dissemination_facilitation_relation"
+    ],
+    "rel_cls_group": [
+      "CAUSALITY"
+    ],
+    "instance_count": 7,
+    "example_relation_ids": [
+      "RelR_7dbeb3c42b67",
+      "RelR_fb030b107649",
+      "RelR_fdaaae10ce82",
+      "RelR_34eeafe0fd1f",
+      "RelR_fada4de96048",
+      "RelR_9b6e14480eb6",
+      "RelR_4339d7a83acf"
+    ]
+  },
+  {
+    "canonical_rel_name": "influences_evolution_of",
+    "canonical_rel_desc": "The subject exerts a shaping influence on how the object develops or changes over time.",
+    "rel_cls": [
+      "narrative_evolution_influence_relation"
+    ],
+    "rel_cls_group": [
+      "CAUSALITY"
+    ],
+    "instance_count": 2,
+    "example_relation_ids": [
+      "RelR_74d8341d5616",
+      "RelR_89592968d126"
+    ]
+  },
+  {
+    "canonical_rel_name": "has_spatial_reach",
+    "canonical_rel_desc": "Indicates the geographic extent or coverage area over which a phenomenon, process, or dissemination (such as the spread of urban legends) occurs.",
+    "rel_cls": [
+      "spatial_reach_relation"
+    ],
+    "rel_cls_group": [
+      "SPATIALITY"
+    ],
+    "instance_count": 3,
+    "example_relation_ids": [
+      "RelR_4677bb98b37f",
+      "RelR_db13efaac0da",
+      "RelR_fcf36d6fe4a0"
+    ]
+  },
+  {
+    "canonical_rel_name": "experiences",
+    "canonical_rel_desc": "An experiencer (person or group) undergoes or perceives a stimulus, event, or information.",
+    "rel_cls": [
+      "perception_experience_relation"
+    ],
+    "rel_cls_group": [
+      "PERCEPTION"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_86b4ed237b92"
+    ]
+  },
+  {
+    "canonical_rel_name": "is_about",
+    "canonical_rel_desc": "Indicates that a narrative, document, or discourse segment has a particular topic, entity, or concept as its primary subject matter.",
+    "rel_cls": [
+      "document_topic_relation"
+    ],
+    "rel_cls_group": [
+      "ABOUTNESS"
+    ],
+    "instance_count": 4,
+    "example_relation_ids": [
+      "RelR_dd103285e1e9",
+      "RelR_a840d2c878b2",
+      "RelR_b34bce086863",
+      "RelR_6ae41532555a"
+    ]
+  },
+  {
+    "canonical_rel_name": "is_attached_to",
+    "canonical_rel_desc": "Indicates that the subject object is physically attached or fastened to the object entity in space.",
+    "rel_cls": [
+      "spatial_attachment_relation"
+    ],
+    "rel_cls_group": [
+      "SPATIALITY"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_34f4361eb4ca"
+    ]
+  },
+  {
+    "canonical_rel_name": "is_same_object_as",
+    "canonical_rel_desc": "Indicates that the subject and object refer to the same underlying physical object or token, possibly inferred rather than explicitly stated.",
+    "rel_cls": [
+      "identity_equivalence_relation"
+    ],
+    "rel_cls_group": [
+      "IDENTITY"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_120d15c6d3fd"
+    ]
+  },
+  {
+    "canonical_rel_name": "causes",
+    "canonical_rel_desc": "Indicates that the subject is a causal factor that brings about or significantly contributes to the object event, state, or condition.",
+    "rel_cls": [
+      "causal_effect_relation",
+      "causal_influence_relation"
+    ],
+    "rel_cls_group": [
+      "CAUSALITY"
+    ],
+    "instance_count": 7,
+    "example_relation_ids": [
+      "RelR_aeaaf50e4593",
+      "RelR_04b99699c553",
+      "RelR_5124399b1585",
+      "RelR_638d63a16c3d",
+      "RelR_ed3eeb4689b6",
+      "RelR_ebfbe75d8291",
+      "RelR_d1f03d867e59"
+    ]
+  },
+  {
+    "canonical_rel_name": "is_experienced_by",
+    "canonical_rel_desc": "A stimulus, condition, or abstract state (e.g., fear, threat) is mentally or emotionally experienced or perceived by an agent.",
+    "rel_cls": [
+      "perception_experience_relation"
+    ],
+    "rel_cls_group": [
+      "PERCEPTION"
+    ],
+    "instance_count": 2,
+    "example_relation_ids": [
+      "RelR_06536c8ce183",
+      "RelR_b15398bf7af3"
+    ]
+  },
+  {
+    "canonical_rel_name": "is_core_theme_of",
+    "canonical_rel_desc": "Indicates that the subject is a central recurring theme or motif within the narrative or narrative category represented by the object.",
+    "rel_cls": [
+      "narrative_theme_relation"
+    ],
+    "rel_cls_group": [
+      "ASSOCIATION"
+    ],
+    "instance_count": 2,
+    "example_relation_ids": [
+      "RelR_ef87d6b49abd",
+      "RelR_f2c909613bbb"
+    ]
+  },
+  {
+    "canonical_rel_name": "contrasts_with",
+    "canonical_rel_desc": "Indicates that two narrative elements or concepts are set in opposition or conceptual contrast to highlight their differences.",
+    "rel_cls": [
+      "conceptual_contrast_relation"
     ],
     "rel_cls_group": [
       "ASSOCIATION"
     ],
     "instance_count": 3,
     "example_relation_ids": [
-      "RelR_5360101d9970",
-      "RelR_c1c38551b527",
-      "RelR_008fca8f9ba4"
+      "RelR_885b21d7168e",
+      "RelR_6386dc2f5ec2",
+      "RelR_d2d23f569a3e"
     ]
   },
   {
-    "canonical_rel_name": "alters_microstructure_of",
-    "canonical_rel_desc": "A process or condition changes the microstructure of a material or alloy (e.g., phase distribution, morphology, or microstructural constituents).",
+    "canonical_rel_name": "is_instance_of",
+    "canonical_rel_desc": "The subject is a specific example or member of the broader category represented by the object.",
     "rel_cls": [
-      "microstructural_transformation_relation"
+      "type_instance_relation"
     ],
     "rel_cls_group": [
-      "MODIFICATION"
+      "IDENTITY"
     ],
     "instance_count": 2,
     "example_relation_ids": [
-      "RelR_338e547f321f",
-      "RelR_29b3c1c25656"
+      "RelR_594935acd492",
+      "RelR_6e87b5266fcd"
     ]
   },
   {
-    "canonical_rel_name": "forms_microstructural_constituent",
-    "canonical_rel_desc": "A process or transformation leads to the formation of a specific microstructural constituent or feature within a material (e.g., graphite nodules, carbides, precipitates).",
+    "canonical_rel_name": "influences_belief_in",
+    "canonical_rel_desc": "The subject affects the audience's belief or questioning regarding the existence or reality of the object.",
     "rel_cls": [
-      "microstructural_transformation_relation"
-    ],
-    "rel_cls_group": [
-      "MODIFICATION"
-    ],
-    "instance_count": 1,
-    "example_relation_ids": [
-      "RelR_a45fb4ca81de"
-    ]
-  },
-  {
-    "canonical_rel_name": "prevents",
-    "canonical_rel_desc": "Subject inhibits or effectively eliminates the occurrence of the specified degradation or metallurgical process under the stated conditions.",
-    "rel_cls": [
-      "degradation_mitigation_relation"
+      "conceptual_influence_relation"
     ],
     "rel_cls_group": [
       "CAUSALITY"
     ],
     "instance_count": 1,
     "example_relation_ids": [
-      "RelR_4fb5553cfff8"
+      "RelR_51fcfa0b345f"
+    ]
+  },
+  {
+    "canonical_rel_name": "represents",
+    "canonical_rel_desc": "The subject narrative or tale symbolically represents or mirrors the fears, anxieties, or concerns present in a society.",
+    "rel_cls": [
+      "sociocultural_representation_relation"
+    ],
+    "rel_cls_group": [
+      "REPRESENTATION"
+    ],
+    "instance_count": 2,
+    "example_relation_ids": [
+      "RelR_80f0137783d6",
+      "RelR_db7229766640"
+    ]
+  },
+  {
+    "canonical_rel_name": "thematically_associated_with",
+    "canonical_rel_desc": "Indicates that two entities are linked through narrative, emotional, or conceptual association within a thematic or story context, without asserting direct causality.",
+    "rel_cls": [
+      "narrative_theme_association"
+    ],
+    "rel_cls_group": [
+      "ASSOCIATION"
+    ],
+    "instance_count": 3,
+    "example_relation_ids": [
+      "RelR_075ebdb87245",
+      "RelR_c1841ee55e50",
+      "RelR_37ff8ff0fa34"
+    ]
+  },
+  {
+    "canonical_rel_name": "targets",
+    "canonical_rel_desc": "Indicates that an agent intentionally selects another party as a victim or focus for harmful or exploitative actions.",
+    "rel_cls": [
+      "threat_vulnerability_relation"
+    ],
+    "rel_cls_group": [
+      "CAUSALITY"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_cd330920c8f9"
+    ]
+  },
+  {
+    "canonical_rel_name": "uses_as_bait",
+    "canonical_rel_desc": "Indicates that the subject uses the object specifically as bait to attract or lure a target.",
+    "rel_cls": [
+      "functional_usage_relation"
+    ],
+    "rel_cls_group": [
+      "USAGE"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_32576799761a"
+    ]
+  },
+  {
+    "canonical_rel_name": "lures",
+    "canonical_rel_desc": "Indicates that the subject functions as an enticing or attractive element that draws the attention, approach, or presence of the object, often enabling a subsequent harmful or instrumental action.",
+    "rel_cls": [
+      "enticement_relation"
+    ],
+    "rel_cls_group": [
+      "CAUSALITY"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_c1327ce70154"
+    ]
+  },
+  {
+    "canonical_rel_name": "warns",
+    "canonical_rel_desc": "Indicates that the subject issues a warning or cautionary message directed toward the object.",
+    "rel_cls": [
+      "warning_communication_relation"
+    ],
+    "rel_cls_group": [
+      "COMMUNICATION"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_c73faab887e3"
+    ]
+  },
+  {
+    "canonical_rel_name": "warns_about",
+    "canonical_rel_desc": "Indicates that a narrative or communicative artifact serves to alert an audience to specific risks, harms, or dangers.",
+    "rel_cls": [
+      "warning_communication_relation"
+    ],
+    "rel_cls_group": [
+      "COMMUNICATION"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_bd10a931517c"
+    ]
+  },
+  {
+    "canonical_rel_name": "depicts",
+    "canonical_rel_desc": "The subject narrative portrays, includes, or represents the object as part of its narrative content (e.g., characters, threats, cursed items, or backstories).",
+    "rel_cls": [
+      "narrative_depiction_relation"
+    ],
+    "rel_cls_group": [
+      "REPRESENTATION"
+    ],
+    "instance_count": 4,
+    "example_relation_ids": [
+      "RelR_b88daef44b0e",
+      "RelR_8232bcad3c55",
+      "RelR_407dabae2e6c",
+      "RelR_92d513d2058e"
+    ]
+  },
+  {
+    "canonical_rel_name": "shares_stories",
+    "canonical_rel_desc": "Community or group circulates or communicates stories or narratives among its members.",
+    "rel_cls": [
+      "narrative_dissemination_relation"
+    ],
+    "rel_cls_group": [
+      "COMMUNICATION"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_beb2ddfd9435"
+    ]
+  },
+  {
+    "canonical_rel_name": "protects",
+    "canonical_rel_desc": "Subject safeguards or provides protective benefit to the object (actual or intended protection), often against implicit or explicit threats.",
+    "rel_cls": [
+      "protection_and_safety_relation"
+    ],
+    "rel_cls_group": [
+      "AGENCY"
+    ],
+    "instance_count": 2,
+    "example_relation_ids": [
+      "RelR_19b464b66a10",
+      "RelR_46c2cd35cb2f"
+    ]
+  },
+  {
+    "canonical_rel_name": "seeks_protection_from",
+    "canonical_rel_desc": "Subject seeks or attempts to obtain protection against or from the object, which is construed as a source of potential harm or threat.",
+    "rel_cls": [
+      "protection_and_safety_relation"
+    ],
+    "rel_cls_group": [
+      "AGENCY"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_a4ed9f8ffbd9"
+    ]
+  },
+  {
+    "canonical_rel_name": "is_threatened_by",
+    "canonical_rel_desc": "Indicates that an entity is exposed or vulnerable to potential harm or danger from another entity, whether the threat is real or perceived.",
+    "rel_cls": [
+      "threat_vulnerability_relation"
+    ],
+    "rel_cls_group": [
+      "CAUSALITY"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_71ee6bafe0a3"
+    ]
+  },
+  {
+    "canonical_rel_name": "reaches_audience",
+    "canonical_rel_desc": "A story or narrative attains exposure to, or becomes accessible by, an audience.",
+    "rel_cls": [
+      "narrative_dissemination_relation"
+    ],
+    "rel_cls_group": [
+      "COMMUNICATION"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_bee45680e312"
+    ]
+  },
+  {
+    "canonical_rel_name": "becomes_aware_of",
+    "canonical_rel_desc": "Indicates that the subject attains awareness or recognition of the object.",
+    "rel_cls": [
+      "awareness_relation"
+    ],
+    "rel_cls_group": [
+      "COGNITION"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_4071c1502070"
+    ]
+  },
+  {
+    "canonical_rel_name": "occurs_in_context_of",
+    "canonical_rel_desc": "Indicates that the subject phenomenon, process, or issue takes place within, or is embedded in, the broader contextual setting denoted by the object (e.g., societal, organizational, cultural, or procedural context).",
+    "rel_cls": [
+      "contextual_occurrence_relation",
+      "contextual_scope_relation"
+    ],
+    "rel_cls_group": [
+      "CONTEXTUALITY"
+    ],
+    "instance_count": 3,
+    "example_relation_ids": [
+      "RelR_dcb2d48745f8",
+      "RelR_c4439d90023b",
+      "RelR_39e8b8652c3f"
+    ]
+  },
+  {
+    "canonical_rel_name": "conceptually_related_to",
+    "canonical_rel_desc": "Indicates a non-causal, conceptual association between two ideas or domains.",
+    "rel_cls": [
+      "conceptual_association_relation"
+    ],
+    "rel_cls_group": [
+      "ASSOCIATION"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_ec56bbbee845"
+    ]
+  },
+  {
+    "canonical_rel_name": "influences",
+    "canonical_rel_desc": "Indicates that the subject affects, shapes, or constrains the nature, degree, or assessment of the object.",
+    "rel_cls": [
+      "conceptual_influence_relation"
+    ],
+    "rel_cls_group": [
+      "CAUSALITY"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_c9efa6406fe6"
+    ]
+  },
+  {
+    "canonical_rel_name": "provides_evidence_for",
+    "canonical_rel_desc": "Indicates that the subject serves as factual or evidential support for the credibility or authenticity of the object claim or narrative.",
+    "rel_cls": [
+      "evidential_support_relation"
+    ],
+    "rel_cls_group": [
+      "EPISTEMIC"
+    ],
+    "instance_count": 2,
+    "example_relation_ids": [
+      "RelR_1f6b21b29ef8",
+      "RelR_a0dc2bc821ef"
+    ]
+  },
+  {
+    "canonical_rel_name": "generates",
+    "canonical_rel_desc": "Indicates that the subject gives rise to or generates the existence or proliferation of the object.",
+    "rel_cls": [
+      "urban_legend_causation_relation"
+    ],
+    "rel_cls_group": [
+      "CAUSALITY"
+    ],
+    "instance_count": 2,
+    "example_relation_ids": [
+      "RelR_3ecb009a61a4",
+      "RelR_fb7da9f85b22"
+    ]
+  },
+  {
+    "canonical_rel_name": "separates_from",
+    "canonical_rel_desc": "Indicates that a conceptual or categorical boundary separates the subject from the object, distinguishing them as different domains or categories.",
+    "rel_cls": [
+      "conceptual_boundary_relation"
+    ],
+    "rel_cls_group": [
+      "ASSOCIATION"
+    ],
+    "instance_count": 2,
+    "example_relation_ids": [
+      "RelR_5bd6a54c04d7",
+      "RelR_e55279202a09"
+    ]
+  },
+  {
+    "canonical_rel_name": "is_blurred_within_context_of",
+    "canonical_rel_desc": "Indicates that the conceptual boundary represented by the subject becomes indistinct or unclear within the narrative or situational context represented by the object.",
+    "rel_cls": [
+      "narrative_truth_boundary_relation"
+    ],
+    "rel_cls_group": [
+      "MODIFICATION"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_f2ccdde0554e"
+    ]
+  },
+  {
+    "canonical_rel_name": "corresponds_to",
+    "canonical_rel_desc": "Indicates that the subject stands in a correspondence relation to the object, typically aligning or matching it in meaning or truth-value, without strict identity of reference.",
+    "rel_cls": [
+      "correspondence_relation"
+    ],
+    "rel_cls_group": [
+      "ASSOCIATION"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_169c41631aab"
+    ]
+  },
+  {
+    "canonical_rel_name": "reflects_on",
+    "canonical_rel_desc": "The subject (e.g., listeners) cognitively contemplates or ponders the truth or implications of the object narrative content.",
+    "rel_cls": [
+      "cognitive_engagement_relation"
+    ],
+    "rel_cls_group": [
+      "COGNITION"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_b46320c9a221"
+    ]
+  },
+  {
+    "canonical_rel_name": "engages_audience",
+    "canonical_rel_desc": "The subject (a story form or folklore domain) captures the attention or interest of the audience.",
+    "rel_cls": [
+      "audience_engagement_relation"
+    ],
+    "rel_cls_group": [
+      "INTERACTION"
+    ],
+    "instance_count": 2,
+    "example_relation_ids": [
+      "RelR_c5e3f0db3a43",
+      "RelR_adb4a392988b"
+    ]
+  },
+  {
+    "canonical_rel_name": "belongs_to",
+    "canonical_rel_desc": "Indicates that the subject is owned by, attributed to, or collectively associated with the object (for example, fears belonging to a particular society).",
+    "rel_cls": [
+      "possession_control_relation"
+    ],
+    "rel_cls_group": [
+      "AGENCY"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_a14119185038"
+    ]
+  },
+  {
+    "canonical_rel_name": "sustains",
+    "canonical_rel_desc": "Indicates that the subject helps maintain or uphold the ongoing existence, intensity, or vitality of the object over time.",
+    "rel_cls": [
+      "urban_legend_causation_relation"
+    ],
+    "rel_cls_group": [
+      "CAUSALITY"
+    ],
+    "instance_count": 2,
+    "example_relation_ids": [
+      "RelR_3c56e82ea561",
+      "RelR_3084235b83bc"
+    ]
+  },
+  {
+    "canonical_rel_name": "is_research_topic_of",
+    "canonical_rel_desc": "Indicates that a subject is a research topic within a specified academic or scholarly field.",
+    "rel_cls": [
+      "research_field_topic_relation"
+    ],
+    "rel_cls_group": [
+      "ASSOCIATION"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_cfe0dae41fe6"
+    ]
+  },
+  {
+    "canonical_rel_name": "includes_ethical_issue",
+    "canonical_rel_desc": "The subject is a broader set or category of ethical dilemmas in AI development that includes the object as a specific ethical issue or example.",
+    "rel_cls": [
+      "ethical_issue_membership_relation"
+    ],
+    "rel_cls_group": [
+      "ASSOCIATION"
+    ],
+    "instance_count": 4,
+    "example_relation_ids": [
+      "RelR_09bf81ea7663",
+      "RelR_90a508212138",
+      "RelR_9b870085ce73",
+      "RelR_de6518c56893"
+    ]
+  },
+  {
+    "canonical_rel_name": "processes",
+    "canonical_rel_desc": "Indicates that a system operates on or analyzes a data asset as part of its data processing activities.",
+    "rel_cls": [
+      "data_handling_relation"
+    ],
+    "rel_cls_group": [
+      "USAGE"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_e5f1d871d4ab"
+    ]
+  },
+  {
+    "canonical_rel_name": "poses_risk_of",
+    "canonical_rel_desc": "Indicates that the use or presence of the subject creates a possibility or risk of the object outcome, without implying deterministic causation.",
+    "rel_cls": [
+      "risk_relation"
+    ],
+    "rel_cls_group": [
+      "CAUSALITY"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_ab8fbe9f47d5"
+    ]
+  },
+  {
+    "canonical_rel_name": "may_commit",
+    "canonical_rel_desc": "Indicates that the subject is a potential actor that may commit or engage in the specified abusive or harmful act, without asserting that it necessarily occurs.",
+    "rel_cls": [
+      "harm_perpetrator_role_relation"
+    ],
+    "rel_cls_group": [
+      "AGENCY"
+    ],
+    "instance_count": 2,
+    "example_relation_ids": [
+      "RelR_520597a97b34",
+      "RelR_fae8cebd0ec0"
+    ]
+  },
+  {
+    "canonical_rel_name": "used_by",
+    "canonical_rel_desc": "Indicates that an actor or institution deploys or makes use of a technology or system.",
+    "rel_cls": [
+      "deployment_relation"
+    ],
+    "rel_cls_group": [
+      "USAGE"
+    ],
+    "instance_count": 2,
+    "example_relation_ids": [
+      "RelR_b1c974321b06",
+      "RelR_50b5bf3bd4ea"
+    ]
+  },
+  {
+    "canonical_rel_name": "trained_on",
+    "canonical_rel_desc": "Indicates that the subject AI system has been fitted or learned from the dataset represented by the object during a training process.",
+    "rel_cls": [
+      "machine_learning_training_relation"
+    ],
+    "rel_cls_group": [
+      "USAGE"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_9052b34bdf1b"
+    ]
+  },
+  {
+    "canonical_rel_name": "is_problematic_state_of",
+    "canonical_rel_desc": "The subject is a specific problematic condition or state that the object can be in.",
+    "rel_cls": [
+      "data_quality_issue_relation"
+    ],
+    "rel_cls_group": [
+      "QUALITY"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_53b3fc460723"
+    ]
+  },
+  {
+    "canonical_rel_name": "can_result_in",
+    "canonical_rel_desc": "Indicates that the subject situation or condition can lead to or result in the object outcome as a potential consequence.",
+    "rel_cls": [
+      "ethical_consequence_relation"
+    ],
+    "rel_cls_group": [
+      "CAUSALITY"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_916616899601"
+    ]
+  },
+  {
+    "canonical_rel_name": "is_based_on_attribute",
+    "canonical_rel_desc": "Connects an act or pattern of discrimination to the protected attribute (e.g., race, gender) that forms the basis or target of that discrimination.",
+    "rel_cls": [
+      "discrimination_basis_relation"
+    ],
+    "rel_cls_group": [
+      "CAUSALITY"
+    ],
+    "instance_count": 2,
+    "example_relation_ids": [
+      "RelR_58dfeb5ae531",
+      "RelR_8fbdff5c20e9"
+    ]
+  },
+  {
+    "canonical_rel_name": "used_in",
+    "canonical_rel_desc": "Indicates that the subject is used within, or embedded in, a process, context, or larger system represented by the object.",
+    "rel_cls": [
+      "functional_usage_relation"
+    ],
+    "rel_cls_group": [
+      "USAGE"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_0646eea3e97d"
+    ]
+  },
+  {
+    "canonical_rel_name": "influences_fairness_and_equity_outcomes",
+    "canonical_rel_desc": "Design and bias-handling choices in AI systems causally influence fairness- and equity-related outcomes in decision-making contexts.",
+    "rel_cls": [
+      "ethical_outcome_influence_relation"
+    ],
+    "rel_cls_group": [
+      "CAUSALITY"
+    ],
+    "instance_count": 2,
+    "example_relation_ids": [
+      "RelR_8057359329a5",
+      "RelR_80705e40909c"
+    ]
+  },
+  {
+    "canonical_rel_name": "aims_to_achieve",
+    "canonical_rel_desc": "Indicates that a process, policy, or framework is designed or expected to pursue a particular normative objective or outcome.",
+    "rel_cls": [
+      "normative_objective_relation"
+    ],
+    "rel_cls_group": [
+      "AGENCY"
+    ],
+    "instance_count": 2,
+    "example_relation_ids": [
+      "RelR_0f91d1f52c0b",
+      "RelR_36aed48fcc27"
+    ]
+  },
+  {
+    "canonical_rel_name": "requires",
+    "canonical_rel_desc": "Indicates that the subject concept or system depends on the existence or establishment of the object as a necessary condition (often normative or constitutive).",
+    "rel_cls": [
+      "requirement_dependency_relation"
+    ],
+    "rel_cls_group": [
+      "REQUIREMENT"
+    ],
+    "instance_count": 2,
+    "example_relation_ids": [
+      "RelR_075d0f4220f8",
+      "RelR_4fbe31eba374"
+    ]
+  },
+  {
+    "canonical_rel_name": "is_candidate_bearer_of_accountability",
+    "canonical_rel_desc": "Indicates that the subject is considered a possible bearer of accountability or responsibility for outcomes associated with an AI system, without asserting that accountability is actually assigned.",
+    "rel_cls": [
+      "accountability_allocation_relation"
+    ],
+    "rel_cls_group": [
+      "RESPONSIBILITY"
+    ],
+    "instance_count": 3,
+    "example_relation_ids": [
+      "RelR_9d3a9ef2a5d9",
+      "RelR_49fd09faa9f1",
+      "RelR_a15d917b6384"
+    ]
+  },
+  {
+    "canonical_rel_name": "promotes_accountability",
+    "canonical_rel_desc": "Indicates that the subject (such as a guideline or regulation) is designed to foster or ensure proper accountability in the context of AI development and deployment.",
+    "rel_cls": [
+      "accountability_support_relation"
+    ],
+    "rel_cls_group": [
+      "CAUSALITY"
+    ],
+    "instance_count": 2,
+    "example_relation_ids": [
+      "RelR_30238b1486db",
+      "RelR_bf4f5f04efec"
+    ]
+  },
+  {
+    "canonical_rel_name": "applies_to",
+    "canonical_rel_desc": "Indicates that a normative or regulatory instrument (e.g., guidelines, regulations, standards) governs, constrains, or is intended to cover the specified systems, entities, or activities.",
+    "rel_cls": [
+      "governance_scope_relation"
+    ],
+    "rel_cls_group": [
+      "GOVERNANCE"
+    ],
+    "instance_count": 2,
+    "example_relation_ids": [
+      "RelR_76a1e8b0c398",
+      "RelR_6251113acc95"
+    ]
+  },
+  {
+    "canonical_rel_name": "concerns",
+    "canonical_rel_desc": "Indicates that an ethical issue or dilemma is about or pertains to a particular system, domain, or context.",
+    "rel_cls": [
+      "ethical_dilemma_scope_relation"
+    ],
+    "rel_cls_group": [
+      "ABOUTNESS"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_7737479c6211"
+    ]
+  },
+  {
+    "canonical_rel_name": "reduces_uptake_of",
+    "canonical_rel_desc": "Subject causally reduces or hinders the uptake (acceptance or adoption) of the object.",
+    "rel_cls": [
+      "technology_uptake_impact_relation"
+    ],
+    "rel_cls_group": [
+      "CAUSALITY"
+    ],
+    "instance_count": 2,
+    "example_relation_ids": [
+      "RelR_0b846e20de40",
+      "RelR_39e6789e8f52"
+    ]
+  },
+  {
+    "canonical_rel_name": "is_ethical_issue_in",
+    "canonical_rel_desc": "The subject is a specific ethical issue or concern that is part of, or discussed within, the broader set or category of ethical dilemmas in AI development (the object).",
+    "rel_cls": [
+      "ethical_issue_membership_relation"
+    ],
+    "rel_cls_group": [
+      "ASSOCIATION"
+    ],
+    "instance_count": 3,
+    "example_relation_ids": [
+      "RelR_28ef1083b1df",
+      "RelR_7a7aebe13364",
+      "RelR_a1ca51df1771"
+    ]
+  },
+  {
+    "canonical_rel_name": "is_contextual_factor_in",
+    "canonical_rel_desc": "Indicates that the subject impact or consideration functions as a contextual factor that must be weighed within the given ethical dilemma or decision context.",
+    "rel_cls": [
+      "ethical_dilemma_context_relation"
+    ],
+    "rel_cls_group": [
+      "CONTEXTUALITY"
+    ],
+    "instance_count": 2,
+    "example_relation_ids": [
+      "RelR_cd1c166e9cab",
+      "RelR_e90243220322"
+    ]
+  },
+  {
+    "canonical_rel_name": "possesses",
+    "canonical_rel_desc": "Indicates that the subject holds, owns, or has control over the object (which can be a tangible asset, power, or an abstract attribute such as fears or anxieties).",
+    "rel_cls": [
+      "possession_control_relation"
+    ],
+    "rel_cls_group": [
+      "AGENCY"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_331e8dc16747"
+    ]
+  },
+  {
+    "canonical_rel_name": "mitigated_by",
+    "canonical_rel_desc": "Indicates that a problem, risk, or dilemma is addressed, reduced, or managed through the application of a given principle, method, or mechanism.",
+    "rel_cls": [
+      "governance_and_mitigation_relation"
+    ],
+    "rel_cls_group": [
+      "GOVERNANCE"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_1b2ca8f5ae09"
+    ]
+  },
+  {
+    "canonical_rel_name": "prioritizes",
+    "canonical_rel_desc": "Indicates that a principle, policy, or system gives higher normative importance to a particular value or outcome when guiding decisions or behavior.",
+    "rel_cls": [
+      "normative_objective_relation"
+    ],
+    "rel_cls_group": [
+      "AGENCY"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_7ff9dec3eb1e"
+    ]
+  },
+  {
+    "canonical_rel_name": "impacts",
+    "canonical_rel_desc": "Indicates that the subject has an effect on the state or well-being of the object, typically in a societal or stakeholder context.",
+    "rel_cls": [
+      "societal_impact_relation"
+    ],
+    "rel_cls_group": [
+      "CAUSALITY"
+    ],
+    "instance_count": 3,
+    "example_relation_ids": [
+      "RelR_64e9f01e34f7",
+      "RelR_41423e5627ce",
+      "RelR_d8e2a208bac1"
+    ]
+  },
+  {
+    "canonical_rel_name": "used_to_achieve",
+    "canonical_rel_desc": "Indicates that the subject (a mechanism, guideline, or practice) is used as a means to work towards achieving the object outcome or potential.",
+    "rel_cls": [
+      "purpose_or_goal_relation"
+    ],
+    "rel_cls_group": [
+      "USAGE"
+    ],
+    "instance_count": 3,
+    "example_relation_ids": [
+      "RelR_9859e8944906",
+      "RelR_048be4f78037",
+      "RelR_54ff370232eb"
+    ]
+  },
+  {
+    "canonical_rel_name": "mitigates_harm",
+    "canonical_rel_desc": "Indicates that the subject causally reduces the likelihood, severity, or impact of the specified harms, without necessarily eliminating them.",
+    "rel_cls": [
+      "risk_mitigation_relation"
+    ],
+    "rel_cls_group": [
+      "CAUSALITY"
+    ],
+    "instance_count": 4,
+    "example_relation_ids": [
+      "RelR_c5e30ba1b1f6",
+      "RelR_09dc69540268",
+      "RelR_91a7d088fb66",
+      "RelR_ab59a77886f4"
     ]
   }
 ]

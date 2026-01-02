@@ -1,0 +1,238 @@
+{
+  "cluster_label": 11,
+  "cluster_classes": [
+    {
+      "candidate_id": "ClsC_fb0a1cd7",
+      "class_label": "Plant Reproductive Structures",
+      "class_description": "Components of flowering plants directly involved in sexual reproduction and pollination, including whole flowers and the pollen grains they produce and exchange.",
+      "class_type_hint": "Biological Structure",
+      "class_group": "Flowering Plant Reproduction & Pollination",
+      "confidence": 0.86,
+      "evidence_excerpt": "Reproductive structures of plants that provide nectar and pollen… specific reproductive material moved by butterflies among flowers.",
+      "member_ids": [
+        "En_48e92359",
+        "En_c728532d"
+      ],
+      "members": [
+        {
+          "id": "En_48e92359",
+          "entity_name": "flowers",
+          "entity_description": "Reproductive structures of plants that provide nectar and pollen and are visited by butterflies.",
+          "entity_type_hint": "Structure"
+        },
+        {
+          "id": "En_c728532d",
+          "entity_name": "pollen",
+          "entity_description": "Reproductive plant grains that butterflies transfer between flowers during pollination.",
+          "entity_type_hint": "Material"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsR_9ddc1c4b",
+      "class_label": "Pollination (Flowering Plant Process)",
+      "class_description": "The biological process in which pollen is transferred between flowers, enabling sexual reproduction in flowering plants, often facilitated by animals such as butterflies.",
+      "class_type_hint": "Biological Process",
+      "class_group": "Flowering Plant Reproduction & Pollination",
+      "confidence": 0.86,
+      "evidence_excerpt": "Pollination transfers pollen between flowers, enabling plant reproduction; plants are the organisms whose reproduction is assisted.",
+      "member_ids": [
+        "Can_0a5c9807"
+      ],
+      "members": [
+        {
+          "id": "Can_0a5c9807",
+          "entity_name": "pollination",
+          "entity_description": "Biological process in which pollen is transferred between flowers, enabling plant reproduction, often facilitated by animals such as butterflies.",
+          "entity_type_hint": "Process"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsR_2f847eb5",
+      "class_label": "Flowering Plants (Organisms)",
+      "class_description": "Organisms that reproduce via flowers and benefit from pollination, including those whose reproduction is assisted by butterflies.",
+      "class_type_hint": "Organism Group",
+      "class_group": "Flowering Plant Reproduction & Pollination",
+      "confidence": 0.86,
+      "evidence_excerpt": "Pollination transfers pollen between flowers, enabling plant reproduction; plants are the organisms whose reproduction is assisted.",
+      "member_ids": [
+        "En_d40fcccb"
+      ],
+      "members": [
+        {
+          "id": "En_d40fcccb",
+          "entity_name": "plants",
+          "entity_description": "Organisms that reproduce via flowers and benefit from pollination by butterflies.",
+          "entity_type_hint": "Organism"
+        }
+      ],
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"split_class\",\n    \"args\": {\n      \"source_class_id\": \"ClsC_fb0a1cd7\",\n      \"splits\": [\n        {\n          \"name\": \"Flowers (Plant Reproductive Structures)\",\n          \"description\": \"Flowers as the reproductive structures of plants that provide nectar and pollen and are visited by pollinators such as butterflies.\",\n          \"class_type_hint\": \"Biological Structure\",\n          \"member_ids\": [\"En_48e92359\"],\n          \"provisional_id\": \"SPLIT_ClsC_fb0a1cd7_FLOWERS\"\n        },\n        {\n          \"name\": \"Pollen (Plant Reproductive Material)\",\n          \"description\": \"Pollen grains as the reproductive material of plants that are transferred between flowers during pollination.\",\n          \"class_type_hint\": \"Biological Material\",\n          \"member_ids\": [\"En_c728532d\"],\n          \"provisional_id\": \"SPLIT_ClsC_fb0a1cd7_POLLEN\"\n        }\n      ],\n      \"justification\": \"The original class mixes a structural entity (flowers) and a particulate reproductive material (pollen) with different entity_type_hints, so splitting improves semantic coherence between structures and materials.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"SPLIT_ClsC_fb0a1cd7_FLOWERS\",\n      \"new_name\": \"Flowers (Plant Reproductive Structures)\",\n      \"new_description\": \"Flowers as the reproductive structures of plants that provide nectar and pollen and are visited by pollinators such as butterflies.\",\n      \"new_class_type_hint\": \"Biological Structure\",\n      \"new_class_group\": \"Flowering Plant Reproduction (Plants, Structures, Materials & Processes)\",\n      \"remark\": null,\n      \"justification\": \"Assign a precise name, type, and shared Class_Group reflecting that flowers are distinct plant structures within the broader flowering plant reproduction context.\",\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"SPLIT_ClsC_fb0a1cd7_POLLEN\",\n      \"new_name\": \"Pollen (Plant Reproductive Material)\",\n      \"new_description\": \"Pollen grains as the reproductive material of plants that are transferred between flowers during pollination, often by pollinators such as butterflies.\",\n      \"new_class_type_hint\": \"Biological Material\",\n      \"new_class_group\": \"Flowering Plant Reproduction (Plants, Structures, Materials & Processes)\",\n      \"remark\": null,\n      \"justification\": \"Clarify that this class is for pollen as a reproductive material, not a structure, and align it with the same overarching flowering plant reproduction Class_Group.\",\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsR_9ddc1c4b\",\n      \"new_name\": \"Pollination (Flowering Plant Process)\",\n      \"new_description\": null,\n      \"new_class_type_hint\": \"Biological Process\",\n      \"new_class_group\": \"Flowering Plant Reproduction (Plants, Structures, Materials & Processes)\",\n      \"remark\": null,\n      \"justification\": \"Update the Class_Group label to a more explicit shared grouping that connects plants, structures, materials, and the pollination process under flowering plant reproduction.\",\n      \"confidence\": 0.88\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsR_2f847eb5\",\n      \"new_name\": \"Flowering Plants (Organisms)\",\n      \"new_description\": null,\n      \"new_class_type_hint\": \"Organism Group\",\n      \"new_class_group\": \"Flowering Plant Reproduction (Plants, Structures, Materials & Processes)\",\n      \"remark\": null,\n      \"justification\": \"Align this organism-focused class with the same refined Class_Group used for flowers, pollen, and pollination to clearly model all components of flowering plant reproduction together.\",\n      \"confidence\": 0.88\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "split_class",
+      "args": {
+        "source_class_id": "ClsC_fb0a1cd7",
+        "splits": [
+          {
+            "name": "Flowers (Plant Reproductive Structures)",
+            "description": "Flowers as the reproductive structures of plants that provide nectar and pollen and are visited by pollinators such as butterflies.",
+            "class_type_hint": "Biological Structure",
+            "member_ids": [
+              "En_48e92359"
+            ],
+            "provisional_id": "SPLIT_ClsC_fb0a1cd7_FLOWERS"
+          },
+          {
+            "name": "Pollen (Plant Reproductive Material)",
+            "description": "Pollen grains as the reproductive material of plants that are transferred between flowers during pollination.",
+            "class_type_hint": "Biological Material",
+            "member_ids": [
+              "En_c728532d"
+            ],
+            "provisional_id": "SPLIT_ClsC_fb0a1cd7_POLLEN"
+          }
+        ],
+        "justification": "The original class mixes a structural entity (flowers) and a particulate reproductive material (pollen) with different entity_type_hints, so splitting improves semantic coherence between structures and materials.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "SPLIT_ClsC_fb0a1cd7_FLOWERS",
+        "new_name": "Flowers (Plant Reproductive Structures)",
+        "new_description": "Flowers as the reproductive structures of plants that provide nectar and pollen and are visited by pollinators such as butterflies.",
+        "new_class_type_hint": "Biological Structure",
+        "new_class_group": "Flowering Plant Reproduction (Plants, Structures, Materials & Processes)",
+        "remark": null,
+        "justification": "Assign a precise name, type, and shared Class_Group reflecting that flowers are distinct plant structures within the broader flowering plant reproduction context.",
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "SPLIT_ClsC_fb0a1cd7_POLLEN",
+        "new_name": "Pollen (Plant Reproductive Material)",
+        "new_description": "Pollen grains as the reproductive material of plants that are transferred between flowers during pollination, often by pollinators such as butterflies.",
+        "new_class_type_hint": "Biological Material",
+        "new_class_group": "Flowering Plant Reproduction (Plants, Structures, Materials & Processes)",
+        "remark": null,
+        "justification": "Clarify that this class is for pollen as a reproductive material, not a structure, and align it with the same overarching flowering plant reproduction Class_Group.",
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsR_9ddc1c4b",
+        "new_name": "Pollination (Flowering Plant Process)",
+        "new_description": null,
+        "new_class_type_hint": "Biological Process",
+        "new_class_group": "Flowering Plant Reproduction (Plants, Structures, Materials & Processes)",
+        "remark": null,
+        "justification": "Update the Class_Group label to a more explicit shared grouping that connects plants, structures, materials, and the pollination process under flowering plant reproduction.",
+        "confidence": 0.88
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsR_2f847eb5",
+        "new_name": "Flowering Plants (Organisms)",
+        "new_description": null,
+        "new_class_type_hint": "Organism Group",
+        "new_class_group": "Flowering Plant Reproduction (Plants, Structures, Materials & Processes)",
+        "remark": null,
+        "justification": "Align this organism-focused class with the same refined Class_Group used for flowers, pollen, and pollination to clearly model all components of flowering plant reproduction together.",
+        "confidence": 0.88
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "split_class",
+      "source_class_id": "ClsC_fb0a1cd7",
+      "source_class_id_resolved": "ClsC_fb0a1cd7",
+      "created_classes": [
+        {
+          "new_class_id": "ClsR_9673352a",
+          "provisional_id": "SPLIT_ClsC_fb0a1cd7_FLOWERS",
+          "member_ids": [
+            "En_48e92359"
+          ]
+        },
+        {
+          "new_class_id": "ClsR_4f130c6a",
+          "provisional_id": "SPLIT_ClsC_fb0a1cd7_POLLEN",
+          "member_ids": [
+            "En_c728532d"
+          ]
+        }
+      ],
+      "justification": "The original class mixes a structural entity (flowers) and a particulate reproductive material (pollen) with different entity_type_hints, so splitting improves semantic coherence between structures and materials.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "modify_class",
+      "class_id": "SPLIT_ClsC_fb0a1cd7_FLOWERS",
+      "class_id_resolved": "ClsR_9673352a",
+      "new_name": "Flowers (Plant Reproductive Structures)",
+      "new_description": "Flowers as the reproductive structures of plants that provide nectar and pollen and are visited by pollinators such as butterflies.",
+      "new_class_type_hint": "Biological Structure",
+      "new_class_group": "Flowering Plant Reproduction (Plants, Structures, Materials & Processes)",
+      "remark": null,
+      "justification": "Assign a precise name, type, and shared Class_Group reflecting that flowers are distinct plant structures within the broader flowering plant reproduction context.",
+      "confidence": 0.9
+    },
+    {
+      "action": "modify_class",
+      "class_id": "SPLIT_ClsC_fb0a1cd7_POLLEN",
+      "class_id_resolved": "ClsR_4f130c6a",
+      "new_name": "Pollen (Plant Reproductive Material)",
+      "new_description": "Pollen grains as the reproductive material of plants that are transferred between flowers during pollination, often by pollinators such as butterflies.",
+      "new_class_type_hint": "Biological Material",
+      "new_class_group": "Flowering Plant Reproduction (Plants, Structures, Materials & Processes)",
+      "remark": null,
+      "justification": "Clarify that this class is for pollen as a reproductive material, not a structure, and align it with the same overarching flowering plant reproduction Class_Group.",
+      "confidence": 0.9
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsR_9ddc1c4b",
+      "class_id_resolved": "ClsR_9ddc1c4b",
+      "new_name": "Pollination (Flowering Plant Process)",
+      "new_description": null,
+      "new_class_type_hint": "Biological Process",
+      "new_class_group": "Flowering Plant Reproduction (Plants, Structures, Materials & Processes)",
+      "remark": null,
+      "justification": "Update the Class_Group label to a more explicit shared grouping that connects plants, structures, materials, and the pollination process under flowering plant reproduction.",
+      "confidence": 0.88
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsR_2f847eb5",
+      "class_id_resolved": "ClsR_2f847eb5",
+      "new_name": "Flowering Plants (Organisms)",
+      "new_description": null,
+      "new_class_type_hint": "Organism Group",
+      "new_class_group": "Flowering Plant Reproduction (Plants, Structures, Materials & Processes)",
+      "remark": null,
+      "justification": "Align this organism-focused class with the same refined Class_Group used for flowers, pollen, and pollination to clearly model all components of flowering plant reproduction together.",
+      "confidence": 0.88
+    }
+  ],
+  "provisional_to_real": {
+    "SPLIT_ClsC_fb0a1cd7_FLOWERS": "ClsR_9673352a",
+    "SPLIT_ClsC_fb0a1cd7_POLLEN": "ClsR_4f130c6a"
+  },
+  "timestamp": "2026-01-02T08:41:45Z"
+}

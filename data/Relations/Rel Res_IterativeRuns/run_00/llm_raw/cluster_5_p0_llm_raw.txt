@@ -3,52 +3,40 @@
     "function": "set_canonical_rel",
     "args": {
       "relation_ids": [
-        "RelR_c4bd0eecf18e",
-        "RelR_d3bbaeb2df23",
-        "RelR_cc53169ea6f4",
-        "RelR_d39cfe6239e1",
-        "RelR_f33b7d004979",
-        "RelR_d531fbfb64b2"
+        "RelR_520597a97b34",
+        "RelR_fae8cebd0ec0"
       ],
-      "canonical_rel_name": "has_metallurgical_structure",
-      "canonical_rel_desc": "Indicates the metallurgical/microstructural phase type (e.g., austenitic, ferritic, martensitic, or mixed) that characterizes a metal or alloy under specified conditions.",
-      "justification": "All these relations link a steel or alloy category (subject) to its metallurgical/microstructural phase type (object), such as austenitic, ferritic, or martensitic, sometimes with qualifiers like temperature or mixed structures. They share the same predicate semantics and can be normalized to a single canonical relation.",
-      "remark": null,
-      "confidence": 0.96
+      "canonical_rel_name": "may_commit",
+      "canonical_rel_desc": "Indicates that the subject is a potential actor that may commit or engage in the specified abusive or harmful act, without asserting that it necessarily occurs.",
+      "justification": "Both relations link institutional actors (governments, corporations) to the same act ('abuse of power') with an explicitly potential / non-deterministic modality in the context of AI-enabled surveillance. A generalized predicate 'may_commit' captures this actor-to-harmful-act relation cleanly and can be reused for other potential-perpetrator links.",
+      "remark": "The potentiality is already captured in the canonical_rel_name; detailed conditions (e.g., AI-enabled surveillance) stay as qualifiers on the relation instances.",
+      "confidence": 0.9
     }
   },
   {
     "function": "set_rel_cls",
     "args": {
       "relation_ids": [
-        "RelR_c4bd0eecf18e",
-        "RelR_d3bbaeb2df23",
-        "RelR_cc53169ea6f4",
-        "RelR_d39cfe6239e1",
-        "RelR_f33b7d004979",
-        "RelR_d531fbfb64b2"
+        "RelR_520597a97b34",
+        "RelR_fae8cebd0ec0"
       ],
-      "rel_cls": "metallurgical_structure_relation",
-      "justification": "Each relation expresses how a steel or alloy is characterized by a specific metallurgical/microstructural structure. Grouping them under a common class for metallurgical structure relations captures this shared semantics and can support other related predicates about microstructure in the future.",
+      "rel_cls": "harm_perpetrator_role_relation",
+      "justification": "These relations specify which entities can play the role of perpetrator of a harmful/abusive act (abuse of power), fitting a role-based actor-to-harm class. The class name 'harm_perpetrator_role_relation' groups this with other potential or actual perpetrator-role links.",
       "remark": null,
-      "confidence": 0.94
+      "confidence": 0.9
     }
   },
   {
     "function": "set_rel_cls_group",
     "args": {
       "relation_ids": [
-        "RelR_c4bd0eecf18e",
-        "RelR_d3bbaeb2df23",
-        "RelR_cc53169ea6f4",
-        "RelR_d39cfe6239e1",
-        "RelR_f33b7d004979",
-        "RelR_d531fbfb64b2"
+        "RelR_520597a97b34",
+        "RelR_fae8cebd0ec0"
       ],
-      "rel_cls_group": "STRUCTURE",
-      "justification": "These predicates describe structural/microstructural characteristics (phase structure) of materials rather than composition, causality, or identity. A broad group label of STRUCTURE best reflects their role in the KG.",
+      "rel_cls_group": "AGENCY",
+      "justification": "The core semantics is about which agents (governments, corporations) may perform a given act (abuse of power). This is primarily an actor/agency relation rather than pure causality or composition, so it best fits the AGENCY group.",
       "remark": null,
-      "confidence": 0.92
+      "confidence": 0.9
     }
   }
 ]

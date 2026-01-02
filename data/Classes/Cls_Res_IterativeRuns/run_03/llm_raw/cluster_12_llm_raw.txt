@@ -1,0 +1,39 @@
+[
+  {
+    "function": "reassign_entities",
+    "args": {
+      "entity_ids": ["En_09aa0f55"],
+      "from_class_id": "ClsR_5aa32109",
+      "to_class_id": "ClsR_11cbea87",
+      "justification": "The entity 'underside of leaves' is a plant surface/location used as oviposition substrate, aligning conceptually with 'Plant Structures as Lepidopteran Substrate and Background' rather than the prey-role/behavioral focus of 'Butterfly Prey Role and Anti-predator Strategies'; it also avoids the same entity being split across two classes.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsR_5aa32109",
+      "new_name": "Butterfly Prey Role and Anti-predator Strategies",
+      "new_description": "The ecological role of butterflies as prey within food webs and the behavioral or spatial strategies they use (e.g., concealed egg-laying) to reduce predation risk.",
+      "new_class_type_hint": "Ecological Interaction",
+      "new_class_group": "Ecology and Ecosystems",
+      "remark": "Location-focused entities like 'underside of leaves' have been moved to the plant-substrate class so this class can focus on butterflies’ role as prey and their anti-predator behaviors rather than on physical plant structures.",
+      "justification": "After moving the location entity to the plant-structure class, this class now centers on butterflies’ prey role and anti-predator behaviors; updating the description keeps it aligned with its actual members and avoids conflating behavior with habitat features.",
+      "confidence": 0.88
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsR_11cbea87",
+      "new_name": "Plant Structures as Lepidopteran Substrate and Background",
+      "new_description": "Plant structures (e.g., host plants, leaves, undersides of leaves, stems, twigs) that serve as oviposition sites, larval feeding and chrysalis substrates, and visual backgrounds for camouflage across butterfly and caterpillar life stages.",
+      "new_class_type_hint": "Habitat / Resource",
+      "new_class_group": "Lepidopteran Plant Interactions & Habitat",
+      "remark": "Now explicitly contains the 'underside of leaves' entity that was previously shared with the prey-role class, consolidating all plant-structure substrates and backgrounds in one habitat-focused class.",
+      "justification": "With 'underside of leaves' reassigned here, refining the description clarifies that this class collects plant substrates and visual backgrounds used across Lepidopteran life stages, distinct from predation-role classes.",
+      "confidence": 0.87
+    }
+  }
+]

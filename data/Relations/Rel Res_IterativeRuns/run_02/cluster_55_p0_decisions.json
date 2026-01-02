@@ -1,0 +1,125 @@
+{
+  "cluster_label": "55_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_c9efa6406fe6",
+      "relation_name": "determines",
+      "rel_desc": "The authenticity of urban legends determines or reflects the truth behind the stories.",
+      "rel_hint_type": "dependency",
+      "canonical_rel_name": "influences",
+      "canonical_rel_desc": "Indicates that the subject affects, shapes, or constrains the nature, degree, or assessment of the object.",
+      "rel_cls": "conceptual_influence_relation",
+      "rel_cls_group": "CAUSALITY",
+      "subject_entity_name": "authenticity of urban legends",
+      "object_entity_name": "truth behind the stories",
+      "subject_class_label": "Urban Legend Research and Analysis",
+      "subject_class_group": "Urban Legends – Folklore, Psychology & Scholarship",
+      "object_class_label": "Fact and Fiction in Narratives",
+      "object_class_group": "Narrative Truth, Fiction, and History",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "remain shrouded in mystery",
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.82,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_1f6b21b29ef8",
+      "relation_name": "supports",
+      "rel_desc": "Real events can support or underpin the authenticity of some urban legends.",
+      "rel_hint_type": "evidential",
+      "canonical_rel_name": "provides_evidence_for",
+      "canonical_rel_desc": "Indicates that the subject serves as factual or evidential support for the credibility or authenticity of the object claim or narrative.",
+      "rel_cls": "evidential_support_relation",
+      "rel_cls_group": "EPISTEMIC",
+      "subject_entity_name": "real events",
+      "object_entity_name": "authenticity of urban legends",
+      "subject_class_label": "Fact and Fiction in Narratives",
+      "subject_class_group": "Narrative Truth, Fiction, and History",
+      "object_class_label": "Urban Legend Research and Analysis",
+      "object_class_group": "Urban Legends – Folklore, Psychology & Scholarship",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": "some stories",
+        "UncertaintyQualifier": "may be based on",
+        "CausalHint": null,
+        "LogicalMarker": "may",
+        "OtherQualifier": null
+      },
+      "confidence": 0.84,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_a0dc2bc821ef",
+      "relation_name": "supports",
+      "rel_desc": "Historical figures can provide a factual basis that supports the authenticity of some urban legends.",
+      "rel_hint_type": "evidential",
+      "canonical_rel_name": "provides_evidence_for",
+      "canonical_rel_desc": "Indicates that the subject serves as factual or evidential support for the credibility or authenticity of the object claim or narrative.",
+      "rel_cls": "evidential_support_relation",
+      "rel_cls_group": "EPISTEMIC",
+      "subject_entity_name": "historical figures",
+      "object_entity_name": "authenticity of urban legends",
+      "subject_class_label": "Urban Legend Content References",
+      "subject_class_group": "Urban Legends – Folklore, Psychology & Scholarship",
+      "object_class_label": "Urban Legend Research and Analysis",
+      "object_class_group": "Urban Legends – Folklore, Psychology & Scholarship",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": "some stories",
+        "UncertaintyQualifier": "may be based on",
+        "CausalHint": null,
+        "LogicalMarker": "may",
+        "OtherQualifier": null
+      },
+      "confidence": 0.84,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_rel_schema\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_c9efa6406fe6\"],\n      \"canonical_rel_name\": \"influences\",\n      \"canonical_rel_desc\": \"Indicates that the subject affects, shapes, or constrains how the truth or credibility of the object is judged or interpreted.\",\n      \"rel_cls\": \"epistemic_influence_relation\",\n      \"rel_cls_group\": \"EPISTEMIC\",\n      \"justification\": \"This relation concerns how the perceived authenticity of urban legends affects judgments about the truth behind the stories, which is an epistemic (assessment/interpretation) influence rather than a direct causal process. Updating the description, relation class, and class group makes it consistent with the evidential/epistemic nature of the second and third relations while keeping a distinct predicate from explicit evidential support.\",\n      \"remark\": null,\n      \"confidence\": 0.81\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_rel_schema",
+      "args": {
+        "relation_ids": [
+          "RelR_c9efa6406fe6"
+        ],
+        "canonical_rel_name": "influences",
+        "canonical_rel_desc": "Indicates that the subject affects, shapes, or constrains how the truth or credibility of the object is judged or interpreted.",
+        "rel_cls": "epistemic_influence_relation",
+        "rel_cls_group": "EPISTEMIC",
+        "justification": "This relation concerns how the perceived authenticity of urban legends affects judgments about the truth behind the stories, which is an epistemic (assessment/interpretation) influence rather than a direct causal process. Updating the description, relation class, and class group makes it consistent with the evidential/epistemic nature of the second and third relations while keeping a distinct predicate from explicit evidential support.",
+        "remark": null,
+        "confidence": 0.81
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_rel_schema",
+      "relation_ids": [
+        "RelR_c9efa6406fe6"
+      ],
+      "canonical_rel_name": "influences",
+      "canonical_rel_desc": "Indicates that the subject affects, shapes, or constrains how the truth or credibility of the object is judged or interpreted.",
+      "rel_cls": "epistemic_influence_relation",
+      "rel_cls_group": "EPISTEMIC",
+      "new_relation_name": null,
+      "original_relation_name": null,
+      "justification": "This relation concerns how the perceived authenticity of urban legends affects judgments about the truth behind the stories, which is an epistemic (assessment/interpretation) influence rather than a direct causal process. Updating the description, relation class, and class group makes it consistent with the evidential/epistemic nature of the second and third relations while keeping a distinct predicate from explicit evidential support.",
+      "remark": null,
+      "confidence": 0.81
+    }
+  ],
+  "timestamp": "2026-01-02T09:29:05Z"
+}

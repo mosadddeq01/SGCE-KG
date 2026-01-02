@@ -1,0 +1,111 @@
+{
+  "cluster_label": 17,
+  "cluster_classes": [
+    {
+      "candidate_id": "ClsC_7aefe6ac",
+      "class_label": "Privacy Rights",
+      "class_description": "Ethical and legal concepts concerned with individuals’ control over personal and sensitive information, especially in technological and AI contexts.",
+      "class_type_hint": "Ethical Principle",
+      "class_group": "TBD",
+      "confidence": 0.93,
+      "evidence_excerpt": "Ethical-legal right and concern over control and protection of personal information.",
+      "member_ids": [
+        "Can_6d842f51",
+        "Can_38441217"
+      ],
+      "members": [
+        {
+          "id": "Can_6d842f51",
+          "entity_name": "right to privacy",
+          "entity_description": "The legal and moral rights of individuals to keep their personal information and activities private and to control access to their personal data.",
+          "entity_type_hint": "EthicalPrinciple"
+        },
+        {
+          "id": "Can_38441217",
+          "entity_name": "privacy",
+          "entity_description": "An ethical concern and conceptual issue regarding the protection of personal and sensitive information in the context of AI technologies.",
+          "entity_type_hint": "Concept"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_7c7ef516",
+      "class_label": "AI Transparency Ethics",
+      "class_description": "Ethical issues arising from the opacity of AI decision-making processes, focusing on challenges in interpreting, explaining, and justifying AI system outputs.",
+      "class_type_hint": "Ethical Concern",
+      "class_group": "TBD",
+      "confidence": 0.86,
+      "evidence_excerpt": "ethical dilemma in AI development as systems become complex and opaque, challenging to understand decisions",
+      "member_ids": [
+        "En_0818b970"
+      ],
+      "members": [
+        {
+          "id": "En_0818b970",
+          "entity_name": "ethical dilemma of transparency in AI",
+          "entity_description": "The ethical challenge posed by AI systems whose decision-making processes are difficult to interpret or explain, raising concerns about transparency.",
+          "entity_type_hint": "Concern"
+        }
+      ],
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_7aefe6ac\",\n      \"new_name\": null,\n      \"new_description\": null,\n      \"new_class_type_hint\": null,\n      \"new_class_group\": \"AI Ethics: Privacy and Transparency\",\n      \"remark\": null,\n      \"justification\": \"This class covers privacy and rights over personal information specifically in technological/AI contexts, which aligns with a broader AI ethics grouping focused on privacy and transparency; assigning this shared Class_Group connects it to related transparency concerns.\",\n      \"confidence\": 0.93\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_7c7ef516\",\n      \"new_name\": null,\n      \"new_description\": null,\n      \"new_class_type_hint\": null,\n      \"new_class_group\": \"AI Ethics: Privacy and Transparency\",\n      \"remark\": null,\n      \"justification\": \"This class addresses ethical dilemmas around transparency of AI decision-making, which is a core facet of AI ethics closely related to privacy and control over information; assigning the same Class_Group as the privacy rights class creates a coherent higher-level AI ethics cluster.\",\n      \"confidence\": 0.9\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_7aefe6ac",
+        "new_name": null,
+        "new_description": null,
+        "new_class_type_hint": null,
+        "new_class_group": "AI Ethics: Privacy and Transparency",
+        "remark": null,
+        "justification": "This class covers privacy and rights over personal information specifically in technological/AI contexts, which aligns with a broader AI ethics grouping focused on privacy and transparency; assigning this shared Class_Group connects it to related transparency concerns.",
+        "confidence": 0.93
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_7c7ef516",
+        "new_name": null,
+        "new_description": null,
+        "new_class_type_hint": null,
+        "new_class_group": "AI Ethics: Privacy and Transparency",
+        "remark": null,
+        "justification": "This class addresses ethical dilemmas around transparency of AI decision-making, which is a core facet of AI ethics closely related to privacy and control over information; assigning the same Class_Group as the privacy rights class creates a coherent higher-level AI ethics cluster.",
+        "confidence": 0.9
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_7aefe6ac",
+      "class_id_resolved": "ClsC_7aefe6ac",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "AI Ethics: Privacy and Transparency",
+      "remark": null,
+      "justification": "This class covers privacy and rights over personal information specifically in technological/AI contexts, which aligns with a broader AI ethics grouping focused on privacy and transparency; assigning this shared Class_Group connects it to related transparency concerns.",
+      "confidence": 0.93
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_7c7ef516",
+      "class_id_resolved": "ClsC_7c7ef516",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "AI Ethics: Privacy and Transparency",
+      "remark": null,
+      "justification": "This class addresses ethical dilemmas around transparency of AI decision-making, which is a core facet of AI ethics closely related to privacy and control over information; assigning the same Class_Group as the privacy rights class creates a coherent higher-level AI ethics cluster.",
+      "confidence": 0.9
+    }
+  ],
+  "provisional_to_real": {},
+  "timestamp": "2026-01-02T08:46:09Z"
+}

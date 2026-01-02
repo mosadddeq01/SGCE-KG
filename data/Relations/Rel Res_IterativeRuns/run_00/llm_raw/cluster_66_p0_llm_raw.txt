@@ -1,0 +1,45 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_f2a8e6c98fe9",
+        "RelR_49c5c2326a8b",
+        "RelR_0a35505ddb42"
+      ],
+      "canonical_rel_name": "is_food_source_for",
+      "canonical_rel_desc": "Indicates that the subject serves as a food resource for the predator group represented by the object within a trophic interaction.",
+      "justification": "In all three instances, the subject is the 'food source role of butterflies' and the objects are predator groups (birds, reptiles, predatory insects). The semantics are that butterflies (via this role) are eaten by these predators, i.e., they serve as a food source for them. A single predicate 'is_food_source_for' consistently captures this trophic relation from the perspective of butterflies as prey/food, independent of predator taxon.",
+      "remark": null,
+      "confidence": 0.94
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_f2a8e6c98fe9",
+        "RelR_49c5c2326a8b",
+        "RelR_0a35505ddb42"
+      ],
+      "rel_cls": "trophic_interaction_relation",
+      "justification": "Each relation connects a prey food-source role (butterflies) to predator taxa and is explicitly marked as 'trophic' in the hints. These are specific cases of predator–prey feeding interactions, which are well captured by a shared class 'trophic_interaction_relation'.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_f2a8e6c98fe9",
+        "RelR_49c5c2326a8b",
+        "RelR_0a35505ddb42"
+      ],
+      "rel_cls_group": "INTERACTION",
+      "justification": "The relations describe ecological predator–prey feeding relationships between butterflies (as a food source) and various predators. These are best modeled at the broadest level as biotic interactions rather than composition or causality, so the INTERACTION group is appropriate.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  }
+]

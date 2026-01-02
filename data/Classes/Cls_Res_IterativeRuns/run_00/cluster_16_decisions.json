@@ -1,0 +1,171 @@
+{
+  "cluster_label": 16,
+  "cluster_classes": [
+    {
+      "candidate_id": "ClsC_74c6ff79",
+      "class_label": "Caterpillar Defensive Structures",
+      "class_description": "Anatomical features on caterpillars, such as spines and hairs, that provide physical protection against predators and other threats.",
+      "class_type_hint": "Biological Structure",
+      "class_group": "TBD",
+      "confidence": 0.93,
+      "evidence_excerpt": "Some caterpillars have spines or hairs for protection... protective adaptations.",
+      "member_ids": [
+        "En_6bd20b29",
+        "En_332efc1c",
+        "En_2af98f3b"
+      ],
+      "members": [
+        {
+          "id": "En_6bd20b29",
+          "entity_name": "spines",
+          "entity_description": "Defensive protrusions on some caterpillars used as protection against threats.",
+          "entity_type_hint": "Component"
+        },
+        {
+          "id": "En_332efc1c",
+          "entity_name": "hairs",
+          "entity_description": "Hair-like structures on some caterpillars providing physical protection.",
+          "entity_type_hint": "Component"
+        },
+        {
+          "id": "En_2af98f3b",
+          "entity_name": "caterpillar protective spines and hairs",
+          "entity_description": "Combined defensive structures on caterpillars used to protect them from threats.",
+          "entity_type_hint": "DamagePreventionFeature"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_b049d5f9",
+      "class_label": "Caterpillar Growth Processes",
+      "class_description": "Biological processes involved in caterpillar growth, including overall rapid size increase and the specific shedding of the external skin (molting).",
+      "class_type_hint": "Biological Process",
+      "class_group": "TBD",
+      "confidence": 0.9,
+      "evidence_excerpt": "Caterpillars grow rapidly and shed their skin several times as they grow.",
+      "member_ids": [
+        "En_7f07fa15",
+        "En_0d334a9d"
+      ],
+      "members": [
+        {
+          "id": "En_7f07fa15",
+          "entity_name": "rapid growth of caterpillars",
+          "entity_description": "The fast increase in size experienced by caterpillars during the larval stage.",
+          "entity_type_hint": "BiologicalProcess"
+        },
+        {
+          "id": "En_0d334a9d",
+          "entity_name": "molting",
+          "entity_description": "Biological process in which caterpillars shed and replace their external skin multiple times as they grow.",
+          "entity_type_hint": "BiologicalProcess"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_13dfd95d",
+      "class_label": "Caterpillar Integument",
+      "class_description": "The external body covering of caterpillars, including the skin that is periodically shed and replaced during growth and molting.",
+      "class_type_hint": "Anatomical Structure",
+      "class_group": "TBD",
+      "confidence": 0.86,
+      "evidence_excerpt": "The external anatomical covering of caterpillars that is repeatedly shed and replaced during growth.",
+      "member_ids": [
+        "En_82d1c7f9"
+      ],
+      "members": [
+        {
+          "id": "En_82d1c7f9",
+          "entity_name": "caterpillar skin",
+          "entity_description": "The external anatomical covering of caterpillars that is repeatedly shed and replaced during growth.",
+          "entity_type_hint": "AnatomicalStructure"
+        }
+      ],
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_74c6ff79\",\n      \"new_name\": \"Caterpillar Defensive Structures\",\n      \"new_description\": \"Anatomical defensive structures on caterpillars, such as spines and hairs, that provide physical protection against predators and other threats.\",\n      \"new_class_type_hint\": \"Anatomical Structure\",\n      \"new_class_group\": \"Caterpillar Anatomy and Physiology\",\n      \"remark\": null,\n      \"justification\": \"All members are body parts (spines, hairs) rather than generic 'biological structures', so updating the type hint to 'Anatomical Structure' and assigning the shared class group 'Caterpillar Anatomy and Physiology' makes the schema more coherent and aligned with the other caterpillar body-related classes.\",\n      \"confidence\": 0.92\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_b049d5f9\",\n      \"new_name\": \"Caterpillar Growth and Molting Processes\",\n      \"new_description\": \"Biological processes involved in caterpillar growth and development, including rapid size increase and the periodic shedding of the external skin (molting).\",\n      \"new_class_type_hint\": \"Biological Process\",\n      \"new_class_group\": \"Caterpillar Anatomy and Physiology\",\n      \"remark\": null,\n      \"justification\": \"Both entities describe physiological processes (rapid growth and molting) in caterpillars, so clarifying the name and description as growth and molting processes and grouping them under the same 'Caterpillar Anatomy and Physiology' class group better connects them to related anatomical classes while keeping the process vs structure distinction at the class level.\",\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_13dfd95d\",\n      \"new_name\": \"Caterpillar Integument (Skin)\",\n      \"new_description\": \"The external body covering of caterpillars, including the skin and associated surface structures that can be shed and replaced during growth and molting.\",\n      \"new_class_type_hint\": \"Anatomical Structure\",\n      \"new_class_group\": \"Caterpillar Anatomy and Physiology\",\n      \"remark\": null,\n      \"justification\": \"The single member is 'caterpillar skin', a specific anatomical structure; refining the name to highlight integument/skin and assigning the shared 'Caterpillar Anatomy and Physiology' class group aligns it with other caterpillar body-part classes while keeping it clearly structural rather than process-focused.\",\n      \"confidence\": 0.9\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_74c6ff79",
+        "new_name": "Caterpillar Defensive Structures",
+        "new_description": "Anatomical defensive structures on caterpillars, such as spines and hairs, that provide physical protection against predators and other threats.",
+        "new_class_type_hint": "Anatomical Structure",
+        "new_class_group": "Caterpillar Anatomy and Physiology",
+        "remark": null,
+        "justification": "All members are body parts (spines, hairs) rather than generic 'biological structures', so updating the type hint to 'Anatomical Structure' and assigning the shared class group 'Caterpillar Anatomy and Physiology' makes the schema more coherent and aligned with the other caterpillar body-related classes.",
+        "confidence": 0.92
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_b049d5f9",
+        "new_name": "Caterpillar Growth and Molting Processes",
+        "new_description": "Biological processes involved in caterpillar growth and development, including rapid size increase and the periodic shedding of the external skin (molting).",
+        "new_class_type_hint": "Biological Process",
+        "new_class_group": "Caterpillar Anatomy and Physiology",
+        "remark": null,
+        "justification": "Both entities describe physiological processes (rapid growth and molting) in caterpillars, so clarifying the name and description as growth and molting processes and grouping them under the same 'Caterpillar Anatomy and Physiology' class group better connects them to related anatomical classes while keeping the process vs structure distinction at the class level.",
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_13dfd95d",
+        "new_name": "Caterpillar Integument (Skin)",
+        "new_description": "The external body covering of caterpillars, including the skin and associated surface structures that can be shed and replaced during growth and molting.",
+        "new_class_type_hint": "Anatomical Structure",
+        "new_class_group": "Caterpillar Anatomy and Physiology",
+        "remark": null,
+        "justification": "The single member is 'caterpillar skin', a specific anatomical structure; refining the name to highlight integument/skin and assigning the shared 'Caterpillar Anatomy and Physiology' class group aligns it with other caterpillar body-part classes while keeping it clearly structural rather than process-focused.",
+        "confidence": 0.9
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_74c6ff79",
+      "class_id_resolved": "ClsC_74c6ff79",
+      "new_name": "Caterpillar Defensive Structures",
+      "new_description": "Anatomical defensive structures on caterpillars, such as spines and hairs, that provide physical protection against predators and other threats.",
+      "new_class_type_hint": "Anatomical Structure",
+      "new_class_group": "Caterpillar Anatomy and Physiology",
+      "remark": null,
+      "justification": "All members are body parts (spines, hairs) rather than generic 'biological structures', so updating the type hint to 'Anatomical Structure' and assigning the shared class group 'Caterpillar Anatomy and Physiology' makes the schema more coherent and aligned with the other caterpillar body-related classes.",
+      "confidence": 0.92
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_b049d5f9",
+      "class_id_resolved": "ClsC_b049d5f9",
+      "new_name": "Caterpillar Growth and Molting Processes",
+      "new_description": "Biological processes involved in caterpillar growth and development, including rapid size increase and the periodic shedding of the external skin (molting).",
+      "new_class_type_hint": "Biological Process",
+      "new_class_group": "Caterpillar Anatomy and Physiology",
+      "remark": null,
+      "justification": "Both entities describe physiological processes (rapid growth and molting) in caterpillars, so clarifying the name and description as growth and molting processes and grouping them under the same 'Caterpillar Anatomy and Physiology' class group better connects them to related anatomical classes while keeping the process vs structure distinction at the class level.",
+      "confidence": 0.9
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_13dfd95d",
+      "class_id_resolved": "ClsC_13dfd95d",
+      "new_name": "Caterpillar Integument (Skin)",
+      "new_description": "The external body covering of caterpillars, including the skin and associated surface structures that can be shed and replaced during growth and molting.",
+      "new_class_type_hint": "Anatomical Structure",
+      "new_class_group": "Caterpillar Anatomy and Physiology",
+      "remark": null,
+      "justification": "The single member is 'caterpillar skin', a specific anatomical structure; refining the name to highlight integument/skin and assigning the shared 'Caterpillar Anatomy and Physiology' class group aligns it with other caterpillar body-part classes while keeping it clearly structural rather than process-focused.",
+      "confidence": 0.9
+    }
+  ],
+  "provisional_to_real": {},
+  "timestamp": "2026-01-02T08:34:31Z"
+}

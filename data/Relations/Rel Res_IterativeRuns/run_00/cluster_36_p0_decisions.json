@@ -1,0 +1,141 @@
+{
+  "cluster_label": "36_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_0b846e20de40",
+      "relation_name": "reduces",
+      "rel_desc": "Lack of transparency acts as a barrier, reducing acceptance of AI systems.",
+      "rel_hint_type": "negative impact",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "lack of transparency",
+      "object_entity_name": "acceptance of AI systems",
+      "subject_class_label": "Opaque and Non-Transparent AI Systems",
+      "subject_class_group": "AI Transparency & Explainability",
+      "object_class_label": "AI System Uptake",
+      "object_class_group": "TBD",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "can",
+        "CausalHint": "hinder",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.96,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_39e6789e8f52",
+      "relation_name": "reduces",
+      "rel_desc": "Lack of transparency hinders or reduces adoption of AI systems.",
+      "rel_hint_type": "negative impact",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "lack of transparency",
+      "object_entity_name": "adoption of AI systems",
+      "subject_class_label": "Opaque and Non-Transparent AI Systems",
+      "subject_class_group": "AI Transparency & Explainability",
+      "object_class_label": "AI System Uptake",
+      "object_class_group": "TBD",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "can",
+        "CausalHint": "hinder",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.96,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_0b846e20de40\",\n        \"RelR_39e6789e8f52\"\n      ],\n      \"canonical_rel_name\": \"reduces_uptake_of\",\n      \"canonical_rel_desc\": \"Subject causally reduces or hinders the uptake (acceptance or adoption) of the object.\",\n      \"justification\": \"Both relations describe a causal negative impact where lack of transparency decreases acceptance or adoption of AI systems. They share the same direction (from barrier to reduced uptake) and semantics (hindering uptake), so they should use one normalized predicate.\",\n      \"remark\": null,\n      \"confidence\": 0.93\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_0b846e20de40\",\n        \"RelR_39e6789e8f52\"\n      ],\n      \"rel_cls\": \"technology_uptake_impact_relation\",\n      \"justification\": \"These relations connect a barrier (lack of transparency) to its impact on technology uptake (acceptance/adoption of AI systems). This is a specific subtype of causal relations focused on technology uptake outcomes.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_0b846e20de40\",\n        \"RelR_39e6789e8f52\"\n      ],\n      \"rel_cls_group\": \"CAUSALITY\",\n      \"justification\": \"The descriptions and qualifiers (e.g., 'hinders', 'reduces') indicate a causal effect from lack of transparency to reduced acceptance/adoption of AI systems, so they belong in a causal relation group.\",\n      \"remark\": null,\n      \"confidence\": 0.97\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_0b846e20de40",
+          "RelR_39e6789e8f52"
+        ],
+        "canonical_rel_name": "reduces_uptake_of",
+        "canonical_rel_desc": "Subject causally reduces or hinders the uptake (acceptance or adoption) of the object.",
+        "justification": "Both relations describe a causal negative impact where lack of transparency decreases acceptance or adoption of AI systems. They share the same direction (from barrier to reduced uptake) and semantics (hindering uptake), so they should use one normalized predicate.",
+        "remark": null,
+        "confidence": 0.93
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_0b846e20de40",
+          "RelR_39e6789e8f52"
+        ],
+        "rel_cls": "technology_uptake_impact_relation",
+        "justification": "These relations connect a barrier (lack of transparency) to its impact on technology uptake (acceptance/adoption of AI systems). This is a specific subtype of causal relations focused on technology uptake outcomes.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_0b846e20de40",
+          "RelR_39e6789e8f52"
+        ],
+        "rel_cls_group": "CAUSALITY",
+        "justification": "The descriptions and qualifiers (e.g., 'hinders', 'reduces') indicate a causal effect from lack of transparency to reduced acceptance/adoption of AI systems, so they belong in a causal relation group.",
+        "remark": null,
+        "confidence": 0.97
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_0b846e20de40",
+        "RelR_39e6789e8f52"
+      ],
+      "canonical_rel_name": "reduces_uptake_of",
+      "canonical_rel_desc": "Subject causally reduces or hinders the uptake (acceptance or adoption) of the object.",
+      "justification": "Both relations describe a causal negative impact where lack of transparency decreases acceptance or adoption of AI systems. They share the same direction (from barrier to reduced uptake) and semantics (hindering uptake), so they should use one normalized predicate.",
+      "remark": null,
+      "confidence": 0.93
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_0b846e20de40",
+        "RelR_39e6789e8f52"
+      ],
+      "rel_cls": "technology_uptake_impact_relation",
+      "justification": "These relations connect a barrier (lack of transparency) to its impact on technology uptake (acceptance/adoption of AI systems). This is a specific subtype of causal relations focused on technology uptake outcomes.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_0b846e20de40",
+        "RelR_39e6789e8f52"
+      ],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "The descriptions and qualifiers (e.g., 'hinders', 'reduces') indicate a causal effect from lack of transparency to reduced acceptance/adoption of AI systems, so they belong in a causal relation group.",
+      "remark": null,
+      "confidence": 0.97
+    }
+  ],
+  "timestamp": "2026-01-02T09:15:53Z"
+}

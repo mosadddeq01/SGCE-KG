@@ -1,0 +1,44 @@
+[
+  {
+    "function": "merge_classes",
+    "args": {
+      "class_ids": [
+        "ClsC_75f4cf54",
+        "ClsR_ac465a3a"
+      ],
+      "provisional_id": "MERGE(ClsC_75f4cf54|ClsR_ac465a3a)",
+      "new_name": "Modern Folklore",
+      "new_description": "The contemporary body of traditional stories, beliefs, and narrative practices—including but not limited to urban legends—that circulate within modern societies. This class consolidates the legacy composite handling of modern folklore and its urban-legend subdomain into a single, stable category.",
+      "new_class_type_hint": "Cultural Phenomenon",
+      "justification": "ClsC_75f4cf54 is an empty legacy composite explicitly superseded by a more precise Modern Folklore class (ClsR_ac465a3a) covering the same domain, so merging removes redundant schema clutter while preserving a single canonical Modern Folklore class.",
+      "remark": "Legacy composite Modern Folklore class merged into the canonical Modern Folklore class to eliminate redundant, memberless container.",
+      "confidence": 0.96
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "MERGE(ClsC_75f4cf54|ClsR_ac465a3a)",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Urban Legends and Modern Folklore",
+      "remark": null,
+      "justification": "The merged Modern Folklore class should clearly sit in the same overarching domain as related classes like Contemporary Cultural Contexts, so explicitly assigning the 'Urban Legends and Modern Folklore' Class_Group maintains coherent upper-level organization.",
+      "confidence": 0.94
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_c0b9f443",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": null,
+      "remark": "This class is fully empty after prior splits and should be treated as deprecated; avoid assigning new entities and consider archiving or deleting it in a dedicated cleanup step.",
+      "justification": "ClsC_c0b9f443 is an empty legacy container already described as deprecated, so adding an explicit remark flags it for human review and future removal without altering current entity assignments.",
+      "confidence": 0.9
+    }
+  }
+]

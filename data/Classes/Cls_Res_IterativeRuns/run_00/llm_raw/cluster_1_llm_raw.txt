@@ -1,54 +1,83 @@
 [
   {
-    "function": "modify_class",
+    "function": "split_class",
     "args": {
-      "class_id": "ClsC_1ecda745",
-      "new_name": "Corrosive Acids",
-      "new_description": "Highly corrosive acids requiring specific materials for safe handling and storage.",
-      "new_class_type_hint": "Material",
-      "new_class_group": "Industrial Chemical Handling",
+      "source_class_id": "ClsC_e2aa4b5b",
+      "splits": [
+        {
+          "name": "Pollination (Flowering Plant Process)",
+          "description": "The biological process in which pollen is transferred between flowers, enabling sexual reproduction in flowering plants, often facilitated by animals such as butterflies.",
+          "class_type_hint": "Biological Process",
+          "member_ids": [
+            "Can_0a5c9807"
+          ],
+          "provisional_id": "SPLIT_Pollination_Process"
+        },
+        {
+          "name": "Flowering Plants (Organisms)",
+          "description": "Organisms that reproduce via flowers and benefit from pollination, including those whose reproduction is assisted by butterflies.",
+          "class_type_hint": "Organism Group",
+          "member_ids": [
+            "En_d40fcccb"
+          ],
+          "provisional_id": "SPLIT_Flowering_Plants_Organisms"
+        }
+      ],
+      "justification": "ClsC_e2aa4b5b mixes a process entity (pollination) and an organism entity (plants), so splitting into separate process and organism classes produces more coherent, single-focus classes.",
       "remark": null,
-      "justification": "Assigning Class_Group 'Industrial Chemical Handling' to connect this class with other classes related to chemicals and their safe management in industrial processes.",
-      "confidence": 0.95
+      "confidence": 0.9
     }
   },
   {
     "function": "modify_class",
     "args": {
-      "class_id": "ClsC_16b29b0b",
-      "new_name": "Amine Treating Chemicals",
-      "new_description": "Chemicals used in amine treating processes to remove H2S and CO2 from hydrocarbon streams.",
-      "new_class_type_hint": "Chemical",
-      "new_class_group": "Industrial Chemical Handling",
+      "class_id": "ClsC_fb0a1cd7",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Flowering Plant Reproduction & Pollination",
       "remark": null,
-      "justification": "Assigning Class_Group 'Industrial Chemical Handling' to connect this class with other classes related to chemicals and their use in industrial processes.",
-      "confidence": 0.95
+      "justification": "ClsC_fb0a1cd7 contains reproductive structures (flowers, pollen) that are directly involved in flowering plant reproduction and pollination, matching the shared domain with related process and organism classes.",
+      "confidence": 0.94
     }
   },
   {
     "function": "modify_class",
     "args": {
-      "class_id": "ClsC_4035c3e0",
-      "new_name": "Sour Water Treatment",
-      "new_description": "Processes and substances involved in the treatment of sour water containing hydrogen sulfide.",
-      "new_class_type_hint": "Process",
-      "new_class_group": "Industrial Water & Gas Treatment",
+      "class_id": "SPLIT_Pollination_Process",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Flowering Plant Reproduction & Pollination",
       "remark": null,
-      "justification": "Assigning a more specific Class_Group 'Industrial Water & Gas Treatment' to distinguish process/treatment classes from chemical/material handling classes.",
-      "confidence": 0.95
+      "justification": "The new pollination process class is part of the same conceptual domain as plant reproductive structures and flowering plant organisms, so it should share the same Class_Group.",
+      "confidence": 0.9
     }
   },
   {
     "function": "modify_class",
     "args": {
-      "class_id": "ClsC_bd232016",
-      "new_name": "Vacuum Distillation Unit",
-      "new_description": "A process unit designed to separate components at reduced pressure to lower their boiling points.",
-      "new_class_type_hint": "Process Unit",
-      "new_class_group": "Industrial Separation Units",
+      "class_id": "SPLIT_Flowering_Plants_Organisms",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Flowering Plant Reproduction & Pollination",
       "remark": null,
-      "justification": "Assigning Class_Group 'Industrial Separation Units' to clarify that this class is about a specific type of process unit, distinct from chemical handling or water/gas treatment.",
-      "confidence": 0.95
+      "justification": "The new flowering plants organism class represents the organisms whose reproduction is enabled by pollination, fitting into the same overarching flowering plant reproduction & pollination Class_Group.",
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_e2aa4b5b",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Flowering Plant Reproduction & Pollination",
+      "remark": "This class has been structurally split into separate process (pollination) and organism (flowering plants) classes and may now have no direct members; consider deprecating or repurposing in a later cleanup pass.",
+      "justification": "Even though its members were split out, ClsC_e2aa4b5b conceptually belongs to the same flowering plant reproduction & pollination domain and should share the Class_Group, with a remark added to flag its post-split status.",
+      "confidence": 0.82
     }
   }
 ]

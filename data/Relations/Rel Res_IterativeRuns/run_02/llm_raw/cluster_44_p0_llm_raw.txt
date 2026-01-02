@@ -1,0 +1,18 @@
+[
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": [
+        "RelR_154508b1708b",
+        "RelR_b98bacba7b1b"
+      ],
+      "canonical_rel_name": "participates_in_process_or_activity",
+      "canonical_rel_desc": "Indicates that an agent participates in or performs a specific process, activity, or behavior.",
+      "rel_cls": "process_or_activity_participation_relation",
+      "rel_cls_group": null,
+      "justification": "Both relations link a butterfly (agent) to something it does: its first flight (an event/activity) and reproduction (a biological process). The current canonical_rel_name values ('performs_activity' vs. 'performs_biological_process') and rel_cls values ('agent_activity_participation_relation' vs. 'biological_process_participation_relation') are overly fragmented for the same participation semantics. Normalizing to 'participates_in_process_or_activity' with a unified class 'process_or_activity_participation_relation' captures both events and biological processes consistently, while the existing rel_cls_group 'PARTICIPATION' remains appropriate and does not need overriding.",
+      "remark": "Unifies activity and biological process performance under a single participation predicate for cleaner KG schema.",
+      "confidence": 0.9
+    }
+  }
+]

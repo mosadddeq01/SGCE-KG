@@ -54,8 +54,10 @@ IMPORTANT FIELD DISTINCTIONS
 
 - remarks (optional, internal):
   Free-text notes attached to a class, used to flag important issues that are
-  outside the scope of structural changes (e.g., suspected entity-level duplicates
-  that should be checked elsewhere).
+  outside the scope of structural changes (e.g., upstream entity resolution that you suspect is wrong, or entities that
+  look identical but should not be changed here), DO NOT try to fix them via merge or reassign.
+   Instead, attach a human-facing remark via modify_class (using the 'remark' field)
+   so that a human can review it later.
 
 Class_Group is NOT a synonym of class_type_hint.
 
@@ -308,141 +310,134 @@ Each class includes:
 
 [
   {
-    "candidate_id": "ClsC_7d8ac253",
-    "class_label": "Hydrogen-Induced Cracking",
-    "class_description": "Cracking mechanisms in metals caused by hydrogen, including SOHIC and HIC.",
-    "class_type_hint": "Damage Mechanism",
+    "candidate_id": "ClsC_68508fdd",
+    "class_label": "Supernatural Concepts",
+    "class_description": "Abstract ideas referring to phenomena beyond normal scientific understanding, including the supernatural, the paranormal, and the broader notion of the unknown and its existence.",
+    "class_type_hint": "Concept",
     "class_group": "TBD",
-    "confidence": 0.85,
-    "evidence_excerpt": "Cracking in hydrogen-exposed steel, often near welds.",
+    "confidence": 0.9,
+    "evidence_excerpt": "Phenomena or entities believed to exist beyond normal scientific understanding; unexplained or mysterious aspects of reality.",
     "member_ids": [
-      "Can_04c94b79",
-      "En_d0d2d7c7"
+      "Can_c8b3267a",
+      "Can_f19c2f39",
+      "En_ef1ddbe3",
+      "En_1dd5c0bc"
     ],
     "members": [
       {
-        "id": "Can_04c94b79",
-        "entity_name": "Stress Oriented Hydrogen Induced Cracking (SOHIC)",
-        "entity_description": "A type of cracking in steel caused by the presence of hydrogen and stress, often near welds, characterized by cracks aligned nearly perpendicular to stress.",
-        "entity_type_hint": "DamageMechanism"
+        "id": "Can_c8b3267a",
+        "entity_name": "the supernatural",
+        "entity_description": "Phenomena or entities believed to exist beyond normal scientific understanding, frequently referenced in explanatory stories and urban legends.",
+        "entity_type_hint": "Concept"
       },
       {
-        "id": "En_d0d2d7c7",
-        "entity_name": "Hydrogen Induced Cracking (HIC)",
-        "entity_description": "Stepwise internal cracks in metal connecting hydrogen blisters, occurring without external stress.",
-        "entity_type_hint": "DamageMechanism"
+        "id": "Can_f19c2f39",
+        "entity_name": "the unknown",
+        "entity_description": "Broad concept of unexplained or mysterious aspects of reality that provoke curiosity and fear, often addressed in stories and folklore.",
+        "entity_type_hint": "Concept"
+      },
+      {
+        "id": "En_ef1ddbe3",
+        "entity_name": "paranormal",
+        "entity_description": "Events or phenomena that appear beyond normal experience or scientific explanation, associated with legends and hauntings.",
+        "entity_type_hint": "Concept"
+      },
+      {
+        "id": "En_1dd5c0bc",
+        "entity_name": "existence of the supernatural",
+        "entity_description": "The question of whether supernatural phenomena are real in listeners’ lives.",
+        "entity_type_hint": "Concept"
       }
     ],
     "remarks": []
   },
   {
-    "candidate_id": "ClsC_03e60d10",
-    "class_label": "Sulfide and Acid Stress Cracking",
-    "class_description": "Cracking mechanisms in metals due to sulfide and acid environments, including sulfide stress cracking and polythionic acid stress corrosion cracking.",
-    "class_type_hint": "Damage Mechanism",
-    "class_group": "TBD",
-    "confidence": 0.82,
-    "evidence_excerpt": "Cracking in sulfide and acid environments.",
-    "member_ids": [
-      "En_a9e4aa90",
-      "En_c7aaaee0"
-    ],
-    "members": [
-      {
-        "id": "En_a9e4aa90",
-        "entity_name": "sulfide stress cracking",
-        "entity_description": "A form of hydrogen embrittlement that occurs in metals exposed to sulfide environments.",
-        "entity_type_hint": "DamageMechanism"
-      },
-      {
-        "id": "En_c7aaaee0",
-        "entity_name": "polythionic acid stress corrosion cracking",
-        "entity_description": "A type of corrosion that affects austenitic stainless steels and other austenitic alloys during shutdowns.",
-        "entity_type_hint": "DamageMechanism"
-      }
-    ],
-    "remarks": []
-  },
-  {
-    "candidate_id": "ClsC_e9a1c8ba",
-    "class_label": "Environmental Cracking",
-    "class_description": "Cracking mechanisms in metals due to environmental factors, including wet H2S environments and carbon steel weldments.",
-    "class_type_hint": "Damage Mechanism",
+    "candidate_id": "ClsC_d3aea1db",
+    "class_label": "Supernatural Narratives",
+    "class_description": "Story-focused entities that describe tales or narrative frames centered on supernatural or unexplained events in folklore and urban legends.",
+    "class_type_hint": "Narrative Motif",
     "class_group": "TBD",
     "confidence": 0.8,
-    "evidence_excerpt": "Cracking in corrosive environments.",
+    "evidence_excerpt": "Stories focusing on supernatural phenomena and unexplained events; unresolved questions that inspire continued creation of legends.",
     "member_ids": [
-      "En_19cc48f3",
-      "En_1a88e9ed"
+      "En_25310b6e",
+      "En_90dc77e5"
     ],
     "members": [
       {
-        "id": "En_19cc48f3",
-        "entity_name": "cracking in wet H2S environments",
-        "entity_description": "Cracking of pressure vessels in environments containing wet hydrogen sulfide.",
-        "entity_type_hint": "DamageMechanism"
+        "id": "En_25310b6e",
+        "entity_name": "tales of the supernatural and the unknown",
+        "entity_description": "Stories focusing on supernatural phenomena and unexplained or mysterious events.",
+        "entity_type_hint": "Concept"
       },
       {
-        "id": "En_1a88e9ed",
-        "entity_name": "environmental cracking of carbon steel weldments",
-        "entity_description": "Cracking that occurs in carbon steel weldments due to environmental factors in corrosive environments.",
-        "entity_type_hint": "DamageMechanism"
+        "id": "En_90dc77e5",
+        "entity_name": "mysteries to be solved",
+        "entity_description": "Unresolved questions or unexplained events that inspire continued creation of urban legends.",
+        "entity_type_hint": "Concept"
       }
     ],
     "remarks": []
   },
   {
-    "candidate_id": "ClsC_47ffa62a",
-    "class_label": "General Stress Corrosion Cracking",
-    "class_description": "Cracking mechanisms in materials due to stress and corrosive environments, including stress corrosion cracking and environment assisted cracking.",
-    "class_type_hint": "Damage Mechanism",
+    "candidate_id": "ClsC_16232585",
+    "class_label": "Supernatural Phenomena",
+    "class_description": "Concrete locations or manifestations associated with supernatural activity, such as haunted places, apparitions, and mysterious beings in legends.",
+    "class_type_hint": "Phenomenon",
     "class_group": "TBD",
-    "confidence": 0.83,
-    "evidence_excerpt": "Cracking due to stress and corrosive environments.",
+    "confidence": 0.9,
+    "evidence_excerpt": "Haunted houses, ghostly apparitions, and mysterious creatures as central figures in supernatural legends.",
     "member_ids": [
-      "En_a608496c",
-      "En_038f5dc2"
+      "Can_5156a5ee",
+      "Can_cd810348",
+      "En_c0b6da09"
     ],
     "members": [
       {
-        "id": "En_a608496c",
-        "entity_name": "stress corrosion cracking",
-        "entity_description": "A failure mechanism where cracks form in a material due to the combined effects of tensile stress and a corrosive environment.",
-        "entity_type_hint": "DamageMechanism"
+        "id": "Can_5156a5ee",
+        "entity_name": "haunted houses",
+        "entity_description": "Houses or locations believed to be inhabited or influenced by ghosts or supernatural entities, frequently depicted as dangerous settings in urban legends and folklore.",
+        "entity_type_hint": "Location"
       },
       {
-        "id": "En_038f5dc2",
-        "entity_name": "Environment Assisted Cracking",
-        "entity_description": "Cracking of materials facilitated by environmental conditions.",
-        "entity_type_hint": "DamageMechanism"
+        "id": "Can_cd810348",
+        "entity_name": "mysterious creatures",
+        "entity_description": "Unusual, unidentified, or supernatural beings that appear as central figures in many legends and urban myths, often evoking fear and curiosity.",
+        "entity_type_hint": "Phenomenon"
+      },
+      {
+        "id": "En_c0b6da09",
+        "entity_name": "ghostly apparitions",
+        "entity_description": "Visual manifestations of ghosts or spirits, commonly described in supernatural stories and legends.",
+        "entity_type_hint": "Phenomenon"
       }
     ],
     "remarks": []
   },
   {
-    "candidate_id": "ClsC_26300b9e",
-    "class_label": "Material Damage Mechanisms",
-    "class_description": "Mechanisms causing material degradation, including mechanical, metallurgical, and thickness loss processes.",
-    "class_type_hint": "Failure Mechanism",
+    "candidate_id": "ClsC_feb94b4d",
+    "class_label": "Supernatural Threat Elements",
+    "class_description": "Supernatural or ominous elements in urban legends, such as cursed items or locations with troubling histories, that embody hidden danger.",
+    "class_type_hint": "Narrative Motif",
     "class_group": "TBD",
-    "confidence": 0.85,
-    "evidence_excerpt": "The mechanisms are divided into sections: a) Mechanical and Metallurgical Failure, b) Uniform or Localized Loss of Thickness.",
+    "confidence": 0.88,
+    "evidence_excerpt": "haunted houses with dark pasts, and cursed objects",
     "member_ids": [
-      "En_6a5f3538",
-      "En_8ed6cfa3"
+      "En_582f9d8e",
+      "En_f72754d2"
     ],
     "members": [
       {
-        "id": "En_6a5f3538",
-        "entity_name": "Mechanical and Metallurgical Failure",
-        "entity_description": "Failure mechanisms related to mechanical and metallurgical processes in various industries.",
-        "entity_type_hint": "DamageMechanism"
+        "id": "En_582f9d8e",
+        "entity_name": "dark pasts",
+        "entity_description": "Troubling or violent histories associated with haunted houses in these urban legend descriptions.",
+        "entity_type_hint": "Condition"
       },
       {
-        "id": "En_8ed6cfa3",
-        "entity_name": "Uniform or Localized Loss of Thickness",
-        "entity_description": "A damage mechanism involving the reduction of material thickness, either uniformly or in specific areas.",
-        "entity_type_hint": "DamageMechanism"
+        "id": "En_f72754d2",
+        "entity_name": "cursed objects",
+        "entity_description": "Objects believed to carry a curse, bringing misfortune or danger to those who encounter them.",
+        "entity_type_hint": "Object"
       }
     ],
     "remarks": []
@@ -457,5 +452,5 @@ Return ONLY the JSON array of ordered function calls.
 Return [] only if you are highly confident (> very strong evidence) that no change is needed.
 If any ambiguous or conflicting evidence exists, return a concrete ordered action list
 (with justifications and, optionally, confidence scores).
-You are a very proactive class-resolution assistant. (You are not called very proactive only by using modify_class for new_class_group. You must use other functions as well to be called a proactive class-resolution assistant.
+You are a very proactive class-resolution assistant. You are not called very proactive only by using modify_class for new_class_group. You must use other functions as well to be called a proactive class-resolution assistant.
 

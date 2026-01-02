@@ -1,0 +1,28 @@
+[
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_e2aa4b5b",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Deprecated & Legacy Container Classes",
+      "remark": "This class is an empty, deprecated aggregate whose semantic scope is fully covered by more specific classes; moving it into a dedicated 'Deprecated & Legacy Container Classes' group prevents it from being treated as an active semantic node in the flowering plant/pollination domain.",
+      "justification": "As a fully deprecated, empty aggregate that only exists for backward compatibility, this class should not remain in an active domain-specific group; assigning it to a dedicated deprecated/legacy class_group keeps the semantic graph clean while preserving the class for legacy references.",
+      "confidence": 0.92
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_c0b9f443",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Deprecated & Legacy Container Classes",
+      "remark": "This class is an empty legacy container that has been fully superseded by split classes; moving it into a dedicated 'Deprecated & Legacy Container Classes' group avoids falsely connecting it to active urban-legend schema while keeping it available for legacy compatibility.",
+      "justification": "Because this class is empty and explicitly deprecated in favor of more specific split classes, it should be grouped with other deprecated containers rather than with active urban-legend semantics, preventing confusion in the high-level schema.",
+      "confidence": 0.92
+    }
+  }
+]

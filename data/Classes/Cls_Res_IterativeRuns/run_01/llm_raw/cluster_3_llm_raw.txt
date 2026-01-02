@@ -1,67 +1,78 @@
 [
   {
-    "function": "modify_class",
+    "function": "create_class",
     "args": {
-      "class_id": "ClsC_1ecda745",
-      "new_name": "Corrosive Acids",
-      "new_description": "Highly corrosive acids requiring specific materials for safe handling and storage.",
-      "new_class_type_hint": "Material",
-      "new_class_group": "Industrial Chemicals",
+      "name": "Ecological Predators",
+      "description": "Organisms that act as predators within ecosystems, influencing prey species such as caterpillars and shaping ecological dynamics.",
+      "class_type_hint": "Organism Role",
+      "member_ids": ["En_06d732fe"],
+      "provisional_id": "NEW_Ecological_Predators",
+      "justification": "Within 'Ecological Interactions', the entity 'predators' is an organism role rather than an interaction or process concept, warranting its own focused class.",
       "remark": null,
-      "justification": "Current class_group 'Industrial Chemical Handling' is too process-focused; 'Industrial Chemicals' better reflects the material/chemical nature of the class and aligns with similar classes.",
-      "confidence": 0.95
+      "confidence": 0.86
+    }
+  },
+  {
+    "function": "reassign_entities",
+    "args": {
+      "entity_ids": ["En_06d732fe"],
+      "from_class_id": "ClsC_ccd47493",
+      "to_class_id": "NEW_Ecological_Predators",
+      "justification": "Move 'predators' from a mixed interaction/process class into a new class dedicated to predator organisms and roles, improving conceptual coherence.",
+      "remark": null,
+      "confidence": 0.86
     }
   },
   {
     "function": "modify_class",
     "args": {
-      "class_id": "ClsC_16b29b0b",
-      "new_name": "Amine Treating Chemicals",
-      "new_description": "Chemicals used in amine treating processes to remove H2S and CO2 from hydrocarbon streams.",
-      "new_class_type_hint": "Chemical",
-      "new_class_group": "Industrial Chemicals",
+      "class_id": "ClsC_fd78acc4",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Ecology and Ecosystems",
       "remark": null,
-      "justification": "Class_group 'Industrial Chemical Handling' is too broad and process-oriented; 'Industrial Chemicals' is more accurate for a class of chemicals/materials.",
-      "confidence": 0.95
-    }
-  },
-  {
-    "function": "modify_class",
-    "args": {
-      "class_id": "ClsC_4035c3e0",
-      "new_name": "Sour Water Treatment Processes",
-      "new_description": "Processes and units involved in the treatment of sour water containing hydrogen sulfide.",
-      "new_class_type_hint": "Process",
-      "new_class_group": "Industrial Water & Gas Treatment",
-      "remark": null,
-      "justification": "Clarified class_label to emphasize process/unit focus; class_group is appropriate as is.",
+      "justification": "Assign a shared Class_Group capturing broad ecological system-level concepts for consistency with other ecology-related classes.",
       "confidence": 0.9
     }
   },
   {
     "function": "modify_class",
     "args": {
-      "class_id": "ClsC_c5aee02f",
-      "new_name": "General Corrosion Mechanisms",
-      "new_description": "Corrosion mechanisms such as oxidation and sulfidation that stainless steels resist.",
-      "new_class_type_hint": "Damage Mechanism",
-      "new_class_group": "Corrosion Mechanisms",
+      "class_id": "ClsC_883a75f2",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Ecology and Ecosystems",
       "remark": null,
-      "justification": "Refined class_label and description for clarity and consistency; class_group is correct.",
+      "justification": "Align ecological state-variable concepts like biodiversity and plant population balance under the same ecology-focused Class_Group.",
       "confidence": 0.9
     }
   },
   {
     "function": "modify_class",
     "args": {
-      "class_id": "ClsC_bd232016",
-      "new_name": "Vacuum Distillation Units",
-      "new_description": "Process units designed to separate components at reduced pressure to lower their boiling points.",
-      "new_class_type_hint": "Process Unit",
-      "new_class_group": "Industrial Separation Units",
+      "class_id": "ClsC_ccd47493",
+      "new_name": "Ecological Processes and Interactions",
+      "new_description": "Ecological processes, connections, and biotic interactions within ecosystems, excluding specific organism roles like predators which are modeled separately.",
+      "new_class_type_hint": "Ecological Concept",
+      "new_class_group": "Ecology and Ecosystems",
       "remark": null,
-      "justification": "Pluralized class_label for consistency with other class naming; class_group is correct.",
-      "confidence": 0.9
+      "justification": "After moving 'predators' out, refine the class name/description to focus on ecological processes and interactions while assigning it to the shared ecological Class_Group.",
+      "confidence": 0.88
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "NEW_Ecological_Predators",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Ecology and Ecosystems",
+      "remark": null,
+      "justification": "Place the new predator-role class under the same overarching ecological Class_Group to reflect its role within ecosystems.",
+      "confidence": 0.88
     }
   }
 ]

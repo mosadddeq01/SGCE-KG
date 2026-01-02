@@ -1,0 +1,22 @@
+[
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": [
+        "RelR_6f9cfe211b66",
+        "RelR_6bd2ff1decf9",
+        "RelR_8025399d304b",
+        "RelR_d272cd370446",
+        "RelR_f7af10f818b3",
+        "RelR_28be306934ad"
+      ],
+      "canonical_rel_name": "contributes_to",
+      "canonical_rel_desc": "Indicates that the subject is a causal or enabling factor that contributes to the occurrence, development, or degree of the object, without implying sole or deterministic causation.",
+      "rel_cls": "causal_influence_relation",
+      "rel_cls_group": "CAUSALITY",
+      "justification": "All relations describe the subject as a contributing or enabling causal factor for the object, without implying sole or deterministic causation. They already share the same intended canonical predicate ('contributes_to') and relation class/group ('causal_influence_relation', 'CAUSALITY'); one instance had a slightly divergent description text. This call standardizes the canonical_rel_name/desc, rel_cls, and rel_cls_group across all six semantically equivalent causal influence relations for schema consistency.",
+      "remark": null,
+      "confidence": 0.94
+    }
+  }
+]

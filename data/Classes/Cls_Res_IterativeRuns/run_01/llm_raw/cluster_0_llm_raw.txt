@@ -1,125 +1,148 @@
 [
   {
-    "function": "split_class",
+    "function": "merge_classes",
     "args": {
-      "source_class_id": "ClsC_17b175d2",
-      "splits": [
-        {
-          "name": "Austenitic Stainless Steels",
-          "description": "Stainless steels with austenitic structure, including 300 Series types.",
-          "class_type_hint": "MaterialFamily",
-          "member_ids": ["En_d9cbe1b8"],
-          "provisional_id": "SPLIT_AUSTENITIC"
-        },
-        {
-          "name": "Ferritic Stainless Steels",
-          "description": "Stainless steels with ferritic structure, including Types 405, 409, 430, 442, and 446.",
-          "class_type_hint": "MaterialFamily",
-          "member_ids": ["En_31c964a4"],
-          "provisional_id": "SPLIT_FERRITIC"
-        },
-        {
-          "name": "Martensitic Stainless Steels",
-          "description": "Stainless steels with martensitic structure, including Types 410, 410S, 416, 420, 440A, 440B, and 440C.",
-          "class_type_hint": "MaterialFamily",
-          "member_ids": ["En_e3269efb"],
-          "provisional_id": "SPLIT_MARTENSITIC"
-        }
+      "class_ids": [
+        "ClsC_f3159e95",
+        "ClsC_c3af27b0",
+        "ClsC_e1ee2a50"
       ],
-      "justification": "ClsC_17b175d2 is overloaded, grouping three distinct stainless steel families that correspond to different metallurgical structures; splitting enables clearer mapping to structure-specific classes.",
+      "provisional_id": "MERGE(SocietalImpacts)",
+      "new_name": "AI Societal Impacts and Implications",
+      "new_description": "Societal and socioeconomic impacts and implications of AI technologies, including benefits such as efficiency and productivity, and risks such as job displacement, inequality, and concentration of power, as well as broad societal consequences and AI's potential for social good.",
+      "new_class_type_hint": "Societal Impact",
+      "justification": "These three classes all describe high-level societal impacts and implications of AI, with overlapping themes of benefits and risks and no clear conceptual boundary between them, so they should be unified into a single coherent impact class.",
       "remark": null,
+      "confidence": 0.92
+    }
+  },
+  {
+    "function": "merge_classes",
+    "args": {
+      "class_ids": [
+        "ClsC_3855a314",
+        "ClsC_faff2019"
+      ],
+      "provisional_id": "MERGE(ResponsibilityAccountability)",
+      "new_name": "AI Responsibility and Accountability",
+      "new_description": "Concepts and structures for assigning, bearing, and organizing responsibility and accountability for AI system decisions, behaviors, errors, and harms, including responsible actors and explicit lines of accountability.",
+      "new_class_type_hint": "Governance Concept",
+      "justification": "Both classes cover who is responsible for AI system behavior and how accountability is structured, with complementary entities (responsible actors, errors/harms, and lines of accountability), so they represent a single governance concept and should be merged.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "MERGE(SocietalImpacts)",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "AI Societal Impacts & Implications",
+      "remark": null,
+      "justification": "The merged class explicitly represents the full range of AI societal impacts and implications and should anchor a dedicated Class_Group for these themes.",
+      "confidence": 0.93
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "MERGE(ResponsibilityAccountability)",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "AI Ethics, Norms & Governance",
+      "remark": null,
+      "justification": "Responsibility and accountability for AI decisions are core governance concerns and naturally belong in a shared Class_Group with other AI ethics and governance mechanisms.",
+      "confidence": 0.92
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_42a3ff76",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "AI Fairness, Bias & Discrimination",
+      "remark": null,
+      "justification": "This class focuses on bias, fairness, and equity in AI, aligning directly with other fairness and discrimination-related classes.",
+      "confidence": 0.93
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_dda92042",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "AI Fairness, Bias & Discrimination",
+      "remark": null,
+      "justification": "Algorithmic bias and discriminatory outcomes are central fairness and discrimination mechanisms and should share a Class_Group with related concepts.",
       "confidence": 0.95
     }
   },
   {
     "function": "modify_class",
     "args": {
-      "class_id": "ClsC_297a52fd",
-      "new_name": "Steel Metallurgical Structures",
-      "new_description": "Metallurgical structures found in steels, including austenitic, ferritic, and martensitic.",
-      "new_class_type_hint": "MetallurgicalStructure",
-      "new_class_group": "Steel Metallurgy",
+      "class_id": "ClsC_446932f3",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "AI Fairness, Bias & Discrimination",
       "remark": null,
-      "justification": "Class_Group was missing and class_label was too generic; updating to clarify scope and connect to related classes.",
+      "justification": "Discriminatory treatment and outcomes are the realized harms of unfair AI decisions and belong in the same fairness/bias/discrimination group.",
+      "confidence": 0.94
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_f28cb1bb",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "AI Fairness, Bias & Discrimination",
+      "remark": null,
+      "justification": "Protected characteristics like race and gender are key attributes in discrimination and fairness analysis and should be grouped with related fairness and bias classes.",
+      "confidence": 0.96
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_7884cff9",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "AI Fairness, Bias & Discrimination",
+      "remark": null,
+      "justification": "Training data quality, especially biased or incomplete data, is a primary source of algorithmic unfairness and belongs in the fairness/bias/discrimination group.",
       "confidence": 0.95
     }
   },
   {
     "function": "modify_class",
     "args": {
-      "class_id": "SPLIT_AUSTENITIC",
-      "new_name": "Austenitic Stainless Steels",
-      "new_description": "Stainless steels with austenitic structure, including 300 Series types.",
-      "new_class_type_hint": "MaterialFamily",
-      "new_class_group": "Steel Metallurgy",
+      "class_id": "ClsC_7d013e67",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "AI Fairness, Bias & Discrimination",
       "remark": null,
-      "justification": "Assigning correct Class_Group to new split class for schema coherence.",
+      "justification": "Problematic training data is a subtype of fairness-relevant data issues and should share a Class_Group with other bias and discrimination sources.",
       "confidence": 0.95
     }
   },
   {
     "function": "modify_class",
     "args": {
-      "class_id": "SPLIT_FERRITIC",
-      "new_name": "Ferritic Stainless Steels",
-      "new_description": "Stainless steels with ferritic structure, including Types 405, 409, 430, 442, and 446.",
-      "new_class_type_hint": "MaterialFamily",
-      "new_class_group": "Steel Metallurgy",
+      "class_id": "ClsC_bae93eec",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "AI Fairness, Bias & Discrimination",
       "remark": null,
-      "justification": "Assigning correct Class_Group to new split class for schema coherence.",
-      "confidence": 0.95
-    }
-  },
-  {
-    "function": "modify_class",
-    "args": {
-      "class_id": "SPLIT_MARTENSITIC",
-      "new_name": "Martensitic Stainless Steels",
-      "new_description": "Stainless steels with martensitic structure, including Types 410, 410S, 416, 420, 440A, 440B, and 440C.",
-      "new_class_type_hint": "MaterialFamily",
-      "new_class_group": "Steel Metallurgy",
-      "remark": null,
-      "justification": "Assigning correct Class_Group to new split class for schema coherence.",
-      "confidence": 0.95
-    }
-  },
-  {
-    "function": "modify_class",
-    "args": {
-      "class_id": "ClsR_aed0d686",
-      "new_name": "Austenitic Structure",
-      "new_description": "Metallurgical structure characterized by austenite, found in 300 Series stainless steels and nickel base alloys.",
-      "new_class_type_hint": "MetallurgicalStructure",
-      "new_class_group": "Steel Metallurgy",
-      "remark": null,
-      "justification": "Confirming and standardizing Class_Group for schema consistency.",
-      "confidence": 0.95
-    }
-  },
-  {
-    "function": "modify_class",
-    "args": {
-      "class_id": "ClsR_ed9c5658",
-      "new_name": "Ferritic Structure",
-      "new_description": "Metallurgical structure characterized by ferrite, found in carbon and low alloy steels and many 400 series stainless steels.",
-      "new_class_type_hint": "MetallurgicalStructure",
-      "new_class_group": "Steel Metallurgy",
-      "remark": null,
-      "justification": "Confirming and standardizing Class_Group for schema consistency.",
-      "confidence": 0.95
-    }
-  },
-  {
-    "function": "modify_class",
-    "args": {
-      "class_id": "ClsR_423fb320",
-      "new_name": "Martensitic Structure",
-      "new_description": "Metallurgical structure characterized by martensite, found in some stainless steels.",
-      "new_class_type_hint": "MetallurgicalStructure",
-      "new_class_group": "Steel Metallurgy",
-      "remark": null,
-      "justification": "Confirming and standardizing Class_Group for schema consistency.",
-      "confidence": 0.95
-    }
-  }
-]
+      "justification": "Hiring processes are a canonical decision domain for fairness and discrimination concerns

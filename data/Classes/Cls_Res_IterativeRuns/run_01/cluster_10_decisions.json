@@ -1,0 +1,167 @@
+{
+  "cluster_label": 10,
+  "cluster_classes": [
+    {
+      "candidate_id": "ClsC_852a09f4",
+      "class_label": "Hook Man Urban Legend (Concept)",
+      "class_description": "The Hook Man urban legend as a narrative concept, including the legend itself and the range of its internal narrative variations.",
+      "class_type_hint": "Narrative Legend Concept",
+      "class_group": "Hook Man Urban Legend",
+      "confidence": 0.9,
+      "evidence_excerpt": "All three refer to the same underlying urban legend (the Hook Man story)... While the specifics of the story may vary...",
+      "member_ids": [
+        "Can_8ff0b203",
+        "En_3ce00e1c"
+      ],
+      "members": [
+        {
+          "id": "Can_8ff0b203",
+          "entity_name": "Hook Man (urban legend)",
+          "entity_description": "A famous modern urban legend about a murderous figure with a hook for a hand, told in many narrative versions worldwide.",
+          "entity_type_hint": "Concept"
+        },
+        {
+          "id": "En_3ce00e1c",
+          "entity_name": "story specifics of the Hook Man legend",
+          "entity_description": "The variable narrative details and plot elements within different versions of the Hook Man urban legend.",
+          "entity_type_hint": "Concept"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsR_946fe0a3",
+      "class_label": "Hook Man Legend Narrative Elements",
+      "class_description": "All concrete narrative elements that make up the Hook Man urban legend scenes, including the couple, car, setting, warning medium, antagonist, and key props/events such as the scratching sound and bloody hook.",
+      "class_type_hint": "Narrative Element Set",
+      "class_group": "Hook Man Urban Legend",
+      "confidence": 0.93,
+      "evidence_excerpt": "the couple becomes increasingly terrified as they hear a scratching sound on the car door, only to discover a bloody hook hanging from the handle",
+      "member_ids": [
+        "En_ad3952c6",
+        "En_0907cfbb",
+        "En_ebc756dc",
+        "En_4f26b44c",
+        "En_fee2fc6c",
+        "En_063f3192",
+        "En_7650fa24",
+        "En_e5cfa027",
+        "En_85a40722"
+      ],
+      "members": [
+        {
+          "id": "En_ad3952c6",
+          "entity_name": "scratching sound",
+          "entity_description": "An ominous scratching noise heard by the couple on the car door in the story.",
+          "entity_type_hint": "Event"
+        },
+        {
+          "id": "En_0907cfbb",
+          "entity_name": "car door",
+          "entity_description": "The door of the couple’s car where the scratching sound is heard.",
+          "entity_type_hint": "Component"
+        },
+        {
+          "id": "En_ebc756dc",
+          "entity_name": "bloody hook",
+          "entity_description": "A blood-covered hook found hanging from the car door handle in the Hook Man story.",
+          "entity_type_hint": "Component"
+        },
+        {
+          "id": "En_4f26b44c",
+          "entity_name": "car door handle",
+          "entity_description": "The handle of the car door from which the bloody hook is discovered hanging.",
+          "entity_type_hint": "Component"
+        },
+        {
+          "id": "En_fee2fc6c",
+          "entity_name": "secluded area",
+          "entity_description": "An isolated location where the young couple parks in the Hook Man story.",
+          "entity_type_hint": "Location"
+        },
+        {
+          "id": "En_063f3192",
+          "entity_name": "news report",
+          "entity_description": "A broadcast news message warning about an escaped criminal that the couple hears.",
+          "entity_type_hint": "InformationObject"
+        },
+        {
+          "id": "En_7650fa24",
+          "entity_name": "escaped criminal",
+          "entity_description": "A fugitive offender described in the news report who has a hook for a hand in the Hook Man legend.",
+          "entity_type_hint": "Person"
+        },
+        {
+          "id": "En_e5cfa027",
+          "entity_name": "young couple",
+          "entity_description": "A pair of young people featured as protagonists in the Hook Man urban legend scenario.",
+          "entity_type_hint": "GroupOfPeople"
+        },
+        {
+          "id": "En_85a40722",
+          "entity_name": "hook for a hand",
+          "entity_description": "A metal hook replacing the hand of the escaped criminal in the Hook Man legend.",
+          "entity_type_hint": "BodyPart"
+        }
+      ],
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_852a09f4\",\n      \"new_name\": \"Hook Man Urban Legend (Concept)\",\n      \"new_description\": \"The Hook Man urban legend as an overall narrative concept, covering the core story pattern and its common variations across tellings.\",\n      \"new_class_type_hint\": \"UrbanLegendConcept\",\n      \"new_class_group\": \"Urban Legend: Hook Man\",\n      \"remark\": null,\n      \"justification\": \"Refines this class as the abstract concept/schema for the Hook Man urban legend and aligns its class_group with a reusable pattern for this specific legend while keeping it distinct from concrete narrative elements.\",\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsR_946fe0a3\",\n      \"new_name\": \"Hook Man Legend: Narrative Elements\",\n      \"new_description\": \"Concrete narrative elements that compose specific tellings of the Hook Man urban legend, including characters (young couple, escaped criminal), setting (secluded area), props (car door, hook), and key events (scratching sound, discovery of the bloody hook).\",\n      \"new_class_type_hint\": \"UrbanLegendNarrativeElements\",\n      \"new_class_group\": \"Urban Legend: Hook Man\",\n      \"remark\": null,\n      \"justification\": \"Clarifies that this class captures concrete story components for particular tellings of the Hook Man legend, not the abstract legend concept, and standardizes the class_group to align it with the corresponding concept class.\",\n      \"confidence\": 0.9\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_852a09f4",
+        "new_name": "Hook Man Urban Legend (Concept)",
+        "new_description": "The Hook Man urban legend as an overall narrative concept, covering the core story pattern and its common variations across tellings.",
+        "new_class_type_hint": "UrbanLegendConcept",
+        "new_class_group": "Urban Legend: Hook Man",
+        "remark": null,
+        "justification": "Refines this class as the abstract concept/schema for the Hook Man urban legend and aligns its class_group with a reusable pattern for this specific legend while keeping it distinct from concrete narrative elements.",
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsR_946fe0a3",
+        "new_name": "Hook Man Legend: Narrative Elements",
+        "new_description": "Concrete narrative elements that compose specific tellings of the Hook Man urban legend, including characters (young couple, escaped criminal), setting (secluded area), props (car door, hook), and key events (scratching sound, discovery of the bloody hook).",
+        "new_class_type_hint": "UrbanLegendNarrativeElements",
+        "new_class_group": "Urban Legend: Hook Man",
+        "remark": null,
+        "justification": "Clarifies that this class captures concrete story components for particular tellings of the Hook Man legend, not the abstract legend concept, and standardizes the class_group to align it with the corresponding concept class.",
+        "confidence": 0.9
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_852a09f4",
+      "class_id_resolved": "ClsC_852a09f4",
+      "new_name": "Hook Man Urban Legend (Concept)",
+      "new_description": "The Hook Man urban legend as an overall narrative concept, covering the core story pattern and its common variations across tellings.",
+      "new_class_type_hint": "UrbanLegendConcept",
+      "new_class_group": "Urban Legend: Hook Man",
+      "remark": null,
+      "justification": "Refines this class as the abstract concept/schema for the Hook Man urban legend and aligns its class_group with a reusable pattern for this specific legend while keeping it distinct from concrete narrative elements.",
+      "confidence": 0.9
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsR_946fe0a3",
+      "class_id_resolved": "ClsR_946fe0a3",
+      "new_name": "Hook Man Legend: Narrative Elements",
+      "new_description": "Concrete narrative elements that compose specific tellings of the Hook Man urban legend, including characters (young couple, escaped criminal), setting (secluded area), props (car door, hook), and key events (scratching sound, discovery of the bloody hook).",
+      "new_class_type_hint": "UrbanLegendNarrativeElements",
+      "new_class_group": "Urban Legend: Hook Man",
+      "remark": null,
+      "justification": "Clarifies that this class captures concrete story components for particular tellings of the Hook Man legend, not the abstract legend concept, and standardizes the class_group to align it with the corresponding concept class.",
+      "confidence": 0.9
+    }
+  ],
+  "provisional_to_real": {},
+  "timestamp": "2026-01-02T08:37:38Z"
+}

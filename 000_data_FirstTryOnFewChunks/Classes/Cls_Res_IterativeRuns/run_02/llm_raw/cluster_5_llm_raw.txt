@@ -1,0 +1,79 @@
+[
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_e266c5eb",
+      "new_name": "Non-Destructive Testing Methods",
+      "new_description": "Methods used to inspect materials for defects without causing damage, including radiographic, ultrasonic, visual, and magnetic particle testing.",
+      "new_class_type_hint": "Inspection Method",
+      "new_class_group": "Inspection & Testing Methods",
+      "remark": null,
+      "justification": "Class_Group is already correct for this class, but confirming assignment for schema clarity.",
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_26300b9e",
+      "new_name": "Material Damage Mechanisms",
+      "new_description": "Mechanisms causing material degradation, including mechanical, metallurgical, and thickness loss processes.",
+      "new_class_type_hint": "Damage Mechanism",
+      "new_class_group": "Material Damage Mechanisms",
+      "remark": null,
+      "justification": "Class_Group is already correct for this class, but confirming assignment for schema clarity.",
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsR_0b6df3b1",
+      "new_name": "Mechanical and Metallurgical Failure Mechanisms",
+      "new_description": "Failure mechanisms related to mechanical and metallurgical processes.",
+      "new_class_type_hint": "Damage Mechanism",
+      "new_class_group": "Material Damage Mechanisms",
+      "remark": null,
+      "justification": "Class_Group is already correct for this class, but confirming assignment for schema clarity.",
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsR_3fd3a011",
+      "new_name": "Thickness Loss Mechanisms",
+      "new_description": "Mechanisms involving uniform or localized loss of material thickness.",
+      "new_class_type_hint": "Damage Mechanism",
+      "new_class_group": "Material Damage Mechanisms",
+      "remark": null,
+      "justification": "Class_Group is already correct for this class, but confirming assignment for schema clarity.",
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "split_class",
+    "args": {
+      "source_class_id": "ClsC_26300b9e",
+      "splits": [
+        {
+          "name": "Mechanical and Metallurgical Failure Mechanisms",
+          "description": "Failure mechanisms related to mechanical and metallurgical processes.",
+          "class_type_hint": "Damage Mechanism",
+          "member_ids": [],
+          "provisional_id": "SPLIT_MechanicalMetallurgical"
+        },
+        {
+          "name": "Thickness Loss Mechanisms",
+          "description": "Mechanisms involving uniform or localized loss of material thickness.",
+          "class_type_hint": "Damage Mechanism",
+          "member_ids": [],
+          "provisional_id": "SPLIT_ThicknessLoss"
+        }
+      ],
+      "justification": "ClsC_26300b9e is overloaded, as its description and evidence excerpt indicate it covers both mechanical/metallurgical failure and thickness loss, which are already represented as separate classes. Splitting for schema clarity.",
+      "remark": "No entities currently in ClsC_26300b9e, but schema should reflect the two distinct subclasses.",
+      "confidence": 0.9
+    }
+  }
+]

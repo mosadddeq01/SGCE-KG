@@ -2,173 +2,110 @@
   "cluster_label": 8,
   "cluster_classes": [
     {
-      "candidate_id": "ClsC_79ac2db8",
-      "class_label": "High-Temperature Corrosion Mechanisms",
-      "class_description": "Corrosion mechanisms occurring at elevated temperatures, including oxidation and sulfidation, affecting material integrity.",
-      "class_type_hint": "Damage Mechanism",
-      "class_group": "Corrosion Mechanisms",
+      "candidate_id": "ClsC_9a8ddbba",
+      "class_label": "Butterfly Adult Feeding Biology",
+      "class_description": "How adult butterflies obtain food from flowers, including nectar as a food resource and the proboscis as the specialized feeding structure.",
+      "class_type_hint": "Biological System",
+      "class_group": "Butterfly Adult Feeding & Nutrition",
       "confidence": 0.9,
-      "evidence_excerpt": "Corrosion at high temperatures, affecting material integrity.",
-      "member_ids": [],
-      "members": [],
-      "remarks": []
-    },
-    {
-      "candidate_id": "ClsC_3b260d0c",
-      "class_label": "Heat Affected Zone (HAZ)",
-      "class_description": "The Heat Affected Zone (HAZ) is the region of base metal adjacent to a weld that has not melted but has experienced changes in microstructure and mechanical properties due to the heat of welding.",
-      "class_type_hint": "Welded Component Feature",
-      "class_group": "Welded Joint Zones",
-      "confidence": 0.95,
-      "evidence_excerpt": "",
+      "evidence_excerpt": "Adult butterflies feed on nectar from flowers using their long, tubular mouthparts called proboscis.",
       "member_ids": [
-        "En_1f762ea0"
+        "En_b7e8c0a2",
+        "En_8a47e478"
       ],
       "members": [
         {
-          "id": "En_1f762ea0",
-          "entity_name": "Heat Affected Zone (HAZ)",
-          "entity_description": "The portion of the base metal adjacent to a weld with altered microstructure and properties due to welding heat.",
+          "id": "En_b7e8c0a2",
+          "entity_name": "nectar",
+          "entity_description": "A sugary liquid in flowers that serves as a food source for adult butterflies.",
+          "entity_type_hint": "Material"
+        },
+        {
+          "id": "En_8a47e478",
+          "entity_name": "proboscis",
+          "entity_description": "The long, tubular mouthparts adult butterflies use to feed on nectar.",
           "entity_type_hint": "Component"
         }
       ],
       "remarks": []
     },
     {
-      "candidate_id": "ClsR_a28908bf",
-      "class_label": "General High-Temperature Corrosion",
-      "class_description": "Corrosion mechanisms at high temperature not limited to oxidation or sulfidation.",
-      "class_type_hint": "Damage Mechanism",
-      "class_group": "Corrosion Mechanisms",
+      "candidate_id": "ClsR_804169c6",
+      "class_label": "Female butterflies",
+      "class_description": "Adult butterflies of the female sex that lay eggs on specific host plants to begin the next generation.",
+      "class_type_hint": "Organism",
+      "class_group": "Butterfly Biology",
       "confidence": 0.9,
-      "evidence_excerpt": "Corrosion at high temperatures, affecting material integrity.",
+      "evidence_excerpt": "adult butterflies, including female butterflies that lay eggs on host plants",
       "member_ids": [
-        "En_baec7c0b"
+        "Can_116352ca"
       ],
       "members": [
         {
-          "id": "En_baec7c0b",
-          "entity_name": "High Temperature Corrosion",
-          "entity_description": "Corrosion occurring at elevated temperatures, affecting material integrity.",
-          "entity_type_hint": "DamageMechanism"
+          "id": "Can_116352ca",
+          "entity_name": "female butterflies",
+          "entity_description": "Adult butterflies of the female sex that lay eggs on specific host plants to begin the next generation.",
+          "entity_type_hint": "Organism"
         }
       ],
       "remarks": []
     }
   ],
-  "llm_raw": "[\n  {\n    \"function\": \"merge_classes\",\n    \"args\": {\n      \"class_ids\": [\"ClsC_79ac2db8\", \"ClsR_a28908bf\"],\n      \"provisional_id\": \"MERGE(ClsC_79ac2db8|ClsR_a28908bf)\",\n      \"new_name\": \"High-Temperature Corrosion Mechanisms\",\n      \"new_description\": \"Corrosion mechanisms occurring at elevated temperatures, including but not limited to oxidation and sulfidation, affecting material integrity.\",\n      \"new_class_type_hint\": \"Damage Mechanism\",\n      \"justification\": \"Both classes describe high-temperature corrosion mechanisms with overlapping descriptions and evidence, and are currently in the same class_group; merging eliminates redundancy and clarifies the schema.\",\n      \"remark\": null,\n      \"confidence\": 0.98\n    }\n  },\n  {\n    \"function\": \"reassign_entities\",\n    \"args\": {\n      \"entity_ids\": [\"En_baec7c0b\"],\n      \"from_class_id\": \"ClsR_a28908bf\",\n      \"to_class_id\": \"MERGE(ClsC_79ac2db8|ClsR_a28908bf)\",\n      \"justification\": \"Entity 'High Temperature Corrosion' fits the merged class definition and should be consolidated under the unified class.\",\n      \"remark\": null,\n      \"confidence\": 0.98\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"MERGE(ClsC_79ac2db8|ClsR_a28908bf)\",\n      \"new_name\": null,\n      \"new_description\": null,\n      \"new_class_type_hint\": null,\n      \"new_class_group\": \"Corrosion Mechanisms\",\n      \"remark\": null,\n      \"justification\": \"Confirm and retain the correct Class_Group for the merged class.\",\n      \"confidence\": 0.95\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_3b260d0c\",\n      \"new_name\": null,\n      \"new_description\": null,\n      \"new_class_type_hint\": null,\n      \"new_class_group\": \"Welded Joint Zones\",\n      \"remark\": null,\n      \"justification\": \"Class 'Heat Affected Zone (HAZ)' is distinct from corrosion mechanisms and correctly grouped under 'Welded Joint Zones'. Confirming Class_Group.\",\n      \"confidence\": 0.95\n    }\n  }\n]",
+  "llm_raw": "[\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_9a8ddbba\",\n      \"new_name\": null,\n      \"new_description\": null,\n      \"new_class_type_hint\": null,\n      \"new_class_group\": \"Butterfly Biology & Ecology\",\n      \"remark\": null,\n      \"justification\": \"This class concerns adult butterfly feeding structures and food sources, which is part of the broader domain of butterfly biology and ecology; aligning its class_group with the related female butterfly class supports a coherent upper-level schema.\",\n      \"confidence\": 0.87\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsR_804169c6\",\n      \"new_name\": null,\n      \"new_description\": null,\n      \"new_class_type_hint\": null,\n      \"new_class_group\": \"Butterfly Biology & Ecology\",\n      \"remark\": null,\n      \"justification\": \"This class describes female butterflies as organisms within butterfly life history; assigning the same broader class_group as the adult feeding biology class connects related but distinct aspects of butterfly biology.\",\n      \"confidence\": 0.87\n    }\n  }\n]",
   "parsed_steps": [
     {
-      "function": "merge_classes",
+      "function": "modify_class",
       "args": {
-        "class_ids": [
-          "ClsC_79ac2db8",
-          "ClsR_a28908bf"
-        ],
-        "provisional_id": "MERGE(ClsC_79ac2db8|ClsR_a28908bf)",
-        "new_name": "High-Temperature Corrosion Mechanisms",
-        "new_description": "Corrosion mechanisms occurring at elevated temperatures, including but not limited to oxidation and sulfidation, affecting material integrity.",
-        "new_class_type_hint": "Damage Mechanism",
-        "justification": "Both classes describe high-temperature corrosion mechanisms with overlapping descriptions and evidence, and are currently in the same class_group; merging eliminates redundancy and clarifies the schema.",
+        "class_id": "ClsC_9a8ddbba",
+        "new_name": null,
+        "new_description": null,
+        "new_class_type_hint": null,
+        "new_class_group": "Butterfly Biology & Ecology",
         "remark": null,
-        "confidence": 0.98
-      }
-    },
-    {
-      "function": "reassign_entities",
-      "args": {
-        "entity_ids": [
-          "En_baec7c0b"
-        ],
-        "from_class_id": "ClsR_a28908bf",
-        "to_class_id": "MERGE(ClsC_79ac2db8|ClsR_a28908bf)",
-        "justification": "Entity 'High Temperature Corrosion' fits the merged class definition and should be consolidated under the unified class.",
-        "remark": null,
-        "confidence": 0.98
+        "justification": "This class concerns adult butterfly feeding structures and food sources, which is part of the broader domain of butterfly biology and ecology; aligning its class_group with the related female butterfly class supports a coherent upper-level schema.",
+        "confidence": 0.87
       }
     },
     {
       "function": "modify_class",
       "args": {
-        "class_id": "MERGE(ClsC_79ac2db8|ClsR_a28908bf)",
+        "class_id": "ClsR_804169c6",
         "new_name": null,
         "new_description": null,
         "new_class_type_hint": null,
-        "new_class_group": "Corrosion Mechanisms",
+        "new_class_group": "Butterfly Biology & Ecology",
         "remark": null,
-        "justification": "Confirm and retain the correct Class_Group for the merged class.",
-        "confidence": 0.95
-      }
-    },
-    {
-      "function": "modify_class",
-      "args": {
-        "class_id": "ClsC_3b260d0c",
-        "new_name": null,
-        "new_description": null,
-        "new_class_type_hint": null,
-        "new_class_group": "Welded Joint Zones",
-        "remark": null,
-        "justification": "Class 'Heat Affected Zone (HAZ)' is distinct from corrosion mechanisms and correctly grouped under 'Welded Joint Zones'. Confirming Class_Group.",
-        "confidence": 0.95
+        "justification": "This class describes female butterflies as organisms within butterfly life history; assigning the same broader class_group as the adult feeding biology class connects related but distinct aspects of butterfly biology.",
+        "confidence": 0.87
       }
     }
   ],
   "executed_decisions": [
     {
-      "action": "merge_classes",
-      "input_class_ids": [
-        "ClsC_79ac2db8",
-        "ClsR_a28908bf"
-      ],
-      "result_class_id": "ClsR_8f8b3257",
-      "provisional_id": "MERGE(ClsC_79ac2db8|ClsR_a28908bf)",
-      "justification": "Both classes describe high-temperature corrosion mechanisms with overlapping descriptions and evidence, and are currently in the same class_group; merging eliminates redundancy and clarifies the schema.",
-      "remark": null,
-      "confidence": 0.98
-    },
-    {
-      "action": "reassign_entities",
-      "entity_ids": [
-        "En_baec7c0b"
-      ],
-      "from": "ClsR_a28908bf",
-      "from_resolved": "ClsR_8f8b3257",
-      "to": "MERGE(ClsC_79ac2db8|ClsR_a28908bf)",
-      "to_resolved": "ClsR_8f8b3257",
-      "justification": "Entity 'High Temperature Corrosion' fits the merged class definition and should be consolidated under the unified class.",
-      "remark": null,
-      "confidence": 0.98
-    },
-    {
       "action": "modify_class",
-      "class_id": "MERGE(ClsC_79ac2db8|ClsR_a28908bf)",
-      "class_id_resolved": "ClsR_8f8b3257",
+      "class_id": "ClsC_9a8ddbba",
+      "class_id_resolved": "ClsC_9a8ddbba",
       "new_name": null,
       "new_description": null,
       "new_class_type_hint": null,
-      "new_class_group": "Corrosion Mechanisms",
+      "new_class_group": "Butterfly Biology & Ecology",
       "remark": null,
-      "justification": "Confirm and retain the correct Class_Group for the merged class.",
-      "confidence": 0.95
+      "justification": "This class concerns adult butterfly feeding structures and food sources, which is part of the broader domain of butterfly biology and ecology; aligning its class_group with the related female butterfly class supports a coherent upper-level schema.",
+      "confidence": 0.87
     },
     {
       "action": "modify_class",
-      "class_id": "ClsC_3b260d0c",
-      "class_id_resolved": "ClsC_3b260d0c",
+      "class_id": "ClsR_804169c6",
+      "class_id_resolved": "ClsR_804169c6",
       "new_name": null,
       "new_description": null,
       "new_class_type_hint": null,
-      "new_class_group": "Welded Joint Zones",
+      "new_class_group": "Butterfly Biology & Ecology",
       "remark": null,
-      "justification": "Class 'Heat Affected Zone (HAZ)' is distinct from corrosion mechanisms and correctly grouped under 'Welded Joint Zones'. Confirming Class_Group.",
-      "confidence": 0.95
+      "justification": "This class describes female butterflies as organisms within butterfly life history; assigning the same broader class_group as the adult feeding biology class connects related but distinct aspects of butterfly biology.",
+      "confidence": 0.87
     }
   ],
-  "provisional_to_real": {
-    "MERGE(ClsC_79ac2db8|ClsR_a28908bf)": "ClsR_8f8b3257",
-    "ClsC_79ac2db8": "ClsR_8f8b3257",
-    "ClsR_a28908bf": "ClsR_8f8b3257"
-  },
-  "timestamp": "2025-12-28T00:24:01Z"
+  "provisional_to_real": {},
+  "timestamp": "2026-01-02T08:41:11Z"
 }

@@ -3,25 +3,25 @@
     "function": "set_canonical_rel",
     "args": {
       "relation_ids": [
-        "RelR_338e547f321f",
-        "RelR_29b3c1c25656"
+        "RelR_19b464b66a10",
+        "RelR_46c2cd35cb2f"
       ],
-      "canonical_rel_name": "alters_microstructure_of",
-      "canonical_rel_desc": "A process or condition changes the microstructure of a material or alloy (e.g., phase distribution, morphology, or microstructural constituents).",
-      "justification": "Both relations describe graphitization changing the microstructure of different steels under long-term high-temperature operation; they share the same direction (process → material) and semantic meaning of microstructural alteration.",
+      "canonical_rel_name": "protects",
+      "canonical_rel_desc": "Subject safeguards or provides protective benefit to the object (actual or intended protection), often against implicit or explicit threats.",
+      "justification": "Both relations describe an agent (communities; ethical principles) providing or intending to provide protection to beneficiaries (loved ones; communities). The protection is the subject’s effect on the object, so a single canonical predicate 'protects' with a description that allows for intended or actual protection fits both.",
       "remark": null,
-      "confidence": 0.93
+      "confidence": 0.9
     }
   },
   {
     "function": "set_canonical_rel",
     "args": {
       "relation_ids": [
-        "RelR_a45fb4ca81de"
+        "RelR_a4ed9f8ffbd9"
       ],
-      "canonical_rel_name": "forms_microstructural_constituent",
-      "canonical_rel_desc": "A process or transformation leads to the formation of a specific microstructural constituent or feature within a material (e.g., graphite nodules, carbides, precipitates).",
-      "justification": "This relation specifically captures that graphitization produces/creates graphite nodules as microstructural features in the steel, which is more precise than a generic ‘produces’ predicate.",
+      "canonical_rel_name": "seeks_protection_from",
+      "canonical_rel_desc": "Subject seeks or attempts to obtain protection against or from the object, which is construed as a source of potential harm or threat.",
+      "justification": "This relation encodes a different direction of protection semantics: communities are not protecting threats, but instead are seeking protection from perceived threats. Using a distinct canonical predicate 'seeks_protection_from' preserves the asymmetric role of the threat as the source of harm.",
       "remark": null,
       "confidence": 0.9
     }
@@ -30,28 +30,28 @@
     "function": "set_rel_cls",
     "args": {
       "relation_ids": [
-        "RelR_338e547f321f",
-        "RelR_29b3c1c25656",
-        "RelR_a45fb4ca81de"
+        "RelR_19b464b66a10",
+        "RelR_a4ed9f8ffbd9",
+        "RelR_46c2cd35cb2f"
       ],
-      "rel_cls": "microstructural_transformation_relation",
-      "justification": "All three relations describe how the graphitization process changes or generates microstructural features in steels (altering existing microstructure or forming graphite nodules), so they belong to the same broader class of microstructural transformation relations.",
+      "rel_cls": "protection_and_safety_relation",
+      "justification": "All three relations concern protective dynamics and safety: subjects either protect others or seek protection from threats. Grouping them under a shared class 'protection_and_safety_relation' captures this common semantic family while allowing distinct canonical predicates.",
       "remark": null,
-      "confidence": 0.94
+      "confidence": 0.9
     }
   },
   {
     "function": "set_rel_cls_group",
     "args": {
       "relation_ids": [
-        "RelR_338e547f321f",
-        "RelR_29b3c1c25656",
-        "RelR_a45fb4ca81de"
+        "RelR_19b464b66a10",
+        "RelR_a4ed9f8ffbd9",
+        "RelR_46c2cd35cb2f"
       ],
-      "rel_cls_group": "MODIFICATION",
-      "justification": "Each relation expresses that a process (graphitization) modifies the state of a material by changing its microstructure or forming new microstructural constituents, fitting a broad modification/change-of-state dimension rather than simple association or identity.",
+      "rel_cls_group": "CAUSALITY",
+      "justification": "Protection relations encode causal or counterfactual effects (subject’s norms or actions reduce or mitigate potential harms from threats). This aligns best with a high-level CAUSALITY group rather than generic association, since the key semantics is about causal mitigation of risk or harm.",
       "remark": null,
-      "confidence": 0.9
+      "confidence": 0.88
     }
   }
 ]

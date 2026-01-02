@@ -1,0 +1,126 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_34f4361eb4ca"],
+      "canonical_rel_name": "is_attached_to",
+      "canonical_rel_desc": "Indicates that the subject object is physically attached or fastened to the object entity in space.",
+      "justification": "The description and hint ('spatial attachment') state the bloody hook is hanging from the car door handle, which is a straightforward physical attachment relation.",
+      "remark": null,
+      "confidence": 0.98
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": ["RelR_34f4361eb4ca"],
+      "rel_cls": "spatial_attachment_relation",
+      "justification": "This relation encodes a concrete physical attachment between two entities (hook and car door handle), which fits a spatial attachment class.",
+      "remark": null,
+      "confidence": 0.97
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": ["RelR_34f4361eb4ca"],
+      "rel_cls_group": "SPATIALITY",
+      "justification": "The core semantics concern where the hook is in relation to the handle (a physical, spatial configuration).",
+      "remark": null,
+      "confidence": 0.97
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_120d15c6d3fd"],
+      "canonical_rel_name": "is_same_object_as",
+      "canonical_rel_desc": "Indicates that the subject and object refer to the same underlying physical object or token, possibly inferred rather than explicitly stated.",
+      "justification": "The text says the bloody hook is implied to be the same hook that served as the criminal’s hand, which is an identity-of-object relation rather than loose similarity.",
+      "remark": "Slight inferential nature is already captured in the UncertaintyQualifier; predicate still models object identity.",
+      "confidence": 0.87
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": ["RelR_120d15c6d3fd"],
+      "rel_cls": "identity_equivalence_relation",
+      "justification": "The relation asserts that two mentions (bloody hook, hook for a hand) are the same physical hook, belonging to an identity/equivalence family.",
+      "remark": null,
+      "confidence": 0.86
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": ["RelR_120d15c6d3fd"],
+      "rel_cls_group": "IDENTITY",
+      "justification": "Semantics concern reference and sameness of an entity, which falls under identity rather than causality or composition.",
+      "remark": null,
+      "confidence": 0.86
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_ec56bbbee845"],
+      "canonical_rel_name": "conceptually_related_to",
+      "canonical_rel_desc": "Indicates a non-causal, conceptual association between two ideas or domains.",
+      "justification": "The relation reflects that research on the origins of urban legends is conceptually tied to questions about the truth behind the stories, with no direct causal or identity claim.",
+      "remark": null,
+      "confidence": 0.84
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": ["RelR_ec56bbbee845"],
+      "rel_cls": "conceptual_association_relation",
+      "justification": "The link is a broad conceptual association between two research/idea areas, fitting an association-type class.",
+      "remark": null,
+      "confidence": 0.83
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": ["RelR_ec56bbbee845"],
+      "rel_cls_group": "ASSOCIATION",
+      "justification": "This is best modeled as an associative/relational tie between concepts rather than identity, causality, or spatiality.",
+      "remark": null,
+      "confidence": 0.83
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_169c41631aab"],
+      "canonical_rel_name": "corresponds_to",
+      "canonical_rel_desc": "Indicates that the subject stands in a correspondence relation to the object, typically aligning or matching it in meaning or truth-value, without strict identity of reference.",
+      "justification": "The description states that 'truth behind the stories' corresponds to factual, verifiable aspects; this is a correspondence between a truth-claim and facts rather than literal object identity.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": ["RelR_169c41631aab"],
+      "rel_cls": "correspondence_relation",
+      "justification": "The predicate specifically captures a truth–fact correspondence notion, which fits a correspondence-style relation class distinct from general conceptual association or strict identity-of-object.",
+      "remark": null,
+      "confidence": 0.88
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": ["RelR_169c41631aab"],
+      "rel_cls_group": "IDENTITY",
+      "justification": "Philosophically this encodes a truth-as-correspondence-to-fact view; it is closer to an identity/accuracy dimension than to mere association, even though it is not strict token-identity.",
+      "remark": "Could also be modeled under ASSOCIATION in alternate schemas, but identity-of-truth-to-fact is a reasonable primary grouping here.",
+      "confidence": 0.8
+    }
+  }
+]

@@ -1,0 +1,335 @@
+{
+  "cluster_label": "30_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_09bf81ea7663",
+      "relation_name": "involves",
+      "rel_desc": "Ethical dilemmas in AI development are said to arise from concerns that include accountability.",
+      "rel_hint_type": "conceptual-inclusion",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "ethical dilemmas in AI development",
+      "object_entity_name": "accountability",
+      "subject_class_label": "AI Ethics Dilemmas (Concept)",
+      "subject_class_group": "AI Ethics & Governance",
+      "object_class_label": "AI Responsibility and Accountability Concepts",
+      "object_class_group": "AI Responsibility & Accountability",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": "in the development and deployment of AI technologies",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "stem from",
+        "LogicalMarker": null,
+        "OtherQualifier": "ConcernType: listed as one of multiple sources of dilemmas"
+      },
+      "confidence": 0.9,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_b34bce086863",
+      "relation_name": "discusses",
+      "rel_desc": "The document section titled \"Ethical Dilemmas in AI Development\" is a discussion of ethical dilemmas in AI development as a concept.",
+      "rel_hint_type": "aboutness",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "Ethical Dilemmas in AI Development",
+      "object_entity_name": "ethical dilemmas in AI development",
+      "subject_class_label": "AI Ethics Dilemma Documents",
+      "subject_class_group": "AI Ethics & Governance",
+      "object_class_label": "AI Ethics Dilemmas (Concept)",
+      "object_class_group": "AI Ethics & Governance",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "DocumentSegmentType: introductory overview of dilemmas"
+      },
+      "confidence": 0.92,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_7737479c6211",
+      "relation_name": "concerns",
+      "rel_desc": "The ethical dilemma of transparency is specifically situated within AI development and, by extension, AI systems.",
+      "rel_hint_type": "topic",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "ethical dilemma of transparency in AI",
+      "object_entity_name": "AI systems",
+      "subject_class_label": "AI Transparency Ethics",
+      "subject_class_group": "AI Ethics: Privacy and Transparency",
+      "object_class_label": "AI Systems",
+      "object_class_group": "TBD",
+      "qualifiers": {
+        "TemporalQualifier": "during AI development",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.78,
+      "remarks": [
+        "AI development is not an explicit entity; AI systems used as proxy for development context."
+      ]
+    },
+    {
+      "relation_id": "RelR_de6518c56893",
+      "relation_name": "involves",
+      "rel_desc": "Ethical dilemmas in AI development involve issues related to accountability.",
+      "rel_hint_type": "thematic_link",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "ethical dilemmas in AI development",
+      "object_entity_name": "accountability",
+      "subject_class_label": "AI Ethics Dilemmas (Concept)",
+      "subject_class_group": "AI Ethics & Governance",
+      "object_class_label": "AI Responsibility and Accountability Concepts",
+      "object_class_group": "AI Responsibility & Accountability",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "in AI development",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "IssueCategory: part of the multifaceted nature of ethical dilemmas"
+      },
+      "confidence": 0.87,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_09bf81ea7663\", \"RelR_de6518c56893\"],\n      \"canonical_rel_name\": \"involves_concern\",\n      \"canonical_rel_desc\": \"Indicates that a broader ethical dilemma includes a specific concern or issue (e.g., accountability) as one of its components.\",\n      \"justification\": \"Both relations link the same ethical dilemma concept in AI development to 'accountability' as an included concern/issue; a normalized predicate clarifies that accountability is a constituent concern of the dilemma rather than just a loose association.\",\n      \"remark\": \"Used for relations where an ethical dilemma concept includes specific issues like accountability, privacy, bias, etc.\",\n      \"confidence\": 0.93\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_09bf81ea7663\", \"RelR_de6518c56893\"],\n      \"rel_cls\": \"ethical_dilemma_issue_relation\",\n      \"justification\": \"These relations represent the inclusion of specific issues (accountability) within a broader ethical dilemma in AI development, forming a consistent class of ‘dilemma ↔ constituent ethical issue’ links.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_09bf81ea7663\", \"RelR_de6518c56893\"],\n      \"rel_cls_group\": \"ASSOCIATION\",\n      \"justification\": \"The link is a conceptual/thematic inclusion of one concern within a broader dilemma, not causal, spatial, temporal, or compositional in a physical sense; it best fits a broad associative/thematic grouping.\",\n      \"remark\": null,\n      \"confidence\": 0.86\n    }\n  },\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_b34bce086863\"],\n      \"canonical_rel_name\": \"is_about\",\n      \"canonical_rel_desc\": \"Indicates that a document or document segment has a particular concept as its primary topic or subject matter.\",\n      \"justification\": \"The relation explicitly states that the document section 'Ethical Dilemmas in AI Development' discusses the concept 'ethical dilemmas in AI development'; this is a standard document-to-topic aboutness relation.\",\n      \"remark\": \"Use this predicate for document or section nodes pointing to their main conceptual topics.\",\n      \"confidence\": 0.96\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_b34bce086863\"],\n      \"rel_cls\": \"document_topic_relation\",\n      \"justification\": \"This relation links a document section to the concept it discusses, a canonical example of a document-to-topic relation class.\",\n      \"remark\": null,\n      \"confidence\": 0.95\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_b34bce086863\"],\n      \"rel_cls_group\": \"ABOUTNESS\",\n      \"justification\": \"The semantics are strictly about what the document section is about, fitting a broad ABOUTNESS group rather than generic association.\",\n      \"remark\": null,\n      \"confidence\": 0.95\n    }\n  },\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_7737479c6211\"],\n      \"canonical_rel_name\": \"concerns\",\n      \"canonical_rel_desc\": \"Indicates that an ethical issue or dilemma is about or pertains to a particular system, domain, or context.\",\n      \"justification\": \"The relation connects the 'ethical dilemma of transparency in AI' to 'AI systems' and describes the dilemma as being situated within AI systems; this is a conceptual ‘dilemma concerns domain’ predicate rather than a document-topic link.\",\n      \"remark\": \"Use when an ethical issue or principle is described as pertaining to a specific type of AI system or technological context.\",\n      \"confidence\": 0.88\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_7737479c6211\"],\n      \"rel_cls\": \"ethical_dilemma_scope_relation\",\n      \"justification\": \"The relation defines the scope or domain (AI systems) to which an ethical dilemma (transparency in AI) applies, forming a class of links that map ethical issues to their affected system/domain.\",\n      \"remark\": null,\n      \"confidence\": 0.84\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_7737479c6211\"],\n      \"rel_cls_group\": \"ABOUTNESS\",\n      \"justification\": \"The dilemma is about or pertains to AI systems as its domain of application; this fits the broad ABOUTNESS dimension better than causality, composition, or spatiality.\",\n      \"remark\": \"Borderline between ABOUTNESS and ASSOCIATION; chosen as ABOUTNESS to parallel document-topic style but for concept-to-domain links.\",\n      \"confidence\": 0.8\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_09bf81ea7663",
+          "RelR_de6518c56893"
+        ],
+        "canonical_rel_name": "involves_concern",
+        "canonical_rel_desc": "Indicates that a broader ethical dilemma includes a specific concern or issue (e.g., accountability) as one of its components.",
+        "justification": "Both relations link the same ethical dilemma concept in AI development to 'accountability' as an included concern/issue; a normalized predicate clarifies that accountability is a constituent concern of the dilemma rather than just a loose association.",
+        "remark": "Used for relations where an ethical dilemma concept includes specific issues like accountability, privacy, bias, etc.",
+        "confidence": 0.93
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_09bf81ea7663",
+          "RelR_de6518c56893"
+        ],
+        "rel_cls": "ethical_dilemma_issue_relation",
+        "justification": "These relations represent the inclusion of specific issues (accountability) within a broader ethical dilemma in AI development, forming a consistent class of 'dilemma ↔ constituent ethical issue' links.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_09bf81ea7663",
+          "RelR_de6518c56893"
+        ],
+        "rel_cls_group": "ASSOCIATION",
+        "justification": "The link is a conceptual/thematic inclusion of one concern within a broader dilemma, not causal, spatial, temporal, or compositional in a physical sense; it best fits a broad associative/thematic grouping.",
+        "remark": null,
+        "confidence": 0.86
+      }
+    },
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_b34bce086863"
+        ],
+        "canonical_rel_name": "is_about",
+        "canonical_rel_desc": "Indicates that a document or document segment has a particular concept as its primary topic or subject matter.",
+        "justification": "The relation explicitly states that the document section 'Ethical Dilemmas in AI Development' discusses the concept 'ethical dilemmas in AI development'; this is a standard document-to-topic aboutness relation.",
+        "remark": "Use this predicate for document or section nodes pointing to their main conceptual topics.",
+        "confidence": 0.96
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_b34bce086863"
+        ],
+        "rel_cls": "document_topic_relation",
+        "justification": "This relation links a document section to the concept it discusses, a canonical example of a document-to-topic relation class.",
+        "remark": null,
+        "confidence": 0.95
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_b34bce086863"
+        ],
+        "rel_cls_group": "ABOUTNESS",
+        "justification": "The semantics are strictly about what the document section is about, fitting a broad ABOUTNESS group rather than generic association.",
+        "remark": null,
+        "confidence": 0.95
+      }
+    },
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_7737479c6211"
+        ],
+        "canonical_rel_name": "concerns",
+        "canonical_rel_desc": "Indicates that an ethical issue or dilemma is about or pertains to a particular system, domain, or context.",
+        "justification": "The relation connects the 'ethical dilemma of transparency in AI' to 'AI systems' and describes the dilemma as being situated within AI systems; this is a conceptual 'dilemma concerns domain' predicate rather than a document-topic link.",
+        "remark": "Use when an ethical issue or principle is described as pertaining to a specific type of AI system or technological context.",
+        "confidence": 0.88
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_7737479c6211"
+        ],
+        "rel_cls": "ethical_dilemma_scope_relation",
+        "justification": "The relation defines the scope or domain (AI systems) to which an ethical dilemma (transparency in AI) applies, forming a class of links that map ethical issues to their affected system/domain.",
+        "remark": null,
+        "confidence": 0.84
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_7737479c6211"
+        ],
+        "rel_cls_group": "ABOUTNESS",
+        "justification": "The dilemma is about or pertains to AI systems as its domain of application; this fits the broad ABOUTNESS dimension better than causality, composition, or spatiality.",
+        "remark": "Borderline between ABOUTNESS and ASSOCIATION; chosen as ABOUTNESS to parallel document-topic style but for concept-to-domain links.",
+        "confidence": 0.8
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_09bf81ea7663",
+        "RelR_de6518c56893"
+      ],
+      "canonical_rel_name": "involves_concern",
+      "canonical_rel_desc": "Indicates that a broader ethical dilemma includes a specific concern or issue (e.g., accountability) as one of its components.",
+      "justification": "Both relations link the same ethical dilemma concept in AI development to 'accountability' as an included concern/issue; a normalized predicate clarifies that accountability is a constituent concern of the dilemma rather than just a loose association.",
+      "remark": "Used for relations where an ethical dilemma concept includes specific issues like accountability, privacy, bias, etc.",
+      "confidence": 0.93
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_09bf81ea7663",
+        "RelR_de6518c56893"
+      ],
+      "rel_cls": "ethical_dilemma_issue_relation",
+      "justification": "These relations represent the inclusion of specific issues (accountability) within a broader ethical dilemma in AI development, forming a consistent class of 'dilemma ↔ constituent ethical issue' links.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_09bf81ea7663",
+        "RelR_de6518c56893"
+      ],
+      "rel_cls_group": "ASSOCIATION",
+      "justification": "The link is a conceptual/thematic inclusion of one concern within a broader dilemma, not causal, spatial, temporal, or compositional in a physical sense; it best fits a broad associative/thematic grouping.",
+      "remark": null,
+      "confidence": 0.86
+    },
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_b34bce086863"
+      ],
+      "canonical_rel_name": "is_about",
+      "canonical_rel_desc": "Indicates that a document or document segment has a particular concept as its primary topic or subject matter.",
+      "justification": "The relation explicitly states that the document section 'Ethical Dilemmas in AI Development' discusses the concept 'ethical dilemmas in AI development'; this is a standard document-to-topic aboutness relation.",
+      "remark": "Use this predicate for document or section nodes pointing to their main conceptual topics.",
+      "confidence": 0.96
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_b34bce086863"
+      ],
+      "rel_cls": "document_topic_relation",
+      "justification": "This relation links a document section to the concept it discusses, a canonical example of a document-to-topic relation class.",
+      "remark": null,
+      "confidence": 0.95
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_b34bce086863"
+      ],
+      "rel_cls_group": "ABOUTNESS",
+      "justification": "The semantics are strictly about what the document section is about, fitting a broad ABOUTNESS group rather than generic association.",
+      "remark": null,
+      "confidence": 0.95
+    },
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_7737479c6211"
+      ],
+      "canonical_rel_name": "concerns",
+      "canonical_rel_desc": "Indicates that an ethical issue or dilemma is about or pertains to a particular system, domain, or context.",
+      "justification": "The relation connects the 'ethical dilemma of transparency in AI' to 'AI systems' and describes the dilemma as being situated within AI systems; this is a conceptual 'dilemma concerns domain' predicate rather than a document-topic link.",
+      "remark": "Use when an ethical issue or principle is described as pertaining to a specific type of AI system or technological context.",
+      "confidence": 0.88
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_7737479c6211"
+      ],
+      "rel_cls": "ethical_dilemma_scope_relation",
+      "justification": "The relation defines the scope or domain (AI systems) to which an ethical dilemma (transparency in AI) applies, forming a class of links that map ethical issues to their affected system/domain.",
+      "remark": null,
+      "confidence": 0.84
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_7737479c6211"
+      ],
+      "rel_cls_group": "ABOUTNESS",
+      "justification": "The dilemma is about or pertains to AI systems as its domain of application; this fits the broad ABOUTNESS dimension better than causality, composition, or spatiality.",
+      "remark": "Borderline between ABOUTNESS and ASSOCIATION; chosen as ABOUTNESS to parallel document-topic style but for concept-to-domain links.",
+      "confidence": 0.8
+    }
+  ],
+  "timestamp": "2026-01-02T09:15:08Z"
+}

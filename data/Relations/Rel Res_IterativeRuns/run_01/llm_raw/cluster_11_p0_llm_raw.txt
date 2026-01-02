@@ -1,0 +1,18 @@
+[
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": [
+        "RelR_76a1e8b0c398",
+        "RelR_6251113acc95"
+      ],
+      "canonical_rel_name": "applies_to",
+      "canonical_rel_desc": "Indicates that a normative or regulatory instrument (e.g., guidelines, regulations, standards) governs, constrains, or is intended to cover the specified systems, entities, or activities.",
+      "rel_cls": null,
+      "rel_cls_group": null,
+      "justification": "Both relations describe the governance scope of normative instruments (ethical guidelines, regulations) over AI systems. Normalizing the canonical predicate from 'applies_to_entity' to the cleaner, more general 'applies_to' improves consistency and readability without changing the underlying semantics. The existing rel_cls and rel_cls_group are already appropriate and therefore left unchanged.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  }
+]

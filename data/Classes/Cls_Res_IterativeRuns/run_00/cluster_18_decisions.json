@@ -1,0 +1,257 @@
+{
+  "cluster_label": 18,
+  "cluster_classes": [
+    {
+      "candidate_id": "ClsC_5a5ed473",
+      "class_label": "Butterfly Wings",
+      "class_description": "Anatomical wing structures of butterflies, including their distinct post-emergence physical states prior to functional flight.",
+      "class_type_hint": "Anatomical Structure",
+      "class_group": "TBD",
+      "confidence": 0.86,
+      "evidence_excerpt": "wings of a butterfly… initial post-emergence state of a butterfly’s wings",
+      "member_ids": [
+        "Can_95454d35",
+        "En_e0dc8ccf"
+      ],
+      "members": [
+        {
+          "id": "Can_95454d35",
+          "entity_name": "butterfly wings",
+          "entity_description": "The flight-enabling appendages of a butterfly that develop during metamorphosis and must expand and harden before enabling flight.",
+          "entity_type_hint": "Component"
+        },
+        {
+          "id": "En_e0dc8ccf",
+          "entity_name": "soft, wrinkled butterfly wings",
+          "entity_description": "The initial post-emergence state of a butterfly’s wings, when they are soft and wrinkled before expansion and hardening.",
+          "entity_type_hint": "State"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_0289e8be",
+      "class_label": "Butterfly Emergence Processes",
+      "class_description": "Physiological and behavioral processes that occur as a butterfly transitions from chrysalis to functional adult, culminating in flight.",
+      "class_type_hint": "Biological Process",
+      "class_group": "TBD",
+      "confidence": 0.84,
+      "evidence_excerpt": "pumping fluid into wings to expand and harden… ready to take flight for the first time",
+      "member_ids": [
+        "En_ec926b39",
+        "En_895aab62"
+      ],
+      "members": [
+        {
+          "id": "En_ec926b39",
+          "entity_name": "fluid pumping into wings",
+          "entity_description": "Process by which a butterfly circulates fluid into its wings to expand and harden them.",
+          "entity_type_hint": "Process"
+        },
+        {
+          "id": "En_895aab62",
+          "entity_name": "first flight",
+          "entity_description": "The initial act of flying that a butterfly performs after its wings develop.",
+          "entity_type_hint": "Process"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_0b13f1f3",
+      "class_label": "Butterfly Development",
+      "class_description": "Biological processes and outcomes involved in a caterpillar’s transformation into an adult butterfly, including specific metamorphosis and broader developmental changes.",
+      "class_type_hint": "Biological Process",
+      "class_group": "TBD",
+      "confidence": 0.86,
+      "evidence_excerpt": "Transformation of a caterpillar inside the chrysalis into an adult butterfly, described as astonishing transformations.",
+      "member_ids": [
+        "Can_1db56857",
+        "En_328200c3",
+        "En_e1203c31"
+      ],
+      "members": [
+        {
+          "id": "Can_1db56857",
+          "entity_name": "metamorphosis",
+          "entity_description": "Transformation process in which a caterpillar's body reorganizes inside the chrysalis and develops into an adult butterfly.",
+          "entity_type_hint": "Process"
+        },
+        {
+          "id": "En_328200c3",
+          "entity_name": "butterfly",
+          "entity_description": "Adult form that the caterpillar develops into after completing metamorphosis.",
+          "entity_type_hint": "Organism"
+        },
+        {
+          "id": "En_e1203c31",
+          "entity_name": "astonishing transformations",
+          "entity_description": "Remarkable morphological and developmental changes occurring across butterfly life stages.",
+          "entity_type_hint": "Process"
+        }
+      ],
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"create_class\",\n    \"args\": {\n      \"name\": \"Adult Butterfly Organism\",\n      \"description\": \"The adult butterfly as an organism, representing the outcome of metamorphosis rather than the developmental process itself.\",\n      \"class_type_hint\": \"Organism\",\n      \"member_ids\": [\n        \"En_328200c3\"\n      ],\n      \"provisional_id\": \"NEW_AdultButterflyOrganism\",\n      \"justification\": \"En_328200c3 is an organism outcome distinct from the developmental processes in 'Butterfly Development', so it should be modeled as its own organism class rather than mixed into a process class.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"reassign_entities\",\n    \"args\": {\n      \"entity_ids\": [\n        \"En_328200c3\"\n      ],\n      \"from_class_id\": \"ClsC_0b13f1f3\",\n      \"to_class_id\": \"NEW_AdultButterflyOrganism\",\n      \"justification\": \"The entity 'butterfly' (En_328200c3) is the adult organism, not a process, so it fits better in the newly created organism class than in the 'Butterfly Development' process class.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_5a5ed473\",\n      \"new_name\": \"Butterfly Wings\",\n      \"new_description\": \"Anatomical wing structures of butterflies, including their initial post-emergence physical states prior to functional flight.\",\n      \"new_class_type_hint\": \"Anatomical Structure\",\n      \"new_class_group\": \"Butterfly Life Cycle & Metamorphosis\",\n      \"remark\": null,\n      \"justification\": \"This class correctly covers anatomical wing structures and states; only a stable, shared Class_Group is needed to align it with related metamorphosis and emergence classes.\",\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_0289e8be\",\n      \"new_name\": \"Butterfly Emergence Processes\",\n      \"new_description\": \"Physiological and behavioral processes as a butterfly transitions from chrysalis to functional adult, including wing expansion and first flight.\",\n      \"new_class_type_hint\": \"Biological Process\",\n      \"new_class_group\": \"Butterfly Life Cycle & Metamorphosis\",\n      \"remark\": null,\n      \"justification\": \"This class focuses on specific emergence-stage processes within the butterfly life cycle and should share a Class_Group with other metamorphosis-related classes.\",\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_0b13f1f3\",\n      \"new_name\": \"Butterfly Development Processes\",\n      \"new_description\": \"Biological processes involved in a caterpillar’s transformation into an adult butterfly, including metamorphosis and broader morphological transformations, excluding the adult organism itself.\",\n      \"new_class_type_hint\": \"Biological Process\",\n      \"new_class_group\": \"Butterfly Life Cycle & Metamorphosis\",\n      \"remark\": null,\n      \"justification\": \"After moving the adult organism entity out, this class should be clearly scoped to developmental processes and aligned via a shared Class_Group with related emergence and anatomical classes.\",\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"NEW_AdultButterflyOrganism\",\n      \"new_name\": \"Adult Butterfly Organism\",\n      \"new_description\": \"The adult butterfly as an organism, representing the endpoint of the metamorphosis process.\",\n      \"new_class_type_hint\": \"Organism\",\n      \"new_class_group\": \"Butterfly Life Cycle & Metamorphosis\",\n      \"remark\": null,\n      \"justification\": \"The new organism class should be explicitly connected to the same life-cycle Class_Group as the related developmental and emergence process classes.\",\n      \"confidence\": 0.9\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "create_class",
+      "args": {
+        "name": "Adult Butterfly Organism",
+        "description": "The adult butterfly as an organism, representing the outcome of metamorphosis rather than the developmental process itself.",
+        "class_type_hint": "Organism",
+        "member_ids": [
+          "En_328200c3"
+        ],
+        "provisional_id": "NEW_AdultButterflyOrganism",
+        "justification": "En_328200c3 is an organism outcome distinct from the developmental processes in 'Butterfly Development', so it should be modeled as its own organism class rather than mixed into a process class.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "reassign_entities",
+      "args": {
+        "entity_ids": [
+          "En_328200c3"
+        ],
+        "from_class_id": "ClsC_0b13f1f3",
+        "to_class_id": "NEW_AdultButterflyOrganism",
+        "justification": "The entity 'butterfly' (En_328200c3) is the adult organism, not a process, so it fits better in the newly created organism class than in the 'Butterfly Development' process class.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_5a5ed473",
+        "new_name": "Butterfly Wings",
+        "new_description": "Anatomical wing structures of butterflies, including their initial post-emergence physical states prior to functional flight.",
+        "new_class_type_hint": "Anatomical Structure",
+        "new_class_group": "Butterfly Life Cycle & Metamorphosis",
+        "remark": null,
+        "justification": "This class correctly covers anatomical wing structures and states; only a stable, shared Class_Group is needed to align it with related metamorphosis and emergence classes.",
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_0289e8be",
+        "new_name": "Butterfly Emergence Processes",
+        "new_description": "Physiological and behavioral processes as a butterfly transitions from chrysalis to functional adult, including wing expansion and first flight.",
+        "new_class_type_hint": "Biological Process",
+        "new_class_group": "Butterfly Life Cycle & Metamorphosis",
+        "remark": null,
+        "justification": "This class focuses on specific emergence-stage processes within the butterfly life cycle and should share a Class_Group with other metamorphosis-related classes.",
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_0b13f1f3",
+        "new_name": "Butterfly Development Processes",
+        "new_description": "Biological processes involved in a caterpillar's transformation into an adult butterfly, including metamorphosis and broader morphological transformations, excluding the adult organism itself.",
+        "new_class_type_hint": "Biological Process",
+        "new_class_group": "Butterfly Life Cycle & Metamorphosis",
+        "remark": null,
+        "justification": "After moving the adult organism entity out, this class should be clearly scoped to developmental processes and aligned via a shared Class_Group with related emergence and anatomical classes.",
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "NEW_AdultButterflyOrganism",
+        "new_name": "Adult Butterfly Organism",
+        "new_description": "The adult butterfly as an organism, representing the endpoint of the metamorphosis process.",
+        "new_class_type_hint": "Organism",
+        "new_class_group": "Butterfly Life Cycle & Metamorphosis",
+        "remark": null,
+        "justification": "The new organism class should be explicitly connected to the same life-cycle Class_Group as the related developmental and emergence process classes.",
+        "confidence": 0.9
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "create_class",
+      "result_class_id": "ClsR_b640fc18",
+      "provisional_id": "NEW_AdultButterflyOrganism",
+      "member_ids_added": [
+        "En_328200c3"
+      ],
+      "justification": "En_328200c3 is an organism outcome distinct from the developmental processes in 'Butterfly Development', so it should be modeled as its own organism class rather than mixed into a process class.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "reassign_entities",
+      "entity_ids": [
+        "En_328200c3"
+      ],
+      "from": "ClsC_0b13f1f3",
+      "from_resolved": "ClsC_0b13f1f3",
+      "to": "NEW_AdultButterflyOrganism",
+      "to_resolved": "ClsR_b640fc18",
+      "justification": "The entity 'butterfly' (En_328200c3) is the adult organism, not a process, so it fits better in the newly created organism class than in the 'Butterfly Development' process class.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_5a5ed473",
+      "class_id_resolved": "ClsC_5a5ed473",
+      "new_name": "Butterfly Wings",
+      "new_description": "Anatomical wing structures of butterflies, including their initial post-emergence physical states prior to functional flight.",
+      "new_class_type_hint": "Anatomical Structure",
+      "new_class_group": "Butterfly Life Cycle & Metamorphosis",
+      "remark": null,
+      "justification": "This class correctly covers anatomical wing structures and states; only a stable, shared Class_Group is needed to align it with related metamorphosis and emergence classes.",
+      "confidence": 0.9
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_0289e8be",
+      "class_id_resolved": "ClsC_0289e8be",
+      "new_name": "Butterfly Emergence Processes",
+      "new_description": "Physiological and behavioral processes as a butterfly transitions from chrysalis to functional adult, including wing expansion and first flight.",
+      "new_class_type_hint": "Biological Process",
+      "new_class_group": "Butterfly Life Cycle & Metamorphosis",
+      "remark": null,
+      "justification": "This class focuses on specific emergence-stage processes within the butterfly life cycle and should share a Class_Group with other metamorphosis-related classes.",
+      "confidence": 0.9
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_0b13f1f3",
+      "class_id_resolved": "ClsC_0b13f1f3",
+      "new_name": "Butterfly Development Processes",
+      "new_description": "Biological processes involved in a caterpillar's transformation into an adult butterfly, including metamorphosis and broader morphological transformations, excluding the adult organism itself.",
+      "new_class_type_hint": "Biological Process",
+      "new_class_group": "Butterfly Life Cycle & Metamorphosis",
+      "remark": null,
+      "justification": "After moving the adult organism entity out, this class should be clearly scoped to developmental processes and aligned via a shared Class_Group with related emergence and anatomical classes.",
+      "confidence": 0.9
+    },
+    {
+      "action": "modify_class",
+      "class_id": "NEW_AdultButterflyOrganism",
+      "class_id_resolved": "ClsR_b640fc18",
+      "new_name": "Adult Butterfly Organism",
+      "new_description": "The adult butterfly as an organism, representing the endpoint of the metamorphosis process.",
+      "new_class_type_hint": "Organism",
+      "new_class_group": "Butterfly Life Cycle & Metamorphosis",
+      "remark": null,
+      "justification": "The new organism class should be explicitly connected to the same life-cycle Class_Group as the related developmental and emergence process classes.",
+      "confidence": 0.9
+    }
+  ],
+  "provisional_to_real": {
+    "NEW_AdultButterflyOrganism": "ClsR_b640fc18"
+  },
+  "timestamp": "2026-01-02T08:34:54Z"
+}

@@ -1,0 +1,246 @@
+{
+  "cluster_label": 12,
+  "cluster_classes": [
+    {
+      "candidate_id": "ClsC_92e225e0",
+      "class_label": "Caterpillar Leaf-Feeding Behavior",
+      "class_description": "Behaviors of caterpillars specifically related to consuming plant leaves as a primary food source.",
+      "class_type_hint": "Feeding Behavior",
+      "class_group": "Lepidopteran Plant Interactions & Habitat",
+      "confidence": 0.63,
+      "evidence_excerpt": "Caterpillars feeding on plant leaves as their main activity and food source.",
+      "member_ids": [
+        "En_edbab226"
+      ],
+      "members": [
+        {
+          "id": "En_edbab226",
+          "entity_name": "feeding on leaves",
+          "entity_description": "Primary caterpillar activity of consuming plant leaves for nutrition.",
+          "entity_type_hint": "Behavior"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsR_04475627",
+      "class_label": "Predators of Caterpillars and Butterflies",
+      "class_description": "Organisms that act as predators of caterpillars, butterfly eggs, larvae, and adults within ecosystems, influencing prey species and shaping ecological dynamics.",
+      "class_type_hint": "Organism Role",
+      "class_group": "Ecology and Ecosystems",
+      "confidence": 0.5,
+      "evidence_excerpt": "",
+      "member_ids": [
+        "En_06d732fe",
+        "En_3acddb02",
+        "En_afd1483c",
+        "En_48503a32",
+        "En_153b2752"
+      ],
+      "members": [
+        {
+          "id": "En_06d732fe",
+          "entity_name": "predators",
+          "entity_description": "Animals that prey on caterpillars, driving their protective adaptations.",
+          "entity_type_hint": "Organism"
+        },
+        {
+          "id": "En_3acddb02",
+          "entity_name": "predators",
+          "entity_description": "Animals that might eat or harm butterfly eggs on leaves.",
+          "entity_type_hint": "BiologicalEntity"
+        },
+        {
+          "id": "En_afd1483c",
+          "entity_name": "birds",
+          "entity_description": "Vertebrate animals that consume butterflies as part of their diet.",
+          "entity_type_hint": "Organism"
+        },
+        {
+          "id": "En_48503a32",
+          "entity_name": "reptiles",
+          "entity_description": "Cold-blooded vertebrates identified as predators that eat butterflies.",
+          "entity_type_hint": "Organism"
+        },
+        {
+          "id": "En_153b2752",
+          "entity_name": "other insects",
+          "entity_description": "Insect species besides butterflies that prey on butterflies as food.",
+          "entity_type_hint": "Organism"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsR_5aa32109",
+      "class_label": "Butterfly Prey Role and Anti-predator Strategies",
+      "class_description": "The ecological role of butterflies as prey within food webs and the behaviors or spatial strategies, such as laying eggs on the underside of leaves, that reduce predation risk.",
+      "class_type_hint": "Ecological Interaction",
+      "class_group": "Ecology and Ecosystems",
+      "confidence": 0.93,
+      "evidence_excerpt": "Eggs laid on the underside of leaves to protect them from predators.",
+      "member_ids": [
+        "En_09aa0f55",
+        "En_35e2307e"
+      ],
+      "members": [
+        {
+          "id": "En_09aa0f55",
+          "entity_name": "underside of leaves",
+          "entity_description": "The lower surface of plant leaves where butterfly eggs are commonly laid.",
+          "entity_type_hint": "Location"
+        },
+        {
+          "id": "En_35e2307e",
+          "entity_name": "food source role of butterflies",
+          "entity_description": "The ecological role of butterflies as prey for birds, reptiles, and other insects.",
+          "entity_type_hint": "Process"
+        }
+      ],
+      "remarks": [
+        "Location-focused entities like 'underside of leaves' have been moved to the plant-substrate class so this class can focus on butterflies' role as prey and their anti-predator behaviors rather than on physical plant structures."
+      ]
+    },
+    {
+      "candidate_id": "ClsR_11cbea87",
+      "class_label": "Plant Structures as Lepidopteran Substrate and Background",
+      "class_description": "Plant structures (e.g., host plants, leaves, undersides of leaves, stems, twigs) used by butterflies and caterpillars as oviposition sites, feeding and chrysalis substrates, and visual backgrounds for camouflage across life stages.",
+      "class_type_hint": "Habitat / Resource",
+      "class_group": "Lepidopteran Plant Interactions & Habitat",
+      "confidence": 0.9,
+      "evidence_excerpt": "Plants and their leaves used for egg-laying and larval feeding in the butterfly life cycle.",
+      "member_ids": [
+        "Can_f8ebbd2b",
+        "Can_43b24e7a",
+        "En_09aa0f55",
+        "En_d3f23ee9",
+        "En_eeb5307e",
+        "En_5ee9c9cd"
+      ],
+      "members": [
+        {
+          "id": "Can_f8ebbd2b",
+          "entity_name": "plant leaves",
+          "entity_description": "Plant leaves that serve as sites for egg-laying, feeding by caterpillars, and attachment for chrysalis formation.",
+          "entity_type_hint": "Location"
+        },
+        {
+          "id": "Can_43b24e7a",
+          "entity_name": "host plants",
+          "entity_description": "Specific plants on which female butterflies deposit their eggs and that serve as food sources and habitat for early butterfly life stages.",
+          "entity_type_hint": "Environment"
+        },
+        {
+          "id": "En_09aa0f55",
+          "entity_name": "underside of leaves",
+          "entity_description": "The lower surface of plant leaves where butterfly eggs are commonly laid.",
+          "entity_type_hint": "Location"
+        },
+        {
+          "id": "En_d3f23ee9",
+          "entity_name": "leaves",
+          "entity_description": "Plant leaves that are visually imitated by certain caterpillars for concealment.",
+          "entity_type_hint": "Environment"
+        },
+        {
+          "id": "En_eeb5307e",
+          "entity_name": "twigs",
+          "entity_description": "Small plant branches whose appearance is mimicked by some caterpillars.",
+          "entity_type_hint": "Environment"
+        },
+        {
+          "id": "En_5ee9c9cd",
+          "entity_name": "stem",
+          "entity_description": "Plant stem that serves as an attachment point for the caterpillar before forming a chrysalis.",
+          "entity_type_hint": "Location"
+        }
+      ],
+      "remarks": [
+        "Now explicitly contains the 'underside of leaves' entity that was previously shared with the prey-role class, consolidating all plant-structure substrates and backgrounds in one habitat-focused class."
+      ]
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"reassign_entities\",\n    \"args\": {\n      \"entity_ids\": [\"En_09aa0f55\"],\n      \"from_class_id\": \"ClsR_5aa32109\",\n      \"to_class_id\": \"ClsR_11cbea87\",\n      \"justification\": \"The entity 'underside of leaves' is a plant surface/location used as oviposition substrate, aligning conceptually with 'Plant Structures as Lepidopteran Substrate and Background' rather than the prey-role/behavioral focus of 'Butterfly Prey Role and Anti-predator Strategies'; it also avoids the same entity being split across two classes.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsR_5aa32109\",\n      \"new_name\": \"Butterfly Prey Role and Anti-predator Strategies\",\n      \"new_description\": \"The ecological role of butterflies as prey within food webs and the behavioral or spatial strategies they use (e.g., concealed egg-laying) to reduce predation risk.\",\n      \"new_class_type_hint\": \"Ecological Interaction\",\n      \"new_class_group\": \"Ecology and Ecosystems\",\n      \"remark\": \"Location-focused entities like 'underside of leaves' have been moved to the plant-substrate class so this class can focus on butterflies’ role as prey and their anti-predator behaviors rather than on physical plant structures.\",\n      \"justification\": \"After moving the location entity to the plant-structure class, this class now centers on butterflies’ prey role and anti-predator behaviors; updating the description keeps it aligned with its actual members and avoids conflating behavior with habitat features.\",\n      \"confidence\": 0.88\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsR_11cbea87\",\n      \"new_name\": \"Plant Structures as Lepidopteran Substrate and Background\",\n      \"new_description\": \"Plant structures (e.g., host plants, leaves, undersides of leaves, stems, twigs) that serve as oviposition sites, larval feeding and chrysalis substrates, and visual backgrounds for camouflage across butterfly and caterpillar life stages.\",\n      \"new_class_type_hint\": \"Habitat / Resource\",\n      \"new_class_group\": \"Lepidopteran Plant Interactions & Habitat\",\n      \"remark\": \"Now explicitly contains the 'underside of leaves' entity that was previously shared with the prey-role class, consolidating all plant-structure substrates and backgrounds in one habitat-focused class.\",\n      \"justification\": \"With 'underside of leaves' reassigned here, refining the description clarifies that this class collects plant substrates and visual backgrounds used across Lepidopteran life stages, distinct from predation-role classes.\",\n      \"confidence\": 0.87\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "reassign_entities",
+      "args": {
+        "entity_ids": [
+          "En_09aa0f55"
+        ],
+        "from_class_id": "ClsR_5aa32109",
+        "to_class_id": "ClsR_11cbea87",
+        "justification": "The entity 'underside of leaves' is a plant surface/location used as oviposition substrate, aligning conceptually with 'Plant Structures as Lepidopteran Substrate and Background' rather than the prey-role/behavioral focus of 'Butterfly Prey Role and Anti-predator Strategies'; it also avoids the same entity being split across two classes.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsR_5aa32109",
+        "new_name": "Butterfly Prey Role and Anti-predator Strategies",
+        "new_description": "The ecological role of butterflies as prey within food webs and the behavioral or spatial strategies they use (e.g., concealed egg-laying) to reduce predation risk.",
+        "new_class_type_hint": "Ecological Interaction",
+        "new_class_group": "Ecology and Ecosystems",
+        "remark": "Location-focused entities like 'underside of leaves' have been moved to the plant-substrate class so this class can focus on butterflies' role as prey and their anti-predator behaviors rather than on physical plant structures.",
+        "justification": "After moving the location entity to the plant-structure class, this class now centers on butterflies' prey role and anti-predator behaviors; updating the description keeps it aligned with its actual members and avoids conflating behavior with habitat features.",
+        "confidence": 0.88
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsR_11cbea87",
+        "new_name": "Plant Structures as Lepidopteran Substrate and Background",
+        "new_description": "Plant structures (e.g., host plants, leaves, undersides of leaves, stems, twigs) that serve as oviposition sites, larval feeding and chrysalis substrates, and visual backgrounds for camouflage across butterfly and caterpillar life stages.",
+        "new_class_type_hint": "Habitat / Resource",
+        "new_class_group": "Lepidopteran Plant Interactions & Habitat",
+        "remark": "Now explicitly contains the 'underside of leaves' entity that was previously shared with the prey-role class, consolidating all plant-structure substrates and backgrounds in one habitat-focused class.",
+        "justification": "With 'underside of leaves' reassigned here, refining the description clarifies that this class collects plant substrates and visual backgrounds used across Lepidopteran life stages, distinct from predation-role classes.",
+        "confidence": 0.87
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "reassign_entities",
+      "entity_ids": [
+        "En_09aa0f55"
+      ],
+      "from": "ClsR_5aa32109",
+      "from_resolved": "ClsR_5aa32109",
+      "to": "ClsR_11cbea87",
+      "to_resolved": "ClsR_11cbea87",
+      "justification": "The entity 'underside of leaves' is a plant surface/location used as oviposition substrate, aligning conceptually with 'Plant Structures as Lepidopteran Substrate and Background' rather than the prey-role/behavioral focus of 'Butterfly Prey Role and Anti-predator Strategies'; it also avoids the same entity being split across two classes.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsR_5aa32109",
+      "class_id_resolved": "ClsR_5aa32109",
+      "new_name": "Butterfly Prey Role and Anti-predator Strategies",
+      "new_description": "The ecological role of butterflies as prey within food webs and the behavioral or spatial strategies they use (e.g., concealed egg-laying) to reduce predation risk.",
+      "new_class_type_hint": "Ecological Interaction",
+      "new_class_group": "Ecology and Ecosystems",
+      "remark": "Location-focused entities like 'underside of leaves' have been moved to the plant-substrate class so this class can focus on butterflies' role as prey and their anti-predator behaviors rather than on physical plant structures.",
+      "justification": "After moving the location entity to the plant-structure class, this class now centers on butterflies' prey role and anti-predator behaviors; updating the description keeps it aligned with its actual members and avoids conflating behavior with habitat features.",
+      "confidence": 0.88
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsR_11cbea87",
+      "class_id_resolved": "ClsR_11cbea87",
+      "new_name": "Plant Structures as Lepidopteran Substrate and Background",
+      "new_description": "Plant structures (e.g., host plants, leaves, undersides of leaves, stems, twigs) that serve as oviposition sites, larval feeding and chrysalis substrates, and visual backgrounds for camouflage across butterfly and caterpillar life stages.",
+      "new_class_type_hint": "Habitat / Resource",
+      "new_class_group": "Lepidopteran Plant Interactions & Habitat",
+      "remark": "Now explicitly contains the 'underside of leaves' entity that was previously shared with the prey-role class, consolidating all plant-structure substrates and backgrounds in one habitat-focused class.",
+      "justification": "With 'underside of leaves' reassigned here, refining the description clarifies that this class collects plant substrates and visual backgrounds used across Lepidopteran life stages, distinct from predation-role classes.",
+      "confidence": 0.87
+    }
+  ],
+  "provisional_to_real": {},
+  "timestamp": "2026-01-02T08:45:13Z"
+}

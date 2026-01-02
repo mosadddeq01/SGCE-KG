@@ -54,8 +54,10 @@ IMPORTANT FIELD DISTINCTIONS
 
 - remarks (optional, internal):
   Free-text notes attached to a class, used to flag important issues that are
-  outside the scope of structural changes (e.g., suspected entity-level duplicates
-  that should be checked elsewhere).
+  outside the scope of structural changes (e.g., upstream entity resolution that you suspect is wrong, or entities that
+  look identical but should not be changed here), DO NOT try to fix them via merge or reassign.
+   Instead, attach a human-facing remark via modify_class (using the 'remark' field)
+   so that a human can review it later.
 
 Class_Group is NOT a synonym of class_type_hint.
 
@@ -308,85 +310,92 @@ Each class includes:
 
 [
   {
-    "candidate_id": "ClsC_c57a96c1",
-    "class_label": "External Corrosion",
-    "class_description": "Corrosion mechanisms affecting external surfaces, including underground or submerged systems and beneath insulation.",
-    "class_type_hint": "Damage Mechanism",
+    "candidate_id": "ClsC_a16ea337",
+    "class_label": "Truth and Fiction Concepts",
+    "class_description": "Abstract concepts related to objective reality and its distinction from narrative invention, including facts, underlying truth, and the boundary between fact and fiction.",
+    "class_type_hint": "Epistemic Concept",
     "class_group": "TBD",
-    "confidence": 0.85,
-    "evidence_excerpt": "Corrosion on external surfaces and beneath insulation.",
+    "confidence": 0.86,
+    "evidence_excerpt": "The line between fact and fiction is often blurred... ponder the truth behind the stories",
     "member_ids": [
-      "En_9574d8b7",
-      "En_d504ed6b"
+      "Can_72564a54",
+      "En_edf2b36f",
+      "En_57524089"
     ],
     "members": [
       {
-        "id": "En_9574d8b7",
-        "entity_name": "external corrosion",
-        "entity_description": "Corrosion occurring on the outer surfaces of underground or submerged metallic piping systems.",
-        "entity_type_hint": "DamageMechanism"
+        "id": "Can_72564a54",
+        "entity_name": "line between fact and fiction",
+        "entity_description": "The conceptual boundary distinguishing objective truth from invented or embellished narrative, often blurred in storytelling.",
+        "entity_type_hint": "Concept"
       },
       {
-        "id": "En_d504ed6b",
-        "entity_name": "corrosion under thermal insulation",
-        "entity_description": "Corrosion that occurs beneath insulation materials, often exacerbated by trapped moisture.",
-        "entity_type_hint": "DamageMechanism"
+        "id": "En_edf2b36f",
+        "entity_name": "fact",
+        "entity_description": "Information or events considered objectively true and verifiable.",
+        "entity_type_hint": "Concept"
+      },
+      {
+        "id": "En_57524089",
+        "entity_name": "truth behind the stories",
+        "entity_description": "Actual reality or factual basis underlying the stories being told.",
+        "entity_type_hint": "Concept"
       }
     ],
     "remarks": []
   },
   {
-    "candidate_id": "ClsC_79ac2db8",
-    "class_label": "High-Temperature Corrosion",
-    "class_description": "Corrosion mechanisms occurring at elevated temperatures, including oxidation and sulfidation.",
-    "class_type_hint": "Damage Mechanism",
+    "candidate_id": "ClsC_edbf52e4",
+    "class_label": "Fact And Fiction",
+    "class_description": "Concepts distinguishing actual historical occurrences from invented or imagined story content, especially where narratives blur the line between truth and fabrication.",
+    "class_type_hint": "Epistemic Category",
     "class_group": "TBD",
     "confidence": 0.9,
-    "evidence_excerpt": "Corrosion at high temperatures, affecting material integrity.",
+    "evidence_excerpt": "The line between fact and fiction is often blurred in these tales.",
     "member_ids": [
-      "En_56c0bd49",
-      "En_fefc46ef",
-      "En_baec7c0b"
+      "En_7a3bef3b",
+      "En_cfd47e19"
     ],
     "members": [
       {
-        "id": "En_56c0bd49",
-        "entity_name": "oxidation",
-        "entity_description": "A chemical reaction that stainless steels resist due to their alloy content.",
-        "entity_type_hint": "DamageMechanism"
+        "id": "En_7a3bef3b",
+        "entity_name": "real events",
+        "entity_description": "Actual historical or factual occurrences that may underlie some stories.",
+        "entity_type_hint": "Event"
       },
       {
-        "id": "En_fefc46ef",
-        "entity_name": "sulfidation",
-        "entity_description": "A chemical reaction that stainless steels resist due to their alloy content.",
-        "entity_type_hint": "DamageMechanism"
-      },
-      {
-        "id": "En_baec7c0b",
-        "entity_name": "High Temperature Corrosion",
-        "entity_description": "Corrosion occurring at elevated temperatures, affecting material integrity.",
-        "entity_type_hint": "DamageMechanism"
+        "id": "En_cfd47e19",
+        "entity_name": "fiction",
+        "entity_description": "Invented or imagined content within stories, contrasting with factual material.",
+        "entity_type_hint": "Concept"
       }
     ],
     "remarks": []
   },
   {
-    "candidate_id": "ClsC_3b260d0c",
-    "class_label": "Heat Affected Zone",
-    "class_description": "The Heat Affected Zone (HAZ) is the area of base metal near a weld that has not melted but has undergone changes in microstructure and mechanical properties due to welding heat.",
-    "class_type_hint": "Component",
+    "candidate_id": "ClsC_351d72f0",
+    "class_label": "Historical Narrative Concepts",
+    "class_description": "Concepts related to narrative explanations of unknown or supernatural phenomena across history, including the stories themselves and the broad historical periods in which they arose.",
+    "class_type_hint": "Conceptual Category",
     "class_group": "TBD",
-    "confidence": 0.95,
-    "evidence_excerpt": "",
+    "confidence": 0.63,
+    "evidence_excerpt": "Origins of urban legends in ancient times when stories explained the unknown and supernatural.",
     "member_ids": [
-      "En_1f762ea0"
+      "Can_f8783101",
+      "En_48b27b28"
     ],
     "members": [
       {
-        "id": "En_1f762ea0",
-        "entity_name": "Heat Affected Zone (HAZ)",
-        "entity_description": "The portion of the base metal adjacent to a weld with altered microstructure and properties due to welding heat.",
-        "entity_type_hint": "Component"
+        "id": "Can_f8783101",
+        "entity_name": "stories and tales",
+        "entity_description": "Narrative stories and tales, particularly urban legends, used historically to explain unknown and supernatural phenomena and reflecting societal fears and anxieties.",
+        "entity_type_hint": "Concept"
+      },
+      {
+        "id": "En_48b27b28",
+        "entity_name": "ancient times",
+        "entity_description": "A distant historical period when early explanatory stories about the unknown were told.",
+        "entity_type_hint": "TemporalQualifier"
       }
     ],
     "remarks": []
@@ -401,5 +410,5 @@ Return ONLY the JSON array of ordered function calls.
 Return [] only if you are highly confident (> very strong evidence) that no change is needed.
 If any ambiguous or conflicting evidence exists, return a concrete ordered action list
 (with justifications and, optionally, confidence scores).
-You are a very proactive class-resolution assistant. (You are not called very proactive only by using modify_class for new_class_group. You must use other functions as well to be called a proactive class-resolution assistant.
+You are a very proactive class-resolution assistant. You are not called very proactive only by using modify_class for new_class_group. You must use other functions as well to be called a proactive class-resolution assistant.
 

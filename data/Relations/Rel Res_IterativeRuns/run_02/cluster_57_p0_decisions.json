@@ -1,0 +1,99 @@
+{
+  "cluster_label": "57_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_696ab2250695",
+      "relation_name": "has_part",
+      "rel_desc": "Butterflies possess a proboscis as a mouthpart.",
+      "rel_hint_type": "part-whole",
+      "canonical_rel_name": "has_part",
+      "canonical_rel_desc": "Subject entity includes the object entity as a physical component or substructure.",
+      "rel_cls": "part_whole_relation",
+      "rel_cls_group": "COMPOSITION",
+      "subject_entity_name": "butterfly",
+      "object_entity_name": "proboscis",
+      "subject_class_label": "Adult butterflies",
+      "subject_class_group": "Butterfly Biology & Life Cycle",
+      "object_class_label": "Butterfly Adult Feeding Biology",
+      "object_class_group": "Butterfly Biology & Life Cycle",
+      "qualifiers": {
+        "TemporalQualifier": "adult stage",
+        "SpatialQualifier": "mouth region",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.9,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_b66dae949bec",
+      "relation_name": "has_part",
+      "rel_desc": "The escaped criminal has a hook instead of a hand.",
+      "rel_hint_type": "part-whole",
+      "canonical_rel_name": "has_part",
+      "canonical_rel_desc": "Indicates that the subject entity includes the object entity as a physical or conceptual component.",
+      "rel_cls": "part_whole_relation",
+      "rel_cls_group": "COMPOSITION",
+      "subject_entity_name": "escaped criminal",
+      "object_entity_name": "hook for a hand",
+      "subject_class_label": "Hook Man Legend: Narrative Elements",
+      "subject_class_group": "Urban Legend: Hook Man",
+      "object_class_label": "Hook Man Legend: Narrative Elements",
+      "object_class_group": "Urban Legend: Hook Man",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "on the criminal’s arm/hand",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "with",
+        "LogicalMarker": null,
+        "OtherQualifier": "ReplacementType: prosthetic/weaponized hook"
+      },
+      "confidence": 0.99,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_rel_schema\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_696ab2250695\",\n        \"RelR_b66dae949bec\"\n      ],\n      \"canonical_rel_name\": \"has_part\",\n      \"canonical_rel_desc\": \"Indicates that the subject entity includes the object entity as a physical or conceptual component or substructure.\",\n      \"rel_cls\": \"part_whole_relation\",\n      \"rel_cls_group\": \"COMPOSITION\",\n      \"justification\": \"Both relations express the same part–whole semantics (a subject possessing a physical component). They already share the same canonical_rel_name and rel_cls_group; the only discrepancy is in the wording of canonical_rel_desc. Normalizing to a single, general description improves schema consistency while covering both examples (a butterfly’s proboscis and a criminal’s hook hand) as physical or conceptual components.\",\n      \"remark\": null,\n      \"confidence\": 0.97\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_rel_schema",
+      "args": {
+        "relation_ids": [
+          "RelR_696ab2250695",
+          "RelR_b66dae949bec"
+        ],
+        "canonical_rel_name": "has_part",
+        "canonical_rel_desc": "Indicates that the subject entity includes the object entity as a physical or conceptual component or substructure.",
+        "rel_cls": "part_whole_relation",
+        "rel_cls_group": "COMPOSITION",
+        "justification": "Both relations express the same part–whole semantics (a subject possessing a physical component). They already share the same canonical_rel_name and rel_cls_group; the only discrepancy is in the wording of canonical_rel_desc. Normalizing to a single, general description improves schema consistency while covering both examples (a butterfly's proboscis and a criminal's hook hand) as physical or conceptual components.",
+        "remark": null,
+        "confidence": 0.97
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_rel_schema",
+      "relation_ids": [
+        "RelR_696ab2250695",
+        "RelR_b66dae949bec"
+      ],
+      "canonical_rel_name": "has_part",
+      "canonical_rel_desc": "Indicates that the subject entity includes the object entity as a physical or conceptual component or substructure.",
+      "rel_cls": "part_whole_relation",
+      "rel_cls_group": "COMPOSITION",
+      "new_relation_name": null,
+      "original_relation_name": null,
+      "justification": "Both relations express the same part–whole semantics (a subject possessing a physical component). They already share the same canonical_rel_name and rel_cls_group; the only discrepancy is in the wording of canonical_rel_desc. Normalizing to a single, general description improves schema consistency while covering both examples (a butterfly's proboscis and a criminal's hook hand) as physical or conceptual components.",
+      "remark": null,
+      "confidence": 0.97
+    }
+  ],
+  "timestamp": "2026-01-02T09:29:11Z"
+}

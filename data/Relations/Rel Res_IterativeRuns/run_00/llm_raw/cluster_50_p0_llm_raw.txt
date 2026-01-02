@@ -1,0 +1,96 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_154508b1708b"],
+      "canonical_rel_name": "performs_activity",
+      "canonical_rel_desc": "Indicates that an agent carries out or performs a specific activity or behavior.",
+      "justification": "The subject is an individual butterfly acting as an agent, and the object is a concrete activity ('first flight') that the butterfly performs; this is best modeled as an agent performing an activity.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": ["RelR_154508b1708b"],
+      "rel_cls": "agent_activity_participation_relation",
+      "justification": "This relation connects an organismal agent with an activity it carries out; this fits a general class for agent–activity participation.",
+      "remark": null,
+      "confidence": 0.86
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": ["RelR_154508b1708b"],
+      "rel_cls_group": "AGENCY",
+      "justification": "The semantic focus is on the butterfly as an active agent performing an action (its first flight), which falls under agency/participation rather than composition.",
+      "remark": null,
+      "confidence": 0.86
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_b7c3668c1002"],
+      "canonical_rel_name": "includes_life_stage_event",
+      "canonical_rel_desc": "Indicates that a particular life stage includes or is characterized by a specific event or milestone.",
+      "justification": "The subject is the 'adult stage of a butterfly' and the object is the milestone event 'first flight'; this is not an agent performing an action but a life stage being composed of/characterized by that event.",
+      "remark": null,
+      "confidence": 0.8
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": ["RelR_b7c3668c1002"],
+      "rel_cls": "life_stage_composition_relation",
+      "justification": "The relation specifies what event is included within or characteristic of a particular life stage, which is a compositional relation internal to life-cycle stages.",
+      "remark": null,
+      "confidence": 0.78
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_e4d4e35af547"],
+      "canonical_rel_name": "part_of",
+      "canonical_rel_desc": "Indicates that the subject is a constituent or component of the object, which is a larger whole or system.",
+      "justification": "Ecological connections and processes are described as components that make up the natural world, so they are parts of the larger whole 'natural world'.",
+      "remark": null,
+      "confidence": 0.94
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_db7e9fb51f10"],
+      "canonical_rel_name": "has_member",
+      "canonical_rel_desc": "Indicates that the subject, typically a group or community, consists of or includes the members represented by the object.",
+      "justification": "The subject 'communities' and the object 'people around the world' indicate a group–member composition where the community is composed of its people; modeling this as 'has_member' keeps directionality clear (whole → member).",
+      "remark": null,
+      "confidence": 0.8
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": ["RelR_e4d4e35af547", "RelR_db7e9fb51f10"],
+      "rel_cls": "part_whole_relation",
+      "justification": "Both relations describe compositional structure: ecological processes as parts of the natural world, and individuals as members of communities. Despite opposite directions (part→whole vs whole→member), they belong to the same conceptual family of part–whole/group–member relations.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": ["RelR_b7c3668c1002", "RelR_e4d4e35af547", "RelR_db7e9fb51f10"],
+      "rel_cls_group": "COMPOSITION",
+      "justification": "All three relations describe how larger entities or stages are composed: life stages by events, the natural world by ecological processes, and communities by people. These are clearly compositional/part–whole semantics.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  }
+]

@@ -1,0 +1,44 @@
+[
+  {
+    "function": "merge_classes",
+    "args": {
+      "class_ids": [
+        "ClsC_51c702f9",
+        "ClsR_85e5cf63"
+      ],
+      "provisional_id": "MERGE(ClsC_51c702f9|ClsR_85e5cf63)",
+      "new_name": "Butterfly Predators, Prey Role, and Predation Risk",
+      "new_description": "Predators of butterflies and their eggs/larvae (birds, reptiles, other insects, and unspecified predators), the ecological role of butterflies as prey within food webs, and behaviors/locations such as egg-laying on leaf undersides that reduce predation risk.",
+      "new_class_type_hint": "Ecological Interaction",
+      "justification": "ClsC_51c702f9 and ClsR_85e5cf63 both focus on butterfly predation (predators and butterflies as prey), with overlapping scope where one covers predators and anti-predator use of leaf undersides and the other covers specific predator taxa and prey role, so they should be a single coherent predation/predation-risk class.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_ac18d27f",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Butterfly Ecology: Host Plants, Predators & Anti-predator Strategies",
+      "remark": null,
+      "justification": "ClsC_ac18d27f (host plants and oviposition sites) is ecologically coupled to the predation/predation-risk classes via egg-laying and concealment on leaf undersides, so assigning a shared, broader class_group better connects host-plant and predation interactions in a single butterfly ecology group.",
+      "confidence": 0.86
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "MERGE(ClsC_51c702f9|ClsR_85e5cf63)",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Butterfly Ecology: Host Plants, Predators & Anti-predator Strategies",
+      "remark": null,
+      "justification": "The newly merged predation-focused class and the host-plant class describe complementary aspects of butterfly ecology (prey role, predators, and oviposition-site concealment), so they should share a unified class_group to reflect this higher-level ecological connection.",
+      "confidence": 0.9
+    }
+  }
+]

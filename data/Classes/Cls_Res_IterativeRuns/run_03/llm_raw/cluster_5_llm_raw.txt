@@ -1,0 +1,93 @@
+[
+  {
+    "function": "reassign_entities",
+    "args": {
+      "entity_ids": [
+        "Can_9f2a4b9d"
+      ],
+      "from_class_id": "ClsR_8098889a",
+      "to_class_id": "ClsR_21565432",
+      "justification": "The entity 'adult butterflies' (Can_9f2a4b9d) is typed as an Organism and describes actual adult butterflies as organisms, matching the 'Adult butterflies' class (ClsR_21565432) rather than the conceptual life-stage class (ClsR_8098889a), which should contain LifeStage-type entities.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_9a8ddbba",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Butterfly Biology & Life Cycle",
+      "remark": null,
+      "justification": "Unify the class_group with other butterfly life-history and organism classes under a single, coherent umbrella; adult feeding biology is part of butterfly biology and life cycle.",
+      "confidence": 0.86
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_8b9ae141",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Butterfly Biology & Life Cycle",
+      "remark": null,
+      "justification": "Align 'Butterfly species' with the same overarching butterfly biology and life cycle group to consistently connect taxon-level variation (e.g., lifespan differences) with life-stage concepts and adult traits.",
+      "confidence": 0.82
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsR_804169c6",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Butterfly Biology & Life Cycle",
+      "remark": null,
+      "justification": "Female butterflies are a sex-specific subset of adult butterflies and fit naturally in the unified 'Butterfly Biology & Life Cycle' group with other adult and reproductive classes.",
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsR_21565432",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Butterfly Biology & Life Cycle",
+      "remark": null,
+      "justification": "Adult butterflies as organisms belong in the same overarching group as adult life stages, female butterflies, and their traits, improving schema connectivity.",
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsR_8098889a",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Butterfly Biology & Life Cycle",
+      "remark": "After moving the Organism-typed entity 'adult butterflies' (Can_9f2a4b9d) out, this class now cleanly represents the conceptual adult life stage (LifeStage-type entities only).",
+      "justification": "The adult butterfly life stage is a core component of the butterfly life cycle and should share a unified class_group with related adult-stage and life-history classes.",
+      "confidence": 0.91
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsR_3dccc0e8",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Butterfly Biology & Life Cycle",
+      "remark": null,
+      "justification": "Butterfly adult stage attributes (e.g., lifespan) are directly tied to the adult life stage and species-level variation, so they should be grouped with other butterfly life-cycle and adult biology classes under a single class_group.",
+      "confidence": 0.88
+    }
+  }
+]

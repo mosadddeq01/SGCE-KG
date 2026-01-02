@@ -1,65 +1,28 @@
 [
   {
-    "function": "reassign_entities",
-    "args": {
-      "entity_ids": ["En_529021da"],
-      "from_class_id": "ClsR_d7469e03",
-      "to_class_id": "ClsC_45b546e0",
-      "justification": "Entity 'ASM Metals Handbook Volume 13' is part of the ASM Metals Handbooks series and fits better in the 'ASM Metals Handbooks' class with its other volumes, rather than in the broader 'Corrosion and Materials References' class.",
-      "remark": null,
-      "confidence": 0.95
-    }
-  },
-  {
     "function": "modify_class",
     "args": {
-      "class_id": "ClsC_45b546e0",
-      "new_name": "ASM Metals Handbooks",
-      "new_description": "Comprehensive reference volumes on metals, including properties, corrosion, and failure analysis, supporting industrial standards.",
-      "new_class_type_hint": "Reference Material",
-      "new_class_group": "Industrial Standards & References",
+      "class_id": "ClsR_074c3c2d",
+      "new_name": "Story and Legend Audiences",
+      "new_description": "Individuals and groups who receive, listen to, or engage with stories and urban legends, from specific listeners to the global audience.",
+      "new_class_type_hint": "SocialGroup/Role",
+      "new_class_group": "Storytelling & Narrative Dissemination",
       "remark": null,
-      "justification": "Confirming and clarifying class metadata after entity reassignment; ensures all ASM Metals Handbook volumes are grouped together under the correct class and Class_Group.",
-      "confidence": 0.95
-    }
-  },
-  {
-    "function": "modify_class",
-    "args": {
-      "class_id": "ClsR_d7469e03",
-      "new_name": "Corrosion and Materials References",
-      "new_description": "Reference materials and manuals focused on corrosion, material behavior, and industry practices in petrochemical and industrial contexts.",
-      "new_class_type_hint": "Reference Material",
-      "new_class_group": "Industrial Standards & References",
-      "remark": null,
-      "justification": "Update class metadata to reflect the removal of the ASM Metals Handbook volume and clarify its focus on non-ASM corrosion/materials references.",
+      "justification": "Refines the class name and description to explicitly match the scope of audiences for both stories and urban legends while aligning the class_group label with the shared domain of narrative dissemination and reception.",
       "confidence": 0.9
     }
   },
   {
     "function": "modify_class",
     "args": {
-      "class_id": "ClsC_ed0048e2",
-      "new_name": "MPC Report FS-26",
-      "new_description": "A specific report detailing fitness-for-service evaluation procedures for pressure vessels, tanks, and piping.",
-      "new_class_type_hint": "Report",
-      "new_class_group": "Industrial Standards & References",
-      "remark": "This class currently contains only a single, highly specific report. Consider merging with a broader 'Fitness-For-Service Standards & Reports' class if more similar reports are identified in future iterations.",
-      "justification": "Clarify class label and type hint to reflect that this is a single report; flag for future review if more similar reports are found.",
-      "confidence": 0.85
-    }
-  },
-  {
-    "function": "modify_class",
-    "args": {
-      "class_id": "ClsR_b38940f6",
-      "new_name": "Industrial Equipment Standards",
-      "new_description": "Standards and codes for construction, inspection, assessment, and safe operation of industrial equipment, including pressure vessels, heat exchangers, and welded structures.",
-      "new_class_type_hint": "Standard",
-      "new_class_group": "Industrial Standards & References",
+      "class_id": "ClsR_76678d39",
+      "new_name": "Stories and Urban Legends",
+      "new_description": "Narrative content, including stories and urban legends, that is disseminated through various channels to different audiences.",
+      "new_class_type_hint": "InformationObject",
+      "new_class_group": "Storytelling & Narrative Dissemination",
       "remark": null,
-      "justification": "Confirming and clarifying class metadata; no structural change needed as this class is already well-scoped and fits the Class_Group.",
-      "confidence": 0.95
+      "justification": "Clarifies that the class covers narrative content (stories and urban legends) and harmonizes the class_group with the related audience class, making the content–audience relationship explicit at the schema level.",
+      "confidence": 0.9
     }
   }
 ]

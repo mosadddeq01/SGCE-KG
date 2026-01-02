@@ -1,0 +1,177 @@
+{
+  "cluster_label": "9_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_dc1c54bff52d",
+      "relation_name": "occurs_on",
+      "rel_desc": "During the pupa stage, the chrysalis (pupa) is attached to a plant stem, situating the stage on that substrate.",
+      "rel_hint_type": "spatial",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "pupa stage of the butterfly life cycle",
+      "object_entity_name": "stem",
+      "subject_class_label": "Butterfly pupa (chrysalis) life stage",
+      "subject_class_group": "TBD",
+      "object_class_label": "Plant Structures as Lepidopteran Substrate and Background",
+      "object_class_group": "Lepidopteran Plant Interactions & Habitat",
+      "qualifiers": {
+        "TemporalQualifier": "when forming the chrysalis at the start of the pupa stage",
+        "SpatialQualifier": "attached to a plant stem",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "implied correspondence between chrysalis and pupa stage",
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "SubstrateType: plant stem or leaf"
+      },
+      "confidence": 0.7,
+      "remarks": [
+        "Relation created to capture spatial context of the pupa/chrysalis relative to the plant stem."
+      ]
+    },
+    {
+      "relation_id": "RelR_1e8726328e10",
+      "relation_name": "located_in",
+      "rel_desc": "The young couple is situated in a secluded area.",
+      "rel_hint_type": "spatial location",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "young couple",
+      "object_entity_name": "secluded area",
+      "subject_class_label": "Hook Man Legend: Narrative Elements",
+      "subject_class_group": "Urban Legend: Hook Man",
+      "object_class_label": "Hook Man Legend: Narrative Elements",
+      "object_class_group": "Urban Legend: Hook Man",
+      "qualifiers": {
+        "TemporalQualifier": "typically, at the start of the tale",
+        "SpatialQualifier": "secluded area",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "typically",
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "NarrativeRole: initial setting of the legend"
+      },
+      "confidence": 0.98,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_1bdfad65e09d",
+      "relation_name": "occurs_on",
+      "rel_desc": "The scratching sound is heard on the car door.",
+      "rel_hint_type": "spatial occurrence",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "scratching sound",
+      "object_entity_name": "car door",
+      "subject_class_label": "Hook Man Legend: Narrative Elements",
+      "subject_class_group": "Urban Legend: Hook Man",
+      "object_class_label": "Hook Man Legend: Narrative Elements",
+      "object_class_group": "Urban Legend: Hook Man",
+      "qualifiers": {
+        "TemporalQualifier": "as the story unfolds",
+        "SpatialQualifier": "on the car door",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": "as",
+        "OtherQualifier": "PerceptualModality: auditory cue of threat"
+      },
+      "confidence": 0.98,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_dc1c54bff52d\",\n        \"RelR_1e8726328e10\",\n        \"RelR_1bdfad65e09d\"\n      ],\n      \"canonical_rel_name\": \"located_at\",\n      \"canonical_rel_desc\": \"Indicates that the subject is situated at, on, or within the spatial region or physical substrate denoted by the object.\",\n      \"justification\": \"All three relations express a generic spatial placement of the subject relative to the object: the pupa stage on a stem, a couple in a secluded area, and a scratching sound on a car door. Using a unified predicate 'located_at' abstracts over prepositional nuances ('in', 'on') while preserving semantics; specific wording remains captured in SpatialQualifier.\",\n      \"remark\": null,\n      \"confidence\": 0.92\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_dc1c54bff52d\",\n        \"RelR_1e8726328e10\",\n        \"RelR_1bdfad65e09d\"\n      ],\n      \"rel_cls\": \"spatial_location_relation\",\n      \"justification\": \"Each relation links an entity to the spatial location or substrate where it is situated or perceived. Grouping them under 'spatial_location_relation' captures that they are all about where something is located in space, independent of narrative domain or biological vs. fictional context.\",\n      \"remark\": null,\n      \"confidence\": 0.94\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_dc1c54bff52d\",\n        \"RelR_1e8726328e10\",\n        \"RelR_1bdfad65e09d\"\n      ],\n      \"rel_cls_group\": \"SPATIALITY\",\n      \"justification\": \"All relations encode spatial context (placement on a stem, in an area, on a car door). This clearly aligns with a high-level spatial dimension rather than composition, causality, or other groups.\",\n      \"remark\": null,\n      \"confidence\": 0.96\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_dc1c54bff52d",
+          "RelR_1e8726328e10",
+          "RelR_1bdfad65e09d"
+        ],
+        "canonical_rel_name": "located_at",
+        "canonical_rel_desc": "Indicates that the subject is situated at, on, or within the spatial region or physical substrate denoted by the object.",
+        "justification": "All three relations express a generic spatial placement of the subject relative to the object: the pupa stage on a stem, a couple in a secluded area, and a scratching sound on a car door. Using a unified predicate 'located_at' abstracts over prepositional nuances ('in', 'on') while preserving semantics; specific wording remains captured in SpatialQualifier.",
+        "remark": null,
+        "confidence": 0.92
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_dc1c54bff52d",
+          "RelR_1e8726328e10",
+          "RelR_1bdfad65e09d"
+        ],
+        "rel_cls": "spatial_location_relation",
+        "justification": "Each relation links an entity to the spatial location or substrate where it is situated or perceived. Grouping them under 'spatial_location_relation' captures that they are all about where something is located in space, independent of narrative domain or biological vs. fictional context.",
+        "remark": null,
+        "confidence": 0.94
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_dc1c54bff52d",
+          "RelR_1e8726328e10",
+          "RelR_1bdfad65e09d"
+        ],
+        "rel_cls_group": "SPATIALITY",
+        "justification": "All relations encode spatial context (placement on a stem, in an area, on a car door). This clearly aligns with a high-level spatial dimension rather than composition, causality, or other groups.",
+        "remark": null,
+        "confidence": 0.96
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_dc1c54bff52d",
+        "RelR_1e8726328e10",
+        "RelR_1bdfad65e09d"
+      ],
+      "canonical_rel_name": "located_at",
+      "canonical_rel_desc": "Indicates that the subject is situated at, on, or within the spatial region or physical substrate denoted by the object.",
+      "justification": "All three relations express a generic spatial placement of the subject relative to the object: the pupa stage on a stem, a couple in a secluded area, and a scratching sound on a car door. Using a unified predicate 'located_at' abstracts over prepositional nuances ('in', 'on') while preserving semantics; specific wording remains captured in SpatialQualifier.",
+      "remark": null,
+      "confidence": 0.92
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_dc1c54bff52d",
+        "RelR_1e8726328e10",
+        "RelR_1bdfad65e09d"
+      ],
+      "rel_cls": "spatial_location_relation",
+      "justification": "Each relation links an entity to the spatial location or substrate where it is situated or perceived. Grouping them under 'spatial_location_relation' captures that they are all about where something is located in space, independent of narrative domain or biological vs. fictional context.",
+      "remark": null,
+      "confidence": 0.94
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_dc1c54bff52d",
+        "RelR_1e8726328e10",
+        "RelR_1bdfad65e09d"
+      ],
+      "rel_cls_group": "SPATIALITY",
+      "justification": "All relations encode spatial context (placement on a stem, in an area, on a car door). This clearly aligns with a high-level spatial dimension rather than composition, causality, or other groups.",
+      "remark": null,
+      "confidence": 0.96
+    }
+  ],
+  "timestamp": "2026-01-02T09:12:12Z"
+}

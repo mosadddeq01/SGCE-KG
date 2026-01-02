@@ -1,0 +1,15 @@
+[
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": ["RelR_f30e4e7be97d", "RelR_3a30f8130634"],
+      "canonical_rel_name": "has_characteristic",
+      "canonical_rel_desc": "Indicates that a subject possesses a psychological or sociocultural characteristic (e.g., imagination, fears, values) that is relevant to the interpretation or transmission of urban legends.",
+      "rel_cls": "psychological_cultural_attribute_relation",
+      "rel_cls_group": "ATTRIBUTE",
+      "justification": "Both relations link human or cultural groups to enduring psychological or sociocultural traits (imagination, culturally specific fears). They share the same semantic pattern and should use a unified predicate and relation class. Normalizing to 'has_characteristic' avoids trivial variation with 'has_attribute', and using a single rel_cls 'psychological_cultural_attribute_relation' captures that these are not generic physical attributes but mental/cultural characteristics. The rel_cls_group is aligned to the core dimension 'ATTRIBUTE', replacing the slightly inconsistent 'ATTRIBUTION' label.",
+      "remark": null,
+      "confidence": 0.86
+    }
+  }
+]

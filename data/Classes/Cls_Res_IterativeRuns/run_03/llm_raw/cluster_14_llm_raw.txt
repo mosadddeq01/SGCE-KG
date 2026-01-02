@@ -1,0 +1,65 @@
+[
+  {
+    "function": "reassign_entities",
+    "args": {
+      "entity_ids": ["En_26270cf5"],
+      "from_class_id": "ClsC_5df9057e",
+      "to_class_id": "ClsC_c5c16241",
+      "justification": "The entity 'concentration of power' is a systemic phenomenon/risk rather than an actor and aligns conceptually with misuse and overreach captured by the 'Abuse of Power' risk class, not with the 'AI Power Holders' actor class.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_5df9057e",
+      "new_name": "AI Corporate Power Holders",
+      "new_description": "Corporate entities (especially large or dominant firms) that hold concentrated economic and decision-making power in the AI ecosystem.",
+      "new_class_type_hint": "Actor",
+      "new_class_group": "AI Institutional & Corporate Power Actors",
+      "remark": "This class now primarily captures powerful corporate actors after moving the 'concentration of power' phenomenon into a risk class; check upstream entity modeling so that 'corporations' here can be distinguished from more generic corporate entities in other classes.",
+      "justification": "After reassigning the phenomenon entity, this class represents only corporate actors; renaming, refining the description, and assigning a Class_Group clarifies it as a distinct actor type within institutional/corporate power structures.",
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_2a41b464",
+      "new_name": "AI Institutional Actors (Governments & Corporations)",
+      "new_description": "Public authorities and private-sector corporations that deploy or develop AI and surveillance technologies and hold institutional power over their use.",
+      "new_class_type_hint": "Actor Category",
+      "new_class_group": "AI Institutional & Corporate Power Actors",
+      "remark": "Shares the generic 'corporations' concept with 'AI Corporate Power Holders'; this seems like a broader institutional-actor class versus a narrower dominant-corporation class and should not be merged, but upstream de-duplication of the 'corporations' entity may be warranted.",
+      "justification": "Clarifying the label/description and assigning the same Class_Group as 'AI Corporate Power Holders' emphasizes that both are institutional power actors in the AI ecosystem, while keeping them as distinct but related classes.",
+      "confidence": 0.88
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_c5c16241",
+      "new_name": "AI-Enabled Abuse of Power",
+      "new_description": "Societal risks where authority or institutional power is misused, including overreach and rights violations that AI and surveillance technologies may enable or exacerbate, such as concentration of power and intrusive monitoring.",
+      "new_class_type_hint": "Societal Risk",
+      "new_class_group": "AI Power & Governance Risks",
+      "remark": null,
+      "justification": "Updating the label and description to explicitly cover structural risks like concentration of power and assigning a governance-focused Class_Group better reflects its role as a risk class linked to institutional power misuse.",
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_81c254c4",
+      "new_name": "AI Social Stakeholders & Communities",
+      "new_description": "Collective human groups, communities, and society as a whole whose well-being, welfare, and social structures are impacted by AI technologies.",
+      "new_class_type_hint": "Stakeholder Group",
+      "new_class_group": "AI Social Stakeholders & Society",
+      "remark": null,
+      "justification": "This class consistently represents affected populations rather than power-holding institutions; refining the label/description and assigning a stakeholder-focused Class_Group distinguishes it from institutional power actors and risk classes.",
+      "confidence": 0.9
+    }
+  }
+]

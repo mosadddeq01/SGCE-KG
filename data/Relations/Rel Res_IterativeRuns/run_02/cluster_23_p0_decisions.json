@@ -1,0 +1,99 @@
+{
+  "cluster_label": "23_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_19adc7bf5116",
+      "relation_name": "has_state",
+      "rel_desc": "The newly emerged adult butterfly initially has soft, wrinkled wings.",
+      "rel_hint_type": "state possession",
+      "canonical_rel_name": "has_state",
+      "canonical_rel_desc": "Indicates that an entity currently possesses or is in a particular physical or experiential state.",
+      "rel_cls": "entity_state_relation",
+      "rel_cls_group": "ASSOCIATION",
+      "subject_entity_name": "newly emerged adult butterfly",
+      "object_entity_name": "soft, wrinkled butterfly wings",
+      "subject_class_label": "Adult Butterfly Life Stage",
+      "subject_class_group": "Butterfly Biology & Life Cycle",
+      "object_class_label": "Butterfly Wing Post-emergence State",
+      "object_class_group": "Butterfly Metamorphosis, Anatomy, and Experiential States",
+      "qualifiers": {
+        "TemporalQualifier": "immediately after emergence (start of adult stage)",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.96,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_1575408e8b17",
+      "relation_name": "exhibits_state",
+      "rel_desc": "The butterfly, when fluttering by, exhibits an aesthetic state described as a moment of beauty and grace.",
+      "rel_hint_type": "state-association",
+      "canonical_rel_name": "exhibits_state",
+      "canonical_rel_desc": "Indicates that an entity manifestly displays or expresses a particular state (e.g., aesthetic, behavioral, or experiential) under certain conditions.",
+      "rel_cls": "entity_state_relation",
+      "rel_cls_group": "ASSOCIATION",
+      "subject_entity_name": "butterfly",
+      "object_entity_name": "aesthetic state of the butterfly",
+      "subject_class_label": "Adult butterflies",
+      "subject_class_group": "Butterfly Biology & Life Cycle",
+      "object_class_label": "Butterfly aesthetic state in flight",
+      "object_class_group": "Butterfly Metamorphosis, Anatomy, and Experiential States",
+      "qualifiers": {
+        "TemporalQualifier": "at that moment",
+        "SpatialQualifier": null,
+        "OperationalConstraint": "when fluttering by (in flight)",
+        "ConditionExpression": "when you see a butterfly fluttering by",
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "PerceptionContext: observer is invited to marvel at the butterfly's beauty and grace"
+      },
+      "confidence": 0.9,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_rel_schema\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_19adc7bf5116\",\n        \"RelR_1575408e8b17\"\n      ],\n      \"canonical_rel_name\": null,\n      \"canonical_rel_desc\": null,\n      \"rel_cls\": null,\n      \"rel_cls_group\": \"ATTRIBUTE\",\n      \"justification\": \"Both relations describe an entity possessing or manifesting a particular physical or aesthetic state, which is more accurately modeled as an attribute-like relation rather than a generic association. Keeping the existing canonical names and relation class is appropriate, but refining the broad group to ATTRIBUTE improves semantic clarity for state/quality relations.\",\n      \"remark\": null,\n      \"confidence\": 0.86\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_rel_schema",
+      "args": {
+        "relation_ids": [
+          "RelR_19adc7bf5116",
+          "RelR_1575408e8b17"
+        ],
+        "canonical_rel_name": null,
+        "canonical_rel_desc": null,
+        "rel_cls": null,
+        "rel_cls_group": "ATTRIBUTE",
+        "justification": "Both relations describe an entity possessing or manifesting a particular physical or aesthetic state, which is more accurately modeled as an attribute-like relation rather than a generic association. Keeping the existing canonical names and relation class is appropriate, but refining the broad group to ATTRIBUTE improves semantic clarity for state/quality relations.",
+        "remark": null,
+        "confidence": 0.86
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_rel_schema",
+      "relation_ids": [
+        "RelR_19adc7bf5116",
+        "RelR_1575408e8b17"
+      ],
+      "canonical_rel_name": null,
+      "canonical_rel_desc": null,
+      "rel_cls": null,
+      "rel_cls_group": "ATTRIBUTE",
+      "new_relation_name": null,
+      "original_relation_name": null,
+      "justification": "Both relations describe an entity possessing or manifesting a particular physical or aesthetic state, which is more accurately modeled as an attribute-like relation rather than a generic association. Keeping the existing canonical names and relation class is appropriate, but refining the broad group to ATTRIBUTE improves semantic clarity for state/quality relations.",
+      "remark": null,
+      "confidence": 0.86
+    }
+  ],
+  "timestamp": "2026-01-02T09:27:26Z"
+}

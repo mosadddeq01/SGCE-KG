@@ -1,41 +1,41 @@
 [
   {
-    "function": "modify_class",
+    "function": "merge_classes",
     "args": {
-      "class_id": "ClsC_c57a96c1",
-      "new_name": "External Corrosion Mechanisms",
-      "new_description": "Corrosion mechanisms affecting external surfaces, including corrosion under insulation and on underground or submerged systems.",
-      "new_class_type_hint": "Damage Mechanism",
-      "new_class_group": "Corrosion Mechanisms",
+      "class_ids": ["ClsC_a16ea337", "ClsC_edbf52e4"],
+      "provisional_id": "MERGE(ClsC_a16ea337|ClsC_edbf52e4)",
+      "new_name": "Fact and Fiction in Narratives",
+      "new_description": "Concepts and distinctions between objective reality and invented story content, including facts, fiction, real events, and the blurred boundary between them within narratives.",
+      "new_class_type_hint": "Epistemic Narrative Concept",
+      "justification": "Both classes model the same epistemic distinction between fact, fiction, and their blurred boundary in stories (overlapping descriptions and complementary entities: fact, fiction, real events, line between fact and fiction, truth behind stories), so they should be merged into a single coherent class.",
       "remark": null,
-      "justification": "Class label and description updated for clarity and to better reflect the inclusion of corrosion under insulation; assigned to new Class_Group 'Corrosion Mechanisms' to connect with other corrosion-related classes.",
-      "confidence": 0.95
+      "confidence": 0.93
     }
   },
   {
     "function": "modify_class",
     "args": {
-      "class_id": "ClsC_79ac2db8",
-      "new_name": "High-Temperature Corrosion Mechanisms",
-      "new_description": "Corrosion mechanisms occurring at elevated temperatures, including oxidation and sulfidation, affecting material integrity.",
-      "new_class_type_hint": "Damage Mechanism",
-      "new_class_group": "Corrosion Mechanisms",
+      "class_id": "MERGE(ClsC_a16ea337|ClsC_edbf52e4)",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Narrative Truth, Fiction, and History",
       "remark": null,
-      "justification": "Class label and description updated for clarity and to standardize naming; assigned to new Class_Group 'Corrosion Mechanisms' to connect with other corrosion-related classes.",
-      "confidence": 0.95
+      "justification": "The merged class concerns truth vs. fabrication within stories, which fits a broader group unifying narrative truth, fiction, and their historical context.",
+      "confidence": 0.86
     }
   },
   {
     "function": "modify_class",
     "args": {
-      "class_id": "ClsC_3b260d0c",
-      "new_name": "Heat Affected Zone (HAZ)",
-      "new_description": "The Heat Affected Zone (HAZ) is the area of base metal near a weld that has not melted but has undergone changes in microstructure and mechanical properties due to welding heat.",
-      "new_class_type_hint": "Component",
-      "new_class_group": "Welded Component Features",
+      "class_id": "ClsC_351d72f0",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Narrative Truth, Fiction, and History",
       "remark": null,
-      "justification": "Assigned to new Class_Group 'Welded Component Features' as it is a metallurgical region, not a corrosion mechanism; clarifies schema separation.",
-      "confidence": 0.98
+      "justification": "This class covers stories and ancient times as explanatory narratives for the unknown, which is closely related in domain to the fact/fiction distinction in narratives and should share the same higher-level Class_Group.",
+      "confidence": 0.82
     }
   }
 ]

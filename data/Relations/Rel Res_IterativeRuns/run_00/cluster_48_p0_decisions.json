@@ -1,0 +1,141 @@
+{
+  "cluster_label": "48_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_c4439d90023b",
+      "relation_name": "arise_in_context_of",
+      "rel_desc": "The ethical dilemmas are specifically framed as occurring in the context of AI development (and deployment).",
+      "rel_hint_type": "context",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "ethical dilemmas in AI development",
+      "object_entity_name": "Artificial Intelligence",
+      "subject_class_label": "AI Ethics Dilemmas (Concept)",
+      "subject_class_group": "AI Ethics & Governance",
+      "object_class_label": "Artificial Intelligence Technologies",
+      "object_class_group": "Artificial Intelligence Technologies & Applications",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": "during the development and deployment of AI technologies",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "Scope: ethical issues specific to AI lifecycle activities"
+      },
+      "confidence": 0.78,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_39e8b8652c3f",
+      "relation_name": "occurs_in",
+      "rel_desc": "Biased algorithms are used within or embedded in hiring processes.",
+      "rel_hint_type": "context / scope",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "biased algorithms",
+      "object_entity_name": "hiring processes",
+      "subject_class_label": "Algorithmic Bias",
+      "subject_class_group": "AI Fairness, Bias & Data",
+      "object_class_label": "Hiring Processes",
+      "object_class_group": "Decision-Making & Hiring Processes",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "Domain: employment recruitment"
+      },
+      "confidence": 0.9,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_c4439d90023b\",\n        \"RelR_39e8b8652c3f\"\n      ],\n      \"canonical_rel_name\": \"occurs_in_context_of\",\n      \"canonical_rel_desc\": \"Indicates that the subject phenomenon, issue, or process takes place within or is embedded in the contextual scope defined by the object.\",\n      \"justification\": \"Both relations describe a phenomenon (ethical dilemmas, biased algorithms) taking place within or being embedded in a broader contextual scope (AI development, hiring processes). A single contextual containment predicate 'occurs_in_context_of' captures this non-physical, situational context consistently.\",\n      \"remark\": null,\n      \"confidence\": 0.87\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_c4439d90023b\",\n        \"RelR_39e8b8652c3f\"\n      ],\n      \"rel_cls\": \"contextual_scope_relation\",\n      \"justification\": \"In both instances, the object defines the situational or procedural scope within which the subject occurs or is instantiated, fitting a shared class of contextual scope relations.\",\n      \"remark\": null,\n      \"confidence\": 0.86\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_c4439d90023b\",\n        \"RelR_39e8b8652c3f\"\n      ],\n      \"rel_cls_group\": \"ASSOCIATION\",\n      \"justification\": \"These links express an abstract contextual association (scope/setting) rather than physical location or strict causality; the subject is associated with, and scoped by, the context provided by the object.\",\n      \"remark\": null,\n      \"confidence\": 0.8\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_c4439d90023b",
+          "RelR_39e8b8652c3f"
+        ],
+        "canonical_rel_name": "occurs_in_context_of",
+        "canonical_rel_desc": "Indicates that the subject phenomenon, issue, or process takes place within or is embedded in the contextual scope defined by the object.",
+        "justification": "Both relations describe a phenomenon (ethical dilemmas, biased algorithms) taking place within or being embedded in a broader contextual scope (AI development, hiring processes). A single contextual containment predicate 'occurs_in_context_of' captures this non-physical, situational context consistently.",
+        "remark": null,
+        "confidence": 0.87
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_c4439d90023b",
+          "RelR_39e8b8652c3f"
+        ],
+        "rel_cls": "contextual_scope_relation",
+        "justification": "In both instances, the object defines the situational or procedural scope within which the subject occurs or is instantiated, fitting a shared class of contextual scope relations.",
+        "remark": null,
+        "confidence": 0.86
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_c4439d90023b",
+          "RelR_39e8b8652c3f"
+        ],
+        "rel_cls_group": "ASSOCIATION",
+        "justification": "These links express an abstract contextual association (scope/setting) rather than physical location or strict causality; the subject is associated with, and scoped by, the context provided by the object.",
+        "remark": null,
+        "confidence": 0.8
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_c4439d90023b",
+        "RelR_39e8b8652c3f"
+      ],
+      "canonical_rel_name": "occurs_in_context_of",
+      "canonical_rel_desc": "Indicates that the subject phenomenon, issue, or process takes place within or is embedded in the contextual scope defined by the object.",
+      "justification": "Both relations describe a phenomenon (ethical dilemmas, biased algorithms) taking place within or being embedded in a broader contextual scope (AI development, hiring processes). A single contextual containment predicate 'occurs_in_context_of' captures this non-physical, situational context consistently.",
+      "remark": null,
+      "confidence": 0.87
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_c4439d90023b",
+        "RelR_39e8b8652c3f"
+      ],
+      "rel_cls": "contextual_scope_relation",
+      "justification": "In both instances, the object defines the situational or procedural scope within which the subject occurs or is instantiated, fitting a shared class of contextual scope relations.",
+      "remark": null,
+      "confidence": 0.86
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_c4439d90023b",
+        "RelR_39e8b8652c3f"
+      ],
+      "rel_cls_group": "ASSOCIATION",
+      "justification": "These links express an abstract contextual association (scope/setting) rather than physical location or strict causality; the subject is associated with, and scoped by, the context provided by the object.",
+      "remark": null,
+      "confidence": 0.8
+    }
+  ],
+  "timestamp": "2026-01-02T09:17:34Z"
+}

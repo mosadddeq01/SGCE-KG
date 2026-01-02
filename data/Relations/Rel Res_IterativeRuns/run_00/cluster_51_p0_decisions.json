@@ -1,0 +1,175 @@
+{
+  "cluster_label": "51_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_10a2451d8473",
+      "relation_name": "enables",
+      "rel_desc": "Fully developed butterfly wings enable the butterfly to perform its first flight.",
+      "rel_hint_type": "functional dependency",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "butterfly wings",
+      "object_entity_name": "first flight",
+      "subject_class_label": "Butterfly Wing Anatomy",
+      "subject_class_group": "Butterfly Metamorphosis, Anatomy, and Experiential States",
+      "object_class_label": "Butterfly Emergence Processes",
+      "object_class_group": "Butterfly Metamorphosis, Anatomy, and Experiential States",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": "wings are fully developed",
+        "UncertaintyQualifier": null,
+        "CausalHint": "Once",
+        "LogicalMarker": "once",
+        "OtherQualifier": null
+      },
+      "confidence": 0.92,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_3249723f2ac7",
+      "relation_name": "facilitates",
+      "rel_desc": "Butterflies facilitate the pollination process.",
+      "rel_hint_type": "functional role",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "butterfly",
+      "object_entity_name": "pollination",
+      "subject_class_label": "Adult butterflies",
+      "subject_class_group": "Butterfly Biology & Life Cycle",
+      "object_class_label": "Pollination (Flowering Plant Process)",
+      "object_class_group": "Flowering Plant Reproduction",
+      "qualifiers": {
+        "TemporalQualifier": "during adult feeding and flower visits",
+        "SpatialQualifier": "in flowering plant habitats",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "crucial role (strong importance)",
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "Mechanism: transferring pollen between flowers"
+      },
+      "confidence": 0.99,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_7725d379faeb",
+      "relation_name": "enables_reproduction_of",
+      "rel_desc": "Pollination enables or helps plants to reproduce.",
+      "rel_hint_type": "functional",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "pollination",
+      "object_entity_name": "plants",
+      "subject_class_label": "Pollination (Flowering Plant Process)",
+      "subject_class_group": "Flowering Plant Reproduction",
+      "object_class_label": "Flowering Plants (Organisms)",
+      "object_class_group": "Flowering Plant Reproduction",
+      "qualifiers": {
+        "TemporalQualifier": "during flowering period",
+        "SpatialQualifier": "in plant reproductive structures",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "helps (non-deterministic wording)",
+        "CausalHint": "helping",
+        "LogicalMarker": "by",
+        "OtherQualifier": null
+      },
+      "confidence": 0.98,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_10a2451d8473\",\n        \"RelR_3249723f2ac7\",\n        \"RelR_7725d379faeb\"\n      ],\n      \"canonical_rel_name\": \"enables\",\n      \"canonical_rel_desc\": \"Subject functionally enables or facilitates the occurrence or success of the object process/state, without implying strict determinism.\",\n      \"justification\": \"All three relations describe a functional enabling or facilitating effect: (1) fully developed wings enable first flight, (2) butterflies facilitate/enhance pollination, and (3) pollination enables plant reproduction. Using a single predicate 'enables' captures this causal-functional support consistently while remaining agnostic to deterministic vs. contributory causation.\",\n      \"remark\": null,\n      \"confidence\": 0.93\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_10a2451d8473\",\n        \"RelR_3249723f2ac7\",\n        \"RelR_7725d379faeb\"\n      ],\n      \"rel_cls\": \"functional_causality_relation\",\n      \"justification\": \"Each relation expresses that the subject provides a functional capability or support that causally contributes to the object (wings → flight, butterfly → pollination, pollination → plant reproduction). Grouping them under a functional_causality_relation class cleanly abstracts this family of enabling/ facilitating links.\",\n      \"remark\": null,\n      \"confidence\": 0.93\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_10a2451d8473\",\n        \"RelR_3249723f2ac7\",\n        \"RelR_7725d379faeb\"\n      ],\n      \"rel_cls_group\": \"CAUSALITY\",\n      \"justification\": \"In all cases the subject is presented as a causal factor for the object outcome or process (enabling or facilitating it), so they fall naturally under a broad CAUSALITY group.\",\n      \"remark\": null,\n      \"confidence\": 0.95\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_10a2451d8473",
+          "RelR_3249723f2ac7",
+          "RelR_7725d379faeb"
+        ],
+        "canonical_rel_name": "enables",
+        "canonical_rel_desc": "Subject functionally enables or facilitates the occurrence or success of the object process/state, without implying strict determinism.",
+        "justification": "All three relations describe a functional enabling or facilitating effect: (1) fully developed wings enable first flight, (2) butterflies facilitate/enhance pollination, and (3) pollination enables plant reproduction. Using a single predicate 'enables' captures this causal-functional support consistently while remaining agnostic to deterministic vs. contributory causation.",
+        "remark": null,
+        "confidence": 0.93
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_10a2451d8473",
+          "RelR_3249723f2ac7",
+          "RelR_7725d379faeb"
+        ],
+        "rel_cls": "functional_causality_relation",
+        "justification": "Each relation expresses that the subject provides a functional capability or support that causally contributes to the object (wings → flight, butterfly → pollination, pollination → plant reproduction). Grouping them under a functional_causality_relation class cleanly abstracts this family of enabling/ facilitating links.",
+        "remark": null,
+        "confidence": 0.93
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_10a2451d8473",
+          "RelR_3249723f2ac7",
+          "RelR_7725d379faeb"
+        ],
+        "rel_cls_group": "CAUSALITY",
+        "justification": "In all cases the subject is presented as a causal factor for the object outcome or process (enabling or facilitating it), so they fall naturally under a broad CAUSALITY group.",
+        "remark": null,
+        "confidence": 0.95
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_10a2451d8473",
+        "RelR_3249723f2ac7",
+        "RelR_7725d379faeb"
+      ],
+      "canonical_rel_name": "enables",
+      "canonical_rel_desc": "Subject functionally enables or facilitates the occurrence or success of the object process/state, without implying strict determinism.",
+      "justification": "All three relations describe a functional enabling or facilitating effect: (1) fully developed wings enable first flight, (2) butterflies facilitate/enhance pollination, and (3) pollination enables plant reproduction. Using a single predicate 'enables' captures this causal-functional support consistently while remaining agnostic to deterministic vs. contributory causation.",
+      "remark": null,
+      "confidence": 0.93
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_10a2451d8473",
+        "RelR_3249723f2ac7",
+        "RelR_7725d379faeb"
+      ],
+      "rel_cls": "functional_causality_relation",
+      "justification": "Each relation expresses that the subject provides a functional capability or support that causally contributes to the object (wings → flight, butterfly → pollination, pollination → plant reproduction). Grouping them under a functional_causality_relation class cleanly abstracts this family of enabling/ facilitating links.",
+      "remark": null,
+      "confidence": 0.93
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_10a2451d8473",
+        "RelR_3249723f2ac7",
+        "RelR_7725d379faeb"
+      ],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "In all cases the subject is presented as a causal factor for the object outcome or process (enabling or facilitating it), so they fall naturally under a broad CAUSALITY group.",
+      "remark": null,
+      "confidence": 0.95
+    }
+  ],
+  "timestamp": "2026-01-02T09:18:16Z"
+}

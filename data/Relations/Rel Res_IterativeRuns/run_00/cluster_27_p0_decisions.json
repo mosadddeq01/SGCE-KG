@@ -1,0 +1,201 @@
+{
+  "cluster_label": "27_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_86b4ed237b92",
+      "relation_name": "experiences",
+      "rel_desc": "The young couple hears the news report.",
+      "rel_hint_type": "perception",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "young couple",
+      "object_entity_name": "news report",
+      "subject_class_label": "Hook Man Legend: Narrative Elements",
+      "subject_class_group": "Urban Legend: Hook Man",
+      "object_class_label": "Hook Man Legend: Narrative Elements",
+      "object_class_group": "Urban Legend: Hook Man",
+      "qualifiers": {
+        "TemporalQualifier": "early in the story",
+        "SpatialQualifier": "in the secluded area, inside the car",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": "when",
+        "OtherQualifier": "MediaType: broadcast news"
+      },
+      "confidence": 0.97,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_06536c8ce183",
+      "relation_name": "experienced_by",
+      "rel_desc": "Fear of the unknown is an emotion experienced by the young couple in the legend.",
+      "rel_hint_type": "emotional experience",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "fear of the unknown",
+      "object_entity_name": "young couple",
+      "subject_class_label": "Urban Legend Emotional Themes and Responses",
+      "subject_class_group": "Urban Legend Emotional Dynamics",
+      "object_class_label": "Hook Man Legend: Narrative Elements",
+      "object_class_group": "Urban Legend: Hook Man",
+      "qualifiers": {
+        "TemporalQualifier": "throughout the terrifying events",
+        "SpatialQualifier": "in the secluded area / car setting",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "implicit, not named as ‘the couple’s fear’",
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "EmotionType: existential uncertainty"
+      },
+      "confidence": 0.8,
+      "remarks": [
+        "The text generalizes to urban legends; mapping specifically to the couple is slightly interpretive."
+      ]
+    },
+    {
+      "relation_id": "RelR_b15398bf7af3",
+      "relation_name": "perceived_by",
+      "rel_desc": "The young couple perceives a persistent threat of danger.",
+      "rel_hint_type": "risk perception",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "threat of danger",
+      "object_entity_name": "young couple",
+      "subject_class_label": "Urban Legend Emotional Themes and Responses",
+      "subject_class_group": "Urban Legend Emotional Dynamics",
+      "object_class_label": "Hook Man Legend: Narrative Elements",
+      "object_class_group": "Urban Legend: Hook Man",
+      "qualifiers": {
+        "TemporalQualifier": "during the unfolding of the story",
+        "SpatialQualifier": "secluded area around the car",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "implied rather than literally stated",
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "RiskNature: unseen attacker possibly nearby"
+      },
+      "confidence": 0.8,
+      "remarks": [
+        "Slight inference from general theme to specific characters."
+      ]
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_86b4ed237b92\"],\n      \"canonical_rel_name\": \"experiences\",\n      \"canonical_rel_desc\": \"An experiencer (person or group) undergoes or perceives a stimulus, event, or information.\",\n      \"justification\": \"In this instance the subject is the experiencer (young couple) and the object is the stimulus (news report), so a directional predicate from experiencer to experienced stimulus is appropriate.\",\n      \"remark\": null,\n      \"confidence\": 0.92\n    }\n  },\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_06536c8ce183\", \"RelR_b15398bf7af3\"],\n      \"canonical_rel_name\": \"is_experienced_by\",\n      \"canonical_rel_desc\": \"A stimulus, condition, or abstract state (e.g., fear, threat) is mentally or emotionally experienced or perceived by an agent.\",\n      \"justification\": \"In both instances the subject is the experienced state or stimulus (fear of the unknown, threat of danger) and the object is the experiencer (young couple), so a consistent inverse-style predicate from stimulus/state to experiencer fits both cases.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_86b4ed237b92\", \"RelR_06536c8ce183\", \"RelR_b15398bf7af3\"],\n      \"rel_cls\": \"perception_experience_relation\",\n      \"justification\": \"All three relations describe mental or emotional perception/experience links between an agent (young couple) and an experienced stimulus or state (news report, fear, threat).\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_86b4ed237b92\", \"RelR_06536c8ce183\", \"RelR_b15398bf7af3\"],\n      \"rel_cls_group\": \"PERCEPTION\",\n      \"justification\": \"The broad semantic dimension is perception/experience of information, emotions, or threats by an agent, which fits a PERCEPTION-style group.\",\n      \"remark\": null,\n      \"confidence\": 0.88\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_86b4ed237b92"
+        ],
+        "canonical_rel_name": "experiences",
+        "canonical_rel_desc": "An experiencer (person or group) undergoes or perceives a stimulus, event, or information.",
+        "justification": "In this instance the subject is the experiencer (young couple) and the object is the stimulus (news report), so a directional predicate from experiencer to experienced stimulus is appropriate.",
+        "remark": null,
+        "confidence": 0.92
+      }
+    },
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_06536c8ce183",
+          "RelR_b15398bf7af3"
+        ],
+        "canonical_rel_name": "is_experienced_by",
+        "canonical_rel_desc": "A stimulus, condition, or abstract state (e.g., fear, threat) is mentally or emotionally experienced or perceived by an agent.",
+        "justification": "In both instances the subject is the experienced state or stimulus (fear of the unknown, threat of danger) and the object is the experiencer (young couple), so a consistent inverse-style predicate from stimulus/state to experiencer fits both cases.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_86b4ed237b92",
+          "RelR_06536c8ce183",
+          "RelR_b15398bf7af3"
+        ],
+        "rel_cls": "perception_experience_relation",
+        "justification": "All three relations describe mental or emotional perception/experience links between an agent (young couple) and an experienced stimulus or state (news report, fear, threat).",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_86b4ed237b92",
+          "RelR_06536c8ce183",
+          "RelR_b15398bf7af3"
+        ],
+        "rel_cls_group": "PERCEPTION",
+        "justification": "The broad semantic dimension is perception/experience of information, emotions, or threats by an agent, which fits a PERCEPTION-style group.",
+        "remark": null,
+        "confidence": 0.88
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_86b4ed237b92"
+      ],
+      "canonical_rel_name": "experiences",
+      "canonical_rel_desc": "An experiencer (person or group) undergoes or perceives a stimulus, event, or information.",
+      "justification": "In this instance the subject is the experiencer (young couple) and the object is the stimulus (news report), so a directional predicate from experiencer to experienced stimulus is appropriate.",
+      "remark": null,
+      "confidence": 0.92
+    },
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_06536c8ce183",
+        "RelR_b15398bf7af3"
+      ],
+      "canonical_rel_name": "is_experienced_by",
+      "canonical_rel_desc": "A stimulus, condition, or abstract state (e.g., fear, threat) is mentally or emotionally experienced or perceived by an agent.",
+      "justification": "In both instances the subject is the experienced state or stimulus (fear of the unknown, threat of danger) and the object is the experiencer (young couple), so a consistent inverse-style predicate from stimulus/state to experiencer fits both cases.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_86b4ed237b92",
+        "RelR_06536c8ce183",
+        "RelR_b15398bf7af3"
+      ],
+      "rel_cls": "perception_experience_relation",
+      "justification": "All three relations describe mental or emotional perception/experience links between an agent (young couple) and an experienced stimulus or state (news report, fear, threat).",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_86b4ed237b92",
+        "RelR_06536c8ce183",
+        "RelR_b15398bf7af3"
+      ],
+      "rel_cls_group": "PERCEPTION",
+      "justification": "The broad semantic dimension is perception/experience of information, emotions, or threats by an agent, which fits a PERCEPTION-style group.",
+      "remark": null,
+      "confidence": 0.88
+    }
+  ],
+  "timestamp": "2026-01-02T09:14:42Z"
+}

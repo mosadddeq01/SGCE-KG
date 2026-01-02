@@ -1,105 +1,67 @@
 [
   {
-    "function": "split_class",
+    "function": "modify_class",
     "args": {
-      "source_class_id": "ClsC_26300b9e",
-      "splits": [
-        {
-          "name": "Mechanical and Metallurgical Failure Mechanisms",
-          "description": "Failure mechanisms related to mechanical and metallurgical processes.",
-          "class_type_hint": "Damage Mechanism",
-          "member_ids": ["En_6a5f3538"],
-          "provisional_id": "SPLIT_MechanicalMetallurgical_26300b9e"
-        },
-        {
-          "name": "Thickness Loss Mechanisms",
-          "description": "Mechanisms involving uniform or localized loss of material thickness.",
-          "class_type_hint": "Damage Mechanism",
-          "member_ids": ["En_8ed6cfa3"],
-          "provisional_id": "SPLIT_ThicknessLoss_26300b9e"
-        }
+      "class_id": "ClsC_68508fdd",
+      "new_name": "Supernatural Concepts",
+      "new_description": "Abstract ideas referring to phenomena beyond normal scientific understanding, including the supernatural, the paranormal, and the broader notion of the unknown and its existence in people’s beliefs and imaginations.",
+      "new_class_type_hint": "Concept",
+      "new_class_group": "Supernatural & Paranormal Domain",
+      "remark": null,
+      "justification": "This class cleanly covers abstract belief-level notions (supernatural, unknown, paranormal); assigning a shared Class_Group clarifies its relation to other supernatural-focused classes in the cluster.",
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_d3aea1db",
+      "new_name": "Supernatural Narratives",
+      "new_description": "Story-focused entities and narrative frames centered on supernatural or unexplained events in folklore and urban legends, including tales about the supernatural and unresolved mysteries that drive such stories.",
+      "new_class_type_hint": "Narrative Motif",
+      "new_class_group": "Supernatural & Paranormal Domain",
+      "remark": null,
+      "justification": "This class groups story-level uses of the supernatural; aligning its Class_Group with other supernatural-related classes connects narrative motifs with the broader supernatural domain.",
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_16232585",
+      "new_name": "Supernatural Phenomena and Manifestations",
+      "new_description": "Concrete locations, objects, beings, and manifestations associated with supernatural activity, such as haunted houses, cursed objects, ghostly apparitions, and mysterious creatures in legends.",
+      "new_class_type_hint": "Phenomenon",
+      "new_class_group": "Supernatural & Paranormal Domain",
+      "remark": null,
+      "justification": "This class already covers concrete manifestations like haunted houses, apparitions, and mysterious creatures; expanding the description to include cursed objects and setting a shared Class_Group clarifies its scope within the supernatural domain.",
+      "confidence": 0.93
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_feb94b4d",
+      "new_name": "Supernatural Threat Backstories",
+      "new_description": "Intangible backstories and conditions that imbue supernatural settings and elements with danger, such as dark or violent pasts and histories that make places or items feel cursed in urban legends.",
+      "new_class_type_hint": "Narrative Motif",
+      "new_class_group": "Supernatural & Parannormal Domain",
+      "remark": "After moving cursed objects to the phenomena/manifestations class, this class is focused on narrative backstory/condition rather than concrete items; label and description updated accordingly.",
+      "justification": "Within this class, ‘dark pasts’ are narrative backstory elements, whereas ‘cursed objects’ are concrete manifestations that fit better with supernatural phenomena; narrowing this class to backstories and assigning it to the common supernatural domain improves conceptual coherence.",
+      "confidence": 0.86
+    }
+  },
+  {
+    "function": "reassign_entities",
+    "args": {
+      "entity_ids": [
+        "En_f72754d2"
       ],
-      "justification": "ClsC_26300b9e is overloaded, grouping unrelated mechanisms (mechanical/metallurgical failure vs. thickness loss); splitting improves schema coherence.",
+      "from_class_id": "ClsC_feb94b4d",
+      "to_class_id": "ClsC_16232585",
+      "justification": "‘Cursed objects’ are concrete items believed to carry a curse and function as supernatural manifestations (like haunted houses or ghostly apparitions), so they belong with Supernatural Phenomena rather than with purely narrative backstory elements.",
       "remark": null,
-      "confidence": 0.95
-    }
-  },
-  {
-    "function": "modify_class",
-    "args": {
-      "class_id": "ClsC_7d8ac253",
-      "new_name": "Hydrogen-Induced Cracking Mechanisms",
-      "new_description": "Cracking mechanisms in metals caused by hydrogen, including SOHIC and HIC.",
-      "new_class_type_hint": "Damage Mechanism",
-      "new_class_group": "Environmental Cracking Mechanisms",
-      "remark": null,
-      "justification": "Assigning a more precise Class_Group to connect hydrogen-related cracking with other environmental cracking classes.",
-      "confidence": 0.95
-    }
-  },
-  {
-    "function": "modify_class",
-    "args": {
-      "class_id": "ClsC_03e60d10",
-      "new_name": "Sulfide and Acid Stress Cracking Mechanisms",
-      "new_description": "Cracking mechanisms in metals due to sulfide and acid environments, including sulfide stress cracking and polythionic acid stress corrosion cracking.",
-      "new_class_type_hint": "Damage Mechanism",
-      "new_class_group": "Environmental Cracking Mechanisms",
-      "remark": null,
-      "justification": "Assigning to the same Class_Group as other environmental cracking mechanisms for schema consistency.",
-      "confidence": 0.95
-    }
-  },
-  {
-    "function": "modify_class",
-    "args": {
-      "class_id": "ClsC_e9a1c8ba",
-      "new_name": "Environmental Cracking Mechanisms",
-      "new_description": "Cracking mechanisms in metals due to environmental factors, including wet H2S environments and carbon steel weldments.",
-      "new_class_type_hint": "Damage Mechanism",
-      "new_class_group": "Environmental Cracking Mechanisms",
-      "remark": null,
-      "justification": "Class_Group assignment aligns with other classes focused on environmental cracking.",
-      "confidence": 0.95
-    }
-  },
-  {
-    "function": "modify_class",
-    "args": {
-      "class_id": "ClsC_47ffa62a",
-      "new_name": "General Stress Corrosion Cracking Mechanisms",
-      "new_description": "Cracking mechanisms in materials due to stress and corrosive environments, including stress corrosion cracking and environment assisted cracking.",
-      "new_class_type_hint": "Damage Mechanism",
-      "new_class_group": "Environmental Cracking Mechanisms",
-      "remark": null,
-      "justification": "Assigning to the same Class_Group as other environmental cracking classes for schema connectivity.",
-      "confidence": 0.95
-    }
-  },
-  {
-    "function": "modify_class",
-    "args": {
-      "class_id": "SPLIT_MechanicalMetallurgical_26300b9e",
-      "new_name": "Mechanical and Metallurgical Failure Mechanisms",
-      "new_description": "Failure mechanisms related to mechanical and metallurgical processes.",
-      "new_class_type_hint": "Damage Mechanism",
-      "new_class_group": "Material Failure Mechanisms",
-      "remark": null,
-      "justification": "Assigning a distinct Class_Group for mechanical/metallurgical failure mechanisms, separate from environmental cracking.",
-      "confidence": 0.95
-    }
-  },
-  {
-    "function": "modify_class",
-    "args": {
-      "class_id": "SPLIT_ThicknessLoss_26300b9e",
-      "new_name": "Thickness Loss Mechanisms",
-      "new_description": "Mechanisms involving uniform or localized loss of material thickness.",
-      "new_class_type_hint": "Damage Mechanism",
-      "new_class_group": "Material Loss Mechanisms",
-      "remark": null,
-      "justification": "Assigning a distinct Class_Group for thickness loss mechanisms, as this is a different degradation mode from cracking or mechanical failure.",
-      "confidence": 0.95
+      "confidence": 0.9
     }
   }
 ]

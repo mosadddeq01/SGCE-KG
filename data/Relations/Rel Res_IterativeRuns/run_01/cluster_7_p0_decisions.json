@@ -2,99 +2,101 @@
   "cluster_label": "7_p0",
   "cluster_relations": [
     {
-      "relation_id": "RelR_362f6e35c9d7",
-      "relation_name": "has_category",
-      "rel_desc": "Duplex stainless steel is one of the four categories of stainless steels listed.",
-      "rel_hint_type": "taxonomic",
-      "canonical_rel_name": "has_subtype",
-      "canonical_rel_desc": "Indicates that the subject material class has the object as a more specific subtype or category within it.",
-      "rel_cls": "material_taxonomy_relation",
-      "rel_cls_group": "IDENTITY",
-      "subject_entity_name": "Stainless Steel",
-      "object_entity_name": "duplex stainless steel",
-      "subject_class_label": "Corrosion-Resistant Alloys",
-      "subject_class_group": "Corrosion-Resistant Metals and Alloys",
-      "object_class_label": "Corrosion-Resistant Alloys",
-      "object_class_group": "Corrosion-Resistant Metals and Alloys",
+      "relation_id": "RelR_ab8fbe9f47d5",
+      "relation_name": "enables_risk_of",
+      "rel_desc": "Use of facial recognition technology for surveillance raises the potential for abuse of power.",
+      "rel_hint_type": "risk linkage",
+      "canonical_rel_name": "poses_risk_of",
+      "canonical_rel_desc": "Indicates that the use or presence of the subject creates a possibility or risk of the object outcome, without implying deterministic causation.",
+      "rel_cls": "risk_relation",
+      "rel_cls_group": "CAUSALITY",
+      "subject_entity_name": "facial recognition technology",
+      "object_entity_name": "abuse of power",
+      "subject_class_label": "AI Surveillance Technologies",
+      "subject_class_group": "Artificial Intelligence Technologies & Applications",
+      "object_class_label": "AI-Enabled Abuse of Power",
+      "object_class_group": "AI Power & Governance Risks",
       "qualifiers": {
-        "TemporalQualifier": "at room temperature",
+        "TemporalQualifier": null,
         "SpatialQualifier": null,
-        "OperationalConstraint": null,
+        "OperationalConstraint": "when used for surveillance",
         "ConditionExpression": null,
-        "UncertaintyQualifier": null,
-        "CausalHint": "characterized by",
-        "LogicalMarker": null,
-        "OtherQualifier": "CategoryType: stainless steel category"
-      },
-      "confidence": 0.88,
-      "remarks": [
-        "Although text just says 'duplex', entity is resolved as duplex stainless steel; relation captures the category membership.",
-        "Although text just says 'duplex', entity is resolved as duplex stainless steel; relation captures the category membership."
-      ]
-    },
-    {
-      "relation_id": "RelR_39cf0ff7f895",
-      "relation_name": "is_subtype_of",
-      "rel_desc": "Duplex stainless steel is a subtype/category within the broader class of stainless steels.",
-      "rel_hint_type": "taxonomic",
-      "canonical_rel_name": "is_subtype_of",
-      "canonical_rel_desc": "Indicates that the subject is a more specific subtype or category within the broader class represented by the object.",
-      "rel_cls": "material_taxonomy_relation",
-      "rel_cls_group": "IDENTITY",
-      "subject_entity_name": "duplex stainless steel",
-      "object_entity_name": "Stainless Steel",
-      "subject_class_label": "Corrosion-Resistant Alloys",
-      "subject_class_group": "Corrosion-Resistant Metals and Alloys",
-      "object_class_label": "Corrosion-Resistant Alloys",
-      "object_class_group": "Corrosion-Resistant Metals and Alloys",
-      "qualifiers": {
-        "TemporalQualifier": "at room temperature",
-        "SpatialQualifier": null,
-        "OperationalConstraint": null,
-        "ConditionExpression": null,
-        "UncertaintyQualifier": null,
-        "CausalHint": "characterized by",
+        "UncertaintyQualifier": "potential",
+        "CausalHint": "raising questions about",
         "LogicalMarker": null,
         "OtherQualifier": null
       },
-      "confidence": 0.82,
-      "remarks": []
-    }
-  ],
-  "llm_raw": "[\n  {\n    \"function\": \"modify_rel_schema\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_362f6e35c9d7\"],\n      \"canonical_rel_name\": \"is_subtype_of\",\n      \"canonical_rel_desc\": \"Indicates that the subject is a more specific subtype or category within the broader class represented by the object.\",\n      \"rel_cls\": \"material_taxonomy_relation\",\n      \"rel_cls_group\": \"IDENTITY\",\n      \"justification\": \"This relation is the inverse of RelR_39cf0ff7f895 and expresses the same taxonomic hierarchy. To maintain schema consistency, hierarchical material-category links should use a single canonical predicate 'is_subtype_of' with a shared description, regardless of direction in raw relation_name. The existing rel_cls and rel_cls_group are already appropriate for a taxonomic identity/hierarchy relation.\",\n      \"remark\": \"Normalized hierarchical material category relation to use the same canonical predicate 'is_subtype_of' as the inverse instance in this cluster.\",\n      \"confidence\": 0.96\n    }\n  }\n]",
-  "parsed_steps": [
+      "confidence": 0.9,
+      "remarks": [
+        "Relation expresses risk-enabling, not deterministic causation.",
+        "Relation expresses risk-enabling, not deterministic causation."
+      ]
+    },
     {
-      "function": "modify_rel_schema",
-      "args": {
-        "relation_ids": [
-          "RelR_362f6e35c9d7"
-        ],
-        "canonical_rel_name": "is_subtype_of",
-        "canonical_rel_desc": "Indicates that the subject is a more specific subtype or category within the broader class represented by the object.",
-        "rel_cls": "material_taxonomy_relation",
-        "rel_cls_group": "IDENTITY",
-        "justification": "This relation is the inverse of RelR_39cf0ff7f895 and expresses the same taxonomic hierarchy. To maintain schema consistency, hierarchical material-category links should use a single canonical predicate 'is_subtype_of' with a shared description, regardless of direction in raw relation_name. The existing rel_cls and rel_cls_group are already appropriate for a taxonomic identity/hierarchy relation.",
-        "remark": "Normalized hierarchical material category relation to use the same canonical predicate 'is_subtype_of' as the inverse instance in this cluster.",
-        "confidence": 0.96
-      }
-    }
-  ],
-  "executed_decisions": [
+      "relation_id": "RelR_520597a97b34",
+      "relation_name": "may_perpetrate",
+      "rel_desc": "Governments are potential actors that may engage in abuse of power enabled by surveillance technologies.",
+      "rel_hint_type": "actor-role",
+      "canonical_rel_name": "may_commit",
+      "canonical_rel_desc": "Indicates that the subject is a potential actor that may commit or engage in the specified abusive or harmful act, without asserting that it necessarily occurs.",
+      "rel_cls": "harm_perpetrator_role_relation",
+      "rel_cls_group": "AGENCY",
+      "subject_entity_name": "governments",
+      "object_entity_name": "abuse of power",
+      "subject_class_label": "AI Institutional Actors (Governments & Corporations)",
+      "subject_class_group": "AI Institutional & Corporate Power Actors",
+      "object_class_label": "AI-Enabled Abuse of Power",
+      "object_class_group": "AI Power & Governance Risks",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": "in context of AI-enabled surveillance",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "potential",
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "Context: facial recognition surveillance"
+      },
+      "confidence": 0.88,
+      "remarks": [
+        "Direction chosen as actor (government) toward act (abuse of power).",
+        "Direction chosen as actor (government) toward act (abuse of power)."
+      ]
+    },
     {
-      "action": "modify_rel_schema",
-      "relation_ids": [
-        "RelR_362f6e35c9d7"
-      ],
-      "canonical_rel_name": "is_subtype_of",
-      "canonical_rel_desc": "Indicates that the subject is a more specific subtype or category within the broader class represented by the object.",
-      "rel_cls": "material_taxonomy_relation",
-      "rel_cls_group": "IDENTITY",
-      "new_relation_name": null,
-      "original_relation_name": null,
-      "justification": "This relation is the inverse of RelR_39cf0ff7f895 and expresses the same taxonomic hierarchy. To maintain schema consistency, hierarchical material-category links should use a single canonical predicate 'is_subtype_of' with a shared description, regardless of direction in raw relation_name. The existing rel_cls and rel_cls_group are already appropriate for a taxonomic identity/hierarchy relation.",
-      "remark": "Normalized hierarchical material category relation to use the same canonical predicate 'is_subtype_of' as the inverse instance in this cluster.",
-      "confidence": 0.96
+      "relation_id": "RelR_fae8cebd0ec0",
+      "relation_name": "may_perpetrate",
+      "rel_desc": "Corporations are also potential actors that may engage in abuse of power enabled by AI surveillance.",
+      "rel_hint_type": "actor-role",
+      "canonical_rel_name": "may_commit",
+      "canonical_rel_desc": "Indicates that the subject is a potential actor that may commit or engage in the specified abusive or harmful act, without asserting that it necessarily occurs.",
+      "rel_cls": "harm_perpetrator_role_relation",
+      "rel_cls_group": "AGENCY",
+      "subject_entity_name": "corporations",
+      "object_entity_name": "abuse of power",
+      "subject_class_label": "AI Institutional Actors (Governments & Corporations)",
+      "subject_class_group": "AI Institutional & Corporate Power Actors",
+      "object_class_label": "AI-Enabled Abuse of Power",
+      "object_class_group": "AI Power & Governance Risks",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": "in context of AI-enabled surveillance",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "potential",
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "Context: facial recognition surveillance"
+      },
+      "confidence": 0.88,
+      "remarks": [
+        "Parallel to relation for governments.",
+        "Parallel to relation for governments."
+      ]
     }
   ],
-  "timestamp": "2025-12-29T21:47:59Z"
+  "llm_raw": "[]",
+  "parsed_steps": [],
+  "executed_decisions": [],
+  "timestamp": "2026-01-02T09:22:10Z"
 }

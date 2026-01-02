@@ -1,0 +1,179 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_8ef0f91ac606"],
+      "canonical_rel_name": "participates_in_process",
+      "canonical_rel_desc": "Indicates that an entity serves as a participant or material involved in a biological or physical process.",
+      "justification": "The subject 'pollen' is a reproductive material that takes part in the process 'pollination'; the semantics are that it participates in the process rather than causing or merely co-occurring with it.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_b98bacba7b1b"],
+      "canonical_rel_name": "performs_biological_process",
+      "canonical_rel_desc": "Indicates that an organism actively performs or executes a biological process or behavior.",
+      "justification": "The subject 'butterfly' is the organism that carries out the process 'reproduction of butterflies'; this is best modeled as an organism performing a biological process.",
+      "remark": null,
+      "confidence": 0.94
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_f30e4e7be97d"],
+      "canonical_rel_name": "has_attribute",
+      "canonical_rel_desc": "Indicates that a subject possesses a particular attribute, property, or characteristic.",
+      "justification": "The relation describes that 'people around the world' are characterized as having 'imagination'; this is a classic subject–attribute relation and should be normalized as a generic attribute predicate.",
+      "remark": null,
+      "confidence": 0.88
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_c379e2c55f1c"],
+      "canonical_rel_name": "circulates_in",
+      "canonical_rel_desc": "Indicates that an informational or cultural item circulates, is shared, or is transmitted within a given population or community context.",
+      "justification": "The subject 'modern folklore' is said to circulate within 'communities'; the semantics are dissemination of cultural content within social groups, well captured by 'circulates_in'.",
+      "remark": null,
+      "confidence": 0.78
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_4339d7a83acf"],
+      "canonical_rel_name": "facilitates_dissemination_of",
+      "canonical_rel_desc": "Indicates that a subject enables, accelerates, or facilitates the dissemination or spread of a piece of information, content, or phenomenon.",
+      "justification": "The subject 'communication platforms and media' are described as facilitating the 'proliferation of urban legends'; the key semantic is enabling their spread, not merely co-existing with them.",
+      "remark": null,
+      "confidence": 0.92
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_dcb2d48745f8"],
+      "canonical_rel_name": "occurs_in_context",
+      "canonical_rel_desc": "Indicates that a process, phenomenon, or state occurs within or is embedded in a particular contextual setting (e.g., societal, cultural, spatial, or temporal).",
+      "justification": "The 'proliferation of urban legends' is said to occur within 'modern society'; this is a contextual containment/setting relation rather than a causal or compositional one.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_1b2ca8f5ae09"],
+      "canonical_rel_name": "mitigated_by",
+      "canonical_rel_desc": "Indicates that a problem, risk, or dilemma is addressed, reduced, or managed through the application of a given principle, method, or mechanism.",
+      "justification": "The relation states that 'ethical dilemmas in AI development' are to be managed by 'ethical principles'; this is best captured as the dilemmas being mitigated or addressed by those principles.",
+      "remark": null,
+      "confidence": 0.86
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": ["RelR_8ef0f91ac606", "RelR_b98bacba7b1b"],
+      "rel_cls": "biological_process_participation_relation",
+      "justification": "Both relations link biological entities (pollen, butterflies) to biological processes (pollination, reproduction) in which they take part, either as material participants or active performers; they naturally fall into a shared class of participation in biological processes.",
+      "remark": null,
+      "confidence": 0.88
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": ["RelR_f30e4e7be97d"],
+      "rel_cls": "attribute_relation",
+      "justification": "The relation connects 'people around the world' with the characteristic 'imagination', clearly expressing a subject–attribute link that fits an attribute-focused relation class.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": ["RelR_c379e2c55f1c", "RelR_4339d7a83acf"],
+      "rel_cls": "cultural_dissemination_relation",
+      "justification": "Both relations concern how cultural content (modern folklore, urban legends) moves or spreads: one describes circulation within communities, the other how platforms facilitate spread; together they form a coherent class of cultural dissemination relations.",
+      "remark": null,
+      "confidence": 0.86
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": ["RelR_dcb2d48745f8"],
+      "rel_cls": "contextual_occurrence_relation",
+      "justification": "The relation specifies that the proliferation of urban legends occurs within the contextual setting of modern society, which is best grouped as an occurrence-in-context type relation.",
+      "remark": null,
+      "confidence": 0.89
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": ["RelR_1b2ca8f5ae09"],
+      "rel_cls": "governance_and_mitigation_relation",
+      "justification": "The link between ethical dilemmas and ethical principles is normative and governance-oriented: principles are prescribed to manage or mitigate dilemmas; this warrants a governance/mitigation relation class.",
+      "remark": null,
+      "confidence": 0.87
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": ["RelR_8ef0f91ac606", "RelR_b98bacba7b1b"],
+      "rel_cls_group": "PARTICIPATION",
+      "justification": "Both relations capture entities participating in biological processes; this fits a broad participation-oriented semantic dimension rather than pure causality or composition.",
+      "remark": null,
+      "confidence": 0.86
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": ["RelR_f30e4e7be97d"],
+      "rel_cls_group": "ATTRIBUTE",
+      "justification": "The relation encodes that people possess a mental characteristic (imagination), which falls squarely into an attribute/characterization semantic dimension.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": ["RelR_c379e2c55f1c", "RelR_4339d7a83acf"],
+      "rel_cls_group": "DISSEMINATION",
+      "justification": "Both relations concern how cultural narratives move and spread through social or technical channels; dissemination is the primary semantic axis here.",
+      "remark": null,
+      "confidence": 0.88
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": ["RelR_dcb2d48745f8"],
+      "rel_cls_group": "SPATIALITY",
+      "justification": "The proliferation of urban legends is located within the contextual space of 'modern society'; this is best modeled using a broad spatial/contextual grouping.",
+      "remark": null,
+      "confidence": 0.83
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": ["RelR_1b2ca8f5ae09"],
+      "rel_cls_group": "GOVERNANCE",
+      "justification": "The relation encodes how ethical principles are employed to manage or mitigate ethical dilemmas in AI development, which is strongly aligned with governance and normative control.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  }
+]

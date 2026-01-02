@@ -1,0 +1,221 @@
+{
+  "cluster_label": "21_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_64c60c5bae68",
+      "relation_name": "used_for",
+      "rel_desc": "Early stories associated with the origins of urban legends were used for explaining the unknown.",
+      "rel_hint_type": "functional use",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "origins of urban legends",
+      "object_entity_name": "the unknown",
+      "subject_class_label": "Urban Legend Research and Analysis",
+      "subject_class_group": "Urban Legends – Folklore, Psychology & Scholarship",
+      "object_class_label": "Supernatural Concepts",
+      "object_class_group": "Supernatural & Paranormal Domain",
+      "qualifiers": {
+        "TemporalQualifier": "ancient times",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "used to explain",
+        "LogicalMarker": null,
+        "OtherQualifier": "ExplanationType: explanation of mysterious and supernatural phenomena"
+      },
+      "confidence": 0.8,
+      "remarks": [
+        "Subject approximates 'stories' via the broader origins-of-urban-legends concept."
+      ]
+    },
+    {
+      "relation_id": "RelR_32576799761a",
+      "relation_name": "uses_as_bait",
+      "rel_desc": "Strangers in the legends use candy as bait to lure children.",
+      "rel_hint_type": "usage",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "strangers",
+      "object_entity_name": "candy",
+      "subject_class_label": "Predatory Strangers in Cautionary Urban Legends",
+      "subject_class_group": "Cautionary Urban Legends",
+      "object_class_label": "Bait Objects in Child-Luring Urban Legends",
+      "object_class_group": "Cautionary Urban Legends",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "in the world around them",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "with",
+        "LogicalMarker": null,
+        "OtherQualifier": "NarrativeContext: child-luring urban legend scenario"
+      },
+      "confidence": 0.96,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_0646eea3e97d",
+      "relation_name": "used_in",
+      "rel_desc": "AI systems are used within or to conduct decision-making processes.",
+      "rel_hint_type": "usage",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "AI systems",
+      "object_entity_name": "decision-making processes",
+      "subject_class_label": "AI Systems",
+      "subject_class_group": "TBD",
+      "object_class_label": "Decision-Making Processes",
+      "object_class_group": "Decision-Making & Hiring Processes",
+      "qualifiers": {
+        "TemporalQualifier": "as AI systems become more autonomous",
+        "SpatialQualifier": null,
+        "OperationalConstraint": "autonomous operation",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": "as",
+        "OtherQualifier": "Impact domain: individuals and society"
+      },
+      "confidence": 0.88,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_64c60c5bae68\"],\n      \"canonical_rel_name\": \"used_for\",\n      \"canonical_rel_desc\": \"Indicates that the subject is used for a particular purpose or function expressed by the object.\",\n      \"justification\": \"The relation states that early stories (represented via the origins of urban legends) were used for explaining the unknown, i.e., a clear purpose-of-use relation.\",\n      \"remark\": null,\n      \"confidence\": 0.93\n    }\n  },\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_32576799761a\"],\n      \"canonical_rel_name\": \"uses_as_bait\",\n      \"canonical_rel_desc\": \"Indicates that the subject uses the object specifically as bait to attract or lure a target.\",\n      \"justification\": \"The relation captures that strangers in legends use candy as bait to lure children; the bait semantics is central and should be explicit in the predicate.\",\n      \"remark\": null,\n      \"confidence\": 0.95\n    }\n  },\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_0646eea3e97d\"],\n      \"canonical_rel_name\": \"used_in\",\n      \"canonical_rel_desc\": \"Indicates that the subject is used within, or embedded in, a process, context, or larger system represented by the object.\",\n      \"justification\": \"The relation describes AI systems being used in decision-making processes, a standard in-context usage relation best captured by 'used_in'.\",\n      \"remark\": null,\n      \"confidence\": 0.94\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_64c60c5bae68\",\n        \"RelR_32576799761a\",\n        \"RelR_0646eea3e97d\"\n      ],\n      \"rel_cls\": \"functional_usage_relation\",\n      \"justification\": \"All three relations express that the subject is being used or employed in some way: for a purpose (explaining the unknown), as bait, or within a process. These are variants of functional/operational usage.\",\n      \"remark\": null,\n      \"confidence\": 0.95\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_64c60c5bae68\",\n        \"RelR_32576799761a\",\n        \"RelR_0646eea3e97d\"\n      ],\n      \"rel_cls_group\": \"USAGE\",\n      \"justification\": \"Each relation connects a subject to an object that is used, or a context in which it is used, so their broad semantic dimension is usage/function.\",\n      \"remark\": null,\n      \"confidence\": 0.96\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_64c60c5bae68"
+        ],
+        "canonical_rel_name": "used_for",
+        "canonical_rel_desc": "Indicates that the subject is used for a particular purpose or function expressed by the object.",
+        "justification": "The relation states that early stories (represented via the origins of urban legends) were used for explaining the unknown, i.e., a clear purpose-of-use relation.",
+        "remark": null,
+        "confidence": 0.93
+      }
+    },
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_32576799761a"
+        ],
+        "canonical_rel_name": "uses_as_bait",
+        "canonical_rel_desc": "Indicates that the subject uses the object specifically as bait to attract or lure a target.",
+        "justification": "The relation captures that strangers in legends use candy as bait to lure children; the bait semantics is central and should be explicit in the predicate.",
+        "remark": null,
+        "confidence": 0.95
+      }
+    },
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_0646eea3e97d"
+        ],
+        "canonical_rel_name": "used_in",
+        "canonical_rel_desc": "Indicates that the subject is used within, or embedded in, a process, context, or larger system represented by the object.",
+        "justification": "The relation describes AI systems being used in decision-making processes, a standard in-context usage relation best captured by 'used_in'.",
+        "remark": null,
+        "confidence": 0.94
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_64c60c5bae68",
+          "RelR_32576799761a",
+          "RelR_0646eea3e97d"
+        ],
+        "rel_cls": "functional_usage_relation",
+        "justification": "All three relations express that the subject is being used or employed in some way: for a purpose (explaining the unknown), as bait, or within a process. These are variants of functional/operational usage.",
+        "remark": null,
+        "confidence": 0.95
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_64c60c5bae68",
+          "RelR_32576799761a",
+          "RelR_0646eea3e97d"
+        ],
+        "rel_cls_group": "USAGE",
+        "justification": "Each relation connects a subject to an object that is used, or a context in which it is used, so their broad semantic dimension is usage/function.",
+        "remark": null,
+        "confidence": 0.96
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_64c60c5bae68"
+      ],
+      "canonical_rel_name": "used_for",
+      "canonical_rel_desc": "Indicates that the subject is used for a particular purpose or function expressed by the object.",
+      "justification": "The relation states that early stories (represented via the origins of urban legends) were used for explaining the unknown, i.e., a clear purpose-of-use relation.",
+      "remark": null,
+      "confidence": 0.93
+    },
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_32576799761a"
+      ],
+      "canonical_rel_name": "uses_as_bait",
+      "canonical_rel_desc": "Indicates that the subject uses the object specifically as bait to attract or lure a target.",
+      "justification": "The relation captures that strangers in legends use candy as bait to lure children; the bait semantics is central and should be explicit in the predicate.",
+      "remark": null,
+      "confidence": 0.95
+    },
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_0646eea3e97d"
+      ],
+      "canonical_rel_name": "used_in",
+      "canonical_rel_desc": "Indicates that the subject is used within, or embedded in, a process, context, or larger system represented by the object.",
+      "justification": "The relation describes AI systems being used in decision-making processes, a standard in-context usage relation best captured by 'used_in'.",
+      "remark": null,
+      "confidence": 0.94
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_64c60c5bae68",
+        "RelR_32576799761a",
+        "RelR_0646eea3e97d"
+      ],
+      "rel_cls": "functional_usage_relation",
+      "justification": "All three relations express that the subject is being used or employed in some way: for a purpose (explaining the unknown), as bait, or within a process. These are variants of functional/operational usage.",
+      "remark": null,
+      "confidence": 0.95
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_64c60c5bae68",
+        "RelR_32576799761a",
+        "RelR_0646eea3e97d"
+      ],
+      "rel_cls_group": "USAGE",
+      "justification": "Each relation connects a subject to an object that is used, or a context in which it is used, so their broad semantic dimension is usage/function.",
+      "remark": null,
+      "confidence": 0.96
+    }
+  ],
+  "timestamp": "2026-01-02T09:13:43Z"
+}

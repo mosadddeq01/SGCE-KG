@@ -1,124 +1,116 @@
 {
   "cluster_id": 2,
-  "n_entities": 18,
-  "n_subclusters": 5,
+  "n_entities": 17,
+  "n_subclusters": 4,
   "clusters": {
     "-1": [
       {
-        "id": "En_1f762ea0",
-        "entity_name": "Heat Affected Zone (HAZ)",
-        "entity_type_hint": "Component",
-        "entity_description": "The portion of the base metal adjacent to a weld with altered microstructure and properties due to welding heat."
+        "id": "En_ac8428bd",
+        "entity_name": "massive amounts of data",
+        "entity_type_hint": "DataAsset",
+        "entity_description": "Large-scale datasets collected and analyzed by AI systems."
       },
       {
-        "id": "En_6a5f3538",
-        "entity_name": "Mechanical and Metallurgical Failure",
-        "entity_type_hint": "DamageMechanism",
-        "entity_description": "Failure mechanisms related to mechanical and metallurgical processes in various industries."
+        "id": "En_bc8da22f",
+        "entity_name": "hiring processes",
+        "entity_type_hint": "ProcessUnit",
+        "entity_description": "Organizational procedures and workflows used to evaluate and select job applicants."
       },
       {
-        "id": "En_8ed6cfa3",
-        "entity_name": "Uniform or Localized Loss of Thickness",
-        "entity_type_hint": "DamageMechanism",
-        "entity_description": "A damage mechanism involving the reduction of material thickness, either uniformly or in specific areas."
+        "id": "En_3362253d",
+        "entity_name": "decision-making processes",
+        "entity_type_hint": "ProcessUnit",
+        "entity_description": "Processes by which choices or judgments are made, often supported or automated by AI."
       }
     ],
     "0": [
       {
-        "id": "En_9574d8b7",
-        "entity_name": "external corrosion",
-        "entity_type_hint": "DamageMechanism",
-        "entity_description": "Corrosion occurring on the outer surfaces of underground or submerged metallic piping systems."
+        "id": "En_6c6c854a",
+        "entity_name": "fairness",
+        "entity_type_hint": "Condition",
+        "entity_description": "The quality of decisions or processes being impartial and just across affected groups."
       },
       {
-        "id": "En_d504ed6b",
-        "entity_name": "corrosion under thermal insulation",
-        "entity_type_hint": "DamageMechanism",
-        "entity_description": "Corrosion that occurs beneath insulation materials, often exacerbated by trapped moisture."
-      },
-      {
-        "id": "En_56c0bd49",
-        "entity_name": "oxidation",
-        "entity_type_hint": "DamageMechanism",
-        "entity_description": "A chemical reaction that stainless steels resist due to their alloy content."
-      },
-      {
-        "id": "En_fefc46ef",
-        "entity_name": "sulfidation",
-        "entity_type_hint": "DamageMechanism",
-        "entity_description": "A chemical reaction that stainless steels resist due to their alloy content."
-      },
-      {
-        "id": "En_2b400819",
-        "entity_name": "corrosion",
-        "entity_type_hint": "DamageMechanism",
-        "entity_description": "A process that stainless steels resist due to their alloy content."
-      },
-      {
-        "id": "En_baec7c0b",
-        "entity_name": "High Temperature Corrosion",
-        "entity_type_hint": "DamageMechanism",
-        "entity_description": "Corrosion occurring at elevated temperatures, affecting material integrity."
+        "id": "En_d9389e81",
+        "entity_name": "equity",
+        "entity_type_hint": "Condition",
+        "entity_description": "Condition where outcomes and opportunities are adjusted to account for structural disadvantages."
       }
     ],
     "1": [
       {
-        "id": "En_1a88e9ed",
-        "entity_name": "environmental cracking of carbon steel weldments",
-        "entity_type_hint": "DamageMechanism",
-        "entity_description": "Cracking that occurs in carbon steel weldments due to environmental factors in corrosive environments."
+        "id": "En_5312d9e5",
+        "entity_name": "bias",
+        "entity_type_hint": "Concern",
+        "entity_description": "Unfair or skewed behavior in AI systems that can disadvantage certain groups or outcomes."
       },
       {
-        "id": "En_038f5dc2",
-        "entity_name": "Environment Assisted Cracking",
+        "id": "En_6fb3b228",
+        "entity_name": "issue of bias",
         "entity_type_hint": "DamageMechanism",
-        "entity_description": "Cracking of materials facilitated by environmental conditions."
+        "entity_description": "Problem arising when AI systems reflect or amplify unfair prejudices in data."
+      },
+      {
+        "id": "En_233d0bd9",
+        "entity_name": "training data",
+        "entity_type_hint": "DataAsset",
+        "entity_description": "Data used to train AI systems, determining their performance and behavior."
+      },
+      {
+        "id": "En_9bc351d3",
+        "entity_name": "biased data",
+        "entity_type_hint": "DataAsset",
+        "entity_description": "Training data containing systematic prejudice or skew, leading to unfair AI behavior."
+      },
+      {
+        "id": "En_34e84e77",
+        "entity_name": "incomplete data",
+        "entity_type_hint": "DataAsset",
+        "entity_description": "Training data that lacks sufficient or representative information about the target population or domain."
+      },
+      {
+        "id": "En_93b27f7a",
+        "entity_name": "discriminatory outcomes",
+        "entity_type_hint": "FailureEvent",
+        "entity_description": "Unfair or unequal results produced by AI systems against certain individuals or groups."
+      },
+      {
+        "id": "En_981f0165",
+        "entity_name": "biased algorithms",
+        "entity_type_hint": "DamageMechanism",
+        "entity_description": "Algorithms whose design or training data leads to systematically unfair or discriminatory outcomes."
+      },
+      {
+        "id": "En_5ae6b36d",
+        "entity_name": "bias in AI systems",
+        "entity_type_hint": "DamageMechanism",
+        "entity_description": "Systematic and unfair skew in AI system behavior arising from data, design, or deployment."
+      },
+      {
+        "id": "En_e950458e",
+        "entity_name": "bias",
+        "entity_type_hint": "Concept",
+        "entity_description": "Unfair or discriminatory tendencies in AI systems arising from data or design choices."
       }
     ],
     "2": [
       {
-        "id": "En_a9e4aa90",
-        "entity_name": "sulfide stress cracking",
-        "entity_type_hint": "DamageMechanism",
-        "entity_description": "A form of hydrogen embrittlement that occurs in metals exposed to sulfide environments."
+        "id": "En_e24497ac",
+        "entity_name": "discrimination",
+        "entity_type_hint": "FailureEvent",
+        "entity_description": "Unjust or prejudicial treatment of individuals or groups based on protected characteristics."
       },
       {
-        "id": "En_c7aaaee0",
-        "entity_name": "polythionic acid stress corrosion cracking",
-        "entity_type_hint": "DamageMechanism",
-        "entity_description": "A type of corrosion that affects austenitic stainless steels and other austenitic alloys during shutdowns."
+        "id": "En_aefbfcea",
+        "entity_name": "race",
+        "entity_type_hint": "Attribute",
+        "entity_description": "A protected demographic characteristic often associated with discriminatory treatment in decisions."
       },
       {
-        "id": "En_19cc48f3",
-        "entity_name": "cracking in wet H2S environments",
-        "entity_type_hint": "DamageMechanism",
-        "entity_description": "Cracking of pressure vessels in environments containing wet hydrogen sulfide."
-      },
-      {
-        "id": "En_a608496c",
-        "entity_name": "stress corrosion cracking",
-        "entity_type_hint": "DamageMechanism",
-        "entity_description": "A failure mechanism where cracks form in a material due to the combined effects of tensile stress and a corrosive environment."
-      }
-    ],
-    "3": [
-      {
-        "id": "En_d0d2d7c7",
-        "entity_name": "Hydrogen Induced Cracking (HIC)",
-        "entity_type_hint": "DamageMechanism",
-        "entity_description": "Stepwise internal cracks in metal connecting hydrogen blisters, occurring without external stress."
-      },
-      {
-        "id": "En_60c6b9f5",
-        "entity_name": "stress oriented hydrogen induced cracking",
-        "entity_type_hint": "DamageMechanism",
-        "entity_description": "An array of cracks aligned nearly perpendicular to stress, formed by linking small HIC cracks."
-      },
-      {
-        "id": "En_706b91a8",
-        "entity_name": "Stress Oriented Hydrogen Induced Cracking",
-        "entity_type_hint": "DamageMechanism",
-        "entity_description": "A type of cracking in steel caused by the presence of hydrogen and stress, often near welds."
+        "id": "En_341fc99b",
+        "entity_name": "gender",
+        "entity_type_hint": "Attribute",
+        "entity_description": "A protected demographic characteristic frequently implicated in biased or unequal treatment."
       }
     ]
   }

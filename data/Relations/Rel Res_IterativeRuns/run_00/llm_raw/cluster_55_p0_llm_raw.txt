@@ -1,0 +1,57 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_a2ae78a4dc63",
+        "RelR_30f3df166726"
+      ],
+      "canonical_rel_name": "causes_morphological_change_in",
+      "canonical_rel_desc": "A biological process causes structural or morphological change, including dissolution or reorganization, in anatomical structures of an organism.",
+      "justification": "Both relations describe metamorphosis as a causal process that changes or dissolves specific body structures (caterpillar body, organs), focusing on morphological transformation of anatomy rather than the final life stage outcome.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_78e7393f0734"
+      ],
+      "canonical_rel_name": "results_in_life_stage",
+      "canonical_rel_desc": "A biological process results in the organism reaching or becoming a particular life stage or form.",
+      "justification": "This relation describes metamorphosis as leading to the organism becoming an adult butterfly, emphasizing transition to a new life stage rather than morphological change of specific organs.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_a2ae78a4dc63",
+        "RelR_78e7393f0734",
+        "RelR_30f3df166726"
+      ],
+      "rel_cls": "biological_development_causal_relation",
+      "justification": "All three relations model causal links within an organism’s developmental process (metamorphosis) either changing body structures or producing a new life stage, so they fit a shared class for causal relations in biological development.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_a2ae78a4dc63",
+        "RelR_78e7393f0734",
+        "RelR_30f3df166726"
+      ],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "Each relation explicitly encodes a cause–effect connection where metamorphosis (a process) brings about changes in anatomy or a new life stage, aligning them with a causal semantics group.",
+      "remark": null,
+      "confidence": 0.95
+    }
+  }
+]

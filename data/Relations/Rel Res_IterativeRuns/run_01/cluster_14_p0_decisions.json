@@ -1,0 +1,99 @@
+{
+  "cluster_label": "14_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_ac010e700426",
+      "relation_name": "used_for",
+      "rel_desc": "Facial recognition technology is used for surveillance purposes.",
+      "rel_hint_type": "functional use",
+      "canonical_rel_name": "used_for",
+      "canonical_rel_desc": "Indicates that a technology or system is employed to achieve a particular purpose or function.",
+      "rel_cls": "functional_usage_relation",
+      "rel_cls_group": "USAGE",
+      "subject_entity_name": "facial recognition technology",
+      "object_entity_name": "surveillance purposes",
+      "subject_class_label": "AI Surveillance Technologies",
+      "subject_class_group": "Artificial Intelligence Technologies & Applications",
+      "object_class_label": "Surveillance Purposes",
+      "object_class_group": "Artificial Intelligence Technologies & Applications",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "can be",
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.99,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_b1c974321b06",
+      "relation_name": "may_be_used_by",
+      "rel_desc": "Facial recognition technology, when used for surveillance, may be deployed by governments implicated in potential abuse of power.",
+      "rel_hint_type": "deployment",
+      "canonical_rel_name": "used_by",
+      "canonical_rel_desc": "Indicates that an actor or institution deploys or makes use of a technology or system.",
+      "rel_cls": "deployment_relation",
+      "rel_cls_group": "USAGE",
+      "subject_entity_name": "facial recognition technology",
+      "object_entity_name": "governments",
+      "subject_class_label": "AI Surveillance Technologies",
+      "subject_class_group": "Artificial Intelligence Technologies & Applications",
+      "object_class_label": "AI Institutional Actors (Governments & Corporations)",
+      "object_class_group": "AI Institutional & Corporate Power Actors",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": "for surveillance purposes",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "may",
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "Implied user: governments"
+      },
+      "confidence": 0.55,
+      "remarks": [
+        "Relation added mainly to capture implied deployment context; semantics somewhat inferred.",
+        "Relation added mainly to capture implied deployment context; semantics somewhat inferred."
+      ]
+    },
+    {
+      "relation_id": "RelR_50b5bf3bd4ea",
+      "relation_name": "may_be_used_by",
+      "rel_desc": "Facial recognition surveillance also raises concerns about its use by corporations engaging in potential abuse of power.",
+      "rel_hint_type": "deployment",
+      "canonical_rel_name": "used_by",
+      "canonical_rel_desc": "Indicates that an actor or institution deploys or makes use of a technology or system.",
+      "rel_cls": "deployment_relation",
+      "rel_cls_group": "USAGE",
+      "subject_entity_name": "facial recognition technology",
+      "object_entity_name": "corporations",
+      "subject_class_label": "AI Surveillance Technologies",
+      "subject_class_group": "Artificial Intelligence Technologies & Applications",
+      "object_class_label": "AI Institutional Actors (Governments & Corporations)",
+      "object_class_group": "AI Institutional & Corporate Power Actors",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": "for surveillance purposes",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "may",
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "Implied user: corporations"
+      },
+      "confidence": 0.55,
+      "remarks": [
+        "Implied relation, not directly stated.",
+        "Implied relation, not directly stated."
+      ]
+    }
+  ],
+  "llm_raw": "[]",
+  "parsed_steps": [],
+  "executed_decisions": [],
+  "timestamp": "2026-01-02T09:22:37Z"
+}

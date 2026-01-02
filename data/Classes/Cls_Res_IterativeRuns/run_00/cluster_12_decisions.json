@@ -1,0 +1,205 @@
+{
+  "cluster_label": 12,
+  "cluster_classes": [
+    {
+      "candidate_id": "ClsC_40994bf9",
+      "class_label": "Core Emotional Themes",
+      "class_description": "Abstract emotional drivers such as fear and perceived threat that create tension and suspense within a narrative or legend.",
+      "class_type_hint": "Psychological Theme",
+      "class_group": "TBD",
+      "confidence": 0.86,
+      "evidence_excerpt": "the underlying fear of the unknown and the threat of danger remain constant in urban legends",
+      "member_ids": [
+        "En_b46e1fe6",
+        "En_cd01b8f2",
+        "En_baa60abc"
+      ],
+      "members": [
+        {
+          "id": "En_b46e1fe6",
+          "entity_name": "fear of the unknown",
+          "entity_description": "A core emotional theme driving the tension in the Hook Man urban legend.",
+          "entity_type_hint": "DamageMechanism"
+        },
+        {
+          "id": "En_cd01b8f2",
+          "entity_name": "threat of danger",
+          "entity_description": "A perceived risk or menace that persists across versions of the Hook Man legend.",
+          "entity_type_hint": "DamageMechanism"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_3992015b",
+      "class_label": "Emotional Responses",
+      "class_description": "Psychological or emotional states elicited by engagement with urban legends, including pleasurable fright, perceived danger, and motivating fears.",
+      "class_type_hint": "Psychological Construct",
+      "class_group": "TBD",
+      "confidence": 0.78,
+      "evidence_excerpt": "Emotional experiences and fears that arise from or motivate engagement with urban legends.",
+      "member_ids": [
+        "En_5ed75bc6",
+        "En_baa60abc",
+        "En_d9f222db"
+      ],
+      "members": [
+        {
+          "id": "En_5ed75bc6",
+          "entity_name": "good scare",
+          "entity_description": "The emotional experience of being pleasantly frightened by stories or legends.",
+          "entity_type_hint": "Symptom"
+        },
+        {
+          "id": "En_baa60abc",
+          "entity_name": "perceived threats",
+          "entity_description": "Threats that people believe exist, whether they are real or imagined, referenced in legends.",
+          "entity_type_hint": "Condition"
+        },
+        {
+          "id": "En_d9f222db",
+          "entity_name": "fears to be faced",
+          "entity_description": "Personal or collective fears that motivate engagement with and creation of urban legends.",
+          "entity_type_hint": "Concept"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_727496d3",
+      "class_label": "Societal Fears",
+      "class_description": "Concepts describing the collective fears and anxieties held by human communities that are reflected in narratives such as urban legends.",
+      "class_type_hint": "Social Concept",
+      "class_group": "TBD",
+      "confidence": 0.32,
+      "evidence_excerpt": "urban legends ... reflect the fears and anxieties of society",
+      "member_ids": [
+        "Can_c6384468",
+        "En_72a7e56d"
+      ],
+      "members": [
+        {
+          "id": "Can_c6384468",
+          "entity_name": "fears and anxieties of society",
+          "entity_description": "Collective worries and concerns held by a society that are reflected or mirrored in urban legends.",
+          "entity_type_hint": "Concept"
+        },
+        {
+          "id": "En_72a7e56d",
+          "entity_name": "society",
+          "entity_description": "Human communities whose shared fears, anxieties, and imagination shape urban legends.",
+          "entity_type_hint": "Agent"
+        }
+      ],
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"reassign_entities\",\n    \"args\": {\n      \"entity_ids\": [\"En_baa60abc\"],\n      \"from_class_id\": \"ClsC_3992015b\",\n      \"to_class_id\": \"ClsC_40994bf9\",\n      \"justification\": \"\\\"perceived threats\\\" is conceptually a persistent threat construct (like \\\"threat of danger\\\") rather than an internal emotional state like \\\"good scare\\\" or \\\"fears to be faced\\\", so it fits better with Core Emotional Themes.\",\n      \"remark\": null,\n      \"confidence\": 0.78\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_40994bf9\",\n      \"new_name\": null,\n      \"new_description\": null,\n      \"new_class_type_hint\": null,\n      \"new_class_group\": \"Urban Legend Emotional Dynamics\",\n      \"remark\": null,\n      \"justification\": \"Core Emotional Themes describes underlying fear and threat constructs that generate suspense in urban legends, aligning with an overarching group about emotional dynamics in such narratives.\",\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_3992015b\",\n      \"new_name\": null,\n      \"new_description\": null,\n      \"new_class_type_hint\": null,\n      \"new_class_group\": \"Urban Legend Emotional Dynamics\",\n      \"remark\": null,\n      \"justification\": \"Emotional Responses covers experiential emotional states (e.g., a \\\"good scare\\\") arising from urban legends, which are part of the same emotional dynamics domain as the core themes and societal fears.\",\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_727496d3\",\n      \"new_name\": null,\n      \"new_description\": null,\n      \"new_class_type_hint\": null,\n      \"new_class_group\": \"Urban Legend Emotional Dynamics\",\n      \"remark\": null,\n      \"justification\": \"Societal Fears describes collective anxieties reflected in legends, complementing the individual-level emotional themes and responses, so all three belong in a shared group capturing emotional dynamics of urban legends.\",\n      \"confidence\": 0.85\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "reassign_entities",
+      "args": {
+        "entity_ids": [
+          "En_baa60abc"
+        ],
+        "from_class_id": "ClsC_3992015b",
+        "to_class_id": "ClsC_40994bf9",
+        "justification": "\"perceived threats\" is conceptually a persistent threat construct (like \"threat of danger\") rather than an internal emotional state like \"good scare\" or \"fears to be faced\", so it fits better with Core Emotional Themes.",
+        "remark": null,
+        "confidence": 0.78
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_40994bf9",
+        "new_name": null,
+        "new_description": null,
+        "new_class_type_hint": null,
+        "new_class_group": "Urban Legend Emotional Dynamics",
+        "remark": null,
+        "justification": "Core Emotional Themes describes underlying fear and threat constructs that generate suspense in urban legends, aligning with an overarching group about emotional dynamics in such narratives.",
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_3992015b",
+        "new_name": null,
+        "new_description": null,
+        "new_class_type_hint": null,
+        "new_class_group": "Urban Legend Emotional Dynamics",
+        "remark": null,
+        "justification": "Emotional Responses covers experiential emotional states (e.g., a \"good scare\") arising from urban legends, which are part of the same emotional dynamics domain as the core themes and societal fears.",
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_727496d3",
+        "new_name": null,
+        "new_description": null,
+        "new_class_type_hint": null,
+        "new_class_group": "Urban Legend Emotional Dynamics",
+        "remark": null,
+        "justification": "Societal Fears describes collective anxieties reflected in legends, complementing the individual-level emotional themes and responses, so all three belong in a shared group capturing emotional dynamics of urban legends.",
+        "confidence": 0.85
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "reassign_entities",
+      "entity_ids": [
+        "En_baa60abc"
+      ],
+      "from": "ClsC_3992015b",
+      "from_resolved": "ClsC_3992015b",
+      "to": "ClsC_40994bf9",
+      "to_resolved": "ClsC_40994bf9",
+      "justification": "\"perceived threats\" is conceptually a persistent threat construct (like \"threat of danger\") rather than an internal emotional state like \"good scare\" or \"fears to be faced\", so it fits better with Core Emotional Themes.",
+      "remark": null,
+      "confidence": 0.78
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_40994bf9",
+      "class_id_resolved": "ClsC_40994bf9",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Urban Legend Emotional Dynamics",
+      "remark": null,
+      "justification": "Core Emotional Themes describes underlying fear and threat constructs that generate suspense in urban legends, aligning with an overarching group about emotional dynamics in such narratives.",
+      "confidence": 0.9
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_3992015b",
+      "class_id_resolved": "ClsC_3992015b",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Urban Legend Emotional Dynamics",
+      "remark": null,
+      "justification": "Emotional Responses covers experiential emotional states (e.g., a \"good scare\") arising from urban legends, which are part of the same emotional dynamics domain as the core themes and societal fears.",
+      "confidence": 0.9
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_727496d3",
+      "class_id_resolved": "ClsC_727496d3",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Urban Legend Emotional Dynamics",
+      "remark": null,
+      "justification": "Societal Fears describes collective anxieties reflected in legends, complementing the individual-level emotional themes and responses, so all three belong in a shared group capturing emotional dynamics of urban legends.",
+      "confidence": 0.85
+    }
+  ],
+  "provisional_to_real": {},
+  "timestamp": "2026-01-02T08:33:55Z"
+}

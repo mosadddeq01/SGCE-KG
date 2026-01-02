@@ -1,145 +1,1469 @@
 [
   {
-    "rel_cls": "metallurgical_structure_relation",
+    "rel_cls": "life_stage_membership_relation",
     "rel_cls_group": [
-      "STRUCTURE"
+      "TEMPORALITY"
     ],
     "canonical_rel_names": [
-      "has_metallurgical_structure"
-    ],
-    "instance_count": 6,
-    "example_relation_ids": [
-      "RelR_c4bd0eecf18e",
-      "RelR_d3bbaeb2df23",
-      "RelR_cc53169ea6f4",
-      "RelR_d39cfe6239e1",
-      "RelR_f33b7d004979",
-      "RelR_d531fbfb64b2"
-    ]
-  },
-  {
-    "rel_cls": "phenomenon_occurrence_in_material_relation",
-    "rel_cls_group": [
-      "SPATIALITY"
-    ],
-    "canonical_rel_names": [
-      "occurs_in_material"
+      "has_life_cycle_stage_type",
+      "in_life_stage",
+      "is_life_stage_of"
     ],
     "instance_count": 7,
     "example_relation_ids": [
-      "RelR_ccb0e0161188",
-      "RelR_c426520a3c91",
-      "RelR_7c9bc782fce9",
-      "RelR_caa4eec09380",
-      "RelR_704fe359a26f",
-      "RelR_81f81efb1983",
-      "RelR_c686532b051c"
+      "RelR_59f0cf4b1acd",
+      "RelR_f849b185d587",
+      "RelR_f21d9e53b149",
+      "RelR_a6687ed9e9e8",
+      "RelR_8880eaf69ce7",
+      "RelR_3148befa598a",
+      "RelR_ec1be2a64785"
     ]
   },
   {
-    "rel_cls": "microstructure_similarity_relation",
+    "rel_cls": "temporal_order_relation",
     "rel_cls_group": [
-      "STRUCTURE"
+      "TEMPORALITY"
     ],
     "canonical_rel_names": [
-      "has_similar_microstructure_to"
+      "precedes_in_life_cycle"
     ],
     "instance_count": 1,
     "example_relation_ids": [
-      "RelR_96a7cdcaa41e"
+      "RelR_e98df9e87abe"
     ]
   },
   {
-    "rel_cls": "functional_substitution_relation",
+    "rel_cls": "reproductive_behavior_relation",
     "rel_cls_group": [
-      "USAGE"
+      "AGENCY"
     ],
     "canonical_rel_names": [
-      "is_functional_alternative_to"
+      "exhibits_behavior",
+      "oviposits_on"
     ],
-    "instance_count": 1,
+    "instance_count": 3,
     "example_relation_ids": [
-      "RelR_862422bffa70"
+      "RelR_debb207b84a8",
+      "RelR_d7f799ddca5e",
+      "RelR_52b36be4a12b"
     ]
   },
   {
-    "rel_cls": "material_taxonomy_relation",
-    "rel_cls_group": [
-      "IDENTITY"
-    ],
-    "canonical_rel_names": [
-      "has_subtype",
-      "is_subtype_of"
-    ],
-    "instance_count": 2,
-    "example_relation_ids": [
-      "RelR_362f6e35c9d7",
-      "RelR_39cf0ff7f895"
-    ]
-  },
-  {
-    "rel_cls": "alloying_element_relation",
-    "rel_cls_group": [
-      "COMPOSITION"
-    ],
-    "canonical_rel_names": [
-      "contains_alloying_element"
-    ],
-    "instance_count": 1,
-    "example_relation_ids": [
-      "RelR_f080c3c67c9c"
-    ]
-  },
-  {
-    "rel_cls": "degradation_mitigation_relation",
+    "rel_cls": "defensive_trait_relation",
     "rel_cls_group": [
       "CAUSALITY"
     ],
     "canonical_rel_names": [
-      "prevents",
-      "provides_resistance_to",
-      "resists"
+      "provides_protection_from"
     ],
-    "instance_count": 7,
+    "instance_count": 4,
     "example_relation_ids": [
-      "RelR_7b6d773fe742",
-      "RelR_e71b6b450b41",
-      "RelR_1383761175ce",
-      "RelR_529c638c696d",
-      "RelR_0f937d199405",
-      "RelR_d3ce89b75d87",
-      "RelR_4fb5553cfff8"
+      "RelR_cccdc9addccb",
+      "RelR_d155e64427a2",
+      "RelR_1cbc46290af6",
+      "RelR_308cde1adf6b"
     ]
   },
   {
-    "rel_cls": "document_coclassification_relation",
+    "rel_cls": "causal_influence_relation",
     "rel_cls_group": [
-      "ASSOCIATION"
+      "CAUSALITY"
     ],
     "canonical_rel_names": [
-      "co_classified_with"
+      "contributes_to"
     ],
-    "instance_count": 3,
+    "instance_count": 9,
     "example_relation_ids": [
-      "RelR_5360101d9970",
-      "RelR_c1c38551b527",
-      "RelR_008fca8f9ba4"
+      "RelR_ca823f123534",
+      "RelR_adc14e4f5770",
+      "RelR_6f9cfe211b66",
+      "RelR_6bd2ff1decf9",
+      "RelR_8025399d304b",
+      "RelR_d272cd370446",
+      "RelR_f7af10f818b3",
+      "RelR_1ab100f4d650",
+      "RelR_28be306934ad"
     ]
   },
   {
-    "rel_cls": "microstructural_transformation_relation",
+    "rel_cls": "biological_process_target_relation",
     "rel_cls_group": [
       "MODIFICATION"
     ],
     "canonical_rel_names": [
-      "alters_microstructure_of",
-      "forms_microstructural_constituent"
+      "acts_on_entity"
+    ],
+    "instance_count": 2,
+    "example_relation_ids": [
+      "RelR_0f0eded4976d",
+      "RelR_ff4e4add3a2a"
+    ]
+  },
+  {
+    "rel_cls": "biological_process_outcome_relation",
+    "rel_cls_group": [
+      "CAUSALITY"
+    ],
+    "canonical_rel_names": [
+      "results_in"
+    ],
+    "instance_count": 6,
+    "example_relation_ids": [
+      "RelR_e79e49632c59",
+      "RelR_78e7393f0734",
+      "RelR_e4a8ef0dc8b3",
+      "RelR_a7c1d8a2d6a4",
+      "RelR_6323e3607881",
+      "RelR_ff3746e8fcf1"
+    ]
+  },
+  {
+    "rel_cls": "taxonomic_subtype_relation",
+    "rel_cls_group": [
+      "HIERARCHY"
+    ],
+    "canonical_rel_names": [
+      "is_subtype_of"
+    ],
+    "instance_count": 4,
+    "example_relation_ids": [
+      "RelR_bf6d759409fa",
+      "RelR_89f260736044",
+      "RelR_8deeeec9c025",
+      "RelR_e84d90311c99"
+    ]
+  },
+  {
+    "rel_cls": "mimicry_resemblance_relation",
+    "rel_cls_group": [
+      "ASSOCIATION"
+    ],
+    "canonical_rel_names": [
+      "resembles_in_appearance"
+    ],
+    "instance_count": 2,
+    "example_relation_ids": [
+      "RelR_eeeb624488dd",
+      "RelR_6d68f46ba528"
+    ]
+  },
+  {
+    "rel_cls": "part_whole_relation",
+    "rel_cls_group": [
+      "COMPOSITION"
+    ],
+    "canonical_rel_names": [
+      "has_member",
+      "has_part",
+      "part_of"
+    ],
+    "instance_count": 9,
+    "example_relation_ids": [
+      "RelR_7f6ca4cc4b62",
+      "RelR_05a39f53d2c7",
+      "RelR_696ab2250695",
+      "RelR_444956d93803",
+      "RelR_e4d4e35af547",
+      "RelR_db7e9fb51f10",
+      "RelR_b66dae949bec",
+      "RelR_a30ba2cfa5a0",
+      "RelR_080adccf8427"
+    ]
+  },
+  {
+    "rel_cls": "life_stage_occurrence_relation",
+    "rel_cls_group": [
+      "TEMPORALITY"
+    ],
+    "canonical_rel_names": [
+      "occurs_during"
+    ],
+    "instance_count": 2,
+    "example_relation_ids": [
+      "RelR_27d033e04d06",
+      "RelR_4545bd36cd1b"
+    ]
+  },
+  {
+    "rel_cls": "biological_development_causal_relation",
+    "rel_cls_group": [
+      "CAUSALITY"
+    ],
+    "canonical_rel_names": [
+      "causes_morphological_change_in"
+    ],
+    "instance_count": 2,
+    "example_relation_ids": [
+      "RelR_a2ae78a4dc63",
+      "RelR_30f3df166726"
+    ]
+  },
+  {
+    "rel_cls": "morphological_transformation_relation",
+    "rel_cls_group": [
+      "MODIFICATION"
+    ],
+    "canonical_rel_names": [
+      "develops_into",
+      "transforms_into"
+    ],
+    "instance_count": 2,
+    "example_relation_ids": [
+      "RelR_afe7c3e54753",
+      "RelR_bc274f2902df"
+    ]
+  },
+  {
+    "rel_cls": "spatial_location_relation",
+    "rel_cls_group": [
+      "SPATIALITY"
+    ],
+    "canonical_rel_names": [
+      "located_at"
     ],
     "instance_count": 3,
     "example_relation_ids": [
-      "RelR_338e547f321f",
-      "RelR_29b3c1c25656",
-      "RelR_a45fb4ca81de"
+      "RelR_dc1c54bff52d",
+      "RelR_1e8726328e10",
+      "RelR_1bdfad65e09d"
+    ]
+  },
+  {
+    "rel_cls": "developmental_origin_relation",
+    "rel_cls_group": [
+      "CAUSALITY"
+    ],
+    "canonical_rel_names": [
+      "is_developmental_source_of"
+    ],
+    "instance_count": 3,
+    "example_relation_ids": [
+      "RelR_8c14d18c8a06",
+      "RelR_9100d84b8533",
+      "RelR_3d558fb2e335"
+    ]
+  },
+  {
+    "rel_cls": "life_cycle_transition_relation",
+    "rel_cls_group": [
+      "CAUSALITY"
+    ],
+    "canonical_rel_names": [
+      "results_in_life_stage"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_f4ce4b8c02c5"
+    ]
+  },
+  {
+    "rel_cls": "entity_state_relation",
+    "rel_cls_group": [
+      "ASSOCIATION",
+      "ATTRIBUTE"
+    ],
+    "canonical_rel_names": [
+      "exhibits_state",
+      "has_state",
+      "is_state_of"
+    ],
+    "instance_count": 3,
+    "example_relation_ids": [
+      "RelR_19adc7bf5116",
+      "RelR_274280acb8b8",
+      "RelR_1575408e8b17"
+    ]
+  },
+  {
+    "rel_cls": "process_participation_relation",
+    "rel_cls_group": [
+      "PARTICIPATION"
+    ],
+    "canonical_rel_names": [
+      "participates_in_process"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_56bb3ee39078"
+    ]
+  },
+  {
+    "rel_cls": "state_transition_relation",
+    "rel_cls_group": [
+      "CAUSALITY"
+    ],
+    "canonical_rel_names": [
+      "induces_state_change_in"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_899c8db84b01"
+    ]
+  },
+  {
+    "rel_cls": "functional_causality_relation",
+    "rel_cls_group": [
+      "CAUSALITY"
+    ],
+    "canonical_rel_names": [
+      "enables"
+    ],
+    "instance_count": 3,
+    "example_relation_ids": [
+      "RelR_10a2451d8473",
+      "RelR_3249723f2ac7",
+      "RelR_7725d379faeb"
+    ]
+  },
+  {
+    "rel_cls": "process_or_activity_participation_relation",
+    "rel_cls_group": [
+      "PARTICIPATION"
+    ],
+    "canonical_rel_names": [
+      "participates_in_process_or_activity"
+    ],
+    "instance_count": 2,
+    "example_relation_ids": [
+      "RelR_154508b1708b",
+      "RelR_b98bacba7b1b"
+    ]
+  },
+  {
+    "rel_cls": "life_stage_composition_relation",
+    "rel_cls_group": [
+      "COMPOSITION"
+    ],
+    "canonical_rel_names": [
+      "includes_life_stage_event"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_b7c3668c1002"
+    ]
+  },
+  {
+    "rel_cls": "feeding_biology_relation",
+    "rel_cls_group": [
+      "INTERACTION",
+      "USAGE"
+    ],
+    "canonical_rel_names": [
+      "feeds_on",
+      "used_for_feeding"
+    ],
+    "instance_count": 2,
+    "example_relation_ids": [
+      "RelR_a6b026f37e4f",
+      "RelR_f4ac7c3f9e60"
+    ]
+  },
+  {
+    "rel_cls": "biological_production_relation",
+    "rel_cls_group": [
+      "CAUSALITY"
+    ],
+    "canonical_rel_names": [
+      "is_produced_by",
+      "produces"
+    ],
+    "instance_count": 4,
+    "example_relation_ids": [
+      "RelR_e7db8bd3804c",
+      "RelR_ba24b6e0d3d5",
+      "RelR_f49ab1c0c1ed",
+      "RelR_93d7c90d9d26"
+    ]
+  },
+  {
+    "rel_cls": "ecological_interaction_relation",
+    "rel_cls_group": [
+      "INTERACTION"
+    ],
+    "canonical_rel_names": [
+      "transfers",
+      "visits"
+    ],
+    "instance_count": 2,
+    "example_relation_ids": [
+      "RelR_b06e6a8e25ae",
+      "RelR_cc74dfa66b87"
+    ]
+  },
+  {
+    "rel_cls": "biological_process_participation_relation",
+    "rel_cls_group": [
+      "PARTICIPATION"
+    ],
+    "canonical_rel_names": [
+      "participates_in_process"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_8ef0f91ac606"
+    ]
+  },
+  {
+    "rel_cls": "trophic_interaction_relation",
+    "rel_cls_group": [
+      "INTERACTION"
+    ],
+    "canonical_rel_names": [
+      "is_food_source_for",
+      "preys_on"
+    ],
+    "instance_count": 6,
+    "example_relation_ids": [
+      "RelR_f2a8e6c98fe9",
+      "RelR_49c5c2326a8b",
+      "RelR_0a35505ddb42",
+      "RelR_33df4713543b",
+      "RelR_53eb75cf8ccb",
+      "RelR_b5008b5a9bda"
+    ]
+  },
+  {
+    "rel_cls": "ecological_role_relation",
+    "rel_cls_group": [
+      "ASSOCIATION"
+    ],
+    "canonical_rel_names": [
+      "has_ecological_role"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_9227ea6b14cf"
+    ]
+  },
+  {
+    "rel_cls": "ecosystem_function_relation",
+    "rel_cls_group": [
+      "CAUSALITY"
+    ],
+    "canonical_rel_names": [
+      "contributes_to"
+    ],
+    "instance_count": 2,
+    "example_relation_ids": [
+      "RelR_0bfb617913f4",
+      "RelR_4cdd2e15f147"
+    ]
+  },
+  {
+    "rel_cls": "behavioral_characteristic_relation",
+    "rel_cls_group": [
+      "ATTRIBUTE"
+    ],
+    "canonical_rel_names": [
+      "characterized_by_behavior"
+    ],
+    "instance_count": 2,
+    "example_relation_ids": [
+      "RelR_7c72519d0c58",
+      "RelR_1fe1a12fceaa"
+    ]
+  },
+  {
+    "rel_cls": "life_history_attribute_relation",
+    "rel_cls_group": [
+      "ATTRIBUTE"
+    ],
+    "canonical_rel_names": [
+      "has_lifespan"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_6b77872b3c4f"
+    ]
+  },
+  {
+    "rel_cls": "trait_dependency_relation",
+    "rel_cls_group": [
+      "CAUSALITY"
+    ],
+    "canonical_rel_names": [
+      "depends_on"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_32b8f325ca74"
+    ]
+  },
+  {
+    "rel_cls": "epistemic_relation",
+    "rel_cls_group": [
+      "INFORMATION"
+    ],
+    "canonical_rel_names": [
+      "facilitates_understanding_of"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_c052c5237284"
+    ]
+  },
+  {
+    "rel_cls": "psychological_sociocultural_attribute_relation",
+    "rel_cls_group": [
+      "ATTRIBUTE"
+    ],
+    "canonical_rel_names": [
+      "has_psychological_or_cultural_attribute"
+    ],
+    "instance_count": 4,
+    "example_relation_ids": [
+      "RelR_f30e4e7be97d",
+      "RelR_ca51ef516e04",
+      "RelR_caf1f7b84a8f",
+      "RelR_3a30f8130634"
+    ]
+  },
+  {
+    "rel_cls": "document_thematic_scope_relation",
+    "rel_cls_group": [
+      "ASSOCIATION"
+    ],
+    "canonical_rel_names": [
+      "analyzes"
+    ],
+    "instance_count": 2,
+    "example_relation_ids": [
+      "RelR_4aa6b71f4024",
+      "RelR_d79e62f5781d"
+    ]
+  },
+  {
+    "rel_cls": "research_field_topic_relation",
+    "rel_cls_group": [
+      "ASSOCIATION"
+    ],
+    "canonical_rel_names": [
+      "has_research_topic"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_c40291b62cd5"
+    ]
+  },
+  {
+    "rel_cls": "cultural_dissemination_relation",
+    "rel_cls_group": [
+      "DISSEMINATION"
+    ],
+    "canonical_rel_names": [
+      "circulates_in"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_c379e2c55f1c"
+    ]
+  },
+  {
+    "rel_cls": "temporal_origin_relation",
+    "rel_cls_group": [
+      "TEMPORALITY"
+    ],
+    "canonical_rel_names": [
+      "has_temporal_origin_in"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_3971f06e2bc8"
+    ]
+  },
+  {
+    "rel_cls": "functional_usage_relation",
+    "rel_cls_group": [
+      "USAGE"
+    ],
+    "canonical_rel_names": [
+      "used_for",
+      "used_in",
+      "uses_as_bait"
+    ],
+    "instance_count": 4,
+    "example_relation_ids": [
+      "RelR_64c60c5bae68",
+      "RelR_32576799761a",
+      "RelR_ac010e700426",
+      "RelR_0646eea3e97d"
+    ]
+  },
+  {
+    "rel_cls": "dissemination_facilitation_relation",
+    "rel_cls_group": [
+      "CAUSALITY"
+    ],
+    "canonical_rel_names": [
+      "facilitates_dissemination_of",
+      "facilitates_spread_of"
+    ],
+    "instance_count": 7,
+    "example_relation_ids": [
+      "RelR_7dbeb3c42b67",
+      "RelR_fb030b107649",
+      "RelR_fdaaae10ce82",
+      "RelR_34eeafe0fd1f",
+      "RelR_fada4de96048",
+      "RelR_9b6e14480eb6",
+      "RelR_4339d7a83acf"
+    ]
+  },
+  {
+    "rel_cls": "narrative_evolution_influence_relation",
+    "rel_cls_group": [
+      "CAUSALITY"
+    ],
+    "canonical_rel_names": [
+      "influences_evolution_of"
+    ],
+    "instance_count": 2,
+    "example_relation_ids": [
+      "RelR_74d8341d5616",
+      "RelR_89592968d126"
+    ]
+  },
+  {
+    "rel_cls": "spatial_reach_relation",
+    "rel_cls_group": [
+      "SPATIALITY"
+    ],
+    "canonical_rel_names": [
+      "has_spatial_reach"
+    ],
+    "instance_count": 3,
+    "example_relation_ids": [
+      "RelR_4677bb98b37f",
+      "RelR_db13efaac0da",
+      "RelR_fcf36d6fe4a0"
+    ]
+  },
+  {
+    "rel_cls": "perception_experience_relation",
+    "rel_cls_group": [
+      "PERCEPTION"
+    ],
+    "canonical_rel_names": [
+      "experiences",
+      "is_experienced_by"
+    ],
+    "instance_count": 3,
+    "example_relation_ids": [
+      "RelR_86b4ed237b92",
+      "RelR_06536c8ce183",
+      "RelR_b15398bf7af3"
+    ]
+  },
+  {
+    "rel_cls": "document_topic_relation",
+    "rel_cls_group": [
+      "ABOUTNESS"
+    ],
+    "canonical_rel_names": [
+      "is_about"
+    ],
+    "instance_count": 4,
+    "example_relation_ids": [
+      "RelR_dd103285e1e9",
+      "RelR_a840d2c878b2",
+      "RelR_b34bce086863",
+      "RelR_6ae41532555a"
+    ]
+  },
+  {
+    "rel_cls": "spatial_attachment_relation",
+    "rel_cls_group": [
+      "SPATIALITY"
+    ],
+    "canonical_rel_names": [
+      "is_attached_to"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_34f4361eb4ca"
+    ]
+  },
+  {
+    "rel_cls": "identity_equivalence_relation",
+    "rel_cls_group": [
+      "IDENTITY"
+    ],
+    "canonical_rel_names": [
+      "is_same_object_as"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_120d15c6d3fd"
+    ]
+  },
+  {
+    "rel_cls": "causal_effect_relation",
+    "rel_cls_group": [
+      "CAUSALITY"
+    ],
+    "canonical_rel_names": [
+      "causes"
+    ],
+    "instance_count": 7,
+    "example_relation_ids": [
+      "RelR_aeaaf50e4593",
+      "RelR_04b99699c553",
+      "RelR_5124399b1585",
+      "RelR_638d63a16c3d",
+      "RelR_ed3eeb4689b6",
+      "RelR_ebfbe75d8291",
+      "RelR_d1f03d867e59"
+    ]
+  },
+  {
+    "rel_cls": "narrative_theme_relation",
+    "rel_cls_group": [
+      "ASSOCIATION"
+    ],
+    "canonical_rel_names": [
+      "is_core_theme_of"
+    ],
+    "instance_count": 2,
+    "example_relation_ids": [
+      "RelR_ef87d6b49abd",
+      "RelR_f2c909613bbb"
+    ]
+  },
+  {
+    "rel_cls": "conceptual_contrast_relation",
+    "rel_cls_group": [
+      "ASSOCIATION"
+    ],
+    "canonical_rel_names": [
+      "contrasts_with"
+    ],
+    "instance_count": 3,
+    "example_relation_ids": [
+      "RelR_885b21d7168e",
+      "RelR_6386dc2f5ec2",
+      "RelR_d2d23f569a3e"
+    ]
+  },
+  {
+    "rel_cls": "taxonomic_instance_relation",
+    "rel_cls_group": [
+      "HIERARCHY"
+    ],
+    "canonical_rel_names": [
+      "is_instance_of"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_594935acd492"
+    ]
+  },
+  {
+    "rel_cls": "conceptual_influence_relation",
+    "rel_cls_group": [
+      "CAUSALITY"
+    ],
+    "canonical_rel_names": [
+      "influences_belief_in"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_51fcfa0b345f"
+    ]
+  },
+  {
+    "rel_cls": "sociocultural_representation_relation",
+    "rel_cls_group": [
+      "REPRESENTATION"
+    ],
+    "canonical_rel_names": [
+      "represents"
+    ],
+    "instance_count": 2,
+    "example_relation_ids": [
+      "RelR_80f0137783d6",
+      "RelR_db7229766640"
+    ]
+  },
+  {
+    "rel_cls": "narrative_theme_association",
+    "rel_cls_group": [
+      "ASSOCIATION"
+    ],
+    "canonical_rel_names": [
+      "is_thematically_associated_with",
+      "thematically_associated_with"
+    ],
+    "instance_count": 3,
+    "example_relation_ids": [
+      "RelR_075ebdb87245",
+      "RelR_c1841ee55e50",
+      "RelR_37ff8ff0fa34"
+    ]
+  },
+  {
+    "rel_cls": "threat_vulnerability_relation",
+    "rel_cls_group": [
+      "CAUSALITY"
+    ],
+    "canonical_rel_names": [
+      "is_threatened_by",
+      "targets"
+    ],
+    "instance_count": 2,
+    "example_relation_ids": [
+      "RelR_cd330920c8f9",
+      "RelR_71ee6bafe0a3"
+    ]
+  },
+  {
+    "rel_cls": "enticement_relation",
+    "rel_cls_group": [
+      "CAUSALITY"
+    ],
+    "canonical_rel_names": [
+      "lures"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_c1327ce70154"
+    ]
+  },
+  {
+    "rel_cls": "warning_communication_relation",
+    "rel_cls_group": [
+      "COMMUNICATION"
+    ],
+    "canonical_rel_names": [
+      "warns_about",
+      "warns_audience"
+    ],
+    "instance_count": 2,
+    "example_relation_ids": [
+      "RelR_c73faab887e3",
+      "RelR_bd10a931517c"
+    ]
+  },
+  {
+    "rel_cls": "narrative_depiction_relation",
+    "rel_cls_group": [
+      "REPRESENTATION"
+    ],
+    "canonical_rel_names": [
+      "depicts"
+    ],
+    "instance_count": 4,
+    "example_relation_ids": [
+      "RelR_b88daef44b0e",
+      "RelR_8232bcad3c55",
+      "RelR_407dabae2e6c",
+      "RelR_92d513d2058e"
+    ]
+  },
+  {
+    "rel_cls": "narrative_dissemination_relation",
+    "rel_cls_group": [
+      "COMMUNICATION"
+    ],
+    "canonical_rel_names": [
+      "reaches_audience",
+      "shares_stories"
+    ],
+    "instance_count": 2,
+    "example_relation_ids": [
+      "RelR_beb2ddfd9435",
+      "RelR_bee45680e312"
+    ]
+  },
+  {
+    "rel_cls": "protection_and_safety_relation",
+    "rel_cls_group": [
+      "AGENCY"
+    ],
+    "canonical_rel_names": [
+      "protects",
+      "seeks_protection_from"
+    ],
+    "instance_count": 3,
+    "example_relation_ids": [
+      "RelR_19b464b66a10",
+      "RelR_a4ed9f8ffbd9",
+      "RelR_46c2cd35cb2f"
+    ]
+  },
+  {
+    "rel_cls": "awareness_relation",
+    "rel_cls_group": [
+      "COGNITION"
+    ],
+    "canonical_rel_names": [
+      "becomes_aware_of"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_4071c1502070"
+    ]
+  },
+  {
+    "rel_cls": "capability_enabling_relation",
+    "rel_cls_group": [
+      "CAUSALITY"
+    ],
+    "canonical_rel_names": [
+      "enables"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_845dea97687a"
+    ]
+  },
+  {
+    "rel_cls": "contextual_occurrence_relation",
+    "rel_cls_group": [
+      "CONTEXTUALITY"
+    ],
+    "canonical_rel_names": [
+      "occurs_in_context_of"
+    ],
+    "instance_count": 2,
+    "example_relation_ids": [
+      "RelR_dcb2d48745f8",
+      "RelR_39e8b8652c3f"
+    ]
+  },
+  {
+    "rel_cls": "conceptual_association_relation",
+    "rel_cls_group": [
+      "ASSOCIATION"
+    ],
+    "canonical_rel_names": [
+      "conceptually_related_to"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_ec56bbbee845"
+    ]
+  },
+  {
+    "rel_cls": "epistemic_influence_relation",
+    "rel_cls_group": [
+      "EPISTEMIC"
+    ],
+    "canonical_rel_names": [
+      "influences"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_c9efa6406fe6"
+    ]
+  },
+  {
+    "rel_cls": "evidential_support_relation",
+    "rel_cls_group": [
+      "EPISTEMIC"
+    ],
+    "canonical_rel_names": [
+      "provides_evidence_for"
+    ],
+    "instance_count": 2,
+    "example_relation_ids": [
+      "RelR_1f6b21b29ef8",
+      "RelR_a0dc2bc821ef"
+    ]
+  },
+  {
+    "rel_cls": "urban_legend_causation_relation",
+    "rel_cls_group": [
+      "CAUSALITY"
+    ],
+    "canonical_rel_names": [
+      "generates",
+      "sustains"
+    ],
+    "instance_count": 4,
+    "example_relation_ids": [
+      "RelR_3ecb009a61a4",
+      "RelR_fb7da9f85b22",
+      "RelR_3c56e82ea561",
+      "RelR_3084235b83bc"
+    ]
+  },
+  {
+    "rel_cls": "conceptual_boundary_relation",
+    "rel_cls_group": [
+      "ASSOCIATION"
+    ],
+    "canonical_rel_names": [
+      "separates_from"
+    ],
+    "instance_count": 2,
+    "example_relation_ids": [
+      "RelR_5bd6a54c04d7",
+      "RelR_e55279202a09"
+    ]
+  },
+  {
+    "rel_cls": "narrative_truth_boundary_relation",
+    "rel_cls_group": [
+      "MODIFICATION"
+    ],
+    "canonical_rel_names": [
+      "is_blurred_within_context_of"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_f2ccdde0554e"
+    ]
+  },
+  {
+    "rel_cls": "correspondence_relation",
+    "rel_cls_group": [
+      "ASSOCIATION"
+    ],
+    "canonical_rel_names": [
+      "corresponds_to"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_169c41631aab"
+    ]
+  },
+  {
+    "rel_cls": "cognitive_engagement_relation",
+    "rel_cls_group": [
+      "COGNITION"
+    ],
+    "canonical_rel_names": [
+      "reflects_on"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_b46320c9a221"
+    ]
+  },
+  {
+    "rel_cls": "audience_engagement_relation",
+    "rel_cls_group": [
+      "INTERACTION"
+    ],
+    "canonical_rel_names": [
+      "engages_audience"
+    ],
+    "instance_count": 2,
+    "example_relation_ids": [
+      "RelR_c5e3f0db3a43",
+      "RelR_adb4a392988b"
+    ]
+  },
+  {
+    "rel_cls": "ownership_association_relation",
+    "rel_cls_group": [
+      "OWNERSHIP"
+    ],
+    "canonical_rel_names": [
+      "belongs_to"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_a14119185038"
+    ]
+  },
+  {
+    "rel_cls": "thematic_membership_relation",
+    "rel_cls_group": [
+      "ASSOCIATION"
+    ],
+    "canonical_rel_names": [
+      "is_topic_within"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_cfe0dae41fe6"
+    ]
+  },
+  {
+    "rel_cls": "ethical_issue_membership_relation",
+    "rel_cls_group": [
+      "ASSOCIATION"
+    ],
+    "canonical_rel_names": [
+      "includes_ethical_issue",
+      "is_ethical_issue_in"
+    ],
+    "instance_count": 7,
+    "example_relation_ids": [
+      "RelR_09bf81ea7663",
+      "RelR_90a508212138",
+      "RelR_9b870085ce73",
+      "RelR_28ef1083b1df",
+      "RelR_7a7aebe13364",
+      "RelR_a1ca51df1771",
+      "RelR_de6518c56893"
+    ]
+  },
+  {
+    "rel_cls": "contextual_scope_relation",
+    "rel_cls_group": [
+      "CONTEXTUALITY"
+    ],
+    "canonical_rel_names": [
+      "occurs_in_context_of"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_c4439d90023b"
+    ]
+  },
+  {
+    "rel_cls": "data_handling_relation",
+    "rel_cls_group": [
+      "USAGE"
+    ],
+    "canonical_rel_names": [
+      "processes"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_e5f1d871d4ab"
+    ]
+  },
+  {
+    "rel_cls": "risk_relation",
+    "rel_cls_group": [
+      "CAUSALITY"
+    ],
+    "canonical_rel_names": [
+      "poses_risk_of"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_ab8fbe9f47d5"
+    ]
+  },
+  {
+    "rel_cls": "harm_perpetrator_role_relation",
+    "rel_cls_group": [
+      "AGENCY"
+    ],
+    "canonical_rel_names": [
+      "may_commit"
+    ],
+    "instance_count": 2,
+    "example_relation_ids": [
+      "RelR_520597a97b34",
+      "RelR_fae8cebd0ec0"
+    ]
+  },
+  {
+    "rel_cls": "deployment_relation",
+    "rel_cls_group": [
+      "USAGE"
+    ],
+    "canonical_rel_names": [
+      "used_by"
+    ],
+    "instance_count": 2,
+    "example_relation_ids": [
+      "RelR_b1c974321b06",
+      "RelR_50b5bf3bd4ea"
+    ]
+  },
+  {
+    "rel_cls": "machine_learning_training_relation",
+    "rel_cls_group": [
+      "USAGE"
+    ],
+    "canonical_rel_names": [
+      "trained_on"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_9052b34bdf1b"
+    ]
+  },
+  {
+    "rel_cls": "data_quality_issue_relation",
+    "rel_cls_group": [
+      "QUALITY"
+    ],
+    "canonical_rel_names": [
+      "is_problematic_state_of"
+    ],
+    "instance_count": 2,
+    "example_relation_ids": [
+      "RelR_28d2994fd29a",
+      "RelR_53b3fc460723"
+    ]
+  },
+  {
+    "rel_cls": "ethical_consequence_relation",
+    "rel_cls_group": [
+      "CAUSALITY"
+    ],
+    "canonical_rel_names": [
+      "can_result_in"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_916616899601"
+    ]
+  },
+  {
+    "rel_cls": "discrimination_basis_relation",
+    "rel_cls_group": [
+      "ATTRIBUTION"
+    ],
+    "canonical_rel_names": [
+      "is_based_on_attribute"
+    ],
+    "instance_count": 2,
+    "example_relation_ids": [
+      "RelR_58dfeb5ae531",
+      "RelR_8fbdff5c20e9"
+    ]
+  },
+  {
+    "rel_cls": "ethical_outcome_influence_relation",
+    "rel_cls_group": [
+      "CAUSALITY"
+    ],
+    "canonical_rel_names": [
+      "influences_ethical_outcomes"
+    ],
+    "instance_count": 2,
+    "example_relation_ids": [
+      "RelR_8057359329a5",
+      "RelR_80705e40909c"
+    ]
+  },
+  {
+    "rel_cls": "normative_objective_relation",
+    "rel_cls_group": [
+      "AGENCY"
+    ],
+    "canonical_rel_names": [
+      "aims_to_achieve",
+      "prioritizes"
+    ],
+    "instance_count": 3,
+    "example_relation_ids": [
+      "RelR_0f91d1f52c0b",
+      "RelR_36aed48fcc27",
+      "RelR_7ff9dec3eb1e"
+    ]
+  },
+  {
+    "rel_cls": "type_instance_relation",
+    "rel_cls_group": [
+      "IDENTITY"
+    ],
+    "canonical_rel_names": [
+      "is_instance_of"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_6e87b5266fcd"
+    ]
+  },
+  {
+    "rel_cls": "requirement_dependency_relation",
+    "rel_cls_group": [
+      "REQUIREMENT"
+    ],
+    "canonical_rel_names": [
+      "requires"
+    ],
+    "instance_count": 2,
+    "example_relation_ids": [
+      "RelR_075d0f4220f8",
+      "RelR_4fbe31eba374"
+    ]
+  },
+  {
+    "rel_cls": "accountability_allocation_relation",
+    "rel_cls_group": [
+      "RESPONSIBILITY"
+    ],
+    "canonical_rel_names": [
+      "is_candidate_bearer_of_accountability"
+    ],
+    "instance_count": 3,
+    "example_relation_ids": [
+      "RelR_9d3a9ef2a5d9",
+      "RelR_49fd09faa9f1",
+      "RelR_a15d917b6384"
+    ]
+  },
+  {
+    "rel_cls": "accountability_support_relation",
+    "rel_cls_group": [
+      "CAUSALITY"
+    ],
+    "canonical_rel_names": [
+      "promotes_accountability"
+    ],
+    "instance_count": 3,
+    "example_relation_ids": [
+      "RelR_30238b1486db",
+      "RelR_bf4f5f04efec",
+      "RelR_e54cfb0280b1"
+    ]
+  },
+  {
+    "rel_cls": "governance_scope_relation",
+    "rel_cls_group": [
+      "GOVERNANCE"
+    ],
+    "canonical_rel_names": [
+      "applies_to"
+    ],
+    "instance_count": 2,
+    "example_relation_ids": [
+      "RelR_76a1e8b0c398",
+      "RelR_6251113acc95"
+    ]
+  },
+  {
+    "rel_cls": "ethical_dilemma_scope_relation",
+    "rel_cls_group": [
+      "ABOUTNESS"
+    ],
+    "canonical_rel_names": [
+      "pertains_to"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_7737479c6211"
+    ]
+  },
+  {
+    "rel_cls": "technology_uptake_impact_relation",
+    "rel_cls_group": [
+      "CAUSALITY"
+    ],
+    "canonical_rel_names": [
+      "reduces_uptake_of"
+    ],
+    "instance_count": 2,
+    "example_relation_ids": [
+      "RelR_0b846e20de40",
+      "RelR_39e6789e8f52"
+    ]
+  },
+  {
+    "rel_cls": "system_output_relation",
+    "rel_cls_group": [
+      "PRODUCTION"
+    ],
+    "canonical_rel_names": [
+      "produces"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_3b75b87b80cf"
+    ]
+  },
+  {
+    "rel_cls": "ethical_governance_enabler_relation",
+    "rel_cls_group": [
+      "CAUSALITY"
+    ],
+    "canonical_rel_names": [
+      "enables"
+    ],
+    "instance_count": 4,
+    "example_relation_ids": [
+      "RelR_49d258a4616e",
+      "RelR_71e763e0951a",
+      "RelR_713e661e20f5",
+      "RelR_cc803de755e2"
+    ]
+  },
+  {
+    "rel_cls": "ethical_dilemma_context_relation",
+    "rel_cls_group": [
+      "CONTEXTUALITY"
+    ],
+    "canonical_rel_names": [
+      "is_contextual_factor_in"
+    ],
+    "instance_count": 2,
+    "example_relation_ids": [
+      "RelR_cd1c166e9cab",
+      "RelR_e90243220322"
+    ]
+  },
+  {
+    "rel_cls": "possession_control_relation",
+    "rel_cls_group": [
+      "AGENCY"
+    ],
+    "canonical_rel_names": [
+      "possesses"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_331e8dc16747"
+    ]
+  },
+  {
+    "rel_cls": "governance_and_mitigation_relation",
+    "rel_cls_group": [
+      "CAUSALITY"
+    ],
+    "canonical_rel_names": [
+      "mitigated_by"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_1b2ca8f5ae09"
+    ]
+  },
+  {
+    "rel_cls": "societal_impact_relation",
+    "rel_cls_group": [
+      "CAUSALITY"
+    ],
+    "canonical_rel_names": [
+      "impacts"
+    ],
+    "instance_count": 3,
+    "example_relation_ids": [
+      "RelR_64e9f01e34f7",
+      "RelR_41423e5627ce",
+      "RelR_d8e2a208bac1"
+    ]
+  },
+  {
+    "rel_cls": "purpose_or_goal_relation",
+    "rel_cls_group": [
+      "PURPOSE",
+      "USAGE"
+    ],
+    "canonical_rel_names": [
+      "used_to_achieve"
+    ],
+    "instance_count": 3,
+    "example_relation_ids": [
+      "RelR_9859e8944906",
+      "RelR_048be4f78037",
+      "RelR_54ff370232eb"
+    ]
+  },
+  {
+    "rel_cls": "risk_mitigation_relation",
+    "rel_cls_group": [
+      "CAUSALITY"
+    ],
+    "canonical_rel_names": [
+      "mitigates_harm"
+    ],
+    "instance_count": 4,
+    "example_relation_ids": [
+      "RelR_c5e30ba1b1f6",
+      "RelR_09dc69540268",
+      "RelR_91a7d088fb66",
+      "RelR_ab59a77886f4"
     ]
   }
 ]

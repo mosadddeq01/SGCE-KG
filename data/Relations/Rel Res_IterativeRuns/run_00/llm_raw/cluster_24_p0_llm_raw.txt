@@ -1,0 +1,82 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_8deeeec9c025"
+      ],
+      "canonical_rel_name": "is_instance_of",
+      "canonical_rel_desc": "Indicates that the subject is an instance or specific type within the broader category represented by the object concept.",
+      "justification": "The relation describes ghostly apparitions as a type of paranormal phenomenon, which is a clear category-membership / instance-of relation between a specific phenomenon and a broader concept.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_8deeeec9c025"
+      ],
+      "rel_cls": "category_membership_relation",
+      "justification": "The predicate links a specific phenomenon (ghostly apparitions) to a broader conceptual category (paranormal), fitting a category/ontology membership family of relations.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_8deeeec9c025"
+      ],
+      "rel_cls_group": "IDENTITY",
+      "justification": "Category membership / instance-of semantics express an identity-like relationship between an instance and its type-level category.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_075ebdb87245",
+        "RelR_c1841ee55e50",
+        "RelR_37ff8ff0fa34"
+      ],
+      "canonical_rel_name": "thematically_associated_with",
+      "canonical_rel_desc": "Indicates that two entities are linked through narrative, emotional, or conceptual association within a thematic or story context, without asserting direct causality.",
+      "justification": "All three relations describe non-causal, narrative or emotional linkages: (1) the unknown and a good scare as joint emotional draws; (2) dark pasts and dangers; (3) cursed objects and dangers. These are not strict causal mechanisms but thematic/emotional associations in stories, so a shared canonical predicate focusing on thematic association is appropriate.",
+      "remark": "Use for narrative/emotional co-appearance or linkage where text does not clearly assert direct causality.",
+      "confidence": 0.82
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_075ebdb87245",
+        "RelR_c1841ee55e50",
+        "RelR_37ff8ff0fa34"
+      ],
+      "rel_cls": "narrative_theme_association",
+      "justification": "Each relation connects elements that co-function within urban legends as joint themes (emotional draws, backstories, perceived dangers) rather than material interactions, fitting a shared class for narrative/thematic associations.",
+      "remark": null,
+      "confidence": 0.83
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_075ebdb87245",
+        "RelR_c1841ee55e50",
+        "RelR_37ff8ff0fa34"
+      ],
+      "rel_cls_group": "ASSOCIATION",
+      "justification": "All three relations express non-causal, co-thematic linkage between concepts in stories; this is best captured under a broad ASSOCIATION group.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  }
+]

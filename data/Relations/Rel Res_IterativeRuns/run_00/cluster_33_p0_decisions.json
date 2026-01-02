@@ -1,0 +1,183 @@
+{
+  "cluster_label": "33_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_6b77872b3c4f",
+      "relation_name": "has_lifespan",
+      "rel_desc": "The adult stage of a butterfly is characterized by a relatively short lifespan.",
+      "rel_hint_type": "attribute",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "adult stage of a butterfly",
+      "object_entity_name": "butterfly adult lifespan",
+      "subject_class_label": "Adult Butterfly Life Stage",
+      "subject_class_group": "Butterfly Biology & Life Cycle",
+      "object_class_label": "Butterfly Adult Stage Attributes",
+      "object_class_group": "Butterfly Biology & Life Cycle",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": "ranging from a few days to a few weeks",
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.95,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_ca51ef516e04",
+      "relation_name": "exhibits_attribute",
+      "rel_desc": "People around the world are described as having curiosity that is engaged by urban legends.",
+      "rel_hint_type": "attribute",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "people around the world",
+      "object_entity_name": "curiosity",
+      "subject_class_label": "Story and Legend Audiences (including Cautionary Narratives)",
+      "subject_class_group": "Storytelling & Narrative Dissemination",
+      "object_class_label": "Psychological and Cultural Constructs of Urban Legends",
+      "object_class_group": "Urban Legends – Folklore, Psychology & Scholarship",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "around the world",
+        "OperationalConstraint": null,
+        "ConditionExpression": "when they encounter or hear urban legends",
+        "UncertaintyQualifier": null,
+        "CausalHint": "captured by",
+        "LogicalMarker": null,
+        "OtherQualifier": "PsychologicalState: desire to know more stimulated by urban legends"
+      },
+      "confidence": 0.88,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_6b77872b3c4f\"],\n      \"canonical_rel_name\": \"has_lifespan\",\n      \"canonical_rel_desc\": \"Links a biological life stage or organism to its characteristic lifespan or longevity.\",\n      \"justification\": \"The relation connects the adult stage of a butterfly to its characteristic lifespan range, which is a specific life-history property; 'has_lifespan' is an appropriate predicate for this kind of biological attribute.\",\n      \"remark\": null,\n      \"confidence\": 0.93\n    }\n  },\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_ca51ef516e04\"],\n      \"canonical_rel_name\": \"has_psychological_attribute\",\n      \"canonical_rel_desc\": \"Links an entity (typically a person or group) to a psychological or mental attribute it exhibits.\",\n      \"justification\": \"The relation expresses that people (as an audience) exhibit or possess the attribute of curiosity when exposed to urban legends; modeling this as a psychological attribute owned by the people fits well with 'has_psychological_attribute'.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_6b77872b3c4f\"],\n      \"rel_cls\": \"life_history_attribute_relation\",\n      \"justification\": \"The predicate describes a life-history characteristic (lifespan) of a biological life stage, which fits a specific class for life-history or demographic attributes.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_ca51ef516e04\"],\n      \"rel_cls\": \"psychological_attribute_relation\",\n      \"justification\": \"The predicate links people to a psychological state/trait (curiosity), which is best grouped under a class for psychological or mental attributes.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_6b77872b3c4f\", \"RelR_ca51ef516e04\"],\n      \"rel_cls_group\": \"ATTRIBUTE\",\n      \"justification\": \"Both relations express that a subject possesses or exhibits an attribute (lifespan; curiosity) rather than composition, causation, or hierarchy, so they belong to a broad ATTRIBUTE group.\",\n      \"remark\": null,\n      \"confidence\": 0.94\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_6b77872b3c4f"
+        ],
+        "canonical_rel_name": "has_lifespan",
+        "canonical_rel_desc": "Links a biological life stage or organism to its characteristic lifespan or longevity.",
+        "justification": "The relation connects the adult stage of a butterfly to its characteristic lifespan range, which is a specific life-history property; 'has_lifespan' is an appropriate predicate for this kind of biological attribute.",
+        "remark": null,
+        "confidence": 0.93
+      }
+    },
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_ca51ef516e04"
+        ],
+        "canonical_rel_name": "has_psychological_attribute",
+        "canonical_rel_desc": "Links an entity (typically a person or group) to a psychological or mental attribute it exhibits.",
+        "justification": "The relation expresses that people (as an audience) exhibit or possess the attribute of curiosity when exposed to urban legends; modeling this as a psychological attribute owned by the people fits well with 'has_psychological_attribute'.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_6b77872b3c4f"
+        ],
+        "rel_cls": "life_history_attribute_relation",
+        "justification": "The predicate describes a life-history characteristic (lifespan) of a biological life stage, which fits a specific class for life-history or demographic attributes.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_ca51ef516e04"
+        ],
+        "rel_cls": "psychological_attribute_relation",
+        "justification": "The predicate links people to a psychological state/trait (curiosity), which is best grouped under a class for psychological or mental attributes.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_6b77872b3c4f",
+          "RelR_ca51ef516e04"
+        ],
+        "rel_cls_group": "ATTRIBUTE",
+        "justification": "Both relations express that a subject possesses or exhibits an attribute (lifespan; curiosity) rather than composition, causation, or hierarchy, so they belong to a broad ATTRIBUTE group.",
+        "remark": null,
+        "confidence": 0.94
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_6b77872b3c4f"
+      ],
+      "canonical_rel_name": "has_lifespan",
+      "canonical_rel_desc": "Links a biological life stage or organism to its characteristic lifespan or longevity.",
+      "justification": "The relation connects the adult stage of a butterfly to its characteristic lifespan range, which is a specific life-history property; 'has_lifespan' is an appropriate predicate for this kind of biological attribute.",
+      "remark": null,
+      "confidence": 0.93
+    },
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_ca51ef516e04"
+      ],
+      "canonical_rel_name": "has_psychological_attribute",
+      "canonical_rel_desc": "Links an entity (typically a person or group) to a psychological or mental attribute it exhibits.",
+      "justification": "The relation expresses that people (as an audience) exhibit or possess the attribute of curiosity when exposed to urban legends; modeling this as a psychological attribute owned by the people fits well with 'has_psychological_attribute'.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_6b77872b3c4f"
+      ],
+      "rel_cls": "life_history_attribute_relation",
+      "justification": "The predicate describes a life-history characteristic (lifespan) of a biological life stage, which fits a specific class for life-history or demographic attributes.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_ca51ef516e04"
+      ],
+      "rel_cls": "psychological_attribute_relation",
+      "justification": "The predicate links people to a psychological state/trait (curiosity), which is best grouped under a class for psychological or mental attributes.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_6b77872b3c4f",
+        "RelR_ca51ef516e04"
+      ],
+      "rel_cls_group": "ATTRIBUTE",
+      "justification": "Both relations express that a subject possesses or exhibits an attribute (lifespan; curiosity) rather than composition, causation, or hierarchy, so they belong to a broad ATTRIBUTE group.",
+      "remark": null,
+      "confidence": 0.94
+    }
+  ],
+  "timestamp": "2026-01-02T09:15:29Z"
+}

@@ -2,214 +2,219 @@
   "cluster_label": 5,
   "cluster_classes": [
     {
-      "candidate_id": "ClsC_e266c5eb",
-      "class_label": "Non-Destructive Testing Methods",
-      "class_description": "Methods used to inspect materials for defects without causing damage, including radiographic, ultrasonic, visual, and magnetic particle testing.",
-      "class_type_hint": "Inspection Method",
-      "class_group": "Industrial Standards & References",
-      "confidence": 0.95,
-      "evidence_excerpt": "Methods in the FOCUS chunk for detecting defects.",
+      "candidate_id": "ClsC_351d72f0",
+      "class_label": "Historical Narrative Concepts",
+      "class_description": "Concepts related to narrative explanations of unknown or supernatural phenomena across history, including the stories themselves and the broad historical periods in which they arose.",
+      "class_type_hint": "Conceptual Category",
+      "class_group": "Narrative Truth, Fiction, and History",
+      "confidence": 0.63,
+      "evidence_excerpt": "Origins of urban legends in ancient times when stories explained the unknown and supernatural.",
       "member_ids": [
-        "En_374342ee",
-        "En_a40dec03",
-        "En_23dad6fc",
-        "En_84774ba7",
-        "En_b3df3885"
+        "Can_f8783101",
+        "En_48b27b28"
       ],
       "members": [
         {
-          "id": "En_374342ee",
-          "entity_name": "radiographic testing",
-          "entity_description": "A non-destructive testing method using X-rays or gamma rays to view the internal structure of a component.",
-          "entity_type_hint": "InspectionMethod"
+          "id": "Can_f8783101",
+          "entity_name": "stories and tales",
+          "entity_description": "Narrative stories and tales, particularly urban legends, used historically to explain unknown and supernatural phenomena and reflecting societal fears and anxieties.",
+          "entity_type_hint": "Concept"
         },
         {
-          "id": "En_a40dec03",
-          "entity_name": "shear wave ultrasonic testing",
-          "entity_description": "An ultrasonic testing method using shear waves to detect flaws in materials.",
-          "entity_type_hint": "InspectionMethod"
-        },
-        {
-          "id": "En_23dad6fc",
-          "entity_name": "ultrasonic testing",
-          "entity_description": "A non-destructive testing method using high-frequency sound waves to detect internal flaws.",
-          "entity_type_hint": "InspectionMethod"
-        },
-        {
-          "id": "En_84774ba7",
-          "entity_name": "visual inspection",
-          "entity_description": "A non-destructive testing method involving the visual examination of a component.",
-          "entity_type_hint": "InspectionMethod"
-        },
-        {
-          "id": "En_b3df3885",
-          "entity_name": "wet fluorescent magnetic particle testing",
-          "entity_description": "A non-destructive testing method using fluorescent particles to detect surface and near-surface defects.",
-          "entity_type_hint": "InspectionMethod"
+          "id": "En_48b27b28",
+          "entity_name": "ancient times",
+          "entity_description": "A distant historical period when early explanatory stories about the unknown were told.",
+          "entity_type_hint": "TemporalQualifier"
         }
       ],
       "remarks": []
     },
     {
-      "candidate_id": "ClsC_26300b9e",
-      "class_label": "Material Damage Mechanisms",
-      "class_description": "Mechanisms causing material degradation, including mechanical, metallurgical, and thickness loss processes.",
-      "class_type_hint": "Failure Mechanism",
-      "class_group": "TBD",
-      "confidence": 0.85,
-      "evidence_excerpt": "The mechanisms are divided into sections: a) Mechanical and Metallurgical Failure, b) Uniform or Localized Loss of Thickness.",
-      "member_ids": [],
-      "members": [],
-      "remarks": []
-    },
-    {
-      "candidate_id": "ClsR_0b6df3b1",
-      "class_label": "Mechanical and Metallurgical Failure Mechanisms",
-      "class_description": "Failure mechanisms related to mechanical and metallurgical processes.",
-      "class_type_hint": "Damage Mechanism",
-      "class_group": "Material Failure Mechanisms",
-      "confidence": 0.85,
-      "evidence_excerpt": "The mechanisms are divided into sections: a) Mechanical and Metallurgical Failure, b) Uniform or Localized Loss of Thickness.",
+      "candidate_id": "ClsR_f3df1342",
+      "class_label": "Fact and Fiction in Narratives",
+      "class_description": "Concepts and distinctions between objective reality and invented story content, including facts, fiction, real events, and the blurred boundary between them within narratives.",
+      "class_type_hint": "Epistemic Narrative Concept",
+      "class_group": "Narrative Truth, Fiction, and History",
+      "confidence": 0.9,
+      "evidence_excerpt": "The line between fact and fiction is often blurred... ponder the truth behind the stories",
       "member_ids": [
-        "En_6a5f3538"
+        "Can_72564a54",
+        "En_edf2b36f",
+        "En_57524089",
+        "En_7a3bef3b",
+        "En_cfd47e19"
       ],
       "members": [
         {
-          "id": "En_6a5f3538",
-          "entity_name": "Mechanical and Metallurgical Failure",
-          "entity_description": "Failure mechanisms related to mechanical and metallurgical processes in various industries.",
-          "entity_type_hint": "DamageMechanism"
-        }
-      ],
-      "remarks": []
-    },
-    {
-      "candidate_id": "ClsR_3fd3a011",
-      "class_label": "Thickness Loss Mechanisms",
-      "class_description": "Mechanisms involving uniform or localized loss of material thickness.",
-      "class_type_hint": "Damage Mechanism",
-      "class_group": "Material Loss Mechanisms",
-      "confidence": 0.85,
-      "evidence_excerpt": "The mechanisms are divided into sections: a) Mechanical and Metallurgical Failure, b) Uniform or Localized Loss of Thickness.",
-      "member_ids": [
-        "En_8ed6cfa3"
-      ],
-      "members": [
+          "id": "Can_72564a54",
+          "entity_name": "line between fact and fiction",
+          "entity_description": "The conceptual boundary distinguishing objective truth from invented or embellished narrative, often blurred in storytelling.",
+          "entity_type_hint": "Concept"
+        },
         {
-          "id": "En_8ed6cfa3",
-          "entity_name": "Uniform or Localized Loss of Thickness",
-          "entity_description": "A damage mechanism involving the reduction of material thickness, either uniformly or in specific areas.",
-          "entity_type_hint": "DamageMechanism"
+          "id": "En_edf2b36f",
+          "entity_name": "fact",
+          "entity_description": "Information or events considered objectively true and verifiable.",
+          "entity_type_hint": "Concept"
+        },
+        {
+          "id": "En_57524089",
+          "entity_name": "truth behind the stories",
+          "entity_description": "Actual reality or factual basis underlying the stories being told.",
+          "entity_type_hint": "Concept"
+        },
+        {
+          "id": "En_7a3bef3b",
+          "entity_name": "real events",
+          "entity_description": "Actual historical or factual occurrences that may underlie some stories.",
+          "entity_type_hint": "Event"
+        },
+        {
+          "id": "En_cfd47e19",
+          "entity_name": "fiction",
+          "entity_description": "Invented or imagined content within stories, contrasting with factual material.",
+          "entity_type_hint": "Concept"
         }
       ],
       "remarks": []
     }
   ],
-  "llm_raw": "[\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_26300b9e\",\n      \"new_name\": \"Material Damage Mechanisms\",\n      \"new_description\": \"Mechanisms causing material degradation, including mechanical, metallurgical, and thickness loss processes.\",\n      \"new_class_type_hint\": \"Damage Mechanism\",\n      \"new_class_group\": \"Material Damage Mechanisms\",\n      \"remark\": null,\n      \"justification\": \"Class_Group is missing and should be set to 'Material Damage Mechanisms' to reflect the broader grouping of both mechanical/metallurgical and thickness loss mechanisms.\",\n      \"confidence\": 0.95\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsR_0b6df3b1\",\n      \"new_name\": \"Mechanical and Metallurgical Failure Mechanisms\",\n      \"new_description\": \"Failure mechanisms related to mechanical and metallurgical processes.\",\n      \"new_class_type_hint\": \"Damage Mechanism\",\n      \"new_class_group\": \"Material Damage Mechanisms\",\n      \"remark\": null,\n      \"justification\": \"Class_Group should be unified with ClsC_26300b9e as both represent subtypes of material damage mechanisms.\",\n      \"confidence\": 0.95\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsR_3fd3a011\",\n      \"new_name\": \"Thickness Loss Mechanisms\",\n      \"new_description\": \"Mechanisms involving uniform or localized loss of material thickness.\",\n      \"new_class_type_hint\": \"Damage Mechanism\",\n      \"new_class_group\": \"Material Damage Mechanisms\",\n      \"remark\": null,\n      \"justification\": \"Class_Group should be unified with ClsC_26300b9e as both represent subtypes of material damage mechanisms.\",\n      \"confidence\": 0.95\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_e266c5eb\",\n      \"new_name\": \"Non-Destructive Testing Methods\",\n      \"new_description\": \"Methods used to inspect materials for defects without causing damage, including radiographic, ultrasonic, visual, and magnetic particle testing.\",\n      \"new_class_type_hint\": \"Inspection Method\",\n      \"new_class_group\": \"Inspection & Testing Methods\",\n      \"remark\": null,\n      \"justification\": \"Class_Group 'Industrial Standards & References' is too broad; 'Inspection & Testing Methods' more accurately reflects the class's domain.\",\n      \"confidence\": 0.95\n    }\n  }\n]",
+  "llm_raw": "[\n  {\n    \"function\": \"split_class\",\n    \"args\": {\n      \"source_class_id\": \"ClsC_351d72f0\",\n      \"splits\": [\n        {\n          \"name\": \"Narrative Explanations of the Unknown\",\n          \"description\": \"Stories and tales, particularly urban legends, used historically to explain unknown and supernatural phenomena and reflect societal fears.\",\n          \"class_type_hint\": \"Narrative Concept\",\n          \"member_ids\": [\n            \"Can_f8783101\"\n          ],\n          \"provisional_id\": \"SPLIT_351d72f0_STORIES\"\n        },\n        {\n          \"name\": \"Historical Periods of Narrative Origins\",\n          \"description\": \"Historical periods (e.g., ancient times) referenced as the context in which explanatory stories about the unknown were told.\",\n          \"class_type_hint\": \"TemporalQualifier\",\n          \"member_ids\": [\n            \"En_48b27b28\"\n          ],\n          \"provisional_id\": \"SPLIT_351d72f0_PERIODS\"\n        }\n      ],\n      \"justification\": \"ClsC_351d72f0 currently mixes two distinct kinds of entities—narrative content (stories and tales) and a temporal qualifier (ancient times)—so it should be split into a narrative-concept class and a time-period class for cleaner semantics.\",\n      \"remark\": null,\n      \"confidence\": 0.82\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"SPLIT_351d72f0_STORIES\",\n      \"new_name\": \"Narrative Explanations of the Unknown\",\n      \"new_description\": \"Stories and tales, particularly urban legends, used historically to explain unknown and supernatural phenomena and reflect societal fears and anxieties.\",\n      \"new_class_type_hint\": \"Narrative Concept\",\n      \"new_class_group\": \"Narrative Truth, Fiction, and History\",\n      \"remark\": null,\n      \"justification\": \"The narrative-focused split should explicitly sit in the same overarching group as fact/fiction distinctions, clarifying it as a narrative-concept class within the history/truth/fiction domain.\",\n      \"confidence\": 0.86\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"SPLIT_351d72f0_PERIODS\",\n      \"new_name\": \"Historical Periods of Narrative Origins\",\n      \"new_description\": \"Historical periods (such as ancient times) that serve as the temporal context for early explanatory stories about the unknown and supernatural.\",\n      \"new_class_type_hint\": \"TemporalQualifier\",\n      \"new_class_group\": \"Narrative Truth, Fiction, and History\",\n      \"remark\": null,\n      \"justification\": \"The temporal-period split should be clearly labeled as a temporal qualifier but kept in the same Class_Group since it frames when narrative explanations of the unknown arose within the truth/fiction/history context.\",\n      \"confidence\": 0.83\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsR_f3df1342\",\n      \"new_name\": \"Fact and Fiction in Narratives\",\n      \"new_description\": \"Concepts and distinctions between objective reality and invented story content, including facts, fiction, real events, and the blurred boundary between them within narratives.\",\n      \"new_class_type_hint\": \"Epistemic Narrative Concept\",\n      \"new_class_group\": \"Narrative Truth, Fiction, and History\",\n      \"remark\": null,\n      \"justification\": \"Confirm and standardize the metadata for the fact/fiction class within the same Class_Group as the newly split narrative-history classes, reinforcing a coherent schema over narrative truth, fiction, and historical framing.\",\n      \"confidence\": 0.9\n    }\n  }\n]",
   "parsed_steps": [
     {
-      "function": "modify_class",
+      "function": "split_class",
       "args": {
-        "class_id": "ClsC_26300b9e",
-        "new_name": "Material Damage Mechanisms",
-        "new_description": "Mechanisms causing material degradation, including mechanical, metallurgical, and thickness loss processes.",
-        "new_class_type_hint": "Damage Mechanism",
-        "new_class_group": "Material Damage Mechanisms",
+        "source_class_id": "ClsC_351d72f0",
+        "splits": [
+          {
+            "name": "Narrative Explanations of the Unknown",
+            "description": "Stories and tales, particularly urban legends, used historically to explain unknown and supernatural phenomena and reflect societal fears.",
+            "class_type_hint": "Narrative Concept",
+            "member_ids": [
+              "Can_f8783101"
+            ],
+            "provisional_id": "SPLIT_351d72f0_STORIES"
+          },
+          {
+            "name": "Historical Periods of Narrative Origins",
+            "description": "Historical periods (e.g., ancient times) referenced as the context in which explanatory stories about the unknown were told.",
+            "class_type_hint": "TemporalQualifier",
+            "member_ids": [
+              "En_48b27b28"
+            ],
+            "provisional_id": "SPLIT_351d72f0_PERIODS"
+          }
+        ],
+        "justification": "ClsC_351d72f0 currently mixes two distinct kinds of entities—narrative content (stories and tales) and a temporal qualifier (ancient times)—so it should be split into a narrative-concept class and a time-period class for cleaner semantics.",
         "remark": null,
-        "justification": "Class_Group is missing and should be set to 'Material Damage Mechanisms' to reflect the broader grouping of both mechanical/metallurgical and thickness loss mechanisms.",
-        "confidence": 0.95
+        "confidence": 0.82
       }
     },
     {
       "function": "modify_class",
       "args": {
-        "class_id": "ClsR_0b6df3b1",
-        "new_name": "Mechanical and Metallurgical Failure Mechanisms",
-        "new_description": "Failure mechanisms related to mechanical and metallurgical processes.",
-        "new_class_type_hint": "Damage Mechanism",
-        "new_class_group": "Material Damage Mechanisms",
+        "class_id": "SPLIT_351d72f0_STORIES",
+        "new_name": "Narrative Explanations of the Unknown",
+        "new_description": "Stories and tales, particularly urban legends, used historically to explain unknown and supernatural phenomena and reflect societal fears and anxieties.",
+        "new_class_type_hint": "Narrative Concept",
+        "new_class_group": "Narrative Truth, Fiction, and History",
         "remark": null,
-        "justification": "Class_Group should be unified with ClsC_26300b9e as both represent subtypes of material damage mechanisms.",
-        "confidence": 0.95
+        "justification": "The narrative-focused split should explicitly sit in the same overarching group as fact/fiction distinctions, clarifying it as a narrative-concept class within the history/truth/fiction domain.",
+        "confidence": 0.86
       }
     },
     {
       "function": "modify_class",
       "args": {
-        "class_id": "ClsR_3fd3a011",
-        "new_name": "Thickness Loss Mechanisms",
-        "new_description": "Mechanisms involving uniform or localized loss of material thickness.",
-        "new_class_type_hint": "Damage Mechanism",
-        "new_class_group": "Material Damage Mechanisms",
+        "class_id": "SPLIT_351d72f0_PERIODS",
+        "new_name": "Historical Periods of Narrative Origins",
+        "new_description": "Historical periods (such as ancient times) that serve as the temporal context for early explanatory stories about the unknown and supernatural.",
+        "new_class_type_hint": "TemporalQualifier",
+        "new_class_group": "Narrative Truth, Fiction, and History",
         "remark": null,
-        "justification": "Class_Group should be unified with ClsC_26300b9e as both represent subtypes of material damage mechanisms.",
-        "confidence": 0.95
+        "justification": "The temporal-period split should be clearly labeled as a temporal qualifier but kept in the same Class_Group since it frames when narrative explanations of the unknown arose within the truth/fiction/history context.",
+        "confidence": 0.83
       }
     },
     {
       "function": "modify_class",
       "args": {
-        "class_id": "ClsC_e266c5eb",
-        "new_name": "Non-Destructive Testing Methods",
-        "new_description": "Methods used to inspect materials for defects without causing damage, including radiographic, ultrasonic, visual, and magnetic particle testing.",
-        "new_class_type_hint": "Inspection Method",
-        "new_class_group": "Inspection & Testing Methods",
+        "class_id": "ClsR_f3df1342",
+        "new_name": "Fact and Fiction in Narratives",
+        "new_description": "Concepts and distinctions between objective reality and invented story content, including facts, fiction, real events, and the blurred boundary between them within narratives.",
+        "new_class_type_hint": "Epistemic Narrative Concept",
+        "new_class_group": "Narrative Truth, Fiction, and History",
         "remark": null,
-        "justification": "Class_Group 'Industrial Standards & References' is too broad; 'Inspection & Testing Methods' more accurately reflects the class's domain.",
-        "confidence": 0.95
+        "justification": "Confirm and standardize the metadata for the fact/fiction class within the same Class_Group as the newly split narrative-history classes, reinforcing a coherent schema over narrative truth, fiction, and historical framing.",
+        "confidence": 0.9
       }
     }
   ],
   "executed_decisions": [
     {
-      "action": "modify_class",
-      "class_id": "ClsC_26300b9e",
-      "class_id_resolved": "ClsC_26300b9e",
-      "new_name": "Material Damage Mechanisms",
-      "new_description": "Mechanisms causing material degradation, including mechanical, metallurgical, and thickness loss processes.",
-      "new_class_type_hint": "Damage Mechanism",
-      "new_class_group": "Material Damage Mechanisms",
+      "action": "split_class",
+      "source_class_id": "ClsC_351d72f0",
+      "source_class_id_resolved": "ClsC_351d72f0",
+      "created_classes": [
+        {
+          "new_class_id": "ClsR_de142256",
+          "provisional_id": "SPLIT_351d72f0_STORIES",
+          "member_ids": [
+            "Can_f8783101"
+          ]
+        },
+        {
+          "new_class_id": "ClsR_0c8267fa",
+          "provisional_id": "SPLIT_351d72f0_PERIODS",
+          "member_ids": [
+            "En_48b27b28"
+          ]
+        }
+      ],
+      "justification": "ClsC_351d72f0 currently mixes two distinct kinds of entities—narrative content (stories and tales) and a temporal qualifier (ancient times)—so it should be split into a narrative-concept class and a time-period class for cleaner semantics.",
       "remark": null,
-      "justification": "Class_Group is missing and should be set to 'Material Damage Mechanisms' to reflect the broader grouping of both mechanical/metallurgical and thickness loss mechanisms.",
-      "confidence": 0.95
+      "confidence": 0.82
     },
     {
       "action": "modify_class",
-      "class_id": "ClsR_0b6df3b1",
-      "class_id_resolved": "ClsR_0b6df3b1",
-      "new_name": "Mechanical and Metallurgical Failure Mechanisms",
-      "new_description": "Failure mechanisms related to mechanical and metallurgical processes.",
-      "new_class_type_hint": "Damage Mechanism",
-      "new_class_group": "Material Damage Mechanisms",
+      "class_id": "SPLIT_351d72f0_STORIES",
+      "class_id_resolved": "ClsR_de142256",
+      "new_name": "Narrative Explanations of the Unknown",
+      "new_description": "Stories and tales, particularly urban legends, used historically to explain unknown and supernatural phenomena and reflect societal fears and anxieties.",
+      "new_class_type_hint": "Narrative Concept",
+      "new_class_group": "Narrative Truth, Fiction, and History",
       "remark": null,
-      "justification": "Class_Group should be unified with ClsC_26300b9e as both represent subtypes of material damage mechanisms.",
-      "confidence": 0.95
+      "justification": "The narrative-focused split should explicitly sit in the same overarching group as fact/fiction distinctions, clarifying it as a narrative-concept class within the history/truth/fiction domain.",
+      "confidence": 0.86
     },
     {
       "action": "modify_class",
-      "class_id": "ClsR_3fd3a011",
-      "class_id_resolved": "ClsR_3fd3a011",
-      "new_name": "Thickness Loss Mechanisms",
-      "new_description": "Mechanisms involving uniform or localized loss of material thickness.",
-      "new_class_type_hint": "Damage Mechanism",
-      "new_class_group": "Material Damage Mechanisms",
+      "class_id": "SPLIT_351d72f0_PERIODS",
+      "class_id_resolved": "ClsR_0c8267fa",
+      "new_name": "Historical Periods of Narrative Origins",
+      "new_description": "Historical periods (such as ancient times) that serve as the temporal context for early explanatory stories about the unknown and supernatural.",
+      "new_class_type_hint": "TemporalQualifier",
+      "new_class_group": "Narrative Truth, Fiction, and History",
       "remark": null,
-      "justification": "Class_Group should be unified with ClsC_26300b9e as both represent subtypes of material damage mechanisms.",
-      "confidence": 0.95
+      "justification": "The temporal-period split should be clearly labeled as a temporal qualifier but kept in the same Class_Group since it frames when narrative explanations of the unknown arose within the truth/fiction/history context.",
+      "confidence": 0.83
     },
     {
       "action": "modify_class",
-      "class_id": "ClsC_e266c5eb",
-      "class_id_resolved": "ClsC_e266c5eb",
-      "new_name": "Non-Destructive Testing Methods",
-      "new_description": "Methods used to inspect materials for defects without causing damage, including radiographic, ultrasonic, visual, and magnetic particle testing.",
-      "new_class_type_hint": "Inspection Method",
-      "new_class_group": "Inspection & Testing Methods",
+      "class_id": "ClsR_f3df1342",
+      "class_id_resolved": "ClsR_f3df1342",
+      "new_name": "Fact and Fiction in Narratives",
+      "new_description": "Concepts and distinctions between objective reality and invented story content, including facts, fiction, real events, and the blurred boundary between them within narratives.",
+      "new_class_type_hint": "Epistemic Narrative Concept",
+      "new_class_group": "Narrative Truth, Fiction, and History",
       "remark": null,
-      "justification": "Class_Group 'Industrial Standards & References' is too broad; 'Inspection & Testing Methods' more accurately reflects the class's domain.",
-      "confidence": 0.95
+      "justification": "Confirm and standardize the metadata for the fact/fiction class within the same Class_Group as the newly split narrative-history classes, reinforcing a coherent schema over narrative truth, fiction, and historical framing.",
+      "confidence": 0.9
     }
   ],
-  "provisional_to_real": {},
-  "timestamp": "2025-12-28T00:22:56Z"
+  "provisional_to_real": {
+    "SPLIT_351d72f0_STORIES": "ClsR_de142256",
+    "SPLIT_351d72f0_PERIODS": "ClsR_0c8267fa"
+  },
+  "timestamp": "2026-01-02T08:36:43Z"
 }

@@ -1,0 +1,141 @@
+{
+  "cluster_label": "11_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_eeeb624488dd",
+      "relation_name": "mimics",
+      "rel_desc": "Twig mimicry involves resembling twigs in appearance.",
+      "rel_hint_type": "resemblance",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "twig mimicry",
+      "object_entity_name": "twigs",
+      "subject_class_label": "Caterpillar Camouflage Strategies",
+      "subject_class_group": "Caterpillar Biology and Defense",
+      "object_class_label": "Plant Structures as Lepidopteran Substrate and Background",
+      "object_class_group": "Lepidopteran Plant Interactions & Habitat",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "visual environment where twigs are present",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "to camouflage themselves",
+        "LogicalMarker": null,
+        "OtherQualifier": "Purpose: concealment from predators"
+      },
+      "confidence": 0.9,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_6d68f46ba528",
+      "relation_name": "mimics",
+      "rel_desc": "Leaf mimicry consists of resembling leaves in appearance.",
+      "rel_hint_type": "resemblance",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "leaf mimicry",
+      "object_entity_name": "leaves",
+      "subject_class_label": "Caterpillar Camouflage Strategies",
+      "subject_class_group": "Caterpillar Biology and Defense",
+      "object_class_label": "Plant Structures as Lepidopteran Substrate and Background",
+      "object_class_group": "Lepidopteran Plant Interactions & Habitat",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "visual environment where leaves are present",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "to camouflage themselves",
+        "LogicalMarker": null,
+        "OtherQualifier": "Purpose: concealment from predators"
+      },
+      "confidence": 0.9,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_eeeb624488dd\",\n        \"RelR_6d68f46ba528\"\n      ],\n      \"canonical_rel_name\": \"resembles_in_appearance\",\n      \"canonical_rel_desc\": \"Subject is a type of mimicry strategy that visually resembles the object in appearance or form, typically for camouflage or concealment.\",\n      \"justification\": \"Both relations describe specific mimicry strategies (twig mimicry, leaf mimicry) whose defining property is visual resemblance to the referenced plant structure (twigs, leaves). The common predicate is visual resemblance, without implying genetic or taxonomic identity, so a generic appearance-based resemblance predicate is appropriate and reusable.\",\n      \"remark\": null,\n      \"confidence\": 0.94\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_eeeb624488dd\",\n        \"RelR_6d68f46ba528\"\n      ],\n      \"rel_cls\": \"mimicry_resemblance_relation\",\n      \"justification\": \"These edges both describe biological mimicry where one entity (a camouflage strategy) is defined by its resemblance to another entity (a background plant structure). Grouping them under a mimicry-focused resemblance class captures this shared mechanism and distinguishes it from other resemblance or identity relations.\",\n      \"remark\": null,\n      \"confidence\": 0.93\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_eeeb624488dd\",\n        \"RelR_6d68f46ba528\"\n      ],\n      \"rel_cls_group\": \"IDENTITY\",\n      \"justification\": \"The core semantic dimension is similarity/likeness of appearance between subject and object, i.e., a form of identity or equivalence in visual traits, rather than composition, causality, or spatial location. Thus these belong best under a broad identity/similarity group.\",\n      \"remark\": \"Could alternatively be modeled under an ASSOCIATION-like group in future if a separate similarity group is introduced.\",\n      \"confidence\": 0.88\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_eeeb624488dd",
+          "RelR_6d68f46ba528"
+        ],
+        "canonical_rel_name": "resembles_in_appearance",
+        "canonical_rel_desc": "Subject is a type of mimicry strategy that visually resembles the object in appearance or form, typically for camouflage or concealment.",
+        "justification": "Both relations describe specific mimicry strategies (twig mimicry, leaf mimicry) whose defining property is visual resemblance to the referenced plant structure (twigs, leaves). The common predicate is visual resemblance, without implying genetic or taxonomic identity, so a generic appearance-based resemblance predicate is appropriate and reusable.",
+        "remark": null,
+        "confidence": 0.94
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_eeeb624488dd",
+          "RelR_6d68f46ba528"
+        ],
+        "rel_cls": "mimicry_resemblance_relation",
+        "justification": "These edges both describe biological mimicry where one entity (a camouflage strategy) is defined by its resemblance to another entity (a background plant structure). Grouping them under a mimicry-focused resemblance class captures this shared mechanism and distinguishes it from other resemblance or identity relations.",
+        "remark": null,
+        "confidence": 0.93
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_eeeb624488dd",
+          "RelR_6d68f46ba528"
+        ],
+        "rel_cls_group": "IDENTITY",
+        "justification": "The core semantic dimension is similarity/likeness of appearance between subject and object, i.e., a form of identity or equivalence in visual traits, rather than composition, causality, or spatial location. Thus these belong best under a broad identity/similarity group.",
+        "remark": "Could alternatively be modeled under an ASSOCIATION-like group in future if a separate similarity group is introduced.",
+        "confidence": 0.88
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_eeeb624488dd",
+        "RelR_6d68f46ba528"
+      ],
+      "canonical_rel_name": "resembles_in_appearance",
+      "canonical_rel_desc": "Subject is a type of mimicry strategy that visually resembles the object in appearance or form, typically for camouflage or concealment.",
+      "justification": "Both relations describe specific mimicry strategies (twig mimicry, leaf mimicry) whose defining property is visual resemblance to the referenced plant structure (twigs, leaves). The common predicate is visual resemblance, without implying genetic or taxonomic identity, so a generic appearance-based resemblance predicate is appropriate and reusable.",
+      "remark": null,
+      "confidence": 0.94
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_eeeb624488dd",
+        "RelR_6d68f46ba528"
+      ],
+      "rel_cls": "mimicry_resemblance_relation",
+      "justification": "These edges both describe biological mimicry where one entity (a camouflage strategy) is defined by its resemblance to another entity (a background plant structure). Grouping them under a mimicry-focused resemblance class captures this shared mechanism and distinguishes it from other resemblance or identity relations.",
+      "remark": null,
+      "confidence": 0.93
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_eeeb624488dd",
+        "RelR_6d68f46ba528"
+      ],
+      "rel_cls_group": "IDENTITY",
+      "justification": "The core semantic dimension is similarity/likeness of appearance between subject and object, i.e., a form of identity or equivalence in visual traits, rather than composition, causality, or spatial location. Thus these belong best under a broad identity/similarity group.",
+      "remark": "Could alternatively be modeled under an ASSOCIATION-like group in future if a separate similarity group is introduced.",
+      "confidence": 0.88
+    }
+  ],
+  "timestamp": "2026-01-02T09:12:24Z"
+}

@@ -1,0 +1,99 @@
+{
+  "cluster_label": "15_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_27d033e04d06",
+      "relation_name": "occurs_during",
+      "rel_desc": "Metamorphosis is the transformation process that takes place during the pupa stage of the butterfly life cycle.",
+      "rel_hint_type": "temporal",
+      "canonical_rel_name": "occurs_during",
+      "canonical_rel_desc": "Indicates that a process or transformation takes place during a specific temporal phase or life stage.",
+      "rel_cls": "life_stage_occurrence_relation",
+      "rel_cls_group": "TEMPORALITY",
+      "subject_entity_name": "metamorphosis",
+      "object_entity_name": "pupa stage of the butterfly life cycle",
+      "subject_class_label": "Butterfly Metamorphosis Processes",
+      "subject_class_group": "Butterfly Metamorphosis, Anatomy, and Experiential States",
+      "object_class_label": "Butterfly pupa (chrysalis) life stage",
+      "object_class_group": "TBD",
+      "qualifiers": {
+        "TemporalQualifier": "during the pupa stage",
+        "SpatialQualifier": "inside the chrysalis",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": "During",
+        "OtherQualifier": null
+      },
+      "confidence": 0.82,
+      "remarks": [
+        "Stage linkage is inferred from biological knowledge in the text, not named explicitly in the same sentence.",
+        "Stage linkage is inferred from biological knowledge in the text, not named explicitly in the same sentence."
+      ]
+    },
+    {
+      "relation_id": "RelR_f4ce4b8c02c5",
+      "relation_name": "leads_to_stage",
+      "rel_desc": "Metamorphosis leads to the adult stage of the butterfly’s life cycle.",
+      "rel_hint_type": "life-cycle transition",
+      "canonical_rel_name": "results_in_life_stage",
+      "canonical_rel_desc": "Indicates that a biological process culminates in or brings about a particular life stage of an organism.",
+      "rel_cls": "life_cycle_transition_relation",
+      "rel_cls_group": "CAUSALITY",
+      "subject_entity_name": "metamorphosis",
+      "object_entity_name": "adult stage of a butterfly",
+      "subject_class_label": "Butterfly Metamorphosis Processes",
+      "subject_class_group": "Butterfly Metamorphosis, Anatomy, and Experiential States",
+      "object_class_label": "Adult Butterfly Life Stage",
+      "object_class_group": "Butterfly Biology & Life Cycle",
+      "qualifiers": {
+        "TemporalQualifier": "at the end of metamorphosis",
+        "SpatialQualifier": "emerges from the chrysalis",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "after",
+        "LogicalMarker": "after",
+        "OtherQualifier": "StageOrder: fourth and final stage of life cycle"
+      },
+      "confidence": 0.88,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_4545bd36cd1b",
+      "relation_name": "occurs_during",
+      "rel_desc": "Astonishing transformations occur during the pupa stage as part of metamorphosis.",
+      "rel_hint_type": "process_stage",
+      "canonical_rel_name": "occurs_during",
+      "canonical_rel_desc": "Indicates that a process or transformation takes place during a specific temporal phase or life stage.",
+      "rel_cls": "life_stage_occurrence_relation",
+      "rel_cls_group": "TEMPORALITY",
+      "subject_entity_name": "astonishing transformations",
+      "object_entity_name": "pupa stage of the butterfly life cycle",
+      "subject_class_label": "Butterfly Metamorphosis Processes",
+      "subject_class_group": "Butterfly Metamorphosis, Anatomy, and Experiential States",
+      "object_class_label": "Butterfly pupa (chrysalis) life stage",
+      "object_class_group": "TBD",
+      "qualifiers": {
+        "TemporalQualifier": "during metamorphic life stages",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "primarily but not exclusively associated with pupa stage",
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "MetamorphosisContext: egg → larva → pupa → adult"
+      },
+      "confidence": 0.62,
+      "remarks": [
+        "Relation primarily created to attach metamorphic context to a concrete life stage; transformations span multiple stages, not only pupa.",
+        "Relation primarily created to attach metamorphic context to a concrete life stage; transformations span multiple stages, not only pupa."
+      ]
+    }
+  ],
+  "llm_raw": "[]",
+  "parsed_steps": [],
+  "executed_decisions": [],
+  "timestamp": "2026-01-02T09:22:39Z"
+}

@@ -1,0 +1,48 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_bf6d759409fa",
+        "RelR_89f260736044",
+        "RelR_28d2994fd29a",
+        "RelR_e84d90311c99"
+      ],
+      "canonical_rel_name": "is_subtype_of",
+      "canonical_rel_desc": "Indicates that the subject is a more specific subtype, kind, or state of the object within a taxonomic or type hierarchy.",
+      "justification": "All four relations describe a taxonomic or type hierarchy where the subject is a more specific form of the object: twig mimicry and leaf mimicry are specific camouflage strategies; biased data is a problematic form/state of training data; opaque AI systems are a specific kind of AI systems. Normalizing these to a single predicate 'is_subtype_of' yields a consistent hierarchical edge in the KG.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_bf6d759409fa",
+        "RelR_89f260736044",
+        "RelR_28d2994fd29a",
+        "RelR_e84d90311c99"
+      ],
+      "rel_cls": "taxonomic_subtype_relation",
+      "justification": "Each relation encodes a taxonomic or type hierarchy where the subject is a more specific subtype, kind, or characteristic state of the object. Grouping them under a shared class 'taxonomic_subtype_relation' captures this family of hierarchical 'is-a' style links.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_bf6d759409fa",
+        "RelR_89f260736044",
+        "RelR_28d2994fd29a",
+        "RelR_e84d90311c99"
+      ],
+      "rel_cls_group": "HIERARCHY",
+      "justification": "All four relations describe hierarchical organization (subtype / kind-of / specific form) between subject and object, which belongs in a broad hierarchy-oriented relation group.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  }
+]

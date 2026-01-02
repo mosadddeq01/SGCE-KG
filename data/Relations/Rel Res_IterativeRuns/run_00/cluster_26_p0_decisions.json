@@ -1,0 +1,211 @@
+{
+  "cluster_label": "26_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_b88daef44b0e",
+      "relation_name": "depicts",
+      "rel_desc": "Stories depict predatory strangers as part of their narrative content.",
+      "rel_hint_type": "content",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "stories",
+      "object_entity_name": "strangers",
+      "subject_class_label": "Stories and Urban Legends",
+      "subject_class_group": "Storytelling & Narrative Dissemination",
+      "object_class_label": "Predatory Strangers in Cautionary Urban Legends",
+      "object_class_group": "Cautionary Urban Legends",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": "within cautionary urban legends",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "of",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.95,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_8232bcad3c55",
+      "relation_name": "depicts",
+      "rel_desc": "Stories depict children as vulnerable characters in the narrative.",
+      "rel_hint_type": "content",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "stories",
+      "object_entity_name": "children",
+      "subject_class_label": "Stories and Urban Legends",
+      "subject_class_group": "Storytelling & Narrative Dissemination",
+      "object_class_label": "Child Victims in Cautionary Urban Legends",
+      "object_class_group": "Cautionary Urban Legends",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": "within cautionary urban legends",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "of",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.9,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_407dabae2e6c",
+      "relation_name": "depicts",
+      "rel_desc": "Stories include cursed objects as central motifs.",
+      "rel_hint_type": "content",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "stories",
+      "object_entity_name": "cursed objects",
+      "subject_class_label": "Stories and Urban Legends",
+      "subject_class_group": "Storytelling & Narrative Dissemination",
+      "object_class_label": "Supernatural Phenomena and Manifestations",
+      "object_class_group": "Supernatural & Paranormal Domain",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": "within supernatural-themed urban legends",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "of",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.9,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_92d513d2058e",
+      "relation_name": "depicts",
+      "rel_desc": "Stories describe haunted houses characterized by dark pasts.",
+      "rel_hint_type": "content",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "stories",
+      "object_entity_name": "dark pasts",
+      "subject_class_label": "Stories and Urban Legends",
+      "subject_class_group": "Storytelling & Narrative Dissemination",
+      "object_class_label": "Supernatural Threat Backstories",
+      "object_class_group": "Supernatural & Paranormal Domain",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": "within haunted house legends",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "with",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.82,
+      "remarks": [
+        "Haunted houses themselves are not separate entities in this chunk; relation focuses on dark pasts as the represented aspect."
+      ]
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_b88daef44b0e\",\n        \"RelR_8232bcad3c55\",\n        \"RelR_407dabae2e6c\",\n        \"RelR_92d513d2058e\"\n      ],\n      \"canonical_rel_name\": \"depicts\",\n      \"canonical_rel_desc\": \"The subject narrative portrays, includes, or represents the object as part of its narrative content (e.g., characters, threats, cursed items, or backstories).\",\n      \"justification\": \"All four relations link 'stories' to elements that appear within their narrative content (predatory strangers, vulnerable children, cursed objects, dark pasts), with rel_hint_type='content' and similar descriptions using 'depicts' or 'include'. They share the same representational predicate: the story depicts/represents the referenced entity or concept.\",\n      \"remark\": null,\n      \"confidence\": 0.95\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_b88daef44b0e\",\n        \"RelR_8232bcad3c55\",\n        \"RelR_407dabae2e6c\",\n        \"RelR_92d513d2058e\"\n      ],\n      \"rel_cls\": \"narrative_depiction_relation\",\n      \"justification\": \"Each relation connects a narrative (story/urban legend) to an element that is represented within it, such as characters, threats, objects, or backstories. This is best modeled as a common class of narrative depiction/content relations, independent of the specific type of depicted element.\",\n      \"remark\": null,\n      \"confidence\": 0.94\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_b88daef44b0e\",\n        \"RelR_8232bcad3c55\",\n        \"RelR_407dabae2e6c\",\n        \"RelR_92d513d2058e\"\n      ],\n      \"rel_cls_group\": \"REPRESENTATION\",\n      \"justification\": \"The relations describe how stories represent or portray certain entities and concepts in their content. This is about representational content, not physical composition, causality, or hierarchy, so a broad group for representation/depiction is appropriate.\",\n      \"remark\": null,\n      \"confidence\": 0.92\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_b88daef44b0e",
+          "RelR_8232bcad3c55",
+          "RelR_407dabae2e6c",
+          "RelR_92d513d2058e"
+        ],
+        "canonical_rel_name": "depicts",
+        "canonical_rel_desc": "The subject narrative portrays, includes, or represents the object as part of its narrative content (e.g., characters, threats, cursed items, or backstories).",
+        "justification": "All four relations link 'stories' to elements that appear within their narrative content (predatory strangers, vulnerable children, cursed objects, dark pasts), with rel_hint_type='content' and similar descriptions using 'depicts' or 'include'. They share the same representational predicate: the story depicts/represents the referenced entity or concept.",
+        "remark": null,
+        "confidence": 0.95
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_b88daef44b0e",
+          "RelR_8232bcad3c55",
+          "RelR_407dabae2e6c",
+          "RelR_92d513d2058e"
+        ],
+        "rel_cls": "narrative_depiction_relation",
+        "justification": "Each relation connects a narrative (story/urban legend) to an element that is represented within it, such as characters, threats, objects, or backstories. This is best modeled as a common class of narrative depiction/content relations, independent of the specific type of depicted element.",
+        "remark": null,
+        "confidence": 0.94
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_b88daef44b0e",
+          "RelR_8232bcad3c55",
+          "RelR_407dabae2e6c",
+          "RelR_92d513d2058e"
+        ],
+        "rel_cls_group": "REPRESENTATION",
+        "justification": "The relations describe how stories represent or portray certain entities and concepts in their content. This is about representational content, not physical composition, causality, or hierarchy, so a broad group for representation/depiction is appropriate.",
+        "remark": null,
+        "confidence": 0.92
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_b88daef44b0e",
+        "RelR_8232bcad3c55",
+        "RelR_407dabae2e6c",
+        "RelR_92d513d2058e"
+      ],
+      "canonical_rel_name": "depicts",
+      "canonical_rel_desc": "The subject narrative portrays, includes, or represents the object as part of its narrative content (e.g., characters, threats, cursed items, or backstories).",
+      "justification": "All four relations link 'stories' to elements that appear within their narrative content (predatory strangers, vulnerable children, cursed objects, dark pasts), with rel_hint_type='content' and similar descriptions using 'depicts' or 'include'. They share the same representational predicate: the story depicts/represents the referenced entity or concept.",
+      "remark": null,
+      "confidence": 0.95
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_b88daef44b0e",
+        "RelR_8232bcad3c55",
+        "RelR_407dabae2e6c",
+        "RelR_92d513d2058e"
+      ],
+      "rel_cls": "narrative_depiction_relation",
+      "justification": "Each relation connects a narrative (story/urban legend) to an element that is represented within it, such as characters, threats, objects, or backstories. This is best modeled as a common class of narrative depiction/content relations, independent of the specific type of depicted element.",
+      "remark": null,
+      "confidence": 0.94
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_b88daef44b0e",
+        "RelR_8232bcad3c55",
+        "RelR_407dabae2e6c",
+        "RelR_92d513d2058e"
+      ],
+      "rel_cls_group": "REPRESENTATION",
+      "justification": "The relations describe how stories represent or portray certain entities and concepts in their content. This is about representational content, not physical composition, causality, or hierarchy, so a broad group for representation/depiction is appropriate.",
+      "remark": null,
+      "confidence": 0.92
+    }
+  ],
+  "timestamp": "2026-01-02T09:14:27Z"
+}

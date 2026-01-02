@@ -2,94 +2,82 @@
   {
     "function": "split_class",
     "args": {
-      "source_class_id": "ClsC_03e60d10",
+      "source_class_id": "ClsC_b049d5f9",
       "splits": [
         {
-          "name": "Sulfide Stress Cracking Mechanisms",
-          "description": "Cracking mechanisms in metals due to sulfide environments, including sulfide stress cracking.",
-          "class_type_hint": "Damage Mechanism",
-          "member_ids": ["En_a9e4aa90"],
-          "provisional_id": "SPLIT_SSC_ClsC_03e60d10"
+          "name": "Caterpillar Rapid Growth",
+          "description": "The rapid increase in size and mass experienced by caterpillars during the larval stage.",
+          "class_type_hint": "Biological Process",
+          "member_ids": [
+            "En_7f07fa15"
+          ],
+          "provisional_id": "Split_CaterpillarRapidGrowth"
         },
         {
-          "name": "Acid Stress Corrosion Cracking Mechanisms",
-          "description": "Cracking mechanisms in metals due to acid environments, including polythionic acid stress corrosion cracking.",
-          "class_type_hint": "Damage Mechanism",
-          "member_ids": ["En_c7aaaee0"],
-          "provisional_id": "SPLIT_ASCC_ClsC_03e60d10"
+          "name": "Caterpillar Molting",
+          "description": "The biological process by which caterpillars periodically shed and replace their external skin as they grow.",
+          "class_type_hint": "Biological Process",
+          "member_ids": [
+            "En_0d334a9d"
+          ],
+          "provisional_id": "Split_CaterpillarMolting"
         }
       ],
-      "justification": "ClsC_03e60d10 is overloaded, grouping sulfide and acid mechanisms that are distinct in cause and industry treatment; splitting improves schema clarity.",
-      "remark": null,
-      "confidence": 0.92
-    }
-  },
-  {
-    "function": "merge_classes",
-    "args": {
-      "class_ids": [
-        "ClsC_7d8ac253",
-        "SPLIT_SSC_ClsC_03e60d10"
-      ],
-      "provisional_id": "MERGE_Hydrogen_Sulfide_Cracking",
-      "new_name": "Hydrogen and Sulfide-Induced Cracking Mechanisms",
-      "new_description": "Cracking mechanisms in metals caused by hydrogen and/or sulfide environments, including SOHIC, HIC, and sulfide stress cracking.",
-      "new_class_type_hint": "Damage Mechanism",
-      "justification": "SOHIC, HIC, and sulfide stress cracking are closely related hydrogen/sulfide-induced mechanisms, often co-occurring and treated together in industry standards.",
-      "remark": null,
-      "confidence": 0.93
+      "justification": "The original class bundles two distinct biological processes (growth vs. molting) that are better modeled as separate process classes for clarity and reuse.",
+      "remark": "Source class has been decomposed into distinct growth and molting process classes; consider deprecating or repurposing this container class in a later cleanup step.",
+      "confidence": 0.86
     }
   },
   {
     "function": "modify_class",
     "args": {
-      "class_id": "MERGE_Hydrogen_Sulfide_Cracking",
-      "new_name": null,
-      "new_description": null,
-      "new_class_type_hint": null,
-      "new_class_group": "Environmental Cracking Mechanisms",
+      "class_id": "Split_CaterpillarRapidGrowth",
+      "new_name": "Caterpillar Rapid Growth",
+      "new_description": "The rapid increase in size and mass experienced by caterpillars during the larval stage.",
+      "new_class_type_hint": "Biological Process",
+      "new_class_group": "Caterpillar Anatomy and Physiology",
       "remark": null,
-      "justification": "Assigns correct Class_Group to merged hydrogen/sulfide-induced cracking class for schema consistency.",
-      "confidence": 0.95
+      "justification": "Assign a coherent Class_Group and confirm metadata so this new growth-focused process class is properly connected to other caterpillar biology classes.",
+      "confidence": 0.88
     }
   },
   {
     "function": "modify_class",
     "args": {
-      "class_id": "SPLIT_ASCC_ClsC_03e60d10",
-      "new_name": null,
-      "new_description": null,
-      "new_class_type_hint": null,
-      "new_class_group": "Environmental Cracking Mechanisms",
+      "class_id": "Split_CaterpillarMolting",
+      "new_name": "Caterpillar Molting Process",
+      "new_description": "The periodic shedding and replacement of a caterpillar’s external skin (integument) during growth.",
+      "new_class_type_hint": "Biological Process",
+      "new_class_group": "Caterpillar Anatomy and Physiology",
       "remark": null,
-      "justification": "Assigns correct Class_Group to acid stress corrosion cracking class for schema consistency.",
-      "confidence": 0.95
+      "justification": "Assign a coherent Class_Group and clarify that this class specifically represents the molting process, which is closely related to integument structure.",
+      "confidence": 0.9
     }
   },
   {
     "function": "modify_class",
     "args": {
-      "class_id": "ClsC_e9a1c8ba",
-      "new_name": null,
-      "new_description": null,
-      "new_class_type_hint": null,
-      "new_class_group": "Environmental Cracking Mechanisms",
-      "remark": null,
-      "justification": "Confirms and standardizes Class_Group for general environmental cracking mechanisms.",
-      "confidence": 0.95
+      "class_id": "ClsC_b049d5f9",
+      "new_name": "Caterpillar Growth and Molting (legacy container)",
+      "new_description": "Former umbrella class for caterpillar growth and molting processes; entities have been moved into more specific subclasses.",
+      "new_class_type_hint": "Biological Process",
+      "new_class_group": "Caterpillar Anatomy and Physiology",
+      "remark": "This class is now effectively empty after splitting; consider deprecating or hiding it from primary use.",
+      "justification": "Update the legacy source class metadata to reflect that it has been decomposed, preventing future misinterpretation as an active process class.",
+      "confidence": 0.82
     }
   },
   {
     "function": "modify_class",
     "args": {
-      "class_id": "ClsC_47ffa62a",
-      "new_name": null,
-      "new_description": null,
-      "new_class_type_hint": null,
-      "new_class_group": "Environmental Cracking Mechanisms",
+      "class_id": "ClsC_13dfd95d",
+      "new_name": "Caterpillar Integument (Skin)",
+      "new_description": "The external anatomical covering of caterpillars, including the skin and associated surface structures that are shed and replaced during growth and molting.",
+      "new_class_type_hint": "Anatomical Structure",
+      "new_class_group": "Caterpillar Anatomy and Physiology",
       "remark": null,
-      "justification": "Confirms and standardizes Class_Group for general stress corrosion cracking mechanisms.",
-      "confidence": 0.95
+      "justification": "Confirm and slightly refine the description while keeping the shared Class_Group so that this anatomical class remains clearly linked to related growth and molting process classes.",
+      "confidence": 0.9
     }
   }
 ]

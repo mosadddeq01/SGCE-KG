@@ -1,103 +1,132 @@
 [
   {
-    "function": "split_class",
-    "args": {
-      "source_class_id": "ClsR_b38940f6",
-      "splits": [
-        {
-          "name": "Fitness-For-Service Standards & Reports",
-          "description": "Standards and reports focused on fitness-for-service evaluation and assessment of industrial equipment integrity.",
-          "class_type_hint": "Standard/Report",
-          "member_ids": [
-            "En_95198f7a",
-            "En_c25b73ff"
-          ],
-          "provisional_id": "SPLIT_FFS_Standards"
-        }
-      ],
-      "justification": "Entities 'RP 579' and 'MPC Report FS-26' are both focused on fitness-for-service evaluation, which is a distinct subdomain within industrial equipment standards and reports; splitting improves schema clarity.",
-      "remark": null,
-      "confidence": 0.92
-    }
-  },
-  {
-    "function": "reassign_entities",
-    "args": {
-      "entity_ids": [
-        "En_c25b73ff"
-      ],
-      "from_class_id": "ClsC_ed0048e2",
-      "to_class_id": "SPLIT_FFS_Standards",
-      "justification": "MPC Report FS-26 is a fitness-for-service report and fits better with other FFS standards than as a standalone class.",
-      "remark": null,
-      "confidence": 0.95
-    }
-  },
-  {
     "function": "merge_classes",
     "args": {
       "class_ids": [
-        "ClsC_ed0048e2"
+        "ClsC_f3159e95",
+        "ClsC_c3af27b0",
+        "ClsC_e1ee2a50"
       ],
-      "provisional_id": "MERGED_EMPTY_CLSC_ED0048E2",
-      "new_name": "Empty Class Placeholder",
-      "new_description": "This class is now empty after entity reassignment and should be reviewed for removal.",
-      "new_class_type_hint": "Placeholder",
-      "justification": "ClsC_ed0048e2 is now empty after entity reassignment; placeholder created for schema integrity and human review.",
-      "remark": "This class is now empty and should be considered for removal in a future iteration.",
-      "confidence": 0.8
-    }
-  },
-  {
-    "function": "modify_class",
-    "args": {
-      "class_id": "SPLIT_FFS_Standards",
-      "new_name": "Fitness-For-Service Standards & Reports",
-      "new_description": "Standards and reports focused on fitness-for-service evaluation and assessment of industrial equipment integrity.",
-      "new_class_type_hint": "Standard/Report",
-      "new_class_group": "Industrial Standards & References",
+      "provisional_id": "MERGE(ClsC_f3159e95|ClsC_c3af27b0|ClsC_e1ee2a50)",
+      "new_name": "AI Societal Impacts and Implications",
+      "new_description": "Societal-level impacts, risks, and opportunities associated with AI technologies, including economic effects (productivity, job displacement, inequality), concentration of power, broad societal consequences, and the potential of AI to benefit society.",
+      "new_class_type_hint": "Societal Impact",
+      "justification": "All three classes describe overlapping high-level societal effects and opportunities of AI (efficiency, productivity, inequality, concentration of power, broad societal impact, potential of AI), so maintaining separate classes would be redundant.",
       "remark": null,
-      "justification": "Assigning clear name, description, and class group to the new split class for schema consistency.",
-      "confidence": 0.95
-    }
-  },
-  {
-    "function": "modify_class",
-    "args": {
-      "class_id": "ClsR_b38940f6",
-      "new_name": "General Industrial Equipment Standards",
-      "new_description": "Standards and codes for construction, inspection, assessment, and safe operation of industrial equipment, excluding fitness-for-service standards.",
-      "new_class_type_hint": "Standard",
-      "new_class_group": "Industrial Standards & References",
-      "remark": null,
-      "justification": "Updating class name and description to reflect removal of fitness-for-service standards and clarify scope.",
       "confidence": 0.93
     }
   },
+
+  /* ---------- GROUP 1: AI Technologies, Systems & Data ---------- */
+
   {
     "function": "modify_class",
     "args": {
-      "class_id": "ClsC_45b546e0",
-      "new_name": "ASM Metals Handbooks",
-      "new_description": "Comprehensive reference volumes on metals, including properties, corrosion, and failure analysis, supporting industrial standards.",
-      "new_class_type_hint": "Reference Material",
-      "new_class_group": "Industrial Standards & References",
+      "class_id": "ClsC_7884cff9",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "AI Technologies, Systems & Data",
       "remark": null,
-      "justification": "Confirming class group and metadata for ASM Metals Handbooks; no structural change needed.",
+      "justification": "Covers AI training datasets and their properties, fitting the core technology-and-data layer of AI systems rather than ethics or societal impact.",
       "confidence": 0.9
     }
   },
   {
     "function": "modify_class",
     "args": {
-      "class_id": "ClsR_d7469e03",
-      "new_name": "Corrosion and Materials References",
-      "new_description": "Reference materials and manuals focused on corrosion, material behavior, and industry practices in petrochemical and industrial contexts.",
-      "new_class_type_hint": "Reference Material",
-      "new_class_group": "Industrial Standards & References",
+      "class_id": "ClsC_7d013e67",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "AI Technologies, Systems & Data",
       "remark": null,
-      "justification": "Confirming class group and metadata for Corrosion and Materials References; no structural change needed.",
+      "justification": "Defines problematic subsets of training data (biased, incomplete), which are technical/data quality aspects of AI systems.",
       "confidence": 0.9
     }
-  }
-]
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_48eeb186",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "AI Technologies, Systems & Data",
+      "remark": null,
+      "justification": "Represents AI technologies and Artificial Intelligence as core technological systems, clearly fitting the technology-and-systems layer.",
+      "confidence": 0.96
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_885caf33",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "AI Technologies, Systems & Data",
+      "remark": null,
+      "justification": "Describes development and deployment lifecycle stages of AI technologies, a process-level part of the technology stack.",
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_bd45abda",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "AI Technologies, Systems & Data",
+      "remark": null,
+      "justification": "Explicitly models AI systems as sociotechnical systems that collect data and make decisions, central to the technical layer.",
+      "confidence": 0.94
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_8793c241",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "AI Technologies, Systems & Data",
+      "remark": null,
+      "justification": "‘Massive amounts of data’ describes large datasets collected and analyzed by AI systems, a data-asset aspect of AI technology.",
+      "confidence": 0.88
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_bae93eec",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "AI Technologies, Systems & Data",
+      "remark": null,
+      "justification": "Hiring processes here are generic organizational workflows that can be augmented by AI, best grouped with other core processes around AI use.",
+      "confidence": 0.82
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_782428d3",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "AI Technologies, Systems & Data",
+      "remark": null,
+      "justification": "Decision‑making processes (often AI-supported) are core process units in which AI operates, aligning with the systems-and-process layer.",
+      "confidence": 0.84
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_2437d804",
+      "new_name": null,
+      "new_description": null,
+      "new_class

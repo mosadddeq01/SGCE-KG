@@ -54,8 +54,10 @@ IMPORTANT FIELD DISTINCTIONS
 
 - remarks (optional, internal):
   Free-text notes attached to a class, used to flag important issues that are
-  outside the scope of structural changes (e.g., suspected entity-level duplicates
-  that should be checked elsewhere).
+  outside the scope of structural changes (e.g., upstream entity resolution that you suspect is wrong, or entities that
+  look identical but should not be changed here), DO NOT try to fix them via merge or reassign.
+   Instead, attach a human-facing remark via modify_class (using the 'remark' field)
+   so that a human can review it later.
 
 Class_Group is NOT a synonym of class_type_hint.
 
@@ -308,186 +310,932 @@ Each class includes:
 
 [
   {
-    "candidate_id": "ClsC_45b546e0",
-    "class_label": "ASM Metals Handbooks",
-    "class_description": "Comprehensive reference volumes on metals, including properties, corrosion, and failure analysis, supporting industrial standards.",
-    "class_type_hint": "Reference Material",
-    "class_group": "Industrial Standards & References",
-    "confidence": 0.95,
-    "evidence_excerpt": "ASM Metals Handbook volumes cover properties, corrosion, and failure analysis.",
-    "member_ids": [
-      "En_5be2b70d",
-      "En_529021da",
-      "En_b3dfb229"
-    ],
-    "members": [
-      {
-        "id": "En_5be2b70d",
-        "entity_name": "ASM Metals Handbook Volume 1",
-        "entity_description": "Reference for properties and selection of iron, steels, and high-performance alloys.",
-        "entity_type_hint": "Reference"
-      },
-      {
-        "id": "En_529021da",
-        "entity_name": "ASM Metals Handbook Volume 13",
-        "entity_description": "Reference for corrosion in petroleum refining and petrochemical operations.",
-        "entity_type_hint": "Reference"
-      },
-      {
-        "id": "En_b3dfb229",
-        "entity_name": "ASM Metals Handbook Volume 11",
-        "entity_description": "Reference for failure analysis and prevention.",
-        "entity_type_hint": "Reference"
-      }
-    ],
-    "remarks": []
-  },
-  {
-    "candidate_id": "ClsC_ed0048e2",
-    "class_label": "MPC Report FS-26",
-    "class_description": "A specific report detailing fitness-for-service evaluation procedures for pressure vessels, tanks, and piping.",
-    "class_type_hint": "Report",
-    "class_group": "Industrial Standards & References",
-    "confidence": 0.1,
-    "evidence_excerpt": "",
-    "member_ids": [
-      "En_c25b73ff"
-    ],
-    "members": [
-      {
-        "id": "En_c25b73ff",
-        "entity_name": "MPC Report FS-26",
-        "entity_description": "Fitness-For-Service evaluation procedures for operating pressure vessels, tanks, and piping.",
-        "entity_type_hint": "Report"
-      }
-    ],
-    "remarks": [
-      "This class contains a single report that is highly specific; consider merging or reassigning in future iterations if more similar reports are found.",
-      "This class currently contains only a single, highly specific report. Consider merging with a broader 'Fitness-For-Service Standards & Reports' class if more similar reports are identified in future iterations."
-    ]
-  },
-  {
-    "candidate_id": "ClsR_b38940f6",
-    "class_label": "Industrial Equipment Standards",
-    "class_description": "Standards and codes for construction, inspection, assessment, and safe operation of industrial equipment, including pressure vessels, heat exchangers, and welded structures.",
-    "class_type_hint": "Standard",
-    "class_group": "Industrial Standards & References",
-    "confidence": 0.95,
-    "evidence_excerpt": "Codes for calculating heater tube thickness and construction of pressure vessels.",
-    "member_ids": [
-      "En_3508599f",
-      "En_3d8a8447",
-      "En_cc2f7cce",
-      "En_02b98d5e",
-      "En_89226ca0",
-      "En_95198f7a",
-      "En_e5fa14ee",
-      "En_45419999",
-      "En_658db0c3",
-      "En_4e2351be",
-      "En_1a045908",
-      "En_e947261b"
-    ],
-    "members": [
-      {
-        "id": "En_3508599f",
-        "entity_name": "API 530",
-        "entity_description": "Pressure Vessel Inspection Code for calculating heater tube thickness in petroleum refineries.",
-        "entity_type_hint": "Standard"
-      },
-      {
-        "id": "En_3d8a8447",
-        "entity_name": "ASME Boiler and Pressure Vessel Code Section VIII",
-        "entity_description": "Rules for construction of pressure vessels.",
-        "entity_type_hint": "Standard"
-      },
-      {
-        "id": "En_cc2f7cce",
-        "entity_name": "Std. 660",
-        "entity_description": "Standard for Shell and Tube Heat Exchangers used in general refinery service.",
-        "entity_type_hint": "Standard"
-      },
-      {
-        "id": "En_02b98d5e",
-        "entity_name": "ASME Boiler and Pressure Vessel Code Section III",
-        "entity_description": "Rules for construction of nuclear power plant components.",
-        "entity_type_hint": "Standard"
-      },
-      {
-        "id": "En_89226ca0",
-        "entity_name": "BSI 7910",
-        "entity_description": "Guidance on methods for assessing the acceptability of flaws in fusion welded structures.",
-        "entity_type_hint": "Standard"
-      },
-      {
-        "id": "En_95198f7a",
-        "entity_name": "RP 579",
-        "entity_description": "Fitness-For-Service standard for assessing the integrity of equipment.",
-        "entity_type_hint": "Standard"
-      },
-      {
-        "id": "En_e5fa14ee",
-        "entity_name": "Publ. 581",
-        "entity_description": "Risk-Based Inspection - Base Resource Document for risk assessment.",
-        "entity_type_hint": "Standard"
-      },
-      {
-        "id": "En_45419999",
-        "entity_name": "RP 751",
-        "entity_description": "Guidelines for the safe operation of hydrofluoric acid alkylation units.",
-        "entity_type_hint": "Standard"
-      },
-      {
-        "id": "En_658db0c3",
-        "entity_name": "RP 932-B",
-        "entity_description": "Guidelines for corrosion control in hydroprocessing reactor effluent air cooler systems.",
-        "entity_type_hint": "Standard"
-      },
-      {
-        "id": "En_4e2351be",
-        "entity_name": "RP 934",
-        "entity_description": "Requirements for materials and fabrication of heavy wall pressure vessels for high temperature and pressure service.",
-        "entity_type_hint": "Standard"
-      },
-      {
-        "id": "En_1a045908",
-        "entity_name": "RP 941",
-        "entity_description": "Standard for steels used in hydrogen service at elevated temperatures and pressures.",
-        "entity_type_hint": "Standard"
-      },
-      {
-        "id": "En_e947261b",
-        "entity_name": "RP 945",
-        "entity_description": "Guidelines for avoiding environmental cracking in amine units.",
-        "entity_type_hint": "Standard"
-      }
-    ],
-    "remarks": []
-  },
-  {
-    "candidate_id": "ClsR_d7469e03",
-    "class_label": "Corrosion and Materials References",
-    "class_description": "Reference materials and manuals focused on corrosion, material behavior, and industry practices in petrochemical and industrial contexts.",
-    "class_type_hint": "Reference Material",
-    "class_group": "Industrial Standards & References",
+    "candidate_id": "ClsC_42a3ff76",
+    "class_label": "AI Ethics Concepts",
+    "class_description": "Normative concepts used to evaluate the ethical acceptability of AI systems and their impacts, including bias as a harm mechanism and fairness/equity as desired conditions.",
+    "class_type_hint": "Ethical Principle",
+    "class_group": "TBD",
     "confidence": 0.9,
-    "evidence_excerpt": "Focus on corrosion in petrochemical operations.",
+    "evidence_excerpt": "AI bias as an ethical concern and damage mechanism; ensuring fairness and equity in decision-making processes.",
     "member_ids": [
-      "En_cae45bdb",
-      "En_e9ced1af"
+      "Can_5f153ade",
+      "En_6c6c854a",
+      "En_d9389e81"
     ],
     "members": [
       {
-        "id": "En_cae45bdb",
-        "entity_name": "ASTM MNL41",
-        "entity_description": "Manual on corrosion in the petrochemical industry.",
-        "entity_type_hint": "Reference"
+        "id": "Can_5f153ade",
+        "entity_name": "bias in AI systems",
+        "entity_description": "Systematic, unfair, or discriminatory tendencies in AI systems arising from biased or incomplete data, design choices, or deployment contexts, which can disadvantage certain groups or lead to inequitable outcomes.",
+        "entity_type_hint": "Concept"
       },
       {
-        "id": "En_e9ced1af",
-        "entity_name": "ASTM STP1428",
-        "entity_description": "Study on thermo-mechanical fatigue behavior of materials.",
-        "entity_type_hint": "Reference"
+        "id": "En_6c6c854a",
+        "entity_name": "fairness",
+        "entity_description": "The quality of decisions or processes being impartial and just across affected groups.",
+        "entity_type_hint": "Condition"
+      },
+      {
+        "id": "En_d9389e81",
+        "entity_name": "equity",
+        "entity_description": "Condition where outcomes and opportunities are adjusted to account for structural disadvantages.",
+        "entity_type_hint": "Condition"
+      }
+    ],
+    "remarks": []
+  },
+  {
+    "candidate_id": "ClsC_01330fd0",
+    "class_label": "AI Surveillance Technologies",
+    "class_description": "Technological systems that use artificial intelligence to monitor or track individuals or groups, such as facial recognition used for surveillance purposes.",
+    "class_type_hint": "Technology Category",
+    "class_group": "TBD",
+    "confidence": 0.86,
+    "evidence_excerpt": "facial recognition technology can be used for surveillance purposes",
+    "member_ids": [
+      "En_d3f49663",
+      "En_c9fa581d"
+    ],
+    "members": [
+      {
+        "id": "En_d3f49663",
+        "entity_name": "facial recognition technology",
+        "entity_description": "AI-based technology that identifies or verifies individuals using their facial features.",
+        "entity_type_hint": "Component"
+      },
+      {
+        "id": "En_c9fa581d",
+        "entity_name": "surveillance purposes",
+        "entity_description": "Use of technologies to monitor or track individuals or groups.",
+        "entity_type_hint": "OperatingCondition"
+      }
+    ],
+    "remarks": []
+  },
+  {
+    "candidate_id": "ClsC_2a41b464",
+    "class_label": "AI Institutional Actors",
+    "class_description": "Organizations that may deploy or develop AI and surveillance technologies, including public authorities and private-sector corporations.",
+    "class_type_hint": "Actor Category",
+    "class_group": "TBD",
+    "confidence": 0.9,
+    "evidence_excerpt": "abuse of power by governments or corporations",
+    "member_ids": [
+      "En_960e1bbe",
+      "En_ad2a7d77"
+    ],
+    "members": [
+      {
+        "id": "En_960e1bbe",
+        "entity_name": "governments",
+        "entity_description": "Public authorities that may deploy AI and surveillance technologies.",
+        "entity_type_hint": "Organization"
+      },
+      {
+        "id": "En_ad2a7d77",
+        "entity_name": "corporations",
+        "entity_description": "Private-sector organizations that may develop or use AI technologies, including facial recognition.",
+        "entity_type_hint": "Organization"
+      }
+    ],
+    "remarks": []
+  },
+  {
+    "candidate_id": "ClsC_dda92042",
+    "class_label": "Algorithmic Bias",
+    "class_description": "Concepts describing how AI or algorithmic systems produce unfair or discriminatory results, including the biased systems themselves and their outcomes.",
+    "class_type_hint": "Failure Mechanism",
+    "class_group": "TBD",
+    "confidence": 0.93,
+    "evidence_excerpt": "Biased algorithms in AI systems can lead to discriminatory outcomes.",
+    "member_ids": [
+      "En_93b27f7a",
+      "En_981f0165"
+    ],
+    "members": [
+      {
+        "id": "En_93b27f7a",
+        "entity_name": "discriminatory outcomes",
+        "entity_description": "Unfair or unequal results produced by AI systems against certain individuals or groups.",
+        "entity_type_hint": "FailureEvent"
+      },
+      {
+        "id": "En_981f0165",
+        "entity_name": "biased algorithms",
+        "entity_description": "Algorithms whose design or training data leads to systematically unfair or discriminatory outcomes.",
+        "entity_type_hint": "DamageMechanism"
+      }
+    ],
+    "remarks": []
+  },
+  {
+    "candidate_id": "ClsC_446932f3",
+    "class_label": "Discriminatory Treatment",
+    "class_description": "Events or states involving unjust or prejudicial treatment of individuals or groups, including general discrimination and its realized outcomes.",
+    "class_type_hint": "Failure Event",
+    "class_group": "TBD",
+    "confidence": 0.88,
+    "evidence_excerpt": "Unfair or unequal results and unjust or prejudicial treatment of individuals or groups.",
+    "member_ids": [
+      "En_93b27f7a",
+      "En_e24497ac"
+    ],
+    "members": [
+      {
+        "id": "En_93b27f7a",
+        "entity_name": "discriminatory outcomes",
+        "entity_description": "Unfair or unequal results produced by AI systems against certain individuals or groups.",
+        "entity_type_hint": "FailureEvent"
+      },
+      {
+        "id": "En_e24497ac",
+        "entity_name": "discrimination",
+        "entity_description": "Unjust or prejudicial treatment of individuals or groups based on protected characteristics.",
+        "entity_type_hint": "FailureEvent"
+      }
+    ],
+    "remarks": []
+  },
+  {
+    "candidate_id": "ClsC_f28cb1bb",
+    "class_label": "Protected Characteristics",
+    "class_description": "Demographic attributes that are legally or ethically protected and commonly referenced in discussions of discrimination and fairness.",
+    "class_type_hint": "Attribute",
+    "class_group": "TBD",
+    "confidence": 0.96,
+    "evidence_excerpt": "Race and gender as protected demographic characteristics in discrimination contexts.",
+    "member_ids": [
+      "En_aefbfcea",
+      "En_341fc99b"
+    ],
+    "members": [
+      {
+        "id": "En_aefbfcea",
+        "entity_name": "race",
+        "entity_description": "A protected demographic characteristic often associated with discriminatory treatment in decisions.",
+        "entity_type_hint": "Attribute"
+      },
+      {
+        "id": "En_341fc99b",
+        "entity_name": "gender",
+        "entity_description": "A protected demographic characteristic frequently implicated in biased or unequal treatment.",
+        "entity_type_hint": "Attribute"
+      }
+    ],
+    "remarks": []
+  },
+  {
+    "candidate_id": "ClsC_7884cff9",
+    "class_label": "AI Training Data",
+    "class_description": "Datasets used to train AI systems, including general training data and problematic subsets such as biased or incomplete data that can cause discriminatory or unreliable behavior.",
+    "class_type_hint": "Data Asset",
+    "class_group": "TBD",
+    "confidence": 0.96,
+    "evidence_excerpt": "AI systems are only as good as the data they are trained on, and if this data is biased or incomplete...",
+    "member_ids": [
+      "En_233d0bd9",
+      "En_9bc351d3",
+      "En_34e84e77"
+    ],
+    "members": [
+      {
+        "id": "En_233d0bd9",
+        "entity_name": "training data",
+        "entity_description": "Data used to train AI systems, determining their performance and behavior.",
+        "entity_type_hint": "DataAsset"
+      },
+      {
+        "id": "En_9bc351d3",
+        "entity_name": "biased data",
+        "entity_description": "Training data containing systematic prejudice or skew, leading to unfair AI behavior.",
+        "entity_type_hint": "DataAsset"
+      },
+      {
+        "id": "En_34e84e77",
+        "entity_name": "incomplete data",
+        "entity_description": "Training data that lacks sufficient or representative information about the target population or domain.",
+        "entity_type_hint": "DataAsset"
+      }
+    ],
+    "remarks": []
+  },
+  {
+    "candidate_id": "ClsC_7d013e67",
+    "class_label": "Problematic Training Data",
+    "class_description": "Subtypes of AI training data characterized by quality or representativeness issues, such as systematic bias or missing coverage, that can lead to discriminatory outcomes.",
+    "class_type_hint": "Data Quality Issue",
+    "class_group": "TBD",
+    "confidence": 0.93,
+    "evidence_excerpt": "if this data is biased or incomplete, it can lead to discriminatory outcomes",
+    "member_ids": [
+      "En_9bc351d3",
+      "En_34e84e77"
+    ],
+    "members": [
+      {
+        "id": "En_9bc351d3",
+        "entity_name": "biased data",
+        "entity_description": "Training data containing systematic prejudice or skew, leading to unfair AI behavior.",
+        "entity_type_hint": "DataAsset"
+      },
+      {
+        "id": "En_34e84e77",
+        "entity_name": "incomplete data",
+        "entity_description": "Training data that lacks sufficient or representative information about the target population or domain.",
+        "entity_type_hint": "DataAsset"
+      }
+    ],
+    "remarks": []
+  },
+  {
+    "candidate_id": "ClsC_f3159e95",
+    "class_label": "AI Socioeconomic Impacts",
+    "class_description": "Societal and economic outcomes influenced by AI adoption, including positive effects like increased productivity and negative effects such as job displacement and inequality.",
+    "class_type_hint": "Societal Impact",
+    "class_group": "TBD",
+    "confidence": 0.93,
+    "evidence_excerpt": "AI technologies... bring benefits, such as improved efficiency and productivity, [and] raise concerns about job displacement, inequality",
+    "member_ids": [
+      "En_8b90e664",
+      "En_ab9dfae7",
+      "En_a9f68a35"
+    ],
+    "members": [
+      {
+        "id": "En_8b90e664",
+        "entity_name": "productivity",
+        "entity_description": "Amount of useful output or work achieved, which AI can help to increase.",
+        "entity_type_hint": "Benefit"
+      },
+      {
+        "id": "En_ab9dfae7",
+        "entity_name": "job displacement",
+        "entity_description": "Loss or shifting of employment roles caused by adoption of AI technologies.",
+        "entity_type_hint": "Phenomenon"
+      },
+      {
+        "id": "En_a9f68a35",
+        "entity_name": "inequality",
+        "entity_description": "Uneven distribution of opportunities, income, or power that may be exacerbated by AI.",
+        "entity_type_hint": "Phenomenon"
+      }
+    ],
+    "remarks": []
+  },
+  {
+    "candidate_id": "ClsC_c3af27b0",
+    "class_label": "AI Societal Impacts",
+    "class_description": "Concepts describing how AI technologies affect society, including benefits like efficiency gains and risks such as concentrated power among dominant actors.",
+    "class_type_hint": "Societal Impact",
+    "class_group": "TBD",
+    "confidence": 0.86,
+    "evidence_excerpt": "AI technologies have the potential to bring about significant benefits... they also raise concerns about... concentration of power",
+    "member_ids": [
+      "En_985f94b9",
+      "En_26270cf5"
+    ],
+    "members": [
+      {
+        "id": "En_985f94b9",
+        "entity_name": "improved efficiency",
+        "entity_description": "Increase in the effectiveness and speed of processes enabled by AI technologies.",
+        "entity_type_hint": "Benefit"
+      },
+      {
+        "id": "En_26270cf5",
+        "entity_name": "concentration of power",
+        "entity_description": "Accumulation of decision-making and economic influence in a small group due to AI.",
+        "entity_type_hint": "Phenomenon"
+      }
+    ],
+    "remarks": []
+  },
+  {
+    "candidate_id": "ClsC_5df9057e",
+    "class_label": "AI Power Holders",
+    "class_description": "Entities that may hold or embody concentrated economic and decision-making power in the AI ecosystem, such as dominant corporations.",
+    "class_type_hint": "Actor",
+    "class_group": "TBD",
+    "confidence": 0.8,
+    "evidence_excerpt": "concentration of power in the hands of a few corporations",
+    "member_ids": [
+      "En_26270cf5",
+      "En_5420c77a"
+    ],
+    "members": [
+      {
+        "id": "En_26270cf5",
+        "entity_name": "concentration of power",
+        "entity_description": "Accumulation of decision-making and economic influence in a small group due to AI.",
+        "entity_type_hint": "Phenomenon"
+      },
+      {
+        "id": "En_5420c77a",
+        "entity_name": "corporations",
+        "entity_description": "Large business organizations that may control powerful AI technologies and resources.",
+        "entity_type_hint": "Organization"
+      }
+    ],
+    "remarks": []
+  },
+  {
+    "candidate_id": "ClsC_7aefe6ac",
+    "class_label": "Privacy Rights",
+    "class_description": "Ethical and legal concepts concerned with individuals’ control over personal and sensitive information, especially in technological and AI contexts.",
+    "class_type_hint": "Ethical Principle",
+    "class_group": "TBD",
+    "confidence": 0.93,
+    "evidence_excerpt": "Ethical-legal right and concern over control and protection of personal information.",
+    "member_ids": [
+      "Can_6d842f51",
+      "Can_38441217"
+    ],
+    "members": [
+      {
+        "id": "Can_6d842f51",
+        "entity_name": "right to privacy",
+        "entity_description": "The legal and moral rights of individuals to keep their personal information and activities private and to control access to their personal data.",
+        "entity_type_hint": "EthicalPrinciple"
+      },
+      {
+        "id": "Can_38441217",
+        "entity_name": "privacy",
+        "entity_description": "An ethical concern and conceptual issue regarding the protection of personal and sensitive information in the context of AI technologies.",
+        "entity_type_hint": "Concept"
+      }
+    ],
+    "remarks": []
+  },
+  {
+    "candidate_id": "ClsC_3855a314",
+    "class_label": "AI System Responsibility Concepts",
+    "class_description": "Concepts involved in discussions of responsibility and accountability for AI behavior, including the AI system as a potential actor and the errors or harms it produces.",
+    "class_type_hint": "Responsibility Concept",
+    "class_group": "TBD",
+    "confidence": 0.78,
+    "evidence_excerpt": "Who is responsible when an AI system makes a mistake or causes harm?",
+    "member_ids": [
+      "Can_0211509c",
+      "En_225b9bfb"
+    ],
+    "members": [
+      {
+        "id": "Can_0211509c",
+        "entity_name": "AI system error or harm",
+        "entity_description": "An erroneous action, decision, or resulting negative impact produced by an AI system.",
+        "entity_type_hint": "FailureEvent"
+      },
+      {
+        "id": "En_225b9bfb",
+        "entity_name": "AI system itself",
+        "entity_description": "The AI system considered as a potential bearer of responsibility.",
+        "entity_type_hint": "Actor"
+      }
+    ],
+    "remarks": []
+  },
+  {
+    "candidate_id": "ClsC_891fa7d2",
+    "class_label": "AI Ethics Discourse",
+    "class_description": "Conceptual and textual treatments of ethical dilemmas arising in the development and deployment of artificial intelligence systems, including both the abstract moral issues and documents explicitly discussing them.",
+    "class_type_hint": "Thematic Topic",
+    "class_group": "TBD",
+    "confidence": 0.86,
+    "evidence_excerpt": "Both refer to ethical dilemmas specific to AI development; one as a recurring ethical concept, the other as a document title on the same topic.",
+    "member_ids": [
+      "Can_22528e3f",
+      "En_69d1922a"
+    ],
+    "members": [
+      {
+        "id": "Can_22528e3f",
+        "entity_name": "ethical dilemmas in AI development",
+        "entity_description": "Complex moral conflicts and issues that arise in the design, development, and deployment of artificial intelligence technologies, including concerns such as privacy, bias, accountability, transparency, and societal impact.",
+        "entity_type_hint": "EthicalConcept"
+      },
+      {
+        "id": "En_69d1922a",
+        "entity_name": "Ethical Dilemmas in AI Development",
+        "entity_description": "Textual discussion focused on ethical dilemmas arising from the development of artificial intelligence systems.",
+        "entity_type_hint": "Document"
+      }
+    ],
+    "remarks": []
+  },
+  {
+    "candidate_id": "ClsC_890d54c4",
+    "class_label": "AI Decision Explainability",
+    "class_description": "Concepts related to AI systems’ decisions and the human-understandable explanations of how those decisions are produced, supporting transparency and accountability.",
+    "class_type_hint": "AI Governance Concept",
+    "class_group": "TBD",
+    "confidence": 0.86,
+    "evidence_excerpt": "Human-understandable explanations of how AI systems make decisions and execute internal processes; AI system decisions as outputs or choices.",
+    "member_ids": [
+      "Can_c1751366",
+      "En_560ba8c4"
+    ],
+    "members": [
+      {
+        "id": "Can_c1751366",
+        "entity_name": "explanations for AI decisions and processes",
+        "entity_description": "Human-understandable justifications and descriptions of how AI systems make decisions and execute internal processes, used to improve transparency, trust, and accountability.",
+        "entity_type_hint": "MitigationAction"
+      },
+      {
+        "id": "En_560ba8c4",
+        "entity_name": "AI system decisions",
+        "entity_description": "Outputs or choices produced by AI systems in response to inputs or situations.",
+        "entity_type_hint": "Event"
+      }
+    ],
+    "remarks": []
+  },
+  {
+    "candidate_id": "ClsC_75828e8c",
+    "class_label": "AI System Transparency",
+    "class_description": "Concepts describing the transparency of AI systems and its role in shaping stakeholder perceptions, including both the presence and absence of transparency and its impact on trust, acceptance, and adoption.",
+    "class_type_hint": "Socio-Technical Concept",
+    "class_group": "TBD",
+    "confidence": 0.93,
+    "evidence_excerpt": "Degree to which AI systems’ processes are understandable vs. condition where decision-making is not visible.",
+    "member_ids": [
+      "Can_36886a98",
+      "En_e13e3f0a"
+    ],
+    "members": [
+      {
+        "id": "Can_36886a98",
+        "entity_name": "transparency in AI systems",
+        "entity_description": "The degree to which AI systems’ processes and decision logic are open, understandable, and explainable to stakeholders, used both as a general property and as a design practice to enhance trust and accountability.",
+        "entity_type_hint": "Concept"
+      },
+      {
+        "id": "En_e13e3f0a",
+        "entity_name": "lack of transparency",
+        "entity_description": "Condition where AI systems’ decision-making processes are not visible or understandable to stakeholders.",
+        "entity_type_hint": "Condition"
+      }
+    ],
+    "remarks": []
+  },
+  {
+    "candidate_id": "ClsC_2cd5b2d8",
+    "class_label": "Trust in AI Systems",
+    "class_description": "Attitudinal states of stakeholders toward AI systems, covering both positive trust and negative distrust as key factors in system acceptance.",
+    "class_type_hint": "Psychological State",
+    "class_group": "TBD",
+    "confidence": 0.9,
+    "evidence_excerpt": "Distrust as skepticism or lack of confidence vs. trust as confidence AI will behave reliably.",
+    "member_ids": [
+      "En_4658a580",
+      "En_7a0d326e"
+    ],
+    "members": [
+      {
+        "id": "En_4658a580",
+        "entity_name": "distrust in AI systems",
+        "entity_description": "Skepticism or lack of confidence among users or stakeholders toward AI systems.",
+        "entity_type_hint": "Symptom"
+      },
+      {
+        "id": "En_7a0d326e",
+        "entity_name": "trust in AI systems",
+        "entity_description": "Confidence that AI systems will behave reliably and as intended.",
+        "entity_type_hint": "Concept"
+      }
+    ],
+    "remarks": []
+  },
+  {
+    "candidate_id": "ClsC_0682ec86",
+    "class_label": "AI System Uptake",
+    "class_description": "Concepts related to whether and how AI systems come into regular use, including willingness to use them and the process of integrating them into practice.",
+    "class_type_hint": "Socio-Technical Process",
+    "class_group": "TBD",
+    "confidence": 0.88,
+    "evidence_excerpt": "Acceptance as willingness to use vs. adoption as integration into regular use.",
+    "member_ids": [
+      "En_f182ba96",
+      "En_682f30cf"
+    ],
+    "members": [
+      {
+        "id": "En_f182ba96",
+        "entity_name": "acceptance of AI systems",
+        "entity_description": "The willingness of individuals or organizations to use or embrace AI systems.",
+        "entity_type_hint": "Condition"
+      },
+      {
+        "id": "En_682f30cf",
+        "entity_name": "adoption of AI systems",
+        "entity_description": "The process by which AI systems are integrated into regular use by users or institutions.",
+        "entity_type_hint": "Process"
+      }
+    ],
+    "remarks": []
+  },
+  {
+    "candidate_id": "ClsC_da406864",
+    "class_label": "AI Ethics Norms",
+    "class_description": "Normative concepts that govern how AI should be developed and deployed, including explicit rules, high-level moral principles, and calls to act in a responsible and ethical manner.",
+    "class_type_hint": "Governance Concept",
+    "class_group": "TBD",
+    "confidence": 0.86,
+    "evidence_excerpt": "Normative guidance for responsible, ethical AI development and deployment, including rules and principles.",
+    "member_ids": [
+      "Can_d2ad650f",
+      "En_8bdcb18c",
+      "En_3fa5be25"
+    ],
+    "members": [
+      {
+        "id": "Can_d2ad650f",
+        "entity_name": "ethical guidelines",
+        "entity_description": "Explicit normative rules and principles intended to govern the responsible development and deployment of AI technologies.",
+        "entity_type_hint": "MitigationAction"
+      },
+      {
+        "id": "En_8bdcb18c",
+        "entity_name": "ethical principles",
+        "entity_description": "Moral guidelines intended to shape how AI technologies are developed and used.",
+        "entity_type_hint": "Concept"
+      },
+      {
+        "id": "En_3fa5be25",
+        "entity_name": "responsible and ethical manner",
+        "entity_description": "A mode of developing and deploying AI that adheres to ethical principles and responsibility.",
+        "entity_type_hint": "OperatingCondition"
+      }
+    ],
+    "remarks": []
+  },
+  {
+    "candidate_id": "ClsC_faff2019",
+    "class_label": "AI Accountability",
+    "class_description": "Concepts concerned with assigning and structuring responsibility for AI system decisions, behaviors, and outcomes across involved actors.",
+    "class_type_hint": "Governance Concept",
+    "class_group": "TBD",
+    "confidence": 0.93,
+    "evidence_excerpt": "responsibility for AI decisions and impacts; establish clear lines of accountability",
+    "member_ids": [
+      "Can_677b3d47",
+      "En_e76bc9ae"
+    ],
+    "members": [
+      {
+        "id": "Can_677b3d47",
+        "entity_name": "accountability",
+        "entity_description": "The assignment of responsibility for AI system decisions, behaviors, and outcomes in their development and deployment.",
+        "entity_type_hint": "Concept"
+      },
+      {
+        "id": "En_e76bc9ae",
+        "entity_name": "lines of accountability",
+        "entity_description": "Specified allocations of responsibility among actors when AI systems cause outcomes.",
+        "entity_type_hint": "Concept"
+      }
+    ],
+    "remarks": []
+  },
+  {
+    "candidate_id": "ClsC_81c254c4",
+    "class_label": "AI Social Stakeholders",
+    "class_description": "Collective human groups and social structures (society, communities, and their well-being) that are impacted by AI technologies and considered in ethical AI discussions.",
+    "class_type_hint": "Stakeholder Group",
+    "class_group": "TBD",
+    "confidence": 0.86,
+    "evidence_excerpt": "Groups of people and society as a whole affected by AI and whose well-being is prioritized.",
+    "member_ids": [
+      "Can_35f75da6",
+      "En_e326b183",
+      "En_c7cdbd8a"
+    ],
+    "members": [
+      {
+        "id": "Can_35f75da6",
+        "entity_name": "society",
+        "entity_description": "The broader social collective or society as a whole that is impacted by AI systems and their deployment.",
+        "entity_type_hint": "Environment"
+      },
+      {
+        "id": "En_e326b183",
+        "entity_name": "well-being of individuals and communities",
+        "entity_description": "Overall health, welfare, and quality of life for people and social groups affected by AI.",
+        "entity_type_hint": "Concept"
+      },
+      {
+        "id": "En_c7cdbd8a",
+        "entity_name": "communities",
+        "entity_description": "Groups of people or societies collectively impacted by AI technologies.",
+        "entity_type_hint": "Actor"
+      }
+    ],
+    "remarks": []
+  },
+  {
+    "candidate_id": "ClsC_edea542b",
+    "class_label": "AI System Stakeholders",
+    "class_description": "Human parties directly involved with or impacted by AI systems, including those who design them, operate them, or are affected by their decisions.",
+    "class_type_hint": "Actor Category",
+    "class_group": "TBD",
+    "confidence": 0.93,
+    "evidence_excerpt": "Persons whose lives may be affected; people or organizations that design AI; end-users who deploy or interact with AI.",
+    "member_ids": [
+      "Can_cf564007",
+      "En_38023a87",
+      "En_a3e5ecec"
+    ],
+    "members": [
+      {
+        "id": "Can_cf564007",
+        "entity_name": "individuals",
+        "entity_description": "Persons whose lives, rights, or opportunities may be affected by AI system decisions.",
+        "entity_type_hint": "Actor"
+      },
+      {
+        "id": "En_38023a87",
+        "entity_name": "developers",
+        "entity_description": "People or organizations that design, build, or train AI systems.",
+        "entity_type_hint": "Actor"
+      },
+      {
+        "id": "En_a3e5ecec",
+        "entity_name": "users",
+        "entity_description": "End-users or operators who deploy or interact with AI systems.",
+        "entity_type_hint": "Actor"
+      }
+    ],
+    "remarks": []
+  },
+  {
+    "candidate_id": "ClsC_e1ee2a50",
+    "class_label": "AI Societal Implications",
+    "class_description": "High-level concepts concerning how artificial intelligence affects society and the beneficial opportunities it offers, including both its broad societal impact and its potential to be harnessed for social good.",
+    "class_type_hint": "Socio-Technical Concept",
+    "class_group": "TBD",
+    "confidence": 0.78,
+    "evidence_excerpt": "broader societal implications of AI technologies and harnessing the potential of AI for the benefit of all",
+    "member_ids": [
+      "Can_6e521b24",
+      "En_d21dd85b"
+    ],
+    "members": [
+      {
+        "id": "Can_6e521b24",
+        "entity_name": "societal impact of AI technologies",
+        "entity_description": "The broad social, economic, cultural, and ethical consequences that artificial intelligence and its applications may have on society, communities, and social structures.",
+        "entity_type_hint": "Phenomenon"
+      },
+      {
+        "id": "En_d21dd85b",
+        "entity_name": "potential of AI",
+        "entity_description": "The beneficial capabilities and opportunities offered by artificial intelligence systems.",
+        "entity_type_hint": "Concept"
+      }
+    ],
+    "remarks": []
+  },
+  {
+    "candidate_id": "ClsC_48eeb186",
+    "class_label": "Artificial Intelligence Technologies",
+    "class_description": "Concepts and systems related to artificial intelligence as a technological field, including the core technology and its concrete technological applications in society.",
+    "class_type_hint": "Technology Domain",
+    "class_group": "TBD",
+    "confidence": 0.86,
+    "evidence_excerpt": "AI technologies as concrete systems and Artificial Intelligence as the core technological field.",
+    "member_ids": [
+      "Can_c45dd68a",
+      "En_b2346235"
+    ],
+    "members": [
+      {
+        "id": "Can_c45dd68a",
+        "entity_name": "AI technologies",
+        "entity_description": "Technological systems, tools, and applications that use artificial intelligence methods and algorithms and are deployed across industries and daily life.",
+        "entity_type_hint": "Technology"
+      },
+      {
+        "id": "En_b2346235",
+        "entity_name": "Artificial Intelligence",
+        "entity_description": "A rapidly advancing technological field that is revolutionizing industries and daily life.",
+        "entity_type_hint": "Technology"
+      }
+    ],
+    "remarks": []
+  },
+  {
+    "candidate_id": "ClsC_885caf33",
+    "class_label": "AI Technology Lifecycle Processes",
+    "class_description": "Process stages in the lifecycle of AI technologies, covering their research, design, development, and subsequent deployment into real-world environments.",
+    "class_type_hint": "Process",
+    "class_group": "TBD",
+    "confidence": 0.9,
+    "evidence_excerpt": "Development and deployment described as distinct lifecycle stages for AI technologies.",
+    "member_ids": [
+      "Can_048be6b8",
+      "Can_f7dea021"
+    ],
+    "members": [
+      {
+        "id": "Can_048be6b8",
+        "entity_name": "development of AI technologies",
+        "entity_description": "The processes and activities involved in researching, designing, building, training, and improving artificial intelligence technologies and applications, including their preparation for deployment.",
+        "entity_type_hint": "Process"
+      },
+      {
+        "id": "Can_f7dea021",
+        "entity_name": "deployment of AI technologies",
+        "entity_description": "The process of releasing, integrating, and using AI technologies in real-world applications and environments.",
+        "entity_type_hint": "Process"
+      }
+    ],
+    "remarks": []
+  },
+  {
+    "candidate_id": "ClsC_bd45abda",
+    "class_label": "AI Systems",
+    "class_description": "Artificial intelligence systems that collect and analyze data, support or make decisions, and may operate autonomously using complex, often opaque algorithms.",
+    "class_type_hint": "Sociotechnical System",
+    "class_group": "TBD",
+    "confidence": 0.9,
+    "evidence_excerpt": "AI systems that collect and analyze data, make or support decisions, and may operate autonomously",
+    "member_ids": [
+      "Can_c983eba4"
+    ],
+    "members": [
+      {
+        "id": "Can_c983eba4",
+        "entity_name": "AI systems",
+        "entity_description": "Artificial intelligence systems that collect and analyze data, make or support decisions, and may operate autonomously using complex, often opaque algorithms.",
+        "entity_type_hint": "FunctionalUnit"
+      }
+    ],
+    "remarks": []
+  },
+  {
+    "candidate_id": "ClsC_43d1d6d8",
+    "class_label": "AI Regulations",
+    "class_description": "Formal legal and rule-based frameworks that govern the development, deployment, and use of AI technologies, including compliance obligations and enforcement mechanisms.",
+    "class_type_hint": "Governance Mechanism",
+    "class_group": "TBD",
+    "confidence": 0.9,
+    "evidence_excerpt": "Formal rules and legal frameworks designed to govern and control how AI technologies are developed, deployed, and used.",
+    "member_ids": [
+      "Can_1d58c2bc"
+    ],
+    "members": [
+      {
+        "id": "Can_1d58c2bc",
+        "entity_name": "regulations",
+        "entity_description": "Formal rules and legal frameworks designed to govern and control how AI technologies are developed, deployed, and used.",
+        "entity_type_hint": "MitigationAction"
+      }
+    ],
+    "remarks": []
+  },
+  {
+    "candidate_id": "ClsC_8793c241",
+    "class_label": "Massive Data Assets",
+    "class_description": "Large-scale datasets collected and analyzed by AI systems, typically involving extensive personal or behavioral information and raising privacy and governance concerns.",
+    "class_type_hint": "Data Asset",
+    "class_group": "TBD",
+    "confidence": 0.86,
+    "evidence_excerpt": "Large-scale datasets collected and analyzed by AI systems, raising privacy concerns.",
+    "member_ids": [
+      "En_ac8428bd"
+    ],
+    "members": [
+      {
+        "id": "En_ac8428bd",
+        "entity_name": "massive amounts of data",
+        "entity_description": "Large-scale datasets collected and analyzed by AI systems.",
+        "entity_type_hint": "DataAsset"
+      }
+    ],
+    "remarks": []
+  },
+  {
+    "candidate_id": "ClsC_c5c16241",
+    "class_label": "Abuse of Power",
+    "class_description": "Instances where authority or institutional power is misused, including when AI or surveillance technologies enable overreach or rights violations.",
+    "class_type_hint": "Societal Risk",
+    "class_group": "TBD",
+    "confidence": 0.86,
+    "evidence_excerpt": "Facial recognition technology used for surveillance, raising concerns about abuse of power by governments or corporations.",
+    "member_ids": [
+      "En_a423105c"
+    ],
+    "members": [
+      {
+        "id": "En_a423105c",
+        "entity_name": "abuse of power",
+        "entity_description": "Misuse of authority or power, potentially enabled by AI and surveillance tools.",
+        "entity_type_hint": "CausalHint"
+      }
+    ],
+    "remarks": []
+  },
+  {
+    "candidate_id": "ClsC_bae93eec",
+    "class_label": "Hiring Processes",
+    "class_description": "Organizational procedures and workflows used to evaluate, screen, and select job applicants, including both human and algorithmic decision steps.",
+    "class_type_hint": "Organizational Process",
+    "class_group": "TBD",
+    "confidence": 0.9,
+    "evidence_excerpt": "Organizational procedures and workflows used to evaluate and select job applicants.",
+    "member_ids": [
+      "En_bc8da22f"
+    ],
+    "members": [
+      {
+        "id": "En_bc8da22f",
+        "entity_name": "hiring processes",
+        "entity_description": "Organizational procedures and workflows used to evaluate and select job applicants.",
+        "entity_type_hint": "ProcessUnit"
+      }
+    ],
+    "remarks": []
+  },
+  {
+    "candidate_id": "ClsC_782428d3",
+    "class_label": "Decision-Making Processes",
+    "class_description": "Processes by which choices or judgments are made, including those supported or automated by AI, with attention to fairness and bias.",
+    "class_type_hint": "Process",
+    "class_group": "TBD",
+    "confidence": 0.86,
+    "evidence_excerpt": "choices or judgments are made, often supported or automated by AI; fairness and equity in decision-making",
+    "member_ids": [
+      "En_3362253d"
+    ],
+    "members": [
+      {
+        "id": "En_3362253d",
+        "entity_name": "decision-making processes",
+        "entity_description": "Processes by which choices or judgments are made, often supported or automated by AI.",
+        "entity_type_hint": "ProcessUnit"
+      }
+    ],
+    "remarks": []
+  },
+  {
+    "candidate_id": "ClsC_7c7ef516",
+    "class_label": "AI Transparency Ethics",
+    "class_description": "Ethical issues arising from the opacity of AI decision-making processes, focusing on challenges in interpreting, explaining, and justifying AI system outputs.",
+    "class_type_hint": "Ethical Concern",
+    "class_group": "TBD",
+    "confidence": 0.86,
+    "evidence_excerpt": "ethical dilemma in AI development as systems become complex and opaque, challenging to understand decisions",
+    "member_ids": [
+      "En_0818b970"
+    ],
+    "members": [
+      {
+        "id": "En_0818b970",
+        "entity_name": "ethical dilemma of transparency in AI",
+        "entity_description": "The ethical challenge posed by AI systems whose decision-making processes are difficult to interpret or explain, raising concerns about transparency.",
+        "entity_type_hint": "Concern"
+      }
+    ],
+    "remarks": []
+  },
+  {
+    "candidate_id": "ClsC_2437d804",
+    "class_label": "Opaque AI Systems",
+    "class_description": "AI systems whose internal decision-making processes are not readily interpretable or observable, raising challenges for transparency, accountability, and oversight.",
+    "class_type_hint": "System Characteristic",
+    "class_group": "TBD",
+    "confidence": 0.9,
+    "evidence_excerpt": "AI systems become more complex and opaque, making it challenging to understand how they arrive at their decisions.",
+    "member_ids": [
+      "En_b71727ac"
+    ],
+    "members": [
+      {
+        "id": "En_b71727ac",
+        "entity_name": "opaque AI systems",
+        "entity_description": "AI systems whose internal logic and decision processes are not easily observable or understandable, making their behavior difficult to interpret.",
+        "entity_type_hint": "SystemCharacteristic"
+      }
+    ],
+    "remarks": []
+  },
+  {
+    "candidate_id": "ClsC_5d345f2e",
+    "class_label": "AI Technology Harms",
+    "class_description": "Negative consequences, risks, and adverse impacts that can result from the development, deployment, or use of artificial intelligence technologies.",
+    "class_type_hint": "Risk Category",
+    "class_group": "TBD",
+    "confidence": 0.86,
+    "evidence_excerpt": "negative consequences and risks that may arise from the development and deployment of AI",
+    "member_ids": [
+      "En_1a97574a"
+    ],
+    "members": [
+      {
+        "id": "En_1a97574a",
+        "entity_name": "harms from AI technologies",
+        "entity_description": "Negative consequences and risks that may arise from the development and deployment of AI.",
+        "entity_type_hint": "FailureEvent"
       }
     ],
     "remarks": []
@@ -502,5 +1250,5 @@ Return ONLY the JSON array of ordered function calls.
 Return [] only if you are highly confident (> very strong evidence) that no change is needed.
 If any ambiguous or conflicting evidence exists, return a concrete ordered action list
 (with justifications and, optionally, confidence scores).
-You are a very proactive class-resolution assistant. (You are not called very proactive only by using modify_class for new_class_group. You must use other functions as well to be called a proactive class-resolution assistant.
+You are a very proactive class-resolution assistant. You are not called very proactive only by using modify_class for new_class_group. You must use other functions as well to be called a proactive class-resolution assistant.
 

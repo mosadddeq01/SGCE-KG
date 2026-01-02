@@ -1,0 +1,111 @@
+{
+  "cluster_label": 18,
+  "cluster_classes": [
+    {
+      "candidate_id": "ClsC_5a5ed473",
+      "class_label": "Butterfly Wings",
+      "class_description": "Anatomical wing structures of butterflies, including their initial post-emergence physical states prior to functional flight.",
+      "class_type_hint": "Anatomical Structure",
+      "class_group": "Butterfly Life Cycle & Metamorphosis",
+      "confidence": 0.86,
+      "evidence_excerpt": "wings of a butterfly… initial post-emergence state of a butterfly’s wings",
+      "member_ids": [
+        "Can_95454d35",
+        "En_e0dc8ccf"
+      ],
+      "members": [
+        {
+          "id": "Can_95454d35",
+          "entity_name": "butterfly wings",
+          "entity_description": "The flight-enabling appendages of a butterfly that develop during metamorphosis and must expand and harden before enabling flight.",
+          "entity_type_hint": "Component"
+        },
+        {
+          "id": "En_e0dc8ccf",
+          "entity_name": "soft, wrinkled butterfly wings",
+          "entity_description": "The initial post-emergence state of a butterfly’s wings, when they are soft and wrinkled before expansion and hardening.",
+          "entity_type_hint": "State"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsR_a2aed154",
+      "class_label": "Butterfly aesthetic state in flight",
+      "class_description": "The perceived aesthetic or experiential state of a butterfly in flight (e.g., beauty, grace), modeled as a phenomenological state rather than a biological life stage.",
+      "class_type_hint": "PhenomenologicalState",
+      "class_group": "Butterfly Aesthetic and Behavioral States",
+      "confidence": 0.8,
+      "evidence_excerpt": "newly emerged adult butterfly… moment of beauty and grace in flight",
+      "member_ids": [
+        "En_1f5ea1cb"
+      ],
+      "members": [
+        {
+          "id": "En_1f5ea1cb",
+          "entity_name": "aesthetic state of the butterfly",
+          "entity_description": "The perceived aesthetic state of an adult butterfly in flight, characterized as beautiful and graceful.",
+          "entity_type_hint": "State"
+        }
+      ],
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_5a5ed473\",\n      \"new_name\": null,\n      \"new_description\": null,\n      \"new_class_type_hint\": null,\n      \"new_class_group\": \"Butterfly Anatomy and Experiential States\",\n      \"remark\": null,\n      \"justification\": \"This class models the physical wing structures and immediate post-emergence state of butterfly wings, which should be grouped in the same higher-level domain as phenomenological butterfly states for a coherent butterfly-focused schema.\",\n      \"confidence\": 0.88\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsR_a2aed154\",\n      \"new_name\": \"Butterfly aesthetic state in flight\",\n      \"new_description\": \"The perceived aesthetic or experiential state of a butterfly in flight (e.g., beauty, grace), modeled as a phenomenological state rather than a biological life stage.\",\n      \"new_class_type_hint\": \"PhenomenologicalState\",\n      \"new_class_group\": \"Butterfly Anatomy and Experiential States\",\n      \"remark\": null,\n      \"justification\": \"This class captures an experiential state of butterflies and should share a Class_Group with anatomical butterfly concepts to connect physical structures and perceived aesthetic states within a unified butterfly schema while keeping the classes distinct.\",\n      \"confidence\": 0.86\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_5a5ed473",
+        "new_name": null,
+        "new_description": null,
+        "new_class_type_hint": null,
+        "new_class_group": "Butterfly Anatomy and Experiential States",
+        "remark": null,
+        "justification": "This class models the physical wing structures and immediate post-emergence state of butterfly wings, which should be grouped in the same higher-level domain as phenomenological butterfly states for a coherent butterfly-focused schema.",
+        "confidence": 0.88
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsR_a2aed154",
+        "new_name": "Butterfly aesthetic state in flight",
+        "new_description": "The perceived aesthetic or experiential state of a butterfly in flight (e.g., beauty, grace), modeled as a phenomenological state rather than a biological life stage.",
+        "new_class_type_hint": "PhenomenologicalState",
+        "new_class_group": "Butterfly Anatomy and Experiential States",
+        "remark": null,
+        "justification": "This class captures an experiential state of butterflies and should share a Class_Group with anatomical butterfly concepts to connect physical structures and perceived aesthetic states within a unified butterfly schema while keeping the classes distinct.",
+        "confidence": 0.86
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_5a5ed473",
+      "class_id_resolved": "ClsC_5a5ed473",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Butterfly Anatomy and Experiential States",
+      "remark": null,
+      "justification": "This class models the physical wing structures and immediate post-emergence state of butterfly wings, which should be grouped in the same higher-level domain as phenomenological butterfly states for a coherent butterfly-focused schema.",
+      "confidence": 0.88
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsR_a2aed154",
+      "class_id_resolved": "ClsR_a2aed154",
+      "new_name": "Butterfly aesthetic state in flight",
+      "new_description": "The perceived aesthetic or experiential state of a butterfly in flight (e.g., beauty, grace), modeled as a phenomenological state rather than a biological life stage.",
+      "new_class_type_hint": "PhenomenologicalState",
+      "new_class_group": "Butterfly Anatomy and Experiential States",
+      "remark": null,
+      "justification": "This class captures an experiential state of butterflies and should share a Class_Group with anatomical butterfly concepts to connect physical structures and perceived aesthetic states within a unified butterfly schema while keeping the classes distinct.",
+      "confidence": 0.86
+    }
+  ],
+  "provisional_to_real": {},
+  "timestamp": "2026-01-02T08:38:55Z"
+}

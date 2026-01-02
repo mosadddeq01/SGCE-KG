@@ -1,0 +1,205 @@
+{
+  "cluster_label": "42_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_c73faab887e3",
+      "relation_name": "warns",
+      "rel_desc": "Stories function as warnings directed at listeners.",
+      "rel_hint_type": "communicative",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "stories",
+      "object_entity_name": "listeners",
+      "subject_class_label": "Stories and Urban Legends",
+      "subject_class_group": "Storytelling & Narrative Dissemination",
+      "object_class_label": "Story and Legend Audiences (including Cautionary Narratives)",
+      "object_class_group": "Storytelling & Narrative Dissemination",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "in the world around them",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "warn",
+        "LogicalMarker": null,
+        "OtherQualifier": "Function: cautionary/educational"
+      },
+      "confidence": 0.98,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_4071c1502070",
+      "relation_name": "made_aware_of",
+      "rel_desc": "Listeners are made aware of perceived threats through the warnings in stories.",
+      "rel_hint_type": "awareness",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "listeners",
+      "object_entity_name": "perceived threats",
+      "subject_class_label": "Story and Legend Audiences (including Cautionary Narratives)",
+      "subject_class_group": "Storytelling & Narrative Dissemination",
+      "object_class_label": "Urban Legend Emotional Themes and Responses",
+      "object_class_group": "Urban Legend Emotional Dynamics",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": "through exposure to the stories",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "perceived; real or imagined",
+        "CausalHint": "warn about",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.82,
+      "remarks": [
+        "Connects two related danger/threat notions across sentences."
+      ]
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_c73faab887e3\"],\n      \"canonical_rel_name\": \"warns\",\n      \"canonical_rel_desc\": \"Indicates that the subject issues a warning or cautionary message directed toward the object.\",\n      \"justification\": \"The relation describes stories functioning as warnings directed at listeners; a simple predicate 'warns' captures this communicative function clearly.\",\n      \"remark\": null,\n      \"confidence\": 0.95\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_c73faab887e3\"],\n      \"rel_cls\": \"warning_communication_relation\",\n      \"justification\": \"This relation captures a specific type of communication where the primary purpose is to warn or caution the audience.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_c73faab887e3\"],\n      \"rel_cls_group\": \"COMMUNICATION\",\n      \"justification\": \"The core semantics involve a message being communicated from stories to listeners, fitting a broad communication-oriented grouping.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_4071c1502070\"],\n      \"canonical_rel_name\": \"becomes_aware_of\",\n      \"canonical_rel_desc\": \"Indicates that the subject attains awareness or recognition of the object.\",\n      \"justification\": \"The description states that listeners are made aware of perceived threats; modeling this as 'becomes_aware_of' captures the cognitive state change without encoding the causal mechanism in the predicate.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_4071c1502070\"],\n      \"rel_cls\": \"awareness_relation\",\n      \"justification\": \"The relation focuses on the listener’s awareness of threats, which belongs to a family of predicates about knowledge and awareness states.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_4071c1502070\"],\n      \"rel_cls_group\": \"COGNITION\",\n      \"justification\": \"The key semantic dimension is a cognitive/mental-state change (awareness of threats), which fits a broad cognition-related grouping.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_c73faab887e3"
+        ],
+        "canonical_rel_name": "warns",
+        "canonical_rel_desc": "Indicates that the subject issues a warning or cautionary message directed toward the object.",
+        "justification": "The relation describes stories functioning as warnings directed at listeners; a simple predicate 'warns' captures this communicative function clearly.",
+        "remark": null,
+        "confidence": 0.95
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_c73faab887e3"
+        ],
+        "rel_cls": "warning_communication_relation",
+        "justification": "This relation captures a specific type of communication where the primary purpose is to warn or caution the audience.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_c73faab887e3"
+        ],
+        "rel_cls_group": "COMMUNICATION",
+        "justification": "The core semantics involve a message being communicated from stories to listeners, fitting a broad communication-oriented grouping.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_4071c1502070"
+        ],
+        "canonical_rel_name": "becomes_aware_of",
+        "canonical_rel_desc": "Indicates that the subject attains awareness or recognition of the object.",
+        "justification": "The description states that listeners are made aware of perceived threats; modeling this as 'becomes_aware_of' captures the cognitive state change without encoding the causal mechanism in the predicate.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_4071c1502070"
+        ],
+        "rel_cls": "awareness_relation",
+        "justification": "The relation focuses on the listener's awareness of threats, which belongs to a family of predicates about knowledge and awareness states.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_4071c1502070"
+        ],
+        "rel_cls_group": "COGNITION",
+        "justification": "The key semantic dimension is a cognitive/mental-state change (awareness of threats), which fits a broad cognition-related grouping.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_c73faab887e3"
+      ],
+      "canonical_rel_name": "warns",
+      "canonical_rel_desc": "Indicates that the subject issues a warning or cautionary message directed toward the object.",
+      "justification": "The relation describes stories functioning as warnings directed at listeners; a simple predicate 'warns' captures this communicative function clearly.",
+      "remark": null,
+      "confidence": 0.95
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_c73faab887e3"
+      ],
+      "rel_cls": "warning_communication_relation",
+      "justification": "This relation captures a specific type of communication where the primary purpose is to warn or caution the audience.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_c73faab887e3"
+      ],
+      "rel_cls_group": "COMMUNICATION",
+      "justification": "The core semantics involve a message being communicated from stories to listeners, fitting a broad communication-oriented grouping.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_4071c1502070"
+      ],
+      "canonical_rel_name": "becomes_aware_of",
+      "canonical_rel_desc": "Indicates that the subject attains awareness or recognition of the object.",
+      "justification": "The description states that listeners are made aware of perceived threats; modeling this as 'becomes_aware_of' captures the cognitive state change without encoding the causal mechanism in the predicate.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_4071c1502070"
+      ],
+      "rel_cls": "awareness_relation",
+      "justification": "The relation focuses on the listener's awareness of threats, which belongs to a family of predicates about knowledge and awareness states.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_4071c1502070"
+      ],
+      "rel_cls_group": "COGNITION",
+      "justification": "The key semantic dimension is a cognitive/mental-state change (awareness of threats), which fits a broad cognition-related grouping.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  ],
+  "timestamp": "2026-01-02T09:16:51Z"
+}

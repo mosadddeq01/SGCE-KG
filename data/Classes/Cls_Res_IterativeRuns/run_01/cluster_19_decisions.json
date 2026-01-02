@@ -1,0 +1,310 @@
+{
+  "cluster_label": 19,
+  "cluster_classes": [
+    {
+      "candidate_id": "ClsC_dc523bae",
+      "class_label": "Adult Butterfly Stages",
+      "class_description": "Life stages and experiential states of the butterfly as an adult, from immediate post-emergence to mature, graceful flight.",
+      "class_type_hint": "Life Stage / Condition",
+      "class_group": "TBD",
+      "confidence": 0.8,
+      "evidence_excerpt": "newly emerged adult butterfly… moment of beauty and grace in flight",
+      "member_ids": [
+        "En_4433b9d4"
+      ],
+      "members": [
+        {
+          "id": "En_4433b9d4",
+          "entity_name": "newly emerged adult butterfly",
+          "entity_description": "An adult butterfly immediately after leaving the chrysalis, before its wings have fully expanded and hardened.",
+          "entity_type_hint": "LifeStage"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_7706dd85",
+      "class_label": "Butterfly Life Stage",
+      "class_description": "Concepts describing the adult stage of butterflies and its temporal characteristics, including the winged, reproductive form and how long this stage lasts.",
+      "class_type_hint": "Biological Life Stage",
+      "class_group": "TBD",
+      "confidence": 0.86,
+      "evidence_excerpt": "Adult butterflies as the final life stage and the duration of the adult stage.",
+      "member_ids": [
+        "Can_9f2a4b9d",
+        "En_0e254da6"
+      ],
+      "members": [
+        {
+          "id": "Can_9f2a4b9d",
+          "entity_name": "adult butterflies",
+          "entity_description": "The fourth and final life stage of butterflies, when they are winged, sexually mature insects that feed (often on nectar), pollinate, and focus on mating and reproduction, typically living from a few days to a few weeks depending on species.",
+          "entity_type_hint": "Organism"
+        },
+        {
+          "id": "En_0e254da6",
+          "entity_name": "butterfly adult lifespan",
+          "entity_description": "The duration of the adult stage of a butterfly's life, typically from a few days to a few weeks depending on species.",
+          "entity_type_hint": "LifeStageAttribute"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_f017f51e",
+      "class_label": "Butterfly Life Cycle",
+      "class_description": "Developmental stages of a butterfly from egg through larval and pupal stages to the adult form, including references to specific later stages such as the pupa (chrysalis) and adult phases.",
+      "class_type_hint": "Biological Process",
+      "class_group": "Butterfly Development and Reproduction",
+      "confidence": 0.93,
+      "evidence_excerpt": "All entities describe the butterfly life cycle or specific life stages (pupa/chrysalis, adult).",
+      "member_ids": [
+        "Can_7f3d9397",
+        "Can_466f6058",
+        "Can_690f4a29"
+      ],
+      "members": [
+        {
+          "id": "Can_7f3d9397",
+          "entity_name": "butterfly life cycle",
+          "entity_description": "The full developmental sequence or journey of a butterfly from egg through larval and pupal stages to the adult form, recurring across generations.",
+          "entity_type_hint": "Process"
+        },
+        {
+          "id": "Can_466f6058",
+          "entity_name": "pupa stage of the butterfly life cycle",
+          "entity_description": "The third developmental stage of a butterfly, in which the organism becomes a pupa enclosed in a chrysalis and undergoes metamorphosis from larva to adult.",
+          "entity_type_hint": "ProcessStage"
+        },
+        {
+          "id": "Can_690f4a29",
+          "entity_name": "adult stage of a butterfly",
+          "entity_description": "The fourth and final life cycle stage of a butterfly, when the fully developed adult butterfly emerges from the chrysalis, flies, feeds, mates, and reproduces.",
+          "entity_type_hint": "LifeStage"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_76c68477",
+      "class_label": "Butterfly Reproductive Behavior",
+      "class_description": "Processes in adult butterflies related to securing mates and producing offspring, including mating behavior and the act of reproduction itself, which occur during the adult stage of the life cycle.",
+      "class_type_hint": "Biological Process",
+      "class_group": "Butterfly Development and Reproduction",
+      "confidence": 0.93,
+      "evidence_excerpt": "Throughout their adult stage, butterflies focus on finding a mate and reproducing to continue the life cycle.",
+      "member_ids": [
+        "En_41e4d0dd",
+        "En_d4b92880"
+      ],
+      "members": [
+        {
+          "id": "En_41e4d0dd",
+          "entity_name": "mating behavior of butterflies",
+          "entity_description": "The activity of butterflies seeking and finding mates during the adult stage.",
+          "entity_type_hint": "Process"
+        },
+        {
+          "id": "En_d4b92880",
+          "entity_name": "reproduction of butterflies",
+          "entity_description": "The process by which adult butterflies produce offspring, continuing the life cycle.",
+          "entity_type_hint": "Process"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_9205413b",
+      "class_label": "Butterfly Life Stages",
+      "class_description": "Distinct developmental stages in the butterfly life cycle, from egg to larval caterpillar, treated as organismal life stages rather than specific anatomical parts.",
+      "class_type_hint": "OrganismLifeStage",
+      "class_group": "Butterfly Life Cycle",
+      "confidence": 0.93,
+      "evidence_excerpt": "egg life stage and larval life stage (caterpillar) within the butterfly life cycle",
+      "member_ids": [
+        "Can_10d615c2",
+        "Can_e076166c"
+      ],
+      "members": [
+        {
+          "id": "Can_10d615c2",
+          "entity_name": "butterfly egg stage",
+          "entity_description": "The initial life stage of a butterfly during which the organism exists as eggs laid on host plants before hatching into larvae (caterpillars), with eggs varying in size, shape, and color by species.",
+          "entity_type_hint": "OrganismLifeStage"
+        },
+        {
+          "id": "Can_e076166c",
+          "entity_name": "caterpillar (butterfly larval stage)",
+          "entity_description": "The larval life stage of butterflies, beginning when the egg hatches into a caterpillar and encompassing the primary feeding, rapid growth, and preparation for pupation.",
+          "entity_type_hint": "OrganismLifeStage"
+        }
+      ],
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"merge_classes\",\n    \"args\": {\n      \"class_ids\": [\n        \"ClsC_dc523bae\",\n        \"ClsC_7706dd85\"\n      ],\n      \"provisional_id\": \"MERGE(ClsC_dc523bae|ClsC_7706dd85)\",\n      \"new_name\": \"Adult Butterfly Life Stage\",\n      \"new_description\": \"The adult (imago) stage of butterflies, including the general adult form, its immediate post-emergence period, and attributes such as typical lifespan and activity during this stage.\",\n      \"new_class_type_hint\": \"OrganismLifeStage\",\n      \"justification\": \"Both classes describe the same conceptual domain—the adult/imago stage of butterflies and its temporal characteristics—so they should be a single, consolidated Adult Butterfly Life Stage class rather than fragmented classes.\",\n      \"remark\": null,\n      \"confidence\": 0.92\n    }\n  },\n  {\n    \"function\": \"reassign_entities\",\n    \"args\": {\n      \"entity_ids\": [\n        \"Can_690f4a29\"\n      ],\n      \"from_class_id\": \"ClsC_f017f51e\",\n      \"to_class_id\": \"MERGE(ClsC_dc523bae|ClsC_7706dd85)\",\n      \"justification\": \"The entity 'adult stage of a butterfly' is a life stage concept and fits better in the unified Adult Butterfly Life Stage class than in the broader Butterfly Life Cycle process class.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"MERGE(ClsC_dc523bae|ClsC_7706dd85)\",\n      \"new_name\": null,\n      \"new_description\": null,\n      \"new_class_type_hint\": null,\n      \"new_class_group\": \"Butterfly Life Cycle and Reproduction\",\n      \"remark\": null,\n      \"justification\": \"The merged Adult Butterfly Life Stage class is part of the overall butterfly developmental sequence and directly tied to reproductive activities, so it should share the unified Butterfly Life Cycle and Reproduction class group.\",\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_f017f51e\",\n      \"new_name\": null,\n      \"new_description\": null,\n      \"new_class_type_hint\": null,\n      \"new_class_group\": \"Butterfly Life Cycle and Reproduction\",\n      \"remark\": null,\n      \"justification\": \"Butterfly Life Cycle already represents the full developmental process and is strongly coupled to reproduction; aligning its class_group with the unified Butterfly Life Cycle and Reproduction group improves coherence across related life-cycle classes.\",\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_9205413b\",\n      \"new_name\": null,\n      \"new_description\": null,\n      \"new_class_type_hint\": null,\n      \"new_class_group\": \"Butterfly Life Cycle and Reproduction\",\n      \"remark\": null,\n      \"justification\": \"Butterfly Life Stages (egg and larval stages) are components of the same developmental system as the overall life cycle and adult stage, so they should be grouped under the same Butterfly Life Cycle and Reproduction class_group.\",\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_76c68477\",\n      \"new_name\": null,\n      \"new_description\": null,\n      \"new_class_type_hint\": null,\n      \"new_class_group\": \"Butterfly Life Cycle and Reproduction\",\n      \"remark\": null,\n      \"justification\": \"Butterfly Reproductive Behavior is the reproductive component of the butterfly life cycle and should share a unified Butterfly Life Cycle and Reproduction class_group with the life-stage and life-cycle classes it functionally depends on.\",\n      \"confidence\": 0.9\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "merge_classes",
+      "args": {
+        "class_ids": [
+          "ClsC_dc523bae",
+          "ClsC_7706dd85"
+        ],
+        "provisional_id": "MERGE(ClsC_dc523bae|ClsC_7706dd85)",
+        "new_name": "Adult Butterfly Life Stage",
+        "new_description": "The adult (imago) stage of butterflies, including the general adult form, its immediate post-emergence period, and attributes such as typical lifespan and activity during this stage.",
+        "new_class_type_hint": "OrganismLifeStage",
+        "justification": "Both classes describe the same conceptual domain—the adult/imago stage of butterflies and its temporal characteristics—so they should be a single, consolidated Adult Butterfly Life Stage class rather than fragmented classes.",
+        "remark": null,
+        "confidence": 0.92
+      }
+    },
+    {
+      "function": "reassign_entities",
+      "args": {
+        "entity_ids": [
+          "Can_690f4a29"
+        ],
+        "from_class_id": "ClsC_f017f51e",
+        "to_class_id": "MERGE(ClsC_dc523bae|ClsC_7706dd85)",
+        "justification": "The entity 'adult stage of a butterfly' is a life stage concept and fits better in the unified Adult Butterfly Life Stage class than in the broader Butterfly Life Cycle process class.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "MERGE(ClsC_dc523bae|ClsC_7706dd85)",
+        "new_name": null,
+        "new_description": null,
+        "new_class_type_hint": null,
+        "new_class_group": "Butterfly Life Cycle and Reproduction",
+        "remark": null,
+        "justification": "The merged Adult Butterfly Life Stage class is part of the overall butterfly developmental sequence and directly tied to reproductive activities, so it should share the unified Butterfly Life Cycle and Reproduction class group.",
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_f017f51e",
+        "new_name": null,
+        "new_description": null,
+        "new_class_type_hint": null,
+        "new_class_group": "Butterfly Life Cycle and Reproduction",
+        "remark": null,
+        "justification": "Butterfly Life Cycle already represents the full developmental process and is strongly coupled to reproduction; aligning its class_group with the unified Butterfly Life Cycle and Reproduction group improves coherence across related life-cycle classes.",
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_9205413b",
+        "new_name": null,
+        "new_description": null,
+        "new_class_type_hint": null,
+        "new_class_group": "Butterfly Life Cycle and Reproduction",
+        "remark": null,
+        "justification": "Butterfly Life Stages (egg and larval stages) are components of the same developmental system as the overall life cycle and adult stage, so they should be grouped under the same Butterfly Life Cycle and Reproduction class_group.",
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_76c68477",
+        "new_name": null,
+        "new_description": null,
+        "new_class_type_hint": null,
+        "new_class_group": "Butterfly Life Cycle and Reproduction",
+        "remark": null,
+        "justification": "Butterfly Reproductive Behavior is the reproductive component of the butterfly life cycle and should share a unified Butterfly Life Cycle and Reproduction class_group with the life-stage and life-cycle classes it functionally depends on.",
+        "confidence": 0.9
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "merge_classes",
+      "input_class_ids": [
+        "ClsC_dc523bae",
+        "ClsC_7706dd85"
+      ],
+      "result_class_id": "ClsR_8098889a",
+      "provisional_id": "MERGE(ClsC_dc523bae|ClsC_7706dd85)",
+      "justification": "Both classes describe the same conceptual domain—the adult/imago stage of butterflies and its temporal characteristics—so they should be a single, consolidated Adult Butterfly Life Stage class rather than fragmented classes.",
+      "remark": null,
+      "confidence": 0.92
+    },
+    {
+      "action": "reassign_entities",
+      "entity_ids": [
+        "Can_690f4a29"
+      ],
+      "from": "ClsC_f017f51e",
+      "from_resolved": "ClsC_f017f51e",
+      "to": "MERGE(ClsC_dc523bae|ClsC_7706dd85)",
+      "to_resolved": "ClsR_8098889a",
+      "justification": "The entity 'adult stage of a butterfly' is a life stage concept and fits better in the unified Adult Butterfly Life Stage class than in the broader Butterfly Life Cycle process class.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "modify_class",
+      "class_id": "MERGE(ClsC_dc523bae|ClsC_7706dd85)",
+      "class_id_resolved": "ClsR_8098889a",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Butterfly Life Cycle and Reproduction",
+      "remark": null,
+      "justification": "The merged Adult Butterfly Life Stage class is part of the overall butterfly developmental sequence and directly tied to reproductive activities, so it should share the unified Butterfly Life Cycle and Reproduction class group.",
+      "confidence": 0.9
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_f017f51e",
+      "class_id_resolved": "ClsC_f017f51e",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Butterfly Life Cycle and Reproduction",
+      "remark": null,
+      "justification": "Butterfly Life Cycle already represents the full developmental process and is strongly coupled to reproduction; aligning its class_group with the unified Butterfly Life Cycle and Reproduction group improves coherence across related life-cycle classes.",
+      "confidence": 0.9
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_9205413b",
+      "class_id_resolved": "ClsC_9205413b",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Butterfly Life Cycle and Reproduction",
+      "remark": null,
+      "justification": "Butterfly Life Stages (egg and larval stages) are components of the same developmental system as the overall life cycle and adult stage, so they should be grouped under the same Butterfly Life Cycle and Reproduction class_group.",
+      "confidence": 0.9
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_76c68477",
+      "class_id_resolved": "ClsC_76c68477",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Butterfly Life Cycle and Reproduction",
+      "remark": null,
+      "justification": "Butterfly Reproductive Behavior is the reproductive component of the butterfly life cycle and should share a unified Butterfly Life Cycle and Reproduction class_group with the life-stage and life-cycle classes it functionally depends on.",
+      "confidence": 0.9
+    }
+  ],
+  "provisional_to_real": {
+    "MERGE(ClsC_dc523bae|ClsC_7706dd85)": "ClsR_8098889a",
+    "ClsC_dc523bae": "ClsR_8098889a",
+    "ClsC_7706dd85": "ClsR_8098889a"
+  },
+  "timestamp": "2026-01-02T08:39:06Z"
+}

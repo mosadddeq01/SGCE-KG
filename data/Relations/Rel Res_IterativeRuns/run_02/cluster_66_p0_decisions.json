@@ -1,0 +1,129 @@
+{
+  "cluster_label": "66_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_ef87d6b49abd",
+      "relation_name": "core_theme_of",
+      "rel_desc": "Fear of the unknown is a core recurring theme in urban legends.",
+      "rel_hint_type": "thematic association",
+      "canonical_rel_name": "is_core_theme_of",
+      "canonical_rel_desc": "Indicates that the subject is a central recurring theme or motif within the narrative or narrative category represented by the object.",
+      "rel_cls": "narrative_theme_relation",
+      "rel_cls_group": "ASSOCIATION",
+      "subject_entity_name": "fear of the unknown",
+      "object_entity_name": "urban legends",
+      "subject_class_label": "Urban Legend Emotional Themes and Responses",
+      "subject_class_group": "Urban Legend Emotional Dynamics",
+      "object_class_label": "Urban Legends",
+      "object_class_group": "Urban Legends and Modern Folklore",
+      "qualifiers": {
+        "TemporalQualifier": "across different tellings and versions",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "remain constant",
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "Scope: urban legends like the \"Hook Man\""
+      },
+      "confidence": 0.98,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_f2c909613bbb",
+      "relation_name": "core_theme_of",
+      "rel_desc": "A perceived threat of danger is a core recurring theme in urban legends.",
+      "rel_hint_type": "thematic association",
+      "canonical_rel_name": "is_core_theme_of",
+      "canonical_rel_desc": "Indicates that the subject is a central recurring theme or motif within the narrative or narrative category represented by the object.",
+      "rel_cls": "narrative_theme_relation",
+      "rel_cls_group": "ASSOCIATION",
+      "subject_entity_name": "threat of danger",
+      "object_entity_name": "urban legends",
+      "subject_class_label": "Urban Legend Emotional Themes and Responses",
+      "subject_class_group": "Urban Legend Emotional Dynamics",
+      "object_class_label": "Urban Legends",
+      "object_class_group": "Urban Legends and Modern Folklore",
+      "qualifiers": {
+        "TemporalQualifier": "across varying story versions",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "remain constant",
+        "CausalHint": null,
+        "LogicalMarker": "while",
+        "OtherQualifier": "EmotionalImpact: sustained tension and menace"
+      },
+      "confidence": 0.98,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_075ebdb87245",
+      "relation_name": "co_occurs_with",
+      "rel_desc": "The allure of the unknown is paired with the experience of a good scare as joint emotional draws of urban legends.",
+      "rel_hint_type": "association",
+      "canonical_rel_name": "thematically_associated_with",
+      "canonical_rel_desc": "Indicates that two entities are linked through narrative, emotional, or conceptual association within a thematic or story context, without asserting direct causality.",
+      "rel_cls": "narrative_theme_association",
+      "rel_cls_group": "ASSOCIATION",
+      "subject_entity_name": "the unknown",
+      "object_entity_name": "good scare",
+      "subject_class_label": "Supernatural Concepts",
+      "subject_class_group": "Supernatural & Paranormal Domain",
+      "object_class_label": "Urban Legend Emotional Themes and Responses",
+      "object_class_group": "Urban Legend Emotional Dynamics",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "have contributed",
+        "LogicalMarker": "and",
+        "OtherQualifier": "Effect: both contribute to enduring popularity of urban legends"
+      },
+      "confidence": 0.7,
+      "remarks": [
+        "Relation models their joint role in audience attraction; semantics are associative rather than strictly causal.",
+        "Relation models their joint role in audience attraction; semantics are associative rather than strictly causal.",
+        "Relation models their joint role in audience attraction; semantics are associative rather than strictly causal."
+      ]
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_rel_schema\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_075ebdb87245\"],\n      \"canonical_rel_name\": \"is_thematically_associated_with\",\n      \"canonical_rel_desc\": \"Indicates that two entities are linked through narrative, emotional, or conceptual association within a thematic or story context, without asserting direct causality.\",\n      \"rel_cls\": null,\n      \"rel_cls_group\": null,\n      \"justification\": \"Normalize the predicate to a consistent verb-style form (matching patterns like 'is_core_theme_of') while preserving the same associative, non-causal semantics. The existing class and group are already appropriate and do not need changes.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_rel_schema",
+      "args": {
+        "relation_ids": [
+          "RelR_075ebdb87245"
+        ],
+        "canonical_rel_name": "is_thematically_associated_with",
+        "canonical_rel_desc": "Indicates that two entities are linked through narrative, emotional, or conceptual association within a thematic or story context, without asserting direct causality.",
+        "rel_cls": null,
+        "rel_cls_group": null,
+        "justification": "Normalize the predicate to a consistent verb-style form (matching patterns like 'is_core_theme_of') while preserving the same associative, non-causal semantics. The existing class and group are already appropriate and do not need changes.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_rel_schema",
+      "relation_ids": [
+        "RelR_075ebdb87245"
+      ],
+      "canonical_rel_name": "is_thematically_associated_with",
+      "canonical_rel_desc": "Indicates that two entities are linked through narrative, emotional, or conceptual association within a thematic or story context, without asserting direct causality.",
+      "rel_cls": null,
+      "rel_cls_group": null,
+      "new_relation_name": null,
+      "original_relation_name": null,
+      "justification": "Normalize the predicate to a consistent verb-style form (matching patterns like 'is_core_theme_of') while preserving the same associative, non-causal semantics. The existing class and group are already appropriate and do not need changes.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  ],
+  "timestamp": "2026-01-02T09:29:41Z"
+}

@@ -1,0 +1,205 @@
+{
+  "cluster_label": "62_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_9227ea6b14cf",
+      "relation_name": "has_ecological_role",
+      "rel_desc": "Butterflies have an ecological role as a food source for various predators.",
+      "rel_hint_type": "ecological role",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "butterfly",
+      "object_entity_name": "food source role of butterflies",
+      "subject_class_label": "Adult butterflies",
+      "subject_class_group": "Butterfly Biology & Life Cycle",
+      "object_class_label": "Butterfly Prey Role and Anti-predator Strategies",
+      "object_class_group": "Ecology and Ecosystems",
+      "qualifiers": {
+        "TemporalQualifier": "throughout adult stage (primarily)",
+        "SpatialQualifier": "within their ecosystem",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "serve as",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.95,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_0bfb617913f4",
+      "relation_name": "contributes_to",
+      "rel_desc": "The food source role of butterflies contributes to ecosystem biodiversity.",
+      "rel_hint_type": "ecological impact",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "food source role of butterflies",
+      "object_entity_name": "biodiversity",
+      "subject_class_label": "Butterfly Prey Role and Anti-predator Strategies",
+      "subject_class_group": "Ecology and Ecosystems",
+      "object_class_label": "Ecological State Variables",
+      "object_class_group": "Ecology and Ecosystems",
+      "qualifiers": {
+        "TemporalQualifier": "ongoing in functioning ecosystems",
+        "SpatialQualifier": "within their ecosystem",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "contributing to",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.9,
+      "remarks": [
+        "Could alternatively model butterfly directly contributing; here we emphasize the role."
+      ]
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_9227ea6b14cf\"],\n      \"canonical_rel_name\": \"has_ecological_role\",\n      \"canonical_rel_desc\": \"Indicates that an organism exhibits a specific ecological or functional role within an ecosystem.\",\n      \"justification\": \"The relation links the organism (butterfly) to a description of its ecological role (being a food source for predators). A role-oriented predicate best captures this semantics.\",\n      \"remark\": null,\n      \"confidence\": 0.93\n    }\n  },\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_0bfb617913f4\"],\n      \"canonical_rel_name\": \"contributes_to\",\n      \"canonical_rel_desc\": \"Indicates that the subject factor or role causally or functionally contributes to the presence, maintenance, or magnitude of the object phenomenon or state.\",\n      \"justification\": \"The relation describes how the butterflies’ food-source role functionally adds to or supports ecosystem biodiversity, matching a generic ‘contributes_to’ causal-impact predicate.\",\n      \"remark\": null,\n      \"confidence\": 0.92\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_9227ea6b14cf\"],\n      \"rel_cls\": \"ecological_role_relation\",\n      \"justification\": \"This relation expresses the mapping between an organism and its ecological/functional role in an ecosystem; grouping it under an ecological_role_relation class is appropriate.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_0bfb617913f4\"],\n      \"rel_cls\": \"ecological_impact_relation\",\n      \"justification\": \"The relation captures how a role impacts a higher-level ecological variable (biodiversity), fitting a broader class of ecological impact or effect relations.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_9227ea6b14cf\"],\n      \"rel_cls_group\": \"ASSOCIATION\",\n      \"justification\": \"Linking an organism to its ecological role is an associative/functional mapping rather than a strict causal, spatial, or compositional relation.\",\n      \"remark\": null,\n      \"confidence\": 0.86\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_0bfb617913f4\"],\n      \"rel_cls_group\": \"CAUSALITY\",\n      \"justification\": \"The description and qualifiers emphasize that the role of butterflies helps bring about or maintain biodiversity, which is inherently causal.\",\n      \"remark\": null,\n      \"confidence\": 0.93\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_9227ea6b14cf"
+        ],
+        "canonical_rel_name": "has_ecological_role",
+        "canonical_rel_desc": "Indicates that an organism exhibits a specific ecological or functional role within an ecosystem.",
+        "justification": "The relation links the organism (butterfly) to a description of its ecological role (being a food source for predators). A role-oriented predicate best captures this semantics.",
+        "remark": null,
+        "confidence": 0.93
+      }
+    },
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_0bfb617913f4"
+        ],
+        "canonical_rel_name": "contributes_to",
+        "canonical_rel_desc": "Indicates that the subject factor or role causally or functionally contributes to the presence, maintenance, or magnitude of the object phenomenon or state.",
+        "justification": "The relation describes how the butterflies' food-source role functionally adds to or supports ecosystem biodiversity, matching a generic 'contributes_to' causal-impact predicate.",
+        "remark": null,
+        "confidence": 0.92
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_9227ea6b14cf"
+        ],
+        "rel_cls": "ecological_role_relation",
+        "justification": "This relation expresses the mapping between an organism and its ecological/functional role in an ecosystem; grouping it under an ecological_role_relation class is appropriate.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_0bfb617913f4"
+        ],
+        "rel_cls": "ecological_impact_relation",
+        "justification": "The relation captures how a role impacts a higher-level ecological variable (biodiversity), fitting a broader class of ecological impact or effect relations.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_9227ea6b14cf"
+        ],
+        "rel_cls_group": "ASSOCIATION",
+        "justification": "Linking an organism to its ecological role is an associative/functional mapping rather than a strict causal, spatial, or compositional relation.",
+        "remark": null,
+        "confidence": 0.86
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_0bfb617913f4"
+        ],
+        "rel_cls_group": "CAUSALITY",
+        "justification": "The description and qualifiers emphasize that the role of butterflies helps bring about or maintain biodiversity, which is inherently causal.",
+        "remark": null,
+        "confidence": 0.93
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_9227ea6b14cf"
+      ],
+      "canonical_rel_name": "has_ecological_role",
+      "canonical_rel_desc": "Indicates that an organism exhibits a specific ecological or functional role within an ecosystem.",
+      "justification": "The relation links the organism (butterfly) to a description of its ecological role (being a food source for predators). A role-oriented predicate best captures this semantics.",
+      "remark": null,
+      "confidence": 0.93
+    },
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_0bfb617913f4"
+      ],
+      "canonical_rel_name": "contributes_to",
+      "canonical_rel_desc": "Indicates that the subject factor or role causally or functionally contributes to the presence, maintenance, or magnitude of the object phenomenon or state.",
+      "justification": "The relation describes how the butterflies' food-source role functionally adds to or supports ecosystem biodiversity, matching a generic 'contributes_to' causal-impact predicate.",
+      "remark": null,
+      "confidence": 0.92
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_9227ea6b14cf"
+      ],
+      "rel_cls": "ecological_role_relation",
+      "justification": "This relation expresses the mapping between an organism and its ecological/functional role in an ecosystem; grouping it under an ecological_role_relation class is appropriate.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_0bfb617913f4"
+      ],
+      "rel_cls": "ecological_impact_relation",
+      "justification": "The relation captures how a role impacts a higher-level ecological variable (biodiversity), fitting a broader class of ecological impact or effect relations.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_9227ea6b14cf"
+      ],
+      "rel_cls_group": "ASSOCIATION",
+      "justification": "Linking an organism to its ecological role is an associative/functional mapping rather than a strict causal, spatial, or compositional relation.",
+      "remark": null,
+      "confidence": 0.86
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_0bfb617913f4"
+      ],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "The description and qualifiers emphasize that the role of butterflies helps bring about or maintain biodiversity, which is inherently causal.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  ],
+  "timestamp": "2026-01-02T09:20:04Z"
+}

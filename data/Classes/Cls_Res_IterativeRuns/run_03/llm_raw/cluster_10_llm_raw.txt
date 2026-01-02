@@ -1,0 +1,105 @@
+[
+  {
+    "function": "create_class",
+    "args": {
+      "name": "Distrust in AI Systems",
+      "description": "Skepticism, lack of confidence, or negative expectations that AI systems will behave reliably or as intended.",
+      "class_type_hint": "Psychological State",
+      "member_ids": ["En_4658a580"],
+      "provisional_id": "NEW_Distrust_AI",
+      "justification": "The current 'Trust in AI Systems' class bundles two opposite attitudes (trust and distrust); creating a dedicated class for distrust yields clearer, more atomic attitude concepts.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "reassign_entities",
+    "args": {
+      "entity_ids": ["En_4658a580"],
+      "from_class_id": "ClsC_2cd5b2d8",
+      "to_class_id": "NEW_Distrust_AI",
+      "justification": "The entity 'distrust in AI systems' belongs in the newly created class focusing specifically on distrust, rather than in a mixed trust/distrust container.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_2cd5b2d8",
+      "new_name": "Trust in AI Systems",
+      "new_description": "Positive confidence among users or stakeholders that AI systems will behave reliably and as intended.",
+      "new_class_type_hint": "Psychological State",
+      "new_class_group": "AI System Trust, Acceptance, and Adoption",
+      "remark": null,
+      "justification": "After moving the distrust entity out, this class now cleanly represents trust only and should be renamed and grouped with related uptake attitudes.",
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "NEW_Distrust_AI",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "AI System Trust, Acceptance, and Adoption",
+      "remark": null,
+      "justification": "Assign the new distrust class to the same higher-level group that connects attitudes and uptake of AI systems.",
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "create_class",
+    "args": {
+      "name": "Adoption of AI Systems",
+      "description": "The process by which AI systems are brought into and maintained in regular use within organizations or society.",
+      "class_type_hint": "Socio-Technical Process",
+      "member_ids": ["En_682f30cf"],
+      "provisional_id": "NEW_Adoption_AI",
+      "justification": "The existing 'AI System Uptake' class mixes a willingness attitude (acceptance) with a concrete implementation process (adoption); creating a separate adoption class clarifies this distinction.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "reassign_entities",
+    "args": {
+      "entity_ids": ["En_682f30cf"],
+      "from_class_id": "ClsC_0682ec86",
+      "to_class_id": "NEW_Adoption_AI",
+      "justification": "The entity 'adoption of AI systems' is a socio-technical implementation process and fits better in the new dedicated adoption class than in the acceptance-focused source class.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_0682ec86",
+      "new_name": "Acceptance of AI Systems",
+      "new_description": "The willingness of individuals or organizations to use or embrace AI systems, reflecting their attitudinal readiness.",
+      "new_class_type_hint": "Attitude / Condition",
+      "new_class_group": "AI System Trust, Acceptance, and Adoption",
+      "remark": null,
+      "justification": "With the adoption entity moved out, this class now purely represents acceptance as a willingness/attitude and should be renamed and grouped with other trust-related attitudes.",
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "NEW_Adoption_AI",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "AI System Trust, Acceptance, and Adoption",
+      "remark": null,
+      "justification": "Assign the new adoption class to the same Class_Group as trust, distrust, and acceptance to coherently represent AI system uptake constructs.",
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "Cls

@@ -1,0 +1,20 @@
+[
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": [
+        "RelR_f30e4e7be97d",
+        "RelR_ca51ef516e04",
+        "RelR_caf1f7b84a8f",
+        "RelR_3a30f8130634"
+      ],
+      "canonical_rel_name": "has_psychological_or_cultural_attribute",
+      "canonical_rel_desc": "Links a person, group, or audience to a psychological or sociocultural attribute it possesses (e.g., imagination, curiosity, fears, values, interests) that is relevant to the interpretation or transmission of urban legends.",
+      "rel_cls": "psychological_sociocultural_attribute_relation",
+      "rel_cls_group": null,
+      "justification": "All four relations connect people or cultural groups to psychological or sociocultural attributes (imagination, curiosity, fears, interests) in the context of urban legends. They currently use slightly different canonical_rel_name and rel_cls variants for the same semantic pattern. Normalizing to a single predicate 'has_psychological_or_cultural_attribute' and a unified class 'psychological_sociocultural_attribute_relation' improves schema consistency while keeping the broad group ATTRIBUTE unchanged.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  }
+]

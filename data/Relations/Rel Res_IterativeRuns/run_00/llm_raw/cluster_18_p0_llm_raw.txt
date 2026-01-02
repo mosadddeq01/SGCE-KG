@@ -1,0 +1,97 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_74d8341d5616",
+        "RelR_89592968d126"
+      ],
+      "canonical_rel_name": "influences_evolution_of",
+      "canonical_rel_desc": "The subject exerts a shaping influence on how the object develops or changes over time.",
+      "justification": "Both relations describe cultural factors (interests or fears of different cultures) shaping how tales evolve over time, i.e., exerting an influence on the evolution of stories.",
+      "remark": "Use this predicate when some cultural or contextual factor shapes the development trajectory of narratives.",
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_51fcfa0b345f"
+      ],
+      "canonical_rel_name": "influences_belief_in",
+      "canonical_rel_desc": "The subject affects the audience’s belief or questioning regarding the existence or reality of the object.",
+      "justification": "This relation instance explicitly concerns how blurring fact and fiction affects listeners’ questioning of the existence of the supernatural, i.e., an influence on belief about the object.",
+      "remark": "Use this predicate for narrative or informational factors that alter belief or doubt in some concept or entity.",
+      "confidence": 0.88
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_c5e3f0db3a43",
+        "RelR_adb4a392988b"
+      ],
+      "canonical_rel_name": "engages_audience",
+      "canonical_rel_desc": "The subject (a story form or folklore domain) captures the attention or interest of the audience.",
+      "justification": "Both relations describe narrative forms (supernatural tales or modern folklore) captivating or drawing interest from audiences, which is the same engagement effect with audiences as objects.",
+      "remark": "Normalizes variants like 'engages' and 'attracts_interest_from' into a single audience engagement predicate.",
+      "confidence": 0.86
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_74d8341d5616",
+        "RelR_89592968d126"
+      ],
+      "rel_cls": "narrative_evolution_influence_relation",
+      "justification": "These links describe how cultural factors causally shape the evolution of narratives, a specific family of influence relations focused on story development over time.",
+      "remark": "Class for factors that direct or bias how tales change, spread, or adapt across contexts.",
+      "confidence": 0.87
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_51fcfa0b345f"
+      ],
+      "rel_cls": "belief_influence_relation",
+      "justification": "This relation is specifically about influencing belief or doubt regarding the existence of something, fitting a belief-oriented influence class distinct from narrative evolution or simple engagement.",
+      "remark": null,
+      "confidence": 0.86
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_c5e3f0db3a43",
+        "RelR_adb4a392988b"
+      ],
+      "rel_cls": "audience_engagement_relation",
+      "justification": "Both instances connect narrative forms with their effect of captivating or attracting audiences, which is a coherent class of audience engagement effects.",
+      "remark": "Use for relations where stories or media capture attention, curiosity, or sustained interest of audiences.",
+      "confidence": 0.86
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_74d8341d5616",
+        "RelR_89592968d126",
+        "RelR_51fcfa0b345f",
+        "RelR_c5e3f0db3a43",
+        "RelR_adb4a392988b"
+      ],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "All five relations express that the subject brings about, shapes, or affects some outcome (evolution of tales, audience engagement, or belief), which fits a broad causal/influence grouping.",
+      "remark": "These are high-level influence/affect edges; grouping under CAUSALITY helps distinguish them from purely associative or taxonomic links.",
+      "confidence": 0.9
+    }
+  }
+]

@@ -1,0 +1,82 @@
+[
+  {
+    "function": "split_class",
+    "args": {
+      "source_class_id": "ClsC_dc523bae",
+      "splits": [
+        {
+          "name": "Newly emerged adult butterfly stage",
+          "description": "The specific early part of the adult butterfly life stage immediately after emergence from the chrysalis, before the wings have fully expanded and hardened.",
+          "class_type_hint": "OrganismLifeStage",
+          "member_ids": ["En_4433b9d"],
+          "provisional_id": "ClsC_dc523bae_AdultStage"
+        },
+        {
+          "name": "Butterfly aesthetic state in flight",
+          "description": "The perceived aesthetic or experiential state of an adult butterfly in flight, characterized as beautiful and graceful, independent of its biological life stage.",
+          "class_type_hint": "PhenomenologicalState",
+          "member_ids": ["En_1f5ea1cb"],
+          "provisional_id": "ClsC_dc523bae_AestheticState"
+        }
+      ],
+      "justification": "ClsC_dc523bae mixes a concrete biological life stage (newly emerged adult) with a non-biological aesthetic/experiential state in flight, so it should be split into a life-stage class and an aesthetic-state class.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  },
+  {
+    "function": "merge_classes",
+    "args": {
+      "class_ids": [
+        "ClsC_7706dd85",
+        "ClsC_dc523bae_AdultStage"
+      ],
+      "provisional_id": "MERGE_AdultButterflyStage",
+      "new_name": "Adult butterfly stage",
+      "new_description": "The adult, winged life stage of butterflies, including the newly emerged adult immediately post-eclosion as well as the general sexually mature, reproductive adult phase and its typical lifespan.",
+      "new_class_type_hint": "OrganismLifeStage",
+      "justification": "ClsC_7706dd85 and the split class ClsC_dc523bae_AdultStage both describe the adult butterfly life stage (general adult form, lifespan, and immediate post-emergence period), so they form a single coherent adult-life-stage concept.",
+      "remark": null,
+      "confidence": 0.94
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "MERGE_AdultButterflyStage",
+      "new_name": "Adult butterfly life stage",
+      "new_description": "The adult, winged life stage of butterflies, from immediate post-emergence from the chrysalis through the sexually mature, reproductive period, including typical duration of the adult phase.",
+      "new_class_type_hint": "OrganismLifeStage",
+      "new_class_group": "Butterfly Life Cycle",
+      "remark": null,
+      "justification": "The merged adult-stage class should be clearly labeled as a butterfly life stage and grouped under a broader 'Butterfly Life Cycle' Class_Group for consistency with other life-stage classes.",
+      "confidence": 0.93
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_9205413b",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": "OrganismLifeStage",
+      "new_class_group": "Butterfly Life Cycle",
+      "remark": null,
+      "justification": "ClsC_9205413b already represents egg and larval stages of butterflies, so assigning it to the same 'Butterfly Life Cycle' Class_Group as the adult-stage class unifies all biological life stages within one lifecycle grouping.",
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_dc523bae_AestheticState",
+      "new_name": "Butterfly aesthetic state in flight",
+      "new_description": "The perceived aesthetic or experiential state of a butterfly in flight (e.g., beauty, grace), modeled as a phenomenological state rather than a biological life stage.",
+      "new_class_type_hint": "PhenomenologicalState",
+      "new_class_group": "Butterfly Aesthetic and Behavioral States",
+      "remark": null,
+      "justification": "The aesthetic perception of a butterfly in flight is not a life stage but a phenomenological state, so it should have its own clear label and be grouped separately from biological life-cycle classes.",
+      "confidence": 0.9
+    }
+  }
+]

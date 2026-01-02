@@ -1,136 +1,73 @@
-```json
 [
   {
-    "function": "split_class",
+    "function": "merge_classes",
     "args": {
-      "source_class_id": "ClsC_297a52fd",
-      "splits": [
-        {
-          "name": "Austenitic Structure",
-          "description": "Metallurgical structure characterized by austenite, found in 300 Series stainless steels and nickel base alloys.",
-          "class_type_hint": "MetallurgicalStructure",
-          "member_ids": ["Can_2acbb9eb"],
-          "provisional_id": "SPLIT_Austenitic_Structure"
-        },
-        {
-          "name": "Ferritic Structure",
-          "description": "Metallurgical structure characterized by ferrite, found in carbon and low alloy steels and many 400 series stainless steels.",
-          "class_type_hint": "MetallurgicalStructure",
-          "member_ids": ["Can_449bd7c2"],
-          "provisional_id": "SPLIT_Ferritic_Structure"
-        },
-        {
-          "name": "Martensitic Structure",
-          "description": "Metallurgical structure characterized by martensite, found in some stainless steels.",
-          "class_type_hint": "MetallurgicalStructure",
-          "member_ids": ["Can_c3c96b1a"],
-          "provisional_id": "SPLIT_Martensitic_Structure"
-        }
+      "class_ids": [
+        "ClsC_351d72f0",
+        "ClsR_de142256"
       ],
-      "justification": "ClsC_297a52fd is overloaded, grouping distinct metallurgical structures (austenitic, ferritic, martensitic) that are already represented as separate classes; splitting clarifies schema and avoids redundancy.",
+      "provisional_id": "MERGE(ClsC_351d72f0|ClsR_de142256)",
+      "new_name": "Narrative Explanations of the Unknown and Their Historical Origins",
+      "new_description": "Stories and tales, particularly early urban-legend-like narratives, used to explain unknown and supernatural phenomena across history, including both the narratives themselves and the historical periods in which they arose.",
+      "new_class_type_hint": "Narrative Concept",
+      "justification": "ClsC_351d72f0 (Historical Narrative Concepts) is empty and conceptually overlaps with ClsR_de142256 (Narrative Explanations of the Unknown) around stories explaining the unknown and supernatural across history, so they should be consolidated into a single, clearer class under the same class_group.",
       "remark": null,
-      "confidence": 0.95
+      "confidence": 0.86
     }
   },
   {
     "function": "merge_classes",
     "args": {
       "class_ids": [
-        "ClsR_aed0d686",
-        "SPLIT_Austenitic_Structure"
+        "ClsR_074c3c2d",
+        "ClsR_19f6228d"
       ],
-      "provisional_id": "MERGE_Austenitic_Structure",
-      "new_name": "Austenitic Structure",
-      "new_description": "Metallurgical structure characterized by austenite, found in 300 Series stainless steels and nickel base alloys.",
-      "new_class_type_hint": "MetallurgicalStructure",
-      "justification": "ClsR_aed0d686 and SPLIT_Austenitic_Structure are duplicates, both representing the austenitic metallurgical structure with identical entity membership and description.",
+      "provisional_id": "MERGE(ClsR_074c3c2d|ClsR_19f6228d)",
+      "new_name": "Story and Legend Audiences (including Cautionary Narratives)",
+      "new_description": "Individuals and groups who receive, listen to, or engage with stories and urban legends, including general audiences and those specifically receiving warnings and moral lessons from cautionary urban legend stories.",
+      "new_class_type_hint": "SocialGroup/Role",
+      "justification": "Both classes model essentially the same audience role ('listeners' and broader audiences of stories and legends), with ClsR_19f6228d being a narrow, single-entity subtype; merging removes redundant duplication and yields one coherent audience class for narratives, preserving the existing class_group for narrative dissemination.",
       "remark": null,
-      "confidence": 0.98
-    }
-  },
-  {
-    "function": "merge_classes",
-    "args": {
-      "class_ids": [
-        "ClsR_ed9c5658",
-        "SPLIT_Ferritic_Structure"
-      ],
-      "provisional_id": "MERGE_Ferritic_Structure",
-      "new_name": "Ferritic Structure",
-      "new_description": "Metallurgical structure characterized by ferrite, found in carbon and low alloy steels and many 400 series stainless steels.",
-      "new_class_type_hint": "MetallurgicalStructure",
-      "justification": "ClsR_ed9c5658 and SPLIT_Ferritic_Structure are duplicates, both representing the ferritic metallurgical structure with identical entity membership and description.",
-      "remark": null,
-      "confidence": 0.98
-    }
-  },
-  {
-    "function": "merge_classes",
-    "args": {
-      "class_ids": [
-        "ClsR_423fb320",
-        "SPLIT_Martensitic_Structure"
-      ],
-      "provisional_id": "MERGE_Martensitic_Structure",
-      "new_name": "Martensitic Structure",
-      "new_description": "Metallurgical structure characterized by martensite, found in some stainless steels.",
-      "new_class_type_hint": "MetallurgicalStructure",
-      "justification": "ClsR_423fb320 and SPLIT_Martensitic_Structure are duplicates, both representing the martensitic metallurgical structure with identical entity membership and description.",
-      "remark": null,
-      "confidence": 0.98
-    }
-  },
-  {
-    "function": "modify_class",
-    "args": {
-      "class_id": "ClsC_17b175d2",
-      "new_name": "Stainless Steel Families",
-      "new_description": "Families of stainless steels categorized by their dominant metallurgical structure: austenitic, ferritic, and martensitic.",
-      "new_class_type_hint": "MaterialFamily",
-      "new_class_group": "Stainless Steel Classification",
-      "remark": null,
-      "justification": "ClsC_17b175d2 represents families of stainless steels, which is a broader classification than metallurgical structures; assigning a more precise Class_Group clarifies schema.",
       "confidence": 0.9
     }
   },
   {
     "function": "modify_class",
     "args": {
-      "class_id": "ClsR_8e6e239d",
-      "new_name": "Austenitic Stainless Steels",
-      "new_description": "Stainless steels with austenitic structure, including 300 Series types.",
-      "new_class_type_hint": "MaterialFamily",
-      "new_class_group": "Stainless Steel Classification",
+      "class_id": "MERGE(ClsR_074c3c2d|ClsR_19f6228d)",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Storytelling & Narrative Dissemination",
       "remark": null,
-      "justification": "ClsR_8e6e239d is a family of stainless steels defined by austenitic structure; grouping under 'Stainless Steel Classification' aligns with its domain.",
+      "justification": "After merging the two audience classes into a single narrative-audience class, the unified class should retain and standardize on the existing, appropriate class_group label used for storytelling and narrative dissemination roles.",
       "confidence": 0.9
     }
   },
   {
     "function": "modify_class",
     "args": {
-      "class_id": "ClsR_0ca3c51c",
-      "new_name": "Ferritic Stainless Steels",
-      "new_description": "Stainless steels with ferritic structure, including Types 405, 409, 430, 442, and 446.",
-      "new_class_type_hint": "MaterialFamily",
-      "new_class_group": "Stainless Steel Classification",
+      "class_id": "MERGE(ClsC_351d72f0|ClsR_de142256)",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Narrative Truth, Fiction, and History",
       "remark": null,
-      "justification": "ClsR_0ca3c51c is a family of stainless steels defined by ferritic structure; grouping under 'Stainless Steel Classification' aligns with its domain.",
+      "justification": "The merged class inherits both predecessors’ focus on historical narrative explanations of the unknown and should remain in the existing higher-level group that connects narrative truth, fiction, and historical origins.",
       "confidence": 0.9
     }
   },
   {
     "function": "modify_class",
     "args": {
-      "class_id": "ClsR_4ad44c21",
-      "new_name": "Martensitic Stainless Steels",
-      "new_description": "Stainless steels with martensitic structure, including Types 410, 410S, 416, 420, 440A, 440B, and 440C.",
-      "new_class_type_hint": "MaterialFamily",
-      "new_class_group": "Stainless Steel Classification",
+      "class_id": "ClsR_0dcfbe42",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Urban Legends and Modern Folklore",
       "remark": null,
-      "justification": "ClsR_4ad44c21 is a family of stainless steels defined by martensitic structure; grouping under 'Stainless Steel Classification' aligns with its domain.",
+      "justification": "ClsR_0dcfbe42 currently uses a slightly different class_group label ('Urban Legends & Modern Folklore') than related classes ClsR_1804969e and ClsC_bbd396a2 ('Urban Legends and Modern Folklore'); standardizing the class_group string improves schema coherence for the core modern-folklore domain.",
       "confidence": 0.9
     }
   }
 ]
-```

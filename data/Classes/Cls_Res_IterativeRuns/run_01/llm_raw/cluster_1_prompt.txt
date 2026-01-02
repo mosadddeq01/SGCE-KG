@@ -54,8 +54,10 @@ IMPORTANT FIELD DISTINCTIONS
 
 - remarks (optional, internal):
   Free-text notes attached to a class, used to flag important issues that are
-  outside the scope of structural changes (e.g., suspected entity-level duplicates
-  that should be checked elsewhere).
+  outside the scope of structural changes (e.g., upstream entity resolution that you suspect is wrong, or entities that
+  look identical but should not be changed here), DO NOT try to fix them via merge or reassign.
+   Instead, attach a human-facing remark via modify_class (using the 'remark' field)
+   so that a human can review it later.
 
 Class_Group is NOT a synonym of class_type_hint.
 
@@ -308,120 +310,120 @@ Each class includes:
 
 [
   {
-    "candidate_id": "ClsC_a8158c68",
-    "class_label": "Graphitization-Susceptible Steels",
-    "class_description": "Steels that are prone to graphitization, a microstructural change causing loss of strength and ductility.",
-    "class_type_hint": "Material",
-    "class_group": "Steel Metallurgy and Degradation",
-    "confidence": 0.85,
-    "evidence_excerpt": "Graphitization affects carbon, 0.5Mo, and low alloy C-Mo steels.",
+    "candidate_id": "ClsC_8bffd2e0",
+    "class_label": "Cautionary Urban Legends",
+    "class_description": "Narrative stories that depict threats and negative consequences to warn audiences about risks in the world, especially through urban legend motifs.",
+    "class_type_hint": "Narrative Genre",
+    "class_group": "Cautionary Urban Legends – Child Luring Scenarios",
+    "confidence": 0.86,
+    "evidence_excerpt": "cautionary tales and dangers that lurk in the world around them",
     "member_ids": [
-      "Can_2e6baaf9",
-      "En_a532abae",
-      "En_8b972f6a"
+      "Can_6920b11a",
+      "En_1a731e82"
     ],
     "members": [
       {
-        "id": "Can_2e6baaf9",
-        "entity_name": "carbon steel",
-        "entity_description": "Steels that do not have alloying elements intentionally added, but may contain small amounts of elements and are affected by graphitization under certain conditions.",
-        "entity_type_hint": "Material"
+        "id": "Can_6920b11a",
+        "entity_name": "cautionary tales",
+        "entity_description": "Stories intended to warn audiences about risks, dangers, or undesirable behaviors, often by depicting negative consequences.",
+        "entity_type_hint": "Concept"
       },
       {
-        "id": "En_a532abae",
-        "entity_name": "0.5Mo steel",
-        "entity_description": "A type of steel that undergoes graphitization at elevated temperatures.",
-        "entity_type_hint": "Material"
-      },
-      {
-        "id": "En_8b972f6a",
-        "entity_name": "low alloy C-Mo steel",
-        "entity_description": "A type of steel susceptible to graphitization, especially with up to 1% Mo.",
-        "entity_type_hint": "Material"
+        "id": "En_1a731e82",
+        "entity_name": "dangers",
+        "entity_description": "Various threats, harms, or risks portrayed as lurking in the world in cautionary urban legends.",
+        "entity_type_hint": "Concept"
       }
     ],
     "remarks": []
   },
   {
-    "candidate_id": "ClsC_ae9f3d63",
-    "class_label": "High-Temperature Steels",
-    "class_description": "Steels designed for high temperature applications, including low alloy and quenched and tempered types.",
-    "class_type_hint": "Material",
-    "class_group": "Metallurgical Materials",
-    "confidence": 0.8,
-    "evidence_excerpt": "Used for high temperature strength and creep resistance.",
+    "candidate_id": "ClsC_1ff99f88",
+    "class_label": "Predatory Strangers and Child Victims",
+    "class_description": "Roles in cautionary urban legends where unfamiliar adults act as potential predators and children are portrayed as vulnerable targets.",
+    "class_type_hint": "Narrative Role",
+    "class_group": "Cautionary Urban Legends – Child Luring Scenarios",
+    "confidence": 0.9,
+    "evidence_excerpt": "unfamiliar adults depicted as potential predators who attempt to lure children",
     "member_ids": [
-      "En_a458e346",
-      "En_7ecdae42"
+      "En_ad1ae942",
+      "En_ef37b7fd"
     ],
     "members": [
       {
-        "id": "En_a458e346",
-        "entity_name": "quenched and tempered 2-1/4Cr-1Mo steel",
-        "entity_description": "A type of steel used for thick wall reactor vessels in petroleum refinery processes.",
-        "entity_type_hint": "Material"
+        "id": "En_ad1ae942",
+        "entity_name": "strangers",
+        "entity_description": "Unfamiliar adults depicted as potential predators who attempt to lure children in urban legend stories.",
+        "entity_type_hint": "Actor"
       },
       {
-        "id": "En_7ecdae42",
-        "entity_name": "low alloy steel",
-        "entity_description": "Steels with up to 9% chromium and other alloys for high temperature strength and creep resistance.",
-        "entity_type_hint": "Material"
+        "id": "En_ef37b7fd",
+        "entity_name": "children",
+        "entity_description": "Young people portrayed as vulnerable targets of predatory strangers in cautionary urban legends.",
+        "entity_type_hint": "Actor"
       }
     ],
     "remarks": []
   },
   {
-    "candidate_id": "ClsC_ea4e666c",
-    "class_label": "Graphitization Phenomena",
-    "class_description": "Processes involving the transformation of carbide phases into graphite nodules in steels at elevated temperatures.",
-    "class_type_hint": "Material Transformation",
-    "class_group": "Steel Metallurgy and Degradation",
-    "confidence": 0.92,
-    "evidence_excerpt": "Transformation of carbide phases into graphite nodules.",
+    "candidate_id": "ClsC_91ed630a",
+    "class_label": "Loved Ones (Protected Individuals)",
+    "class_description": "Family members or close associates that communities aim to protect by sharing urban legends and related cautionary stories.",
+    "class_type_hint": "Social Actor",
+    "class_group": "Urban Legend Social Actors and Groups",
+    "confidence": 0.64,
+    "evidence_excerpt": "communities can come together to protect themselves and their loved ones from perceived threats",
     "member_ids": [
-      "En_d2a9115d",
-      "Can_3476493c"
+      "En_47198d48"
     ],
     "members": [
       {
-        "id": "En_d2a9115d",
-        "entity_name": "graphitization",
-        "entity_description": "Change in microstructure of carbon and 0.5Mo steels causing loss of strength and ductility.",
-        "entity_type_hint": "DamageMechanism"
-      },
-      {
-        "id": "Can_3476493c",
-        "entity_name": "graphite nodules",
-        "entity_description": "Result of carbide phase decomposition in steels at elevated temperatures, forming graphite nodules.",
-        "entity_type_hint": "Component"
+        "id": "En_47198d48",
+        "entity_name": "loved ones",
+        "entity_description": "Family members or close associates that communities aim to protect by sharing legends.",
+        "entity_type_hint": "Actor"
       }
     ],
     "remarks": []
   },
   {
-    "candidate_id": "ClsC_8a2ead3a",
-    "class_label": "Chromium in Steel",
-    "class_description": "Chromium as an alloying element in steel, providing resistance to oxidation, corrosion, and eliminating graphitization.",
-    "class_type_hint": "Material",
-    "class_group": "TBD",
-    "confidence": 0.92,
-    "evidence_excerpt": "Chromium is an alloying element in stainless steels.",
+    "candidate_id": "ClsR_e3962c89",
+    "class_label": "Bait Objects in Child-Luring Urban Legends",
+    "class_description": "Tempting objects (such as candy) used by predators as bait to lure children in cautionary urban legend narratives.",
+    "class_type_hint": "Narrative Object",
+    "class_group": "Cautionary Urban Legends – Child Luring Scenarios",
+    "confidence": 0.78,
+    "evidence_excerpt": "Stories of strangers luring children with candy ... warn listeners about the dangers",
     "member_ids": [
-      "En_f6aa95ca",
-      "En_417e7d84"
+      "En_95d09649"
     ],
     "members": [
       {
-        "id": "En_f6aa95ca",
-        "entity_name": "chromium",
-        "entity_description": "An alloying element in stainless steels that provides resistance to oxidation and corrosion.",
-        "entity_type_hint": "Material"
-      },
+        "id": "En_95d09649",
+        "entity_name": "candy",
+        "entity_description": "Sweets used as bait by strangers in cautionary tales about child luring.",
+        "entity_type_hint": "Object"
+      }
+    ],
+    "remarks": []
+  },
+  {
+    "candidate_id": "ClsR_19f6228d",
+    "class_label": "Audience of Cautionary Urban Legends",
+    "class_description": "Listeners and audiences who receive the implied warnings and moral lessons from cautionary urban legend stories.",
+    "class_type_hint": "Narrative Role",
+    "class_group": "Cautionary Urban Legends – Child Luring Scenarios",
+    "confidence": 0.78,
+    "evidence_excerpt": "Stories of strangers luring children with candy ... warn listeners about the dangers",
+    "member_ids": [
+      "En_9dc9eb21"
+    ],
+    "members": [
       {
-        "id": "En_417e7d84",
-        "entity_name": "chromium",
-        "entity_description": "Element added to steel to eliminate graphitization.",
-        "entity_type_hint": "Material"
+        "id": "En_9dc9eb21",
+        "entity_name": "listeners",
+        "entity_description": "People who hear these urban legends and receive the implied warnings about danger.",
+        "entity_type_hint": "Actor"
       }
     ],
     "remarks": []
@@ -436,5 +438,5 @@ Return ONLY the JSON array of ordered function calls.
 Return [] only if you are highly confident (> very strong evidence) that no change is needed.
 If any ambiguous or conflicting evidence exists, return a concrete ordered action list
 (with justifications and, optionally, confidence scores).
-You are a very proactive class-resolution assistant. (You are not called very proactive only by using modify_class for new_class_group. You must use other functions as well to be called a proactive class-resolution assistant.
+You are a very proactive class-resolution assistant. You are not called very proactive only by using modify_class for new_class_group. You must use other functions as well to be called a proactive class-resolution assistant.
 

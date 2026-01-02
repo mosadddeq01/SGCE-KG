@@ -1,0 +1,118 @@
+{
+  "cluster_label": 2,
+  "cluster_classes": [
+    {
+      "candidate_id": "ClsC_2bb0705d",
+      "class_label": "Corrosion-Resistant Alloys",
+      "class_description": "Alloys known for their resistance to corrosion, including stainless steels and nickel base alloys.",
+      "class_type_hint": "Material",
+      "class_group": "Steel Metallurgy",
+      "confidence": 0.88,
+      "evidence_excerpt": "Duplex stainless steel and nickel base alloys are known for corrosion resistance.",
+      "member_ids": [
+        "Can_0aec2541",
+        "Can_0441bbd6",
+        "En_2d1b9dea"
+      ],
+      "members": [
+        {
+          "id": "Can_0aec2541",
+          "entity_name": "duplex stainless steel",
+          "entity_description": "A family of stainless steels with a mixed austenitic-ferritic structure, known for its corrosion resistance, including Alloy 2205, 2304, and 2507.",
+          "entity_type_hint": "Material"
+        },
+        {
+          "id": "Can_0441bbd6",
+          "entity_name": "Stainless Steel",
+          "entity_description": "A corrosion-resistant alloy of iron, chromium, and often nickel, known for its strength, durability, and resistance to oxidation, sulfidation, and other forms of corrosion.",
+          "entity_type_hint": "Material"
+        },
+        {
+          "id": "En_2d1b9dea",
+          "entity_name": "nickel base",
+          "entity_description": "A family of alloys with nickel as a major alloying element, including Alloys 200, 400, K-500, etc.",
+          "entity_type_hint": "Material"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_cca87da3",
+      "class_label": "Titanium (Metal)",
+      "class_description": "Titanium, a strong, lightweight, and corrosion-resistant metal used in various applications.",
+      "class_type_hint": "Material",
+      "class_group": "Metals and Alloys",
+      "confidence": 0.1,
+      "evidence_excerpt": "",
+      "member_ids": [
+        "En_66d2eb63"
+      ],
+      "members": [
+        {
+          "id": "En_66d2eb63",
+          "entity_name": "titanium",
+          "entity_description": "A strong, lightweight, and corrosion-resistant metal used in various applications.",
+          "entity_type_hint": "Material"
+        }
+      ],
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_2bb0705d\",\n      \"new_name\": \"Corrosion-Resistant Alloys\",\n      \"new_description\": \"Alloys known for their resistance to corrosion, including stainless steels, nickel base alloys, and other corrosion-resistant metals.\",\n      \"new_class_type_hint\": \"Material\",\n      \"new_class_group\": \"Corrosion-Resistant Metals and Alloys\",\n      \"remark\": null,\n      \"justification\": \"Current class_group 'Steel Metallurgy' is too narrow; the class includes nickel base alloys and should be grouped under a broader corrosion-resistance-focused Class_Group.\",\n      \"confidence\": 0.95\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_cca87da3\",\n      \"new_name\": \"Titanium (Metal)\",\n      \"new_description\": \"Titanium, a strong, lightweight, and corrosion-resistant metal used in various applications.\",\n      \"new_class_type_hint\": \"Material\",\n      \"new_class_group\": \"Corrosion-Resistant Metals and Alloys\",\n      \"remark\": null,\n      \"justification\": \"Titanium is a corrosion-resistant metal and should be grouped with other corrosion-resistant alloys for schema coherence.\",\n      \"confidence\": 0.9\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_2bb0705d",
+        "new_name": "Corrosion-Resistant Alloys",
+        "new_description": "Alloys known for their resistance to corrosion, including stainless steels, nickel base alloys, and other corrosion-resistant metals.",
+        "new_class_type_hint": "Material",
+        "new_class_group": "Corrosion-Resistant Metals and Alloys",
+        "remark": null,
+        "justification": "Current class_group 'Steel Metallurgy' is too narrow; the class includes nickel base alloys and should be grouped under a broader corrosion-resistance-focused Class_Group.",
+        "confidence": 0.95
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_cca87da3",
+        "new_name": "Titanium (Metal)",
+        "new_description": "Titanium, a strong, lightweight, and corrosion-resistant metal used in various applications.",
+        "new_class_type_hint": "Material",
+        "new_class_group": "Corrosion-Resistant Metals and Alloys",
+        "remark": null,
+        "justification": "Titanium is a corrosion-resistant metal and should be grouped with other corrosion-resistant alloys for schema coherence.",
+        "confidence": 0.9
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_2bb0705d",
+      "class_id_resolved": "ClsC_2bb0705d",
+      "new_name": "Corrosion-Resistant Alloys",
+      "new_description": "Alloys known for their resistance to corrosion, including stainless steels, nickel base alloys, and other corrosion-resistant metals.",
+      "new_class_type_hint": "Material",
+      "new_class_group": "Corrosion-Resistant Metals and Alloys",
+      "remark": null,
+      "justification": "Current class_group 'Steel Metallurgy' is too narrow; the class includes nickel base alloys and should be grouped under a broader corrosion-resistance-focused Class_Group.",
+      "confidence": 0.95
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_cca87da3",
+      "class_id_resolved": "ClsC_cca87da3",
+      "new_name": "Titanium (Metal)",
+      "new_description": "Titanium, a strong, lightweight, and corrosion-resistant metal used in various applications.",
+      "new_class_type_hint": "Material",
+      "new_class_group": "Corrosion-Resistant Metals and Alloys",
+      "remark": null,
+      "justification": "Titanium is a corrosion-resistant metal and should be grouped with other corrosion-resistant alloys for schema coherence.",
+      "confidence": 0.9
+    }
+  ],
+  "provisional_to_real": {},
+  "timestamp": "2025-12-28T00:22:43Z"
+}

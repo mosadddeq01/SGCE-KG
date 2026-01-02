@@ -1,0 +1,157 @@
+{
+  "cluster_label": "10_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_7737479c6211",
+      "relation_name": "concerns",
+      "rel_desc": "The ethical dilemma of transparency is specifically situated within AI development and, by extension, AI systems.",
+      "rel_hint_type": "topic",
+      "canonical_rel_name": "concerns",
+      "canonical_rel_desc": "Indicates that an ethical issue or dilemma is about or pertains to a particular system, domain, or context.",
+      "rel_cls": "ethical_dilemma_scope_relation",
+      "rel_cls_group": "ABOUTNESS",
+      "subject_entity_name": "ethical dilemma of transparency in AI",
+      "object_entity_name": "AI systems",
+      "subject_class_label": "AI Transparency Ethics",
+      "subject_class_group": "AI Ethics: Privacy and Transparency",
+      "object_class_label": "AI Systems",
+      "object_class_group": "TBD",
+      "qualifiers": {
+        "TemporalQualifier": "during AI development",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.78,
+      "remarks": [
+        "AI development is not an explicit entity; AI systems used as proxy for development context.",
+        "AI development is not an explicit entity; AI systems used as proxy for development context.",
+        "AI development is not an explicit entity; AI systems used as proxy for development context."
+      ]
+    },
+    {
+      "relation_id": "RelR_28ef1083b1df",
+      "relation_name": "is_concern_in",
+      "rel_desc": "Job displacement is explicitly identified as a concern within the broader ethical dilemmas in AI development.",
+      "rel_hint_type": "issue_membership",
+      "canonical_rel_name": "is_ethical_issue_in",
+      "canonical_rel_desc": "The subject is a specific ethical issue or concern that is part of, or discussed within, the broader set or category of ethical dilemmas in AI development (the object).",
+      "rel_cls": "ethical_issue_membership_relation",
+      "rel_cls_group": "ASSOCIATION",
+      "subject_entity_name": "job displacement",
+      "object_entity_name": "ethical dilemmas in AI development",
+      "subject_class_label": "AI Societal and Economic Impacts",
+      "subject_class_group": "AI_Impacts_and_Harms",
+      "object_class_label": "AI Ethics Dilemmas (Concept)",
+      "object_class_group": "AI Ethics & Governance",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "societal level",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "raise concerns about",
+        "LogicalMarker": null,
+        "OtherQualifier": "EthicalContext: potential impact of AI on society in AI development"
+      },
+      "confidence": 0.93,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_7a7aebe13364",
+      "relation_name": "is_concern_in",
+      "rel_desc": "Inequality is explicitly identified as a concern within the broader ethical dilemmas in AI development.",
+      "rel_hint_type": "issue_membership",
+      "canonical_rel_name": "is_ethical_issue_in",
+      "canonical_rel_desc": "The subject is a specific ethical issue or concern that is part of, or discussed within, the broader set or category of ethical dilemmas in AI development (the object).",
+      "rel_cls": "ethical_issue_membership_relation",
+      "rel_cls_group": "ASSOCIATION",
+      "subject_entity_name": "inequality",
+      "object_entity_name": "ethical dilemmas in AI development",
+      "subject_class_label": "AI Societal and Economic Impacts",
+      "subject_class_group": "AI_Impacts_and_Harms",
+      "object_class_label": "AI Ethics Dilemmas (Concept)",
+      "object_class_group": "AI Ethics & Governance",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "societal level",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "raise concerns about",
+        "LogicalMarker": null,
+        "OtherQualifier": "EthicalContext: evaluation of AI’s societal impact"
+      },
+      "confidence": 0.93,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_a1ca51df1771",
+      "relation_name": "is_concern_in",
+      "rel_desc": "Concentration of power is explicitly identified as a concern within ethical dilemmas in AI development.",
+      "rel_hint_type": "issue_membership",
+      "canonical_rel_name": "is_ethical_issue_in",
+      "canonical_rel_desc": "The subject is a specific ethical issue or concern that is part of, or discussed within, the broader set or category of ethical dilemmas in AI development (the object).",
+      "rel_cls": "ethical_issue_membership_relation",
+      "rel_cls_group": "ASSOCIATION",
+      "subject_entity_name": "concentration of power",
+      "object_entity_name": "ethical dilemmas in AI development",
+      "subject_class_label": "AI Societal and Economic Impacts",
+      "subject_class_group": "AI_Impacts_and_Harms",
+      "object_class_label": "AI Ethics Dilemmas (Concept)",
+      "object_class_group": "AI Ethics & Governance",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "societal level",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "raise concerns about",
+        "LogicalMarker": null,
+        "OtherQualifier": "EthicalContext: potential impact of AI on society"
+      },
+      "confidence": 0.93,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_rel_schema\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_7737479c6211\"],\n      \"canonical_rel_name\": \"pertains_to\",\n      \"canonical_rel_desc\": \"Indicates that an ethical issue, dilemma, or concept is about or related to a particular system, domain, or context.\",\n      \"rel_cls\": \"ethical_dilemma_scope_relation\",\n      \"rel_cls_group\": \"ABOUTNESS\",\n      \"justification\": \"The relation expresses a general aboutness/scope link between an ethical dilemma and its domain (AI systems). Using a more generic predicate-style name 'pertains_to' improves reusability across the KG and better matches standard aboutness semantics than the verb-form label 'concerns', while keeping the same class and group.\",\n      \"remark\": null,\n      \"confidence\": 0.86\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_rel_schema",
+      "args": {
+        "relation_ids": [
+          "RelR_7737479c6211"
+        ],
+        "canonical_rel_name": "pertains_to",
+        "canonical_rel_desc": "Indicates that an ethical issue, dilemma, or concept is about or related to a particular system, domain, or context.",
+        "rel_cls": "ethical_dilemma_scope_relation",
+        "rel_cls_group": "ABOUTNESS",
+        "justification": "The relation expresses a general aboutness/scope link between an ethical dilemma and its domain (AI systems). Using a more generic predicate-style name 'pertains_to' improves reusability across the KG and better matches standard aboutness semantics than the verb-form label 'concerns', while keeping the same class and group.",
+        "remark": null,
+        "confidence": 0.86
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_rel_schema",
+      "relation_ids": [
+        "RelR_7737479c6211"
+      ],
+      "canonical_rel_name": "pertains_to",
+      "canonical_rel_desc": "Indicates that an ethical issue, dilemma, or concept is about or related to a particular system, domain, or context.",
+      "rel_cls": "ethical_dilemma_scope_relation",
+      "rel_cls_group": "ABOUTNESS",
+      "new_relation_name": null,
+      "original_relation_name": null,
+      "justification": "The relation expresses a general aboutness/scope link between an ethical dilemma and its domain (AI systems). Using a more generic predicate-style name 'pertains_to' improves reusability across the KG and better matches standard aboutness semantics than the verb-form label 'concerns', while keeping the same class and group.",
+      "remark": null,
+      "confidence": 0.86
+    }
+  ],
+  "timestamp": "2026-01-02T09:26:42Z"
+}

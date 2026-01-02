@@ -1,0 +1,70 @@
+[
+  {
+    "function": "merge_classes",
+    "args": {
+      "class_ids": [
+        "ClsC_8927f318",
+        "ClsC_d80e4f55"
+      ],
+      "provisional_id": "MERGE(ClsC_8927f318|ClsC_d80e4f55)",
+      "new_name": "Butterfly Predators and Prey Role",
+      "new_description": "Organisms that prey on butterflies (e.g., birds, reptiles, other insects) and the ecological role of butterflies as a food source within food webs.",
+      "new_class_type_hint": "Ecological Interaction",
+      "justification": "Both classes describe the same ecological context—predators that consume butterflies and butterflies’ role as prey—drawing from the same evidence sentence and splitting predators (birds vs reptiles/other insects) across two overlapping classes.",
+      "remark": null,
+      "confidence": 0.87
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "MERGE(ClsC_8927f318|ClsC_d80e4f55)",
+      "new_name": "Butterfly Predators and Prey Role",
+      "new_description": "Organisms that prey on butterflies (birds, reptiles, and other insects) and the ecological role of butterflies as prey within food webs.",
+      "new_class_type_hint": "Ecological Interaction",
+      "new_class_group": "Butterfly Predation & Anti-predator Strategies",
+      "remark": null,
+      "justification": "Sets a coherent class_group for the merged predation-focused class to anchor the predation domain and align it with related predation-risk content.",
+      "confidence": 0.88
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_51c702f9",
+      "new_name": "Butterfly Predation Risk and Concealment",
+      "new_description": "Predators of butterfly eggs and larvae and the use of leaf undersides and similar behaviors to reduce predation risk.",
+      "new_class_type_hint": "Ecological Interaction",
+      "new_class_group": "Butterfly Predation & Anti-predator Strategies",
+      "remark": null,
+      "justification": "Aligns this class with the same predation-focused group as the merged predator class and clarifies that it covers both threats (predators) and anti-predator behaviors (leaf underside use).",
+      "confidence": 0.82
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_9a8ddbba",
+      "new_name": "Butterfly Adult Feeding Biology",
+      "new_description": "How adult butterflies obtain food from flowers, including nectar as a food resource and the proboscis as the specialized feeding structure.",
+      "new_class_type_hint": "Biological System",
+      "new_class_group": "Butterfly Adult Feeding & Nutrition",
+      "remark": null,
+      "justification": "Assigns a clear feeding-focused class_group and slightly clarifies that this class is specific to adult butterfly feeding biology.",
+      "confidence": 0.86
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_ac18d27f",
+      "new_name": "Butterfly Host Plants and Oviposition Sites",
+      "new_description": "Host plants and their structures (e.g., leaves, undersides of leaves) that serve as oviposition sites and food sources for butterfly eggs, larvae, and chrysalides.",
+      "new_class_type_hint": "Habitat / Resource",
+      "new_class_group": "Butterfly Host Plants & Oviposition Sites",
+      "remark": null,
+      "justification": "Sets a dedicated host-plant/oviposition class_group and refines the label/description to emphasize both host plants and specific plant structures used during early life stages.",
+      "confidence": 0.87
+    }
+  }
+]

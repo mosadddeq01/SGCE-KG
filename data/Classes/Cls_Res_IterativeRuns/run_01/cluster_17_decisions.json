@@ -1,0 +1,145 @@
+{
+  "cluster_label": 17,
+  "cluster_classes": [
+    {
+      "candidate_id": "ClsC_c5cf3150",
+      "class_label": "Cultural Contexts of Legends",
+      "class_description": "Concepts and groups that describe how shared cultural identities, interests, and anxieties shape the formation and evolution of tales and urban legends.",
+      "class_type_hint": "Sociocultural Context",
+      "class_group": "Urban Legends and Modern Folklore",
+      "confidence": 0.86,
+      "evidence_excerpt": "Tales evolved over time to suit the interests and fears of different cultures and their distinct cultural groups.",
+      "member_ids": [
+        "En_1c3e93a0",
+        "En_686f75cf"
+      ],
+      "members": [
+        {
+          "id": "En_1c3e93a0",
+          "entity_name": "fears of different cultures",
+          "entity_description": "Culturally specific anxieties that influence the content of tales and legends.",
+          "entity_type_hint": "Concept"
+        },
+        {
+          "id": "En_686f75cf",
+          "entity_name": "cultural groups",
+          "entity_description": "Distinct cultural groups whose shared interests and fears shape urban legends.",
+          "entity_type_hint": "SocialGroup"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_727496d3",
+      "class_label": "Societal Fears",
+      "class_description": "Concepts describing the collective fears and anxieties held by human communities that are reflected in narratives such as urban legends.",
+      "class_type_hint": "Social Concept",
+      "class_group": "Urban Legend Emotional Dynamics",
+      "confidence": 0.32,
+      "evidence_excerpt": "urban legends ... reflect the fears and anxieties of society",
+      "member_ids": [
+        "Can_c6384468",
+        "En_72a7e56d",
+        "En_1c3e93a0"
+      ],
+      "members": [
+        {
+          "id": "Can_c6384468",
+          "entity_name": "fears and anxieties of society",
+          "entity_description": "Collective worries and concerns held by a society that are reflected or mirrored in urban legends.",
+          "entity_type_hint": "Concept"
+        },
+        {
+          "id": "En_72a7e56d",
+          "entity_name": "society",
+          "entity_description": "Human communities whose shared fears, anxieties, and imagination shape urban legends.",
+          "entity_type_hint": "Agent"
+        }
+      ],
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"reassign_entities\",\n    \"args\": {\n      \"entity_ids\": [\"En_1c3e93a0\"],\n      \"from_class_id\": \"ClsC_c5cf3150\",\n      \"to_class_id\": \"ClsC_727496d3\",\n      \"justification\": \"The entity 'fears of different cultures' is conceptually a collective fear/anxiety and aligns more directly with the Societal Fears class, while the Cultural Contexts class is better focused on groups and identities rather than the fears themselves.\",\n      \"remark\": null,\n      \"confidence\": 0.86\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_c5cf3150\",\n      \"new_name\": \"Cultural Groups Shaping Legends\",\n      \"new_description\": \"Distinct cultural groups and identities whose shared interests and anxieties shape the formation and evolution of tales and urban legends.\",\n      \"new_class_type_hint\": \"Sociocultural Context\",\n      \"new_class_group\": \"Urban Legends Sociocultural Context\",\n      \"remark\": null,\n      \"justification\": \"After moving the explicit 'fears' entity out, this class is best interpreted as representing cultural groups and identities rather than fears; renaming and aligning the class_group clarifies its scope and connects it to the same sociocultural domain as related classes.\",\n      \"confidence\": 0.84\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_727496d3\",\n      \"new_name\": \"Societal Fears\",\n      \"new_description\": \"Collective fears and anxieties held by societies and cultural groups that are reflected in narratives such as tales and urban legends.\",\n      \"new_class_type_hint\": \"Social Concept\",\n      \"new_class_group\": \"Urban Legends Sociocultural Context\",\n      \"remark\": null,\n      \"justification\": \"This class clearly centers on collective fears and anxieties that urban legends express; updating the class_group to 'Urban Legends Sociocultural Context' places it in the same overarching sociocultural domain as the cultural-groups class, improving schema connectivity.\",\n      \"confidence\": 0.86\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "reassign_entities",
+      "args": {
+        "entity_ids": [
+          "En_1c3e93a0"
+        ],
+        "from_class_id": "ClsC_c5cf3150",
+        "to_class_id": "ClsC_727496d3",
+        "justification": "The entity 'fears of different cultures' is conceptually a collective fear/anxiety and aligns more directly with the Societal Fears class, while the Cultural Contexts class is better focused on groups and identities rather than the fears themselves.",
+        "remark": null,
+        "confidence": 0.86
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_c5cf3150",
+        "new_name": "Cultural Groups Shaping Legends",
+        "new_description": "Distinct cultural groups and identities whose shared interests and anxieties shape the formation and evolution of tales and urban legends.",
+        "new_class_type_hint": "Sociocultural Context",
+        "new_class_group": "Urban Legends Sociocultural Context",
+        "remark": null,
+        "justification": "After moving the explicit 'fears' entity out, this class is best interpreted as representing cultural groups and identities rather than fears; renaming and aligning the class_group clarifies its scope and connects it to the same sociocultural domain as related classes.",
+        "confidence": 0.84
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_727496d3",
+        "new_name": "Societal Fears",
+        "new_description": "Collective fears and anxieties held by societies and cultural groups that are reflected in narratives such as tales and urban legends.",
+        "new_class_type_hint": "Social Concept",
+        "new_class_group": "Urban Legends Sociocultural Context",
+        "remark": null,
+        "justification": "This class clearly centers on collective fears and anxieties that urban legends express; updating the class_group to 'Urban Legends Sociocultural Context' places it in the same overarching sociocultural domain as the cultural-groups class, improving schema connectivity.",
+        "confidence": 0.86
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "reassign_entities",
+      "entity_ids": [
+        "En_1c3e93a0"
+      ],
+      "from": "ClsC_c5cf3150",
+      "from_resolved": "ClsC_c5cf3150",
+      "to": "ClsC_727496d3",
+      "to_resolved": "ClsC_727496d3",
+      "justification": "The entity 'fears of different cultures' is conceptually a collective fear/anxiety and aligns more directly with the Societal Fears class, while the Cultural Contexts class is better focused on groups and identities rather than the fears themselves.",
+      "remark": null,
+      "confidence": 0.86
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_c5cf3150",
+      "class_id_resolved": "ClsC_c5cf3150",
+      "new_name": "Cultural Groups Shaping Legends",
+      "new_description": "Distinct cultural groups and identities whose shared interests and anxieties shape the formation and evolution of tales and urban legends.",
+      "new_class_type_hint": "Sociocultural Context",
+      "new_class_group": "Urban Legends Sociocultural Context",
+      "remark": null,
+      "justification": "After moving the explicit 'fears' entity out, this class is best interpreted as representing cultural groups and identities rather than fears; renaming and aligning the class_group clarifies its scope and connects it to the same sociocultural domain as related classes.",
+      "confidence": 0.84
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_727496d3",
+      "class_id_resolved": "ClsC_727496d3",
+      "new_name": "Societal Fears",
+      "new_description": "Collective fears and anxieties held by societies and cultural groups that are reflected in narratives such as tales and urban legends.",
+      "new_class_type_hint": "Social Concept",
+      "new_class_group": "Urban Legends Sociocultural Context",
+      "remark": null,
+      "justification": "This class clearly centers on collective fears and anxieties that urban legends express; updating the class_group to 'Urban Legends Sociocultural Context' places it in the same overarching sociocultural domain as the cultural-groups class, improving schema connectivity.",
+      "confidence": 0.86
+    }
+  ],
+  "provisional_to_real": {},
+  "timestamp": "2026-01-02T08:38:49Z"
+}

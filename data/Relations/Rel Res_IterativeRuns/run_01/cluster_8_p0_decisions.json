@@ -1,0 +1,99 @@
+{
+  "cluster_label": "8_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_eeeb624488dd",
+      "relation_name": "mimics",
+      "rel_desc": "Twig mimicry involves resembling twigs in appearance.",
+      "rel_hint_type": "resemblance",
+      "canonical_rel_name": "resembles_in_appearance",
+      "canonical_rel_desc": "Subject is a type of mimicry strategy that visually resembles the object in appearance or form, typically for camouflage or concealment.",
+      "rel_cls": "mimicry_resemblance_relation",
+      "rel_cls_group": "IDENTITY",
+      "subject_entity_name": "twig mimicry",
+      "object_entity_name": "twigs",
+      "subject_class_label": "Caterpillar Camouflage Strategies",
+      "subject_class_group": "Caterpillar Biology and Defense",
+      "object_class_label": "Plant Structures as Lepidopteran Substrate and Background",
+      "object_class_group": "Lepidopteran Plant Interactions & Habitat",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "visual environment where twigs are present",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "to camouflage themselves",
+        "LogicalMarker": null,
+        "OtherQualifier": "Purpose: concealment from predators"
+      },
+      "confidence": 0.9,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_6d68f46ba528",
+      "relation_name": "mimics",
+      "rel_desc": "Leaf mimicry consists of resembling leaves in appearance.",
+      "rel_hint_type": "resemblance",
+      "canonical_rel_name": "resembles_in_appearance",
+      "canonical_rel_desc": "Subject is a type of mimicry strategy that visually resembles the object in appearance or form, typically for camouflage or concealment.",
+      "rel_cls": "mimicry_resemblance_relation",
+      "rel_cls_group": "IDENTITY",
+      "subject_entity_name": "leaf mimicry",
+      "object_entity_name": "leaves",
+      "subject_class_label": "Caterpillar Camouflage Strategies",
+      "subject_class_group": "Caterpillar Biology and Defense",
+      "object_class_label": "Plant Structures as Lepidopteran Substrate and Background",
+      "object_class_group": "Lepidopteran Plant Interactions & Habitat",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "visual environment where leaves are present",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "to camouflage themselves",
+        "LogicalMarker": null,
+        "OtherQualifier": "Purpose: concealment from predators"
+      },
+      "confidence": 0.9,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_rel_schema\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_eeeb624488dd\",\n        \"RelR_6d68f46ba528\"\n      ],\n      \"canonical_rel_name\": null,\n      \"canonical_rel_desc\": null,\n      \"rel_cls\": null,\n      \"rel_cls_group\": \"ASSOCIATION\",\n      \"justification\": \"Both relations describe mimicry strategies where the subject visually resembles the object for camouflage. This is a deceptive resemblance, not an ontological identity between entities, so mapping to an IDENTITY group is misleading. A broad ASSOCIATION group better captures that these are pattern-based resemblance/association relations rather than true identity.\",\n      \"remark\": \"Changed rel_cls_group from IDENTITY to ASSOCIATION to reflect that mimicry is a visual/functional resemblance rather than actual identity of entities.\",\n      \"confidence\": 0.88\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_rel_schema",
+      "args": {
+        "relation_ids": [
+          "RelR_eeeb624488dd",
+          "RelR_6d68f46ba528"
+        ],
+        "canonical_rel_name": null,
+        "canonical_rel_desc": null,
+        "rel_cls": null,
+        "rel_cls_group": "ASSOCIATION",
+        "justification": "Both relations describe mimicry strategies where the subject visually resembles the object for camouflage. This is a deceptive resemblance, not an ontological identity between entities, so mapping to an IDENTITY group is misleading. A broad ASSOCIATION group better captures that these are pattern-based resemblance/association relations rather than true identity.",
+        "remark": "Changed rel_cls_group from IDENTITY to ASSOCIATION to reflect that mimicry is a visual/functional resemblance rather than actual identity of entities.",
+        "confidence": 0.88
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_rel_schema",
+      "relation_ids": [
+        "RelR_eeeb624488dd",
+        "RelR_6d68f46ba528"
+      ],
+      "canonical_rel_name": null,
+      "canonical_rel_desc": null,
+      "rel_cls": null,
+      "rel_cls_group": "ASSOCIATION",
+      "new_relation_name": null,
+      "original_relation_name": null,
+      "justification": "Both relations describe mimicry strategies where the subject visually resembles the object for camouflage. This is a deceptive resemblance, not an ontological identity between entities, so mapping to an IDENTITY group is misleading. A broad ASSOCIATION group better captures that these are pattern-based resemblance/association relations rather than true identity.",
+      "remark": "Changed rel_cls_group from IDENTITY to ASSOCIATION to reflect that mimicry is a visual/functional resemblance rather than actual identity of entities.",
+      "confidence": 0.88
+    }
+  ],
+  "timestamp": "2026-01-02T09:22:14Z"
+}

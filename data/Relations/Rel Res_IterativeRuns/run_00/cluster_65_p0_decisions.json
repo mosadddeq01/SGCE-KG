@@ -1,0 +1,163 @@
+{
+  "cluster_label": "65_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_ba24b6e0d3d5",
+      "relation_name": "produced_by",
+      "rel_desc": "Pollen is a reproductive material produced by flowers.",
+      "rel_hint_type": "production",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "pollen",
+      "object_entity_name": "flowers",
+      "subject_class_label": "Pollen (Plant Reproductive Material)",
+      "subject_class_group": "Flowering Plant Reproduction",
+      "object_class_label": "Flowers (Plant Reproductive Structures)",
+      "object_class_group": "Flowering Plant Reproduction",
+      "qualifiers": {
+        "TemporalQualifier": "during flowering",
+        "SpatialQualifier": "on or within flowers",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": "from ... to ...",
+        "OtherQualifier": null
+      },
+      "confidence": 0.9,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_3b75b87b80cf",
+      "relation_name": "produces",
+      "rel_desc": "AI systems generate decisions whose reasoning can be hard to understand.",
+      "rel_hint_type": "output relation",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "AI systems",
+      "object_entity_name": "AI system decisions",
+      "subject_class_label": "AI Systems",
+      "subject_class_group": "TBD",
+      "object_class_label": "AI Decision Explainability",
+      "object_class_group": "AI Transparency & Explainability",
+      "qualifiers": {
+        "TemporalQualifier": "as systems become more complex and opaque",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": "as",
+        "OtherQualifier": "ExplainabilityContext: challenging to understand the decision-making process"
+      },
+      "confidence": 0.9,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_ba24b6e0d3d5\"],\n      \"canonical_rel_name\": \"is_produced_by\",\n      \"canonical_rel_desc\": \"Indicates that the subject entity is generated or produced by the object entity.\",\n      \"justification\": \"In this relation, 'pollen' (subject) is described as reproductive material produced by 'flowers' (object), so the predicate must capture that the subject is the product of the object. The passive-direction predicate 'is_produced_by' accurately reflects this direction.\",\n      \"remark\": null,\n      \"confidence\": 0.93\n    }\n  },\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_3b75b87b80cf\"],\n      \"canonical_rel_name\": \"produces\",\n      \"canonical_rel_desc\": \"Indicates that the subject entity generates or produces the object entity as an output or result.\",\n      \"justification\": \"In this relation, 'AI systems' (subject) generate 'AI system decisions' (object), matching an active-direction production predicate. Using 'produces' preserves this direction and aligns with standard production/output semantics.\",\n      \"remark\": null,\n      \"confidence\": 0.93\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_ba24b6e0d3d5\", \"RelR_3b75b87b80cf\"],\n      \"rel_cls\": \"production_output_relation\",\n      \"justification\": \"Both relations describe a producer–product linkage: flowers producing pollen, and AI systems producing decisions. Despite opposite predicate direction in one case, they share the same conceptual family of a process or agent yielding an output.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_ba24b6e0d3d5\", \"RelR_3b75b87b80cf\"],\n      \"rel_cls_group\": \"CAUSALITY\",\n      \"justification\": \"In both cases, the producer causally leads to the existence of the product (pollen caused by flowers, decisions caused by AI systems). This is best captured as a causal/processual link rather than mere association.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_ba24b6e0d3d5"
+        ],
+        "canonical_rel_name": "is_produced_by",
+        "canonical_rel_desc": "Indicates that the subject entity is generated or produced by the object entity.",
+        "justification": "In this relation, 'pollen' (subject) is described as reproductive material produced by 'flowers' (object), so the predicate must capture that the subject is the product of the object. The passive-direction predicate 'is_produced_by' accurately reflects this direction.",
+        "remark": null,
+        "confidence": 0.93
+      }
+    },
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_3b75b87b80cf"
+        ],
+        "canonical_rel_name": "produces",
+        "canonical_rel_desc": "Indicates that the subject entity generates or produces the object entity as an output or result.",
+        "justification": "In this relation, 'AI systems' (subject) generate 'AI system decisions' (object), matching an active-direction production predicate. Using 'produces' preserves this direction and aligns with standard production/output semantics.",
+        "remark": null,
+        "confidence": 0.93
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_ba24b6e0d3d5",
+          "RelR_3b75b87b80cf"
+        ],
+        "rel_cls": "production_output_relation",
+        "justification": "Both relations describe a producer–product linkage: flowers producing pollen, and AI systems producing decisions. Despite opposite predicate direction in one case, they share the same conceptual family of a process or agent yielding an output.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_ba24b6e0d3d5",
+          "RelR_3b75b87b80cf"
+        ],
+        "rel_cls_group": "CAUSALITY",
+        "justification": "In both cases, the producer causally leads to the existence of the product (pollen caused by flowers, decisions caused by AI systems). This is best captured as a causal/processual link rather than mere association.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_ba24b6e0d3d5"
+      ],
+      "canonical_rel_name": "is_produced_by",
+      "canonical_rel_desc": "Indicates that the subject entity is generated or produced by the object entity.",
+      "justification": "In this relation, 'pollen' (subject) is described as reproductive material produced by 'flowers' (object), so the predicate must capture that the subject is the product of the object. The passive-direction predicate 'is_produced_by' accurately reflects this direction.",
+      "remark": null,
+      "confidence": 0.93
+    },
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_3b75b87b80cf"
+      ],
+      "canonical_rel_name": "produces",
+      "canonical_rel_desc": "Indicates that the subject entity generates or produces the object entity as an output or result.",
+      "justification": "In this relation, 'AI systems' (subject) generate 'AI system decisions' (object), matching an active-direction production predicate. Using 'produces' preserves this direction and aligns with standard production/output semantics.",
+      "remark": null,
+      "confidence": 0.93
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_ba24b6e0d3d5",
+        "RelR_3b75b87b80cf"
+      ],
+      "rel_cls": "production_output_relation",
+      "justification": "Both relations describe a producer–product linkage: flowers producing pollen, and AI systems producing decisions. Despite opposite predicate direction in one case, they share the same conceptual family of a process or agent yielding an output.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_ba24b6e0d3d5",
+        "RelR_3b75b87b80cf"
+      ],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "In both cases, the producer causally leads to the existence of the product (pollen caused by flowers, decisions caused by AI systems). This is best captured as a causal/processual link rather than mere association.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  ],
+  "timestamp": "2026-01-02T09:20:26Z"
+}

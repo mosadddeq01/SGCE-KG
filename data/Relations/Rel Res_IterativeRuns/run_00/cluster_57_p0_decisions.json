@@ -1,0 +1,145 @@
+{
+  "cluster_label": "57_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_ca823f123534",
+      "relation_name": "contributes_to",
+      "rel_desc": "Caterpillars’ feeding on leaves is associated with (and functionally supports) their rapid growth during the larval stage.",
+      "rel_hint_type": "causal",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "feeding on leaves",
+      "object_entity_name": "rapid growth of caterpillars",
+      "subject_class_label": "Caterpillar Leaf-Feeding Behavior",
+      "subject_class_group": "Lepidopteran Plant Interactions & Habitat",
+      "object_class_label": "Caterpillar Rapid Growth",
+      "object_class_group": "Caterpillar Development and Physiology",
+      "qualifiers": {
+        "TemporalQualifier": "during the larva stage (second stage of the butterfly's life cycle)",
+        "SpatialQualifier": "on leaves",
+        "OperationalConstraint": "when caterpillars are actively feeding",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "and (co-occurring activities implying feeding enables growth)",
+        "LogicalMarker": "and",
+        "OtherQualifier": "LifeStage: caterpillar (larva)"
+      },
+      "confidence": 0.78,
+      "remarks": [
+        "Causality is implied but not explicitly stated; relation created to capture this developmental context."
+      ]
+    },
+    {
+      "relation_id": "RelR_adc14e4f5770",
+      "relation_name": "contributes_to",
+      "rel_desc": "Pollination is linked to maintaining the balance of plant populations.",
+      "rel_hint_type": "causal",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "pollination",
+      "object_entity_name": "balance of plant populations",
+      "subject_class_label": "Pollination (Flowering Plant Process)",
+      "subject_class_group": "Flowering Plant Reproduction",
+      "object_class_label": "Ecological State Variables",
+      "object_class_group": "Ecology and Ecosystems",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "within ecosystems where caterpillars interact with plants",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "crucial role in ... maintaining",
+        "LogicalMarker": "and",
+        "OtherQualifier": "EcologicalContext: ecosystem plant community dynamics"
+      },
+      "confidence": 0.86,
+      "remarks": [
+        "Caterpillars are the agents, but relation here is between the ecological process and the resulting state."
+      ]
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_ca823f123534\",\n        \"RelR_adc14e4f5770\"\n      ],\n      \"canonical_rel_name\": \"contributes_to\",\n      \"canonical_rel_desc\": \"Indicates that the subject process or activity is a contributing causal factor to the occurrence, maintenance, or magnitude of the object outcome or state.\",\n      \"justification\": \"In both instances, the subject (feeding on leaves; pollination) is described as a causal or enabling factor that supports or helps maintain the object (rapid growth of caterpillars; balance of plant populations). The semantics are consistent: a contributing causal influence from subject to object, so they can share a single predicate.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_ca823f123534\",\n        \"RelR_adc14e4f5770\"\n      ],\n      \"rel_cls\": \"causal_influence_relation\",\n      \"justification\": \"Both relations express that one biological/ecological process has a causal influence on another state or outcome. Grouping them under a general causal_influence_relation class captures this shared family of semantics beyond the specific predicate label.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_ca823f123534\",\n        \"RelR_adc14e4f5770\"\n      ],\n      \"rel_cls_group\": \"CAUSALITY\",\n      \"justification\": \"The rel_hint_type is explicitly causal and the descriptions indicate cause–effect style contributions from subject to object. This fits the broad CAUSALITY dimension.\",\n      \"remark\": null,\n      \"confidence\": 0.96\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_ca823f123534",
+          "RelR_adc14e4f5770"
+        ],
+        "canonical_rel_name": "contributes_to",
+        "canonical_rel_desc": "Indicates that the subject process or activity is a contributing causal factor to the occurrence, maintenance, or magnitude of the object outcome or state.",
+        "justification": "In both instances, the subject (feeding on leaves; pollination) is described as a causal or enabling factor that supports or helps maintain the object (rapid growth of caterpillars; balance of plant populations). The semantics are consistent: a contributing causal influence from subject to object, so they can share a single predicate.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_ca823f123534",
+          "RelR_adc14e4f5770"
+        ],
+        "rel_cls": "causal_influence_relation",
+        "justification": "Both relations express that one biological/ecological process has a causal influence on another state or outcome. Grouping them under a general causal_influence_relation class captures this shared family of semantics beyond the specific predicate label.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_ca823f123534",
+          "RelR_adc14e4f5770"
+        ],
+        "rel_cls_group": "CAUSALITY",
+        "justification": "The rel_hint_type is explicitly causal and the descriptions indicate cause–effect style contributions from subject to object. This fits the broad CAUSALITY dimension.",
+        "remark": null,
+        "confidence": 0.96
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_ca823f123534",
+        "RelR_adc14e4f5770"
+      ],
+      "canonical_rel_name": "contributes_to",
+      "canonical_rel_desc": "Indicates that the subject process or activity is a contributing causal factor to the occurrence, maintenance, or magnitude of the object outcome or state.",
+      "justification": "In both instances, the subject (feeding on leaves; pollination) is described as a causal or enabling factor that supports or helps maintain the object (rapid growth of caterpillars; balance of plant populations). The semantics are consistent: a contributing causal influence from subject to object, so they can share a single predicate.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_ca823f123534",
+        "RelR_adc14e4f5770"
+      ],
+      "rel_cls": "causal_influence_relation",
+      "justification": "Both relations express that one biological/ecological process has a causal influence on another state or outcome. Grouping them under a general causal_influence_relation class captures this shared family of semantics beyond the specific predicate label.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_ca823f123534",
+        "RelR_adc14e4f5770"
+      ],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "The rel_hint_type is explicitly causal and the descriptions indicate cause–effect style contributions from subject to object. This fits the broad CAUSALITY dimension.",
+      "remark": null,
+      "confidence": 0.96
+    }
+  ],
+  "timestamp": "2026-01-02T09:19:20Z"
+}

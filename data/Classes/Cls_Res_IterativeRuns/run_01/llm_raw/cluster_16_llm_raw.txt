@@ -1,0 +1,31 @@
+[
+  {
+    "function": "merge_classes",
+    "args": {
+      "class_ids": [
+        "ClsC_40994bf9",
+        "ClsC_3992015b"
+      ],
+      "provisional_id": "MERGE(ClsC_40994bf9|ClsC_3992015b)",
+      "new_name": "Urban Legend Emotional Themes and Responses",
+      "new_description": "Emotional and psychological states and themes associated with urban legends, including underlying fears (e.g., fear of the unknown, perceived threats) and the felt responses they elicit (e.g., a good scare, motivating fears).",
+      "new_class_type_hint": "Emotional/Psychological Construct",
+      "justification": "Both classes describe closely overlapping emotional constructs around fear, threat, and scare responses in urban legends and already share the same class_group, so maintaining a separation between 'Core Emotional Themes' and 'Emotional Responses' is needlessly fine-grained; a single unified class for emotional themes and responses is more coherent.",
+      "remark": null,
+      "confidence": 0.86
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "MERGE(ClsC_40994bf9|ClsC_3992015b)",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Urban Legend Emotional Dynamics",
+      "remark": null,
+      "justification": "The merged emotional-construct class still belongs in the existing higher-level grouping that captures emotional dynamics in urban legends, so the class_group should be explicitly set for the new merged class.",
+      "confidence": 0.9
+    }
+  }
+]

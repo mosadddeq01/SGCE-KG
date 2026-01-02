@@ -1,0 +1,61 @@
+[
+  {
+    "function": "merge_classes",
+    "args": {
+      "class_ids": [
+        "ClsR_0c8267fa",
+        "ClsR_bc758ae4"
+      ],
+      "provisional_id": "MERGE(ClsR_0c8267fa|ClsR_bc758ae4)",
+      "new_name": "Narrative Explanations of the Unknown and Historical Origins",
+      "new_description": "Stories and tales, particularly early urban-legend-like narratives, used to explain unknown and supernatural phenomena across history, together with the historical periods (e.g., ancient times) that form their temporal context of origin.",
+      "new_class_type_hint": "Narrative/Historical Concept",
+      "justification": "Both classes cover the same evidence about early stories explaining the unknown and their origins in ancient times, so merging them prevents redundant separation of the narratives from their historical periods.",
+      "remark": null,
+      "confidence": 0.86
+    }
+  },
+  {
+    "function": "split_class",
+    "args": {
+      "source_class_id": "ClsC_727496d3",
+      "splits": [
+        {
+          "name": "Societal Fears and Anxieties in Legends",
+          "description": "Collective fears and culturally specific anxieties that are reflected in tales and urban legends.",
+          "class_type_hint": "Social Concept",
+          "member_ids": [
+            "Can_c6384468",
+            "En_1c3e93a0"
+          ],
+          "provisional_id": "SPLIT(ClsC_727496d3|FearsConcepts)"
+        },
+        {
+          "name": "Societies as Bearers of Fears",
+          "description": "Human societies and cultures understood as collective bearers of the fears and anxieties expressed in urban legends.",
+          "class_type_hint": "Sociocultural Actor",
+          "member_ids": [
+            "En_72a7e56d"
+          ],
+          "provisional_id": "SPLIT(ClsC_727496d3|SocietiesActors)"
+        }
+      ],
+      "justification": "The original class mixed two distinct notions—abstract societal fears and the societies/cultures that hold them—so splitting yields a cleaner separation between fear concepts and sociocultural actors.",
+      "remark": null,
+      "confidence": 0.84
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_133710e4",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Urban Legends Sociocultural Context",
+      "remark": "Reassigned class_group to align this communities-focused class with other sociocultural-context classes (e.g., cultural groups, societal fears) instead of isolating it in a one-off group label.",
+      "justification": "Urban legend communities are sociocultural contexts in which legends circulate, so grouping them with other Urban Legends Sociocultural Context classes improves higher-level organization.",
+      "confidence": 0.82
+    }
+  }
+]

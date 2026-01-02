@@ -1,0 +1,101 @@
+{
+  "cluster_label": "8_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_594935acd492",
+      "relation_name": "instance_of",
+      "rel_desc": "The story specifics of the Hook Man legend are an instance within the broader category of urban legends.",
+      "rel_hint_type": "categorization",
+      "canonical_rel_name": "is_instance_of",
+      "canonical_rel_desc": "The subject is a specific example or member of the broader category represented by the object.",
+      "rel_cls": "type_instance_relation",
+      "rel_cls_group": "IDENTITY",
+      "subject_entity_name": "story specifics of the Hook Man legend",
+      "object_entity_name": "urban legends",
+      "subject_class_label": "Hook Man Urban Legend (Concept)",
+      "subject_class_group": "Urban Legend: Hook Man",
+      "object_class_label": "Urban Legends",
+      "object_class_group": "Urban Legends and Modern Folklore",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "like",
+        "CausalHint": null,
+        "LogicalMarker": "like",
+        "OtherQualifier": "CategoryRole: exemplar of modern folklore"
+      },
+      "confidence": 0.83,
+      "remarks": [
+        "Somewhat interpretive as the entity is \"story specifics\" rather than the legend name itself.",
+        "Somewhat interpretive as the entity is \"story specifics\" rather than the legend name itself.",
+        "Somewhat interpretive as the entity is \"story specifics\" rather than the legend name itself."
+      ]
+    },
+    {
+      "relation_id": "RelR_8deeeec9c025",
+      "relation_name": "is_instance_of",
+      "rel_desc": "Ghostly apparitions are presented as a type of supernatural or paranormal phenomenon within urban legends.",
+      "rel_hint_type": "category-membership",
+      "canonical_rel_name": "is_subtype_of",
+      "canonical_rel_desc": "Indicates that the subject is a more specific subtype, kind, or form within the broader category represented by the object.",
+      "rel_cls": "taxonomic_subtype_relation",
+      "rel_cls_group": "HIERARCHY",
+      "subject_entity_name": "ghostly apparitions",
+      "object_entity_name": "paranormal",
+      "subject_class_label": "Supernatural Phenomena and Manifestations",
+      "subject_class_group": "Supernatural & Paranormal Domain",
+      "object_class_label": "Supernatural Concepts",
+      "object_class_group": "Supernatural & Paranormal Domain",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "NarrativeContext: elements of urban legend stories"
+      },
+      "confidence": 0.8,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_rel_schema\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_594935acd492\"],\n      \"canonical_rel_name\": null,\n      \"canonical_rel_desc\": null,\n      \"rel_cls\": \"taxonomic_instance_relation\",\n      \"rel_cls_group\": \"HIERARCHY\",\n      \"justification\": \"The relation expresses a type–instance (member-of) taxonomic link: the specific story details of the Hook Man legend are an instance of the broader class 'urban legends'. Such membership is best modeled as a taxonomic hierarchy rather than pure IDENTITY. Aligning rel_cls_group to 'HIERARCHY' and using a more precise rel_cls 'taxonomic_instance_relation' keeps it consistent with the subtype taxonomic modeling used in RelR_8deeeec9c025 while preserving the existing canonical_rel_name 'is_instance_of'.\",\n      \"remark\": null,\n      \"confidence\": 0.83\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_rel_schema",
+      "args": {
+        "relation_ids": [
+          "RelR_594935acd492"
+        ],
+        "canonical_rel_name": null,
+        "canonical_rel_desc": null,
+        "rel_cls": "taxonomic_instance_relation",
+        "rel_cls_group": "HIERARCHY",
+        "justification": "The relation expresses a type–instance (member-of) taxonomic link: the specific story details of the Hook Man legend are an instance of the broader class 'urban legends'. Such membership is best modeled as a taxonomic hierarchy rather than pure IDENTITY. Aligning rel_cls_group to 'HIERARCHY' and using a more precise rel_cls 'taxonomic_instance_relation' keeps it consistent with the subtype taxonomic modeling used in RelR_8deeeec9c025 while preserving the existing canonical_rel_name 'is_instance_of'.",
+        "remark": null,
+        "confidence": 0.83
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_rel_schema",
+      "relation_ids": [
+        "RelR_594935acd492"
+      ],
+      "canonical_rel_name": null,
+      "canonical_rel_desc": null,
+      "rel_cls": "taxonomic_instance_relation",
+      "rel_cls_group": "HIERARCHY",
+      "new_relation_name": null,
+      "original_relation_name": null,
+      "justification": "The relation expresses a type–instance (member-of) taxonomic link: the specific story details of the Hook Man legend are an instance of the broader class 'urban legends'. Such membership is best modeled as a taxonomic hierarchy rather than pure IDENTITY. Aligning rel_cls_group to 'HIERARCHY' and using a more precise rel_cls 'taxonomic_instance_relation' keeps it consistent with the subtype taxonomic modeling used in RelR_8deeeec9c025 while preserving the existing canonical_rel_name 'is_instance_of'.",
+      "remark": null,
+      "confidence": 0.83
+    }
+  ],
+  "timestamp": "2026-01-02T09:26:31Z"
+}

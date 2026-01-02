@@ -1,0 +1,34 @@
+[
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": [
+        "RelR_aeaaf50e4593",
+        "RelR_04b99699c553"
+      ],
+      "canonical_rel_name": "causes",
+      "canonical_rel_desc": "Indicates that the subject is a causal factor that leads to the occurrence or persistence of the object outcome or state, potentially under specified conditions or with uncertainty qualifiers.",
+      "rel_cls": "causal_effect_relation",
+      "rel_cls_group": "CAUSALITY",
+      "justification": "These two relations express the same general causal predicate as the other 'causes' relations in this chunk. Normalizing their rel_cls to 'causal_effect_relation' and harmonizing the canonical_rel_desc with the majority avoids having two nearly synonymous causal classes ('causal_influence_relation' vs 'causal_effect_relation') for identical semantics.",
+      "remark": "Standardized all 'causes' relations in this chunk to a single causal_effect_relation class and shared description.",
+      "confidence": 0.94
+    }
+  },
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": [
+        "RelR_58dfeb5ae531",
+        "RelR_8fbdff5c20e9"
+      ],
+      "canonical_rel_name": "is_based_on_attribute",
+      "canonical_rel_desc": "Connects an act or pattern of discrimination to the protected attribute (e.g., race, gender) that forms the basis or target of that discrimination.",
+      "rel_cls": "discrimination_basis_relation",
+      "rel_cls_group": "ATTRIBUTION",
+      "justification": "These relations link discrimination to the protected characteristic it targets. This is better modeled as an attribution/basis relation rather than a direct causal relation. Changing rel_cls_group from 'CAUSALITY' to 'ATTRIBUTION' more accurately reflects that the protected attribute is the basis or grounds of discrimination, not a causal factor in the usual sense.",
+      "remark": "Reclassified discrimination basis edges under the ATTRIBUTION group to distinguish them from true causal effect relations.",
+      "confidence": 0.96
+    }
+  }
+]

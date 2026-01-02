@@ -1,1 +1,18 @@
-[]
+[
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": [
+        "RelR_19b464b66a10",
+        "RelR_46c2cd35cb2f"
+      ],
+      "canonical_rel_name": null,
+      "canonical_rel_desc": null,
+      "rel_cls": null,
+      "rel_cls_group": "AGENCY",
+      "justification": "Both relations describe an agentive safeguarding action (communities or ethical principles acting to protect beneficiaries). This is better modeled as an AGENCY-type relation (an actor exercising protective agency toward a beneficiary) rather than a generic CAUSALITY group, which is more appropriate for impersonal cause–effect links.",
+      "remark": "No change to canonical_rel_name or rel_cls; only the broad semantic dimension is refined from CAUSALITY to AGENCY to emphasize the agentive nature of protection.",
+      "confidence": 0.83
+    }
+  }
+]

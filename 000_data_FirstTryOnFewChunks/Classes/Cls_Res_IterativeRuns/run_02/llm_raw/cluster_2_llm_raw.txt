@@ -1,0 +1,54 @@
+[
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_1ecda745",
+      "new_name": "Corrosive Acids",
+      "new_description": "Highly corrosive acids requiring specific materials for safe handling and storage.",
+      "new_class_type_hint": "Material",
+      "new_class_group": "Industrial Process Chemicals",
+      "remark": null,
+      "justification": "Class_Group 'Industrial Chemicals' is too broad; 'Corrosive Acids' are a specific subset of chemicals used in industrial processes, so assigning to 'Industrial Process Chemicals' for more precise schema connectivity.",
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_16b29b0b",
+      "new_name": "Amine Treating Chemicals",
+      "new_description": "Chemicals used in amine treating processes to remove H2S and CO2 from hydrocarbon streams.",
+      "new_class_type_hint": "Chemical",
+      "new_class_group": "Industrial Process Chemicals",
+      "remark": null,
+      "justification": "Class_Group 'Industrial Chemicals' is too broad; 'Amine Treating Chemicals' are a specific set of chemicals used in industrial processes, so assigning to 'Industrial Process Chemicals' for schema precision and to connect with 'Corrosive Acids'.",
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_4035c3e0",
+      "new_name": "Sour Water Treatment Processes",
+      "new_description": "Processes and units involved in the treatment of sour water containing hydrogen sulfide.",
+      "new_class_type_hint": "Process",
+      "new_class_group": "Industrial Water & Gas Treatment",
+      "remark": null,
+      "justification": "Class_Group is already appropriate as 'Industrial Water & Gas Treatment' since this class is about process units and not chemicals.",
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_bd232016",
+      "new_name": "Vacuum Distillation Units",
+      "new_description": "Process units designed to separate components at reduced pressure to lower their boiling points.",
+      "new_class_type_hint": "Process Unit",
+      "new_class_group": "Industrial Separation Units",
+      "remark": null,
+      "justification": "Class_Group 'Industrial Separation Units' is appropriate for this process unit; no change needed except to confirm assignment.",
+      "confidence": 0.95
+    }
+  }
+]

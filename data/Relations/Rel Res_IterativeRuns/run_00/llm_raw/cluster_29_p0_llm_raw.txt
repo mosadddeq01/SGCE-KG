@@ -1,0 +1,45 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_dd103285e1e9",
+        "RelR_a840d2c878b2",
+        "RelR_6ae41532555a"
+      ],
+      "canonical_rel_name": "is_about",
+      "canonical_rel_desc": "Indicates that a narrative, document, or discourse segment is about or concerns a particular topic, entity, or concept.",
+      "justification": "All three relations connect a narrative or document-like subject (news report, tales, document segment) to the topic they describe or focus on, with rel_hint_type and CausalHint explicitly indicating aboutness. A unified predicate 'is_about' captures this document-to-topic relation without qualifiers.",
+      "remark": "Use for content-topic or narrative-topic links where the subject is informational content and the object is its main topic.",
+      "confidence": 0.96
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_dd103285e1e9",
+        "RelR_a840d2c878b2",
+        "RelR_6ae41532555a"
+      ],
+      "rel_cls": "aboutness_relation",
+      "justification": "These predicates all belong to the same family of relations that link an informational artifact (report, tale, document section) to what it is about or discusses, i.e., aboutness/subject-matter relations.",
+      "remark": null,
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_dd103285e1e9",
+        "RelR_a840d2c878b2",
+        "RelR_6ae41532555a"
+      ],
+      "rel_cls_group": "ASSOCIATION",
+      "justification": "Aboutness links are high-level semantic associations between content and topic rather than compositional, causal, or spatial relations, so they best fit a broad ASSOCIATION group.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  }
+]

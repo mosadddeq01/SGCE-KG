@@ -2,105 +2,107 @@
   {
     "function": "merge_classes",
     "args": {
-      "class_ids": ["ClsC_4b31704b", "ClsC_a1e9aca5", "ClsC_67645c71"],
-      "provisional_id": "MERGE(ClsC_4b31704b|ClsC_a1e9aca5|ClsC_67645c71)",
-      "new_name": "Industrial Equipment Standards",
-      "new_description": "Standards and codes for construction, inspection, assessment, and safe operation of industrial equipment, including pressure vessels, heat exchangers, and welded structures.",
-      "new_class_type_hint": "Standard",
-      "justification": "All three classes group standards for construction, inspection, and assessment of industrial equipment, with overlapping focus on pressure vessels and related components; merging removes artificial separation and clarifies schema.",
+      "class_ids": [
+        "ClsC_f3159e95",
+        "ClsC_c3af27b0",
+        "ClsC_e1ee2a50"
+      ],
+      "provisional_id": "MERGE(ClsC_f3159e95|ClsC_c3af27b0|ClsC_e1ee2a50)",
+      "new_name": "AI Societal and Economic Impacts",
+      "new_description": "Societal, economic, and political impacts of AI technologies, including positive effects such as improved efficiency and productivity and opportunities for social good, as well as negative effects such as job displacement, inequality, and concentration of power.",
+      "new_class_type_hint": "Societal Impact",
+      "justification": "These three classes all describe high-level societal impacts and opportunities of AI (efficiency, productivity, inequality, concentration of power, societal impact of AI, potential of AI) and are semantically redundant as one unified impact class.",
       "remark": null,
-      "confidence": 0.95
+      "confidence": 0.93
     }
   },
   {
-    "function": "modify_class",
+    "function": "reassign_entities",
     "args": {
-      "class_id": "MERGE(ClsC_4b31704b|ClsC_a1e9aca5|ClsC_67645c71)",
-      "new_name": null,
-      "new_description": null,
-      "new_class_type_hint": null,
-      "new_class_group": "Industrial Standards & References",
+      "entity_ids": [
+        "En_26270cf5"
+      ],
+      "from_class_id": "ClsC_5df9057e",
+      "to_class_id": "MERGE(ClsC_f3159e95|ClsC_c3af27b0|ClsC_e1ee2a50)",
+      "justification": "The entity 'concentration of power' is a societal impact phenomenon rather than an actor and fits conceptually with the merged AI societal and economic impacts class, while 'AI Power Holders' should focus on powerful actors (corporations).",
       "remark": null,
-      "justification": "Assigning a coherent Class_Group to the merged standards class, connecting it to related reference and inspection method classes.",
-      "confidence": 0.95
-    }
-  },
-  {
-    "function": "modify_class",
-    "args": {
-      "class_id": "ClsC_45b546e0",
-      "new_name": null,
-      "new_description": null,
-      "new_class_type_hint": null,
-      "new_class_group": "Industrial Standards & References",
-      "remark": null,
-      "justification": "ASM Metals Handbooks are reference materials directly supporting industrial standards and practices; grouping with standards and related references.",
       "confidence": 0.9
     }
   },
   {
-    "function": "merge_classes",
+    "function": "modify_class",
     "args": {
-      "class_ids": ["ClsC_8ca8cebe", "ClsC_454b398d"],
-      "provisional_id": "MERGE(ClsC_8ca8cebe|ClsC_454b398d)",
-      "new_name": "Corrosion and Materials References",
-      "new_description": "Reference materials and manuals focused on corrosion, material behavior, and industry practices in petrochemical and industrial contexts.",
-      "new_class_type_hint": "Reference Material",
-      "justification": "Both classes contain overlapping entities (e.g., ASTM MNL41) and focus on corrosion and material behavior references; merging eliminates redundancy and clarifies schema.",
+      "class_id": "ClsC_5df9057e",
+      "new_name": "Powerful AI Corporations",
+      "new_description": "Large corporations that hold concentrated economic and decision-making power in the AI ecosystem and may control powerful AI technologies and resources.",
+      "new_class_type_hint": "Actor Category",
+      "new_class_group": "AI Stakeholders & Institutions",
       "remark": null,
+      "justification": "After moving the phenomenon 'concentration of power' out, this class now cleanly represents dominant corporate actors in AI and should be renamed and typed accordingly and grouped with other AI stakeholder classes.",
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "MERGE(ClsC_f3159e95|ClsC_c3af27b0|ClsC_e1ee2a50)",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "AI Societal Impacts",
+      "remark": null,
+      "justification": "Assign a stable upper-level group for the unified class capturing how AI affects society, economics, and power distribution.",
       "confidence": 0.92
     }
   },
+
+  /* ==== AI Ethics & Human Rights ==== */
   {
     "function": "modify_class",
     "args": {
-      "class_id": "MERGE(ClsC_8ca8cebe|ClsC_454b398d)",
+      "class_id": "ClsC_42a3ff76",
       "new_name": null,
       "new_description": null,
       "new_class_type_hint": null,
-      "new_class_group": "Industrial Standards & References",
+      "new_class_group": "AI Ethics & Human Rights",
       "remark": null,
-      "justification": "Assigning merged corrosion/materials references to the same Class_Group as other industrial standards and references for schema coherence.",
-      "confidence": 0.9
+      "justification": "This class covers bias, fairness, and equity as normative evaluative concepts, fitting an AI ethics and human rights grouping.",
+      "confidence": 0.94
     }
   },
   {
     "function": "modify_class",
     "args": {
-      "class_id": "ClsC_45b546e0",
-      "new_name": "ASM Metals Handbooks",
-      "new_description": "Comprehensive reference volumes on metals, including properties, corrosion, and failure analysis, supporting industrial standards.",
-      "new_class_type_hint": "Reference Material",
-      "new_class_group": null,
+      "class_id": "ClsC_dda92042",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "AI Ethics & Human Rights",
       "remark": null,
-      "justification": "Clarifying class label and description to emphasize the reference/supporting role for industrial standards.",
-      "confidence": 0.85
+      "justification": "Algorithmic bias and discriminatory outcomes are central ethical failure concepts and should be grouped under AI Ethics & Human Rights.",
+      "confidence": 0.93
     }
   },
   {
     "function": "modify_class",
     "args": {
-      "class_id": "ClsC_e266c5eb",
+      "class_id": "ClsC_446932f3",
       "new_name": null,
       "new_description": null,
       "new_class_type_hint": null,
-      "new_class_group": "Industrial Standards & References",
+      "new_class_group": "AI Ethics & Human Rights",
       "remark": null,
-      "justification": "Non-Destructive Testing Methods are essential inspection methods referenced by industrial standards; grouping for schema connectivity.",
-      "confidence": 0.9
+      "justification": "Discriminatory treatment and outcomes are core human-rights-relevant harms and belong in the AI Ethics & Human Rights group.",
+      "confidence": 0.93
     }
   },
   {
     "function": "modify_class",
     "args": {
-      "class_id": "ClsC_ed0048e2",
+      "class_id": "ClsC_f28cb1bb",
       "new_name": null,
       "new_description": null,
       "new_class_type_hint": null,
-      "new_class_group": "Industrial Standards & References",
-      "remark": "This class contains a single report that is highly specific; consider merging or reassigning in future iterations if more similar reports are found.",
-      "justification": "Assigning to the same Class_Group for now due to its direct relevance to industrial standards; flagging for future review due to singleton status.",
-      "confidence": 0.7
-    }
-  }
-]
+      "new_class_group": "AI Ethics & Human Rights",
+      "remark": null,
+      "justification": "Protected characteristics like race and gender are central to discrimination and fairness debates, fitting the AI Ethics & Human Rights

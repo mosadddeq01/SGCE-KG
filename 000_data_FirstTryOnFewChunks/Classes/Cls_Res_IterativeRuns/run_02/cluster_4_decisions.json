@@ -1,0 +1,256 @@
+{
+  "cluster_label": 4,
+  "cluster_classes": [
+    {
+      "candidate_id": "ClsC_2bb0705d",
+      "class_label": "Corrosion-Resistant Alloys",
+      "class_description": "Alloys known for their resistance to corrosion, including stainless steels, nickel base alloys, and other corrosion-resistant metals.",
+      "class_type_hint": "Material",
+      "class_group": "Corrosion-Resistant Metals and Alloys",
+      "confidence": 0.88,
+      "evidence_excerpt": "Duplex stainless steel and nickel base alloys are known for corrosion resistance.",
+      "member_ids": [
+        "Can_0aec2541",
+        "Can_0441bbd6",
+        "En_2d1b9dea",
+        "En_66d2eb63"
+      ],
+      "members": [
+        {
+          "id": "Can_0aec2541",
+          "entity_name": "duplex stainless steel",
+          "entity_description": "A family of stainless steels with a mixed austenitic-ferritic structure, known for its corrosion resistance, including Alloy 2205, 2304, and 2507.",
+          "entity_type_hint": "Material"
+        },
+        {
+          "id": "Can_0441bbd6",
+          "entity_name": "Stainless Steel",
+          "entity_description": "A corrosion-resistant alloy of iron, chromium, and often nickel, known for its strength, durability, and resistance to oxidation, sulfidation, and other forms of corrosion.",
+          "entity_type_hint": "Material"
+        },
+        {
+          "id": "En_2d1b9dea",
+          "entity_name": "nickel base",
+          "entity_description": "A family of alloys with nickel as a major alloying element, including Alloys 200, 400, K-500, etc.",
+          "entity_type_hint": "Material"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_cca87da3",
+      "class_label": "Titanium (Metal)",
+      "class_description": "Titanium, a strong, lightweight, and corrosion-resistant metal used in various applications.",
+      "class_type_hint": "Material",
+      "class_group": "Corrosion-Resistant Metals and Alloys",
+      "confidence": 0.1,
+      "evidence_excerpt": "",
+      "member_ids": [
+        "En_66d2eb63"
+      ],
+      "members": [
+        {
+          "id": "En_66d2eb63",
+          "entity_name": "titanium",
+          "entity_description": "A strong, lightweight, and corrosion-resistant metal used in various applications.",
+          "entity_type_hint": "Material"
+        }
+      ],
+      "remarks": [
+        "Class is now empty after moving titanium to the main corrosion-resistant alloys class; review for deprecation or merge."
+      ]
+    },
+    {
+      "candidate_id": "ClsC_8a2ead3a",
+      "class_label": "Chromium in Steel",
+      "class_description": "Chromium as an alloying element in steel, providing resistance to oxidation, corrosion, and eliminating graphitization.",
+      "class_type_hint": "Material",
+      "class_group": "Steel Metallurgy and Degradation",
+      "confidence": 0.92,
+      "evidence_excerpt": "Chromium is an alloying element in stainless steels.",
+      "member_ids": [
+        "En_f6aa95ca",
+        "En_417e7d84"
+      ],
+      "members": [
+        {
+          "id": "En_f6aa95ca",
+          "entity_name": "chromium",
+          "entity_description": "An alloying element in stainless steels that provides resistance to oxidation and corrosion.",
+          "entity_type_hint": "Material"
+        },
+        {
+          "id": "En_417e7d84",
+          "entity_name": "chromium",
+          "entity_description": "Element added to steel to eliminate graphitization.",
+          "entity_type_hint": "Material"
+        }
+      ],
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_8a2ead3a\",\n      \"new_name\": \"Chromium (Alloying Element in Steel)\",\n      \"new_description\": \"Chromium as an alloying element in steel, providing resistance to oxidation, corrosion, and eliminating graphitization.\",\n      \"new_class_type_hint\": \"Alloying Element\",\n      \"new_class_group\": \"Corrosion-Resistant Metals and Alloys\",\n      \"remark\": null,\n      \"justification\": \"Class 'Chromium in Steel' is more appropriately grouped with other corrosion-resistant metals and alloys, as its primary role is to impart corrosion resistance; this aligns it with the other classes in the cluster.\",\n      \"confidence\": 0.95\n    }\n  },\n  {\n    \"function\": \"split_class\",\n    \"args\": {\n      \"source_class_id\": \"ClsC_8a2ead3a\",\n      \"splits\": [\n        {\n          \"name\": \"Chromium (Element)\",\n          \"description\": \"Chromium as a chemical element, not limited to its role in steel.\",\n          \"class_type_hint\": \"Element\",\n          \"member_ids\": [\n            \"En_f6aa95ca\"\n          ],\n          \"provisional_id\": \"SPLIT_Chromium_Element\"\n        },\n        {\n          \"name\": \"Chromium in Steel\",\n          \"description\": \"Chromium as an alloying element in steel, providing resistance to oxidation and corrosion.\",\n          \"class_type_hint\": \"Alloying Element\",\n          \"member_ids\": [\n            \"En_417e7d84\"\n          ],\n          \"provisional_id\": \"SPLIT_Chromium_in_Steel\"\n        }\n      ],\n      \"justification\": \"The class 'Chromium in Steel' contains entities that refer to both the general element and its specific role in steel; splitting clarifies these distinct concepts.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_2bb0705d\",\n      \"new_name\": \"Corrosion-Resistant Alloys\",\n      \"new_description\": \"Alloys and metals known for their resistance to corrosion, including stainless steels, nickel base alloys, titanium, and other corrosion-resistant metals.\",\n      \"new_class_type_hint\": \"Material\",\n      \"new_class_group\": \"Corrosion-Resistant Metals and Alloys\",\n      \"remark\": null,\n      \"justification\": \"Expanded description to explicitly include titanium, which is a key corrosion-resistant metal and is currently in a separate class.\",\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"reassign_entities\",\n    \"args\": {\n      \"entity_ids\": [\n        \"En_66d2eb63\"\n      ],\n      \"from_class_id\": \"ClsC_cca87da3\",\n      \"to_class_id\": \"ClsC_2bb0705d\",\n      \"justification\": \"Titanium is a prototypical corrosion-resistant metal and fits better in the broader 'Corrosion-Resistant Alloys' class alongside stainless steels and nickel base alloys.\",\n      \"remark\": null,\n      \"confidence\": 0.95\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_cca87da3\",\n      \"new_name\": \"Titanium (Metal)\",\n      \"new_description\": \"Class emptied after reassignment; consider deprecating or merging if no unique members remain.\",\n      \"new_class_type_hint\": \"Material\",\n      \"new_class_group\": \"Corrosion-Resistant Metals and Alloys\",\n      \"remark\": \"Class is now empty after moving titanium to the main corrosion-resistant alloys class; review for deprecation or merge.\",\n      \"justification\": \"After moving its only entity, this class is empty and should be reviewed for removal or merging.\",\n      \"confidence\": 0.9\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_8a2ead3a",
+        "new_name": "Chromium (Alloying Element in Steel)",
+        "new_description": "Chromium as an alloying element in steel, providing resistance to oxidation, corrosion, and eliminating graphitization.",
+        "new_class_type_hint": "Alloying Element",
+        "new_class_group": "Corrosion-Resistant Metals and Alloys",
+        "remark": null,
+        "justification": "Class 'Chromium in Steel' is more appropriately grouped with other corrosion-resistant metals and alloys, as its primary role is to impart corrosion resistance; this aligns it with the other classes in the cluster.",
+        "confidence": 0.95
+      }
+    },
+    {
+      "function": "split_class",
+      "args": {
+        "source_class_id": "ClsC_8a2ead3a",
+        "splits": [
+          {
+            "name": "Chromium (Element)",
+            "description": "Chromium as a chemical element, not limited to its role in steel.",
+            "class_type_hint": "Element",
+            "member_ids": [
+              "En_f6aa95ca"
+            ],
+            "provisional_id": "SPLIT_Chromium_Element"
+          },
+          {
+            "name": "Chromium in Steel",
+            "description": "Chromium as an alloying element in steel, providing resistance to oxidation and corrosion.",
+            "class_type_hint": "Alloying Element",
+            "member_ids": [
+              "En_417e7d84"
+            ],
+            "provisional_id": "SPLIT_Chromium_in_Steel"
+          }
+        ],
+        "justification": "The class 'Chromium in Steel' contains entities that refer to both the general element and its specific role in steel; splitting clarifies these distinct concepts.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_2bb0705d",
+        "new_name": "Corrosion-Resistant Alloys",
+        "new_description": "Alloys and metals known for their resistance to corrosion, including stainless steels, nickel base alloys, titanium, and other corrosion-resistant metals.",
+        "new_class_type_hint": "Material",
+        "new_class_group": "Corrosion-Resistant Metals and Alloys",
+        "remark": null,
+        "justification": "Expanded description to explicitly include titanium, which is a key corrosion-resistant metal and is currently in a separate class.",
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "reassign_entities",
+      "args": {
+        "entity_ids": [
+          "En_66d2eb63"
+        ],
+        "from_class_id": "ClsC_cca87da3",
+        "to_class_id": "ClsC_2bb0705d",
+        "justification": "Titanium is a prototypical corrosion-resistant metal and fits better in the broader 'Corrosion-Resistant Alloys' class alongside stainless steels and nickel base alloys.",
+        "remark": null,
+        "confidence": 0.95
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_cca87da3",
+        "new_name": "Titanium (Metal)",
+        "new_description": "Class emptied after reassignment; consider deprecating or merging if no unique members remain.",
+        "new_class_type_hint": "Material",
+        "new_class_group": "Corrosion-Resistant Metals and Alloys",
+        "remark": "Class is now empty after moving titanium to the main corrosion-resistant alloys class; review for deprecation or merge.",
+        "justification": "After moving its only entity, this class is empty and should be reviewed for removal or merging.",
+        "confidence": 0.9
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_8a2ead3a",
+      "class_id_resolved": "ClsC_8a2ead3a",
+      "new_name": "Chromium (Alloying Element in Steel)",
+      "new_description": "Chromium as an alloying element in steel, providing resistance to oxidation, corrosion, and eliminating graphitization.",
+      "new_class_type_hint": "Alloying Element",
+      "new_class_group": "Corrosion-Resistant Metals and Alloys",
+      "remark": null,
+      "justification": "Class 'Chromium in Steel' is more appropriately grouped with other corrosion-resistant metals and alloys, as its primary role is to impart corrosion resistance; this aligns it with the other classes in the cluster.",
+      "confidence": 0.95
+    },
+    {
+      "action": "split_class",
+      "source_class_id": "ClsC_8a2ead3a",
+      "source_class_id_resolved": "ClsC_8a2ead3a",
+      "created_classes": [
+        {
+          "new_class_id": "ClsR_ad7cb205",
+          "provisional_id": "SPLIT_Chromium_Element",
+          "member_ids": [
+            "En_f6aa95ca"
+          ]
+        },
+        {
+          "new_class_id": "ClsR_0be796eb",
+          "provisional_id": "SPLIT_Chromium_in_Steel",
+          "member_ids": [
+            "En_417e7d84"
+          ]
+        }
+      ],
+      "justification": "The class 'Chromium in Steel' contains entities that refer to both the general element and its specific role in steel; splitting clarifies these distinct concepts.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_2bb0705d",
+      "class_id_resolved": "ClsC_2bb0705d",
+      "new_name": "Corrosion-Resistant Alloys",
+      "new_description": "Alloys and metals known for their resistance to corrosion, including stainless steels, nickel base alloys, titanium, and other corrosion-resistant metals.",
+      "new_class_type_hint": "Material",
+      "new_class_group": "Corrosion-Resistant Metals and Alloys",
+      "remark": null,
+      "justification": "Expanded description to explicitly include titanium, which is a key corrosion-resistant metal and is currently in a separate class.",
+      "confidence": 0.9
+    },
+    {
+      "action": "reassign_entities",
+      "entity_ids": [
+        "En_66d2eb63"
+      ],
+      "from": "ClsC_cca87da3",
+      "from_resolved": "ClsC_cca87da3",
+      "to": "ClsC_2bb0705d",
+      "to_resolved": "ClsC_2bb0705d",
+      "justification": "Titanium is a prototypical corrosion-resistant metal and fits better in the broader 'Corrosion-Resistant Alloys' class alongside stainless steels and nickel base alloys.",
+      "remark": null,
+      "confidence": 0.95
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_cca87da3",
+      "class_id_resolved": "ClsC_cca87da3",
+      "new_name": "Titanium (Metal)",
+      "new_description": "Class emptied after reassignment; consider deprecating or merging if no unique members remain.",
+      "new_class_type_hint": "Material",
+      "new_class_group": "Corrosion-Resistant Metals and Alloys",
+      "remark": "Class is now empty after moving titanium to the main corrosion-resistant alloys class; review for deprecation or merge.",
+      "justification": "After moving its only entity, this class is empty and should be reviewed for removal or merging.",
+      "confidence": 0.9
+    }
+  ],
+  "provisional_to_real": {
+    "SPLIT_Chromium_Element": "ClsR_ad7cb205",
+    "SPLIT_Chromium_in_Steel": "ClsR_0be796eb"
+  },
+  "timestamp": "2025-12-28T00:23:45Z"
+}

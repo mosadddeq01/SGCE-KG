@@ -1,0 +1,44 @@
+[
+  {
+    "function": "merge_classes",
+    "args": {
+      "class_ids": [
+        "ClsC_b75db7ef",
+        "ClsC_a3024a5a"
+      ],
+      "provisional_id": "MERGE(HookManElements)",
+      "new_name": "Hook Man Legend Narrative Elements",
+      "new_description": "All concrete narrative elements that make up the Hook Man urban legend scenes, including the couple, car, setting, warning medium, antagonist, and key props/events such as the scratching sound and bloody hook.",
+      "new_class_type_hint": "Narrative Element Set",
+      "justification": "Both classes exclusively contain narrative components of the same Hook Man urban legend (settings, props, events, characters) and differ only by an arbitrary split between ‘scene’ and ‘core elements’, so they should form a single coherent narrative-elements class.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "MERGE(HookManElements)",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Hook Man Urban Legend",
+      "remark": null,
+      "justification": "Assign a coherent upper-level grouping to the merged narrative-elements class, explicitly tying it to the Hook Man urban legend domain.",
+      "confidence": 0.96
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_852a09f4",
+      "new_name": "Hook Man Urban Legend (Concept)",
+      "new_description": "The Hook Man urban legend as a narrative concept, including the legend itself and the range of its internal narrative variations.",
+      "new_class_type_hint": "Narrative Legend Concept",
+      "new_class_group": "Hook Man Urban Legend",
+      "remark": null,
+      "justification": "Clarify that this class represents the overarching legend concept (not just elements) and group it with the narrative-element class under a shared Hook Man Urban Legend class group.",
+      "confidence": 0.94
+    }
+  }
+]

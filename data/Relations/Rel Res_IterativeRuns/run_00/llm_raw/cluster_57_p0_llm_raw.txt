@@ -1,0 +1,42 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_ca823f123534",
+        "RelR_adc14e4f5770"
+      ],
+      "canonical_rel_name": "contributes_to",
+      "canonical_rel_desc": "Indicates that the subject process or activity is a contributing causal factor to the occurrence, maintenance, or magnitude of the object outcome or state.",
+      "justification": "In both instances, the subject (feeding on leaves; pollination) is described as a causal or enabling factor that supports or helps maintain the object (rapid growth of caterpillars; balance of plant populations). The semantics are consistent: a contributing causal influence from subject to object, so they can share a single predicate.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_ca823f123534",
+        "RelR_adc14e4f5770"
+      ],
+      "rel_cls": "causal_influence_relation",
+      "justification": "Both relations express that one biological/ecological process has a causal influence on another state or outcome. Grouping them under a general causal_influence_relation class captures this shared family of semantics beyond the specific predicate label.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_ca823f123534",
+        "RelR_adc14e4f5770"
+      ],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "The rel_hint_type is explicitly causal and the descriptions indicate cause–effect style contributions from subject to object. This fits the broad CAUSALITY dimension.",
+      "remark": null,
+      "confidence": 0.96
+    }
+  }
+]

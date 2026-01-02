@@ -1,0 +1,42 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_30238b1486db",
+        "RelR_bf4f5f04efec"
+      ],
+      "canonical_rel_name": "promotes_accountability",
+      "canonical_rel_desc": "Indicates that the subject (such as a guideline or regulation) is designed to foster or ensure proper accountability in the context of AI development and deployment.",
+      "justification": "Both relations describe normative instruments (ethical guidelines, regulations) whose functional purpose is to ensure proper assignment of accountability in AI. A single predicate 'promotes_accountability' captures this directed support/assurance role without overfitting to a specific mechanism.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_30238b1486db",
+        "RelR_bf4f5f04efec"
+      ],
+      "rel_cls": "accountability_support_relation",
+      "justification": "These relations form a coherent family where governance instruments (guidelines, regulations, frameworks) provide structures or mechanisms that support or secure accountability outcomes in AI systems.",
+      "remark": null,
+      "confidence": 0.88
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_30238b1486db",
+        "RelR_bf4f5f04efec"
+      ],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "The descriptions emphasize that guidelines and regulations exist to ensure accountability, implying a purposive causal relationship where the subject contributes to bringing about accountability outcomes.",
+      "remark": "Also has a normative/functional flavor, but CAUSALITY best captures that these instruments are mechanisms intended to lead to accountability.",
+      "confidence": 0.85
+    }
+  }
+]

@@ -1,0 +1,175 @@
+{
+  "cluster_label": "37_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_9859e8944906",
+      "relation_name": "used_for",
+      "rel_desc": "Ethical guidelines are part of the means by which the potential of AI is harnessed for the benefit of all.",
+      "rel_hint_type": "purpose",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "ethical guidelines",
+      "object_entity_name": "potential of AI",
+      "subject_class_label": "AI Ethics Norms",
+      "subject_class_group": "AI Ethics & Governance",
+      "object_class_label": "AI Societal and Economic Impacts",
+      "object_class_group": "AI_Impacts_and_Harms",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": "Within the context of AI development and deployment",
+        "ConditionExpression": "By establishing clear ethical guidelines",
+        "UncertaintyQualifier": "we can work towards (partial/aspirational)",
+        "CausalHint": null,
+        "LogicalMarker": "By",
+        "OtherQualifier": "BenefitScope: for the benefit of all"
+      },
+      "confidence": 0.84,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_048be4f78037",
+      "relation_name": "used_for",
+      "rel_desc": "Regulations are also part of the mechanism to harness the potential of AI for the benefit of all.",
+      "rel_hint_type": "purpose",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "regulations",
+      "object_entity_name": "potential of AI",
+      "subject_class_label": "AI Regulations",
+      "subject_class_group": "AI Governance and Stakeholders",
+      "object_class_label": "AI Societal and Economic Impacts",
+      "object_class_group": "AI_Impacts_and_Harms",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": "In governance of AI technologies",
+        "ConditionExpression": "Through establishing regulations",
+        "UncertaintyQualifier": "we can work towards (non-guaranteed outcome)",
+        "CausalHint": null,
+        "LogicalMarker": "By",
+        "OtherQualifier": "BenefitScope: for the benefit of all"
+      },
+      "confidence": 0.82,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_54ff370232eb",
+      "relation_name": "used_for",
+      "rel_desc": "Promoting accountability is presented as a way to work towards harnessing the potential of AI.",
+      "rel_hint_type": "purpose",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "accountability",
+      "object_entity_name": "potential of AI",
+      "subject_class_label": "AI Responsibility and Accountability Concepts",
+      "subject_class_group": "AI Responsibility & Accountability",
+      "object_class_label": "AI Societal and Economic Impacts",
+      "object_class_group": "AI_Impacts_and_Harms",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": "Within governance and oversight of AI technologies",
+        "ConditionExpression": "By promoting accountability",
+        "UncertaintyQualifier": "we can work towards (non-certain progress)",
+        "CausalHint": null,
+        "LogicalMarker": "By",
+        "OtherQualifier": null
+      },
+      "confidence": 0.8,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_9859e8944906\",\n        \"RelR_048be4f78037\",\n        \"RelR_54ff370232eb\"\n      ],\n      \"canonical_rel_name\": \"used_to_achieve\",\n      \"canonical_rel_desc\": \"Indicates that the subject (a mechanism, guideline, or practice) is used as a means to work towards achieving the object outcome or potential.\",\n      \"justification\": \"In all three relations, the subject (ethical guidelines, regulations, accountability) functions as a means or mechanism to work towards a shared goal (the potential of AI benefiting all). This is a stable, domain-agnostic purpose/means-to-goal pattern, best captured as 'used_to_achieve'.\",\n      \"remark\": \"Object here is the potential/benefits of AI, but the predicate is defined in a domain-agnostic way so it can be reused for other goal-oriented governance mechanisms.\",\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_9859e8944906\",\n        \"RelR_048be4f78037\",\n        \"RelR_54ff370232eb\"\n      ],\n      \"rel_cls\": \"purpose_or_goal_relation\",\n      \"justification\": \"Each relation links a governance mechanism or normative concept to a desired outcome (harnessing AI’s potential for the benefit of all). This is a classic purpose/goal-directed relation family rather than composition, hierarchy, or simple association.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_9859e8944906\",\n        \"RelR_048be4f78037\",\n        \"RelR_54ff370232eb\"\n      ],\n      \"rel_cls_group\": \"USAGE\",\n      \"justification\": \"The semantics emphasize using governance tools (guidelines, regulations, accountability) as instruments to achieve a goal, fitting a broad usage/means-to-an-end category rather than pure causality or identity.\",\n      \"remark\": null,\n      \"confidence\": 0.86\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_9859e8944906",
+          "RelR_048be4f78037",
+          "RelR_54ff370232eb"
+        ],
+        "canonical_rel_name": "used_to_achieve",
+        "canonical_rel_desc": "Indicates that the subject (a mechanism, guideline, or practice) is used as a means to work towards achieving the object outcome or potential.",
+        "justification": "In all three relations, the subject (ethical guidelines, regulations, accountability) functions as a means or mechanism to work towards a shared goal (the potential of AI benefiting all). This is a stable, domain-agnostic purpose/means-to-goal pattern, best captured as 'used_to_achieve'.",
+        "remark": "Object here is the potential/benefits of AI, but the predicate is defined in a domain-agnostic way so it can be reused for other goal-oriented governance mechanisms.",
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_9859e8944906",
+          "RelR_048be4f78037",
+          "RelR_54ff370232eb"
+        ],
+        "rel_cls": "purpose_or_goal_relation",
+        "justification": "Each relation links a governance mechanism or normative concept to a desired outcome (harnessing AI's potential for the benefit of all). This is a classic purpose/goal-directed relation family rather than composition, hierarchy, or simple association.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_9859e8944906",
+          "RelR_048be4f78037",
+          "RelR_54ff370232eb"
+        ],
+        "rel_cls_group": "USAGE",
+        "justification": "The semantics emphasize using governance tools (guidelines, regulations, accountability) as instruments to achieve a goal, fitting a broad usage/means-to-an-end category rather than pure causality or identity.",
+        "remark": null,
+        "confidence": 0.86
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_9859e8944906",
+        "RelR_048be4f78037",
+        "RelR_54ff370232eb"
+      ],
+      "canonical_rel_name": "used_to_achieve",
+      "canonical_rel_desc": "Indicates that the subject (a mechanism, guideline, or practice) is used as a means to work towards achieving the object outcome or potential.",
+      "justification": "In all three relations, the subject (ethical guidelines, regulations, accountability) functions as a means or mechanism to work towards a shared goal (the potential of AI benefiting all). This is a stable, domain-agnostic purpose/means-to-goal pattern, best captured as 'used_to_achieve'.",
+      "remark": "Object here is the potential/benefits of AI, but the predicate is defined in a domain-agnostic way so it can be reused for other goal-oriented governance mechanisms.",
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_9859e8944906",
+        "RelR_048be4f78037",
+        "RelR_54ff370232eb"
+      ],
+      "rel_cls": "purpose_or_goal_relation",
+      "justification": "Each relation links a governance mechanism or normative concept to a desired outcome (harnessing AI's potential for the benefit of all). This is a classic purpose/goal-directed relation family rather than composition, hierarchy, or simple association.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_9859e8944906",
+        "RelR_048be4f78037",
+        "RelR_54ff370232eb"
+      ],
+      "rel_cls_group": "USAGE",
+      "justification": "The semantics emphasize using governance tools (guidelines, regulations, accountability) as instruments to achieve a goal, fitting a broad usage/means-to-an-end category rather than pure causality or identity.",
+      "remark": null,
+      "confidence": 0.86
+    }
+  ],
+  "timestamp": "2026-01-02T09:16:00Z"
+}

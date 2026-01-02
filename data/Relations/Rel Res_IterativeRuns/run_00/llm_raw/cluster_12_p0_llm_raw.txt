@@ -1,0 +1,45 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_885b21d7168e",
+        "RelR_6386dc2f5ec2",
+        "RelR_d2d23f569a3e"
+      ],
+      "canonical_rel_name": "contrasts_with",
+      "canonical_rel_desc": "Indicates that two narrative elements or concepts are set in opposition or conceptual contrast to highlight their differences.",
+      "justification": "All three relations explicitly encode a contrast between two narrative concepts (varying story specifics vs. stable emotional themes; truth vs. fiction). They share the same symmetric predicate meaning of conceptual opposition, so they should use a single normalized canonical predicate 'contrasts_with'.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_885b21d7168e",
+        "RelR_6386dc2f5ec2",
+        "RelR_d2d23f569a3e"
+      ],
+      "rel_cls": "conceptual_contrast_relation",
+      "justification": "Each relation captures a conceptual opposition between two narrative constructs (e.g., variable specifics vs. constant fear/threat, truth vs. fiction). Grouping them under a class 'conceptual_contrast_relation' reflects this shared function of highlighting opposing concepts within narratives.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_885b21d7168e",
+        "RelR_6386dc2f5ec2",
+        "RelR_d2d23f569a3e"
+      ],
+      "rel_cls_group": "ASSOCIATION",
+      "justification": "Contrast is a form of comparative association between two concepts, linking them by highlighting their differences. This is neither compositional nor causal but a relational comparison, which fits best under a broad 'ASSOCIATION' group.",
+      "remark": null,
+      "confidence": 0.86
+    }
+  }
+]

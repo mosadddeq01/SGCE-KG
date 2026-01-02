@@ -54,8 +54,10 @@ IMPORTANT FIELD DISTINCTIONS
 
 - remarks (optional, internal):
   Free-text notes attached to a class, used to flag important issues that are
-  outside the scope of structural changes (e.g., suspected entity-level duplicates
-  that should be checked elsewhere).
+  outside the scope of structural changes (e.g., upstream entity resolution that you suspect is wrong, or entities that
+  look identical but should not be changed here), DO NOT try to fix them via merge or reassign.
+   Instead, attach a human-facing remark via modify_class (using the 'remark' field)
+   so that a human can review it later.
 
 Class_Group is NOT a synonym of class_type_hint.
 
@@ -308,57 +310,85 @@ Each class includes:
 
 [
   {
-    "candidate_id": "ClsC_2bb0705d",
-    "class_label": "Corrosion-Resistant Alloys",
-    "class_description": "Alloys known for their resistance to corrosion, including stainless steels and nickel base alloys.",
-    "class_type_hint": "Material",
-    "class_group": "Steel Metallurgy",
-    "confidence": 0.88,
-    "evidence_excerpt": "Duplex stainless steel and nickel base alloys are known for corrosion resistance.",
+    "candidate_id": "ClsC_fb0a1cd7",
+    "class_label": "Plant Reproductive Structures",
+    "class_description": "Components of flowering plants directly involved in sexual reproduction and pollination, including whole flowers and the pollen grains they produce and exchange.",
+    "class_type_hint": "Biological Structure",
+    "class_group": "Flowering Plant Reproduction & Pollination",
+    "confidence": 0.86,
+    "evidence_excerpt": "Reproductive structures of plants that provide nectar and pollen… specific reproductive material moved by butterflies among flowers.",
     "member_ids": [
-      "Can_0aec2541",
-      "Can_0441bbd6",
-      "En_2d1b9dea"
+      "En_48e92359",
+      "En_c728532d"
     ],
     "members": [
       {
-        "id": "Can_0aec2541",
-        "entity_name": "duplex stainless steel",
-        "entity_description": "A family of stainless steels with a mixed austenitic-ferritic structure, known for its corrosion resistance, including Alloy 2205, 2304, and 2507.",
-        "entity_type_hint": "Material"
+        "id": "En_48e92359",
+        "entity_name": "flowers",
+        "entity_description": "Reproductive structures of plants that provide nectar and pollen and are visited by butterflies.",
+        "entity_type_hint": "Structure"
       },
       {
-        "id": "Can_0441bbd6",
-        "entity_name": "Stainless Steel",
-        "entity_description": "A corrosion-resistant alloy of iron, chromium, and often nickel, known for its strength, durability, and resistance to oxidation, sulfidation, and other forms of corrosion.",
-        "entity_type_hint": "Material"
-      },
-      {
-        "id": "En_2d1b9dea",
-        "entity_name": "nickel base",
-        "entity_description": "A family of alloys with nickel as a major alloying element, including Alloys 200, 400, K-500, etc.",
+        "id": "En_c728532d",
+        "entity_name": "pollen",
+        "entity_description": "Reproductive plant grains that butterflies transfer between flowers during pollination.",
         "entity_type_hint": "Material"
       }
     ],
     "remarks": []
   },
   {
-    "candidate_id": "ClsC_cca87da3",
-    "class_label": "Titanium (Metal)",
-    "class_description": "Titanium, a strong, lightweight, and corrosion-resistant metal used in various applications.",
-    "class_type_hint": "Material",
-    "class_group": "Metals and Alloys",
-    "confidence": 0.1,
-    "evidence_excerpt": "",
+    "candidate_id": "ClsC_e2aa4b5b",
+    "class_label": "Flowering Plant Reproduction",
+    "class_description": "Biological processes and organisms involved in sexual reproduction of flowering plants, including the transfer of pollen and the plants whose reproduction is enabled.",
+    "class_type_hint": "Biological System",
+    "class_group": "Flowering Plant Reproduction & Pollination",
+    "confidence": 0.86,
+    "evidence_excerpt": "Pollination transfers pollen between flowers, enabling plant reproduction; plants are the organisms whose reproduction is assisted.",
+    "member_ids": [],
+    "members": [],
+    "remarks": [
+      "This class has been structurally split into separate process (pollination) and organism (flowering plants) classes and may now have no direct members; consider deprecating or repurposing in a later cleanup pass."
+    ]
+  },
+  {
+    "candidate_id": "ClsR_9ddc1c4b",
+    "class_label": "Pollination (Flowering Plant Process)",
+    "class_description": "The biological process in which pollen is transferred between flowers, enabling sexual reproduction in flowering plants, often facilitated by animals such as butterflies.",
+    "class_type_hint": "Biological Process",
+    "class_group": "Flowering Plant Reproduction & Pollination",
+    "confidence": 0.86,
+    "evidence_excerpt": "Pollination transfers pollen between flowers, enabling plant reproduction; plants are the organisms whose reproduction is assisted.",
     "member_ids": [
-      "En_66d2eb63"
+      "Can_0a5c9807"
     ],
     "members": [
       {
-        "id": "En_66d2eb63",
-        "entity_name": "titanium",
-        "entity_description": "A strong, lightweight, and corrosion-resistant metal used in various applications.",
-        "entity_type_hint": "Material"
+        "id": "Can_0a5c9807",
+        "entity_name": "pollination",
+        "entity_description": "Biological process in which pollen is transferred between flowers, enabling plant reproduction, often facilitated by animals such as butterflies.",
+        "entity_type_hint": "Process"
+      }
+    ],
+    "remarks": []
+  },
+  {
+    "candidate_id": "ClsR_2f847eb5",
+    "class_label": "Flowering Plants (Organisms)",
+    "class_description": "Organisms that reproduce via flowers and benefit from pollination, including those whose reproduction is assisted by butterflies.",
+    "class_type_hint": "Organism Group",
+    "class_group": "Flowering Plant Reproduction & Pollination",
+    "confidence": 0.86,
+    "evidence_excerpt": "Pollination transfers pollen between flowers, enabling plant reproduction; plants are the organisms whose reproduction is assisted.",
+    "member_ids": [
+      "En_d40fcccb"
+    ],
+    "members": [
+      {
+        "id": "En_d40fcccb",
+        "entity_name": "plants",
+        "entity_description": "Organisms that reproduce via flowers and benefit from pollination by butterflies.",
+        "entity_type_hint": "Organism"
       }
     ],
     "remarks": []
@@ -373,5 +403,5 @@ Return ONLY the JSON array of ordered function calls.
 Return [] only if you are highly confident (> very strong evidence) that no change is needed.
 If any ambiguous or conflicting evidence exists, return a concrete ordered action list
 (with justifications and, optionally, confidence scores).
-You are a very proactive class-resolution assistant. (You are not called very proactive only by using modify_class for new_class_group. You must use other functions as well to be called a proactive class-resolution assistant.
+You are a very proactive class-resolution assistant. You are not called very proactive only by using modify_class for new_class_group. You must use other functions as well to be called a proactive class-resolution assistant.
 

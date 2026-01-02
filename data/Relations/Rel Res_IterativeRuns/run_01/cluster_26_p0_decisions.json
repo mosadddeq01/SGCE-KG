@@ -1,0 +1,102 @@
+{
+  "cluster_label": "26_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_afe7c3e54753",
+      "relation_name": "develops_into",
+      "rel_desc": "The caterpillar’s body ultimately develops into the butterfly form by the end of metamorphosis.",
+      "rel_hint_type": "developmental",
+      "canonical_rel_name": "develops_into",
+      "canonical_rel_desc": "Indicates that an anatomical structure or life stage gradually changes and becomes another anatomical structure or life stage over the course of development.",
+      "rel_cls": "morphological_transformation_relation",
+      "rel_cls_group": "CAUSALITY",
+      "subject_entity_name": "caterpillar body",
+      "object_entity_name": "butterfly",
+      "subject_class_label": "Butterfly Metamorphosis Anatomical Structures",
+      "subject_class_group": "Butterfly Metamorphosis, Anatomy, and Experiential States",
+      "object_class_label": "Adult butterflies",
+      "object_class_group": "Butterfly Biology & Life Cycle",
+      "qualifiers": {
+        "TemporalQualifier": "by the end of metamorphosis",
+        "SpatialQualifier": "inside the chrysalis",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": "as",
+        "OtherQualifier": null
+      },
+      "confidence": 0.78,
+      "remarks": [
+        "Maps organism-level description onto the 'caterpillar body' anatomical entity.",
+        "Maps organism-level description onto the 'caterpillar body' anatomical entity."
+      ]
+    },
+    {
+      "relation_id": "RelR_bc274f2902df",
+      "relation_name": "transforms_into",
+      "rel_desc": "The caterpillar's organs dissolve and are transformed into a soupy substance during metamorphosis.",
+      "rel_hint_type": "physical transformation",
+      "canonical_rel_name": "transforms_into",
+      "canonical_rel_desc": "Indicates that a material or structure is converted into another material or structure, emphasizing physical or morphological transformation.",
+      "rel_cls": "morphological_transformation_relation",
+      "rel_cls_group": "CAUSALITY",
+      "subject_entity_name": "organs",
+      "object_entity_name": "soupy substance",
+      "subject_class_label": "Butterfly Metamorphosis Anatomical Structures",
+      "subject_class_group": "Butterfly Metamorphosis, Anatomy, and Experiential States",
+      "object_class_label": "Butterfly Metamorphosis Anatomical Structures",
+      "object_class_group": "Butterfly Metamorphosis, Anatomy, and Experiential States",
+      "qualifiers": {
+        "TemporalQualifier": "during metamorphosis inside the chrysalis",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "dissolve into",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.97,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_rel_schema\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_afe7c3e54753\", \"RelR_bc274f2902df\"],\n      \"canonical_rel_name\": null,\n      \"canonical_rel_desc\": null,\n      \"rel_cls\": \"morphological_transformation_relation\",\n      \"rel_cls_group\": \"MODIFICATION\",\n      \"justification\": \"Both relations describe morphological or physical transformation of a structure or life stage into another form (metamorphosis, dissolution into a soupy substance). This is best modeled as a state-change / transformation (MODIFICATION) rather than as a direct causal relation between two independent entities. The existing rel_cls 'morphological_transformation_relation' is appropriate; only the broad group should be normalized from 'CAUSALITY' to 'MODIFICATION' to better reflect the semantics of change-of-form.\",\n      \"remark\": null,\n      \"confidence\": 0.86\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_rel_schema",
+      "args": {
+        "relation_ids": [
+          "RelR_afe7c3e54753",
+          "RelR_bc274f2902df"
+        ],
+        "canonical_rel_name": null,
+        "canonical_rel_desc": null,
+        "rel_cls": "morphological_transformation_relation",
+        "rel_cls_group": "MODIFICATION",
+        "justification": "Both relations describe morphological or physical transformation of a structure or life stage into another form (metamorphosis, dissolution into a soupy substance). This is best modeled as a state-change / transformation (MODIFICATION) rather than as a direct causal relation between two independent entities. The existing rel_cls 'morphological_transformation_relation' is appropriate; only the broad group should be normalized from 'CAUSALITY' to 'MODIFICATION' to better reflect the semantics of change-of-form.",
+        "remark": null,
+        "confidence": 0.86
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_rel_schema",
+      "relation_ids": [
+        "RelR_afe7c3e54753",
+        "RelR_bc274f2902df"
+      ],
+      "canonical_rel_name": null,
+      "canonical_rel_desc": null,
+      "rel_cls": "morphological_transformation_relation",
+      "rel_cls_group": "MODIFICATION",
+      "new_relation_name": null,
+      "original_relation_name": null,
+      "justification": "Both relations describe morphological or physical transformation of a structure or life stage into another form (metamorphosis, dissolution into a soupy substance). This is best modeled as a state-change / transformation (MODIFICATION) rather than as a direct causal relation between two independent entities. The existing rel_cls 'morphological_transformation_relation' is appropriate; only the broad group should be normalized from 'CAUSALITY' to 'MODIFICATION' to better reflect the semantics of change-of-form.",
+      "remark": null,
+      "confidence": 0.86
+    }
+  ],
+  "timestamp": "2026-01-02T09:23:23Z"
+}

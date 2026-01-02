@@ -1,0 +1,48 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_7dbeb3c42b67",
+        "RelR_fb030b107649",
+        "RelR_fada4de96048",
+        "RelR_9b6e14480eb6"
+      ],
+      "canonical_rel_name": "facilitates_spread_of",
+      "canonical_rel_desc": "Indicates that the subject enables or makes easier the spread, transmission, or dissemination of the object (stories, tales, legends, or similar informational content).",
+      "justification": "All four relations describe an enabling/causal role where the subject (oral storytelling, interconnected societies, internet, social media) makes it easier for stories, tales, or legends to be transmitted or spread. A single predicate 'facilitates_spread_of' captures this causal-enabling semantics consistently across instances without overfitting to a specific medium or speed.",
+      "remark": null,
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_7dbeb3c42b67",
+        "RelR_fb030b107649",
+        "RelR_fada4de96048",
+        "RelR_9b6e14480eb6"
+      ],
+      "rel_cls": "information_dissemination_enabler_relation",
+      "justification": "Each subject entity functions as a mechanism or context that enables the dissemination of narrative or informational content. Grouping them under 'information_dissemination_enabler_relation' captures the shared conceptual family of relations where something acts as an enabler of information spread.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_7dbeb3c42b67",
+        "RelR_fb030b107649",
+        "RelR_fada4de96048",
+        "RelR_9b6e14480eb6"
+      ],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "The relations all encode that the presence or operation of the subject causally contributes to or enables the spread/transmission of the object; this is best modeled as a causal/enabling dimension rather than mere association.",
+      "remark": null,
+      "confidence": 0.94
+    }
+  }
+]

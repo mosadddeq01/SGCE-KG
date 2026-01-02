@@ -1,0 +1,99 @@
+{
+  "cluster_label": "63_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_5124399b1585",
+      "relation_name": "causes",
+      "rel_desc": "Biased training data can cause AI systems to produce discriminatory outcomes.",
+      "rel_hint_type": "causal",
+      "canonical_rel_name": "causes",
+      "canonical_rel_desc": "Indicates that the subject is a causal factor that leads to the occurrence or persistence of the object outcome or state, potentially under specified conditions or with uncertainty qualifiers.",
+      "rel_cls": "causal_effect_relation",
+      "rel_cls_group": "CAUSALITY",
+      "subject_entity_name": "biased data",
+      "object_entity_name": "discriminatory outcomes",
+      "subject_class_label": "Problematic Training Data",
+      "subject_class_group": "AI Fairness, Bias & Data",
+      "object_class_label": "Discriminatory Treatment",
+      "object_class_group": "AI Fairness, Bias & Data",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": "when used to train AI systems",
+        "ConditionExpression": "if data is biased",
+        "UncertaintyQualifier": "can",
+        "CausalHint": "lead to",
+        "LogicalMarker": "if",
+        "OtherQualifier": null
+      },
+      "confidence": 0.93,
+      "remarks": [
+        "Causation is potential, not guaranteed.",
+        "Causation is potential, not guaranteed."
+      ]
+    },
+    {
+      "relation_id": "RelR_638d63a16c3d",
+      "relation_name": "causes",
+      "rel_desc": "Incomplete training data can also cause discriminatory outcomes.",
+      "rel_hint_type": "causal",
+      "canonical_rel_name": "causes",
+      "canonical_rel_desc": "Indicates that the subject is a causal factor that leads to the occurrence or persistence of the object outcome or state, potentially under specified conditions or with uncertainty qualifiers.",
+      "rel_cls": "causal_effect_relation",
+      "rel_cls_group": "CAUSALITY",
+      "subject_entity_name": "incomplete data",
+      "object_entity_name": "discriminatory outcomes",
+      "subject_class_label": "Problematic Training Data",
+      "subject_class_group": "AI Fairness, Bias & Data",
+      "object_class_label": "Discriminatory Treatment",
+      "object_class_group": "AI Fairness, Bias & Data",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": "when used to train AI systems",
+        "ConditionExpression": "if data is incomplete",
+        "UncertaintyQualifier": "can",
+        "CausalHint": "lead to",
+        "LogicalMarker": "if",
+        "OtherQualifier": null
+      },
+      "confidence": 0.93,
+      "remarks": [
+        "Causation expressed as possibility.",
+        "Causation expressed as possibility."
+      ]
+    },
+    {
+      "relation_id": "RelR_ebfbe75d8291",
+      "relation_name": "causes",
+      "rel_desc": "Biased algorithms in hiring perpetuate or sustain discriminatory outcomes.",
+      "rel_hint_type": "causal",
+      "canonical_rel_name": "causes",
+      "canonical_rel_desc": "Indicates that the subject is a causal factor that leads to the occurrence or persistence of the object outcome or state, potentially under specified conditions or with uncertainty qualifiers.",
+      "rel_cls": "causal_effect_relation",
+      "rel_cls_group": "CAUSALITY",
+      "subject_entity_name": "biased algorithms",
+      "object_entity_name": "discrimination",
+      "subject_class_label": "Algorithmic Bias",
+      "subject_class_group": "AI Fairness, Bias & Data",
+      "object_class_label": "Discriminatory Treatment",
+      "object_class_group": "AI Fairness, Bias & Data",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "within hiring processes",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "modal: can",
+        "CausalHint": "perpetuate",
+        "LogicalMarker": null,
+        "OtherQualifier": "Domain: employment decisions"
+      },
+      "confidence": 0.95,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[]",
+  "parsed_steps": [],
+  "executed_decisions": [],
+  "timestamp": "2026-01-02T09:25:47Z"
+}

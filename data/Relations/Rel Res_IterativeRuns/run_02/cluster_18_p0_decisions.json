@@ -1,0 +1,105 @@
+{
+  "cluster_label": "18_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_ab8fbe9f47d5",
+      "relation_name": "enables_risk_of",
+      "rel_desc": "Use of facial recognition technology for surveillance raises the potential for abuse of power.",
+      "rel_hint_type": "risk linkage",
+      "canonical_rel_name": "poses_risk_of",
+      "canonical_rel_desc": "Indicates that the use or presence of the subject creates a possibility or risk of the object outcome, without implying deterministic causation.",
+      "rel_cls": "risk_relation",
+      "rel_cls_group": "CAUSALITY",
+      "subject_entity_name": "facial recognition technology",
+      "object_entity_name": "abuse of power",
+      "subject_class_label": "AI Surveillance Technologies",
+      "subject_class_group": "Artificial Intelligence Technologies & Applications",
+      "object_class_label": "AI-Enabled Abuse of Power",
+      "object_class_group": "AI Power & Governance Risks",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": "when used for surveillance",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "potential",
+        "CausalHint": "raising questions about",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.9,
+      "remarks": [
+        "Relation expresses risk-enabling, not deterministic causation.",
+        "Relation expresses risk-enabling, not deterministic causation.",
+        "Relation expresses risk-enabling, not deterministic causation."
+      ]
+    },
+    {
+      "relation_id": "RelR_520597a97b34",
+      "relation_name": "may_perpetrate",
+      "rel_desc": "Governments are potential actors that may engage in abuse of power enabled by surveillance technologies.",
+      "rel_hint_type": "actor-role",
+      "canonical_rel_name": "may_commit",
+      "canonical_rel_desc": "Indicates that the subject is a potential actor that may commit or engage in the specified abusive or harmful act, without asserting that it necessarily occurs.",
+      "rel_cls": "harm_perpetrator_role_relation",
+      "rel_cls_group": "AGENCY",
+      "subject_entity_name": "governments",
+      "object_entity_name": "abuse of power",
+      "subject_class_label": "AI Institutional Actors (Governments & Corporations)",
+      "subject_class_group": "AI Institutional & Corporate Power Actors",
+      "object_class_label": "AI-Enabled Abuse of Power",
+      "object_class_group": "AI Power & Governance Risks",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": "in context of AI-enabled surveillance",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "potential",
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "Context: facial recognition surveillance"
+      },
+      "confidence": 0.88,
+      "remarks": [
+        "Direction chosen as actor (government) toward act (abuse of power).",
+        "Direction chosen as actor (government) toward act (abuse of power).",
+        "Direction chosen as actor (government) toward act (abuse of power)."
+      ]
+    },
+    {
+      "relation_id": "RelR_fae8cebd0ec0",
+      "relation_name": "may_perpetrate",
+      "rel_desc": "Corporations are also potential actors that may engage in abuse of power enabled by AI surveillance.",
+      "rel_hint_type": "actor-role",
+      "canonical_rel_name": "may_commit",
+      "canonical_rel_desc": "Indicates that the subject is a potential actor that may commit or engage in the specified abusive or harmful act, without asserting that it necessarily occurs.",
+      "rel_cls": "harm_perpetrator_role_relation",
+      "rel_cls_group": "AGENCY",
+      "subject_entity_name": "corporations",
+      "object_entity_name": "abuse of power",
+      "subject_class_label": "AI Institutional Actors (Governments & Corporations)",
+      "subject_class_group": "AI Institutional & Corporate Power Actors",
+      "object_class_label": "AI-Enabled Abuse of Power",
+      "object_class_group": "AI Power & Governance Risks",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": "in context of AI-enabled surveillance",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "potential",
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "Context: facial recognition surveillance"
+      },
+      "confidence": 0.88,
+      "remarks": [
+        "Parallel to relation for governments.",
+        "Parallel to relation for governments.",
+        "Parallel to relation for governments."
+      ]
+    }
+  ],
+  "llm_raw": "[]",
+  "parsed_steps": [],
+  "executed_decisions": [],
+  "timestamp": "2026-01-02T09:27:09Z"
+}

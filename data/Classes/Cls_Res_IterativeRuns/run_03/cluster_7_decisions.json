@@ -1,0 +1,235 @@
+{
+  "cluster_label": 7,
+  "cluster_classes": [
+    {
+      "candidate_id": "ClsC_a90782df",
+      "class_label": "Butterfly egg morphology traits",
+      "class_description": "Intrinsic morphological and visual characteristics of butterfly eggs, including their size, shape, and color, which vary among species.",
+      "class_type_hint": "IntrinsicProperty",
+      "class_group": "Lepidopteran Biology",
+      "confidence": 0.96,
+      "evidence_excerpt": "The size, shape, and color of butterfly eggs vary depending on the species.",
+      "member_ids": [
+        "En_1e04ea32",
+        "En_12453875",
+        "En_931c36ef"
+      ],
+      "members": [
+        {
+          "id": "En_1e04ea32",
+          "entity_name": "butterfly egg size",
+          "entity_description": "Variation in how large or small butterfly eggs are across species.",
+          "entity_type_hint": "IntrinsicProperty"
+        },
+        {
+          "id": "En_12453875",
+          "entity_name": "butterfly egg shape",
+          "entity_description": "Morphological forms of butterfly eggs such as round, cylindrical, or oval.",
+          "entity_type_hint": "IntrinsicProperty"
+        },
+        {
+          "id": "En_931c36ef",
+          "entity_name": "butterfly egg color",
+          "entity_description": "Observed colors of butterfly eggs, including white, yellow, green, and brown.",
+          "entity_type_hint": "IntrinsicProperty"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_f017f51e",
+      "class_label": "Butterfly Life Cycle",
+      "class_description": "Developmental stages of a butterfly from egg through larval and pupal stages to the adult form, including references to specific later stages such as the pupa (chrysalis) and adult phases.",
+      "class_type_hint": "Biological Process",
+      "class_group": "Butterfly Life Cycle and Reproduction",
+      "confidence": 0.93,
+      "evidence_excerpt": "All entities describe the butterfly life cycle or specific life stages (pupa/chrysalis, adult).",
+      "member_ids": [
+        "Can_7f3d9397",
+        "Can_466f6058"
+      ],
+      "members": [
+        {
+          "id": "Can_7f3d9397",
+          "entity_name": "butterfly life cycle",
+          "entity_description": "The full developmental sequence or journey of a butterfly from egg through larval and pupal stages to the adult form, recurring across generations.",
+          "entity_type_hint": "Process"
+        },
+        {
+          "id": "Can_466f6058",
+          "entity_name": "pupa stage of the butterfly life cycle",
+          "entity_description": "The third developmental stage of a butterfly, in which the organism becomes a pupa enclosed in a chrysalis and undergoes metamorphosis from larva to adult.",
+          "entity_type_hint": "ProcessStage"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_76c68477",
+      "class_label": "Butterfly Reproductive Behavior",
+      "class_description": "Processes in adult butterflies related to securing mates and producing offspring, including mating behavior and the act of reproduction itself, which occur during the adult stage of the life cycle.",
+      "class_type_hint": "Biological Process",
+      "class_group": "Butterfly Life Cycle and Reproduction",
+      "confidence": 0.93,
+      "evidence_excerpt": "Throughout their adult stage, butterflies focus on finding a mate and reproducing to continue the life cycle.",
+      "member_ids": [
+        "En_41e4d0dd",
+        "En_d4b92880"
+      ],
+      "members": [
+        {
+          "id": "En_41e4d0dd",
+          "entity_name": "mating behavior of butterflies",
+          "entity_description": "The activity of butterflies seeking and finding mates during the adult stage.",
+          "entity_type_hint": "Process"
+        },
+        {
+          "id": "En_d4b92880",
+          "entity_name": "reproduction of butterflies",
+          "entity_description": "The process by which adult butterflies produce offspring, continuing the life cycle.",
+          "entity_type_hint": "Process"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_9205413b",
+      "class_label": "Early Butterfly Life Stages (Egg and Larva)",
+      "class_description": "The early developmental stages in the butterfly life cycle, specifically the egg and larval (caterpillar) stages, treated as organismal life stages rather than anatomical parts.",
+      "class_type_hint": "OrganismLifeStage",
+      "class_group": "Butterfly Life Cycle and Reproduction",
+      "confidence": 0.93,
+      "evidence_excerpt": "egg life stage and larval life stage (caterpillar) within the butterfly life cycle",
+      "member_ids": [
+        "Can_10d615c2",
+        "Can_e076166c"
+      ],
+      "members": [
+        {
+          "id": "Can_10d615c2",
+          "entity_name": "butterfly egg stage",
+          "entity_description": "The initial life stage of a butterfly during which the organism exists as eggs laid on host plants before hatching into larvae (caterpillars), with eggs varying in size, shape, and color by species.",
+          "entity_type_hint": "OrganismLifeStage"
+        },
+        {
+          "id": "Can_e076166c",
+          "entity_name": "caterpillar (butterfly larval stage)",
+          "entity_description": "The larval life stage of butterflies, beginning when the egg hatches into a caterpillar and encompassing the primary feeding, rapid growth, and preparation for pupation.",
+          "entity_type_hint": "OrganismLifeStage"
+        }
+      ],
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_a90782df\",\n      \"new_name\": null,\n      \"new_description\": null,\n      \"new_class_type_hint\": null,\n      \"new_class_group\": \"Butterfly Life Cycle and Reproduction\",\n      \"remark\": null,\n      \"justification\": \"Butterfly egg morphology traits are tightly linked to the egg life stage within the butterfly life cycle, so aligning its class_group with the other life-cycle-focused butterfly classes improves coherence and discovery.\",\n      \"confidence\": 0.86\n    }\n  },\n  {\n    \"function\": \"create_class\",\n    \"args\": {\n      \"name\": \"Butterfly pupa (chrysalis) life stage\",\n      \"description\": \"The organismal pupa (chrysalis) life stage of butterflies, during which metamorphosis from larva to adult occurs.\",\n      \"class_type_hint\": \"OrganismLifeStage\",\n      \"member_ids\": [\n        \"Can_466f6058\"\n      ],\n      \"provisional_id\": \"NEW_PUPA_STAGE\",\n      \"justification\": \"The current 'Butterfly Life Cycle' class mixes the overall life cycle process with a specific organismal life stage (pupa); creating a dedicated pupa life-stage class yields cleaner separation between process and life-stage concepts.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"reassign_entities\",\n    \"args\": {\n      \"entity_ids\": [\n        \"Can_466f6058\"\n      ],\n      \"from_class_id\": \"ClsC_f017f51e\",\n      \"to_class_id\": \"NEW_PUPA_STAGE\",\n      \"justification\": \"The entity 'pupa stage of the butterfly life cycle' is an organism life stage rather than the full life cycle process, so it fits better in the new dedicated pupa life-stage class than in the general 'Butterfly Life Cycle' process class.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_f017f51e\",\n      \"new_name\": \"Butterfly life cycle process\",\n      \"new_description\": \"The full developmental process of a butterfly from egg through larval and pupal stages to the adult form, considered as a recurring biological life cycle.\",\n      \"new_class_type_hint\": \"Biological Process\",\n      \"new_class_group\": \"Butterfly Life Cycle and Reproduction\",\n      \"remark\": null,\n      \"justification\": \"After moving the specific pupa life-stage entity out, the remaining class represents the overall developmental process; renaming and tightening the description clarifies that this class is about the life cycle process, not individual life stages.\",\n      \"confidence\": 0.9\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_a90782df",
+        "new_name": null,
+        "new_description": null,
+        "new_class_type_hint": null,
+        "new_class_group": "Butterfly Life Cycle and Reproduction",
+        "remark": null,
+        "justification": "Butterfly egg morphology traits are tightly linked to the egg life stage within the butterfly life cycle, so aligning its class_group with the other life-cycle-focused butterfly classes improves coherence and discovery.",
+        "confidence": 0.86
+      }
+    },
+    {
+      "function": "create_class",
+      "args": {
+        "name": "Butterfly pupa (chrysalis) life stage",
+        "description": "The organismal pupa (chrysalis) life stage of butterflies, during which metamorphosis from larva to adult occurs.",
+        "class_type_hint": "OrganismLifeStage",
+        "member_ids": [
+          "Can_466f6058"
+        ],
+        "provisional_id": "NEW_PUPA_STAGE",
+        "justification": "The current 'Butterfly Life Cycle' class mixes the overall life cycle process with a specific organismal life stage (pupa); creating a dedicated pupa life-stage class yields cleaner separation between process and life-stage concepts.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "reassign_entities",
+      "args": {
+        "entity_ids": [
+          "Can_466f6058"
+        ],
+        "from_class_id": "ClsC_f017f51e",
+        "to_class_id": "NEW_PUPA_STAGE",
+        "justification": "The entity 'pupa stage of the butterfly life cycle' is an organism life stage rather than the full life cycle process, so it fits better in the new dedicated pupa life-stage class than in the general 'Butterfly Life Cycle' process class.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_f017f51e",
+        "new_name": "Butterfly life cycle process",
+        "new_description": "The full developmental process of a butterfly from egg through larval and pupal stages to the adult form, considered as a recurring biological life cycle.",
+        "new_class_type_hint": "Biological Process",
+        "new_class_group": "Butterfly Life Cycle and Reproduction",
+        "remark": null,
+        "justification": "After moving the specific pupa life-stage entity out, the remaining class represents the overall developmental process; renaming and tightening the description clarifies that this class is about the life cycle process, not individual life stages.",
+        "confidence": 0.9
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_a90782df",
+      "class_id_resolved": "ClsC_a90782df",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Butterfly Life Cycle and Reproduction",
+      "remark": null,
+      "justification": "Butterfly egg morphology traits are tightly linked to the egg life stage within the butterfly life cycle, so aligning its class_group with the other life-cycle-focused butterfly classes improves coherence and discovery.",
+      "confidence": 0.86
+    },
+    {
+      "action": "create_class",
+      "result_class_id": "ClsR_df2fa4d9",
+      "provisional_id": "NEW_PUPA_STAGE",
+      "member_ids_added": [
+        "Can_466f6058"
+      ],
+      "justification": "The current 'Butterfly Life Cycle' class mixes the overall life cycle process with a specific organismal life stage (pupa); creating a dedicated pupa life-stage class yields cleaner separation between process and life-stage concepts.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "reassign_entities",
+      "entity_ids": [
+        "Can_466f6058"
+      ],
+      "from": "ClsC_f017f51e",
+      "from_resolved": "ClsC_f017f51e",
+      "to": "NEW_PUPA_STAGE",
+      "to_resolved": "ClsR_df2fa4d9",
+      "justification": "The entity 'pupa stage of the butterfly life cycle' is an organism life stage rather than the full life cycle process, so it fits better in the new dedicated pupa life-stage class than in the general 'Butterfly Life Cycle' process class.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_f017f51e",
+      "class_id_resolved": "ClsC_f017f51e",
+      "new_name": "Butterfly life cycle process",
+      "new_description": "The full developmental process of a butterfly from egg through larval and pupal stages to the adult form, considered as a recurring biological life cycle.",
+      "new_class_type_hint": "Biological Process",
+      "new_class_group": "Butterfly Life Cycle and Reproduction",
+      "remark": null,
+      "justification": "After moving the specific pupa life-stage entity out, the remaining class represents the overall developmental process; renaming and tightening the description clarifies that this class is about the life cycle process, not individual life stages.",
+      "confidence": 0.9
+    }
+  ],
+  "provisional_to_real": {
+    "NEW_PUPA_STAGE": "ClsR_df2fa4d9"
+  },
+  "timestamp": "2026-01-02T08:43:58Z"
+}

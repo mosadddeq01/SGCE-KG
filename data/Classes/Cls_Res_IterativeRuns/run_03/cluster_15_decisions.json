@@ -1,0 +1,125 @@
+{
+  "cluster_label": 15,
+  "cluster_classes": [
+    {
+      "candidate_id": "ClsC_3855a314",
+      "class_label": "AI System Responsibility Concepts",
+      "class_description": "Concepts involved in discussions of responsibility and accountability for AI behavior, including the AI system as a potential actor and the errors or harms it produces.",
+      "class_type_hint": "Responsibility Concept",
+      "class_group": "TBD",
+      "confidence": 0.78,
+      "evidence_excerpt": "Who is responsible when an AI system makes a mistake or causes harm?",
+      "member_ids": [
+        "Can_0211509c",
+        "En_225b9bfb"
+      ],
+      "members": [
+        {
+          "id": "Can_0211509c",
+          "entity_name": "AI system error or harm",
+          "entity_description": "An erroneous action, decision, or resulting negative impact produced by an AI system.",
+          "entity_type_hint": "FailureEvent"
+        },
+        {
+          "id": "En_225b9bfb",
+          "entity_name": "AI system itself",
+          "entity_description": "The AI system considered as a potential bearer of responsibility.",
+          "entity_type_hint": "Actor"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_faff2019",
+      "class_label": "AI Accountability",
+      "class_description": "Concepts concerned with assigning and structuring responsibility for AI system decisions, behaviors, and outcomes across involved actors.",
+      "class_type_hint": "Governance Concept",
+      "class_group": "TBD",
+      "confidence": 0.93,
+      "evidence_excerpt": "responsibility for AI decisions and impacts; establish clear lines of accountability",
+      "member_ids": [
+        "Can_677b3d47",
+        "En_e76bc9ae"
+      ],
+      "members": [
+        {
+          "id": "Can_677b3d47",
+          "entity_name": "accountability",
+          "entity_description": "The assignment of responsibility for AI system decisions, behaviors, and outcomes in their development and deployment.",
+          "entity_type_hint": "Concept"
+        },
+        {
+          "id": "En_e76bc9ae",
+          "entity_name": "lines of accountability",
+          "entity_description": "Specified allocations of responsibility among actors when AI systems cause outcomes.",
+          "entity_type_hint": "Concept"
+        }
+      ],
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"merge_classes\",\n    \"args\": {\n      \"class_ids\": [\n        \"ClsC_3855a314\",\n        \"ClsC_faff2019\"\n      ],\n      \"provisional_id\": \"MERGE(ClsC_3855a314|ClsC_faff2019)\",\n      \"new_name\": \"AI Responsibility and Accountability Concepts\",\n      \"new_description\": \"Concepts related to responsibility, accountability, and the allocation of blame or answerability for AI system decisions, behaviors, and resulting harms, including the AI system as a potential actor, its errors or harms, and the structures of accountability among human and organizational actors.\",\n      \"new_class_type_hint\": \"Governance/Responsibility Concept\",\n      \"justification\": \"Both classes cover tightly overlapping governance notions of responsibility and accountability for AI system decisions and harms (who is responsible, lines of accountability, AI system errors and harms) with no clear need for separate schema-level distinctions, so consolidating into a single coherent class avoids redundancy.\",\n      \"remark\": null,\n      \"confidence\": 0.86\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"MERGE(ClsC_3855a314|ClsC_faff2019)\",\n      \"new_name\": null,\n      \"new_description\": null,\n      \"new_class_type_hint\": null,\n      \"new_class_group\": \"AI Responsibility & Accountability\",\n      \"remark\": null,\n      \"justification\": \"The merged class clearly belongs to a governance-oriented domain focused on responsibility and accountability in AI, so assigning the Class_Group 'AI Responsibility & Accountability' connects it appropriately in the higher-level schema.\",\n      \"confidence\": 0.93\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "merge_classes",
+      "args": {
+        "class_ids": [
+          "ClsC_3855a314",
+          "ClsC_faff2019"
+        ],
+        "provisional_id": "MERGE(ClsC_3855a314|ClsC_faff2019)",
+        "new_name": "AI Responsibility and Accountability Concepts",
+        "new_description": "Concepts related to responsibility, accountability, and the allocation of blame or answerability for AI system decisions, behaviors, and resulting harms, including the AI system as a potential actor, its errors or harms, and the structures of accountability among human and organizational actors.",
+        "new_class_type_hint": "Governance/Responsibility Concept",
+        "justification": "Both classes cover tightly overlapping governance notions of responsibility and accountability for AI system decisions and harms (who is responsible, lines of accountability, AI system errors and harms) with no clear need for separate schema-level distinctions, so consolidating into a single coherent class avoids redundancy.",
+        "remark": null,
+        "confidence": 0.86
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "MERGE(ClsC_3855a314|ClsC_faff2019)",
+        "new_name": null,
+        "new_description": null,
+        "new_class_type_hint": null,
+        "new_class_group": "AI Responsibility & Accountability",
+        "remark": null,
+        "justification": "The merged class clearly belongs to a governance-oriented domain focused on responsibility and accountability in AI, so assigning the Class_Group 'AI Responsibility & Accountability' connects it appropriately in the higher-level schema.",
+        "confidence": 0.93
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "merge_classes",
+      "input_class_ids": [
+        "ClsC_3855a314",
+        "ClsC_faff2019"
+      ],
+      "result_class_id": "ClsR_96535215",
+      "provisional_id": "MERGE(ClsC_3855a314|ClsC_faff2019)",
+      "justification": "Both classes cover tightly overlapping governance notions of responsibility and accountability for AI system decisions and harms (who is responsible, lines of accountability, AI system errors and harms) with no clear need for separate schema-level distinctions, so consolidating into a single coherent class avoids redundancy.",
+      "remark": null,
+      "confidence": 0.86
+    },
+    {
+      "action": "modify_class",
+      "class_id": "MERGE(ClsC_3855a314|ClsC_faff2019)",
+      "class_id_resolved": "ClsR_96535215",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "AI Responsibility & Accountability",
+      "remark": null,
+      "justification": "The merged class clearly belongs to a governance-oriented domain focused on responsibility and accountability in AI, so assigning the Class_Group 'AI Responsibility & Accountability' connects it appropriately in the higher-level schema.",
+      "confidence": 0.93
+    }
+  ],
+  "provisional_to_real": {
+    "MERGE(ClsC_3855a314|ClsC_faff2019)": "ClsR_96535215",
+    "ClsC_3855a314": "ClsR_96535215",
+    "ClsC_faff2019": "ClsR_96535215"
+  },
+  "timestamp": "2026-01-02T08:45:50Z"
+}

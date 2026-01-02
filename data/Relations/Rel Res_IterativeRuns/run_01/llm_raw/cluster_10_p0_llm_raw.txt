@@ -1,0 +1,31 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_debb207b84a8",
+        "RelR_52b36be4a12b"
+      ],
+      "canonical_rel_name": "oviposits_on",
+      "canonical_rel_desc": "Indicates that a female organism deposits its eggs on a specific substrate or host.",
+      "justification": "Both relations describe the same reproductive act of female butterflies depositing eggs on host plants; using a single canonical predicate 'oviposits_on' avoids trivial synonyms ('lays_eggs_on') and improves schema consistency.",
+      "remark": "Normalized two semantically identical oviposition relations under a single canonical predicate.",
+      "confidence": 0.96
+    }
+  },
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": [
+        "RelR_154508b1708b"
+      ],
+      "canonical_rel_name": null,
+      "canonical_rel_desc": null,
+      "rel_cls": "agent_activity_participation_relation",
+      "rel_cls_group": "PARTICIPATION",
+      "justification": "The relation links a butterfly to execution of a specific activity ('first flight'). This is better modeled as participation in an activity than as a generic AGENCY relation; updating rel_cls_group to 'PARTICIPATION' and keeping the more specific class name aligns it with the biological_process_participation_relation pattern used elsewhere.",
+      "remark": "Reclassified from generic AGENCY to PARTICIPATION to emphasize the agent’s involvement in an activity rather than abstract agency.",
+      "confidence": 0.9
+    }
+  }
+]

@@ -1,0 +1,18 @@
+[
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": [
+        "RelR_dcb2d48745f8",
+        "RelR_39e8b8652c3f"
+      ],
+      "canonical_rel_name": "occurs_in_context_of",
+      "canonical_rel_desc": "Indicates that the subject phenomenon, process, or issue takes place within, or is embedded in, the broader contextual setting denoted by the object (e.g., societal, organizational, cultural, or procedural context).",
+      "rel_cls": "contextual_occurrence_relation",
+      "rel_cls_group": "CONTEXTUALITY",
+      "justification": "Both relations describe phenomena (urban legend proliferation, biased algorithms) occurring within broader societal or procedural contexts (modern society, hiring processes). This is contextual rather than purely spatial or generic association, so they should share a single contextual-occurrence predicate ('occurs_in_context_of'), a unified relation class, and a rel_cls_group that reflects contextual embedding instead of SPATIALITY or ASSOCIATION.",
+      "remark": "Normalized two semantically equivalent 'occurs in context' relations into a single canonical predicate and contextual relation class; adjusted rel_cls_group from SPATIALITY/ASSOCIATION to CONTEXTUALITY to better capture non-spatial contextual embedding.",
+      "confidence": 0.9
+    }
+  }
+]

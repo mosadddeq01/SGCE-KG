@@ -1,0 +1,203 @@
+{
+  "cluster_label": "45_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_debb207b84a8",
+      "relation_name": "lays_eggs_on",
+      "rel_desc": "Female butterflies deposit their eggs on specific host plants.",
+      "rel_hint_type": "reproductive-behavior",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "female butterflies",
+      "object_entity_name": "host plants",
+      "subject_class_label": "Female butterflies",
+      "subject_class_group": "Butterfly Biology & Life Cycle",
+      "object_class_label": "Plant Structures as Lepidopteran Substrate and Background",
+      "object_class_group": "Lepidopteran Plant Interactions & Habitat",
+      "qualifiers": {
+        "TemporalQualifier": "during the egg stage of the life cycle",
+        "SpatialQualifier": "on specific host plants",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "FunctionalReason: host plants will provide food for emerging larvae"
+      },
+      "confidence": 0.97,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_1fe1a12fceaa",
+      "relation_name": "characterized_by",
+      "rel_desc": "The adult stage of butterflies is characterized by reproductive activity.",
+      "rel_hint_type": "behavioral",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "adult stage of a butterfly",
+      "object_entity_name": "reproduction of butterflies",
+      "subject_class_label": "Adult Butterfly Life Stage",
+      "subject_class_group": "Butterfly Biology & Life Cycle",
+      "object_class_label": "Butterfly Reproductive Behavior",
+      "object_class_group": "Butterfly Life Cycle and Reproduction",
+      "qualifiers": {
+        "TemporalQualifier": "throughout adult stage",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "to continue the life cycle",
+        "LogicalMarker": "and",
+        "OtherQualifier": null
+      },
+      "confidence": 0.97,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_debb207b84a8\"],\n      \"canonical_rel_name\": \"oviposits_on\",\n      \"canonical_rel_desc\": \"Indicates that a female organism deposits its eggs on a specific substrate or host.\",\n      \"justification\": \"The relation links female butterflies to host plants with the reproductive action of depositing eggs; a concise and reusable predicate for this behavior is 'oviposits_on'.\",\n      \"remark\": \"Chosen over 'lays_eggs_on' for more general biological applicability across taxa.\",\n      \"confidence\": 0.94\n    }\n  },\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_1fe1a12fceaa\"],\n      \"canonical_rel_name\": \"has_characteristic_behavior\",\n      \"canonical_rel_desc\": \"Indicates that a life stage or entity is defined or typified by a particular behavior.\",\n      \"justification\": \"The relation states that the adult stage of butterflies is characterized by reproductive activity; this is best modeled as the life stage having a characteristic behavior.\",\n      \"remark\": null,\n      \"confidence\": 0.93\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_debb207b84a8\"],\n      \"rel_cls\": \"reproductive_behavior_relation\",\n      \"justification\": \"The predicate 'oviposits_on' is a specific reproductive behavior linking an organism to an oviposition substrate, fitting a reproductive behavior relation class.\",\n      \"remark\": null,\n      \"confidence\": 0.93\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_1fe1a12fceaa\"],\n      \"rel_cls\": \"behavioral_characterization_relation\",\n      \"justification\": \"This relation characterizes a life stage by a behavior (reproduction), which is a generic pattern of describing an entity in terms of its typical behaviors.\",\n      \"remark\": null,\n      \"confidence\": 0.92\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_debb207b84a8\"],\n      \"rel_cls_group\": \"AGENCY\",\n      \"justification\": \"The relation describes an action performed by an agent (female butterflies) on a target (host plants), which fits an action/agency-oriented group.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_1fe1a12fceaa\"],\n      \"rel_cls_group\": \"ATTRIBUTE\",\n      \"justification\": \"The relation states that the adult life stage is characterized by (has) the attribute of reproductive behavior, fitting an attribute/characterization dimension.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_debb207b84a8"
+        ],
+        "canonical_rel_name": "oviposits_on",
+        "canonical_rel_desc": "Indicates that a female organism deposits its eggs on a specific substrate or host.",
+        "justification": "The relation links female butterflies to host plants with the reproductive action of depositing eggs; a concise and reusable predicate for this behavior is 'oviposits_on'.",
+        "remark": "Chosen over 'lays_eggs_on' for more general biological applicability across taxa.",
+        "confidence": 0.94
+      }
+    },
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_1fe1a12fceaa"
+        ],
+        "canonical_rel_name": "has_characteristic_behavior",
+        "canonical_rel_desc": "Indicates that a life stage or entity is defined or typified by a particular behavior.",
+        "justification": "The relation states that the adult stage of butterflies is characterized by reproductive activity; this is best modeled as the life stage having a characteristic behavior.",
+        "remark": null,
+        "confidence": 0.93
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_debb207b84a8"
+        ],
+        "rel_cls": "reproductive_behavior_relation",
+        "justification": "The predicate 'oviposits_on' is a specific reproductive behavior linking an organism to an oviposition substrate, fitting a reproductive behavior relation class.",
+        "remark": null,
+        "confidence": 0.93
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_1fe1a12fceaa"
+        ],
+        "rel_cls": "behavioral_characterization_relation",
+        "justification": "This relation characterizes a life stage by a behavior (reproduction), which is a generic pattern of describing an entity in terms of its typical behaviors.",
+        "remark": null,
+        "confidence": 0.92
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_debb207b84a8"
+        ],
+        "rel_cls_group": "AGENCY",
+        "justification": "The relation describes an action performed by an agent (female butterflies) on a target (host plants), which fits an action/agency-oriented group.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_1fe1a12fceaa"
+        ],
+        "rel_cls_group": "ATTRIBUTE",
+        "justification": "The relation states that the adult life stage is characterized by (has) the attribute of reproductive behavior, fitting an attribute/characterization dimension.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_debb207b84a8"
+      ],
+      "canonical_rel_name": "oviposits_on",
+      "canonical_rel_desc": "Indicates that a female organism deposits its eggs on a specific substrate or host.",
+      "justification": "The relation links female butterflies to host plants with the reproductive action of depositing eggs; a concise and reusable predicate for this behavior is 'oviposits_on'.",
+      "remark": "Chosen over 'lays_eggs_on' for more general biological applicability across taxa.",
+      "confidence": 0.94
+    },
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_1fe1a12fceaa"
+      ],
+      "canonical_rel_name": "has_characteristic_behavior",
+      "canonical_rel_desc": "Indicates that a life stage or entity is defined or typified by a particular behavior.",
+      "justification": "The relation states that the adult stage of butterflies is characterized by reproductive activity; this is best modeled as the life stage having a characteristic behavior.",
+      "remark": null,
+      "confidence": 0.93
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_debb207b84a8"
+      ],
+      "rel_cls": "reproductive_behavior_relation",
+      "justification": "The predicate 'oviposits_on' is a specific reproductive behavior linking an organism to an oviposition substrate, fitting a reproductive behavior relation class.",
+      "remark": null,
+      "confidence": 0.93
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_1fe1a12fceaa"
+      ],
+      "rel_cls": "behavioral_characterization_relation",
+      "justification": "This relation characterizes a life stage by a behavior (reproduction), which is a generic pattern of describing an entity in terms of its typical behaviors.",
+      "remark": null,
+      "confidence": 0.92
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_debb207b84a8"
+      ],
+      "rel_cls_group": "AGENCY",
+      "justification": "The relation describes an action performed by an agent (female butterflies) on a target (host plants), which fits an action/agency-oriented group.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_1fe1a12fceaa"
+      ],
+      "rel_cls_group": "ATTRIBUTE",
+      "justification": "The relation states that the adult life stage is characterized by (has) the attribute of reproductive behavior, fitting an attribute/characterization dimension.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  ],
+  "timestamp": "2026-01-02T09:17:16Z"
+}

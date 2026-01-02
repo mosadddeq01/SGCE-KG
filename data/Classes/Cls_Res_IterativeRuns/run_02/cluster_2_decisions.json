@@ -2,223 +2,251 @@
   "cluster_label": 2,
   "cluster_classes": [
     {
-      "candidate_id": "ClsC_1ecda745",
-      "class_label": "Corrosive Acids",
-      "class_description": "Highly corrosive acids requiring specific materials for safe handling and storage.",
-      "class_type_hint": "Material",
-      "class_group": "Industrial Chemicals",
-      "confidence": 0.9,
-      "evidence_excerpt": "require specific materials to safely manage these corrosive substances.",
+      "candidate_id": "ClsC_fd78acc4",
+      "class_label": "Ecological Systems",
+      "class_description": "Broad, system-level ecological constructs that describe whole environments and their overarching structure, such as ecosystems and the natural world context in which organisms exist.",
+      "class_type_hint": "Ecological Concept",
+      "class_group": "Ecology and Ecosystems",
+      "confidence": 0.86,
+      "evidence_excerpt": "ecological community and its environment … wider ecological context of butterfly existence",
       "member_ids": [
-        "En_cad09535",
-        "En_99c85915"
+        "Can_61a7f8d5",
+        "En_abad69f5"
       ],
       "members": [
         {
-          "id": "En_cad09535",
-          "entity_name": "sulfuric acid",
-          "entity_description": "A strong acid used in various industrial processes, requiring specific materials for safe handling.",
-          "entity_type_hint": "Material"
-        },
-        {
-          "id": "En_99c85915",
-          "entity_name": "hydrofluoric acid",
-          "entity_description": "A highly corrosive acid used in industrial applications, requiring special materials for safe handling and storage.",
-          "entity_type_hint": "Material"
-        }
-      ],
-      "remarks": []
-    },
-    {
-      "candidate_id": "ClsC_16b29b0b",
-      "class_label": "Amine Treating Chemicals",
-      "class_description": "Chemicals used in amine treating processes to remove H2S and CO2 from hydrocarbon streams.",
-      "class_type_hint": "Chemical",
-      "class_group": "Industrial Chemicals",
-      "confidence": 0.95,
-      "evidence_excerpt": "used in amine treating to remove H2S and CO2.",
-      "member_ids": [
-        "En_b6489a63",
-        "En_a38530be",
-        "En_24fd3367"
-      ],
-      "members": [
-        {
-          "id": "En_b6489a63",
-          "entity_name": "diethanolamine (DEA)",
-          "entity_description": "A chemical used in amine treating to remove H2S and CO2 from hydrocarbon streams.",
-          "entity_type_hint": "Chemical"
-        },
-        {
-          "id": "En_a38530be",
-          "entity_name": "methyldiethanolamine",
-          "entity_description": "A chemical used in amine treating to remove H2S and CO2 from hydrocarbon streams.",
-          "entity_type_hint": "Material"
-        },
-        {
-          "id": "En_24fd3367",
-          "entity_name": "monoethanolamine",
-          "entity_description": "A chemical used in amine treating to remove H2S and CO2 from hydrocarbon streams.",
-          "entity_type_hint": "Material"
-        }
-      ],
-      "remarks": []
-    },
-    {
-      "candidate_id": "ClsC_4035c3e0",
-      "class_label": "Sour Water Treatment Processes",
-      "class_description": "Processes and units involved in the treatment of sour water containing hydrogen sulfide.",
-      "class_type_hint": "Process",
-      "class_group": "Industrial Water & Gas Treatment",
-      "confidence": 0.88,
-      "evidence_excerpt": "treating sour water by removing contaminants.",
-      "member_ids": [
-        "En_da73a6e7",
-        "En_3b78069f"
-      ],
-      "members": [
-        {
-          "id": "En_da73a6e7",
-          "entity_name": "sour water",
-          "entity_description": "Water containing hydrogen sulfide and other sulfur compounds, often requiring treatment.",
+          "id": "Can_61a7f8d5",
+          "entity_name": "ecosystem",
+          "entity_description": "The integrated ecological community of organisms and their physical environment where caterpillars and butterflies interact as pollinators, prey, and participants in ecological processes.",
           "entity_type_hint": "Environment"
         },
         {
-          "id": "En_3b78069f",
-          "entity_name": "sour water stripper",
-          "entity_description": "A process unit used to remove hydrogen sulfide and ammonia from sour water.",
-          "entity_type_hint": "ProcessUnit"
+          "id": "En_abad69f5",
+          "entity_name": "natural world",
+          "entity_description": "The broad ecological and biological systems, including all living organisms and their environments, of which butterfly life cycles are a part.",
+          "entity_type_hint": "EcologicalContext"
         }
       ],
       "remarks": []
     },
     {
-      "candidate_id": "ClsC_bd232016",
-      "class_label": "Vacuum Distillation Units",
-      "class_description": "Process units designed to separate components at reduced pressure to lower their boiling points.",
-      "class_type_hint": "Process Unit",
-      "class_group": "Industrial Separation Units",
-      "confidence": 0.95,
-      "evidence_excerpt": "",
+      "candidate_id": "ClsC_883a75f2",
+      "class_label": "Ecological State Variables",
+      "class_description": "Ecological conditions or metrics that characterize the status of biological communities, including biodiversity levels and the balance of plant populations.",
+      "class_type_hint": "Ecological Concept",
+      "class_group": "Ecology and Ecosystems",
+      "confidence": 0.84,
+      "evidence_excerpt": "state where plant species abundances are maintained … richness and variety of organisms",
       "member_ids": [
-        "En_c71fc6d7"
+        "En_6925a761",
+        "En_0a72995a"
       ],
       "members": [
         {
-          "id": "En_c71fc6d7",
-          "entity_name": "vacuum distillation unit",
-          "entity_description": "A process unit that separates components at reduced pressure to lower boiling points.",
-          "entity_type_hint": "ProcessUnit"
+          "id": "En_6925a761",
+          "entity_name": "balance of plant populations",
+          "entity_description": "Ecological state where plant species abundances are maintained, influenced by caterpillars.",
+          "entity_type_hint": "Condition"
+        },
+        {
+          "id": "En_0a72995a",
+          "entity_name": "biodiversity",
+          "entity_description": "The variety and variability of living organisms and ecological complexes within an ecosystem to which butterflies contribute.",
+          "entity_type_hint": "EcologicalConcept"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_ccd47493",
+      "class_label": "Ecological Processes and Interactions",
+      "class_description": "Ecological processes, connections, and biotic interactions within ecosystems, excluding specific organism roles like predators which are modeled separately.",
+      "class_type_hint": "Ecological Concept",
+      "class_group": "Ecology and Ecosystems",
+      "confidence": 0.7,
+      "evidence_excerpt": "Predators and the complex web of ecological and biological interactions and processes within ecosystems.",
+      "member_ids": [
+        "En_81f97594"
+      ],
+      "members": [
+        {
+          "id": "En_81f97594",
+          "entity_name": "ecological connections and processes",
+          "entity_description": "The complex web of ecological and biological interactions and processes within ecosystems, highlighted through studying butterfly life cycles.",
+          "entity_type_hint": "EcologicalProcess"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsR_04475627",
+      "class_label": "Ecological Predators",
+      "class_description": "Organisms that act as predators within ecosystems, influencing prey species such as caterpillars and shaping ecological dynamics.",
+      "class_type_hint": "Organism Role",
+      "class_group": "Ecology and Ecosystems",
+      "confidence": 0.5,
+      "evidence_excerpt": "",
+      "member_ids": [
+        "En_06d732fe",
+        "En_3acddb02",
+        "En_afd1483c",
+        "En_48503a32",
+        "En_153b2752"
+      ],
+      "members": [
+        {
+          "id": "En_06d732fe",
+          "entity_name": "predators",
+          "entity_description": "Animals that prey on caterpillars, driving their protective adaptations.",
+          "entity_type_hint": "Organism"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsR_5aa32109",
+      "class_label": "Butterfly Predators, Prey Role, and Predation Risk",
+      "class_description": "Predators of butterflies and their eggs/larvae (birds, reptiles, other insects, and unspecified predators), the ecological role of butterflies as prey within food webs, and behaviors/locations such as egg-laying on leaf undersides that reduce predation risk.",
+      "class_type_hint": "Ecological Interaction",
+      "class_group": "Butterfly Ecology: Host Plants, Predators & Anti-predator Strategies",
+      "confidence": 0.93,
+      "evidence_excerpt": "Eggs laid on the underside of leaves to protect them from predators.",
+      "member_ids": [
+        "En_09aa0f55",
+        "En_3acddb02",
+        "En_35e2307e",
+        "En_afd1483c",
+        "En_48503a32",
+        "En_153b2752"
+      ],
+      "members": [
+        {
+          "id": "En_09aa0f55",
+          "entity_name": "underside of leaves",
+          "entity_description": "The lower surface of plant leaves where butterfly eggs are commonly laid.",
+          "entity_type_hint": "Location"
+        },
+        {
+          "id": "En_3acddb02",
+          "entity_name": "predators",
+          "entity_description": "Animals that might eat or harm butterfly eggs on leaves.",
+          "entity_type_hint": "BiologicalEntity"
+        },
+        {
+          "id": "En_35e2307e",
+          "entity_name": "food source role of butterflies",
+          "entity_description": "The ecological role of butterflies as prey for birds, reptiles, and other insects.",
+          "entity_type_hint": "Process"
+        },
+        {
+          "id": "En_afd1483c",
+          "entity_name": "birds",
+          "entity_description": "Vertebrate animals that consume butterflies as part of their diet.",
+          "entity_type_hint": "Organism"
+        },
+        {
+          "id": "En_48503a32",
+          "entity_name": "reptiles",
+          "entity_description": "Cold-blooded vertebrates identified as predators that eat butterflies.",
+          "entity_type_hint": "Organism"
+        },
+        {
+          "id": "En_153b2752",
+          "entity_name": "other insects",
+          "entity_description": "Insect species besides butterflies that prey on butterflies as food.",
+          "entity_type_hint": "Organism"
         }
       ],
       "remarks": []
     }
   ],
-  "llm_raw": "[\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_1ecda745\",\n      \"new_name\": \"Corrosive Acids\",\n      \"new_description\": \"Highly corrosive acids requiring specific materials for safe handling and storage.\",\n      \"new_class_type_hint\": \"Material\",\n      \"new_class_group\": \"Industrial Process Chemicals\",\n      \"remark\": null,\n      \"justification\": \"Class_Group 'Industrial Chemicals' is too broad; 'Corrosive Acids' are a specific subset of chemicals used in industrial processes, so assigning to 'Industrial Process Chemicals' for more precise schema connectivity.\",\n      \"confidence\": 0.95\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_16b29b0b\",\n      \"new_name\": \"Amine Treating Chemicals\",\n      \"new_description\": \"Chemicals used in amine treating processes to remove H2S and CO2 from hydrocarbon streams.\",\n      \"new_class_type_hint\": \"Chemical\",\n      \"new_class_group\": \"Industrial Process Chemicals\",\n      \"remark\": null,\n      \"justification\": \"Class_Group 'Industrial Chemicals' is too broad; 'Amine Treating Chemicals' are a specific set of chemicals used in industrial processes, so assigning to 'Industrial Process Chemicals' for schema precision and to connect with 'Corrosive Acids'.\",\n      \"confidence\": 0.95\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_4035c3e0\",\n      \"new_name\": \"Sour Water Treatment Processes\",\n      \"new_description\": \"Processes and units involved in the treatment of sour water containing hydrogen sulfide.\",\n      \"new_class_type_hint\": \"Process\",\n      \"new_class_group\": \"Industrial Water & Gas Treatment\",\n      \"remark\": null,\n      \"justification\": \"Class_Group is already appropriate as 'Industrial Water & Gas Treatment' since this class is about process units and not chemicals.\",\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_bd232016\",\n      \"new_name\": \"Vacuum Distillation Units\",\n      \"new_description\": \"Process units designed to separate components at reduced pressure to lower their boiling points.\",\n      \"new_class_type_hint\": \"Process Unit\",\n      \"new_class_group\": \"Industrial Separation Units\",\n      \"remark\": null,\n      \"justification\": \"Class_Group 'Industrial Separation Units' is appropriate for this process unit; no change needed except to confirm assignment.\",\n      \"confidence\": 0.95\n    }\n  }\n]",
+  "llm_raw": "[\n  {\n    \"function\": \"reassign_entities\",\n    \"args\": {\n      \"entity_ids\": [\n        \"En_3acddb02\",\n        \"En_afd1483c\",\n        \"En_48503a32\",\n        \"En_153b2752\"\n      ],\n      \"from_class_id\": \"ClsR_5aa32109\",\n      \"to_class_id\": \"ClsR_04475627\",\n      \"justification\": \"Entities in ClsR_5aa32109 describing concrete predator organisms (generic predators, birds, reptiles, other insects) match the scope of ClsR_04475627 (predator organisms) better than the mixed interaction/behavior scope of ClsR_5aa32109, so they should be consolidated under the dedicated predator-organism class.\",\n      \"remark\": null,\n      \"confidence\": 0.92\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsR_04475627\",\n      \"new_name\": \"Predators of Caterpillars and Butterflies\",\n      \"new_description\": \"Organisms that act as predators of caterpillars, butterfly eggs, larvae, and adults within ecosystems, influencing prey species and shaping ecological dynamics.\",\n      \"new_class_type_hint\": \"Organism Role\",\n      \"new_class_group\": \"Ecology and Ecosystems\",\n      \"remark\": null,\n      \"justification\": \"After moving all predator-organism entities into ClsR_04475627, renaming and slightly broadening the description clarifies that this class covers all predators of caterpillars and butterflies and remains aligned with the existing Ecology and Ecosystems group.\",\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsR_5aa32109\",\n      \"new_name\": \"Butterfly Prey Role and Anti-predator Strategies\",\n      \"new_description\": \"The ecological role of butterflies as prey within food webs and the behaviors or spatial strategies, such as laying eggs on the underside of leaves, that reduce predation risk.\",\n      \"new_class_type_hint\": \"Ecological Interaction\",\n      \"new_class_group\": \"Ecology and Ecosystems\",\n      \"remark\": null,\n      \"justification\": \"Once predator-organism entities are reassigned, ClsR_5aa32109 is focused on butterflies’ role as prey and their anti-predator strategies; renaming and simplifying the description to exclude explicit predator taxa and aligning its class_group with the other ecological interaction classes creates a cleaner, more coherent schema.\",\n      \"confidence\": 0.9\n    }\n  }\n]",
   "parsed_steps": [
     {
-      "function": "modify_class",
+      "function": "reassign_entities",
       "args": {
-        "class_id": "ClsC_1ecda745",
-        "new_name": "Corrosive Acids",
-        "new_description": "Highly corrosive acids requiring specific materials for safe handling and storage.",
-        "new_class_type_hint": "Material",
-        "new_class_group": "Industrial Process Chemicals",
+        "entity_ids": [
+          "En_3acddb02",
+          "En_afd1483c",
+          "En_48503a32",
+          "En_153b2752"
+        ],
+        "from_class_id": "ClsR_5aa32109",
+        "to_class_id": "ClsR_04475627",
+        "justification": "Entities in ClsR_5aa32109 describing concrete predator organisms (generic predators, birds, reptiles, other insects) match the scope of ClsR_04475627 (predator organisms) better than the mixed interaction/behavior scope of ClsR_5aa32109, so they should be consolidated under the dedicated predator-organism class.",
         "remark": null,
-        "justification": "Class_Group 'Industrial Chemicals' is too broad; 'Corrosive Acids' are a specific subset of chemicals used in industrial processes, so assigning to 'Industrial Process Chemicals' for more precise schema connectivity.",
-        "confidence": 0.95
+        "confidence": 0.92
       }
     },
     {
       "function": "modify_class",
       "args": {
-        "class_id": "ClsC_16b29b0b",
-        "new_name": "Amine Treating Chemicals",
-        "new_description": "Chemicals used in amine treating processes to remove H2S and CO2 from hydrocarbon streams.",
-        "new_class_type_hint": "Chemical",
-        "new_class_group": "Industrial Process Chemicals",
+        "class_id": "ClsR_04475627",
+        "new_name": "Predators of Caterpillars and Butterflies",
+        "new_description": "Organisms that act as predators of caterpillars, butterfly eggs, larvae, and adults within ecosystems, influencing prey species and shaping ecological dynamics.",
+        "new_class_type_hint": "Organism Role",
+        "new_class_group": "Ecology and Ecosystems",
         "remark": null,
-        "justification": "Class_Group 'Industrial Chemicals' is too broad; 'Amine Treating Chemicals' are a specific set of chemicals used in industrial processes, so assigning to 'Industrial Process Chemicals' for schema precision and to connect with 'Corrosive Acids'.",
-        "confidence": 0.95
-      }
-    },
-    {
-      "function": "modify_class",
-      "args": {
-        "class_id": "ClsC_4035c3e0",
-        "new_name": "Sour Water Treatment Processes",
-        "new_description": "Processes and units involved in the treatment of sour water containing hydrogen sulfide.",
-        "new_class_type_hint": "Process",
-        "new_class_group": "Industrial Water & Gas Treatment",
-        "remark": null,
-        "justification": "Class_Group is already appropriate as 'Industrial Water & Gas Treatment' since this class is about process units and not chemicals.",
+        "justification": "After moving all predator-organism entities into ClsR_04475627, renaming and slightly broadening the description clarifies that this class covers all predators of caterpillars and butterflies and remains aligned with the existing Ecology and Ecosystems group.",
         "confidence": 0.9
       }
     },
     {
       "function": "modify_class",
       "args": {
-        "class_id": "ClsC_bd232016",
-        "new_name": "Vacuum Distillation Units",
-        "new_description": "Process units designed to separate components at reduced pressure to lower their boiling points.",
-        "new_class_type_hint": "Process Unit",
-        "new_class_group": "Industrial Separation Units",
+        "class_id": "ClsR_5aa32109",
+        "new_name": "Butterfly Prey Role and Anti-predator Strategies",
+        "new_description": "The ecological role of butterflies as prey within food webs and the behaviors or spatial strategies, such as laying eggs on the underside of leaves, that reduce predation risk.",
+        "new_class_type_hint": "Ecological Interaction",
+        "new_class_group": "Ecology and Ecosystems",
         "remark": null,
-        "justification": "Class_Group 'Industrial Separation Units' is appropriate for this process unit; no change needed except to confirm assignment.",
-        "confidence": 0.95
+        "justification": "Once predator-organism entities are reassigned, ClsR_5aa32109 is focused on butterflies' role as prey and their anti-predator strategies; renaming and simplifying the description to exclude explicit predator taxa and aligning its class_group with the other ecological interaction classes creates a cleaner, more coherent schema.",
+        "confidence": 0.9
       }
     }
   ],
   "executed_decisions": [
     {
-      "action": "modify_class",
-      "class_id": "ClsC_1ecda745",
-      "class_id_resolved": "ClsC_1ecda745",
-      "new_name": "Corrosive Acids",
-      "new_description": "Highly corrosive acids requiring specific materials for safe handling and storage.",
-      "new_class_type_hint": "Material",
-      "new_class_group": "Industrial Process Chemicals",
+      "action": "reassign_entities",
+      "entity_ids": [
+        "En_3acddb02",
+        "En_afd1483c",
+        "En_48503a32",
+        "En_153b2752"
+      ],
+      "from": "ClsR_5aa32109",
+      "from_resolved": "ClsR_5aa32109",
+      "to": "ClsR_04475627",
+      "to_resolved": "ClsR_04475627",
+      "justification": "Entities in ClsR_5aa32109 describing concrete predator organisms (generic predators, birds, reptiles, other insects) match the scope of ClsR_04475627 (predator organisms) better than the mixed interaction/behavior scope of ClsR_5aa32109, so they should be consolidated under the dedicated predator-organism class.",
       "remark": null,
-      "justification": "Class_Group 'Industrial Chemicals' is too broad; 'Corrosive Acids' are a specific subset of chemicals used in industrial processes, so assigning to 'Industrial Process Chemicals' for more precise schema connectivity.",
-      "confidence": 0.95
+      "confidence": 0.92
     },
     {
       "action": "modify_class",
-      "class_id": "ClsC_16b29b0b",
-      "class_id_resolved": "ClsC_16b29b0b",
-      "new_name": "Amine Treating Chemicals",
-      "new_description": "Chemicals used in amine treating processes to remove H2S and CO2 from hydrocarbon streams.",
-      "new_class_type_hint": "Chemical",
-      "new_class_group": "Industrial Process Chemicals",
+      "class_id": "ClsR_04475627",
+      "class_id_resolved": "ClsR_04475627",
+      "new_name": "Predators of Caterpillars and Butterflies",
+      "new_description": "Organisms that act as predators of caterpillars, butterfly eggs, larvae, and adults within ecosystems, influencing prey species and shaping ecological dynamics.",
+      "new_class_type_hint": "Organism Role",
+      "new_class_group": "Ecology and Ecosystems",
       "remark": null,
-      "justification": "Class_Group 'Industrial Chemicals' is too broad; 'Amine Treating Chemicals' are a specific set of chemicals used in industrial processes, so assigning to 'Industrial Process Chemicals' for schema precision and to connect with 'Corrosive Acids'.",
-      "confidence": 0.95
-    },
-    {
-      "action": "modify_class",
-      "class_id": "ClsC_4035c3e0",
-      "class_id_resolved": "ClsC_4035c3e0",
-      "new_name": "Sour Water Treatment Processes",
-      "new_description": "Processes and units involved in the treatment of sour water containing hydrogen sulfide.",
-      "new_class_type_hint": "Process",
-      "new_class_group": "Industrial Water & Gas Treatment",
-      "remark": null,
-      "justification": "Class_Group is already appropriate as 'Industrial Water & Gas Treatment' since this class is about process units and not chemicals.",
+      "justification": "After moving all predator-organism entities into ClsR_04475627, renaming and slightly broadening the description clarifies that this class covers all predators of caterpillars and butterflies and remains aligned with the existing Ecology and Ecosystems group.",
       "confidence": 0.9
     },
     {
       "action": "modify_class",
-      "class_id": "ClsC_bd232016",
-      "class_id_resolved": "ClsC_bd232016",
-      "new_name": "Vacuum Distillation Units",
-      "new_description": "Process units designed to separate components at reduced pressure to lower their boiling points.",
-      "new_class_type_hint": "Process Unit",
-      "new_class_group": "Industrial Separation Units",
+      "class_id": "ClsR_5aa32109",
+      "class_id_resolved": "ClsR_5aa32109",
+      "new_name": "Butterfly Prey Role and Anti-predator Strategies",
+      "new_description": "The ecological role of butterflies as prey within food webs and the behaviors or spatial strategies, such as laying eggs on the underside of leaves, that reduce predation risk.",
+      "new_class_type_hint": "Ecological Interaction",
+      "new_class_group": "Ecology and Ecosystems",
       "remark": null,
-      "justification": "Class_Group 'Industrial Separation Units' is appropriate for this process unit; no change needed except to confirm assignment.",
-      "confidence": 0.95
+      "justification": "Once predator-organism entities are reassigned, ClsR_5aa32109 is focused on butterflies' role as prey and their anti-predator strategies; renaming and simplifying the description to exclude explicit predator taxa and aligning its class_group with the other ecological interaction classes creates a cleaner, more coherent schema.",
+      "confidence": 0.9
     }
   ],
   "provisional_to_real": {},
-  "timestamp": "2025-12-28T00:23:30Z"
+  "timestamp": "2026-01-02T08:40:13Z"
 }

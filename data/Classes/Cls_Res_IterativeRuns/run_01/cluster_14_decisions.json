@@ -1,0 +1,172 @@
+{
+  "cluster_label": 14,
+  "cluster_classes": [
+    {
+      "candidate_id": "ClsC_bbd396a2",
+      "class_label": "Contemporary Cultural Contexts",
+      "class_description": "Macro-level social and cultural environments that shape the circulation and reception of phenomena such as urban legends in the present era.",
+      "class_type_hint": "Sociocultural Context",
+      "class_group": "Urban Legends and Modern Folklore",
+      "confidence": 0.86,
+      "evidence_excerpt": "Mainstream cultural environment and contemporary social context where urban legends circulate.",
+      "member_ids": [
+        "Can_f86960c6",
+        "En_9eb83b20"
+      ],
+      "members": [
+        {
+          "id": "Can_f86960c6",
+          "entity_name": "popular culture",
+          "entity_description": "The mainstream cultural environment where widely shared stories, media, and phenomena such as urban legends circulate and influence discourse.",
+          "entity_type_hint": "Environment"
+        },
+        {
+          "id": "En_9eb83b20",
+          "entity_name": "modern society",
+          "entity_description": "Contemporary social context in which urban legends are prevalent.",
+          "entity_type_hint": "Environment"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_75f4cf54",
+      "class_label": "Modern Folklore (legacy composite)",
+      "class_description": "Legacy composite class that previously combined the broad domain of modern folklore with the specific sub-type of urban legends; now superseded by separate classes for each.",
+      "class_type_hint": "Cultural Phenomenon",
+      "class_group": "Urban Legends and Modern Folklore",
+      "confidence": 0.93,
+      "evidence_excerpt": "modern folklore explicitly includes urban legends as part of contemporary traditional stories and beliefs",
+      "member_ids": [],
+      "members": [],
+      "remarks": [
+        "This class has been fully decomposed into two more precise classes: 'Urban Legends' and 'Modern Folklore'. It currently has no members and can be considered for deprecation or archival."
+      ]
+    },
+    {
+      "candidate_id": "ClsC_c0b9f443",
+      "class_label": "Deprecated: Urban Legend Elements (superseded by split classes)",
+      "class_description": "Legacy container class that previously mixed bait objects and audience roles for cautionary urban legends; its members have been moved into more specific split classes.",
+      "class_type_hint": "Deprecated",
+      "class_group": "Cautionary Urban Legends – Child Luring Scenarios",
+      "confidence": 0.78,
+      "evidence_excerpt": "Stories of strangers luring children with candy ... warn listeners about the dangers",
+      "member_ids": [],
+      "members": [],
+      "remarks": [
+        "This class is now empty after splitting its members into more specific classes and can be treated as deprecated or removed in a future cleanup step.",
+        "This class is fully empty after prior splits and should be treated as deprecated; avoid assigning new entities and consider archiving or deleting it in a dedicated cleanup step."
+      ]
+    },
+    {
+      "candidate_id": "ClsR_ac465a3a",
+      "class_label": "Modern Folklore",
+      "class_description": "The contemporary body of traditional stories, beliefs, and narrative practices—including but not limited to urban legends—that circulate within modern societies.",
+      "class_type_hint": "Cultural Phenomenon",
+      "class_group": "Urban Legends and Modern Folklore",
+      "confidence": 0.93,
+      "evidence_excerpt": "modern folklore explicitly includes urban legends as part of contemporary traditional stories and beliefs",
+      "member_ids": [
+        "Can_d44e5492"
+      ],
+      "members": [
+        {
+          "id": "Can_d44e5492",
+          "entity_name": "modern folklore",
+          "entity_description": "The contemporary body of traditional stories, beliefs, and tales, including urban legends, that circulate within modern societies.",
+          "entity_type_hint": "CulturalPhenomenon"
+        }
+      ],
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"merge_classes\",\n    \"args\": {\n      \"class_ids\": [\n        \"ClsC_75f4cf54\",\n        \"ClsR_ac465a3a\"\n      ],\n      \"provisional_id\": \"MERGE(ClsC_75f4cf54|ClsR_ac465a3a)\",\n      \"new_name\": \"Modern Folklore\",\n      \"new_description\": \"The contemporary body of traditional stories, beliefs, and narrative practices—including but not limited to urban legends—that circulate within modern societies. This class consolidates the legacy composite handling of modern folklore and its urban-legend subdomain into a single, stable category.\",\n      \"new_class_type_hint\": \"Cultural Phenomenon\",\n      \"justification\": \"ClsC_75f4cf54 is an empty legacy composite explicitly superseded by a more precise Modern Folklore class (ClsR_ac465a3a) covering the same domain, so merging removes redundant schema clutter while preserving a single canonical Modern Folklore class.\",\n      \"remark\": \"Legacy composite Modern Folklore class merged into the canonical Modern Folklore class to eliminate redundant, memberless container.\",\n      \"confidence\": 0.96\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"MERGE(ClsC_75f4cf54|ClsR_ac465a3a)\",\n      \"new_name\": null,\n      \"new_description\": null,\n      \"new_class_type_hint\": null,\n      \"new_class_group\": \"Urban Legends and Modern Folklore\",\n      \"remark\": null,\n      \"justification\": \"The merged Modern Folklore class should clearly sit in the same overarching domain as related classes like Contemporary Cultural Contexts, so explicitly assigning the 'Urban Legends and Modern Folklore' Class_Group maintains coherent upper-level organization.\",\n      \"confidence\": 0.94\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_c0b9f443\",\n      \"new_name\": null,\n      \"new_description\": null,\n      \"new_class_type_hint\": null,\n      \"new_class_group\": null,\n      \"remark\": \"This class is fully empty after prior splits and should be treated as deprecated; avoid assigning new entities and consider archiving or deleting it in a dedicated cleanup step.\",\n      \"justification\": \"ClsC_c0b9f443 is an empty legacy container already described as deprecated, so adding an explicit remark flags it for human review and future removal without altering current entity assignments.\",\n      \"confidence\": 0.9\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "merge_classes",
+      "args": {
+        "class_ids": [
+          "ClsC_75f4cf54",
+          "ClsR_ac465a3a"
+        ],
+        "provisional_id": "MERGE(ClsC_75f4cf54|ClsR_ac465a3a)",
+        "new_name": "Modern Folklore",
+        "new_description": "The contemporary body of traditional stories, beliefs, and narrative practices—including but not limited to urban legends—that circulate within modern societies. This class consolidates the legacy composite handling of modern folklore and its urban-legend subdomain into a single, stable category.",
+        "new_class_type_hint": "Cultural Phenomenon",
+        "justification": "ClsC_75f4cf54 is an empty legacy composite explicitly superseded by a more precise Modern Folklore class (ClsR_ac465a3a) covering the same domain, so merging removes redundant schema clutter while preserving a single canonical Modern Folklore class.",
+        "remark": "Legacy composite Modern Folklore class merged into the canonical Modern Folklore class to eliminate redundant, memberless container.",
+        "confidence": 0.96
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "MERGE(ClsC_75f4cf54|ClsR_ac465a3a)",
+        "new_name": null,
+        "new_description": null,
+        "new_class_type_hint": null,
+        "new_class_group": "Urban Legends and Modern Folklore",
+        "remark": null,
+        "justification": "The merged Modern Folklore class should clearly sit in the same overarching domain as related classes like Contemporary Cultural Contexts, so explicitly assigning the 'Urban Legends and Modern Folklore' Class_Group maintains coherent upper-level organization.",
+        "confidence": 0.94
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_c0b9f443",
+        "new_name": null,
+        "new_description": null,
+        "new_class_type_hint": null,
+        "new_class_group": null,
+        "remark": "This class is fully empty after prior splits and should be treated as deprecated; avoid assigning new entities and consider archiving or deleting it in a dedicated cleanup step.",
+        "justification": "ClsC_c0b9f443 is an empty legacy container already described as deprecated, so adding an explicit remark flags it for human review and future removal without altering current entity assignments.",
+        "confidence": 0.9
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "merge_classes",
+      "input_class_ids": [
+        "ClsC_75f4cf54",
+        "ClsR_ac465a3a"
+      ],
+      "result_class_id": "ClsR_1804969e",
+      "provisional_id": "MERGE(ClsC_75f4cf54|ClsR_ac465a3a)",
+      "justification": "ClsC_75f4cf54 is an empty legacy composite explicitly superseded by a more precise Modern Folklore class (ClsR_ac465a3a) covering the same domain, so merging removes redundant schema clutter while preserving a single canonical Modern Folklore class.",
+      "remark": "Legacy composite Modern Folklore class merged into the canonical Modern Folklore class to eliminate redundant, memberless container.",
+      "confidence": 0.96
+    },
+    {
+      "action": "modify_class",
+      "class_id": "MERGE(ClsC_75f4cf54|ClsR_ac465a3a)",
+      "class_id_resolved": "ClsR_1804969e",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Urban Legends and Modern Folklore",
+      "remark": null,
+      "justification": "The merged Modern Folklore class should clearly sit in the same overarching domain as related classes like Contemporary Cultural Contexts, so explicitly assigning the 'Urban Legends and Modern Folklore' Class_Group maintains coherent upper-level organization.",
+      "confidence": 0.94
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_c0b9f443",
+      "class_id_resolved": "ClsC_c0b9f443",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": null,
+      "remark": "This class is fully empty after prior splits and should be treated as deprecated; avoid assigning new entities and consider archiving or deleting it in a dedicated cleanup step.",
+      "justification": "ClsC_c0b9f443 is an empty legacy container already described as deprecated, so adding an explicit remark flags it for human review and future removal without altering current entity assignments.",
+      "confidence": 0.9
+    }
+  ],
+  "provisional_to_real": {
+    "MERGE(ClsC_75f4cf54|ClsR_ac465a3a)": "ClsR_1804969e",
+    "ClsC_75f4cf54": "ClsR_1804969e",
+    "ClsR_ac465a3a": "ClsR_1804969e"
+  },
+  "timestamp": "2026-01-02T08:38:28Z"
+}

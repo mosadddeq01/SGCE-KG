@@ -1,0 +1,182 @@
+{
+  "cluster_label": 13,
+  "cluster_classes": [
+    {
+      "candidate_id": "ClsC_01330fd0",
+      "class_label": "AI Surveillance Technologies",
+      "class_description": "Technological systems that use artificial intelligence to monitor or track individuals or groups, such as facial recognition used for surveillance purposes.",
+      "class_type_hint": "Technology Category",
+      "class_group": "TBD",
+      "confidence": 0.86,
+      "evidence_excerpt": "facial recognition technology can be used for surveillance purposes",
+      "member_ids": [
+        "En_d3f49663",
+        "En_c9fa581d"
+      ],
+      "members": [
+        {
+          "id": "En_d3f49663",
+          "entity_name": "facial recognition technology",
+          "entity_description": "AI-based technology that identifies or verifies individuals using their facial features.",
+          "entity_type_hint": "Component"
+        },
+        {
+          "id": "En_c9fa581d",
+          "entity_name": "surveillance purposes",
+          "entity_description": "Use of technologies to monitor or track individuals or groups.",
+          "entity_type_hint": "OperatingCondition"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_48eeb186",
+      "class_label": "Artificial Intelligence Technologies",
+      "class_description": "Concepts and systems related to artificial intelligence as a technological field, including the core technology and its concrete technological applications in society.",
+      "class_type_hint": "Technology Domain",
+      "class_group": "TBD",
+      "confidence": 0.86,
+      "evidence_excerpt": "AI technologies as concrete systems and Artificial Intelligence as the core technological field.",
+      "member_ids": [
+        "Can_c45dd68a",
+        "En_b2346235"
+      ],
+      "members": [
+        {
+          "id": "Can_c45dd68a",
+          "entity_name": "AI technologies",
+          "entity_description": "Technological systems, tools, and applications that use artificial intelligence methods and algorithms and are deployed across industries and daily life.",
+          "entity_type_hint": "Technology"
+        },
+        {
+          "id": "En_b2346235",
+          "entity_name": "Artificial Intelligence",
+          "entity_description": "A rapidly advancing technological field that is revolutionizing industries and daily life.",
+          "entity_type_hint": "Technology"
+        }
+      ],
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"split_class\",\n    \"args\": {\n      \"source_class_id\": \"ClsC_01330fd0\",\n      \"splits\": [\n        {\n          \"name\": \"Surveillance Purposes\",\n          \"description\": \"Use cases, goals, and purposes for which surveillance is conducted, such as monitoring or tracking individuals or groups.\",\n          \"class_type_hint\": \"UseCase\",\n          \"member_ids\": [\n            \"En_c9fa581d\"\n          ],\n          \"provisional_id\": \"SPLIT(ClsC_01330fd0)_purposes\"\n        }\n      ],\n      \"justification\": \"ClsC_01330fd0 mixes an AI-based surveillance technology (facial recognition technology) with a non-technology use-case concept (surveillance purposes); splitting isolates the purpose-oriented entity into its own coherent class.\",\n      \"remark\": null,\n      \"confidence\": 0.87\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_01330fd0\",\n      \"new_name\": \"AI Surveillance Technologies\",\n      \"new_description\": \"AI-based technological systems used for surveillance, such as facial recognition technology deployed to monitor or track individuals or groups.\",\n      \"new_class_type_hint\": \"Technology Category\",\n      \"new_class_group\": \"Artificial Intelligence Technologies & Applications\",\n      \"remark\": null,\n      \"justification\": \"After removing the use-case entity, ClsC_01330fd0 is now purely about AI surveillance technologies and should be explicitly positioned in the broader Artificial Intelligence Technologies & Applications group.\",\n      \"confidence\": 0.88\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_48eeb186\",\n      \"new_name\": \"Artificial Intelligence Technologies\",\n      \"new_description\": \"The technological field of artificial intelligence and its concrete systems, tools, and applications deployed across industries and daily life.\",\n      \"new_class_type_hint\": \"Technology Domain\",\n      \"new_class_group\": \"Artificial Intelligence Technologies & Applications\",\n      \"remark\": null,\n      \"justification\": \"ClsC_48eeb186 covers the general AI technology domain, which is the natural umbrella for all AI applications including surveillance; assigning it to the same Artificial Intelligence Technologies & Applications group aligns related AI technology classes.\",\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"SPLIT(ClsC_01330fd0)_purposes\",\n      \"new_name\": \"Surveillance Purposes\",\n      \"new_description\": \"Concepts describing the purposes or goals of surveillance activities (e.g., monitoring or tracking individuals or groups), independent of specific technologies used.\",\n      \"new_class_type_hint\": \"UseCase\",\n      \"new_class_group\": \"Artificial Intelligence Technologies & Applications\",\n      \"remark\": \"This class currently has only one member entity ('surveillance purposes'); future ingestion may populate additional AI-related surveillance use cases here.\",\n      \"justification\": \"The new split class contains a non-technological use-case concept closely tied to AI surveillance applications, so it should be clearly labeled as a use-case class and grouped with related AI technologies and applications.\",\n      \"confidence\": 0.82\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "split_class",
+      "args": {
+        "source_class_id": "ClsC_01330fd0",
+        "splits": [
+          {
+            "name": "Surveillance Purposes",
+            "description": "Use cases, goals, and purposes for which surveillance is conducted, such as monitoring or tracking individuals or groups.",
+            "class_type_hint": "UseCase",
+            "member_ids": [
+              "En_c9fa581d"
+            ],
+            "provisional_id": "SPLIT(ClsC_01330fd0)_purposes"
+          }
+        ],
+        "justification": "ClsC_01330fd0 mixes an AI-based surveillance technology (facial recognition technology) with a non-technology use-case concept (surveillance purposes); splitting isolates the purpose-oriented entity into its own coherent class.",
+        "remark": null,
+        "confidence": 0.87
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_01330fd0",
+        "new_name": "AI Surveillance Technologies",
+        "new_description": "AI-based technological systems used for surveillance, such as facial recognition technology deployed to monitor or track individuals or groups.",
+        "new_class_type_hint": "Technology Category",
+        "new_class_group": "Artificial Intelligence Technologies & Applications",
+        "remark": null,
+        "justification": "After removing the use-case entity, ClsC_01330fd0 is now purely about AI surveillance technologies and should be explicitly positioned in the broader Artificial Intelligence Technologies & Applications group.",
+        "confidence": 0.88
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_48eeb186",
+        "new_name": "Artificial Intelligence Technologies",
+        "new_description": "The technological field of artificial intelligence and its concrete systems, tools, and applications deployed across industries and daily life.",
+        "new_class_type_hint": "Technology Domain",
+        "new_class_group": "Artificial Intelligence Technologies & Applications",
+        "remark": null,
+        "justification": "ClsC_48eeb186 covers the general AI technology domain, which is the natural umbrella for all AI applications including surveillance; assigning it to the same Artificial Intelligence Technologies & Applications group aligns related AI technology classes.",
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "SPLIT(ClsC_01330fd0)_purposes",
+        "new_name": "Surveillance Purposes",
+        "new_description": "Concepts describing the purposes or goals of surveillance activities (e.g., monitoring or tracking individuals or groups), independent of specific technologies used.",
+        "new_class_type_hint": "UseCase",
+        "new_class_group": "Artificial Intelligence Technologies & Applications",
+        "remark": "This class currently has only one member entity ('surveillance purposes'); future ingestion may populate additional AI-related surveillance use cases here.",
+        "justification": "The new split class contains a non-technological use-case concept closely tied to AI surveillance applications, so it should be clearly labeled as a use-case class and grouped with related AI technologies and applications.",
+        "confidence": 0.82
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "split_class",
+      "source_class_id": "ClsC_01330fd0",
+      "source_class_id_resolved": "ClsC_01330fd0",
+      "created_classes": [
+        {
+          "new_class_id": "ClsR_a21c1d0a",
+          "provisional_id": "SPLIT(ClsC_01330fd0)_purposes",
+          "member_ids": [
+            "En_c9fa581d"
+          ]
+        }
+      ],
+      "justification": "ClsC_01330fd0 mixes an AI-based surveillance technology (facial recognition technology) with a non-technology use-case concept (surveillance purposes); splitting isolates the purpose-oriented entity into its own coherent class.",
+      "remark": null,
+      "confidence": 0.87
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_01330fd0",
+      "class_id_resolved": "ClsC_01330fd0",
+      "new_name": "AI Surveillance Technologies",
+      "new_description": "AI-based technological systems used for surveillance, such as facial recognition technology deployed to monitor or track individuals or groups.",
+      "new_class_type_hint": "Technology Category",
+      "new_class_group": "Artificial Intelligence Technologies & Applications",
+      "remark": null,
+      "justification": "After removing the use-case entity, ClsC_01330fd0 is now purely about AI surveillance technologies and should be explicitly positioned in the broader Artificial Intelligence Technologies & Applications group.",
+      "confidence": 0.88
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_48eeb186",
+      "class_id_resolved": "ClsC_48eeb186",
+      "new_name": "Artificial Intelligence Technologies",
+      "new_description": "The technological field of artificial intelligence and its concrete systems, tools, and applications deployed across industries and daily life.",
+      "new_class_type_hint": "Technology Domain",
+      "new_class_group": "Artificial Intelligence Technologies & Applications",
+      "remark": null,
+      "justification": "ClsC_48eeb186 covers the general AI technology domain, which is the natural umbrella for all AI applications including surveillance; assigning it to the same Artificial Intelligence Technologies & Applications group aligns related AI technology classes.",
+      "confidence": 0.9
+    },
+    {
+      "action": "modify_class",
+      "class_id": "SPLIT(ClsC_01330fd0)_purposes",
+      "class_id_resolved": "ClsR_a21c1d0a",
+      "new_name": "Surveillance Purposes",
+      "new_description": "Concepts describing the purposes or goals of surveillance activities (e.g., monitoring or tracking individuals or groups), independent of specific technologies used.",
+      "new_class_type_hint": "UseCase",
+      "new_class_group": "Artificial Intelligence Technologies & Applications",
+      "remark": "This class currently has only one member entity ('surveillance purposes'); future ingestion may populate additional AI-related surveillance use cases here.",
+      "justification": "The new split class contains a non-technological use-case concept closely tied to AI surveillance applications, so it should be clearly labeled as a use-case class and grouped with related AI technologies and applications.",
+      "confidence": 0.82
+    }
+  ],
+  "provisional_to_real": {
+    "SPLIT(ClsC_01330fd0)_purposes": "ClsR_a21c1d0a"
+  },
+  "timestamp": "2026-01-02T08:45:29Z"
+}

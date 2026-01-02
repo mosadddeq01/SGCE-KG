@@ -1,0 +1,15 @@
+[
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": ["RelR_0bfb617913f4"],
+      "canonical_rel_name": "contributes_to",
+      "canonical_rel_desc": "Indicates that an entity or role plays a part in producing, maintaining, or influencing an ecological or system-level property (e.g., biodiversity).",
+      "rel_cls": "ecosystem_function_relation",
+      "rel_cls_group": "CAUSALITY",
+      "justification": "Both relations describe the contribution of butterflies or their ecological roles to biodiversity. They already share the same canonical predicate 'contributes_to' and rel_cls_group 'CAUSALITY'. Unifying the rel_cls to 'ecosystem_function_relation' and harmonizing the canonical_rel_desc with the broader ecosystem-function wording used in the second relation creates a consistent schema for this predicate while still covering role-level and organism-level contributions.",
+      "remark": "Harmonized this instance to use the same relation class and a generalized description as the organism-level 'contributes_to biodiversity' relation for schema consistency.",
+      "confidence": 0.88
+    }
+  }
+]

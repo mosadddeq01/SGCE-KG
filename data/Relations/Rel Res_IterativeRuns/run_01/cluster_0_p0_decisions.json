@@ -2,245 +2,123 @@
   "cluster_label": "0_p0",
   "cluster_relations": [
     {
-      "relation_id": "RelR_7b6d773fe742",
-      "relation_name": "resists",
-      "rel_desc": "Stainless steels are resistant to oxidation due to their alloy content.",
-      "rel_hint_type": "corrosion_resistance",
-      "canonical_rel_name": "resists",
-      "canonical_rel_desc": "Subject material exhibits resistance to the specified corrosion or degradation mechanism under certain conditions.",
-      "rel_cls": "degradation_mitigation_relation",
-      "rel_cls_group": "CAUSALITY",
-      "subject_entity_name": "Stainless Steel",
-      "object_entity_name": "oxidation",
-      "subject_class_label": "Corrosion-Resistant Alloys",
-      "subject_class_group": "Corrosion-Resistant Metals and Alloys",
-      "object_class_label": "Oxidation and Sulfidation Corrosion Mechanisms",
-      "object_class_group": "Corrosion Mechanisms",
+      "relation_id": "RelR_19adc7bf5116",
+      "relation_name": "has_state",
+      "rel_desc": "The newly emerged adult butterfly initially has soft, wrinkled wings.",
+      "rel_hint_type": "state possession",
+      "canonical_rel_name": "has_state",
+      "canonical_rel_desc": "Indicates that an entity currently possesses or is in a particular physical or experiential state.",
+      "rel_cls": "entity_state_relation",
+      "rel_cls_group": "ASSOCIATION",
+      "subject_entity_name": "newly emerged adult butterfly",
+      "object_entity_name": "soft, wrinkled butterfly wings",
+      "subject_class_label": "Adult Butterfly Life Stage",
+      "subject_class_group": "Butterfly Biology & Life Cycle",
+      "object_class_label": "Butterfly Wing Post-emergence State",
+      "object_class_group": "Butterfly Metamorphosis, Anatomy, and Experiential States",
       "qualifiers": {
-        "TemporalQualifier": null,
+        "TemporalQualifier": "immediately after emergence (start of adult stage)",
         "SpatialQualifier": null,
         "OperationalConstraint": null,
-        "ConditionExpression": "depending on the alloy content",
+        "ConditionExpression": null,
         "UncertaintyQualifier": null,
-        "CausalHint": "give them resistance to",
-        "LogicalMarker": null,
-        "OtherQualifier": "MechanismType: corrosion mechanism"
-      },
-      "confidence": 0.93,
-      "remarks": []
-    },
-    {
-      "relation_id": "RelR_e71b6b450b41",
-      "relation_name": "resists",
-      "rel_desc": "Stainless steels are resistant to sulfidation due to their alloy content.",
-      "rel_hint_type": "corrosion_resistance",
-      "canonical_rel_name": "resists",
-      "canonical_rel_desc": "Subject material exhibits resistance to the specified corrosion or degradation mechanism under certain conditions.",
-      "rel_cls": "degradation_mitigation_relation",
-      "rel_cls_group": "CAUSALITY",
-      "subject_entity_name": "Stainless Steel",
-      "object_entity_name": "sulfidation",
-      "subject_class_label": "Corrosion-Resistant Alloys",
-      "subject_class_group": "Corrosion-Resistant Metals and Alloys",
-      "object_class_label": "Oxidation and Sulfidation Corrosion Mechanisms",
-      "object_class_group": "Corrosion Mechanisms",
-      "qualifiers": {
-        "TemporalQualifier": null,
-        "SpatialQualifier": null,
-        "OperationalConstraint": null,
-        "ConditionExpression": "depending on the alloy content",
-        "UncertaintyQualifier": null,
-        "CausalHint": "give them resistance to",
-        "LogicalMarker": null,
-        "OtherQualifier": "MechanismType: corrosion mechanism"
-      },
-      "confidence": 0.93,
-      "remarks": []
-    },
-    {
-      "relation_id": "RelR_1383761175ce",
-      "relation_name": "resists",
-      "rel_desc": "Stainless steels resist various forms of general corrosion, beyond just oxidation and sulfidation, depending on alloy content.",
-      "rel_hint_type": "corrosion_resistance",
-      "canonical_rel_name": "resists",
-      "canonical_rel_desc": "Subject material exhibits resistance to the specified corrosion or degradation mechanism under certain conditions.",
-      "rel_cls": "degradation_mitigation_relation",
-      "rel_cls_group": "CAUSALITY",
-      "subject_entity_name": "Stainless Steel",
-      "object_entity_name": "general corrosion",
-      "subject_class_label": "Corrosion-Resistant Alloys",
-      "subject_class_group": "Corrosion-Resistant Metals and Alloys",
-      "object_class_label": "Oxidation and Sulfidation Corrosion Mechanisms",
-      "object_class_group": "Corrosion Mechanisms",
-      "qualifiers": {
-        "TemporalQualifier": null,
-        "SpatialQualifier": null,
-        "OperationalConstraint": null,
-        "ConditionExpression": "depending on the alloy content",
-        "UncertaintyQualifier": null,
-        "CausalHint": "give them resistance to",
-        "LogicalMarker": null,
-        "OtherQualifier": "Scope: other forms of corrosion beyond oxidation and sulfidation"
-      },
-      "confidence": 0.78,
-      "remarks": [
-        "Relation generalized from phrase 'other forms of corrosion' to entity 'general corrosion'.",
-        "Relation generalized from phrase 'other forms of corrosion' to entity 'general corrosion'.",
-        "The object entity 'general corrosion' is currently assigned the class label 'Oxidation and Sulfidation Corrosion Mechanisms'. This may indicate an upstream entity classification or labeling issue, since general corrosion is broader than oxidation and sulfidation specifically."
-      ]
-    },
-    {
-      "relation_id": "RelR_529c638c696d",
-      "relation_name": "provides_resistance_to",
-      "rel_desc": "Chromium, as an alloying element in stainless steels, contributes to resistance against oxidation.",
-      "rel_hint_type": "causal",
-      "canonical_rel_name": "provides_resistance_to",
-      "canonical_rel_desc": "Subject (typically an alloying element or component) causally contributes to the resistance of a material system against a specified corrosion or degradation mechanism.",
-      "rel_cls": "degradation_mitigation_relation",
-      "rel_cls_group": "CAUSALITY",
-      "subject_entity_name": "chromium",
-      "object_entity_name": "oxidation",
-      "subject_class_label": "Chromium (Element)",
-      "subject_class_group": "Corrosion-Resistant Metals and Alloys",
-      "object_class_label": "Oxidation and Sulfidation Corrosion Mechanisms",
-      "object_class_group": "Corrosion Mechanisms",
-      "qualifiers": {
-        "TemporalQualifier": null,
-        "SpatialQualifier": null,
-        "OperationalConstraint": null,
-        "ConditionExpression": "when present as alloying element in stainless steels",
-        "UncertaintyQualifier": null,
-        "CausalHint": "give them resistance to",
-        "LogicalMarker": null,
-        "OtherQualifier": "Context: chromium in stainless steel alloy matrix"
-      },
-      "confidence": 0.8,
-      "remarks": [
-        "Resistance is mediated via stainless steels; not direct chromium surface behavior, but captured as a causal contribution.",
-        "Resistance is mediated via stainless steels; not direct chromium surface behavior, but captured as a causal contribution."
-      ]
-    },
-    {
-      "relation_id": "RelR_0f937d199405",
-      "relation_name": "provides_resistance_to",
-      "rel_desc": "Chromium, as an alloying element in stainless steels, contributes to resistance against sulfidation.",
-      "rel_hint_type": "causal",
-      "canonical_rel_name": "provides_resistance_to",
-      "canonical_rel_desc": "Subject (typically an alloying element or component) causally contributes to the resistance of a material system against a specified corrosion or degradation mechanism.",
-      "rel_cls": "degradation_mitigation_relation",
-      "rel_cls_group": "CAUSALITY",
-      "subject_entity_name": "chromium",
-      "object_entity_name": "sulfidation",
-      "subject_class_label": "Chromium (Element)",
-      "subject_class_group": "Corrosion-Resistant Metals and Alloys",
-      "object_class_label": "Oxidation and Sulfidation Corrosion Mechanisms",
-      "object_class_group": "Corrosion Mechanisms",
-      "qualifiers": {
-        "TemporalQualifier": null,
-        "SpatialQualifier": null,
-        "OperationalConstraint": null,
-        "ConditionExpression": "when present as alloying element in stainless steels",
-        "UncertaintyQualifier": null,
-        "CausalHint": "give them resistance to",
-        "LogicalMarker": null,
-        "OtherQualifier": "Context: chromium in stainless steel alloy matrix"
-      },
-      "confidence": 0.8,
-      "remarks": [
-        "Again, resistance is via its role in stainless steels rather than isolated chromium behavior.",
-        "Again, resistance is via its role in stainless steels rather than isolated chromium behavior."
-      ]
-    },
-    {
-      "relation_id": "RelR_d3ce89b75d87",
-      "relation_name": "provides_resistance_to",
-      "rel_desc": "Chromium contributes to resistance to general corrosion forms when used as an alloying element in stainless steels.",
-      "rel_hint_type": "causal",
-      "canonical_rel_name": "provides_resistance_to",
-      "canonical_rel_desc": "Subject (typically an alloying element or component) causally contributes to the resistance of a material system against a specified corrosion or degradation mechanism.",
-      "rel_cls": "degradation_mitigation_relation",
-      "rel_cls_group": "CAUSALITY",
-      "subject_entity_name": "chromium",
-      "object_entity_name": "general corrosion",
-      "subject_class_label": "Chromium (Element)",
-      "subject_class_group": "Corrosion-Resistant Metals and Alloys",
-      "object_class_label": "Oxidation and Sulfidation Corrosion Mechanisms",
-      "object_class_group": "Corrosion Mechanisms",
-      "qualifiers": {
-        "TemporalQualifier": null,
-        "SpatialQualifier": null,
-        "OperationalConstraint": null,
-        "ConditionExpression": "when present as alloying element in stainless steels; depending on the alloy content",
-        "UncertaintyQualifier": null,
-        "CausalHint": "give them resistance to",
-        "LogicalMarker": null,
-        "OtherQualifier": "Scope: general corrosion (other forms of corrosion)"
-      },
-      "confidence": 0.68,
-      "remarks": [
-        "Relation created mainly to capture that chromium helps overall corrosion resistance; semantics slightly generalized.",
-        "Relation created mainly to capture that chromium helps overall corrosion resistance; semantics slightly generalized.",
-        "The object entity 'general corrosion' is currently assigned the class label 'Oxidation and Sulfidation Corrosion Mechanisms'. This may indicate an upstream entity classification or labeling issue, since general corrosion is broader than oxidation and sulfidation specifically."
-      ]
-    },
-    {
-      "relation_id": "RelR_4fb5553cfff8",
-      "relation_name": "prevents",
-      "rel_desc": "Adding approximately 0.7% chromium to low alloy C-Mo steels eliminates graphitization.",
-      "rel_hint_type": "inhibition",
-      "canonical_rel_name": "prevents",
-      "canonical_rel_desc": "Subject inhibits or effectively eliminates the occurrence of the specified degradation or metallurgical process under the stated conditions.",
-      "rel_cls": "degradation_mitigation_relation",
-      "rel_cls_group": "CAUSALITY",
-      "subject_entity_name": "chromium",
-      "object_entity_name": "graphitization",
-      "subject_class_label": "Chromium in Steel",
-      "subject_class_group": "Corrosion-Resistant Metals and Alloys",
-      "object_class_label": "Graphitization (Process)",
-      "object_class_group": "Steel Metallurgy and Degradation",
-      "qualifiers": {
-        "TemporalQualifier": null,
-        "SpatialQualifier": "in low alloy C-Mo steels",
-        "OperationalConstraint": null,
-        "ConditionExpression": "addition of about 0.7% chromium; steels with up to 1% Mo",
-        "UncertaintyQualifier": "has been found to",
-        "CausalHint": "eliminate",
+        "CausalHint": null,
         "LogicalMarker": null,
         "OtherQualifier": null
       },
+      "confidence": 0.96,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_274280acb8b8",
+      "relation_name": "is_state_of",
+      "rel_desc": "Soft, wrinkled butterfly wings represent an initial state of the butterfly's wings.",
+      "rel_hint_type": "state relation",
+      "canonical_rel_name": "is_state_of",
+      "canonical_rel_desc": "Links a specific state description to the underlying entity or part whose state it describes.",
+      "rel_cls": "entity_state_relation",
+      "rel_cls_group": "ASSOCIATION",
+      "subject_entity_name": "soft, wrinkled butterfly wings",
+      "object_entity_name": "butterfly wings",
+      "subject_class_label": "Butterfly Wing Post-emergence State",
+      "subject_class_group": "Butterfly Metamorphosis, Anatomy, and Experiential States",
+      "object_class_label": "Butterfly Wing Anatomy",
+      "object_class_group": "Butterfly Metamorphosis, Anatomy, and Experiential States",
+      "qualifiers": {
+        "TemporalQualifier": "initial post-emergence period",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "StateDescription: soft and wrinkled before expansion and hardening"
+      },
       "confidence": 0.93,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_899c8db84b01",
+      "relation_name": "modifies_state_of",
+      "rel_desc": "Fluid pumping into the wings modifies their initial soft, wrinkled state toward an expanded, hardened state.",
+      "rel_hint_type": "state change",
+      "canonical_rel_name": "induces_state_change_in",
+      "canonical_rel_desc": "Indicates that a process or action causes a change from one state to another in the target entity.",
+      "rel_cls": "state_transition_relation",
+      "rel_cls_group": "CAUSALITY",
+      "subject_entity_name": "fluid pumping into wings",
+      "object_entity_name": "soft, wrinkled butterfly wings",
+      "subject_class_label": "Butterfly Emergence Processes",
+      "subject_class_group": "Butterfly Metamorphosis, Anatomy, and Experiential States",
+      "object_class_label": "Butterfly Wing Post-emergence State",
+      "object_class_group": "Butterfly Metamorphosis, Anatomy, and Experiential States",
+      "qualifiers": {
+        "TemporalQualifier": "from initial post-emergence condition",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "to expand and harden",
+        "LogicalMarker": "to",
+        "OtherQualifier": "StateTransition: from soft, wrinkled to expanded and hardened"
+      },
+      "confidence": 0.9,
       "remarks": [
-        "Material context (low alloy C-Mo steels with up to 1% Mo) added as qualifiers rather than as extra entities.",
-        "Material context (low alloy C-Mo steels with up to 1% Mo) added as qualifiers rather than as extra entities."
+        "Created to explicitly represent the state transition of wings due to pumping.",
+        "Created to explicitly represent the state transition of wings due to pumping."
       ]
-    }
-  ],
-  "llm_raw": "[\n  {\n    \"function\": \"add_rel_remark\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_1383761175ce\",\n        \"RelR_d3ce89b75d87\"\n      ],\n      \"remark\": \"The object entity 'general corrosion' is currently assigned the class label 'Oxidation and Sulfidation Corrosion Mechanisms'. This may indicate an upstream entity classification or labeling issue, since general corrosion is broader than oxidation and sulfidation specifically.\",\n      \"justification\": \"The relation schema (canonical_rel_name, rel_cls, rel_cls_group) is consistent, but the object_class_label appears semantically narrower than the entity name 'general corrosion'. This potential mismatch is at the entity level and cannot be fixed here, so it is flagged for later review.\",\n      \"confidence\": 0.78\n    }\n  }\n]",
-  "parsed_steps": [
+    },
     {
-      "function": "add_rel_remark",
-      "args": {
-        "relation_ids": [
-          "RelR_1383761175ce",
-          "RelR_d3ce89b75d87"
-        ],
-        "remark": "The object entity 'general corrosion' is currently assigned the class label 'Oxidation and Sulfidation Corrosion Mechanisms'. This may indicate an upstream entity classification or labeling issue, since general corrosion is broader than oxidation and sulfidation specifically.",
-        "justification": "The relation schema (canonical_rel_name, rel_cls, rel_cls_group) is consistent, but the object_class_label appears semantically narrower than the entity name 'general corrosion'. This potential mismatch is at the entity level and cannot be fixed here, so it is flagged for later review.",
-        "confidence": 0.78
-      }
+      "relation_id": "RelR_1575408e8b17",
+      "relation_name": "exhibits_state",
+      "rel_desc": "The butterfly, when fluttering by, exhibits an aesthetic state described as a moment of beauty and grace.",
+      "rel_hint_type": "state-association",
+      "canonical_rel_name": "exhibits_state",
+      "canonical_rel_desc": "Indicates that an entity manifestly displays or expresses a particular state (e.g., aesthetic, behavioral, or experiential) under certain conditions.",
+      "rel_cls": "entity_state_relation",
+      "rel_cls_group": "ASSOCIATION",
+      "subject_entity_name": "butterfly",
+      "object_entity_name": "aesthetic state of the butterfly",
+      "subject_class_label": "Adult butterflies",
+      "subject_class_group": "Butterfly Biology & Life Cycle",
+      "object_class_label": "Butterfly aesthetic state in flight",
+      "object_class_group": "Butterfly Metamorphosis, Anatomy, and Experiential States",
+      "qualifiers": {
+        "TemporalQualifier": "at that moment",
+        "SpatialQualifier": null,
+        "OperationalConstraint": "when fluttering by (in flight)",
+        "ConditionExpression": "when you see a butterfly fluttering by",
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "PerceptionContext: observer is invited to marvel at the butterfly's beauty and grace"
+      },
+      "confidence": 0.9,
+      "remarks": []
     }
   ],
-  "executed_decisions": [
-    {
-      "action": "add_rel_remark",
-      "relation_ids": [
-        "RelR_1383761175ce",
-        "RelR_d3ce89b75d87"
-      ],
-      "remark": "The object entity 'general corrosion' is currently assigned the class label 'Oxidation and Sulfidation Corrosion Mechanisms'. This may indicate an upstream entity classification or labeling issue, since general corrosion is broader than oxidation and sulfidation specifically.",
-      "justification": "The relation schema (canonical_rel_name, rel_cls, rel_cls_group) is consistent, but the object_class_label appears semantically narrower than the entity name 'general corrosion'. This potential mismatch is at the entity level and cannot be fixed here, so it is flagged for later review.",
-      "confidence": 0.78
-    }
-  ],
-  "timestamp": "2025-12-29T21:47:41Z"
+  "llm_raw": "[]",
+  "parsed_steps": [],
+  "executed_decisions": [],
+  "timestamp": "2026-01-02T09:21:43Z"
 }

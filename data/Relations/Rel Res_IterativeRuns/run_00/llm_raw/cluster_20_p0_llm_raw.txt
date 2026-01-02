@@ -1,0 +1,57 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_0f91d1f52c0b",
+        "RelR_36aed48fcc27"
+      ],
+      "canonical_rel_name": "aims_to_achieve",
+      "canonical_rel_desc": "Indicates that a process, policy, or framework is designed or expected to pursue a particular normative objective or outcome.",
+      "justification": "Both relations describe decision-making processes being designed or expected to pursue specific normative goals (fairness and equity). A normalized predicate 'aims_to_achieve' better captures this intentional, goal-oriented semantics than the raw 'aims_for' wording and can be reused for similar normative objectives.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_7ff9dec3eb1e"
+      ],
+      "canonical_rel_name": "prioritizes",
+      "canonical_rel_desc": "Indicates that a principle, policy, or system gives higher normative importance to a particular value or outcome when guiding decisions or behavior.",
+      "justification": "This relation states that ethical principles give special priority to the well-being of individuals and communities when guiding AI development. The canonical predicate 'prioritizes' accurately captures the value-ranking semantics and is distinct from merely aiming to achieve a goal.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_0f91d1f52c0b",
+        "RelR_36aed48fcc27",
+        "RelR_7ff9dec3eb1e"
+      ],
+      "rel_cls": "normative_objective_relation",
+      "justification": "All three relations express normative orientations: processes and principles are linked to values they are meant to pursue or prioritize (fairness, equity, well-being). Grouping them under 'normative_objective_relation' captures that they represent goals or value priorities within ethical and decision-making frameworks.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_0f91d1f52c0b",
+        "RelR_36aed48fcc27",
+        "RelR_7ff9dec3eb1e"
+      ],
+      "rel_cls_group": "AGENCY",
+      "justification": "These relations describe intentional or designed orientations of agents or institutional processes (decision-making procedures, ethical principles) toward certain values and goals. This fits best under a broad AGENCY group, emphasizing intention and value-directed behavior rather than mere association or composition.",
+      "remark": null,
+      "confidence": 0.86
+    }
+  }
+]

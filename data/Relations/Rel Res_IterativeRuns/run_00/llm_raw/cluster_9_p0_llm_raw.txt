@@ -1,0 +1,45 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_dc1c54bff52d",
+        "RelR_1e8726328e10",
+        "RelR_1bdfad65e09d"
+      ],
+      "canonical_rel_name": "located_at",
+      "canonical_rel_desc": "Indicates that the subject is situated at, on, or within the spatial region or physical substrate denoted by the object.",
+      "justification": "All three relations express a generic spatial placement of the subject relative to the object: the pupa stage on a stem, a couple in a secluded area, and a scratching sound on a car door. Using a unified predicate 'located_at' abstracts over prepositional nuances ('in', 'on') while preserving semantics; specific wording remains captured in SpatialQualifier.",
+      "remark": null,
+      "confidence": 0.92
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_dc1c54bff52d",
+        "RelR_1e8726328e10",
+        "RelR_1bdfad65e09d"
+      ],
+      "rel_cls": "spatial_location_relation",
+      "justification": "Each relation links an entity to the spatial location or substrate where it is situated or perceived. Grouping them under 'spatial_location_relation' captures that they are all about where something is located in space, independent of narrative domain or biological vs. fictional context.",
+      "remark": null,
+      "confidence": 0.94
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_dc1c54bff52d",
+        "RelR_1e8726328e10",
+        "RelR_1bdfad65e09d"
+      ],
+      "rel_cls_group": "SPATIALITY",
+      "justification": "All relations encode spatial context (placement on a stem, in an area, on a car door). This clearly aligns with a high-level spatial dimension rather than composition, causality, or other groups.",
+      "remark": null,
+      "confidence": 0.96
+    }
+  }
+]

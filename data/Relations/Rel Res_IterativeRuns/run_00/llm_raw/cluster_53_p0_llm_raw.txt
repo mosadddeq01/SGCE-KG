@@ -1,0 +1,51 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_e79e49632c59",
+        "RelR_e4a8ef0dc8b3",
+        "RelR_a7c1d8a2d6a4",
+        "RelR_6323e3607881",
+        "RelR_ff3746e8fcf1"
+      ],
+      "canonical_rel_name": "results_in",
+      "canonical_rel_desc": "Denotes that a process causally leads to a specific outcome state, structure, or life stage.",
+      "justification": "All relations describe biological processes (molting or metamorphosis) causally producing an outcome (new skin, new tissues, wings, antennae, or an adult butterfly). They are all process→outcome links differing only in the specific outcome type, so a unified causal outcome predicate 'results_in' is appropriate and consistent across instances.",
+      "remark": "More specific predicates like 'results_in_formation_of' or 'results_in_change_of' can be captured at the description/qualifier level if needed; the core schema predicate here is a generic process outcome relation.",
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_e79e49632c59",
+        "RelR_e4a8ef0dc8b3",
+        "RelR_a7c1d8a2d6a4",
+        "RelR_6323e3607881",
+        "RelR_ff3746e8fcf1"
+      ],
+      "rel_cls": "biological_process_outcome_relation",
+      "justification": "Each relation links a biological process (molting or metamorphosis) to its biological outcome (changed integument, newly formed tissues or organs, or a new life stage). This fits a common class of relations where a biological process yields a specific biological outcome.",
+      "remark": null,
+      "confidence": 0.88
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_e79e49632c59",
+        "RelR_e4a8ef0dc8b3",
+        "RelR_a7c1d8a2d6a4",
+        "RelR_6323e3607881",
+        "RelR_ff3746e8fcf1"
+      ],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "In all cases, the subject process is explicitly described as leading to or producing the object outcome, which is a causal process→effect pattern, so they belong under a broad causal relation group.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  }
+]

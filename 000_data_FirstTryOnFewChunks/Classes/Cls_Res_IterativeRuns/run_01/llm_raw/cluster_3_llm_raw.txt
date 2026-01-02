@@ -1,0 +1,67 @@
+[
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_1ecda745",
+      "new_name": "Corrosive Acids",
+      "new_description": "Highly corrosive acids requiring specific materials for safe handling and storage.",
+      "new_class_type_hint": "Material",
+      "new_class_group": "Industrial Chemicals",
+      "remark": null,
+      "justification": "Current class_group 'Industrial Chemical Handling' is too process-focused; 'Industrial Chemicals' better reflects the material/chemical nature of the class and aligns with similar classes.",
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_16b29b0b",
+      "new_name": "Amine Treating Chemicals",
+      "new_description": "Chemicals used in amine treating processes to remove H2S and CO2 from hydrocarbon streams.",
+      "new_class_type_hint": "Chemical",
+      "new_class_group": "Industrial Chemicals",
+      "remark": null,
+      "justification": "Class_group 'Industrial Chemical Handling' is too broad and process-oriented; 'Industrial Chemicals' is more accurate for a class of chemicals/materials.",
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_4035c3e0",
+      "new_name": "Sour Water Treatment Processes",
+      "new_description": "Processes and units involved in the treatment of sour water containing hydrogen sulfide.",
+      "new_class_type_hint": "Process",
+      "new_class_group": "Industrial Water & Gas Treatment",
+      "remark": null,
+      "justification": "Clarified class_label to emphasize process/unit focus; class_group is appropriate as is.",
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_c5aee02f",
+      "new_name": "General Corrosion Mechanisms",
+      "new_description": "Corrosion mechanisms such as oxidation and sulfidation that stainless steels resist.",
+      "new_class_type_hint": "Damage Mechanism",
+      "new_class_group": "Corrosion Mechanisms",
+      "remark": null,
+      "justification": "Refined class_label and description for clarity and consistency; class_group is correct.",
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_bd232016",
+      "new_name": "Vacuum Distillation Units",
+      "new_description": "Process units designed to separate components at reduced pressure to lower their boiling points.",
+      "new_class_type_hint": "Process Unit",
+      "new_class_group": "Industrial Separation Units",
+      "remark": null,
+      "justification": "Pluralized class_label for consistency with other class naming; class_group is correct.",
+      "confidence": 0.9
+    }
+  }
+]

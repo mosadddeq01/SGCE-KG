@@ -1,0 +1,44 @@
+[
+  {
+    "function": "merge_classes",
+    "args": {
+      "class_ids": [
+        "ClsR_05c6a27f",
+        "ClsR_b640fc18"
+      ],
+      "provisional_id": "MERGE(ClsR_05c6a27f|ClsR_b640fc18)",
+      "new_name": "Adult butterflies",
+      "new_description": "Adult butterflies as whole organisms, representing the adult life stage and endpoint of metamorphosis, regardless of sex.",
+      "new_class_type_hint": "Organism",
+      "justification": "ClsR_05c6a27f and ClsR_b640fc18 both model the same concept—the adult butterfly organism—with overlapping 'butterfly' entities and only minor wording differences, so they should be consolidated into a single Adult butterflies class.",
+      "remark": null,
+      "confidence": 0.96
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "MERGE(ClsR_05c6a27f|ClsR_b640fc18)",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Butterfly Biology",
+      "remark": null,
+      "justification": "The merged Adult butterflies class is conceptually aligned with other organism- and trait-level butterfly classes already grouped under 'Butterfly Biology', so its Class_Group should be unified to that umbrella.",
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_2d1cc363",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": null,
+      "remark": "This class is an empty legacy aggregate for adult butterflies and should be treated as deprecated; avoid adding new members and prefer the dedicated 'Adult butterflies' and 'Female butterflies' classes.",
+      "justification": "ClsC_2d1cc363 is documented as a legacy, now-empty aggregate with members already moved to more precise classes, so it should be explicitly flagged as deprecated for human maintainers.",
+      "confidence": 0.93
+    }
+  }
+]

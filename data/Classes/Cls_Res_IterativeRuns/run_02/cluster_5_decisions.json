@@ -2,248 +2,65 @@
   "cluster_label": 5,
   "cluster_classes": [
     {
-      "candidate_id": "ClsC_e266c5eb",
-      "class_label": "Non-Destructive Testing Methods",
-      "class_description": "Methods used to inspect materials for defects without causing damage, including radiographic, ultrasonic, visual, and magnetic particle testing.",
-      "class_type_hint": "Inspection Method",
-      "class_group": "Inspection & Testing Methods",
-      "confidence": 0.95,
-      "evidence_excerpt": "Methods in the FOCUS chunk for detecting defects.",
+      "candidate_id": "ClsC_f017f51e",
+      "class_label": "Butterfly Life Cycle",
+      "class_description": "Developmental stages of a butterfly from egg through larval and pupal stages to the adult form, including references to specific later stages such as the pupa (chrysalis) and adult phases.",
+      "class_type_hint": "Biological Process",
+      "class_group": "Butterfly Life Cycle and Reproduction",
+      "confidence": 0.93,
+      "evidence_excerpt": "All entities describe the butterfly life cycle or specific life stages (pupa/chrysalis, adult).",
       "member_ids": [
-        "En_374342ee",
-        "En_a40dec03",
-        "En_23dad6fc",
-        "En_84774ba7",
-        "En_b3df3885"
+        "Can_7f3d9397",
+        "Can_466f6058"
       ],
       "members": [
         {
-          "id": "En_374342ee",
-          "entity_name": "radiographic testing",
-          "entity_description": "A non-destructive testing method using X-rays or gamma rays to view the internal structure of a component.",
-          "entity_type_hint": "InspectionMethod"
+          "id": "Can_7f3d9397",
+          "entity_name": "butterfly life cycle",
+          "entity_description": "The full developmental sequence or journey of a butterfly from egg through larval and pupal stages to the adult form, recurring across generations.",
+          "entity_type_hint": "Process"
         },
         {
-          "id": "En_a40dec03",
-          "entity_name": "shear wave ultrasonic testing",
-          "entity_description": "An ultrasonic testing method using shear waves to detect flaws in materials.",
-          "entity_type_hint": "InspectionMethod"
-        },
-        {
-          "id": "En_23dad6fc",
-          "entity_name": "ultrasonic testing",
-          "entity_description": "A non-destructive testing method using high-frequency sound waves to detect internal flaws.",
-          "entity_type_hint": "InspectionMethod"
-        },
-        {
-          "id": "En_84774ba7",
-          "entity_name": "visual inspection",
-          "entity_description": "A non-destructive testing method involving the visual examination of a component.",
-          "entity_type_hint": "InspectionMethod"
-        },
-        {
-          "id": "En_b3df3885",
-          "entity_name": "wet fluorescent magnetic particle testing",
-          "entity_description": "A non-destructive testing method using fluorescent particles to detect surface and near-surface defects.",
-          "entity_type_hint": "InspectionMethod"
+          "id": "Can_466f6058",
+          "entity_name": "pupa stage of the butterfly life cycle",
+          "entity_description": "The third developmental stage of a butterfly, in which the organism becomes a pupa enclosed in a chrysalis and undergoes metamorphosis from larva to adult.",
+          "entity_type_hint": "ProcessStage"
         }
       ],
       "remarks": []
     },
     {
-      "candidate_id": "ClsC_26300b9e",
-      "class_label": "Material Damage Mechanisms",
-      "class_description": "Mechanisms causing material degradation, including mechanical, metallurgical, and thickness loss processes.",
-      "class_type_hint": "Damage Mechanism",
-      "class_group": "Material Damage Mechanisms",
-      "confidence": 0.85,
-      "evidence_excerpt": "The mechanisms are divided into sections: a) Mechanical and Metallurgical Failure, b) Uniform or Localized Loss of Thickness.",
-      "member_ids": [],
-      "members": [],
-      "remarks": []
-    },
-    {
-      "candidate_id": "ClsR_0b6df3b1",
-      "class_label": "Mechanical and Metallurgical Failure Mechanisms",
-      "class_description": "Failure mechanisms related to mechanical and metallurgical processes.",
-      "class_type_hint": "Damage Mechanism",
-      "class_group": "Material Damage Mechanisms",
-      "confidence": 0.85,
-      "evidence_excerpt": "The mechanisms are divided into sections: a) Mechanical and Metallurgical Failure, b) Uniform or Localized Loss of Thickness.",
+      "candidate_id": "ClsC_76c68477",
+      "class_label": "Butterfly Reproductive Behavior",
+      "class_description": "Processes in adult butterflies related to securing mates and producing offspring, including mating behavior and the act of reproduction itself, which occur during the adult stage of the life cycle.",
+      "class_type_hint": "Biological Process",
+      "class_group": "Butterfly Life Cycle and Reproduction",
+      "confidence": 0.93,
+      "evidence_excerpt": "Throughout their adult stage, butterflies focus on finding a mate and reproducing to continue the life cycle.",
       "member_ids": [
-        "En_6a5f3538"
+        "En_41e4d0dd",
+        "En_d4b92880"
       ],
       "members": [
         {
-          "id": "En_6a5f3538",
-          "entity_name": "Mechanical and Metallurgical Failure",
-          "entity_description": "Failure mechanisms related to mechanical and metallurgical processes in various industries.",
-          "entity_type_hint": "DamageMechanism"
-        }
-      ],
-      "remarks": []
-    },
-    {
-      "candidate_id": "ClsR_3fd3a011",
-      "class_label": "Thickness Loss Mechanisms",
-      "class_description": "Mechanisms involving uniform or localized loss of material thickness.",
-      "class_type_hint": "Damage Mechanism",
-      "class_group": "Material Damage Mechanisms",
-      "confidence": 0.85,
-      "evidence_excerpt": "The mechanisms are divided into sections: a) Mechanical and Metallurgical Failure, b) Uniform or Localized Loss of Thickness.",
-      "member_ids": [
-        "En_8ed6cfa3"
-      ],
-      "members": [
+          "id": "En_41e4d0dd",
+          "entity_name": "mating behavior of butterflies",
+          "entity_description": "The activity of butterflies seeking and finding mates during the adult stage.",
+          "entity_type_hint": "Process"
+        },
         {
-          "id": "En_8ed6cfa3",
-          "entity_name": "Uniform or Localized Loss of Thickness",
-          "entity_description": "A damage mechanism involving the reduction of material thickness, either uniformly or in specific areas.",
-          "entity_type_hint": "DamageMechanism"
+          "id": "En_d4b92880",
+          "entity_name": "reproduction of butterflies",
+          "entity_description": "The process by which adult butterflies produce offspring, continuing the life cycle.",
+          "entity_type_hint": "Process"
         }
       ],
       "remarks": []
     }
   ],
-  "llm_raw": "[\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_e266c5eb\",\n      \"new_name\": \"Non-Destructive Testing Methods\",\n      \"new_description\": \"Methods used to inspect materials for defects without causing damage, including radiographic, ultrasonic, visual, and magnetic particle testing.\",\n      \"new_class_type_hint\": \"Inspection Method\",\n      \"new_class_group\": \"Inspection & Testing Methods\",\n      \"remark\": null,\n      \"justification\": \"Class_Group is already correct for this class, but confirming assignment for schema clarity.\",\n      \"confidence\": 0.95\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_26300b9e\",\n      \"new_name\": \"Material Damage Mechanisms\",\n      \"new_description\": \"Mechanisms causing material degradation, including mechanical, metallurgical, and thickness loss processes.\",\n      \"new_class_type_hint\": \"Damage Mechanism\",\n      \"new_class_group\": \"Material Damage Mechanisms\",\n      \"remark\": null,\n      \"justification\": \"Class_Group is already correct for this class, but confirming assignment for schema clarity.\",\n      \"confidence\": 0.95\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsR_0b6df3b1\",\n      \"new_name\": \"Mechanical and Metallurgical Failure Mechanisms\",\n      \"new_description\": \"Failure mechanisms related to mechanical and metallurgical processes.\",\n      \"new_class_type_hint\": \"Damage Mechanism\",\n      \"new_class_group\": \"Material Damage Mechanisms\",\n      \"remark\": null,\n      \"justification\": \"Class_Group is already correct for this class, but confirming assignment for schema clarity.\",\n      \"confidence\": 0.95\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsR_3fd3a011\",\n      \"new_name\": \"Thickness Loss Mechanisms\",\n      \"new_description\": \"Mechanisms involving uniform or localized loss of material thickness.\",\n      \"new_class_type_hint\": \"Damage Mechanism\",\n      \"new_class_group\": \"Material Damage Mechanisms\",\n      \"remark\": null,\n      \"justification\": \"Class_Group is already correct for this class, but confirming assignment for schema clarity.\",\n      \"confidence\": 0.95\n    }\n  },\n  {\n    \"function\": \"split_class\",\n    \"args\": {\n      \"source_class_id\": \"ClsC_26300b9e\",\n      \"splits\": [\n        {\n          \"name\": \"Mechanical and Metallurgical Failure Mechanisms\",\n          \"description\": \"Failure mechanisms related to mechanical and metallurgical processes.\",\n          \"class_type_hint\": \"Damage Mechanism\",\n          \"member_ids\": [],\n          \"provisional_id\": \"SPLIT_MechanicalMetallurgical\"\n        },\n        {\n          \"name\": \"Thickness Loss Mechanisms\",\n          \"description\": \"Mechanisms involving uniform or localized loss of material thickness.\",\n          \"class_type_hint\": \"Damage Mechanism\",\n          \"member_ids\": [],\n          \"provisional_id\": \"SPLIT_ThicknessLoss\"\n        }\n      ],\n      \"justification\": \"ClsC_26300b9e is overloaded, as its description and evidence excerpt indicate it covers both mechanical/metallurgical failure and thickness loss, which are already represented as separate classes. Splitting for schema clarity.\",\n      \"remark\": \"No entities currently in ClsC_26300b9e, but schema should reflect the two distinct subclasses.\",\n      \"confidence\": 0.9\n    }\n  }\n]",
-  "parsed_steps": [
-    {
-      "function": "modify_class",
-      "args": {
-        "class_id": "ClsC_e266c5eb",
-        "new_name": "Non-Destructive Testing Methods",
-        "new_description": "Methods used to inspect materials for defects without causing damage, including radiographic, ultrasonic, visual, and magnetic particle testing.",
-        "new_class_type_hint": "Inspection Method",
-        "new_class_group": "Inspection & Testing Methods",
-        "remark": null,
-        "justification": "Class_Group is already correct for this class, but confirming assignment for schema clarity.",
-        "confidence": 0.95
-      }
-    },
-    {
-      "function": "modify_class",
-      "args": {
-        "class_id": "ClsC_26300b9e",
-        "new_name": "Material Damage Mechanisms",
-        "new_description": "Mechanisms causing material degradation, including mechanical, metallurgical, and thickness loss processes.",
-        "new_class_type_hint": "Damage Mechanism",
-        "new_class_group": "Material Damage Mechanisms",
-        "remark": null,
-        "justification": "Class_Group is already correct for this class, but confirming assignment for schema clarity.",
-        "confidence": 0.95
-      }
-    },
-    {
-      "function": "modify_class",
-      "args": {
-        "class_id": "ClsR_0b6df3b1",
-        "new_name": "Mechanical and Metallurgical Failure Mechanisms",
-        "new_description": "Failure mechanisms related to mechanical and metallurgical processes.",
-        "new_class_type_hint": "Damage Mechanism",
-        "new_class_group": "Material Damage Mechanisms",
-        "remark": null,
-        "justification": "Class_Group is already correct for this class, but confirming assignment for schema clarity.",
-        "confidence": 0.95
-      }
-    },
-    {
-      "function": "modify_class",
-      "args": {
-        "class_id": "ClsR_3fd3a011",
-        "new_name": "Thickness Loss Mechanisms",
-        "new_description": "Mechanisms involving uniform or localized loss of material thickness.",
-        "new_class_type_hint": "Damage Mechanism",
-        "new_class_group": "Material Damage Mechanisms",
-        "remark": null,
-        "justification": "Class_Group is already correct for this class, but confirming assignment for schema clarity.",
-        "confidence": 0.95
-      }
-    },
-    {
-      "function": "split_class",
-      "args": {
-        "source_class_id": "ClsC_26300b9e",
-        "splits": [
-          {
-            "name": "Mechanical and Metallurgical Failure Mechanisms",
-            "description": "Failure mechanisms related to mechanical and metallurgical processes.",
-            "class_type_hint": "Damage Mechanism",
-            "member_ids": [],
-            "provisional_id": "SPLIT_MechanicalMetallurgical"
-          },
-          {
-            "name": "Thickness Loss Mechanisms",
-            "description": "Mechanisms involving uniform or localized loss of material thickness.",
-            "class_type_hint": "Damage Mechanism",
-            "member_ids": [],
-            "provisional_id": "SPLIT_ThicknessLoss"
-          }
-        ],
-        "justification": "ClsC_26300b9e is overloaded, as its description and evidence excerpt indicate it covers both mechanical/metallurgical failure and thickness loss, which are already represented as separate classes. Splitting for schema clarity.",
-        "remark": "No entities currently in ClsC_26300b9e, but schema should reflect the two distinct subclasses.",
-        "confidence": 0.9
-      }
-    }
-  ],
-  "executed_decisions": [
-    {
-      "action": "modify_class",
-      "class_id": "ClsC_e266c5eb",
-      "class_id_resolved": "ClsC_e266c5eb",
-      "new_name": "Non-Destructive Testing Methods",
-      "new_description": "Methods used to inspect materials for defects without causing damage, including radiographic, ultrasonic, visual, and magnetic particle testing.",
-      "new_class_type_hint": "Inspection Method",
-      "new_class_group": "Inspection & Testing Methods",
-      "remark": null,
-      "justification": "Class_Group is already correct for this class, but confirming assignment for schema clarity.",
-      "confidence": 0.95
-    },
-    {
-      "action": "modify_class",
-      "class_id": "ClsC_26300b9e",
-      "class_id_resolved": "ClsC_26300b9e",
-      "new_name": "Material Damage Mechanisms",
-      "new_description": "Mechanisms causing material degradation, including mechanical, metallurgical, and thickness loss processes.",
-      "new_class_type_hint": "Damage Mechanism",
-      "new_class_group": "Material Damage Mechanisms",
-      "remark": null,
-      "justification": "Class_Group is already correct for this class, but confirming assignment for schema clarity.",
-      "confidence": 0.95
-    },
-    {
-      "action": "modify_class",
-      "class_id": "ClsR_0b6df3b1",
-      "class_id_resolved": "ClsR_0b6df3b1",
-      "new_name": "Mechanical and Metallurgical Failure Mechanisms",
-      "new_description": "Failure mechanisms related to mechanical and metallurgical processes.",
-      "new_class_type_hint": "Damage Mechanism",
-      "new_class_group": "Material Damage Mechanisms",
-      "remark": null,
-      "justification": "Class_Group is already correct for this class, but confirming assignment for schema clarity.",
-      "confidence": 0.95
-    },
-    {
-      "action": "modify_class",
-      "class_id": "ClsR_3fd3a011",
-      "class_id_resolved": "ClsR_3fd3a011",
-      "new_name": "Thickness Loss Mechanisms",
-      "new_description": "Mechanisms involving uniform or localized loss of material thickness.",
-      "new_class_type_hint": "Damage Mechanism",
-      "new_class_group": "Material Damage Mechanisms",
-      "remark": null,
-      "justification": "Class_Group is already correct for this class, but confirming assignment for schema clarity.",
-      "confidence": 0.95
-    },
-    {
-      "action": "split_class",
-      "source_class_id": "ClsC_26300b9e",
-      "source_class_id_resolved": "ClsC_26300b9e",
-      "created_classes": [],
-      "justification": "ClsC_26300b9e is overloaded, as its description and evidence excerpt indicate it covers both mechanical/metallurgical failure and thickness loss, which are already represented as separate classes. Splitting for schema clarity.",
-      "remark": "No entities currently in ClsC_26300b9e, but schema should reflect the two distinct subclasses.",
-      "confidence": 0.9
-    }
-  ],
+  "llm_raw": "[]",
+  "parsed_steps": [],
+  "executed_decisions": [],
   "provisional_to_real": {},
-  "timestamp": "2025-12-28T00:23:49Z"
+  "timestamp": "2026-01-02T08:40:45Z"
 }

@@ -1,0 +1,42 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_f49ab1c0c1ed",
+        "RelR_93d7c90d9d26"
+      ],
+      "canonical_rel_name": "produces",
+      "canonical_rel_desc": "Subject biologically produces or generates the object as a material or resource (e.g., a plant structure producing nectar or pollen).",
+      "justification": "In both relations, flowers are the biological structures that generate the resource (nectar or pollen). The semantics are about biological production/origin from the flower, not just generic provision. Using a single predicate 'produces' normalizes these closely related instances.",
+      "remark": "Upstream hints use 'provides', but the KG predicate is standardized to 'produces' for biological origin/production relations.",
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_f49ab1c0c1ed",
+        "RelR_93d7c90d9d26"
+      ],
+      "rel_cls": "biological_production_relation",
+      "justification": "Both relations describe a living structure producing a biological material (nectar, pollen). Grouping them under 'biological_production_relation' captures this common mechanism and can cover similar organism → product predicates.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_f49ab1c0c1ed",
+        "RelR_93d7c90d9d26"
+      ],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "The flower’s biological processes causally give rise to (produce) nectar and pollen. This is best modeled as a causal generation/origin relation at the broad semantic level.",
+      "remark": null,
+      "confidence": 0.85
+    }
+  }
+]

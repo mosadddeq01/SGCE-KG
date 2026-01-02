@@ -1,0 +1,179 @@
+{
+  "cluster_label": "12_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_885b21d7168e",
+      "relation_name": "contrasts_with",
+      "rel_desc": "The varying story specifics contrast with the constant fear of the unknown.",
+      "rel_hint_type": "contrast",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "story specifics of the Hook Man legend",
+      "object_entity_name": "fear of the unknown",
+      "subject_class_label": "Hook Man Urban Legend (Concept)",
+      "subject_class_group": "Urban Legend: Hook Man",
+      "object_class_label": "Urban Legend Emotional Themes and Responses",
+      "object_class_group": "Urban Legend Emotional Dynamics",
+      "qualifiers": {
+        "TemporalQualifier": "across different retellings",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": "specifics of the story may vary",
+        "UncertaintyQualifier": "may vary",
+        "CausalHint": null,
+        "LogicalMarker": "while",
+        "OtherQualifier": "NarrativePattern: surface variation vs. stable emotional theme"
+      },
+      "confidence": 0.86,
+      "remarks": [
+        "Used contrast relation to encode that one varies while the other is stable."
+      ]
+    },
+    {
+      "relation_id": "RelR_6386dc2f5ec2",
+      "relation_name": "contrasts_with",
+      "rel_desc": "The variable story specifics contrast with the constant perceived threat of danger.",
+      "rel_hint_type": "contrast",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "story specifics of the Hook Man legend",
+      "object_entity_name": "threat of danger",
+      "subject_class_label": "Hook Man Urban Legend (Concept)",
+      "subject_class_group": "Urban Legend: Hook Man",
+      "object_class_label": "Urban Legend Emotional Themes and Responses",
+      "object_class_group": "Urban Legend Emotional Dynamics",
+      "qualifiers": {
+        "TemporalQualifier": "across versions of the Hook Man legend",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": "specifics of the story may vary",
+        "UncertaintyQualifier": "may vary",
+        "CausalHint": null,
+        "LogicalMarker": "while",
+        "OtherQualifier": "NarrativePattern: changing plot elements vs. fixed danger theme"
+      },
+      "confidence": 0.86,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_d2d23f569a3e",
+      "relation_name": "contrasts_with",
+      "rel_desc": "The truth behind the stories is conceptually contrasted with fictional elements in the tales.",
+      "rel_hint_type": "contrast",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "truth behind the stories",
+      "object_entity_name": "fiction",
+      "subject_class_label": "Fact and Fiction in Narratives",
+      "subject_class_group": "Narrative Truth, Fiction, and History",
+      "object_class_label": "Fact and Fiction in Narratives",
+      "object_class_group": "Narrative Truth, Fiction, and History",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "in these tales",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "often blurred",
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.72,
+      "remarks": [
+        "Relation added to reflect contrast; less explicit than fact-truth link."
+      ]
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_885b21d7168e\",\n        \"RelR_6386dc2f5ec2\",\n        \"RelR_d2d23f569a3e\"\n      ],\n      \"canonical_rel_name\": \"contrasts_with\",\n      \"canonical_rel_desc\": \"Indicates that two narrative elements or concepts are set in opposition or conceptual contrast to highlight their differences.\",\n      \"justification\": \"All three relations explicitly encode a contrast between two narrative concepts (varying story specifics vs. stable emotional themes; truth vs. fiction). They share the same symmetric predicate meaning of conceptual opposition, so they should use a single normalized canonical predicate 'contrasts_with'.\",\n      \"remark\": null,\n      \"confidence\": 0.93\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_885b21d7168e\",\n        \"RelR_6386dc2f5ec2\",\n        \"RelR_d2d23f569a3e\"\n      ],\n      \"rel_cls\": \"conceptual_contrast_relation\",\n      \"justification\": \"Each relation captures a conceptual opposition between two narrative constructs (e.g., variable specifics vs. constant fear/threat, truth vs. fiction). Grouping them under a class 'conceptual_contrast_relation' reflects this shared function of highlighting opposing concepts within narratives.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_885b21d7168e\",\n        \"RelR_6386dc2f5ec2\",\n        \"RelR_d2d23f569a3e\"\n      ],\n      \"rel_cls_group\": \"ASSOCIATION\",\n      \"justification\": \"Contrast is a form of comparative association between two concepts, linking them by highlighting their differences. This is neither compositional nor causal but a relational comparison, which fits best under a broad 'ASSOCIATION' group.\",\n      \"remark\": null,\n      \"confidence\": 0.86\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_885b21d7168e",
+          "RelR_6386dc2f5ec2",
+          "RelR_d2d23f569a3e"
+        ],
+        "canonical_rel_name": "contrasts_with",
+        "canonical_rel_desc": "Indicates that two narrative elements or concepts are set in opposition or conceptual contrast to highlight their differences.",
+        "justification": "All three relations explicitly encode a contrast between two narrative concepts (varying story specifics vs. stable emotional themes; truth vs. fiction). They share the same symmetric predicate meaning of conceptual opposition, so they should use a single normalized canonical predicate 'contrasts_with'.",
+        "remark": null,
+        "confidence": 0.93
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_885b21d7168e",
+          "RelR_6386dc2f5ec2",
+          "RelR_d2d23f569a3e"
+        ],
+        "rel_cls": "conceptual_contrast_relation",
+        "justification": "Each relation captures a conceptual opposition between two narrative constructs (e.g., variable specifics vs. constant fear/threat, truth vs. fiction). Grouping them under a class 'conceptual_contrast_relation' reflects this shared function of highlighting opposing concepts within narratives.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_885b21d7168e",
+          "RelR_6386dc2f5ec2",
+          "RelR_d2d23f569a3e"
+        ],
+        "rel_cls_group": "ASSOCIATION",
+        "justification": "Contrast is a form of comparative association between two concepts, linking them by highlighting their differences. This is neither compositional nor causal but a relational comparison, which fits best under a broad 'ASSOCIATION' group.",
+        "remark": null,
+        "confidence": 0.86
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_885b21d7168e",
+        "RelR_6386dc2f5ec2",
+        "RelR_d2d23f569a3e"
+      ],
+      "canonical_rel_name": "contrasts_with",
+      "canonical_rel_desc": "Indicates that two narrative elements or concepts are set in opposition or conceptual contrast to highlight their differences.",
+      "justification": "All three relations explicitly encode a contrast between two narrative concepts (varying story specifics vs. stable emotional themes; truth vs. fiction). They share the same symmetric predicate meaning of conceptual opposition, so they should use a single normalized canonical predicate 'contrasts_with'.",
+      "remark": null,
+      "confidence": 0.93
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_885b21d7168e",
+        "RelR_6386dc2f5ec2",
+        "RelR_d2d23f569a3e"
+      ],
+      "rel_cls": "conceptual_contrast_relation",
+      "justification": "Each relation captures a conceptual opposition between two narrative constructs (e.g., variable specifics vs. constant fear/threat, truth vs. fiction). Grouping them under a class 'conceptual_contrast_relation' reflects this shared function of highlighting opposing concepts within narratives.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_885b21d7168e",
+        "RelR_6386dc2f5ec2",
+        "RelR_d2d23f569a3e"
+      ],
+      "rel_cls_group": "ASSOCIATION",
+      "justification": "Contrast is a form of comparative association between two concepts, linking them by highlighting their differences. This is neither compositional nor causal but a relational comparison, which fits best under a broad 'ASSOCIATION' group.",
+      "remark": null,
+      "confidence": 0.86
+    }
+  ],
+  "timestamp": "2026-01-02T09:12:30Z"
+}

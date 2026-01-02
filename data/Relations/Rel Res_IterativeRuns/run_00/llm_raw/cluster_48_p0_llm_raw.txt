@@ -1,0 +1,42 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_c4439d90023b",
+        "RelR_39e8b8652c3f"
+      ],
+      "canonical_rel_name": "occurs_in_context_of",
+      "canonical_rel_desc": "Indicates that the subject phenomenon, issue, or process takes place within or is embedded in the contextual scope defined by the object.",
+      "justification": "Both relations describe a phenomenon (ethical dilemmas, biased algorithms) taking place within or being embedded in a broader contextual scope (AI development, hiring processes). A single contextual containment predicate 'occurs_in_context_of' captures this non-physical, situational context consistently.",
+      "remark": null,
+      "confidence": 0.87
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_c4439d90023b",
+        "RelR_39e8b8652c3f"
+      ],
+      "rel_cls": "contextual_scope_relation",
+      "justification": "In both instances, the object defines the situational or procedural scope within which the subject occurs or is instantiated, fitting a shared class of contextual scope relations.",
+      "remark": null,
+      "confidence": 0.86
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_c4439d90023b",
+        "RelR_39e8b8652c3f"
+      ],
+      "rel_cls_group": "ASSOCIATION",
+      "justification": "These links express an abstract contextual association (scope/setting) rather than physical location or strict causality; the subject is associated with, and scoped by, the context provided by the object.",
+      "remark": null,
+      "confidence": 0.8
+    }
+  }
+]

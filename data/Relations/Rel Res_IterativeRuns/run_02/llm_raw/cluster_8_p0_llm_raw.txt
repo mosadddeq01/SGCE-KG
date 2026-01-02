@@ -1,0 +1,15 @@
+[
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": ["RelR_594935acd492"],
+      "canonical_rel_name": null,
+      "canonical_rel_desc": null,
+      "rel_cls": "taxonomic_instance_relation",
+      "rel_cls_group": "HIERARCHY",
+      "justification": "The relation expresses a type–instance (member-of) taxonomic link: the specific story details of the Hook Man legend are an instance of the broader class 'urban legends'. Such membership is best modeled as a taxonomic hierarchy rather than pure IDENTITY. Aligning rel_cls_group to 'HIERARCHY' and using a more precise rel_cls 'taxonomic_instance_relation' keeps it consistent with the subtype taxonomic modeling used in RelR_8deeeec9c025 while preserving the existing canonical_rel_name 'is_instance_of'.",
+      "remark": null,
+      "confidence": 0.83
+    }
+  }
+]

@@ -1,0 +1,128 @@
+{
+  "cluster_label": "59_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_c73faab887e3",
+      "relation_name": "warns",
+      "rel_desc": "Stories function as warnings directed at listeners.",
+      "rel_hint_type": "communicative",
+      "canonical_rel_name": "warns",
+      "canonical_rel_desc": "Indicates that the subject issues a warning or cautionary message directed toward the object.",
+      "rel_cls": "warning_communication_relation",
+      "rel_cls_group": "COMMUNICATION",
+      "subject_entity_name": "stories",
+      "object_entity_name": "listeners",
+      "subject_class_label": "Stories and Urban Legends",
+      "subject_class_group": "Storytelling & Narrative Dissemination",
+      "object_class_label": "Story and Legend Audiences (including Cautionary Narratives)",
+      "object_class_group": "Storytelling & Narrative Dissemination",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "in the world around them",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "warn",
+        "LogicalMarker": null,
+        "OtherQualifier": "Function: cautionary/educational"
+      },
+      "confidence": 0.98,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_bd10a931517c",
+      "relation_name": "alerts_to",
+      "rel_desc": "Stories alert their audience to various dangers.",
+      "rel_hint_type": "warning",
+      "canonical_rel_name": "warns_about",
+      "canonical_rel_desc": "Indicates that a narrative or communicative artifact serves to alert an audience to specific risks, harms, or dangers.",
+      "rel_cls": "risk_communication_relation",
+      "rel_cls_group": "INFORMATION",
+      "subject_entity_name": "stories",
+      "object_entity_name": "dangers",
+      "subject_class_label": "Stories and Urban Legends",
+      "subject_class_group": "Storytelling & Narrative Dissemination",
+      "object_class_label": "Cautionary Urban Legends",
+      "object_class_group": "Cautionary Urban Legends",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "in the world around them",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "warn about",
+        "LogicalMarker": null,
+        "OtherQualifier": "Scope: various threats, harms, or risks"
+      },
+      "confidence": 0.96,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_4071c1502070",
+      "relation_name": "made_aware_of",
+      "rel_desc": "Listeners are made aware of perceived threats through the warnings in stories.",
+      "rel_hint_type": "awareness",
+      "canonical_rel_name": "becomes_aware_of",
+      "canonical_rel_desc": "Indicates that the subject attains awareness or recognition of the object.",
+      "rel_cls": "awareness_relation",
+      "rel_cls_group": "COGNITION",
+      "subject_entity_name": "listeners",
+      "object_entity_name": "perceived threats",
+      "subject_class_label": "Story and Legend Audiences (including Cautionary Narratives)",
+      "subject_class_group": "Storytelling & Narrative Dissemination",
+      "object_class_label": "Urban Legend Emotional Themes and Responses",
+      "object_class_group": "Urban Legend Emotional Dynamics",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": "through exposure to the stories",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "perceived; real or imagined",
+        "CausalHint": "warn about",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.82,
+      "remarks": [
+        "Connects two related danger/threat notions across sentences.",
+        "Connects two related danger/threat notions across sentences."
+      ]
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_rel_schema\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_bd10a931517c\"\n      ],\n      \"canonical_rel_name\": null,\n      \"canonical_rel_desc\": null,\n      \"rel_cls\": \"warning_communication_relation\",\n      \"rel_cls_group\": \"COMMUNICATION\",\n      \"justification\": \"This relation describes stories alerting audiences to dangers, which is a communicative warning act, semantically aligned with the existing 'warning_communication_relation' used for similar narrative-to-audience warnings. Using the same rel_cls and placing it under the COMMUNICATION group improves consistency with RelR_c73faab887e3 and better reflects that this is a warning message rather than generic information.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_rel_schema",
+      "args": {
+        "relation_ids": [
+          "RelR_bd10a931517c"
+        ],
+        "canonical_rel_name": null,
+        "canonical_rel_desc": null,
+        "rel_cls": "warning_communication_relation",
+        "rel_cls_group": "COMMUNICATION",
+        "justification": "This relation describes stories alerting audiences to dangers, which is a communicative warning act, semantically aligned with the existing 'warning_communication_relation' used for similar narrative-to-audience warnings. Using the same rel_cls and placing it under the COMMUNICATION group improves consistency with RelR_c73faab887e3 and better reflects that this is a warning message rather than generic information.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_rel_schema",
+      "relation_ids": [
+        "RelR_bd10a931517c"
+      ],
+      "canonical_rel_name": null,
+      "canonical_rel_desc": null,
+      "rel_cls": "warning_communication_relation",
+      "rel_cls_group": "COMMUNICATION",
+      "new_relation_name": null,
+      "original_relation_name": null,
+      "justification": "This relation describes stories alerting audiences to dangers, which is a communicative warning act, semantically aligned with the existing 'warning_communication_relation' used for similar narrative-to-audience warnings. Using the same rel_cls and placing it under the COMMUNICATION group improves consistency with RelR_c73faab887e3 and better reflects that this is a warning message rather than generic information.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  ],
+  "timestamp": "2026-01-02T09:25:34Z"
+}

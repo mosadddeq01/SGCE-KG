@@ -1,0 +1,141 @@
+{
+  "cluster_label": "41_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_5bd6a54c04d7",
+      "relation_name": "separates",
+      "rel_desc": "The conceptual line between fact and fiction is defined as a boundary that separates factual content from non-factual content.",
+      "rel_hint_type": "conceptual_link",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "line between fact and fiction",
+      "object_entity_name": "fact",
+      "subject_class_label": "Fact and Fiction in Narratives",
+      "subject_class_group": "Narrative Truth, Fiction, and History",
+      "object_class_label": "Fact and Fiction in Narratives",
+      "object_class_group": "Narrative Truth, Fiction, and History",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "often blurred",
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "BoundaryStatus: often blurred"
+      },
+      "confidence": 0.96,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_e55279202a09",
+      "relation_name": "separates",
+      "rel_desc": "The conceptual line between fact and fiction separates fictional content from factual content.",
+      "rel_hint_type": "conceptual_link",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "line between fact and fiction",
+      "object_entity_name": "fiction",
+      "subject_class_label": "Fact and Fiction in Narratives",
+      "subject_class_group": "Narrative Truth, Fiction, and History",
+      "object_class_label": "Fact and Fiction in Narratives",
+      "object_class_group": "Narrative Truth, Fiction, and History",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "often blurred",
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "BoundaryStatus: often blurred"
+      },
+      "confidence": 0.96,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_5bd6a54c04d7\", \"RelR_e55279202a09\"],\n      \"canonical_rel_name\": \"separates_from\",\n      \"canonical_rel_desc\": \"Indicates that a conceptual or categorical boundary separates the subject from the object, distinguishing them as different domains or categories.\",\n      \"justification\": \"In both relations, the subject is the conceptual 'line between fact and fiction' and the object is either 'fact' or 'fiction'. The semantics are identical: the boundary separates one domain from the other. A unified predicate 'separates_from' captures this conceptual boundary relation for both directions consistently.\",\n      \"remark\": \"Used for conceptual or categorical boundaries, not just physical separation.\",\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_5bd6a54c04d7\", \"RelR_e55279202a09\"],\n      \"rel_cls\": \"conceptual_boundary_relation\",\n      \"justification\": \"Both relations describe a conceptual boundary that distinguishes two narrative categories (fact vs. fiction). Grouping them under 'conceptual_boundary_relation' captures the family of relations where one entity serves as a boundary or separator between conceptual domains.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_5bd6a54c04d7\", \"RelR_e55279202a09\"],\n      \"rel_cls_group\": \"ASSOCIATION\",\n      \"justification\": \"The relation expresses how entities are conceptually associated via a boundary (demarcation) rather than physical space, time, or causality. This fits best under a broad ASSOCIATION/structural-conceptual grouping.\",\n      \"remark\": \"Could alternatively be modeled under a specialized conceptual-structure group in future schema refinements.\",\n      \"confidence\": 0.85\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_5bd6a54c04d7",
+          "RelR_e55279202a09"
+        ],
+        "canonical_rel_name": "separates_from",
+        "canonical_rel_desc": "Indicates that a conceptual or categorical boundary separates the subject from the object, distinguishing them as different domains or categories.",
+        "justification": "In both relations, the subject is the conceptual 'line between fact and fiction' and the object is either 'fact' or 'fiction'. The semantics are identical: the boundary separates one domain from the other. A unified predicate 'separates_from' captures this conceptual boundary relation for both directions consistently.",
+        "remark": "Used for conceptual or categorical boundaries, not just physical separation.",
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_5bd6a54c04d7",
+          "RelR_e55279202a09"
+        ],
+        "rel_cls": "conceptual_boundary_relation",
+        "justification": "Both relations describe a conceptual boundary that distinguishes two narrative categories (fact vs. fiction). Grouping them under 'conceptual_boundary_relation' captures the family of relations where one entity serves as a boundary or separator between conceptual domains.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_5bd6a54c04d7",
+          "RelR_e55279202a09"
+        ],
+        "rel_cls_group": "ASSOCIATION",
+        "justification": "The relation expresses how entities are conceptually associated via a boundary (demarcation) rather than physical space, time, or causality. This fits best under a broad ASSOCIATION/structural-conceptual grouping.",
+        "remark": "Could alternatively be modeled under a specialized conceptual-structure group in future schema refinements.",
+        "confidence": 0.85
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_5bd6a54c04d7",
+        "RelR_e55279202a09"
+      ],
+      "canonical_rel_name": "separates_from",
+      "canonical_rel_desc": "Indicates that a conceptual or categorical boundary separates the subject from the object, distinguishing them as different domains or categories.",
+      "justification": "In both relations, the subject is the conceptual 'line between fact and fiction' and the object is either 'fact' or 'fiction'. The semantics are identical: the boundary separates one domain from the other. A unified predicate 'separates_from' captures this conceptual boundary relation for both directions consistently.",
+      "remark": "Used for conceptual or categorical boundaries, not just physical separation.",
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_5bd6a54c04d7",
+        "RelR_e55279202a09"
+      ],
+      "rel_cls": "conceptual_boundary_relation",
+      "justification": "Both relations describe a conceptual boundary that distinguishes two narrative categories (fact vs. fiction). Grouping them under 'conceptual_boundary_relation' captures the family of relations where one entity serves as a boundary or separator between conceptual domains.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_5bd6a54c04d7",
+        "RelR_e55279202a09"
+      ],
+      "rel_cls_group": "ASSOCIATION",
+      "justification": "The relation expresses how entities are conceptually associated via a boundary (demarcation) rather than physical space, time, or causality. This fits best under a broad ASSOCIATION/structural-conceptual grouping.",
+      "remark": "Could alternatively be modeled under a specialized conceptual-structure group in future schema refinements.",
+      "confidence": 0.85
+    }
+  ],
+  "timestamp": "2026-01-02T09:16:44Z"
+}

@@ -1,0 +1,158 @@
+{
+  "cluster_label": "11_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_1ab100f4d650",
+      "relation_name": "gives_rise_to",
+      "rel_desc": "The rapid advancement of Artificial Intelligence is described as bringing about numerous ethical dilemmas in AI development.",
+      "rel_hint_type": "causal",
+      "canonical_rel_name": "contributes_to",
+      "canonical_rel_desc": "Subject is a causal or enabling factor that contributes to the occurrence or presence of the object, without implying it is the sole cause.",
+      "rel_cls": "causal_influence_relation",
+      "rel_cls_group": "CAUSALITY",
+      "subject_entity_name": "Artificial Intelligence",
+      "object_entity_name": "ethical dilemmas in AI development",
+      "subject_class_label": "Artificial Intelligence Technologies",
+      "subject_class_group": "Artificial Intelligence Technologies & Applications",
+      "object_class_label": "AI Ethics Dilemmas (Concept)",
+      "object_class_group": "AI Ethics & Governance",
+      "qualifiers": {
+        "TemporalQualifier": "in recent years",
+        "SpatialQualifier": null,
+        "OperationalConstraint": "in the development and deployment of AI technologies",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "with this rapid advancement comes",
+        "LogicalMarker": null,
+        "OtherQualifier": "ImpactScope: affecting various industries and aspects of daily life"
+      },
+      "confidence": 0.83,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_76a1e8b0c398",
+      "relation_name": "applies_to",
+      "rel_desc": "Ethical guidelines are intended to govern the development and deployment of AI systems.",
+      "rel_hint_type": "governance scope",
+      "canonical_rel_name": "applies_to_entity",
+      "canonical_rel_desc": "Normative or regulatory instruments (e.g., guidelines, regulations, standards) that specify which systems, entities, or activities they apply to or govern.",
+      "rel_cls": "governance_scope_relation",
+      "rel_cls_group": "GOVERNANCE",
+      "subject_entity_name": "ethical guidelines",
+      "object_entity_name": "AI systems",
+      "subject_class_label": "AI Ethics Norms",
+      "subject_class_group": "AI Ethics & Governance",
+      "object_class_label": "AI Systems",
+      "object_class_group": "TBD",
+      "qualifiers": {
+        "TemporalQualifier": "during development and deployment",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "LifecyclePhase: development and deployment of AI systems"
+      },
+      "confidence": 0.86,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_6251113acc95",
+      "relation_name": "applies_to",
+      "rel_desc": "Regulations are designed to apply to and govern AI systems during their development and deployment.",
+      "rel_hint_type": "governance scope",
+      "canonical_rel_name": "applies_to_entity",
+      "canonical_rel_desc": "Normative or regulatory instruments (e.g., guidelines, regulations, standards) that specify which systems, entities, or activities they apply to or govern.",
+      "rel_cls": "governance_scope_relation",
+      "rel_cls_group": "GOVERNANCE",
+      "subject_entity_name": "regulations",
+      "object_entity_name": "AI systems",
+      "subject_class_label": "AI Regulations",
+      "subject_class_group": "AI Governance and Stakeholders",
+      "object_class_label": "AI Systems",
+      "object_class_group": "TBD",
+      "qualifiers": {
+        "TemporalQualifier": "during development and deployment",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "LifecyclePhase: development and deployment of AI systems"
+      },
+      "confidence": 0.86,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_1b2ca8f5ae09",
+      "relation_name": "addressed_by",
+      "rel_desc": "Ethical dilemmas in AI development are to be managed by guiding development with ethical principles.",
+      "rel_hint_type": "governance",
+      "canonical_rel_name": "mitigated_by",
+      "canonical_rel_desc": "Indicates that a problem, risk, or dilemma is addressed, reduced, or managed through the application of a given principle, method, or mechanism.",
+      "rel_cls": "governance_and_mitigation_relation",
+      "rel_cls_group": "GOVERNANCE",
+      "subject_entity_name": "ethical dilemmas in AI development",
+      "object_entity_name": "ethical principles",
+      "subject_class_label": "AI Ethics Dilemmas (Concept)",
+      "subject_class_group": "AI Ethics & Governance",
+      "object_class_label": "AI Ethics Norms",
+      "object_class_group": "AI Ethics & Governance",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": "in AI development processes",
+        "ConditionExpression": "to consider the broader societal implications of AI technologies",
+        "UncertaintyQualifier": "essential to consider and work towards ensuring",
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "NormativeGoal: mitigate ethical dilemmas and harms"
+      },
+      "confidence": 0.84,
+      "remarks": [
+        "Relation represents that ethical principles are the governing response to the ethical dilemmas around AI development.",
+        "Relation represents that ethical principles are the governing response to the ethical dilemmas around AI development."
+      ]
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_rel_schema\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_76a1e8b0c398\",\n        \"RelR_6251113acc95\"\n      ],\n      \"canonical_rel_name\": \"applies_to\",\n      \"canonical_rel_desc\": \"Indicates that a normative or regulatory instrument (e.g., guidelines, regulations, standards) governs, constrains, or is intended to cover the specified systems, entities, or activities.\",\n      \"rel_cls\": null,\n      \"rel_cls_group\": null,\n      \"justification\": \"Both relations describe the governance scope of normative instruments (ethical guidelines, regulations) over AI systems. Normalizing the canonical predicate from 'applies_to_entity' to the cleaner, more general 'applies_to' improves consistency and readability without changing the underlying semantics. The existing rel_cls and rel_cls_group are already appropriate and therefore left unchanged.\",\n      \"remark\": null,\n      \"confidence\": 0.93\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_rel_schema",
+      "args": {
+        "relation_ids": [
+          "RelR_76a1e8b0c398",
+          "RelR_6251113acc95"
+        ],
+        "canonical_rel_name": "applies_to",
+        "canonical_rel_desc": "Indicates that a normative or regulatory instrument (e.g., guidelines, regulations, standards) governs, constrains, or is intended to cover the specified systems, entities, or activities.",
+        "rel_cls": null,
+        "rel_cls_group": null,
+        "justification": "Both relations describe the governance scope of normative instruments (ethical guidelines, regulations) over AI systems. Normalizing the canonical predicate from 'applies_to_entity' to the cleaner, more general 'applies_to' improves consistency and readability without changing the underlying semantics. The existing rel_cls and rel_cls_group are already appropriate and therefore left unchanged.",
+        "remark": null,
+        "confidence": 0.93
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_rel_schema",
+      "relation_ids": [
+        "RelR_76a1e8b0c398",
+        "RelR_6251113acc95"
+      ],
+      "canonical_rel_name": "applies_to",
+      "canonical_rel_desc": "Indicates that a normative or regulatory instrument (e.g., guidelines, regulations, standards) governs, constrains, or is intended to cover the specified systems, entities, or activities.",
+      "rel_cls": null,
+      "rel_cls_group": null,
+      "new_relation_name": null,
+      "original_relation_name": null,
+      "justification": "Both relations describe the governance scope of normative instruments (ethical guidelines, regulations) over AI systems. Normalizing the canonical predicate from 'applies_to_entity' to the cleaner, more general 'applies_to' improves consistency and readability without changing the underlying semantics. The existing rel_cls and rel_cls_group are already appropriate and therefore left unchanged.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  ],
+  "timestamp": "2026-01-02T09:22:30Z"
+}

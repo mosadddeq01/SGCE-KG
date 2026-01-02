@@ -1,0 +1,141 @@
+{
+  "cluster_label": "10_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_76a1e8b0c398",
+      "relation_name": "applies_to",
+      "rel_desc": "Ethical guidelines are intended to govern the development and deployment of AI systems.",
+      "rel_hint_type": "governance scope",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "ethical guidelines",
+      "object_entity_name": "AI systems",
+      "subject_class_label": "AI Ethics Norms",
+      "subject_class_group": "AI Ethics & Governance",
+      "object_class_label": "AI Systems",
+      "object_class_group": "TBD",
+      "qualifiers": {
+        "TemporalQualifier": "during development and deployment",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "LifecyclePhase: development and deployment of AI systems"
+      },
+      "confidence": 0.86,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_6251113acc95",
+      "relation_name": "applies_to",
+      "rel_desc": "Regulations are designed to apply to and govern AI systems during their development and deployment.",
+      "rel_hint_type": "governance scope",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "regulations",
+      "object_entity_name": "AI systems",
+      "subject_class_label": "AI Regulations",
+      "subject_class_group": "AI Governance and Stakeholders",
+      "object_class_label": "AI Systems",
+      "object_class_group": "TBD",
+      "qualifiers": {
+        "TemporalQualifier": "during development and deployment",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "LifecyclePhase: development and deployment of AI systems"
+      },
+      "confidence": 0.86,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_76a1e8b0c398\",\n        \"RelR_6251113acc95\"\n      ],\n      \"canonical_rel_name\": \"applies_to_entity\",\n      \"canonical_rel_desc\": \"Normative or regulatory instruments (e.g., guidelines, regulations, standards) that specify which systems, entities, or activities they apply to or govern.\",\n      \"justification\": \"Both relations express that a governance instrument (ethical guidelines or regulations) specifies its scope of application over AI systems during certain lifecycle phases. They share the same predicate semantics from a norm to its governed entity, so they should be normalized under one canonical predicate.\",\n      \"remark\": \"Lifecycle phase is captured via qualifiers; the core predicate remains the scope of application from guideline/regulation to AI systems.\",\n      \"confidence\": 0.93\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_76a1e8b0c398\",\n        \"RelR_6251113acc95\"\n      ],\n      \"rel_cls\": \"governance_scope_relation\",\n      \"justification\": \"In both cases, the relation encodes the scope of governance or applicability of a normative instrument (guidelines or regulations) over AI systems, which fits a shared class for governance scope links.\",\n      \"remark\": null,\n      \"confidence\": 0.92\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_76a1e8b0c398\",\n        \"RelR_6251113acc95\"\n      ],\n      \"rel_cls_group\": \"GOVERNANCE\",\n      \"justification\": \"These relations concern regulatory/ethical control and applicability over AI systems, which is best captured as a broad governance-oriented group rather than composition, causality, or spatiality.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_76a1e8b0c398",
+          "RelR_6251113acc95"
+        ],
+        "canonical_rel_name": "applies_to_entity",
+        "canonical_rel_desc": "Normative or regulatory instruments (e.g., guidelines, regulations, standards) that specify which systems, entities, or activities they apply to or govern.",
+        "justification": "Both relations express that a governance instrument (ethical guidelines or regulations) specifies its scope of application over AI systems during certain lifecycle phases. They share the same predicate semantics from a norm to its governed entity, so they should be normalized under one canonical predicate.",
+        "remark": "Lifecycle phase is captured via qualifiers; the core predicate remains the scope of application from guideline/regulation to AI systems.",
+        "confidence": 0.93
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_76a1e8b0c398",
+          "RelR_6251113acc95"
+        ],
+        "rel_cls": "governance_scope_relation",
+        "justification": "In both cases, the relation encodes the scope of governance or applicability of a normative instrument (guidelines or regulations) over AI systems, which fits a shared class for governance scope links.",
+        "remark": null,
+        "confidence": 0.92
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_76a1e8b0c398",
+          "RelR_6251113acc95"
+        ],
+        "rel_cls_group": "GOVERNANCE",
+        "justification": "These relations concern regulatory/ethical control and applicability over AI systems, which is best captured as a broad governance-oriented group rather than composition, causality, or spatiality.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_76a1e8b0c398",
+        "RelR_6251113acc95"
+      ],
+      "canonical_rel_name": "applies_to_entity",
+      "canonical_rel_desc": "Normative or regulatory instruments (e.g., guidelines, regulations, standards) that specify which systems, entities, or activities they apply to or govern.",
+      "justification": "Both relations express that a governance instrument (ethical guidelines or regulations) specifies its scope of application over AI systems during certain lifecycle phases. They share the same predicate semantics from a norm to its governed entity, so they should be normalized under one canonical predicate.",
+      "remark": "Lifecycle phase is captured via qualifiers; the core predicate remains the scope of application from guideline/regulation to AI systems.",
+      "confidence": 0.93
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_76a1e8b0c398",
+        "RelR_6251113acc95"
+      ],
+      "rel_cls": "governance_scope_relation",
+      "justification": "In both cases, the relation encodes the scope of governance or applicability of a normative instrument (guidelines or regulations) over AI systems, which fits a shared class for governance scope links.",
+      "remark": null,
+      "confidence": 0.92
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_76a1e8b0c398",
+        "RelR_6251113acc95"
+      ],
+      "rel_cls_group": "GOVERNANCE",
+      "justification": "These relations concern regulatory/ethical control and applicability over AI systems, which is best captured as a broad governance-oriented group rather than composition, causality, or spatiality.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  ],
+  "timestamp": "2026-01-02T09:12:17Z"
+}

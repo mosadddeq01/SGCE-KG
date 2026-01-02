@@ -1,0 +1,15 @@
+[
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": ["RelR_afe7c3e54753", "RelR_bc274f2902df"],
+      "canonical_rel_name": null,
+      "canonical_rel_desc": null,
+      "rel_cls": "morphological_transformation_relation",
+      "rel_cls_group": "MODIFICATION",
+      "justification": "Both relations describe morphological or physical transformation of a structure or life stage into another form (metamorphosis, dissolution into a soupy substance). This is best modeled as a state-change / transformation (MODIFICATION) rather than as a direct causal relation between two independent entities. The existing rel_cls 'morphological_transformation_relation' is appropriate; only the broad group should be normalized from 'CAUSALITY' to 'MODIFICATION' to better reflect the semantics of change-of-form.",
+      "remark": null,
+      "confidence": 0.86
+    }
+  }
+]

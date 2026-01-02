@@ -1,0 +1,141 @@
+{
+  "cluster_label": "70_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_aeaaf50e4593",
+      "relation_name": "causes_fear_in",
+      "rel_desc": "The scratching sound contributes to the young couple’s terror.",
+      "rel_hint_type": "causal",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "scratching sound",
+      "object_entity_name": "young couple",
+      "subject_class_label": "Hook Man Legend: Narrative Elements",
+      "subject_class_group": "Urban Legend: Hook Man",
+      "object_class_label": "Hook Man Legend: Narrative Elements",
+      "object_class_group": "Urban Legend: Hook Man",
+      "qualifiers": {
+        "TemporalQualifier": "as the story unfolds",
+        "SpatialQualifier": "inside the car, near the door",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "as",
+        "LogicalMarker": "as",
+        "OtherQualifier": "EmotionalEffect: escalating terror"
+      },
+      "confidence": 0.94,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_04b99699c553",
+      "relation_name": "causes",
+      "rel_desc": "Rapid transmission of information causes or contributes to the proliferation of urban legends.",
+      "rel_hint_type": "causal",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "rapid transmission of information",
+      "object_entity_name": "proliferation of urban legends",
+      "subject_class_label": "Information Dissemination Processes",
+      "subject_class_group": "Story & Information Dissemination Mechanisms",
+      "object_class_label": "Urban Legends",
+      "object_class_group": "Urban Legends and Modern Folklore",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "in popular culture",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "has led to",
+        "LogicalMarker": null,
+        "OtherQualifier": "DisseminationMode: shared and reshared"
+      },
+      "confidence": 0.98,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_aeaaf50e4593\", \"RelR_04b99699c553\"],\n      \"canonical_rel_name\": \"causes\",\n      \"canonical_rel_desc\": \"Indicates that the subject is a causal factor that brings about or significantly contributes to the object event, state, or condition.\",\n      \"justification\": \"Both relations describe straightforward causal influence from the subject to the object: the scratching sound causes fear in the couple, and rapid transmission of information causes the proliferation of urban legends. A single generic predicate 'causes' covers both instances consistently while leaving specifics (emotional vs. dissemination effects) to the node types and qualifiers.\",\n      \"remark\": null,\n      \"confidence\": 0.95\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_aeaaf50e4593\", \"RelR_04b99699c553\"],\n      \"rel_cls\": \"causal_influence_relation\",\n      \"justification\": \"In both cases, the subject exerts a causal influence over the object outcome. Grouping them under a general 'causal_influence_relation' class captures this family of cause-effect predicates without being as broad and generic as the group-level label.\",\n      \"remark\": null,\n      \"confidence\": 0.94\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_aeaaf50e4593\", \"RelR_04b99699c553\"],\n      \"rel_cls_group\": \"CAUSALITY\",\n      \"justification\": \"Both relations explicitly encode cause-effect semantics and were hinted as causal by upstream processing, so they naturally fall under the CAUSALITY group.\",\n      \"remark\": null,\n      \"confidence\": 0.98\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_aeaaf50e4593",
+          "RelR_04b99699c553"
+        ],
+        "canonical_rel_name": "causes",
+        "canonical_rel_desc": "Indicates that the subject is a causal factor that brings about or significantly contributes to the object event, state, or condition.",
+        "justification": "Both relations describe straightforward causal influence from the subject to the object: the scratching sound causes fear in the couple, and rapid transmission of information causes the proliferation of urban legends. A single generic predicate 'causes' covers both instances consistently while leaving specifics (emotional vs. dissemination effects) to the node types and qualifiers.",
+        "remark": null,
+        "confidence": 0.95
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_aeaaf50e4593",
+          "RelR_04b99699c553"
+        ],
+        "rel_cls": "causal_influence_relation",
+        "justification": "In both cases, the subject exerts a causal influence over the object outcome. Grouping them under a general 'causal_influence_relation' class captures this family of cause-effect predicates without being as broad and generic as the group-level label.",
+        "remark": null,
+        "confidence": 0.94
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_aeaaf50e4593",
+          "RelR_04b99699c553"
+        ],
+        "rel_cls_group": "CAUSALITY",
+        "justification": "Both relations explicitly encode cause-effect semantics and were hinted as causal by upstream processing, so they naturally fall under the CAUSALITY group.",
+        "remark": null,
+        "confidence": 0.98
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_aeaaf50e4593",
+        "RelR_04b99699c553"
+      ],
+      "canonical_rel_name": "causes",
+      "canonical_rel_desc": "Indicates that the subject is a causal factor that brings about or significantly contributes to the object event, state, or condition.",
+      "justification": "Both relations describe straightforward causal influence from the subject to the object: the scratching sound causes fear in the couple, and rapid transmission of information causes the proliferation of urban legends. A single generic predicate 'causes' covers both instances consistently while leaving specifics (emotional vs. dissemination effects) to the node types and qualifiers.",
+      "remark": null,
+      "confidence": 0.95
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_aeaaf50e4593",
+        "RelR_04b99699c553"
+      ],
+      "rel_cls": "causal_influence_relation",
+      "justification": "In both cases, the subject exerts a causal influence over the object outcome. Grouping them under a general 'causal_influence_relation' class captures this family of cause-effect predicates without being as broad and generic as the group-level label.",
+      "remark": null,
+      "confidence": 0.94
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_aeaaf50e4593",
+        "RelR_04b99699c553"
+      ],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "Both relations explicitly encode cause-effect semantics and were hinted as causal by upstream processing, so they naturally fall under the CAUSALITY group.",
+      "remark": null,
+      "confidence": 0.98
+    }
+  ],
+  "timestamp": "2026-01-02T09:20:55Z"
+}

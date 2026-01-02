@@ -2,124 +2,128 @@
   "cluster_label": -1,
   "cluster_classes": [
     {
-      "candidate_id": "ClsC_ae9f3d63",
-      "class_label": "High-Temperature Steels",
-      "class_description": "Steels designed for high temperature applications, including low alloy and quenched and tempered types.",
-      "class_type_hint": "Material",
+      "candidate_id": "ClsC_92e225e0",
+      "class_label": "Caterpillar Feeding Behavior",
+      "class_description": "Behaviors of caterpillars related to consuming plant leaves as their primary nutritional activity.",
+      "class_type_hint": "Behavior",
       "class_group": "TBD",
-      "confidence": 0.8,
-      "evidence_excerpt": "Used for high temperature strength and creep resistance.",
+      "confidence": 0.63,
+      "evidence_excerpt": "Caterpillars feeding on plant leaves as their main activity and food source.",
       "member_ids": [
-        "En_a458e346",
-        "En_7ecdae42"
+        "En_edbab226",
+        "Can_f8ebbd2b"
       ],
       "members": [
         {
-          "id": "En_a458e346",
-          "entity_name": "quenched and tempered 2-1/4Cr-1Mo steel",
-          "entity_description": "A type of steel used for thick wall reactor vessels in petroleum refinery processes.",
-          "entity_type_hint": "Material"
+          "id": "En_edbab226",
+          "entity_name": "feeding on leaves",
+          "entity_description": "Primary caterpillar activity of consuming plant leaves for nutrition.",
+          "entity_type_hint": "Behavior"
         },
         {
-          "id": "En_7ecdae42",
-          "entity_name": "low alloy steel",
-          "entity_description": "Steels with up to 9% chromium and other alloys for high temperature strength and creep resistance.",
-          "entity_type_hint": "Material"
-        }
-      ],
-      "remarks": []
-    },
-    {
-      "candidate_id": "ClsC_c5aee02f",
-      "class_label": "General Corrosion",
-      "class_description": "Broad corrosion processes that stainless steels resist, including oxidation and sulfidation.",
-      "class_type_hint": "Damage Mechanism",
-      "class_group": "TBD",
-      "confidence": 0.88,
-      "evidence_excerpt": "Stainless steels resist various forms of corrosion.",
-      "member_ids": [
-        "En_2b400819",
-        "En_56c0bd49",
-        "En_fefc46ef"
-      ],
-      "members": [
-        {
-          "id": "En_2b400819",
-          "entity_name": "general corrosion",
-          "entity_description": "A broad process that stainless steels resist due to their alloy content, encompassing various forms like oxidation and sulfidation.",
-          "entity_type_hint": "DamageMechanism"
-        },
-        {
-          "id": "En_56c0bd49",
-          "entity_name": "oxidation",
-          "entity_description": "A chemical reaction that stainless steels resist due to their alloy content.",
-          "entity_type_hint": "DamageMechanism"
-        },
-        {
-          "id": "En_fefc46ef",
-          "entity_name": "sulfidation",
-          "entity_description": "A chemical reaction that stainless steels resist due to their alloy content.",
-          "entity_type_hint": "DamageMechanism"
+          "id": "Can_f8ebbd2b",
+          "entity_name": "plant leaves",
+          "entity_description": "Plant leaves that serve as sites for egg-laying, feeding by caterpillars, and attachment for chrysalis formation.",
+          "entity_type_hint": "Location"
         }
       ],
       "remarks": []
     }
   ],
-  "llm_raw": "[\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_ae9f3d63\",\n      \"new_name\": \"High-Temperature Steels\",\n      \"new_description\": \"Steels designed for high temperature applications, including low alloy and quenched and tempered types.\",\n      \"new_class_type_hint\": \"Material\",\n      \"new_class_group\": \"Metallurgical Materials\",\n      \"remark\": null,\n      \"justification\": \"Assigning a clear Class_Group 'Metallurgical Materials' to connect this material class with other metallurgical material classes in the schema.\",\n      \"confidence\": 0.95\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_c5aee02f\",\n      \"new_name\": \"General Corrosion\",\n      \"new_description\": \"Broad corrosion processes that stainless steels resist, including oxidation and sulfidation.\",\n      \"new_class_type_hint\": \"Damage Mechanism\",\n      \"new_class_group\": \"Corrosion Mechanisms\",\n      \"remark\": null,\n      \"justification\": \"Assigning a clear Class_Group 'Corrosion Mechanisms' to connect this damage mechanism class with other corrosion-related classes in the schema.\",\n      \"confidence\": 0.95\n    }\n  }\n]",
+  "llm_raw": "[\n  {\n    \"function\": \"split_class\",\n    \"args\": {\n      \"source_class_id\": \"ClsC_92e225e0\",\n      \"splits\": [\n        {\n          \"name\": \"Caterpillar Plant-Leaf Substrate\",\n          \"description\": \"Plant leaves serving as physical substrate for caterpillar egg-laying, feeding, and chrysalis attachment.\",\n          \"class_type_hint\": \"Habitat/Resource\",\n          \"member_ids\": [\n            \"Can_f8ebbd2b\"\n          ],\n          \"provisional_id\": \"SPLIT_92e225e0_LEAF_SUBSTRATE\"\n        }\n      ],\n      \"justification\": \"The original class mixes a behavior entity ('feeding on leaves') with an environmental/location entity ('plant leaves'); splitting separates behavior from physical substrate.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_92e225e0\",\n      \"new_name\": \"Caterpillar Leaf-Feeding Behavior\",\n      \"new_description\": \"Behaviors of caterpillars specifically related to consuming plant leaves as a primary food source.\",\n      \"new_class_type_hint\": \"Behavior\",\n      \"new_class_group\": \"Caterpillar–Plant Interactions\",\n      \"remark\": null,\n      \"justification\": \"After removing the substrate entity, the remaining entity is purely behavioral; updating the name/description clarifies scope and assigns an appropriate shared Class_Group.\",\n      \"confidence\": 0.88\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"SPLIT_92e225e0_LEAF_SUBSTRATE\",\n      \"new_name\": \"Plant Leaves as Caterpillar Substrate\",\n      \"new_description\": \"Plant leaves considered as physical structures used by caterpillars for egg-laying, feeding sites, and chrysalis attachment.\",\n      \"new_class_type_hint\": \"Habitat/Resource\",\n      \"new_class_group\": \"Caterpillar–Plant Interactions\",\n      \"remark\": null,\n      \"justification\": \"The new split class is environmental rather than behavioral; setting a clear name, description, type hint, and aligning its Class_Group with the related behavior class makes the schema coherent.\",\n      \"confidence\": 0.88\n    }\n  }\n]",
   "parsed_steps": [
     {
-      "function": "modify_class",
+      "function": "split_class",
       "args": {
-        "class_id": "ClsC_ae9f3d63",
-        "new_name": "High-Temperature Steels",
-        "new_description": "Steels designed for high temperature applications, including low alloy and quenched and tempered types.",
-        "new_class_type_hint": "Material",
-        "new_class_group": "Metallurgical Materials",
+        "source_class_id": "ClsC_92e225e0",
+        "splits": [
+          {
+            "name": "Caterpillar Plant-Leaf Substrate",
+            "description": "Plant leaves serving as physical substrate for caterpillar egg-laying, feeding, and chrysalis attachment.",
+            "class_type_hint": "Habitat/Resource",
+            "member_ids": [
+              "Can_f8ebbd2b"
+            ],
+            "provisional_id": "SPLIT_92e225e0_LEAF_SUBSTRATE"
+          }
+        ],
+        "justification": "The original class mixes a behavior entity ('feeding on leaves') with an environmental/location entity ('plant leaves'); splitting separates behavior from physical substrate.",
         "remark": null,
-        "justification": "Assigning a clear Class_Group 'Metallurgical Materials' to connect this material class with other metallurgical material classes in the schema.",
-        "confidence": 0.95
+        "confidence": 0.9
       }
     },
     {
       "function": "modify_class",
       "args": {
-        "class_id": "ClsC_c5aee02f",
-        "new_name": "General Corrosion",
-        "new_description": "Broad corrosion processes that stainless steels resist, including oxidation and sulfidation.",
-        "new_class_type_hint": "Damage Mechanism",
-        "new_class_group": "Corrosion Mechanisms",
+        "class_id": "ClsC_92e225e0",
+        "new_name": "Caterpillar Leaf-Feeding Behavior",
+        "new_description": "Behaviors of caterpillars specifically related to consuming plant leaves as a primary food source.",
+        "new_class_type_hint": "Behavior",
+        "new_class_group": "Caterpillar–Plant Interactions",
         "remark": null,
-        "justification": "Assigning a clear Class_Group 'Corrosion Mechanisms' to connect this damage mechanism class with other corrosion-related classes in the schema.",
-        "confidence": 0.95
+        "justification": "After removing the substrate entity, the remaining entity is purely behavioral; updating the name/description clarifies scope and assigns an appropriate shared Class_Group.",
+        "confidence": 0.88
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "SPLIT_92e225e0_LEAF_SUBSTRATE",
+        "new_name": "Plant Leaves as Caterpillar Substrate",
+        "new_description": "Plant leaves considered as physical structures used by caterpillars for egg-laying, feeding sites, and chrysalis attachment.",
+        "new_class_type_hint": "Habitat/Resource",
+        "new_class_group": "Caterpillar–Plant Interactions",
+        "remark": null,
+        "justification": "The new split class is environmental rather than behavioral; setting a clear name, description, type hint, and aligning its Class_Group with the related behavior class makes the schema coherent.",
+        "confidence": 0.88
       }
     }
   ],
   "executed_decisions": [
     {
-      "action": "modify_class",
-      "class_id": "ClsC_ae9f3d63",
-      "class_id_resolved": "ClsC_ae9f3d63",
-      "new_name": "High-Temperature Steels",
-      "new_description": "Steels designed for high temperature applications, including low alloy and quenched and tempered types.",
-      "new_class_type_hint": "Material",
-      "new_class_group": "Metallurgical Materials",
+      "action": "split_class",
+      "source_class_id": "ClsC_92e225e0",
+      "source_class_id_resolved": "ClsC_92e225e0",
+      "created_classes": [
+        {
+          "new_class_id": "ClsR_e357867f",
+          "provisional_id": "SPLIT_92e225e0_LEAF_SUBSTRATE",
+          "member_ids": [
+            "Can_f8ebbd2b"
+          ]
+        }
+      ],
+      "justification": "The original class mixes a behavior entity ('feeding on leaves') with an environmental/location entity ('plant leaves'); splitting separates behavior from physical substrate.",
       "remark": null,
-      "justification": "Assigning a clear Class_Group 'Metallurgical Materials' to connect this material class with other metallurgical material classes in the schema.",
-      "confidence": 0.95
+      "confidence": 0.9
     },
     {
       "action": "modify_class",
-      "class_id": "ClsC_c5aee02f",
-      "class_id_resolved": "ClsC_c5aee02f",
-      "new_name": "General Corrosion",
-      "new_description": "Broad corrosion processes that stainless steels resist, including oxidation and sulfidation.",
-      "new_class_type_hint": "Damage Mechanism",
-      "new_class_group": "Corrosion Mechanisms",
+      "class_id": "ClsC_92e225e0",
+      "class_id_resolved": "ClsC_92e225e0",
+      "new_name": "Caterpillar Leaf-Feeding Behavior",
+      "new_description": "Behaviors of caterpillars specifically related to consuming plant leaves as a primary food source.",
+      "new_class_type_hint": "Behavior",
+      "new_class_group": "Caterpillar–Plant Interactions",
       "remark": null,
-      "justification": "Assigning a clear Class_Group 'Corrosion Mechanisms' to connect this damage mechanism class with other corrosion-related classes in the schema.",
-      "confidence": 0.95
+      "justification": "After removing the substrate entity, the remaining entity is purely behavioral; updating the name/description clarifies scope and assigns an appropriate shared Class_Group.",
+      "confidence": 0.88
+    },
+    {
+      "action": "modify_class",
+      "class_id": "SPLIT_92e225e0_LEAF_SUBSTRATE",
+      "class_id_resolved": "ClsR_e357867f",
+      "new_name": "Plant Leaves as Caterpillar Substrate",
+      "new_description": "Plant leaves considered as physical structures used by caterpillars for egg-laying, feeding sites, and chrysalis attachment.",
+      "new_class_type_hint": "Habitat/Resource",
+      "new_class_group": "Caterpillar–Plant Interactions",
+      "remark": null,
+      "justification": "The new split class is environmental rather than behavioral; setting a clear name, description, type hint, and aligning its Class_Group with the related behavior class makes the schema coherent.",
+      "confidence": 0.88
     }
   ],
-  "provisional_to_real": {},
-  "timestamp": "2025-12-28T00:22:17Z"
+  "provisional_to_real": {
+    "SPLIT_92e225e0_LEAF_SUBSTRATE": "ClsR_e357867f"
+  },
+  "timestamp": "2026-01-02T08:35:20Z"
 }

@@ -54,8 +54,10 @@ IMPORTANT FIELD DISTINCTIONS
 
 - remarks (optional, internal):
   Free-text notes attached to a class, used to flag important issues that are
-  outside the scope of structural changes (e.g., suspected entity-level duplicates
-  that should be checked elsewhere).
+  outside the scope of structural changes (e.g., upstream entity resolution that you suspect is wrong, or entities that
+  look identical but should not be changed here), DO NOT try to fix them via merge or reassign.
+   Instead, attach a human-facing remark via modify_class (using the 'remark' field)
+   so that a human can review it later.
 
 Class_Group is NOT a synonym of class_type_hint.
 
@@ -308,64 +310,29 @@ Each class includes:
 
 [
   {
-    "candidate_id": "ClsC_ae9f3d63",
-    "class_label": "High-Temperature Steels",
-    "class_description": "Steels designed for high temperature applications, including low alloy and quenched and tempered types.",
-    "class_type_hint": "Material",
+    "candidate_id": "ClsC_92e225e0",
+    "class_label": "Caterpillar Feeding Behavior",
+    "class_description": "Behaviors of caterpillars related to consuming plant leaves as their primary nutritional activity.",
+    "class_type_hint": "Behavior",
     "class_group": "TBD",
-    "confidence": 0.8,
-    "evidence_excerpt": "Used for high temperature strength and creep resistance.",
+    "confidence": 0.63,
+    "evidence_excerpt": "Caterpillars feeding on plant leaves as their main activity and food source.",
     "member_ids": [
-      "En_a458e346",
-      "En_7ecdae42"
+      "En_edbab226",
+      "Can_f8ebbd2b"
     ],
     "members": [
       {
-        "id": "En_a458e346",
-        "entity_name": "quenched and tempered 2-1/4Cr-1Mo steel",
-        "entity_description": "A type of steel used for thick wall reactor vessels in petroleum refinery processes.",
-        "entity_type_hint": "Material"
+        "id": "En_edbab226",
+        "entity_name": "feeding on leaves",
+        "entity_description": "Primary caterpillar activity of consuming plant leaves for nutrition.",
+        "entity_type_hint": "Behavior"
       },
       {
-        "id": "En_7ecdae42",
-        "entity_name": "low alloy steel",
-        "entity_description": "Steels with up to 9% chromium and other alloys for high temperature strength and creep resistance.",
-        "entity_type_hint": "Material"
-      }
-    ],
-    "remarks": []
-  },
-  {
-    "candidate_id": "ClsC_c5aee02f",
-    "class_label": "General Corrosion",
-    "class_description": "Broad corrosion processes that stainless steels resist, including oxidation and sulfidation.",
-    "class_type_hint": "Damage Mechanism",
-    "class_group": "TBD",
-    "confidence": 0.88,
-    "evidence_excerpt": "Stainless steels resist various forms of corrosion.",
-    "member_ids": [
-      "En_2b400819",
-      "En_56c0bd49",
-      "En_fefc46ef"
-    ],
-    "members": [
-      {
-        "id": "En_2b400819",
-        "entity_name": "general corrosion",
-        "entity_description": "A broad process that stainless steels resist due to their alloy content, encompassing various forms like oxidation and sulfidation.",
-        "entity_type_hint": "DamageMechanism"
-      },
-      {
-        "id": "En_56c0bd49",
-        "entity_name": "oxidation",
-        "entity_description": "A chemical reaction that stainless steels resist due to their alloy content.",
-        "entity_type_hint": "DamageMechanism"
-      },
-      {
-        "id": "En_fefc46ef",
-        "entity_name": "sulfidation",
-        "entity_description": "A chemical reaction that stainless steels resist due to their alloy content.",
-        "entity_type_hint": "DamageMechanism"
+        "id": "Can_f8ebbd2b",
+        "entity_name": "plant leaves",
+        "entity_description": "Plant leaves that serve as sites for egg-laying, feeding by caterpillars, and attachment for chrysalis formation.",
+        "entity_type_hint": "Location"
       }
     ],
     "remarks": []
@@ -380,5 +347,5 @@ Return ONLY the JSON array of ordered function calls.
 Return [] only if you are highly confident (> very strong evidence) that no change is needed.
 If any ambiguous or conflicting evidence exists, return a concrete ordered action list
 (with justifications and, optionally, confidence scores).
-You are a very proactive class-resolution assistant. (You are not called very proactive only by using modify_class for new_class_group. You must use other functions as well to be called a proactive class-resolution assistant.
+You are a very proactive class-resolution assistant. You are not called very proactive only by using modify_class for new_class_group. You must use other functions as well to be called a proactive class-resolution assistant.
 

@@ -1,0 +1,209 @@
+{
+  "cluster_label": "7_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_7dbeb3c42b67",
+      "relation_name": "facilitates",
+      "rel_desc": "Oral storytelling facilitates the intergenerational transmission of tales.",
+      "rel_hint_type": "enabling",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "oral storytelling",
+      "object_entity_name": "intergenerational transmission of tales",
+      "subject_class_label": "Story Transmission & Evolution Processes",
+      "subject_class_group": "Story & Information Dissemination Mechanisms",
+      "object_class_label": "Story Transmission & Evolution Processes",
+      "object_class_group": "Story & Information Dissemination Mechanisms",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "were shared / passed down",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.96,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_fb030b107649",
+      "relation_name": "facilitates",
+      "rel_desc": "Interconnected societies facilitate the spread of urban legends.",
+      "rel_hint_type": "enabling",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "interconnected societies",
+      "object_entity_name": "spread of urban legends",
+      "subject_class_label": "Cross-Cultural Connectivity Mechanisms",
+      "subject_class_group": "Story & Information Dissemination Mechanisms",
+      "object_class_label": "Urban Legends",
+      "object_class_group": "Urban Legends and Modern Folklore",
+      "qualifiers": {
+        "TemporalQualifier": "as societies became more interconnected",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": "became more interconnected through trade and travel",
+        "UncertaintyQualifier": "began to",
+        "CausalHint": "as",
+        "LogicalMarker": "as",
+        "OtherQualifier": null
+      },
+      "confidence": 0.93,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_fada4de96048",
+      "relation_name": "enables_sharing_of",
+      "rel_desc": "The internet enables rapid sharing and dissemination of stories.",
+      "rel_hint_type": "enabling",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "internet",
+      "object_entity_name": "stories",
+      "subject_class_label": "Digital & Networked Communication Media",
+      "subject_class_group": "Story & Information Dissemination Mechanisms",
+      "object_class_label": "Stories and Urban Legends",
+      "object_class_group": "Storytelling & Narrative Dissemination",
+      "qualifiers": {
+        "TemporalQualifier": "In the age of the internet",
+        "SpatialQualifier": "online / digital space (implied)",
+        "OperationalConstraint": "digital connectivity",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "can (potential capability)",
+        "CausalHint": "In the age of",
+        "LogicalMarker": null,
+        "OtherQualifier": "Speed: at lightning speed"
+      },
+      "confidence": 0.98,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_9b6e14480eb6",
+      "relation_name": "enables_sharing_of",
+      "rel_desc": "Social media platforms enable rapid sharing of stories.",
+      "rel_hint_type": "enabling",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "social media",
+      "object_entity_name": "stories",
+      "subject_class_label": "Digital & Networked Communication Media",
+      "subject_class_group": "Story & Information Dissemination Mechanisms",
+      "object_class_label": "Stories and Urban Legends",
+      "object_class_group": "Storytelling & Narrative Dissemination",
+      "qualifiers": {
+        "TemporalQualifier": "In the age of … social media",
+        "SpatialQualifier": "online / social platforms (implied)",
+        "OperationalConstraint": "presence on social media",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "can (potential capability)",
+        "CausalHint": null,
+        "LogicalMarker": "and",
+        "OtherQualifier": "Speed: at lightning speed"
+      },
+      "confidence": 0.98,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_7dbeb3c42b67\",\n        \"RelR_fb030b107649\",\n        \"RelR_fada4de96048\",\n        \"RelR_9b6e14480eb6\"\n      ],\n      \"canonical_rel_name\": \"facilitates_spread_of\",\n      \"canonical_rel_desc\": \"Indicates that the subject enables or makes easier the spread, transmission, or dissemination of the object (stories, tales, legends, or similar informational content).\",\n      \"justification\": \"All four relations describe an enabling/causal role where the subject (oral storytelling, interconnected societies, internet, social media) makes it easier for stories, tales, or legends to be transmitted or spread. A single predicate 'facilitates_spread_of' captures this causal-enabling semantics consistently across instances without overfitting to a specific medium or speed.\",\n      \"remark\": null,\n      \"confidence\": 0.95\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_7dbeb3c42b67\",\n        \"RelR_fb030b107649\",\n        \"RelR_fada4de96048\",\n        \"RelR_9b6e14480eb6\"\n      ],\n      \"rel_cls\": \"information_dissemination_enabler_relation\",\n      \"justification\": \"Each subject entity functions as a mechanism or context that enables the dissemination of narrative or informational content. Grouping them under 'information_dissemination_enabler_relation' captures the shared conceptual family of relations where something acts as an enabler of information spread.\",\n      \"remark\": null,\n      \"confidence\": 0.93\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_7dbeb3c42b67\",\n        \"RelR_fb030b107649\",\n        \"RelR_fada4de96048\",\n        \"RelR_9b6e14480eb6\"\n      ],\n      \"rel_cls_group\": \"CAUSALITY\",\n      \"justification\": \"The relations all encode that the presence or operation of the subject causally contributes to or enables the spread/transmission of the object; this is best modeled as a causal/enabling dimension rather than mere association.\",\n      \"remark\": null,\n      \"confidence\": 0.94\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_7dbeb3c42b67",
+          "RelR_fb030b107649",
+          "RelR_fada4de96048",
+          "RelR_9b6e14480eb6"
+        ],
+        "canonical_rel_name": "facilitates_spread_of",
+        "canonical_rel_desc": "Indicates that the subject enables or makes easier the spread, transmission, or dissemination of the object (stories, tales, legends, or similar informational content).",
+        "justification": "All four relations describe an enabling/causal role where the subject (oral storytelling, interconnected societies, internet, social media) makes it easier for stories, tales, or legends to be transmitted or spread. A single predicate 'facilitates_spread_of' captures this causal-enabling semantics consistently across instances without overfitting to a specific medium or speed.",
+        "remark": null,
+        "confidence": 0.95
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_7dbeb3c42b67",
+          "RelR_fb030b107649",
+          "RelR_fada4de96048",
+          "RelR_9b6e14480eb6"
+        ],
+        "rel_cls": "information_dissemination_enabler_relation",
+        "justification": "Each subject entity functions as a mechanism or context that enables the dissemination of narrative or informational content. Grouping them under 'information_dissemination_enabler_relation' captures the shared conceptual family of relations where something acts as an enabler of information spread.",
+        "remark": null,
+        "confidence": 0.93
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_7dbeb3c42b67",
+          "RelR_fb030b107649",
+          "RelR_fada4de96048",
+          "RelR_9b6e14480eb6"
+        ],
+        "rel_cls_group": "CAUSALITY",
+        "justification": "The relations all encode that the presence or operation of the subject causally contributes to or enables the spread/transmission of the object; this is best modeled as a causal/enabling dimension rather than mere association.",
+        "remark": null,
+        "confidence": 0.94
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_7dbeb3c42b67",
+        "RelR_fb030b107649",
+        "RelR_fada4de96048",
+        "RelR_9b6e14480eb6"
+      ],
+      "canonical_rel_name": "facilitates_spread_of",
+      "canonical_rel_desc": "Indicates that the subject enables or makes easier the spread, transmission, or dissemination of the object (stories, tales, legends, or similar informational content).",
+      "justification": "All four relations describe an enabling/causal role where the subject (oral storytelling, interconnected societies, internet, social media) makes it easier for stories, tales, or legends to be transmitted or spread. A single predicate 'facilitates_spread_of' captures this causal-enabling semantics consistently across instances without overfitting to a specific medium or speed.",
+      "remark": null,
+      "confidence": 0.95
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_7dbeb3c42b67",
+        "RelR_fb030b107649",
+        "RelR_fada4de96048",
+        "RelR_9b6e14480eb6"
+      ],
+      "rel_cls": "information_dissemination_enabler_relation",
+      "justification": "Each subject entity functions as a mechanism or context that enables the dissemination of narrative or informational content. Grouping them under 'information_dissemination_enabler_relation' captures the shared conceptual family of relations where something acts as an enabler of information spread.",
+      "remark": null,
+      "confidence": 0.93
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_7dbeb3c42b67",
+        "RelR_fb030b107649",
+        "RelR_fada4de96048",
+        "RelR_9b6e14480eb6"
+      ],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "The relations all encode that the presence or operation of the subject causally contributes to or enables the spread/transmission of the object; this is best modeled as a causal/enabling dimension rather than mere association.",
+      "remark": null,
+      "confidence": 0.94
+    }
+  ],
+  "timestamp": "2026-01-02T09:11:58Z"
+}

@@ -1,0 +1,279 @@
+{
+  "cluster_label": 9,
+  "cluster_classes": [
+    {
+      "candidate_id": "ClsC_8bffd2e0",
+      "class_label": "Cautionary Urban Legends",
+      "class_description": "Narrative stories that depict threats and negative consequences to warn audiences about risks in the world, especially through urban legend motifs.",
+      "class_type_hint": "Narrative Genre",
+      "class_group": "TBD",
+      "confidence": 0.86,
+      "evidence_excerpt": "cautionary tales and dangers that lurk in the world around them",
+      "member_ids": [
+        "Can_6920b11a",
+        "En_1a731e82"
+      ],
+      "members": [
+        {
+          "id": "Can_6920b11a",
+          "entity_name": "cautionary tales",
+          "entity_description": "Stories intended to warn audiences about risks, dangers, or undesirable behaviors, often by depicting negative consequences.",
+          "entity_type_hint": "Concept"
+        },
+        {
+          "id": "En_1a731e82",
+          "entity_name": "dangers",
+          "entity_description": "Various threats, harms, or risks portrayed as lurking in the world in cautionary urban legends.",
+          "entity_type_hint": "Concept"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_1ff99f88",
+      "class_label": "Predatory Strangers and Child Victims",
+      "class_description": "Roles in cautionary urban legends where unfamiliar adults act as potential predators and children are portrayed as vulnerable targets.",
+      "class_type_hint": "Narrative Role",
+      "class_group": "TBD",
+      "confidence": 0.9,
+      "evidence_excerpt": "unfamiliar adults depicted as potential predators who attempt to lure children",
+      "member_ids": [
+        "En_ad1ae942",
+        "En_ef37b7fd"
+      ],
+      "members": [
+        {
+          "id": "En_ad1ae942",
+          "entity_name": "strangers",
+          "entity_description": "Unfamiliar adults depicted as potential predators who attempt to lure children in urban legend stories.",
+          "entity_type_hint": "Actor"
+        },
+        {
+          "id": "En_ef37b7fd",
+          "entity_name": "children",
+          "entity_description": "Young people portrayed as vulnerable targets of predatory strangers in cautionary urban legends.",
+          "entity_type_hint": "Actor"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_c0b9f443",
+      "class_label": "Urban Legend Elements",
+      "class_description": "Core elements within urban legend narratives, including the tempting object used in the story and the audience who receives the implied warning.",
+      "class_type_hint": "Narrative Element",
+      "class_group": "TBD",
+      "confidence": 0.78,
+      "evidence_excerpt": "Stories of strangers luring children with candy ... warn listeners about the dangers",
+      "member_ids": [
+        "En_95d09649",
+        "En_9dc9eb21"
+      ],
+      "members": [
+        {
+          "id": "En_95d09649",
+          "entity_name": "candy",
+          "entity_description": "Sweets used as bait by strangers in cautionary tales about child luring.",
+          "entity_type_hint": "Object"
+        },
+        {
+          "id": "En_9dc9eb21",
+          "entity_name": "listeners",
+          "entity_description": "People who hear these urban legends and receive the implied warnings about danger.",
+          "entity_type_hint": "Actor"
+        }
+      ],
+      "remarks": [
+        "This class is now empty after splitting its members into more specific classes and can be treated as deprecated or removed in a future cleanup step."
+      ]
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_8bffd2e0\",\n      \"new_name\": null,\n      \"new_description\": null,\n      \"new_class_type_hint\": null,\n      \"new_class_group\": \"Cautionary Urban Legends – Child Luring Scenarios\",\n      \"remark\": null,\n      \"justification\": \"This class defines the overall cautionary urban legend narrative about dangers in the world, specifically in the context of child-luring stories; assigning a focused Class_Group aligns it with related role/element classes.\",\n      \"confidence\": 0.93\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_1ff99f88\",\n      \"new_name\": null,\n      \"new_description\": null,\n      \"new_class_type_hint\": null,\n      \"new_class_group\": \"Cautionary Urban Legends – Child Luring Scenarios\",\n      \"remark\": null,\n      \"justification\": \"This class covers predatory strangers and child victims, which are core roles within the same child-luring cautionary urban legends, so it should share the same Class_Group as the overarching narrative class.\",\n      \"confidence\": 0.93\n    }\n  },\n  {\n    \"function\": \"split_class\",\n    \"args\": {\n      \"source_class_id\": \"ClsC_c0b9f443\",\n      \"splits\": [\n        {\n          \"name\": \"Bait Objects in Child-Luring Urban Legends\",\n          \"description\": \"Tempting objects (such as candy) used by predators as bait to lure children in cautionary urban legend narratives.\",\n          \"class_type_hint\": \"Narrative Object\",\n          \"member_ids\": [\n            \"En_95d09649\"\n          ],\n          \"provisional_id\": \"SPLIT(ClsC_c0b9f443)_bait\"\n        },\n        {\n          \"name\": \"Audience of Cautionary Urban Legends\",\n          \"description\": \"Listeners and audiences who receive the implied warnings and moral lessons from cautionary urban legend stories.\",\n          \"class_type_hint\": \"Narrative Role\",\n          \"member_ids\": [\n            \"En_9dc9eb21\"\n          ],\n          \"provisional_id\": \"SPLIT(ClsC_c0b9f443)_audience\"\n        }\n      ],\n      \"justification\": \"The original 'Urban Legend Elements' class mixes two distinct concepts—tempting bait objects (candy) and the audience/listeners—so splitting into separate object and audience role classes yields clearer, more coherent categories.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"SPLIT(ClsC_c0b9f443)_bait\",\n      \"new_name\": null,\n      \"new_description\": null,\n      \"new_class_type_hint\": null,\n      \"new_class_group\": \"Cautionary Urban Legends – Child Luring Scenarios\",\n      \"remark\": null,\n      \"justification\": \"The bait object (candy) is a core element of child-luring cautionary urban legends and should be grouped with the other classes modeling this specific scenario.\",\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"SPLIT(ClsC_c0b9f443)_audience\",\n      \"new_name\": null,\n      \"new_description\": null,\n      \"new_class_type_hint\": null,\n      \"new_class_group\": \"Cautionary Urban Legends – Child Luring Scenarios\",\n      \"remark\": null,\n      \"justification\": \"Listeners are the audience for the same cautionary urban legends about child-luring, so aligning this audience-role class under the shared Class_Group keeps all narrative participants and elements connected.\",\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_c0b9f443\",\n      \"new_name\": \"Deprecated: Urban Legend Elements (superseded by split classes)\",\n      \"new_description\": \"Legacy container class that previously mixed bait objects and audience roles for cautionary urban legends; its members have been moved into more specific split classes.\",\n      \"new_class_type_hint\": \"Deprecated\",\n      \"new_class_group\": \"Cautionary Urban Legends – Child Luring Scenarios\",\n      \"remark\": \"This class is now empty after splitting its members into more specific classes and can be treated as deprecated or removed in a future cleanup step.\",\n      \"justification\": \"After splitting all members into more precise object and audience classes, the original mixed class should be clearly marked as deprecated and aligned to the same Class_Group to avoid future use.\",\n      \"confidence\": 0.88\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_8bffd2e0",
+        "new_name": null,
+        "new_description": null,
+        "new_class_type_hint": null,
+        "new_class_group": "Cautionary Urban Legends – Child Luring Scenarios",
+        "remark": null,
+        "justification": "This class defines the overall cautionary urban legend narrative about dangers in the world, specifically in the context of child-luring stories; assigning a focused Class_Group aligns it with related role/element classes.",
+        "confidence": 0.93
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_1ff99f88",
+        "new_name": null,
+        "new_description": null,
+        "new_class_type_hint": null,
+        "new_class_group": "Cautionary Urban Legends – Child Luring Scenarios",
+        "remark": null,
+        "justification": "This class covers predatory strangers and child victims, which are core roles within the same child-luring cautionary urban legends, so it should share the same Class_Group as the overarching narrative class.",
+        "confidence": 0.93
+      }
+    },
+    {
+      "function": "split_class",
+      "args": {
+        "source_class_id": "ClsC_c0b9f443",
+        "splits": [
+          {
+            "name": "Bait Objects in Child-Luring Urban Legends",
+            "description": "Tempting objects (such as candy) used by predators as bait to lure children in cautionary urban legend narratives.",
+            "class_type_hint": "Narrative Object",
+            "member_ids": [
+              "En_95d09649"
+            ],
+            "provisional_id": "SPLIT(ClsC_c0b9f443)_bait"
+          },
+          {
+            "name": "Audience of Cautionary Urban Legends",
+            "description": "Listeners and audiences who receive the implied warnings and moral lessons from cautionary urban legend stories.",
+            "class_type_hint": "Narrative Role",
+            "member_ids": [
+              "En_9dc9eb21"
+            ],
+            "provisional_id": "SPLIT(ClsC_c0b9f443)_audience"
+          }
+        ],
+        "justification": "The original 'Urban Legend Elements' class mixes two distinct concepts—tempting bait objects (candy) and the audience/listeners—so splitting into separate object and audience role classes yields clearer, more coherent categories.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "SPLIT(ClsC_c0b9f443)_bait",
+        "new_name": null,
+        "new_description": null,
+        "new_class_type_hint": null,
+        "new_class_group": "Cautionary Urban Legends – Child Luring Scenarios",
+        "remark": null,
+        "justification": "The bait object (candy) is a core element of child-luring cautionary urban legends and should be grouped with the other classes modeling this specific scenario.",
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "SPLIT(ClsC_c0b9f443)_audience",
+        "new_name": null,
+        "new_description": null,
+        "new_class_type_hint": null,
+        "new_class_group": "Cautionary Urban Legends – Child Luring Scenarios",
+        "remark": null,
+        "justification": "Listeners are the audience for the same cautionary urban legends about child-luring, so aligning this audience-role class under the shared Class_Group keeps all narrative participants and elements connected.",
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_c0b9f443",
+        "new_name": "Deprecated: Urban Legend Elements (superseded by split classes)",
+        "new_description": "Legacy container class that previously mixed bait objects and audience roles for cautionary urban legends; its members have been moved into more specific split classes.",
+        "new_class_type_hint": "Deprecated",
+        "new_class_group": "Cautionary Urban Legends – Child Luring Scenarios",
+        "remark": "This class is now empty after splitting its members into more specific classes and can be treated as deprecated or removed in a future cleanup step.",
+        "justification": "After splitting all members into more precise object and audience classes, the original mixed class should be clearly marked as deprecated and aligned to the same Class_Group to avoid future use.",
+        "confidence": 0.88
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_8bffd2e0",
+      "class_id_resolved": "ClsC_8bffd2e0",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Cautionary Urban Legends – Child Luring Scenarios",
+      "remark": null,
+      "justification": "This class defines the overall cautionary urban legend narrative about dangers in the world, specifically in the context of child-luring stories; assigning a focused Class_Group aligns it with related role/element classes.",
+      "confidence": 0.93
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_1ff99f88",
+      "class_id_resolved": "ClsC_1ff99f88",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Cautionary Urban Legends – Child Luring Scenarios",
+      "remark": null,
+      "justification": "This class covers predatory strangers and child victims, which are core roles within the same child-luring cautionary urban legends, so it should share the same Class_Group as the overarching narrative class.",
+      "confidence": 0.93
+    },
+    {
+      "action": "split_class",
+      "source_class_id": "ClsC_c0b9f443",
+      "source_class_id_resolved": "ClsC_c0b9f443",
+      "created_classes": [
+        {
+          "new_class_id": "ClsR_e3962c89",
+          "provisional_id": "SPLIT(ClsC_c0b9f443)_bait",
+          "member_ids": [
+            "En_95d09649"
+          ]
+        },
+        {
+          "new_class_id": "ClsR_19f6228d",
+          "provisional_id": "SPLIT(ClsC_c0b9f443)_audience",
+          "member_ids": [
+            "En_9dc9eb21"
+          ]
+        }
+      ],
+      "justification": "The original 'Urban Legend Elements' class mixes two distinct concepts—tempting bait objects (candy) and the audience/listeners—so splitting into separate object and audience role classes yields clearer, more coherent categories.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "modify_class",
+      "class_id": "SPLIT(ClsC_c0b9f443)_bait",
+      "class_id_resolved": "ClsR_e3962c89",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Cautionary Urban Legends – Child Luring Scenarios",
+      "remark": null,
+      "justification": "The bait object (candy) is a core element of child-luring cautionary urban legends and should be grouped with the other classes modeling this specific scenario.",
+      "confidence": 0.9
+    },
+    {
+      "action": "modify_class",
+      "class_id": "SPLIT(ClsC_c0b9f443)_audience",
+      "class_id_resolved": "ClsR_19f6228d",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Cautionary Urban Legends – Child Luring Scenarios",
+      "remark": null,
+      "justification": "Listeners are the audience for the same cautionary urban legends about child-luring, so aligning this audience-role class under the shared Class_Group keeps all narrative participants and elements connected.",
+      "confidence": 0.9
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_c0b9f443",
+      "class_id_resolved": "ClsC_c0b9f443",
+      "new_name": "Deprecated: Urban Legend Elements (superseded by split classes)",
+      "new_description": "Legacy container class that previously mixed bait objects and audience roles for cautionary urban legends; its members have been moved into more specific split classes.",
+      "new_class_type_hint": "Deprecated",
+      "new_class_group": "Cautionary Urban Legends – Child Luring Scenarios",
+      "remark": "This class is now empty after splitting its members into more specific classes and can be treated as deprecated or removed in a future cleanup step.",
+      "justification": "After splitting all members into more precise object and audience classes, the original mixed class should be clearly marked as deprecated and aligned to the same Class_Group to avoid future use.",
+      "confidence": 0.88
+    }
+  ],
+  "provisional_to_real": {
+    "SPLIT(ClsC_c0b9f443)_bait": "ClsR_e3962c89",
+    "SPLIT(ClsC_c0b9f443)_audience": "ClsR_19f6228d"
+  },
+  "timestamp": "2026-01-02T08:33:29Z"
+}

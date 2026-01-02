@@ -2,184 +2,114 @@
   "cluster_label": 7,
   "cluster_classes": [
     {
-      "candidate_id": "ClsC_c57a96c1",
-      "class_label": "External Corrosion Mechanisms",
-      "class_description": "Corrosion mechanisms affecting external surfaces, including corrosion under insulation and on underground or submerged systems.",
-      "class_type_hint": "Damage Mechanism",
-      "class_group": "Corrosion Mechanisms",
-      "confidence": 0.85,
-      "evidence_excerpt": "Corrosion on external surfaces and beneath insulation.",
-      "member_ids": [
-        "En_9574d8b7",
-        "En_d504ed6b"
-      ],
-      "members": [
-        {
-          "id": "En_9574d8b7",
-          "entity_name": "external corrosion",
-          "entity_description": "Corrosion occurring on the outer surfaces of underground or submerged metallic piping systems.",
-          "entity_type_hint": "DamageMechanism"
-        },
-        {
-          "id": "En_d504ed6b",
-          "entity_name": "corrosion under thermal insulation",
-          "entity_description": "Corrosion that occurs beneath insulation materials, often exacerbated by trapped moisture.",
-          "entity_type_hint": "DamageMechanism"
-        }
-      ],
-      "remarks": []
-    },
-    {
-      "candidate_id": "ClsC_c5aee02f",
-      "class_label": "General Corrosion Mechanisms",
-      "class_description": "Corrosion mechanisms such as oxidation and sulfidation that stainless steels resist.",
-      "class_type_hint": "Damage Mechanism",
-      "class_group": "Corrosion Mechanisms",
-      "confidence": 0.88,
-      "evidence_excerpt": "Stainless steels resist various forms of corrosion.",
-      "member_ids": [
-        "En_2b400819",
-        "En_56c0bd49",
-        "En_fefc46ef"
-      ],
-      "members": [
-        {
-          "id": "En_2b400819",
-          "entity_name": "general corrosion",
-          "entity_description": "A broad process that stainless steels resist due to their alloy content, encompassing various forms like oxidation and sulfidation.",
-          "entity_type_hint": "DamageMechanism"
-        },
-        {
-          "id": "En_56c0bd49",
-          "entity_name": "oxidation",
-          "entity_description": "A chemical reaction that stainless steels resist due to their alloy content.",
-          "entity_type_hint": "DamageMechanism"
-        },
-        {
-          "id": "En_fefc46ef",
-          "entity_name": "sulfidation",
-          "entity_description": "A chemical reaction that stainless steels resist due to their alloy content.",
-          "entity_type_hint": "DamageMechanism"
-        }
-      ],
-      "remarks": []
-    },
-    {
-      "candidate_id": "ClsR_f183943d",
-      "class_label": "Oxidation and Sulfidation Mechanisms",
-      "class_description": "Corrosion mechanisms at high temperature specifically involving oxidation and sulfidation reactions.",
-      "class_type_hint": "Damage Mechanism",
-      "class_group": "Corrosion Mechanisms",
+      "candidate_id": "ClsC_b049d5f9",
+      "class_label": "Caterpillar Growth and Molting (legacy container)",
+      "class_description": "Former umbrella class for caterpillar growth and molting processes; entities have been moved into more specific subclasses.",
+      "class_type_hint": "Biological Process",
+      "class_group": "Caterpillar Anatomy and Physiology",
       "confidence": 0.9,
-      "evidence_excerpt": "Corrosion at high temperatures, affecting material integrity.",
+      "evidence_excerpt": "Caterpillars grow rapidly and shed their skin several times as they grow.",
+      "member_ids": [],
+      "members": [],
+      "remarks": [
+        "This class is now effectively empty after splitting; consider deprecating or hiding it from primary use.",
+        "This class is now empty after its contents were split into more specific process classes. Marked as deprecated to prevent future use while preserving backward compatibility."
+      ]
+    },
+    {
+      "candidate_id": "ClsC_13dfd95d",
+      "class_label": "Caterpillar Integument (Skin)",
+      "class_description": "The external anatomical covering of caterpillars, including the skin and associated surface structures that are shed and replaced during growth and molting.",
+      "class_type_hint": "Anatomical Structure",
+      "class_group": "Caterpillar Anatomy and Physiology",
+      "confidence": 0.86,
+      "evidence_excerpt": "The external anatomical covering of caterpillars that is repeatedly shed and replaced during growth.",
       "member_ids": [
-        "En_56c0bd49",
-        "En_fefc46ef"
+        "En_82d1c7f9"
       ],
       "members": [
         {
-          "id": "En_56c0bd49",
-          "entity_name": "oxidation",
-          "entity_description": "A chemical reaction that stainless steels resist due to their alloy content.",
-          "entity_type_hint": "DamageMechanism"
-        },
+          "id": "En_82d1c7f9",
+          "entity_name": "caterpillar skin",
+          "entity_description": "The external anatomical covering of caterpillars that is repeatedly shed and replaced during growth.",
+          "entity_type_hint": "AnatomicalStructure"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsR_291f11bf",
+      "class_label": "Caterpillar Rapid Growth",
+      "class_description": "The rapid increase in size and mass experienced by caterpillars during the larval stage.",
+      "class_type_hint": "Biological Process",
+      "class_group": "Caterpillar Anatomy and Physiology",
+      "confidence": 0.9,
+      "evidence_excerpt": "Caterpillars grow rapidly and shed their skin several times as they grow.",
+      "member_ids": [
+        "En_7f07fa15"
+      ],
+      "members": [
         {
-          "id": "En_fefc46ef",
-          "entity_name": "sulfidation",
-          "entity_description": "A chemical reaction that stainless steels resist due to their alloy content.",
-          "entity_type_hint": "DamageMechanism"
+          "id": "En_7f07fa15",
+          "entity_name": "rapid growth of caterpillars",
+          "entity_description": "The fast increase in size experienced by caterpillars during the larval stage.",
+          "entity_type_hint": "BiologicalProcess"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsR_d4b35bea",
+      "class_label": "Caterpillar Molting Process",
+      "class_description": "The periodic shedding and replacement of a caterpillar's external skin (integument) during growth.",
+      "class_type_hint": "Biological Process",
+      "class_group": "Caterpillar Anatomy and Physiology",
+      "confidence": 0.9,
+      "evidence_excerpt": "Caterpillars grow rapidly and shed their skin several times as they grow.",
+      "member_ids": [
+        "En_0d334a9d"
+      ],
+      "members": [
+        {
+          "id": "En_0d334a9d",
+          "entity_name": "molting",
+          "entity_description": "Biological process in which caterpillars shed and replace their external skin multiple times as they grow.",
+          "entity_type_hint": "BiologicalProcess"
         }
       ],
       "remarks": []
     }
   ],
-  "llm_raw": "[\n  {\n    \"function\": \"merge_classes\",\n    \"args\": {\n      \"class_ids\": [\"ClsC_c5aee02f\", \"ClsR_f183943d\"],\n      \"provisional_id\": \"MERGE(ClsC_c5aee02f|ClsR_f183943d)\",\n      \"new_name\": \"Oxidation and Sulfidation Corrosion Mechanisms\",\n      \"new_description\": \"Corrosion mechanisms involving oxidation and sulfidation, including high-temperature reactions and general resistance in stainless steels.\",\n      \"new_class_type_hint\": \"Damage Mechanism\",\n      \"justification\": \"Both classes cover oxidation and sulfidation as corrosion mechanisms, with identical entities (En_56c0bd49, En_fefc46ef) and overlapping descriptions; merging eliminates redundancy and clarifies schema.\",\n      \"remark\": null,\n      \"confidence\": 0.98\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"MERGE(ClsC_c5aee02f|ClsR_f183943d)\",\n      \"new_name\": null,\n      \"new_description\": null,\n      \"new_class_type_hint\": null,\n      \"new_class_group\": \"Corrosion Mechanisms\",\n      \"remark\": null,\n      \"justification\": \"Assigning the correct Class_Group to the merged class for schema consistency.\",\n      \"confidence\": 1.0\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_c57a96c1\",\n      \"new_name\": null,\n      \"new_description\": null,\n      \"new_class_type_hint\": null,\n      \"new_class_group\": \"Corrosion Mechanisms\",\n      \"remark\": null,\n      \"justification\": \"Confirming and standardizing Class_Group for the external corrosion mechanisms class to ensure schema connectivity.\",\n      \"confidence\": 1.0\n    }\n  }\n]",
+  "llm_raw": "[\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_b049d5f9\",\n      \"new_name\": \"DEPRECATED – Caterpillar Growth and Molting (legacy container)\",\n      \"new_description\": \"Deprecated umbrella class that formerly grouped caterpillar growth and molting processes. All known entities have been moved into more specific subclasses (e.g., Caterpillar Rapid Growth, Caterpillar Molting Process). This class is retained only for backward compatibility and should not be used for new annotations.\",\n      \"new_class_type_hint\": \"DeprecatedContainer\",\n      \"new_class_group\": \"Caterpillar Anatomy and Physiology\",\n      \"remark\": \"This class is now empty after its contents were split into more specific process classes. Marked as deprecated to prevent future use while preserving backward compatibility.\",\n      \"justification\": \"The class is effectively empty and explicitly described as a former umbrella; retagging and renaming it as deprecated clarifies its status and prevents misuse while keeping the existing, coherent anatomy and process subclasses intact.\",\n      \"confidence\": 0.96\n    }\n  }\n]",
   "parsed_steps": [
     {
-      "function": "merge_classes",
-      "args": {
-        "class_ids": [
-          "ClsC_c5aee02f",
-          "ClsR_f183943d"
-        ],
-        "provisional_id": "MERGE(ClsC_c5aee02f|ClsR_f183943d)",
-        "new_name": "Oxidation and Sulfidation Corrosion Mechanisms",
-        "new_description": "Corrosion mechanisms involving oxidation and sulfidation, including high-temperature reactions and general resistance in stainless steels.",
-        "new_class_type_hint": "Damage Mechanism",
-        "justification": "Both classes cover oxidation and sulfidation as corrosion mechanisms, with identical entities (En_56c0bd49, En_fefc46ef) and overlapping descriptions; merging eliminates redundancy and clarifies schema.",
-        "remark": null,
-        "confidence": 0.98
-      }
-    },
-    {
       "function": "modify_class",
       "args": {
-        "class_id": "MERGE(ClsC_c5aee02f|ClsR_f183943d)",
-        "new_name": null,
-        "new_description": null,
-        "new_class_type_hint": null,
-        "new_class_group": "Corrosion Mechanisms",
-        "remark": null,
-        "justification": "Assigning the correct Class_Group to the merged class for schema consistency.",
-        "confidence": 1.0
-      }
-    },
-    {
-      "function": "modify_class",
-      "args": {
-        "class_id": "ClsC_c57a96c1",
-        "new_name": null,
-        "new_description": null,
-        "new_class_type_hint": null,
-        "new_class_group": "Corrosion Mechanisms",
-        "remark": null,
-        "justification": "Confirming and standardizing Class_Group for the external corrosion mechanisms class to ensure schema connectivity.",
-        "confidence": 1.0
+        "class_id": "ClsC_b049d5f9",
+        "new_name": "DEPRECATED – Caterpillar Growth and Molting (legacy container)",
+        "new_description": "Deprecated umbrella class that formerly grouped caterpillar growth and molting processes. All known entities have been moved into more specific subclasses (e.g., Caterpillar Rapid Growth, Caterpillar Molting Process). This class is retained only for backward compatibility and should not be used for new annotations.",
+        "new_class_type_hint": "DeprecatedContainer",
+        "new_class_group": "Caterpillar Anatomy and Physiology",
+        "remark": "This class is now empty after its contents were split into more specific process classes. Marked as deprecated to prevent future use while preserving backward compatibility.",
+        "justification": "The class is effectively empty and explicitly described as a former umbrella; retagging and renaming it as deprecated clarifies its status and prevents misuse while keeping the existing, coherent anatomy and process subclasses intact.",
+        "confidence": 0.96
       }
     }
   ],
   "executed_decisions": [
     {
-      "action": "merge_classes",
-      "input_class_ids": [
-        "ClsC_c5aee02f",
-        "ClsR_f183943d"
-      ],
-      "result_class_id": "ClsR_b15e595e",
-      "provisional_id": "MERGE(ClsC_c5aee02f|ClsR_f183943d)",
-      "justification": "Both classes cover oxidation and sulfidation as corrosion mechanisms, with identical entities (En_56c0bd49, En_fefc46ef) and overlapping descriptions; merging eliminates redundancy and clarifies schema.",
-      "remark": null,
-      "confidence": 0.98
-    },
-    {
       "action": "modify_class",
-      "class_id": "MERGE(ClsC_c5aee02f|ClsR_f183943d)",
-      "class_id_resolved": "ClsR_b15e595e",
-      "new_name": null,
-      "new_description": null,
-      "new_class_type_hint": null,
-      "new_class_group": "Corrosion Mechanisms",
-      "remark": null,
-      "justification": "Assigning the correct Class_Group to the merged class for schema consistency.",
-      "confidence": 1.0
-    },
-    {
-      "action": "modify_class",
-      "class_id": "ClsC_c57a96c1",
-      "class_id_resolved": "ClsC_c57a96c1",
-      "new_name": null,
-      "new_description": null,
-      "new_class_type_hint": null,
-      "new_class_group": "Corrosion Mechanisms",
-      "remark": null,
-      "justification": "Confirming and standardizing Class_Group for the external corrosion mechanisms class to ensure schema connectivity.",
-      "confidence": 1.0
+      "class_id": "ClsC_b049d5f9",
+      "class_id_resolved": "ClsC_b049d5f9",
+      "new_name": "DEPRECATED – Caterpillar Growth and Molting (legacy container)",
+      "new_description": "Deprecated umbrella class that formerly grouped caterpillar growth and molting processes. All known entities have been moved into more specific subclasses (e.g., Caterpillar Rapid Growth, Caterpillar Molting Process). This class is retained only for backward compatibility and should not be used for new annotations.",
+      "new_class_type_hint": "DeprecatedContainer",
+      "new_class_group": "Caterpillar Anatomy and Physiology",
+      "remark": "This class is now empty after its contents were split into more specific process classes. Marked as deprecated to prevent future use while preserving backward compatibility.",
+      "justification": "The class is effectively empty and explicitly described as a former umbrella; retagging and renaming it as deprecated clarifies its status and prevents misuse while keeping the existing, coherent anatomy and process subclasses intact.",
+      "confidence": 0.96
     }
   ],
-  "provisional_to_real": {
-    "MERGE(ClsC_c5aee02f|ClsR_f183943d)": "ClsR_b15e595e",
-    "ClsC_c5aee02f": "ClsR_b15e595e",
-    "ClsR_f183943d": "ClsR_b15e595e"
-  },
-  "timestamp": "2025-12-28T00:23:58Z"
+  "provisional_to_real": {},
+  "timestamp": "2026-01-02T08:41:06Z"
 }

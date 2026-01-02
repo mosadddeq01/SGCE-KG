@@ -1,0 +1,279 @@
+{
+  "cluster_label": 8,
+  "cluster_classes": [
+    {
+      "candidate_id": "ClsC_819ac234",
+      "class_label": "Information Dissemination Mechanisms",
+      "class_description": "Processes and channels that enable the spread and rapid transmission of information, particularly in the context of how stories or legends propagate through society.",
+      "class_type_hint": "Socio-Technical Process",
+      "class_group": "Story Dissemination, Media & Reach",
+      "confidence": 0.86,
+      "evidence_excerpt": "Advancements in technology and communication platforms enable rapid transmission of information and proliferation of urban legends.",
+      "member_ids": [
+        "En_8c9e41c7",
+        "En_58983a7b",
+        "En_68993b38",
+        "En_1255f05d"
+      ],
+      "members": [
+        {
+          "id": "En_8c9e41c7",
+          "entity_name": "advancements in technology",
+          "entity_description": "Improvements in technological capabilities and tools that enable faster and broader dissemination of information, including urban legends.",
+          "entity_type_hint": "Process"
+        },
+        {
+          "id": "En_58983a7b",
+          "entity_name": "communication",
+          "entity_description": "Means of transmitting information, identified as enabling faster spread of urban legends.",
+          "entity_type_hint": "Process"
+        },
+        {
+          "id": "En_68993b38",
+          "entity_name": "rapid transmission of information",
+          "entity_description": "The fast spread and sharing of information enabled by modern communication channels.",
+          "entity_type_hint": "Process"
+        },
+        {
+          "id": "En_1255f05d",
+          "entity_name": "communication platforms and media",
+          "entity_description": "Various online and offline communication channels and media used to share stories and information, such as websites, apps, and broadcast media.",
+          "entity_type_hint": "Component"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_4cf0bc03",
+      "class_label": "Digital Communication Media",
+      "class_description": "Networked digital channels that enable rapid, wide dissemination of content to large audiences, such as the internet and social media platforms.",
+      "class_type_hint": "Communication Medium",
+      "class_group": "Story Dissemination, Media & Reach",
+      "confidence": 0.93,
+      "evidence_excerpt": "In the age of the internet and social media, stories can be shared and disseminated at lightning speed.",
+      "member_ids": [
+        "En_2947a53c",
+        "En_81fef881",
+        "En_1255f05d"
+      ],
+      "members": [
+        {
+          "id": "En_2947a53c",
+          "entity_name": "internet",
+          "entity_description": "Global digital network described as a medium that accelerates sharing of stories and legends.",
+          "entity_type_hint": "Environment"
+        },
+        {
+          "id": "En_81fef881",
+          "entity_name": "social media",
+          "entity_description": "Online platforms that allow rapid, wide dissemination of urban legend stories.",
+          "entity_type_hint": "Environment"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_87a787d2",
+      "class_label": "Story Transmission Processes",
+      "class_description": "Processes involved in how stories are communicated and change over time, including oral sharing, passing between generations, and gradual adaptation.",
+      "class_type_hint": "Cultural Process",
+      "class_group": "Story Dissemination, Media & Reach",
+      "confidence": 0.9,
+      "evidence_excerpt": "shared orally, passed down from one generation to the next, and evolved over time",
+      "member_ids": [
+        "En_e91614e9",
+        "En_1444e894",
+        "En_bd8000e3"
+      ],
+      "members": [
+        {
+          "id": "En_e91614e9",
+          "entity_name": "oral storytelling",
+          "entity_description": "The practice of sharing tales verbally and passing them between generations.",
+          "entity_type_hint": "Process"
+        },
+        {
+          "id": "En_1444e894",
+          "entity_name": "intergenerational transmission of tales",
+          "entity_description": "Passing stories from one generation to the next within a culture.",
+          "entity_type_hint": "Process"
+        },
+        {
+          "id": "En_bd8000e3",
+          "entity_name": "evolution of tales",
+          "entity_description": "The gradual change and adaptation of stories over time.",
+          "entity_type_hint": "Process"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_52c9e43a",
+      "class_label": "Cross-Cultural Connectivity",
+      "class_description": "Social and economic mechanisms that link societies and enable the spread of stories, ideas, and legends across regions.",
+      "class_type_hint": "Social Phenomenon",
+      "class_group": "Story Dissemination, Media & Reach",
+      "confidence": 0.86,
+      "evidence_excerpt": "As societies became more interconnected through trade and travel, urban legends began to spread across regions and continents.",
+      "member_ids": [
+        "En_5f18ecaa",
+        "En_a7ed01c0",
+        "En_6731b153"
+      ],
+      "members": [
+        {
+          "id": "En_5f18ecaa",
+          "entity_name": "interconnected societies",
+          "entity_description": "Societies linked through trade and travel, facilitating the spread of legends.",
+          "entity_type_hint": "Environment"
+        },
+        {
+          "id": "En_a7ed01c0",
+          "entity_name": "trade",
+          "entity_description": "Exchange of goods and services that contributes to cross-cultural contact.",
+          "entity_type_hint": "Process"
+        },
+        {
+          "id": "En_6731b153",
+          "entity_name": "travel",
+          "entity_description": "Movement of people between places that helps spread stories and legends.",
+          "entity_type_hint": "Process"
+        }
+      ],
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"reassign_entities\",\n    \"args\": {\n      \"entity_ids\": [\"En_1255f05d\"],\n      \"from_class_id\": \"ClsC_819ac234\",\n      \"to_class_id\": \"ClsC_4cf0bc03\",\n      \"justification\": \"The entity 'communication platforms and media' is a concrete digital/mediated channel (websites, apps, broadcast media) and aligns more closely with 'Digital Communication Media' than with the more abstract, process-focused 'Information Dissemination Mechanisms' class.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_819ac234\",\n      \"new_name\": \"Information Dissemination Processes\",\n      \"new_description\": \"Abstract socio-technical processes that enable the spread and rapid transmission of information, including improvements in technology and communication methods.\",\n      \"new_class_type_hint\": \"Socio-Technical Process\",\n      \"new_class_group\": \"Story & Information Dissemination Mechanisms\",\n      \"remark\": null,\n      \"justification\": \"Renaming clarifies that this class covers abstract processes (e.g., advancements in technology, communication, rapid transmission) rather than specific media channels, and the new Class_Group standardizes the shared domain across related classes.\",\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_4cf0bc03\",\n      \"new_name\": \"Digital & Networked Communication Media\",\n      \"new_description\": \"Digital and networked channels such as the internet and social media platforms that enable rapid, wide dissemination of stories and other content to large audiences.\",\n      \"new_class_type_hint\": \"Communication Medium\",\n      \"new_class_group\": \"Story & Information Dissemination Mechanisms\",\n      \"remark\": null,\n      \"justification\": \"Updating the name and description emphasizes the focus on concrete media channels (internet, social media, apps, broadcast media) and aligns its Class_Group with other dissemination-related classes for a coherent upper-level schema.\",\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_87a787d2\",\n      \"new_name\": \"Story Transmission & Evolution Processes\",\n      \"new_description\": \"Cultural processes by which stories are communicated, passed between generations, and gradually adapted over time, including oral storytelling and intergenerational transmission.\",\n      \"new_class_type_hint\": \"Cultural Process\",\n      \"new_class_group\": \"Story & Information Dissemination Mechanisms\",\n      \"remark\": null,\n      \"justification\": \"Refining the name and description clarifies that this class covers cultural processes of story transmission and evolution, and assigning the shared Class_Group connects it to other dissemination mechanisms without merging distinct concepts.\",\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_52c9e43a\",\n      \"new_name\": \"Cross-Cultural Connectivity Mechanisms\",\n      \"new_description\": \"Social and economic mechanisms—such as trade, travel, and interconnected societies—that link regions and enable the cross-cultural spread of stories, ideas, and legends.\",\n      \"new_class_type_hint\": \"Social Phenomenon\",\n      \"new_class_group\": \"Story & Information Dissemination Mechanisms\",\n      \"remark\": null,\n      \"justification\": \"Updating the name and description makes the mechanism focus explicit and assigning the same Class_Group unifies this with other classes that describe how stories and information spread across people, media, and cultures.\",\n      \"confidence\": 0.9\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "reassign_entities",
+      "args": {
+        "entity_ids": [
+          "En_1255f05d"
+        ],
+        "from_class_id": "ClsC_819ac234",
+        "to_class_id": "ClsC_4cf0bc03",
+        "justification": "The entity 'communication platforms and media' is a concrete digital/mediated channel (websites, apps, broadcast media) and aligns more closely with 'Digital Communication Media' than with the more abstract, process-focused 'Information Dissemination Mechanisms' class.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_819ac234",
+        "new_name": "Information Dissemination Processes",
+        "new_description": "Abstract socio-technical processes that enable the spread and rapid transmission of information, including improvements in technology and communication methods.",
+        "new_class_type_hint": "Socio-Technical Process",
+        "new_class_group": "Story & Information Dissemination Mechanisms",
+        "remark": null,
+        "justification": "Renaming clarifies that this class covers abstract processes (e.g., advancements in technology, communication, rapid transmission) rather than specific media channels, and the new Class_Group standardizes the shared domain across related classes.",
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_4cf0bc03",
+        "new_name": "Digital & Networked Communication Media",
+        "new_description": "Digital and networked channels such as the internet and social media platforms that enable rapid, wide dissemination of stories and other content to large audiences.",
+        "new_class_type_hint": "Communication Medium",
+        "new_class_group": "Story & Information Dissemination Mechanisms",
+        "remark": null,
+        "justification": "Updating the name and description emphasizes the focus on concrete media channels (internet, social media, apps, broadcast media) and aligns its Class_Group with other dissemination-related classes for a coherent upper-level schema.",
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_87a787d2",
+        "new_name": "Story Transmission & Evolution Processes",
+        "new_description": "Cultural processes by which stories are communicated, passed between generations, and gradually adapted over time, including oral storytelling and intergenerational transmission.",
+        "new_class_type_hint": "Cultural Process",
+        "new_class_group": "Story & Information Dissemination Mechanisms",
+        "remark": null,
+        "justification": "Refining the name and description clarifies that this class covers cultural processes of story transmission and evolution, and assigning the shared Class_Group connects it to other dissemination mechanisms without merging distinct concepts.",
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_52c9e43a",
+        "new_name": "Cross-Cultural Connectivity Mechanisms",
+        "new_description": "Social and economic mechanisms—such as trade, travel, and interconnected societies—that link regions and enable the cross-cultural spread of stories, ideas, and legends.",
+        "new_class_type_hint": "Social Phenomenon",
+        "new_class_group": "Story & Information Dissemination Mechanisms",
+        "remark": null,
+        "justification": "Updating the name and description makes the mechanism focus explicit and assigning the same Class_Group unifies this with other classes that describe how stories and information spread across people, media, and cultures.",
+        "confidence": 0.9
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "reassign_entities",
+      "entity_ids": [
+        "En_1255f05d"
+      ],
+      "from": "ClsC_819ac234",
+      "from_resolved": "ClsC_819ac234",
+      "to": "ClsC_4cf0bc03",
+      "to_resolved": "ClsC_4cf0bc03",
+      "justification": "The entity 'communication platforms and media' is a concrete digital/mediated channel (websites, apps, broadcast media) and aligns more closely with 'Digital Communication Media' than with the more abstract, process-focused 'Information Dissemination Mechanisms' class.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_819ac234",
+      "class_id_resolved": "ClsC_819ac234",
+      "new_name": "Information Dissemination Processes",
+      "new_description": "Abstract socio-technical processes that enable the spread and rapid transmission of information, including improvements in technology and communication methods.",
+      "new_class_type_hint": "Socio-Technical Process",
+      "new_class_group": "Story & Information Dissemination Mechanisms",
+      "remark": null,
+      "justification": "Renaming clarifies that this class covers abstract processes (e.g., advancements in technology, communication, rapid transmission) rather than specific media channels, and the new Class_Group standardizes the shared domain across related classes.",
+      "confidence": 0.9
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_4cf0bc03",
+      "class_id_resolved": "ClsC_4cf0bc03",
+      "new_name": "Digital & Networked Communication Media",
+      "new_description": "Digital and networked channels such as the internet and social media platforms that enable rapid, wide dissemination of stories and other content to large audiences.",
+      "new_class_type_hint": "Communication Medium",
+      "new_class_group": "Story & Information Dissemination Mechanisms",
+      "remark": null,
+      "justification": "Updating the name and description emphasizes the focus on concrete media channels (internet, social media, apps, broadcast media) and aligns its Class_Group with other dissemination-related classes for a coherent upper-level schema.",
+      "confidence": 0.9
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_87a787d2",
+      "class_id_resolved": "ClsC_87a787d2",
+      "new_name": "Story Transmission & Evolution Processes",
+      "new_description": "Cultural processes by which stories are communicated, passed between generations, and gradually adapted over time, including oral storytelling and intergenerational transmission.",
+      "new_class_type_hint": "Cultural Process",
+      "new_class_group": "Story & Information Dissemination Mechanisms",
+      "remark": null,
+      "justification": "Refining the name and description clarifies that this class covers cultural processes of story transmission and evolution, and assigning the shared Class_Group connects it to other dissemination mechanisms without merging distinct concepts.",
+      "confidence": 0.9
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_52c9e43a",
+      "class_id_resolved": "ClsC_52c9e43a",
+      "new_name": "Cross-Cultural Connectivity Mechanisms",
+      "new_description": "Social and economic mechanisms—such as trade, travel, and interconnected societies—that link regions and enable the cross-cultural spread of stories, ideas, and legends.",
+      "new_class_type_hint": "Social Phenomenon",
+      "new_class_group": "Story & Information Dissemination Mechanisms",
+      "remark": null,
+      "justification": "Updating the name and description makes the mechanism focus explicit and assigning the same Class_Group unifies this with other classes that describe how stories and information spread across people, media, and cultures.",
+      "confidence": 0.9
+    }
+  ],
+  "provisional_to_real": {},
+  "timestamp": "2026-01-02T08:37:21Z"
+}

@@ -54,8 +54,10 @@ IMPORTANT FIELD DISTINCTIONS
 
 - remarks (optional, internal):
   Free-text notes attached to a class, used to flag important issues that are
-  outside the scope of structural changes (e.g., suspected entity-level duplicates
-  that should be checked elsewhere).
+  outside the scope of structural changes (e.g., upstream entity resolution that you suspect is wrong, or entities that
+  look identical but should not be changed here), DO NOT try to fix them via merge or reassign.
+   Instead, attach a human-facing remark via modify_class (using the 'remark' field)
+   so that a human can review it later.
 
 Class_Group is NOT a synonym of class_type_hint.
 
@@ -308,113 +310,57 @@ Each class includes:
 
 [
   {
-    "candidate_id": "ClsC_1ecda745",
-    "class_label": "Corrosive Acids",
-    "class_description": "Highly corrosive acids requiring specific materials for safe handling and storage.",
-    "class_type_hint": "Material",
+    "candidate_id": "ClsC_fb0a1cd7",
+    "class_label": "Plant Reproductive Structures",
+    "class_description": "Components of flowering plants directly involved in sexual reproduction and pollination, including whole flowers and the pollen grains they produce and exchange.",
+    "class_type_hint": "Biological Structure",
     "class_group": "TBD",
-    "confidence": 0.9,
-    "evidence_excerpt": "require specific materials to safely manage these corrosive substances.",
+    "confidence": 0.86,
+    "evidence_excerpt": "Reproductive structures of plants that provide nectar and pollen… specific reproductive material moved by butterflies among flowers.",
     "member_ids": [
-      "En_cad09535",
-      "En_99c85915"
+      "En_48e92359",
+      "En_c728532d"
     ],
     "members": [
       {
-        "id": "En_cad09535",
-        "entity_name": "sulfuric acid",
-        "entity_description": "A strong acid used in various industrial processes, requiring specific materials for safe handling.",
-        "entity_type_hint": "Material"
+        "id": "En_48e92359",
+        "entity_name": "flowers",
+        "entity_description": "Reproductive structures of plants that provide nectar and pollen and are visited by butterflies.",
+        "entity_type_hint": "Structure"
       },
       {
-        "id": "En_99c85915",
-        "entity_name": "hydrofluoric acid",
-        "entity_description": "A highly corrosive acid used in industrial applications, requiring special materials for safe handling and storage.",
-        "entity_type_hint": "Material"
-      }
-    ],
-    "remarks": []
-  },
-  {
-    "candidate_id": "ClsC_16b29b0b",
-    "class_label": "Amine Treating Chemicals",
-    "class_description": "Chemicals used in amine treating processes to remove H2S and CO2 from hydrocarbon streams.",
-    "class_type_hint": "Chemical",
-    "class_group": "TBD",
-    "confidence": 0.95,
-    "evidence_excerpt": "used in amine treating to remove H2S and CO2.",
-    "member_ids": [
-      "En_b6489a63",
-      "En_a38530be",
-      "En_24fd3367"
-    ],
-    "members": [
-      {
-        "id": "En_b6489a63",
-        "entity_name": "diethanolamine (DEA)",
-        "entity_description": "A chemical used in amine treating to remove H2S and CO2 from hydrocarbon streams.",
-        "entity_type_hint": "Chemical"
-      },
-      {
-        "id": "En_a38530be",
-        "entity_name": "methyldiethanolamine",
-        "entity_description": "A chemical used in amine treating to remove H2S and CO2 from hydrocarbon streams.",
-        "entity_type_hint": "Material"
-      },
-      {
-        "id": "En_24fd3367",
-        "entity_name": "monoethanolamine",
-        "entity_description": "A chemical used in amine treating to remove H2S and CO2 from hydrocarbon streams.",
+        "id": "En_c728532d",
+        "entity_name": "pollen",
+        "entity_description": "Reproductive plant grains that butterflies transfer between flowers during pollination.",
         "entity_type_hint": "Material"
       }
     ],
     "remarks": []
   },
   {
-    "candidate_id": "ClsC_4035c3e0",
-    "class_label": "Sour Water Treatment",
-    "class_description": "Processes and substances involved in the treatment of sour water containing hydrogen sulfide.",
-    "class_type_hint": "Process",
+    "candidate_id": "ClsC_e2aa4b5b",
+    "class_label": "Flowering Plant Reproduction",
+    "class_description": "Biological processes and organisms involved in sexual reproduction of flowering plants, including the transfer of pollen and the plants whose reproduction is enabled.",
+    "class_type_hint": "Biological System",
     "class_group": "TBD",
-    "confidence": 0.88,
-    "evidence_excerpt": "treating sour water by removing contaminants.",
+    "confidence": 0.86,
+    "evidence_excerpt": "Pollination transfers pollen between flowers, enabling plant reproduction; plants are the organisms whose reproduction is assisted.",
     "member_ids": [
-      "En_da73a6e7",
-      "En_3b78069f"
+      "Can_0a5c9807",
+      "En_d40fcccb"
     ],
     "members": [
       {
-        "id": "En_da73a6e7",
-        "entity_name": "sour water",
-        "entity_description": "Water containing hydrogen sulfide and other sulfur compounds, often requiring treatment.",
-        "entity_type_hint": "Environment"
+        "id": "Can_0a5c9807",
+        "entity_name": "pollination",
+        "entity_description": "Biological process in which pollen is transferred between flowers, enabling plant reproduction, often facilitated by animals such as butterflies.",
+        "entity_type_hint": "Process"
       },
       {
-        "id": "En_3b78069f",
-        "entity_name": "sour water stripper",
-        "entity_description": "A process unit used to remove hydrogen sulfide and ammonia from sour water.",
-        "entity_type_hint": "ProcessUnit"
-      }
-    ],
-    "remarks": []
-  },
-  {
-    "candidate_id": "ClsC_bd232016",
-    "class_label": "Vacuum Distillation Unit",
-    "class_description": "A process unit designed to separate components at reduced pressure to lower their boiling points.",
-    "class_type_hint": "Process Unit",
-    "class_group": "TBD",
-    "confidence": 0.95,
-    "evidence_excerpt": "",
-    "member_ids": [
-      "En_c71fc6d7"
-    ],
-    "members": [
-      {
-        "id": "En_c71fc6d7",
-        "entity_name": "vacuum distillation unit",
-        "entity_description": "A process unit that separates components at reduced pressure to lower boiling points.",
-        "entity_type_hint": "ProcessUnit"
+        "id": "En_d40fcccb",
+        "entity_name": "plants",
+        "entity_description": "Organisms that reproduce via flowers and benefit from pollination by butterflies.",
+        "entity_type_hint": "Organism"
       }
     ],
     "remarks": []
@@ -429,5 +375,5 @@ Return ONLY the JSON array of ordered function calls.
 Return [] only if you are highly confident (> very strong evidence) that no change is needed.
 If any ambiguous or conflicting evidence exists, return a concrete ordered action list
 (with justifications and, optionally, confidence scores).
-You are a very proactive class-resolution assistant. (You are not called very proactive only by using modify_class for new_class_group. You must use other functions as well to be called a proactive class-resolution assistant.
+You are a very proactive class-resolution assistant. You are not called very proactive only by using modify_class for new_class_group. You must use other functions as well to be called a proactive class-resolution assistant.
 

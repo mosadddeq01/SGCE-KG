@@ -1,0 +1,106 @@
+[
+  {
+    "function": "merge_classes",
+    "args": {
+      "class_ids": ["ClsC_4b31704b", "ClsC_a1e9aca5", "ClsC_67645c71"],
+      "provisional_id": "MERGE(ClsC_4b31704b|ClsC_a1e9aca5|ClsC_67645c71)",
+      "new_name": "Industrial Equipment Standards",
+      "new_description": "Standards and codes for construction, inspection, assessment, and safe operation of industrial equipment, including pressure vessels, heat exchangers, and welded structures.",
+      "new_class_type_hint": "Standard",
+      "justification": "All three classes group standards for construction, inspection, and assessment of industrial equipment, with overlapping focus on pressure vessels and related components; merging removes artificial separation and clarifies schema.",
+      "remark": null,
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "MERGE(ClsC_4b31704b|ClsC_a1e9aca5|ClsC_67645c71)",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Industrial Standards & References",
+      "remark": null,
+      "justification": "Assigning a coherent Class_Group to the merged standards class, connecting it to related reference and inspection method classes.",
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_45b546e0",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Industrial Standards & References",
+      "remark": null,
+      "justification": "ASM Metals Handbooks are reference materials directly supporting industrial standards and practices; grouping with standards and related references.",
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "merge_classes",
+    "args": {
+      "class_ids": ["ClsC_8ca8cebe", "ClsC_454b398d"],
+      "provisional_id": "MERGE(ClsC_8ca8cebe|ClsC_454b398d)",
+      "new_name": "Corrosion and Materials References",
+      "new_description": "Reference materials and manuals focused on corrosion, material behavior, and industry practices in petrochemical and industrial contexts.",
+      "new_class_type_hint": "Reference Material",
+      "justification": "Both classes contain overlapping entities (e.g., ASTM MNL41) and focus on corrosion and material behavior references; merging eliminates redundancy and clarifies schema.",
+      "remark": null,
+      "confidence": 0.92
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "MERGE(ClsC_8ca8cebe|ClsC_454b398d)",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Industrial Standards & References",
+      "remark": null,
+      "justification": "Assigning merged corrosion/materials references to the same Class_Group as other industrial standards and references for schema coherence.",
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_45b546e0",
+      "new_name": "ASM Metals Handbooks",
+      "new_description": "Comprehensive reference volumes on metals, including properties, corrosion, and failure analysis, supporting industrial standards.",
+      "new_class_type_hint": "Reference Material",
+      "new_class_group": null,
+      "remark": null,
+      "justification": "Clarifying class label and description to emphasize the reference/supporting role for industrial standards.",
+      "confidence": 0.85
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_e266c5eb",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Industrial Standards & References",
+      "remark": null,
+      "justification": "Non-Destructive Testing Methods are essential inspection methods referenced by industrial standards; grouping for schema connectivity.",
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_ed0048e2",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Industrial Standards & References",
+      "remark": "This class contains a single report that is highly specific; consider merging or reassigning in future iterations if more similar reports are found.",
+      "justification": "Assigning to the same Class_Group for now due to its direct relevance to industrial standards; flagging for future review due to singleton status.",
+      "confidence": 0.7
+    }
+  }
+]

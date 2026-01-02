@@ -1,0 +1,97 @@
+{
+  "cluster_label": "52_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_c73faab887e3",
+      "relation_name": "warns",
+      "rel_desc": "Stories function as warnings directed at listeners.",
+      "rel_hint_type": "communicative",
+      "canonical_rel_name": "warns",
+      "canonical_rel_desc": "Indicates that the subject issues a warning or cautionary message directed toward the object.",
+      "rel_cls": "warning_communication_relation",
+      "rel_cls_group": "COMMUNICATION",
+      "subject_entity_name": "stories",
+      "object_entity_name": "listeners",
+      "subject_class_label": "Stories and Urban Legends",
+      "subject_class_group": "Storytelling & Narrative Dissemination",
+      "object_class_label": "Story and Legend Audiences (including Cautionary Narratives)",
+      "object_class_group": "Storytelling & Narrative Dissemination",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "in the world around them",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "warn",
+        "LogicalMarker": null,
+        "OtherQualifier": "Function: cautionary/educational"
+      },
+      "confidence": 0.98,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_bd10a931517c",
+      "relation_name": "alerts_to",
+      "rel_desc": "Stories alert their audience to various dangers.",
+      "rel_hint_type": "warning",
+      "canonical_rel_name": "warns_about",
+      "canonical_rel_desc": "Indicates that a narrative or communicative artifact serves to alert an audience to specific risks, harms, or dangers.",
+      "rel_cls": "warning_communication_relation",
+      "rel_cls_group": "COMMUNICATION",
+      "subject_entity_name": "stories",
+      "object_entity_name": "dangers",
+      "subject_class_label": "Stories and Urban Legends",
+      "subject_class_group": "Storytelling & Narrative Dissemination",
+      "object_class_label": "Cautionary Urban Legends",
+      "object_class_group": "Cautionary Urban Legends",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "in the world around them",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "warn about",
+        "LogicalMarker": null,
+        "OtherQualifier": "Scope: various threats, harms, or risks"
+      },
+      "confidence": 0.96,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_rel_schema\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_c73faab887e3\"\n      ],\n      \"canonical_rel_name\": \"warns_audience\",\n      \"canonical_rel_desc\": \"Indicates that the subject issues a warning or cautionary message directed toward an audience represented by the object.\",\n      \"rel_cls\": null,\n      \"rel_cls_group\": null,\n      \"justification\": \"Refines the canonical predicate to explicitly capture that the object is an audience, aligning with narrative-communication semantics and distinguishing it from warnings about external dangers (as in 'warns_about'). Keeps the existing relation class and group, which are already appropriate.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_rel_schema",
+      "args": {
+        "relation_ids": [
+          "RelR_c73faab887e3"
+        ],
+        "canonical_rel_name": "warns_audience",
+        "canonical_rel_desc": "Indicates that the subject issues a warning or cautionary message directed toward an audience represented by the object.",
+        "rel_cls": null,
+        "rel_cls_group": null,
+        "justification": "Refines the canonical predicate to explicitly capture that the object is an audience, aligning with narrative-communication semantics and distinguishing it from warnings about external dangers (as in 'warns_about'). Keeps the existing relation class and group, which are already appropriate.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_rel_schema",
+      "relation_ids": [
+        "RelR_c73faab887e3"
+      ],
+      "canonical_rel_name": "warns_audience",
+      "canonical_rel_desc": "Indicates that the subject issues a warning or cautionary message directed toward an audience represented by the object.",
+      "rel_cls": null,
+      "rel_cls_group": null,
+      "new_relation_name": null,
+      "original_relation_name": null,
+      "justification": "Refines the canonical predicate to explicitly capture that the object is an audience, aligning with narrative-communication semantics and distinguishing it from warnings about external dangers (as in 'warns_about'). Keeps the existing relation class and group, which are already appropriate.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  ],
+  "timestamp": "2026-01-02T09:28:55Z"
+}

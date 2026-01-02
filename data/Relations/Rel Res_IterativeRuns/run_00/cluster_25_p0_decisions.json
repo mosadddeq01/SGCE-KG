@@ -1,0 +1,237 @@
+{
+  "cluster_label": "25_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_80f0137783d6",
+      "relation_name": "reflects",
+      "rel_desc": "Cautionary tales embodied by urban legends mirror or reflect the fears and anxieties present in society.",
+      "rel_hint_type": "representation",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "cautionary tales",
+      "object_entity_name": "fears and anxieties of society",
+      "subject_class_label": "Cautionary Urban Legends",
+      "subject_class_group": "Cautionary Urban Legends",
+      "object_class_label": "Societal Fears and Anxieties in Legends",
+      "object_class_group": "Urban Legends Sociocultural Context",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "Function: moral or warning function linked to social concerns"
+      },
+      "confidence": 0.96,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_b46320c9a221",
+      "relation_name": "reflects_on",
+      "rel_desc": "Listeners reflect on or ponder the truth underlying the stories they hear.",
+      "rel_hint_type": "cognitive",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "listeners",
+      "object_entity_name": "truth behind the stories",
+      "subject_class_label": "Story and Legend Audiences (including Cautionary Narratives)",
+      "subject_class_group": "Storytelling & Narrative Dissemination",
+      "object_class_label": "Fact and Fiction in Narratives",
+      "object_class_group": "Narrative Truth, Fiction, and History",
+      "qualifiers": {
+        "TemporalQualifier": "when hearing these tales",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": "the stories they hear",
+        "UncertaintyQualifier": "ponder (open question)",
+        "CausalHint": "leaving",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.99,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_db7229766640",
+      "relation_name": "reflects",
+      "rel_desc": "Cautionary tales mirror or express the fears and anxieties present in society.",
+      "rel_hint_type": "representation",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "cautionary tales",
+      "object_entity_name": "fears and anxieties of society",
+      "subject_class_label": "Cautionary Urban Legends",
+      "subject_class_group": "Cautionary Urban Legends",
+      "object_class_label": "Societal Fears and Anxieties in Legends",
+      "object_class_group": "Urban Legends Sociocultural Context",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "in communities around the world",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": "that",
+        "OtherQualifier": "Function: serve as cautionary tales"
+      },
+      "confidence": 0.96,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_80f0137783d6\",\n        \"RelR_db7229766640\"\n      ],\n      \"canonical_rel_name\": \"represents\",\n      \"canonical_rel_desc\": \"The subject narrative or tale symbolically represents or mirrors the fears, anxieties, or concerns present in a society.\",\n      \"justification\": \"Both relations describe cautionary tales mirroring or expressing the fears and anxieties of society; this is a stable representation predicate where the narrative stands for underlying societal concerns.\",\n      \"remark\": null,\n      \"confidence\": 0.93\n    }\n  },\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_b46320c9a221\"\n      ],\n      \"canonical_rel_name\": \"reflects_on\",\n      \"canonical_rel_desc\": \"The subject (e.g., listeners) cognitively contemplates or ponders the truth or implications of the object narrative content.\",\n      \"justification\": \"This relation captures a cognitive act by listeners who think about or ponder the truth behind the stories; a distinct cognitive-process predicate from narrative representation is needed.\",\n      \"remark\": null,\n      \"confidence\": 0.94\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_80f0137783d6\",\n        \"RelR_db7229766640\"\n      ],\n      \"rel_cls\": \"sociocultural_representation_relation\",\n      \"justification\": \"In both cases, tales are linked to underlying societal fears and anxieties, which is best modeled as a sociocultural representation where narratives embody or express collective concerns.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_b46320c9a221\"\n      ],\n      \"rel_cls\": \"cognitive_engagement_relation\",\n      \"justification\": \"The relation connects audiences (listeners) with their mental engagement with story content (pondering its truth), which fits a class of cognitive or interpretive engagement with narratives.\",\n      \"remark\": null,\n      \"confidence\": 0.92\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_80f0137783d6\",\n        \"RelR_db7229766640\"\n      ],\n      \"rel_cls_group\": \"REPRESENTATION\",\n      \"justification\": \"These edges describe how narratives stand for or mirror societal fears, a clear case of representational semantics rather than causality or simple association.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_b46320c9a221\"\n      ],\n      \"rel_cls_group\": \"COGNITION\",\n      \"justification\": \"This edge models a mental act (listeners thinking about story truth), which belongs in a broad cognitive or mental-process dimension.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_80f0137783d6",
+          "RelR_db7229766640"
+        ],
+        "canonical_rel_name": "represents",
+        "canonical_rel_desc": "The subject narrative or tale symbolically represents or mirrors the fears, anxieties, or concerns present in a society.",
+        "justification": "Both relations describe cautionary tales mirroring or expressing the fears and anxieties of society; this is a stable representation predicate where the narrative stands for underlying societal concerns.",
+        "remark": null,
+        "confidence": 0.93
+      }
+    },
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_b46320c9a221"
+        ],
+        "canonical_rel_name": "reflects_on",
+        "canonical_rel_desc": "The subject (e.g., listeners) cognitively contemplates or ponders the truth or implications of the object narrative content.",
+        "justification": "This relation captures a cognitive act by listeners who think about or ponder the truth behind the stories; a distinct cognitive-process predicate from narrative representation is needed.",
+        "remark": null,
+        "confidence": 0.94
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_80f0137783d6",
+          "RelR_db7229766640"
+        ],
+        "rel_cls": "sociocultural_representation_relation",
+        "justification": "In both cases, tales are linked to underlying societal fears and anxieties, which is best modeled as a sociocultural representation where narratives embody or express collective concerns.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_b46320c9a221"
+        ],
+        "rel_cls": "cognitive_engagement_relation",
+        "justification": "The relation connects audiences (listeners) with their mental engagement with story content (pondering its truth), which fits a class of cognitive or interpretive engagement with narratives.",
+        "remark": null,
+        "confidence": 0.92
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_80f0137783d6",
+          "RelR_db7229766640"
+        ],
+        "rel_cls_group": "REPRESENTATION",
+        "justification": "These edges describe how narratives stand for or mirror societal fears, a clear case of representational semantics rather than causality or simple association.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_b46320c9a221"
+        ],
+        "rel_cls_group": "COGNITION",
+        "justification": "This edge models a mental act (listeners thinking about story truth), which belongs in a broad cognitive or mental-process dimension.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_80f0137783d6",
+        "RelR_db7229766640"
+      ],
+      "canonical_rel_name": "represents",
+      "canonical_rel_desc": "The subject narrative or tale symbolically represents or mirrors the fears, anxieties, or concerns present in a society.",
+      "justification": "Both relations describe cautionary tales mirroring or expressing the fears and anxieties of society; this is a stable representation predicate where the narrative stands for underlying societal concerns.",
+      "remark": null,
+      "confidence": 0.93
+    },
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_b46320c9a221"
+      ],
+      "canonical_rel_name": "reflects_on",
+      "canonical_rel_desc": "The subject (e.g., listeners) cognitively contemplates or ponders the truth or implications of the object narrative content.",
+      "justification": "This relation captures a cognitive act by listeners who think about or ponder the truth behind the stories; a distinct cognitive-process predicate from narrative representation is needed.",
+      "remark": null,
+      "confidence": 0.94
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_80f0137783d6",
+        "RelR_db7229766640"
+      ],
+      "rel_cls": "sociocultural_representation_relation",
+      "justification": "In both cases, tales are linked to underlying societal fears and anxieties, which is best modeled as a sociocultural representation where narratives embody or express collective concerns.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_b46320c9a221"
+      ],
+      "rel_cls": "cognitive_engagement_relation",
+      "justification": "The relation connects audiences (listeners) with their mental engagement with story content (pondering its truth), which fits a class of cognitive or interpretive engagement with narratives.",
+      "remark": null,
+      "confidence": 0.92
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_80f0137783d6",
+        "RelR_db7229766640"
+      ],
+      "rel_cls_group": "REPRESENTATION",
+      "justification": "These edges describe how narratives stand for or mirror societal fears, a clear case of representational semantics rather than causality or simple association.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_b46320c9a221"
+      ],
+      "rel_cls_group": "COGNITION",
+      "justification": "This edge models a mental act (listeners thinking about story truth), which belongs in a broad cognitive or mental-process dimension.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  ],
+  "timestamp": "2026-01-02T09:14:19Z"
+}

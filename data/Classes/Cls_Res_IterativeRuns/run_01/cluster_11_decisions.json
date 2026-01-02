@@ -1,0 +1,311 @@
+{
+  "cluster_label": 11,
+  "cluster_classes": [
+    {
+      "candidate_id": "ClsC_84499569",
+      "class_label": "Caterpillar Camouflage Strategies",
+      "class_description": "Defensive behavioral adaptations in which caterpillars visually blend into their environment, including general background matching and specific mimicry of plant parts such as twigs and leaves.",
+      "class_type_hint": "Behavioral Adaptation",
+      "class_group": "Caterpillar Camouflage and Environmental Context",
+      "confidence": 0.95,
+      "evidence_excerpt": "Some caterpillars ... mimic the appearance of twigs or leaves to camouflage themselves from predators.",
+      "member_ids": [
+        "En_f481f6b5",
+        "En_8baeb2a2",
+        "En_cbc8017d"
+      ],
+      "members": [
+        {
+          "id": "En_f481f6b5",
+          "entity_name": "camouflage",
+          "entity_description": "Defensive strategy where caterpillars visually blend into surroundings to avoid predators.",
+          "entity_type_hint": "Behavior"
+        },
+        {
+          "id": "En_8baeb2a2",
+          "entity_name": "twig mimicry",
+          "entity_description": "Caterpillar camouflage strategy where individuals resemble twigs.",
+          "entity_type_hint": "Behavior"
+        },
+        {
+          "id": "En_cbc8017d",
+          "entity_name": "leaf mimicry",
+          "entity_description": "Caterpillar camouflage strategy in which individuals resemble leaves.",
+          "entity_type_hint": "Behavior"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_74c6ff79",
+      "class_label": "Caterpillar Defensive Structures",
+      "class_description": "Anatomical defensive structures on caterpillars, such as spines and hairs, that provide physical protection against predators and other threats.",
+      "class_type_hint": "Anatomical Structure",
+      "class_group": "Caterpillar Anatomy and Physiology",
+      "confidence": 0.93,
+      "evidence_excerpt": "Some caterpillars have spines or hairs for protection... protective adaptations.",
+      "member_ids": [
+        "En_6bd20b29",
+        "En_332efc1c",
+        "En_2af98f3b"
+      ],
+      "members": [
+        {
+          "id": "En_6bd20b29",
+          "entity_name": "spines",
+          "entity_description": "Defensive protrusions on some caterpillars used as protection against threats.",
+          "entity_type_hint": "Component"
+        },
+        {
+          "id": "En_332efc1c",
+          "entity_name": "hairs",
+          "entity_description": "Hair-like structures on some caterpillars providing physical protection.",
+          "entity_type_hint": "Component"
+        },
+        {
+          "id": "En_2af98f3b",
+          "entity_name": "caterpillar protective spines and hairs",
+          "entity_description": "Combined defensive structures on caterpillars used to protect them from threats.",
+          "entity_type_hint": "DamagePreventionFeature"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_92e225e0",
+      "class_label": "Caterpillar Leaf-Feeding Behavior",
+      "class_description": "Behaviors of caterpillars specifically related to consuming plant leaves as a primary food source.",
+      "class_type_hint": "Behavior",
+      "class_group": "Caterpillar–Plant Interactions",
+      "confidence": 0.63,
+      "evidence_excerpt": "Caterpillars feeding on plant leaves as their main activity and food source.",
+      "member_ids": [
+        "En_edbab226"
+      ],
+      "members": [
+        {
+          "id": "En_edbab226",
+          "entity_name": "feeding on leaves",
+          "entity_description": "Primary caterpillar activity of consuming plant leaves for nutrition.",
+          "entity_type_hint": "Behavior"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_46b27c3f",
+      "class_label": "Plant Structures Used for Camouflage",
+      "class_description": "Physical plant parts (e.g., leaves, stems, twigs) that serve as environmental structures or visual backgrounds for caterpillar behavior and camouflage.",
+      "class_type_hint": "Environmental Feature",
+      "class_group": "Caterpillar Camouflage and Environmental Context",
+      "confidence": 0.9,
+      "evidence_excerpt": "Leaves, stems, and twigs are plant parts used as background or attachment points.",
+      "member_ids": [
+        "En_d3f23ee9",
+        "En_5ee9c9cd",
+        "En_eeb5307e"
+      ],
+      "members": [
+        {
+          "id": "En_d3f23ee9",
+          "entity_name": "leaves",
+          "entity_description": "Plant leaves that are visually imitated by certain caterpillars for concealment.",
+          "entity_type_hint": "Environment"
+        },
+        {
+          "id": "En_5ee9c9cd",
+          "entity_name": "stem",
+          "entity_description": "Plant stem that serves as an attachment point for the caterpillar before forming a chrysalis.",
+          "entity_type_hint": "Location"
+        },
+        {
+          "id": "En_eeb5307e",
+          "entity_name": "twigs",
+          "entity_description": "Small plant branches whose appearance is mimicked by some caterpillars.",
+          "entity_type_hint": "Environment"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsR_e357867f",
+      "class_label": "Plant Leaves as Caterpillar Substrate",
+      "class_description": "Plant leaves considered as physical structures used by caterpillars for egg-laying, feeding sites, and chrysalis attachment.",
+      "class_type_hint": "Habitat/Resource",
+      "class_group": "Caterpillar–Plant Interactions",
+      "confidence": 0.63,
+      "evidence_excerpt": "Caterpillars feeding on plant leaves as their main activity and food source.",
+      "member_ids": [
+        "Can_f8ebbd2b",
+        "En_5ee9c9cd"
+      ],
+      "members": [
+        {
+          "id": "Can_f8ebbd2b",
+          "entity_name": "plant leaves",
+          "entity_description": "Plant leaves that serve as sites for egg-laying, feeding by caterpillars, and attachment for chrysalis formation.",
+          "entity_type_hint": "Location"
+        }
+      ],
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_84499569\",\n      \"new_name\": null,\n      \"new_description\": null,\n      \"new_class_type_hint\": null,\n      \"new_class_group\": \"Caterpillar Defense Mechanisms\",\n      \"remark\": null,\n      \"justification\": \"Camouflage, twig mimicry, and leaf mimicry are defensive behaviors; assigning a broader class_group 'Caterpillar Defense Mechanisms' aligns this behavioral defense class with other caterpillar defense-related classes.\",\n      \"confidence\": 0.93\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_74c6ff79\",\n      \"new_name\": null,\n      \"new_description\": null,\n      \"new_class_type_hint\": null,\n      \"new_class_group\": \"Caterpillar Defense Mechanisms\",\n      \"remark\": null,\n      \"justification\": \"Spines and hairs are anatomical defenses; grouping this anatomical defense class with the camouflage behavior class under 'Caterpillar Defense Mechanisms' reflects their shared defensive function while keeping them as separate structure/behavior classes.\",\n      \"confidence\": 0.93\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_46b27c3f\",\n      \"new_name\": \"Plant Structures as Caterpillar Environmental Context\",\n      \"new_description\": \"Physical plant parts (e.g., leaves, stems, twigs) that serve as environmental structures, visual backgrounds, or attachment points in caterpillar life stages (including camouflage and chrysalis formation).\",\n      \"new_class_type_hint\": \"Environmental Feature\",\n      \"new_class_group\": \"Caterpillar Habitat and Plant Structures\",\n      \"remark\": null,\n      \"justification\": \"This class currently mixes camouflage background structures (leaves, twigs) with a chrysalis-attachment stem; broadening the name/description and moving it to a habitat-oriented class_group clarifies it as general environmental plant structures used by caterpillars.\",\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsR_e357867f\",\n      \"new_name\": \"Plant Structures as Caterpillar Substrate\",\n      \"new_description\": \"Plant structures (such as leaves and stems) used by caterpillars and butterflies as physical substrates for egg-laying, feeding, and chrysalis attachment.\",\n      \"new_class_type_hint\": \"Habitat/Resource\",\n      \"new_class_group\": \"Caterpillar Habitat and Plant Structures\",\n      \"remark\": null,\n      \"justification\": \"The existing class is conceptually about plant surfaces as substrate, and expanding from just leaves to general plant structures (leaves, stems, etc.) and aligning the class_group with other habitat-focused plant-structure classes yields a clearer, more reusable substrate class.\",\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"reassign_entities\",\n    \"args\": {\n      \"entity_ids\": [\n        \"En_5ee9c9cd\"\n      ],\n      \"from_class_id\": \"ClsC_46b27c3f\",\n      \"to_class_id\": \"ClsR_e357867f\",\n      \"justification\": \"Entity 'stem' is described as an attachment point for the chrysalis, matching the substrate/habitat role of 'Plant Structures as Caterpillar Substrate' rather than the camouflage-focused context of the original class.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_92e225e0\",\n      \"new_name\": null,\n      \"new_description\": null,\n      \"new_class_type_hint\": \"Feeding Behavior\",\n      \"new_class_group\": \"Caterpillar–Plant Interactions\",\n      \"remark\": null,\n      \"justification\": \"Refining the class_type_hint to 'Feeding Behavior' keeps this behavioral class distinct from habitat/structure and defense classes while correctly situating it within caterpillar–plant interaction behaviors.\",\n      \"confidence\": 0.82\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_84499569",
+        "new_name": null,
+        "new_description": null,
+        "new_class_type_hint": null,
+        "new_class_group": "Caterpillar Defense Mechanisms",
+        "remark": null,
+        "justification": "Camouflage, twig mimicry, and leaf mimicry are defensive behaviors; assigning a broader class_group 'Caterpillar Defense Mechanisms' aligns this behavioral defense class with other caterpillar defense-related classes.",
+        "confidence": 0.93
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_74c6ff79",
+        "new_name": null,
+        "new_description": null,
+        "new_class_type_hint": null,
+        "new_class_group": "Caterpillar Defense Mechanisms",
+        "remark": null,
+        "justification": "Spines and hairs are anatomical defenses; grouping this anatomical defense class with the camouflage behavior class under 'Caterpillar Defense Mechanisms' reflects their shared defensive function while keeping them as separate structure/behavior classes.",
+        "confidence": 0.93
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_46b27c3f",
+        "new_name": "Plant Structures as Caterpillar Environmental Context",
+        "new_description": "Physical plant parts (e.g., leaves, stems, twigs) that serve as environmental structures, visual backgrounds, or attachment points in caterpillar life stages (including camouflage and chrysalis formation).",
+        "new_class_type_hint": "Environmental Feature",
+        "new_class_group": "Caterpillar Habitat and Plant Structures",
+        "remark": null,
+        "justification": "This class currently mixes camouflage background structures (leaves, twigs) with a chrysalis-attachment stem; broadening the name/description and moving it to a habitat-oriented class_group clarifies it as general environmental plant structures used by caterpillars.",
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsR_e357867f",
+        "new_name": "Plant Structures as Caterpillar Substrate",
+        "new_description": "Plant structures (such as leaves and stems) used by caterpillars and butterflies as physical substrates for egg-laying, feeding, and chrysalis attachment.",
+        "new_class_type_hint": "Habitat/Resource",
+        "new_class_group": "Caterpillar Habitat and Plant Structures",
+        "remark": null,
+        "justification": "The existing class is conceptually about plant surfaces as substrate, and expanding from just leaves to general plant structures (leaves, stems, etc.) and aligning the class_group with other habitat-focused plant-structure classes yields a clearer, more reusable substrate class.",
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "reassign_entities",
+      "args": {
+        "entity_ids": [
+          "En_5ee9c9cd"
+        ],
+        "from_class_id": "ClsC_46b27c3f",
+        "to_class_id": "ClsR_e357867f",
+        "justification": "Entity 'stem' is described as an attachment point for the chrysalis, matching the substrate/habitat role of 'Plant Structures as Caterpillar Substrate' rather than the camouflage-focused context of the original class.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_92e225e0",
+        "new_name": null,
+        "new_description": null,
+        "new_class_type_hint": "Feeding Behavior",
+        "new_class_group": "Caterpillar–Plant Interactions",
+        "remark": null,
+        "justification": "Refining the class_type_hint to 'Feeding Behavior' keeps this behavioral class distinct from habitat/structure and defense classes while correctly situating it within caterpillar–plant interaction behaviors.",
+        "confidence": 0.82
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_84499569",
+      "class_id_resolved": "ClsC_84499569",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Caterpillar Defense Mechanisms",
+      "remark": null,
+      "justification": "Camouflage, twig mimicry, and leaf mimicry are defensive behaviors; assigning a broader class_group 'Caterpillar Defense Mechanisms' aligns this behavioral defense class with other caterpillar defense-related classes.",
+      "confidence": 0.93
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_74c6ff79",
+      "class_id_resolved": "ClsC_74c6ff79",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Caterpillar Defense Mechanisms",
+      "remark": null,
+      "justification": "Spines and hairs are anatomical defenses; grouping this anatomical defense class with the camouflage behavior class under 'Caterpillar Defense Mechanisms' reflects their shared defensive function while keeping them as separate structure/behavior classes.",
+      "confidence": 0.93
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_46b27c3f",
+      "class_id_resolved": "ClsC_46b27c3f",
+      "new_name": "Plant Structures as Caterpillar Environmental Context",
+      "new_description": "Physical plant parts (e.g., leaves, stems, twigs) that serve as environmental structures, visual backgrounds, or attachment points in caterpillar life stages (including camouflage and chrysalis formation).",
+      "new_class_type_hint": "Environmental Feature",
+      "new_class_group": "Caterpillar Habitat and Plant Structures",
+      "remark": null,
+      "justification": "This class currently mixes camouflage background structures (leaves, twigs) with a chrysalis-attachment stem; broadening the name/description and moving it to a habitat-oriented class_group clarifies it as general environmental plant structures used by caterpillars.",
+      "confidence": 0.9
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsR_e357867f",
+      "class_id_resolved": "ClsR_e357867f",
+      "new_name": "Plant Structures as Caterpillar Substrate",
+      "new_description": "Plant structures (such as leaves and stems) used by caterpillars and butterflies as physical substrates for egg-laying, feeding, and chrysalis attachment.",
+      "new_class_type_hint": "Habitat/Resource",
+      "new_class_group": "Caterpillar Habitat and Plant Structures",
+      "remark": null,
+      "justification": "The existing class is conceptually about plant surfaces as substrate, and expanding from just leaves to general plant structures (leaves, stems, etc.) and aligning the class_group with other habitat-focused plant-structure classes yields a clearer, more reusable substrate class.",
+      "confidence": 0.9
+    },
+    {
+      "action": "reassign_entities",
+      "entity_ids": [
+        "En_5ee9c9cd"
+      ],
+      "from": "ClsC_46b27c3f",
+      "from_resolved": "ClsC_46b27c3f",
+      "to": "ClsR_e357867f",
+      "to_resolved": "ClsR_e357867f",
+      "justification": "Entity 'stem' is described as an attachment point for the chrysalis, matching the substrate/habitat role of 'Plant Structures as Caterpillar Substrate' rather than the camouflage-focused context of the original class.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_92e225e0",
+      "class_id_resolved": "ClsC_92e225e0",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": "Feeding Behavior",
+      "new_class_group": "Caterpillar–Plant Interactions",
+      "remark": null,
+      "justification": "Refining the class_type_hint to 'Feeding Behavior' keeps this behavioral class distinct from habitat/structure and defense classes while correctly situating it within caterpillar–plant interaction behaviors.",
+      "confidence": 0.82
+    }
+  ],
+  "provisional_to_real": {},
+  "timestamp": "2026-01-02T08:37:56Z"
+}
