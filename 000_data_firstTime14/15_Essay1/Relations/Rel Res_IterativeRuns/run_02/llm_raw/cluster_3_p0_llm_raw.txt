@@ -1,0 +1,15 @@
+[
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": ["RelR_c1e4be4073e6"],
+      "canonical_rel_name": "has_capability",
+      "canonical_rel_desc": "Indicates that the subject entity has the capability to perform or exhibit the object function or behavior.",
+      "rel_cls": null,
+      "rel_cls_group": null,
+      "justification": "Normalize the predicate to a shorter, more standard form ('has_capability') that also aligns better with the raw relation_name and with common KG practice. The semantics remain identical (subject possesses the ability for the object function), so only the canonical_rel_name and its description need refinement; the existing rel_cls and rel_cls_group are already consistent.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  }
+]

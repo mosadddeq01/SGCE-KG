@@ -1,0 +1,18 @@
+[
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": [
+        "RelR_e17811459201",
+        "RelR_2c8b6d7987ee"
+      ],
+      "canonical_rel_name": "develops_into",
+      "canonical_rel_desc": "Indicates that an earlier biological life stage or form naturally develops or transitions into a subsequent life stage of the same organism.",
+      "rel_cls": "life_cycle_stage_transition_relation",
+      "rel_cls_group": "TEMPORALITY",
+      "justification": "All five relations encode the same semantics: one butterfly life stage naturally transitioning into the next. Three instances already use the canonical_rel_name 'develops_into' with a consistent description and class. Two instances use a slightly different canonical_rel_name 'develops_into_next_life_stage' but with the same meaning and same rel_cls/group. Normalizing these two to 'develops_into' with the shared description makes the predicate schema consistent and reusable across all life stage transitions.",
+      "remark": "Normalized predicate naming for life-stage transitions within the butterfly life cycle cluster.",
+      "confidence": 0.96
+    }
+  }
+]

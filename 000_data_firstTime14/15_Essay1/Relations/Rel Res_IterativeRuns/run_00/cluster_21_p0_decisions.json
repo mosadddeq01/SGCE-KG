@@ -1,0 +1,299 @@
+{
+  "cluster_label": "21_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_4f57ef94fbbb",
+      "relation_name": "filled_with",
+      "rel_desc": "The soft, wrinkled wings are filled with wing fluid as part of their expansion and hardening.",
+      "rel_hint_type": "usage",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "soft, wrinkled wings",
+      "object_entity_name": "wing fluid",
+      "subject_class_label": "Butterfly Wing Physical States",
+      "subject_class_group": "Biological Structures and Substances in Butterfly Metamorphosis",
+      "object_class_label": "Metamorphic Body Fluids and Liquefied Tissues",
+      "object_class_group": "Biological Structures and Substances in Butterfly Metamorphosis",
+      "qualifiers": {
+        "TemporalQualifier": "shortly after emergence",
+        "SpatialQualifier": "within the butterfly's wings",
+        "OperationalConstraint": null,
+        "ConditionExpression": "to expand and harden",
+        "UncertaintyQualifier": null,
+        "CausalHint": "to expand and harden",
+        "LogicalMarker": "must",
+        "OtherQualifier": "Requirement: pumping fluid is necessary for wings to expand and harden"
+      },
+      "confidence": 0.9,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_dcfb994bf136",
+      "relation_name": "pumped_into",
+      "rel_desc": "Wing fluid is pumped into the butterfly wings so they can expand and harden.",
+      "rel_hint_type": "usage",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "wing fluid",
+      "object_entity_name": "butterfly wings",
+      "subject_class_label": "Metamorphic Body Fluids and Liquefied Tissues",
+      "subject_class_group": "Biological Structures and Substances in Butterfly Metamorphosis",
+      "object_class_label": "Butterfly Wing Structures",
+      "object_class_group": "Biological Structures and Substances in Butterfly Metamorphosis",
+      "qualifiers": {
+        "TemporalQualifier": "immediately after emergence",
+        "SpatialQualifier": "into the butterfly's wings",
+        "OperationalConstraint": null,
+        "ConditionExpression": "in order for wings to expand and harden",
+        "UncertaintyQualifier": null,
+        "CausalHint": "to expand and harden",
+        "LogicalMarker": null,
+        "OtherQualifier": "Purpose: wing development (expansion and hardening)"
+      },
+      "confidence": 0.9,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_8eb2e286edb1",
+      "relation_name": "uses_for_oviposition",
+      "rel_desc": "Female butterflies use host plants as sites on which to lay their eggs.",
+      "rel_hint_type": "usage",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "female butterflies",
+      "object_entity_name": "host plants",
+      "subject_class_label": "Female butterflies (adult females)",
+      "subject_class_group": "Butterfly Biology and Life Cycle",
+      "object_class_label": "Butterfly Host Plants and Larval Resources",
+      "object_class_group": "Butterfly Ecology, Habitat, and Food Web",
+      "qualifiers": {
+        "TemporalQualifier": "when laying eggs",
+        "SpatialQualifier": "on host plants",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "BiologicalRole: oviposition site"
+      },
+      "confidence": 0.93,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_4f57ef94fbbb\"],\n      \"canonical_rel_name\": \"is_filled_with\",\n      \"canonical_rel_desc\": \"Indicates that a structure or region is filled internally with a particular fluid or substance as part of its physical state.\",\n      \"justification\": \"The relation describes the wings being internally filled with wing fluid as a resulting state (soft, wrinkled wings are filled with wing fluid). This is best modeled as a containment/state predicate rather than a transport action.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_4f57ef94fbbb\"],\n      \"rel_cls\": \"substance_containment_relation\",\n      \"justification\": \"The predicate expresses that a biological structure contains a fluid internally (wings contain wing fluid). This fits a class of relations about one entity being filled or occupied by a substance.\",\n      \"remark\": null,\n      \"confidence\": 0.86\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_4f57ef94fbbb\"],\n      \"rel_cls_group\": \"COMPOSITION\",\n      \"justification\": \"Being filled with a particular fluid describes the internal material composition/state of the wings rather than an action, so it belongs under a compositional group.\",\n      \"remark\": null,\n      \"confidence\": 0.86\n    }\n  },\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_dcfb994bf136\"],\n      \"canonical_rel_name\": \"is_pumped_into\",\n      \"canonical_rel_desc\": \"Indicates that a fluid or substance is actively transported or pumped into a target structure or region.\",\n      \"justification\": \"The relation explicitly states that wing fluid is pumped into the butterfly wings, emphasizing directional transport of a fluid into a structure, so a transport-oriented predicate is appropriate.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_dcfb994bf136\"],\n      \"rel_cls\": \"physiological_transport_relation\",\n      \"justification\": \"The predicate captures an active movement of biological fluid into a body structure, fitting a class of physiological transport or circulation relations rather than static composition.\",\n      \"remark\": null,\n      \"confidence\": 0.88\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_dcfb994bf136\"],\n      \"rel_cls_group\": \"INTERACTION\",\n      \"justification\": \"The relation focuses on an active process (pumping fluid into wings), a dynamic interaction between fluid and structure, rather than merely describing composition, so INTERACTION is the best broad group.\",\n      \"remark\": null,\n      \"confidence\": 0.84\n    }\n  },\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_8eb2e286edb1\"],\n      \"canonical_rel_name\": \"uses_as_oviposition_site\",\n      \"canonical_rel_desc\": \"Indicates that an organism uses another entity as a site or substrate for laying eggs (oviposition).\",\n      \"justification\": \"The description states that female butterflies use host plants as sites on which to lay eggs. A usage predicate specifying oviposition-site usage captures this meaning precisely.\",\n      \"remark\": null,\n      \"confidence\": 0.93\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_8eb2e286edb1\"],\n      \"rel_cls\": \"resource_usage_relation\",\n      \"justification\": \"The relation expresses use of host plants as a biological resource (oviposition substrate) by female butterflies, fitting a class of resource/functional usage relations between organisms and environmental resources.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_8eb2e286edb1\"],\n      \"rel_cls_group\": \"USAGE\",\n      \"justification\": \"The semantics center on butterflies using host plants for the purpose of egg laying, which is a clear usage relation rather than composition, identity, or causality.\",\n      \"remark\": null,\n      \"confidence\": 0.93\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_4f57ef94fbbb"
+        ],
+        "canonical_rel_name": "is_filled_with",
+        "canonical_rel_desc": "Indicates that a structure or region is filled internally with a particular fluid or substance as part of its physical state.",
+        "justification": "The relation describes the wings being internally filled with wing fluid as a resulting state (soft, wrinkled wings are filled with wing fluid). This is best modeled as a containment/state predicate rather than a transport action.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_4f57ef94fbbb"
+        ],
+        "rel_cls": "substance_containment_relation",
+        "justification": "The predicate expresses that a biological structure contains a fluid internally (wings contain wing fluid). This fits a class of relations about one entity being filled or occupied by a substance.",
+        "remark": null,
+        "confidence": 0.86
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_4f57ef94fbbb"
+        ],
+        "rel_cls_group": "COMPOSITION",
+        "justification": "Being filled with a particular fluid describes the internal material composition/state of the wings rather than an action, so it belongs under a compositional group.",
+        "remark": null,
+        "confidence": 0.86
+      }
+    },
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_dcfb994bf136"
+        ],
+        "canonical_rel_name": "is_pumped_into",
+        "canonical_rel_desc": "Indicates that a fluid or substance is actively transported or pumped into a target structure or region.",
+        "justification": "The relation explicitly states that wing fluid is pumped into the butterfly wings, emphasizing directional transport of a fluid into a structure, so a transport-oriented predicate is appropriate.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_dcfb994bf136"
+        ],
+        "rel_cls": "physiological_transport_relation",
+        "justification": "The predicate captures an active movement of biological fluid into a body structure, fitting a class of physiological transport or circulation relations rather than static composition.",
+        "remark": null,
+        "confidence": 0.88
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_dcfb994bf136"
+        ],
+        "rel_cls_group": "INTERACTION",
+        "justification": "The relation focuses on an active process (pumping fluid into wings), a dynamic interaction between fluid and structure, rather than merely describing composition, so INTERACTION is the best broad group.",
+        "remark": null,
+        "confidence": 0.84
+      }
+    },
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_8eb2e286edb1"
+        ],
+        "canonical_rel_name": "uses_as_oviposition_site",
+        "canonical_rel_desc": "Indicates that an organism uses another entity as a site or substrate for laying eggs (oviposition).",
+        "justification": "The description states that female butterflies use host plants as sites on which to lay eggs. A usage predicate specifying oviposition-site usage captures this meaning precisely.",
+        "remark": null,
+        "confidence": 0.93
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_8eb2e286edb1"
+        ],
+        "rel_cls": "resource_usage_relation",
+        "justification": "The relation expresses use of host plants as a biological resource (oviposition substrate) by female butterflies, fitting a class of resource/functional usage relations between organisms and environmental resources.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_8eb2e286edb1"
+        ],
+        "rel_cls_group": "USAGE",
+        "justification": "The semantics center on butterflies using host plants for the purpose of egg laying, which is a clear usage relation rather than composition, identity, or causality.",
+        "remark": null,
+        "confidence": 0.93
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_4f57ef94fbbb"
+      ],
+      "canonical_rel_name": "is_filled_with",
+      "canonical_rel_desc": "Indicates that a structure or region is filled internally with a particular fluid or substance as part of its physical state.",
+      "justification": "The relation describes the wings being internally filled with wing fluid as a resulting state (soft, wrinkled wings are filled with wing fluid). This is best modeled as a containment/state predicate rather than a transport action.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_4f57ef94fbbb"
+      ],
+      "rel_cls": "substance_containment_relation",
+      "justification": "The predicate expresses that a biological structure contains a fluid internally (wings contain wing fluid). This fits a class of relations about one entity being filled or occupied by a substance.",
+      "remark": null,
+      "confidence": 0.86
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_4f57ef94fbbb"
+      ],
+      "rel_cls_group": "COMPOSITION",
+      "justification": "Being filled with a particular fluid describes the internal material composition/state of the wings rather than an action, so it belongs under a compositional group.",
+      "remark": null,
+      "confidence": 0.86
+    },
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_dcfb994bf136"
+      ],
+      "canonical_rel_name": "is_pumped_into",
+      "canonical_rel_desc": "Indicates that a fluid or substance is actively transported or pumped into a target structure or region.",
+      "justification": "The relation explicitly states that wing fluid is pumped into the butterfly wings, emphasizing directional transport of a fluid into a structure, so a transport-oriented predicate is appropriate.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_dcfb994bf136"
+      ],
+      "rel_cls": "physiological_transport_relation",
+      "justification": "The predicate captures an active movement of biological fluid into a body structure, fitting a class of physiological transport or circulation relations rather than static composition.",
+      "remark": null,
+      "confidence": 0.88
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_dcfb994bf136"
+      ],
+      "rel_cls_group": "INTERACTION",
+      "justification": "The relation focuses on an active process (pumping fluid into wings), a dynamic interaction between fluid and structure, rather than merely describing composition, so INTERACTION is the best broad group.",
+      "remark": null,
+      "confidence": 0.84
+    },
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_8eb2e286edb1"
+      ],
+      "canonical_rel_name": "uses_as_oviposition_site",
+      "canonical_rel_desc": "Indicates that an organism uses another entity as a site or substrate for laying eggs (oviposition).",
+      "justification": "The description states that female butterflies use host plants as sites on which to lay eggs. A usage predicate specifying oviposition-site usage captures this meaning precisely.",
+      "remark": null,
+      "confidence": 0.93
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_8eb2e286edb1"
+      ],
+      "rel_cls": "resource_usage_relation",
+      "justification": "The relation expresses use of host plants as a biological resource (oviposition substrate) by female butterflies, fitting a class of resource/functional usage relations between organisms and environmental resources.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_8eb2e286edb1"
+      ],
+      "rel_cls_group": "USAGE",
+      "justification": "The semantics center on butterflies using host plants for the purpose of egg laying, which is a clear usage relation rather than composition, identity, or causality.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  ],
+  "timestamp": "2026-01-03T08:55:39Z"
+}

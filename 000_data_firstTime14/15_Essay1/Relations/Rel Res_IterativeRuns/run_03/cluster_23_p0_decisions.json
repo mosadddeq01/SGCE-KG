@@ -1,0 +1,131 @@
+{
+  "cluster_label": "23_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_c5cadccccf4b",
+      "relation_name": "is_stage_of",
+      "rel_desc": "The pupa stage is identified as the third stage in the butterfly life cycle.",
+      "rel_hint_type": "process structure",
+      "canonical_rel_name": "is_stage_of_process",
+      "canonical_rel_desc": "Indicates that the subject is a distinct temporal stage within the lifecycle or progression of the object process.",
+      "rel_cls": "process_stage_structure_relation",
+      "rel_cls_group": "TEMPORALITY",
+      "subject_entity_name": "pupa stage",
+      "object_entity_name": "butterfly life cycle",
+      "subject_class_label": "Butterfly larval and pupal stages",
+      "subject_class_group": "Butterfly Life Cycle Stages",
+      "object_class_label": "Butterfly life cycle process",
+      "object_class_group": "Butterfly Life Cycle and Development",
+      "qualifiers": {
+        "TemporalQualifier": "third stage in sequence",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "StageOrder: 3"
+      },
+      "confidence": 0.98,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_7352e4bcbf70",
+      "relation_name": "characterizes_stage",
+      "rel_desc": "Metamorphosis is the defining transformation process that occurs during the pupa stage.",
+      "rel_hint_type": "process-stage link",
+      "canonical_rel_name": "occurs_during_life_stage",
+      "canonical_rel_desc": "Indicates that the subject process takes place during the temporal extent of the specified life stage.",
+      "rel_cls": "process_occurrence_in_stage_relation",
+      "rel_cls_group": "TEMPORALITY",
+      "subject_entity_name": "metamorphosis",
+      "object_entity_name": "pupa stage",
+      "subject_class_label": "Butterfly Metamorphosis Process",
+      "subject_class_group": "Butterfly Life Cycle and Development",
+      "object_class_label": "Butterfly larval and pupal stages",
+      "object_class_group": "Butterfly Life Cycle Stages",
+      "qualifiers": {
+        "TemporalQualifier": "during the entire pupa stage",
+        "SpatialQualifier": "within the chrysalis",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "implicit association",
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.9,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_d2beb40f9077",
+      "relation_name": "is_stage_of",
+      "rel_desc": "The butterfly is the adult stage within the butterfly life cycle.",
+      "rel_hint_type": "process structure",
+      "canonical_rel_name": "is_stage_of_process",
+      "canonical_rel_desc": "Indicates that the subject is a distinct temporal stage within the lifecycle or progression of the object process.",
+      "rel_cls": "process_stage_structure_relation",
+      "rel_cls_group": "TEMPORALITY",
+      "subject_entity_name": "butterfly",
+      "object_entity_name": "butterfly life cycle",
+      "subject_class_label": "Adult butterfly life stage",
+      "subject_class_group": "Butterfly Life Cycle and Development",
+      "object_class_label": "Butterfly life cycle process",
+      "object_class_group": "Butterfly Life Cycle and Development",
+      "qualifiers": {
+        "TemporalQualifier": "final (adult) stage",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "inferred from context",
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "StageOrder: after pupa"
+      },
+      "confidence": 0.88,
+      "remarks": [
+        "Stage membership inferred from lifecycle context, not directly stated.",
+        "Stage membership inferred from lifecycle context, not directly stated.",
+        "Stage membership inferred from lifecycle context, not directly stated.",
+        "Stage membership inferred from lifecycle context, not directly stated."
+      ]
+    },
+    {
+      "relation_id": "RelR_2afc37a26583",
+      "relation_name": "instance_of_stage",
+      "rel_desc": "The newly emerged butterfly is in the adult butterfly life stage, which is the fourth and final stage.",
+      "rel_hint_type": "classification",
+      "canonical_rel_name": "is_instance_of",
+      "canonical_rel_desc": "Indicates that the subject is a concrete instance of the object class or stage type.",
+      "rel_cls": "instance_class_relation",
+      "rel_cls_group": "IDENTITY",
+      "subject_entity_name": "newly emerged butterfly",
+      "object_entity_name": "adult butterfly life stage",
+      "subject_class_label": "Adult butterfly life stage",
+      "subject_class_group": "Butterfly Life Cycle and Development",
+      "object_class_label": "Adult butterfly life stage",
+      "object_class_group": "Butterfly Life Cycle and Development",
+      "qualifiers": {
+        "TemporalQualifier": "immediately after emergence into the adult stage",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "inferred from context",
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.7,
+      "remarks": [
+        "Stage membership inferred from juxtaposition and life-cycle description, not stated in a single explicit clause.",
+        "Stage membership inferred from juxtaposition and life-cycle description, not stated in a single explicit clause.",
+        "Stage membership inferred from juxtaposition and life-cycle description, not stated in a single explicit clause.",
+        "Stage membership inferred from juxtaposition and life-cycle description, not stated in a single explicit clause."
+      ]
+    }
+  ],
+  "llm_raw": "[]",
+  "parsed_steps": [],
+  "executed_decisions": [],
+  "timestamp": "2026-01-03T09:02:21Z"
+}

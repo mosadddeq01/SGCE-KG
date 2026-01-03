@@ -1,0 +1,41 @@
+[
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_a7722b9f",
+      "new_name": "DEPRECATED – Butterfly Feeding System",
+      "new_description": "Deprecated historical container that previously mixed butterfly nectar (food source) and proboscis (mouthpart); kept only for backward compatibility and should not receive new members.",
+      "new_class_type_hint": "DeprecatedContainer",
+      "new_class_group": "Butterfly Feeding and Nutrition",
+      "remark": "This class is empty and explicitly deprecated; label and type hint tightened so it is clearly non-usable going forward while preserving it for legacy references.",
+      "justification": "The class is an empty, deprecated umbrella that should be clearly marked as non-usable and aligned with the more specific feeding-related group to avoid future misuse.",
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsR_627912b2",
+      "new_name": "Butterfly Nectar Food Source",
+      "new_description": "Nectar as the primary liquid food resource consumed by adult butterflies, typically obtained from flowers.",
+      "new_class_type_hint": "NutritionalResource",
+      "new_class_group": "Butterfly Feeding and Nutrition",
+      "remark": null,
+      "justification": "Aligning this nutritional resource class into a more precise Class_Group that specifically covers feeding and nutrition keeps it semantically connected to proboscis, while separating it from unrelated life-cycle aspects.",
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsR_fd181093",
+      "new_name": "Butterfly Proboscis (Mouthpart)",
+      "new_description": "The long, tubular proboscis mouthpart of adult butterflies used to drink nectar from flowers.",
+      "new_class_type_hint": "AnatomicalStructure",
+      "new_class_group": "Butterfly Feeding and Nutrition",
+      "remark": null,
+      "justification": "This anatomical structure is specifically involved in feeding on nectar; assigning it to the same, more focused Class_Group as the nectar resource clarifies the feeding subsystem while keeping the class itself intact.",
+      "confidence": 0.9
+    }
+  }
+]

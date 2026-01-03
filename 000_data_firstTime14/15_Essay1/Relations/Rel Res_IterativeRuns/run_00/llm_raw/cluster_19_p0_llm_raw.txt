@@ -1,0 +1,44 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_e17811459201"],
+      "canonical_rel_name": "transitions_to_next_life_stage",
+      "canonical_rel_desc": "Indicates that an organism in one life stage develops into and is replaced by the next defined life stage in its life cycle.",
+      "justification": "This relation encodes a developmental progression from the caterpillar (larval stage) to the pupa stage as the next life stage. The predicate should reflect ordered life-stage transition rather than generic temporality.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_4a1d32a5ca81", "RelR_436375c118d9"],
+      "canonical_rel_name": "emerges_from_structure",
+      "canonical_rel_desc": "Indicates that an organism or life stage physically emerges from a containing or enclosing biological structure.",
+      "justification": "Both relations describe an adult butterfly (including the newly emerged variant) physically emerging from the chrysalis. They share the same directionality and semantics: an organismal stage coming out of an enclosing structure.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": ["RelR_e17811459201", "RelR_4a1d32a5ca81", "RelR_436375c118d9"],
+      "rel_cls": "developmental_stage_transition_relation",
+      "justification": "All three relations capture transitions in an organism’s development: one between successive life stages (caterpillar to pupa) and two from an enclosing pupal structure to the adult life stage. Grouping them under a developmental-stage transition class is appropriate, even though one pair also involves an enclosing structure.",
+      "remark": null,
+      "confidence": 0.85
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": ["RelR_e17811459201", "RelR_4a1d32a5ca81", "RelR_436375c118d9"],
+      "rel_cls_group": "TEMPORALITY",
+      "justification": "Each relation fundamentally encodes ordered changes over time in the butterfly’s life cycle—progression to the next life stage or emergence after metamorphosis—so they best fit a temporal/sequence-oriented group.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  }
+]

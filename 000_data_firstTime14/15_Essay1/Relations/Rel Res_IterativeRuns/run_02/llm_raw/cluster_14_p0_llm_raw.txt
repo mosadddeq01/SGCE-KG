@@ -1,0 +1,18 @@
+[
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": [
+        "RelR_044e62cbf470",
+        "RelR_5386b1bb9e0a"
+      ],
+      "canonical_rel_name": "includes_example",
+      "canonical_rel_desc": "Indicates that the subject category or collection includes the object as a specific example or member, often corresponding to phrases like 'such as' in text.",
+      "rel_cls": "example_membership_relation",
+      "rel_cls_group": "ASSOCIATION",
+      "justification": "Both relations describe the same semantics: 'new tissues and structures' as a category, with 'butterfly wings' and 'antennae' as specific example members, signaled by the qualifier 'such as'. To normalize the schema, they should share one canonical predicate. 'includes_example' captures the example-membership nuance better than a generic 'includes'. The relation class is aligned to a more specific 'example_membership_relation' rather than two different membership-like labels, and the broad group is unified under ASSOCIATION (set membership / example-of) instead of mixing ASSOCIATION and COMPOSITION for the same pattern.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  }
+]

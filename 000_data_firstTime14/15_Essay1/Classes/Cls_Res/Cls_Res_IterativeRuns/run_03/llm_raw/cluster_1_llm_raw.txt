@@ -1,0 +1,92 @@
+[
+  {
+    "function": "split_class",
+    "args": {
+      "source_class_id": "ClsC_8432c730",
+      "splits": [
+        {
+          "name": "Butterflies (individual organisms, general)",
+          "description": "Butterflies as individual holometabolous insects, without specifying sex, undergoing complete metamorphosis through egg, larval, pupal, and adult stages.",
+          "class_type_hint": "Organism",
+          "member_ids": ["Can_d81ff7bc"],
+          "provisional_id": "ClsC_8432c730_gen"
+        },
+        {
+          "name": "Female butterflies (adult females)",
+          "description": "Adult female butterflies that lay eggs on specific host plants, initiating the butterfly life cycle.",
+          "class_type_hint": "Organism",
+          "member_ids": ["Can_36b8bc0d"],
+          "provisional_id": "ClsC_8432c730_female"
+        }
+      ],
+      "justification": "The original class mixes generic butterflies with the specific subset of adult female butterflies, which are conceptually distinct organism categories and should be modeled as separate classes.",
+      "remark": "After this split, the original class becomes an empty container and can likely be deprecated or cleaned up in a later pass.",
+      "confidence": 0.85
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_8432c730_gen",
+      "new_name": "Butterflies (individual organisms, general)",
+      "new_description": "Individual butterflies as holometabolous insects, without specifying sex, undergoing complete metamorphosis through egg, larval, pupal, and adult stages.",
+      "new_class_type_hint": "Organism",
+      "new_class_group": "Butterfly Biology and Life Cycle",
+      "remark": null,
+      "justification": "Set a precise label/description for the newly split generic-butterfly class and align it to a unified butterfly-focused Class_Group that covers organisms, taxa, and roles.",
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_8432c730_female",
+      "new_name": "Female butterflies (adult females)",
+      "new_description": "Adult female butterflies responsible for egg laying, representing the sex-specific subset of butterfly organisms relevant to reproduction and life cycle traits.",
+      "new_class_type_hint": "Organism",
+      "new_class_group": "Butterfly Biology and Life Cycle",
+      "remark": null,
+      "justification": "Clarify that this class is specifically for adult female butterflies and align it to the same butterfly biology Class_Group as related organism and taxon classes.",
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsR_16b46bdf",
+      "new_name": "Butterfly species (taxonomic categories)",
+      "new_description": "Species-level taxonomic categories of butterflies whose differing traits affect egg characteristics, metamorphosis duration, and adult lifespan.",
+      "new_class_type_hint": "BiologicalTaxonCategory",
+      "new_class_group": "Butterfly Biology and Life Cycle",
+      "remark": null,
+      "justification": "Keep this as the species-level taxon class but harmonize its Class_Group with the organism classes to reflect a coherent butterfly biology and life cycle domain.",
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsR_610ebdc2",
+      "new_name": "Butterfly reproductive mate role",
+      "new_description": "The reproductive partner role that butterflies seek during the adult stage for mating, specifically in the context of butterfly life cycles.",
+      "new_class_type_hint": "Biological Role",
+      "new_class_group": "Butterfly Biology and Life Cycle",
+      "remark": null,
+      "justification": "Maintain this as a role class but align its Class_Group with butterfly organisms and taxa so that all butterfly-related biology and life cycle concepts are connected.",
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_8432c730",
+      "new_name": "Butterflies (legacy, split into specific organism classes)",
+      "new_description": "Legacy container class that previously mixed generic butterflies and female butterflies; its members have been split into more precise organism classes.",
+      "new_class_type_hint": "Organism",
+      "new_class_group": "Butterfly Biology and Life Cycle",
+      "remark": "This class is now empty after splitting into separate generic and female-butterfly organism classes and can likely be deprecated or removed in a clean-up step.",
+      "justification": "Document the result of the split and align the legacy class to the same Class_Group while flagging it for potential deprecation.",
+      "confidence": 0.82
+    }
+  }
+]

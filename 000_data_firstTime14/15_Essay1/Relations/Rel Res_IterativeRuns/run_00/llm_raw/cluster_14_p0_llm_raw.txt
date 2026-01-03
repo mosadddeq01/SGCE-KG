@@ -1,0 +1,44 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_3de914ef26c4"],
+      "canonical_rel_name": "undergoes_biological_process",
+      "canonical_rel_desc": "Indicates that an organism or life stage repeatedly undergoes a specific biological process as part of its development or functioning.",
+      "justification": "The subject is a caterpillar life stage and the object is the molting process it repeatedly undergoes during growth; this is best modeled as an organism (or life stage) undergoing a biological process, which is reusable beyond this specific example.",
+      "remark": null,
+      "confidence": 0.96
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_0e82810746df"],
+      "canonical_rel_name": "is_life_cycle_of",
+      "canonical_rel_desc": "Indicates that a developmental life cycle process is the characteristic life cycle of a given organism or taxon.",
+      "justification": "The subject is the butterfly life cycle (a developmental process) and the object is butterflies (the organism group that undergoes this process); the most precise predicate is that this process is the life cycle of that organism.",
+      "remark": null,
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": ["RelR_3de914ef26c4", "RelR_0e82810746df"],
+      "rel_cls": "organism_development_relation",
+      "justification": "Both relations link biological entities (organisms or life stages) with their developmental processes: one is an organism/life stage undergoing a process (molting), the other is an organism associated with its overall life cycle. These fit a common class covering organism–developmental-process relations.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": ["RelR_3de914ef26c4", "RelR_0e82810746df"],
+      "rel_cls_group": "ASSOCIATION",
+      "justification": "At a broad level, both edges express non-causal, non-spatial associations between organisms (or their stages) and their characteristic biological/developmental processes, which fits an ASSOCIATION-type group better than COMPOSITION, CAUSALITY, or IDENTITY.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  }
+]

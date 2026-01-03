@@ -1,0 +1,48 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_b442e6ca4cf0",
+        "RelR_d5270603457a",
+        "RelR_793ddc5ed01e",
+        "RelR_93185084d84f"
+      ],
+      "canonical_rel_name": "occurs_on_surface_of",
+      "canonical_rel_desc": "Indicates that a biological life stage or entity occurs on, or is situated on, the surface of another physical entity (e.g., eggs on plant leaves).",
+      "justification": "All four relations describe the egg stage being spatially situated on a substrate (host plants, plant leaves, or the underside of leaves). Despite minor wording differences (located_on, occurs_on), they share the same spatial predicate meaning: the life stage occurs on the surface of a physical support. A single canonical predicate 'occurs_on_surface_of' captures this consistently.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_b442e6ca4cf0",
+        "RelR_d5270603457a",
+        "RelR_793ddc5ed01e",
+        "RelR_93185084d84f"
+      ],
+      "rel_cls": "life_stage_habitat_relation",
+      "justification": "Each relation links a butterfly life stage (egg stage) to its typical physical substrate/habitat (host plants, plant leaves, leaf undersides). This is best modeled as a class of relations connecting organism life stages to their environmental or substrate context.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_b442e6ca4cf0",
+        "RelR_d5270603457a",
+        "RelR_793ddc5ed01e",
+        "RelR_93185084d84f"
+      ],
+      "rel_cls_group": "SPATIALITY",
+      "justification": "The core semantics of these relations is spatial: the egg stage is physically located on or occurs on the surface of particular plants or leaves. Even when causal or functional qualifiers are mentioned (e.g., protection from predators), the relation itself is explicitly spatial.",
+      "remark": null,
+      "confidence": 0.96
+    }
+  }
+]

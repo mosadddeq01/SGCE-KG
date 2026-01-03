@@ -1,0 +1,217 @@
+{
+  "cluster_label": "5_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_34cc144f0893",
+      "relation_name": "has_stages",
+      "rel_desc": "The butterfly life cycle consists of distinct developmental stages.",
+      "rel_hint_type": "composition",
+      "canonical_rel_name": "has_life_cycle_stage",
+      "canonical_rel_desc": "Indicates that a life cycle process is composed of specific developmental stages.",
+      "rel_cls": "process_stage_relation",
+      "rel_cls_group": "COMPOSITION",
+      "subject_entity_name": "butterfly life cycle",
+      "object_entity_name": "stages of the butterfly's life cycle",
+      "subject_class_label": "Butterfly life cycle process",
+      "subject_class_group": "Butterfly Life Cycle and Development",
+      "object_class_label": "Butterfly life cycle (stages collection)",
+      "object_class_group": "Butterfly Life Cycle Stages",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.96,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_7352e4bcbf70",
+      "relation_name": "characterizes_stage",
+      "rel_desc": "Metamorphosis is the defining transformation process that occurs during the pupa stage.",
+      "rel_hint_type": "process-stage link",
+      "canonical_rel_name": "occurs_during_life_stage",
+      "canonical_rel_desc": "Indicates that the subject process takes place during the temporal extent of the specified life stage.",
+      "rel_cls": "process_occurrence_in_stage_relation",
+      "rel_cls_group": "TEMPORALITY",
+      "subject_entity_name": "metamorphosis",
+      "object_entity_name": "pupa stage",
+      "subject_class_label": "Butterfly Metamorphosis Process",
+      "subject_class_group": "Butterfly Life Cycle and Development",
+      "object_class_label": "Butterfly larval and pupal stages",
+      "object_class_group": "Butterfly Life Cycle Stages",
+      "qualifiers": {
+        "TemporalQualifier": "during the entire pupa stage",
+        "SpatialQualifier": "within the chrysalis",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "implicit association",
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.9,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_c7358510f831",
+      "relation_name": "includes_stage",
+      "rel_desc": "The butterfly life cycle includes the egg stage as its initial phase.",
+      "rel_hint_type": "composition",
+      "canonical_rel_name": "includes_life_stage",
+      "canonical_rel_desc": "Links a multi-stage biological process (e.g., a life cycle) to one of its constituent life stages (e.g., egg, larva, pupa, adult).",
+      "rel_cls": "process_stage_membership_relation",
+      "rel_cls_group": "COMPOSITION",
+      "subject_entity_name": "butterfly life cycle",
+      "object_entity_name": "egg stage (butterfly life cycle)",
+      "subject_class_label": "Butterfly life cycle process",
+      "subject_class_group": "Butterfly Life Cycle and Development",
+      "object_class_label": "Butterfly egg life stage",
+      "object_class_group": "Butterfly Life Cycle Stages",
+      "qualifiers": {
+        "TemporalQualifier": "as the first stage",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": "From",
+        "OtherQualifier": null
+      },
+      "confidence": 0.94,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_59d1bc18ae81",
+      "relation_name": "includes_stage",
+      "rel_desc": "The butterfly life cycle includes the larval (caterpillar) stage.",
+      "rel_hint_type": "composition",
+      "canonical_rel_name": "includes_life_stage",
+      "canonical_rel_desc": "Indicates that a life cycle process or sequence comprises the given life stage as one of its constituent phases.",
+      "rel_cls": "life_cycle_stage_composition_relation",
+      "rel_cls_group": "COMPOSITION",
+      "subject_entity_name": "butterfly life cycle",
+      "object_entity_name": "caterpillar (larval stage of butterfly)",
+      "subject_class_label": "Butterfly life cycle process",
+      "subject_class_group": "Butterfly Life Cycle and Development",
+      "object_class_label": "Butterfly larval and pupal stages",
+      "object_class_group": "Butterfly Life Cycle Stages",
+      "qualifiers": {
+        "TemporalQualifier": "after the egg stage",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": "to",
+        "OtherQualifier": null
+      },
+      "confidence": 0.94,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_5444b05c7e2f",
+      "relation_name": "includes_stage",
+      "rel_desc": "The butterfly life cycle includes the pupa stage.",
+      "rel_hint_type": "composition",
+      "canonical_rel_name": "has_stage",
+      "canonical_rel_desc": "Indicates that a life cycle or process includes the object as one of its stages or phases.",
+      "rel_cls": "process_stage_relation",
+      "rel_cls_group": "TEMPORALITY",
+      "subject_entity_name": "butterfly life cycle",
+      "object_entity_name": "pupa stage",
+      "subject_class_label": "Butterfly life cycle process",
+      "subject_class_group": "Butterfly Life Cycle and Development",
+      "object_class_label": "Butterfly larval and pupal stages",
+      "object_class_group": "Butterfly Life Cycle Stages",
+      "qualifiers": {
+        "TemporalQualifier": "after larva and before adult",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": "to",
+        "OtherQualifier": null
+      },
+      "confidence": 0.94,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_6860d9952bda",
+      "relation_name": "includes_stage",
+      "rel_desc": "The butterfly life cycle includes the adult butterfly life stage as the final phase.",
+      "rel_hint_type": "composition",
+      "canonical_rel_name": "includes_life_stage",
+      "canonical_rel_desc": "Indicates that a life cycle process or sequence comprises the given life stage as one of its constituent phases.",
+      "rel_cls": "life_cycle_stage_composition_relation",
+      "rel_cls_group": "COMPOSITION",
+      "subject_entity_name": "butterfly life cycle",
+      "object_entity_name": "adult butterfly life stage",
+      "subject_class_label": "Butterfly life cycle process",
+      "subject_class_group": "Butterfly Life Cycle and Development",
+      "object_class_label": "Adult butterfly life stage",
+      "object_class_group": "Butterfly Life Cycle and Development",
+      "qualifiers": {
+        "TemporalQualifier": "as the final stage",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": "to",
+        "OtherQualifier": null
+      },
+      "confidence": 0.95,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_rel_schema\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_34cc144f0893\",\n        \"RelR_c7358510f831\",\n        \"RelR_59d1bc18ae81\",\n        \"RelR_5444b05c7e2f\",\n        \"RelR_6860d9952bda\"\n      ],\n      \"canonical_rel_name\": \"has_life_cycle_stage\",\n      \"canonical_rel_desc\": \"Indicates that a life cycle or multi-stage biological process includes the object as one of its constituent life stages (e.g., egg, larva, pupa, adult).\",\n      \"rel_cls\": \"life_cycle_stage_composition_relation\",\n      \"rel_cls_group\": \"COMPOSITION\",\n      \"justification\": \"All five relations link the 'butterfly life cycle' process to one of its stages (or to the collection of its stages), which is a part–whole composition semantics rather than pure temporality. Existing fields use slightly different canonical names ('includes_life_stage', 'has_stage', 'has_life_cycle_stage') and relation classes ('process_stage_relation', 'process_stage_membership_relation', 'life_cycle_stage_composition_relation') with mixed rel_cls_group values (COMPOSITION and TEMPORALITY). Normalizing them to a single canonical predicate 'has_life_cycle_stage', a unified class 'life_cycle_stage_composition_relation', and the broad group COMPOSITION yields a consistent schema for life-cycle-to-stage composition edges.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_rel_schema",
+      "args": {
+        "relation_ids": [
+          "RelR_34cc144f0893",
+          "RelR_c7358510f831",
+          "RelR_59d1bc18ae81",
+          "RelR_5444b05c7e2f",
+          "RelR_6860d9952bda"
+        ],
+        "canonical_rel_name": "has_life_cycle_stage",
+        "canonical_rel_desc": "Indicates that a life cycle or multi-stage biological process includes the object as one of its constituent life stages (e.g., egg, larva, pupa, adult).",
+        "rel_cls": "life_cycle_stage_composition_relation",
+        "rel_cls_group": "COMPOSITION",
+        "justification": "All five relations link the 'butterfly life cycle' process to one of its stages (or to the collection of its stages), which is a part–whole composition semantics rather than pure temporality. Existing fields use slightly different canonical names ('includes_life_stage', 'has_stage', 'has_life_cycle_stage') and relation classes ('process_stage_relation', 'process_stage_membership_relation', 'life_cycle_stage_composition_relation') with mixed rel_cls_group values (COMPOSITION and TEMPORALITY). Normalizing them to a single canonical predicate 'has_life_cycle_stage', a unified class 'life_cycle_stage_composition_relation', and the broad group COMPOSITION yields a consistent schema for life-cycle-to-stage composition edges.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_rel_schema",
+      "relation_ids": [
+        "RelR_34cc144f0893",
+        "RelR_c7358510f831",
+        "RelR_59d1bc18ae81",
+        "RelR_5444b05c7e2f",
+        "RelR_6860d9952bda"
+      ],
+      "canonical_rel_name": "has_life_cycle_stage",
+      "canonical_rel_desc": "Indicates that a life cycle or multi-stage biological process includes the object as one of its constituent life stages (e.g., egg, larva, pupa, adult).",
+      "rel_cls": "life_cycle_stage_composition_relation",
+      "rel_cls_group": "COMPOSITION",
+      "new_relation_name": null,
+      "original_relation_name": null,
+      "justification": "All five relations link the 'butterfly life cycle' process to one of its stages (or to the collection of its stages), which is a part–whole composition semantics rather than pure temporality. Existing fields use slightly different canonical names ('includes_life_stage', 'has_stage', 'has_life_cycle_stage') and relation classes ('process_stage_relation', 'process_stage_membership_relation', 'life_cycle_stage_composition_relation') with mixed rel_cls_group values (COMPOSITION and TEMPORALITY). Normalizing them to a single canonical predicate 'has_life_cycle_stage', a unified class 'life_cycle_stage_composition_relation', and the broad group COMPOSITION yields a consistent schema for life-cycle-to-stage composition edges.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  ],
+  "timestamp": "2026-01-03T08:57:40Z"
+}

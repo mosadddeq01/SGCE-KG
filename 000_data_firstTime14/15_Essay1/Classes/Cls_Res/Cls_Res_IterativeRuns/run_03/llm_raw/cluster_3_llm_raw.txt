@@ -1,0 +1,87 @@
+[
+  {
+    "function": "split_class",
+    "args": {
+      "source_class_id": "ClsR_456c8b15",
+      "splits": [
+        {
+          "name": "Butterfly Host Plants as Oviposition and Larval Food Resources",
+          "description": "Plant species that serve specifically as host plants for butterflies, providing oviposition sites and primary food resources for larvae within the butterfly life cycle.",
+          "class_type_hint": "HostPlant",
+          "member_ids": [
+            "Can_de817465"
+          ],
+          "provisional_id": "SPLIT(ClsR_456c8b15)_host_plants"
+        }
+      ],
+      "justification": "The original 'Butterfly Trophic Interactions' class mixes conceptually different roles—animal predators of butterflies vs. plant host resources; host plants are structurally distinct and deserve their own class focusing on oviposition and larval feeding resources.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsR_456c8b15",
+      "new_name": "Butterfly Predators and Prey Role",
+      "new_description": "Animals and trophic roles in which butterflies (at egg, larval, and adult stages) function as prey, including birds, reptiles, and other insects, and the role of butterflies as a food source within the food web.",
+      "new_class_type_hint": "TrophicPredatorPrey",
+      "new_class_group": "Butterfly Ecology, Habitat, and Food Web",
+      "remark": null,
+      "justification": "After moving host plants to a dedicated class, the remaining members of ClsR_456c8b15 are all predators and the prey role of butterflies, so the class should be renamed and re-described to reflect this narrower, cleaner scope and aligned under a refined ecology/food web group.",
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "SPLIT(ClsR_456c8b15)_host_plants",
+      "new_name": "Butterfly Host Plants and Larval Resources",
+      "new_description": "Host plant species used by butterflies for egg laying and as primary food resources for caterpillars, emphasizing their role in the butterfly life cycle and food web.",
+      "new_class_type_hint": "HostPlantResource",
+      "new_class_group": "Butterfly Ecology, Habitat, and Food Web",
+      "remark": null,
+      "justification": "The new split class should be clearly labeled and grouped to highlight host plants as a distinct ecological resource within the butterfly habitat and food web context.",
+      "confidence": 0.88
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_e0d7198b",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Butterfly Ecology, Habitat, and Food Web",
+      "remark": null,
+      "justification": "This class describes broad ecosystems and the natural environment for butterflies, which fits best under a unified higher-level group that explicitly covers ecology, habitat, and food web structure.",
+      "confidence": 0.86
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_b7ed0484",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Butterfly Ecology, Habitat, and Food Web",
+      "remark": null,
+      "justification": "This class captures ecological outcomes (biodiversity, plant population balance) driven by butterflies, which are tightly linked to ecological context and trophic interactions and should share the same broader ecology/habitat/food web group.",
+      "confidence": 0.84
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_93a9cf68",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Butterfly Ecology, Habitat, and Food Web",
+      "remark": null,
+      "justification": "This class focuses on egg-laying sites and larval food leaves, which are specific habitat features embedded in the same ecological and food web context as the other classes and should share the unified Class_Group.",
+      "confidence": 0.86
+    }
+  }
+]

@@ -1,0 +1,44 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_064770ca4865"],
+      "canonical_rel_name": "is_part_of",
+      "canonical_rel_desc": "Indicates that the subject entity is a constituent or component part of the object entity.",
+      "justification": "This relation connects 'underside of leaves' to 'plant leaves' with a clear part-to-whole direction; the canonical predicate should consistently represent a part pointing to its whole.",
+      "remark": null,
+      "confidence": 0.97
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_78920b55e632"],
+      "canonical_rel_name": "has_part",
+      "canonical_rel_desc": "Indicates that the subject entity includes the object entity as one of its constituent parts.",
+      "justification": "This relation connects 'newly emerged butterfly' to 'soft, wrinkled wings' with a whole-to-part direction; the canonical predicate should represent an entity possessing a component part.",
+      "remark": null,
+      "confidence": 0.97
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": ["RelR_064770ca4865", "RelR_78920b55e632"],
+      "rel_cls": "part_whole_relation",
+      "justification": "Both relations describe structural composition between entities (part vs. whole), differing only in directionality; they belong in the same part-whole relation class.",
+      "remark": null,
+      "confidence": 0.96
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": ["RelR_064770ca4865", "RelR_78920b55e632"],
+      "rel_cls_group": "COMPOSITION",
+      "justification": "Part-whole / has-part relations are a form of compositional structure, where one entity is composed of or includes another.",
+      "remark": null,
+      "confidence": 0.95
+    }
+  }
+]

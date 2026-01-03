@@ -1,0 +1,339 @@
+{
+  "cluster_label": 0,
+  "cluster_classes": [
+    {
+      "candidate_id": "ClsC_bcac8bce",
+      "class_label": "Metamorphic Body Structures",
+      "class_description": "Anatomical structures involved in the caterpillar-to-butterfly transformation, including larval organs that dissolve and the new adult tissues and appendages that form.",
+      "class_type_hint": "Biological Structure",
+      "class_group": "TBD",
+      "confidence": 0.86,
+      "evidence_excerpt": "Its organs dissolve into a soupy substance, and new tissues and structures, such as wings and antennae, begin to form.",
+      "member_ids": [
+        "En_d4c0d528",
+        "En_f0c16ab3",
+        "En_38daabd9"
+      ],
+      "members": [
+        {
+          "id": "En_d4c0d528",
+          "entity_name": "organs",
+          "entity_description": "Internal bodily structures of the caterpillar that dissolve during metamorphosis inside the chrysalis.",
+          "entity_type_hint": "BiologicalStructure"
+        },
+        {
+          "id": "En_f0c16ab3",
+          "entity_name": "new tissues and structures",
+          "entity_description": "Developing anatomical features that form from dissolved caterpillar material during metamorphosis.",
+          "entity_type_hint": "BiologicalStructure"
+        },
+        {
+          "id": "En_38daabd9",
+          "entity_name": "antennae",
+          "entity_description": "Sensory appendages of the adult butterfly that form as new structures during metamorphosis.",
+          "entity_type_hint": "BiologicalStructure"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_5da5be54",
+      "class_label": "Plant Organs",
+      "class_description": "Macroscopic structural parts of plants, such as leaves and stems, that provide support or surfaces for biological processes like chrysalis attachment.",
+      "class_type_hint": "Biological Structure",
+      "class_group": "TBD",
+      "confidence": 0.93,
+      "evidence_excerpt": "The caterpillar attaches itself to a leaf or stem and forms a protective shell.",
+      "member_ids": [
+        "En_1eb696d6",
+        "En_179a18b9"
+      ],
+      "members": [
+        {
+          "id": "En_1eb696d6",
+          "entity_name": "leaf",
+          "entity_description": "Flat, typically green plant organ attached to a stem, which can serve as an attachment surface for a chrysalis.",
+          "entity_type_hint": "BiologicalStructure"
+        },
+        {
+          "id": "En_179a18b9",
+          "entity_name": "stem",
+          "entity_description": "Supportive plant structure that bears leaves and can serve as an attachment surface for a chrysalis.",
+          "entity_type_hint": "BiologicalStructure"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_709b29fb",
+      "class_label": "Butterfly Wing Anatomy",
+      "class_description": "Anatomical structures and localized physical states of butterfly wings, including the paired wings themselves and their initial soft, wrinkled condition post-emergence.",
+      "class_type_hint": "Anatomical Structure",
+      "class_group": "TBD",
+      "confidence": 0.83,
+      "evidence_excerpt": "Paired flight organs... initially emerging soft and wrinkled before fully developing for flight.",
+      "member_ids": [
+        "Can_6b57f2c6",
+        "En_c7331ad1"
+      ],
+      "members": [
+        {
+          "id": "Can_6b57f2c6",
+          "entity_name": "butterfly wings",
+          "entity_description": "Paired flight organs of the adult butterfly that form during metamorphosis, initially emerging soft and wrinkled before fully developing for flight.",
+          "entity_type_hint": "AnatomicalStructure"
+        },
+        {
+          "id": "En_c7331ad1",
+          "entity_name": "soft, wrinkled wings",
+          "entity_description": "Initial physical state of a butterfly’s wings right after emerging from the chrysalis.",
+          "entity_type_hint": "BiologicalState"
+        }
+      ],
+      "remarks": [
+        "This class has been split into more specific subclasses: 'Butterfly Wing Structures' and 'Butterfly Wing Physical States'. It should no longer receive new entities."
+      ]
+    },
+    {
+      "candidate_id": "ClsC_ba1c425e",
+      "class_label": "Metamorphic Body Fluids",
+      "class_description": "Biological liquids or semi-liquids involved in insect metamorphosis, including internal fluids used to expand new structures and liquefied body material during transformation.",
+      "class_type_hint": "Biological Substance",
+      "class_group": "TBD",
+      "confidence": 0.8,
+      "evidence_excerpt": "Internal fluid the butterfly pumps into its wings; organs dissolve into a soupy substance during metamorphosis.",
+      "member_ids": [
+        "En_0223824e",
+        "En_84110611"
+      ],
+      "members": [
+        {
+          "id": "En_0223824e",
+          "entity_name": "wing fluid",
+          "entity_description": "Internal fluid the butterfly pumps into its wings to expand and harden them.",
+          "entity_type_hint": "BiologicalSubstance"
+        },
+        {
+          "id": "En_84110611",
+          "entity_name": "soupy substance",
+          "entity_description": "Liquid-like mixture formed when the caterpillar’s organs dissolve during metamorphosis.",
+          "entity_type_hint": "BiologicalState"
+        }
+      ],
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"split_class\",\n    \"args\": {\n      \"source_class_id\": \"ClsC_709b29fb\",\n      \"splits\": [\n        {\n          \"name\": \"Butterfly Wing Structures\",\n          \"description\": \"Structural anatomical components of butterfly wings, such as the paired wings themselves that form during metamorphosis.\",\n          \"class_type_hint\": \"Anatomical Structure\",\n          \"member_ids\": [\"Can_6b57f2c6\"],\n          \"provisional_id\": \"ClsC_709b29fb_struct\"\n        },\n        {\n          \"name\": \"Butterfly Wing Physical States\",\n          \"description\": \"Physical or developmental states of butterfly wings, such as their initial soft, wrinkled condition post-emergence.\",\n          \"class_type_hint\": \"Biological State\",\n          \"member_ids\": [\"En_c7331ad1\"],\n          \"provisional_id\": \"ClsC_709b29fb_state\"\n        }\n      ],\n      \"justification\": \"ClsC_709b29fb currently mixes the structural entity 'butterfly wings' with the state entity 'soft, wrinkled wings'; splitting yields one class for wing structures and another for wing states.\",\n      \"remark\": null,\n      \"confidence\": 0.93\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_709b29fb\",\n      \"new_name\": \"Butterfly Wing Anatomy (superseded by split subclasses)\",\n      \"new_description\": \"Original umbrella class for butterfly wing anatomy, now superseded by separate classes for wing structures and wing physical states.\",\n      \"new_class_type_hint\": \"Anatomical Structure\",\n      \"new_class_group\": \"Biological Structures and Substances in Butterfly Metamorphosis\",\n      \"remark\": \"This class has been split into more specific subclasses: 'Butterfly Wing Structures' and 'Butterfly Wing Physical States'. It should no longer receive new entities.\",\n      \"justification\": \"After splitting ClsC_709b29fb into structure and state subclasses, the original class should be marked as superseded and aligned to the new class_group for clarity.\",\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_709b29fb_struct\",\n      \"new_name\": \"Butterfly Wing Structures\",\n      \"new_description\": \"Structural anatomical components of butterfly wings, such as the paired wings that form and expand during metamorphosis.\",\n      \"new_class_type_hint\": \"Anatomical Structure\",\n      \"new_class_group\": \"Biological Structures and Substances in Butterfly Metamorphosis\",\n      \"remark\": null,\n      \"justification\": \"The new structural subclass for wings should be explicitly categorized under a shared class_group for metamorphosis-related biological structures and substances.\",\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_709b29fb_state\",\n      \"new_name\": \"Butterfly Wing Physical States\",\n      \"new_description\": \"Physical or developmental states of butterfly wings (e.g., soft and wrinkled immediately after emergence from the chrysalis).\",\n      \"new_class_type_hint\": \"Biological State\",\n      \"new_class_group\": \"Biological Structures and Substances in Butterfly Metamorphosis\",\n      \"remark\": null,\n      \"justification\": \"The new state-focused subclass should be clearly labeled as a state class and aligned to the same higher-level metamorphosis-related biological group.\",\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_bcac8bce\",\n      \"new_name\": \"Insect Metamorphic Body Structures\",\n      \"new_description\": \"Anatomical structures involved in the caterpillar-to-butterfly transformation, including larval organs that dissolve and the new adult tissues and appendages that form.\",\n      \"new_class_type_hint\": \"Biological Structure\",\n      \"new_class_group\": \"Biological Structures and Substances in Butterfly Metamorphosis\",\n      \"remark\": null,\n      \"justification\": \"ClsC_bcac8bce covers organs, new tissues, and antennae during metamorphosis and should be grouped with other metamorphosis-related structures and substances under a shared class_group.\",\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_5da5be54\",\n      \"new_name\": \"Plant Organs Supporting Metamorphosis Habitat\",\n      \"new_description\": \"Macroscopic structural parts of plants, such as leaves and stems, that provide surfaces or support for chrysalis attachment during butterfly metamorphosis.\",\n      \"new_class_type_hint\": \"Biological Structure\",\n      \"new_class_group\": \"Biological Structures and Substances in Butterfly Metamorphosis\",\n      \"remark\": null,\n      \"justification\": \"Although plant organs are not insect anatomy, they are biological structures directly involved in the metamorphosis context (as attachment sites) and should share the same high-level metamorphosis-related class_group.\",\n      \"confidence\": 0.86\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_ba1c425e\",\n      \"new_name\": \"Metamorphic Body Fluids\",\n      \"new_description\": \"Biological liquids or semi-liquids involved in insect metamorphosis, including internal fluids used to expand new structures and the liquefied body material formed as organs dissolve.\",\n      \"new_class_type_hint\": \"Biological Substance\",\n      \"new_class_group\": \"Biological Structures and Substances in Butterfly Metamorphosis\",\n      \"remark\": null,\n      \"justification\": \"ClsC_ba1c425e covers wing fluid and liquefied organ material during metamorphosis, which are conceptually aligned with metamorphosis-related anatomical structures and should share the same class_group.\",\n      \"confidence\": 0.88\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "split_class",
+      "args": {
+        "source_class_id": "ClsC_709b29fb",
+        "splits": [
+          {
+            "name": "Butterfly Wing Structures",
+            "description": "Structural anatomical components of butterfly wings, such as the paired wings themselves that form during metamorphosis.",
+            "class_type_hint": "Anatomical Structure",
+            "member_ids": [
+              "Can_6b57f2c6"
+            ],
+            "provisional_id": "ClsC_709b29fb_struct"
+          },
+          {
+            "name": "Butterfly Wing Physical States",
+            "description": "Physical or developmental states of butterfly wings, such as their initial soft, wrinkled condition post-emergence.",
+            "class_type_hint": "Biological State",
+            "member_ids": [
+              "En_c7331ad1"
+            ],
+            "provisional_id": "ClsC_709b29fb_state"
+          }
+        ],
+        "justification": "ClsC_709b29fb currently mixes the structural entity 'butterfly wings' with the state entity 'soft, wrinkled wings'; splitting yields one class for wing structures and another for wing states.",
+        "remark": null,
+        "confidence": 0.93
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_709b29fb",
+        "new_name": "Butterfly Wing Anatomy (superseded by split subclasses)",
+        "new_description": "Original umbrella class for butterfly wing anatomy, now superseded by separate classes for wing structures and wing physical states.",
+        "new_class_type_hint": "Anatomical Structure",
+        "new_class_group": "Biological Structures and Substances in Butterfly Metamorphosis",
+        "remark": "This class has been split into more specific subclasses: 'Butterfly Wing Structures' and 'Butterfly Wing Physical States'. It should no longer receive new entities.",
+        "justification": "After splitting ClsC_709b29fb into structure and state subclasses, the original class should be marked as superseded and aligned to the new class_group for clarity.",
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_709b29fb_struct",
+        "new_name": "Butterfly Wing Structures",
+        "new_description": "Structural anatomical components of butterfly wings, such as the paired wings that form and expand during metamorphosis.",
+        "new_class_type_hint": "Anatomical Structure",
+        "new_class_group": "Biological Structures and Substances in Butterfly Metamorphosis",
+        "remark": null,
+        "justification": "The new structural subclass for wings should be explicitly categorized under a shared class_group for metamorphosis-related biological structures and substances.",
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_709b29fb_state",
+        "new_name": "Butterfly Wing Physical States",
+        "new_description": "Physical or developmental states of butterfly wings (e.g., soft and wrinkled immediately after emergence from the chrysalis).",
+        "new_class_type_hint": "Biological State",
+        "new_class_group": "Biological Structures and Substances in Butterfly Metamorphosis",
+        "remark": null,
+        "justification": "The new state-focused subclass should be clearly labeled as a state class and aligned to the same higher-level metamorphosis-related biological group.",
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_bcac8bce",
+        "new_name": "Insect Metamorphic Body Structures",
+        "new_description": "Anatomical structures involved in the caterpillar-to-butterfly transformation, including larval organs that dissolve and the new adult tissues and appendages that form.",
+        "new_class_type_hint": "Biological Structure",
+        "new_class_group": "Biological Structures and Substances in Butterfly Metamorphosis",
+        "remark": null,
+        "justification": "ClsC_bcac8bce covers organs, new tissues, and antennae during metamorphosis and should be grouped with other metamorphosis-related structures and substances under a shared class_group.",
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_5da5be54",
+        "new_name": "Plant Organs Supporting Metamorphosis Habitat",
+        "new_description": "Macroscopic structural parts of plants, such as leaves and stems, that provide surfaces or support for chrysalis attachment during butterfly metamorphosis.",
+        "new_class_type_hint": "Biological Structure",
+        "new_class_group": "Biological Structures and Substances in Butterfly Metamorphosis",
+        "remark": null,
+        "justification": "Although plant organs are not insect anatomy, they are biological structures directly involved in the metamorphosis context (as attachment sites) and should share the same high-level metamorphosis-related class_group.",
+        "confidence": 0.86
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_ba1c425e",
+        "new_name": "Metamorphic Body Fluids",
+        "new_description": "Biological liquids or semi-liquids involved in insect metamorphosis, including internal fluids used to expand new structures and the liquefied body material formed as organs dissolve.",
+        "new_class_type_hint": "Biological Substance",
+        "new_class_group": "Biological Structures and Substances in Butterfly Metamorphosis",
+        "remark": null,
+        "justification": "ClsC_ba1c425e covers wing fluid and liquefied organ material during metamorphosis, which are conceptually aligned with metamorphosis-related anatomical structures and should share the same class_group.",
+        "confidence": 0.88
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "split_class",
+      "source_class_id": "ClsC_709b29fb",
+      "source_class_id_resolved": "ClsC_709b29fb",
+      "created_classes": [
+        {
+          "new_class_id": "ClsR_3d560a55",
+          "provisional_id": "ClsC_709b29fb_struct",
+          "member_ids": [
+            "Can_6b57f2c6"
+          ]
+        },
+        {
+          "new_class_id": "ClsR_11d8a097",
+          "provisional_id": "ClsC_709b29fb_state",
+          "member_ids": [
+            "En_c7331ad1"
+          ]
+        }
+      ],
+      "justification": "ClsC_709b29fb currently mixes the structural entity 'butterfly wings' with the state entity 'soft, wrinkled wings'; splitting yields one class for wing structures and another for wing states.",
+      "remark": null,
+      "confidence": 0.93
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_709b29fb",
+      "class_id_resolved": "ClsC_709b29fb",
+      "new_name": "Butterfly Wing Anatomy (superseded by split subclasses)",
+      "new_description": "Original umbrella class for butterfly wing anatomy, now superseded by separate classes for wing structures and wing physical states.",
+      "new_class_type_hint": "Anatomical Structure",
+      "new_class_group": "Biological Structures and Substances in Butterfly Metamorphosis",
+      "remark": "This class has been split into more specific subclasses: 'Butterfly Wing Structures' and 'Butterfly Wing Physical States'. It should no longer receive new entities.",
+      "justification": "After splitting ClsC_709b29fb into structure and state subclasses, the original class should be marked as superseded and aligned to the new class_group for clarity.",
+      "confidence": 0.9
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_709b29fb_struct",
+      "class_id_resolved": "ClsR_3d560a55",
+      "new_name": "Butterfly Wing Structures",
+      "new_description": "Structural anatomical components of butterfly wings, such as the paired wings that form and expand during metamorphosis.",
+      "new_class_type_hint": "Anatomical Structure",
+      "new_class_group": "Biological Structures and Substances in Butterfly Metamorphosis",
+      "remark": null,
+      "justification": "The new structural subclass for wings should be explicitly categorized under a shared class_group for metamorphosis-related biological structures and substances.",
+      "confidence": 0.9
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_709b29fb_state",
+      "class_id_resolved": "ClsR_11d8a097",
+      "new_name": "Butterfly Wing Physical States",
+      "new_description": "Physical or developmental states of butterfly wings (e.g., soft and wrinkled immediately after emergence from the chrysalis).",
+      "new_class_type_hint": "Biological State",
+      "new_class_group": "Biological Structures and Substances in Butterfly Metamorphosis",
+      "remark": null,
+      "justification": "The new state-focused subclass should be clearly labeled as a state class and aligned to the same higher-level metamorphosis-related biological group.",
+      "confidence": 0.9
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_bcac8bce",
+      "class_id_resolved": "ClsC_bcac8bce",
+      "new_name": "Insect Metamorphic Body Structures",
+      "new_description": "Anatomical structures involved in the caterpillar-to-butterfly transformation, including larval organs that dissolve and the new adult tissues and appendages that form.",
+      "new_class_type_hint": "Biological Structure",
+      "new_class_group": "Biological Structures and Substances in Butterfly Metamorphosis",
+      "remark": null,
+      "justification": "ClsC_bcac8bce covers organs, new tissues, and antennae during metamorphosis and should be grouped with other metamorphosis-related structures and substances under a shared class_group.",
+      "confidence": 0.9
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_5da5be54",
+      "class_id_resolved": "ClsC_5da5be54",
+      "new_name": "Plant Organs Supporting Metamorphosis Habitat",
+      "new_description": "Macroscopic structural parts of plants, such as leaves and stems, that provide surfaces or support for chrysalis attachment during butterfly metamorphosis.",
+      "new_class_type_hint": "Biological Structure",
+      "new_class_group": "Biological Structures and Substances in Butterfly Metamorphosis",
+      "remark": null,
+      "justification": "Although plant organs are not insect anatomy, they are biological structures directly involved in the metamorphosis context (as attachment sites) and should share the same high-level metamorphosis-related class_group.",
+      "confidence": 0.86
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_ba1c425e",
+      "class_id_resolved": "ClsC_ba1c425e",
+      "new_name": "Metamorphic Body Fluids",
+      "new_description": "Biological liquids or semi-liquids involved in insect metamorphosis, including internal fluids used to expand new structures and the liquefied body material formed as organs dissolve.",
+      "new_class_type_hint": "Biological Substance",
+      "new_class_group": "Biological Structures and Substances in Butterfly Metamorphosis",
+      "remark": null,
+      "justification": "ClsC_ba1c425e covers wing fluid and liquefied organ material during metamorphosis, which are conceptually aligned with metamorphosis-related anatomical structures and should share the same class_group.",
+      "confidence": 0.88
+    }
+  ],
+  "provisional_to_real": {
+    "ClsC_709b29fb_struct": "ClsR_3d560a55",
+    "ClsC_709b29fb_state": "ClsR_11d8a097"
+  },
+  "timestamp": "2026-01-03T08:18:01Z"
+}

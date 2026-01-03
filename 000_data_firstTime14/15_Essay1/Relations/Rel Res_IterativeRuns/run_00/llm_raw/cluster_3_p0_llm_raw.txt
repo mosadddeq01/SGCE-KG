@@ -1,0 +1,57 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_352da87a984c"
+      ],
+      "canonical_rel_name": "provides_protection_to",
+      "canonical_rel_desc": "Subject provides a protective benefit to the object, reducing the object's exposure to threats or harm.",
+      "justification": "In this relation, the underside of leaves protects the butterfly egg stage itself (the object is the beneficiary, not the threat). A predicate where the object is the protected entity (provides_protection_to) matches the modeled subject/object direction and avoids conflating the threat with the beneficiary.",
+      "remark": "Threat (predators of butterfly eggs) is carried in qualifiers; canonical predicate focuses on subject protecting the object.",
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_8b709e5be133",
+        "RelR_9c5113504641"
+      ],
+      "canonical_rel_name": "protects_against",
+      "canonical_rel_desc": "Subject confers protection by defending against or deterring the object, which represents a threat.",
+      "justification": "In both relations, the subject (caterpillar spines or hairs) functions specifically to protect against predators, and the object node is the predator class (the threat), not the protected caterpillar. Using protects_against with the object as the threat yields a consistent, threat-oriented defensive predicate for these two instances.",
+      "remark": "Protected target (caterpillars) is indicated in qualifiers; core predicate is modeled as protection against the predator threat.",
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_352da87a984c",
+        "RelR_8b709e5be133",
+        "RelR_9c5113504641"
+      ],
+      "rel_cls": "anti_predator_defense_relation",
+      "justification": "All three relations describe defensive or protective functions against predators (or predation risk), either by providing concealment for eggs or by physical defenses on caterpillars. Grouping them under an anti_predator_defense_relation captures this shared functional class across different canonical predicates.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_352da87a984c",
+        "RelR_8b709e5be133",
+        "RelR_9c5113504641"
+      ],
+      "rel_cls_group": "AGENCY",
+      "justification": "These relations express an active functional role or agency-like effect (defensive protection) of one entity with respect to another or to a threat. This aligns better with an AGENCY-type group (functional role, defense) than with composition or pure association.",
+      "remark": null,
+      "confidence": 0.82
+    }
+  }
+]

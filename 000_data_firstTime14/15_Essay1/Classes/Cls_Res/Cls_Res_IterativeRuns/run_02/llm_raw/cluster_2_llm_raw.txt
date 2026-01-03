@@ -1,0 +1,28 @@
+[
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_709b29fb",
+      "new_name": "Butterfly Wing Anatomy (Deprecated Umbrella)",
+      "new_description": "Deprecated umbrella class for butterfly wing anatomy. This class has been superseded by more specific subclasses: 'Butterfly Wing Structures' and 'Butterfly Wing Physical States'. No new entities should be assigned here.",
+      "new_class_type_hint": "DeprecatedClass",
+      "new_class_group": "Biological Structures and Substances in Butterfly Metamorphosis",
+      "remark": "Formally marking this as a deprecated umbrella class prevents future entities from being mis-assigned here instead of the more precise wing structure/state classes.",
+      "justification": "The class is explicitly described as superseded and has no members; making its deprecated status explicit in the name, description, and type hint reduces future misuse and clarifies schema structure.",
+      "confidence": 0.94
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_ba1c425e",
+      "new_name": "Metamorphic Body Fluids and Liquefied Tissues",
+      "new_description": "Biological liquids or semi-liquids involved in insect metamorphosis, including internal fluids used to expand new structures (e.g., wing fluid) and the liquefied body material formed as larval organs dissolve inside the chrysalis.",
+      "new_class_type_hint": "Biological Substance",
+      "new_class_group": "Biological Structures and Substances in Butterfly Metamorphosis",
+      "remark": "This class intentionally groups both pumped internal fluid (e.g., hemolymph-like wing fluid) and the liquefied tissue mixture from dissolved organs. Note that member 'soupy substance' currently has an entity_type_hint of BiologicalState, but its usage here is as a fluid substance; consider reviewing that entity_type_hint upstream.",
+      "justification": "Members include both classic internal fluid and a liquefied tissue mixture; renaming and refining the description aligns the class scope with its actual members and flags the mixed-type issue without restructuring entities.",
+      "confidence": 0.9
+    }
+  }
+]

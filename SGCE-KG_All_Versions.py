@@ -3014,6 +3014,8 @@ if __name__ == "__main__":
 
 
 
+
+
 #*######################### Start ##########################
 #region:#?   Embedding and clustering recognized entities - Forced HDBSCAN
 
@@ -7280,7 +7282,8 @@ def iterative_resolution():
 
 
 
-#?######################### Start ##########################
+
+#*######################### Start ##########################
 #region:#?   Produce_class_input_from_iter K
 
 
@@ -7296,7 +7299,6 @@ from pathlib import Path
 
 
 path = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities/iterative_runs/")
-#todo: make finding the lates iteration automatic
 input_files = sorted(path.glob("entities_iter*.jsonl"))
 if not input_files:
     raise FileNotFoundError(f"No iteration files found in: {path}")
@@ -7389,13 +7391,214 @@ def produce_clean_jsonl(inp: Path, outp: Path):
 
 
 
+# -----------------------
+# Cls Rec input producer - Run statement
+# -----------------------
+
+
 # if __name__ == "__main__":
 #     produce_clean_jsonl(input_path, out_file)
 
 
 #endregion#? Produce_class_input_from_iter K
-#?#########################  End  ##########################
+#*#########################  End  ##########################
 
+
+
+
+
+
+
+
+#?######################### Start ##########################
+#region:#?   Produce_class_input_from_iter K - V2
+
+
+#!/usr/bin/env python3
+"""
+Produce a clean JSONL for class-identification with only the requested fields.
+
+This version is more robust in how it recovers `chunk_id`:
+- It searches recursively for any `chunk_id` field inside each record, so
+  different internal structures (e.g. nested in members) are handled.
+- It also looks up chunk_ids for any IDs listed in `merged_from` by using
+  the original raw entities file.
+"""
+
+import sys, json
+from pathlib import Path
+from typing import Dict, List
+
+# ---------- CONFIG: adjust if needed ----------
+
+# Directory with per-iteration entity files
+iter_path = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities/iterative_runs/")
+input_files = sorted(iter_path.glob("entities_iter*.jsonl"))
+if not input_files:
+    raise FileNotFoundError(f"No iteration files found in: {iter_path}")
+
+latest_file = input_files[-1]
+print(f"Using latest iteration file: {latest_file}")
+input_path = latest_file
+
+# Original raw entities (used to recover chunk_ids via merged_from)
+RAW_SEED_PATH = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities/Ent_Raw_0/entities_raw.jsonl")
+
+# Output file for class-identification input
+out_dir = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Classes/Cls_Input")
+out_file = out_dir / "cls_input_entities.jsonl"
+
+# ---------- guard against ipykernel injected args ----------
+if any(a.startswith("--f=") or a.startswith("--ipykernel") for a in sys.argv[1:]) or "ipykernel" in sys.argv[0]:
+    sys.argv = [sys.argv[0]]
+
+# ---------- helpers ----------
+
+def load_jsonl(path: Path) -> List[Dict]:
+    if not path.exists():
+        raise FileNotFoundError(f"Input not found: {path}")
+    out = []
+    with path.open("r", encoding="utf-8") as fh:
+        for line in fh:
+            line = line.strip()
+            if not line:
+                continue
+            out.append(json.loads(line))
+    return out
+
+def ensure_list(x):
+    if x is None:
+        return []
+    if isinstance(x, list):
+        return x
+    return [x]
+
+def synth_id(base_name: str, idx: int):
+    safe = (base_name or "no_name").strip().replace(" ", "_")[:40]
+    return f"Tmp_{safe}_{idx}"
+
+def dedupe_preserve_order(values: List) -> List[str]:
+    """
+    Deduplicate while preserving order; normalize everything to str and
+    drop falsy values (None, "", etc.).
+    """
+    seen = set()
+    out: List[str] = []
+    for v in values:
+        if not v:
+            continue
+        sv = str(v)
+        if sv not in seen:
+            seen.add(sv)
+            out.append(sv)
+    return out
+
+def find_chunk_ids_anywhere(obj) -> List:
+    """
+    Recursively find all values of any key named 'chunk_id' in a nested
+    dict/list structure.
+    """
+    found: List = []
+    if isinstance(obj, dict):
+        for k, v in obj.items():
+            if k == "chunk_id" and v is not None:
+                found.extend(ensure_list(v))
+            else:
+                found.extend(find_chunk_ids_anywhere(v))
+    elif isinstance(obj, list):
+        for item in obj:
+            found.extend(find_chunk_ids_anywhere(item))
+    return found
+
+def build_raw_chunk_index(seed_path: Path) -> Dict[str, List[str]]:
+    """
+    Build a mapping from raw entity id -> list of chunk_ids from the
+    original entities_raw.jsonl file.
+    """
+    id_to_chunks: Dict[str, List[str]] = {}
+    if not seed_path.exists():
+        print(f"WARNING: raw seed file not found; cannot augment chunk_ids from raw entities: {seed_path}")
+        return id_to_chunks
+
+    raw_recs = load_jsonl(seed_path)
+    for r in raw_recs:
+        rid = r.get("id") or r.get("entity_id") or None
+        if not rid:
+            continue
+        chunks = find_chunk_ids_anywhere(r)
+        if chunks:
+            id_to_chunks[rid] = dedupe_preserve_order(chunks)
+    return id_to_chunks
+
+# ---------- main ----------
+
+def produce_clean_jsonl(inp: Path, outp: Path):
+    # Build lookup from raw entity id -> chunk_ids, so we can use merged_from
+    raw_id_to_chunks = build_raw_chunk_index(RAW_SEED_PATH)
+
+    recs = load_jsonl(inp)
+    outp.parent.mkdir(parents=True, exist_ok=True)
+
+    cleaned = []
+    for i, r in enumerate(recs):
+        # pick id (prefer top-level id or canonical_id); otherwise synth
+        rid = r.get("id") or r.get("canonical_id") or r.get("canonical") or None
+        if not rid:
+            rid = synth_id(r.get("entity_name"), i)
+
+        # ---- chunk_id gathering ----
+        chunk_ids: List[str] = []
+
+        # 1) Any chunk_id present anywhere in this record (robust to structure)
+        direct_chunks = find_chunk_ids_anywhere(r)
+        chunk_ids.extend(direct_chunks)
+
+        # 2) Augment with chunk_ids from raw entities referenced in merged_from
+        for src_id in ensure_list(r.get("merged_from")):
+            if not src_id:
+                continue
+            src_chunks = raw_id_to_chunks.get(str(src_id))
+            if src_chunks:
+                chunk_ids.extend(src_chunks)
+
+        # final dedupe + normalization
+        chunk_ids = dedupe_preserve_order(chunk_ids)
+
+        # ---- node_properties normalization ----
+        node_props = r.get("node_properties") or []
+        if not isinstance(node_props, list):
+            node_props = [node_props]
+
+        cleaned_rec = {
+            "id": rid,
+            "entity_name": r.get("entity_name") or r.get("canonical_name") or "",
+            "entity_description": r.get("entity_description") or r.get("canonical_description") or "",
+            "entity_type_hint": r.get("entity_type_hint") or r.get("canonical_type") or r.get("entity_type") or "",
+            "confidence_score": r.get("confidence_score") if r.get("confidence_score") is not None else None,
+            "resolution_context": r.get("resolution_context") or r.get("text_span") or r.get("context_phrase") or "",
+            "flag": r.get("flag") or "entity_raw",
+            "chunk_id": chunk_ids,
+            "node_properties": node_props,
+        }
+        cleaned.append(cleaned_rec)
+
+    with outp.open("w", encoding="utf-8") as fh:
+        for rec in cleaned:
+            fh.write(json.dumps(rec, ensure_ascii=False) + "\n")
+
+    print(f"Wrote {len(cleaned)} records -> {outp}")
+
+
+# -----------------------
+# Cls Rec input producer - Run statement
+# -----------------------
+
+# if __name__ == "__main__":
+#     produce_clean_jsonl(input_path, out_file)
+
+
+#endregion#? Produce_class_input_from_iter K - V2
+#?#########################  End  ##########################
 
 
 
@@ -29197,4 +29400,189 @@ RETURN n, r, m
 #?#########################  End  ##########################
 
 
+
+
+
+
+
+
+
+
+
+
+#!############################################# Start Chapter ##################################################
+#region:#!   Other Notes
+
+
+
+
+#?######################### Start ##########################
+#region:#?  The way I implemented weighted embeddings and retrieval in earlier projects.
+
+
+
+
+
+
+
+
+
+
+
+
+...
+
+# Remaining weights have been rescaled to sum to 1.
+WEIGHTS = {"name": 0.40, "desc": 0.25, "ctx": 0.35 }
+EMBED_MODEL = "BAAI/bge-large-en-v1.5"   # change if needed
+BATCH_SIZE = 32
+DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
+
+.....
+
+
+....
+
+...
+
+
+# ------------------ Embedder ------------------
+class HFEmbedder:
+    def __init__(self, model_name: str = EMBED_MODEL, device: str = DEVICE):
+        print(f"[Embedder] loading model {model_name} on {device} ...")
+        self.device = device
+        self.tokenizer = AutoTokenizer.from_pretrained(model_name, use_fast=True)
+        self.model = AutoModel.from_pretrained(model_name)
+        self.model.to(device)
+        self.model.eval()
+        for p in self.model.parameters():
+            p.requires_grad = False
+
+    @torch.no_grad()
+    def encode_batch(self, texts: List[str], batch_size: int = BATCH_SIZE) -> np.ndarray:
+        embs = []
+        for i in range(0, len(texts), batch_size):
+            batch = texts[i:i+batch_size]
+            enc = self.tokenizer(batch, padding=True, truncation=True, return_tensors="pt", max_length=1024)
+            input_ids = enc["input_ids"].to(self.device)
+            attention_mask = enc["attention_mask"].to(self.device)
+            out = self.model(input_ids=input_ids, attention_mask=attention_mask, return_dict=True)
+            token_embeds = out.last_hidden_state
+            pooled = mean_pool(token_embeds, attention_mask)
+            pooled = pooled.cpu().numpy()
+            embs.append(pooled)
+        embs = np.vstack(embs)
+        embs = normalize(embs, axis=1)
+        return embs
+
+# ------------------ Build fields & combine embeddings ------------------
+def build_field_texts(entities: List[Dict]):
+    """
+    Build text lists for fields:
+      - name: entity_name (preferred)
+      - desc: entity_description
+      - ctx: [TYPE:<entity_type_hint>] + resolution_context (preferred) + serialized node_properties if present
+    Node properties are appended into ctx so they contribute to the 'ctx' embedding (no extra weight).
+    """
+    names, descs, ctxs = [], [], []
+    for e in entities:
+        # name & desc
+        names.append(safe_text(e, "entity_name") or safe_text(e, "entity_name_original") or "")
+        descs.append(safe_text(e, "entity_description") or "")
+
+        # resolution_context preferred; fall back to older fields
+        resolution = safe_text(e, "resolution_context") or safe_text(e, "text_span") or safe_text(e, "context_phrase") or safe_text(e, "used_context_excerpt") or ""
+
+        # entity type (folded into ctx as a hint)
+        etype = safe_text(e, "entity_type_hint") or safe_text(e, "entity_type") or ""
+
+        # serialize node_properties if present and append to resolution context (so it contributes to ctx embedding)
+        node_props = e.get("node_properties") or []
+        node_props_text = ""
+        if isinstance(node_props, list) and node_props:
+            pieces = []
+            for np in node_props:
+                if isinstance(np, dict):
+                    pname = np.get("prop_name") or np.get("name") or ""
+                    pval = np.get("prop_value") or np.get("value") or ""
+                    pieces.append(f"{pname}:{pval}" if pname and pval else (pname or pval))
+            if pieces:
+                node_props_text = " | ".join(pieces)
+
+        # build ctx: type hint first (if present), then resolution, then props
+        ctx_parts = []
+        if etype:
+            ctx_parts.append(f"[TYPE:{etype}]")
+        if resolution:
+            ctx_parts.append(resolution)
+        if node_props_text:
+            ctx_parts.append(node_props_text)
+
+        combined_ctx = " ; ".join([p for p in ctx_parts if p])
+        ctxs.append(combined_ctx)
+
+    return names, descs, ctxs
+
+def compute_combined_embeddings(embedder: HFEmbedder, entities: List[Dict], weights=WEIGHTS):
+    names, descs, ctxs = build_field_texts(entities)
+    D_ref = None
+    # encode each field (if empty, make zeros)
+    print("[compute] encoding name field ...")
+    emb_name = embedder.encode_batch(names) if any(t.strip() for t in names) else None
+    D_ref = emb_name.shape[1] if emb_name is not None else None
+
+    print("[compute] encoding desc field ...")
+    emb_desc = embedder.encode_batch(descs) if any(t.strip() for t in descs) else None
+    if D_ref is None and emb_desc is not None:
+        D_ref = emb_desc.shape[1]
+
+    print("[compute] encoding ctx field ...")
+    emb_ctx = embedder.encode_batch(ctxs) if any(t.strip() for t in ctxs) else None
+    if D_ref is None and emb_ctx is not None:
+        D_ref = emb_ctx.shape[1]
+
+    if D_ref is None:
+        raise ValueError("All fields empty — cannot embed")
+
+    # helper to make arrays shape (N, D_ref)
+    def _ensure(arr):
+        if arr is None:
+            return np.zeros((len(entities), D_ref))
+        if arr.shape[1] != D_ref:
+            raise ValueError("embedding dimension mismatch")
+        return arr
+
+    emb_name = _ensure(emb_name)
+    emb_desc = _ensure(emb_desc)
+    emb_ctx  = _ensure(emb_ctx)
+
+    w_name = weights.get("name", 0.0)
+    w_desc = weights.get("desc", 0.0)
+    w_ctx  = weights.get("ctx", 0.0)
+    Wsum = w_name + w_desc + w_ctx
+    if Wsum <= 0:
+        raise ValueError("Sum of weights must be > 0")
+    w_name /= Wsum; w_desc /= Wsum; w_ctx /= Wsum
+
+    combined = (w_name * emb_name) + (w_desc * emb_desc) + (w_ctx * emb_ctx)
+    combined = normalize(combined, axis=1)
+    return combined
+
+...
+
+.
+.
+.
+.
+.
+ 
+
+#endregion#? The way I implemented weighted embeddings and retrieval in earlier projects.
+#?#########################  End  ##########################
+
+
+
+
+#endregion#! Other Notes
+#!#############################################  End Chapter  ##################################################
 

@@ -1,0 +1,31 @@
+{
+  "n_classes": 2,
+  "n_members_total": 5,
+  "classes": {
+    "ClsC_56319786": {
+      "class_label": "Metamorphic Body Fluids",
+      "class_description": "Biological liquids or semi-liquids involved in insect metamorphosis, including internal fluids used to expand new structures and liquefied body material during transformation.",
+      "class_type_hint": "Biological Substance",
+      "confidence": 0.8,
+      "evidence_excerpt": "Internal fluid the butterfly pumps into its wings; organs dissolve into a soupy substance during metamorphosis.",
+      "source_cluster_id": {"recluster_round": 1, "subcluster": 0},
+      "members": [
+        {"id": "En_0223824e","entity_name": "wing fluid","entity_description": "Internal fluid the butterfly pumps into its wings to expand and harden them.","entity_type_hint": "BiologicalSubstance","confidence_score": 0.86,"resolution_context": "The newly emerged butterfly has soft, wrinkled wings that it must pump full of fluid to expand and harden. The reference to fluid indicates a biological substance used to inflate the wings.","flag": "entity_raw","chunk_id": ["Ch_000005"],"node_properties": []},
+        {"id": "En_84110611","entity_name": "soupy substance","entity_description": "Liquid-like mixture formed when the caterpillar’s organs dissolve during metamorphosis.","entity_type_hint": "BiologicalState","confidence_score": 0.9,"resolution_context": "Its organs dissolve into a soupy substance, and new tissues and structures, such as wings and antennae, begin to form. The phrase indicates a liquefied intermediate state of the caterpillar body.","flag": "entity_raw","chunk_id": ["Ch_000005"],"node_properties": []}
+      ]
+    },
+    "ClsC_40cdc002": {
+      "class_label": "Butterfly Ecological Interactions",
+      "class_description": "Ecological roles and interacting organisms associated with butterflies and their larvae, including their predators and their role as prey.",
+      "class_type_hint": "Ecological Relationship",
+      "confidence": 0.8,
+      "evidence_excerpt": "host plants, food source for birds and reptiles, and predators of caterpillars",
+      "source_cluster_id": {"recluster_round": 1, "subcluster": 1},
+      "members": [
+        {"id": "Can_de817465","entity_name": "host plants","entity_description": "Specific plant species used by butterflies as oviposition sites and as food sources for emerging larvae.","entity_type_hint": "Environment","confidence_score": 0.94,"resolution_context": "Both refer to the same concept of plants serving as egg-laying sites and larval food sources for butterflies in the life cycle context.","flag": "entity_raw","chunk_id": ["Ch_000001","Ch_000007"],"node_properties": []},
+        {"id": "En_4eeeef3a","entity_name": "food source","entity_description": "Role of butterflies as prey providing nourishment to birds, reptiles, and other insects.","entity_type_hint": "EcologicalRole","confidence_score": 0.9,"resolution_context": "Butterflies also serve as a food source for birds, reptiles, and other insects, contributing to the overall biodiversity of their ecosystem.","flag": "entity_raw","chunk_id": ["Ch_000006"],"node_properties": []},
+        {"id": "En_53a03385","entity_name": "predators of caterpillars","entity_description": "Animals that prey upon caterpillars, driving their need for camouflage and protection.","entity_type_hint": "OrganismGroup","confidence_score": 0.8,"resolution_context": "Some caterpillars have spines or hairs for protection, while others mimic the appearance of twigs or leaves to camouflage themselves from predators. The presence of predators influences the evolution of these defensive traits in caterpillars.","flag": "entity_raw","chunk_id": ["Ch_000003"],"node_properties": []}
+      ]
+    }
+  }
+}

@@ -1,0 +1,75 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_30d0fd057598"],
+      "canonical_rel_name": "occurs_in",
+      "canonical_rel_desc": "Indicates that a process or event takes place within or inside a specified spatial container or structure.",
+      "justification": "This relation links the metamorphosis process to the chrysalis as the spatial container where the process takes place; a process-within-location predicate is appropriate.",
+      "remark": null,
+      "confidence": 0.97
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_072ad5baa14c"],
+      "canonical_rel_name": "occurs_between",
+      "canonical_rel_desc": "Indicates that a process or interaction takes place between or among specified entities or structures.",
+      "justification": "This relation links the pollination process to flowers as the entities between which the interaction occurs, matching a process-between-participants semantics.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_9590b882f46e"],
+      "canonical_rel_name": "is_property_of",
+      "canonical_rel_desc": "Indicates that a quality, attribute, or property is characteristic of or belongs to a specified entity or system.",
+      "justification": "Here biodiversity is modeled as a property or attribute of an ecosystem rather than as a process occurring inside it; a property-of predicate captures this semantics better than a pure spatial relation.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": ["RelR_30d0fd057598", "RelR_072ad5baa14c"],
+      "rel_cls": "process_spatial_relation",
+      "justification": "Both relations connect biological processes (metamorphosis, pollination) to spatial or structural contexts (a chrysalis as container, flowers as interaction partners), fitting a common class for spatial context of processes.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": ["RelR_9590b882f46e"],
+      "rel_cls": "property_assignment_relation",
+      "justification": "This relation assigns a property (biodiversity) to a system (ecosystem), which is best captured by a class for associating attributes or properties with entities.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": ["RelR_30d0fd057598", "RelR_072ad5baa14c"],
+      "rel_cls_group": "SPATIALITY",
+      "justification": "Both relations primarily describe where or between which structures a process occurs, which is a spatial/contextual dimension.",
+      "remark": null,
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": ["RelR_9590b882f46e"],
+      "rel_cls_group": "ATTRIBUTE",
+      "justification": "The link expresses that biodiversity is an attribute or property of an ecosystem, fitting an attribute/quality assignment dimension rather than spatiality or causality.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  }
+]

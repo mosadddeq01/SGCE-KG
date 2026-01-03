@@ -1,0 +1,1688 @@
+[
+  {
+    "cluster_label": -1,
+    "cluster_classes": [
+      {
+        "candidate_id": "ClsC_414056f3",
+        "class_label": "Plant Reproduction System",
+        "class_description": "Interrelated biological entities involved in sexual reproduction of flowering plants, including the plants themselves, their flowers, pollen, and the pollination process that transfers pollen between flowers.",
+        "class_type_hint": "Biological System",
+        "class_group": "TBD",
+        "confidence": 0.9,
+        "evidence_excerpt": "Butterflies transfer pollen between flowers during pollination, helping plants reproduce via flowers, nectar, and pollen.",
+        "member_ids": [
+          "Can_989a53ee",
+          "En_7b4a49dc",
+          "En_830b9177",
+          "En_0c1d707b"
+        ],
+        "members": [
+          {
+            "id": "Can_989a53ee",
+            "entity_name": "pollination",
+            "entity_description": "Biological process in which pollen is transferred between flowers, often by organisms, enabling plant reproduction and helping maintain plant populations.",
+            "entity_type_hint": "BiologicalProcess"
+          },
+          {
+            "id": "En_7b4a49dc",
+            "entity_name": "flowers",
+            "entity_description": "Reproductive structures of plants that produce nectar and pollen visited by butterflies.",
+            "entity_type_hint": "OrganismPart"
+          },
+          {
+            "id": "En_830b9177",
+            "entity_name": "pollen",
+            "entity_description": "Plant reproductive grains carried by butterflies between flowers during pollination.",
+            "entity_type_hint": "BiologicalSubstance"
+          },
+          {
+            "id": "En_0c1d707b",
+            "entity_name": "plants",
+            "entity_description": "Organisms that produce flowers, nectar, and pollen and depend on pollination to reproduce.",
+            "entity_type_hint": "Organism"
+          }
+        ],
+        "remarks": []
+      },
+      {
+        "candidate_id": "ClsC_e4745cce",
+        "class_label": "Butterfly Reproduction",
+        "class_description": "Entities related to the reproductive phase of a butterfly’s life cycle, including reproductive partners and the biological process of producing offspring.",
+        "class_type_hint": "Biological Process",
+        "class_group": "TBD",
+        "confidence": 0.86,
+        "evidence_excerpt": "Throughout their adult stage, butterflies focus on finding a mate and reproducing to continue the life cycle.",
+        "member_ids": [
+          "En_5d8a67f6",
+          "En_ab8bd9db"
+        ],
+        "members": [
+          {
+            "id": "En_5d8a67f6",
+            "entity_name": "mate",
+            "entity_description": "Reproductive partner that butterflies seek during the adult stage.",
+            "entity_type_hint": "Role"
+          },
+          {
+            "id": "En_ab8bd9db",
+            "entity_name": "reproducing",
+            "entity_description": "Biological process where butterflies produce offspring to continue their species’ life cycle.",
+            "entity_type_hint": "BiologicalProcess"
+          }
+        ],
+        "remarks": []
+      }
+    ],
+    "llm_raw": "[\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_414056f3\",\n      \"new_name\": \"Flowering Plant Reproduction\",\n      \"new_description\": \"Processes and structures involved in the sexual reproduction of flowering plants, including pollination, flowers, pollen, and the reproductive role of plants.\",\n      \"new_class_type_hint\": \"Biological Reproduction System\",\n      \"new_class_group\": \"Biological Reproduction\",\n      \"remark\": null,\n      \"justification\": \"Entities describe the reproductive system and process of flowering plants (plants, flowers, pollen, pollination), so refining the label/description and assigning the broader Class_Group 'Biological Reproduction' aligns it with the butterfly reproduction class while keeping a clear plant-specific scope.\",\n      \"confidence\": 0.93\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_e4745cce\",\n      \"new_name\": \"Butterfly Reproduction\",\n      \"new_description\": \"Processes and roles involved in butterfly reproduction during the adult stage, including reproductive partners and the act of producing offspring.\",\n      \"new_class_type_hint\": \"Biological Reproduction Process\",\n      \"new_class_group\": \"Biological Reproduction\",\n      \"remark\": null,\n      \"justification\": \"Entities concern the reproductive phase of butterflies (mate, reproducing), which is distinct from but closely related to plant reproduction, so assigning the shared Class_Group 'Biological Reproduction' connects these related but separate classes and clarifies its process-centric scope.\",\n      \"confidence\": 0.93\n    }\n  }\n]",
+    "parsed_steps": [
+      {
+        "function": "modify_class",
+        "args": {
+          "class_id": "ClsC_414056f3",
+          "new_name": "Flowering Plant Reproduction",
+          "new_description": "Processes and structures involved in the sexual reproduction of flowering plants, including pollination, flowers, pollen, and the reproductive role of plants.",
+          "new_class_type_hint": "Biological Reproduction System",
+          "new_class_group": "Biological Reproduction",
+          "remark": null,
+          "justification": "Entities describe the reproductive system and process of flowering plants (plants, flowers, pollen, pollination), so refining the label/description and assigning the broader Class_Group 'Biological Reproduction' aligns it with the butterfly reproduction class while keeping a clear plant-specific scope.",
+          "confidence": 0.93
+        }
+      },
+      {
+        "function": "modify_class",
+        "args": {
+          "class_id": "ClsC_e4745cce",
+          "new_name": "Butterfly Reproduction",
+          "new_description": "Processes and roles involved in butterfly reproduction during the adult stage, including reproductive partners and the act of producing offspring.",
+          "new_class_type_hint": "Biological Reproduction Process",
+          "new_class_group": "Biological Reproduction",
+          "remark": null,
+          "justification": "Entities concern the reproductive phase of butterflies (mate, reproducing), which is distinct from but closely related to plant reproduction, so assigning the shared Class_Group 'Biological Reproduction' connects these related but separate classes and clarifies its process-centric scope.",
+          "confidence": 0.93
+        }
+      }
+    ],
+    "executed_decisions": [
+      {
+        "action": "modify_class",
+        "class_id": "ClsC_414056f3",
+        "class_id_resolved": "ClsC_414056f3",
+        "new_name": "Flowering Plant Reproduction",
+        "new_description": "Processes and structures involved in the sexual reproduction of flowering plants, including pollination, flowers, pollen, and the reproductive role of plants.",
+        "new_class_type_hint": "Biological Reproduction System",
+        "new_class_group": "Biological Reproduction",
+        "remark": null,
+        "justification": "Entities describe the reproductive system and process of flowering plants (plants, flowers, pollen, pollination), so refining the label/description and assigning the broader Class_Group 'Biological Reproduction' aligns it with the butterfly reproduction class while keeping a clear plant-specific scope.",
+        "confidence": 0.93
+      },
+      {
+        "action": "modify_class",
+        "class_id": "ClsC_e4745cce",
+        "class_id_resolved": "ClsC_e4745cce",
+        "new_name": "Butterfly Reproduction",
+        "new_description": "Processes and roles involved in butterfly reproduction during the adult stage, including reproductive partners and the act of producing offspring.",
+        "new_class_type_hint": "Biological Reproduction Process",
+        "new_class_group": "Biological Reproduction",
+        "remark": null,
+        "justification": "Entities concern the reproductive phase of butterflies (mate, reproducing), which is distinct from but closely related to plant reproduction, so assigning the shared Class_Group 'Biological Reproduction' connects these related but separate classes and clarifies its process-centric scope.",
+        "confidence": 0.93
+      }
+    ],
+    "provisional_to_real": {},
+    "timestamp": "2026-01-03T08:19:08Z"
+  },
+  {
+    "cluster_label": 0,
+    "cluster_classes": [
+      {
+        "candidate_id": "ClsC_bcac8bce",
+        "class_label": "Metamorphic Body Structures",
+        "class_description": "Anatomical structures involved in the caterpillar-to-butterfly transformation, including larval organs that dissolve and the new adult tissues and appendages that form.",
+        "class_type_hint": "Biological Structure",
+        "class_group": "TBD",
+        "confidence": 0.86,
+        "evidence_excerpt": "Its organs dissolve into a soupy substance, and new tissues and structures, such as wings and antennae, begin to form.",
+        "member_ids": [
+          "En_d4c0d528",
+          "En_f0c16ab3",
+          "En_38daabd9"
+        ],
+        "members": [
+          {
+            "id": "En_d4c0d528",
+            "entity_name": "organs",
+            "entity_description": "Internal bodily structures of the caterpillar that dissolve during metamorphosis inside the chrysalis.",
+            "entity_type_hint": "BiologicalStructure"
+          },
+          {
+            "id": "En_f0c16ab3",
+            "entity_name": "new tissues and structures",
+            "entity_description": "Developing anatomical features that form from dissolved caterpillar material during metamorphosis.",
+            "entity_type_hint": "BiologicalStructure"
+          },
+          {
+            "id": "En_38daabd9",
+            "entity_name": "antennae",
+            "entity_description": "Sensory appendages of the adult butterfly that form as new structures during metamorphosis.",
+            "entity_type_hint": "BiologicalStructure"
+          }
+        ],
+        "remarks": []
+      },
+      {
+        "candidate_id": "ClsC_5da5be54",
+        "class_label": "Plant Organs",
+        "class_description": "Macroscopic structural parts of plants, such as leaves and stems, that provide support or surfaces for biological processes like chrysalis attachment.",
+        "class_type_hint": "Biological Structure",
+        "class_group": "TBD",
+        "confidence": 0.93,
+        "evidence_excerpt": "The caterpillar attaches itself to a leaf or stem and forms a protective shell.",
+        "member_ids": [
+          "En_1eb696d6",
+          "En_179a18b9"
+        ],
+        "members": [
+          {
+            "id": "En_1eb696d6",
+            "entity_name": "leaf",
+            "entity_description": "Flat, typically green plant organ attached to a stem, which can serve as an attachment surface for a chrysalis.",
+            "entity_type_hint": "BiologicalStructure"
+          },
+          {
+            "id": "En_179a18b9",
+            "entity_name": "stem",
+            "entity_description": "Supportive plant structure that bears leaves and can serve as an attachment surface for a chrysalis.",
+            "entity_type_hint": "BiologicalStructure"
+          }
+        ],
+        "remarks": []
+      },
+      {
+        "candidate_id": "ClsC_709b29fb",
+        "class_label": "Butterfly Wing Anatomy",
+        "class_description": "Anatomical structures and localized physical states of butterfly wings, including the paired wings themselves and their initial soft, wrinkled condition post-emergence.",
+        "class_type_hint": "Anatomical Structure",
+        "class_group": "TBD",
+        "confidence": 0.83,
+        "evidence_excerpt": "Paired flight organs... initially emerging soft and wrinkled before fully developing for flight.",
+        "member_ids": [
+          "Can_6b57f2c6",
+          "En_c7331ad1"
+        ],
+        "members": [
+          {
+            "id": "Can_6b57f2c6",
+            "entity_name": "butterfly wings",
+            "entity_description": "Paired flight organs of the adult butterfly that form during metamorphosis, initially emerging soft and wrinkled before fully developing for flight.",
+            "entity_type_hint": "AnatomicalStructure"
+          },
+          {
+            "id": "En_c7331ad1",
+            "entity_name": "soft, wrinkled wings",
+            "entity_description": "Initial physical state of a butterfly’s wings right after emerging from the chrysalis.",
+            "entity_type_hint": "BiologicalState"
+          }
+        ],
+        "remarks": [
+          "This class has been split into more specific subclasses: 'Butterfly Wing Structures' and 'Butterfly Wing Physical States'. It should no longer receive new entities."
+        ]
+      },
+      {
+        "candidate_id": "ClsC_ba1c425e",
+        "class_label": "Metamorphic Body Fluids",
+        "class_description": "Biological liquids or semi-liquids involved in insect metamorphosis, including internal fluids used to expand new structures and liquefied body material during transformation.",
+        "class_type_hint": "Biological Substance",
+        "class_group": "TBD",
+        "confidence": 0.8,
+        "evidence_excerpt": "Internal fluid the butterfly pumps into its wings; organs dissolve into a soupy substance during metamorphosis.",
+        "member_ids": [
+          "En_0223824e",
+          "En_84110611"
+        ],
+        "members": [
+          {
+            "id": "En_0223824e",
+            "entity_name": "wing fluid",
+            "entity_description": "Internal fluid the butterfly pumps into its wings to expand and harden them.",
+            "entity_type_hint": "BiologicalSubstance"
+          },
+          {
+            "id": "En_84110611",
+            "entity_name": "soupy substance",
+            "entity_description": "Liquid-like mixture formed when the caterpillar’s organs dissolve during metamorphosis.",
+            "entity_type_hint": "BiologicalState"
+          }
+        ],
+        "remarks": []
+      }
+    ],
+    "llm_raw": "[\n  {\n    \"function\": \"split_class\",\n    \"args\": {\n      \"source_class_id\": \"ClsC_709b29fb\",\n      \"splits\": [\n        {\n          \"name\": \"Butterfly Wing Structures\",\n          \"description\": \"Structural anatomical components of butterfly wings, such as the paired wings themselves that form during metamorphosis.\",\n          \"class_type_hint\": \"Anatomical Structure\",\n          \"member_ids\": [\"Can_6b57f2c6\"],\n          \"provisional_id\": \"ClsC_709b29fb_struct\"\n        },\n        {\n          \"name\": \"Butterfly Wing Physical States\",\n          \"description\": \"Physical or developmental states of butterfly wings, such as their initial soft, wrinkled condition post-emergence.\",\n          \"class_type_hint\": \"Biological State\",\n          \"member_ids\": [\"En_c7331ad1\"],\n          \"provisional_id\": \"ClsC_709b29fb_state\"\n        }\n      ],\n      \"justification\": \"ClsC_709b29fb currently mixes the structural entity 'butterfly wings' with the state entity 'soft, wrinkled wings'; splitting yields one class for wing structures and another for wing states.\",\n      \"remark\": null,\n      \"confidence\": 0.93\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_709b29fb\",\n      \"new_name\": \"Butterfly Wing Anatomy (superseded by split subclasses)\",\n      \"new_description\": \"Original umbrella class for butterfly wing anatomy, now superseded by separate classes for wing structures and wing physical states.\",\n      \"new_class_type_hint\": \"Anatomical Structure\",\n      \"new_class_group\": \"Biological Structures and Substances in Butterfly Metamorphosis\",\n      \"remark\": \"This class has been split into more specific subclasses: 'Butterfly Wing Structures' and 'Butterfly Wing Physical States'. It should no longer receive new entities.\",\n      \"justification\": \"After splitting ClsC_709b29fb into structure and state subclasses, the original class should be marked as superseded and aligned to the new class_group for clarity.\",\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_709b29fb_struct\",\n      \"new_name\": \"Butterfly Wing Structures\",\n      \"new_description\": \"Structural anatomical components of butterfly wings, such as the paired wings that form and expand during metamorphosis.\",\n      \"new_class_type_hint\": \"Anatomical Structure\",\n      \"new_class_group\": \"Biological Structures and Substances in Butterfly Metamorphosis\",\n      \"remark\": null,\n      \"justification\": \"The new structural subclass for wings should be explicitly categorized under a shared class_group for metamorphosis-related biological structures and substances.\",\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_709b29fb_state\",\n      \"new_name\": \"Butterfly Wing Physical States\",\n      \"new_description\": \"Physical or developmental states of butterfly wings (e.g., soft and wrinkled immediately after emergence from the chrysalis).\",\n      \"new_class_type_hint\": \"Biological State\",\n      \"new_class_group\": \"Biological Structures and Substances in Butterfly Metamorphosis\",\n      \"remark\": null,\n      \"justification\": \"The new state-focused subclass should be clearly labeled as a state class and aligned to the same higher-level metamorphosis-related biological group.\",\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_bcac8bce\",\n      \"new_name\": \"Insect Metamorphic Body Structures\",\n      \"new_description\": \"Anatomical structures involved in the caterpillar-to-butterfly transformation, including larval organs that dissolve and the new adult tissues and appendages that form.\",\n      \"new_class_type_hint\": \"Biological Structure\",\n      \"new_class_group\": \"Biological Structures and Substances in Butterfly Metamorphosis\",\n      \"remark\": null,\n      \"justification\": \"ClsC_bcac8bce covers organs, new tissues, and antennae during metamorphosis and should be grouped with other metamorphosis-related structures and substances under a shared class_group.\",\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_5da5be54\",\n      \"new_name\": \"Plant Organs Supporting Metamorphosis Habitat\",\n      \"new_description\": \"Macroscopic structural parts of plants, such as leaves and stems, that provide surfaces or support for chrysalis attachment during butterfly metamorphosis.\",\n      \"new_class_type_hint\": \"Biological Structure\",\n      \"new_class_group\": \"Biological Structures and Substances in Butterfly Metamorphosis\",\n      \"remark\": null,\n      \"justification\": \"Although plant organs are not insect anatomy, they are biological structures directly involved in the metamorphosis context (as attachment sites) and should share the same high-level metamorphosis-related class_group.\",\n      \"confidence\": 0.86\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_ba1c425e\",\n      \"new_name\": \"Metamorphic Body Fluids\",\n      \"new_description\": \"Biological liquids or semi-liquids involved in insect metamorphosis, including internal fluids used to expand new structures and the liquefied body material formed as organs dissolve.\",\n      \"new_class_type_hint\": \"Biological Substance\",\n      \"new_class_group\": \"Biological Structures and Substances in Butterfly Metamorphosis\",\n      \"remark\": null,\n      \"justification\": \"ClsC_ba1c425e covers wing fluid and liquefied organ material during metamorphosis, which are conceptually aligned with metamorphosis-related anatomical structures and should share the same class_group.\",\n      \"confidence\": 0.88\n    }\n  }\n]",
+    "parsed_steps": [
+      {
+        "function": "split_class",
+        "args": {
+          "source_class_id": "ClsC_709b29fb",
+          "splits": [
+            {
+              "name": "Butterfly Wing Structures",
+              "description": "Structural anatomical components of butterfly wings, such as the paired wings themselves that form during metamorphosis.",
+              "class_type_hint": "Anatomical Structure",
+              "member_ids": [
+                "Can_6b57f2c6"
+              ],
+              "provisional_id": "ClsC_709b29fb_struct"
+            },
+            {
+              "name": "Butterfly Wing Physical States",
+              "description": "Physical or developmental states of butterfly wings, such as their initial soft, wrinkled condition post-emergence.",
+              "class_type_hint": "Biological State",
+              "member_ids": [
+                "En_c7331ad1"
+              ],
+              "provisional_id": "ClsC_709b29fb_state"
+            }
+          ],
+          "justification": "ClsC_709b29fb currently mixes the structural entity 'butterfly wings' with the state entity 'soft, wrinkled wings'; splitting yields one class for wing structures and another for wing states.",
+          "remark": null,
+          "confidence": 0.93
+        }
+      },
+      {
+        "function": "modify_class",
+        "args": {
+          "class_id": "ClsC_709b29fb",
+          "new_name": "Butterfly Wing Anatomy (superseded by split subclasses)",
+          "new_description": "Original umbrella class for butterfly wing anatomy, now superseded by separate classes for wing structures and wing physical states.",
+          "new_class_type_hint": "Anatomical Structure",
+          "new_class_group": "Biological Structures and Substances in Butterfly Metamorphosis",
+          "remark": "This class has been split into more specific subclasses: 'Butterfly Wing Structures' and 'Butterfly Wing Physical States'. It should no longer receive new entities.",
+          "justification": "After splitting ClsC_709b29fb into structure and state subclasses, the original class should be marked as superseded and aligned to the new class_group for clarity.",
+          "confidence": 0.9
+        }
+      },
+      {
+        "function": "modify_class",
+        "args": {
+          "class_id": "ClsC_709b29fb_struct",
+          "new_name": "Butterfly Wing Structures",
+          "new_description": "Structural anatomical components of butterfly wings, such as the paired wings that form and expand during metamorphosis.",
+          "new_class_type_hint": "Anatomical Structure",
+          "new_class_group": "Biological Structures and Substances in Butterfly Metamorphosis",
+          "remark": null,
+          "justification": "The new structural subclass for wings should be explicitly categorized under a shared class_group for metamorphosis-related biological structures and substances.",
+          "confidence": 0.9
+        }
+      },
+      {
+        "function": "modify_class",
+        "args": {
+          "class_id": "ClsC_709b29fb_state",
+          "new_name": "Butterfly Wing Physical States",
+          "new_description": "Physical or developmental states of butterfly wings (e.g., soft and wrinkled immediately after emergence from the chrysalis).",
+          "new_class_type_hint": "Biological State",
+          "new_class_group": "Biological Structures and Substances in Butterfly Metamorphosis",
+          "remark": null,
+          "justification": "The new state-focused subclass should be clearly labeled as a state class and aligned to the same higher-level metamorphosis-related biological group.",
+          "confidence": 0.9
+        }
+      },
+      {
+        "function": "modify_class",
+        "args": {
+          "class_id": "ClsC_bcac8bce",
+          "new_name": "Insect Metamorphic Body Structures",
+          "new_description": "Anatomical structures involved in the caterpillar-to-butterfly transformation, including larval organs that dissolve and the new adult tissues and appendages that form.",
+          "new_class_type_hint": "Biological Structure",
+          "new_class_group": "Biological Structures and Substances in Butterfly Metamorphosis",
+          "remark": null,
+          "justification": "ClsC_bcac8bce covers organs, new tissues, and antennae during metamorphosis and should be grouped with other metamorphosis-related structures and substances under a shared class_group.",
+          "confidence": 0.9
+        }
+      },
+      {
+        "function": "modify_class",
+        "args": {
+          "class_id": "ClsC_5da5be54",
+          "new_name": "Plant Organs Supporting Metamorphosis Habitat",
+          "new_description": "Macroscopic structural parts of plants, such as leaves and stems, that provide surfaces or support for chrysalis attachment during butterfly metamorphosis.",
+          "new_class_type_hint": "Biological Structure",
+          "new_class_group": "Biological Structures and Substances in Butterfly Metamorphosis",
+          "remark": null,
+          "justification": "Although plant organs are not insect anatomy, they are biological structures directly involved in the metamorphosis context (as attachment sites) and should share the same high-level metamorphosis-related class_group.",
+          "confidence": 0.86
+        }
+      },
+      {
+        "function": "modify_class",
+        "args": {
+          "class_id": "ClsC_ba1c425e",
+          "new_name": "Metamorphic Body Fluids",
+          "new_description": "Biological liquids or semi-liquids involved in insect metamorphosis, including internal fluids used to expand new structures and the liquefied body material formed as organs dissolve.",
+          "new_class_type_hint": "Biological Substance",
+          "new_class_group": "Biological Structures and Substances in Butterfly Metamorphosis",
+          "remark": null,
+          "justification": "ClsC_ba1c425e covers wing fluid and liquefied organ material during metamorphosis, which are conceptually aligned with metamorphosis-related anatomical structures and should share the same class_group.",
+          "confidence": 0.88
+        }
+      }
+    ],
+    "executed_decisions": [
+      {
+        "action": "split_class",
+        "source_class_id": "ClsC_709b29fb",
+        "source_class_id_resolved": "ClsC_709b29fb",
+        "created_classes": [
+          {
+            "new_class_id": "ClsR_3d560a55",
+            "provisional_id": "ClsC_709b29fb_struct",
+            "member_ids": [
+              "Can_6b57f2c6"
+            ]
+          },
+          {
+            "new_class_id": "ClsR_11d8a097",
+            "provisional_id": "ClsC_709b29fb_state",
+            "member_ids": [
+              "En_c7331ad1"
+            ]
+          }
+        ],
+        "justification": "ClsC_709b29fb currently mixes the structural entity 'butterfly wings' with the state entity 'soft, wrinkled wings'; splitting yields one class for wing structures and another for wing states.",
+        "remark": null,
+        "confidence": 0.93
+      },
+      {
+        "action": "modify_class",
+        "class_id": "ClsC_709b29fb",
+        "class_id_resolved": "ClsC_709b29fb",
+        "new_name": "Butterfly Wing Anatomy (superseded by split subclasses)",
+        "new_description": "Original umbrella class for butterfly wing anatomy, now superseded by separate classes for wing structures and wing physical states.",
+        "new_class_type_hint": "Anatomical Structure",
+        "new_class_group": "Biological Structures and Substances in Butterfly Metamorphosis",
+        "remark": "This class has been split into more specific subclasses: 'Butterfly Wing Structures' and 'Butterfly Wing Physical States'. It should no longer receive new entities.",
+        "justification": "After splitting ClsC_709b29fb into structure and state subclasses, the original class should be marked as superseded and aligned to the new class_group for clarity.",
+        "confidence": 0.9
+      },
+      {
+        "action": "modify_class",
+        "class_id": "ClsC_709b29fb_struct",
+        "class_id_resolved": "ClsR_3d560a55",
+        "new_name": "Butterfly Wing Structures",
+        "new_description": "Structural anatomical components of butterfly wings, such as the paired wings that form and expand during metamorphosis.",
+        "new_class_type_hint": "Anatomical Structure",
+        "new_class_group": "Biological Structures and Substances in Butterfly Metamorphosis",
+        "remark": null,
+        "justification": "The new structural subclass for wings should be explicitly categorized under a shared class_group for metamorphosis-related biological structures and substances.",
+        "confidence": 0.9
+      },
+      {
+        "action": "modify_class",
+        "class_id": "ClsC_709b29fb_state",
+        "class_id_resolved": "ClsR_11d8a097",
+        "new_name": "Butterfly Wing Physical States",
+        "new_description": "Physical or developmental states of butterfly wings (e.g., soft and wrinkled immediately after emergence from the chrysalis).",
+        "new_class_type_hint": "Biological State",
+        "new_class_group": "Biological Structures and Substances in Butterfly Metamorphosis",
+        "remark": null,
+        "justification": "The new state-focused subclass should be clearly labeled as a state class and aligned to the same higher-level metamorphosis-related biological group.",
+        "confidence": 0.9
+      },
+      {
+        "action": "modify_class",
+        "class_id": "ClsC_bcac8bce",
+        "class_id_resolved": "ClsC_bcac8bce",
+        "new_name": "Insect Metamorphic Body Structures",
+        "new_description": "Anatomical structures involved in the caterpillar-to-butterfly transformation, including larval organs that dissolve and the new adult tissues and appendages that form.",
+        "new_class_type_hint": "Biological Structure",
+        "new_class_group": "Biological Structures and Substances in Butterfly Metamorphosis",
+        "remark": null,
+        "justification": "ClsC_bcac8bce covers organs, new tissues, and antennae during metamorphosis and should be grouped with other metamorphosis-related structures and substances under a shared class_group.",
+        "confidence": 0.9
+      },
+      {
+        "action": "modify_class",
+        "class_id": "ClsC_5da5be54",
+        "class_id_resolved": "ClsC_5da5be54",
+        "new_name": "Plant Organs Supporting Metamorphosis Habitat",
+        "new_description": "Macroscopic structural parts of plants, such as leaves and stems, that provide surfaces or support for chrysalis attachment during butterfly metamorphosis.",
+        "new_class_type_hint": "Biological Structure",
+        "new_class_group": "Biological Structures and Substances in Butterfly Metamorphosis",
+        "remark": null,
+        "justification": "Although plant organs are not insect anatomy, they are biological structures directly involved in the metamorphosis context (as attachment sites) and should share the same high-level metamorphosis-related class_group.",
+        "confidence": 0.86
+      },
+      {
+        "action": "modify_class",
+        "class_id": "ClsC_ba1c425e",
+        "class_id_resolved": "ClsC_ba1c425e",
+        "new_name": "Metamorphic Body Fluids",
+        "new_description": "Biological liquids or semi-liquids involved in insect metamorphosis, including internal fluids used to expand new structures and the liquefied body material formed as organs dissolve.",
+        "new_class_type_hint": "Biological Substance",
+        "new_class_group": "Biological Structures and Substances in Butterfly Metamorphosis",
+        "remark": null,
+        "justification": "ClsC_ba1c425e covers wing fluid and liquefied organ material during metamorphosis, which are conceptually aligned with metamorphosis-related anatomical structures and should share the same class_group.",
+        "confidence": 0.88
+      }
+    ],
+    "provisional_to_real": {
+      "ClsC_709b29fb_struct": "ClsR_3d560a55",
+      "ClsC_709b29fb_state": "ClsR_11d8a097"
+    },
+    "timestamp": "2026-01-03T08:18:01Z"
+  },
+  {
+    "cluster_label": 1,
+    "cluster_classes": [
+      {
+        "candidate_id": "ClsC_a55194f9",
+        "class_label": "Caterpillar Defensive Structures",
+        "class_description": "External spine- or hair-like body structures on caterpillars that primarily serve protective or defensive functions against predators.",
+        "class_type_hint": "Morphological Feature",
+        "class_group": "TBD",
+        "confidence": 0.93,
+        "evidence_excerpt": "Some caterpillars have spines or hairs for protection",
+        "member_ids": [
+          "En_2f23dc3d",
+          "En_8927b8e0"
+        ],
+        "members": [
+          {
+            "id": "En_2f23dc3d",
+            "entity_name": "caterpillar spines",
+            "entity_description": "Spine-like structures on some caterpillars that serve a protective function.",
+            "entity_type_hint": "MorphologicalFeature"
+          },
+          {
+            "id": "En_8927b8e0",
+            "entity_name": "caterpillar hairs",
+            "entity_description": "Hair-like structures on some caterpillars that provide protection.",
+            "entity_type_hint": "MorphologicalFeature"
+          }
+        ],
+        "remarks": []
+      },
+      {
+        "candidate_id": "ClsC_87b56a66",
+        "class_label": "Caterpillar Camouflage",
+        "class_description": "Specific camouflage adaptations in caterpillars where body form and coloration mimic environmental elements such as twigs or leaves to avoid detection by predators.",
+        "class_type_hint": "Biological Adaptation",
+        "class_group": "TBD",
+        "confidence": 0.95,
+        "evidence_excerpt": "Some caterpillars ... mimic the appearance of twigs or leaves to camouflage themselves from predators.",
+        "member_ids": [
+          "En_cf864dec",
+          "En_7ac357b4"
+        ],
+        "members": [
+          {
+            "id": "En_cf864dec",
+            "entity_name": "twig mimicry",
+            "entity_description": "Caterpillar camouflage strategy where their appearance resembles twigs.",
+            "entity_type_hint": "BiologicalAdaptation"
+          },
+          {
+            "id": "En_7ac357b4",
+            "entity_name": "leaf mimicry",
+            "entity_description": "Camouflage adaptation where caterpillars resemble leaves to avoid predation.",
+            "entity_type_hint": "BiologicalAdaptation"
+          }
+        ],
+        "remarks": []
+      }
+    ],
+    "llm_raw": "[\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_a55194f9\",\n      \"new_name\": null,\n      \"new_description\": null,\n      \"new_class_type_hint\": null,\n      \"new_class_group\": \"Caterpillar Defensive Adaptations\",\n      \"remark\": null,\n      \"justification\": \"This class covers defensive spine/hair structures in caterpillars and should be grouped with other predator-avoidance strategies under a shared Class_Group for caterpillar defensive adaptations.\",\n      \"confidence\": 0.95\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_87b56a66\",\n      \"new_name\": null,\n      \"new_description\": null,\n      \"new_class_type_hint\": null,\n      \"new_class_group\": \"Caterpillar Defensive Adaptations\",\n      \"remark\": null,\n      \"justification\": \"This class covers camouflage adaptations (twig/leaf mimicry) in caterpillars, which are conceptually distinct from but closely related to defensive spines/hairs; assigning the same Class_Group connects these as caterpillar defensive adaptations.\",\n      \"confidence\": 0.95\n    }\n  }\n]",
+    "parsed_steps": [
+      {
+        "function": "modify_class",
+        "args": {
+          "class_id": "ClsC_a55194f9",
+          "new_name": null,
+          "new_description": null,
+          "new_class_type_hint": null,
+          "new_class_group": "Caterpillar Defensive Adaptations",
+          "remark": null,
+          "justification": "This class covers defensive spine/hair structures in caterpillars and should be grouped with other predator-avoidance strategies under a shared Class_Group for caterpillar defensive adaptations.",
+          "confidence": 0.95
+        }
+      },
+      {
+        "function": "modify_class",
+        "args": {
+          "class_id": "ClsC_87b56a66",
+          "new_name": null,
+          "new_description": null,
+          "new_class_type_hint": null,
+          "new_class_group": "Caterpillar Defensive Adaptations",
+          "remark": null,
+          "justification": "This class covers camouflage adaptations (twig/leaf mimicry) in caterpillars, which are conceptually distinct from but closely related to defensive spines/hairs; assigning the same Class_Group connects these as caterpillar defensive adaptations.",
+          "confidence": 0.95
+        }
+      }
+    ],
+    "executed_decisions": [
+      {
+        "action": "modify_class",
+        "class_id": "ClsC_a55194f9",
+        "class_id_resolved": "ClsC_a55194f9",
+        "new_name": null,
+        "new_description": null,
+        "new_class_type_hint": null,
+        "new_class_group": "Caterpillar Defensive Adaptations",
+        "remark": null,
+        "justification": "This class covers defensive spine/hair structures in caterpillars and should be grouped with other predator-avoidance strategies under a shared Class_Group for caterpillar defensive adaptations.",
+        "confidence": 0.95
+      },
+      {
+        "action": "modify_class",
+        "class_id": "ClsC_87b56a66",
+        "class_id_resolved": "ClsC_87b56a66",
+        "new_name": null,
+        "new_description": null,
+        "new_class_type_hint": null,
+        "new_class_group": "Caterpillar Defensive Adaptations",
+        "remark": null,
+        "justification": "This class covers camouflage adaptations (twig/leaf mimicry) in caterpillars, which are conceptually distinct from but closely related to defensive spines/hairs; assigning the same Class_Group connects these as caterpillar defensive adaptations.",
+        "confidence": 0.95
+      }
+    ],
+    "provisional_to_real": {},
+    "timestamp": "2026-01-03T08:18:07Z"
+  },
+  {
+    "cluster_label": 2,
+    "cluster_classes": [
+      {
+        "candidate_id": "ClsC_70788dbe",
+        "class_label": "Butterfly Developmental Processes",
+        "class_description": "Biological processes that drive the growth and transformation of caterpillars into butterflies, including repeated skin shedding and the major transformation within the chrysalis.",
+        "class_type_hint": "Biological Process",
+        "class_group": "TBD",
+        "confidence": 0.9,
+        "evidence_excerpt": "molting as repeated skin shedding; metamorphosis as transformation into a butterfly",
+        "member_ids": [
+          "En_a552e15f",
+          "En_39d95774"
+        ],
+        "members": [
+          {
+            "id": "En_a552e15f",
+            "entity_name": "molting",
+            "entity_description": "Biological process where caterpillars shed their skin multiple times as they grow.",
+            "entity_type_hint": "BiologicalProcess"
+          },
+          {
+            "id": "En_39d95774",
+            "entity_name": "metamorphosis",
+            "entity_description": "Transformation process where a caterpillar changes into a butterfly inside the chrysalis.",
+            "entity_type_hint": "BiologicalProcess"
+          }
+        ],
+        "remarks": []
+      },
+      {
+        "candidate_id": "ClsC_8d404c11",
+        "class_label": "Metamorphosis Temporal Attributes",
+        "class_description": "Time-related attributes that quantify or describe the duration of the metamorphosis process inside the chrysalis.",
+        "class_type_hint": "Process Attribute",
+        "class_group": "TBD",
+        "confidence": 0.8,
+        "evidence_excerpt": "metamorphosis inside the chrysalis and its duration from days to weeks",
+        "member_ids": [
+          "En_39d95774",
+          "En_50ff70fb"
+        ],
+        "members": [
+          {
+            "id": "En_39d95774",
+            "entity_name": "metamorphosis",
+            "entity_description": "Transformation process where a caterpillar changes into a butterfly inside the chrysalis.",
+            "entity_type_hint": "BiologicalProcess"
+          },
+          {
+            "id": "En_50ff70fb",
+            "entity_name": "metamorphosis process duration",
+            "entity_description": "Time span of metamorphosis inside the chrysalis, ranging from days to weeks depending on species.",
+            "entity_type_hint": "OperatingCondition"
+          }
+        ],
+        "remarks": []
+      }
+    ],
+    "llm_raw": "[\n  {\n    \"function\": \"reassign_entities\",\n    \"args\": {\n      \"entity_ids\": [\"En_39d95774\"],\n      \"from_class_id\": \"ClsC_8d404c11\",\n      \"to_class_id\": \"ClsC_70788dbe\",\n      \"justification\": \"The entity 'metamorphosis' is a biological process and conceptually belongs in the process-focused class rather than in a class defined as handling time-related attributes of metamorphosis.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_70788dbe\",\n      \"new_name\": \"Butterfly Developmental Processes\",\n      \"new_description\": \"Biological processes that drive the growth and transformation of caterpillars into butterflies, including molting (repeated skin shedding) and metamorphosis inside the chrysalis.\",\n      \"new_class_type_hint\": \"Biological Process\",\n      \"new_class_group\": \"Butterfly Life Cycle & Metamorphosis\",\n      \"remark\": null,\n      \"justification\": \"This class cleanly represents biological processes (molting and metamorphosis) in the butterfly life cycle; assigning a shared Class_Group clarifies its relation to metamorphosis-related attributes.\",\n      \"confidence\": 0.92\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_8d404c11\",\n      \"new_name\": \"Metamorphosis Duration Attributes\",\n      \"new_description\": \"Time-related attributes that quantify or describe the duration of the metamorphosis process inside the chrysalis (e.g., number of days or weeks).\",\n      \"new_class_type_hint\": \"Process Attribute\",\n      \"new_class_group\": \"Butterfly Life Cycle & Metamorphosis\",\n      \"remark\": null,\n      \"justification\": \"This class is intended to capture temporal attributes (such as duration) of metamorphosis rather than the process itself; refining the name/description and assigning the same Class_Group keeps it distinct but clearly related to the butterfly life cycle processes.\",\n      \"confidence\": 0.9\n    }\n  }\n]",
+    "parsed_steps": [
+      {
+        "function": "reassign_entities",
+        "args": {
+          "entity_ids": [
+            "En_39d95774"
+          ],
+          "from_class_id": "ClsC_8d404c11",
+          "to_class_id": "ClsC_70788dbe",
+          "justification": "The entity 'metamorphosis' is a biological process and conceptually belongs in the process-focused class rather than in a class defined as handling time-related attributes of metamorphosis.",
+          "remark": null,
+          "confidence": 0.9
+        }
+      },
+      {
+        "function": "modify_class",
+        "args": {
+          "class_id": "ClsC_70788dbe",
+          "new_name": "Butterfly Developmental Processes",
+          "new_description": "Biological processes that drive the growth and transformation of caterpillars into butterflies, including molting (repeated skin shedding) and metamorphosis inside the chrysalis.",
+          "new_class_type_hint": "Biological Process",
+          "new_class_group": "Butterfly Life Cycle & Metamorphosis",
+          "remark": null,
+          "justification": "This class cleanly represents biological processes (molting and metamorphosis) in the butterfly life cycle; assigning a shared Class_Group clarifies its relation to metamorphosis-related attributes.",
+          "confidence": 0.92
+        }
+      },
+      {
+        "function": "modify_class",
+        "args": {
+          "class_id": "ClsC_8d404c11",
+          "new_name": "Metamorphosis Duration Attributes",
+          "new_description": "Time-related attributes that quantify or describe the duration of the metamorphosis process inside the chrysalis (e.g., number of days or weeks).",
+          "new_class_type_hint": "Process Attribute",
+          "new_class_group": "Butterfly Life Cycle & Metamorphosis",
+          "remark": null,
+          "justification": "This class is intended to capture temporal attributes (such as duration) of metamorphosis rather than the process itself; refining the name/description and assigning the same Class_Group keeps it distinct but clearly related to the butterfly life cycle processes.",
+          "confidence": 0.9
+        }
+      }
+    ],
+    "executed_decisions": [
+      {
+        "action": "reassign_entities",
+        "entity_ids": [
+          "En_39d95774"
+        ],
+        "from": "ClsC_8d404c11",
+        "from_resolved": "ClsC_8d404c11",
+        "to": "ClsC_70788dbe",
+        "to_resolved": "ClsC_70788dbe",
+        "justification": "The entity 'metamorphosis' is a biological process and conceptually belongs in the process-focused class rather than in a class defined as handling time-related attributes of metamorphosis.",
+        "remark": null,
+        "confidence": 0.9
+      },
+      {
+        "action": "modify_class",
+        "class_id": "ClsC_70788dbe",
+        "class_id_resolved": "ClsC_70788dbe",
+        "new_name": "Butterfly Developmental Processes",
+        "new_description": "Biological processes that drive the growth and transformation of caterpillars into butterflies, including molting (repeated skin shedding) and metamorphosis inside the chrysalis.",
+        "new_class_type_hint": "Biological Process",
+        "new_class_group": "Butterfly Life Cycle & Metamorphosis",
+        "remark": null,
+        "justification": "This class cleanly represents biological processes (molting and metamorphosis) in the butterfly life cycle; assigning a shared Class_Group clarifies its relation to metamorphosis-related attributes.",
+        "confidence": 0.92
+      },
+      {
+        "action": "modify_class",
+        "class_id": "ClsC_8d404c11",
+        "class_id_resolved": "ClsC_8d404c11",
+        "new_name": "Metamorphosis Duration Attributes",
+        "new_description": "Time-related attributes that quantify or describe the duration of the metamorphosis process inside the chrysalis (e.g., number of days or weeks).",
+        "new_class_type_hint": "Process Attribute",
+        "new_class_group": "Butterfly Life Cycle & Metamorphosis",
+        "remark": null,
+        "justification": "This class is intended to capture temporal attributes (such as duration) of metamorphosis rather than the process itself; refining the name/description and assigning the same Class_Group keeps it distinct but clearly related to the butterfly life cycle processes.",
+        "confidence": 0.9
+      }
+    ],
+    "provisional_to_real": {},
+    "timestamp": "2026-01-03T08:18:14Z"
+  },
+  {
+    "cluster_label": 3,
+    "cluster_classes": [
+      {
+        "candidate_id": "ClsC_e0d7198b",
+        "class_label": "Ecosystem Contexts",
+        "class_description": "Concepts describing the overall ecological setting in which organisms and processes occur, including specific ecosystems and the broader natural world.",
+        "class_type_hint": "EnvironmentalContext",
+        "class_group": "TBD",
+        "confidence": 0.86,
+        "evidence_excerpt": "generic ecological community context … overall ecological and biological environment",
+        "member_ids": [
+          "Can_d7075cf0",
+          "En_a6a35cf1"
+        ],
+        "members": [
+          {
+            "id": "Can_d7075cf0",
+            "entity_name": "ecosystem",
+            "entity_description": "Interacting community of organisms and their physical environment in which caterpillars and butterflies act as pollinators and prey.",
+            "entity_type_hint": "Environment"
+          },
+          {
+            "id": "En_a6a35cf1",
+            "entity_name": "natural world",
+            "entity_description": "The broader ecosystem and biological processes that butterfly life cycles are part of.",
+            "entity_type_hint": "Environment"
+          }
+        ],
+        "remarks": []
+      },
+      {
+        "candidate_id": "ClsC_4bb8bf3f",
+        "class_label": "Butterfly Predators",
+        "class_description": "Organism groups that consume butterflies as prey within the ecosystem food web.",
+        "class_type_hint": "OrganismGroup",
+        "class_group": "TBD",
+        "confidence": 0.93,
+        "evidence_excerpt": "food source for birds, reptiles, and other insects",
+        "member_ids": [
+          "En_8e017cbc",
+          "En_8b2459ca",
+          "En_2f1262d6"
+        ],
+        "members": [
+          {
+            "id": "En_8e017cbc",
+            "entity_name": "birds",
+            "entity_description": "Vertebrate animals that can prey on butterflies as a food source.",
+            "entity_type_hint": "Organism"
+          },
+          {
+            "id": "En_8b2459ca",
+            "entity_name": "reptiles",
+            "entity_description": "Cold-blooded vertebrates that may consume butterflies as part of their diet.",
+            "entity_type_hint": "Organism"
+          },
+          {
+            "id": "En_2f1262d6",
+            "entity_name": "other insects",
+            "entity_description": "Non-butterfly insects that use butterflies as prey within the ecosystem food web.",
+            "entity_type_hint": "OrganismGroup"
+          }
+        ],
+        "remarks": []
+      },
+      {
+        "candidate_id": "ClsC_b7ed0484",
+        "class_label": "Ecological Outcomes",
+        "class_description": "Ecological states and concepts that describe system-level outcomes influenced by species interactions, such as biodiversity and balance of plant populations.",
+        "class_type_hint": "EcologicalConcept",
+        "class_group": "TBD",
+        "confidence": 0.8,
+        "evidence_excerpt": "maintaining the balance of plant populations … contributing to overall biodiversity",
+        "member_ids": [
+          "En_35e31952",
+          "En_ce5a9b9d"
+        ],
+        "members": [
+          {
+            "id": "En_35e31952",
+            "entity_name": "balance of plant populations",
+            "entity_description": "Ecological state where plant species abundance is maintained within an ecosystem.",
+            "entity_type_hint": "EcologicalState"
+          },
+          {
+            "id": "En_ce5a9b9d",
+            "entity_name": "biodiversity",
+            "entity_description": "Variety of living organisms in an ecosystem to which butterflies contribute.",
+            "entity_type_hint": "EcologicalConcept"
+          }
+        ],
+        "remarks": []
+      },
+      {
+        "candidate_id": "ClsC_a7722b9f",
+        "class_label": "Butterfly Feeding System",
+        "class_description": "Entities directly involved in how adult butterflies obtain and consume liquid food from flowers, including the food source and the specialized mouthpart used to access it.",
+        "class_type_hint": "Biological System",
+        "class_group": "TBD",
+        "confidence": 0.86,
+        "evidence_excerpt": "Adult butterflies feed on nectar from flowers using their long, tubular mouthparts called proboscis.",
+        "member_ids": [
+          "En_68971f0a",
+          "En_dbc29b7e"
+        ],
+        "members": [
+          {
+            "id": "En_68971f0a",
+            "entity_name": "nectar",
+            "entity_description": "Sugary liquid produced by flowers that serves as food for adult butterflies.",
+            "entity_type_hint": "Substance"
+          },
+          {
+            "id": "En_dbc29b7e",
+            "entity_name": "proboscis",
+            "entity_description": "Long, tubular mouthpart of adult butterflies used to drink nectar from flowers.",
+            "entity_type_hint": "AnatomicalStructure"
+          }
+        ],
+        "remarks": []
+      },
+      {
+        "candidate_id": "ClsC_8432c730",
+        "class_label": "Butterflies",
+        "class_description": "Butterflies as holometabolous insects, including generic butterflies, their sex-specific adult forms, and species-level groupings relevant to life cycle traits.",
+        "class_type_hint": "Biological Taxon or Group",
+        "class_group": "TBD",
+        "confidence": 0.86,
+        "evidence_excerpt": "All entities concern butterflies as insects undergoing complete metamorphosis, including females and species-level differences.",
+        "member_ids": [
+          "Can_d81ff7bc",
+          "Can_36b8bc0d",
+          "Can_1b3d39f7"
+        ],
+        "members": [
+          {
+            "id": "Can_d81ff7bc",
+            "entity_name": "butterflies",
+            "entity_description": "Insects that undergo complete metamorphosis through egg, larval, pupal, and adult stages.",
+            "entity_type_hint": "Organism"
+          },
+          {
+            "id": "Can_36b8bc0d",
+            "entity_name": "female butterflies",
+            "entity_description": "Adult female butterflies that lay eggs on specific host plants, initiating the butterfly life cycle.",
+            "entity_type_hint": "Organism"
+          },
+          {
+            "id": "Can_1b3d39f7",
+            "entity_name": "butterfly species",
+            "entity_description": "Different kinds of butterflies (species-level categories) whose distinct traits influence egg characteristics, metamorphosis duration, and adult lifespan.",
+            "entity_type_hint": "BiologicalCategory"
+          }
+        ],
+        "remarks": []
+      },
+      {
+        "candidate_id": "ClsC_93a9cf68",
+        "class_label": "Butterfly Egg Ecology",
+        "class_description": "Entities involved in the immediate ecological context of butterfly egg laying, including the leaf surfaces used for oviposition and the predators that drive protective behaviors.",
+        "class_type_hint": "Ecological Context",
+        "class_group": "TBD",
+        "confidence": 0.86,
+        "evidence_excerpt": "Eggs are laid on the underside of leaves to protect them from predators; caterpillars feed on leaves.",
+        "member_ids": [
+          "En_b23551a2",
+          "En_b5d0970a",
+          "En_d9bb99dd"
+        ],
+        "members": [
+          {
+            "id": "En_b23551a2",
+            "entity_name": "underside of leaves",
+            "entity_description": "Protected surface on the bottom of plant leaves where butterfly eggs are usually laid.",
+            "entity_type_hint": "Location"
+          },
+          {
+            "id": "En_b5d0970a",
+            "entity_name": "plant leaves",
+            "entity_description": "Plant leaves that provide surfaces for butterfly egg laying and serve as a primary food source for caterpillars.",
+            "entity_type_hint": "PlantPart"
+          },
+          {
+            "id": "En_d9bb99dd",
+            "entity_name": "predators of butterfly eggs",
+            "entity_description": "Organisms that might consume or harm butterfly eggs, prompting eggs to be laid on leaf undersides.",
+            "entity_type_hint": "OrganismGroup"
+          }
+        ],
+        "remarks": []
+      },
+      {
+        "candidate_id": "ClsC_890e5662",
+        "class_label": "Butterfly Ecological Interactions",
+        "class_description": "Ecological roles and interacting organisms associated with butterflies and their larvae, including their predators and their role as prey.",
+        "class_type_hint": "Ecological Relationship",
+        "class_group": "TBD",
+        "confidence": 0.8,
+        "evidence_excerpt": "host plants, food source for birds and reptiles, and predators of caterpillars",
+        "member_ids": [
+          "Can_de817465",
+          "En_4eeeef3a",
+          "En_53a03385"
+        ],
+        "members": [
+          {
+            "id": "Can_de817465",
+            "entity_name": "host plants",
+            "entity_description": "Specific plant species used by butterflies as oviposition sites and as food sources for emerging larvae.",
+            "entity_type_hint": "Environment"
+          },
+          {
+            "id": "En_4eeeef3a",
+            "entity_name": "food source",
+            "entity_description": "Role of butterflies as prey providing nourishment to birds, reptiles, and other insects.",
+            "entity_type_hint": "EcologicalRole"
+          },
+          {
+            "id": "En_53a03385",
+            "entity_name": "predators of caterpillars",
+            "entity_description": "Animals that prey upon caterpillars, driving their need for camouflage and protection.",
+            "entity_type_hint": "OrganismGroup"
+          }
+        ],
+        "remarks": []
+      }
+    ],
+    "llm_raw": "[\n  {\n    \"function\": \"merge_classes\",\n    \"args\": {\n      \"class_ids\": [\n        \"ClsC_4bb8bf3f\",\n        \"ClsC_890e5662\"\n      ],\n      \"provisional_id\": \"MERGE(ClsC_4bb8bf3f|ClsC_890e5662)\",\n      \"new_name\": \"Butterfly Trophic Interactions\",\n      \"new_description\": \"Interacting organisms and trophic roles involving butterflies and their larvae, including their predators, host plants, and their role as prey within the food web.\",\n      \"new_class_type_hint\": \"EcologicalInteraction\",\n      \"justification\": \"ClsC_4bb8bf3f and ClsC_890e5662 both model predator–prey and feeding relationships of butterflies (predators, host plants, and food-source roles) and are semantically overlapping ecological trophic interactions, so they should be consolidated into a single coherent interaction class.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"MERGE(ClsC_4bb8bf3f|ClsC_890e5662)\",\n      \"new_name\": \"Butterfly Trophic Interactions\",\n      \"new_description\": \"Interacting organisms and trophic roles involving butterflies and their larvae throughout their life cycle, including predators (of adults and caterpillars), host plants, and the role of butterflies as a food source within the ecosystem food web.\",\n      \"new_class_type_hint\": \"EcologicalInteraction\",\n      \"new_class_group\": \"Butterfly Ecology and Life Cycle\",\n      \"remark\": null,\n      \"justification\": \"The merged class represents trophic and interaction-focused ecology around butterflies and should be grouped under a broader Butterfly Ecology and Life Cycle class group for consistency with other ecological and life-cycle aspects.\",\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_e0d7198b\",\n      \"new_name\": \"Butterfly Ecosystem Contexts\",\n      \"new_description\": \"Ecological settings in which butterflies and their life-cycle processes occur, including specific ecosystems and the broader natural world.\",\n      \"new_class_type_hint\": \"EnvironmentalContext\",\n      \"new_class_group\": \"Butterfly Ecology and Life Cycle\",\n      \"remark\": null,\n      \"justification\": \"This class captures the broader environmental setting for butterflies and should be explicitly named and grouped under the shared Butterfly Ecology and Life Cycle class group to align with the other butterfly-focused ecological classes.\",\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_b7ed0484\",\n      \"new_name\": \"Butterfly-Driven Ecological Outcomes\",\n      \"new_description\": \"Ecological states and system-level outcomes influenced by butterflies and their interactions, such as biodiversity and the balance of plant populations.\",\n      \"new_class_type_hint\": \"EcologicalConcept\",\n      \"new_class_group\": \"Butterfly Ecology and Life Cycle\",\n      \"remark\": null,\n      \"justification\": \"The outcomes described (biodiversity, balance of plant populations) are consequences of butterfly ecological roles and should be clearly tied into the shared Butterfly Ecology and Life Cycle class group.\",\n      \"confidence\": 0.86\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_a7722b9f\",\n      \"new_name\": \"Butterfly Feeding System\",\n      \"new_description\": \"Entities directly involved in how butterflies obtain and consume liquid food from flowers, including the nectar food source and the specialized proboscis mouthpart used to access it.\",\n      \"new_class_type_hint\": \"BiologicalSystem\",\n      \"new_class_group\": \"Butterfly Ecology and Life Cycle\",\n      \"remark\": null,\n      \"justification\": \"Feeding structures and food sources are part of butterfly life-history ecology and should share the Butterfly Ecology and Life Cycle group with other life-cycle and interaction classes.\",\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_8432c730\",\n      \"new_name\": \"Butterflies\",\n      \"new_description\": \"Butterflies as holometabolous insects, including generic butterflies, sex-specific adults, and species-level groupings relevant to life-cycle traits.\",\n      \"new_class_type_hint\": \"BiologicalTaxonOrGroup\",\n      \"new_class_group\": \"Butterfly Ecology and Life Cycle\",\n      \"remark\": null,\n      \"justification\": \"This taxon-centric class is the focal organism of the schema; assigning it to the Butterfly Ecology and Life Cycle group connects it to the ecological and life-stage context classes built around butterflies.\",\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_93a9cf68\",\n      \"new_name\": \"Butterfly Egg Ecology\",\n      \"new_description\": \"Entities involved in the immediate ecological context of butterfly egg laying, including leaf surfaces used for oviposition, leaves as larval food sources, and predators of butterfly eggs.\",\n      \"new_class_type_hint\": \"EcologicalContext\",\n      \"new_class_group\": \"Butterfly Ecology and Life Cycle\",\n      \"remark\": null,\n      \"justification\": \"Egg-laying microhabitats and egg predators represent a specific life-stage context and should be grouped with the broader Butterfly Ecology and Life Cycle domain for coherent organization.\",\n      \"confidence\": 0.9\n    }\n  }\n]",
+    "parsed_steps": [
+      {
+        "function": "merge_classes",
+        "args": {
+          "class_ids": [
+            "ClsC_4bb8bf3f",
+            "ClsC_890e5662"
+          ],
+          "provisional_id": "MERGE(ClsC_4bb8bf3f|ClsC_890e5662)",
+          "new_name": "Butterfly Trophic Interactions",
+          "new_description": "Interacting organisms and trophic roles involving butterflies and their larvae, including their predators, host plants, and their role as prey within the food web.",
+          "new_class_type_hint": "EcologicalInteraction",
+          "justification": "ClsC_4bb8bf3f and ClsC_890e5662 both model predator–prey and feeding relationships of butterflies (predators, host plants, and food-source roles) and are semantically overlapping ecological trophic interactions, so they should be consolidated into a single coherent interaction class.",
+          "remark": null,
+          "confidence": 0.9
+        }
+      },
+      {
+        "function": "modify_class",
+        "args": {
+          "class_id": "MERGE(ClsC_4bb8bf3f|ClsC_890e5662)",
+          "new_name": "Butterfly Trophic Interactions",
+          "new_description": "Interacting organisms and trophic roles involving butterflies and their larvae throughout their life cycle, including predators (of adults and caterpillars), host plants, and the role of butterflies as a food source within the ecosystem food web.",
+          "new_class_type_hint": "EcologicalInteraction",
+          "new_class_group": "Butterfly Ecology and Life Cycle",
+          "remark": null,
+          "justification": "The merged class represents trophic and interaction-focused ecology around butterflies and should be grouped under a broader Butterfly Ecology and Life Cycle class group for consistency with other ecological and life-cycle aspects.",
+          "confidence": 0.9
+        }
+      },
+      {
+        "function": "modify_class",
+        "args": {
+          "class_id": "ClsC_e0d7198b",
+          "new_name": "Butterfly Ecosystem Contexts",
+          "new_description": "Ecological settings in which butterflies and their life-cycle processes occur, including specific ecosystems and the broader natural world.",
+          "new_class_type_hint": "EnvironmentalContext",
+          "new_class_group": "Butterfly Ecology and Life Cycle",
+          "remark": null,
+          "justification": "This class captures the broader environmental setting for butterflies and should be explicitly named and grouped under the shared Butterfly Ecology and Life Cycle class group to align with the other butterfly-focused ecological classes.",
+          "confidence": 0.9
+        }
+      },
+      {
+        "function": "modify_class",
+        "args": {
+          "class_id": "ClsC_b7ed0484",
+          "new_name": "Butterfly-Driven Ecological Outcomes",
+          "new_description": "Ecological states and system-level outcomes influenced by butterflies and their interactions, such as biodiversity and the balance of plant populations.",
+          "new_class_type_hint": "EcologicalConcept",
+          "new_class_group": "Butterfly Ecology and Life Cycle",
+          "remark": null,
+          "justification": "The outcomes described (biodiversity, balance of plant populations) are consequences of butterfly ecological roles and should be clearly tied into the shared Butterfly Ecology and Life Cycle class group.",
+          "confidence": 0.86
+        }
+      },
+      {
+        "function": "modify_class",
+        "args": {
+          "class_id": "ClsC_a7722b9f",
+          "new_name": "Butterfly Feeding System",
+          "new_description": "Entities directly involved in how butterflies obtain and consume liquid food from flowers, including the nectar food source and the specialized proboscis mouthpart used to access it.",
+          "new_class_type_hint": "BiologicalSystem",
+          "new_class_group": "Butterfly Ecology and Life Cycle",
+          "remark": null,
+          "justification": "Feeding structures and food sources are part of butterfly life-history ecology and should share the Butterfly Ecology and Life Cycle group with other life-cycle and interaction classes.",
+          "confidence": 0.9
+        }
+      },
+      {
+        "function": "modify_class",
+        "args": {
+          "class_id": "ClsC_8432c730",
+          "new_name": "Butterflies",
+          "new_description": "Butterflies as holometabolous insects, including generic butterflies, sex-specific adults, and species-level groupings relevant to life-cycle traits.",
+          "new_class_type_hint": "BiologicalTaxonOrGroup",
+          "new_class_group": "Butterfly Ecology and Life Cycle",
+          "remark": null,
+          "justification": "This taxon-centric class is the focal organism of the schema; assigning it to the Butterfly Ecology and Life Cycle group connects it to the ecological and life-stage context classes built around butterflies.",
+          "confidence": 0.9
+        }
+      },
+      {
+        "function": "modify_class",
+        "args": {
+          "class_id": "ClsC_93a9cf68",
+          "new_name": "Butterfly Egg Ecology",
+          "new_description": "Entities involved in the immediate ecological context of butterfly egg laying, including leaf surfaces used for oviposition, leaves as larval food sources, and predators of butterfly eggs.",
+          "new_class_type_hint": "EcologicalContext",
+          "new_class_group": "Butterfly Ecology and Life Cycle",
+          "remark": null,
+          "justification": "Egg-laying microhabitats and egg predators represent a specific life-stage context and should be grouped with the broader Butterfly Ecology and Life Cycle domain for coherent organization.",
+          "confidence": 0.9
+        }
+      }
+    ],
+    "executed_decisions": [
+      {
+        "action": "merge_classes",
+        "input_class_ids": [
+          "ClsC_4bb8bf3f",
+          "ClsC_890e5662"
+        ],
+        "result_class_id": "ClsR_1d18e4db",
+        "provisional_id": "MERGE(ClsC_4bb8bf3f|ClsC_890e5662)",
+        "justification": "ClsC_4bb8bf3f and ClsC_890e5662 both model predator–prey and feeding relationships of butterflies (predators, host plants, and food-source roles) and are semantically overlapping ecological trophic interactions, so they should be consolidated into a single coherent interaction class.",
+        "remark": null,
+        "confidence": 0.9
+      },
+      {
+        "action": "modify_class",
+        "class_id": "MERGE(ClsC_4bb8bf3f|ClsC_890e5662)",
+        "class_id_resolved": "ClsR_1d18e4db",
+        "new_name": "Butterfly Trophic Interactions",
+        "new_description": "Interacting organisms and trophic roles involving butterflies and their larvae throughout their life cycle, including predators (of adults and caterpillars), host plants, and the role of butterflies as a food source within the ecosystem food web.",
+        "new_class_type_hint": "EcologicalInteraction",
+        "new_class_group": "Butterfly Ecology and Life Cycle",
+        "remark": null,
+        "justification": "The merged class represents trophic and interaction-focused ecology around butterflies and should be grouped under a broader Butterfly Ecology and Life Cycle class group for consistency with other ecological and life-cycle aspects.",
+        "confidence": 0.9
+      },
+      {
+        "action": "modify_class",
+        "class_id": "ClsC_e0d7198b",
+        "class_id_resolved": "ClsC_e0d7198b",
+        "new_name": "Butterfly Ecosystem Contexts",
+        "new_description": "Ecological settings in which butterflies and their life-cycle processes occur, including specific ecosystems and the broader natural world.",
+        "new_class_type_hint": "EnvironmentalContext",
+        "new_class_group": "Butterfly Ecology and Life Cycle",
+        "remark": null,
+        "justification": "This class captures the broader environmental setting for butterflies and should be explicitly named and grouped under the shared Butterfly Ecology and Life Cycle class group to align with the other butterfly-focused ecological classes.",
+        "confidence": 0.9
+      },
+      {
+        "action": "modify_class",
+        "class_id": "ClsC_b7ed0484",
+        "class_id_resolved": "ClsC_b7ed0484",
+        "new_name": "Butterfly-Driven Ecological Outcomes",
+        "new_description": "Ecological states and system-level outcomes influenced by butterflies and their interactions, such as biodiversity and the balance of plant populations.",
+        "new_class_type_hint": "EcologicalConcept",
+        "new_class_group": "Butterfly Ecology and Life Cycle",
+        "remark": null,
+        "justification": "The outcomes described (biodiversity, balance of plant populations) are consequences of butterfly ecological roles and should be clearly tied into the shared Butterfly Ecology and Life Cycle class group.",
+        "confidence": 0.86
+      },
+      {
+        "action": "modify_class",
+        "class_id": "ClsC_a7722b9f",
+        "class_id_resolved": "ClsC_a7722b9f",
+        "new_name": "Butterfly Feeding System",
+        "new_description": "Entities directly involved in how butterflies obtain and consume liquid food from flowers, including the nectar food source and the specialized proboscis mouthpart used to access it.",
+        "new_class_type_hint": "BiologicalSystem",
+        "new_class_group": "Butterfly Ecology and Life Cycle",
+        "remark": null,
+        "justification": "Feeding structures and food sources are part of butterfly life-history ecology and should share the Butterfly Ecology and Life Cycle group with other life-cycle and interaction classes.",
+        "confidence": 0.9
+      },
+      {
+        "action": "modify_class",
+        "class_id": "ClsC_8432c730",
+        "class_id_resolved": "ClsC_8432c730",
+        "new_name": "Butterflies",
+        "new_description": "Butterflies as holometabolous insects, including generic butterflies, sex-specific adults, and species-level groupings relevant to life-cycle traits.",
+        "new_class_type_hint": "BiologicalTaxonOrGroup",
+        "new_class_group": "Butterfly Ecology and Life Cycle",
+        "remark": null,
+        "justification": "This taxon-centric class is the focal organism of the schema; assigning it to the Butterfly Ecology and Life Cycle group connects it to the ecological and life-stage context classes built around butterflies.",
+        "confidence": 0.9
+      },
+      {
+        "action": "modify_class",
+        "class_id": "ClsC_93a9cf68",
+        "class_id_resolved": "ClsC_93a9cf68",
+        "new_name": "Butterfly Egg Ecology",
+        "new_description": "Entities involved in the immediate ecological context of butterfly egg laying, including leaf surfaces used for oviposition, leaves as larval food sources, and predators of butterfly eggs.",
+        "new_class_type_hint": "EcologicalContext",
+        "new_class_group": "Butterfly Ecology and Life Cycle",
+        "remark": null,
+        "justification": "Egg-laying microhabitats and egg predators represent a specific life-stage context and should be grouped with the broader Butterfly Ecology and Life Cycle domain for coherent organization.",
+        "confidence": 0.9
+      }
+    ],
+    "provisional_to_real": {
+      "MERGE(ClsC_4bb8bf3f|ClsC_890e5662)": "ClsR_1d18e4db",
+      "ClsC_4bb8bf3f": "ClsR_1d18e4db",
+      "ClsC_890e5662": "ClsR_1d18e4db"
+    },
+    "timestamp": "2026-01-03T08:18:33Z"
+  },
+  {
+    "cluster_label": 4,
+    "cluster_classes": [
+      {
+        "candidate_id": "ClsC_e81597af",
+        "class_label": "Butterfly Life Cycle",
+        "class_description": "Concepts describing the complete developmental process of butterflies from egg to adult, including references to its constituent stages as a set.",
+        "class_type_hint": "BiologicalProcess",
+        "class_group": "TBD",
+        "confidence": 0.9,
+        "evidence_excerpt": "the complete developmental process of butterflies from egg to adult, namely egg, larva, pupa, and adult",
+        "member_ids": [
+          "Can_7f9d935a",
+          "En_f45a9343"
+        ],
+        "members": [
+          {
+            "id": "Can_7f9d935a",
+            "entity_name": "butterfly life cycle",
+            "entity_description": "The complete biological process a butterfly passes through from egg, through larva and pupa, to the adult stage.",
+            "entity_type_hint": "BiologicalProcess"
+          },
+          {
+            "id": "En_f45a9343",
+            "entity_name": "stages of the butterfly's life cycle",
+            "entity_description": "The distinct developmental phases a butterfly passes through from egg to adult.",
+            "entity_type_hint": "ProcessPhaseCollection"
+          }
+        ],
+        "remarks": []
+      },
+      {
+        "candidate_id": "ClsC_b41f496c",
+        "class_label": "Butterfly Egg Stage",
+        "class_description": "The initial life stage of butterflies, during which the organism exists as an egg laid on suitable host plants.",
+        "class_type_hint": "Biological Life Stage",
+        "class_group": "TBD",
+        "confidence": 0.93,
+        "evidence_excerpt": "The initial life stage of a butterfly, during which the organism exists as an egg laid by a female butterfly on suitable host plants.",
+        "member_ids": [
+          "Can_a1cdcba4"
+        ],
+        "members": [
+          {
+            "id": "Can_a1cdcba4",
+            "entity_name": "egg stage (butterfly life cycle)",
+            "entity_description": "The initial life stage of a butterfly, during which the organism exists as an egg laid by a female butterfly on suitable host plants.",
+            "entity_type_hint": "LifeStage"
+          }
+        ],
+        "remarks": []
+      }
+    ],
+    "llm_raw": "[\n  {\n    \"function\": \"split_class\",\n    \"args\": {\n      \"source_class_id\": \"ClsC_e81597af\",\n      \"splits\": [\n        {\n          \"name\": \"Butterfly Life Cycle Stages (Set)\",\n          \"description\": \"The set of distinct developmental phases in a butterfly's life cycle (egg, larva, pupa, adult), treated as a collection of stages rather than the continuous biological process.\",\n          \"class_type_hint\": \"LifeStageCollection\",\n          \"member_ids\": [\n            \"En_f45a9343\"\n          ],\n          \"provisional_id\": \"Split_ClsC_e81597af_stages\"\n        }\n      ],\n      \"justification\": \"The class currently mixes the biological life cycle process (Can_7f9d935a) with an entity representing the set of stages (En_f45a9343); splitting isolates the collection-of-stages concept from the process concept.\",\n      \"remark\": null,\n      \"confidence\": 0.86\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_e81597af\",\n      \"new_name\": \"Butterfly Life Cycle Process\",\n      \"new_description\": \"The continuous biological process a butterfly passes through from egg, through larva and pupa, to the adult stage.\",\n      \"new_class_type_hint\": \"BiologicalProcess\",\n      \"new_class_group\": \"Butterfly Development and Life Stages\",\n      \"remark\": null,\n      \"justification\": \"After splitting out the stages-collection, this class is now cleanly the process itself; renaming and clarifying the description and assigning a shared Class_Group make its scope explicit and connect it to related stage classes.\",\n      \"confidence\": 0.88\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"Split_ClsC_e81597af_stages\",\n      \"new_name\": \"Butterfly Life Cycle Stages\",\n      \"new_description\": \"The distinct developmental stages in a butterfly’s life cycle (egg, larva, pupa, adult), treated as a collection of life stages.\",\n      \"new_class_type_hint\": \"LifeStageCollection\",\n      \"new_class_group\": \"Butterfly Development and Life Stages\",\n      \"remark\": null,\n      \"justification\": \"The split-out class represents the set of life stages rather than the process; giving it a clear label, type hint, and the same Class_Group makes its role explicit and aligns it with butterfly development concepts.\",\n      \"confidence\": 0.87\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_b41f496c\",\n      \"new_name\": null,\n      \"new_description\": null,\n      \"new_class_type_hint\": \"LifeStage\",\n      \"new_class_group\": \"Butterfly Development and Life Stages\",\n      \"remark\": null,\n      \"justification\": \"The egg stage is a specific butterfly life stage closely related to the life cycle process and stage collection; assigning it to the same Class_Group and normalizing its type hint to LifeStage connects it within the butterfly development schema.\",\n      \"confidence\": 0.9\n    }\n  }\n]",
+    "parsed_steps": [
+      {
+        "function": "split_class",
+        "args": {
+          "source_class_id": "ClsC_e81597af",
+          "splits": [
+            {
+              "name": "Butterfly Life Cycle Stages (Set)",
+              "description": "The set of distinct developmental phases in a butterfly's life cycle (egg, larva, pupa, adult), treated as a collection of stages rather than the continuous biological process.",
+              "class_type_hint": "LifeStageCollection",
+              "member_ids": [
+                "En_f45a9343"
+              ],
+              "provisional_id": "Split_ClsC_e81597af_stages"
+            }
+          ],
+          "justification": "The class currently mixes the biological life cycle process (Can_7f9d935a) with an entity representing the set of stages (En_f45a9343); splitting isolates the collection-of-stages concept from the process concept.",
+          "remark": null,
+          "confidence": 0.86
+        }
+      },
+      {
+        "function": "modify_class",
+        "args": {
+          "class_id": "ClsC_e81597af",
+          "new_name": "Butterfly Life Cycle Process",
+          "new_description": "The continuous biological process a butterfly passes through from egg, through larva and pupa, to the adult stage.",
+          "new_class_type_hint": "BiologicalProcess",
+          "new_class_group": "Butterfly Development and Life Stages",
+          "remark": null,
+          "justification": "After splitting out the stages-collection, this class is now cleanly the process itself; renaming and clarifying the description and assigning a shared Class_Group make its scope explicit and connect it to related stage classes.",
+          "confidence": 0.88
+        }
+      },
+      {
+        "function": "modify_class",
+        "args": {
+          "class_id": "Split_ClsC_e81597af_stages",
+          "new_name": "Butterfly Life Cycle Stages",
+          "new_description": "The distinct developmental stages in a butterfly's life cycle (egg, larva, pupa, adult), treated as a collection of life stages.",
+          "new_class_type_hint": "LifeStageCollection",
+          "new_class_group": "Butterfly Development and Life Stages",
+          "remark": null,
+          "justification": "The split-out class represents the set of life stages rather than the process; giving it a clear label, type hint, and the same Class_Group makes its role explicit and aligns it with butterfly development concepts.",
+          "confidence": 0.87
+        }
+      },
+      {
+        "function": "modify_class",
+        "args": {
+          "class_id": "ClsC_b41f496c",
+          "new_name": null,
+          "new_description": null,
+          "new_class_type_hint": "LifeStage",
+          "new_class_group": "Butterfly Development and Life Stages",
+          "remark": null,
+          "justification": "The egg stage is a specific butterfly life stage closely related to the life cycle process and stage collection; assigning it to the same Class_Group and normalizing its type hint to LifeStage connects it within the butterfly development schema.",
+          "confidence": 0.9
+        }
+      }
+    ],
+    "executed_decisions": [
+      {
+        "action": "split_class",
+        "source_class_id": "ClsC_e81597af",
+        "source_class_id_resolved": "ClsC_e81597af",
+        "created_classes": [
+          {
+            "new_class_id": "ClsR_de1cdd20",
+            "provisional_id": "Split_ClsC_e81597af_stages",
+            "member_ids": [
+              "En_f45a9343"
+            ]
+          }
+        ],
+        "justification": "The class currently mixes the biological life cycle process (Can_7f9d935a) with an entity representing the set of stages (En_f45a9343); splitting isolates the collection-of-stages concept from the process concept.",
+        "remark": null,
+        "confidence": 0.86
+      },
+      {
+        "action": "modify_class",
+        "class_id": "ClsC_e81597af",
+        "class_id_resolved": "ClsC_e81597af",
+        "new_name": "Butterfly Life Cycle Process",
+        "new_description": "The continuous biological process a butterfly passes through from egg, through larva and pupa, to the adult stage.",
+        "new_class_type_hint": "BiologicalProcess",
+        "new_class_group": "Butterfly Development and Life Stages",
+        "remark": null,
+        "justification": "After splitting out the stages-collection, this class is now cleanly the process itself; renaming and clarifying the description and assigning a shared Class_Group make its scope explicit and connect it to related stage classes.",
+        "confidence": 0.88
+      },
+      {
+        "action": "modify_class",
+        "class_id": "Split_ClsC_e81597af_stages",
+        "class_id_resolved": "ClsR_de1cdd20",
+        "new_name": "Butterfly Life Cycle Stages",
+        "new_description": "The distinct developmental stages in a butterfly's life cycle (egg, larva, pupa, adult), treated as a collection of life stages.",
+        "new_class_type_hint": "LifeStageCollection",
+        "new_class_group": "Butterfly Development and Life Stages",
+        "remark": null,
+        "justification": "The split-out class represents the set of life stages rather than the process; giving it a clear label, type hint, and the same Class_Group makes its role explicit and aligns it with butterfly development concepts.",
+        "confidence": 0.87
+      },
+      {
+        "action": "modify_class",
+        "class_id": "ClsC_b41f496c",
+        "class_id_resolved": "ClsC_b41f496c",
+        "new_name": null,
+        "new_description": null,
+        "new_class_type_hint": "LifeStage",
+        "new_class_group": "Butterfly Development and Life Stages",
+        "remark": null,
+        "justification": "The egg stage is a specific butterfly life stage closely related to the life cycle process and stage collection; assigning it to the same Class_Group and normalizing its type hint to LifeStage connects it within the butterfly development schema.",
+        "confidence": 0.9
+      }
+    ],
+    "provisional_to_real": {
+      "Split_ClsC_e81597af_stages": "ClsR_de1cdd20"
+    },
+    "timestamp": "2026-01-03T08:18:43Z"
+  },
+  {
+    "cluster_label": 5,
+    "cluster_classes": [
+      {
+        "candidate_id": "ClsC_da99310a",
+        "class_label": "Butterfly Life Stages",
+        "class_description": "Distinct developmental stages in the butterfly life cycle, specifically the feeding larval (caterpillar) stage and the metamorphic pupa (chrysalis) stage.",
+        "class_type_hint": "Biological Life Stage",
+        "class_group": "TBD",
+        "confidence": 0.93,
+        "evidence_excerpt": "Both entities are defined as developmental life stages within the butterfly life cycle.",
+        "member_ids": [
+          "Can_14766c36",
+          "En_f9ea792d",
+          "Can_63faab69",
+          "Can_92ae16e5"
+        ],
+        "members": [
+          {
+            "id": "Can_14766c36",
+            "entity_name": "chrysalis",
+            "entity_description": "Protective pupa casing formed by a caterpillar during the pupal stage, enclosing it as it undergoes metamorphosis into a butterfly.",
+            "entity_type_hint": "BiologicalStructure"
+          },
+          {
+            "id": "En_f9ea792d",
+            "entity_name": "butterfly",
+            "entity_description": "Adult stage that the caterpillar develops into after metamorphosis.",
+            "entity_type_hint": "OrganismLifeStage"
+          },
+          {
+            "id": "Can_63faab69",
+            "entity_name": "caterpillar (larval stage of butterfly)",
+            "entity_description": "The larval life stage of a butterfly, immediately after the egg hatches, during which the organism is a caterpillar that feeds and grows on host plants before forming a pupa.",
+            "entity_type_hint": "LifeStage"
+          },
+          {
+            "id": "Can_92ae16e5",
+            "entity_name": "pupa stage",
+            "entity_description": "The third developmental life stage of a butterfly, in which the organism is enclosed in a chrysalis and undergoes metamorphosis from larva to adult.",
+            "entity_type_hint": "OrganismLifeStage"
+          }
+        ],
+        "remarks": []
+      },
+      {
+        "candidate_id": "ClsC_cf017722",
+        "class_label": "Butterfly Adult Stage",
+        "class_description": "Entities describing the butterfly at or immediately after the adult (imago) stage, including the newly emerged adult and its readiness for first flight.",
+        "class_type_hint": "Organism Life Stage",
+        "class_group": "TBD",
+        "confidence": 0.78,
+        "evidence_excerpt": "The fourth and final stage of the butterfly's life cycle is the adult stage... ready to take flight for the first time.",
+        "member_ids": [
+          "En_f5deceae",
+          "En_1060a171"
+        ],
+        "members": [
+          {
+            "id": "En_f5deceae",
+            "entity_name": "newly emerged butterfly",
+            "entity_description": "Butterfly immediately after exiting the chrysalis, with soft, wrinkled wings.",
+            "entity_type_hint": "OrganismLifeStage"
+          },
+          {
+            "id": "En_1060a171",
+            "entity_name": "flight",
+            "entity_description": "Butterfly’s ability to fly once its wings are fully developed.",
+            "entity_type_hint": "Capability"
+          }
+        ],
+        "remarks": []
+      },
+      {
+        "candidate_id": "ClsC_29b0e509",
+        "class_label": "Butterfly Life Cycle",
+        "class_description": "Concepts describing the butterfly’s developmental process from early stages to its final admired adult state.",
+        "class_type_hint": "Biological Process",
+        "class_group": "TBD",
+        "confidence": 0.8,
+        "evidence_excerpt": "from egg through larva and pupa to adult … butterfly fluttering by … moment of beauty and grace",
+        "member_ids": [
+          "En_780fa8f4",
+          "En_9afe46f5"
+        ],
+        "members": [
+          {
+            "id": "En_780fa8f4",
+            "entity_name": "incredible journey of the butterfly",
+            "entity_description": "The full developmental path of a butterfly from egg through larva and pupa to adult.",
+            "entity_type_hint": "Process"
+          },
+          {
+            "id": "En_9afe46f5",
+            "entity_name": "moment of beauty and grace",
+            "entity_description": "The state of the butterfly as a fully developed, aesthetically admired adult in flight.",
+            "entity_type_hint": "State"
+          }
+        ],
+        "remarks": []
+      },
+      {
+        "candidate_id": "ClsC_4b3071e8",
+        "class_label": "Adult Butterfly Stage",
+        "class_description": "Concepts related to the adult life stage of butterflies, including the stage itself and its characteristic duration.",
+        "class_type_hint": "Biological Life Stage",
+        "class_group": "TBD",
+        "confidence": 0.86,
+        "evidence_excerpt": "final, mature life stage of a butterfly… and the characteristic temporal duration of the butterfly’s adult stage",
+        "member_ids": [
+          "Can_0e72203e",
+          "En_fd4b9c19"
+        ],
+        "members": [
+          {
+            "id": "Can_0e72203e",
+            "entity_name": "adult butterfly life stage",
+            "entity_description": "The final, winged life stage of a butterfly following the pupa (chrysalis), during which the organism is fully developed, capable of flight, feeding, mating, and reproduction.",
+            "entity_type_hint": "LifeStage"
+          },
+          {
+            "id": "En_fd4b9c19",
+            "entity_name": "adult butterfly lifespan",
+            "entity_description": "Duration of life of butterflies in the adult stage, typically days to weeks.",
+            "entity_type_hint": "OperatingCondition"
+          }
+        ],
+        "remarks": []
+      }
+    ],
+    "llm_raw": "[\n  {\n    \"function\": \"merge_classes\",\n    \"args\": {\n      \"class_ids\": [\n        \"ClsC_cf017722\",\n        \"ClsC_4b3071e8\"\n      ],\n      \"provisional_id\": \"MERGE(ClsC_cf017722|ClsC_4b3071e8)\",\n      \"new_name\": \"Adult butterfly life stage\",\n      \"new_description\": \"Entities describing the final, winged adult (imago) stage of butterflies, including the newly emerged adult, its readiness for flight, and properties specific to the adult stage such as lifespan.\",\n      \"new_class_type_hint\": \"Organism Life Stage\",\n      \"justification\": \"Both classes focus on the same biological concept—the adult butterfly life stage—with overlapping scope (adult stage and its characteristics), so they should be unified into a single adult-stage class.\",\n      \"remark\": null,\n      \"confidence\": 0.93\n    }\n  },\n  {\n    \"function\": \"reassign_entities\",\n    \"args\": {\n      \"entity_ids\": [\n        \"En_f9ea792d\"\n      ],\n      \"from_class_id\": \"ClsC_da99310a\",\n      \"to_class_id\": \"MERGE(ClsC_cf017722|ClsC_4b3071e8)\",\n      \"justification\": \"Entity 'butterfly' is explicitly the adult life stage and belongs with the unified adult-stage class rather than a mixed life-stages class.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"reassign_entities\",\n    \"args\": {\n      \"entity_ids\": [\n        \"En_9afe46f5\"\n      ],\n      \"from_class_id\": \"ClsC_29b0e509\",\n      \"to_class_id\": \"MERGE(ClsC_cf017722|ClsC_4b3071e8)\",\n      \"justification\": \"Entity 'moment of beauty and grace' refers to the aesthetic state of the fully developed adult butterfly in flight, aligning better with the adult life-stage class than with the full life-cycle process.\",\n      \"remark\": null,\n      \"confidence\": 0.82\n    }\n  },\n  {\n    \"function\": \"split_class\",\n    \"args\": {\n      \"source_class_id\": \"ClsC_da99310a\",\n      \"splits\": [\n        {\n          \"name\": \"Butterfly pupa casing (chrysalis)\",\n          \"description\": \"The protective casing formed around the butterfly pupa (chrysalis), a physical structure enclosing the organism during metamorphosis.\",\n          \"class_type_hint\": \"BiologicalStructure\",\n          \"member_ids\": [\n            \"Can_14766c36\"\n          ],\n          \"provisional_id\": \"SPLIT_chrysalis_structure\"\n        }\n      ],\n      \"justification\": \"ClsC_da99310a currently mixes biological life stages (larva, pupa stage, adult) with a distinct physical structure (chrysalis); the chrysalis should be split into its own structural class.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_da99310a\",\n      \"new_name\": \"Butterfly immature life stages (larva and pupa)\",\n      \"new_description\": \"Developmental life stages of butterflies before adulthood, specifically the feeding larval (caterpillar) stage and the pupal stage during which metamorphosis occurs.\",\n      \"new_class_type_hint\": \"Biological Life Stage\",\n      \"new_class_group\": \"Butterfly development and life cycle\",\n      \"remark\": null,\n      \"justification\": \"After moving the adult stage out and splitting the chrysalis structure, the remaining class cleanly represents larval and pupal life stages and should be renamed and grouped accordingly.\",\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"MERGE(ClsC_cf017722|ClsC_4b3071e8)\",\n      \"new_name\": \"Adult butterfly life stage\",\n      \"new_description\": \"The final, winged life stage of a butterfly following the pupa (chrysalis), including newly emerged adults, their acquisition of flight, and adult-specific properties such as lifespan.\",\n      \"new_class_type_hint\": \"Organism Life Stage\",\n      \"new_class_group\": \"Butterfly development and life cycle\",\n      \"remark\": null,\n      \"justification\": \"The merged adult-stage class should be explicitly labeled and connected to the broader butterfly development and life cycle group.\",\n      \"confidence\": 0.93\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"SPLIT_chrysalis_structure\",\n      \"new_name\": \"Butterfly chrysalis (pupal casing)\",\n      \"new_description\": \"The chrysalis, a stationary, protective casing that encloses the butterfly during the pupal stage of metamorphosis.\",\n      \"new_class_type_hint\": \"BiologicalStructure\",\n      \"new_class_group\": \"Butterfly development and life cycle\",\n      \"remark\": null,\n      \"justification\": \"The newly split chrysalis structure class needs a clear label and assignment to the butterfly development and life cycle group.\",\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_29b0e509\",\n      \"new_name\": \"Butterfly life cycle process\",\n      \"new_description\": \"The overall developmental process of a butterfly from egg through larva and pupa to the adult stage.\",\n      \"new_class_type_hint\": \"Biological Process\",\n      \"new_class_group\": \"Butterfly development and life cycle\",\n      \"remark\": null,\n      \"justification\": \"With the adult aesthetic state moved out, this class should be clarified as the full metamorphic process and aligned under the common butterfly development and life cycle group.\",\n      \"confidence\": 0.88\n    }\n  }\n]",
+    "parsed_steps": [
+      {
+        "function": "merge_classes",
+        "args": {
+          "class_ids": [
+            "ClsC_cf017722",
+            "ClsC_4b3071e8"
+          ],
+          "provisional_id": "MERGE(ClsC_cf017722|ClsC_4b3071e8)",
+          "new_name": "Adult butterfly life stage",
+          "new_description": "Entities describing the final, winged adult (imago) stage of butterflies, including the newly emerged adult, its readiness for flight, and properties specific to the adult stage such as lifespan.",
+          "new_class_type_hint": "Organism Life Stage",
+          "justification": "Both classes focus on the same biological concept—the adult butterfly life stage—with overlapping scope (adult stage and its characteristics), so they should be unified into a single adult-stage class.",
+          "remark": null,
+          "confidence": 0.93
+        }
+      },
+      {
+        "function": "reassign_entities",
+        "args": {
+          "entity_ids": [
+            "En_f9ea792d"
+          ],
+          "from_class_id": "ClsC_da99310a",
+          "to_class_id": "MERGE(ClsC_cf017722|ClsC_4b3071e8)",
+          "justification": "Entity 'butterfly' is explicitly the adult life stage and belongs with the unified adult-stage class rather than a mixed life-stages class.",
+          "remark": null,
+          "confidence": 0.9
+        }
+      },
+      {
+        "function": "reassign_entities",
+        "args": {
+          "entity_ids": [
+            "En_9afe46f5"
+          ],
+          "from_class_id": "ClsC_29b0e509",
+          "to_class_id": "MERGE(ClsC_cf017722|ClsC_4b3071e8)",
+          "justification": "Entity 'moment of beauty and grace' refers to the aesthetic state of the fully developed adult butterfly in flight, aligning better with the adult life-stage class than with the full life-cycle process.",
+          "remark": null,
+          "confidence": 0.82
+        }
+      },
+      {
+        "function": "split_class",
+        "args": {
+          "source_class_id": "ClsC_da99310a",
+          "splits": [
+            {
+              "name": "Butterfly pupa casing (chrysalis)",
+              "description": "The protective casing formed around the butterfly pupa (chrysalis), a physical structure enclosing the organism during metamorphosis.",
+              "class_type_hint": "BiologicalStructure",
+              "member_ids": [
+                "Can_14766c36"
+              ],
+              "provisional_id": "SPLIT_chrysalis_structure"
+            }
+          ],
+          "justification": "ClsC_da99310a currently mixes biological life stages (larva, pupa stage, adult) with a distinct physical structure (chrysalis); the chrysalis should be split into its own structural class.",
+          "remark": null,
+          "confidence": 0.9
+        }
+      },
+      {
+        "function": "modify_class",
+        "args": {
+          "class_id": "ClsC_da99310a",
+          "new_name": "Butterfly immature life stages (larva and pupa)",
+          "new_description": "Developmental life stages of butterflies before adulthood, specifically the feeding larval (caterpillar) stage and the pupal stage during which metamorphosis occurs.",
+          "new_class_type_hint": "Biological Life Stage",
+          "new_class_group": "Butterfly development and life cycle",
+          "remark": null,
+          "justification": "After moving the adult stage out and splitting the chrysalis structure, the remaining class cleanly represents larval and pupal life stages and should be renamed and grouped accordingly.",
+          "confidence": 0.9
+        }
+      },
+      {
+        "function": "modify_class",
+        "args": {
+          "class_id": "MERGE(ClsC_cf017722|ClsC_4b3071e8)",
+          "new_name": "Adult butterfly life stage",
+          "new_description": "The final, winged life stage of a butterfly following the pupa (chrysalis), including newly emerged adults, their acquisition of flight, and adult-specific properties such as lifespan.",
+          "new_class_type_hint": "Organism Life Stage",
+          "new_class_group": "Butterfly development and life cycle",
+          "remark": null,
+          "justification": "The merged adult-stage class should be explicitly labeled and connected to the broader butterfly development and life cycle group.",
+          "confidence": 0.93
+        }
+      },
+      {
+        "function": "modify_class",
+        "args": {
+          "class_id": "SPLIT_chrysalis_structure",
+          "new_name": "Butterfly chrysalis (pupal casing)",
+          "new_description": "The chrysalis, a stationary, protective casing that encloses the butterfly during the pupal stage of metamorphosis.",
+          "new_class_type_hint": "BiologicalStructure",
+          "new_class_group": "Butterfly development and life cycle",
+          "remark": null,
+          "justification": "The newly split chrysalis structure class needs a clear label and assignment to the butterfly development and life cycle group.",
+          "confidence": 0.9
+        }
+      },
+      {
+        "function": "modify_class",
+        "args": {
+          "class_id": "ClsC_29b0e509",
+          "new_name": "Butterfly life cycle process",
+          "new_description": "The overall developmental process of a butterfly from egg through larva and pupa to the adult stage.",
+          "new_class_type_hint": "Biological Process",
+          "new_class_group": "Butterfly development and life cycle",
+          "remark": null,
+          "justification": "With the adult aesthetic state moved out, this class should be clarified as the full metamorphic process and aligned under the common butterfly development and life cycle group.",
+          "confidence": 0.88
+        }
+      }
+    ],
+    "executed_decisions": [
+      {
+        "action": "merge_classes",
+        "input_class_ids": [
+          "ClsC_cf017722",
+          "ClsC_4b3071e8"
+        ],
+        "result_class_id": "ClsR_f05b402d",
+        "provisional_id": "MERGE(ClsC_cf017722|ClsC_4b3071e8)",
+        "justification": "Both classes focus on the same biological concept—the adult butterfly life stage—with overlapping scope (adult stage and its characteristics), so they should be unified into a single adult-stage class.",
+        "remark": null,
+        "confidence": 0.93
+      },
+      {
+        "action": "reassign_entities",
+        "entity_ids": [
+          "En_f9ea792d"
+        ],
+        "from": "ClsC_da99310a",
+        "from_resolved": "ClsC_da99310a",
+        "to": "MERGE(ClsC_cf017722|ClsC_4b3071e8)",
+        "to_resolved": "ClsR_f05b402d",
+        "justification": "Entity 'butterfly' is explicitly the adult life stage and belongs with the unified adult-stage class rather than a mixed life-stages class.",
+        "remark": null,
+        "confidence": 0.9
+      },
+      {
+        "action": "reassign_entities",
+        "entity_ids": [
+          "En_9afe46f5"
+        ],
+        "from": "ClsC_29b0e509",
+        "from_resolved": "ClsC_29b0e509",
+        "to": "MERGE(ClsC_cf017722|ClsC_4b3071e8)",
+        "to_resolved": "ClsR_f05b402d",
+        "justification": "Entity 'moment of beauty and grace' refers to the aesthetic state of the fully developed adult butterfly in flight, aligning better with the adult life-stage class than with the full life-cycle process.",
+        "remark": null,
+        "confidence": 0.82
+      },
+      {
+        "action": "split_class",
+        "source_class_id": "ClsC_da99310a",
+        "source_class_id_resolved": "ClsC_da99310a",
+        "created_classes": [
+          {
+            "new_class_id": "ClsR_67349790",
+            "provisional_id": "SPLIT_chrysalis_structure",
+            "member_ids": [
+              "Can_14766c36"
+            ]
+          }
+        ],
+        "justification": "ClsC_da99310a currently mixes biological life stages (larva, pupa stage, adult) with a distinct physical structure (chrysalis); the chrysalis should be split into its own structural class.",
+        "remark": null,
+        "confidence": 0.9
+      },
+      {
+        "action": "modify_class",
+        "class_id": "ClsC_da99310a",
+        "class_id_resolved": "ClsC_da99310a",
+        "new_name": "Butterfly immature life stages (larva and pupa)",
+        "new_description": "Developmental life stages of butterflies before adulthood, specifically the feeding larval (caterpillar) stage and the pupal stage during which metamorphosis occurs.",
+        "new_class_type_hint": "Biological Life Stage",
+        "new_class_group": "Butterfly development and life cycle",
+        "remark": null,
+        "justification": "After moving the adult stage out and splitting the chrysalis structure, the remaining class cleanly represents larval and pupal life stages and should be renamed and grouped accordingly.",
+        "confidence": 0.9
+      },
+      {
+        "action": "modify_class",
+        "class_id": "MERGE(ClsC_cf017722|ClsC_4b3071e8)",
+        "class_id_resolved": "ClsR_f05b402d",
+        "new_name": "Adult butterfly life stage",
+        "new_description": "The final, winged life stage of a butterfly following the pupa (chrysalis), including newly emerged adults, their acquisition of flight, and adult-specific properties such as lifespan.",
+        "new_class_type_hint": "Organism Life Stage",
+        "new_class_group": "Butterfly development and life cycle",
+        "remark": null,
+        "justification": "The merged adult-stage class should be explicitly labeled and connected to the broader butterfly development and life cycle group.",
+        "confidence": 0.93
+      },
+      {
+        "action": "modify_class",
+        "class_id": "SPLIT_chrysalis_structure",
+        "class_id_resolved": "ClsR_67349790",
+        "new_name": "Butterfly chrysalis (pupal casing)",
+        "new_description": "The chrysalis, a stationary, protective casing that encloses the butterfly during the pupal stage of metamorphosis.",
+        "new_class_type_hint": "BiologicalStructure",
+        "new_class_group": "Butterfly development and life cycle",
+        "remark": null,
+        "justification": "The newly split chrysalis structure class needs a clear label and assignment to the butterfly development and life cycle group.",
+        "confidence": 0.9
+      },
+      {
+        "action": "modify_class",
+        "class_id": "ClsC_29b0e509",
+        "class_id_resolved": "ClsC_29b0e509",
+        "new_name": "Butterfly life cycle process",
+        "new_description": "The overall developmental process of a butterfly from egg through larva and pupa to the adult stage.",
+        "new_class_type_hint": "Biological Process",
+        "new_class_group": "Butterfly development and life cycle",
+        "remark": null,
+        "justification": "With the adult aesthetic state moved out, this class should be clarified as the full metamorphic process and aligned under the common butterfly development and life cycle group.",
+        "confidence": 0.88
+      }
+    ],
+    "provisional_to_real": {
+      "MERGE(ClsC_cf017722|ClsC_4b3071e8)": "ClsR_f05b402d",
+      "ClsC_cf017722": "ClsR_f05b402d",
+      "ClsC_4b3071e8": "ClsR_f05b402d",
+      "SPLIT_chrysalis_structure": "ClsR_67349790"
+    },
+    "timestamp": "2026-01-03T08:19:02Z"
+  }
+]

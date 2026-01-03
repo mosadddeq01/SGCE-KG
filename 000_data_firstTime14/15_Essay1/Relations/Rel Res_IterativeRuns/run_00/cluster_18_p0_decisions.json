@@ -1,0 +1,163 @@
+{
+  "cluster_label": "18_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_e05239df7425",
+      "relation_name": "transforms",
+      "rel_desc": "Metamorphosis is the process that transforms the caterpillar body.",
+      "rel_hint_type": "causal transformation",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "metamorphosis",
+      "object_entity_name": "caterpillar (larval stage of butterfly)",
+      "subject_class_label": "Butterfly Metamorphosis Process",
+      "subject_class_group": "Butterfly Life Cycle and Development",
+      "object_class_label": "Butterfly larval and pupal stages",
+      "object_class_group": "Butterfly Life Cycle Stages",
+      "qualifiers": {
+        "TemporalQualifier": "during metamorphosis",
+        "SpatialQualifier": "inside the chrysalis",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "undergoes",
+        "LogicalMarker": null,
+        "OtherQualifier": "ChangeType: developmental reorganization"
+      },
+      "confidence": 0.96,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_121cf3bd156b",
+      "relation_name": "transforms_into",
+      "rel_desc": "The caterpillar's organs transform into a soupy substance during metamorphosis.",
+      "rel_hint_type": "state_change",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "organs",
+      "object_entity_name": "soupy substance",
+      "subject_class_label": "Internal Metamorphosis Body Structures",
+      "subject_class_group": "Biological Structures and Substances in Butterfly Metamorphosis",
+      "object_class_label": "Metamorphic Body Fluids and Liquefied Tissues",
+      "object_class_group": "Biological Structures and Substances in Butterfly Metamorphosis",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "dissolve into",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.96,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_e05239df7425\"],\n      \"canonical_rel_name\": \"transforms_entity\",\n      \"canonical_rel_desc\": \"Indicates that a process or mechanism brings about a transformation of an entity or body, without specifying the resulting form.\",\n      \"justification\": \"In this relation, the subject is the metamorphosis process and the object is the caterpillar body; the semantics are that the process transforms the entity, not that the entity becomes a specific resulting state. A process-to-entity transformation predicate is appropriate and distinct from result-oriented 'transforms_into' relations.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_121cf3bd156b\"],\n      \"canonical_rel_name\": \"transforms_into_state\",\n      \"canonical_rel_desc\": \"Indicates that an entity changes form or state into a specified resulting substance, structure, or configuration.\",\n      \"justification\": \"Here the subject is 'organs' and the object is 'soupy substance'; the relation expresses a state change where the organs become the soupy substance during metamorphosis. This is a result-oriented transformation that should be distinguished from a generic process-transforms-entity predicate.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_e05239df7425\", \"RelR_121cf3bd156b\"],\n      \"rel_cls\": \"state_change_relation\",\n      \"justification\": \"Both relations describe biological transformations during metamorphosis: one where a process transforms an organism’s body, and another where organs change into a liquefied state. They belong to the same broader family of relations that capture changes in state or form, even though their canonical predicates differ in granularity.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_e05239df7425\", \"RelR_121cf3bd156b\"],\n      \"rel_cls_group\": \"MODIFICATION\",\n      \"justification\": \"Both edges capture transformation of entities (bodies, organs) into different forms or configurations, which fits the broad category of modifications or changes to existing entities rather than pure compositional or spatial relations.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_e05239df7425"
+        ],
+        "canonical_rel_name": "transforms_entity",
+        "canonical_rel_desc": "Indicates that a process or mechanism brings about a transformation of an entity or body, without specifying the resulting form.",
+        "justification": "In this relation, the subject is the metamorphosis process and the object is the caterpillar body; the semantics are that the process transforms the entity, not that the entity becomes a specific resulting state. A process-to-entity transformation predicate is appropriate and distinct from result-oriented 'transforms_into' relations.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_121cf3bd156b"
+        ],
+        "canonical_rel_name": "transforms_into_state",
+        "canonical_rel_desc": "Indicates that an entity changes form or state into a specified resulting substance, structure, or configuration.",
+        "justification": "Here the subject is 'organs' and the object is 'soupy substance'; the relation expresses a state change where the organs become the soupy substance during metamorphosis. This is a result-oriented transformation that should be distinguished from a generic process-transforms-entity predicate.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_e05239df7425",
+          "RelR_121cf3bd156b"
+        ],
+        "rel_cls": "state_change_relation",
+        "justification": "Both relations describe biological transformations during metamorphosis: one where a process transforms an organism's body, and another where organs change into a liquefied state. They belong to the same broader family of relations that capture changes in state or form, even though their canonical predicates differ in granularity.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_e05239df7425",
+          "RelR_121cf3bd156b"
+        ],
+        "rel_cls_group": "MODIFICATION",
+        "justification": "Both edges capture transformation of entities (bodies, organs) into different forms or configurations, which fits the broad category of modifications or changes to existing entities rather than pure compositional or spatial relations.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_e05239df7425"
+      ],
+      "canonical_rel_name": "transforms_entity",
+      "canonical_rel_desc": "Indicates that a process or mechanism brings about a transformation of an entity or body, without specifying the resulting form.",
+      "justification": "In this relation, the subject is the metamorphosis process and the object is the caterpillar body; the semantics are that the process transforms the entity, not that the entity becomes a specific resulting state. A process-to-entity transformation predicate is appropriate and distinct from result-oriented 'transforms_into' relations.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_121cf3bd156b"
+      ],
+      "canonical_rel_name": "transforms_into_state",
+      "canonical_rel_desc": "Indicates that an entity changes form or state into a specified resulting substance, structure, or configuration.",
+      "justification": "Here the subject is 'organs' and the object is 'soupy substance'; the relation expresses a state change where the organs become the soupy substance during metamorphosis. This is a result-oriented transformation that should be distinguished from a generic process-transforms-entity predicate.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_e05239df7425",
+        "RelR_121cf3bd156b"
+      ],
+      "rel_cls": "state_change_relation",
+      "justification": "Both relations describe biological transformations during metamorphosis: one where a process transforms an organism's body, and another where organs change into a liquefied state. They belong to the same broader family of relations that capture changes in state or form, even though their canonical predicates differ in granularity.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_e05239df7425",
+        "RelR_121cf3bd156b"
+      ],
+      "rel_cls_group": "MODIFICATION",
+      "justification": "Both edges capture transformation of entities (bodies, organs) into different forms or configurations, which fits the broad category of modifications or changes to existing entities rather than pure compositional or spatial relations.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  ],
+  "timestamp": "2026-01-03T08:55:16Z"
+}

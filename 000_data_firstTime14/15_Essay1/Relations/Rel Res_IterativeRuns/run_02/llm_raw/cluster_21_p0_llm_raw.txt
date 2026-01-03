@@ -1,0 +1,19 @@
+[
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": [
+        "RelR_2b4f104ea8bc",
+        "RelR_6cf306626059",
+        "RelR_64e81943ef93"
+      ],
+      "canonical_rel_name": "supports_persistence_of",
+      "canonical_rel_desc": "Indicates that the subject process or factor causally supports the ongoing existence, stability, or continuation of the object (e.g., a population, life cycle, organism survival, or ecological state).",
+      "rel_cls": "biological_causal_effect_relation",
+      "rel_cls_group": "CAUSALITY",
+      "justification": "All three relations describe a beneficial causal effect where a biological process (pollination, reproduction, life cycle stages) helps maintain, continue, or ensure the survival/reproduction of some biological or ecological object. The current canonical names ('contributes_to_maintenance_of', 'supports_continuation_of', 'supports_survival_and_reproduction_of') are overly specific variants of the same generic causal-support predicate. Normalizing them to a single predicate 'supports_persistence_of' reduces unnecessary predicate proliferation while preserving the shared semantics of causally supporting ongoing existence, stability, or continuation.",
+      "remark": "If future schema design requires finer distinction between maintenance, continuation, and survival/reproduction, these could later be modeled via qualifiers or more specific sub-predicates, but at this stage a unified causal-support predicate is more consistent.",
+      "confidence": 0.86
+    }
+  }
+]

@@ -1,0 +1,15 @@
+[
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": ["RelR_ee426f37cf50"],
+      "canonical_rel_name": "visits_feeding_site",
+      "canonical_rel_desc": "Indicates that the subject organism visits the object, which serves as a site used specifically for feeding.",
+      "rel_cls": "feeding_interaction_relation",
+      "rel_cls_group": "INTERACTION",
+      "justification": "The current canonical_rel_name 'feeds_at' blurs the distinction between the act of feeding and the spatial/interaction aspect of visiting a resource site. The instance description and qualifiers emphasize that adult butterflies *visit* flowers in the context of feeding on nectar (VisitPurpose: feeding on nectar), with flowers acting as the feeding site. Renaming to 'visits_feeding_site' better captures that the predicate is about visiting a location used for feeding, while remaining within the same interaction and feeding_interaction_relation class.",
+      "remark": null,
+      "confidence": 0.86
+    }
+  }
+]

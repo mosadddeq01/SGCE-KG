@@ -1,0 +1,32 @@
+[
+  {
+    "function": "merge_classes",
+    "args": {
+      "class_ids": [
+        "ClsC_414056f3",
+        "ClsR_fc192048",
+        "ClsR_703dd4b2"
+      ],
+      "provisional_id": "MERGE(ClsC_414056f3|ClsR_fc192048|ClsR_703dd4b2)",
+      "new_name": "Flowering Plant Reproduction",
+      "new_description": "Processes and structures involved in the sexual reproduction of flowering plants, including pollination, flowers, pollen, and the plants that bear them.",
+      "new_class_type_hint": "Biological Reproduction",
+      "justification": "All three classes describe the same conceptual domain of flowering plant reproduction, with one umbrella class and two finer-grained process/structure variants using identical evidence; merging them into a single class avoids redundant fragmentation and unifies entities like pollination, flowers, pollen, and plants under one coherent reproductive concept.",
+      "remark": "Previously separate process vs structure subclasses (ClsR_fc192048, ClsR_703dd4b2) have been merged with the umbrella class (ClsC_414056f3) because the current schema does not support explicit subclassing and the distinctions were not used elsewhere; if future ontology layers support subtyping, this class could be re-factored into process/structure children.",
+      "confidence": 0.91
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "MERGE(ClsC_414056f3|ClsR_fc192048|ClsR_703dd4b2)",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Plant Reproduction",
+      "remark": null,
+      "justification": "The merged class specifically concerns reproduction in plants (flowering plants), so a more precise Class_Group label 'Plant Reproduction' better captures its scope than the broader or inconsistent previous values 'Biological Reproduction' and 'Organism Reproduction'.",
+      "confidence": 0.9
+    }
+  }
+]

@@ -1,0 +1,306 @@
+{
+  "cluster_label": 5,
+  "cluster_classes": [
+    {
+      "candidate_id": "ClsC_da99310a",
+      "class_label": "Butterfly immature life stages (larva and pupa)",
+      "class_description": "Developmental life stages of butterflies before adulthood, specifically the feeding larval (caterpillar) stage and the pupal stage during which metamorphosis occurs.",
+      "class_type_hint": "Biological Life Stage",
+      "class_group": "Butterfly development and life cycle",
+      "confidence": 0.93,
+      "evidence_excerpt": "Both entities are defined as developmental life stages within the butterfly life cycle.",
+      "member_ids": [
+        "Can_63faab69",
+        "Can_92ae16e5"
+      ],
+      "members": [
+        {
+          "id": "Can_63faab69",
+          "entity_name": "caterpillar (larval stage of butterfly)",
+          "entity_description": "The larval life stage of a butterfly, immediately after the egg hatches, during which the organism is a caterpillar that feeds and grows on host plants before forming a pupa.",
+          "entity_type_hint": "LifeStage"
+        },
+        {
+          "id": "Can_92ae16e5",
+          "entity_name": "pupa stage",
+          "entity_description": "The third developmental life stage of a butterfly, in which the organism is enclosed in a chrysalis and undergoes metamorphosis from larva to adult.",
+          "entity_type_hint": "OrganismLifeStage"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_b41f496c",
+      "class_label": "Butterfly Egg Stage",
+      "class_description": "The initial life stage of butterflies, during which the organism exists as an egg laid on suitable host plants.",
+      "class_type_hint": "LifeStage",
+      "class_group": "Butterfly Development and Life Stages",
+      "confidence": 0.93,
+      "evidence_excerpt": "The initial life stage of a butterfly, during which the organism exists as an egg laid by a female butterfly on suitable host plants.",
+      "member_ids": [
+        "Can_a1cdcba4"
+      ],
+      "members": [
+        {
+          "id": "Can_a1cdcba4",
+          "entity_name": "egg stage (butterfly life cycle)",
+          "entity_description": "The initial life stage of a butterfly, during which the organism exists as an egg laid by a female butterfly on suitable host plants.",
+          "entity_type_hint": "LifeStage"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsR_de1cdd20",
+      "class_label": "Butterfly Life Cycle Stages",
+      "class_description": "The distinct developmental stages in a butterfly's life cycle (egg, larva, pupa, adult), treated as a collection of life stages.",
+      "class_type_hint": "LifeStageCollection",
+      "class_group": "Butterfly Development and Life Stages",
+      "confidence": 0.9,
+      "evidence_excerpt": "the complete developmental process of butterflies from egg to adult, namely egg, larva, pupa, and adult",
+      "member_ids": [
+        "En_f45a9343"
+      ],
+      "members": [
+        {
+          "id": "En_f45a9343",
+          "entity_name": "stages of the butterfly's life cycle",
+          "entity_description": "The distinct developmental phases a butterfly passes through from egg to adult.",
+          "entity_type_hint": "ProcessPhaseCollection"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsR_f05b402d",
+      "class_label": "Adult butterfly life stage",
+      "class_description": "The final, winged life stage of a butterfly following the pupa (chrysalis), including newly emerged adults, their acquisition of flight, and adult-specific properties such as lifespan.",
+      "class_type_hint": "Organism Life Stage",
+      "class_group": "Butterfly development and life cycle",
+      "confidence": 0.86,
+      "evidence_excerpt": "The fourth and final stage of the butterfly's life cycle is the adult stage... ready to take flight for the first time.",
+      "member_ids": [
+        "En_f5deceae",
+        "En_1060a171",
+        "Can_0e72203e",
+        "En_fd4b9c19",
+        "En_f9ea792d",
+        "En_9afe46f5"
+      ],
+      "members": [
+        {
+          "id": "En_f5deceae",
+          "entity_name": "newly emerged butterfly",
+          "entity_description": "Butterfly immediately after exiting the chrysalis, with soft, wrinkled wings.",
+          "entity_type_hint": "OrganismLifeStage"
+        },
+        {
+          "id": "En_1060a171",
+          "entity_name": "flight",
+          "entity_description": "Butterfly’s ability to fly once its wings are fully developed.",
+          "entity_type_hint": "Capability"
+        },
+        {
+          "id": "Can_0e72203e",
+          "entity_name": "adult butterfly life stage",
+          "entity_description": "The final, winged life stage of a butterfly following the pupa (chrysalis), during which the organism is fully developed, capable of flight, feeding, mating, and reproduction.",
+          "entity_type_hint": "LifeStage"
+        },
+        {
+          "id": "En_fd4b9c19",
+          "entity_name": "adult butterfly lifespan",
+          "entity_description": "Duration of life of butterflies in the adult stage, typically days to weeks.",
+          "entity_type_hint": "OperatingCondition"
+        },
+        {
+          "id": "En_f9ea792d",
+          "entity_name": "butterfly",
+          "entity_description": "Adult stage that the caterpillar develops into after metamorphosis.",
+          "entity_type_hint": "OrganismLifeStage"
+        },
+        {
+          "id": "En_9afe46f5",
+          "entity_name": "moment of beauty and grace",
+          "entity_description": "The state of the butterfly as a fully developed, aesthetically admired adult in flight.",
+          "entity_type_hint": "State"
+        }
+      ],
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"split_class\",\n    \"args\": {\n      \"source_class_id\": \"ClsR_f05b402d\",\n      \"splits\": [\n        {\n          \"name\": \"Adult butterfly stage properties\",\n          \"description\": \"Properties and qualitative states associated with the adult butterfly life stage, such as flight capability, lifespan duration, and aesthetic qualities.\",\n          \"class_type_hint\": \"LifeStageAttributes\",\n          \"member_ids\": [\n            \"En_1060a171\",\n            \"En_fd4b9c19\",\n            \"En_9afe46f5\"\n          ],\n          \"provisional_id\": \"SPLIT_AdultStageProperties\"\n        }\n      ],\n      \"justification\": \"ClsR_f05b402d mixes the adult life stage entities with related properties and states (flight, lifespan, aesthetic state), so splitting out these non-life-stage attributes into a separate class yields a cleaner life-stage class.\",\n      \"remark\": null,\n      \"confidence\": 0.93\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_da99310a\",\n      \"new_name\": \"Butterfly immature life stages (larva and pupa)\",\n      \"new_description\": null,\n      \"new_class_type_hint\": null,\n      \"new_class_group\": \"Butterfly Life Cycle and Development\",\n      \"remark\": null,\n      \"justification\": \"Standardize the Class_Group label across all butterfly life-stage classes to a single canonical form while keeping this class focused on larval and pupal stages.\",\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_b41f496c\",\n      \"new_name\": \"Butterfly egg life stage\",\n      \"new_description\": null,\n      \"new_class_type_hint\": null,\n      \"new_class_group\": \"Butterfly Life Cycle and Development\",\n      \"remark\": null,\n      \"justification\": \"Align naming with the other life-stage classes and unify the Class_Group to a single canonical label for all butterfly life stages.\",\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsR_de1cdd20\",\n      \"new_name\": \"Butterfly life cycle stages (collection)\",\n      \"new_description\": null,\n      \"new_class_type_hint\": null,\n      \"new_class_group\": \"Butterfly Life Cycle and Development\",\n      \"remark\": null,\n      \"justification\": \"Clarify that this class represents the collection of all stages and standardize its Class_Group with the other butterfly life-stage classes.\",\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsR_f05b402d\",\n      \"new_name\": \"Adult butterfly life stage\",\n      \"new_description\": \"The final, winged life stage of a butterfly following the pupa (chrysalis), during which the organism is fully developed, capable of flight, feeding, mating, and reproduction.\",\n      \"new_class_type_hint\": \"OrganismLifeStage\",\n      \"new_class_group\": \"Butterfly Life Cycle and Development\",\n      \"remark\": null,\n      \"justification\": \"After splitting out attribute entities, this class should be clearly scoped to the adult organism life stage and share the unified Class_Group with the other stages.\",\n      \"confidence\": 0.93\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"SPLIT_AdultStageProperties\",\n      \"new_name\": \"Adult butterfly stage properties\",\n      \"new_description\": null,\n      \"new_class_type_hint\": null,\n      \"new_class_group\": \"Butterfly Life Cycle and Development\",\n      \"remark\": null,\n      \"justification\": \"Assign the same Class_Group to the newly created properties class so it remains semantically connected to the butterfly life-cycle schema while being distinct from the life-stage entity class.\",\n      \"confidence\": 0.9\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "split_class",
+      "args": {
+        "source_class_id": "ClsR_f05b402d",
+        "splits": [
+          {
+            "name": "Adult butterfly stage properties",
+            "description": "Properties and qualitative states associated with the adult butterfly life stage, such as flight capability, lifespan duration, and aesthetic qualities.",
+            "class_type_hint": "LifeStageAttributes",
+            "member_ids": [
+              "En_1060a171",
+              "En_fd4b9c19",
+              "En_9afe46f5"
+            ],
+            "provisional_id": "SPLIT_AdultStageProperties"
+          }
+        ],
+        "justification": "ClsR_f05b402d mixes the adult life stage entities with related properties and states (flight, lifespan, aesthetic state), so splitting out these non-life-stage attributes into a separate class yields a cleaner life-stage class.",
+        "remark": null,
+        "confidence": 0.93
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_da99310a",
+        "new_name": "Butterfly immature life stages (larva and pupa)",
+        "new_description": null,
+        "new_class_type_hint": null,
+        "new_class_group": "Butterfly Life Cycle and Development",
+        "remark": null,
+        "justification": "Standardize the Class_Group label across all butterfly life-stage classes to a single canonical form while keeping this class focused on larval and pupal stages.",
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_b41f496c",
+        "new_name": "Butterfly egg life stage",
+        "new_description": null,
+        "new_class_type_hint": null,
+        "new_class_group": "Butterfly Life Cycle and Development",
+        "remark": null,
+        "justification": "Align naming with the other life-stage classes and unify the Class_Group to a single canonical label for all butterfly life stages.",
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsR_de1cdd20",
+        "new_name": "Butterfly life cycle stages (collection)",
+        "new_description": null,
+        "new_class_type_hint": null,
+        "new_class_group": "Butterfly Life Cycle and Development",
+        "remark": null,
+        "justification": "Clarify that this class represents the collection of all stages and standardize its Class_Group with the other butterfly life-stage classes.",
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsR_f05b402d",
+        "new_name": "Adult butterfly life stage",
+        "new_description": "The final, winged life stage of a butterfly following the pupa (chrysalis), during which the organism is fully developed, capable of flight, feeding, mating, and reproduction.",
+        "new_class_type_hint": "OrganismLifeStage",
+        "new_class_group": "Butterfly Life Cycle and Development",
+        "remark": null,
+        "justification": "After splitting out attribute entities, this class should be clearly scoped to the adult organism life stage and share the unified Class_Group with the other stages.",
+        "confidence": 0.93
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "SPLIT_AdultStageProperties",
+        "new_name": "Adult butterfly stage properties",
+        "new_description": null,
+        "new_class_type_hint": null,
+        "new_class_group": "Butterfly Life Cycle and Development",
+        "remark": null,
+        "justification": "Assign the same Class_Group to the newly created properties class so it remains semantically connected to the butterfly life-cycle schema while being distinct from the life-stage entity class.",
+        "confidence": 0.9
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "split_class",
+      "source_class_id": "ClsR_f05b402d",
+      "source_class_id_resolved": "ClsR_f05b402d",
+      "created_classes": [
+        {
+          "new_class_id": "ClsR_fbd62bb3",
+          "provisional_id": "SPLIT_AdultStageProperties",
+          "member_ids": [
+            "En_1060a171",
+            "En_fd4b9c19",
+            "En_9afe46f5"
+          ]
+        }
+      ],
+      "justification": "ClsR_f05b402d mixes the adult life stage entities with related properties and states (flight, lifespan, aesthetic state), so splitting out these non-life-stage attributes into a separate class yields a cleaner life-stage class.",
+      "remark": null,
+      "confidence": 0.93
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_da99310a",
+      "class_id_resolved": "ClsC_da99310a",
+      "new_name": "Butterfly immature life stages (larva and pupa)",
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Butterfly Life Cycle and Development",
+      "remark": null,
+      "justification": "Standardize the Class_Group label across all butterfly life-stage classes to a single canonical form while keeping this class focused on larval and pupal stages.",
+      "confidence": 0.9
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_b41f496c",
+      "class_id_resolved": "ClsC_b41f496c",
+      "new_name": "Butterfly egg life stage",
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Butterfly Life Cycle and Development",
+      "remark": null,
+      "justification": "Align naming with the other life-stage classes and unify the Class_Group to a single canonical label for all butterfly life stages.",
+      "confidence": 0.9
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsR_de1cdd20",
+      "class_id_resolved": "ClsR_de1cdd20",
+      "new_name": "Butterfly life cycle stages (collection)",
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Butterfly Life Cycle and Development",
+      "remark": null,
+      "justification": "Clarify that this class represents the collection of all stages and standardize its Class_Group with the other butterfly life-stage classes.",
+      "confidence": 0.9
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsR_f05b402d",
+      "class_id_resolved": "ClsR_f05b402d",
+      "new_name": "Adult butterfly life stage",
+      "new_description": "The final, winged life stage of a butterfly following the pupa (chrysalis), during which the organism is fully developed, capable of flight, feeding, mating, and reproduction.",
+      "new_class_type_hint": "OrganismLifeStage",
+      "new_class_group": "Butterfly Life Cycle and Development",
+      "remark": null,
+      "justification": "After splitting out attribute entities, this class should be clearly scoped to the adult organism life stage and share the unified Class_Group with the other stages.",
+      "confidence": 0.93
+    },
+    {
+      "action": "modify_class",
+      "class_id": "SPLIT_AdultStageProperties",
+      "class_id_resolved": "ClsR_fbd62bb3",
+      "new_name": "Adult butterfly stage properties",
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Butterfly Life Cycle and Development",
+      "remark": null,
+      "justification": "Assign the same Class_Group to the newly created properties class so it remains semantically connected to the butterfly life-cycle schema while being distinct from the life-stage entity class.",
+      "confidence": 0.9
+    }
+  ],
+  "provisional_to_real": {
+    "SPLIT_AdultStageProperties": "ClsR_fbd62bb3"
+  },
+  "timestamp": "2026-01-03T08:20:33Z"
+}

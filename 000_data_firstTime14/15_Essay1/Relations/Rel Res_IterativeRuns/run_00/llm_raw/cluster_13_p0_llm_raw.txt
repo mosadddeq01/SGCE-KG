@@ -1,0 +1,85 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_9dcf3884e0fe",
+        "RelR_014a23852960",
+        "RelR_9df25e33b9ff",
+        "RelR_b78eded5a9f1"
+      ],
+      "canonical_rel_name": "feeds_on",
+      "canonical_rel_desc": "Indicates that the subject organism or life stage obtains food by consuming the object, which serves as its trophic resource.",
+      "justification": "All four relations describe trophic feeding interactions where an organism (adult butterflies, birds, reptiles, or other insects) uses the object as a food resource (nectar or a food-source role). Normalizing to a single predicate 'feeds_on' captures the biological feeding direction consistently.",
+      "remark": null,
+      "confidence": 0.97
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_9dcf3884e0fe",
+        "RelR_014a23852960",
+        "RelR_9df25e33b9ff",
+        "RelR_b78eded5a9f1"
+      ],
+      "rel_cls": "trophic_interaction_relation",
+      "justification": "Each relation expresses a predator–prey or consumer–resource feeding link, which is a classic trophic interaction in an ecological food web. Grouping them under 'trophic_interaction_relation' reflects this shared ecological semantics.",
+      "remark": null,
+      "confidence": 0.96
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_9dcf3884e0fe",
+        "RelR_014a23852960",
+        "RelR_9df25e33b9ff",
+        "RelR_b78eded5a9f1"
+      ],
+      "rel_cls_group": "INTERACTION",
+      "justification": "Feeding and predator–prey relations are biological interactions between organisms (or organism life stages) and their food resources, fitting the broad INTERACTION dimension better than COMPOSITION or IDENTITY.",
+      "remark": null,
+      "confidence": 0.96
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_d52ac673eaa1"
+      ],
+      "canonical_rel_name": "is_produced_by",
+      "canonical_rel_desc": "Indicates that the subject substance or resource is generated, secreted, or produced by the object organism or structure.",
+      "justification": "This relation states that nectar originates from flowers, i.e., nectar is produced by flowers. Using the passive-direction predicate 'is_produced_by' with subject=nectar and object=flowers makes the production/source semantics explicit and consistent.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_d52ac673eaa1"
+      ],
+      "rel_cls": "biological_product_origin_relation",
+      "justification": "The link describes the origin of a biological product (nectar) from a producing organismal structure (flowers). This fits a class for product/source or origin relations rather than trophic or hierarchical relations.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_d52ac673eaa1"
+      ],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "Flowers causally give rise to nectar as a secreted product; the relation encodes a generative source-effect link rather than simple association or composition, so it is best grouped under CAUSALITY.",
+      "remark": null,
+      "confidence": 0.88
+    }
+  }
+]

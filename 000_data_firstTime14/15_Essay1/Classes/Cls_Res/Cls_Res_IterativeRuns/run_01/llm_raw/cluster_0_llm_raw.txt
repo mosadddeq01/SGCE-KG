@@ -1,0 +1,31 @@
+[
+  {
+    "function": "merge_classes",
+    "args": {
+      "class_ids": [
+        "ClsC_bcac8bce",
+        "ClsR_67349790"
+      ],
+      "provisional_id": "MERGE(ClsC_bcac8bce|ClsR_67349790)",
+      "new_name": "Butterfly Metamorphosis Anatomical Structures",
+      "new_description": "Anatomical structures directly involved in the caterpillar-to-butterfly transformation, including larval organs that dissolve, the liquefied tissues that reorganize, the new adult tissues and appendages that form (e.g., antennae), and the protective pupal casing (chrysalis) that encloses the organism during metamorphosis.",
+      "new_class_type_hint": "Biological Structure",
+      "justification": "ClsC_bcac8bce and ClsR_67349790 both represent anatomical structures directly involved in butterfly metamorphosis (internal organs and new adult structures vs. the pupal casing), with overlapping scope in the same biological and metamorphosis domain, so they should be unified into a single, broader anatomical-structure class rather than kept as two small overlapping classes.",
+      "remark": null,
+      "confidence": 0.86
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "MERGE(ClsC_bcac8bce|ClsR_67349790)",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Biological Structures and Substances in Butterfly Metamorphosis",
+      "remark": null,
+      "justification": "The merged anatomical-structures class belongs with the other metamorphosis-related structures and fluids, so it should explicitly share the existing Class_Group 'Biological Structures and Substances in Butterfly Metamorphosis' for consistent schema connectivity.",
+      "confidence": 0.95
+    }
+  }
+]

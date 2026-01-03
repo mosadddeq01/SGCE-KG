@@ -1,0 +1,85 @@
+[
+  {
+    "function": "split_class",
+    "args": {
+      "source_class_id": "ClsC_93a9cf68",
+      "splits": [
+        {
+          "name": "Predators of Butterfly Eggs",
+          "description": "Organisms that prey on butterfly eggs, influencing where eggs are laid and survival rates.",
+          "class_type_hint": "PredatorGroup",
+          "member_ids": ["En_d9bb99dd"],
+          "provisional_id": "SPLIT(ClsC_93a9cf68|predators)"
+        }
+      ],
+      "justification": "ClsC_93a9cf68 mixes abiotic/plant substrates (leaf surfaces and leaves) with biotic predator organisms, so splitting out egg predators creates two more coherent ecological classes.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_93a9cf68",
+      "new_name": "Butterfly Egg Substrates and Larval Food Leaves",
+      "new_description": "Leaf surfaces and plant leaves used by butterflies for egg laying and as primary food sources for emerging larvae.",
+      "new_class_type_hint": "HabitatFeature",
+      "new_class_group": "Butterfly Ecology and Life Cycle",
+      "remark": null,
+      "justification": "After moving predators to a dedicated class, ClsC_93a9cf68 now only contains leaf surfaces and leaves, so renaming and tightening the description and type hint align it with substrate/food-plant habitat features.",
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "SPLIT(ClsC_93a9cf68|predators)",
+      "new_name": "Predators of Butterfly Eggs",
+      "new_description": "Groups of animals that consume or harm butterfly eggs, shaping oviposition behavior and egg survival.",
+      "new_class_type_hint": "EcologicalInteractionAgent",
+      "new_class_group": "Butterfly Ecology and Life Cycle",
+      "remark": null,
+      "justification": "The new split class holds only egg predators and should be clearly labeled and attached to the same butterfly ecology class group with an interaction-focused type hint.",
+      "confidence": 0.88
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_b7ed0484",
+      "new_name": "Butterfly-Driven Ecological Outcomes",
+      "new_description": "System-level ecological states and outcomes, such as biodiversity and balanced plant populations, that are influenced by butterflies and their interactions.",
+      "new_class_type_hint": "EcologicalOutcome",
+      "new_class_group": "Butterfly Ecology and Life Cycle",
+      "remark": null,
+      "justification": "Entities in ClsC_b7ed0484 (biodiversity, balance of plant populations) are ecological results rather than generic concepts, so refining the type hint to 'EcologicalOutcome' and slightly clarifying the description improves semantic precision.",
+      "confidence": 0.86
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_e0d7198b",
+      "new_name": "Butterfly Ecosystems and Natural Environments",
+      "new_description": "Broad ecological systems and the overall natural environment within which butterflies and their life cycles occur, including ecosystems and the wider natural world.",
+      "new_class_type_hint": "EcologicalContext",
+      "new_class_group": "Butterfly Ecology and Life Cycle",
+      "remark": null,
+      "justification": "Members of ClsC_e0d7198b are high-level ecological settings (ecosystem, natural world), so renaming and standardizing the type hint to an ecology-focused context term clarifies its role relative to more specific interaction and outcome classes.",
+      "confidence": 0.84
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsR_1d18e4db",
+      "new_name": "Butterfly Trophic Interactions",
+      "new_description": "Interacting organisms and trophic roles involving butterflies and their larvae, including predators of adults and caterpillars, host plants as food sources, and butterflies as prey within the food web.",
+      "new_class_type_hint": "EcologicalInteraction",
+      "new_class_group": "Butterfly Ecology and Life Cycle",
+      "remark": "Entity 'host plants' (Can_de817465) is typed as Environment but functions biologically as a plant/organism group; upstream review of its entity_type_hint is recommended, though it is correctly placed in this trophic interaction class.",
+      "justification": "ClsR_1d18e4db is already structurally coherent, but tightening the description to emphasize trophic roles and flagging the host-plant typing inconsistency for human review improves schema quality.",
+      "confidence": 0.83
+    }
+  }
+]

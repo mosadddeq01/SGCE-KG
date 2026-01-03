@@ -1,0 +1,61 @@
+[
+  {
+    "function": "split_class",
+    "args": {
+      "source_class_id": "ClsC_e81597af",
+      "splits": [
+        {
+          "name": "Butterfly Life Cycle Stages (Set)",
+          "description": "The set of distinct developmental phases in a butterfly's life cycle (egg, larva, pupa, adult), treated as a collection of stages rather than the continuous biological process.",
+          "class_type_hint": "LifeStageCollection",
+          "member_ids": [
+            "En_f45a9343"
+          ],
+          "provisional_id": "Split_ClsC_e81597af_stages"
+        }
+      ],
+      "justification": "The class currently mixes the biological life cycle process (Can_7f9d935a) with an entity representing the set of stages (En_f45a9343); splitting isolates the collection-of-stages concept from the process concept.",
+      "remark": null,
+      "confidence": 0.86
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_e81597af",
+      "new_name": "Butterfly Life Cycle Process",
+      "new_description": "The continuous biological process a butterfly passes through from egg, through larva and pupa, to the adult stage.",
+      "new_class_type_hint": "BiologicalProcess",
+      "new_class_group": "Butterfly Development and Life Stages",
+      "remark": null,
+      "justification": "After splitting out the stages-collection, this class is now cleanly the process itself; renaming and clarifying the description and assigning a shared Class_Group make its scope explicit and connect it to related stage classes.",
+      "confidence": 0.88
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "Split_ClsC_e81597af_stages",
+      "new_name": "Butterfly Life Cycle Stages",
+      "new_description": "The distinct developmental stages in a butterfly’s life cycle (egg, larva, pupa, adult), treated as a collection of life stages.",
+      "new_class_type_hint": "LifeStageCollection",
+      "new_class_group": "Butterfly Development and Life Stages",
+      "remark": null,
+      "justification": "The split-out class represents the set of life stages rather than the process; giving it a clear label, type hint, and the same Class_Group makes its role explicit and aligns it with butterfly development concepts.",
+      "confidence": 0.87
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_b41f496c",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": "LifeStage",
+      "new_class_group": "Butterfly Development and Life Stages",
+      "remark": null,
+      "justification": "The egg stage is a specific butterfly life stage closely related to the life cycle process and stage collection; assigning it to the same Class_Group and normalizing its type hint to LifeStage connects it within the butterfly development schema.",
+      "confidence": 0.9
+    }
+  }
+]

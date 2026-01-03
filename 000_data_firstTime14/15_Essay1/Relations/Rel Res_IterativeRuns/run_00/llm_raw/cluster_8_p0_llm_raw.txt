@@ -1,0 +1,79 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_17bc7b23b738",
+        "RelR_965fe2118346"
+      ],
+      "canonical_rel_name": "attaches_to",
+      "canonical_rel_desc": "Subject organism physically secures or anchors itself to the surface of the object, typically as a substrate for a life-stage transition or resting.",
+      "justification": "Both relations describe the same physical predicate: the caterpillar securing its body to a plant structure (leaf or stem) as a substrate during transition to the pupa/chrysalis stage. The object varies (leaf vs. stem) but the semantics of the edge are identical, so they should share a single canonical predicate 'attaches_to'.",
+      "remark": null,
+      "confidence": 0.96
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_17bc7b23b738",
+        "RelR_965fe2118346"
+      ],
+      "rel_cls": "substrate_attachment_relation",
+      "justification": "These relations represent an organism attaching to a physical substrate (plant organ) as part of its life cycle. Grouping them under a class like 'substrate_attachment_relation' captures this specific family of physical interactions, more informative than a generic 'interaction' class.",
+      "remark": null,
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_17bc7b23b738",
+        "RelR_965fe2118346"
+      ],
+      "rel_cls_group": "INTERACTION",
+      "justification": "The essence of these edges is a direct physical interaction between organism and substrate (caterpillar–plant contact/anchoring), which fits best under a broad INTERACTION category rather than COMPOSITION or SPATIALITY alone.",
+      "remark": null,
+      "confidence": 0.94
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_ee426f37cf50"
+      ],
+      "canonical_rel_name": "feeds_at",
+      "canonical_rel_desc": "Subject organism feeds at or on the object, which serves as the feeding site or resource location.",
+      "justification": "The description specifies that adult butterflies visit flowers while feeding on nectar; the core semantics are that the butterfly uses the flower as a feeding site. A canonical predicate 'feeds_at' captures this trophic/feeding-location interaction more precisely and reuseably than the surface label 'visits'.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_ee426f37cf50"
+      ],
+      "rel_cls": "feeding_interaction_relation",
+      "justification": "This edge encodes a trophic/feeding interaction between an animal and a plant resource (nectar from flowers). Classifying it as 'feeding_interaction_relation' correctly groups it with other predator–prey or consumer–resource feeding edges, distinct from non-feeding physical attachments.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_ee426f37cf50"
+      ],
+      "rel_cls_group": "INTERACTION",
+      "justification": "The butterfly–flower feeding relationship is a direct biotic interaction (consumer–resource), which fits the broad INTERACTION dimension better than USAGE or SPATIALITY alone.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  }
+]

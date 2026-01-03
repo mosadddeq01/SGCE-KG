@@ -1,0 +1,100 @@
+{
+  "cluster_label": "22_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_383e17a3b951",
+      "relation_name": "develops_into",
+      "rel_desc": "The butterfly in the egg stage develops into a caterpillar (larval stage) when the egg hatches.",
+      "rel_hint_type": "developmental transition",
+      "canonical_rel_name": "develops_into",
+      "canonical_rel_desc": "Indicates that an earlier biological life stage or form naturally develops or transitions into a subsequent life stage of the same organism.",
+      "rel_cls": "life_cycle_stage_transition_relation",
+      "rel_cls_group": "TEMPORALITY",
+      "subject_entity_name": "egg stage (butterfly life cycle)",
+      "object_entity_name": "caterpillar (larval stage of butterfly)",
+      "subject_class_label": "Butterfly egg life stage",
+      "subject_class_group": "Butterfly Life Cycle Stages",
+      "object_class_label": "Butterfly larval and pupal stages",
+      "object_class_group": "Butterfly Life Cycle Stages",
+      "qualifiers": {
+        "TemporalQualifier": "after a few days or weeks",
+        "SpatialQualifier": "at the egg’s location (on leaves)",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "hatches → emerges",
+        "LogicalMarker": "after",
+        "OtherQualifier": "StageOrder: egg stage precedes larval (caterpillar) stage"
+      },
+      "confidence": 0.98,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_436375c118d9",
+      "relation_name": "emerges_from",
+      "rel_desc": "The newly emerged butterfly has just emerged from the chrysalis.",
+      "rel_hint_type": "transition",
+      "canonical_rel_name": "emerges_from_structure",
+      "canonical_rel_desc": "Indicates that an organism or life stage physically emerges from a containing or enclosing biological structure.",
+      "rel_cls": "developmental_stage_transition_relation",
+      "rel_cls_group": "TEMPORALITY",
+      "subject_entity_name": "newly emerged butterfly",
+      "object_entity_name": "chrysalis",
+      "subject_class_label": "Adult butterfly life stage",
+      "subject_class_group": "Butterfly Life Cycle and Development",
+      "object_class_label": "Chrysalis (Pupal Casing)",
+      "object_class_group": "Biological Structures and Substances in Butterfly Metamorphosis",
+      "qualifiers": {
+        "TemporalQualifier": "immediately after emergence",
+        "SpatialQualifier": "from the chrysalis",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "implicit reference",
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.6,
+      "remarks": [
+        "Relation relies on discourse continuity rather than a repeated explicit phrase.",
+        "Relation relies on discourse continuity rather than a repeated explicit phrase."
+      ]
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_rel_schema\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_436375c118d9\"],\n      \"canonical_rel_name\": \"emerges_from\",\n      \"canonical_rel_desc\": \"Indicates that an organism or life stage physically emerges from a containing or enclosing structure, typically as part of a developmental event.\",\n      \"rel_cls\": \"emergence_event_relation\",\n      \"rel_cls_group\": \"TEMPORALITY\",\n      \"justification\": \"The current canonical_rel_name 'emerges_from_structure' redundantly encodes the object type in the predicate, which should remain generic as 'emerges_from' for reuse across structures. The relation is about a developmental event (a butterfly life stage emerging from a chrysalis) that is primarily temporal (moment of emergence) and secondarily spatial, so a more precise rel_cls 'emergence_event_relation' under the broad group 'TEMPORALITY' better captures its semantics while keeping it distinct from pure stage-to-stage transitions.\",\n      \"remark\": null,\n      \"confidence\": 0.81\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_rel_schema",
+      "args": {
+        "relation_ids": [
+          "RelR_436375c118d9"
+        ],
+        "canonical_rel_name": "emerges_from",
+        "canonical_rel_desc": "Indicates that an organism or life stage physically emerges from a containing or enclosing structure, typically as part of a developmental event.",
+        "rel_cls": "emergence_event_relation",
+        "rel_cls_group": "TEMPORALITY",
+        "justification": "The current canonical_rel_name 'emerges_from_structure' redundantly encodes the object type in the predicate, which should remain generic as 'emerges_from' for reuse across structures. The relation is about a developmental event (a butterfly life stage emerging from a chrysalis) that is primarily temporal (moment of emergence) and secondarily spatial, so a more precise rel_cls 'emergence_event_relation' under the broad group 'TEMPORALITY' better captures its semantics while keeping it distinct from pure stage-to-stage transitions.",
+        "remark": null,
+        "confidence": 0.81
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_rel_schema",
+      "relation_ids": [
+        "RelR_436375c118d9"
+      ],
+      "canonical_rel_name": "emerges_from",
+      "canonical_rel_desc": "Indicates that an organism or life stage physically emerges from a containing or enclosing structure, typically as part of a developmental event.",
+      "rel_cls": "emergence_event_relation",
+      "rel_cls_group": "TEMPORALITY",
+      "new_relation_name": null,
+      "original_relation_name": null,
+      "justification": "The current canonical_rel_name 'emerges_from_structure' redundantly encodes the object type in the predicate, which should remain generic as 'emerges_from' for reuse across structures. The relation is about a developmental event (a butterfly life stage emerging from a chrysalis) that is primarily temporal (moment of emergence) and secondarily spatial, so a more precise rel_cls 'emergence_event_relation' under the broad group 'TEMPORALITY' better captures its semantics while keeping it distinct from pure stage-to-stage transitions.",
+      "remark": null,
+      "confidence": 0.81
+    }
+  ],
+  "timestamp": "2026-01-03T08:58:35Z"
+}

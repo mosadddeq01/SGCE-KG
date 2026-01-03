@@ -1,0 +1,335 @@
+{
+  "cluster_label": "25_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_e21da0364351",
+      "relation_name": "produces",
+      "rel_desc": "Female butterflies produce the egg stage by laying eggs.",
+      "rel_hint_type": "reproduction",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "female butterflies",
+      "object_entity_name": "egg stage (butterfly life cycle)",
+      "subject_class_label": "Female butterflies (adult females)",
+      "subject_class_group": "Butterfly Biology and Life Cycle",
+      "object_class_label": "Butterfly egg life stage",
+      "object_class_group": "Butterfly Life Cycle Stages",
+      "qualifiers": {
+        "TemporalQualifier": "start of life cycle",
+        "SpatialQualifier": "on specific host plants",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "ActionType: oviposition"
+      },
+      "confidence": 0.97,
+      "remarks": [
+        "Captures the reproductive link between adult female and egg stage."
+      ]
+    },
+    {
+      "relation_id": "RelR_7686e1be475f",
+      "relation_name": "forms",
+      "rel_desc": "The caterpillar forms the chrysalis as a protective shell around its body.",
+      "rel_hint_type": "creation",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "caterpillar (larval stage of butterfly)",
+      "object_entity_name": "chrysalis",
+      "subject_class_label": "Butterfly larval and pupal stages",
+      "subject_class_group": "Butterfly Life Cycle Stages",
+      "object_class_label": "Chrysalis (Pupal Casing)",
+      "object_class_group": "Biological Structures and Substances in Butterfly Metamorphosis",
+      "qualifiers": {
+        "TemporalQualifier": "at start of pupa stage",
+        "SpatialQualifier": "around the caterpillar's body",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "protective shell",
+        "LogicalMarker": null,
+        "OtherQualifier": "Function: protection during metamorphosis"
+      },
+      "confidence": 0.99,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_4e5bce9b92d3",
+      "relation_name": "produces",
+      "rel_desc": "Female butterflies produce the egg stage by laying eggs, initiating the butterfly life cycle.",
+      "rel_hint_type": "reproductive",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "female butterflies",
+      "object_entity_name": "egg stage (butterfly life cycle)",
+      "subject_class_label": "Female butterflies (adult females)",
+      "subject_class_group": "Butterfly Biology and Life Cycle",
+      "object_class_label": "Butterfly egg life stage",
+      "object_class_group": "Butterfly Life Cycle Stages",
+      "qualifiers": {
+        "TemporalQualifier": "at the beginning of a new life cycle",
+        "SpatialQualifier": "on host plants",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "starting the cycle anew",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.96,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_c7358510f831",
+      "relation_name": "includes_stage",
+      "rel_desc": "The butterfly life cycle includes the egg stage as its initial phase.",
+      "rel_hint_type": "composition",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "butterfly life cycle",
+      "object_entity_name": "egg stage (butterfly life cycle)",
+      "subject_class_label": "Butterfly life cycle process",
+      "subject_class_group": "Butterfly Life Cycle and Development",
+      "object_class_label": "Butterfly egg life stage",
+      "object_class_group": "Butterfly Life Cycle Stages",
+      "qualifiers": {
+        "TemporalQualifier": "as the first stage",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": "From",
+        "OtherQualifier": null
+      },
+      "confidence": 0.94,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_e21da0364351\", \"RelR_4e5bce9b92d3\"],\n      \"canonical_rel_name\": \"initiates_life_stage\",\n      \"canonical_rel_desc\": \"Links a reproductive agent (e.g., adult female organism) to the life stage whose occurrence it initiates (e.g., egg stage) through reproduction.\",\n      \"justification\": \"Both relations describe female butterflies, as reproductive agents, bringing about the egg stage of the butterfly life cycle via oviposition. The core semantics is that the subject causally initiates the object life stage, not merely containing or being part of it, so a unified predicate 'initiates_life_stage' fits both instances.\",\n      \"remark\": null,\n      \"confidence\": 0.89\n    }\n  },\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_7686e1be475f\"],\n      \"canonical_rel_name\": \"forms_protective_structure\",\n      \"canonical_rel_desc\": \"Links an organism or life stage to a protective physical structure that it forms around or from its own body (e.g., a caterpillar forming a chrysalis).\",\n      \"justification\": \"This relation specifically captures that the caterpillar actively creates a protective structure (the chrysalis) around its body. The key semantics is self-formation of a protective structure, which is distinct from general life stage initiation or part-of relations in this cluster.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_c7358510f831\"],\n      \"canonical_rel_name\": \"includes_life_stage\",\n      \"canonical_rel_desc\": \"Links a multi-stage biological process (e.g., a life cycle) to one of its constituent life stages (e.g., egg, larva, pupa, adult).\",\n      \"justification\": \"The subject is the butterfly life cycle as a whole and the object is the egg stage as its initial phase. This is a compositional membership relation between a process and one of its stages, best captured as 'includes_life_stage'.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_e21da0364351\", \"RelR_4e5bce9b92d3\"],\n      \"rel_cls\": \"reproductive_stage_initiation_relation\",\n      \"justification\": \"Both relations describe reproductive actions (oviposition) by female butterflies that initiate a new life stage (egg stage). Grouping them under 'reproductive_stage_initiation_relation' captures that they are about reproduction-driven onset of a life stage, distinct from generic causation or structural formation.\",\n      \"remark\": null,\n      \"confidence\": 0.88\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_7686e1be475f\"],\n      \"rel_cls\": \"morphological_transformation_relation\",\n      \"justification\": \"The relation captures a life-stage driven structural transformation where the caterpillar creates a chrysalis around itself. This is best treated as a morphological transformation family of relations, not purely reproductive or compositional.\",\n      \"remark\": null,\n      \"confidence\": 0.87\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_c7358510f831\"],\n      \"rel_cls\": \"process_stage_membership_relation\",\n      \"justification\": \"The subject is a multi-step process (butterfly life cycle) and the object is one of its stages (egg stage). This fits a class describing membership of stages within a broader biological process.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_e21da0364351\", \"RelR_4e5bce9b92d3\"],\n      \"rel_cls_group\": \"CAUSALITY\",\n      \"justification\": \"Female butterflies causally bring about the egg stage via reproductive action; the emphasis is on causing a new stage to begin, which is fundamentally causal rather than purely temporal sequencing or composition.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_7686e1be475f\"],\n      \"rel_cls_group\": \"MODIFICATION\",\n      \"justification\": \"The caterpillar forms a chrysalis as a morphological change of its state and surrounding structure. This is best grouped under MODIFICATION (self-transformation) rather than generic CAUSALITY or COMPOSITION.\",\n      \"remark\": null,\n      \"confidence\": 0.86\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_c7358510f831\"],\n      \"rel_cls_group\": \"COMPOSITION\",\n      \"justification\": \"The butterfly life cycle is treated as a composite process made up of stages, one of which is the egg stage. The relation is about constitutive membership (part-whole) rather than direct causation or temporal ordering, so COMPOSITION is the most appropriate broad group.\",\n      \"remark\": null,\n      \"confidence\": 0.92\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_e21da0364351",
+          "RelR_4e5bce9b92d3"
+        ],
+        "canonical_rel_name": "initiates_life_stage",
+        "canonical_rel_desc": "Links a reproductive agent (e.g., adult female organism) to the life stage whose occurrence it initiates (e.g., egg stage) through reproduction.",
+        "justification": "Both relations describe female butterflies, as reproductive agents, bringing about the egg stage of the butterfly life cycle via oviposition. The core semantics is that the subject causally initiates the object life stage, not merely containing or being part of it, so a unified predicate 'initiates_life_stage' fits both instances.",
+        "remark": null,
+        "confidence": 0.89
+      }
+    },
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_7686e1be475f"
+        ],
+        "canonical_rel_name": "forms_protective_structure",
+        "canonical_rel_desc": "Links an organism or life stage to a protective physical structure that it forms around or from its own body (e.g., a caterpillar forming a chrysalis).",
+        "justification": "This relation specifically captures that the caterpillar actively creates a protective structure (the chrysalis) around its body. The key semantics is self-formation of a protective structure, which is distinct from general life stage initiation or part-of relations in this cluster.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_c7358510f831"
+        ],
+        "canonical_rel_name": "includes_life_stage",
+        "canonical_rel_desc": "Links a multi-stage biological process (e.g., a life cycle) to one of its constituent life stages (e.g., egg, larva, pupa, adult).",
+        "justification": "The subject is the butterfly life cycle as a whole and the object is the egg stage as its initial phase. This is a compositional membership relation between a process and one of its stages, best captured as 'includes_life_stage'.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_e21da0364351",
+          "RelR_4e5bce9b92d3"
+        ],
+        "rel_cls": "reproductive_stage_initiation_relation",
+        "justification": "Both relations describe reproductive actions (oviposition) by female butterflies that initiate a new life stage (egg stage). Grouping them under 'reproductive_stage_initiation_relation' captures that they are about reproduction-driven onset of a life stage, distinct from generic causation or structural formation.",
+        "remark": null,
+        "confidence": 0.88
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_7686e1be475f"
+        ],
+        "rel_cls": "morphological_transformation_relation",
+        "justification": "The relation captures a life-stage driven structural transformation where the caterpillar creates a chrysalis around itself. This is best treated as a morphological transformation family of relations, not purely reproductive or compositional.",
+        "remark": null,
+        "confidence": 0.87
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_c7358510f831"
+        ],
+        "rel_cls": "process_stage_membership_relation",
+        "justification": "The subject is a multi-step process (butterfly life cycle) and the object is one of its stages (egg stage). This fits a class describing membership of stages within a broader biological process.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_e21da0364351",
+          "RelR_4e5bce9b92d3"
+        ],
+        "rel_cls_group": "CAUSALITY",
+        "justification": "Female butterflies causally bring about the egg stage via reproductive action; the emphasis is on causing a new stage to begin, which is fundamentally causal rather than purely temporal sequencing or composition.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_7686e1be475f"
+        ],
+        "rel_cls_group": "MODIFICATION",
+        "justification": "The caterpillar forms a chrysalis as a morphological change of its state and surrounding structure. This is best grouped under MODIFICATION (self-transformation) rather than generic CAUSALITY or COMPOSITION.",
+        "remark": null,
+        "confidence": 0.86
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_c7358510f831"
+        ],
+        "rel_cls_group": "COMPOSITION",
+        "justification": "The butterfly life cycle is treated as a composite process made up of stages, one of which is the egg stage. The relation is about constitutive membership (part-whole) rather than direct causation or temporal ordering, so COMPOSITION is the most appropriate broad group.",
+        "remark": null,
+        "confidence": 0.92
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_e21da0364351",
+        "RelR_4e5bce9b92d3"
+      ],
+      "canonical_rel_name": "initiates_life_stage",
+      "canonical_rel_desc": "Links a reproductive agent (e.g., adult female organism) to the life stage whose occurrence it initiates (e.g., egg stage) through reproduction.",
+      "justification": "Both relations describe female butterflies, as reproductive agents, bringing about the egg stage of the butterfly life cycle via oviposition. The core semantics is that the subject causally initiates the object life stage, not merely containing or being part of it, so a unified predicate 'initiates_life_stage' fits both instances.",
+      "remark": null,
+      "confidence": 0.89
+    },
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_7686e1be475f"
+      ],
+      "canonical_rel_name": "forms_protective_structure",
+      "canonical_rel_desc": "Links an organism or life stage to a protective physical structure that it forms around or from its own body (e.g., a caterpillar forming a chrysalis).",
+      "justification": "This relation specifically captures that the caterpillar actively creates a protective structure (the chrysalis) around its body. The key semantics is self-formation of a protective structure, which is distinct from general life stage initiation or part-of relations in this cluster.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_c7358510f831"
+      ],
+      "canonical_rel_name": "includes_life_stage",
+      "canonical_rel_desc": "Links a multi-stage biological process (e.g., a life cycle) to one of its constituent life stages (e.g., egg, larva, pupa, adult).",
+      "justification": "The subject is the butterfly life cycle as a whole and the object is the egg stage as its initial phase. This is a compositional membership relation between a process and one of its stages, best captured as 'includes_life_stage'.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_e21da0364351",
+        "RelR_4e5bce9b92d3"
+      ],
+      "rel_cls": "reproductive_stage_initiation_relation",
+      "justification": "Both relations describe reproductive actions (oviposition) by female butterflies that initiate a new life stage (egg stage). Grouping them under 'reproductive_stage_initiation_relation' captures that they are about reproduction-driven onset of a life stage, distinct from generic causation or structural formation.",
+      "remark": null,
+      "confidence": 0.88
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_7686e1be475f"
+      ],
+      "rel_cls": "morphological_transformation_relation",
+      "justification": "The relation captures a life-stage driven structural transformation where the caterpillar creates a chrysalis around itself. This is best treated as a morphological transformation family of relations, not purely reproductive or compositional.",
+      "remark": null,
+      "confidence": 0.87
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_c7358510f831"
+      ],
+      "rel_cls": "process_stage_membership_relation",
+      "justification": "The subject is a multi-step process (butterfly life cycle) and the object is one of its stages (egg stage). This fits a class describing membership of stages within a broader biological process.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_e21da0364351",
+        "RelR_4e5bce9b92d3"
+      ],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "Female butterflies causally bring about the egg stage via reproductive action; the emphasis is on causing a new stage to begin, which is fundamentally causal rather than purely temporal sequencing or composition.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_7686e1be475f"
+      ],
+      "rel_cls_group": "MODIFICATION",
+      "justification": "The caterpillar forms a chrysalis as a morphological change of its state and surrounding structure. This is best grouped under MODIFICATION (self-transformation) rather than generic CAUSALITY or COMPOSITION.",
+      "remark": null,
+      "confidence": 0.86
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_c7358510f831"
+      ],
+      "rel_cls_group": "COMPOSITION",
+      "justification": "The butterfly life cycle is treated as a composite process made up of stages, one of which is the egg stage. The relation is about constitutive membership (part-whole) rather than direct causation or temporal ordering, so COMPOSITION is the most appropriate broad group.",
+      "remark": null,
+      "confidence": 0.92
+    }
+  ],
+  "timestamp": "2026-01-03T08:56:26Z"
+}

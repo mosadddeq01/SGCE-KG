@@ -1,0 +1,42 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_8a2529783d3d",
+        "RelR_a929684d919c"
+      ],
+      "canonical_rel_name": "conceals_from_predators",
+      "canonical_rel_desc": "The camouflage adaptation conceals the organism from specified predators, reducing the likelihood of being detected and eaten.",
+      "justification": "Both relations describe specific camouflage adaptations (twig mimicry, leaf mimicry) functionally hiding caterpillars from their predators to reduce predation risk; a unified predicate expressing concealment from predators fits both.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_8a2529783d3d",
+        "RelR_a929684d919c"
+      ],
+      "rel_cls": "camouflage_defense_relation",
+      "justification": "These relations link particular camouflage adaptations to their predator targets as part of an anti-predator defense mechanism; grouping them under a camouflage-focused defense relation class captures this shared functional role.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_8a2529783d3d",
+        "RelR_a929684d919c"
+      ],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "The relations encode a causal defensive effect: camouflage causes reduced visual detection and thus lower predation risk from the specified predators, matching a causal/defensive semantic dimension.",
+      "remark": null,
+      "confidence": 0.88
+    }
+  }
+]

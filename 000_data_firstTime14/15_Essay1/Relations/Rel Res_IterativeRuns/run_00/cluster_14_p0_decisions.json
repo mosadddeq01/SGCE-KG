@@ -1,0 +1,163 @@
+{
+  "cluster_label": "14_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_3de914ef26c4",
+      "relation_name": "undergoes_process",
+      "rel_desc": "Caterpillars repeatedly undergo the biological process of molting as they grow.",
+      "rel_hint_type": "life_cycle",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "caterpillar (larval stage of butterfly)",
+      "object_entity_name": "molting",
+      "subject_class_label": "Butterfly larval and pupal stages",
+      "subject_class_group": "Butterfly Life Cycle Stages",
+      "object_class_label": "Butterfly Molting Process",
+      "object_class_group": "Butterfly Life Cycle and Development",
+      "qualifiers": {
+        "TemporalQualifier": "as they grow",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": "each time they grow enough to shed their skin",
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": "each time",
+        "OtherQualifier": "Frequency: several times"
+      },
+      "confidence": 0.98,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_0e82810746df",
+      "relation_name": "life_cycle_of",
+      "rel_desc": "The butterfly life cycle is the developmental process that butterflies undergo.",
+      "rel_hint_type": "biological_process",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "butterfly life cycle",
+      "object_entity_name": "butterflies",
+      "subject_class_label": "Butterfly life cycle process",
+      "subject_class_group": "Butterfly Life Cycle and Development",
+      "object_class_label": "Butterflies (individual organisms, general)",
+      "object_class_group": "Butterfly Biology and Life Cycle",
+      "qualifiers": {
+        "TemporalQualifier": "from egg to adult",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": "of",
+        "OtherQualifier": null
+      },
+      "confidence": 0.97,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_3de914ef26c4\"],\n      \"canonical_rel_name\": \"undergoes_biological_process\",\n      \"canonical_rel_desc\": \"Indicates that an organism or life stage repeatedly undergoes a specific biological process as part of its development or functioning.\",\n      \"justification\": \"The subject is a caterpillar life stage and the object is the molting process it repeatedly undergoes during growth; this is best modeled as an organism (or life stage) undergoing a biological process, which is reusable beyond this specific example.\",\n      \"remark\": null,\n      \"confidence\": 0.96\n    }\n  },\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_0e82810746df\"],\n      \"canonical_rel_name\": \"is_life_cycle_of\",\n      \"canonical_rel_desc\": \"Indicates that a developmental life cycle process is the characteristic life cycle of a given organism or taxon.\",\n      \"justification\": \"The subject is the butterfly life cycle (a developmental process) and the object is butterflies (the organism group that undergoes this process); the most precise predicate is that this process is the life cycle of that organism.\",\n      \"remark\": null,\n      \"confidence\": 0.95\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_3de914ef26c4\", \"RelR_0e82810746df\"],\n      \"rel_cls\": \"organism_development_relation\",\n      \"justification\": \"Both relations link biological entities (organisms or life stages) with their developmental processes: one is an organism/life stage undergoing a process (molting), the other is an organism associated with its overall life cycle. These fit a common class covering organism–developmental-process relations.\",\n      \"remark\": null,\n      \"confidence\": 0.93\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_3de914ef26c4\", \"RelR_0e82810746df\"],\n      \"rel_cls_group\": \"ASSOCIATION\",\n      \"justification\": \"At a broad level, both edges express non-causal, non-spatial associations between organisms (or their stages) and their characteristic biological/developmental processes, which fits an ASSOCIATION-type group better than COMPOSITION, CAUSALITY, or IDENTITY.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_3de914ef26c4"
+        ],
+        "canonical_rel_name": "undergoes_biological_process",
+        "canonical_rel_desc": "Indicates that an organism or life stage repeatedly undergoes a specific biological process as part of its development or functioning.",
+        "justification": "The subject is a caterpillar life stage and the object is the molting process it repeatedly undergoes during growth; this is best modeled as an organism (or life stage) undergoing a biological process, which is reusable beyond this specific example.",
+        "remark": null,
+        "confidence": 0.96
+      }
+    },
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_0e82810746df"
+        ],
+        "canonical_rel_name": "is_life_cycle_of",
+        "canonical_rel_desc": "Indicates that a developmental life cycle process is the characteristic life cycle of a given organism or taxon.",
+        "justification": "The subject is the butterfly life cycle (a developmental process) and the object is butterflies (the organism group that undergoes this process); the most precise predicate is that this process is the life cycle of that organism.",
+        "remark": null,
+        "confidence": 0.95
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_3de914ef26c4",
+          "RelR_0e82810746df"
+        ],
+        "rel_cls": "organism_development_relation",
+        "justification": "Both relations link biological entities (organisms or life stages) with their developmental processes: one is an organism/life stage undergoing a process (molting), the other is an organism associated with its overall life cycle. These fit a common class covering organism–developmental-process relations.",
+        "remark": null,
+        "confidence": 0.93
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_3de914ef26c4",
+          "RelR_0e82810746df"
+        ],
+        "rel_cls_group": "ASSOCIATION",
+        "justification": "At a broad level, both edges express non-causal, non-spatial associations between organisms (or their stages) and their characteristic biological/developmental processes, which fits an ASSOCIATION-type group better than COMPOSITION, CAUSALITY, or IDENTITY.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_3de914ef26c4"
+      ],
+      "canonical_rel_name": "undergoes_biological_process",
+      "canonical_rel_desc": "Indicates that an organism or life stage repeatedly undergoes a specific biological process as part of its development or functioning.",
+      "justification": "The subject is a caterpillar life stage and the object is the molting process it repeatedly undergoes during growth; this is best modeled as an organism (or life stage) undergoing a biological process, which is reusable beyond this specific example.",
+      "remark": null,
+      "confidence": 0.96
+    },
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_0e82810746df"
+      ],
+      "canonical_rel_name": "is_life_cycle_of",
+      "canonical_rel_desc": "Indicates that a developmental life cycle process is the characteristic life cycle of a given organism or taxon.",
+      "justification": "The subject is the butterfly life cycle (a developmental process) and the object is butterflies (the organism group that undergoes this process); the most precise predicate is that this process is the life cycle of that organism.",
+      "remark": null,
+      "confidence": 0.95
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_3de914ef26c4",
+        "RelR_0e82810746df"
+      ],
+      "rel_cls": "organism_development_relation",
+      "justification": "Both relations link biological entities (organisms or life stages) with their developmental processes: one is an organism/life stage undergoing a process (molting), the other is an organism associated with its overall life cycle. These fit a common class covering organism–developmental-process relations.",
+      "remark": null,
+      "confidence": 0.93
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_3de914ef26c4",
+        "RelR_0e82810746df"
+      ],
+      "rel_cls_group": "ASSOCIATION",
+      "justification": "At a broad level, both edges express non-causal, non-spatial associations between organisms (or their stages) and their characteristic biological/developmental processes, which fits an ASSOCIATION-type group better than COMPOSITION, CAUSALITY, or IDENTITY.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  ],
+  "timestamp": "2026-01-03T08:54:37Z"
+}

@@ -1,0 +1,192 @@
+{
+  "cluster_label": 5,
+  "cluster_classes": [
+    {
+      "candidate_id": "ClsC_70788dbe",
+      "class_label": "Butterfly Developmental Processes (Molting & Metamorphosis)",
+      "class_description": "Biological processes in butterfly development, specifically molting (repeated skin shedding as the caterpillar grows) and metamorphosis (transformation into a butterfly inside the chrysalis).",
+      "class_type_hint": "Biological Process",
+      "class_group": "Butterfly Life Cycle and Development",
+      "confidence": 0.9,
+      "evidence_excerpt": "molting as repeated skin shedding; metamorphosis as transformation into a butterfly",
+      "member_ids": [
+        "En_a552e15f",
+        "En_39d95774"
+      ],
+      "members": [
+        {
+          "id": "En_a552e15f",
+          "entity_name": "molting",
+          "entity_description": "Biological process where caterpillars shed their skin multiple times as they grow.",
+          "entity_type_hint": "BiologicalProcess"
+        },
+        {
+          "id": "En_39d95774",
+          "entity_name": "metamorphosis",
+          "entity_description": "Transformation process where a caterpillar changes into a butterfly inside the chrysalis.",
+          "entity_type_hint": "BiologicalProcess"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_8d404c11",
+      "class_label": "Butterfly Metamorphosis Time Attributes",
+      "class_description": "Time-related attributes that quantify or describe how long butterfly metamorphosis inside the chrysalis takes (e.g., number of days or weeks).",
+      "class_type_hint": "Process Attribute",
+      "class_group": "Butterfly Life Cycle and Development",
+      "confidence": 0.8,
+      "evidence_excerpt": "metamorphosis inside the chrysalis and its duration from days to weeks",
+      "member_ids": [
+        "En_50ff70fb"
+      ],
+      "members": [
+        {
+          "id": "En_50ff70fb",
+          "entity_name": "metamorphosis process duration",
+          "entity_description": "Time span of metamorphosis inside the chrysalis, ranging from days to weeks depending on species.",
+          "entity_type_hint": "OperatingCondition"
+        }
+      ],
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"split_class\",\n    \"args\": {\n      \"source_class_id\": \"ClsC_70788dbe\",\n      \"splits\": [\n        {\n          \"name\": \"Butterfly Molting Process\",\n          \"description\": \"Biological process where caterpillars shed their skin multiple times as they grow.\",\n          \"class_type_hint\": \"Biological Process\",\n          \"member_ids\": [\n            \"En_a552e15f\"\n          ],\n          \"provisional_id\": \"Split_ClsC_70788dbe_Molting\"\n        },\n        {\n          \"name\": \"Butterfly Metamorphosis Process\",\n          \"description\": \"Biological process where a caterpillar transforms into a butterfly inside the chrysalis.\",\n          \"class_type_hint\": \"Biological Process\",\n          \"member_ids\": [\n            \"En_39d95774\"\n          ],\n          \"provisional_id\": \"Split_ClsC_70788dbe_Metamorphosis\"\n        }\n      ],\n      \"justification\": \"The original class bundles two distinct biological processes (molting and metamorphosis) that are conceptually separate stages of the butterfly life cycle and should be modeled as separate process classes for cleaner schema and better alignment with the metamorphosis duration attribute class.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"Split_ClsC_70788dbe_Molting\",\n      \"new_name\": null,\n      \"new_description\": null,\n      \"new_class_type_hint\": null,\n      \"new_class_group\": \"Butterfly Life Cycle and Development\",\n      \"remark\": null,\n      \"justification\": \"Assign the same lifecycle-focused Class_Group to the new Butterfly Molting Process class to keep it connected with related development and metamorphosis concepts.\",\n      \"confidence\": 0.95\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"Split_ClsC_70788dbe_Metamorphosis\",\n      \"new_name\": null,\n      \"new_description\": null,\n      \"new_class_type_hint\": null,\n      \"new_class_group\": \"Butterfly Life Cycle and Development\",\n      \"remark\": null,\n      \"justification\": \"Assign the lifecycle-focused Class_Group to the new Butterfly Metamorphosis Process class so it is clearly linked to the metamorphosis duration attribute class and other developmental processes.\",\n      \"confidence\": 0.95\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_8d404c11\",\n      \"new_name\": null,\n      \"new_description\": \"Time-related attributes that quantify or describe how long butterfly metamorphosis (inside the chrysalis) takes, such as its duration in days or weeks for different species.\",\n      \"new_class_type_hint\": \"Process Attribute\",\n      \"new_class_group\": \"Butterfly Life Cycle and Development\",\n      \"remark\": null,\n      \"justification\": \"Clarify in the description that this class specifically captures time attributes of the metamorphosis process, aligning it more explicitly with the new Butterfly Metamorphosis Process class while keeping the same Class_Group.\",\n      \"confidence\": 0.87\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "split_class",
+      "args": {
+        "source_class_id": "ClsC_70788dbe",
+        "splits": [
+          {
+            "name": "Butterfly Molting Process",
+            "description": "Biological process where caterpillars shed their skin multiple times as they grow.",
+            "class_type_hint": "Biological Process",
+            "member_ids": [
+              "En_a552e15f"
+            ],
+            "provisional_id": "Split_ClsC_70788dbe_Molting"
+          },
+          {
+            "name": "Butterfly Metamorphosis Process",
+            "description": "Biological process where a caterpillar transforms into a butterfly inside the chrysalis.",
+            "class_type_hint": "Biological Process",
+            "member_ids": [
+              "En_39d95774"
+            ],
+            "provisional_id": "Split_ClsC_70788dbe_Metamorphosis"
+          }
+        ],
+        "justification": "The original class bundles two distinct biological processes (molting and metamorphosis) that are conceptually separate stages of the butterfly life cycle and should be modeled as separate process classes for cleaner schema and better alignment with the metamorphosis duration attribute class.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "Split_ClsC_70788dbe_Molting",
+        "new_name": null,
+        "new_description": null,
+        "new_class_type_hint": null,
+        "new_class_group": "Butterfly Life Cycle and Development",
+        "remark": null,
+        "justification": "Assign the same lifecycle-focused Class_Group to the new Butterfly Molting Process class to keep it connected with related development and metamorphosis concepts.",
+        "confidence": 0.95
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "Split_ClsC_70788dbe_Metamorphosis",
+        "new_name": null,
+        "new_description": null,
+        "new_class_type_hint": null,
+        "new_class_group": "Butterfly Life Cycle and Development",
+        "remark": null,
+        "justification": "Assign the lifecycle-focused Class_Group to the new Butterfly Metamorphosis Process class so it is clearly linked to the metamorphosis duration attribute class and other developmental processes.",
+        "confidence": 0.95
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_8d404c11",
+        "new_name": null,
+        "new_description": "Time-related attributes that quantify or describe how long butterfly metamorphosis (inside the chrysalis) takes, such as its duration in days or weeks for different species.",
+        "new_class_type_hint": "Process Attribute",
+        "new_class_group": "Butterfly Life Cycle and Development",
+        "remark": null,
+        "justification": "Clarify in the description that this class specifically captures time attributes of the metamorphosis process, aligning it more explicitly with the new Butterfly Metamorphosis Process class while keeping the same Class_Group.",
+        "confidence": 0.87
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "split_class",
+      "source_class_id": "ClsC_70788dbe",
+      "source_class_id_resolved": "ClsC_70788dbe",
+      "created_classes": [
+        {
+          "new_class_id": "ClsR_d5367cdc",
+          "provisional_id": "Split_ClsC_70788dbe_Molting",
+          "member_ids": [
+            "En_a552e15f"
+          ]
+        },
+        {
+          "new_class_id": "ClsR_f0eb372f",
+          "provisional_id": "Split_ClsC_70788dbe_Metamorphosis",
+          "member_ids": [
+            "En_39d95774"
+          ]
+        }
+      ],
+      "justification": "The original class bundles two distinct biological processes (molting and metamorphosis) that are conceptually separate stages of the butterfly life cycle and should be modeled as separate process classes for cleaner schema and better alignment with the metamorphosis duration attribute class.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "modify_class",
+      "class_id": "Split_ClsC_70788dbe_Molting",
+      "class_id_resolved": "ClsR_d5367cdc",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Butterfly Life Cycle and Development",
+      "remark": null,
+      "justification": "Assign the same lifecycle-focused Class_Group to the new Butterfly Molting Process class to keep it connected with related development and metamorphosis concepts.",
+      "confidence": 0.95
+    },
+    {
+      "action": "modify_class",
+      "class_id": "Split_ClsC_70788dbe_Metamorphosis",
+      "class_id_resolved": "ClsR_f0eb372f",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Butterfly Life Cycle and Development",
+      "remark": null,
+      "justification": "Assign the lifecycle-focused Class_Group to the new Butterfly Metamorphosis Process class so it is clearly linked to the metamorphosis duration attribute class and other developmental processes.",
+      "confidence": 0.95
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_8d404c11",
+      "class_id_resolved": "ClsC_8d404c11",
+      "new_name": null,
+      "new_description": "Time-related attributes that quantify or describe how long butterfly metamorphosis (inside the chrysalis) takes, such as its duration in days or weeks for different species.",
+      "new_class_type_hint": "Process Attribute",
+      "new_class_group": "Butterfly Life Cycle and Development",
+      "remark": null,
+      "justification": "Clarify in the description that this class specifically captures time attributes of the metamorphosis process, aligning it more explicitly with the new Butterfly Metamorphosis Process class while keeping the same Class_Group.",
+      "confidence": 0.87
+    }
+  ],
+  "provisional_to_real": {
+    "Split_ClsC_70788dbe_Molting": "ClsR_d5367cdc",
+    "Split_ClsC_70788dbe_Metamorphosis": "ClsR_f0eb372f"
+  },
+  "timestamp": "2026-01-03T08:23:46Z"
+}

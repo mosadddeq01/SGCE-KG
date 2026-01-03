@@ -1,0 +1,201 @@
+{
+  "cluster_label": 6,
+  "cluster_classes": [
+    {
+      "candidate_id": "ClsC_93a9cf68",
+      "class_label": "Butterfly Egg Substrates and Larval Food Leaves",
+      "class_description": "Leaf surfaces and plant leaves used by butterflies for egg laying and as primary food sources for emerging larvae.",
+      "class_type_hint": "HabitatFeature",
+      "class_group": "Butterfly Ecology and Life Cycle",
+      "confidence": 0.86,
+      "evidence_excerpt": "Eggs are laid on the underside of leaves to protect them from predators; caterpillars feed on leaves.",
+      "member_ids": [
+        "En_b23551a2",
+        "En_b5d0970a"
+      ],
+      "members": [
+        {
+          "id": "En_b23551a2",
+          "entity_name": "underside of leaves",
+          "entity_description": "Protected surface on the bottom of plant leaves where butterfly eggs are usually laid.",
+          "entity_type_hint": "Location"
+        },
+        {
+          "id": "En_b5d0970a",
+          "entity_name": "plant leaves",
+          "entity_description": "Plant leaves that provide surfaces for butterfly egg laying and serve as a primary food source for caterpillars.",
+          "entity_type_hint": "PlantPart"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsR_1d18e4db",
+      "class_label": "Butterfly Trophic Interactions",
+      "class_description": "Interacting organisms and trophic roles involving butterflies and their larvae, including predators of adults and caterpillars, host plants as food sources, and butterflies as prey within the food web.",
+      "class_type_hint": "EcologicalInteraction",
+      "class_group": "Butterfly Ecology and Life Cycle",
+      "confidence": 0.93,
+      "evidence_excerpt": "food source for birds, reptiles, and other insects",
+      "member_ids": [
+        "En_8e017cbc",
+        "En_8b2459ca",
+        "En_2f1262d6",
+        "Can_de817465",
+        "En_4eeeef3a",
+        "En_53a03385"
+      ],
+      "members": [
+        {
+          "id": "En_8e017cbc",
+          "entity_name": "birds",
+          "entity_description": "Vertebrate animals that can prey on butterflies as a food source.",
+          "entity_type_hint": "Organism"
+        },
+        {
+          "id": "En_8b2459ca",
+          "entity_name": "reptiles",
+          "entity_description": "Cold-blooded vertebrates that may consume butterflies as part of their diet.",
+          "entity_type_hint": "Organism"
+        },
+        {
+          "id": "En_2f1262d6",
+          "entity_name": "other insects",
+          "entity_description": "Non-butterfly insects that use butterflies as prey within the ecosystem food web.",
+          "entity_type_hint": "OrganismGroup"
+        },
+        {
+          "id": "Can_de817465",
+          "entity_name": "host plants",
+          "entity_description": "Specific plant species used by butterflies as oviposition sites and as food sources for emerging larvae.",
+          "entity_type_hint": "Environment"
+        },
+        {
+          "id": "En_4eeeef3a",
+          "entity_name": "food source",
+          "entity_description": "Role of butterflies as prey providing nourishment to birds, reptiles, and other insects.",
+          "entity_type_hint": "EcologicalRole"
+        },
+        {
+          "id": "En_53a03385",
+          "entity_name": "predators of caterpillars",
+          "entity_description": "Animals that prey upon caterpillars, driving their need for camouflage and protection.",
+          "entity_type_hint": "OrganismGroup"
+        }
+      ],
+      "remarks": [
+        "Entity 'host plants' (Can_de817465) is typed as Environment but functions biologically as a plant/organism group; upstream review of its entity_type_hint is recommended, though it is correctly placed in this trophic interaction class."
+      ]
+    },
+    {
+      "candidate_id": "ClsR_1b64f457",
+      "class_label": "Predators of Butterfly Eggs",
+      "class_description": "Groups of animals that consume or harm butterfly eggs, shaping oviposition behavior and egg survival.",
+      "class_type_hint": "EcologicalInteractionAgent",
+      "class_group": "Butterfly Ecology and Life Cycle",
+      "confidence": 0.86,
+      "evidence_excerpt": "Eggs are laid on the underside of leaves to protect them from predators; caterpillars feed on leaves.",
+      "member_ids": [
+        "En_d9bb99dd"
+      ],
+      "members": [
+        {
+          "id": "En_d9bb99dd",
+          "entity_name": "predators of butterfly eggs",
+          "entity_description": "Organisms that might consume or harm butterfly eggs, prompting eggs to be laid on leaf undersides.",
+          "entity_type_hint": "OrganismGroup"
+        }
+      ],
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"merge_classes\",\n    \"args\": {\n      \"class_ids\": [\"ClsR_1d18e4db\", \"ClsR_1b64f457\"],\n      \"provisional_id\": \"MERGE(ClsR_1d18e4db|ClsR_1b64f457)\",\n      \"new_name\": \"Butterfly Trophic Interactions\",\n      \"new_description\": \"Organisms and trophic roles involving butterflies and their life stages, including predators of adults, caterpillars, and eggs, host plants as food sources and oviposition sites, and butterflies as prey within the food web.\",\n      \"new_class_type_hint\": \"EcologicalInteraction\",\n      \"justification\": \"ClsR_1b64f457 (predators of butterfly eggs) is a narrow subset of the broader trophic interaction domain covered by ClsR_1d18e4db, so maintaining them as separate classes would create unnecessary fragmentation of closely related trophic interaction entities.\",\n      \"remark\": null,\n      \"confidence\": 0.93\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"MERGE(ClsR_1d18e4db|ClsR_1b64f457)\",\n      \"new_name\": null,\n      \"new_description\": null,\n      \"new_class_type_hint\": null,\n      \"new_class_group\": \"Butterfly Ecology and Life Cycle\",\n      \"remark\": null,\n      \"justification\": \"The merged trophic interaction class should explicitly remain in the same higher-level domain as related life-cycle and habitat classes, so its Class_Group is confirmed and standardized as 'Butterfly Ecology and Life Cycle'.\",\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_93a9cf68\",\n      \"new_name\": \"Butterfly Egg-Laying Sites and Larval Food Leaves\",\n      \"new_description\": \"Leaf surfaces and plant leaves used by butterflies as oviposition sites and as primary food sources for emerging larvae, emphasizing the microhabitat function of leaf undersides and host foliage.\",\n      \"new_class_type_hint\": \"HabitatFeature\",\n      \"new_class_group\": \"Butterfly Ecology and Life Cycle\",\n      \"remark\": null,\n      \"justification\": \"Renaming and slightly refining the description of ClsC_93a9cf68 clarifies that it covers leaf-based oviposition sites and larval food resources as microhabitat features, distinguishing it more cleanly from the merged trophic interaction class while keeping it in the same broader Class_Group.\",\n      \"confidence\": 0.86\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "merge_classes",
+      "args": {
+        "class_ids": [
+          "ClsR_1d18e4db",
+          "ClsR_1b64f457"
+        ],
+        "provisional_id": "MERGE(ClsR_1d18e4db|ClsR_1b64f457)",
+        "new_name": "Butterfly Trophic Interactions",
+        "new_description": "Organisms and trophic roles involving butterflies and their life stages, including predators of adults, caterpillars, and eggs, host plants as food sources and oviposition sites, and butterflies as prey within the food web.",
+        "new_class_type_hint": "EcologicalInteraction",
+        "justification": "ClsR_1b64f457 (predators of butterfly eggs) is a narrow subset of the broader trophic interaction domain covered by ClsR_1d18e4db, so maintaining them as separate classes would create unnecessary fragmentation of closely related trophic interaction entities.",
+        "remark": null,
+        "confidence": 0.93
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "MERGE(ClsR_1d18e4db|ClsR_1b64f457)",
+        "new_name": null,
+        "new_description": null,
+        "new_class_type_hint": null,
+        "new_class_group": "Butterfly Ecology and Life Cycle",
+        "remark": null,
+        "justification": "The merged trophic interaction class should explicitly remain in the same higher-level domain as related life-cycle and habitat classes, so its Class_Group is confirmed and standardized as 'Butterfly Ecology and Life Cycle'.",
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_93a9cf68",
+        "new_name": "Butterfly Egg-Laying Sites and Larval Food Leaves",
+        "new_description": "Leaf surfaces and plant leaves used by butterflies as oviposition sites and as primary food sources for emerging larvae, emphasizing the microhabitat function of leaf undersides and host foliage.",
+        "new_class_type_hint": "HabitatFeature",
+        "new_class_group": "Butterfly Ecology and Life Cycle",
+        "remark": null,
+        "justification": "Renaming and slightly refining the description of ClsC_93a9cf68 clarifies that it covers leaf-based oviposition sites and larval food resources as microhabitat features, distinguishing it more cleanly from the merged trophic interaction class while keeping it in the same broader Class_Group.",
+        "confidence": 0.86
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "merge_classes",
+      "input_class_ids": [
+        "ClsR_1d18e4db",
+        "ClsR_1b64f457"
+      ],
+      "result_class_id": "ClsR_456c8b15",
+      "provisional_id": "MERGE(ClsR_1d18e4db|ClsR_1b64f457)",
+      "justification": "ClsR_1b64f457 (predators of butterfly eggs) is a narrow subset of the broader trophic interaction domain covered by ClsR_1d18e4db, so maintaining them as separate classes would create unnecessary fragmentation of closely related trophic interaction entities.",
+      "remark": null,
+      "confidence": 0.93
+    },
+    {
+      "action": "modify_class",
+      "class_id": "MERGE(ClsR_1d18e4db|ClsR_1b64f457)",
+      "class_id_resolved": "ClsR_456c8b15",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Butterfly Ecology and Life Cycle",
+      "remark": null,
+      "justification": "The merged trophic interaction class should explicitly remain in the same higher-level domain as related life-cycle and habitat classes, so its Class_Group is confirmed and standardized as 'Butterfly Ecology and Life Cycle'.",
+      "confidence": 0.9
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_93a9cf68",
+      "class_id_resolved": "ClsC_93a9cf68",
+      "new_name": "Butterfly Egg-Laying Sites and Larval Food Leaves",
+      "new_description": "Leaf surfaces and plant leaves used by butterflies as oviposition sites and as primary food sources for emerging larvae, emphasizing the microhabitat function of leaf undersides and host foliage.",
+      "new_class_type_hint": "HabitatFeature",
+      "new_class_group": "Butterfly Ecology and Life Cycle",
+      "remark": null,
+      "justification": "Renaming and slightly refining the description of ClsC_93a9cf68 clarifies that it covers leaf-based oviposition sites and larval food resources as microhabitat features, distinguishing it more cleanly from the merged trophic interaction class while keeping it in the same broader Class_Group.",
+      "confidence": 0.86
+    }
+  ],
+  "provisional_to_real": {
+    "MERGE(ClsR_1d18e4db|ClsR_1b64f457)": "ClsR_456c8b15",
+    "ClsR_1d18e4db": "ClsR_456c8b15",
+    "ClsR_1b64f457": "ClsR_456c8b15"
+  },
+  "timestamp": "2026-01-03T08:22:10Z"
+}

@@ -1,0 +1,61 @@
+[
+  {
+    "function": "split_class",
+    "args": {
+      "source_class_id": "ClsR_1e9d0076",
+      "splits": [
+        {
+          "name": "Pollination in flowering plants",
+          "description": "The biological process in which pollen is transferred between flowers (often by animals) to enable sexual reproduction in flowering plants.",
+          "class_type_hint": "BiologicalProcess",
+          "member_ids": [
+            "Can_989a53ee"
+          ],
+          "provisional_id": "SPLIT(ClsR_1e9d0076)_pollination"
+        }
+      ],
+      "justification": "ClsR_1e9d0076 currently mixes a reproductive process (pollination) with reproductive structures and organisms; splitting out the process yields clearer process vs structure classes.",
+      "remark": null,
+      "confidence": 0.86
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsR_1e9d0076",
+      "new_name": "Flowering plant reproductive structures and organisms",
+      "new_description": "Structures and organisms involved in the sexual reproduction of flowering plants, including flowers, pollen, and the flowering plants that bear them.",
+      "new_class_type_hint": "OrganismStructure",
+      "new_class_group": "Biological Reproduction Processes",
+      "remark": null,
+      "justification": "After splitting out the pollination process, the remaining members in ClsR_1e9d0076 are all structures/organisms; renaming and aligning the class_group to a shared biological reproduction domain makes its scope explicit and connects it to related reproduction classes.",
+      "confidence": 0.87
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "SPLIT(ClsR_1e9d0076)_pollination",
+      "new_name": "Pollination in flowering plants",
+      "new_description": "Pollination as a reproductive process in flowering plants, in which pollen is transferred between flowers by wind, animals, or other vectors, enabling fertilization and seed production.",
+      "new_class_type_hint": "Biological Reproduction Process",
+      "new_class_group": "Biological Reproduction Processes",
+      "remark": null,
+      "justification": "The new split class cleanly represents the reproductive process aspect; giving it a precise label and the same biological reproduction class_group as other reproduction-focused classes improves schema coherence.",
+      "confidence": 0.88
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsR_2a20cb5a",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Biological Reproduction Processes",
+      "remark": null,
+      "justification": "ClsR_2a20cb5a describes butterfly reproduction, a biological reproduction process; aligning its class_group with the plant reproduction process group creates a unified higher-level group for animal and plant reproduction processes.",
+      "confidence": 0.9
+    }
+  }
+]

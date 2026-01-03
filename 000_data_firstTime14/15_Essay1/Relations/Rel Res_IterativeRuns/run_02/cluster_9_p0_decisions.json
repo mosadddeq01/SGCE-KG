@@ -1,0 +1,101 @@
+{
+  "cluster_label": "9_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_4a1d32a5ca81",
+      "relation_name": "emerges_from",
+      "rel_desc": "The adult butterfly life stage emerges from the chrysalis at the end of metamorphosis.",
+      "rel_hint_type": "transition",
+      "canonical_rel_name": "emerges_from_structure",
+      "canonical_rel_desc": "Indicates that an organism or life stage physically emerges from a containing or enclosing biological structure.",
+      "rel_cls": "structural_emergence_relation",
+      "rel_cls_group": "SPATIALITY",
+      "subject_entity_name": "adult butterfly life stage",
+      "object_entity_name": "chrysalis",
+      "subject_class_label": "Adult butterfly life stage",
+      "subject_class_group": "Butterfly Life Cycle and Development",
+      "object_class_label": "Chrysalis (Pupal Casing)",
+      "object_class_group": "Biological Structures and Substances in Butterfly Metamorphosis",
+      "qualifiers": {
+        "TemporalQualifier": "after the metamorphosis is complete",
+        "SpatialQualifier": "from the chrysalis",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": "after",
+        "OtherQualifier": null
+      },
+      "confidence": 0.96,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_436375c118d9",
+      "relation_name": "emerges_from",
+      "rel_desc": "The newly emerged butterfly has just emerged from the chrysalis.",
+      "rel_hint_type": "transition",
+      "canonical_rel_name": "emerges_from",
+      "canonical_rel_desc": "Indicates that an organism or life stage physically emerges from a containing or enclosing structure, typically as part of a developmental event.",
+      "rel_cls": "emergence_event_relation",
+      "rel_cls_group": "TEMPORALITY",
+      "subject_entity_name": "newly emerged butterfly",
+      "object_entity_name": "chrysalis",
+      "subject_class_label": "Adult butterfly life stage",
+      "subject_class_group": "Butterfly Life Cycle and Development",
+      "object_class_label": "Chrysalis (Pupal Casing)",
+      "object_class_group": "Biological Structures and Substances in Butterfly Metamorphosis",
+      "qualifiers": {
+        "TemporalQualifier": "immediately after emergence",
+        "SpatialQualifier": "from the chrysalis",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "implicit reference",
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.6,
+      "remarks": [
+        "Relation relies on discourse continuity rather than a repeated explicit phrase.",
+        "Relation relies on discourse continuity rather than a repeated explicit phrase.",
+        "Relation relies on discourse continuity rather than a repeated explicit phrase."
+      ]
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_rel_schema\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_436375c118d9\"\n      ],\n      \"canonical_rel_name\": \"emerges_from_structure\",\n      \"canonical_rel_desc\": \"Indicates that an organism or life stage physically emerges from a containing or enclosing biological structure.\",\n      \"rel_cls\": \"structural_emergence_relation\",\n      \"rel_cls_group\": \"SPATIALITY\",\n      \"justification\": \"Both relations describe an organism/life stage physically emerging from the chrysalis as an enclosing structure during development. The first relation already uses a structural emergence predicate, class, and SPATIALITY group. The second was treated as a generic emergence event under TEMPORALITY, but its semantics are equally structural with temporal information already captured in qualifiers. Aligning the second relation to 'emerges_from_structure' with rel_cls 'structural_emergence_relation' and rel_cls_group 'SPATIALITY' normalizes semantically identical predicates and keeps temporality at the qualifier level.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_rel_schema",
+      "args": {
+        "relation_ids": [
+          "RelR_436375c118d9"
+        ],
+        "canonical_rel_name": "emerges_from_structure",
+        "canonical_rel_desc": "Indicates that an organism or life stage physically emerges from a containing or enclosing biological structure.",
+        "rel_cls": "structural_emergence_relation",
+        "rel_cls_group": "SPATIALITY",
+        "justification": "Both relations describe an organism/life stage physically emerging from the chrysalis as an enclosing structure during development. The first relation already uses a structural emergence predicate, class, and SPATIALITY group. The second was treated as a generic emergence event under TEMPORALITY, but its semantics are equally structural with temporal information already captured in qualifiers. Aligning the second relation to 'emerges_from_structure' with rel_cls 'structural_emergence_relation' and rel_cls_group 'SPATIALITY' normalizes semantically identical predicates and keeps temporality at the qualifier level.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_rel_schema",
+      "relation_ids": [
+        "RelR_436375c118d9"
+      ],
+      "canonical_rel_name": "emerges_from_structure",
+      "canonical_rel_desc": "Indicates that an organism or life stage physically emerges from a containing or enclosing biological structure.",
+      "rel_cls": "structural_emergence_relation",
+      "rel_cls_group": "SPATIALITY",
+      "new_relation_name": null,
+      "original_relation_name": null,
+      "justification": "Both relations describe an organism/life stage physically emerging from the chrysalis as an enclosing structure during development. The first relation already uses a structural emergence predicate, class, and SPATIALITY group. The second was treated as a generic emergence event under TEMPORALITY, but its semantics are equally structural with temporal information already captured in qualifiers. Aligning the second relation to 'emerges_from_structure' with rel_cls 'structural_emergence_relation' and rel_cls_group 'SPATIALITY' normalizes semantically identical predicates and keeps temporality at the qualifier level.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  ],
+  "timestamp": "2026-01-03T08:59:34Z"
+}

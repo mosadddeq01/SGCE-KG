@@ -1,0 +1,209 @@
+{
+  "cluster_label": "20_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_383e17a3b951",
+      "relation_name": "develops_into",
+      "rel_desc": "The butterfly in the egg stage develops into a caterpillar (larval stage) when the egg hatches.",
+      "rel_hint_type": "developmental transition",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "egg stage (butterfly life cycle)",
+      "object_entity_name": "caterpillar (larval stage of butterfly)",
+      "subject_class_label": "Butterfly egg life stage",
+      "subject_class_group": "Butterfly Life Cycle Stages",
+      "object_class_label": "Butterfly larval and pupal stages",
+      "object_class_group": "Butterfly Life Cycle Stages",
+      "qualifiers": {
+        "TemporalQualifier": "after a few days or weeks",
+        "SpatialQualifier": "at the egg’s location (on leaves)",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "hatches → emerges",
+        "LogicalMarker": "after",
+        "OtherQualifier": "StageOrder: egg stage precedes larval (caterpillar) stage"
+      },
+      "confidence": 0.98,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_8d3ba632bd34",
+      "relation_name": "develops_into",
+      "rel_desc": "The egg stage is followed by and develops into the larval (caterpillar) stage.",
+      "rel_hint_type": "developmental",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "egg stage (butterfly life cycle)",
+      "object_entity_name": "caterpillar (larval stage of butterfly)",
+      "subject_class_label": "Butterfly egg life stage",
+      "subject_class_group": "Butterfly Life Cycle Stages",
+      "object_class_label": "Butterfly larval and pupal stages",
+      "object_class_group": "Butterfly Life Cycle Stages",
+      "qualifiers": {
+        "TemporalQualifier": "during the early life cycle",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "to",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.95,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_8f93079c32ed",
+      "relation_name": "develops_into",
+      "rel_desc": "The larval (caterpillar) stage precedes and transforms into the pupa stage.",
+      "rel_hint_type": "developmental",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "caterpillar (larval stage of butterfly)",
+      "object_entity_name": "pupa stage",
+      "subject_class_label": "Butterfly larval and pupal stages",
+      "subject_class_group": "Butterfly Life Cycle Stages",
+      "object_class_label": "Butterfly larval and pupal stages",
+      "object_class_group": "Butterfly Life Cycle Stages",
+      "qualifiers": {
+        "TemporalQualifier": "midway through the life cycle",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "to",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.95,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_2c8b6d7987ee",
+      "relation_name": "develops_into",
+      "rel_desc": "The pupa stage transitions into the adult butterfly life stage.",
+      "rel_hint_type": "developmental",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "pupa stage",
+      "object_entity_name": "adult butterfly life stage",
+      "subject_class_label": "Butterfly larval and pupal stages",
+      "subject_class_group": "Butterfly Life Cycle Stages",
+      "object_class_label": "Adult butterfly life stage",
+      "object_class_group": "Butterfly Life Cycle and Development",
+      "qualifiers": {
+        "TemporalQualifier": "late in the life cycle",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "to",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.96,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_383e17a3b951\",\n        \"RelR_8d3ba632bd34\",\n        \"RelR_8f93079c32ed\",\n        \"RelR_2c8b6d7987ee\"\n      ],\n      \"canonical_rel_name\": \"develops_into\",\n      \"canonical_rel_desc\": \"Indicates that an earlier biological life stage or form naturally develops or transitions into a subsequent life stage of the same organism.\",\n      \"justification\": \"All four relations describe successive biological life stages of a butterfly where one stage changes into the next (egg to larva, larva to pupa, pupa to adult). They share the same directed developmental-transition semantics, so a single canonical predicate 'develops_into' is appropriate.\",\n      \"remark\": null,\n      \"confidence\": 0.97\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_383e17a3b951\",\n        \"RelR_8d3ba632bd34\",\n        \"RelR_8f93079c32ed\",\n        \"RelR_2c8b6d7987ee\"\n      ],\n      \"rel_cls\": \"life_cycle_stage_transition_relation\",\n      \"justification\": \"Each relation connects two consecutive life stages within the same organism’s life cycle (egg→larva, larva→pupa, pupa→adult). This is a specific family of relations about transitions between ordered life-cycle stages, so a dedicated class 'life_cycle_stage_transition_relation' is suitable.\",\n      \"remark\": null,\n      \"confidence\": 0.96\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_383e17a3b951\",\n        \"RelR_8d3ba632bd34\",\n        \"RelR_8f93079c32ed\",\n        \"RelR_2c8b6d7987ee\"\n      ],\n      \"rel_cls_group\": \"TEMPORALITY\",\n      \"justification\": \"The core semantics are about ordered progression over time in a life cycle (one stage precedes and then becomes the next). This is primarily temporal sequencing of states of the same entity, so the broad group 'TEMPORALITY' best fits.\",\n      \"remark\": null,\n      \"confidence\": 0.94\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_383e17a3b951",
+          "RelR_8d3ba632bd34",
+          "RelR_8f93079c32ed",
+          "RelR_2c8b6d7987ee"
+        ],
+        "canonical_rel_name": "develops_into",
+        "canonical_rel_desc": "Indicates that an earlier biological life stage or form naturally develops or transitions into a subsequent life stage of the same organism.",
+        "justification": "All four relations describe successive biological life stages of a butterfly where one stage changes into the next (egg to larva, larva to pupa, pupa to adult). They share the same directed developmental-transition semantics, so a single canonical predicate 'develops_into' is appropriate.",
+        "remark": null,
+        "confidence": 0.97
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_383e17a3b951",
+          "RelR_8d3ba632bd34",
+          "RelR_8f93079c32ed",
+          "RelR_2c8b6d7987ee"
+        ],
+        "rel_cls": "life_cycle_stage_transition_relation",
+        "justification": "Each relation connects two consecutive life stages within the same organism's life cycle (egg→larva, larva→pupa, pupa→adult). This is a specific family of relations about transitions between ordered life-cycle stages, so a dedicated class 'life_cycle_stage_transition_relation' is suitable.",
+        "remark": null,
+        "confidence": 0.96
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_383e17a3b951",
+          "RelR_8d3ba632bd34",
+          "RelR_8f93079c32ed",
+          "RelR_2c8b6d7987ee"
+        ],
+        "rel_cls_group": "TEMPORALITY",
+        "justification": "The core semantics are about ordered progression over time in a life cycle (one stage precedes and then becomes the next). This is primarily temporal sequencing of states of the same entity, so the broad group 'TEMPORALITY' best fits.",
+        "remark": null,
+        "confidence": 0.94
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_383e17a3b951",
+        "RelR_8d3ba632bd34",
+        "RelR_8f93079c32ed",
+        "RelR_2c8b6d7987ee"
+      ],
+      "canonical_rel_name": "develops_into",
+      "canonical_rel_desc": "Indicates that an earlier biological life stage or form naturally develops or transitions into a subsequent life stage of the same organism.",
+      "justification": "All four relations describe successive biological life stages of a butterfly where one stage changes into the next (egg to larva, larva to pupa, pupa to adult). They share the same directed developmental-transition semantics, so a single canonical predicate 'develops_into' is appropriate.",
+      "remark": null,
+      "confidence": 0.97
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_383e17a3b951",
+        "RelR_8d3ba632bd34",
+        "RelR_8f93079c32ed",
+        "RelR_2c8b6d7987ee"
+      ],
+      "rel_cls": "life_cycle_stage_transition_relation",
+      "justification": "Each relation connects two consecutive life stages within the same organism's life cycle (egg→larva, larva→pupa, pupa→adult). This is a specific family of relations about transitions between ordered life-cycle stages, so a dedicated class 'life_cycle_stage_transition_relation' is suitable.",
+      "remark": null,
+      "confidence": 0.96
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_383e17a3b951",
+        "RelR_8d3ba632bd34",
+        "RelR_8f93079c32ed",
+        "RelR_2c8b6d7987ee"
+      ],
+      "rel_cls_group": "TEMPORALITY",
+      "justification": "The core semantics are about ordered progression over time in a life cycle (one stage precedes and then becomes the next). This is primarily temporal sequencing of states of the same entity, so the broad group 'TEMPORALITY' best fits.",
+      "remark": null,
+      "confidence": 0.94
+    }
+  ],
+  "timestamp": "2026-01-03T08:55:29Z"
+}

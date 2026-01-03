@@ -1,0 +1,133 @@
+{
+  "cluster_label": "21_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_2b4f104ea8bc",
+      "relation_name": "helps_maintain",
+      "rel_desc": "Pollination helps maintain the balance of plant populations.",
+      "rel_hint_type": "causal",
+      "canonical_rel_name": "contributes_to_maintenance_of",
+      "canonical_rel_desc": "Indicates that a process or factor helps maintain or stabilize a particular ecological or system state.",
+      "rel_cls": "biological_causal_effect_relation",
+      "rel_cls_group": "CAUSALITY",
+      "subject_entity_name": "pollination",
+      "object_entity_name": "balance of plant populations",
+      "subject_class_label": "Pollination in flowering plants",
+      "subject_class_group": "Biological Reproduction Processes",
+      "object_class_label": "Butterfly-Driven Ecological Outcomes",
+      "object_class_group": "Butterfly Ecology, Habitat, and Food Web",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "within the ecosystem",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "implicit linkage",
+        "CausalHint": "maintaining",
+        "LogicalMarker": "and",
+        "OtherQualifier": null
+      },
+      "confidence": 0.9,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_6cf306626059",
+      "relation_name": "supports",
+      "rel_desc": "Reproduction by butterflies supports continuation of the butterfly life cycle.",
+      "rel_hint_type": "causal",
+      "canonical_rel_name": "supports_continuation_of",
+      "canonical_rel_desc": "Indicates that a process or behavior supports or underpins the continuation or persistence of a life cycle, population, or system.",
+      "rel_cls": "biological_causal_effect_relation",
+      "rel_cls_group": "CAUSALITY",
+      "subject_entity_name": "reproducing",
+      "object_entity_name": "butterfly life cycle",
+      "subject_class_label": "Butterfly reproduction process",
+      "subject_class_group": "Biological Reproduction Processes",
+      "object_class_label": "Butterfly life cycle process",
+      "object_class_group": "Butterfly Life Cycle and Development",
+      "qualifiers": {
+        "TemporalQualifier": "following reproductive events",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": "reproducing to continue the life cycle",
+        "UncertaintyQualifier": null,
+        "CausalHint": "to continue",
+        "LogicalMarker": "to",
+        "OtherQualifier": "EffectType: continuation of species lifecycle"
+      },
+      "confidence": 0.96,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_64e81943ef93",
+      "relation_name": "supports_survival_and_reproduction_of",
+      "rel_desc": "The stages of the butterfly life cycle collectively support the survival and reproduction of butterflies.",
+      "rel_hint_type": "functional",
+      "canonical_rel_name": "supports_survival_and_reproduction_of",
+      "canonical_rel_desc": "Indicates that the subject process or set of stages contributes causally to the survival and reproduction of the object organisms.",
+      "rel_cls": "biological_causal_effect_relation",
+      "rel_cls_group": "CAUSALITY",
+      "subject_entity_name": "butterfly life cycle",
+      "object_entity_name": "butterflies",
+      "subject_class_label": "Butterfly life cycle process",
+      "subject_class_group": "Butterfly Life Cycle and Development",
+      "object_class_label": "Butterflies (individual organisms, general)",
+      "object_class_group": "Butterfly Biology and Life Cycle",
+      "qualifiers": {
+        "TemporalQualifier": "throughout all stages from egg to adult",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "plays a vital role in",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.9,
+      "remarks": [
+        "Models the aggregate effect of all stages as a property of the life cycle.",
+        "Models the aggregate effect of all stages as a property of the life cycle.",
+        "Models the aggregate effect of all stages as a property of the life cycle."
+      ]
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_rel_schema\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_2b4f104ea8bc\",\n        \"RelR_6cf306626059\",\n        \"RelR_64e81943ef93\"\n      ],\n      \"canonical_rel_name\": \"supports_persistence_of\",\n      \"canonical_rel_desc\": \"Indicates that the subject process or factor causally supports the ongoing existence, stability, or continuation of the object (e.g., a population, life cycle, organism survival, or ecological state).\",\n      \"rel_cls\": \"biological_causal_effect_relation\",\n      \"rel_cls_group\": \"CAUSALITY\",\n      \"justification\": \"All three relations describe a beneficial causal effect where a biological process (pollination, reproduction, life cycle stages) helps maintain, continue, or ensure the survival/reproduction of some biological or ecological object. The current canonical names ('contributes_to_maintenance_of', 'supports_continuation_of', 'supports_survival_and_reproduction_of') are overly specific variants of the same generic causal-support predicate. Normalizing them to a single predicate 'supports_persistence_of' reduces unnecessary predicate proliferation while preserving the shared semantics of causally supporting ongoing existence, stability, or continuation.\",\n      \"remark\": \"If future schema design requires finer distinction between maintenance, continuation, and survival/reproduction, these could later be modeled via qualifiers or more specific sub-predicates, but at this stage a unified causal-support predicate is more consistent.\",\n      \"confidence\": 0.86\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_rel_schema",
+      "args": {
+        "relation_ids": [
+          "RelR_2b4f104ea8bc",
+          "RelR_6cf306626059",
+          "RelR_64e81943ef93"
+        ],
+        "canonical_rel_name": "supports_persistence_of",
+        "canonical_rel_desc": "Indicates that the subject process or factor causally supports the ongoing existence, stability, or continuation of the object (e.g., a population, life cycle, organism survival, or ecological state).",
+        "rel_cls": "biological_causal_effect_relation",
+        "rel_cls_group": "CAUSALITY",
+        "justification": "All three relations describe a beneficial causal effect where a biological process (pollination, reproduction, life cycle stages) helps maintain, continue, or ensure the survival/reproduction of some biological or ecological object. The current canonical names ('contributes_to_maintenance_of', 'supports_continuation_of', 'supports_survival_and_reproduction_of') are overly specific variants of the same generic causal-support predicate. Normalizing them to a single predicate 'supports_persistence_of' reduces unnecessary predicate proliferation while preserving the shared semantics of causally supporting ongoing existence, stability, or continuation.",
+        "remark": "If future schema design requires finer distinction between maintenance, continuation, and survival/reproduction, these could later be modeled via qualifiers or more specific sub-predicates, but at this stage a unified causal-support predicate is more consistent.",
+        "confidence": 0.86
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_rel_schema",
+      "relation_ids": [
+        "RelR_2b4f104ea8bc",
+        "RelR_6cf306626059",
+        "RelR_64e81943ef93"
+      ],
+      "canonical_rel_name": "supports_persistence_of",
+      "canonical_rel_desc": "Indicates that the subject process or factor causally supports the ongoing existence, stability, or continuation of the object (e.g., a population, life cycle, organism survival, or ecological state).",
+      "rel_cls": "biological_causal_effect_relation",
+      "rel_cls_group": "CAUSALITY",
+      "new_relation_name": null,
+      "original_relation_name": null,
+      "justification": "All three relations describe a beneficial causal effect where a biological process (pollination, reproduction, life cycle stages) helps maintain, continue, or ensure the survival/reproduction of some biological or ecological object. The current canonical names ('contributes_to_maintenance_of', 'supports_continuation_of', 'supports_survival_and_reproduction_of') are overly specific variants of the same generic causal-support predicate. Normalizing them to a single predicate 'supports_persistence_of' reduces unnecessary predicate proliferation while preserving the shared semantics of causally supporting ongoing existence, stability, or continuation.",
+      "remark": "If future schema design requires finer distinction between maintenance, continuation, and survival/reproduction, these could later be modeled via qualifiers or more specific sub-predicates, but at this stage a unified causal-support predicate is more consistent.",
+      "confidence": 0.86
+    }
+  ],
+  "timestamp": "2026-01-03T09:00:16Z"
+}

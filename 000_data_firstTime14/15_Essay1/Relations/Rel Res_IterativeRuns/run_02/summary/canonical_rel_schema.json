@@ -1,0 +1,828 @@
+[
+  {
+    "canonical_rel_name": "has_life_cycle_stage",
+    "canonical_rel_desc": "Indicates that a life cycle or multi-stage biological process includes the object as one of its constituent life stages (e.g., egg, larva, pupa, adult).",
+    "rel_cls": [
+      "life_cycle_stage_composition_relation"
+    ],
+    "rel_cls_group": [
+      "COMPOSITION"
+    ],
+    "instance_count": 5,
+    "example_relation_ids": [
+      "RelR_34cc144f0893",
+      "RelR_c7358510f831",
+      "RelR_59d1bc18ae81",
+      "RelR_5444b05c7e2f",
+      "RelR_6860d9952bda"
+    ]
+  },
+  {
+    "canonical_rel_name": "has_member",
+    "canonical_rel_desc": "Indicates that the subject is a collection or set that includes the object as one of its members.",
+    "rel_cls": [
+      "collection_membership_relation"
+    ],
+    "rel_cls_group": [
+      "ASSOCIATION"
+    ],
+    "instance_count": 4,
+    "example_relation_ids": [
+      "RelR_e26b138400c4",
+      "RelR_90f6d25010b7",
+      "RelR_7519e52960f9",
+      "RelR_796d1a3aea55"
+    ]
+  },
+  {
+    "canonical_rel_name": "precedes_in_life_cycle",
+    "canonical_rel_desc": "Indicates that one biological life-cycle stage temporally precedes and developmentally leads into another stage within the same organism's life cycle.",
+    "rel_cls": [
+      "life_cycle_stage_order_relation"
+    ],
+    "rel_cls_group": [
+      "TEMPORALITY"
+    ],
+    "instance_count": 3,
+    "example_relation_ids": [
+      "RelR_8794518bc51a",
+      "RelR_97ce9169b13a",
+      "RelR_e56543a37161"
+    ]
+  },
+  {
+    "canonical_rel_name": "undergoes_biological_process",
+    "canonical_rel_desc": "Connects an organism or life stage to a biological process that it undergoes as part of its life cycle, growth, or functioning.",
+    "rel_cls": [
+      "biological_process_participation_relation"
+    ],
+    "rel_cls_group": [
+      "AGENCY"
+    ],
+    "instance_count": 2,
+    "example_relation_ids": [
+      "RelR_7490422f5bab",
+      "RelR_3de914ef26c4"
+    ]
+  },
+  {
+    "canonical_rel_name": "is_subtype_of",
+    "canonical_rel_desc": "Indicates that the subject represents a more specific subtype or subset of the object within a taxonomic or categorical hierarchy.",
+    "rel_cls": [
+      "taxonomic_hierarchy_relation"
+    ],
+    "rel_cls_group": [
+      "IDENTITY"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_7d918f9798db"
+    ]
+  },
+  {
+    "canonical_rel_name": "initiates_life_stage",
+    "canonical_rel_desc": "Links a reproductive agent (e.g., adult female organism) to the life stage whose occurrence it initiates (e.g., egg stage) through reproduction.",
+    "rel_cls": [
+      "reproductive_stage_initiation_relation"
+    ],
+    "rel_cls_group": [
+      "CAUSALITY"
+    ],
+    "instance_count": 2,
+    "example_relation_ids": [
+      "RelR_e21da0364351",
+      "RelR_4e5bce9b92d3"
+    ]
+  },
+  {
+    "canonical_rel_name": "occurs_on_surface_of",
+    "canonical_rel_desc": "Indicates that a biological life stage or entity occurs on, or is situated on, the surface of another physical entity (e.g., eggs on plant leaves).",
+    "rel_cls": [
+      "life_stage_habitat_relation"
+    ],
+    "rel_cls_group": [
+      "SPATIALITY"
+    ],
+    "instance_count": 4,
+    "example_relation_ids": [
+      "RelR_b442e6ca4cf0",
+      "RelR_d5270603457a",
+      "RelR_793ddc5ed01e",
+      "RelR_93185084d84f"
+    ]
+  },
+  {
+    "canonical_rel_name": "provides_food_for",
+    "canonical_rel_desc": "Indicates that the subject serves as a food resource for the object in a trophic interaction.",
+    "rel_cls": [
+      "trophic_resource_relation"
+    ],
+    "rel_cls_group": [
+      "INTERACTION"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_50353490714c"
+    ]
+  },
+  {
+    "canonical_rel_name": "is_part_of",
+    "canonical_rel_desc": "Indicates that the subject is a component, aspect, or subset of the broader whole represented by the object.",
+    "rel_cls": [
+      "part_whole_relation"
+    ],
+    "rel_cls_group": [
+      "COMPOSITION"
+    ],
+    "instance_count": 2,
+    "example_relation_ids": [
+      "RelR_064770ca4865",
+      "RelR_eaa493b25dd1"
+    ]
+  },
+  {
+    "canonical_rel_name": "preys_on",
+    "canonical_rel_desc": "Indicates that the subject organism (predator) preys upon, harms, or consumes the object organism or life stage as a food source.",
+    "rel_cls": [
+      "trophic_interaction_relation"
+    ],
+    "rel_cls_group": [
+      "INTERACTION"
+    ],
+    "instance_count": 2,
+    "example_relation_ids": [
+      "RelR_772c801f350f",
+      "RelR_01e4d235c657"
+    ]
+  },
+  {
+    "canonical_rel_name": "provides_protection_to",
+    "canonical_rel_desc": "Subject provides a protective benefit to the object, reducing the object's exposure to threats or harm.",
+    "rel_cls": [
+      "anti_predator_defense_relation"
+    ],
+    "rel_cls_group": [
+      "AGENCY"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_352da87a984c"
+    ]
+  },
+  {
+    "canonical_rel_name": "influences_life_history_trait",
+    "canonical_rel_desc": "Indicates that the subject species causally affects a specific life-history trait or characteristic of the object life stage or process (e.g., morphology, timing, or duration).",
+    "rel_cls": [
+      "species_life_history_dependency_relation"
+    ],
+    "rel_cls_group": [
+      "CAUSALITY"
+    ],
+    "instance_count": 2,
+    "example_relation_ids": [
+      "RelR_b81ae1c63db7",
+      "RelR_10c9036b59f7"
+    ]
+  },
+  {
+    "canonical_rel_name": "develops_into",
+    "canonical_rel_desc": "Indicates that an earlier biological life stage or form naturally develops or transitions into a subsequent life stage of the same organism.",
+    "rel_cls": [
+      "life_cycle_stage_transition_relation"
+    ],
+    "rel_cls_group": [
+      "TEMPORALITY"
+    ],
+    "instance_count": 5,
+    "example_relation_ids": [
+      "RelR_383e17a3b951",
+      "RelR_e17811459201",
+      "RelR_8d3ba632bd34",
+      "RelR_8f93079c32ed",
+      "RelR_2c8b6d7987ee"
+    ]
+  },
+  {
+    "canonical_rel_name": "follows_in_life_cycle",
+    "canonical_rel_desc": "Indicates that one biological life-cycle stage temporally follows and results from another stage within the same organism's life cycle.",
+    "rel_cls": [
+      "life_cycle_stage_order_relation"
+    ],
+    "rel_cls_group": [
+      "TEMPORALITY"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_15f0623c3f1a"
+    ]
+  },
+  {
+    "canonical_rel_name": "feeds_on",
+    "canonical_rel_desc": "Indicates that the subject organism or life stage obtains food by consuming the object, which serves as its trophic resource.",
+    "rel_cls": [
+      "trophic_interaction_relation"
+    ],
+    "rel_cls_group": [
+      "INTERACTION"
+    ],
+    "instance_count": 5,
+    "example_relation_ids": [
+      "RelR_96b3cd7474bf",
+      "RelR_9dcf3884e0fe",
+      "RelR_014a23852960",
+      "RelR_9df25e33b9ff",
+      "RelR_b78eded5a9f1"
+    ]
+  },
+  {
+    "canonical_rel_name": "has_morphological_structure",
+    "canonical_rel_desc": "Subject organism possesses the object as a distinct morphological structure or body feature.",
+    "rel_cls": [
+      "morphological_structure_relation"
+    ],
+    "rel_cls_group": [
+      "COMPOSITION"
+    ],
+    "instance_count": 2,
+    "example_relation_ids": [
+      "RelR_56abefba395c",
+      "RelR_b342add6565f"
+    ]
+  },
+  {
+    "canonical_rel_name": "protects_against",
+    "canonical_rel_desc": "Subject confers protection by defending against or deterring the object, which represents a threat.",
+    "rel_cls": [
+      "anti_predator_defense_relation"
+    ],
+    "rel_cls_group": [
+      "AGENCY"
+    ],
+    "instance_count": 2,
+    "example_relation_ids": [
+      "RelR_8b709e5be133",
+      "RelR_9c5113504641"
+    ]
+  },
+  {
+    "canonical_rel_name": "uses_camouflage_adaptation",
+    "canonical_rel_desc": "Subject organism employs a specific camouflage or mimicry adaptation as an anti-predator strategy.",
+    "rel_cls": [
+      "anti_predator_behavior_relation"
+    ],
+    "rel_cls_group": [
+      "AGENCY"
+    ],
+    "instance_count": 2,
+    "example_relation_ids": [
+      "RelR_b766056695a2",
+      "RelR_eeafc2f21f16"
+    ]
+  },
+  {
+    "canonical_rel_name": "conceals_from_predators",
+    "canonical_rel_desc": "The camouflage adaptation conceals the organism from specified predators, reducing the likelihood of being detected and eaten.",
+    "rel_cls": [
+      "camouflage_defense_relation"
+    ],
+    "rel_cls_group": [
+      "AGENCY"
+    ],
+    "instance_count": 2,
+    "example_relation_ids": [
+      "RelR_8a2529783d3d",
+      "RelR_a929684d919c"
+    ]
+  },
+  {
+    "canonical_rel_name": "participates_in_biological_process",
+    "canonical_rel_desc": "Connects an organism or life stage to a biological process in which it participates, contributes, or which it undergoes as part of its life cycle or functional role.",
+    "rel_cls": [
+      "biological_process_participation_relation"
+    ],
+    "rel_cls_group": [
+      "AGENCY"
+    ],
+    "instance_count": 4,
+    "example_relation_ids": [
+      "RelR_eda42812b271",
+      "RelR_065b527a3076",
+      "RelR_f0184a60c1ad",
+      "RelR_c1149c6f2bae"
+    ]
+  },
+  {
+    "canonical_rel_name": "supports_persistence_of",
+    "canonical_rel_desc": "Indicates that the subject process or factor causally supports the ongoing existence, stability, or continuation of the object (e.g., a population, life cycle, organism survival, or ecological state).",
+    "rel_cls": [
+      "biological_causal_effect_relation"
+    ],
+    "rel_cls_group": [
+      "CAUSALITY"
+    ],
+    "instance_count": 3,
+    "example_relation_ids": [
+      "RelR_2b4f104ea8bc",
+      "RelR_6cf306626059",
+      "RelR_64e81943ef93"
+    ]
+  },
+  {
+    "canonical_rel_name": "contributes_to",
+    "canonical_rel_desc": "Indicates that the subject has a causal or supporting effect on the emergence, level, or quality of the object.",
+    "rel_cls": [
+      "ecological_effect_relation"
+    ],
+    "rel_cls_group": [
+      "CAUSALITY"
+    ],
+    "instance_count": 2,
+    "example_relation_ids": [
+      "RelR_02dd76699444",
+      "RelR_c8f43fb41026"
+    ]
+  },
+  {
+    "canonical_rel_name": "is_essential_for_functioning_of",
+    "canonical_rel_desc": "Indicates that the subject plays a critical functional role in the operation, stability, or health of the object system (e.g., an organism being essential for ecosystem functioning).",
+    "rel_cls": [
+      "ecological_role_relation"
+    ],
+    "rel_cls_group": [
+      "CAUSALITY"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_03b51cda3275"
+    ]
+  },
+  {
+    "canonical_rel_name": "is_stage_of_process",
+    "canonical_rel_desc": "Indicates that the subject is a distinct temporal stage within the lifecycle or progression of the object process.",
+    "rel_cls": [
+      "process_stage_structure_relation"
+    ],
+    "rel_cls_group": [
+      "TEMPORALITY"
+    ],
+    "instance_count": 2,
+    "example_relation_ids": [
+      "RelR_c5cadccccf4b",
+      "RelR_d2beb40f9077"
+    ]
+  },
+  {
+    "canonical_rel_name": "attaches_to",
+    "canonical_rel_desc": "Subject organism physically secures or anchors itself to the surface of the object, typically as a substrate for a life-stage transition or resting.",
+    "rel_cls": [
+      "substrate_attachment_relation"
+    ],
+    "rel_cls_group": [
+      "INTERACTION"
+    ],
+    "instance_count": 2,
+    "example_relation_ids": [
+      "RelR_17bc7b23b738",
+      "RelR_965fe2118346"
+    ]
+  },
+  {
+    "canonical_rel_name": "forms_protective_structure",
+    "canonical_rel_desc": "Links an organism or life stage to a protective physical structure that it forms around or from its own body (e.g., a caterpillar forming a chrysalis).",
+    "rel_cls": [
+      "morphological_transformation_relation"
+    ],
+    "rel_cls_group": [
+      "MODIFICATION"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_7686e1be475f"
+    ]
+  },
+  {
+    "canonical_rel_name": "is_protective_casing_for_stage",
+    "canonical_rel_desc": "Indicates that the subject is the defining protective casing or structure associated with and surrounding the organism during the specified life stage.",
+    "rel_cls": [
+      "life_stage_structure_relation"
+    ],
+    "rel_cls_group": [
+      "SPATIALITY"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_b14395c279d2"
+    ]
+  },
+  {
+    "canonical_rel_name": "occurs_in",
+    "canonical_rel_desc": "Indicates that a process or event takes place within or inside a specified spatial container or structure.",
+    "rel_cls": [
+      "process_spatial_relation"
+    ],
+    "rel_cls_group": [
+      "SPATIALITY"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_30d0fd057598"
+    ]
+  },
+  {
+    "canonical_rel_name": "occurs_during_life_stage",
+    "canonical_rel_desc": "Indicates that the subject process takes place during the temporal extent of the specified life stage.",
+    "rel_cls": [
+      "process_occurrence_in_stage_relation"
+    ],
+    "rel_cls_group": [
+      "TEMPORALITY"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_7352e4bcbf70"
+    ]
+  },
+  {
+    "canonical_rel_name": "transforms",
+    "canonical_rel_desc": "Indicates that a process or mechanism brings about a transformation of an entity or body, without specifying the resulting form.",
+    "rel_cls": [
+      "state_change_relation"
+    ],
+    "rel_cls_group": [
+      "MODIFICATION"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_e05239df7425"
+    ]
+  },
+  {
+    "canonical_rel_name": "results_in",
+    "canonical_rel_desc": "Indicates that a biological process or sequence of events produces or culminates in a particular outcome, state, or life stage.",
+    "rel_cls": [
+      "biological_process_outcome_relation"
+    ],
+    "rel_cls_group": [
+      "CAUSALITY"
+    ],
+    "instance_count": 3,
+    "example_relation_ids": [
+      "RelR_ae6c6bcec55a",
+      "RelR_f62bec8ad3a1",
+      "RelR_771ed72fbae1"
+    ]
+  },
+  {
+    "canonical_rel_name": "transforms_into",
+    "canonical_rel_desc": "Indicates that an entity changes form or state into a specified resulting substance, structure, or configuration.",
+    "rel_cls": [
+      "state_change_relation"
+    ],
+    "rel_cls_group": [
+      "MODIFICATION"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_121cf3bd156b"
+    ]
+  },
+  {
+    "canonical_rel_name": "contributes_to_formation_of",
+    "canonical_rel_desc": "Indicates that a substance, component, or intermediate state plays a contributing role in forming new tissues, structures, or entities.",
+    "rel_cls": [
+      "biological_process_outcome_relation"
+    ],
+    "rel_cls_group": [
+      "CAUSALITY"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_6b9d42dfc7f9"
+    ]
+  },
+  {
+    "canonical_rel_name": "includes_example",
+    "canonical_rel_desc": "Indicates that the subject category or collection includes the object as a specific example or member, often corresponding to phrases like 'such as' in text.",
+    "rel_cls": [
+      "example_membership_relation"
+    ],
+    "rel_cls_group": [
+      "ASSOCIATION"
+    ],
+    "instance_count": 2,
+    "example_relation_ids": [
+      "RelR_044e62cbf470",
+      "RelR_5386b1bb9e0a"
+    ]
+  },
+  {
+    "canonical_rel_name": "emerges_from_structure",
+    "canonical_rel_desc": "Indicates that an organism or life stage physically emerges from a containing or enclosing biological structure.",
+    "rel_cls": [
+      "structural_emergence_relation"
+    ],
+    "rel_cls_group": [
+      "SPATIALITY"
+    ],
+    "instance_count": 2,
+    "example_relation_ids": [
+      "RelR_4a1d32a5ca81",
+      "RelR_436375c118d9"
+    ]
+  },
+  {
+    "canonical_rel_name": "has_part",
+    "canonical_rel_desc": "Indicates that the subject entity includes the object entity as one of its constituent parts.",
+    "rel_cls": [
+      "part_whole_relation"
+    ],
+    "rel_cls_group": [
+      "COMPOSITION"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_78920b55e632"
+    ]
+  },
+  {
+    "canonical_rel_name": "has_initial_state",
+    "canonical_rel_desc": "Indicates that the subject exhibits the given physical or qualitative state at the initial time of a process or immediately after a specified event.",
+    "rel_cls": [
+      "state_property_relation"
+    ],
+    "rel_cls_group": [
+      "STATE"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_4f549f8e6669"
+    ]
+  },
+  {
+    "canonical_rel_name": "is_filled_with",
+    "canonical_rel_desc": "Indicates that a structure or region is filled internally with a particular fluid or substance as part of its physical state.",
+    "rel_cls": [
+      "substance_containment_relation"
+    ],
+    "rel_cls_group": [
+      "COMPOSITION"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_4f57ef94fbbb"
+    ]
+  },
+  {
+    "canonical_rel_name": "is_pumped_into",
+    "canonical_rel_desc": "Indicates that a fluid or substance is actively transported or pumped into a target structure or region.",
+    "rel_cls": [
+      "physiological_transport_relation"
+    ],
+    "rel_cls_group": [
+      "INTERACTION"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_dcfb994bf136"
+    ]
+  },
+  {
+    "canonical_rel_name": "is_instance_of",
+    "canonical_rel_desc": "Indicates that the subject is a concrete instance of the object class or stage type.",
+    "rel_cls": [
+      "instance_class_relation"
+    ],
+    "rel_cls_group": [
+      "IDENTITY"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_2afc37a26583"
+    ]
+  },
+  {
+    "canonical_rel_name": "enables",
+    "canonical_rel_desc": "Indicates that the subject feature or structure makes the object function or capability possible.",
+    "rel_cls": [
+      "biological_capability_relation"
+    ],
+    "rel_cls_group": [
+      "FUNCTIONALITY"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_69c11dcd8220"
+    ]
+  },
+  {
+    "canonical_rel_name": "has_capability",
+    "canonical_rel_desc": "Indicates that the subject entity has the capability to perform or exhibit the object function or behavior.",
+    "rel_cls": [
+      "biological_capability_relation"
+    ],
+    "rel_cls_group": [
+      "FUNCTIONALITY"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_c1e4be4073e6"
+    ]
+  },
+  {
+    "canonical_rel_name": "used_to_consume",
+    "canonical_rel_desc": "Indicates that the subject structure is used to consume or ingest the object substance as food.",
+    "rel_cls": [
+      "feeding_function_relation"
+    ],
+    "rel_cls_group": [
+      "USAGE"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_b3c16bd12ca6"
+    ]
+  },
+  {
+    "canonical_rel_name": "is_produced_by",
+    "canonical_rel_desc": "Indicates that the subject substance or resource is generated, secreted, or produced by the object organism or structure.",
+    "rel_cls": [
+      "biological_product_origin_relation"
+    ],
+    "rel_cls_group": [
+      "CAUSALITY"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_d52ac673eaa1"
+    ]
+  },
+  {
+    "canonical_rel_name": "feeds_at",
+    "canonical_rel_desc": "Subject organism feeds at or on the object, which serves as the feeding site or resource location.",
+    "rel_cls": [
+      "feeding_interaction_relation"
+    ],
+    "rel_cls_group": [
+      "INTERACTION"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_ee426f37cf50"
+    ]
+  },
+  {
+    "canonical_rel_name": "involves_transfer_of_substance",
+    "canonical_rel_desc": "The process includes the transfer of the specified substance as a constitutive step.",
+    "rel_cls": [
+      "process_component_relation"
+    ],
+    "rel_cls_group": [
+      "COMPOSITION"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_0974e1e433c4"
+    ]
+  },
+  {
+    "canonical_rel_name": "is_transferred_between",
+    "canonical_rel_desc": "The subject entity is transferred between instances of the object entity type (treated as source and target locations) during a process.",
+    "rel_cls": [
+      "material_transfer_relation"
+    ],
+    "rel_cls_group": [
+      "SPATIALITY"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_c68acfd85c5e"
+    ]
+  },
+  {
+    "canonical_rel_name": "occurs_between",
+    "canonical_rel_desc": "Indicates that a process or interaction takes place between or among specified entities or structures.",
+    "rel_cls": [
+      "process_spatial_relation"
+    ],
+    "rel_cls_group": [
+      "SPATIALITY"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_072ad5baa14c"
+    ]
+  },
+  {
+    "canonical_rel_name": "enables_reproduction_of",
+    "canonical_rel_desc": "Indicates that a process or factor makes reproduction of a given organism or group possible or facilitates it, without necessarily being solely sufficient.",
+    "rel_cls": [
+      "biological_causal_effect_relation"
+    ],
+    "rel_cls_group": [
+      "CAUSALITY"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_09732c969e17"
+    ]
+  },
+  {
+    "canonical_rel_name": "has_trophic_role",
+    "canonical_rel_desc": "Indicates that the subject has a specified trophic or prey/predator role in an ecosystem (here, serving as a food source).",
+    "rel_cls": [
+      "ecological_role_relation"
+    ],
+    "rel_cls_group": [
+      "INTERACTION"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_5b6e10909ee8"
+    ]
+  },
+  {
+    "canonical_rel_name": "is_property_of",
+    "canonical_rel_desc": "Indicates that a quality, attribute, or property is characteristic of or belongs to a specified entity or system.",
+    "rel_cls": [
+      "property_assignment_relation"
+    ],
+    "rel_cls_group": [
+      "ATTRIBUTE"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_9590b882f46e"
+    ]
+  },
+  {
+    "canonical_rel_name": "seeks_mate",
+    "canonical_rel_desc": "Subject organism engages in mate-searching behavior directed toward a reproductive partner.",
+    "rel_cls": [
+      "reproductive_behavior_relation"
+    ],
+    "rel_cls_group": [
+      "AGENCY"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_34201c9ee5d7"
+    ]
+  },
+  {
+    "canonical_rel_name": "uses_as_oviposition_site",
+    "canonical_rel_desc": "Indicates that an organism uses another entity as a site or substrate for laying eggs (oviposition).",
+    "rel_cls": [
+      "resource_usage_relation"
+    ],
+    "rel_cls_group": [
+      "USAGE"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_8eb2e286edb1"
+    ]
+  },
+  {
+    "canonical_rel_name": "is_life_cycle_of",
+    "canonical_rel_desc": "Indicates that a developmental life cycle process is the characteristic life cycle of a given organism or taxon.",
+    "rel_cls": [
+      "organism_development_relation"
+    ],
+    "rel_cls_group": [
+      "ASSOCIATION"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_0e82810746df"
+    ]
+  },
+  {
+    "canonical_rel_name": "has_property",
+    "canonical_rel_desc": "Indicates that a life stage or entity is characterized by or exhibits a particular property or quality.",
+    "rel_cls": [
+      "life_stage_property_relation"
+    ],
+    "rel_cls_group": [
+      "ATTRIBUTE"
+    ],
+    "instance_count": 2,
+    "example_relation_ids": [
+      "RelR_cdcdc426a0cf",
+      "RelR_a043d96584dc"
+    ]
+  },
+  {
+    "canonical_rel_name": "depends_on_species",
+    "canonical_rel_desc": "Indicates that the value or magnitude of the subject life-history trait is causally dependent on which butterfly species is involved.",
+    "rel_cls": [
+      "species_life_history_dependency_relation"
+    ],
+    "rel_cls_group": [
+      "CAUSALITY"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_2bed44da1d46"
+    ]
+  }
+]

@@ -1,0 +1,15 @@
+[
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": ["RelR_5386b1bb9e0a"],
+      "canonical_rel_name": "includes",
+      "canonical_rel_desc": "Indicates that the subject set or collection includes the object as one of its members or examples.",
+      "rel_cls": null,
+      "rel_cls_group": null,
+      "justification": "Normalize the predicate to a cleaner, more general canonical name ('includes') while the relation class already captures that this is about anatomical structure set membership. The previous name 'includes_structure' redundantly encodes type information that belongs in rel_cls, not in the canonical predicate.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  }
+]

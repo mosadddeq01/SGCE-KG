@@ -1,0 +1,99 @@
+{
+  "cluster_label": "18_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_044e62cbf470",
+      "relation_name": "includes",
+      "rel_desc": "Butterfly wings are an example of the new tissues and structures that form during metamorphosis.",
+      "rel_hint_type": "composition",
+      "canonical_rel_name": "includes_example",
+      "canonical_rel_desc": "Indicates that the subject category or collection includes the object as a specific example or member, often corresponding to phrases like 'such as' in text.",
+      "rel_cls": "example_membership_relation",
+      "rel_cls_group": "ASSOCIATION",
+      "subject_entity_name": "new tissues and structures",
+      "object_entity_name": "butterfly wings",
+      "subject_class_label": "Internal Metamorphosis Body Structures",
+      "subject_class_group": "Biological Structures and Substances in Butterfly Metamorphosis",
+      "object_class_label": "Butterfly Wing Structures",
+      "object_class_group": "Biological Structures and Substances in Butterfly Metamorphosis",
+      "qualifiers": {
+        "TemporalQualifier": "during metamorphosis",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": "such as",
+        "OtherQualifier": null
+      },
+      "confidence": 0.94,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_5386b1bb9e0a",
+      "relation_name": "includes",
+      "rel_desc": "Antennae are an example of the new tissues and structures that form during metamorphosis.",
+      "rel_hint_type": "composition",
+      "canonical_rel_name": "includes_example",
+      "canonical_rel_desc": "Indicates that the subject category or collection includes the object as a specific example or member, often corresponding to phrases like 'such as' in text.",
+      "rel_cls": "example_membership_relation",
+      "rel_cls_group": "ASSOCIATION",
+      "subject_entity_name": "new tissues and structures",
+      "object_entity_name": "antennae",
+      "subject_class_label": "Internal Metamorphosis Body Structures",
+      "subject_class_group": "Biological Structures and Substances in Butterfly Metamorphosis",
+      "object_class_label": "Internal Metamorphosis Body Structures",
+      "object_class_group": "Biological Structures and Substances in Butterfly Metamorphosis",
+      "qualifiers": {
+        "TemporalQualifier": "during metamorphosis",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": "such as",
+        "OtherQualifier": null
+      },
+      "confidence": 0.94,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_rel_schema\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_044e62cbf470\",\n        \"RelR_5386b1bb9e0a\"\n      ],\n      \"canonical_rel_name\": \"has_example_member\",\n      \"canonical_rel_desc\": \"Indicates that the subject category or collection has the object as a specific example or member, typically corresponding to phrases like 'such as' in text.\",\n      \"rel_cls\": \"example_membership_relation\",\n      \"rel_cls_group\": \"ASSOCIATION\",\n      \"justification\": \"Both relations express that a higher-level category ('new tissues and structures') has specific instances ('butterfly wings', 'antennae') introduced by a 'such as' logical marker. The prior canonical_rel_name 'includes_example' is slightly awkward and less clearly predicate-like; normalizing to 'has_example_member' yields a clearer, reusable edge label while preserving the existing rel_cls and rel_cls_group, which are already appropriate.\",\n      \"remark\": null,\n      \"confidence\": 0.96\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_rel_schema",
+      "args": {
+        "relation_ids": [
+          "RelR_044e62cbf470",
+          "RelR_5386b1bb9e0a"
+        ],
+        "canonical_rel_name": "has_example_member",
+        "canonical_rel_desc": "Indicates that the subject category or collection has the object as a specific example or member, typically corresponding to phrases like 'such as' in text.",
+        "rel_cls": "example_membership_relation",
+        "rel_cls_group": "ASSOCIATION",
+        "justification": "Both relations express that a higher-level category ('new tissues and structures') has specific instances ('butterfly wings', 'antennae') introduced by a 'such as' logical marker. The prior canonical_rel_name 'includes_example' is slightly awkward and less clearly predicate-like; normalizing to 'has_example_member' yields a clearer, reusable edge label while preserving the existing rel_cls and rel_cls_group, which are already appropriate.",
+        "remark": null,
+        "confidence": 0.96
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_rel_schema",
+      "relation_ids": [
+        "RelR_044e62cbf470",
+        "RelR_5386b1bb9e0a"
+      ],
+      "canonical_rel_name": "has_example_member",
+      "canonical_rel_desc": "Indicates that the subject category or collection has the object as a specific example or member, typically corresponding to phrases like 'such as' in text.",
+      "rel_cls": "example_membership_relation",
+      "rel_cls_group": "ASSOCIATION",
+      "new_relation_name": null,
+      "original_relation_name": null,
+      "justification": "Both relations express that a higher-level category ('new tissues and structures') has specific instances ('butterfly wings', 'antennae') introduced by a 'such as' logical marker. The prior canonical_rel_name 'includes_example' is slightly awkward and less clearly predicate-like; normalizing to 'has_example_member' yields a clearer, reusable edge label while preserving the existing rel_cls and rel_cls_group, which are already appropriate.",
+      "remark": null,
+      "confidence": 0.96
+    }
+  ],
+  "timestamp": "2026-01-03T09:01:58Z"
+}

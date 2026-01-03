@@ -1,0 +1,108 @@
+{
+  "cluster_label": "0_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_352da87a984c",
+      "relation_name": "protects",
+      "rel_desc": "The underside of leaves helps protect butterfly eggs in the egg stage from predators.",
+      "rel_hint_type": "protective effect",
+      "canonical_rel_name": "provides_protection_to",
+      "canonical_rel_desc": "Subject provides a protective benefit to the object, reducing the object's exposure to threats or harm.",
+      "rel_cls": "anti_predator_defense_relation",
+      "rel_cls_group": "AGENCY",
+      "subject_entity_name": "underside of leaves",
+      "object_entity_name": "egg stage (butterfly life cycle)",
+      "subject_class_label": "Butterfly Egg-Laying Sites and Larval Food Leaves",
+      "subject_class_group": "Butterfly Ecology, Habitat, and Food Web",
+      "object_class_label": "Butterfly egg life stage",
+      "object_class_group": "Butterfly Life Cycle Stages",
+      "qualifiers": {
+        "TemporalQualifier": "while eggs remain on the underside",
+        "SpatialQualifier": "underside of leaves",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "to protect",
+        "LogicalMarker": "to (purpose)",
+        "OtherQualifier": "ThreatSource: predators of butterfly eggs"
+      },
+      "confidence": 0.9,
+      "remarks": [
+        "Protection is indirect (via concealment/location), but treated as a protective relation.",
+        "Protection is indirect (via concealment/location), but treated as a protective relation.",
+        "Protection is indirect (via concealment/location), but treated as a protective relation.",
+        "Protection is indirect (via concealment/location), but treated as a protective relation."
+      ]
+    },
+    {
+      "relation_id": "RelR_8b709e5be133",
+      "relation_name": "protects_against",
+      "rel_desc": "Caterpillar spines serve to protect caterpillars from their predators.",
+      "rel_hint_type": "defensive",
+      "canonical_rel_name": "protects_against",
+      "canonical_rel_desc": "Subject confers protection by defending against or deterring the object, which represents a threat.",
+      "rel_cls": "anti_predator_defense_relation",
+      "rel_cls_group": "AGENCY",
+      "subject_entity_name": "caterpillar spines",
+      "object_entity_name": "predators of caterpillars",
+      "subject_class_label": "Caterpillar Defensive Morphological Structures",
+      "subject_class_group": "Caterpillar Anti-predator Adaptations",
+      "object_class_label": "Butterfly Predators and Prey Role",
+      "object_class_group": "Butterfly Ecology, Habitat, and Food Web",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": "when predators attempt to attack caterpillars",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "implied target of protection is predators",
+        "CausalHint": "for protection",
+        "LogicalMarker": null,
+        "OtherQualifier": "ProtectionTarget: caterpillars"
+      },
+      "confidence": 0.86,
+      "remarks": [
+        "Predators are implicit, inferred from nearby mention of camouflage from predators.",
+        "Predators are implicit, inferred from nearby mention of camouflage from predators.",
+        "Predators are implicit, inferred from nearby mention of camouflage from predators.",
+        "Predators are implicit, inferred from nearby mention of camouflage from predators."
+      ]
+    },
+    {
+      "relation_id": "RelR_9c5113504641",
+      "relation_name": "protects_against",
+      "rel_desc": "Caterpillar hairs provide protection against predators.",
+      "rel_hint_type": "defensive",
+      "canonical_rel_name": "protects_against",
+      "canonical_rel_desc": "Subject confers protection by defending against or deterring the object, which represents a threat.",
+      "rel_cls": "anti_predator_defense_relation",
+      "rel_cls_group": "AGENCY",
+      "subject_entity_name": "caterpillar hairs",
+      "object_entity_name": "predators of caterpillars",
+      "subject_class_label": "Caterpillar Defensive Morphological Structures",
+      "subject_class_group": "Caterpillar Anti-predator Adaptations",
+      "object_class_label": "Butterfly Predators and Prey Role",
+      "object_class_group": "Butterfly Ecology, Habitat, and Food Web",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": "during predator encounters",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "inferred",
+        "CausalHint": "for protection",
+        "LogicalMarker": null,
+        "OtherQualifier": "ProtectionTarget: caterpillars"
+      },
+      "confidence": 0.86,
+      "remarks": [
+        "Target of protection (predators) inferred from context.",
+        "Target of protection (predators) inferred from context.",
+        "Target of protection (predators) inferred from context.",
+        "Target of protection (predators) inferred from context."
+      ]
+    }
+  ],
+  "llm_raw": "[]",
+  "parsed_steps": [],
+  "executed_decisions": [],
+  "timestamp": "2026-01-03T09:00:38Z"
+}

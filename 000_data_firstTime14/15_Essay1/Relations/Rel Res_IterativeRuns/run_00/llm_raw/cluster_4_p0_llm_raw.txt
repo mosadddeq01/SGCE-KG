@@ -1,0 +1,51 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_7490422f5bab",
+        "RelR_eda42812b271",
+        "RelR_065b527a3076",
+        "RelR_f0184a60c1ad",
+        "RelR_c1149c6f2bae"
+      ],
+      "canonical_rel_name": "participates_in_biological_process",
+      "canonical_rel_desc": "Connects an organism or life stage to a biological process in which it participates, contributes, or which it undergoes as part of its life cycle or functional role.",
+      "justification": "In all five relations, the subject (butterflies, their life stages) is a continuant that takes part in a biological process (butterfly life cycle, pollination, reproduction). Although the raw labels vary (undergoes_process, contributes_to_process, engages_in, participates_in), the common semantics is participation in or undergoing a biological process, so a single canonical predicate improves consistency.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_7490422f5bab",
+        "RelR_eda42812b271",
+        "RelR_065b527a3076",
+        "RelR_f0184a60c1ad",
+        "RelR_c1149c6f2bae"
+      ],
+      "rel_cls": "biological_process_participation_relation",
+      "justification": "Each relation links a biological entity (organism or life stage) to a biological process in which it participates or which it undergoes (life cycle, pollination, reproduction). This is a classic participation-in-process family of relations.",
+      "remark": null,
+      "confidence": 0.94
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_7490422f5bab",
+        "RelR_eda42812b271",
+        "RelR_065b527a3076",
+        "RelR_f0184a60c1ad",
+        "RelR_c1149c6f2bae"
+      ],
+      "rel_cls_group": "AGENCY",
+      "justification": "These relations capture entities actively taking part in processes (life cycle progression, pollination, reproduction), which fits an agent/participation dimension better than composition, identity, or pure association.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  }
+]

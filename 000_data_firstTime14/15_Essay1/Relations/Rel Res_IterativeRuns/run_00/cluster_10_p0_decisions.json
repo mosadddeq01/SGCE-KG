@@ -1,0 +1,211 @@
+{
+  "cluster_label": "10_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_b442e6ca4cf0",
+      "relation_name": "located_on",
+      "rel_desc": "Butterfly eggs are laid on and thus located on specific host plants.",
+      "rel_hint_type": "spatial",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "egg stage (butterfly life cycle)",
+      "object_entity_name": "host plants",
+      "subject_class_label": "Butterfly egg life stage",
+      "subject_class_group": "Butterfly Life Cycle Stages",
+      "object_class_label": "Butterfly Host Plants and Larval Resources",
+      "object_class_group": "Butterfly Ecology, Habitat, and Food Web",
+      "qualifiers": {
+        "TemporalQualifier": "during egg stage",
+        "SpatialQualifier": "on host plant surfaces",
+        "OperationalConstraint": "on specific host plant species",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "Function: oviposition site"
+      },
+      "confidence": 0.96,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_d5270603457a",
+      "relation_name": "occurs_on",
+      "rel_desc": "Butterfly eggs in the egg stage are laid on the underside of leaves.",
+      "rel_hint_type": "spatial location",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "egg stage (butterfly life cycle)",
+      "object_entity_name": "underside of leaves",
+      "subject_class_label": "Butterfly egg life stage",
+      "subject_class_group": "Butterfly Life Cycle Stages",
+      "object_class_label": "Butterfly Egg-Laying Sites and Larval Food Leaves",
+      "object_class_group": "Butterfly Ecology, Habitat, and Food Web",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "on the underside of leaves",
+        "OperationalConstraint": null,
+        "ConditionExpression": "usually laid there",
+        "UncertaintyQualifier": "usually",
+        "CausalHint": "to protect them from predators",
+        "LogicalMarker": null,
+        "OtherQualifier": "Purpose: protection from predators of butterfly eggs"
+      },
+      "confidence": 0.98,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_793ddc5ed01e",
+      "relation_name": "occurs_on",
+      "rel_desc": "Butterfly eggs in the egg stage are laid on plant leaves as their substrate.",
+      "rel_hint_type": "spatial location",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "egg stage (butterfly life cycle)",
+      "object_entity_name": "plant leaves",
+      "subject_class_label": "Butterfly egg life stage",
+      "subject_class_group": "Butterfly Life Cycle Stages",
+      "object_class_label": "Butterfly Egg-Laying Sites and Larval Food Leaves",
+      "object_class_group": "Butterfly Ecology, Habitat, and Food Web",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "on plant leaves (undersides)",
+        "OperationalConstraint": null,
+        "ConditionExpression": "usually laid on leaf undersides",
+        "UncertaintyQualifier": "usually",
+        "CausalHint": "for protection from predators",
+        "LogicalMarker": null,
+        "OtherQualifier": "SubstrateType: host plant leaves"
+      },
+      "confidence": 0.9,
+      "remarks": [
+        "Relation included to explicitly connect the egg stage with plant leaves, not only their underside."
+      ]
+    },
+    {
+      "relation_id": "RelR_93185084d84f",
+      "relation_name": "occurs_on",
+      "rel_desc": "The egg stage occurs on host plants, where eggs are laid.",
+      "rel_hint_type": "spatial",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "egg stage (butterfly life cycle)",
+      "object_entity_name": "host plants",
+      "subject_class_label": "Butterfly egg life stage",
+      "subject_class_group": "Butterfly Life Cycle Stages",
+      "object_class_label": "Butterfly Host Plants and Larval Resources",
+      "object_class_group": "Butterfly Ecology, Habitat, and Food Web",
+      "qualifiers": {
+        "TemporalQualifier": "early in the butterfly life cycle",
+        "SpatialQualifier": "on host plants",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.9,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_b442e6ca4cf0\",\n        \"RelR_d5270603457a\",\n        \"RelR_793ddc5ed01e\",\n        \"RelR_93185084d84f\"\n      ],\n      \"canonical_rel_name\": \"occurs_on_surface_of\",\n      \"canonical_rel_desc\": \"Indicates that a biological life stage or entity occurs on, or is situated on, the surface of another physical entity (e.g., eggs on plant leaves).\",\n      \"justification\": \"All four relations describe the egg stage being spatially situated on a substrate (host plants, plant leaves, or the underside of leaves). Despite minor wording differences (located_on, occurs_on), they share the same spatial predicate meaning: the life stage occurs on the surface of a physical support. A single canonical predicate 'occurs_on_surface_of' captures this consistently.\",\n      \"remark\": null,\n      \"confidence\": 0.93\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_b442e6ca4cf0\",\n        \"RelR_d5270603457a\",\n        \"RelR_793ddc5ed01e\",\n        \"RelR_93185084d84f\"\n      ],\n      \"rel_cls\": \"life_stage_habitat_relation\",\n      \"justification\": \"Each relation links a butterfly life stage (egg stage) to its typical physical substrate/habitat (host plants, plant leaves, leaf undersides). This is best modeled as a class of relations connecting organism life stages to their environmental or substrate context.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_b442e6ca4cf0\",\n        \"RelR_d5270603457a\",\n        \"RelR_793ddc5ed01e\",\n        \"RelR_93185084d84f\"\n      ],\n      \"rel_cls_group\": \"SPATIALITY\",\n      \"justification\": \"The core semantics of these relations is spatial: the egg stage is physically located on or occurs on the surface of particular plants or leaves. Even when causal or functional qualifiers are mentioned (e.g., protection from predators), the relation itself is explicitly spatial.\",\n      \"remark\": null,\n      \"confidence\": 0.96\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_b442e6ca4cf0",
+          "RelR_d5270603457a",
+          "RelR_793ddc5ed01e",
+          "RelR_93185084d84f"
+        ],
+        "canonical_rel_name": "occurs_on_surface_of",
+        "canonical_rel_desc": "Indicates that a biological life stage or entity occurs on, or is situated on, the surface of another physical entity (e.g., eggs on plant leaves).",
+        "justification": "All four relations describe the egg stage being spatially situated on a substrate (host plants, plant leaves, or the underside of leaves). Despite minor wording differences (located_on, occurs_on), they share the same spatial predicate meaning: the life stage occurs on the surface of a physical support. A single canonical predicate 'occurs_on_surface_of' captures this consistently.",
+        "remark": null,
+        "confidence": 0.93
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_b442e6ca4cf0",
+          "RelR_d5270603457a",
+          "RelR_793ddc5ed01e",
+          "RelR_93185084d84f"
+        ],
+        "rel_cls": "life_stage_habitat_relation",
+        "justification": "Each relation links a butterfly life stage (egg stage) to its typical physical substrate/habitat (host plants, plant leaves, leaf undersides). This is best modeled as a class of relations connecting organism life stages to their environmental or substrate context.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_b442e6ca4cf0",
+          "RelR_d5270603457a",
+          "RelR_793ddc5ed01e",
+          "RelR_93185084d84f"
+        ],
+        "rel_cls_group": "SPATIALITY",
+        "justification": "The core semantics of these relations is spatial: the egg stage is physically located on or occurs on the surface of particular plants or leaves. Even when causal or functional qualifiers are mentioned (e.g., protection from predators), the relation itself is explicitly spatial.",
+        "remark": null,
+        "confidence": 0.96
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_b442e6ca4cf0",
+        "RelR_d5270603457a",
+        "RelR_793ddc5ed01e",
+        "RelR_93185084d84f"
+      ],
+      "canonical_rel_name": "occurs_on_surface_of",
+      "canonical_rel_desc": "Indicates that a biological life stage or entity occurs on, or is situated on, the surface of another physical entity (e.g., eggs on plant leaves).",
+      "justification": "All four relations describe the egg stage being spatially situated on a substrate (host plants, plant leaves, or the underside of leaves). Despite minor wording differences (located_on, occurs_on), they share the same spatial predicate meaning: the life stage occurs on the surface of a physical support. A single canonical predicate 'occurs_on_surface_of' captures this consistently.",
+      "remark": null,
+      "confidence": 0.93
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_b442e6ca4cf0",
+        "RelR_d5270603457a",
+        "RelR_793ddc5ed01e",
+        "RelR_93185084d84f"
+      ],
+      "rel_cls": "life_stage_habitat_relation",
+      "justification": "Each relation links a butterfly life stage (egg stage) to its typical physical substrate/habitat (host plants, plant leaves, leaf undersides). This is best modeled as a class of relations connecting organism life stages to their environmental or substrate context.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_b442e6ca4cf0",
+        "RelR_d5270603457a",
+        "RelR_793ddc5ed01e",
+        "RelR_93185084d84f"
+      ],
+      "rel_cls_group": "SPATIALITY",
+      "justification": "The core semantics of these relations is spatial: the egg stage is physically located on or occurs on the surface of particular plants or leaves. Even when causal or functional qualifiers are mentioned (e.g., protection from predators), the relation itself is explicitly spatial.",
+      "remark": null,
+      "confidence": 0.96
+    }
+  ],
+  "timestamp": "2026-01-03T08:53:59Z"
+}

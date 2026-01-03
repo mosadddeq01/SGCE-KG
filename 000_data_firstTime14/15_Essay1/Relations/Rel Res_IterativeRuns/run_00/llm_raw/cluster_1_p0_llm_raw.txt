@@ -1,0 +1,85 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_e26b138400c4",
+        "RelR_90f6d25010b7",
+        "RelR_7519e52960f9",
+        "RelR_796d1a3aea55"
+      ],
+      "canonical_rel_name": "has_member",
+      "canonical_rel_desc": "Indicates that the subject is a collection or set that includes the object as one of its members.",
+      "justification": "In all four relations, the subject is the collection 'stages of the butterfly's life cycle' and the object is a specific life stage (egg, caterpillar/larva, pupa, adult). This is a standard collection–member pattern, so a generic predicate 'has_member' is appropriate and reusable beyond just life stages.",
+      "remark": "Ordering information (first, second, third, final) is captured in qualifiers and does not belong in the canonical predicate.",
+      "confidence": 0.97
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_e26b138400c4",
+        "RelR_90f6d25010b7",
+        "RelR_7519e52960f9",
+        "RelR_796d1a3aea55"
+      ],
+      "rel_cls": "collection_membership_relation",
+      "justification": "Each relation links a collection of life cycle stages to an individual stage as its member. This is a generic collection/set membership family of predicates, well captured by 'collection_membership_relation'.",
+      "remark": null,
+      "confidence": 0.96
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_e26b138400c4",
+        "RelR_90f6d25010b7",
+        "RelR_7519e52960f9",
+        "RelR_796d1a3aea55"
+      ],
+      "rel_cls_group": "ASSOCIATION",
+      "justification": "Collection–member relations are structural associations between entities rather than physical composition or causality. They naturally fall under a broad ASSOCIATION group.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_eaa493b25dd1"
+      ],
+      "canonical_rel_name": "is_part_of",
+      "canonical_rel_desc": "Indicates that the subject is a component, aspect, or subset of the broader whole represented by the object.",
+      "justification": "The relation describes the butterfly life cycle as one of the processes that 'make up' the natural world, which is a classic part–whole semantics. 'is_part_of' is a standard canonical predicate for such relations.",
+      "remark": null,
+      "confidence": 0.88
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_eaa493b25dd1"
+      ],
+      "rel_cls": "part_whole_relation",
+      "justification": "The butterfly life cycle is framed as one of many processes composing the natural world, which fits the general family of part–whole (merological) relations.",
+      "remark": null,
+      "confidence": 0.86
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_eaa493b25dd1"
+      ],
+      "rel_cls_group": "COMPOSITION",
+      "justification": "The wording 'that make up' indicates that the natural world is composed of such processes, making this a compositional whole–part relationship at an abstract level. This aligns best with the COMPOSITION group.",
+      "remark": null,
+      "confidence": 0.84
+    }
+  }
+]

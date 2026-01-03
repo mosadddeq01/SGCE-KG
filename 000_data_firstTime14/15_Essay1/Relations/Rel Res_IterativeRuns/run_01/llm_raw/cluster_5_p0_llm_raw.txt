@@ -1,0 +1,21 @@
+[
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": [
+        "RelR_34cc144f0893",
+        "RelR_c7358510f831",
+        "RelR_59d1bc18ae81",
+        "RelR_5444b05c7e2f",
+        "RelR_6860d9952bda"
+      ],
+      "canonical_rel_name": "has_life_cycle_stage",
+      "canonical_rel_desc": "Indicates that a life cycle or multi-stage biological process includes the object as one of its constituent life stages (e.g., egg, larva, pupa, adult).",
+      "rel_cls": "life_cycle_stage_composition_relation",
+      "rel_cls_group": "COMPOSITION",
+      "justification": "All five relations link the 'butterfly life cycle' process to one of its stages (or to the collection of its stages), which is a part–whole composition semantics rather than pure temporality. Existing fields use slightly different canonical names ('includes_life_stage', 'has_stage', 'has_life_cycle_stage') and relation classes ('process_stage_relation', 'process_stage_membership_relation', 'life_cycle_stage_composition_relation') with mixed rel_cls_group values (COMPOSITION and TEMPORALITY). Normalizing them to a single canonical predicate 'has_life_cycle_stage', a unified class 'life_cycle_stage_composition_relation', and the broad group COMPOSITION yields a consistent schema for life-cycle-to-stage composition edges.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  }
+]

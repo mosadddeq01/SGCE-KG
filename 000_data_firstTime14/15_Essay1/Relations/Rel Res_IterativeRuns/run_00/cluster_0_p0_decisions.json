@@ -1,0 +1,217 @@
+{
+  "cluster_label": "0_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_b766056695a2",
+      "relation_name": "uses_camouflage_strategy",
+      "rel_desc": "Some caterpillars employ twig mimicry as a camouflage strategy.",
+      "rel_hint_type": "behavioral",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "caterpillar (larval stage of butterfly)",
+      "object_entity_name": "twig mimicry",
+      "subject_class_label": "Butterfly larval and pupal stages",
+      "subject_class_group": "Butterfly Life Cycle Stages",
+      "object_class_label": "Caterpillar Camouflage Adaptations",
+      "object_class_group": "Caterpillar Anti-predator Adaptations",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "in their visual appearance",
+        "OperationalConstraint": null,
+        "ConditionExpression": "applies to some caterpillars, not all",
+        "UncertaintyQualifier": null,
+        "CausalHint": "to camouflage themselves",
+        "LogicalMarker": "while others",
+        "OtherQualifier": "Purpose: avoid detection by predators"
+      },
+      "confidence": 0.97,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_eeafc2f21f16",
+      "relation_name": "uses_camouflage_strategy",
+      "rel_desc": "Some caterpillars use leaf mimicry to camouflage themselves.",
+      "rel_hint_type": "behavioral",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "caterpillar (larval stage of butterfly)",
+      "object_entity_name": "leaf mimicry",
+      "subject_class_label": "Butterfly larval and pupal stages",
+      "subject_class_group": "Butterfly Life Cycle Stages",
+      "object_class_label": "Caterpillar Camouflage Adaptations",
+      "object_class_group": "Caterpillar Anti-predator Adaptations",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "in their visual appearance",
+        "OperationalConstraint": null,
+        "ConditionExpression": "applies to some caterpillars, not all",
+        "UncertaintyQualifier": null,
+        "CausalHint": "to camouflage themselves",
+        "LogicalMarker": "while others",
+        "OtherQualifier": "Purpose: avoid detection by predators"
+      },
+      "confidence": 0.97,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_34201c9ee5d7",
+      "relation_name": "seeks",
+      "rel_desc": "During the adult stage, butterflies focus on finding a mate.",
+      "rel_hint_type": "behavioral",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "adult butterfly life stage",
+      "object_entity_name": "mate",
+      "subject_class_label": "Adult butterfly life stage",
+      "subject_class_group": "Butterfly Life Cycle and Development",
+      "object_class_label": "Butterfly reproductive mate role",
+      "object_class_group": "Butterfly Biology and Life Cycle",
+      "qualifiers": {
+        "TemporalQualifier": "throughout their adult stage",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": "throughout",
+        "OtherQualifier": "BehaviorPurpose: reproduction"
+      },
+      "confidence": 0.97,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_b766056695a2\",\n        \"RelR_eeafc2f21f16\"\n      ],\n      \"canonical_rel_name\": \"uses_camouflage_adaptation\",\n      \"canonical_rel_desc\": \"Subject organism employs a specific camouflage or mimicry adaptation as an anti-predator strategy.\",\n      \"justification\": \"Both relations link caterpillars to specific camouflage/mimicry strategies (twig mimicry, leaf mimicry) used to avoid detection by predators; they share the same behavioral predicate semantics and differ only in the type of adaptation (object).\",\n      \"remark\": null,\n      \"confidence\": 0.96\n    }\n  },\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_34201c9ee5d7\"\n      ],\n      \"canonical_rel_name\": \"seeks_mate\",\n      \"canonical_rel_desc\": \"Subject organism engages in mate-searching behavior directed toward a reproductive partner.\",\n      \"justification\": \"The relation describes the adult butterfly life stage focusing on finding a mate, which is best captured as a directed mating-search behavior from the adult stage to a mate.\",\n      \"remark\": null,\n      \"confidence\": 0.95\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_b766056695a2\",\n        \"RelR_eeafc2f21f16\"\n      ],\n      \"rel_cls\": \"anti_predator_behavior_relation\",\n      \"justification\": \"Both relations describe behavioral strategies used by caterpillars to avoid predation (camouflage/mimicry), fitting a shared class for anti-predator behaviors.\",\n      \"remark\": null,\n      \"confidence\": 0.95\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_34201c9ee5d7\"\n      ],\n      \"rel_cls\": \"reproductive_behavior_relation\",\n      \"justification\": \"The behavior is specifically mate-seeking for reproduction, which is distinct from anti-predator strategies and fits a class for reproductive behaviors.\",\n      \"remark\": null,\n      \"confidence\": 0.95\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_b766056695a2\",\n        \"RelR_eeafc2f21f16\",\n        \"RelR_34201c9ee5d7\"\n      ],\n      \"rel_cls_group\": \"AGENCY\",\n      \"justification\": \"All three relations describe goal-directed behaviors or actions of organisms (camouflage use and mate seeking), which fall under a broad behavioral/agency-oriented group.\",\n      \"remark\": null,\n      \"confidence\": 0.95\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_b766056695a2",
+          "RelR_eeafc2f21f16"
+        ],
+        "canonical_rel_name": "uses_camouflage_adaptation",
+        "canonical_rel_desc": "Subject organism employs a specific camouflage or mimicry adaptation as an anti-predator strategy.",
+        "justification": "Both relations link caterpillars to specific camouflage/mimicry strategies (twig mimicry, leaf mimicry) used to avoid detection by predators; they share the same behavioral predicate semantics and differ only in the type of adaptation (object).",
+        "remark": null,
+        "confidence": 0.96
+      }
+    },
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_34201c9ee5d7"
+        ],
+        "canonical_rel_name": "seeks_mate",
+        "canonical_rel_desc": "Subject organism engages in mate-searching behavior directed toward a reproductive partner.",
+        "justification": "The relation describes the adult butterfly life stage focusing on finding a mate, which is best captured as a directed mating-search behavior from the adult stage to a mate.",
+        "remark": null,
+        "confidence": 0.95
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_b766056695a2",
+          "RelR_eeafc2f21f16"
+        ],
+        "rel_cls": "anti_predator_behavior_relation",
+        "justification": "Both relations describe behavioral strategies used by caterpillars to avoid predation (camouflage/mimicry), fitting a shared class for anti-predator behaviors.",
+        "remark": null,
+        "confidence": 0.95
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_34201c9ee5d7"
+        ],
+        "rel_cls": "reproductive_behavior_relation",
+        "justification": "The behavior is specifically mate-seeking for reproduction, which is distinct from anti-predator strategies and fits a class for reproductive behaviors.",
+        "remark": null,
+        "confidence": 0.95
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_b766056695a2",
+          "RelR_eeafc2f21f16",
+          "RelR_34201c9ee5d7"
+        ],
+        "rel_cls_group": "AGENCY",
+        "justification": "All three relations describe goal-directed behaviors or actions of organisms (camouflage use and mate seeking), which fall under a broad behavioral/agency-oriented group.",
+        "remark": null,
+        "confidence": 0.95
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_b766056695a2",
+        "RelR_eeafc2f21f16"
+      ],
+      "canonical_rel_name": "uses_camouflage_adaptation",
+      "canonical_rel_desc": "Subject organism employs a specific camouflage or mimicry adaptation as an anti-predator strategy.",
+      "justification": "Both relations link caterpillars to specific camouflage/mimicry strategies (twig mimicry, leaf mimicry) used to avoid detection by predators; they share the same behavioral predicate semantics and differ only in the type of adaptation (object).",
+      "remark": null,
+      "confidence": 0.96
+    },
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_34201c9ee5d7"
+      ],
+      "canonical_rel_name": "seeks_mate",
+      "canonical_rel_desc": "Subject organism engages in mate-searching behavior directed toward a reproductive partner.",
+      "justification": "The relation describes the adult butterfly life stage focusing on finding a mate, which is best captured as a directed mating-search behavior from the adult stage to a mate.",
+      "remark": null,
+      "confidence": 0.95
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_b766056695a2",
+        "RelR_eeafc2f21f16"
+      ],
+      "rel_cls": "anti_predator_behavior_relation",
+      "justification": "Both relations describe behavioral strategies used by caterpillars to avoid predation (camouflage/mimicry), fitting a shared class for anti-predator behaviors.",
+      "remark": null,
+      "confidence": 0.95
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_34201c9ee5d7"
+      ],
+      "rel_cls": "reproductive_behavior_relation",
+      "justification": "The behavior is specifically mate-seeking for reproduction, which is distinct from anti-predator strategies and fits a class for reproductive behaviors.",
+      "remark": null,
+      "confidence": 0.95
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_b766056695a2",
+        "RelR_eeafc2f21f16",
+        "RelR_34201c9ee5d7"
+      ],
+      "rel_cls_group": "AGENCY",
+      "justification": "All three relations describe goal-directed behaviors or actions of organisms (camouflage use and mate seeking), which fall under a broad behavioral/agency-oriented group.",
+      "remark": null,
+      "confidence": 0.95
+    }
+  ],
+  "timestamp": "2026-01-03T08:51:58Z"
+}

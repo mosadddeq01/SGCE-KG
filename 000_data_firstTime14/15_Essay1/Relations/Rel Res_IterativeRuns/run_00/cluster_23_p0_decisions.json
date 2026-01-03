@@ -1,0 +1,219 @@
+{
+  "cluster_label": "23_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_c5cadccccf4b",
+      "relation_name": "is_stage_of",
+      "rel_desc": "The pupa stage is identified as the third stage in the butterfly life cycle.",
+      "rel_hint_type": "process structure",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "pupa stage",
+      "object_entity_name": "butterfly life cycle",
+      "subject_class_label": "Butterfly larval and pupal stages",
+      "subject_class_group": "Butterfly Life Cycle Stages",
+      "object_class_label": "Butterfly life cycle process",
+      "object_class_group": "Butterfly Life Cycle and Development",
+      "qualifiers": {
+        "TemporalQualifier": "third stage in sequence",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "StageOrder: 3"
+      },
+      "confidence": 0.98,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_7352e4bcbf70",
+      "relation_name": "characterizes_stage",
+      "rel_desc": "Metamorphosis is the defining transformation process that occurs during the pupa stage.",
+      "rel_hint_type": "process-stage link",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "metamorphosis",
+      "object_entity_name": "pupa stage",
+      "subject_class_label": "Butterfly Metamorphosis Process",
+      "subject_class_group": "Butterfly Life Cycle and Development",
+      "object_class_label": "Butterfly larval and pupal stages",
+      "object_class_group": "Butterfly Life Cycle Stages",
+      "qualifiers": {
+        "TemporalQualifier": "during the entire pupa stage",
+        "SpatialQualifier": "within the chrysalis",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "implicit association",
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.9,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_d2beb40f9077",
+      "relation_name": "is_stage_of",
+      "rel_desc": "The butterfly is the adult stage within the butterfly life cycle.",
+      "rel_hint_type": "process structure",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "butterfly",
+      "object_entity_name": "butterfly life cycle",
+      "subject_class_label": "Adult butterfly life stage",
+      "subject_class_group": "Butterfly Life Cycle and Development",
+      "object_class_label": "Butterfly life cycle process",
+      "object_class_group": "Butterfly Life Cycle and Development",
+      "qualifiers": {
+        "TemporalQualifier": "final (adult) stage",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "inferred from context",
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "StageOrder: after pupa"
+      },
+      "confidence": 0.88,
+      "remarks": [
+        "Stage membership inferred from lifecycle context, not directly stated."
+      ]
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_c5cadccccf4b\",\n        \"RelR_d2beb40f9077\"\n      ],\n      \"canonical_rel_name\": \"is_stage_of_process\",\n      \"canonical_rel_desc\": \"Indicates that the subject is a distinct temporal stage within the lifecycle or progression of the object process.\",\n      \"justification\": \"Both relations link a specific life stage (pupa stage, butterfly/adult stage) to the overall butterfly life cycle, expressing that the subject is one stage within that process. They share identical stage-membership semantics and differ only in which particular stage is referenced.\",\n      \"remark\": null,\n      \"confidence\": 0.95\n    }\n  },\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_7352e4bcbf70\"\n      ],\n      \"canonical_rel_name\": \"occurs_during_life_stage\",\n      \"canonical_rel_desc\": \"Indicates that the subject process takes place during the temporal extent of the specified life stage.\",\n      \"justification\": \"This relation states that metamorphosis occurs during and characterizes the pupa stage, which is best modeled as a process taking place within a bounded life stage interval, not as the stage being part of a process.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_c5cadccccf4b\",\n        \"RelR_d2beb40f9077\"\n      ],\n      \"rel_cls\": \"process_stage_structure_relation\",\n      \"justification\": \"These relations capture how a life cycle process is structured into ordered stages, i.e., the decomposition of a process into its constituent life stages. Grouping them under a class focused on process-stage structure supports reuse across different organisms and lifecycle processes.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_7352e4bcbf70\"\n      ],\n      \"rel_cls\": \"process_occurrence_in_stage_relation\",\n      \"justification\": \"This relation expresses that a transformation process (metamorphosis) temporally occurs within and defines a given life stage. This is distinct from being a stage itself and fits a class describing process occurrence relative to stages.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_c5cadccccf4b\",\n        \"RelR_7352e4bcbf70\",\n        \"RelR_d2beb40f9077\"\n      ],\n      \"rel_cls_group\": \"TEMPORALITY\",\n      \"justification\": \"All three relations fundamentally concern temporal structure: life stages are ordered temporal parts of a life cycle process, and metamorphosis is a process that occurs during a specific temporal stage (pupa). Thus, their primary semantic dimension is temporal rather than purely spatial or compositional.\",\n      \"remark\": null,\n      \"confidence\": 0.95\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_c5cadccccf4b",
+          "RelR_d2beb40f9077"
+        ],
+        "canonical_rel_name": "is_stage_of_process",
+        "canonical_rel_desc": "Indicates that the subject is a distinct temporal stage within the lifecycle or progression of the object process.",
+        "justification": "Both relations link a specific life stage (pupa stage, butterfly/adult stage) to the overall butterfly life cycle, expressing that the subject is one stage within that process. They share identical stage-membership semantics and differ only in which particular stage is referenced.",
+        "remark": null,
+        "confidence": 0.95
+      }
+    },
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_7352e4bcbf70"
+        ],
+        "canonical_rel_name": "occurs_during_life_stage",
+        "canonical_rel_desc": "Indicates that the subject process takes place during the temporal extent of the specified life stage.",
+        "justification": "This relation states that metamorphosis occurs during and characterizes the pupa stage, which is best modeled as a process taking place within a bounded life stage interval, not as the stage being part of a process.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_c5cadccccf4b",
+          "RelR_d2beb40f9077"
+        ],
+        "rel_cls": "process_stage_structure_relation",
+        "justification": "These relations capture how a life cycle process is structured into ordered stages, i.e., the decomposition of a process into its constituent life stages. Grouping them under a class focused on process-stage structure supports reuse across different organisms and lifecycle processes.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_7352e4bcbf70"
+        ],
+        "rel_cls": "process_occurrence_in_stage_relation",
+        "justification": "This relation expresses that a transformation process (metamorphosis) temporally occurs within and defines a given life stage. This is distinct from being a stage itself and fits a class describing process occurrence relative to stages.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_c5cadccccf4b",
+          "RelR_7352e4bcbf70",
+          "RelR_d2beb40f9077"
+        ],
+        "rel_cls_group": "TEMPORALITY",
+        "justification": "All three relations fundamentally concern temporal structure: life stages are ordered temporal parts of a life cycle process, and metamorphosis is a process that occurs during a specific temporal stage (pupa). Thus, their primary semantic dimension is temporal rather than purely spatial or compositional.",
+        "remark": null,
+        "confidence": 0.95
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_c5cadccccf4b",
+        "RelR_d2beb40f9077"
+      ],
+      "canonical_rel_name": "is_stage_of_process",
+      "canonical_rel_desc": "Indicates that the subject is a distinct temporal stage within the lifecycle or progression of the object process.",
+      "justification": "Both relations link a specific life stage (pupa stage, butterfly/adult stage) to the overall butterfly life cycle, expressing that the subject is one stage within that process. They share identical stage-membership semantics and differ only in which particular stage is referenced.",
+      "remark": null,
+      "confidence": 0.95
+    },
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_7352e4bcbf70"
+      ],
+      "canonical_rel_name": "occurs_during_life_stage",
+      "canonical_rel_desc": "Indicates that the subject process takes place during the temporal extent of the specified life stage.",
+      "justification": "This relation states that metamorphosis occurs during and characterizes the pupa stage, which is best modeled as a process taking place within a bounded life stage interval, not as the stage being part of a process.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_c5cadccccf4b",
+        "RelR_d2beb40f9077"
+      ],
+      "rel_cls": "process_stage_structure_relation",
+      "justification": "These relations capture how a life cycle process is structured into ordered stages, i.e., the decomposition of a process into its constituent life stages. Grouping them under a class focused on process-stage structure supports reuse across different organisms and lifecycle processes.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_7352e4bcbf70"
+      ],
+      "rel_cls": "process_occurrence_in_stage_relation",
+      "justification": "This relation expresses that a transformation process (metamorphosis) temporally occurs within and defines a given life stage. This is distinct from being a stage itself and fits a class describing process occurrence relative to stages.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_c5cadccccf4b",
+        "RelR_7352e4bcbf70",
+        "RelR_d2beb40f9077"
+      ],
+      "rel_cls_group": "TEMPORALITY",
+      "justification": "All three relations fundamentally concern temporal structure: life stages are ordered temporal parts of a life cycle process, and metamorphosis is a process that occurs during a specific temporal stage (pupa). Thus, their primary semantic dimension is temporal rather than purely spatial or compositional.",
+      "remark": null,
+      "confidence": 0.95
+    }
+  ],
+  "timestamp": "2026-01-03T08:56:01Z"
+}

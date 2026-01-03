@@ -1,0 +1,203 @@
+{
+  "cluster_label": "26_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_044e62cbf470",
+      "relation_name": "includes",
+      "rel_desc": "Butterfly wings are an example of the new tissues and structures that form during metamorphosis.",
+      "rel_hint_type": "composition",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "new tissues and structures",
+      "object_entity_name": "butterfly wings",
+      "subject_class_label": "Internal Metamorphosis Body Structures",
+      "subject_class_group": "Biological Structures and Substances in Butterfly Metamorphosis",
+      "object_class_label": "Butterfly Wing Structures",
+      "object_class_group": "Biological Structures and Substances in Butterfly Metamorphosis",
+      "qualifiers": {
+        "TemporalQualifier": "during metamorphosis",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": "such as",
+        "OtherQualifier": null
+      },
+      "confidence": 0.94,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_5444b05c7e2f",
+      "relation_name": "includes_stage",
+      "rel_desc": "The butterfly life cycle includes the pupa stage.",
+      "rel_hint_type": "composition",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "butterfly life cycle",
+      "object_entity_name": "pupa stage",
+      "subject_class_label": "Butterfly life cycle process",
+      "subject_class_group": "Butterfly Life Cycle and Development",
+      "object_class_label": "Butterfly larval and pupal stages",
+      "object_class_group": "Butterfly Life Cycle Stages",
+      "qualifiers": {
+        "TemporalQualifier": "after larva and before adult",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": "to",
+        "OtherQualifier": null
+      },
+      "confidence": 0.94,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_044e62cbf470\"],\n      \"canonical_rel_name\": \"includes_example\",\n      \"canonical_rel_desc\": \"Indicates that the subject category or collection includes the object as an example member or instance (often introduced by phrases like 'such as').\",\n      \"justification\": \"The relation connects a general category ('new tissues and structures') to a specific instance ('butterfly wings') marked by the logical marker 'such as', which denotes example membership rather than physical part-of composition.\",\n      \"remark\": null,\n      \"confidence\": 0.84\n    }\n  },\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_5444b05c7e2f\"],\n      \"canonical_rel_name\": \"has_stage\",\n      \"canonical_rel_desc\": \"Indicates that a life cycle or process includes the object as one of its stages or phases.\",\n      \"justification\": \"The subject 'butterfly life cycle' is a process that includes 'pupa stage' as a defined phase, so a general process-to-stage predicate ('has_stage') captures this semantics cleanly.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_044e62cbf470\"],\n      \"rel_cls\": \"membership_or_example_relation\",\n      \"justification\": \"The relation expresses that a specific instance (butterfly wings) belongs to or exemplifies a broader category of entities (new tissues and structures), which is best modeled as a membership/example-type relation rather than strict physical composition.\",\n      \"remark\": null,\n      \"confidence\": 0.82\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_5444b05c7e2f\"],\n      \"rel_cls\": \"process_stage_relation\",\n      \"justification\": \"The link between a life cycle and one of its stages is a canonical example of a process-to-stage (phase) relation, so it fits a 'process_stage_relation' class.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_044e62cbf470\"],\n      \"rel_cls_group\": \"ASSOCIATION\",\n      \"justification\": \"The semantics is that of set/category membership or example association, not physical or material composition; this fits better under a broad ASSOCIATION group than COMPOSITION.\",\n      \"remark\": null,\n      \"confidence\": 0.8\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_5444b05c7e2f\"],\n      \"rel_cls_group\": \"TEMPORALITY\",\n      \"justification\": \"Stages of a life cycle are temporally ordered phases of a process; the core dimension of this relation is temporal progression within a process, so TEMPORALITY is the most suitable broad group.\",\n      \"remark\": null,\n      \"confidence\": 0.88\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_044e62cbf470"
+        ],
+        "canonical_rel_name": "includes_example",
+        "canonical_rel_desc": "Indicates that the subject category or collection includes the object as an example member or instance (often introduced by phrases like 'such as').",
+        "justification": "The relation connects a general category ('new tissues and structures') to a specific instance ('butterfly wings') marked by the logical marker 'such as', which denotes example membership rather than physical part-of composition.",
+        "remark": null,
+        "confidence": 0.84
+      }
+    },
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_5444b05c7e2f"
+        ],
+        "canonical_rel_name": "has_stage",
+        "canonical_rel_desc": "Indicates that a life cycle or process includes the object as one of its stages or phases.",
+        "justification": "The subject 'butterfly life cycle' is a process that includes 'pupa stage' as a defined phase, so a general process-to-stage predicate ('has_stage') captures this semantics cleanly.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_044e62cbf470"
+        ],
+        "rel_cls": "membership_or_example_relation",
+        "justification": "The relation expresses that a specific instance (butterfly wings) belongs to or exemplifies a broader category of entities (new tissues and structures), which is best modeled as a membership/example-type relation rather than strict physical composition.",
+        "remark": null,
+        "confidence": 0.82
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_5444b05c7e2f"
+        ],
+        "rel_cls": "process_stage_relation",
+        "justification": "The link between a life cycle and one of its stages is a canonical example of a process-to-stage (phase) relation, so it fits a 'process_stage_relation' class.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_044e62cbf470"
+        ],
+        "rel_cls_group": "ASSOCIATION",
+        "justification": "The semantics is that of set/category membership or example association, not physical or material composition; this fits better under a broad ASSOCIATION group than COMPOSITION.",
+        "remark": null,
+        "confidence": 0.8
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_5444b05c7e2f"
+        ],
+        "rel_cls_group": "TEMPORALITY",
+        "justification": "Stages of a life cycle are temporally ordered phases of a process; the core dimension of this relation is temporal progression within a process, so TEMPORALITY is the most suitable broad group.",
+        "remark": null,
+        "confidence": 0.88
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_044e62cbf470"
+      ],
+      "canonical_rel_name": "includes_example",
+      "canonical_rel_desc": "Indicates that the subject category or collection includes the object as an example member or instance (often introduced by phrases like 'such as').",
+      "justification": "The relation connects a general category ('new tissues and structures') to a specific instance ('butterfly wings') marked by the logical marker 'such as', which denotes example membership rather than physical part-of composition.",
+      "remark": null,
+      "confidence": 0.84
+    },
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_5444b05c7e2f"
+      ],
+      "canonical_rel_name": "has_stage",
+      "canonical_rel_desc": "Indicates that a life cycle or process includes the object as one of its stages or phases.",
+      "justification": "The subject 'butterfly life cycle' is a process that includes 'pupa stage' as a defined phase, so a general process-to-stage predicate ('has_stage') captures this semantics cleanly.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_044e62cbf470"
+      ],
+      "rel_cls": "membership_or_example_relation",
+      "justification": "The relation expresses that a specific instance (butterfly wings) belongs to or exemplifies a broader category of entities (new tissues and structures), which is best modeled as a membership/example-type relation rather than strict physical composition.",
+      "remark": null,
+      "confidence": 0.82
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_5444b05c7e2f"
+      ],
+      "rel_cls": "process_stage_relation",
+      "justification": "The link between a life cycle and one of its stages is a canonical example of a process-to-stage (phase) relation, so it fits a 'process_stage_relation' class.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_044e62cbf470"
+      ],
+      "rel_cls_group": "ASSOCIATION",
+      "justification": "The semantics is that of set/category membership or example association, not physical or material composition; this fits better under a broad ASSOCIATION group than COMPOSITION.",
+      "remark": null,
+      "confidence": 0.8
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_5444b05c7e2f"
+      ],
+      "rel_cls_group": "TEMPORALITY",
+      "justification": "Stages of a life cycle are temporally ordered phases of a process; the core dimension of this relation is temporal progression within a process, so TEMPORALITY is the most suitable broad group.",
+      "remark": null,
+      "confidence": 0.88
+    }
+  ],
+  "timestamp": "2026-01-03T08:56:38Z"
+}

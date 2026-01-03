@@ -1,0 +1,72 @@
+[
+  {
+    "function": "split_class",
+    "args": {
+      "source_class_id": "ClsC_414056f3",
+      "splits": [
+        {
+          "name": "Flowering Plant Reproductive Processes",
+          "description": "Dynamic biological processes involved in the sexual reproduction of flowering plants, such as pollination that enables fertilization and seed formation.",
+          "class_type_hint": "Biological Reproduction Process",
+          "member_ids": [
+            "Can_989a53ee"
+          ],
+          "provisional_id": "SPLIT_4140_process"
+        },
+        {
+          "name": "Flowering Plant Reproductive Structures",
+          "description": "Physical structures of flowering plants that participate in sexual reproduction, including flowers, pollen, and the plants that bear them.",
+          "class_type_hint": "Biological Reproduction Structure",
+          "member_ids": [
+            "En_7b4a49dc",
+            "En_830b9177",
+            "En_0c1d707b"
+          ],
+          "provisional_id": "SPLIT_4140_structures"
+        }
+      ],
+      "justification": "The original class mixes a reproductive process (pollination) with plant reproductive structures (flowers, pollen, plants); splitting improves conceptual coherence between processes and structures.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "SPLIT_4140_process",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Organism Reproduction",
+      "remark": null,
+      "justification": "Assigning a consistent higher-level Class_Group for all organism-level reproductive processes, including flowering plant pollination.",
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "SPLIT_4140_structures",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Organism Reproduction",
+      "remark": null,
+      "justification": "Reproductive structures of flowering plants belong under the same broad Class_Group as other organism reproduction-related classes.",
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_e4745cce",
+      "new_name": "Butterfly Reproduction",
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Organism Reproduction",
+      "remark": null,
+      "justification": "Retains the existing butterfly-focused reproduction class but aligns its Class_Group to the more general 'Organism Reproduction' shared with flowering plant reproduction classes.",
+      "confidence": 0.9
+    }
+  }
+]

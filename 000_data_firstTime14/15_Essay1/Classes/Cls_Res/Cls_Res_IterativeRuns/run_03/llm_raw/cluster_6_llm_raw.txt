@@ -1,0 +1,41 @@
+[
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_da99310a",
+      "new_name": "Butterfly larval and pupal stages",
+      "new_description": "The immature developmental stages of a butterfly after hatching and before adulthood, including the feeding larval (caterpillar) stage and the pupal (chrysalis) stage during which metamorphosis to the adult occurs.",
+      "new_class_type_hint": "BiologicalLifeStage",
+      "new_class_group": "Butterfly Life Cycle Stages",
+      "remark": "Currently models two distinct immature stages (larva and pupa) in a single class; this is acceptable as a grouped immature-stage concept, but if finer granularity is later required, this class could be split into separate larval and pupal life-stage classes.",
+      "justification": "Harmonizes this class with the other butterfly life-stage classes by standardizing the Class_Group label and class_type_hint and clarifying that it covers both larval and pupal stages as immature stages within the same life-cycle domain.",
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_b41f496c",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": "BiologicalLifeStage",
+      "new_class_group": "Butterfly Life Cycle Stages",
+      "remark": null,
+      "justification": "Aligns the egg-stage class with the other butterfly life-stage classes by using a consistent, domain-level Class_Group label and class_type_hint focused on biological life stages.",
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsR_de1cdd20",
+      "new_name": "Butterfly life cycle (stages collection)",
+      "new_description": "The complete set of developmental stages in a butterfly's life cycle (egg, larva, pupa, adult), treated as a collection of related life stages.",
+      "new_class_type_hint": "LifeStageCollection",
+      "new_class_group": "Butterfly Life Cycle Stages",
+      "remark": "This class intentionally represents the collection of all stages rather than a single stage; keep it distinct from the individual life-stage classes but within the same Butterfly Life Cycle Stages group.",
+      "justification": "Clarifies that this class is a collection covering all stages and standardizes its Class_Group with the individual butterfly life-stage classes for coherent schema connectivity.",
+      "confidence": 0.9
+    }
+  }
+]

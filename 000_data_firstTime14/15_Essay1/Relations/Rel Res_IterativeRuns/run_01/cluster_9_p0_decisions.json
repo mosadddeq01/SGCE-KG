@@ -1,0 +1,156 @@
+{
+  "cluster_label": "9_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_6b9d42dfc7f9",
+      "relation_name": "contributes_to_formation_of",
+      "rel_desc": "The soupy substance formed from dissolved organs contributes to the formation of new tissues and structures.",
+      "rel_hint_type": "causal",
+      "canonical_rel_name": "contributes_to_formation_of",
+      "canonical_rel_desc": "Indicates that a substance, component, or intermediate state plays a contributing role in forming new tissues, structures, or entities.",
+      "rel_cls": "biological_process_outcome_relation",
+      "rel_cls_group": "CAUSALITY",
+      "subject_entity_name": "soupy substance",
+      "object_entity_name": "new tissues and structures",
+      "subject_class_label": "Metamorphic Body Fluids and Liquefied Tissues",
+      "subject_class_group": "Biological Structures and Substances in Butterfly Metamorphosis",
+      "object_class_label": "Internal Metamorphosis Body Structures",
+      "object_class_group": "Biological Structures and Substances in Butterfly Metamorphosis",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "implied rather than explicitly stated",
+        "CausalHint": "as part of the same metamorphic process",
+        "LogicalMarker": "and",
+        "OtherQualifier": null
+      },
+      "confidence": 0.6,
+      "remarks": [
+        "Relation added mainly to capture that the liquefied material is functionally tied to forming new tissues.",
+        "Relation added mainly to capture that the liquefied material is functionally tied to forming new tissues."
+      ]
+    },
+    {
+      "relation_id": "RelR_5386b1bb9e0a",
+      "relation_name": "includes",
+      "rel_desc": "Antennae are an example of the new tissues and structures that form during metamorphosis.",
+      "rel_hint_type": "composition",
+      "canonical_rel_name": "includes_structure",
+      "canonical_rel_desc": "The subject set or collection of anatomical tissues/structures includes the object as one of its members or examples.",
+      "rel_cls": "structure_set_membership_relation",
+      "rel_cls_group": "COMPOSITION",
+      "subject_entity_name": "new tissues and structures",
+      "object_entity_name": "antennae",
+      "subject_class_label": "Internal Metamorphosis Body Structures",
+      "subject_class_group": "Biological Structures and Substances in Butterfly Metamorphosis",
+      "object_class_label": "Internal Metamorphosis Body Structures",
+      "object_class_group": "Biological Structures and Substances in Butterfly Metamorphosis",
+      "qualifiers": {
+        "TemporalQualifier": "during metamorphosis",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": "such as",
+        "OtherQualifier": null
+      },
+      "confidence": 0.94,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_4f57ef94fbbb",
+      "relation_name": "filled_with",
+      "rel_desc": "The soft, wrinkled wings are filled with wing fluid as part of their expansion and hardening.",
+      "rel_hint_type": "usage",
+      "canonical_rel_name": "is_filled_with",
+      "canonical_rel_desc": "Indicates that a structure or region is filled internally with a particular fluid or substance as part of its physical state.",
+      "rel_cls": "substance_containment_relation",
+      "rel_cls_group": "COMPOSITION",
+      "subject_entity_name": "soft, wrinkled wings",
+      "object_entity_name": "wing fluid",
+      "subject_class_label": "Butterfly Wing Physical States",
+      "subject_class_group": "Biological Structures and Substances in Butterfly Metamorphosis",
+      "object_class_label": "Metamorphic Body Fluids and Liquefied Tissues",
+      "object_class_group": "Biological Structures and Substances in Butterfly Metamorphosis",
+      "qualifiers": {
+        "TemporalQualifier": "shortly after emergence",
+        "SpatialQualifier": "within the butterfly's wings",
+        "OperationalConstraint": null,
+        "ConditionExpression": "to expand and harden",
+        "UncertaintyQualifier": null,
+        "CausalHint": "to expand and harden",
+        "LogicalMarker": "must",
+        "OtherQualifier": "Requirement: pumping fluid is necessary for wings to expand and harden"
+      },
+      "confidence": 0.9,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_dcfb994bf136",
+      "relation_name": "pumped_into",
+      "rel_desc": "Wing fluid is pumped into the butterfly wings so they can expand and harden.",
+      "rel_hint_type": "usage",
+      "canonical_rel_name": "is_pumped_into",
+      "canonical_rel_desc": "Indicates that a fluid or substance is actively transported or pumped into a target structure or region.",
+      "rel_cls": "physiological_transport_relation",
+      "rel_cls_group": "INTERACTION",
+      "subject_entity_name": "wing fluid",
+      "object_entity_name": "butterfly wings",
+      "subject_class_label": "Metamorphic Body Fluids and Liquefied Tissues",
+      "subject_class_group": "Biological Structures and Substances in Butterfly Metamorphosis",
+      "object_class_label": "Butterfly Wing Structures",
+      "object_class_group": "Biological Structures and Substances in Butterfly Metamorphosis",
+      "qualifiers": {
+        "TemporalQualifier": "immediately after emergence",
+        "SpatialQualifier": "into the butterfly's wings",
+        "OperationalConstraint": null,
+        "ConditionExpression": "in order for wings to expand and harden",
+        "UncertaintyQualifier": null,
+        "CausalHint": "to expand and harden",
+        "LogicalMarker": null,
+        "OtherQualifier": "Purpose: wing development (expansion and hardening)"
+      },
+      "confidence": 0.9,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_rel_schema\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_5386b1bb9e0a\"],\n      \"canonical_rel_name\": \"includes\",\n      \"canonical_rel_desc\": \"Indicates that the subject set or collection includes the object as one of its members or examples.\",\n      \"rel_cls\": null,\n      \"rel_cls_group\": null,\n      \"justification\": \"Normalize the predicate to a cleaner, more general canonical name ('includes') while the relation class already captures that this is about anatomical structure set membership. The previous name 'includes_structure' redundantly encodes type information that belongs in rel_cls, not in the canonical predicate.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_rel_schema",
+      "args": {
+        "relation_ids": [
+          "RelR_5386b1bb9e0a"
+        ],
+        "canonical_rel_name": "includes",
+        "canonical_rel_desc": "Indicates that the subject set or collection includes the object as one of its members or examples.",
+        "rel_cls": null,
+        "rel_cls_group": null,
+        "justification": "Normalize the predicate to a cleaner, more general canonical name ('includes') while the relation class already captures that this is about anatomical structure set membership. The previous name 'includes_structure' redundantly encodes type information that belongs in rel_cls, not in the canonical predicate.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_rel_schema",
+      "relation_ids": [
+        "RelR_5386b1bb9e0a"
+      ],
+      "canonical_rel_name": "includes",
+      "canonical_rel_desc": "Indicates that the subject set or collection includes the object as one of its members or examples.",
+      "rel_cls": null,
+      "rel_cls_group": null,
+      "new_relation_name": null,
+      "original_relation_name": null,
+      "justification": "Normalize the predicate to a cleaner, more general canonical name ('includes') while the relation class already captures that this is about anatomical structure set membership. The previous name 'includes_structure' redundantly encodes type information that belongs in rel_cls, not in the canonical predicate.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  ],
+  "timestamp": "2026-01-03T08:57:50Z"
+}

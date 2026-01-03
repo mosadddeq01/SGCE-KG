@@ -1,0 +1,20 @@
+[
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": [
+        "RelR_8794518bc51a",
+        "RelR_97ce9169b13a",
+        "RelR_e56543a37161",
+        "RelR_15f0623c3f1a"
+      ],
+      "canonical_rel_name": null,
+      "canonical_rel_desc": null,
+      "rel_cls": "developmental_stage_order_relation",
+      "rel_cls_group": null,
+      "justification": "All four relations connect successive stages in an organism's biological development (egg→larva→pupa→adult), not just life cycles of butterflies. Generalizing the relation class from 'life_cycle_stage_order_relation' to 'developmental_stage_order_relation' makes the schema reusable for other species and developmental contexts while preserving the TEMPORALITY group and existing canonical_rel_name values ('precedes_in_life_cycle' and 'follows_in_life_cycle').",
+      "remark": "Only the relation class is broadened to cover developmental stage ordering in general; predicate directions and descriptions remain unchanged.",
+      "confidence": 0.83
+    }
+  }
+]

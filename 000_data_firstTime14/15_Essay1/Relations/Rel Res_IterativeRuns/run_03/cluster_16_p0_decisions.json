@@ -1,0 +1,102 @@
+{
+  "cluster_label": "16_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_7686e1be475f",
+      "relation_name": "forms",
+      "rel_desc": "The caterpillar forms the chrysalis as a protective shell around its body.",
+      "rel_hint_type": "creation",
+      "canonical_rel_name": "forms_protective_structure",
+      "canonical_rel_desc": "Links an organism or life stage to a protective physical structure that it forms around or from its own body (e.g., a caterpillar forming a chrysalis).",
+      "rel_cls": "morphological_transformation_relation",
+      "rel_cls_group": "MODIFICATION",
+      "subject_entity_name": "caterpillar (larval stage of butterfly)",
+      "object_entity_name": "chrysalis",
+      "subject_class_label": "Butterfly larval and pupal stages",
+      "subject_class_group": "Butterfly Life Cycle Stages",
+      "object_class_label": "Chrysalis (Pupal Casing)",
+      "object_class_group": "Biological Structures and Substances in Butterfly Metamorphosis",
+      "qualifiers": {
+        "TemporalQualifier": "at start of pupa stage",
+        "SpatialQualifier": "around the caterpillar's body",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "protective shell",
+        "LogicalMarker": null,
+        "OtherQualifier": "Function: protection during metamorphosis"
+      },
+      "confidence": 0.99,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_b14395c279d2",
+      "relation_name": "encloses_during",
+      "rel_desc": "The chrysalis is the protective casing that encloses the caterpillar during the pupa stage.",
+      "rel_hint_type": "structural context",
+      "canonical_rel_name": "is_protective_casing_for_stage",
+      "canonical_rel_desc": "Indicates that the subject is the defining protective casing or structure associated with and surrounding the organism during the specified life stage.",
+      "rel_cls": "life_stage_structure_relation",
+      "rel_cls_group": "SPATIALITY",
+      "subject_entity_name": "chrysalis",
+      "object_entity_name": "pupa stage",
+      "subject_class_label": "Chrysalis (Pupal Casing)",
+      "subject_class_group": "Biological Structures and Substances in Butterfly Metamorphosis",
+      "object_class_label": "Butterfly larval and pupal stages",
+      "object_class_group": "Butterfly Life Cycle Stages",
+      "qualifiers": {
+        "TemporalQualifier": "throughout the pupa stage",
+        "SpatialQualifier": "around the organism's body",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "implied, not said explicitly",
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "StageStructureRole: defining casing of pupa"
+      },
+      "confidence": 0.84,
+      "remarks": [
+        "Primarily to connect the named pupa stage with its physical casing (chrysalis).",
+        "Primarily to connect the named pupa stage with its physical casing (chrysalis).",
+        "Primarily to connect the named pupa stage with its physical casing (chrysalis).",
+        "Primarily to connect the named pupa stage with its physical casing (chrysalis)."
+      ]
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_rel_schema\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_b14395c279d2\"],\n      \"canonical_rel_name\": \"serves_as_protective_casing_for_life_stage\",\n      \"canonical_rel_desc\": \"Indicates that the subject is the protective casing or enclosing structure associated with an organism during a specific life stage.\",\n      \"rel_cls\": \"life_stage_structure_relation\",\n      \"rel_cls_group\": \"SPATIALITY\",\n      \"justification\": \"The existing canonical_rel_name ('is_protective_casing_for_stage') is slightly awkward, overly tied to the word 'stage', and less reusable. Renaming it to 'serves_as_protective_casing_for_life_stage' clarifies that the subject plays a functional protective role for an organism during a given life stage, matching the description and qualifiers while remaining concise and schema-friendly. The relation class and group remain appropriate.\",\n      \"remark\": null,\n      \"confidence\": 0.86\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_rel_schema",
+      "args": {
+        "relation_ids": [
+          "RelR_b14395c279d2"
+        ],
+        "canonical_rel_name": "serves_as_protective_casing_for_life_stage",
+        "canonical_rel_desc": "Indicates that the subject is the protective casing or enclosing structure associated with an organism during a specific life stage.",
+        "rel_cls": "life_stage_structure_relation",
+        "rel_cls_group": "SPATIALITY",
+        "justification": "The existing canonical_rel_name ('is_protective_casing_for_stage') is slightly awkward, overly tied to the word 'stage', and less reusable. Renaming it to 'serves_as_protective_casing_for_life_stage' clarifies that the subject plays a functional protective role for an organism during a given life stage, matching the description and qualifiers while remaining concise and schema-friendly. The relation class and group remain appropriate.",
+        "remark": null,
+        "confidence": 0.86
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_rel_schema",
+      "relation_ids": [
+        "RelR_b14395c279d2"
+      ],
+      "canonical_rel_name": "serves_as_protective_casing_for_life_stage",
+      "canonical_rel_desc": "Indicates that the subject is the protective casing or enclosing structure associated with an organism during a specific life stage.",
+      "rel_cls": "life_stage_structure_relation",
+      "rel_cls_group": "SPATIALITY",
+      "new_relation_name": null,
+      "original_relation_name": null,
+      "justification": "The existing canonical_rel_name ('is_protective_casing_for_stage') is slightly awkward, overly tied to the word 'stage', and less reusable. Renaming it to 'serves_as_protective_casing_for_life_stage' clarifies that the subject plays a functional protective role for an organism during a given life stage, matching the description and qualifiers while remaining concise and schema-friendly. The relation class and group remain appropriate.",
+      "remark": null,
+      "confidence": 0.86
+    }
+  ],
+  "timestamp": "2026-01-03T09:01:53Z"
+}

@@ -1,0 +1,17 @@
+[
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": [
+        "RelR_b3c16bd12ca6"
+      ],
+      "canonical_rel_name": "used_for_feeding",
+      "canonical_rel_desc": "Indicates that the subject anatomical structure is used by an organism to obtain or ingest the object as food.",
+      "rel_cls": "feeding_function_relation",
+      "rel_cls_group": "USAGE",
+      "justification": "The current canonical_rel_name 'used_to_consume' is somewhat awkward and overly specific. A more standard and reusable predicate for anatomical structures performing a feeding role is 'used_for_feeding', while keeping the same relation class and group. This better captures that the proboscis functions in feeding (not only literal consumption events) and can generalize to similar mouthpart–food relations.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  }
+]

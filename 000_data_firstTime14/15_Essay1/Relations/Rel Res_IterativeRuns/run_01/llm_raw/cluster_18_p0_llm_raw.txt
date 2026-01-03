@@ -1,0 +1,15 @@
+[
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": ["RelR_02dd76699444"],
+      "canonical_rel_name": "contributes_to",
+      "canonical_rel_desc": "Indicates that the subject has a causal or supporting effect on the emergence, level, or quality of the object.",
+      "rel_cls": "ecological_effect_relation",
+      "rel_cls_group": "CAUSALITY",
+      "justification": "The relation describes a general ecological causal/supporting effect (caterpillars helping maintain plant population balance), which is semantically aligned with a broad 'contributes_to' predicate. Using 'contributes_to_maintenance_of' introduces an unnecessary specialization compared to the other instance in this cluster (RelR_c8f43fb41026), which already uses 'contributes_to' with an appropriate generic description for the same ecological-effect relation class. Normalizing both to 'contributes_to' improves schema consistency while preserving the causal semantics.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  }
+]

@@ -1,0 +1,28 @@
+[
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": ["RelR_03b51cda3275"],
+      "canonical_rel_name": "is_essential_for_functioning_of",
+      "canonical_rel_desc": "Indicates that the subject plays a critical functional role in the operation, stability, or health of the object system (e.g., an organism being essential for ecosystem functioning).",
+      "rel_cls": "ecological_role_relation",
+      "rel_cls_group": "CAUSALITY",
+      "justification": "The current canonical name and description frame this as a compositional 'component/part-of' relation, but the instance text and qualifiers emphasize functional/role-based importance (caterpillars as essential for ecosystem functioning, via pollination and plant population balance). This is better modeled as a causal/functional role relation rather than strict composition. Updating the canonical_rel_name and description to focus on functional necessity and aligning rel_cls_group from COMPOSITION to CAUSALITY resolves this mismatch while keeping the ecological_role_relation class.",
+      "remark": null,
+      "confidence": 0.86
+    }
+  },
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": ["RelR_b14395c279d2"],
+      "canonical_rel_name": "is_protective_casing_for_stage",
+      "canonical_rel_desc": "Indicates that the subject is the defining protective casing or structure associated with and surrounding the organism during the specified life stage.",
+      "rel_cls": "life_stage_structure_relation",
+      "rel_cls_group": "SPATIALITY",
+      "justification": "The existing canonical_rel_name 'encloses_during' and its description imply that the subject physically surrounds the object itself during a time interval. In this instance, however, the object is the 'pupa stage' (a life stage), while the description clarifies that the chrysalis is the defining protective casing for that stage. This is more naturally modeled as a relation between a life stage and its characteristic structure, not generic spatial containment of a stage entity. Renaming to 'is_protective_casing_for_stage', refining the description, and assigning a more specific rel_cls 'life_stage_structure_relation' while retaining SPATIALITY (due to the enclosing spatial role) better capture the intended semantics.",
+      "remark": "The organism enclosed during the pupa stage (the developing butterfly) is implicit and not modeled as an explicit node in this relation.",
+      "confidence": 0.83
+    }
+  }
+]

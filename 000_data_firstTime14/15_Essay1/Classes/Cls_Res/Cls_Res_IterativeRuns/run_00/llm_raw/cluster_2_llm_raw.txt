@@ -1,0 +1,39 @@
+[
+  {
+    "function": "reassign_entities",
+    "args": {
+      "entity_ids": ["En_39d95774"],
+      "from_class_id": "ClsC_8d404c11",
+      "to_class_id": "ClsC_70788dbe",
+      "justification": "The entity 'metamorphosis' is a biological process and conceptually belongs in the process-focused class rather than in a class defined as handling time-related attributes of metamorphosis.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_70788dbe",
+      "new_name": "Butterfly Developmental Processes",
+      "new_description": "Biological processes that drive the growth and transformation of caterpillars into butterflies, including molting (repeated skin shedding) and metamorphosis inside the chrysalis.",
+      "new_class_type_hint": "Biological Process",
+      "new_class_group": "Butterfly Life Cycle & Metamorphosis",
+      "remark": null,
+      "justification": "This class cleanly represents biological processes (molting and metamorphosis) in the butterfly life cycle; assigning a shared Class_Group clarifies its relation to metamorphosis-related attributes.",
+      "confidence": 0.92
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_8d404c11",
+      "new_name": "Metamorphosis Duration Attributes",
+      "new_description": "Time-related attributes that quantify or describe the duration of the metamorphosis process inside the chrysalis (e.g., number of days or weeks).",
+      "new_class_type_hint": "Process Attribute",
+      "new_class_group": "Butterfly Life Cycle & Metamorphosis",
+      "remark": null,
+      "justification": "This class is intended to capture temporal attributes (such as duration) of metamorphosis rather than the process itself; refining the name/description and assigning the same Class_Group keeps it distinct but clearly related to the butterfly life cycle processes.",
+      "confidence": 0.9
+    }
+  }
+]

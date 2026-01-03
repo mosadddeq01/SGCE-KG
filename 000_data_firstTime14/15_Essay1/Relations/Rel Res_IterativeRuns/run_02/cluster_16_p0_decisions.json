@@ -1,0 +1,93 @@
+{
+  "cluster_label": "16_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_b81ae1c63db7",
+      "relation_name": "influences",
+      "rel_desc": "Different butterfly species influence the size, shape, and color characteristics of eggs in the egg stage.",
+      "rel_hint_type": "trait dependency",
+      "canonical_rel_name": "influences_life_history_trait",
+      "canonical_rel_desc": "Indicates that the subject species causally affects a specific life-history trait or characteristic of the object life stage or process (e.g., morphology, timing, or duration).",
+      "rel_cls": "species_life_history_dependency_relation",
+      "rel_cls_group": "CAUSALITY",
+      "subject_entity_name": "butterfly species",
+      "object_entity_name": "egg stage (butterfly life cycle)",
+      "subject_class_label": "Butterfly species (taxonomic categories)",
+      "subject_class_group": "Butterfly Biology and Life Cycle",
+      "object_class_label": "Butterfly egg life stage",
+      "object_class_group": "Butterfly Life Cycle Stages",
+      "qualifiers": {
+        "TemporalQualifier": "during egg stage",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": "egg size, shape, and color vary with species",
+        "UncertaintyQualifier": null,
+        "CausalHint": "depending on",
+        "LogicalMarker": null,
+        "OtherQualifier": "AffectedTraits: egg size, egg shape, egg color"
+      },
+      "confidence": 0.94,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_10c9036b59f7",
+      "relation_name": "influences",
+      "rel_desc": "The butterfly species influences how long the metamorphosis process lasts.",
+      "rel_hint_type": "dependency",
+      "canonical_rel_name": "influences_life_history_trait",
+      "canonical_rel_desc": "Indicates that the subject species causally affects a specific life-history trait or characteristic of the object life stage or process (e.g., morphology, timing, or duration).",
+      "rel_cls": "species_life_history_dependency_relation",
+      "rel_cls_group": "CAUSALITY",
+      "subject_entity_name": "butterfly species",
+      "object_entity_name": "metamorphosis process duration",
+      "subject_class_label": "Butterfly species (taxonomic categories)",
+      "subject_class_group": "Butterfly Biology and Life Cycle",
+      "object_class_label": "Butterfly Metamorphosis Time Attributes",
+      "object_class_group": "Butterfly Life Cycle and Development",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": "anywhere from a few days to several weeks",
+        "UncertaintyQualifier": null,
+        "CausalHint": "depending on",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.95,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_2bed44da1d46",
+      "relation_name": "depends_on",
+      "rel_desc": "The duration of the adult butterfly lifespan depends on the butterfly species.",
+      "rel_hint_type": "dependency",
+      "canonical_rel_name": "depends_on_species",
+      "canonical_rel_desc": "Indicates that the value or magnitude of the subject life-history trait is causally dependent on which butterfly species is involved.",
+      "rel_cls": "species_life_history_dependency_relation",
+      "rel_cls_group": "CAUSALITY",
+      "subject_entity_name": "adult butterfly lifespan",
+      "object_entity_name": "butterfly species",
+      "subject_class_label": "Adult butterfly stage properties",
+      "subject_class_group": "Butterfly Life Cycle and Development",
+      "object_class_label": "Butterfly species (taxonomic categories)",
+      "object_class_group": "Butterfly Biology and Life Cycle",
+      "qualifiers": {
+        "TemporalQualifier": "for adult stage duration",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": "lifespan ranges from a few days to a few weeks",
+        "UncertaintyQualifier": null,
+        "CausalHint": "depending on",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.97,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[]",
+  "parsed_steps": [],
+  "executed_decisions": [],
+  "timestamp": "2026-01-03T08:59:55Z"
+}

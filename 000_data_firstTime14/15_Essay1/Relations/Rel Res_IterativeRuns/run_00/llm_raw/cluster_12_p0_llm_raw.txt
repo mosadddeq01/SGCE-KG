@@ -1,0 +1,60 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_8794518bc51a",
+        "RelR_97ce9169b13a",
+        "RelR_e56543a37161"
+      ],
+      "canonical_rel_name": "precedes_in_life_cycle",
+      "canonical_rel_desc": "Indicates that one biological life-cycle stage temporally precedes and developmentally leads into another stage within the same organism's life cycle.",
+      "justification": "All three relations describe a life-cycle stage that occurs before and develops into the next stage in the butterfly life cycle (egg → larva, larva → pupa, pupa → adult). The dominant semantics are temporal ordering within a life cycle plus developmental progression, so a unified predicate 'precedes_in_life_cycle' captures this consistently for all three edges.",
+      "remark": "Though the descriptions mention 'develops into', the primary axis modeled here is ordered progression of life stages; more detailed developmental/causal semantics can be modeled with a separate predicate if needed.",
+      "confidence": 0.93
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_15f0623c3f1a"
+      ],
+      "canonical_rel_name": "follows_in_life_cycle",
+      "canonical_rel_desc": "Indicates that one biological life-cycle stage temporally follows and results from another stage within the same organism's life cycle.",
+      "justification": "This relation is explicitly the inverse direction of the egg → larva precedence relation: the larval stage follows the egg stage. To keep predicates directionally clear and consistent with the text ('follows'), a separate but inverse predicate 'follows_in_life_cycle' is appropriate rather than overloading the 'precedes' predicate.",
+      "remark": "This predicate is the conceptual inverse of 'precedes_in_life_cycle'; an ontology-level inverse relation axiom could connect the two.",
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_8794518bc51a",
+        "RelR_97ce9169b13a",
+        "RelR_e56543a37161",
+        "RelR_15f0623c3f1a"
+      ],
+      "rel_cls": "life_cycle_stage_order_relation",
+      "justification": "All four relations organize butterfly life stages in a temporal and developmental sequence (which stage comes before or after another). This is more specific than a generic temporal relation and naturally forms a class for ordering of life-cycle stages across organisms.",
+      "remark": "This class can later be reused for similar stage-order relations in other organisms' life cycles (e.g., amphibians, insects).",
+      "confidence": 0.92
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_8794518bc51a",
+        "RelR_97ce9169b13a",
+        "RelR_e56543a37161",
+        "RelR_15f0623c3f1a"
+      ],
+      "rel_cls_group": "TEMPORALITY",
+      "justification": "Each relation expresses temporal ordering between stages (precedes/follows) in a life cycle. While developmental progression is mentioned, the core semantic dimension is temporal sequence, fitting the TEMPORALITY group.",
+      "remark": null,
+      "confidence": 0.96
+    }
+  }
+]

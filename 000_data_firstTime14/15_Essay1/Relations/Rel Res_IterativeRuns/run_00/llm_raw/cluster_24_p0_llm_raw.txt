@@ -1,0 +1,64 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_34cc144f0893"],
+      "canonical_rel_name": "has_life_cycle_stage",
+      "canonical_rel_desc": "Indicates that a life cycle process is composed of specific developmental stages.",
+      "justification": "The subject is the butterfly life cycle as a process and the object is the collection of its stages; the semantics are that the process is composed of these stages.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": ["RelR_34cc144f0893"],
+      "rel_cls": "process_stage_relation",
+      "justification": "This relation expresses how a biological process (life cycle) decomposes into constituent stages, fitting a process-vs-stage structural class.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": ["RelR_34cc144f0893"],
+      "rel_cls_group": "COMPOSITION",
+      "justification": "The relation describes a whole (life cycle) being composed of parts (stages), which is a compositional structure.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_2afc37a26583"],
+      "canonical_rel_name": "is_instance_of",
+      "canonical_rel_desc": "Indicates that the subject is a concrete instance of the object class or stage type.",
+      "justification": "The newly emerged butterfly is a specific individual that belongs to the adult butterfly life stage category; this is standard instance–class semantics.",
+      "remark": null,
+      "confidence": 0.86
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": ["RelR_2afc37a26583"],
+      "rel_cls": "instance_class_relation",
+      "justification": "The link classifies an individual entity as belonging to a particular life stage type, which is an instance–class classification relation.",
+      "remark": null,
+      "confidence": 0.86
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": ["RelR_2afc37a26583"],
+      "rel_cls_group": "IDENTITY",
+      "justification": "Instance-of expresses what kind of thing the subject is; this is an identity/classification dimension rather than causal or temporal.",
+      "remark": null,
+      "confidence": 0.86
+    }
+  }
+]

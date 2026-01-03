@@ -1,0 +1,307 @@
+{
+  "cluster_label": "13_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_9dcf3884e0fe",
+      "relation_name": "feeds_on",
+      "rel_desc": "During the adult life stage, butterflies feed on nectar.",
+      "rel_hint_type": "feeding",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "adult butterfly life stage",
+      "object_entity_name": "nectar",
+      "subject_class_label": "Adult butterfly life stage",
+      "subject_class_group": "Butterfly Life Cycle and Development",
+      "object_class_label": "Butterfly Nectar Food Source",
+      "object_class_group": "Butterfly Feeding and Nutrition",
+      "qualifiers": {
+        "TemporalQualifier": "during adult stage",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "FeedingMode: drinking via mouthparts"
+      },
+      "confidence": 0.98,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_d52ac673eaa1",
+      "relation_name": "produced_by",
+      "rel_desc": "Nectar consumed by butterflies originates from flowers.",
+      "rel_hint_type": "source",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "nectar",
+      "object_entity_name": "flowers",
+      "subject_class_label": "Butterfly Nectar Food Source",
+      "subject_class_group": "Butterfly Feeding and Nutrition",
+      "object_class_label": "Flowering plant reproductive structures and organisms",
+      "object_class_group": "Biological Reproduction Processes",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "in flowers",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "from",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.9,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_014a23852960",
+      "relation_name": "consumes",
+      "rel_desc": "Birds consume butterflies, for which butterflies act as a food source.",
+      "rel_hint_type": "feeding",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "birds",
+      "object_entity_name": "food source",
+      "subject_class_label": "Butterfly Predators and Prey Role",
+      "subject_class_group": "Butterfly Ecology, Habitat, and Food Web",
+      "object_class_label": "Butterfly Predators and Prey Role",
+      "object_class_group": "Butterfly Ecology, Habitat, and Food Web",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "within their ecosystem",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "may (in description of reptiles, but birds likely too)",
+        "CausalHint": "for",
+        "LogicalMarker": null,
+        "OtherQualifier": "TrophicRelation: predator-prey"
+      },
+      "confidence": 0.9,
+      "remarks": [
+        "Object is the role 'food source' rather than butterflies entity, consistent with provided nodes."
+      ]
+    },
+    {
+      "relation_id": "RelR_9df25e33b9ff",
+      "relation_name": "consumes",
+      "rel_desc": "Reptiles consume butterflies, which serve as a food source.",
+      "rel_hint_type": "feeding",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "reptiles",
+      "object_entity_name": "food source",
+      "subject_class_label": "Butterfly Predators and Prey Role",
+      "subject_class_group": "Butterfly Ecology, Habitat, and Food Web",
+      "object_class_label": "Butterfly Predators and Prey Role",
+      "object_class_group": "Butterfly Ecology, Habitat, and Food Web",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "within their ecosystem",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "may (reptiles may consume butterflies)",
+        "CausalHint": "for",
+        "LogicalMarker": null,
+        "OtherQualifier": "TrophicRelation: predator-prey"
+      },
+      "confidence": 0.9,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_b78eded5a9f1",
+      "relation_name": "consumes",
+      "rel_desc": "Other insects consume butterflies, for which butterflies act as a food source.",
+      "rel_hint_type": "feeding",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "other insects",
+      "object_entity_name": "food source",
+      "subject_class_label": "Butterfly Predators and Prey Role",
+      "subject_class_group": "Butterfly Ecology, Habitat, and Food Web",
+      "object_class_label": "Butterfly Predators and Prey Role",
+      "object_class_group": "Butterfly Ecology, Habitat, and Food Web",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "within their ecosystem",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "for",
+        "LogicalMarker": null,
+        "OtherQualifier": "TrophicRelation: predator-prey"
+      },
+      "confidence": 0.9,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_9dcf3884e0fe\",\n        \"RelR_014a23852960\",\n        \"RelR_9df25e33b9ff\",\n        \"RelR_b78eded5a9f1\"\n      ],\n      \"canonical_rel_name\": \"feeds_on\",\n      \"canonical_rel_desc\": \"Indicates that the subject organism or life stage obtains food by consuming the object, which serves as its trophic resource.\",\n      \"justification\": \"All four relations describe trophic feeding interactions where an organism (adult butterflies, birds, reptiles, or other insects) uses the object as a food resource (nectar or a food-source role). Normalizing to a single predicate 'feeds_on' captures the biological feeding direction consistently.\",\n      \"remark\": null,\n      \"confidence\": 0.97\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_9dcf3884e0fe\",\n        \"RelR_014a23852960\",\n        \"RelR_9df25e33b9ff\",\n        \"RelR_b78eded5a9f1\"\n      ],\n      \"rel_cls\": \"trophic_interaction_relation\",\n      \"justification\": \"Each relation expresses a predator–prey or consumer–resource feeding link, which is a classic trophic interaction in an ecological food web. Grouping them under 'trophic_interaction_relation' reflects this shared ecological semantics.\",\n      \"remark\": null,\n      \"confidence\": 0.96\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_9dcf3884e0fe\",\n        \"RelR_014a23852960\",\n        \"RelR_9df25e33b9ff\",\n        \"RelR_b78eded5a9f1\"\n      ],\n      \"rel_cls_group\": \"INTERACTION\",\n      \"justification\": \"Feeding and predator–prey relations are biological interactions between organisms (or organism life stages) and their food resources, fitting the broad INTERACTION dimension better than COMPOSITION or IDENTITY.\",\n      \"remark\": null,\n      \"confidence\": 0.96\n    }\n  },\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_d52ac673eaa1\"\n      ],\n      \"canonical_rel_name\": \"is_produced_by\",\n      \"canonical_rel_desc\": \"Indicates that the subject substance or resource is generated, secreted, or produced by the object organism or structure.\",\n      \"justification\": \"This relation states that nectar originates from flowers, i.e., nectar is produced by flowers. Using the passive-direction predicate 'is_produced_by' with subject=nectar and object=flowers makes the production/source semantics explicit and consistent.\",\n      \"remark\": null,\n      \"confidence\": 0.93\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_d52ac673eaa1\"\n      ],\n      \"rel_cls\": \"biological_product_origin_relation\",\n      \"justification\": \"The link describes the origin of a biological product (nectar) from a producing organismal structure (flowers). This fits a class for product/source or origin relations rather than trophic or hierarchical relations.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_d52ac673eaa1\"\n      ],\n      \"rel_cls_group\": \"CAUSALITY\",\n      \"justification\": \"Flowers causally give rise to nectar as a secreted product; the relation encodes a generative source-effect link rather than simple association or composition, so it is best grouped under CAUSALITY.\",\n      \"remark\": null,\n      \"confidence\": 0.88\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_9dcf3884e0fe",
+          "RelR_014a23852960",
+          "RelR_9df25e33b9ff",
+          "RelR_b78eded5a9f1"
+        ],
+        "canonical_rel_name": "feeds_on",
+        "canonical_rel_desc": "Indicates that the subject organism or life stage obtains food by consuming the object, which serves as its trophic resource.",
+        "justification": "All four relations describe trophic feeding interactions where an organism (adult butterflies, birds, reptiles, or other insects) uses the object as a food resource (nectar or a food-source role). Normalizing to a single predicate 'feeds_on' captures the biological feeding direction consistently.",
+        "remark": null,
+        "confidence": 0.97
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_9dcf3884e0fe",
+          "RelR_014a23852960",
+          "RelR_9df25e33b9ff",
+          "RelR_b78eded5a9f1"
+        ],
+        "rel_cls": "trophic_interaction_relation",
+        "justification": "Each relation expresses a predator–prey or consumer–resource feeding link, which is a classic trophic interaction in an ecological food web. Grouping them under 'trophic_interaction_relation' reflects this shared ecological semantics.",
+        "remark": null,
+        "confidence": 0.96
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_9dcf3884e0fe",
+          "RelR_014a23852960",
+          "RelR_9df25e33b9ff",
+          "RelR_b78eded5a9f1"
+        ],
+        "rel_cls_group": "INTERACTION",
+        "justification": "Feeding and predator–prey relations are biological interactions between organisms (or organism life stages) and their food resources, fitting the broad INTERACTION dimension better than COMPOSITION or IDENTITY.",
+        "remark": null,
+        "confidence": 0.96
+      }
+    },
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_d52ac673eaa1"
+        ],
+        "canonical_rel_name": "is_produced_by",
+        "canonical_rel_desc": "Indicates that the subject substance or resource is generated, secreted, or produced by the object organism or structure.",
+        "justification": "This relation states that nectar originates from flowers, i.e., nectar is produced by flowers. Using the passive-direction predicate 'is_produced_by' with subject=nectar and object=flowers makes the production/source semantics explicit and consistent.",
+        "remark": null,
+        "confidence": 0.93
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_d52ac673eaa1"
+        ],
+        "rel_cls": "biological_product_origin_relation",
+        "justification": "The link describes the origin of a biological product (nectar) from a producing organismal structure (flowers). This fits a class for product/source or origin relations rather than trophic or hierarchical relations.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_d52ac673eaa1"
+        ],
+        "rel_cls_group": "CAUSALITY",
+        "justification": "Flowers causally give rise to nectar as a secreted product; the relation encodes a generative source-effect link rather than simple association or composition, so it is best grouped under CAUSALITY.",
+        "remark": null,
+        "confidence": 0.88
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_9dcf3884e0fe",
+        "RelR_014a23852960",
+        "RelR_9df25e33b9ff",
+        "RelR_b78eded5a9f1"
+      ],
+      "canonical_rel_name": "feeds_on",
+      "canonical_rel_desc": "Indicates that the subject organism or life stage obtains food by consuming the object, which serves as its trophic resource.",
+      "justification": "All four relations describe trophic feeding interactions where an organism (adult butterflies, birds, reptiles, or other insects) uses the object as a food resource (nectar or a food-source role). Normalizing to a single predicate 'feeds_on' captures the biological feeding direction consistently.",
+      "remark": null,
+      "confidence": 0.97
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_9dcf3884e0fe",
+        "RelR_014a23852960",
+        "RelR_9df25e33b9ff",
+        "RelR_b78eded5a9f1"
+      ],
+      "rel_cls": "trophic_interaction_relation",
+      "justification": "Each relation expresses a predator–prey or consumer–resource feeding link, which is a classic trophic interaction in an ecological food web. Grouping them under 'trophic_interaction_relation' reflects this shared ecological semantics.",
+      "remark": null,
+      "confidence": 0.96
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_9dcf3884e0fe",
+        "RelR_014a23852960",
+        "RelR_9df25e33b9ff",
+        "RelR_b78eded5a9f1"
+      ],
+      "rel_cls_group": "INTERACTION",
+      "justification": "Feeding and predator–prey relations are biological interactions between organisms (or organism life stages) and their food resources, fitting the broad INTERACTION dimension better than COMPOSITION or IDENTITY.",
+      "remark": null,
+      "confidence": 0.96
+    },
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_d52ac673eaa1"
+      ],
+      "canonical_rel_name": "is_produced_by",
+      "canonical_rel_desc": "Indicates that the subject substance or resource is generated, secreted, or produced by the object organism or structure.",
+      "justification": "This relation states that nectar originates from flowers, i.e., nectar is produced by flowers. Using the passive-direction predicate 'is_produced_by' with subject=nectar and object=flowers makes the production/source semantics explicit and consistent.",
+      "remark": null,
+      "confidence": 0.93
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_d52ac673eaa1"
+      ],
+      "rel_cls": "biological_product_origin_relation",
+      "justification": "The link describes the origin of a biological product (nectar) from a producing organismal structure (flowers). This fits a class for product/source or origin relations rather than trophic or hierarchical relations.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_d52ac673eaa1"
+      ],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "Flowers causally give rise to nectar as a secreted product; the relation encodes a generative source-effect link rather than simple association or composition, so it is best grouped under CAUSALITY.",
+      "remark": null,
+      "confidence": 0.88
+    }
+  ],
+  "timestamp": "2026-01-03T08:54:29Z"
+}

@@ -1,0 +1,162 @@
+{
+  "cluster_label": "15_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_2b4f104ea8bc",
+      "relation_name": "helps_maintain",
+      "rel_desc": "Pollination helps maintain the balance of plant populations.",
+      "rel_hint_type": "causal",
+      "canonical_rel_name": "contributes_to_maintenance_of",
+      "canonical_rel_desc": "Indicates that a process or factor helps maintain or stabilize a particular ecological or system state.",
+      "rel_cls": "biological_process_outcome_relation",
+      "rel_cls_group": "CAUSALITY",
+      "subject_entity_name": "pollination",
+      "object_entity_name": "balance of plant populations",
+      "subject_class_label": "Pollination in flowering plants",
+      "subject_class_group": "Biological Reproduction Processes",
+      "object_class_label": "Butterfly-Driven Ecological Outcomes",
+      "object_class_group": "Butterfly Ecology, Habitat, and Food Web",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "within the ecosystem",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "implicit linkage",
+        "CausalHint": "maintaining",
+        "LogicalMarker": "and",
+        "OtherQualifier": null
+      },
+      "confidence": 0.9,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_09732c969e17",
+      "relation_name": "enables",
+      "rel_desc": "Pollination enables plants to reproduce.",
+      "rel_hint_type": "causal",
+      "canonical_rel_name": "enables_reproduction_of",
+      "canonical_rel_desc": "Indicates that a process or factor makes reproduction of a given organism or group possible or facilitates it, without necessarily being solely sufficient.",
+      "rel_cls": "biological_process_outcome_relation",
+      "rel_cls_group": "CAUSALITY",
+      "subject_entity_name": "pollination",
+      "object_entity_name": "plants",
+      "subject_class_label": "Pollination in flowering plants",
+      "subject_class_group": "Biological Reproduction Processes",
+      "object_class_label": "Flowering plant reproductive structures and organisms",
+      "object_class_group": "Biological Reproduction Processes",
+      "qualifiers": {
+        "TemporalQualifier": "following pollination",
+        "SpatialQualifier": "in flowering plants",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "helping (facilitating, not strictly sufficient)",
+        "CausalHint": "helping",
+        "LogicalMarker": null,
+        "OtherQualifier": "OutcomeType: plant reproduction"
+      },
+      "confidence": 0.98,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_6cf306626059",
+      "relation_name": "supports",
+      "rel_desc": "Reproduction by butterflies supports continuation of the butterfly life cycle.",
+      "rel_hint_type": "causal",
+      "canonical_rel_name": "supports_continuation_of",
+      "canonical_rel_desc": "Indicates that a process or behavior supports or underpins the continuation or persistence of a life cycle, population, or system.",
+      "rel_cls": "biological_process_outcome_relation",
+      "rel_cls_group": "CAUSALITY",
+      "subject_entity_name": "reproducing",
+      "object_entity_name": "butterfly life cycle",
+      "subject_class_label": "Butterfly reproduction process",
+      "subject_class_group": "Biological Reproduction Processes",
+      "object_class_label": "Butterfly life cycle process",
+      "object_class_group": "Butterfly Life Cycle and Development",
+      "qualifiers": {
+        "TemporalQualifier": "following reproductive events",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": "reproducing to continue the life cycle",
+        "UncertaintyQualifier": null,
+        "CausalHint": "to continue",
+        "LogicalMarker": "to",
+        "OtherQualifier": "EffectType: continuation of species lifecycle"
+      },
+      "confidence": 0.96,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_64e81943ef93",
+      "relation_name": "supports_survival_and_reproduction_of",
+      "rel_desc": "The stages of the butterfly life cycle collectively support the survival and reproduction of butterflies.",
+      "rel_hint_type": "functional",
+      "canonical_rel_name": "supports_survival_and_reproduction_of",
+      "canonical_rel_desc": "Indicates that the subject process or set of stages contributes causally to the survival and reproduction of the object organisms.",
+      "rel_cls": "biological_fitness_support_relation",
+      "rel_cls_group": "CAUSALITY",
+      "subject_entity_name": "butterfly life cycle",
+      "object_entity_name": "butterflies",
+      "subject_class_label": "Butterfly life cycle process",
+      "subject_class_group": "Butterfly Life Cycle and Development",
+      "object_class_label": "Butterflies (individual organisms, general)",
+      "object_class_group": "Butterfly Biology and Life Cycle",
+      "qualifiers": {
+        "TemporalQualifier": "throughout all stages from egg to adult",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "plays a vital role in",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.9,
+      "remarks": [
+        "Models the aggregate effect of all stages as a property of the life cycle.",
+        "Models the aggregate effect of all stages as a property of the life cycle."
+      ]
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_rel_schema\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_2b4f104ea8bc\",\n        \"RelR_09732c969e17\",\n        \"RelR_6cf306626059\",\n        \"RelR_64e81943ef93\"\n      ],\n      \"canonical_rel_name\": null,\n      \"canonical_rel_desc\": null,\n      \"rel_cls\": \"biological_causal_effect_relation\",\n      \"rel_cls_group\": \"CAUSALITY\",\n      \"justification\": \"All four relations represent causal effects of biological processes on ecological or fitness-related outcomes (maintenance of plant populations, enabling reproduction, continuation of life cycle, and survival/reproduction). Normalizing them under a single, more general class 'biological_causal_effect_relation' improves schema consistency. They already share the broad group CAUSALITY, so we retain that.\",\n      \"remark\": \"Unifies previously split classes 'biological_process_outcome_relation' and 'biological_fitness_support_relation' into a single causal-effect family for biological processes.\",\n      \"confidence\": 0.92\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_rel_schema",
+      "args": {
+        "relation_ids": [
+          "RelR_2b4f104ea8bc",
+          "RelR_09732c969e17",
+          "RelR_6cf306626059",
+          "RelR_64e81943ef93"
+        ],
+        "canonical_rel_name": null,
+        "canonical_rel_desc": null,
+        "rel_cls": "biological_causal_effect_relation",
+        "rel_cls_group": "CAUSALITY",
+        "justification": "All four relations represent causal effects of biological processes on ecological or fitness-related outcomes (maintenance of plant populations, enabling reproduction, continuation of life cycle, and survival/reproduction). Normalizing them under a single, more general class 'biological_causal_effect_relation' improves schema consistency. They already share the broad group CAUSALITY, so we retain that.",
+        "remark": "Unifies previously split classes 'biological_process_outcome_relation' and 'biological_fitness_support_relation' into a single causal-effect family for biological processes.",
+        "confidence": 0.92
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_rel_schema",
+      "relation_ids": [
+        "RelR_2b4f104ea8bc",
+        "RelR_09732c969e17",
+        "RelR_6cf306626059",
+        "RelR_64e81943ef93"
+      ],
+      "canonical_rel_name": null,
+      "canonical_rel_desc": null,
+      "rel_cls": "biological_causal_effect_relation",
+      "rel_cls_group": "CAUSALITY",
+      "new_relation_name": null,
+      "original_relation_name": null,
+      "justification": "All four relations represent causal effects of biological processes on ecological or fitness-related outcomes (maintenance of plant populations, enabling reproduction, continuation of life cycle, and survival/reproduction). Normalizing them under a single, more general class 'biological_causal_effect_relation' improves schema consistency. They already share the broad group CAUSALITY, so we retain that.",
+      "remark": "Unifies previously split classes 'biological_process_outcome_relation' and 'biological_fitness_support_relation' into a single causal-effect family for biological processes.",
+      "confidence": 0.92
+    }
+  ],
+  "timestamp": "2026-01-03T08:58:05Z"
+}

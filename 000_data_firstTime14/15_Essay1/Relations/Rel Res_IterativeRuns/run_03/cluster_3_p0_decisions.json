@@ -1,0 +1,179 @@
+{
+  "cluster_label": "3_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_8794518bc51a",
+      "relation_name": "precedes",
+      "rel_desc": "The egg stage occurs before and develops into the larval (caterpillar) stage.",
+      "rel_hint_type": "temporal_order",
+      "canonical_rel_name": "precedes_in_life_cycle",
+      "canonical_rel_desc": "Indicates that one biological life-cycle stage temporally precedes and developmentally leads into another stage within the same organism's life cycle.",
+      "rel_cls": "life_cycle_stage_order_relation",
+      "rel_cls_group": "TEMPORALITY",
+      "subject_entity_name": "egg stage (butterfly life cycle)",
+      "object_entity_name": "caterpillar (larval stage of butterfly)",
+      "subject_class_label": "Butterfly egg life stage",
+      "subject_class_group": "Butterfly Life Cycle Stages",
+      "object_class_label": "Butterfly larval and pupal stages",
+      "object_class_group": "Butterfly Life Cycle Stages",
+      "qualifiers": {
+        "TemporalQualifier": "early life stages",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "from",
+        "LogicalMarker": null,
+        "OtherQualifier": "TransitionType: developmental progression"
+      },
+      "confidence": 0.94,
+      "remarks": [
+        "Also implicitly indicates developmental transition, not just ordering.",
+        "Also implicitly indicates developmental transition, not just ordering.",
+        "Also implicitly indicates developmental transition, not just ordering.",
+        "Also implicitly indicates developmental transition, not just ordering."
+      ]
+    },
+    {
+      "relation_id": "RelR_97ce9169b13a",
+      "relation_name": "precedes",
+      "rel_desc": "The larval (caterpillar) stage occurs before and develops into the pupa stage.",
+      "rel_hint_type": "temporal_order",
+      "canonical_rel_name": "precedes_in_life_cycle",
+      "canonical_rel_desc": "Indicates that one biological life-cycle stage temporally precedes and developmentally leads into another stage within the same organism's life cycle.",
+      "rel_cls": "life_cycle_stage_order_relation",
+      "rel_cls_group": "TEMPORALITY",
+      "subject_entity_name": "caterpillar (larval stage of butterfly)",
+      "object_entity_name": "pupa stage",
+      "subject_class_label": "Butterfly larval and pupal stages",
+      "subject_class_group": "Butterfly Life Cycle Stages",
+      "object_class_label": "Butterfly larval and pupal stages",
+      "object_class_group": "Butterfly Life Cycle Stages",
+      "qualifiers": {
+        "TemporalQualifier": "intermediate life stages",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "to",
+        "LogicalMarker": null,
+        "OtherQualifier": "TransitionType: developmental progression"
+      },
+      "confidence": 0.9,
+      "remarks": [
+        "Developmental transition implied though not fully elaborated.",
+        "Developmental transition implied though not fully elaborated.",
+        "Developmental transition implied though not fully elaborated.",
+        "Developmental transition implied though not fully elaborated."
+      ]
+    },
+    {
+      "relation_id": "RelR_e56543a37161",
+      "relation_name": "precedes",
+      "rel_desc": "The pupa stage occurs before and develops into the adult butterfly life stage.",
+      "rel_hint_type": "temporal_order",
+      "canonical_rel_name": "precedes_in_life_cycle",
+      "canonical_rel_desc": "Indicates that one biological life-cycle stage temporally precedes and developmentally leads into another stage within the same organism's life cycle.",
+      "rel_cls": "life_cycle_stage_order_relation",
+      "rel_cls_group": "TEMPORALITY",
+      "subject_entity_name": "pupa stage",
+      "object_entity_name": "adult butterfly life stage",
+      "subject_class_label": "Butterfly larval and pupal stages",
+      "subject_class_group": "Butterfly Life Cycle Stages",
+      "object_class_label": "Adult butterfly life stage",
+      "object_class_group": "Butterfly Life Cycle and Development",
+      "qualifiers": {
+        "TemporalQualifier": "late life stages",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "to",
+        "LogicalMarker": null,
+        "OtherQualifier": "TransitionType: metamorphosis completion"
+      },
+      "confidence": 0.9,
+      "remarks": [
+        "Captures metamorphosis completion from pupa to adult.",
+        "Captures metamorphosis completion from pupa to adult.",
+        "Captures metamorphosis completion from pupa to adult.",
+        "Captures metamorphosis completion from pupa to adult."
+      ]
+    },
+    {
+      "relation_id": "RelR_15f0623c3f1a",
+      "relation_name": "follows",
+      "rel_desc": "The caterpillar (larval) stage follows the egg stage as the second stage of the butterfly life cycle.",
+      "rel_hint_type": "temporal order",
+      "canonical_rel_name": "follows_in_life_cycle",
+      "canonical_rel_desc": "Indicates that one biological life-cycle stage temporally follows and results from another stage within the same organism's life cycle.",
+      "rel_cls": "life_cycle_stage_order_relation",
+      "rel_cls_group": "TEMPORALITY",
+      "subject_entity_name": "caterpillar (larval stage of butterfly)",
+      "object_entity_name": "egg stage (butterfly life cycle)",
+      "subject_class_label": "Butterfly larval and pupal stages",
+      "subject_class_group": "Butterfly Life Cycle Stages",
+      "object_class_label": "Butterfly egg life stage",
+      "object_class_group": "Butterfly Life Cycle Stages",
+      "qualifiers": {
+        "TemporalQualifier": "immediately after the egg hatches",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": "second stage",
+        "OtherQualifier": "LifeCyclePosition: larval stage is stage 2, egg stage is stage 1"
+      },
+      "confidence": 0.9,
+      "remarks": [
+        "Complementary to the develops_into relation; included to make the temporal order explicit.",
+        "Complementary to the develops_into relation; included to make the temporal order explicit.",
+        "Complementary to the develops_into relation; included to make the temporal order explicit.",
+        "Complementary to the develops_into relation; included to make the temporal order explicit."
+      ]
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_rel_schema\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_8794518bc51a\",\n        \"RelR_97ce9169b13a\",\n        \"RelR_e56543a37161\",\n        \"RelR_15f0623c3f1a\"\n      ],\n      \"canonical_rel_name\": null,\n      \"canonical_rel_desc\": null,\n      \"rel_cls\": \"developmental_stage_order_relation\",\n      \"rel_cls_group\": null,\n      \"justification\": \"All four relations connect successive stages in an organism's biological development (egg→larva→pupa→adult), not just life cycles of butterflies. Generalizing the relation class from 'life_cycle_stage_order_relation' to 'developmental_stage_order_relation' makes the schema reusable for other species and developmental contexts while preserving the TEMPORALITY group and existing canonical_rel_name values ('precedes_in_life_cycle' and 'follows_in_life_cycle').\",\n      \"remark\": \"Only the relation class is broadened to cover developmental stage ordering in general; predicate directions and descriptions remain unchanged.\",\n      \"confidence\": 0.83\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_rel_schema",
+      "args": {
+        "relation_ids": [
+          "RelR_8794518bc51a",
+          "RelR_97ce9169b13a",
+          "RelR_e56543a37161",
+          "RelR_15f0623c3f1a"
+        ],
+        "canonical_rel_name": null,
+        "canonical_rel_desc": null,
+        "rel_cls": "developmental_stage_order_relation",
+        "rel_cls_group": null,
+        "justification": "All four relations connect successive stages in an organism's biological development (egg→larva→pupa→adult), not just life cycles of butterflies. Generalizing the relation class from 'life_cycle_stage_order_relation' to 'developmental_stage_order_relation' makes the schema reusable for other species and developmental contexts while preserving the TEMPORALITY group and existing canonical_rel_name values ('precedes_in_life_cycle' and 'follows_in_life_cycle').",
+        "remark": "Only the relation class is broadened to cover developmental stage ordering in general; predicate directions and descriptions remain unchanged.",
+        "confidence": 0.83
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_rel_schema",
+      "relation_ids": [
+        "RelR_8794518bc51a",
+        "RelR_97ce9169b13a",
+        "RelR_e56543a37161",
+        "RelR_15f0623c3f1a"
+      ],
+      "canonical_rel_name": null,
+      "canonical_rel_desc": null,
+      "rel_cls": "developmental_stage_order_relation",
+      "rel_cls_group": null,
+      "new_relation_name": null,
+      "original_relation_name": null,
+      "justification": "All four relations connect successive stages in an organism's biological development (egg→larva→pupa→adult), not just life cycles of butterflies. Generalizing the relation class from 'life_cycle_stage_order_relation' to 'developmental_stage_order_relation' makes the schema reusable for other species and developmental contexts while preserving the TEMPORALITY group and existing canonical_rel_name values ('precedes_in_life_cycle' and 'follows_in_life_cycle').",
+      "remark": "Only the relation class is broadened to cover developmental stage ordering in general; predicate directions and descriptions remain unchanged.",
+      "confidence": 0.83
+    }
+  ],
+  "timestamp": "2026-01-03T09:00:56Z"
+}
