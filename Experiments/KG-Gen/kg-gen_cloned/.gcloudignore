@@ -1,0 +1,35 @@
+.gcloudignore
+.git
+.gitignore
+.DS_Store
+
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+.pytest_cache/
+.ruff_cache/
+.venv/
+venv/
+env/
+
+data/
+*.egg-info/
+
+# Exclude experiment and test data
+experiments/
+tests/data/
+/examples/*.json
+# app/examples/*.json
+*.html
+
+# Explicitly include Dockerfiles
+!Dockerfile
+!**/Dockerfile
+!**/.dockerignore
+
+# Include only necessary app files
+!app/index.html
+!src/kg_gen/utils/template.html

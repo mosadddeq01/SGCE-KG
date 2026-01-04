@@ -1,0 +1,241 @@
+name: Deploy App to Cloud Run
+
+on:
+  # push:
+  #   branches:
+  #     - main
+  workflow_dispatch:
+
+env:
+  GCP_PROJECT_ID: kggen-ai
+  CLOUD_RUN_SERVICE: app
+  CLOUD_RUN_REGION: us-central1
+  ARTIFACT_REGISTRY_REPO: app
+  IMAGE_NAME: cloud-run-app
+  ARTIFACT_REGISTRY_LOCATION: us-central1
+
+jobs:
+  build:
+    name: Build Docker Image
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: read
+      id-token: write
+    
+    outputs:
+      image-uri: ${{ steps.build.outputs.image-uri }}
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+      
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+        with:
+          version: 'latest'
+      
+      - name: Configure Docker for Artifact Registry
+        run: |
+          gcloud auth configure-docker ${{ env.ARTIFACT_REGISTRY_LOCATION }}-docker.pkg.dev
+      
+      - name: Generate image tag
+        id: image-tag
+        run: |
+          IMAGE_TAG=$(git rev-parse --short HEAD)
+          IMAGE_URI="${{ env.ARTIFACT_REGISTRY_LOCATION }}-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/${{ env.ARTIFACT_REGISTRY_REPO }}/${{ env.IMAGE_NAME }}:${IMAGE_TAG}"
+          echo "IMAGE_TAG=${IMAGE_TAG}" >> $GITHUB_ENV
+          echo "IMAGE_URI=${IMAGE_URI}" >> $GITHUB_ENV
+          echo "image-tag=${IMAGE_TAG}" >> $GITHUB_OUTPUT
+          echo "image-uri=${IMAGE_URI}" >> $GITHUB_OUTPUT
+      
+      - name: Build and push image using Cloud Build
+        id: build
+        run: |
+          echo "📦 Building image: $IMAGE_URI"
+          
+          # Ensure no leftover files from previous attempts
+          rm -f Dockerfile .dockerignore
+          
+          # Submit build asynchronously to avoid log streaming issues
+          echo "Submitting build to Cloud Build..."
+          BUILD_ID=$(gcloud builds submit \
+            --config app/cloudbuild.yaml \
+            --substitutions _IMAGE_URI="$IMAGE_URI" \
+            --project "${{ env.GCP_PROJECT_ID }}" \
+            --async \
+            --format="value(id)" \
+            .)
+          
+          echo "Build submitted with ID: $BUILD_ID"
+          echo "Build URL: https://console.cloud.google.com/cloud-build/builds/$BUILD_ID?project=${{ env.GCP_PROJECT_ID }}"
+          
+          # Wait for build completion and check status
+          echo "Waiting for build to complete..."
+          while true; do
+            BUILD_STATUS=$(gcloud builds describe "$BUILD_ID" \
+              --project "${{ env.GCP_PROJECT_ID }}" \
+              --format="value(status)")
+            
+            echo "Current build status: $BUILD_STATUS"
+            
+            case "$BUILD_STATUS" in
+              "SUCCESS")
+                echo "✅ Build completed successfully!"
+                break
+                ;;
+              "FAILURE"|"CANCELLED"|"TIMEOUT"|"INTERNAL_ERROR")
+                echo "❌ Build failed with status: $BUILD_STATUS"
+                echo "Check build logs at: https://console.cloud.google.com/cloud-build/builds/$BUILD_ID?project=${{ env.GCP_PROJECT_ID }}"
+                exit 1
+                ;;
+              "WORKING"|"QUEUED")
+                echo "Build in progress... waiting 10 seconds"
+                sleep 10
+                ;;
+              *)
+                echo "Unknown build status: $BUILD_STATUS"
+                sleep 10
+                ;;
+            esac
+          done
+          
+          echo "image-uri=${IMAGE_URI}" >> $GITHUB_OUTPUT
+      
+      - name: Build summary
+        run: |
+          echo "## 🏗️ Build Complete" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Image:** \`$IMAGE_URI\`" >> $GITHUB_STEP_SUMMARY
+          echo "**Tag:** \`$IMAGE_TAG\`" >> $GITHUB_STEP_SUMMARY
+          echo "**Registry:** \`${{ env.ARTIFACT_REGISTRY_LOCATION }}-docker.pkg.dev\`" >> $GITHUB_STEP_SUMMARY
+
+  deploy:
+    name: Deploy to Cloud Run
+    runs-on: ubuntu-latest
+    needs: build
+    
+    permissions:
+      contents: read
+      id-token: write
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+      
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+        with:
+          version: 'latest'
+      
+      - name: Deploy to Cloud Run
+        env:
+          CLOUD_RUN_MAX_INSTANCES: ${{ vars.CLOUD_RUN_MAX_INSTANCES || '10' }}
+          CLOUD_RUN_MIN_INSTANCES: ${{ vars.CLOUD_RUN_MIN_INSTANCES || '0' }}
+          CLOUD_RUN_CPU: ${{ vars.CLOUD_RUN_CPU || '4' }}
+          CLOUD_RUN_MEMORY: ${{ vars.CLOUD_RUN_MEMORY || '2Gi' }}
+          CLOUD_RUN_CONCURRENCY: ${{ vars.CLOUD_RUN_CONCURRENCY || '80' }}
+          CLOUD_RUN_SERVICE_ACCOUNT: ${{ vars.CLOUD_RUN_SERVICE_ACCOUNT || '' }}
+        run: |
+          echo "🚀 Deploying to Cloud Run..."
+          echo "Image: ${{ needs.build.outputs.image-uri }}"
+          
+          # Build deployment arguments
+          DEPLOY_ARGS=(
+            --image "${{ needs.build.outputs.image-uri }}"
+            --region "${{ env.CLOUD_RUN_REGION }}"
+            --project "${{ env.GCP_PROJECT_ID }}"
+            --platform managed
+            --allow-unauthenticated
+            --quiet
+          )
+          
+          # Add optional parameters if set
+          if [[ -n "$CLOUD_RUN_SERVICE_ACCOUNT" ]]; then
+            DEPLOY_ARGS+=(--service-account "$CLOUD_RUN_SERVICE_ACCOUNT")
+          fi
+          
+          if [[ -n "$CLOUD_RUN_MAX_INSTANCES" ]]; then
+            DEPLOY_ARGS+=(--max-instances "$CLOUD_RUN_MAX_INSTANCES")
+          fi
+          
+          if [[ -n "$CLOUD_RUN_MIN_INSTANCES" ]]; then
+            DEPLOY_ARGS+=(--min-instances "$CLOUD_RUN_MIN_INSTANCES")
+          fi
+          
+          if [[ -n "$CLOUD_RUN_CPU" ]]; then
+            DEPLOY_ARGS+=(--cpu "$CLOUD_RUN_CPU")
+          fi
+          
+          if [[ -n "$CLOUD_RUN_MEMORY" ]]; then
+            DEPLOY_ARGS+=(--memory "$CLOUD_RUN_MEMORY")
+          fi
+          
+          if [[ -n "$CLOUD_RUN_CONCURRENCY" ]]; then
+            DEPLOY_ARGS+=(--concurrency "$CLOUD_RUN_CONCURRENCY")
+          fi
+          
+          # Deploy the service
+          gcloud run deploy "${{ env.CLOUD_RUN_SERVICE }}" "${DEPLOY_ARGS[@]}"
+          
+          echo "✅ Deployment completed"
+      
+      - name: Get Service Details
+        id: service-details
+        run: |
+          echo "📋 Getting service details..."
+          
+          # Get service URL
+          SERVICE_URL=$(gcloud run services describe ${{ env.CLOUD_RUN_SERVICE }} \
+            --region="${{ env.CLOUD_RUN_REGION }}" \
+            --project="${{ env.GCP_PROJECT_ID }}" \
+            --format="value(status.url)")
+          
+          echo "SERVICE_URL=$SERVICE_URL" >> $GITHUB_ENV
+          
+          # Get full service description
+          echo "## Service Configuration:" >> service-details.txt
+          gcloud run services describe ${{ env.CLOUD_RUN_SERVICE }} \
+            --region="${{ env.CLOUD_RUN_REGION }}" \
+            --project="${{ env.GCP_PROJECT_ID }}" \
+            --format="export" >> service-details.txt
+          
+          # Display key service information
+          echo "### Service Details ###"
+          gcloud run services describe ${{ env.CLOUD_RUN_SERVICE }} \
+            --region="${{ env.CLOUD_RUN_REGION }}" \
+            --project="${{ env.GCP_PROJECT_ID }}" \
+            --format="yaml(metadata.name, spec.template.spec.containers[0].image, spec.template.spec.containers[0].resources, spec.template.metadata.annotations)"
+      
+      - name: Create deployment summary
+        run: |
+          echo "## 🚀 Deployment Complete" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Service:** ${{ env.CLOUD_RUN_SERVICE }}" >> $GITHUB_STEP_SUMMARY
+          echo "**URL:** $SERVICE_URL" >> $GITHUB_STEP_SUMMARY
+          echo "**Image:** \`${{ needs.build.outputs.image-uri }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "**Region:** ${{ env.CLOUD_RUN_REGION }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Project:** ${{ env.GCP_PROJECT_ID }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Configuration" >> $GITHUB_STEP_SUMMARY
+          echo "- **CPU:** ${{ vars.CLOUD_RUN_CPU || '4' }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Memory:** ${{ vars.CLOUD_RUN_MEMORY || '2Gi' }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Max Instances:** ${{ vars.CLOUD_RUN_MAX_INSTANCES || '10' }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Min Instances:** ${{ vars.CLOUD_RUN_MIN_INSTANCES || '0' }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Concurrency:** ${{ vars.CLOUD_RUN_CONCURRENCY || '80' }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Commit:** ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY

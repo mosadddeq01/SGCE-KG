@@ -1,0 +1,195 @@
+/* Modal Container */
+.modal-container {
+    position: fixed;
+    inset: 0;
+    z-index: 1200;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    background: rgba(0, 0, 0, 0.15);
+    backdrop-filter: blur(3.5px) saturate(1);
+    -webkit-backdrop-filter: blur(3px) saturate(1.1);
+    animation: modal-overlay-in 0.2s ease-out;
+}
+
+.modal-container[hidden] {
+    display: none;
+}
+
+/* Modal without backdrop */
+.modal-container.no-backdrop {
+    background: transparent;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+}
+
+/* Modal Dialog */
+.modal-dialog {
+    position: relative;
+    width: 100%;
+    max-width: 48rem;
+    max-height: 90vh;
+    background-color: hsl(var(--background));
+    border-radius: 0.5rem;
+    border: 1px solid hsl(var(--border));
+    box-shadow: 
+        0 10px 15px -3px rgba(0, 0, 0, 0.1),
+        0 4px 6px -2px rgba(0, 0, 0, 0.05),
+        0 0 0 1px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+    animation: modal-content-in 0.2s ease-out;
+}
+
+/* Modal Header */
+.modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.5rem;
+    border-bottom: 1px solid hsl(var(--border));
+    background-color: #f7f6f6;
+}
+
+.modal-title {
+    margin: 0;
+    font-size: 1.125rem;
+    font-weight: 600;
+    line-height: 1.75rem;
+    color: hsl(var(--foreground));
+    letter-spacing: -0.025em;
+}
+
+.modal-close {
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 0.375rem;
+    border: none;
+    background-color: transparent;
+    color: hsl(var(--muted-foreground));
+    cursor: pointer;
+    transition: all 0.15s ease-in-out;
+}
+
+.modal-close:hover {
+    background-color: hsl(var(--muted));
+    color: hsl(var(--foreground));
+}
+
+.modal-close:focus {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 2px;
+}
+
+.close-icon {
+    width: 1rem;
+    height: 1rem;
+}
+
+/* Modal Body */
+.modal-body {
+    padding: 0.8rem;
+    overflow-y: auto;
+    max-height: calc(90vh - 5rem);
+}
+
+.modal-content {
+    width: 100%;
+}
+
+/* Animations */
+@keyframes modal-overlay-in {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes modal-content-in {
+    from {
+        opacity: 0;
+        transform: scale(0.95) translateY(-1rem);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+    .modal-container {
+        background: rgba(0, 0, 0, 0.25);
+        backdrop-filter: blur(3.5px) saturate(1.1);
+        -webkit-backdrop-filter: blur(4px) saturate(1.1);
+    }
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+    .modal-container {
+        padding: 0.5rem;
+    }
+    
+    .modal-dialog {
+        max-width: 100%;
+        margin: 0;
+    }
+    
+    .modal-header {
+        padding: 1rem;
+    }
+    
+    .modal-body {
+        padding: 1rem;
+    }
+}
+
+/* Custom CSS Variables (fallback if not defined) */
+:root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --border: 214.3 31.8% 91.4%;
+    --muted: 210 40% 98%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --ring: 222.2 84% 4.9%;
+}
+
+/* Selection item styles for modal content */
+.selection-item-title {
+    margin: 0 0 1rem 0;
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: hsl(var(--foreground));
+    border-bottom: 2px solid hsl(var(--border));
+    padding-bottom: 0.5rem;
+}
+
+.selection-item-characteristics {
+    margin: 0.5rem 0;
+    font-size: 0.875rem;
+    color: hsl(var(--muted-foreground));
+    line-height: 1.5;
+}
+
+.selection-item-characteristics strong {
+    color: hsl(var(--foreground));
+    font-weight: 600;
+    margin-right: 0.5rem;
+}
+
+/* Button styles for modal content */
+
+/* Additional CSS variables for buttons */
+:root {
+    --primary: 222.2 84% 4.9%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 98%;
+    --secondary-foreground: 222.2 84% 4.9%;
+}

@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Knowledge Graph Explorer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="sidebar.css">
+    <link rel="stylesheet" href="modal.css">
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/simplebar@latest/dist/simplebar.css"
+    />
+</head>
+
+<body>
+    <!-- Mobile Top Bar -->
+    <div class="mobile-top-bar">
+        <button class="mobile-menu-button" id="mobileMenuButton" type="button" aria-label="Toggle navigation menu">
+            <div class="hamburger-icon">
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+            </div>
+        </button>
+        <header class="app-header_mobile" role="banner">
+            <div class="app-header__mobile-inner">
+                <div class="app-header__mobile-search" role="search" aria-label="Global search">
+                    <div class="search-field-mobile">
+                        <svg class="search-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                            <path d="M11 4a7 7 0 1 1 0 14 7 7 0 0 1 0-14zm0 2a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm9.707 13.293-3.4-3.4a1 1 0 1 0-1.414 1.414l3.4 3.4a1 1 0 0 0 1.414-1.414z"></path>
+                        </svg>
+                        <input id="globalSearch-mobile" class="search-input-mobile" type="search" placeholder="Search entities, relations..." aria-label="Search" autocomplete="off" />
+                    </div>
+                </div>
+                <button id="viewSelectionBtnMobile" class="view-selection-btn-mobile" title="View selected item">
+                    <svg width="20" height="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path fill="currentColor" d="M11.2 4c-1.26.12-2.48.53-3.56 1.2l-1-1.73A9.7 9.7 0 0 1 11 2m6.53 4.25c-.91-.86-2-1.52-3.19-1.92L15 2.39c1.5.45 2.89 1.27 4 2.39M5.34 7.41A8.3 8.3 0 0 0 4 10.83l-2-.28C2.2 9 2.79 7.5 3.7 6.23M22 12v.66l-2-.16V12c0-1.08-.19-2.14-.61-3.14l1.83-.8c.53 1.25.78 2.59.78 3.94M6 17.3l-1.5 1.31a10.46 10.46 0 0 1-2.2-4.08L4.17 14c.36 1.22.99 2.35 1.83 3.3m6.14 4.7H12c-1.5 0-3-.32-4.36-.93l.89-1.83c1.09.51 2.27.76 3.47.76h.19M17 21h-2v-6h6v2h-2.58l2.72 2.76l-1.41 1.41L17 18.5"/>
+                    </svg>
+                </button>
+                <!-- <button id="selectorModalBtn" class="demo-dialog-btn" title="Open selector modal" style="background: #dc2626;">Selector</button> -->
+                <div id="selectionPopoverMobile" class="selection-popoverMobile" role="dialog" aria-labelledby="selection-titleMobile" hidden>
+                    <div class="popover-header">
+                        <h3 id="selection-titleMobile">Selected Item</h3>
+                        <button id="closePopoverMobile" class="close-btnMobile" aria-label="Close">&times;</button>
+                    </div>
+                    <div class="popover-content">
+                        <div id="selectionListMobile">Click a node or relation in the network to inspect details.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+    </div>
+
+    <div class="layout">
+        <main class="sidebar" id="sidebar" data-simplebar>
+
+            <div class="sidebar-header">
+                <header class="sidebar-header">
+                    <h1>Knowledges Graph Explorer</h1>
+                </header>
+                
+                <div class="action-buttons-container">
+                    <!-- Open Graph Button -->
+                    <button class="action-btn primary-action" onclick="openGraphViewer()">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
+                            <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2M7 9l5-5l5 5m-5-5v12"/>
+                        </svg>
+                        <span class="action-title">Open Existing Graph</span>
+                    </button>
+                    
+                    <!-- Generate from Text Button -->
+                    <button class="action-btn secondary-action" onclick="generateFromText()">
+                        <svg class="action-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                            <polyline points="14,2 14,8 20,8"/>
+                            <line x1="16" y1="13" x2="8" y2="13"/>
+                            <line x1="16" y1="17" x2="8" y2="17"/>
+                            <polyline points="10,9 9,9 8,9"/>
+                        </svg>
+                        <span class="action-title">Generate from Text</span>
+                    </button>
+                </div>
+
+            </div>
+            <!-- Analysis Mode Content -->
+            <div class="sidebar-mode-content" id="analysisModeContent" style="display: none;">
+                <div class="analysis-placeholder">
+                    <p>Load or generate a graph to see analysis here.</p>
+                </div>
+                <div class="analysis-content" id="analysisContent" style="display: none;">
+                    <div class="analysis-section">
+                        <h2 class="analysis-section-title">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
+                                <path fill="currentColor" d="M20 12a2 2 0 0 0-.703.133l-2.398-1.963c.059-.214.101-.436.101-.67C17 8.114 15.886 7 14.5 7S12 8.114 12 9.5c0 .396.1.765.262 1.097l-2.909 3.438A2.06 2.06 0 0 0 9 14c-.179 0-.348.03-.512.074l-2.563-2.563C5.97 11.348 6 11.179 6 11c0-1.108-.892-2-2-2s-2 .892-2 2s.892 2 2 2c.179 0 .348-.03.512-.074l2.563 2.563A1.906 1.906 0 0 0 7 16c0 1.108.892 2 2 2s2-.892 2-2c0-.237-.048-.46-.123-.671l2.913-3.442c.227.066.462.113.71.113a2.48 2.48 0 0 0 1.133-.281l2.399 1.963A2.077 2.077 0 0 0 18 14c0 1.108.892 2 2 2s2-.892 2-2s-.892-2-2-2z"/>
+                            </svg>
+                            Stats
+                        </h2>
+                        <div class="stats-grid" id="statsGrid"></div>
+                    </div>
+                    <div class="analysis-section">
+                        <h2 class="analysis-section-title">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 16 16">
+                                <path fill="currentColor" d="M14 12a1.993 1.993 0 0 0-1.008.305L10.78 10.15a3.439 3.439 0 0 0 .74-1.993L13.09 8a1.49 1.49 0 1 0-.089-.768l-1.591.128a3.512 3.512 0 0 0-1.978-2.521L9.74 4H10a2 2 0 1 0-1.01-.265l-.27.855a3.31 3.31 0 0 0-.754-.084c-.83 0-1.59.296-2.181.789L2.791 2.291a1.5 1.5 0 1 0-1.291.71c.281-.001.544-.079.767-.214L5.26 5.791a3.446 3.446 0 0 0-.76 2.168v.203l-.66.11a2 2 0 1 0 .161.786L4 8.999l.63-.097a3.522 3.522 0 0 0 1.466 1.992l-.556 1.188a1.947 1.947 0 0 0-.539-.08h-.017a2 2 0 1 0 1.231.423l.566-1.153c.364.146.787.231 1.229.231c.847 0 1.621-.311 2.216-.824l2.176 2.124a2 2 0 1 0 1.6-.8zm-9 3a1 1 0 1 1 0-2a1 1 0 0 1 0 2zm3-4.5a2.5 2.5 0 1 1 0-5a2.5 2.5 0 0 1 0 5z"/>
+                            </svg>
+                            Entity Clusters
+                        </h2>
+                        <div id="clusterList" class="list"></div>
+                    </div>
+                    <div class="analysis-section">
+                        <h2 class="analysis-section-title">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
+                                <circle cx="12" cy="12" r="9.25" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+                            </svg>
+                            Top Entities</h2>
+                        <div id="topEntities" class="list"></div>
+                    </div>
+                    <div class="analysis-section">
+                        <h2 class="analysis-section-title">
+                            <svg width="20" height="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                <path fill="currentColor" d="M12 22q-1 0-1.692-.702t-.692-1.702q0-.369.1-.691q.101-.322.29-.603l-4.308-4.294q-.28.183-.615.289q-.335.107-.685.107q-1 0-1.69-.702Q2.02 13 2.02 12t.69-1.702t1.689-.702q.879 0 1.529.553t.815 1.37h2.933q.148-.707.642-1.199q.495-.491 1.202-.64V6.749q-.817-.165-1.36-.825t-.544-1.52q0-1 .702-1.691q.702-.693 1.702-.693t1.702.693t.702 1.692q0 .35-.104.685q-.104.334-.292.615l4.289 4.288q.28-.188.615-.292t.684-.104q1 0 1.693.702Q22 11 22 12t-.692 1.702t-1.693.702q-.86 0-1.519-.543q-.66-.544-.825-1.361h-2.913q-.149.708-.65 1.202q-.5.494-1.208.642v2.927q.817.166 1.37.816t.553 1.51q0 1-.712 1.701Q13 22 12 22m-.48-4.729v-2.927q-.345-.067-.649-.232q-.304-.166-.55-.413q-.248-.247-.413-.551q-.166-.304-.233-.648H6.742q-.019.102-.05.207t-.074.21t-.092.197t-.114.18q.144.145.782.773q.639.63 1.372 1.365l1.37 1.374l.783.782q.089-.063.184-.114t.2-.095q.105-.045.21-.067t.206-.04m2.839-5.772h2.913q.02-.108.051-.213q.032-.104.076-.209t.095-.2t.115-.178q-.145-.144-.774-.783q-.628-.638-1.361-1.37q-.733-.734-1.371-1.363q-.639-.628-.783-.773q-.083.064-.178.115t-.2.095t-.21.076q-.104.032-.212.051v2.933q.339.061.645.23t.542.412t.412.541t.24.636m5.257 1.904q.58 0 .982-.403Q21 12.598 21 12q0-.579-.403-.991t-.981-.413q-.599 0-1.001.413q-.403.412-.403.991q0 .598.403 1.001q.402.403 1 .403m-7.596 0q.579 0 .991-.403T13.424 12q0-.579-.413-.991t-.99-.413q-.599 0-1.002.413q-.403.412-.403.991q0 .598.403 1.001t1.001.403m0 7.596q.579 0 .991-.413t.413-.99q0-.58-.413-.992t-.99-.413q-.599 0-1.002.413q-.403.412-.403.991t.403.991q.403.413 1.001.413m-7.596-7.596q.579 0 .991-.403T5.828 12q0-.579-.413-.991t-.991-.413t-.991.413T3.02 12q0 .598.413 1.001q.412.403.991.403m7.596-7.596q.579 0 .992-.403q.412-.403.412-1.001q0-.579-.413-.992T12.02 3q-.599 0-1.002.413q-.403.412-.403.99q0 .599.403 1.002t1.001.403"/>
+                            </svg>
+                            Top Relations
+                        </h2>
+                        <div id="topRelations" class="list"></div>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+
+        
+        <div class="viewer-wrapper-container">
+            <header class="app-header" role="banner">
+                <div class="app-header__inner">
+                    <div class="app-header__search" role="search" aria-label="Global search">
+                        <div class="search-field">
+                            <svg class="search-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                                <path d="M11 4a7 7 0 1 1 0 14 7 7 0 0 1 0-14zm0 2a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm9.707 13.293-3.4-3.4a1 1 0 1 0-1.414 1.414l3.4 3.4a1 1 0 0 0 1.414-1.414z"></path>
+                            </svg>
+                            <input id="globalSearch" class="search-input" type="search" placeholder="Search entities, relations..." aria-label="Search" autocomplete="off" />
+                        </div>
+                    </div>
+                    <button id="viewSelectionBtn" class="view-selection-btn" title="View selected item">
+                        <svg width="200" height="200" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                            <path fill="currentColor" d="M11.2 4c-1.26.12-2.48.53-3.56 1.2l-1-1.73A9.7 9.7 0 0 1 11 2m6.53 4.25c-.91-.86-2-1.52-3.19-1.92L15 2.39c1.5.45 2.89 1.27 4 2.39M5.34 7.41A8.3 8.3 0 0 0 4 10.83l-2-.28C2.2 9 2.79 7.5 3.7 6.23M22 12v.66l-2-.16V12c0-1.08-.19-2.14-.61-3.14l1.83-.8c.53 1.25.78 2.59.78 3.94M6 17.3l-1.5 1.31a10.46 10.46 0 0 1-2.2-4.08L4.17 14c.36 1.22.99 2.35 1.83 3.3m6.14 4.7H12c-1.5 0-3-.32-4.36-.93l.89-1.83c1.09.51 2.27.76 3.47.76h.19M17 21h-2v-6h6v2h-2.58l2.72 2.76l-1.41 1.41L17 18.5"/>
+                        </svg>
+                        <span class="view-selection-btn-text">View selection</span>
+                    </button>
+                    <!-- <button id="selectorModalBtn" class="demo-dialog-btn" title="Open selector modal" style="background: #dc2626;">Selector</button> -->
+                    <div id="selectionPopover" class="selection-popover" role="dialog" aria-labelledby="selection-title" hidden>
+                        <div class="popover-header">
+                            <h3 id="selection-title">Selected Item</h3>
+                            <button id="closePopover" class="close-btn" aria-label="Close">&times;</button>
+                        </div>
+                        <div class="popover-content">
+                            <div id="selectionList">Click a node or relation in the network to inspect details.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+            <section class="viewer-wrapper">
+                <div id="errorGraphMessage" hidden>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 16 16">
+                        <path fill="currentColor" fill-rule="evenodd" d="m7.493.015l-.386.04c-1.873.187-3.76 1.153-5.036 2.579C.66 4.211-.057 6.168.009 8.253c.115 3.601 2.59 6.65 6.101 7.518a8.034 8.034 0 0 0 6.117-.98a8 8 0 0 0 3.544-4.904c.172-.701.212-1.058.212-1.887s-.04-1.186-.212-1.887C14.979 2.878 12.315.498 9 .064C8.716.027 7.683-.006 7.493.015m1.36 1.548a6.519 6.519 0 0 1 3.091 1.271c.329.246.976.893 1.222 1.222c.561.751.976 1.634 1.164 2.479a6.766 6.766 0 0 1 0 2.93c-.414 1.861-1.725 3.513-3.463 4.363a6.76 6.76 0 0 1-1.987.616c-.424.065-1.336.065-1.76 0c-1.948-.296-3.592-1.359-4.627-2.993a7.502 7.502 0 0 1-.634-1.332A6.158 6.158 0 0 1 1.514 8c0-1.039.201-1.925.646-2.84c.34-.698.686-1.18 1.253-1.747A5.956 5.956 0 0 1 5.16 2.16a6.452 6.452 0 0 1 3.693-.597M7.706 4.29c-.224.073-.351.201-.413.415c-.036.122-.04.401-.034 2.111c.008 1.97.008 1.971.066 2.08a.687.687 0 0 0 .346.308c.132.046.526.046.658 0a.687.687 0 0 0 .346-.308c.058-.109.058-.11.066-2.08c.008-2.152.008-2.154-.145-2.335c-.124-.148-.257-.197-.556-.205a1.705 1.705 0 0 0-.334.014m.08 6.24a.858.858 0 0 0-.467.402a.849.849 0 0 0-.025.563A.777.777 0 0 0 8 12c.303 0 .612-.22.706-.505a.849.849 0 0 0-.025-.563a.948.948 0 0 0-.348-.352c-.116-.06-.429-.089-.547-.05"/>
+                    </svg>
+                    <p class="error-message__description"><strong>Ha ocurrido un error al cargar el grafo, por favor intente de nuevo</strong></p>
+                    <button class="secondary error-message__button example-button" id="tryAgain" type="button" onclick="loadInitialExampleGraph()">Load default graph</button>
+                    <button class="secondary error-message__button new-graph-button" id="tryAgain" type="button" onclick="openGraphViewer()">Open existing graph</button>
+                    <button class="secondary error-message__button generate-from-text-button" id="closeErrorGraphMessage" type="button" onclick="generateFromText()">Generate from text</button>
+                
+                </div>
+                <iframe id="viewer" title="Knowledge Graph Explorer" hidden></iframe>
+                <div class="floating-actions" id="floatingActions">
+                    <button class="secondary" id="downloadGraph" type="button">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 20 20">
+                            <path fill="currentColor" d="M19.31 12.051c.381 0 .69.314.69.7v4.918c-.006.67-.127 1.2-.399 1.594c-.328.476-.908.692-1.747.737l-15.903-.002c-.646-.046-1.168-.302-1.507-.777c-.302-.423-.446-.95-.444-1.558V12.75c0-.386.309-.7.69-.7c.38 0 .688.314.688.7v4.913c0 .333.065.572.182.736c.081.114.224.184.44.201l15.817.001c.42-.023.627-.1.655-.14c.084-.123.146-.393.15-.8V12.75c0-.386.308-.7.689-.7ZM9.99 0c.38 0 .69.313.69.7l-.001 10.869l3.062-3.079a.682.682 0 0 1 .975.004a.707.707 0 0 1-.004.99l-4.356 4.38a.682.682 0 0 1-.973-.003l-4.296-4.38a.707.707 0 0 1 .002-.99a.682.682 0 0 1 .975.002L9.3 11.794V.699C9.3.313 9.61 0 9.99 0Z"/>
+                        </svg>
+                        Download graph.json</button>
+                    <button class="secondary" id="refreshView" type="button">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 20 20">
+                            <path fill="currentColor" d="M19.295 12a.704.704 0 0 1 .705.709v3.204a.704.704 0 0 1-.7.709a.704.704 0 0 1-.7-.709v-1.125C16.779 17.844 13.399 20 9.757 20c-4.41 0-8.106-2.721-9.709-6.915a.712.712 0 0 1 .4-.917c.36-.141.766.04.906.405c1.4 3.662 4.588 6.01 8.403 6.01c3.371 0 6.52-2.182 7.987-5.154l-1.471.01a.704.704 0 0 1-.705-.704a.705.705 0 0 1 .695-.714L19.295 12Zm-9.05-12c4.408 0 8.105 2.721 9.708 6.915a.712.712 0 0 1-.4.917a.697.697 0 0 1-.906-.405c-1.4-3.662-4.588-6.01-8.403-6.01c-3.371 0-6.52 2.182-7.987 5.154l1.471-.01a.704.704 0 0 1 .705.704a.705.705 0 0 1-.695.714L.705 8A.704.704 0 0 1 0 7.291V4.087c0-.392.313-.709.7-.709c.386 0 .7.317.7.709v1.125C3.221 2.156 6.601 0 10.243 0Z"/>
+                        </svg>
+                        Reload view</button>
+                </div>
+                <div class="keyboard-shortcuts">
+                    Press <kbd>Ctrl</kbd> or <kbd>Cmd</kbd> + <kbd>F</kbd> to search                     
+                        nodes or relations   
+                </div>
+                                      
+                </div>
+            </section>
+        </div>
+
+        <!-- Modal Templates -->
+        <template id="selectorModalTemplate" data-title="Template Modal Example" data-width="600px">
+            <section class="card" id="existingGraphCard">
+                <p>Upload a saved visualization JSON or raw <code>graph.json</code> to render it instantly.</p>
+                <div class="drop-zone" id="graphDropZone" role="button" tabindex="0" aria-controls="graphFile"
+                    aria-label="Upload graph JSON">
+                    <strong>Drop file here or click to choose</strong>
+                    <span class="hint">Accepts <code>.json</code> exports from kg-gen</span>
+                </div>
+                <input type="file" id="graphFile" accept="application/json,.json" hidden />
+                <div class="field-group">
+                    <div class="field">
+                        <label for="exampleGraph">Or load a sample</label>
+                        <select id="exampleGraph" disabled>
+                            <option value="">Loading samples...</option>
+                        </select>
+                        <div class="hint" id="exampleStatus">Select an example to load it instantly.</div>
+                        <a id="exampleLink" class="hint-link" href="#" target="_blank" rel="noopener" hidden>View on
+                            Wikipedia</a>
+                    </div>
+                </div>
+            </section>
+        </template>
+
+        <template id="textGeneratorModalTemplate" data-title="Text Generator" data-width="600px">
+            <!-- Generate from text Mode Content -->
+            <div id="generateModeContent">
+                <section class="card" id="generateCard">
+                    <p>Provide your OpenAI API key and either paste text or upload a <code>.txt</code> document. The request
+                        runs through <code>KGGen</code> on this server and never leave your environment.</p>
+
+                    <div class="field-group">
+                        <div>
+                            <label for="apiKey">OpenAI API key</label>
+                            <div class="password-input-container">
+                                <input type="password" id="apiKey" autocomplete="new-password" placeholder="sk-..." />
+                                <button type="button" class="password-toggle" id="passwordToggle" aria-label="Toggle password visibility">
+                                    <svg class="eye-icon" viewBox="0 0 24 24" width="20" height="20">
+                                        <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z" fill="currentColor"/>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                        <div>
+                            <div>
+                                <label for="model">Model</label>
+                                <select id="model">
+                                    <option value="openai/gpt-4o">openai/gpt-4o</option>
+                                    <option value="openai/gpt-5-nano">openai/gpt-5-nano</option>
+                                    <option value="openai/gpt-5">openai/gpt-5</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="field-row">
+                            <div class="field">
+                                <label for="chunkSize">Chunk size (chars)</label>
+                                <input type="number" id="chunkSize" min="0" placeholder="e.g. 1500" />
+                            </div>
+                            <div class="field">
+                                <label for="temperature">Temperature</label>
+                                <input type="number" id="temperature" step="0.1" min="0" max="2" placeholder="Default" />
+                            </div>
+                        </div>
+                        <div>
+                            <label class="checkbox">
+                                <input type="checkbox" id="clusterToggle" />
+                                <span>Enable clustering</span>
+                            </label>
+                        </div>
+                        <div>
+                            <div>
+                                <label for="retrievalModel">Retrieval Model</label>
+                                <select id="retrievalModel">
+                                    <option value="sentence-transformers/all-mpnet-base-v2">sentence-transformers/all-mpnet-base-v2</option>
+                                    <option value="sentence-transformers/all-MiniLM-L12-v2">sentence-transformers/all-MiniLM-L12-v2</option>
+                                    <option value="sentence-transformers/all-MiniLM-L6-v2">sentence-transformers/all-MiniLM-L6-v2</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div>
+                            <label for="context">Context (optional)</label>
+                            <input type="text" id="context" placeholder="Short description of the corpus" />
+                        </div>
+                        <div>
+                            <label for="sourceText">Paste text</label>
+                            <textarea id="sourceText"
+                                placeholder="Add any text you would like to convert into a knowledge graph..."></textarea>
+                            <div class="input-hint" id="sourceTextDisabledMessage" style="display: none; margin-top: 4px; color: #9ca3af; font-size: 0.8rem;">
+                                Text input disabled while file is selected
+                            </div>
+                        </div>
+                        
+                        <!-- Divider with OR -->
+                        <div class="field-divider">
+                            <div class="divider-line"></div>
+                            <div class="divider-text">OR</div>
+                            <div class="divider-line"></div>
+                        </div>
+                        
+                        <div>
+                        <div class="drop-zone" id="graphDropZoneText" role="button" tabindex="0" aria-controls="textFile"
+                        aria-label="Upload text file" >
+                        <strong id="dropZoneText">Drop file here or click to choose</strong>
+                        <span class="hint" id="dropZoneHint">Accepts <code>.txt</code> files</span>
+                        <div class="input-hint" id="dropZoneDisabledMessage" style="display: none; margin-top: 8px; color: #9ca3af; font-size: 0.8rem;">
+                            File upload disabled while text is entered above
+                        </div>
+                        <button title="Remove selected file" type="button" class="file-remove-btn" id="fileRemoveBtn" style="display: none;" aria-label="Remove selected file">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 16 16">
+                                <g fill="currentColor">
+                                    <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z"/>
+                                    <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z"/>
+                                </g>
+                            </svg>
+                        </button>
+                        </div>
+                        <input type="file" id="textFile" accept="text/plain" hidden />
+                            <div class="input-hint" id="textFileHint">To upload a file, clear the text input first</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Error message display -->
+                    <div id="generateErrorMessage" class="error-message" style="display: none;">
+                        <div class="error-message__icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <line x1="15" y1="9" x2="9" y2="15"/>
+                                <line x1="9" y1="9" x2="15" y2="15"/>
+                            </svg>
+                        </div>
+                        <div class="error-message__content">
+                            <div class="error-message__title">Generation Failed</div>
+                            <div class="error-message__description" id="generateErrorText"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="button-row">
+                        <button class="primary" id="generateButton">Generate graph</button>
+                        <button class="secondary" id="clearTextButton" type="button">Clear inputs</button>
+                    </div>
+                </section>
+            </div>
+        </template>
+
+    </div>
+
+    <script src="modal.js"></script>
+    <script src="popover-selected.js"></script>
+    <script src="script.js"></script>
+    <script src="sidebar.js"></script>
+    <script src="https://unpkg.com/simplebar@latest/dist/simplebar.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@floating-ui/core@1.7.3"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@floating-ui/dom@1.7.4"></script>
+ 
+</body>
+
+</html>
