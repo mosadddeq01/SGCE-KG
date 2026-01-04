@@ -492,7 +492,13 @@ client = OpenAI(api_key=OPENAI_KEY)
 # ---------- Utility: load chunks ----------
 def load_chunks(chunks_jsonl_path: str = CHUNKS_JSONL) -> List[Dict]:
     p = Path(chunks_jsonl_path)
-    assert p.exists(), f"chunks file not found: {p}"
+    if not p.exists():
+        # don't assert at import time; raise only when the function is actually called
+        raise FileNotFoundError(
+            f"Chunks file not found: {p}\n"
+            f"Please run your chunking step first to create this file, e.g. sentence_chunks_token_driven(...)\n"
+            f"Expected path: {chunks_jsonl_path}"
+        )
     with open(p, "r", encoding="utf-8") as fh:
         return [json.loads(l) for l in fh]
 
@@ -938,8 +944,8 @@ def extract_entities_from_chunk(
 # chunk_ids = [f"Ch_{i:06d}" for i in range(0, 224)]
 
 # ---------- Driver: run on all chunks in the chunks file ----------
-chunks = load_chunks(CHUNKS_JSONL)
-chunk_ids = [c["id"] for c in chunks]
+# chunks = load_chunks(CHUNKS_JSONL)
+# chunk_ids = [c["id"] for c in chunks]
 
 # chunk_ids = [
 #     "Ch_000001"]
@@ -950,8 +956,9 @@ chunk_ids = [c["id"] for c in chunks]
 # "Ch_000017", "Ch_000018", "Ch_000119", "Ch_000020", "Ch_000021"
 # # "Ch_000138", "Ch_000139", "Ch_000140", "Ch_000141", "Ch_000142", "Ch_000143",
 
+
 def run_entity_extraction_on_chunks(
-    chunk_ids: List[str],
+    chunk_ids: List[str] = None,
     prev_chunks: int = 3,
     save_debug: bool = False,
     debug_dir: str = DEFAULT_DEBUG_DIR,
@@ -961,7 +968,15 @@ def run_entity_extraction_on_chunks(
     """
     Convenience driver to run entity extraction over a list of chunk_ids
     using gpt-5.1 + Responses API.
+    If chunk_ids is None or empty, derive them from CHUNKS_JSONL.
     """
+    # load all chunks into a list (materialize generator if needed)
+    chunks = list(load_chunks(CHUNKS_JSONL))
+
+    # if caller didn't pass chunk_ids, derive from chunks
+    if not chunk_ids:
+        chunk_ids = [c["id"] for c in chunks]
+
     all_results: List[Dict] = []
     for cid in chunk_ids:
         res = extract_entities_from_chunk(
@@ -976,7 +991,6 @@ def run_entity_extraction_on_chunks(
         if res:
             all_results.extend(res)
     return all_results
-
 
 
 
@@ -1003,7 +1017,7 @@ def run_entity_extraction_on_chunks(
 
 
 
-#?######################### Start ##########################
+#*######################### Start ##########################
 #region:#?   Embedding and clustering recognized entities    -  V3- Forced HDBSCAN - Resolution + Properties Added (type folded into ctx)
 
 """
@@ -1248,9 +1262,6 @@ def run_hdbscan(embeddings: np.ndarray,
             except Exception as e:
                 print(f"[cluster] UMAP reduction failed (n_samples={n_samples}, n_components={n_components}, n_neighbors={n_neighbors}) -> continuing without UMAP. Err: {e}")
 
-
-
-
     clusterer = hdbscan.HDBSCAN(
         min_cluster_size=min_cluster_size,
         min_samples=min_samples,
@@ -1407,47 +1418,424 @@ def main_cli(args):
 
 
 
-# if __name__ == "__main__":
-#     import sys
-#     # Notebook-friendly defaults when running inside ipykernel
-#     if "ipykernel" in sys.argv[0] or "ipython" in sys.argv[0]:
-#         class Args:
-#             # change these defaults if you want different notebook behavior
-#             entities_in = "/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities/Ent_Raw_0/entities_raw.jsonl"
-#             out_jsonl = "/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities/Ent_1st/Ent_Clustering_1st/entities_clustered.jsonl"
-#             clusters_summary = "/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities/Ent_1st/Ent_Clustering_1st/clusters_summary.json"
-#             use_umap = True   # toggle UMAP inside notebook easily by editing this
-#         args = Args()
-#         print("[main] running in notebook mode with defaults:")
-#         print(f"  entities_in     = {args.entities_in}")
-#         print(f"  out_jsonl        = {args.out_jsonl}")
-#         print(f"  clusters_summary = {args.clusters_summary}")
-#         print(f"  use_umap         = {args.use_umap}")
-#         main_cli(args)
-#     else:
-#         # Running as a normal script -> parse CLI args
-#         import argparse
-#         parser = argparse.ArgumentParser()
-#         parser.add_argument("--entities_in", type=str, default="/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities/Ent_Raw_0/entities_raw.jsonl")
-#         parser.add_argument("--out_jsonl", type=str, default="/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities/Ent_1st/Ent_Clustering_1st/entities_clustered.jsonl")
-#         parser.add_argument("--clusters_summary", type=str, default="/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities/Ent_1st/Ent_Clustering_1st/clusters_summary.json")
-#         parser.add_argument("--use_umap", action="store_true", help="Enable UMAP reduction before clustering (recommended)")
-#         parsed = parser.parse_args()
-#         # convert parsed Namespace to simple Args-like object expected by main_cli
-#         class ArgsFromCLI:
-#             entities_in = parsed.entities_in
-#             out_jsonl = parsed.out_jsonl
-#             clusters_summary = parsed.clusters_summary
-#             use_umap = bool(parsed.use_umap)
-#         args = ArgsFromCLI()
-#         main_cli(args)
-
 
 #endregion#? Embedding and clustering recognized entities    -  V3- Forced HDBSCAN - Resolution + Properties Added (type folded into ctx)
+#*#########################  End  ##########################
+
+
+
+
+
+#?######################### Start ##########################
+#region:#?   Embedding and clustering recognized entities    -  V4
+
+
+"""
+embed_and_cluster_entities_force_hdbscan.py
+
+Changes from previous: the entity_type_hint is injected into the `ctx` text
+so context = [TYPE:<type>] + resolution_context + serialized node_properties (if present).
+We removed the standalone "type" embedding field and only embed: name, desc, ctx.
+Everything else left intact.
+"""
+
+import os
+import json
+import argparse
+from pathlib import Path
+from typing import List, Dict
+import numpy as np
+from tqdm import tqdm
+
+import torch
+from transformers import AutoTokenizer, AutoModel
+from sklearn.preprocessing import normalize
+
+# --- required clustering lib ---
+try:
+    import hdbscan
+except Exception as e:
+    raise RuntimeError("hdbscan is required for this script. Install with `pip install hdbscan`") from e
+
+# optional but recommended
+try:
+    import umap
+    UMAP_AVAILABLE = True
+except Exception:
+    UMAP_AVAILABLE = False
+
+# ------------------ Config / Hyperparams ------------------
+# Note: type field removed and its signal is folded into ctx text.
+# Remaining weights have been rescaled to sum to 1.
+WEIGHTS = {"name": 0.40, "desc": 0.25, "ctx": 0.35 }
+EMBED_MODEL = "BAAI/bge-large-en-v1.5"   # change if needed
+BATCH_SIZE = 32
+DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
+
+# Force HDBSCAN params
+HDBSCAN_MIN_CLUSTER_SIZE = 2
+HDBSCAN_MIN_SAMPLES = 1
+HDBSCAN_METRIC = "euclidean"   # we will normalize vectors so euclidean ~ cosine
+
+# UMAP (optional)
+USE_UMAP = True
+UMAP_N_COMPONENTS = 64
+UMAP_N_NEIGHBORS = 8  # you see over-merged clusters → decrease N_NEIGHBORS
+UMAP_MIN_DIST = 0.0
+
+# ------------------ Helpers ------------------
+def load_entities(path: str) -> List[Dict]:
+    p = Path(path)
+    assert p.exists(), f"entities file not found: {p}"
+    out = []
+    with open(p, "r", encoding="utf-8") as fh:
+        for line in fh:
+            line = line.strip()
+            if not line:
+                continue
+            out.append(json.loads(line))
+    return out
+
+def safe_text(e: Dict, key: str) -> str:
+    v = e.get(key)
+    if v is None:
+        return ""
+    if isinstance(v, (list, dict)):
+        return json.dumps(v, ensure_ascii=False)
+    return str(v)
+
+def mean_pool(token_embeddings: torch.Tensor, attention_mask: torch.Tensor):
+    input_mask_expanded = attention_mask.unsqueeze(-1).expand(token_embeddings.size()).float()
+    sum_embeddings = torch.sum(token_embeddings * input_mask_expanded, 1)
+    sum_mask = torch.clamp(input_mask_expanded.sum(1), min=1e-9)
+    return sum_embeddings / sum_mask
+
+# ------------------ Embedder ------------------
+class HFEmbedder:
+    def __init__(self, model_name: str = EMBED_MODEL, device: str = DEVICE):
+        print(f"[Embedder] loading model {model_name} on {device} ...")
+        self.device = device
+        self.tokenizer = AutoTokenizer.from_pretrained(model_name, use_fast=True)
+        self.model = AutoModel.from_pretrained(model_name)
+        self.model.to(device)
+        self.model.eval()
+        for p in self.model.parameters():
+            p.requires_grad = False
+
+    @torch.no_grad()
+    def encode_batch(self, texts: List[str], batch_size: int = BATCH_SIZE) -> np.ndarray:
+        embs = []
+        for i in range(0, len(texts), batch_size):
+            batch = texts[i:i+batch_size]
+            enc = self.tokenizer(batch, padding=True, truncation=True, return_tensors="pt", max_length=1024)
+            input_ids = enc["input_ids"].to(self.device)
+            attention_mask = enc["attention_mask"].to(self.device)
+            out = self.model(input_ids=input_ids, attention_mask=attention_mask, return_dict=True)
+            token_embeds = out.last_hidden_state
+            pooled = mean_pool(token_embeds, attention_mask)
+            pooled = pooled.cpu().numpy()
+            embs.append(pooled)
+        embs = np.vstack(embs)
+        embs = normalize(embs, axis=1)
+        return embs
+
+# ------------------ Build fields & combine embeddings ------------------
+def build_field_texts(entities: List[Dict]):
+    """
+    Build text lists for fields:
+      - name: entity_name (preferred)
+      - desc: entity_description
+      - ctx: [TYPE:<entity_type_hint>] + resolution_context (preferred) + serialized node_properties if present
+    Node properties are appended into ctx so they contribute to the 'ctx' embedding (no extra weight).
+    """
+    names, descs, ctxs = [], [], []
+    for e in entities:
+        # name & desc
+        names.append(safe_text(e, "entity_name") or safe_text(e, "entity_name_original") or "")
+        descs.append(safe_text(e, "entity_description") or "")
+
+        # resolution_context preferred; fall back to older fields
+        resolution = safe_text(e, "resolution_context") or safe_text(e, "text_span") or safe_text(e, "context_phrase") or safe_text(e, "used_context_excerpt") or ""
+
+        # entity type (folded into ctx as a hint)
+        etype = safe_text(e, "entity_type_hint") or safe_text(e, "entity_type") or ""
+
+        # serialize node_properties if present and append to resolution context (so it contributes to ctx embedding)
+        node_props = e.get("node_properties") or []
+        node_props_text = ""
+        if isinstance(node_props, list) and node_props:
+            pieces = []
+            for np in node_props:
+                if isinstance(np, dict):
+                    pname = np.get("prop_name") or np.get("name") or ""
+                    pval = np.get("prop_value") or np.get("value") or ""
+                    pieces.append(f"{pname}:{pval}" if pname and pval else (pname or pval))
+            if pieces:
+                node_props_text = " | ".join(pieces)
+
+        # build ctx: type hint first (if present), then resolution, then props
+        ctx_parts = []
+        if etype:
+            ctx_parts.append(f"[TYPE:{etype}]")
+        if resolution:
+            ctx_parts.append(resolution)
+        if node_props_text:
+            ctx_parts.append(node_props_text)
+
+        combined_ctx = " ; ".join([p for p in ctx_parts if p])
+        ctxs.append(combined_ctx)
+
+    return names, descs, ctxs
+
+def compute_combined_embeddings(embedder: HFEmbedder, entities: List[Dict], weights=WEIGHTS):
+    names, descs, ctxs = build_field_texts(entities)
+    D_ref = None
+    # encode each field (if empty, make zeros)
+    print("[compute] encoding name field ...")
+    emb_name = embedder.encode_batch(names) if any(t.strip() for t in names) else None
+    D_ref = emb_name.shape[1] if emb_name is not None else None
+
+    print("[compute] encoding desc field ...")
+    emb_desc = embedder.encode_batch(descs) if any(t.strip() for t in descs) else None
+    if D_ref is None and emb_desc is not None:
+        D_ref = emb_desc.shape[1]
+
+    print("[compute] encoding ctx field ...")
+    emb_ctx = embedder.encode_batch(ctxs) if any(t.strip() for t in ctxs) else None
+    if D_ref is None and emb_ctx is not None:
+        D_ref = emb_ctx.shape[1]
+
+    if D_ref is None:
+        raise ValueError("All fields empty — cannot embed")
+
+    # helper to make arrays shape (N, D_ref)
+    def _ensure(arr):
+        if arr is None:
+            return np.zeros((len(entities), D_ref))
+        if arr.shape[1] != D_ref:
+            raise ValueError("embedding dimension mismatch")
+        return arr
+
+    emb_name = _ensure(emb_name)
+    emb_desc = _ensure(emb_desc)
+    emb_ctx  = _ensure(emb_ctx)
+
+    w_name = weights.get("name", 0.0)
+    w_desc = weights.get("desc", 0.0)
+    w_ctx  = weights.get("ctx", 0.0)
+    Wsum = w_name + w_desc + w_ctx
+    if Wsum <= 0:
+        raise ValueError("Sum of weights must be > 0")
+    w_name /= Wsum; w_desc /= Wsum; w_ctx /= Wsum
+
+    combined = (w_name * emb_name) + (w_desc * emb_desc) + (w_ctx * emb_ctx)
+    combined = normalize(combined, axis=1)
+    return combined
+
+# ------------------ Forced HDBSCAN clustering ------------------
+def run_hdbscan(
+    embeddings: np.ndarray,
+    min_cluster_size: int = HDBSCAN_MIN_CLUSTER_SIZE,
+    min_samples: int = HDBSCAN_MIN_SAMPLES,
+    metric: str = HDBSCAN_METRIC,
+    use_umap: bool = USE_UMAP,
+) -> Tuple[np.ndarray, object]:
+    """
+    Wrapper around HDBSCAN with optional UMAP reduction.
+
+    - Uses UMAP if available and n_samples >= 5.
+    - If UMAP fails, falls back to the original embeddings.
+    - Returns (labels, clusterer).
+    """
+    X = embeddings
+    n_samples = X.shape[0]
+
+    if use_umap and UMAP_AVAILABLE and n_samples >= 5:
+        n_components = min(UMAP_N_COMPONENTS, max(2, n_samples - 2))
+        n_neighbors = min(UMAP_N_NEIGHBORS, max(2, n_samples - 2))
+        try:
+            print(
+                f"[cluster] running UMAP reduction -> {n_components} dims "
+                f"(n_samples={n_samples}, n_neighbors={n_neighbors})"
+            )
+            reducer = umap.UMAP(
+                n_components=n_components,
+                n_neighbors=n_neighbors,
+                min_dist=UMAP_MIN_DIST,
+                metric="cosine",
+                random_state=42,
+            )
+            X = reducer.fit_transform(X)
+        except Exception as e:
+            print(
+                f"[cluster] UMAP reduction failed (n_samples={n_samples}, "
+                f"n_components={n_components}, n_neighbors={n_neighbors}) "
+                f"-> continuing without UMAP. Err: {e}"
+            )
+            X = embeddings  # fall back
+
+    print(
+        f"[cluster] forcing HDBSCAN min_cluster_size={min_cluster_size} "
+        f"min_samples={min_samples} metric={metric} use_umap={use_umap}"
+    )
+    clusterer = hdbscan.HDBSCAN(
+        min_cluster_size=min_cluster_size,
+        min_samples=min_samples,
+        metric=metric,
+        cluster_selection_method="eom",
+    )
+    labels = clusterer.fit_predict(X)
+    return labels, clusterer
+
+
+# def save_entities_with_clusters(entities: List[Dict], labels: np.ndarray, out_jsonl: str, clusters_summary_path: str):
+#     outp = Path(out_jsonl)
+#     outp.parent.mkdir(parents=True, exist_ok=True)
+#     with open(outp, "w", encoding="utf-8") as fh:
+#         for e, lab in zip(entities, labels):
+#             out = dict(e)
+#             out["_cluster_id"] = int(lab)
+#             fh.write(json.dumps(out, ensure_ascii=False) + "\n")
+#     # summary
+#     summary = {}
+#     for idx, lab in enumerate(labels):
+#         summary.setdefault(int(lab), []).append(entities[idx].get("entity_name") or f"En_{idx}")
+#     with open(clusters_summary_path, "w", encoding="utf-8") as fh:
+#         json.dump({"n_entities": len(entities), "n_clusters": len(summary), "clusters": {str(k): v for k, v in summary.items()}}, fh, ensure_ascii=False, indent=2)
+#     print(f"[save] wrote {out_jsonl} and summary {clusters_summary_path}")
+
+def save_entities_with_clusters(entities: List[Dict],
+                                labels: np.ndarray,
+                                out_jsonl: str,
+                                clusters_summary_path: str,
+                                include_fields: List[str] = None,
+                                max_field_chars: int = 240):
+    """
+    Writes:
+      - out_jsonl : entity JSONL annotated with _cluster_id (same as before)
+      - clusters_summary_path : richer summary where each entity object in a cluster is written
+        as a compact single-line JSON (one line per entity object).
+
+    include_fields: list of keys to include in each entity object (defaults below)
+    """
+    if include_fields is None:
+        include_fields = ["entity_name", "entity_type_hint", "entity_description", "resolution_context"]
+
+    outp = Path(out_jsonl)
+    outp.parent.mkdir(parents=True, exist_ok=True)
+    # write JSONL with cluster ids (same as before)
+    with open(outp, "w", encoding="utf-8") as fh:
+        for e, lab in zip(entities, labels):
+            out = dict(e)
+            out["_cluster_id"] = int(lab)
+            fh.write(json.dumps(out, ensure_ascii=False) + "\n")
+
+    # Build cluster mapping with compact per-entity JSON strings
+    clusters = {}
+    for idx, lab in enumerate(labels):
+        lab_int = int(lab)
+        ent = entities[idx] if idx < len(entities) else {}
+        # helper to safely retrieve + trim fields
+        def _get_trim(key):
+            v = ent.get(key) or ""
+            if isinstance(v, (list, dict)):
+                v = json.dumps(v, ensure_ascii=False)
+            s = str(v)
+            if len(s) > max_field_chars:
+                return s[:max_field_chars-3] + "..."
+            return s
+
+        obj = {}
+        # entity_name (fallback to placeholder)
+        obj["entity_name"] = _get_trim("entity_name") or f"En_{idx}"
+        if "entity_type_hint" in include_fields:
+            obj["entity_type_hint"] = _get_trim("entity_type_hint") or _get_trim("entity_type") or ""
+        if "entity_description" in include_fields:
+            obj["entity_description"] = _get_trim("entity_description") or _get_trim("description") or ""
+        if "resolution_context" in include_fields:
+            ctx = ent.get("resolution_context") or ent.get("text_span") or ent.get("context_phrase") or ent.get("used_context_excerpt") or ""
+            if isinstance(ctx, (list, dict)):
+                ctx = json.dumps(ctx, ensure_ascii=False)
+            ctx = str(ctx)
+            if len(ctx) > max_field_chars:
+                ctx = ctx[:max_field_chars-3] + "..."
+            obj["resolution_context"] = ctx
+
+        clusters.setdefault(lab_int, []).append(obj)
+
+    # Now write clusters_summary.json but ensure each entity object is on a single line.
+    meta = {"n_entities": len(entities), "n_clusters": len(clusters)}
+    # We'll stream-write the JSON to control formatting: pretty top-level, but compact objects
+    with open(clusters_summary_path, "w", encoding="utf-8") as fh:
+        fh.write("{\n")
+        fh.write(f'  "n_entities": {meta["n_entities"]},\n')
+        fh.write(f'  "n_clusters": {meta["n_clusters"]},\n')
+        fh.write('  "clusters": {\n')
+
+        # iterate clusters in sorted order of cluster id for stability
+        cluster_items = sorted(clusters.items(), key=lambda x: x[0])
+        for ci, (lab_int, objs) in enumerate(cluster_items):
+            fh.write(f'    "{lab_int}": [\n')
+            for oi, obj in enumerate(objs):
+                # compact JSON for the object (single line)
+                obj_json = json.dumps(obj, ensure_ascii=False, separators=(",", ": "))
+                # indent two levels inside cluster array
+                fh.write(f'      {obj_json}')
+                # trailing comma except last object
+                if oi < len(objs) - 1:
+                    fh.write(",\n")
+                else:
+                    fh.write("\n")
+            # close this cluster array
+            fh.write("    ]")
+            # trailing comma except last cluster
+            if ci < len(cluster_items) - 1:
+                fh.write(",\n")
+            else:
+                fh.write("\n")
+
+        # close clusters and top-level
+        fh.write("  }\n")
+        fh.write("}\n")
+
+    print(f"[save] wrote {out_jsonl} and summary {clusters_summary_path} (compact entity objects per line)")
+
+
+# ------------------ Main entry (CLI + notebook-safe) ------------------
+def main_cli(args):
+    entities = load_entities(args.entities_in)
+    print(f"Loaded {len(entities)} entities from {args.entities_in}")
+
+    embedder = HFEmbedder(model_name=EMBED_MODEL, device=DEVICE)
+    combined = compute_combined_embeddings(embedder, entities, weights=WEIGHTS)
+    print("Combined embeddings shape:", combined.shape)
+
+    # force HDBSCAN (ignore args.use_method)
+    labels, probs, clusterer = run_hdbscan(combined,
+                                          min_cluster_size=HDBSCAN_MIN_CLUSTER_SIZE,
+                                          min_samples=HDBSCAN_MIN_SAMPLES,
+                                          metric=HDBSCAN_METRIC,
+                                          use_umap=USE_UMAP if args.use_umap else False)
+
+    # diagnostics
+    import numpy as np
+    from collections import Counter
+    labels_arr = np.array(labels)
+    n = len(labels_arr)
+    n_clusters = len(set(labels_arr)) - (1 if -1 in labels_arr else 0)
+    n_noise = int((labels_arr == -1).sum())
+    print(f"[diagnostic] clusters (excl -1): {n_clusters}  noise: {n_noise} ({n_noise/n*100:.1f}%)")
+    counts = Counter(labels_arr)
+    top = sorted(((lab, sz) for lab, sz in counts.items() if lab != -1), key=lambda x: x[1], reverse=True)[:10]
+    print("[diagnostic] top cluster sizes:", top)
+
+    save_entities_with_clusters(entities, labels_arr, args.out_jsonl, args.clusters_summary)
+    print("Clustering finished.")
+
+
+
+#endregion#? Embedding and clustering recognized entities    -  V4
 #?#########################  End  ##########################
-
-
-
 
 
 
@@ -2543,11 +2931,12 @@ def iterative_resolution():
         # ---- 1) Embedding + clustering ----
         print("[1] Embedding + clustering")
         main_cli(type("Args", (), {
-            "entities_in": str(current_input),
+            "entities_in": Path(current_input),
             "out_jsonl": str(CLUSTERED_PATH),
             "clusters_summary": str(CLUSTERED_PATH.parent / f"clusters_summary_iter{it}.json"),
             "use_umap": True
         })())
+        
 
         # ---- 2) Resolution ----
         print("[2] Entity resolution")
@@ -2603,8 +2992,206 @@ def iterative_resolution():
 
 
 
-#?######################### Start ##########################
+
+
+#*######################### Start ##########################
 #region:#?   Produce_class_input_from_iter K - V2
+
+
+# #!/usr/bin/env python3
+# """
+# Produce a clean JSONL for class-identification with only the requested fields.
+
+# This version is more robust in how it recovers `chunk_id`:
+# - It searches recursively for any `chunk_id` field inside each record, so
+#   different internal structures (e.g. nested in members) are handled.
+# - It also looks up chunk_ids for any IDs listed in `merged_from` by using
+#   the original raw entities file.
+# """
+
+# import sys, json
+# from pathlib import Path
+# from typing import Dict, List
+
+# # ---------- CONFIG: adjust if needed ----------
+
+# # Directory with per-iteration entity files
+# iter_path = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities/iterative_runs/")
+# input_files = sorted(iter_path.glob("entities_iter*.jsonl"))
+# if not input_files:
+#     raise FileNotFoundError(f"No iteration files found in: {iter_path}")
+
+# latest_file = input_files[-1]
+# print(f"Using latest iteration file: {latest_file}")
+# input_path = latest_file
+
+# # Original raw entities (used to recover chunk_ids via merged_from)
+# RAW_SEED_PATH = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities/Ent_Raw_0/entities_raw.jsonl")
+
+# # Output file for class-identification input
+# out_dir = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Classes/Cls_Input")
+# out_file = out_dir / "cls_input_entities.jsonl"
+
+# # ---------- guard against ipykernel injected args ----------
+# if any(a.startswith("--f=") or a.startswith("--ipykernel") for a in sys.argv[1:]) or "ipykernel" in sys.argv[0]:
+#     sys.argv = [sys.argv[0]]
+
+# # ---------- helpers ----------
+
+# def load_jsonl(path: Path) -> List[Dict]:
+#     if not path.exists():
+#         raise FileNotFoundError(f"Input not found: {path}")
+#     out = []
+#     with path.open("r", encoding="utf-8") as fh:
+#         for line in fh:
+#             line = line.strip()
+#             if not line:
+#                 continue
+#             out.append(json.loads(line))
+#     return out
+
+# def ensure_list(x):
+#     if x is None:
+#         return []
+#     if isinstance(x, list):
+#         return x
+#     return [x]
+
+# def synth_id(base_name: str, idx: int):
+#     safe = (base_name or "no_name").strip().replace(" ", "_")[:40]
+#     return f"Tmp_{safe}_{idx}"
+
+# def dedupe_preserve_order(values: List) -> List[str]:
+#     """
+#     Deduplicate while preserving order; normalize everything to str and
+#     drop falsy values (None, "", etc.).
+#     """
+#     seen = set()
+#     out: List[str] = []
+#     for v in values:
+#         if not v:
+#             continue
+#         sv = str(v)
+#         if sv not in seen:
+#             seen.add(sv)
+#             out.append(sv)
+#     return out
+
+# def find_chunk_ids_anywhere(obj) -> List:
+#     """
+#     Recursively find all values of any key named 'chunk_id' in a nested
+#     dict/list structure.
+#     """
+#     found: List = []
+#     if isinstance(obj, dict):
+#         for k, v in obj.items():
+#             if k == "chunk_id" and v is not None:
+#                 found.extend(ensure_list(v))
+#             else:
+#                 found.extend(find_chunk_ids_anywhere(v))
+#     elif isinstance(obj, list):
+#         for item in obj:
+#             found.extend(find_chunk_ids_anywhere(item))
+#     return found
+
+# def build_raw_chunk_index(seed_path: Path) -> Dict[str, List[str]]:
+#     """
+#     Build a mapping from raw entity id -> list of chunk_ids from the
+#     original entities_raw.jsonl file.
+#     """
+#     id_to_chunks: Dict[str, List[str]] = {}
+#     if not seed_path.exists():
+#         print(f"WARNING: raw seed file not found; cannot augment chunk_ids from raw entities: {seed_path}")
+#         return id_to_chunks
+
+#     raw_recs = load_jsonl(seed_path)
+#     for r in raw_recs:
+#         rid = r.get("id") or r.get("entity_id") or None
+#         if not rid:
+#             continue
+#         chunks = find_chunk_ids_anywhere(r)
+#         if chunks:
+#             id_to_chunks[rid] = dedupe_preserve_order(chunks)
+#     return id_to_chunks
+
+# # ---------- main ----------
+
+# def produce_clean_jsonl(inp: Path, outp: Path):
+#     # Build lookup from raw entity id -> chunk_ids, so we can use merged_from
+#     raw_id_to_chunks = build_raw_chunk_index(RAW_SEED_PATH)
+
+#     recs = load_jsonl(inp)
+#     outp.parent.mkdir(parents=True, exist_ok=True)
+
+#     cleaned = []
+#     for i, r in enumerate(recs):
+#         # pick id (prefer top-level id or canonical_id); otherwise synth
+#         rid = r.get("id") or r.get("canonical_id") or r.get("canonical") or None
+#         if not rid:
+#             rid = synth_id(r.get("entity_name"), i)
+
+#         # ---- chunk_id gathering ----
+#         chunk_ids: List[str] = []
+
+#         # 1) Any chunk_id present anywhere in this record (robust to structure)
+#         direct_chunks = find_chunk_ids_anywhere(r)
+#         chunk_ids.extend(direct_chunks)
+
+#         # 2) Augment with chunk_ids from raw entities referenced in merged_from
+#         for src_id in ensure_list(r.get("merged_from")):
+#             if not src_id:
+#                 continue
+#             src_chunks = raw_id_to_chunks.get(str(src_id))
+#             if src_chunks:
+#                 chunk_ids.extend(src_chunks)
+
+#         # final dedupe + normalization
+#         chunk_ids = dedupe_preserve_order(chunk_ids)
+
+#         # ---- node_properties normalization ----
+#         node_props = r.get("node_properties") or []
+#         if not isinstance(node_props, list):
+#             node_props = [node_props]
+
+#         cleaned_rec = {
+#             "id": rid,
+#             "entity_name": r.get("entity_name") or r.get("canonical_name") or "",
+#             "entity_description": r.get("entity_description") or r.get("canonical_description") or "",
+#             "entity_type_hint": r.get("entity_type_hint") or r.get("canonical_type") or r.get("entity_type") or "",
+#             "confidence_score": r.get("confidence_score") if r.get("confidence_score") is not None else None,
+#             "resolution_context": r.get("resolution_context") or r.get("text_span") or r.get("context_phrase") or "",
+#             "flag": r.get("flag") or "entity_raw",
+#             "chunk_id": chunk_ids,
+#             "node_properties": node_props,
+#         }
+#         cleaned.append(cleaned_rec)
+
+#     with outp.open("w", encoding="utf-8") as fh:
+#         for rec in cleaned:
+#             fh.write(json.dumps(rec, ensure_ascii=False) + "\n")
+
+#     print(f"Wrote {len(cleaned)} records -> {outp}")
+
+
+# -----------------------
+# Cls Rec input producer - Run statement
+# -----------------------
+
+# if __name__ == "__main__":
+#     produce_clean_jsonl(input_path, out_file)
+
+
+#endregion#? Produce_class_input_from_iter K - V2
+#*#########################  End  ##########################
+
+
+
+
+
+
+
+#?######################### Start ##########################
+#region:#?   Produce_class_input_from_iter K - V3
 
 
 #!/usr/bin/env python3
@@ -2620,32 +3207,26 @@ This version is more robust in how it recovers `chunk_id`:
 
 import sys, json
 from pathlib import Path
-from typing import Dict, List
+from typing import Dict, List, Optional
 
 # ---------- CONFIG: adjust if needed ----------
-
-# Directory with per-iteration entity files
-iter_path = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities/iterative_runs/")
-input_files = sorted(iter_path.glob("entities_iter*.jsonl"))
-if not input_files:
-    raise FileNotFoundError(f"No iteration files found in: {iter_path}")
-
-latest_file = input_files[-1]
-print(f"Using latest iteration file: {latest_file}")
-input_path = latest_file
 
 # Original raw entities (used to recover chunk_ids via merged_from)
 RAW_SEED_PATH = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities/Ent_Raw_0/entities_raw.jsonl")
 
-# Output file for class-identification input
-out_dir = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Classes/Cls_Input")
-out_file = out_dir / "cls_input_entities.jsonl"
+# Default locations for latest iteration entities and class-identification output
+DEFAULT_ITER_DIR = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities/iterative_runs/")
+DEFAULT_CLS_OUT_DIR = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Classes/Cls_Input")
+DEFAULT_CLS_OUT_FILE = DEFAULT_CLS_OUT_DIR / "cls_input_entities.jsonl"
 
 # ---------- guard against ipykernel injected args ----------
 if any(a.startswith("--f=") or a.startswith("--ipykernel") for a in sys.argv[1:]) or "ipykernel" in sys.argv[0]:
     sys.argv = [sys.argv[0]]
 
 # ---------- helpers ----------
+
+
+
 
 def load_jsonl(path: Path) -> List[Dict]:
     if not path.exists():
@@ -2723,9 +3304,29 @@ def build_raw_chunk_index(seed_path: Path) -> Dict[str, List[str]]:
             id_to_chunks[rid] = dedupe_preserve_order(chunks)
     return id_to_chunks
 
+
 # ---------- main ----------
 
-def produce_clean_jsonl(inp: Path, outp: Path):
+def produce_clean_jsonl(inp: Optional[Path] = None, outp: Optional[Path] = None):
+    """Produce a cleaned JSONL for class-identification.
+
+    If *inp* is None, the latest iteration file in DEFAULT_ITER_DIR is used.
+    If *outp* is None, DEFAULT_CLS_OUT_FILE is used.
+    """
+
+    # Determine input/output paths lazily so nothing runs on import.
+    if inp is None:
+        iter_path = DEFAULT_ITER_DIR
+        input_files = sorted(iter_path.glob("entities_iter*.jsonl"))
+        if not input_files:
+            raise FileNotFoundError(f"No iteration files found in: {iter_path}")
+        latest_file = input_files[-1]
+        print(f"Using latest iteration file: {latest_file}")
+        inp = latest_file
+
+    if outp is None:
+        outp = DEFAULT_CLS_OUT_FILE
+
     # Build lookup from raw entity id -> chunk_ids, so we can use merged_from
     raw_id_to_chunks = build_raw_chunk_index(RAW_SEED_PATH)
 
@@ -2790,7 +3391,7 @@ def produce_clean_jsonl(inp: Path, outp: Path):
 #     produce_clean_jsonl(input_path, out_file)
 
 
-#endregion#? Produce_class_input_from_iter K - V2
+#endregion#? Produce_class_input_from_iter K - V3
 #?#########################  End  ##########################
 
 
@@ -2898,7 +3499,7 @@ MAX_PROMPT_TOKENS_EST = 8000
 
 # iteration control
 MAX_RECLUSTER_ROUNDS = 12  # safety cap
-VERBOSE = True
+VERBOSE = False
 
 # ------------------------ OpenAI client loader -----------------------
 def _load_openai_key(envvar: str = "OPENAI_API_KEY", fallback_path: str = "/home/mabolhas/MyReposOnSOL/SGCE-KG/.env"):
@@ -3046,85 +3647,16 @@ def compute_combined_embeddings(embedder: HFEmbedder, entities: List[Dict], weig
     combined = normalize(combined, axis=1)
     return combined
 
-# def run_hdbscan(embeddings: np.ndarray, min_cluster_size=HDBSCAN_MIN_CLUSTER_SIZE, min_samples=HDBSCAN_MIN_SAMPLES,
-#                 metric=HDBSCAN_METRIC, use_umap=USE_UMAP) -> Tuple[np.ndarray, object]:
-#     X = embeddings
-#     if use_umap and UMAP_AVAILABLE and X.shape[0] >= 5:
-#         reducer = umap.UMAP(n_components=min(UMAP_N_COMPONENTS, max(2, X.shape[0]-1)),
-#                             n_neighbors=min(UMAP_N_NEIGHBORS, max(2, X.shape[0]-1)),
-#                             min_dist=UMAP_MIN_DIST,
-#                             metric='cosine', random_state=42)
-#         X = reducer.fit_transform(X)
-#     clusterer = hdbscan.HDBSCAN(min_cluster_size=min_cluster_size, min_samples=min_samples, metric=metric, cluster_selection_method='eom')
-#     labels = clusterer.fit_predict(X)
-#     return labels, clusterer
-
-
-def run_hdbscan(
-    embeddings: np.ndarray,
-    min_cluster_size: int = HDBSCAN_MIN_CLUSTER_SIZE,
-    min_samples: int = HDBSCAN_MIN_SAMPLES,
-    metric: str = HDBSCAN_METRIC,
-    use_umap: bool = USE_UMAP,
-) -> Tuple[np.ndarray, object]:
-    """
-    Wrapper around HDBSCAN with optional UMAP reduction.
-
-    Guards against the UMAP/spectral eigsh error:
-      TypeError: Cannot use scipy.linalg.eigh for sparse A with k >= N
-    by:
-      - ensuring n_components and n_neighbors are at least 2 less than
-        the number of samples, and
-      - falling back to the original embeddings if UMAP fails.
-    """
+def run_hdbscan(embeddings: np.ndarray, min_cluster_size=HDBSCAN_MIN_CLUSTER_SIZE, min_samples=HDBSCAN_MIN_SAMPLES,
+                metric=HDBSCAN_METRIC, use_umap=USE_UMAP) -> Tuple[np.ndarray, object]:
     X = embeddings
-    n_samples = X.shape[0]
-
-    if use_umap and UMAP_AVAILABLE and n_samples >= 5:
-        # UMAP requirement: n_components must be at least 2 less than #samples
-        # (otherwise spectral init can hit k >= N in eigsh).
-        max_components = max(2, n_samples - 2)
-        n_components = min(UMAP_N_COMPONENTS, max_components)
-
-        # Similarly keep n_neighbors < n_samples for safety
-        max_neighbors = max(2, n_samples - 2)
-        n_neighbors = min(UMAP_N_NEIGHBORS, max_neighbors)
-
-        if VERBOSE:
-            print(
-                f"[run_hdbscan] UMAP: n_samples={n_samples}, "
-                f"n_components={n_components}, n_neighbors={n_neighbors}"
-            )
-
-        try:
-            reducer = umap.UMAP(
-                n_components=n_components,
-                n_neighbors=n_neighbors,
-                min_dist=UMAP_MIN_DIST,
-                metric="cosine",
-                random_state=42,
-            )
-            X = reducer.fit_transform(X)
-            if VERBOSE:
-                print("[run_hdbscan] UMAP done, X.shape=", X.shape)
-        except TypeError as e:
-            # This is the eigsh k >= N case and similar issues; just fall back.
-            print(
-                f"[run_hdbscan] WARNING: UMAP failed with TypeError "
-                f"(n_samples={n_samples}, n_components={n_components}, "
-                f"n_neighbors={n_neighbors}): {e}"
-            )
-            print("[run_hdbscan] Falling back to original embeddings (no UMAP).")
-        except Exception as e:
-            print(f"[run_hdbscan] WARNING: UMAP failed with unexpected error: {e}")
-            print("[run_hdbscan] Falling back to original embeddings (no UMAP).")
-
-    clusterer = hdbscan.HDBSCAN(
-        min_cluster_size=min_cluster_size,
-        min_samples=min_samples,
-        metric=metric,
-        cluster_selection_method="eom",
-    )
+    if use_umap and UMAP_AVAILABLE and X.shape[0] >= 5:
+        reducer = umap.UMAP(n_components=min(UMAP_N_COMPONENTS, max(2, X.shape[0]-1)),
+                            n_neighbors=min(UMAP_N_NEIGHBORS, max(2, X.shape[0]-1)),
+                            min_dist=UMAP_MIN_DIST,
+                            metric='cosine', random_state=42)
+        X = reducer.fit_transform(X)
+    clusterer = hdbscan.HDBSCAN(min_cluster_size=min_cluster_size, min_samples=min_samples, metric=metric, cluster_selection_method='eom')
     labels = clusterer.fit_predict(X)
     return labels, clusterer
 
@@ -3897,7 +4429,7 @@ OPENAI_API_KEY_ENV = "OPENAI_API_KEY"
 REASONING_EFFORT = "low"          # for gpt-5.x models
 
 # behavioral flags
-VERBOSE = True
+VERBOSE = False
 WRITE_INTERMEDIATE = True
 
 # ---------------------- Helpers: OpenAI key loader ---------------------
@@ -6096,13 +6628,14 @@ if not os.path.exists(output_dir):
 # Relation Rec - Run statement
 # -----------------------
 
-# In VSCode / Jupyter, you typically call run_rel_rec(...) directly like this:
-run_rel_rec(
-    entities_path="/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Classes/Cls_Res/Cls_Res_IterativeRuns/overall_summary/entities_with_class.jsonl",
-    chunks_path="/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Chunks/chunks_sentence.jsonl",
-    output_path="/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Relations/Rel Rec/relations_raw.jsonl",
-    model="gpt-5.1"
-)
+
+# run_rel_rec(
+#     entities_path="/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Classes/Cls_Res/Cls_Res_IterativeRuns/overall_summary/entities_with_class.jsonl",
+#     chunks_path="/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Chunks/chunks_sentence.jsonl",
+#     output_path="/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Relations/Rel Rec/relations_raw.jsonl",
+#     model="gpt-5.1"
+# )
+
 
 
 
@@ -6240,7 +6773,7 @@ OPENAI_TEMPERATURE = 0.0
 LLM_MAX_OUTPUT_TOKENS = 16000
 OPENAI_API_KEY_ENV = "OPENAI_API_KEY"
 
-VERBOSE = True
+VERBOSE = False
 
 # ---------------------- Helpers: OpenAI client ---------------------
 
@@ -7817,7 +8350,7 @@ def run_relres_iteratively():
 # # Relation Res Multi Run - Run statement
 # # -----------------------
 
-run_relres_iteratively() 
+# run_relres_iteratively() 
 
 
 
@@ -7827,204 +8360,221 @@ run_relres_iteratively()
 
 
 
-#?######################### Start ##########################
+
+
+
+#endregion#! Relation Identification
+#!#############################################  End Chapter  ##################################################
+
+
+
+
+
+
+
+
+#!############################################# Start Chapter ##################################################
+#region:#!   KG Assembly
+
+
+
+
+
+
+
+#*######################### Start ##########################
 #region:#?   KG Bundle Export
 
-"""
-KG Bundle Export
 
-Collect everything needed from the whole KG pipeline into ONE file:
-- Classes + entities (from final Class Res overall_summary)
-- Chunks (for evidence and document structure)
-- Relations (from final Rel Res overall_summary, including qualifiers, canonical fields, etc.)
-- Relation schema (canonical_rel_schema, rel_cls_schema, rel_cls_group_schema)
+# """
+# KG Bundle Export
 
-Output:
-  /home/mabolhas/MyReposOnSOL/SGCE-KG/data/KG/kg_bundle.json
+# Collect everything needed from the whole KG pipeline into ONE file:
+# - Classes + entities (from final Class Res overall_summary)
+# - Chunks (for evidence and document structure)
+# - Relations (from final Rel Res overall_summary, including qualifiers, canonical fields, etc.)
+# - Relation schema (canonical_rel_schema, rel_cls_schema, rel_cls_group_schema)
 
-This file is intended as the single input for downstream KG-construction code.
-"""
+# Output:
+#   /home/mabolhas/MyReposOnSOL/SGCE-KG/data/KG/kg_bundle.json
 
-import json
-import time
-from pathlib import Path
-from typing import Any, Dict, List, Optional
+# This file is intended as the single input for downstream KG-construction code.
+# """
 
-
-# -----------------------
-# Paths / Config
-# -----------------------
-
-# Final classes + entities after iterative Class Res
-CLS_RES_OVERALL_DIR = Path(
-    "/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Classes/Cls_Res_IterativeRuns/overall_summary"
-    )
-CLASSES_AND_ENTITIES_PATH = CLS_RES_OVERALL_DIR / "classes_and_entities.json"
-
-# Chunks (sentence-level)
-CHUNKS_PATH = Path(
-    "/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Chunks/chunks_sentence.jsonl"
-)
-
-# Final relations + relation schemas after iterative Rel Res
-REL_RES_OVERALL_DIR = Path(
-    "/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Relations/Rel Res_IterativeRuns/overall_summary"
-)
-RELATIONS_RESOLVED_JSONL = REL_RES_OVERALL_DIR / "relations_resolved.jsonl"
-RELATIONS_RESOLVED_JSON = REL_RES_OVERALL_DIR / "relations_resolved.json"
-
-CANONICAL_REL_SCHEMA_PATH = REL_RES_OVERALL_DIR / "canonical_rel_schema.json"
-REL_CLS_SCHEMA_PATH = REL_RES_OVERALL_DIR / "rel_cls_schema.json"
-REL_CLS_GROUP_SCHEMA_PATH = REL_RES_OVERALL_DIR / "rel_cls_group_schema.json"
-
-# Where to write the final bundle
-KG_BUNDLE_OUT = Path(
-    "/home/mabolhas/MyReposOnSOL/SGCE-KG/data/KG/kg_bundle.json"
-)
+# import json
+# import time
+# from pathlib import Path
+# from typing import Any, Dict, List, Optional
 
 
-# -----------------------
-# Small helpers
-# -----------------------
+# # -----------------------
+# # Paths / Config
+# # -----------------------
 
-def _load_json(path: Path, default: Any) -> Any:
-    if not path.exists():
-        return default
-    try:
-        return json.loads(path.read_text(encoding="utf-8"))
-    except Exception:
-        return default
+# # Final classes + entities after iterative Class Res
+# CLS_RES_OVERALL_DIR = Path(
+#     "/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Classes/Cls_Res_IterativeRuns/overall_summary"
+#     )
+# CLASSES_AND_ENTITIES_PATH = CLS_RES_OVERALL_DIR / "classes_and_entities.json"
 
-def _safe_json_load_line(line: str) -> Optional[Dict]:
-    line = line.strip()
-    if not line:
-        return None
-    try:
-        return json.loads(line)
-    except Exception:
-        return None
+# # Chunks (sentence-level)
+# CHUNKS_PATH = Path(
+#     "/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Chunks/chunks_sentence.jsonl"
+# )
 
+# # Final relations + relation schemas after iterative Rel Res
+# REL_RES_OVERALL_DIR = Path(
+#     "/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Relations/Rel Res_IterativeRuns/overall_summary"
+# )
+# RELATIONS_RESOLVED_JSONL = REL_RES_OVERALL_DIR / "relations_resolved.jsonl"
+# RELATIONS_RESOLVED_JSON = REL_RES_OVERALL_DIR / "relations_resolved.json"
 
-# -----------------------
-# Core export function
-# -----------------------
+# CANONICAL_REL_SCHEMA_PATH = REL_RES_OVERALL_DIR / "canonical_rel_schema.json"
+# REL_CLS_SCHEMA_PATH = REL_RES_OVERALL_DIR / "rel_cls_schema.json"
+# REL_CLS_GROUP_SCHEMA_PATH = REL_RES_OVERALL_DIR / "rel_cls_group_schema.json"
 
-def build_kg_bundle() -> None:
-    """
-    Build a single JSON "kg_bundle.json" that contains:
-
-    {
-      "metadata": {...},
-      "classes": [...],
-      "entities_map": {...},
-      "chunks": { chunk_id: { ...chunk fields... }, ... },
-      "relations": [...],
-      "canonical_rel_schema": [... or {}],
-      "rel_cls_schema": [... or {}],
-      "rel_cls_group_schema": [... or {}]
-    }
-
-    Relations are taken from the final Rel Res output and are expected to already
-    contain:
-      - relation_id
-      - subject_entity_id / object_entity_id
-      - relation_name (raw)
-      - canonical_rel_name / canonical_rel_desc (if filled by Rel Res)
-      - rel_cls, rel_cls_group (if filled)
-      - qualifiers dict
-      - chunk_id
-      - evidence_excerpt
-      - any other fields kept by the pipeline (rel_desc, rel_hint_type, etc.)
-    """
-
-    # 1) Load final classes + entities
-    classes_and_entities = _load_json(CLASSES_AND_ENTITIES_PATH, default={"classes": [], "entities_map": {}})
-    classes: List[Dict[str, Any]] = classes_and_entities.get("classes", []) or []
-    entities_map: Dict[str, Dict[str, Any]] = classes_and_entities.get("entities_map", {}) or {}
-
-    print(f"[KG bundle] Loaded {len(classes)} classes and {len(entities_map)} entities from {CLASSES_AND_ENTITIES_PATH}")
-
-    # 2) Load chunks
-    chunks_by_id: Dict[str, Dict[str, Any]] = {}
-    if CHUNKS_PATH.exists():
-        with CHUNKS_PATH.open("r", encoding="utf-8") as fh:
-            for line in fh:
-                obj = _safe_json_load_line(line)
-                if not obj:
-                    continue
-                cid = obj.get("id")
-                if cid:
-                    chunks_by_id[cid] = obj
-        print(f"[KG bundle] Loaded {len(chunks_by_id)} chunks from {CHUNKS_PATH}")
-    else:
-        print(f"[KG bundle] WARNING: chunks file not found at {CHUNKS_PATH}, 'chunks' will be empty.")
-
-    # 3) Load final relations (prefer jsonl; fallback to json)
-    relations: List[Dict[str, Any]] = []
-    if RELATIONS_RESOLVED_JSONL.exists():
-        with RELATIONS_RESOLVED_JSONL.open("r", encoding="utf-8") as fh:
-            for line in fh:
-                obj = _safe_json_load_line(line)
-                if obj:
-                    relations.append(obj)
-        print(f"[KG bundle] Loaded {len(relations)} relations from {RELATIONS_RESOLVED_JSONL}")
-    elif RELATIONS_RESOLVED_JSON.exists():
-        relations = _load_json(RELATIONS_RESOLVED_JSON, default=[])
-        if not isinstance(relations, list):
-            relations = []
-        print(f"[KG bundle] Loaded {len(relations)} relations from {RELATIONS_RESOLVED_JSON}")
-    else:
-        print(f"[KG bundle] WARNING: no final relations file found in {REL_RES_OVERALL_DIR}, 'relations' will be empty.")
-
-    # 4) Load relation schemas (canonical / class / group)
-    canonical_rel_schema = _load_json(CANONICAL_REL_SCHEMA_PATH, default=[])
-    rel_cls_schema = _load_json(REL_CLS_SCHEMA_PATH, default=[])
-    rel_cls_group_schema = _load_json(REL_CLS_GROUP_SCHEMA_PATH, default=[])
-
-    print(f"[KG bundle] canonical_rel_schema size: {len(canonical_rel_schema) if isinstance(canonical_rel_schema, list) else 'dict'}")
-    print(f"[KG bundle] rel_cls_schema size: {len(rel_cls_schema) if isinstance(rel_cls_schema, list) else 'dict'}")
-    print(f"[KG bundle] rel_cls_group_schema size: {len(rel_cls_group_schema) if isinstance(rel_cls_group_schema, list) else 'dict'}")
-
-    # 5) Assemble bundle
-    bundle = {
-        "metadata": {
-            "generated_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
-            "source_paths": {
-                "classes_and_entities": str(CLASSES_AND_ENTITIES_PATH),
-                "chunks": str(CHUNKS_PATH),
-                "relations_resolved_jsonl": str(RELATIONS_RESOLVED_JSONL),
-                "relations_resolved_json": str(RELATIONS_RESOLVED_JSON),
-                "canonical_rel_schema": str(CANONICAL_REL_SCHEMA_PATH),
-                "rel_cls_schema": str(REL_CLS_SCHEMA_PATH),
-                "rel_cls_group_schema": str(REL_CLS_GROUP_SCHEMA_PATH),
-            },
-        },
-        "classes": classes,
-        "entities_map": entities_map,
-        "chunks": chunks_by_id,
-        "relations": relations,
-        "canonical_rel_schema": canonical_rel_schema,
-        "rel_cls_schema": rel_cls_schema,
-        "rel_cls_group_schema": rel_cls_group_schema,
-    }
-
-    # 6) Write out
-    KG_BUNDLE_OUT.parent.mkdir(parents=True, exist_ok=True)
-    KG_BUNDLE_OUT.write_text(json.dumps(bundle, ensure_ascii=False, indent=2), encoding="utf-8")
-    print(f"[KG bundle] Written KG bundle to {KG_BUNDLE_OUT}")
+# # Where to write the final bundle
+# KG_BUNDLE_OUT = Path(
+#     "/home/mabolhas/MyReposOnSOL/SGCE-KG/data/KG/kg_bundle.json"
+# )
 
 
-# After defining everything, you can call:
-build_kg_bundle()
+# # -----------------------
+# # Small helpers
+# # -----------------------
+
+# def _load_json(path: Path, default: Any) -> Any:
+#     if not path.exists():
+#         return default
+#     try:
+#         return json.loads(path.read_text(encoding="utf-8"))
+#     except Exception:
+#         return default
+
+# def _safe_json_load_line(line: str) -> Optional[Dict]:
+#     line = line.strip()
+#     if not line:
+#         return None
+#     try:
+#         return json.loads(line)
+#     except Exception:
+#         return None
+
+
+# # -----------------------
+# # Core export function
+# # -----------------------
+
+# def build_kg_bundle() -> None:
+#     """
+#     Build a single JSON "kg_bundle.json" that contains:
+
+#     {
+#       "metadata": {...},
+#       "classes": [...],
+#       "entities_map": {...},
+#       "chunks": { chunk_id: { ...chunk fields... }, ... },
+#       "relations": [...],
+#       "canonical_rel_schema": [... or {}],
+#       "rel_cls_schema": [... or {}],
+#       "rel_cls_group_schema": [... or {}]
+#     }
+
+#     Relations are taken from the final Rel Res output and are expected to already
+#     contain:
+#       - relation_id
+#       - subject_entity_id / object_entity_id
+#       - relation_name (raw)
+#       - canonical_rel_name / canonical_rel_desc (if filled by Rel Res)
+#       - rel_cls, rel_cls_group (if filled)
+#       - qualifiers dict
+#       - chunk_id
+#       - evidence_excerpt
+#       - any other fields kept by the pipeline (rel_desc, rel_hint_type, etc.)
+#     """
+
+#     # 1) Load final classes + entities
+#     classes_and_entities = _load_json(CLASSES_AND_ENTITIES_PATH, default={"classes": [], "entities_map": {}})
+#     classes: List[Dict[str, Any]] = classes_and_entities.get("classes", []) or []
+#     entities_map: Dict[str, Dict[str, Any]] = classes_and_entities.get("entities_map", {}) or {}
+
+#     print(f"[KG bundle] Loaded {len(classes)} classes and {len(entities_map)} entities from {CLASSES_AND_ENTITIES_PATH}")
+
+#     # 2) Load chunks
+#     chunks_by_id: Dict[str, Dict[str, Any]] = {}
+#     if CHUNKS_PATH.exists():
+#         with CHUNKS_PATH.open("r", encoding="utf-8") as fh:
+#             for line in fh:
+#                 obj = _safe_json_load_line(line)
+#                 if not obj:
+#                     continue
+#                 cid = obj.get("id")
+#                 if cid:
+#                     chunks_by_id[cid] = obj
+#         print(f"[KG bundle] Loaded {len(chunks_by_id)} chunks from {CHUNKS_PATH}")
+#     else:
+#         print(f"[KG bundle] WARNING: chunks file not found at {CHUNKS_PATH}, 'chunks' will be empty.")
+
+#     # 3) Load final relations (prefer jsonl; fallback to json)
+#     relations: List[Dict[str, Any]] = []
+#     if RELATIONS_RESOLVED_JSONL.exists():
+#         with RELATIONS_RESOLVED_JSONL.open("r", encoding="utf-8") as fh:
+#             for line in fh:
+#                 obj = _safe_json_load_line(line)
+#                 if obj:
+#                     relations.append(obj)
+#         print(f"[KG bundle] Loaded {len(relations)} relations from {RELATIONS_RESOLVED_JSONL}")
+#     elif RELATIONS_RESOLVED_JSON.exists():
+#         relations = _load_json(RELATIONS_RESOLVED_JSON, default=[])
+#         if not isinstance(relations, list):
+#             relations = []
+#         print(f"[KG bundle] Loaded {len(relations)} relations from {RELATIONS_RESOLVED_JSON}")
+#     else:
+#         print(f"[KG bundle] WARNING: no final relations file found in {REL_RES_OVERALL_DIR}, 'relations' will be empty.")
+
+#     # 4) Load relation schemas (canonical / class / group)
+#     canonical_rel_schema = _load_json(CANONICAL_REL_SCHEMA_PATH, default=[])
+#     rel_cls_schema = _load_json(REL_CLS_SCHEMA_PATH, default=[])
+#     rel_cls_group_schema = _load_json(REL_CLS_GROUP_SCHEMA_PATH, default=[])
+
+#     print(f"[KG bundle] canonical_rel_schema size: {len(canonical_rel_schema) if isinstance(canonical_rel_schema, list) else 'dict'}")
+#     print(f"[KG bundle] rel_cls_schema size: {len(rel_cls_schema) if isinstance(rel_cls_schema, list) else 'dict'}")
+#     print(f"[KG bundle] rel_cls_group_schema size: {len(rel_cls_group_schema) if isinstance(rel_cls_group_schema, list) else 'dict'}")
+
+#     # 5) Assemble bundle
+#     bundle = {
+#         "metadata": {
+#             "generated_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+#             "source_paths": {
+#                 "classes_and_entities": str(CLASSES_AND_ENTITIES_PATH),
+#                 "chunks": str(CHUNKS_PATH),
+#                 "relations_resolved_jsonl": str(RELATIONS_RESOLVED_JSONL),
+#                 "relations_resolved_json": str(RELATIONS_RESOLVED_JSON),
+#                 "canonical_rel_schema": str(CANONICAL_REL_SCHEMA_PATH),
+#                 "rel_cls_schema": str(REL_CLS_SCHEMA_PATH),
+#                 "rel_cls_group_schema": str(REL_CLS_GROUP_SCHEMA_PATH),
+#             },
+#         },
+#         "classes": classes,
+#         "entities_map": entities_map,
+#         "chunks": chunks_by_id,
+#         "relations": relations,
+#         "canonical_rel_schema": canonical_rel_schema,
+#         "rel_cls_schema": rel_cls_schema,
+#         "rel_cls_group_schema": rel_cls_group_schema,
+#     }
+
+#     # 6) Write out
+#     KG_BUNDLE_OUT.parent.mkdir(parents=True, exist_ok=True)
+#     KG_BUNDLE_OUT.write_text(json.dumps(bundle, ensure_ascii=False, indent=2), encoding="utf-8")
+#     print(f"[KG bundle] Written KG bundle to {KG_BUNDLE_OUT}")
+
+
+# # After defining everything, you can call:
+# build_kg_bundle()
 
 #endregion#?   KG Bundle Export
-#?#########################  End  ##########################
-
-
-
-
-
-
+#*#########################  End  ##########################
 
 
 
@@ -8235,6 +8785,8 @@ print("Wrote nodes CSV:", nodes_out_csv)
 #*#########################  End  ##########################
 
 
+
+
 #*######################### Start ##########################
 #region:#?   Cypher Queries - V4
 
@@ -8404,15 +8956,7 @@ RETURN count(e) AS entity_labels_removed;
 
 
 
-
-
-
-
-
-
-
-
-#?######################### Start ##########################
+#*######################### Start ##########################
 #region:#?   CSV relations + nodes for Neo4j KG import - V6
 
 
@@ -8829,7 +9373,7 @@ print("Wrote nodes CSV:", nodes_out_csv)
 
 
 #endregion#? CSV relations + nodes for Neo4j KG import - V6
-#?#########################  End  ##########################
+#*#########################  End  ##########################
 
 
 
@@ -8837,7 +9381,7 @@ print("Wrote nodes CSV:", nodes_out_csv)
 
 
 #?######################### Start ##########################
-#region:#?   CSV relations + nodes for Neo4j KG import - V6
+#region:#?   CSV relations + nodes for Neo4j KG import - V7
 
 def export_relations_and_nodes_to_csv():
     import json, csv
@@ -9268,8 +9812,10 @@ def export_relations_and_nodes_to_csv():
 
 
 
-#?######################### Start ##########################
+#*######################### Start ##########################
 #region:#?   Cypher Queries - V6
+
+
 
 MATCH (n)
 DETACH DELETE n;
@@ -9439,7 +9985,7 @@ RETURN n, r, m
 
 
 #endregion#? Cypher Queries
-#?#########################  End  ##########################
+#*#########################  End  ##########################
 
 
 
@@ -9447,12 +9993,7 @@ RETURN n, r, m
 
 
 
-
-
-
-
-
-#endregion#! Relation Identification
+#endregion#! KG Assembly
 #!#############################################  End Chapter  ##################################################
 
 
@@ -9468,1793 +10009,57 @@ RETURN n, r, m
 
 
 
-#!############################################# Start Chapter ##################################################
-#region:#!   Evaluation
-
-#endregion#! Evaluation
-#!#############################################  End Chapter  ##################################################
 
 
 
-
-
-
-#!############################################# Start Chapter ##################################################
-#region:#!   Experiments
 
 
 
 
 
 #?######################### Start ##########################
-#region:#?   QA4Methods - V5   (TRACE names for context, weighted embeddings)
+#region:#?   
 
-
-import os
-import json
-from dataclasses import dataclass
-from pathlib import Path
-from typing import Dict, List, Optional, Tuple, Set
-
-import numpy as np
-import pandas as pd
-import networkx as nx
-
-from datasets import load_dataset  # not strictly required if you only use JSON dump
-import torch
-from transformers import AutoTokenizer, AutoModel
-from sklearn.preprocessing import normalize
-from sklearn.metrics.pairwise import cosine_similarity
-
-from openai import OpenAI
-
-
-# ============================================================
-# 0. Global config: weights, models, env
-# ============================================================
-
-# Entity weights (must sum to 1 after normalization)
-ENT_WEIGHTS = {
-    "name": 0.40,   # entity_name
-    "desc": 0.25,   # entity_description
-    "ctx": 0.35,    # class_label + class_group + node_properties
-}
-
-# Relation weights (before normalization)
-REL_EMB_WEIGHTS = {
-    "name": 0.25,      # relation_name
-    "desc+Q": 0.15,    # rel_desc + qualifiers
-    "head_tail": 0.20, # subject/object names + class info
-    "ctx": 0.40,       # canonical_rel_name + canonical_rel_desc + rel_cls
-}
-
-ENT_EMBED_MODEL = "BAAI/bge-large-en-v1.5"
-REL_EMBED_MODEL = "BAAI/bge-large-en-v1.5"  # same for simplicity
-BATCH_SIZE = 32
-DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
-
-# OpenAI config
-OPENAI_MODEL_JUDGE = "gpt-5.1"
-OPENAI_API_KEY_ENV = "OPENAI_API_KEY"
-
-
-# ============================================================
-# 1. Env helper for OpenAI key
-# ============================================================
-
-def _load_openai_key(
-    envvar: str = OPENAI_API_KEY_ENV,
-    fallback_path: str = "/home/mabolhas/MyReposOnSOL/SGCE-KG/.env",
-):
-    key = os.getenv(envvar, None)
-    if key:
-        return key
-    if Path(fallback_path).exists():
-        txt = Path(fallback_path).read_text(encoding="utf-8").strip()
-        if txt:
-            return txt
-    return None
-
-
-# ============================================================
-# 2. HF Embedder (generic)
-# ============================================================
-
-def mean_pool(token_embeds: torch.Tensor, attention_mask: torch.Tensor) -> torch.Tensor:
-    mask = attention_mask.unsqueeze(-1).expand(token_embeds.size()).float()
-    masked = token_embeds * mask
-    summed = masked.sum(dim=1)
-    counts = mask.sum(dim=1).clamp(min=1e-9)
-    return summed / counts
-
-
-class HFEmbedder:
-    def __init__(self, model_name: str, device: str = DEVICE):
-        print(f"[Embedder] loading model {model_name} on {device} ...")
-        self.device = device
-        self.tokenizer = AutoTokenizer.from_pretrained(model_name, use_fast=True)
-        self.model = AutoModel.from_pretrained(model_name)
-        self.model.to(device)
-        self.model.eval()
-        for p in self.model.parameters():
-            p.requires_grad = False
-
-    @torch.no_grad()
-    def encode_batch(self, texts: List[str], batch_size: int = BATCH_SIZE) -> np.ndarray:
-        embs = []
-        for i in range(0, len(texts), batch_size):
-            batch = texts[i:i + batch_size]
-            enc = self.tokenizer(
-                batch,
-                padding=True,
-                truncation=True,
-                return_tensors="pt",
-                max_length=1024,
-            )
-            input_ids = enc["input_ids"].to(self.device)
-            attention_mask = enc["attention_mask"].to(self.device)
-            out = self.model(
-                input_ids=input_ids,
-                attention_mask=attention_mask,
-                return_dict=True,
-            )
-            token_embeds = out.last_hidden_state
-            pooled = mean_pool(token_embeds, attention_mask)
-            pooled = pooled.cpu().numpy()
-            embs.append(pooled)
-        embs = np.vstack(embs)
-        embs = normalize(embs, axis=1)
-        return embs
-
-
-# ============================================================
-# 3. SimpleGraph for KG-Gen-style KGs (dataset KGs)
-# ============================================================
-
-@dataclass
-class SimpleGraph:
-    entities: Set[str]
-    relations: Set[Tuple[str, str, str]]
-
-    @staticmethod
-    def from_kggen_dict(d: Dict) -> "SimpleGraph":
-        entities = set(d.get("entities", []))
-        rels_raw = d.get("relations", [])
-        relations = set()
-        for r in rels_raw:
-            if isinstance(r, (list, tuple)) and len(r) == 3:
-                s, rel, t = r
-                relations.add((str(s), str(rel), str(t)))
-        return SimpleGraph(entities=entities, relations=relations)
-
-    def to_nx(self) -> nx.DiGraph:
-        g = nx.DiGraph()
-        for e in self.entities:
-            g.add_node(e, text=str(e))
-        for s, rel, t in self.relations:
-            g.add_edge(s, t, relation=str(rel))
-        return g
-
-
-# ============================================================
-# 4. TRACE-KG loaders and weighted embedding builders
-# ============================================================
-
-def safe_str(x) -> str:
-    if x is None:
-        return ""
-    if isinstance(x, float) and np.isnan(x):
-        return ""
-    return str(x)
-
-
-def build_tracekg_entity_texts(nodes_df: pd.DataFrame) -> Tuple[List[str], List[str], List[str], List[str]]:
-    """Return lists: ids, name_texts, desc_texts, ctx_texts."""
-    ids, names, descs, ctxs = [], [], [], []
-    for _, row in nodes_df.iterrows():
-        ent_id = safe_str(row["entity_id"])
-        ids.append(ent_id)
-
-        # name ~ entity_name
-        name_txt = safe_str(row.get("entity_name", ""))
-
-        # desc ~ entity_description
-        desc_txt = safe_str(row.get("entity_description", ""))
-
-        # ctx ~ class_label + class_group + node_properties
-        cls_label = safe_str(row.get("class_label", ""))
-        cls_group = safe_str(row.get("class_group", ""))
-        node_props = safe_str(row.get("node_properties", ""))
-
-        ctx_parts = []
-        if cls_label:
-            ctx_parts.append(f"[CLASS:{cls_label}]")
-        if cls_group:
-            ctx_parts.append(f"[GROUP:{cls_group}]")
-        if node_props:
-            ctx_parts.append(f"[PROPS:{node_props}]")
-        ctx_txt = " ; ".join(ctx_parts)
-
-        names.append(name_txt)
-        descs.append(desc_txt)
-        ctxs.append(ctx_txt)
-    return ids, names, descs, ctxs
-
-
-def compute_weighted_entity_embeddings(
-    embedder: HFEmbedder,
-    nodes_df: pd.DataFrame,
-    weights: Dict[str, float] = ENT_WEIGHTS,
-) -> Tuple[Dict[str, np.ndarray], int]:
-    ids, names, descs, ctxs = build_tracekg_entity_texts(nodes_df)
-
-    print("[TRACE-ENT] encoding name field ...")
-    emb_name = embedder.encode_batch(names) if any(t.strip() for t in names) else None
-
-    print("[TRACE-ENT] encoding desc field ...")
-    emb_desc = embedder.encode_batch(descs) if any(t.strip() for t in descs) else None
-
-    print("[TRACE-ENT] encoding ctx field ...")
-    emb_ctx = embedder.encode_batch(ctxs) if any(t.strip() for t in ctxs) else None
-
-    D_ref = None
-    for arr in [emb_name, emb_desc, emb_ctx]:
-        if arr is not None:
-            D_ref = arr.shape[1]
-            break
-    if D_ref is None:
-        raise ValueError("All entity fields empty — cannot embed.")
-
-    def _ensure(arr):
-        if arr is None:
-            return np.zeros((len(ids), D_ref))
-        if arr.shape[1] != D_ref:
-            raise ValueError("Entity embedding dimension mismatch.")
-        return arr
-
-    emb_name = _ensure(emb_name)
-    emb_desc = _ensure(emb_desc)
-    emb_ctx = _ensure(emb_ctx)
-
-    w_name = weights.get("name", 0.0)
-    w_desc = weights.get("desc", 0.0)
-    w_ctx = weights.get("ctx", 0.0)
-    Wsum = w_name + w_desc + w_ctx
-    if Wsum <= 0:
-        raise ValueError("Sum of ENT_WEIGHTS must be > 0")
-    w_name /= Wsum
-    w_desc /= Wsum
-    w_ctx /= Wsum
-
-    combined = (w_name * emb_name) + (w_desc * emb_desc) + (w_ctx * emb_ctx)
-    combined = normalize(combined, axis=1)
-
-    node_embs: Dict[str, np.ndarray] = {}
-    for i, node_id in enumerate(ids):
-        node_embs[node_id] = combined[i]
-    return node_embs, D_ref
-
-
-def build_tracekg_relation_texts(
-    rels_df: pd.DataFrame,
-    nodes_df: pd.DataFrame,
-) -> Tuple[List[str], Dict[str, int], Dict[int, Dict[str, str]]]:
-    """
-    Build relation text fields by bucket:
-      - name: relation name
-      - desc+Q: rel_desc + qualifiers
-      - head_tail: subject/object names + class info
-      - ctx: canonical_rel_name + canonical_rel_desc + rel_cls
-    """
-    # Node helper map
-    node_info = {}
-    for _, nrow in nodes_df.iterrows():
-        nid = safe_str(nrow["entity_id"])
-        node_info[nid] = {
-            "name": safe_str(nrow.get("entity_name", "")),
-            "class_label": safe_str(nrow.get("class_label", "")),
-        }
-
-    relation_ids: List[str] = []
-    id_to_index: Dict[str, int] = {}
-    texts: Dict[int, Dict[str, str]] = {}
-
-    for i, row in rels_df.iterrows():
-        rid = safe_str(row.get("relation_id", i))
-        relation_ids.append(rid)
-        id_to_index[rid] = i
-
-        start_id = safe_str(row.get("start_id", ""))
-        end_id = safe_str(row.get("end_id", ""))
-
-        # name bucket
-        rel_name = safe_str(row.get("canonical_rel_name", "")) or safe_str(row.get("raw_relation_name", ""))
-
-        # desc+Q bucket
-        rel_desc = safe_str(row.get("rel_desc", "")) or safe_str(row.get("canonical_rel_desc", ""))
-        qualifiers = safe_str(row.get("qualifiers", ""))
-        desc_plus_q = " ; ".join([p for p in [rel_desc, qualifiers] if p])
-
-        # head_tail bucket
-        head_info = node_info.get(start_id, {})
-        tail_info = node_info.get(end_id, {})
-        head_tail_parts = []
-        if head_info.get("name"):
-            head_tail_parts.append(f"[H:{head_info['name']}]")
-        if head_info.get("class_label"):
-            head_tail_parts.append(f"[HCLS:{head_info['class_label']}]")
-        if tail_info.get("name"):
-            head_tail_parts.append(f"[T:{tail_info['name']}]")
-        if tail_info.get("class_label"):
-            head_tail_parts.append(f"[TCLS:{tail_info['class_label']}]")
-        head_tail = " ".join(head_tail_parts)
-
-        # ctx bucket
-        canonical_name = safe_str(row.get("canonical_rel_name", ""))
-        canonical_desc = safe_str(row.get("canonical_rel_desc", ""))
-        rel_cls = safe_str(row.get("rel_cls", ""))
-        ctx_parts = []
-        if canonical_name:
-            ctx_parts.append(canonical_name)
-        if canonical_desc:
-            ctx_parts.append(canonical_desc)
-        if rel_cls:
-            ctx_parts.append(f"[CLS:{rel_cls}]")
-        ctx_txt = " ; ".join(ctx_parts)
-
-        texts[i] = {
-            "name": rel_name,
-            "desc+Q": desc_plus_q,
-            "head_tail": head_tail,
-            "ctx": ctx_txt,
-        }
-
-    return relation_ids, id_to_index, texts
-
-
-def compute_weighted_relation_embeddings(
-    embedder: HFEmbedder,
-    rels_df: pd.DataFrame,
-    nodes_df: pd.DataFrame,
-    weights: Dict[str, float] = REL_EMB_WEIGHTS,
-) -> Tuple[Dict[str, np.ndarray], int]:
-    rel_ids, id_to_index, texts = build_tracekg_relation_texts(rels_df, nodes_df)
-
-    n = len(rel_ids)
-    buckets = ["name", "desc+Q", "head_tail", "ctx"]
-    bucket_texts = {b: [""] * n for b in buckets}
-    for idx in range(n):
-        for b in buckets:
-            bucket_texts[b][idx] = texts[idx].get(b, "")
-
-    emb_bucket = {}
-    D_ref = None
-    for b in buckets:
-        has_any = any(t.strip() for t in bucket_texts[b])
-        if not has_any:
-            emb_bucket[b] = None
-            continue
-        print(f"[TRACE-REL] encoding bucket '{b}' ...")
-        eb = embedder.encode_batch(bucket_texts[b])
-        emb_bucket[b] = eb
-        if D_ref is None:
-            D_ref = eb.shape[1]
-
-    if D_ref is None:
-        raise ValueError("All relation buckets empty — cannot embed relations.")
-
-    def _ensure(arr):
-        if arr is None:
-            return np.zeros((n, D_ref))
-        if arr.shape[1] != D_ref:
-            raise ValueError("Relation embedding dimension mismatch.")
-        return arr
-
-    for b in buckets:
-        emb_bucket[b] = _ensure(emb_bucket[b])
-
-    w_name = weights.get("name", 0.0)
-    w_descq = weights.get("desc+Q", 0.0)
-    w_ht = weights.get("head_tail", 0.0)
-    w_ctx = weights.get("ctx", 0.0)
-    Wsum = w_name + w_descq + w_ht + w_ctx
-    if Wsum <= 0:
-        raise ValueError("Sum of REL_EMB_WEIGHTS must be > 0")
-    w_name /= Wsum
-    w_descq /= Wsum
-    w_ht /= Wsum
-    w_ctx /= Wsum
-
-    combined = (
-        w_name * emb_bucket["name"]
-        + w_descq * emb_bucket["desc+Q"]
-        + w_ht * emb_bucket["head_tail"]
-        + w_ctx * emb_bucket["ctx"]
-    )
-    combined = normalize(combined, axis=1)
-
-    rel_embs: Dict[str, np.ndarray] = {}
-    for i, rid in enumerate(rel_ids):
-        rel_embs[rid] = combined[i]
-    return rel_embs, D_ref
-
-
-def build_tracekg_nx_and_nodeinfo(
-    nodes_df: pd.DataFrame,
-    rels_df: pd.DataFrame,
-) -> Tuple[nx.DiGraph, Dict[str, Dict[str, str]]]:
-    """
-    Build TRACE-KG graph and a node_info dict:
-      node_id -> {"name": entity_name, "class_label": class_label}
-    """
-    g = nx.DiGraph()
-    node_info: Dict[str, Dict[str, str]] = {}
-
-    for _, row in nodes_df.iterrows():
-        nid = safe_str(row["entity_id"])
-        name = safe_str(row.get("entity_name", ""))
-        cls_label = safe_str(row.get("class_label", ""))
-
-        g.add_node(
-            nid,
-            entity_name=name,
-            entity_description=safe_str(row.get("entity_description", "")),
-            class_label=cls_label,
-            class_group=safe_str(row.get("class_group", "")),
-            node_properties=safe_str(row.get("node_properties", "")),
-            chunk_ids=safe_str(row.get("chunk_ids", "")),
-        )
-        node_info[nid] = {
-            "name": name,
-            "class_label": cls_label,
-        }
-
-    for _, row in rels_df.iterrows():
-        sid = safe_str(row.get("start_id", ""))
-        eid = safe_str(row.get("end_id", ""))
-        rid = safe_str(row.get("relation_id", ""))
-        rel_name = safe_str(row.get("canonical_rel_name", "")) or safe_str(row.get("raw_relation_name", ""))
-        qualifiers = safe_str(row.get("qualifiers", ""))
-        g.add_edge(
-            sid,
-            eid,
-            relation=rel_name,
-            relation_id=rid,
-            chunk_id=safe_str(row.get("chunk_id", "")),
-            qualifiers=qualifiers,
-        )
-    return g, node_info
-
-
-# ============================================================
-# 5. Retrieval (weighted node embeddings + graph, with readable context)
-# ============================================================
-
-class WeightedGraphRetriever:
-    def __init__(
-        self,
-        node_embeddings: Dict[str, np.ndarray],
-        graph: nx.DiGraph,
-        node_info: Optional[Dict[str, Dict[str, str]]] = None,
-    ):
-        """
-        node_info (for TRACE-KG) maps:
-           node_id -> {"name": ..., "class_label": ...}
-        For dataset KGs, this can be None and we fall back to IDs in context.
-        """
-        self.node_embeddings = node_embeddings
-        self.graph = graph
-        self.node_info = node_info or {}
-
-    def retrieve_relevant_nodes(
-        self,
-        query_emb: np.ndarray,
-        k: int = 8,
-    ) -> List[Tuple[str, float]]:
-        sims = []
-        for node, emb in self.node_embeddings.items():
-            sim = cosine_similarity(query_emb.reshape(1, -1), emb.reshape(1, -1))[0][0]
-            sims.append((node, sim))
-        sims.sort(key=lambda x: x[1], reverse=True)
-        return sims[:k]
-
-    def _format_node_for_context(self, node_id: str) -> str:
-        """
-        For TRACE-KG, return 'Name (which is of type: ClassLabel)'.
-        For others, just return node_id as string.
-        """
-        info = self.node_info.get(node_id)
-        if info is None:
-            return str(node_id)
-
-        name = info.get("name") or str(node_id)
-        cls = info.get("class_label") or ""
-        if cls:
-            return f"{name} (which is of type: {cls})"
-        return name
-
-    def _format_edge_for_context(self, src: str, dst: str, data: Dict) -> str:
-        """
-        For TRACE-KG, produce:
-          subjectEntName (which is of type: entCleName) has relation
-          {rel_canonical_name (with qualifiers:{})} with
-          objectEntName (which is of type: entCleName).
-        For others, fall back to 'src rel dst.'.
-        """
-        rel_name = data.get("relation", "")
-        qualifiers = data.get("qualifiers", "")
-
-        # Heuristic: if we have node_info, treat this as TRACE-KG style.
-        if self.node_info:
-            subj = self._format_node_for_context(src)
-            obj = self._format_node_for_context(dst)
-            if qualifiers:
-                return (
-                    f"{subj} has relation "
-                    f"{{{rel_name} (with qualifiers: {qualifiers})}} "
-                    f"with {obj}."
-                )
-            else:
-                return (
-                    f"{subj} has relation "
-                    f"{{{rel_name}}} "
-                    f"with {obj}."
-                )
-        else:
-            # dataset KGs
-            return f"{src} {rel_name} {dst}."
-
-    def retrieve_context(
-        self,
-        node: str,
-        depth: int = 2,
-    ) -> List[str]:
-        context: Set[str] = set()
-
-        def explore(n: str, d: int):
-            if d > depth:
-                return
-            for nbr in self.graph.neighbors(n):
-                data = self.graph[n][nbr]
-                text = self._format_edge_for_context(n, nbr, data)
-                context.add(text)
-                explore(nbr, d + 1)
-            for nbr in self.graph.predecessors(n):
-                data = self.graph[nbr][n]
-                text = self._format_edge_for_context(nbr, n, data)
-                context.add(text)
-                explore(nbr, d + 1)
-
-        explore(node, 1)
-        return list(context)
-
-    def retrieve(
-        self,
-        query_emb: np.ndarray,
-        k: int = 8,
-    ) -> Tuple[List[Tuple[str, float]], Set[str], str]:
-        top_nodes = self.retrieve_relevant_nodes(query_emb, k=k)
-        context: Set[str] = set()
-        for node, _ in top_nodes:
-            ctx = self.retrieve_context(node)
-            context.update(ctx)
-        context_text = " ".join(context)
-        return top_nodes, context, context_text
-
-
-# ============================================================
-# 6. LLM-based evaluator (OpenAI API 5.1)
-# ============================================================
-
-_openai_client: Optional[OpenAI] = None
-
-
-def _get_openai_client() -> OpenAI:
-    global _openai_client
-    if _openai_client is not None:
-        return _openai_client
-    api_key = _load_openai_key()
-    if not api_key:
-        raise RuntimeError(
-            "OpenAI API key not found. Set OPENAI_API_KEY env var or provide it "
-            "in /home/mabolhas/MyReposOnSOL/SGCE-KG/.env"
-        )
-    _openai_client = OpenAI(api_key=api_key)
-    return _openai_client
-
-
-def gpt_evaluate_response(correct_answer: str, context: str) -> int:
-    """
-    Use an OpenAI model as a binary judge.
-    Returns 1 if the model believes the context contains the correct answer,
-    otherwise 0.
-    """
-    client = _get_openai_client()
-
-    system_prompt = (
-        "You are an evaluation assistant. "
-        "You are given a statement that is assumed to be the correct answer, "
-        "and a retrieved context. "
-        "Return '1' (without quotes) if the context clearly contains enough "
-        "information to support that answer. Otherwise return '0'. "
-        "Return only a single character: '1' or '0'."
-    )
-
-    user_prompt = (
-        "Correct answer statement:\n"
-        f"{correct_answer}\n\n"
-        "Retrieved context from a knowledge graph:\n"
-        f"{context}\n\n"
-        "Does the retrieved context contain enough information to support "
-        "the correctness of the answer statement? "
-        "Respond strictly with '1' for yes or '0' for no."
-    )
-
-    try:
-        resp = client.responses.create(
-            model=OPENAI_MODEL_JUDGE,
-            input=[
-                {
-                    "role": "system",
-                    "content": system_prompt,
-                },
-                {
-                    "role": "user",
-                    "content": user_prompt,
-                },
-            ],
-            max_output_tokens=64,  # >= 16
-        )
-        text = resp.output[0].content[0].text.strip()
-    except Exception as e:
-        print(f"[gpt_evaluate_response] Error calling OpenAI: {e}")
-        return 0
-
-    text = text.strip()
-    if text == "1":
-        return 1
-    if text == "0":
-        return 0
-
-    # Fallback: heuristic if model output is weird
-    ans_tokens = set(t.lower() for t in correct_answer.split() if len(t) > 3)
-    if not ans_tokens:
-        return 0
-    ctx_lower = context.lower()
-    for t in ans_tokens:
-        if t in ctx_lower:
-            return 1
-    return 0
-
-
-# ============================================================
-# 7. Evaluation utilities
-# ============================================================
-
-def evaluate_accuracy_for_graph(
-    query_embedder: HFEmbedder,
-    retriever: WeightedGraphRetriever,
-    queries: List[str],
-    method_name: str,
-    essay_idx: int,
-    results_dir: str,
-    k: int = 8,
-    verbose: bool = False,
-) -> Dict:
-    os.makedirs(results_dir, exist_ok=True)
-
-    print(f"[{method_name}] encoding {len(queries)} queries for essay {essay_idx} ...")
-    query_embs = query_embedder.encode_batch(queries)
-
-    correct = 0
-    results = []
-
-    for qi, q in enumerate(queries):
-        q_emb = query_embs[qi]
-        _, _, context_text = retriever.retrieve(q_emb, k=k)
-        evaluation = gpt_evaluate_response(q, context_text)
-        results.append(
-            {
-                "correct_answer": q,
-                "retrieved_context": context_text,
-                "evaluation": int(evaluation),
-            }
-        )
-        correct += evaluation
-
-    accuracy = correct / len(queries) if queries else 0.0
-    results.append({"accuracy": f"{accuracy * 100:.2f}%"})
-
-    out_path = os.path.join(results_dir, f"results_{essay_idx}.json")
-    with open(out_path, "w", encoding="utf-8") as f:
-        json.dump(results, f, indent=2)
-
-    if verbose:
-        print(
-            f"[{method_name}] Essay {essay_idx}: "
-            f"accuracy={accuracy:.4f} ({correct}/{len(queries)})"
-        )
-
-    return {
-        "accuracy": accuracy,
-        "num_queries": len(queries),
-        "method": method_name,
-        "essay_idx": essay_idx,
-    }
-
-
-def aggregate_method_stats(summaries: List[Dict]) -> Dict[str, float]:
-    if not summaries:
-        return {"mean_accuracy": 0.0, "num_essays": 0}
-    accs = [s["accuracy"] for s in summaries]
-    return {
-        "mean_accuracy": float(np.mean(accs)),
-        "num_essays": len(accs),
-    }
-
-
-def compare_methods(all_summaries: Dict[str, List[Dict]]) -> Dict[str, Dict]:
-    return {m: aggregate_method_stats(s) for m, s in all_summaries.items()}
-
-
-def print_comparison_table(comparison: Dict[str, Dict]):
-    print("\n=== Method Comparison (Mean Accuracy) ===")
-    print(f"{'Method':<10} | {'Mean Acc':>8} | {'#Essays':>7}")
-    print("-" * 32)
-    for m, stats in comparison.items():
-        print(
-            f"{m:<10} | {stats['mean_accuracy']*100:8.2f}% | "
-            f"{stats['num_essays']:7d}"
-        )
-
-
-# ============================================================
-# 8. Full evaluation over the dataset
-# ============================================================
-
-def run_full_evaluation(
-    dataset_json_path: str,
-    trace_nodes_csv: str,
-    trace_rels_csv: str,
-    output_root: str,
-    methods: List[str],
-    k: int = 8,
-    max_essays: Optional[int] = None,
-    verbose: bool = True,
-) -> Dict[str, List[Dict]]:
-    # Load dataset dump you already created
-    with open(dataset_json_path, "r", encoding="utf-8") as f:
-        dataset_list = json.load(f)
-    if max_essays is not None:
-        dataset_list = dataset_list[:max_essays]
-
-    # TRACE-KG embeddings & graph
-    ent_embedder = HFEmbedder(ENT_EMBED_MODEL, DEVICE)
-    rel_embedder = HFEmbedder(REL_EMBED_MODEL, DEVICE)  # relation embeddings precomputed but not used yet
-    nodes_df = pd.read_csv(trace_nodes_csv)
-    rels_df = pd.read_csv(trace_rels_csv)
-
-    trace_node_embs, _ = compute_weighted_entity_embeddings(ent_embedder, nodes_df, ENT_WEIGHTS)
-    trace_rel_embs, _ = compute_weighted_relation_embeddings(rel_embedder, rels_df, nodes_df, REL_EMB_WEIGHTS)
-    trace_graph, trace_node_info = build_tracekg_nx_and_nodeinfo(nodes_df, rels_df)
-    trace_retriever = WeightedGraphRetriever(trace_node_embs, trace_graph, node_info=trace_node_info)
-
-    # Query embedder (same model as entity, for semantic match)
-    query_embedder = ent_embedder
-
-    all_summaries: Dict[str, List[Dict]] = {m: [] for m in methods}
-
-    for idx, row in enumerate(dataset_list):
-        essay_idx = idx
-        queries: List[str] = row.get("generated_queries", [])
-        if not queries:
-            if verbose:
-                print(f"Skipping essay {essay_idx}: no queries.")
-            continue
-
-        if verbose:
-            print(f"\n=== Essay {essay_idx} | {len(queries)} queries ===")
-
-        # TRACE-KG (one global graph)
-        if "tracekg" in methods:
-            summaries_dir = os.path.join(output_root, "tracekg")
-            s = evaluate_accuracy_for_graph(
-                query_embedder=query_embedder,
-                retriever=trace_retriever,
-                queries=queries,
-                method_name="tracekg",
-                essay_idx=essay_idx,
-                results_dir=summaries_dir,
-                k=k,
-                verbose=verbose,
-            )
-            all_summaries["tracekg"].append(s)
-
-        # Other methods: kggen, graphrag, openie
-        for method in methods:
-            if method == "tracekg":
-                continue
-
-            kg_key = None
-            if method == "kggen":
-                kg_key = "kggen"
-            elif method == "graphrag":
-                kg_key = "graphrag_kg"
-            elif method == "openie":
-                kg_key = "openie_kg"
-            else:
-                continue
-
-            kg_data = row.get(kg_key, None)
-            if kg_data is None:
-                if verbose:
-                    print(f"  [{method}] No KG data for essay {essay_idx}, skipping.")
-                continue
-
-            sg = SimpleGraph.from_kggen_dict(kg_data)
-            g_nx = sg.to_nx()
-
-            node_ids = list(g_nx.nodes())
-            node_texts = [str(n) for n in node_ids]
-            node_embs_arr = query_embedder.encode_batch(node_texts)
-            node_embs = {nid: node_embs_arr[i] for i, nid in enumerate(node_ids)}
-            retriever = WeightedGraphRetriever(node_embs, g_nx, node_info=None)
-
-            summaries_dir = os.path.join(output_root, method)
-            s = evaluate_accuracy_for_graph(
-                query_embedder=query_embedder,
-                retriever=retriever,
-                queries=queries,
-                method_name=method,
-                essay_idx=essay_idx,
-                results_dir=summaries_dir,
-                k=k,
-                verbose=verbose,
-            )
-            all_summaries[method].append(s)
-
-    return all_summaries
-
-
-# ============================================================
-# 9. Main
-# ============================================================
-
-def main():
-    dataset_json_path = (
-        "/home/mabolhas/MyReposOnSOL/SGCE-KG/Experiments/MYNE/QA_and_OthersAnswers/mine_evaluation_dataset-short.json"
-    )
-    trace_nodes_csv = "/home/mabolhas/MyReposOnSOL/SGCE-KG/Experiments/MYNE/TRACEKG/nodes.csv"
-    trace_rels_csv = "/home/mabolhas/MyReposOnSOL/SGCE-KG/Experiments/MYNE/TRACEKG/rels.csv"
-
-    output_root = "./tracekg_mine_results_weighted_openai_v5"
-
-    methods = ["kggen", "graphrag", "openie", "tracekg"]
-    #methods = ["tracekg"]
-
-    all_summaries = run_full_evaluation(
-        dataset_json_path=dataset_json_path,
-        trace_nodes_csv=trace_nodes_csv,
-        trace_rels_csv=trace_rels_csv,
-        output_root=output_root,
-        methods=methods,
-        k=8,
-        max_essays=1,  # or a small number for debugging
-        verbose=True,
-    )
-
-    comparison = compare_methods(all_summaries)
-    print_comparison_table(comparison)
-
-
-if __name__ == "__main__":
-    main()
-
-#endregion#? QA4Methods - V5   (TRACE names for context, weighted embeddings)
+#endregion#? 
 #?#########################  End  ##########################
 
-=== Method Comparison (Mean Accuracy) ===
-Method     | Mean Acc | #Essays
---------------------------------
-kggen      |    66.67% |       1
-graphrag   |    40.00% |       1
-openie     |    73.33% |       1
-tracekg    |    93.33% |       1
-
-[tracekg] Essay 0: accuracy=0.9333 (14/15)
-[kggen] Essay 0: accuracy=0.6667 (10/15)
-[graphrag] Essay 0: accuracy=0.4000 (6/15)
-[openie] Essay 0: accuracy=0.7333 (11/15)
-
-
-
-#?######################### Start ##########################
-#region:#?   QA4Methods - V6   (TRACE names for context, weighted embeddings) - Wihout qualifiers in relation text
-
-
-import os
-import json
-from dataclasses import dataclass
-from pathlib import Path
-from typing import Dict, List, Optional, Tuple, Set
-
-import numpy as np
-import pandas as pd
-import networkx as nx
-
-from datasets import load_dataset  # not strictly required if you only use JSON dump
-import torch
-from transformers import AutoTokenizer, AutoModel
-from sklearn.preprocessing import normalize
-from sklearn.metrics.pairwise import cosine_similarity
-
-from openai import OpenAI
-
-
-# ============================================================
-# 0. Global config: weights, models, env
-# ============================================================
-
-# Entity weights (must sum to 1 after normalization)
-ENT_WEIGHTS = {
-    "name": 0.40,   # entity_name
-    "desc": 0.25,   # entity_description
-    "ctx": 0.35,    # class_label + class_group + node_properties
-}
-
-# Relation weights (before normalization)
-REL_EMB_WEIGHTS = {
-    "name": 0.25,      # relation_name
-    "desc+Q": 0.15,    # rel_desc + qualifiers
-    "head_tail": 0.20, # subject/object names + class info
-    "ctx": 0.40,       # canonical_rel_name + canonical_rel_desc + rel_cls
-}
-
-ENT_EMBED_MODEL = "BAAI/bge-large-en-v1.5"
-REL_EMBED_MODEL = "BAAI/bge-large-en-v1.5"  # same for simplicity
-BATCH_SIZE = 32
-DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
-
-# OpenAI config
-OPENAI_MODEL_JUDGE = "gpt-5.1"
-OPENAI_API_KEY_ENV = "OPENAI_API_KEY"
-
-
-# ============================================================
-# 1. Env helper for OpenAI key
-# ============================================================
-
-def _load_openai_key(
-    envvar: str = OPENAI_API_KEY_ENV,
-    fallback_path: str = "/home/mabolhas/MyReposOnSOL/SGCE-KG/.env",
-):
-    key = os.getenv(envvar, None)
-    if key:
-        return key
-    if Path(fallback_path).exists():
-        txt = Path(fallback_path).read_text(encoding="utf-8").strip()
-        if txt:
-            return txt
-    return None
-
-
-# ============================================================
-# 2. HF Embedder (generic)
-# ============================================================
-
-def mean_pool(token_embeds: torch.Tensor, attention_mask: torch.Tensor) -> torch.Tensor:
-    mask = attention_mask.unsqueeze(-1).expand(token_embeds.size()).float()
-    masked = token_embeds * mask
-    summed = masked.sum(dim=1)
-    counts = mask.sum(dim=1).clamp(min=1e-9)
-    return summed / counts
-
-
-class HFEmbedder:
-    def __init__(self, model_name: str, device: str = DEVICE):
-        print(f"[Embedder] loading model {model_name} on {device} ...")
-        self.device = device
-        self.tokenizer = AutoTokenizer.from_pretrained(model_name, use_fast=True)
-        self.model = AutoModel.from_pretrained(model_name)
-        self.model.to(device)
-        self.model.eval()
-        for p in self.model.parameters():
-            p.requires_grad = False
-
-    @torch.no_grad()
-    def encode_batch(self, texts: List[str], batch_size: int = BATCH_SIZE) -> np.ndarray:
-        embs = []
-        for i in range(0, len(texts), batch_size):
-            batch = texts[i:i + batch_size]
-            enc = self.tokenizer(
-                batch,
-                padding=True,
-                truncation=True,
-                return_tensors="pt",
-                max_length=1024,
-            )
-            input_ids = enc["input_ids"].to(self.device)
-            attention_mask = enc["attention_mask"].to(self.device)
-            out = self.model(
-                input_ids=input_ids,
-                attention_mask=attention_mask,
-                return_dict=True,
-            )
-            token_embeds = out.last_hidden_state
-            pooled = mean_pool(token_embeds, attention_mask)
-            pooled = pooled.cpu().numpy()
-            embs.append(pooled)
-        embs = np.vstack(embs)
-        embs = normalize(embs, axis=1)
-        return embs
-
-
-# ============================================================
-# 3. SimpleGraph for KG-Gen-style KGs (dataset KGs)
-# ============================================================
-
-@dataclass
-class SimpleGraph:
-    entities: Set[str]
-    relations: Set[Tuple[str, str, str]]
-
-    @staticmethod
-    def from_kggen_dict(d: Dict) -> "SimpleGraph":
-        entities = set(d.get("entities", []))
-        rels_raw = d.get("relations", [])
-        relations = set()
-        for r in rels_raw:
-            if isinstance(r, (list, tuple)) and len(r) == 3:
-                s, rel, t = r
-                relations.add((str(s), str(rel), str(t)))
-        return SimpleGraph(entities=entities, relations=relations)
-
-    def to_nx(self) -> nx.DiGraph:
-        g = nx.DiGraph()
-        for e in self.entities:
-            g.add_node(e, text=str(e))
-        for s, rel, t in self.relations:
-            g.add_edge(s, t, relation=str(rel))
-        return g
-
-
-# ============================================================
-# 4. TRACE-KG loaders and weighted embedding builders
-# ============================================================
-
-def safe_str(x) -> str:
-    if x is None:
-        return ""
-    if isinstance(x, float) and np.isnan(x):
-        return ""
-    return str(x)
-
-
-def build_tracekg_entity_texts(nodes_df: pd.DataFrame) -> Tuple[List[str], List[str], List[str], List[str]]:
-    """Return lists: ids, name_texts, desc_texts, ctx_texts."""
-    ids, names, descs, ctxs = [], [], [], []
-    for _, row in nodes_df.iterrows():
-        ent_id = safe_str(row["entity_id"])
-        ids.append(ent_id)
-
-        # name ~ entity_name
-        name_txt = safe_str(row.get("entity_name", ""))
-
-        # desc ~ entity_description
-        desc_txt = safe_str(row.get("entity_description", ""))
-
-        # ctx ~ class_label + class_group + node_properties
-        cls_label = safe_str(row.get("class_label", ""))
-        cls_group = safe_str(row.get("class_group", ""))
-        node_props = safe_str(row.get("node_properties", ""))
-
-        ctx_parts = []
-        if cls_label:
-            ctx_parts.append(f"[CLASS:{cls_label}]")
-        if cls_group:
-            ctx_parts.append(f"[GROUP:{cls_group}]")
-        if node_props:
-            ctx_parts.append(f"[PROPS:{node_props}]")
-        ctx_txt = " ; ".join(ctx_parts)
-
-        names.append(name_txt)
-        descs.append(desc_txt)
-        ctxs.append(ctx_txt)
-    return ids, names, descs, ctxs
-
-
-def compute_weighted_entity_embeddings(
-    embedder: HFEmbedder,
-    nodes_df: pd.DataFrame,
-    weights: Dict[str, float] = ENT_WEIGHTS,
-) -> Tuple[Dict[str, np.ndarray], int]:
-    ids, names, descs, ctxs = build_tracekg_entity_texts(nodes_df)
-
-    print("[TRACE-ENT] encoding name field ...")
-    emb_name = embedder.encode_batch(names) if any(t.strip() for t in names) else None
-
-    print("[TRACE-ENT] encoding desc field ...")
-    emb_desc = embedder.encode_batch(descs) if any(t.strip() for t in descs) else None
-
-    print("[TRACE-ENT] encoding ctx field ...")
-    emb_ctx = embedder.encode_batch(ctxs) if any(t.strip() for t in ctxs) else None
-
-    D_ref = None
-    for arr in [emb_name, emb_desc, emb_ctx]:
-        if arr is not None:
-            D_ref = arr.shape[1]
-            break
-    if D_ref is None:
-        raise ValueError("All entity fields empty — cannot embed.")
-
-    def _ensure(arr):
-        if arr is None:
-            return np.zeros((len(ids), D_ref))
-        if arr.shape[1] != D_ref:
-            raise ValueError("Entity embedding dimension mismatch.")
-        return arr
-
-    emb_name = _ensure(emb_name)
-    emb_desc = _ensure(emb_desc)
-    emb_ctx = _ensure(emb_ctx)
-
-    w_name = weights.get("name", 0.0)
-    w_desc = weights.get("desc", 0.0)
-    w_ctx = weights.get("ctx", 0.0)
-    Wsum = w_name + w_desc + w_ctx
-    if Wsum <= 0:
-        raise ValueError("Sum of ENT_WEIGHTS must be > 0")
-    w_name /= Wsum
-    w_desc /= Wsum
-    w_ctx /= Wsum
-
-    combined = (w_name * emb_name) + (w_desc * emb_desc) + (w_ctx * emb_ctx)
-    combined = normalize(combined, axis=1)
-
-    node_embs: Dict[str, np.ndarray] = {}
-    for i, node_id in enumerate(ids):
-        node_embs[node_id] = combined[i]
-    return node_embs, D_ref
-
-
-def build_tracekg_relation_texts(
-    rels_df: pd.DataFrame,
-    nodes_df: pd.DataFrame,
-) -> Tuple[List[str], Dict[str, int], Dict[int, Dict[str, str]]]:
-    """
-    Build relation text fields by bucket:
-      - name: relation name
-      - desc+Q: rel_desc + qualifiers
-      - head_tail: subject/object names + class info
-      - ctx: canonical_rel_name + canonical_rel_desc + rel_cls
-    """
-    # Node helper map
-    node_info = {}
-    for _, nrow in nodes_df.iterrows():
-        nid = safe_str(nrow["entity_id"])
-        node_info[nid] = {
-            "name": safe_str(nrow.get("entity_name", "")),
-            "class_label": safe_str(nrow.get("class_label", "")),
-        }
-
-    relation_ids: List[str] = []
-    id_to_index: Dict[str, int] = {}
-    texts: Dict[int, Dict[str, str]] = {}
-
-    for i, row in rels_df.iterrows():
-        rid = safe_str(row.get("relation_id", i))
-        relation_ids.append(rid)
-        id_to_index[rid] = i
-
-        start_id = safe_str(row.get("start_id", ""))
-        end_id = safe_str(row.get("end_id", ""))
-
-        # name bucket
-        rel_name = safe_str(row.get("canonical_rel_name", "")) or safe_str(row.get("raw_relation_name", ""))
-
-        # desc+Q bucket
-        rel_desc = safe_str(row.get("rel_desc", "")) or safe_str(row.get("canonical_rel_desc", ""))
-        qualifiers = safe_str(row.get("qualifiers", ""))
-        desc_plus_q = " ; ".join([p for p in [rel_desc, qualifiers] if p])
-
-        # head_tail bucket
-        head_info = node_info.get(start_id, {})
-        tail_info = node_info.get(end_id, {})
-        head_tail_parts = []
-        if head_info.get("name"):
-            head_tail_parts.append(f"[H:{head_info['name']}]")
-        if head_info.get("class_label"):
-            head_tail_parts.append(f"[HCLS:{head_info['class_label']}]")
-        if tail_info.get("name"):
-            head_tail_parts.append(f"[T:{tail_info['name']}]")
-        if tail_info.get("class_label"):
-            head_tail_parts.append(f"[TCLS:{tail_info['class_label']}]")
-        head_tail = " ".join(head_tail_parts)
-
-        # ctx bucket
-        canonical_name = safe_str(row.get("canonical_rel_name", ""))
-        canonical_desc = safe_str(row.get("canonical_rel_desc", ""))
-        rel_cls = safe_str(row.get("rel_cls", ""))
-        ctx_parts = []
-        if canonical_name:
-            ctx_parts.append(canonical_name)
-        if canonical_desc:
-            ctx_parts.append(canonical_desc)
-        if rel_cls:
-            ctx_parts.append(f"[CLS:{rel_cls}]")
-        ctx_txt = " ; ".join(ctx_parts)
-
-        texts[i] = {
-            "name": rel_name,
-            "desc+Q": desc_plus_q,
-            "head_tail": head_tail,
-            "ctx": ctx_txt,
-        }
-
-    return relation_ids, id_to_index, texts
-
-
-def compute_weighted_relation_embeddings(
-    embedder: HFEmbedder,
-    rels_df: pd.DataFrame,
-    nodes_df: pd.DataFrame,
-    weights: Dict[str, float] = REL_EMB_WEIGHTS,
-) -> Tuple[Dict[str, np.ndarray], int]:
-    rel_ids, id_to_index, texts = build_tracekg_relation_texts(rels_df, nodes_df)
-
-    n = len(rel_ids)
-    buckets = ["name", "desc+Q", "head_tail", "ctx"]
-    bucket_texts = {b: [""] * n for b in buckets}
-    for idx in range(n):
-        for b in buckets:
-            bucket_texts[b][idx] = texts[idx].get(b, "")
-
-    emb_bucket = {}
-    D_ref = None
-    for b in buckets:
-        has_any = any(t.strip() for t in bucket_texts[b])
-        if not has_any:
-            emb_bucket[b] = None
-            continue
-        print(f"[TRACE-REL] encoding bucket '{b}' ...")
-        eb = embedder.encode_batch(bucket_texts[b])
-        emb_bucket[b] = eb
-        if D_ref is None:
-            D_ref = eb.shape[1]
-
-    if D_ref is None:
-        raise ValueError("All relation buckets empty — cannot embed relations.")
-
-    def _ensure(arr):
-        if arr is None:
-            return np.zeros((n, D_ref))
-        if arr.shape[1] != D_ref:
-            raise ValueError("Relation embedding dimension mismatch.")
-        return arr
-
-    for b in buckets:
-        emb_bucket[b] = _ensure(emb_bucket[b])
-
-    w_name = weights.get("name", 0.0)
-    w_descq = weights.get("desc+Q", 0.0)
-    w_ht = weights.get("head_tail", 0.0)
-    w_ctx = weights.get("ctx", 0.0)
-    Wsum = w_name + w_descq + w_ht + w_ctx
-    if Wsum <= 0:
-        raise ValueError("Sum of REL_EMB_WEIGHTS must be > 0")
-    w_name /= Wsum
-    w_descq /= Wsum
-    w_ht /= Wsum
-    w_ctx /= Wsum
-
-    combined = (
-        w_name * emb_bucket["name"]
-        + w_descq * emb_bucket["desc+Q"]
-        + w_ht * emb_bucket["head_tail"]
-        + w_ctx * emb_bucket["ctx"]
-    )
-    combined = normalize(combined, axis=1)
-
-    rel_embs: Dict[str, np.ndarray] = {}
-    for i, rid in enumerate(rel_ids):
-        rel_embs[rid] = combined[i]
-    return rel_embs, D_ref
-
-
-def build_tracekg_nx_and_nodeinfo(
-    nodes_df: pd.DataFrame,
-    rels_df: pd.DataFrame,
-) -> Tuple[nx.DiGraph, Dict[str, Dict[str, str]]]:
-    """
-    Build TRACE-KG graph and a node_info dict:
-      node_id -> {"name": entity_name, "class_label": class_label}
-    """
-    g = nx.DiGraph()
-    node_info: Dict[str, Dict[str, str]] = {}
-
-    for _, row in nodes_df.iterrows():
-        nid = safe_str(row["entity_id"])
-        name = safe_str(row.get("entity_name", ""))
-        cls_label = safe_str(row.get("class_label", ""))
-
-        g.add_node(
-            nid,
-            entity_name=name,
-            entity_description=safe_str(row.get("entity_description", "")),
-            class_label=cls_label,
-            class_group=safe_str(row.get("class_group", "")),
-            node_properties=safe_str(row.get("node_properties", "")),
-            chunk_ids=safe_str(row.get("chunk_ids", "")),
-        )
-        node_info[nid] = {
-            "name": name,
-            "class_label": cls_label,
-        }
-
-    for _, row in rels_df.iterrows():
-        sid = safe_str(row.get("start_id", ""))
-        eid = safe_str(row.get("end_id", ""))
-        rid = safe_str(row.get("relation_id", ""))
-        rel_name = safe_str(row.get("canonical_rel_name", "")) or safe_str(row.get("raw_relation_name", ""))
-        qualifiers = safe_str(row.get("qualifiers", ""))
-        g.add_edge(
-            sid,
-            eid,
-            relation=rel_name,
-            relation_id=rid,
-            chunk_id=safe_str(row.get("chunk_id", "")),
-            qualifiers=qualifiers,
-        )
-    return g, node_info
-
-
-# ============================================================
-# 5. Retrieval (weighted node embeddings + graph, with readable context)
-# ============================================================
-
-class WeightedGraphRetriever:
-    def __init__(
-        self,
-        node_embeddings: Dict[str, np.ndarray],
-        graph: nx.DiGraph,
-        node_info: Optional[Dict[str, Dict[str, str]]] = None,
-    ):
-        """
-        node_info (for TRACE-KG) maps:
-           node_id -> {"name": ..., "class_label": ...}
-        For dataset KGs, this can be None and we fall back to IDs in context.
-        """
-        self.node_embeddings = node_embeddings
-        self.graph = graph
-        self.node_info = node_info or {}
-
-    def retrieve_relevant_nodes(
-        self,
-        query_emb: np.ndarray,
-        k: int = 8,
-    ) -> List[Tuple[str, float]]:
-        sims = []
-        for node, emb in self.node_embeddings.items():
-            sim = cosine_similarity(query_emb.reshape(1, -1), emb.reshape(1, -1))[0][0]
-            sims.append((node, sim))
-        sims.sort(key=lambda x: x[1], reverse=True)
-        return sims[:k]
-
-    def _format_node_for_context(self, node_id: str) -> str:
-        """
-        For TRACE-KG, return 'Name (which is of type: ClassLabel)'.
-        For others, just return node_id as string.
-        """
-        info = self.node_info.get(node_id)
-        if info is None:
-            return str(node_id)
-
-        name = info.get("name") or str(node_id)
-        cls = info.get("class_label") or ""
-        if cls:
-            return f"{name} (which is of type: {cls})"
-        return name
-
-    def _format_edge_for_context(self, src: str, dst: str, data: Dict) -> str:
-        """
-        For TRACE-KG, produce:
-          subjectEntName (which is of type: entCleName) has relation
-          {rel_canonical_name (with qualifiers:{})} with
-          objectEntName (which is of type: entCleName).
-        For others, fall back to 'src rel dst.'.
-        """
-        rel_name = data.get("relation", "")
-        qualifiers = data.get("qualifiers", "")
-
-        # Heuristic: if we have node_info, treat this as TRACE-KG style.
-        if self.node_info:
-            subj = self._format_node_for_context(src)
-            obj = self._format_node_for_context(dst)
-            if qualifiers:
-                return (
-                    f"{subj} has relation "
-                    # f"{{{rel_name} (with qualifiers: {qualifiers})}} "
-                    f"{{{rel_name}}} "
-                    f"with {obj}."
-                )
-            else:
-                return (
-                    f"{subj} has relation "
-                    f"{{{rel_name}}} "
-                    f"with {obj}."
-                )
-        else:
-            # dataset KGs
-            return f"{src} {rel_name} {dst}."
-
-    def retrieve_context(
-        self,
-        node: str,
-        depth: int = 2,
-    ) -> List[str]:
-        context: Set[str] = set()
-
-        def explore(n: str, d: int):
-            if d > depth:
-                return
-            for nbr in self.graph.neighbors(n):
-                data = self.graph[n][nbr]
-                text = self._format_edge_for_context(n, nbr, data)
-                context.add(text)
-                explore(nbr, d + 1)
-            for nbr in self.graph.predecessors(n):
-                data = self.graph[nbr][n]
-                text = self._format_edge_for_context(nbr, n, data)
-                context.add(text)
-                explore(nbr, d + 1)
-
-        explore(node, 1)
-        return list(context)
-
-    def retrieve(
-        self,
-        query_emb: np.ndarray,
-        k: int = 8,
-    ) -> Tuple[List[Tuple[str, float]], Set[str], str]:
-        top_nodes = self.retrieve_relevant_nodes(query_emb, k=k)
-        context: Set[str] = set()
-        for node, _ in top_nodes:
-            ctx = self.retrieve_context(node)
-            context.update(ctx)
-        context_text = " ".join(context)
-        return top_nodes, context, context_text
-
-
-# ============================================================
-# 6. LLM-based evaluator (OpenAI API 5.1)
-# ============================================================
-
-_openai_client: Optional[OpenAI] = None
-
-
-def _get_openai_client() -> OpenAI:
-    global _openai_client
-    if _openai_client is not None:
-        return _openai_client
-    api_key = _load_openai_key()
-    if not api_key:
-        raise RuntimeError(
-            "OpenAI API key not found. Set OPENAI_API_KEY env var or provide it "
-            "in /home/mabolhas/MyReposOnSOL/SGCE-KG/.env"
-        )
-    _openai_client = OpenAI(api_key=api_key)
-    return _openai_client
-
-
-def gpt_evaluate_response(correct_answer: str, context: str) -> int:
-    """
-    Use an OpenAI model as a binary judge.
-    Returns 1 if the model believes the context contains the correct answer,
-    otherwise 0.
-    """
-    client = _get_openai_client()
-
-    system_prompt = (
-        "You are an evaluation assistant. "
-        "You are given a statement that is assumed to be the correct answer, "
-        "and a retrieved context. "
-        "Return '1' (without quotes) if the context clearly contains enough "
-        "information to support that answer. Otherwise return '0'. "
-        "Return only a single character: '1' or '0'."
-    )
-
-    user_prompt = (
-        "Correct answer statement:\n"
-        f"{correct_answer}\n\n"
-        "Retrieved context from a knowledge graph:\n"
-        f"{context}\n\n"
-        "Does the retrieved context contain enough information to support "
-        "the correctness of the answer statement? "
-        "Respond strictly with '1' for yes or '0' for no."
-    )
-
-    try:
-        resp = client.responses.create(
-            model=OPENAI_MODEL_JUDGE,
-            input=[
-                {
-                    "role": "system",
-                    "content": system_prompt,
-                },
-                {
-                    "role": "user",
-                    "content": user_prompt,
-                },
-            ],
-            max_output_tokens=64,  # >= 16
-        )
-        text = resp.output[0].content[0].text.strip()
-    except Exception as e:
-        print(f"[gpt_evaluate_response] Error calling OpenAI: {e}")
-        return 0
-
-    text = text.strip()
-    if text == "1":
-        return 1
-    if text == "0":
-        return 0
-
-    # Fallback: heuristic if model output is weird
-    ans_tokens = set(t.lower() for t in correct_answer.split() if len(t) > 3)
-    if not ans_tokens:
-        return 0
-    ctx_lower = context.lower()
-    for t in ans_tokens:
-        if t in ctx_lower:
-            return 1
-    return 0
-
-
-# ============================================================
-# 7. Evaluation utilities
-# ============================================================
-
-def evaluate_accuracy_for_graph(
-    query_embedder: HFEmbedder,
-    retriever: WeightedGraphRetriever,
-    queries: List[str],
-    method_name: str,
-    essay_idx: int,
-    results_dir: str,
-    k: int = 8,
-    verbose: bool = False,
-) -> Dict:
-    os.makedirs(results_dir, exist_ok=True)
-
-    print(f"[{method_name}] encoding {len(queries)} queries for essay {essay_idx} ...")
-    query_embs = query_embedder.encode_batch(queries)
-
-    correct = 0
-    results = []
-
-    for qi, q in enumerate(queries):
-        q_emb = query_embs[qi]
-        _, _, context_text = retriever.retrieve(q_emb, k=k)
-        evaluation = gpt_evaluate_response(q, context_text)
-        results.append(
-            {
-                "correct_answer": q,
-                "retrieved_context": context_text,
-                "evaluation": int(evaluation),
-            }
-        )
-        correct += evaluation
-
-    accuracy = correct / len(queries) if queries else 0.0
-    results.append({"accuracy": f"{accuracy * 100:.2f}%"})
-
-    out_path = os.path.join(results_dir, f"results_{essay_idx}.json")
-    with open(out_path, "w", encoding="utf-8") as f:
-        json.dump(results, f, indent=2)
-
-    if verbose:
-        print(
-            f"[{method_name}] Essay {essay_idx}: "
-            f"accuracy={accuracy:.4f} ({correct}/{len(queries)})"
-        )
-
-    return {
-        "accuracy": accuracy,
-        "num_queries": len(queries),
-        "method": method_name,
-        "essay_idx": essay_idx,
-    }
-
-
-def aggregate_method_stats(summaries: List[Dict]) -> Dict[str, float]:
-    if not summaries:
-        return {"mean_accuracy": 0.0, "num_essays": 0}
-    accs = [s["accuracy"] for s in summaries]
-    return {
-        "mean_accuracy": float(np.mean(accs)),
-        "num_essays": len(accs),
-    }
-
-
-def compare_methods(all_summaries: Dict[str, List[Dict]]) -> Dict[str, Dict]:
-    return {m: aggregate_method_stats(s) for m, s in all_summaries.items()}
-
-
-def print_comparison_table(comparison: Dict[str, Dict]):
-    print("\n=== Method Comparison (Mean Accuracy) ===")
-    print(f"{'Method':<10} | {'Mean Acc':>8} | {'#Essays':>7}")
-    print("-" * 32)
-    for m, stats in comparison.items():
-        print(
-            f"{m:<10} | {stats['mean_accuracy']*100:8.2f}% | "
-            f"{stats['num_essays']:7d}"
-        )
-
-
-# ============================================================
-# 8. Full evaluation over the dataset
-# ============================================================
-
-def run_full_evaluation(
-    dataset_json_path: str,
-    trace_nodes_csv: str,
-    trace_rels_csv: str,
-    output_root: str,
-    methods: List[str],
-    k: int = 8,
-    max_essays: Optional[int] = None,
-    verbose: bool = True,
-) -> Dict[str, List[Dict]]:
-    # Load dataset dump you already created
-    with open(dataset_json_path, "r", encoding="utf-8") as f:
-        dataset_list = json.load(f)
-    if max_essays is not None:
-        dataset_list = dataset_list[:max_essays]
-
-    # TRACE-KG embeddings & graph
-    ent_embedder = HFEmbedder(ENT_EMBED_MODEL, DEVICE)
-    rel_embedder = HFEmbedder(REL_EMBED_MODEL, DEVICE)  # relation embeddings precomputed but not used yet
-    nodes_df = pd.read_csv(trace_nodes_csv)
-    rels_df = pd.read_csv(trace_rels_csv)
-
-    trace_node_embs, _ = compute_weighted_entity_embeddings(ent_embedder, nodes_df, ENT_WEIGHTS)
-    trace_rel_embs, _ = compute_weighted_relation_embeddings(rel_embedder, rels_df, nodes_df, REL_EMB_WEIGHTS)
-    trace_graph, trace_node_info = build_tracekg_nx_and_nodeinfo(nodes_df, rels_df)
-    trace_retriever = WeightedGraphRetriever(trace_node_embs, trace_graph, node_info=trace_node_info)
-
-    # Query embedder (same model as entity, for semantic match)
-    query_embedder = ent_embedder
-
-    all_summaries: Dict[str, List[Dict]] = {m: [] for m in methods}
-
-    for idx, row in enumerate(dataset_list):
-        essay_idx = idx
-        queries: List[str] = row.get("generated_queries", [])
-        if not queries:
-            if verbose:
-                print(f"Skipping essay {essay_idx}: no queries.")
-            continue
-
-        if verbose:
-            print(f"\n=== Essay {essay_idx} | {len(queries)} queries ===")
-
-        # TRACE-KG (one global graph)
-        if "tracekg" in methods:
-            summaries_dir = os.path.join(output_root, "tracekg")
-            s = evaluate_accuracy_for_graph(
-                query_embedder=query_embedder,
-                retriever=trace_retriever,
-                queries=queries,
-                method_name="tracekg",
-                essay_idx=essay_idx,
-                results_dir=summaries_dir,
-                k=k,
-                verbose=verbose,
-            )
-            all_summaries["tracekg"].append(s)
-
-        # Other methods: kggen, graphrag, openie
-        for method in methods:
-            if method == "tracekg":
-                continue
-
-            kg_key = None
-            if method == "kggen":
-                kg_key = "kggen"
-            elif method == "graphrag":
-                kg_key = "graphrag_kg"
-            elif method == "openie":
-                kg_key = "openie_kg"
-            else:
-                continue
-
-            kg_data = row.get(kg_key, None)
-            if kg_data is None:
-                if verbose:
-                    print(f"  [{method}] No KG data for essay {essay_idx}, skipping.")
-                continue
-
-            sg = SimpleGraph.from_kggen_dict(kg_data)
-            g_nx = sg.to_nx()
-
-            node_ids = list(g_nx.nodes())
-            node_texts = [str(n) for n in node_ids]
-            node_embs_arr = query_embedder.encode_batch(node_texts)
-            node_embs = {nid: node_embs_arr[i] for i, nid in enumerate(node_ids)}
-            retriever = WeightedGraphRetriever(node_embs, g_nx, node_info=None)
-
-            summaries_dir = os.path.join(output_root, method)
-            s = evaluate_accuracy_for_graph(
-                query_embedder=query_embedder,
-                retriever=retriever,
-                queries=queries,
-                method_name=method,
-                essay_idx=essay_idx,
-                results_dir=summaries_dir,
-                k=k,
-                verbose=verbose,
-            )
-            all_summaries[method].append(s)
-
-    return all_summaries
-
-
-# ============================================================
-# 9. Main
-# ============================================================
-
-def main():
-    dataset_json_path = (
-        "/home/mabolhas/MyReposOnSOL/SGCE-KG/Experiments/MYNE/QA_and_OthersAnswers/mine_evaluation_dataset-short.json"
-    )
-    trace_nodes_csv = "/home/mabolhas/MyReposOnSOL/SGCE-KG/Experiments/MYNE/TRACEKG/nodes.csv"
-    trace_rels_csv = "/home/mabolhas/MyReposOnSOL/SGCE-KG/Experiments/MYNE/TRACEKG/rels.csv"
-
-    output_root = "./tracekg_mine_results_weighted_openai_v5"
-
-    methods = ["kggen", "graphrag", "openie", "tracekg"]
-    #methods = ["tracekg"]
-
-    all_summaries = run_full_evaluation(
-        dataset_json_path=dataset_json_path,
-        trace_nodes_csv=trace_nodes_csv,
-        trace_rels_csv=trace_rels_csv,
-        output_root=output_root,
-        methods=methods,
-        k=8,
-        max_essays=1,  # or a small number for debugging
-        verbose=True,
-    )
-
-    comparison = compare_methods(all_summaries)
-    print_comparison_table(comparison)
-
-
-if __name__ == "__main__":
-    main()
-
-#endregion#? QA4Methods - V6   (TRACE names for context, weighted embeddings) - Wihout qualifiers in relation text
-#?#########################  End  ##########################
-
-=== Method Comparison (Mean Accuracy) ===
-Method     | Mean Acc | #Essays
---------------------------------
-kggen      |    60.00% |       1
-graphrag   |    46.67% |       1
-openie     |    73.33% |       1
-tracekg    |    80.00% |       1
-
-[tracekg] encoding 15 queries for essay 0 ...
-[kggen] Essay 0: accuracy=0.6000 (9/15)
-[graphrag] Essay 0: accuracy=0.4667 (7/15)
-[openie] Essay 0: accuracy=0.7333 (11/15)
-
-
-
-
-
-#endregion#! Experiments
-#!#############################################  End Chapter  ##################################################
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -11289,10 +10094,6 @@ tracekg    |    80.00% |       1
 
 
 
-
-
-
-
 #?######################### Start ##########################
 #region:#?   Run statements
 
@@ -11313,10 +10114,6 @@ if __name__ == "__main__":
         force=True,
         debug=False
     )
-
-
-
-
 
 
 # -----------------------
@@ -11450,87 +10247,450 @@ if __name__ == "__main__":
 
 
 
-
-
-
-
-
-
 #?######################### Start ##########################
-#region:#?   Create JSON with 100 essays from the mine_evaluation_dataset.json
+#region:#?  Create KG for each Essay  - V3
 
 
+"""
+TRACE KG multi-essay runner
 
+Drop this near the BOTTOM of your main .py file (AFTER all function definitions),
+or put it in a separate script that imports those functions.
 
+It will:
+
+  - Read 100 essays from:
+        /home/mabolhas/MyReposOnSOL/SGCE-KG/Experiments/MYNE/QA_and_OthersAnswers/Plain_Text_100_Essays.json
+
+  - For each essay i (1..N):
+        * Reset the data pipeline folders (Chunks/Classes/Entities/KG/Relations)
+        * Write that essay into Plain_Text.json (the chunking input)
+        * Run, IN ORDER, the pipeline steps you specified:
+              1) sentence_chunks_token_driven(...)
+              2) embed_and_index_chunks(...)
+              3) run_entity_extraction_on_chunks(...)
+              4) iterative_resolution()
+              5) produce_clean_jsonl(input_path, out_file)
+              6) classrec_iterative_main()
+              7) main_input_for_cls_res()
+              8) run_pipeline_iteratively()
+              9) run_rel_rec(...)           <-- needed to create relations_raw.jsonl
+             10) run_relres_iteratively()
+             11) export_relations_and_nodes_to_csv()
+
+        * Copy the entire /data folder to:
+              /home/mabolhas/MyReposOnSOL/SGCE-KG/KGs_from_Essays/KG_Essay_<i>
+
+        * Clear the pipeline data folders again so the next essay is independent
+
+  - Use tqdm for progress
+  - Record per-essay timings, success/fail, and basic counts to:
+        /home/mabolhas/MyReposOnSOL/SGCE-KG/KGs_from_Essays/trace_kg_essays_run_stats.json
+"""
 
 import json
-
-with open("/home/mabolhas/MyReposOnSOL/SGCE-KG/Experiments/MYNE/QA_and_OthersAnswers/mine_evaluation_dataset.json", "r") as f:
-    data = json.load(f)
-
-print(type(data))
-if isinstance(data, dict):
-    print(data.keys())
-elif isinstance(data, list) and data:
-    print(data[0].keys())
-
-
-
-
-
-
-
-import json
-
-with open("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/pdf_to_json/Plain_Text.json", "r") as f:
-    data = json.load(f)
-
-print(type(data))
-if isinstance(data, dict):
-    print(data.keys())
-elif isinstance(data, list) and data:
-    print(data[0].keys())
-
-
-
-
-
-
-import json
+import os
+import shutil
+import time
+import traceback
 from pathlib import Path
 
-# -------- paths --------
-SRC = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/Experiments/MYNE/QA_and_OthersAnswers/mine_evaluation_dataset.json")
-OUT = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/pdf_to_json/Plain_Text_100_Essays.json")
+from tqdm import tqdm  # make sure `pip install tqdm`
 
-# -------- load source --------
-with SRC.open("r", encoding="utf-8") as f:
-    data = json.load(f)   # list of dicts
+# --------------------------------------------------------------------
+# CONSTANT PATHS
+# --------------------------------------------------------------------
 
-# -------- transform --------
-out = []
-for row in data[:100]:
-    out.append({
-        "title": row["essay_topic"],
-        "start_page": row["id"],
-        "end_page": row["id"],
-        "text": row["essay_content"],
-        "kind": "Essay",
-    })
+BASE_ROOT = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG")
+DATA_ROOT = BASE_ROOT / "data"
+ESSAYS_JSON = BASE_ROOT / "Experiments/MYNE/QA_and_OthersAnswers/Plain_Text_100_Essays.json"
+PLAIN_TEXT_JSON = DATA_ROOT / "pdf_to_json" / "Plain_Text.json"
+KG_RUNS_ROOT = BASE_ROOT / "KGs_from_Essays"
 
-# -------- write output --------
-with OUT.open("w", encoding="utf-8") as f:
-    json.dump(out, f, indent=2, ensure_ascii=False)
+CHUNKS_DIR = DATA_ROOT / "Chunks"
+CLASSES_DIR = DATA_ROOT / "Classes"
+ENTITIES_DIR = DATA_ROOT / "Entities"
+KG_DIR = DATA_ROOT / "KG"
+RELATIONS_DIR = DATA_ROOT / "Relations"
 
-print(f"Saved {len(out)} essays to {OUT}")
+# Make sure base dirs exist
+DATA_ROOT.mkdir(parents=True, exist_ok=True)
+PLAIN_TEXT_JSON.parent.mkdir(parents=True, exist_ok=True)
+KG_RUNS_ROOT.mkdir(parents=True, exist_ok=True)
 
 
+# --------------------------------------------------------------------
+# UTILS
+# --------------------------------------------------------------------
+
+def clear_data_subfolders() -> None:
+    """
+    Remove EVERYTHING inside these pipeline folders (but keep the folders):
+      - Chunks
+      - Classes
+      - Entities
+      - KG
+      - Relations
+
+    This ensures each essay run is independent.
+    """
+    for d in [CHUNKS_DIR, CLASSES_DIR, ENTITIES_DIR, KG_DIR, RELATIONS_DIR]:
+        d.mkdir(parents=True, exist_ok=True)
+        for child in d.iterdir():
+            try:
+                if child.is_file() or child.is_symlink():
+                    child.unlink()
+                elif child.is_dir():
+                    shutil.rmtree(child)
+            except Exception as e:
+                print(f"[warn] Failed to remove {child}: {e}")
+
+
+def extract_essay_text(rec, idx: int) -> str:
+    """
+    Heuristic to get the essay text from one JSON record.
+
+    Adjust if your Plain_Text_100_Essays.json has a different structure.
+    """
+    if isinstance(rec, str):
+        return rec
+
+    if isinstance(rec, dict):
+        # Try common field names first
+        for k in ["text", "essay_text", "content", "body", "answer", "Plain_Text"]:
+            v = rec.get(k)
+            if isinstance(v, str) and v.strip():
+                return v
+
+        # Fallback: choose the longest string field
+        best = ""
+        for v in rec.values():
+            if isinstance(v, str) and len(v) > len(best):
+                best = v
+        if best:
+            return best
+
+    # Last resort
+    return str(rec)
+
+
+def load_essays():
+    """
+    Load essays from Plain_Text_100_Essays.json.
+
+    Supports:
+      - list of records
+      - dict of key -> record
+      - single string / other (treated as one essay)
+    """
+    if not ESSAYS_JSON.exists():
+        raise FileNotFoundError(f"Essays file not found: {ESSAYS_JSON}")
+
+    with ESSAYS_JSON.open("r", encoding="utf-8") as f:
+        data = json.load(f)
+
+    essays = []
+
+    if isinstance(data, list):
+        for idx, rec in enumerate(data, start=1):  # 1-based index
+            text = extract_essay_text(rec, idx)
+            essays.append({
+                "index": idx,
+                "raw": rec,
+                "text": text,
+            })
+    elif isinstance(data, dict):
+        for idx, (key, rec) in enumerate(data.items(), start=1):
+            text = extract_essay_text(rec, idx)
+            essays.append({
+                "index": idx,
+                "key": key,
+                "raw": rec,
+                "text": text,
+            })
+    else:
+        # Single essay case
+        essays.append({
+            "index": 1,
+            "raw": data,
+            "text": extract_essay_text(data, 1),
+        })
+
+    return essays
+
+
+def write_plain_text_input(essay_meta: dict) -> None:
+    """
+    Overwrite Plain_Text.json with a single-doc JSON for the current essay.
+
+    This is the ONLY input the chunker reads, and the path stays fixed.
+    """
+    essay_idx = essay_meta["index"]
+    doc = {
+        "id": f"essay_{essay_idx:03d}",
+        "ref_index": essay_idx,
+        "ref_title": f"Essay {essay_idx}",
+        "text": essay_meta["text"],
+    }
+    with PLAIN_TEXT_JSON.open("w", encoding="utf-8") as f:
+        json.dump([doc], f, ensure_ascii=False, indent=2)
+
+
+def collect_chunk_ids():
+    """
+    After chunking, read chunks_sentence.jsonl and return list of chunk ids
+    for run_entity_extraction_on_chunks.
+    """
+    chunks_path = CHUNKS_DIR / "chunks_sentence.jsonl"
+    ids = []
+    if not chunks_path.exists():
+        return ids
+    with chunks_path.open("r", encoding="utf-8") as f:
+        for line in f:
+            line = line.strip()
+            if not line:
+                continue
+            try:
+                obj = json.loads(line)
+            except Exception:
+                continue
+            cid = obj.get("id")
+            if cid is not None:
+                ids.append(cid)
+    return ids
+
+
+def copy_data_for_essay(essay_index: int) -> Path:
+    """
+    Copy the entire /data folder to:
+
+        /.../SGCE-KG/KGs_from_Essays/KG_Essay_<index>
+
+    Returns the destination path.
+    """
+    dest = KG_RUNS_ROOT / f"KG_Essay_{essay_index:03d}"
+    if dest.exists():
+        shutil.rmtree(dest)
+    shutil.copytree(DATA_ROOT, dest)
+    return dest
+
+
+def count_csv_rows(path: Path) -> int:
+    """
+    Count data rows in a CSV (minus header). Returns 0 if file doesn't exist.
+    """
+    if not path.exists():
+        return 0
+    with path.open("r", encoding="utf-8") as f:
+        # subtract header if any lines
+        n = sum(1 for _ in f)
+    return max(n - 1, 0)
+
+
+# --------------------------------------------------------------------
+# MAIN MULTI-ESSAY RUNNER
+# --------------------------------------------------------------------
+
+def run_trace_kg_for_all_essays():
+    essays = load_essays()
+    run_stats = []
+
+    print(f"[info] Loaded {len(essays)} essays from {ESSAYS_JSON}")
+
+    for essay_meta in tqdm(essays, desc="TRACE KG essays"):
+        idx = essay_meta["index"]
+        label = f"Essay_{idx:03d}"
+
+        essay_stat = {
+            "essay_index": idx,
+            "label": label,
+            "success": False,
+            "error": None,
+            "traceback": None,
+            "timings": {},
+            "nodes_count": None,
+            "relations_count": None,
+            "data_snapshot_dir": None,
+        }
+
+        t_run_start = time.time()
+        try:
+            # --------------------------------------------------------
+            # 0) RESET PIPELINE DIRECTORIES FOR THIS ESSAY
+            # --------------------------------------------------------
+            clear_data_subfolders()
+
+            # --------------------------------------------------------
+            # 1) WRITE INPUT FOR CHUNKING
+            # --------------------------------------------------------
+            write_plain_text_input(essay_meta)
+
+            # --------------------------------------------------------
+            # 2) CHUNKING
+            # --------------------------------------------------------
+            t0 = time.time()
+            sentence_chunks_token_driven(
+                "/home/mabolhas/MyReposOnSOL/SGCE-KG/data/pdf_to_json/Plain_Text.json",
+                "/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Chunks/chunks_sentence.jsonl",
+                max_tokens_per_chunk=200,   # preferred upper bound (None to disable)
+                min_tokens_per_chunk=100,   # expand small chunks to reach this minimum (None to disable)
+                sentence_per_line=True,
+                keep_ref_text=False,
+                strip_leading_headings=True,
+                force=True,
+                debug=False,
+            )
+            essay_stat["timings"]["chunking"] = time.time() - t0
+
+            # recompute chunk_ids for this essay
+            chunk_ids = collect_chunk_ids()
+
+            # --------------------------------------------------------
+            # 3) embed_and_index_chunks
+            # --------------------------------------------------------
+            t0 = time.time()
+            embed_and_index_chunks(
+                "/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Chunks/chunks_sentence.jsonl",
+                "/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Chunks/chunks_emb",
+                "BAAI/bge-large-en-v1.5",
+                "BAAI/bge-small-en-v1.5",
+                False,   # use_small_model_for_dev
+                32,      # batch_size
+                None,    # device -> auto
+                True,    # save_index
+                True,    # force
+            )
+            essay_stat["timings"]["embed_and_index_chunks"] = time.time() - t0
+
+            # --------------------------------------------------------
+            # 4) Entity Recognition
+            # --------------------------------------------------------
+            t0 = time.time()
+            run_entity_extraction_on_chunks(
+                chunk_ids,
+                prev_chunks=5,
+                save_debug=False,
+                model="gpt-5.1",
+                max_tokens=8000,
+            )
+            essay_stat["timings"]["entity_recognition"] = time.time() - t0
+
+            # --------------------------------------------------------
+            # 5) Ent Resolution (Multi Run)
+            # --------------------------------------------------------
+            t0 = time.time()
+            iterative_resolution()
+            essay_stat["timings"]["entity_resolution"] = time.time() - t0
+
+            # --------------------------------------------------------
+            # 6) Cls Rec input producer
+            # --------------------------------------------------------
+            t0 = time.time()
+            # input_path & out_file are already defined in your code
+            produce_clean_jsonl(input_path, out_file)
+            essay_stat["timings"]["cls_rec_input"] = time.time() - t0
+
+            # --------------------------------------------------------
+            # 7) Cls Recognition
+            # --------------------------------------------------------
+            t0 = time.time()
+            classrec_iterative_main()
+            essay_stat["timings"]["cls_recognition"] = time.time() - t0
+
+            # --------------------------------------------------------
+            # 8) Create input for Cls Res
+            # --------------------------------------------------------
+            t0 = time.time()
+            main_input_for_cls_res()
+            essay_stat["timings"]["cls_res_input"] = time.time() - t0
+
+            # --------------------------------------------------------
+            # 9) Cls Res Multi Run
+            # --------------------------------------------------------
+            t0 = time.time()
+            run_pipeline_iteratively()
+            essay_stat["timings"]["cls_res_multi_run"] = time.time() - t0
+
+            # --------------------------------------------------------
+            # 10) Relation Rec (single run)
+            #     (Needed to create relations_raw.jsonl before Rel Res)
+            # --------------------------------------------------------
+            t0 = time.time()
+            run_rel_rec(
+                entities_path="/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Classes/Cls_Res/Cls_Res_IterativeRuns/overall_summary/entities_with_class.jsonl",
+                chunks_path="/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Chunks/chunks_sentence.jsonl",
+                output_path="/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Relations/Rel Rec/relations_raw.jsonl",
+                model="gpt-5.1",
+            )
+            essay_stat["timings"]["relation_recognition"] = time.time() - t0
+
+            # --------------------------------------------------------
+            # 11) Relation Res Multi Run
+            # --------------------------------------------------------
+            t0 = time.time()
+            run_relres_iteratively()
+            essay_stat["timings"]["relation_resolution"] = time.time() - t0
+
+            # --------------------------------------------------------
+            # 12) Export KG to CSVs
+            # --------------------------------------------------------
+            t0 = time.time()
+            export_relations_and_nodes_to_csv()
+            essay_stat["timings"]["export_kg"] = time.time() - t0
+
+            # --------------------------------------------------------
+            # 13) SIMPLE COUNTS (nodes / relations)
+            # --------------------------------------------------------
+            nodes_csv = KG_DIR / "nodes.csv"
+            rels_csv = KG_DIR / "rels_fixed_no_raw.csv"
+            essay_stat["nodes_count"] = count_csv_rows(nodes_csv)
+            essay_stat["relations_count"] = count_csv_rows(rels_csv)
+
+            essay_stat["success"] = True
+
+        except Exception as e:
+            essay_stat["error"] = str(e)
+            essay_stat["traceback"] = traceback.format_exc()
+            print(f"[error] Failure on {label}: {e}")
+
+        finally:
+            essay_stat["timings"]["total_seconds"] = time.time() - t_run_start
+
+            # Snapshot /data (even on failure, for debugging that essay)
+            try:
+                dest_dir = copy_data_for_essay(idx)
+                essay_stat["data_snapshot_dir"] = str(dest_dir)
+            except Exception as e:
+                print(f"[warn] Failed to snapshot data for {label}: {e}")
+
+            # Clear pipeline dirs for NEXT essay
+            clear_data_subfolders()
+
+            run_stats.append(essay_stat)
+
+    # ----------------------------------------------------------------
+    # SAVE OVERALL RUN STATS
+    # ----------------------------------------------------------------
+    stats_path = KG_RUNS_ROOT / "trace_kg_essays_run_stats.json"
+    with stats_path.open("w", encoding="utf-8") as f:
+        json.dump(run_stats, f, ensure_ascii=False, indent=2)
+
+    print(f"[done] Wrote overall run stats to {stats_path}")
+
+
+# --------------------------------------------------------------------
+# ENTRY POINT
+# --------------------------------------------------------------------
+
+if __name__ == "__main__":
+    run_trace_kg_for_all_essays()
 
 
 
 
 
-#endregion#? Create JSON with 100 essays from the mine_evaluation_dataset.json
+
+#endregion#? Create KG for each Essay  - V3
 #?#########################  End  ##########################
 
 
@@ -11539,243 +10699,357 @@ print(f"Saved {len(out)} essays to {OUT}")
 
 
 #?######################### Start ##########################
-#region:#?     Create KG for each Essay
+#region:#?   Create KG for each Essay  - V4
 
 
 
+"""
+TRACE KG multi-essay runner (fixed entity seed issue)
+
+Runs the full pipeline independently for each essay in:
+    /home/mabolhas/MyReposOnSOL/SGCE-KG/Experiments/MYNE/QA_and_OthersAnswers/Plain_Text_100_Essays.json
+
+For each essay i:
+  1) Clear data/{Chunks,Classes,Entities,KG,Relations}
+  2) Write that essay as the only document to data/pdf_to_json/Plain_Text.json
+  3) Run, IN ORDER:
+
+        sentence_chunks_token_driven(...)
+        embed_and_index_chunks(...)
+        run_entity_extraction_on_chunks(...)
+        prepare_entity_seed_for_iterative_resolution()   <-- NEW helper
+        iterative_resolution()
+        produce_clean_jsonl(input_path, out_file)
+        classrec_iterative_main()
+        main_input_for_cls_res()
+        run_pipeline_iteratively()
+        run_rel_rec(...)
+        run_relres_iteratively()
+        export_relations_and_nodes_to_csv()
+
+  4) Copy /data to KGs_from_Essays/KG_Essay_<i>
+  5) Clear data/{Chunks,Classes,Entities,KG,Relations} again
+
+Records timing + status per essay to:
+    /home/mabolhas/MyReposOnSOL/SGCE-KG/KGs_from_Essays/trace_kg_essays_run_stats.json
+"""
 
 import json
+import os
 import shutil
 import time
 import traceback
 from pathlib import Path
 
-from tqdm import tqdm  # pip install tqdm if needed
+from tqdm import tqdm  # pip install tqdm
+
+# --------------------------------------------------------------------
+# CONSTANT PATHS
+# --------------------------------------------------------------------
+
+BASE_ROOT = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG")
+DATA_ROOT = BASE_ROOT / "data"
+ESSAYS_JSON = BASE_ROOT / "Experiments/MYNE/QA_and_OthersAnswers/Plain_Text_100_Essays.json"
+PLAIN_TEXT_JSON = DATA_ROOT / "pdf_to_json" / "Plain_Text.json"
+KG_RUNS_ROOT = BASE_ROOT / "KGs_from_Essays"
+
+CHUNKS_DIR = DATA_ROOT / "Chunks"
+CLASSES_DIR = DATA_ROOT / "Classes"
+ENTITIES_DIR = DATA_ROOT / "Entities"
+KG_DIR = DATA_ROOT / "KG"
+RELATIONS_DIR = DATA_ROOT / "Relations"
+
+# Make sure base dirs exist
+DATA_ROOT.mkdir(parents=True, exist_ok=True)
+PLAIN_TEXT_JSON.parent.mkdir(parents=True, exist_ok=True)
+KG_RUNS_ROOT.mkdir(parents=True, exist_ok=True)
 
 
-# =========================
-# CONFIG
-# =========================
+# --------------------------------------------------------------------
+# UTILS
+# --------------------------------------------------------------------
 
-BASE_DIR = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG")
-
-DATA_DIR      = BASE_DIR / "data"
-CHUNKS_DIR    = DATA_DIR / "Chunks"
-CLASSES_DIR   = DATA_DIR / "Classes"
-ENTITIES_DIR  = DATA_DIR / "Entities"
-KG_DIR        = DATA_DIR / "KG"
-REL_DIR       = DATA_DIR / "Relations"
-PDF_JSON_DIR  = DATA_DIR / "pdf_to_json"
-
-# File that sentence_chunks_token_driven reads from
-SINGLE_PLAIN_TEXT_PATH = PDF_JSON_DIR / "Plain_Text.json"
-
-# The ONLY external input file you told me to use
-ALL_ESSAYS_PATH = BASE_DIR / "Experiments" / "MYNE" / "QA_and_OthersAnswers" / "Plain_Text_100_Essays.json"
-
-# Where to store per‑essay snapshots of /data
-# (siblings of /data): KG_Essay_000, KG_Essay_001, ...
-PER_ESSAY_SNAPSHOTS_ROOT = BASE_DIR
-
-
-# =========================
-# HELPERS
-# =========================
-
-def load_all_essays():
+def clear_data_subfolders() -> None:
     """
-    Load Plain_Text_100_Essays.json and return:
-      - root: original JSON root
-      - essays: list of essay objects
+    Remove EVERYTHING inside these pipeline folders (but keep the folders):
+      - Chunks
+      - Classes
+      - Entities
+      - KG
+      - Relations
     """
-    with ALL_ESSAYS_PATH.open("r", encoding="utf-8") as f:
-        root = json.load(f)
-
-    if isinstance(root, list):
-        essays = root
-    elif isinstance(root, dict):
-        essays = None
-        for key in ("essays", "data", "items"):
-            v = root.get(key)
-            if isinstance(v, list):
-                essays = v
-                break
-        if essays is None:
-            raise ValueError(
-                f"Could not find a list of essays in {ALL_ESSAYS_PATH}; "
-                f"expected a list or a dict with 'essays'/'data'/'items'."
-            )
-    else:
-        raise ValueError(
-            f"Unexpected JSON root type in {ALL_ESSAYS_PATH}: {type(root)}"
-        )
-
-    return root, essays
-
-
-def write_single_essay_to_plain_text(original_root, essay_obj):
-    """
-    Overwrite Plain_Text.json so that it contains ONLY this essay,
-    without changing the overall container structure more than necessary.
-
-    - If original_root is a list: [essay_obj]
-    - If original_root is a dict with a list field (essays/data/items):
-        same dict but that list replaced by [essay_obj]
-    - Otherwise: just essay_obj as root.
-    """
-    SINGLE_PLAIN_TEXT_PATH.parent.mkdir(parents=True, exist_ok=True)
-
-    if isinstance(original_root, list):
-        new_root = [essay_obj]
-    elif isinstance(original_root, dict):
-        new_root = dict(original_root)
-        replaced = False
-        for key in ("essays", "data", "items"):
-            if isinstance(original_root.get(key), list):
-                new_root[key] = [essay_obj]
-                replaced = True
-                break
-        if not replaced:
-            new_root = {"essay": essay_obj}
-    else:
-        new_root = essay_obj
-
-    with SINGLE_PLAIN_TEXT_PATH.open("w", encoding="utf-8") as f:
-        json.dump(new_root, f, ensure_ascii=False, indent=2)
-
-
-def clean_data_subdirs():
-    """
-    Remove everything inside (but not the dirs themselves):
-
-      /data/Chunks
-      /data/Classes
-      /data/Entities
-      /data/KG
-      /data/Relations
-    """
-    for subdir in [CHUNKS_DIR, CLASSES_DIR, ENTITIES_DIR, KG_DIR, REL_DIR]:
-        if not subdir.exists():
-            continue
-        for item in subdir.iterdir():
+    for d in [CHUNKS_DIR, CLASSES_DIR, ENTITIES_DIR, KG_DIR, RELATIONS_DIR]:
+        d.mkdir(parents=True, exist_ok=True)
+        for child in d.iterdir():
             try:
-                if item.is_dir():
-                    shutil.rmtree(item)
-                else:
-                    item.unlink()
+                if child.is_file() or child.is_symlink():
+                    child.unlink()
+                elif child.is_dir():
+                    shutil.rmtree(child)
             except Exception as e:
-                print(f"[WARN] Failed to delete {item}: {e}")
+                print(f"[warn] Failed to remove {child}: {e}")
 
 
-def build_chunk_ids_from_file(chunks_jsonl_path: Path):
+def extract_essay_text(rec, idx: int) -> str:
     """
-    Build chunk_ids list for run_entity_extraction_on_chunks
-    from /data/Chunks/chunks_sentence.jsonl
+    Heuristic to get the essay text from one JSON record.
+    Adjust this if your essay JSON schema differs.
     """
-    chunk_ids = []
-    if not chunks_jsonl_path.exists():
-        return chunk_ids
+    if isinstance(rec, str):
+        return rec
 
-    with chunks_jsonl_path.open("r", encoding="utf-8") as f:
+    if isinstance(rec, dict):
+        # Try common field names first
+        for k in ["text", "essay_text", "content", "body", "answer", "Plain_Text"]:
+            v = rec.get(k)
+            if isinstance(v, str) and v.strip():
+                return v
+
+        # Fallback: choose the longest string field
+        best = ""
+        for v in rec.values():
+            if isinstance(v, str) and len(v) > len(best):
+                best = v
+        if best:
+            return best
+
+    # Last resort
+    return str(rec)
+
+
+def load_essays():
+    """
+    Load essays from Plain_Text_100_Essays.json.
+    Supports list, dict, or single-object JSON.
+    """
+    if not ESSAYS_JSON.exists():
+        raise FileNotFoundError(f"Essays file not found: {ESSAYS_JSON}")
+
+    with ESSAYS_JSON.open("r", encoding="utf-8") as f:
+        data = json.load(f)
+
+    essays = []
+
+    if isinstance(data, list):
+        for idx, rec in enumerate(data, start=1):  # 1-based index
+            text = extract_essay_text(rec, idx)
+            essays.append({
+                "index": idx,
+                "raw": rec,
+                "text": text,
+            })
+    elif isinstance(data, dict):
+        for idx, (key, rec) in enumerate(data.items(), start=1):
+            text = extract_essay_text(rec, idx)
+            essays.append({
+                "index": idx,
+                "key": key,
+                "raw": rec,
+                "text": text,
+            })
+    else:
+        essays.append({
+            "index": 1,
+            "raw": data,
+            "text": extract_essay_text(data, 1),
+        })
+
+    return essays
+
+
+def write_plain_text_input(essay_meta: dict) -> None:
+    """
+    Overwrite Plain_Text.json with a single-doc JSON for the current essay.
+    This is the ONLY input the chunker reads.
+    """
+    essay_idx = essay_meta["index"]
+    doc = {
+        "id": f"essay_{essay_idx:03d}",
+        "ref_index": essay_idx,
+        "ref_title": f"Essay {essay_idx}",
+        "text": essay_meta["text"],
+    }
+    with PLAIN_TEXT_JSON.open("w", encoding="utf-8") as f:
+        json.dump([doc], f, ensure_ascii=False, indent=2)
+
+
+def collect_chunk_ids():
+    """
+    After chunking, read chunks_sentence.jsonl and return list of chunk ids
+    for run_entity_extraction_on_chunks.
+    """
+    chunks_path = CHUNKS_DIR / "chunks_sentence.jsonl"
+    ids = []
+    if not chunks_path.exists():
+        return ids
+    with chunks_path.open("r", encoding="utf-8") as f:
         for line in f:
             line = line.strip()
             if not line:
                 continue
-            obj = json.loads(line)
-            cid = (
-                obj.get("id")
-                or obj.get("chunk_id")
-                or obj.get("uid")
-                or obj.get("chunkId")
-            )
+            try:
+                obj = json.loads(line)
+            except Exception:
+                continue
+            cid = obj.get("id")
             if cid is not None:
-                chunk_ids.append(cid)
-    return chunk_ids
+                ids.append(cid)
+    return ids
 
 
-def snapshot_data_dir_for_essay(idx: int):
+def copy_data_for_essay(essay_index: int) -> Path:
     """
-    Copy /data to KG_Essay_{idx:03d} under BASE_DIR.
+    Copy the entire /data folder to:
+        /.../SGCE-KG/KGs_from_Essays/KG_Essay_<index>
+    Returns the destination path.
     """
-    snapshot_dir = PER_ESSAY_SNAPSHOTS_ROOT / f"KG_Essay_{idx:03d}"
-    if snapshot_dir.exists():
-        shutil.rmtree(snapshot_dir)
-    print(f"[INFO] Copying {DATA_DIR} -> {snapshot_dir}")
-    shutil.copytree(DATA_DIR, snapshot_dir)
+    dest = KG_RUNS_ROOT / f"KG_Essay_{essay_index:03d}"
+    if dest.exists():
+        shutil.rmtree(dest)
+    shutil.copytree(DATA_ROOT, dest)
+    return dest
 
 
-# =========================
-# MAIN DRIVER
-# =========================
-
-def run_trace_kg_for_all_essays():
+def count_csv_rows(path: Path) -> int:
     """
-    For each essay in Plain_Text_100_Essays.json:
-
-      1) Write it into /data/pdf_to_json/Plain_Text.json
-      2) Run your run-statements IN THE ORDER YOU SPECIFIED:
-         - sentence_chunks_token_driven(...)
-         - embed_and_index_chunks(...)
-         - run_entity_extraction_on_chunks(...)
-         - iterative_resolution()
-         - produce_clean_jsonl(input_path, out_file)
-         - classrec_iterative_main()
-         - main_input_for_cls_res()
-         - run_pipeline_iteratively()
-         - run_rel_rec(...  # from your Rel Rec run-statement)
-         - run_relres_iteratively()
-         - export_relations_and_nodes_to_csv()
-      3) Copy /data -> KG_Essay_{i}
-      4) Empty Chunks / Classes / Entities / KG / Relations
+    Count data rows in a CSV (minus header). Returns 0 if file doesn't exist.
     """
-    original_root, essays = load_all_essays()
-    n_essays = len(essays)
-    print(f"[INFO] Loaded {n_essays} essays from {ALL_ESSAYS_PATH}")
+    if not path.exists():
+        return 0
+    with path.open("r", encoding="utf-8") as f:
+        n = sum(1 for _ in f)
+    return max(n - 1, 0)
 
-    # Optional: start from a clean state
-    clean_data_subdirs()
 
-    run_stats = []
+# --------------------------------------------------------------------
+# NEW: entity seed prep for iterative_resolution()
+# --------------------------------------------------------------------
 
-    for idx, essay in enumerate(tqdm(essays, desc="TRACE KG per essay"), start=0):
-        essay_label = (
-            essay.get("id")
-            if isinstance(essay, dict) and essay.get("id") is not None
-            else essay.get("essay_id")
-            if isinstance(essay, dict) and essay.get("essay_id") is not None
-            else essay.get("title")
-            if isinstance(essay, dict) and essay.get("title") is not None
-            else f"essay_{idx}"
+def _score_entity_candidate(path: Path) -> tuple:
+    """
+    Heuristic scoring to pick the best entity .jsonl file as a seed.
+    Prefer names with 'entities_raw', then 'entities', and larger size.
+    """
+    name = path.name.lower()
+    score = 0
+    if "entities_raw" in name or "entity_raw" in name:
+        score += 100
+    elif "entities" in name or "entity" in name:
+        score += 50
+    try:
+        size = path.stat().st_size
+    except Exception:
+        size = 0
+    return (score, size)
+
+
+def prepare_entity_seed_for_iterative_resolution():
+    """
+    Ensure that:
+      data/Entities/iterative_runs/entities_raw_seed_backup.jsonl
+      data/Entities/iterative_runs/entities_raw_seed.jsonl
+    exist before calling iterative_resolution().
+
+    Strategy:
+      - Look for any *.jsonl under data/Entities (except inside iterative_runs).
+      - Pick the best candidate by name + size.
+      - Copy it as both seed and seed_backup.
+    """
+    iter_dir = ENTITIES_DIR / "iterative_runs"
+    iter_dir.mkdir(parents=True, exist_ok=True)
+
+    backup_path = iter_dir / "entities_raw_seed_backup.jsonl"
+    seed_path = iter_dir / "entities_raw_seed.jsonl"
+
+    # If both already exist, do nothing (e.g., if some other part of your code made them)
+    if backup_path.exists() and seed_path.exists():
+        return
+
+    # Find candidate entity files produced by entity extraction for THIS essay
+    candidates = []
+    if ENTITIES_DIR.exists():
+        for p in ENTITIES_DIR.rglob("*.jsonl"):
+            # skip previous iterative_runs content (if any)
+            try:
+                if "iterative_runs" in p.parts:
+                    continue
+            except Exception:
+                pass
+            candidates.append(p)
+
+    if not candidates:
+        raise RuntimeError(
+            "prepare_entity_seed_for_iterative_resolution: "
+            "No .jsonl files found under data/Entities to use as seed."
         )
 
-        print("\n" + "=" * 80)
-        print(f"=== Essay {idx:03d} :: {essay_label} ===")
-        print("=" * 80)
+    best = max(candidates, key=_score_entity_candidate)
+    # Copy to seed and backup
+    shutil.copy2(best, backup_path)
+    shutil.copy2(best, seed_path)
+    print(f"[info] Seeded entity resolution from: {best.name}")
+
+
+# --------------------------------------------------------------------
+# MAIN MULTI-ESSAY RUNNER
+# --------------------------------------------------------------------
+
+def run_trace_kg_for_all_essays():
+    essays = load_essays()
+    run_stats = []
+
+    print(f"[info] Loaded {len(essays)} essays from {ESSAYS_JSON}")
+
+    for essay_meta in tqdm(essays, desc="TRACE KG essays"):
+        idx = essay_meta["index"]
+        label = f"Essay_{idx:03d}"
 
         essay_stat = {
             "index": idx,
-            "essay_id": essay_label,
+            "essay_id": label,
+            "t_chunking": None,
+            "t_embed_index": None,
+            "n_chunks": None,
+            "t_build_chunk_ids": None,
+            "t_entity_recognition": None,
+            "t_entity_resolution": None,
+            "t_cls_rec_input": None,
+            "t_cls_recognition": None,
+            "t_cls_res_input": None,
+            "t_cls_res_multi_run": None,
+            "t_rel_recognition": None,
+            "t_rel_resolution": None,
+            "t_export_kg": None,
+            "success": False,
+            "error": None,
+            "traceback": None,
+            "t_total": None,
+            "nodes_count": None,
+            "relations_count": None,
+            "data_snapshot_dir": None,
         }
 
         t_run_start = time.time()
-        success = False
-        error_msg = None
-
         try:
-            # --------------------------------
-            # 0) Prepare input for chunking
-            # --------------------------------
-            write_single_essay_to_plain_text(original_root, essay)
+            # --------------------------------------------------------
+            # 0) RESET PIPELINE DIRECTORIES FOR THIS ESSAY
+            # --------------------------------------------------------
+            clear_data_subfolders()
 
-            # --------------------------------
-            # 1) Chunking - EXACT run statement
-            # --------------------------------
+            # --------------------------------------------------------
+            # 1) WRITE INPUT FOR CHUNKING
+            # --------------------------------------------------------
+            write_plain_text_input(essay_meta)
+
+            # --------------------------------------------------------
+            # 2) CHUNKING
+            # --------------------------------------------------------
             t0 = time.time()
             sentence_chunks_token_driven(
                 "/home/mabolhas/MyReposOnSOL/SGCE-KG/data/pdf_to_json/Plain_Text.json",
                 "/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Chunks/chunks_sentence.jsonl",
-                max_tokens_per_chunk=200,
-                min_tokens_per_chunk=100,
+                max_tokens_per_chunk=200,   # preferred upper bound (None to disable)
+                min_tokens_per_chunk=100,   # expand small chunks to reach this minimum (None to disable)
                 sentence_per_line=True,
                 keep_ref_text=False,
                 strip_leading_headings=True,
@@ -11784,9 +11058,15 @@ def run_trace_kg_for_all_essays():
             )
             essay_stat["t_chunking"] = time.time() - t0
 
-            # --------------------------------
-            # 2) embed_and_index_chunks - EXACT run statement
-            # --------------------------------
+            # recompute chunk_ids for this essay
+            t0 = time.time()
+            chunk_ids = collect_chunk_ids()
+            essay_stat["t_build_chunk_ids"] = time.time() - t0
+            essay_stat["n_chunks"] = len(chunk_ids)
+
+            # --------------------------------------------------------
+            # 3) embed_and_index_chunks
+            # --------------------------------------------------------
             t0 = time.time()
             embed_and_index_chunks(
                 "/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Chunks/chunks_sentence.jsonl",
@@ -11801,20 +11081,9 @@ def run_trace_kg_for_all_essays():
             )
             essay_stat["t_embed_index"] = time.time() - t0
 
-            # --------------------------------
-            # 3) Build chunk_ids for Entity Recognition
-            # --------------------------------
-            t0 = time.time()
-            chunks_path = Path(
-                "/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Chunks/chunks_sentence.jsonl"
-            )
-            chunk_ids = build_chunk_ids_from_file(chunks_path)
-            essay_stat["n_chunks"] = len(chunk_ids)
-            essay_stat["t_build_chunk_ids"] = time.time() - t0
-
-            # --------------------------------
-            # 4) Entity Recognition - EXACT run statement
-            # --------------------------------
+            # --------------------------------------------------------
+            # 4) Entity Recognition
+            # --------------------------------------------------------
             t0 = time.time()
             run_entity_extraction_on_chunks(
                 chunk_ids,
@@ -11825,50 +11094,50 @@ def run_trace_kg_for_all_essays():
             )
             essay_stat["t_entity_recognition"] = time.time() - t0
 
-            # --------------------------------
-            # 5) Ent Resolution (Multi Run) - EXACT run statement
-            # --------------------------------
+            # --------------------------------------------------------
+            # 5) Seed for Ent Resolution (NEW helper)
+            # --------------------------------------------------------
+            prepare_entity_seed_for_iterative_resolution()
+
+            # --------------------------------------------------------
+            # 6) Ent Resolution (Multi Run)
+            # --------------------------------------------------------
             t0 = time.time()
             iterative_resolution()
             essay_stat["t_entity_resolution"] = time.time() - t0
 
-            # --------------------------------
-            # 6) Cls Rec input producer - EXACT run statement
-            # --------------------------------
-            # you had: produce_clean_jsonl(input_path, out_file)
-            # we just define input_path / out_file (paths are from your code)
+            # --------------------------------------------------------
+            # 7) Cls Rec input producer
+            # --------------------------------------------------------
             t0 = time.time()
-            input_path = "/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities/Ent_Res/Ent_Res_IterativeRuns/overall_summary/entities_with_class.jsonl"
-            out_file   = "/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Classes/Cls_Input/cls_input_entities.jsonl"
+            # input_path & out_file are defined in your existing code.
             produce_clean_jsonl(input_path, out_file)
-            essay_stat["t_cls_input"] = time.time() - t0
+            essay_stat["t_cls_rec_input"] = time.time() - t0
 
-            # --------------------------------
-            # 7) Cls Recognition - EXACT run statement
-            # --------------------------------
+            # --------------------------------------------------------
+            # 8) Cls Recognition
+            # --------------------------------------------------------
             t0 = time.time()
             classrec_iterative_main()
             essay_stat["t_cls_recognition"] = time.time() - t0
 
-            # --------------------------------
-            # 8) Create input for Cls Res - EXACT run statement
-            # --------------------------------
+            # --------------------------------------------------------
+            # 9) Create input for Cls Res
+            # --------------------------------------------------------
             t0 = time.time()
             main_input_for_cls_res()
             essay_stat["t_cls_res_input"] = time.time() - t0
 
-            # --------------------------------
-            # 9) Cls Res Multi Run - EXACT run statement
-            # --------------------------------
+            # --------------------------------------------------------
+            # 10) Cls Res Multi Run
+            # --------------------------------------------------------
             t0 = time.time()
             run_pipeline_iteratively()
-            essay_stat["t_cls_resolution"] = time.time() - t0
+            essay_stat["t_cls_res_multi_run"] = time.time() - t0
 
-            # --------------------------------
-            # 10) Relation Rec (Rel Rec) - from your Part Three code
-            #     (you didn't list it in the last block, but it's needed
-            #      to create relations_raw.jsonl for Rel Res)
-            # --------------------------------
+            # --------------------------------------------------------
+            # 11) Relation Rec (single run)
+            # --------------------------------------------------------
             t0 = time.time()
             run_rel_rec(
                 entities_path="/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Classes/Cls_Res/Cls_Res_IterativeRuns/overall_summary/entities_with_class.jsonl",
@@ -11878,63 +11147,611 @@ def run_trace_kg_for_all_essays():
             )
             essay_stat["t_rel_recognition"] = time.time() - t0
 
-            # --------------------------------
-            # 11) Relation Res Multi Run - EXACT run statement
-            # --------------------------------
+            # --------------------------------------------------------
+            # 12) Relation Res Multi Run
+            # --------------------------------------------------------
             t0 = time.time()
             run_relres_iteratively()
             essay_stat["t_rel_resolution"] = time.time() - t0
 
-            # --------------------------------
-            # 12) Export KG to CSVs - EXACT run statement
-            # --------------------------------
+            # --------------------------------------------------------
+            # 13) Export KG to CSVs
+            # --------------------------------------------------------
             t0 = time.time()
             export_relations_and_nodes_to_csv()
-            essay_stat["t_export_csv"] = time.time() - t0
+            essay_stat["t_export_kg"] = time.time() - t0
 
-            success = True
+            # --------------------------------------------------------
+            # 14) SIMPLE COUNTS (nodes / relations)
+            # --------------------------------------------------------
+            nodes_csv = KG_DIR / "nodes.csv"
+            rels_csv = KG_DIR / "rels_fixed_no_raw.csv"
+            essay_stat["nodes_count"] = count_csv_rows(nodes_csv)
+            essay_stat["relations_count"] = count_csv_rows(rels_csv)
+
+            essay_stat["success"] = True
 
         except Exception as e:
-            error_msg = str(e)
-            print(f"[ERROR] Essay {idx:03d} failed: {error_msg}")
-            traceback.print_exc()
+            essay_stat["error"] = str(e)
+            essay_stat["traceback"] = traceback.format_exc()
+            print(f"[error] Failure on {label}: {e}")
 
         finally:
-            essay_stat["success"] = success
-            essay_stat["error"] = error_msg
             essay_stat["t_total"] = time.time() - t_run_start
 
-            # 13) Copy /data to KG_Essay_{idx}
+            # Snapshot /data (even on failure, for debugging)
             try:
-                snapshot_data_dir_for_essay(idx)
-            except Exception as e_snap:
-                print(f"[WARN] Failed to snapshot data for essay {idx:03d}: {e_snap}")
+                dest_dir = copy_data_for_essay(idx)
+                essay_stat["data_snapshot_dir"] = str(dest_dir)
+            except Exception as e:
+                print(f"[warn] Failed to snapshot data for {label}: {e}")
 
-            # 14) Clean data subdirs for next essay
-            try:
-                clean_data_subdirs()
-            except Exception as e_clean:
-                print(f"[WARN] Failed to clean data dirs after essay {idx:03d}: {e_clean}")
+            # Clear pipeline dirs for NEXT essay
+            clear_data_subfolders()
 
             run_stats.append(essay_stat)
 
-    # Save per‑essay stats
-    stats_path = BASE_DIR / "trace_kg_per_essay_stats.json"
+    # ----------------------------------------------------------------
+    # SAVE OVERALL RUN STATS
+    # ----------------------------------------------------------------
+    stats_path = KG_RUNS_ROOT / "trace_kg_essays_run_stats.json"
     with stats_path.open("w", encoding="utf-8") as f:
         json.dump(run_stats, f, ensure_ascii=False, indent=2)
-    print(f"\n[INFO] Per‑essay stats written to {stats_path}")
+
+    print(f"[done] Wrote overall run stats to {stats_path}")
 
 
-# =========================
-# KICK IT OFF
-# =========================
+# --------------------------------------------------------------------
+# ENTRY POINT
+# --------------------------------------------------------------------
 
 if __name__ == "__main__":
     run_trace_kg_for_all_essays()
 
 
+#endregion#? Create KG for each Essay  - V4
+#?#########################  End  ##########################
 
-#endregion#?   Create KG for each Essay
+
+
+
+
+#?######################### Start ##########################
+#region:#?   Create KG for each Essay  - V5
+
+
+
+"""
+TRACE KG multi-essay runner (fixed entity seed issue + defined input_path/out_file)
+
+Runs the full pipeline independently for each essay in:
+    /home/mabolhas/MyReposOnSOL/SGCE-KG/Experiments/MYNE/QA_and_OthersAnswers/Plain_Text_100_Essays.json
+
+For each essay i:
+  1) Clear data/{Chunks,Classes,Entities,KG,Relations}
+  2) Write that essay as the only document to data/pdf_to_json/Plain_Text.json
+  3) Run, IN ORDER:
+
+        sentence_chunks_token_driven(...)
+        embed_and_index_chunks(...)
+        run_entity_extraction_on_chunks(...)
+        prepare_entity_seed_for_iterative_resolution()
+        iterative_resolution()
+        produce_clean_jsonl(input_path, out_file)
+        classrec_iterative_main()
+        main_input_for_cls_res()
+        run_pipeline_iteratively()
+        run_rel_rec(...)
+        run_relres_iteratively()
+        export_relations_and_nodes_to_csv()
+
+  4) Copy /data to KGs_from_Essays/KG_Essay_<i>
+  5) Clear data/{Chunks,Classes,Entities,KG,Relations} again
+
+Records timing + status per essay to:
+    /home/mabolhas/MyReposOnSOL/SGCE-KG/KGs_from_Essays/trace_kg_essays_run_stats.json
+"""
+
+import json
+import os
+import shutil
+import time
+import traceback
+from pathlib import Path
+
+from tqdm import tqdm  # pip install tqdm
+
+# --------------------------------------------------------------------
+# CONSTANT PATHS
+# --------------------------------------------------------------------
+
+BASE_ROOT = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG")
+DATA_ROOT = BASE_ROOT / "data"
+ESSAYS_JSON = BASE_ROOT / "Experiments/MYNE/QA_and_OthersAnswers/Plain_Text_100_Essays.json"
+PLAIN_TEXT_JSON = DATA_ROOT / "pdf_to_json" / "Plain_Text.json"
+KG_RUNS_ROOT = BASE_ROOT / "KGs_from_Essays"
+
+CHUNKS_DIR = DATA_ROOT / "Chunks"
+CLASSES_DIR = DATA_ROOT / "Classes"
+ENTITIES_DIR = DATA_ROOT / "Entities"
+KG_DIR = DATA_ROOT / "KG"
+RELATIONS_DIR = DATA_ROOT / "Relations"
+
+# Make sure base dirs exist
+DATA_ROOT.mkdir(parents=True, exist_ok=True)
+PLAIN_TEXT_JSON.parent.mkdir(parents=True, exist_ok=True)
+KG_RUNS_ROOT.mkdir(parents=True, exist_ok=True)
+
+# --------------------------------------------------------------------
+# PATHS FOR Cls Rec INPUT (FIX FOR input_path / out_file)
+# --------------------------------------------------------------------
+
+# Directory where class-recognition expects its input entities
+CLS_INPUT_DIR = DATA_ROOT / "Classes" / "Cls_Input"
+CLS_INPUT_DIR.mkdir(parents=True, exist_ok=True)
+
+# This is the file classrec_iterative_main() reads:
+#   INPUT_PATH = "/home/.../data/Classes/Cls_Input/cls_input_entities.jsonl"
+out_file = CLS_INPUT_DIR / "cls_input_entities.jsonl"
+
+# This must be the *final resolved entities* JSONL produced by iterative_resolution().
+# Adjust the filename here if your entity-resolution code uses a different one.
+input_path = (
+    DATA_ROOT
+    / "Entities"
+    / "Ent_Res_IterativeRuns"
+    / "overall_summary"
+    / "entities_final.jsonl"
+)
+# ^^^^^ If your iterative_resolution() writes, for example, "final_entities_resolved.jsonl"
+# instead of "entities_final.jsonl", just change that filename above.
+
+
+# --------------------------------------------------------------------
+# UTILS
+# --------------------------------------------------------------------
+
+def clear_data_subfolders() -> None:
+    """
+    Remove EVERYTHING inside these pipeline folders (but keep the folders):
+      - Chunks
+      - Classes
+      - Entities
+      - KG
+      - Relations
+    """
+    for d in [CHUNKS_DIR, CLASSES_DIR, ENTITIES_DIR, KG_DIR, RELATIONS_DIR]:
+        d.mkdir(parents=True, exist_ok=True)
+        for child in d.iterdir():
+            try:
+                if child.is_file() or child.is_symlink():
+                    child.unlink()
+                elif child.is_dir():
+                    shutil.rmtree(child)
+            except Exception as e:
+                print(f"[warn] Failed to remove {child}: {e}")
+
+
+def extract_essay_text(rec, idx: int) -> str:
+    """
+    Heuristic to get the essay text from one JSON record.
+    Adjust this if your essay JSON schema differs.
+    """
+    if isinstance(rec, str):
+        return rec
+
+    if isinstance(rec, dict):
+        # Try common field names first
+        for k in ["text", "essay_text", "content", "body", "answer", "Plain_Text"]:
+            v = rec.get(k)
+            if isinstance(v, str) and v.strip():
+                return v
+
+        # Fallback: choose the longest string field
+        best = ""
+        for v in rec.values():
+            if isinstance(v, str) and len(v) > len(best):
+                best = v
+        if best:
+            return best
+
+    # Last resort
+    return str(rec)
+
+
+def load_essays():
+    """
+    Load essays from Plain_Text_100_Essays.json.
+    Supports list, dict, or single-object JSON.
+    """
+    if not ESSAYS_JSON.exists():
+        raise FileNotFoundError(f"Essays file not found: {ESSAYS_JSON}")
+
+    with ESSAYS_JSON.open("r", encoding="utf-8") as f:
+        data = json.load(f)
+
+    essays = []
+
+    if isinstance(data, list):
+        for idx, rec in enumerate(data, start=1):  # 1-based index
+            text = extract_essay_text(rec, idx)
+            essays.append({
+                "index": idx,
+                "raw": rec,
+                "text": text,
+            })
+    elif isinstance(data, dict):
+        for idx, (key, rec) in enumerate(data.items(), start=1):
+            text = extract_essay_text(rec, idx)
+            essays.append({
+                "index": idx,
+                "key": key,
+                "raw": rec,
+                "text": text,
+            })
+    else:
+        essays.append({
+            "index": 1,
+            "raw": data,
+            "text": extract_essay_text(data, 1),
+        })
+
+    return essays
+
+
+def write_plain_text_input(essay_meta: dict) -> None:
+    """
+    Overwrite Plain_Text.json with a single-doc JSON for the current essay.
+    This is the ONLY input the chunker reads.
+    """
+    essay_idx = essay_meta["index"]
+    doc = {
+        "id": f"essay_{essay_idx:03d}",
+        "ref_index": essay_idx,
+        "ref_title": f"Essay {essay_idx}",
+        "text": essay_meta["text"],
+    }
+    with PLAIN_TEXT_JSON.open("w", encoding="utf-8") as f:
+        json.dump([doc], f, ensure_ascii=False, indent=2)
+
+
+def collect_chunk_ids():
+    """
+    After chunking, read chunks_sentence.jsonl and return list of chunk ids
+    for run_entity_extraction_on_chunks.
+    """
+    chunks_path = CHUNKS_DIR / "chunks_sentence.jsonl"
+    ids = []
+    if not chunks_path.exists():
+        return ids
+    with chunks_path.open("r", encoding="utf-8") as f:
+        for line in f:
+            line = line.strip()
+            if not line:
+                continue
+            try:
+                obj = json.loads(line)
+            except Exception:
+                continue
+            cid = obj.get("id")
+            if cid is not None:
+                ids.append(cid)
+    return ids
+
+
+def copy_data_for_essay(essay_index: int) -> Path:
+    """
+    Copy the entire /data folder to:
+        /.../SGCE-KG/KGs_from_Essays/KG_Essay_<index>
+    Returns the destination path.
+    """
+    dest = KG_RUNS_ROOT / f"KG_Essay_{essay_index:03d}"
+    if dest.exists():
+        shutil.rmtree(dest)
+    shutil.copytree(DATA_ROOT, dest)
+    return dest
+
+
+def count_csv_rows(path: Path) -> int:
+    """
+    Count data rows in a CSV (minus header). Returns 0 if file doesn't exist.
+    """
+    if not path.exists():
+        return 0
+    with path.open("r", encoding="utf-8") as f:
+        n = sum(1 for _ in f)
+    return max(n - 1, 0)
+
+
+# --------------------------------------------------------------------
+# NEW: entity seed prep for iterative_resolution()
+# --------------------------------------------------------------------
+
+def _score_entity_candidate(path: Path) -> tuple:
+    """
+    Heuristic scoring to pick the best entity .jsonl file as a seed.
+    Prefer names with 'entities_raw', then 'entities', and larger size.
+    """
+    name = path.name.lower()
+    score = 0
+    if "entities_raw" in name or "entity_raw" in name:
+        score += 100
+    elif "entities" in name or "entity" in name:
+        score += 50
+    try:
+        size = path.stat().st_size
+    except Exception:
+        size = 0
+    return (score, size)
+
+
+def prepare_entity_seed_for_iterative_resolution():
+    """
+    Ensure that:
+      data/Entities/iterative_runs/entities_raw_seed_backup.jsonl
+      data/Entities/iterative_runs/entities_raw_seed.jsonl
+    exist before calling iterative_resolution().
+
+    Strategy:
+      - Look for any *.jsonl under data/Entities (except inside iterative_runs).
+      - Pick the best candidate by name + size.
+      - Copy it as both seed and seed_backup.
+    """
+    iter_dir = ENTITIES_DIR / "iterative_runs"
+    iter_dir.mkdir(parents=True, exist_ok=True)
+
+    backup_path = iter_dir / "entities_raw_seed_backup.jsonl"
+    seed_path = iter_dir / "entities_raw_seed.jsonl"
+
+    # If both already exist, do nothing (e.g., if some other part of your code made them)
+    if backup_path.exists() and seed_path.exists():
+        return
+
+    # Find candidate entity files produced by entity extraction for THIS essay
+    candidates = []
+    if ENTITIES_DIR.exists():
+        for p in ENTITIES_DIR.rglob("*.jsonl"):
+            # skip previous iterative_runs content (if any)
+            try:
+                if "iterative_runs" in p.parts:
+                    continue
+            except Exception:
+                pass
+            candidates.append(p)
+
+    if not candidates:
+        raise RuntimeError(
+            "prepare_entity_seed_for_iterative_resolution: "
+            "No .jsonl files found under data/Entities to use as seed."
+        )
+
+    best = max(candidates, key=_score_entity_candidate)
+    # Copy to seed and backup
+    shutil.copy2(best, backup_path)
+    shutil.copy2(best, seed_path)
+    print(f"[info] Seeded entity resolution from: {best.name}")
+
+
+# --------------------------------------------------------------------
+# MAIN MULTI-ESSAY RUNNER
+# --------------------------------------------------------------------
+
+def run_trace_kg_for_all_essays():
+    essays = load_essays()
+    run_stats = []
+
+    print(f"[info] Loaded {len(essays)} essays from {ESSAYS_JSON}")
+
+    for essay_meta in tqdm(essays, desc="TRACE KG essays"):
+        idx = essay_meta["index"]
+        label = f"Essay_{idx:03d}"
+
+        essay_stat = {
+            "index": idx,
+            "essay_id": label,
+            "t_chunking": None,
+            "t_embed_index": None,
+            "n_chunks": None,
+            "t_build_chunk_ids": None,
+            "t_entity_recognition": None,
+            "t_entity_resolution": None,
+            "t_cls_rec_input": None,
+            "t_cls_recognition": None,
+            "t_cls_res_input": None,
+            "t_cls_res_multi_run": None,
+            "t_rel_recognition": None,
+            "t_rel_resolution": None,
+            "t_export_kg": None,
+            "success": False,
+            "error": None,
+            "traceback": None,
+            "t_total": None,
+            "nodes_count": None,
+            "relations_count": None,
+            "data_snapshot_dir": None,
+        }
+
+        t_run_start = time.time()
+        try:
+            # --------------------------------------------------------
+            # 0) RESET PIPELINE DIRECTORIES FOR THIS ESSAY
+            # --------------------------------------------------------
+            clear_data_subfolders()
+
+            # --------------------------------------------------------
+            # 1) WRITE INPUT FOR CHUNKING
+            # --------------------------------------------------------
+            write_plain_text_input(essay_meta)
+
+            # --------------------------------------------------------
+            # 2) CHUNKING
+            # --------------------------------------------------------
+            t0 = time.time()
+            sentence_chunks_token_driven(
+                "/home/mabolhas/MyReposOnSOL/SGCE-KG/data/pdf_to_json/Plain_Text.json",
+                "/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Chunks/chunks_sentence.jsonl",
+                max_tokens_per_chunk=200,   # preferred upper bound (None to disable)
+                min_tokens_per_chunk=100,   # expand small chunks to reach this minimum (None to disable)
+                sentence_per_line=True,
+                keep_ref_text=False,
+                strip_leading_headings=True,
+                force=True,
+                debug=False,
+            )
+            essay_stat["t_chunking"] = time.time() - t0
+
+            # recompute chunk_ids for this essay
+            t0 = time.time()
+            chunk_ids = collect_chunk_ids()
+            essay_stat["t_build_chunk_ids"] = time.time() - t0
+            essay_stat["n_chunks"] = len(chunk_ids)
+
+            # --------------------------------------------------------
+            # 3) embed_and_index_chunks
+            # --------------------------------------------------------
+            t0 = time.time()
+            embed_and_index_chunks(
+                "/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Chunks/chunks_sentence.jsonl",
+                "/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Chunks/chunks_emb",
+                "BAAI/bge-large-en-v1.5",
+                "BAAI/bge-small-en-v1.5",
+                False,   # use_small_model_for_dev
+                32,      # batch_size
+                None,    # device -> auto
+                True,    # save_index
+                True,    # force
+            )
+            essay_stat["t_embed_index"] = time.time() - t0
+
+            # --------------------------------------------------------
+            # 4) Entity Recognition
+            # --------------------------------------------------------
+            t0 = time.time()
+            run_entity_extraction_on_chunks(
+                chunk_ids,
+                prev_chunks=5,
+                save_debug=False,
+                model="gpt-5.1",
+                max_tokens=8000,
+            )
+            essay_stat["t_entity_recognition"] = time.time() - t0
+
+            # --------------------------------------------------------
+            # 5) Seed for Ent Resolution (NEW helper)
+            # --------------------------------------------------------
+            prepare_entity_seed_for_iterative_resolution()
+
+            # --------------------------------------------------------
+            # 6) Ent Resolution (Multi Run)
+            # --------------------------------------------------------
+            t0 = time.time()
+            iterative_resolution()
+            essay_stat["t_entity_resolution"] = time.time() - t0
+
+            # --------------------------------------------------------
+            # 7) Cls Rec input producer
+            # --------------------------------------------------------
+            t0 = time.time()
+            # input_path & out_file now defined globally above.
+            produce_clean_jsonl(input_path, out_file)
+            essay_stat["t_cls_rec_input"] = time.time() - t0
+
+            # --------------------------------------------------------
+            # 8) Cls Recognition
+            # --------------------------------------------------------
+            t0 = time.time()
+            classrec_iterative_main()
+            essay_stat["t_cls_recognition"] = time.time() - t0
+
+            # --------------------------------------------------------
+            # 9) Create input for Cls Res
+            # --------------------------------------------------------
+            t0 = time.time()
+            main_input_for_cls_res()
+            essay_stat["t_cls_res_input"] = time.time() - t0
+
+            # --------------------------------------------------------
+            # 10) Cls Res Multi Run
+            # --------------------------------------------------------
+            t0 = time.time()
+            run_pipeline_iteratively()
+            essay_stat["t_cls_res_multi_run"] = time.time() - t0
+
+            # --------------------------------------------------------
+            # 11) Relation Rec (single run)
+            # --------------------------------------------------------
+            t0 = time.time()
+            run_rel_rec(
+                entities_path="/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Classes/Cls_Res/Cls_Res_IterativeRuns/overall_summary/entities_with_class.jsonl",
+                chunks_path="/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Chunks/chunks_sentence.jsonl",
+                output_path="/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Relations/Rel Rec/relations_raw.jsonl",
+                model="gpt-5.1",
+            )
+            essay_stat["t_rel_recognition"] = time.time() - t0
+
+            # --------------------------------------------------------
+            # 12) Relation Res Multi Run
+            # --------------------------------------------------------
+            t0 = time.time()
+            run_relres_iteratively()
+            essay_stat["t_rel_resolution"] = time.time() - t0
+
+            # --------------------------------------------------------
+            # 13) Export KG to CSVs
+            # --------------------------------------------------------
+            t0 = time.time()
+            export_relations_and_nodes_to_csv()
+            essay_stat["t_export_kg"] = time.time() - t0
+
+            # --------------------------------------------------------
+            # 14) SIMPLE COUNTS (nodes / relations)
+            # --------------------------------------------------------
+            nodes_csv = KG_DIR / "nodes.csv"
+            rels_csv = KG_DIR / "rels_fixed_no_raw.csv"
+            essay_stat["nodes_count"] = count_csv_rows(nodes_csv)
+            essay_stat["relations_count"] = count_csv_rows(rels_csv)
+
+            essay_stat["success"] = True
+
+        except Exception as e:
+            essay_stat["error"] = str(e)
+            essay_stat["traceback"] = traceback.format_exc()
+            print(f"[error] Failure on {label}: {e}")
+
+        finally:
+            essay_stat["t_total"] = time.time() - t_run_start
+
+            # Snapshot /data (even on failure, for debugging)
+            try:
+                dest_dir = copy_data_for_essay(idx)
+                essay_stat["data_snapshot_dir"] = str(dest_dir)
+            except Exception as e:
+                print(f"[warn] Failed to snapshot data for {label}: {e}")
+
+            # Clear pipeline dirs for NEXT essay
+            clear_data_subfolders()
+
+            run_stats.append(essay_stat)
+
+    # ----------------------------------------------------------------
+    # SAVE OVERALL RUN STATS
+    # ----------------------------------------------------------------
+    stats_path = KG_RUNS_ROOT / "trace_kg_essays_run_stats.json"
+    with stats_path.open("w", encoding="utf-8") as f:
+        json.dump(run_stats, f, ensure_ascii=False, indent=2)
+
+    print(f"[done] Wrote overall run stats to {stats_path}")
+
+
+# --------------------------------------------------------------------
+# ENTRY POINT
+# --------------------------------------------------------------------
+
+if __name__ == "__main__":
+    run_trace_kg_for_all_essays()
+
+
+#endregion#? Create KG for each Essay  - V5
 #?#########################  End  ##########################
 
 
@@ -11948,31 +11765,566 @@ if __name__ == "__main__":
 
 
 #?######################### Start ##########################
-#region:#?   
+#region:#?   Create KG for each Essay  - V6
 
-#endregion#? 
+
+
+"""
+TRACE KG multi-essay runner (entity seed fix + entity_final path fix)
+
+Runs the full pipeline independently for each essay in:
+    /home/mabolhas/MyReposOnSOL/SGCE-KG/Experiments/MYNE/QA_and_OthersAnswers/Plain_Text_100_Essays.json
+
+For each essay i:
+  1) Clear data/{Chunks,Classes,Entities,KG,Relations}
+  2) Write that essay as the only document to data/pdf_to_json/Plain_Text.json
+  3) Run, IN ORDER:
+
+        sentence_chunks_token_driven(...)
+        embed_and_index_chunks(...)
+        run_entity_extraction_on_chunks(...)
+        prepare_entity_seed_for_iterative_resolution()
+        iterative_resolution()
+        [COPY entities_resolved.jsonl -> entities_final.jsonl]
+        produce_clean_jsonl(input_path, out_file)
+        classrec_iterative_main()
+        main_input_for_cls_res()
+        run_pipeline_iteratively()
+        run_rel_rec(...)
+        run_relres_iteratively()
+        export_relations_and_nodes_to_csv()
+
+  4) Copy /data to KGs_from_Essays/KG_Essay_<i>
+  5) Clear data/{Chunks,Classes,Entities,KG,Relations} again
+
+Records timing + status per essay to:
+    /home/mabolhas/MyReposOnSOL/SGCE-KG/KGs_from_Essays/trace_kg_essays_run_stats.json
+"""
+
+import json
+import os
+import shutil
+import time
+import traceback
+from pathlib import Path
+
+from tqdm import tqdm  # pip install tqdm
+
+# --------------------------------------------------------------------
+# CONSTANT PATHS
+# --------------------------------------------------------------------
+
+BASE_ROOT = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG")
+DATA_ROOT = BASE_ROOT / "data"
+ESSAYS_JSON = BASE_ROOT / "Experiments/MYNE/QA_and_OthersAnswers/Plain_Text_100_Essays.json"
+PLAIN_TEXT_JSON = DATA_ROOT / "pdf_to_json" / "Plain_Text.json"
+KG_RUNS_ROOT = BASE_ROOT / "KGs_from_Essays"
+
+CHUNKS_DIR = DATA_ROOT / "Chunks"
+CLASSES_DIR = DATA_ROOT / "Classes"
+ENTITIES_DIR = DATA_ROOT / "Entities"
+KG_DIR = DATA_ROOT / "KG"
+RELATIONS_DIR = DATA_ROOT / "Relations"
+
+# Make sure base dirs exist
+DATA_ROOT.mkdir(parents=True, exist_ok=True)
+PLAIN_TEXT_JSON.parent.mkdir(parents=True, exist_ok=True)
+KG_RUNS_ROOT.mkdir(parents=True, exist_ok=True)
+
+# --------------------------------------------------------------------
+# PATHS FOR Cls Rec INPUT  (FIXES input_path / out_file ISSUE)
+# --------------------------------------------------------------------
+
+# Directory where class-recognition expects its input entities
+CLS_INPUT_DIR = DATA_ROOT / "Classes" / "Cls_Input"
+CLS_INPUT_DIR.mkdir(parents=True, exist_ok=True)
+
+# This is the file classrec_iterative_main() reads:
+#   INPUT_PATH = "/home/.../data/Classes/Cls_Input/cls_input_entities.jsonl"
+out_file = CLS_INPUT_DIR / "cls_input_entities.jsonl"
+
+# This is the path that produce_clean_jsonl() expects as input
+# (from your original script / error message).
+ENT_RES_ITER_ROOT = ENTITIES_DIR / "Ent_Res_IterativeRuns" / "overall_summary"
+input_path = ENT_RES_ITER_ROOT / "entities_final.jsonl"
+
+# This is where iterative_resolution() actually writes its final resolved entities,
+# according to your log:
+#   /data/Entities/Ent_1st/Ent_Resolved_1st/entities_resolved.jsonl
+ENT_1ST_RESOLVED_PATH = ENTITIES_DIR / "Ent_1st" / "Ent_Resolved_1st" / "entities_resolved.jsonl"
+
+
+# --------------------------------------------------------------------
+# UTILS
+# --------------------------------------------------------------------
+
+def clear_data_subfolders() -> None:
+    """
+    Remove EVERYTHING inside these pipeline folders (but keep the folders):
+      - Chunks
+      - Classes
+      - Entities
+      - KG
+      - Relations
+    """
+    for d in [CHUNKS_DIR, CLASSES_DIR, ENTITIES_DIR, KG_DIR, RELATIONS_DIR]:
+        d.mkdir(parents=True, exist_ok=True)
+        for child in d.iterdir():
+            try:
+                if child.is_file() or child.is_symlink():
+                    child.unlink()
+                elif child.is_dir():
+                    shutil.rmtree(child)
+            except Exception as e:
+                print(f"[warn] Failed to remove {child}: {e}")
+
+
+def extract_essay_text(rec, idx: int) -> str:
+    """
+    Heuristic to get the essay text from one JSON record.
+    Adjust this if your essay JSON schema differs.
+    """
+    if isinstance(rec, str):
+        return rec
+
+    if isinstance(rec, dict):
+        # Try common field names first
+        for k in ["text", "essay_text", "content", "body", "answer", "Plain_Text"]:
+            v = rec.get(k)
+            if isinstance(v, str) and v.strip():
+                return v
+
+        # Fallback: choose the longest string field
+        best = ""
+        for v in rec.values():
+            if isinstance(v, str) and len(v) > len(best):
+                best = v
+        if best:
+            return best
+
+    # Last resort
+    return str(rec)
+
+
+def load_essays():
+    """
+    Load essays from Plain_Text_100_Essays.json.
+    Supports list, dict, or single-object JSON.
+    """
+    if not ESSAYS_JSON.exists():
+        raise FileNotFoundError(f"Essays file not found: {ESSAYS_JSON}")
+
+    with ESSAYS_JSON.open("r", encoding="utf-8") as f:
+        data = json.load(f)
+
+    essays = []
+
+    if isinstance(data, list):
+        for idx, rec in enumerate(data, start=1):  # 1-based index
+            text = extract_essay_text(rec, idx)
+            essays.append({
+                "index": idx,
+                "raw": rec,
+                "text": text,
+            })
+    elif isinstance(data, dict):
+        for idx, (key, rec) in enumerate(data.items(), start=1):
+            text = extract_essay_text(rec, idx)
+            essays.append({
+                "index": idx,
+                "key": key,
+                "raw": rec,
+                "text": text,
+            })
+    else:
+        essays.append({
+            "index": 1,
+            "raw": data,
+            "text": extract_essay_text(data, 1),
+        })
+
+    return essays
+
+
+def write_plain_text_input(essay_meta: dict) -> None:
+    """
+    Overwrite Plain_Text.json with a single-doc JSON for the current essay.
+    This is the ONLY input the chunker reads.
+    """
+    essay_idx = essay_meta["index"]
+    doc = {
+        "id": f"essay_{essay_idx:03d}",
+        "ref_index": essay_idx,
+        "ref_title": f"Essay {essay_idx}",
+        "text": essay_meta["text"],
+    }
+    with PLAIN_TEXT_JSON.open("w", encoding="utf-8") as f:
+        json.dump([doc], f, ensure_ascii=False, indent=2)
+
+
+def collect_chunk_ids():
+    """
+    After chunking, read chunks_sentence.jsonl and return list of chunk ids
+    for run_entity_extraction_on_chunks.
+    """
+    chunks_path = CHUNKS_DIR / "chunks_sentence.jsonl"
+    ids = []
+    if not chunks_path.exists():
+        return ids
+    with chunks_path.open("r", encoding="utf-8") as f:
+        for line in f:
+            line = line.strip()
+            if not line:
+                continue
+            try:
+                obj = json.loads(line)
+            except Exception:
+                continue
+            cid = obj.get("id")
+            if cid is not None:
+                ids.append(cid)
+    return ids
+
+
+def copy_data_for_essay(essay_index: int) -> Path:
+    """
+    Copy the entire /data folder to:
+        /.../SGCE-KG/KGs_from_Essays/KG_Essay_<index>
+    Returns the destination path.
+    """
+    dest = KG_RUNS_ROOT / f"KG_Essay_{essay_index:03d}"
+    if dest.exists():
+        shutil.rmtree(dest)
+    shutil.copytree(DATA_ROOT, dest)
+    return dest
+
+
+def count_csv_rows(path: Path) -> int:
+    """
+    Count data rows in a CSV (minus header). Returns 0 if file doesn't exist.
+    """
+    if not path.exists():
+        return 0
+    with path.open("r", encoding="utf-8") as f:
+        n = sum(1 for _ in f)
+    return max(n - 1, 0)
+
+
+# --------------------------------------------------------------------
+# NEW: entity seed prep for iterative_resolution()
+# --------------------------------------------------------------------
+
+def _score_entity_candidate(path: Path) -> tuple:
+    """
+    Heuristic scoring to pick the best entity .jsonl file as a seed.
+    Prefer names with 'entities_raw', then 'entities', and larger size.
+    """
+    name = path.name.lower()
+    score = 0
+    if "entities_raw" in name or "entity_raw" in name:
+        score += 100
+    elif "entities" in name or "entity" in name:
+        score += 50
+    try:
+        size = path.stat().st_size
+    except Exception:
+        size = 0
+    return (score, size)
+
+
+def prepare_entity_seed_for_iterative_resolution():
+    """
+    Ensure that:
+      data/Entities/iterative_runs/entities_raw_seed_backup.jsonl
+      data/Entities/iterative_runs/entities_raw_seed.jsonl
+    exist before calling iterative_resolution().
+
+    Strategy:
+      - Look for any *.jsonl under data/Entities (except inside iterative_runs).
+      - Pick the best candidate by name + size.
+      - Copy it as both seed and seed_backup.
+    """
+    iter_dir = ENTITIES_DIR / "iterative_runs"
+    iter_dir.mkdir(parents=True, exist_ok=True)
+
+    backup_path = iter_dir / "entities_raw_seed_backup.jsonl"
+    seed_path = iter_dir / "entities_raw_seed.jsonl"
+
+    # If both already exist, do nothing (e.g., if some other part of your code made them)
+    if backup_path.exists() and seed_path.exists():
+        return
+
+    # Find candidate entity files produced by entity extraction for THIS essay
+    candidates = []
+    if ENTITIES_DIR.exists():
+        for p in ENTITIES_DIR.rglob("*.jsonl"):
+            # skip previous iterative_runs content (if any)
+            try:
+                if "iterative_runs" in p.parts:
+                    continue
+            except Exception:
+                pass
+            candidates.append(p)
+
+    if not candidates:
+        raise RuntimeError(
+            "prepare_entity_seed_for_iterative_resolution: "
+            "No .jsonl files found under data/Entities to use as seed."
+        )
+
+    best = max(candidates, key=_score_entity_candidate)
+    # Copy to seed and backup
+    shutil.copy2(best, backup_path)
+    shutil.copy2(best, seed_path)
+    print(f"[info] Seeded entity resolution from: {best.name}")
+
+
+# --------------------------------------------------------------------
+# MAIN MULTI-ESSAY RUNNER
+# --------------------------------------------------------------------
+
+def run_trace_kg_for_all_essays():
+    essays = load_essays()
+    run_stats = []
+
+    print(f"[info] Loaded {len(essays)} essays from {ESSAYS_JSON}")
+
+    for essay_meta in tqdm(essays, desc="TRACE KG essays"):
+        idx = essay_meta["index"]
+        label = f"Essay_{idx:03d}"
+
+        essay_stat = {
+            "index": idx,
+            "essay_id": label,
+            "t_chunking": None,
+            "t_embed_index": None,
+            "n_chunks": None,
+            "t_build_chunk_ids": None,
+            "t_entity_recognition": None,
+            "t_entity_resolution": None,
+            "t_cls_rec_input": None,
+            "t_cls_recognition": None,
+            "t_cls_res_input": None,
+            "t_cls_res_multi_run": None,
+            "t_rel_recognition": None,
+            "t_rel_resolution": None,
+            "t_export_kg": None,
+            "success": False,
+            "error": None,
+            "traceback": None,
+            "t_total": None,
+            "nodes_count": None,
+            "relations_count": None,
+            "data_snapshot_dir": None,
+        }
+
+        t_run_start = time.time()
+        try:
+            # --------------------------------------------------------
+            # 0) RESET PIPELINE DIRECTORIES FOR THIS ESSAY
+            # --------------------------------------------------------
+            clear_data_subfolders()
+
+            # --------------------------------------------------------
+            # 1) WRITE INPUT FOR CHUNKING
+            # --------------------------------------------------------
+            write_plain_text_input(essay_meta)
+
+            # --------------------------------------------------------
+            # 2) CHUNKING
+            # --------------------------------------------------------
+            t0 = time.time()
+            sentence_chunks_token_driven(
+                "/home/mabolhas/MyReposOnSOL/SGCE-KG/data/pdf_to_json/Plain_Text.json",
+                "/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Chunks/chunks_sentence.jsonl",
+                max_tokens_per_chunk=200,   # preferred upper bound (None to disable)
+                min_tokens_per_chunk=100,   # expand small chunks to reach this minimum (None to disable)
+                sentence_per_line=True,
+                keep_ref_text=False,
+                strip_leading_headings=True,
+                force=True,
+                debug=False,
+            )
+            essay_stat["t_chunking"] = time.time() - t0
+
+            # recompute chunk_ids for this essay
+            t0 = time.time()
+            chunk_ids = collect_chunk_ids()
+            essay_stat["t_build_chunk_ids"] = time.time() - t0
+            essay_stat["n_chunks"] = len(chunk_ids)
+
+            # --------------------------------------------------------
+            # 3) embed_and_index_chunks
+            # --------------------------------------------------------
+            t0 = time.time()
+            embed_and_index_chunks(
+                "/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Chunks/chunks_sentence.jsonl",
+                "/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Chunks/chunks_emb",
+                "BAAI/bge-large-en-v1.5",
+                "BAAI/bge-small-en-v1.5",
+                False,   # use_small_model_for_dev
+                32,      # batch_size
+                None,    # device -> auto
+                True,    # save_index
+                True,    # force
+            )
+            essay_stat["t_embed_index"] = time.time() - t0
+
+            # --------------------------------------------------------
+            # 4) Entity Recognition
+            # --------------------------------------------------------
+            t0 = time.time()
+            run_entity_extraction_on_chunks(
+                chunk_ids,
+                prev_chunks=5,
+                save_debug=False,
+                model="gpt-5.1",
+                max_tokens=8000,
+            )
+            essay_stat["t_entity_recognition"] = time.time() - t0
+
+            # --------------------------------------------------------
+            # 5) Seed for Ent Resolution
+            # --------------------------------------------------------
+            prepare_entity_seed_for_iterative_resolution()
+
+            # --------------------------------------------------------
+            # 6) Ent Resolution (Multi Run)
+            # --------------------------------------------------------
+            t0 = time.time()
+            iterative_resolution()
+            essay_stat["t_entity_resolution"] = time.time() - t0
+
+            # --------------------------------------------------------
+            # 6.5) COPY entities_resolved.jsonl -> entities_final.jsonl
+            #      so produce_clean_jsonl() sees what it expects.
+            # --------------------------------------------------------
+            try:
+                src = ENT_1ST_RESOLVED_PATH
+                if not src.exists():
+                    # fallback: search for entities_resolved.jsonl anywhere under Entities
+                    candidates = list(ENTITIES_DIR.rglob("entities_resolved.jsonl"))
+                    if candidates:
+                        # pick the most recent
+                        src = max(candidates, key=lambda p: p.stat().st_mtime)
+                    else:
+                        raise FileNotFoundError(
+                            "Could not find entities_resolved.jsonl after iterative_resolution()."
+                        )
+
+                ENT_RES_ITER_ROOT.mkdir(parents=True, exist_ok=True)
+                shutil.copy2(src, input_path)
+                print(f"[info] Copied resolved entities from {src} -> {input_path}")
+            except Exception as copy_err:
+                # Fail fast here so you see a clear error if something is wrong
+                raise RuntimeError(
+                    f"Failed to prepare entities_final.jsonl for produce_clean_jsonl: {copy_err}"
+                )
+
+            # --------------------------------------------------------
+            # 7) Cls Rec input producer
+            # --------------------------------------------------------
+            t0 = time.time()
+            produce_clean_jsonl(input_path, out_file)
+            essay_stat["t_cls_rec_input"] = time.time() - t0
+
+            # --------------------------------------------------------
+            # 8) Cls Recognition
+            # --------------------------------------------------------
+            t0 = time.time()
+            classrec_iterative_main()
+            essay_stat["t_cls_recognition"] = time.time() - t0
+
+            # --------------------------------------------------------
+            # 9) Create input for Cls Res
+            # --------------------------------------------------------
+            t0 = time.time()
+            main_input_for_cls_res()
+            essay_stat["t_cls_res_input"] = time.time() - t0
+
+            # --------------------------------------------------------
+            # 10) Cls Res Multi Run
+            # --------------------------------------------------------
+            t0 = time.time()
+            run_pipeline_iteratively()
+            essay_stat["t_cls_res_multi_run"] = time.time() - t0
+
+            # --------------------------------------------------------
+            # 11) Relation Rec (single run)
+            # --------------------------------------------------------
+            t0 = time.time()
+            run_rel_rec(
+                entities_path="/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Classes/Cls_Res/Cls_Res_IterativeRuns/overall_summary/entities_with_class.jsonl",
+                chunks_path="/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Chunks/chunks_sentence.jsonl",
+                output_path="/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Relations/Rel Rec/relations_raw.jsonl",
+                model="gpt-5.1",
+            )
+            essay_stat["t_rel_recognition"] = time.time() - t0
+
+            # --------------------------------------------------------
+            # 12) Relation Res Multi Run
+            # --------------------------------------------------------
+            t0 = time.time()
+            run_relres_iteratively()
+            essay_stat["t_rel_resolution"] = time.time() - t0
+
+            # --------------------------------------------------------
+            # 13) Export KG to CSVs
+            # --------------------------------------------------------
+            t0 = time.time()
+            export_relations_and_nodes_to_csv()
+            essay_stat["t_export_kg"] = time.time() - t0
+
+            # --------------------------------------------------------
+            # 14) SIMPLE COUNTS (nodes / relations)
+            # --------------------------------------------------------
+            nodes_csv = KG_DIR / "nodes.csv"
+            rels_csv = KG_DIR / "rels_fixed_no_raw.csv"
+            essay_stat["nodes_count"] = count_csv_rows(nodes_csv)
+            essay_stat["relations_count"] = count_csv_rows(rels_csv)
+
+            essay_stat["success"] = True
+
+        except Exception as e:
+            essay_stat["error"] = str(e)
+            essay_stat["traceback"] = traceback.format_exc()
+            print(f"[error] Failure on {label}: {e}")
+
+        finally:
+            essay_stat["t_total"] = time.time() - t_run_start
+
+            # Snapshot /data (even on failure, for debugging)
+            try:
+                dest_dir = copy_data_for_essay(idx)
+                essay_stat["data_snapshot_dir"] = str(dest_dir)
+            except Exception as e:
+                print(f"[warn] Failed to snapshot data for {label}: {e}")
+
+            # Clear pipeline dirs for NEXT essay
+            clear_data_subfolders()
+
+            run_stats.append(essay_stat)
+
+    # ----------------------------------------------------------------
+    # SAVE OVERALL RUN STATS
+    # ----------------------------------------------------------------
+    stats_path = KG_RUNS_ROOT / "trace_kg_essays_run_stats.json"
+    with stats_path.open("w", encoding="utf-8") as f:
+        json.dump(run_stats, f, ensure_ascii=False, indent=2)
+
+    print(f"[done] Wrote overall run stats to {stats_path}")
+
+
+# --------------------------------------------------------------------
+# ENTRY POINT
+# --------------------------------------------------------------------
+
+if __name__ == "__main__":
+    run_trace_kg_for_all_essays()
+
+
+#endregion#? Create KG for each Essay  - V6
 #?#########################  End  ##########################
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

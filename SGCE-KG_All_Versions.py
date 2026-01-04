@@ -7407,11 +7407,204 @@ def produce_clean_jsonl(inp: Path, outp: Path):
 
 
 
+#*######################### Start ##########################
+#region:#?   Produce_class_input_from_iter K - V2
+
+
+# #!/usr/bin/env python3
+# """
+# Produce a clean JSONL for class-identification with only the requested fields.
+
+# This version is more robust in how it recovers `chunk_id`:
+# - It searches recursively for any `chunk_id` field inside each record, so
+#   different internal structures (e.g. nested in members) are handled.
+# - It also looks up chunk_ids for any IDs listed in `merged_from` by using
+#   the original raw entities file.
+# """
+
+# import sys, json
+# from pathlib import Path
+# from typing import Dict, List
+
+# # ---------- CONFIG: adjust if needed ----------
+
+# # Directory with per-iteration entity files
+# iter_path = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities/iterative_runs/")
+# input_files = sorted(iter_path.glob("entities_iter*.jsonl"))
+# if not input_files:
+#     raise FileNotFoundError(f"No iteration files found in: {iter_path}")
+
+# latest_file = input_files[-1]
+# print(f"Using latest iteration file: {latest_file}")
+# input_path = latest_file
+
+# # Original raw entities (used to recover chunk_ids via merged_from)
+# RAW_SEED_PATH = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities/Ent_Raw_0/entities_raw.jsonl")
+
+# # Output file for class-identification input
+# out_dir = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Classes/Cls_Input")
+# out_file = out_dir / "cls_input_entities.jsonl"
+
+# # ---------- guard against ipykernel injected args ----------
+# if any(a.startswith("--f=") or a.startswith("--ipykernel") for a in sys.argv[1:]) or "ipykernel" in sys.argv[0]:
+#     sys.argv = [sys.argv[0]]
+
+# # ---------- helpers ----------
+
+# def load_jsonl(path: Path) -> List[Dict]:
+#     if not path.exists():
+#         raise FileNotFoundError(f"Input not found: {path}")
+#     out = []
+#     with path.open("r", encoding="utf-8") as fh:
+#         for line in fh:
+#             line = line.strip()
+#             if not line:
+#                 continue
+#             out.append(json.loads(line))
+#     return out
+
+# def ensure_list(x):
+#     if x is None:
+#         return []
+#     if isinstance(x, list):
+#         return x
+#     return [x]
+
+# def synth_id(base_name: str, idx: int):
+#     safe = (base_name or "no_name").strip().replace(" ", "_")[:40]
+#     return f"Tmp_{safe}_{idx}"
+
+# def dedupe_preserve_order(values: List) -> List[str]:
+#     """
+#     Deduplicate while preserving order; normalize everything to str and
+#     drop falsy values (None, "", etc.).
+#     """
+#     seen = set()
+#     out: List[str] = []
+#     for v in values:
+#         if not v:
+#             continue
+#         sv = str(v)
+#         if sv not in seen:
+#             seen.add(sv)
+#             out.append(sv)
+#     return out
+
+# def find_chunk_ids_anywhere(obj) -> List:
+#     """
+#     Recursively find all values of any key named 'chunk_id' in a nested
+#     dict/list structure.
+#     """
+#     found: List = []
+#     if isinstance(obj, dict):
+#         for k, v in obj.items():
+#             if k == "chunk_id" and v is not None:
+#                 found.extend(ensure_list(v))
+#             else:
+#                 found.extend(find_chunk_ids_anywhere(v))
+#     elif isinstance(obj, list):
+#         for item in obj:
+#             found.extend(find_chunk_ids_anywhere(item))
+#     return found
+
+# def build_raw_chunk_index(seed_path: Path) -> Dict[str, List[str]]:
+#     """
+#     Build a mapping from raw entity id -> list of chunk_ids from the
+#     original entities_raw.jsonl file.
+#     """
+#     id_to_chunks: Dict[str, List[str]] = {}
+#     if not seed_path.exists():
+#         print(f"WARNING: raw seed file not found; cannot augment chunk_ids from raw entities: {seed_path}")
+#         return id_to_chunks
+
+#     raw_recs = load_jsonl(seed_path)
+#     for r in raw_recs:
+#         rid = r.get("id") or r.get("entity_id") or None
+#         if not rid:
+#             continue
+#         chunks = find_chunk_ids_anywhere(r)
+#         if chunks:
+#             id_to_chunks[rid] = dedupe_preserve_order(chunks)
+#     return id_to_chunks
+
+# # ---------- main ----------
+
+# def produce_clean_jsonl(inp: Path, outp: Path):
+#     # Build lookup from raw entity id -> chunk_ids, so we can use merged_from
+#     raw_id_to_chunks = build_raw_chunk_index(RAW_SEED_PATH)
+
+#     recs = load_jsonl(inp)
+#     outp.parent.mkdir(parents=True, exist_ok=True)
+
+#     cleaned = []
+#     for i, r in enumerate(recs):
+#         # pick id (prefer top-level id or canonical_id); otherwise synth
+#         rid = r.get("id") or r.get("canonical_id") or r.get("canonical") or None
+#         if not rid:
+#             rid = synth_id(r.get("entity_name"), i)
+
+#         # ---- chunk_id gathering ----
+#         chunk_ids: List[str] = []
+
+#         # 1) Any chunk_id present anywhere in this record (robust to structure)
+#         direct_chunks = find_chunk_ids_anywhere(r)
+#         chunk_ids.extend(direct_chunks)
+
+#         # 2) Augment with chunk_ids from raw entities referenced in merged_from
+#         for src_id in ensure_list(r.get("merged_from")):
+#             if not src_id:
+#                 continue
+#             src_chunks = raw_id_to_chunks.get(str(src_id))
+#             if src_chunks:
+#                 chunk_ids.extend(src_chunks)
+
+#         # final dedupe + normalization
+#         chunk_ids = dedupe_preserve_order(chunk_ids)
+
+#         # ---- node_properties normalization ----
+#         node_props = r.get("node_properties") or []
+#         if not isinstance(node_props, list):
+#             node_props = [node_props]
+
+#         cleaned_rec = {
+#             "id": rid,
+#             "entity_name": r.get("entity_name") or r.get("canonical_name") or "",
+#             "entity_description": r.get("entity_description") or r.get("canonical_description") or "",
+#             "entity_type_hint": r.get("entity_type_hint") or r.get("canonical_type") or r.get("entity_type") or "",
+#             "confidence_score": r.get("confidence_score") if r.get("confidence_score") is not None else None,
+#             "resolution_context": r.get("resolution_context") or r.get("text_span") or r.get("context_phrase") or "",
+#             "flag": r.get("flag") or "entity_raw",
+#             "chunk_id": chunk_ids,
+#             "node_properties": node_props,
+#         }
+#         cleaned.append(cleaned_rec)
+
+#     with outp.open("w", encoding="utf-8") as fh:
+#         for rec in cleaned:
+#             fh.write(json.dumps(rec, ensure_ascii=False) + "\n")
+
+#     print(f"Wrote {len(cleaned)} records -> {outp}")
+
+
+# -----------------------
+# Cls Rec input producer - Run statement
+# -----------------------
+
+# if __name__ == "__main__":
+#     produce_clean_jsonl(input_path, out_file)
+
+
+#endregion#? Produce_class_input_from_iter K - V2
+#*#########################  End  ##########################
+
+
+
+
 
 
 
 #?######################### Start ##########################
-#region:#?   Produce_class_input_from_iter K - V2
+#region:#?   Produce_class_input_from_iter K - V3
 
 
 #!/usr/bin/env python3
@@ -7427,32 +7620,26 @@ This version is more robust in how it recovers `chunk_id`:
 
 import sys, json
 from pathlib import Path
-from typing import Dict, List
+from typing import Dict, List, Optional
 
 # ---------- CONFIG: adjust if needed ----------
-
-# Directory with per-iteration entity files
-iter_path = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities/iterative_runs/")
-input_files = sorted(iter_path.glob("entities_iter*.jsonl"))
-if not input_files:
-    raise FileNotFoundError(f"No iteration files found in: {iter_path}")
-
-latest_file = input_files[-1]
-print(f"Using latest iteration file: {latest_file}")
-input_path = latest_file
 
 # Original raw entities (used to recover chunk_ids via merged_from)
 RAW_SEED_PATH = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities/Ent_Raw_0/entities_raw.jsonl")
 
-# Output file for class-identification input
-out_dir = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Classes/Cls_Input")
-out_file = out_dir / "cls_input_entities.jsonl"
+# Default locations for latest iteration entities and class-identification output
+DEFAULT_ITER_DIR = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities/iterative_runs/")
+DEFAULT_CLS_OUT_DIR = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Classes/Cls_Input")
+DEFAULT_CLS_OUT_FILE = DEFAULT_CLS_OUT_DIR / "cls_input_entities.jsonl"
 
 # ---------- guard against ipykernel injected args ----------
 if any(a.startswith("--f=") or a.startswith("--ipykernel") for a in sys.argv[1:]) or "ipykernel" in sys.argv[0]:
     sys.argv = [sys.argv[0]]
 
 # ---------- helpers ----------
+
+
+
 
 def load_jsonl(path: Path) -> List[Dict]:
     if not path.exists():
@@ -7530,9 +7717,29 @@ def build_raw_chunk_index(seed_path: Path) -> Dict[str, List[str]]:
             id_to_chunks[rid] = dedupe_preserve_order(chunks)
     return id_to_chunks
 
+
 # ---------- main ----------
 
-def produce_clean_jsonl(inp: Path, outp: Path):
+def produce_clean_jsonl(inp: Optional[Path] = None, outp: Optional[Path] = None):
+    """Produce a cleaned JSONL for class-identification.
+
+    If *inp* is None, the latest iteration file in DEFAULT_ITER_DIR is used.
+    If *outp* is None, DEFAULT_CLS_OUT_FILE is used.
+    """
+
+    # Determine input/output paths lazily so nothing runs on import.
+    if inp is None:
+        iter_path = DEFAULT_ITER_DIR
+        input_files = sorted(iter_path.glob("entities_iter*.jsonl"))
+        if not input_files:
+            raise FileNotFoundError(f"No iteration files found in: {iter_path}")
+        latest_file = input_files[-1]
+        print(f"Using latest iteration file: {latest_file}")
+        inp = latest_file
+
+    if outp is None:
+        outp = DEFAULT_CLS_OUT_FILE
+
     # Build lookup from raw entity id -> chunk_ids, so we can use merged_from
     raw_id_to_chunks = build_raw_chunk_index(RAW_SEED_PATH)
 
@@ -7597,10 +7804,8 @@ def produce_clean_jsonl(inp: Path, outp: Path):
 #     produce_clean_jsonl(input_path, out_file)
 
 
-#endregion#? Produce_class_input_from_iter K - V2
+#endregion#? Produce_class_input_from_iter K - V3
 #?#########################  End  ##########################
-
-
 
 
 
