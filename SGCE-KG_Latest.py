@@ -268,8 +268,8 @@ def sentence_chunks_token_driven(
 
 # if __name__ == "__main__":
 #     sentence_chunks_token_driven(
-#         "/home/mabolhas/MyReposOnSOL/SGCE-KG/data/pdf_to_json/Plain_Text.json",
-#         "/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Chunks/chunks_sentence.jsonl",
+#         "SGCE-KG/data/pdf_to_json/Plain_Text.json",
+#         "SGCE-KG/data/Chunks/chunks_sentence.jsonl",
 #         max_tokens_per_chunk=200,   # preferred upper bound (None to disable)
 #         min_tokens_per_chunk=100,   # expand small chunks to reach this minimum (None to disable)
 #         sentence_per_line=True,
@@ -305,8 +305,8 @@ import faiss
 
 @torch.no_grad()
 def embed_and_index_chunks(
-    chunks_jsonl_path: str = "/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Chunks/chunks_sentence.jsonl",
-    output_prefix: str = "/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Chunks/chunks_emb",
+    chunks_jsonl_path: str = "SGCE-KG/data/Chunks/chunks_sentence.jsonl",
+    output_prefix: str = "SGCE-KG/data/Chunks/chunks_emb",
     embed_model_large: str = "BAAI/bge-large-en-v1.5",
     embed_model_small: str = "BAAI/bge-small-en-v1.5",
     use_small_model_for_dev: bool = True,
@@ -420,8 +420,8 @@ def embed_and_index_chunks(
 
 
 # embed_and_index_chunks(
-#     "/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Chunks/chunks_sentence.jsonl",
-#     "/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Chunks/chunks_emb",
+#     "SGCE-KG/data/Chunks/chunks_sentence.jsonl",
+#     "SGCE-KG/data/Chunks/chunks_emb",
 #     "BAAI/bge-large-en-v1.5",
 #     "BAAI/bge-small-en-v1.5",
 #     False,   # use_small_model_for_dev
@@ -453,14 +453,14 @@ from openai import OpenAI
 from datetime import datetime
 
 # ---------- CONFIG: paths ----------
-CHUNKS_JSONL =      "/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Chunks/chunks_sentence.jsonl"
-ENTITIES_OUT =      "/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities/Ent_Raw_0/entities_raw.jsonl"
-DEFAULT_DEBUG_DIR = "/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities/Ent_Raw_0/entity_raw_debug_prompts_outputs"
+CHUNKS_JSONL =      "SGCE-KG/data/Chunks/chunks_sentence.jsonl"
+ENTITIES_OUT =      "SGCE-KG/data/Entities/Ent_Raw_0/entities_raw.jsonl"
+DEFAULT_DEBUG_DIR = "SGCE-KG/data/Entities/Ent_Raw_0/entity_raw_debug_prompts_outputs"
 
 # ---------- OPENAI client (load key from env or fallback file path) ----------
 def _load_openai_key(
     envvar: str = "OPENAI_API_KEY",
-    fallback_path: str = "/home/mabolhas/MyReposOnSOL/SGCE-KG/.env"
+    fallback_path: str = ".env"
 ) -> str:
     """
     Load OpenAI key from:
@@ -1426,6 +1426,7 @@ def main_cli(args):
 
 
 
+
 #?######################### Start ##########################
 #region:#?   Embedding and clustering recognized entities    -  V4
 
@@ -1447,6 +1448,7 @@ from typing import List, Dict
 import numpy as np
 from tqdm import tqdm
 
+from typing import Tuple
 import torch
 from transformers import AutoTokenizer, AutoModel
 from sklearn.preprocessing import normalize
@@ -1891,7 +1893,7 @@ except Exception:
 # OpenAI client loader (reuses your pattern)
 from openai import OpenAI
 
-def _load_openai_key(envvar: str = "OPENAI_API_KEY", fallback_path: str = "/home/mabolhas/MyReposOnSOL/SGCE-KG/.env") -> str:
+def _load_openai_key(envvar: str = "OPENAI_API_KEY", fallback_path: str = ".env") -> str:
     key = os.getenv(envvar, fallback_path)
     if isinstance(key, str) and Path(key).exists():
         try:
@@ -1908,12 +1910,12 @@ if not OPENAI_KEY or not isinstance(OPENAI_KEY, str) or len(OPENAI_KEY) < 10:
 client = OpenAI(api_key=OPENAI_KEY)
 
 # ---------------- Paths & config ----------------
-CLUSTERED_IN = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities/Ent_1st/Ent_Clustering_1st/entities_clustered.jsonl")   # input (from previous clustering)
-CHUNKS_JSONL = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Chunks/chunks_sentence.jsonl")
+CLUSTERED_IN = Path("SGCE-KG/data/Entities/Ent_1st/Ent_Clustering_1st/entities_clustered.jsonl")   # input (from previous clustering)
+CHUNKS_JSONL = Path("SGCE-KG/data/Chunks/chunks_sentence.jsonl")
 
-ENT_OUT = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities/Ent_1st/Ent_Resolved_1st/entities_resolved.jsonl")
-CANON_OUT = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities/Ent_1st/Ent_Resolved_1st/canonical_entities.jsonl")
-LOG_OUT = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities/Ent_1st/Ent_Resolved_1st/resolution_log.jsonl")
+ENT_OUT = Path("SGCE-KG/data/Entities/Ent_1st/Ent_Resolved_1st/entities_resolved.jsonl")
+CANON_OUT = Path("SGCE-KG/data/Entities/Ent_1st/Ent_Resolved_1st/canonical_entities.jsonl")
+LOG_OUT = Path("SGCE-KG/data/Entities/Ent_1st/Ent_Resolved_1st/resolution_log.jsonl")
 
 # NOTE: weights changed to match embed_and_cluster V3 (name, desc, ctx) — type is folded into ctx.
 WEIGHTS = {"name": 0.40, "desc": 0.25, "ctx": 0.35}
@@ -2606,9 +2608,9 @@ def orchestrate():
 # import matplotlib.pyplot as plt
 
 # # --------- Config / paths ----------
-# ENT_RES_FILE = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities/Ent_1st/Ent_Resolved_1st/entities_resolved.jsonl")
-# CANON_FILE = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities/Ent_1st/Ent_Resolved_1st/canonical_entities.jsonl")
-# OUT_DIR = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities/Ent_1st/Ent_1st_Analysis")
+# ENT_RES_FILE = Path("SGCE-KG/data/Entities/Ent_1st/Ent_Resolved_1st/entities_resolved.jsonl")
+# CANON_FILE = Path("SGCE-KG/data/Entities/Ent_1st/Ent_Resolved_1st/canonical_entities.jsonl")
+# OUT_DIR = Path("SGCE-KG/data/Entities/Ent_1st/Ent_1st_Analysis")
 # OUT_DIR.mkdir(parents=True, exist_ok=True)
 
 # # --------- Helpers ----------
@@ -2796,11 +2798,11 @@ DEFAULT_MAX_ITERS = 5
 MIN_MERGES_TO_CONTINUE = 1
 
 # ---------------- Paths ----------------
-ENT_RAW_SEED = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities/Ent_Raw_0/entities_raw.jsonl")
+ENT_RAW_SEED = Path("SGCE-KG/data/Entities/Ent_Raw_0/entities_raw.jsonl")
 
-CLUSTERED_PATH = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities/Ent_1st/Ent_Clustering_1st/entities_clustered.jsonl")
-CANONICAL_PATH = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities/Ent_1st/Ent_Resolved_1st/canonical_entities.jsonl")
-RESOLVED_PATH = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities/Ent_1st/Ent_Resolved_1st/entities_resolved.jsonl")
+CLUSTERED_PATH = Path("SGCE-KG/data/Entities/Ent_1st/Ent_Clustering_1st/entities_clustered.jsonl")
+CANONICAL_PATH = Path("SGCE-KG/data/Entities/Ent_1st/Ent_Resolved_1st/canonical_entities.jsonl")
+RESOLVED_PATH = Path("SGCE-KG/data/Entities/Ent_1st/Ent_Resolved_1st/entities_resolved.jsonl")
 
 ITER_DIR = (ENT_RAW_SEED.parent).parent / "iterative_runs"
 ITER_DIR.mkdir(parents=True, exist_ok=True)
@@ -3016,7 +3018,7 @@ def iterative_resolution():
 # # ---------- CONFIG: adjust if needed ----------
 
 # # Directory with per-iteration entity files
-# iter_path = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities/iterative_runs/")
+# iter_path = Path("SGCE-KG/data/Entities/iterative_runs/")
 # input_files = sorted(iter_path.glob("entities_iter*.jsonl"))
 # if not input_files:
 #     raise FileNotFoundError(f"No iteration files found in: {iter_path}")
@@ -3026,10 +3028,10 @@ def iterative_resolution():
 # input_path = latest_file
 
 # # Original raw entities (used to recover chunk_ids via merged_from)
-# RAW_SEED_PATH = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities/Ent_Raw_0/entities_raw.jsonl")
+# RAW_SEED_PATH = Path("SGCE-KG/data/Entities/Ent_Raw_0/entities_raw.jsonl")
 
 # # Output file for class-identification input
-# out_dir = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Classes/Cls_Input")
+# out_dir = Path("SGCE-KG/data/Classes/Cls_Input")
 # out_file = out_dir / "cls_input_entities.jsonl"
 
 # # ---------- guard against ipykernel injected args ----------
@@ -3212,11 +3214,11 @@ from typing import Dict, List, Optional
 # ---------- CONFIG: adjust if needed ----------
 
 # Original raw entities (used to recover chunk_ids via merged_from)
-RAW_SEED_PATH = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities/Ent_Raw_0/entities_raw.jsonl")
+RAW_SEED_PATH = Path("SGCE-KG/data/Entities/Ent_Raw_0/entities_raw.jsonl")
 
 # Default locations for latest iteration entities and class-identification output
-DEFAULT_ITER_DIR = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities/iterative_runs/")
-DEFAULT_CLS_OUT_DIR = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Classes/Cls_Input")
+DEFAULT_ITER_DIR = Path("SGCE-KG/data/Entities/iterative_runs/")
+DEFAULT_CLS_OUT_DIR = Path("SGCE-KG/data/Classes/Cls_Input")
 DEFAULT_CLS_OUT_FILE = DEFAULT_CLS_OUT_DIR / "cls_input_entities.jsonl"
 
 # ---------- guard against ipykernel injected args ----------
@@ -3459,8 +3461,8 @@ except Exception:
 from openai import OpenAI
 
 # ----------------------------- CONFIG -----------------------------
-INPUT_PATH = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Classes/Cls_Input/cls_input_entities.jsonl")
-OUT_DIR = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Classes/Cls_Rec")
+INPUT_PATH = Path("SGCE-KG/data/Classes/Cls_Input/cls_input_entities.jsonl")
+OUT_DIR = Path("SGCE-KG/data/Classes/Cls_Rec")
 OUT_DIR.mkdir(parents=True, exist_ok=True)
 
 CLASS_CANDIDATES_OUT = OUT_DIR / "class_candidates.jsonl"
@@ -3502,7 +3504,7 @@ MAX_RECLUSTER_ROUNDS = 12  # safety cap
 VERBOSE = False
 
 # ------------------------ OpenAI client loader -----------------------
-def _load_openai_key(envvar: str = "OPENAI_API_KEY", fallback_path: str = "/home/mabolhas/MyReposOnSOL/SGCE-KG/.env"):
+def _load_openai_key(envvar: str = "OPENAI_API_KEY", fallback_path: str = ".env"):
     key = os.getenv(envvar, fallback_path)
     if isinstance(key, str) and Path(key).exists():
         try:
@@ -4142,18 +4144,18 @@ Merge per-round classes files (classes_round_*.json) into a single
 JSONL + JSON file suitable as input to the next step (Cls Res).
 
 Output:
- - /home/mabolhas/MyReposOnSOL/SGCE-KG/data/Classes/Cls_Res/Cls_Res_input/classes_for_cls_res.jsonl
- - /home/mabolhas/MyReposOnSOL/SGCE-KG/data/Classes/Cls_Res/Cls_Res_input/classes_for_cls_res.json
+ - SGCE-KG/data/Classes/Cls_Res/Cls_Res_input/classes_for_cls_res.jsonl
+ - SGCE-KG/data/Classes/Cls_Res/Cls_Res_input/classes_for_cls_res.json
 """
 
 import json
 from pathlib import Path
 from collections import defaultdict
 
-ROOT = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Classes/Cls_Rec")
+ROOT = Path("SGCE-KG/data/Classes/Cls_Rec")
 PATTERN = "classes_round_*.json"
 
-OUTPUT_ROOT = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Classes/Cls_Res/Cls_Res_input")
+OUTPUT_ROOT = Path("SGCE-KG/data/Classes/Cls_Res/Cls_Res_input")
 OUT_JSONL = OUTPUT_ROOT / "classes_for_cls_res.jsonl"
 OUT_JSON  = OUTPUT_ROOT / "classes_for_cls_res.json"
 
@@ -4339,7 +4341,7 @@ Key features:
 - Summary folder with aggregated decisions and useful statistics.
 
 Input:
-  /home/mabolhas/MyReposOnSOL/SGCE-KG/data/Classes/Cls_Rec/classes_for_cls_res.json
+  SGCE-KG/data/Classes/Cls_Rec/classes_for_cls_res.json
 
 Output (written under OUT_DIR):
   - per-cluster decisions: cluster_<N>_decisions.json
@@ -4390,10 +4392,10 @@ except Exception:
     OpenAI = None
 
 # ----------------------------- CONFIG -----------------------------
-INPUT_CLASSES =     Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Classes/Cls_Res/Cls_Res_input/classes_for_cls_res.json")
-#INPUT_CLASSES = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Classes/Cls_Rec/classes_for_cls_res-Wrong.json")
-SRC_ENTITIES_PATH = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Classes/Cls_Input/cls_input_entities.jsonl")
-OUT_DIR = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Classes/Cls_Res")
+INPUT_CLASSES =     Path("SGCE-KG/data/Classes/Cls_Res/Cls_Res_input/classes_for_cls_res.json")
+#INPUT_CLASSES = Path("SGCE-KG/data/Classes/Cls_Rec/classes_for_cls_res-Wrong.json")
+SRC_ENTITIES_PATH = Path("SGCE-KG/data/Classes/Cls_Input/cls_input_entities.jsonl")
+OUT_DIR = Path("SGCE-KG/data/Classes/Cls_Res")
 OUT_DIR.mkdir(parents=True, exist_ok=True)
 RAW_LLM_DIR = OUT_DIR / "llm_raw"
 RAW_LLM_DIR.mkdir(exist_ok=True)
@@ -4433,7 +4435,7 @@ VERBOSE = False
 WRITE_INTERMEDIATE = True
 
 # ---------------------- Helpers: OpenAI key loader ---------------------
-def _load_openai_key(envvar: str = OPENAI_API_KEY_ENV, fallback_path: str = "/home/mabolhas/MyReposOnSOL/SGCE-KG/.env"):
+def _load_openai_key(envvar: str = OPENAI_API_KEY_ENV, fallback_path: str = ".env"):
     key = os.getenv(envvar, None)
     if key:
         return key
@@ -5698,8 +5700,8 @@ from typing import Any, Dict, List, Optional
 # -----------------------
 # CONFIG - reuse or override
 # -----------------------
-BASE_INPUT_CLASSES = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Classes/Cls_Res/Cls_Res_input/classes_for_cls_res.json")
-EXPERIMENT_ROOT = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Classes/Cls_Res/Cls_Res_IterativeRuns")
+BASE_INPUT_CLASSES = Path("SGCE-KG/data/Classes/Cls_Res/Cls_Res_input/classes_for_cls_res.json")
+EXPERIMENT_ROOT = Path("SGCE-KG/data/Classes/Cls_Res/Cls_Res_IterativeRuns")
 
 MAX_RUNS: int = 4
 STRUCTURAL_CHANGE_THRESHOLD: Optional[int] = 0
@@ -6617,7 +6619,7 @@ def parse_args() -> argparse.Namespace:
     return p.parse_args()
 
 #make output path directory if it doesn't exist
-output_dir = "/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Relations/Rel Rec"
+output_dir = "SGCE-KG/data/Relations/Rel Rec"
 import os
 if not os.path.exists(output_dir):
     os.makedirs(output_dir) 
@@ -6630,9 +6632,9 @@ if not os.path.exists(output_dir):
 
 
 # run_rel_rec(
-#     entities_path="/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Classes/Cls_Res/Cls_Res_IterativeRuns/overall_summary/entities_with_class.jsonl",
-#     chunks_path="/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Chunks/chunks_sentence.jsonl",
-#     output_path="/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Relations/Rel Rec/relations_raw.jsonl",
+#     entities_path="SGCE-KG/data/Classes/Cls_Res/Cls_Res_IterativeRuns/overall_summary/entities_with_class.jsonl",
+#     chunks_path="SGCE-KG/data/Chunks/chunks_sentence.jsonl",
+#     output_path="SGCE-KG/data/Relations/Rel Rec/relations_raw.jsonl",
 #     model="gpt-5.1"
 # )
 
@@ -6677,7 +6679,7 @@ Key properties:
   so LLM chunks stay reasonably small.
 
 Input:
-  /home/mabolhas/MyReposOnSOL/SGCE-KG/data/Relations/Rel Rec/relations_raw.jsonl
+  SGCE-KG/data/Relations/Rel Rec/relations_raw.jsonl
 
 Output (under OUT_DIR):
   - per-(cluster,local,part) decisions: cluster_<ID>_decisions.json
@@ -6726,8 +6728,8 @@ except Exception:
 
 # ----------------------------- CONFIG -----------------------------
 
-INPUT_RELATIONS = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Relations/Rel Rec/relations_raw.jsonl")
-OUT_DIR = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Relations/Rel Res")
+INPUT_RELATIONS = Path("SGCE-KG/data/Relations/Rel Rec/relations_raw.jsonl")
+OUT_DIR = Path("SGCE-KG/data/Relations/Rel Res")
 OUT_DIR.mkdir(parents=True, exist_ok=True)
 RAW_LLM_DIR = OUT_DIR / "llm_raw"
 RAW_LLM_DIR.mkdir(exist_ok=True)
@@ -6777,7 +6779,7 @@ VERBOSE = False
 
 # ---------------------- Helpers: OpenAI client ---------------------
 
-def _load_openai_key(envvar: str = OPENAI_API_KEY_ENV, fallback_path: str = "/home/mabolhas/MyReposOnSOL/SGCE-KG/.env"):
+def _load_openai_key(envvar: str = OPENAI_API_KEY_ENV, fallback_path: str = ".env"):
     key = os.getenv(envvar, None)
     if key:
         return key
@@ -8052,10 +8054,10 @@ from typing import Any, Dict, List, Optional
 # -----------------------
 
 # First-run input: raw relations from Rel Rec
-BASE_INPUT_RELATIONS = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Relations/Rel Rec/relations_raw.jsonl")
+BASE_INPUT_RELATIONS = Path("SGCE-KG/data/Relations/Rel Rec/relations_raw.jsonl")
 
 # Root for iterative runs; each run gets its own subfolder
-EXPERIMENT_ROOT = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Relations/Rel Res_IterativeRuns")
+EXPERIMENT_ROOT = Path("SGCE-KG/data/Relations/Rel Res_IterativeRuns")
 
 MAX_RUNS: int = 4
 
@@ -8396,7 +8398,7 @@ def run_relres_iteratively():
 # - Relation schema (canonical_rel_schema, rel_cls_schema, rel_cls_group_schema)
 
 # Output:
-#   /home/mabolhas/MyReposOnSOL/SGCE-KG/data/KG/kg_bundle.json
+#   SGCE-KG/data/KG/kg_bundle.json
 
 # This file is intended as the single input for downstream KG-construction code.
 # """
@@ -8413,18 +8415,18 @@ def run_relres_iteratively():
 
 # # Final classes + entities after iterative Class Res
 # CLS_RES_OVERALL_DIR = Path(
-#     "/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Classes/Cls_Res_IterativeRuns/overall_summary"
+#     "SGCE-KG/data/Classes/Cls_Res_IterativeRuns/overall_summary"
 #     )
 # CLASSES_AND_ENTITIES_PATH = CLS_RES_OVERALL_DIR / "classes_and_entities.json"
 
 # # Chunks (sentence-level)
 # CHUNKS_PATH = Path(
-#     "/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Chunks/chunks_sentence.jsonl"
+#     "SGCE-KG/data/Chunks/chunks_sentence.jsonl"
 # )
 
 # # Final relations + relation schemas after iterative Rel Res
 # REL_RES_OVERALL_DIR = Path(
-#     "/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Relations/Rel Res_IterativeRuns/overall_summary"
+#     "SGCE-KG/data/Relations/Rel Res_IterativeRuns/overall_summary"
 # )
 # RELATIONS_RESOLVED_JSONL = REL_RES_OVERALL_DIR / "relations_resolved.jsonl"
 # RELATIONS_RESOLVED_JSON = REL_RES_OVERALL_DIR / "relations_resolved.json"
@@ -8435,7 +8437,7 @@ def run_relres_iteratively():
 
 # # Where to write the final bundle
 # KG_BUNDLE_OUT = Path(
-#     "/home/mabolhas/MyReposOnSOL/SGCE-KG/data/KG/kg_bundle.json"
+#     "SGCE-KG/data/KG/kg_bundle.json"
 # )
 
 
@@ -8591,11 +8593,11 @@ import json, csv
 from pathlib import Path
 
 # Source JSONL (same as your V2/V3)
-relations_jl = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Relations/Rel Res_IterativeRuns/overall_summary/relations_resolved.jsonl")
+relations_jl = Path("SGCE-KG/data/Relations/Rel Res_IterativeRuns/overall_summary/relations_resolved.jsonl")
 
 # Outputs
-rels_out_csv  = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/KG/rels_fixed_no_raw.csv")
-nodes_out_csv = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/KG/nodes.csv")
+rels_out_csv  = Path("SGCE-KG/data/KG/rels_fixed_no_raw.csv")
+nodes_out_csv = Path("SGCE-KG/data/KG/nodes.csv")
 
 def safe_str(x):
     if x is None:
@@ -8965,15 +8967,15 @@ from pathlib import Path
 
 # Sources
 relations_jl = Path(
-    "/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Relations/Rel Res_IterativeRuns/overall_summary/relations_resolved.jsonl"
+    "SGCE-KG/data/Relations/Rel Res_IterativeRuns/overall_summary/relations_resolved.jsonl"
 )
 entities_cls_jl = Path(
-    "/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Classes/Cls_Res/Cls_Res_IterativeRuns/overall_summary/entities_with_class.jsonl"
+    "SGCE-KG/data/Classes/Cls_Res/Cls_Res_IterativeRuns/overall_summary/entities_with_class.jsonl"
 )
 
 # Outputs
-rels_out_csv  = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/KG/rels_fixed_no_raw.csv")
-nodes_out_csv = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/KG/nodes.csv")
+rels_out_csv  = Path("SGCE-KG/data/KG/rels_fixed_no_raw.csv")
+nodes_out_csv = Path("SGCE-KG/data/KG/nodes.csv")
 
 
 def sanitize_string_for_csv_json(s):
@@ -9389,15 +9391,15 @@ def export_relations_and_nodes_to_csv():
 
     # Sources
     relations_jl = Path(
-        "/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Relations/Rel Res_IterativeRuns/overall_summary/relations_resolved.jsonl"
+        "SGCE-KG/data/Relations/Rel Res_IterativeRuns/overall_summary/relations_resolved.jsonl"
     )
     entities_cls_jl = Path(
-        "/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Classes/Cls_Res/Cls_Res_IterativeRuns/overall_summary/entities_with_class.jsonl"
+        "SGCE-KG/data/Classes/Cls_Res/Cls_Res_IterativeRuns/overall_summary/entities_with_class.jsonl"
     )
 
     # Outputs
-    rels_out_csv  = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/KG/rels_fixed_no_raw.csv")
-    nodes_out_csv = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG/data/KG/nodes.csv")
+    rels_out_csv  = Path("SGCE-KG/data/KG/rels_fixed_no_raw.csv")
+    nodes_out_csv = Path("SGCE-KG/data/KG/nodes.csv")
 
 
     def sanitize_string_for_csv_json(s):
@@ -10104,8 +10106,8 @@ RETURN n, r, m
 
 if __name__ == "__main__":
     sentence_chunks_token_driven(
-        "/home/mabolhas/MyReposOnSOL/SGCE-KG/data/pdf_to_json/Plain_Text.json",
-        "/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Chunks/chunks_sentence.jsonl",
+        "SGCE-KG/data/pdf_to_json/Plain_Text.json",
+        "SGCE-KG/data/Chunks/chunks_sentence.jsonl",
         max_tokens_per_chunk=200,   # preferred upper bound (None to disable)
         min_tokens_per_chunk=100,   # expand small chunks to reach this minimum (None to disable)
         sentence_per_line=True,
@@ -10122,8 +10124,8 @@ if __name__ == "__main__":
 
 
 embed_and_index_chunks(
-    "/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Chunks/chunks_sentence.jsonl",
-    "/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Chunks/chunks_emb",
+    "SGCE-KG/data/Chunks/chunks_sentence.jsonl",
+    "SGCE-KG/data/Chunks/chunks_emb",
     "BAAI/bge-large-en-v1.5",
     "BAAI/bge-small-en-v1.5",
     False,   # use_small_model_for_dev
@@ -10260,7 +10262,7 @@ or put it in a separate script that imports those functions.
 It will:
 
   - Read 100 essays from:
-        /home/mabolhas/MyReposOnSOL/SGCE-KG/Experiments/MYNE/QA_and_OthersAnswers/Plain_Text_100_Essays.json
+        SGCE-KG/Experiments/MYNE/QA_and_OthersAnswers/Plain_Text_100_Essays.json
 
   - For each essay i (1..N):
         * Reset the data pipeline folders (Chunks/Classes/Entities/KG/Relations)
@@ -10279,13 +10281,13 @@ It will:
              11) export_relations_and_nodes_to_csv()
 
         * Copy the entire /data folder to:
-              /home/mabolhas/MyReposOnSOL/SGCE-KG/KGs_from_Essays/KG_Essay_<i>
+              SGCE-KG/KGs_from_Essays/KG_Essay_<i>
 
         * Clear the pipeline data folders again so the next essay is independent
 
   - Use tqdm for progress
   - Record per-essay timings, success/fail, and basic counts to:
-        /home/mabolhas/MyReposOnSOL/SGCE-KG/KGs_from_Essays/trace_kg_essays_run_stats.json
+        SGCE-KG/KGs_from_Essays/trace_kg_essays_run_stats.json
 """
 
 import json
@@ -10301,7 +10303,7 @@ from tqdm import tqdm  # make sure `pip install tqdm`
 # CONSTANT PATHS
 # --------------------------------------------------------------------
 
-BASE_ROOT = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG")
+BASE_ROOT = Path("SGCE-KG")
 DATA_ROOT = BASE_ROOT / "data"
 ESSAYS_JSON = BASE_ROOT / "Experiments/MYNE/QA_and_OthersAnswers/Plain_Text_100_Essays.json"
 PLAIN_TEXT_JSON = DATA_ROOT / "pdf_to_json" / "Plain_Text.json"
@@ -10530,8 +10532,8 @@ def run_trace_kg_for_all_essays():
             # --------------------------------------------------------
             t0 = time.time()
             sentence_chunks_token_driven(
-                "/home/mabolhas/MyReposOnSOL/SGCE-KG/data/pdf_to_json/Plain_Text.json",
-                "/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Chunks/chunks_sentence.jsonl",
+                "SGCE-KG/data/pdf_to_json/Plain_Text.json",
+                "SGCE-KG/data/Chunks/chunks_sentence.jsonl",
                 max_tokens_per_chunk=200,   # preferred upper bound (None to disable)
                 min_tokens_per_chunk=100,   # expand small chunks to reach this minimum (None to disable)
                 sentence_per_line=True,
@@ -10550,8 +10552,8 @@ def run_trace_kg_for_all_essays():
             # --------------------------------------------------------
             t0 = time.time()
             embed_and_index_chunks(
-                "/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Chunks/chunks_sentence.jsonl",
-                "/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Chunks/chunks_emb",
+                "SGCE-KG/data/Chunks/chunks_sentence.jsonl",
+                "SGCE-KG/data/Chunks/chunks_emb",
                 "BAAI/bge-large-en-v1.5",
                 "BAAI/bge-small-en-v1.5",
                 False,   # use_small_model_for_dev
@@ -10617,9 +10619,9 @@ def run_trace_kg_for_all_essays():
             # --------------------------------------------------------
             t0 = time.time()
             run_rel_rec(
-                entities_path="/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Classes/Cls_Res/Cls_Res_IterativeRuns/overall_summary/entities_with_class.jsonl",
-                chunks_path="/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Chunks/chunks_sentence.jsonl",
-                output_path="/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Relations/Rel Rec/relations_raw.jsonl",
+                entities_path="SGCE-KG/data/Classes/Cls_Res/Cls_Res_IterativeRuns/overall_summary/entities_with_class.jsonl",
+                chunks_path="SGCE-KG/data/Chunks/chunks_sentence.jsonl",
+                output_path="SGCE-KG/data/Relations/Rel Rec/relations_raw.jsonl",
                 model="gpt-5.1",
             )
             essay_stat["timings"]["relation_recognition"] = time.time() - t0
@@ -10707,7 +10709,7 @@ if __name__ == "__main__":
 TRACE KG multi-essay runner (fixed entity seed issue)
 
 Runs the full pipeline independently for each essay in:
-    /home/mabolhas/MyReposOnSOL/SGCE-KG/Experiments/MYNE/QA_and_OthersAnswers/Plain_Text_100_Essays.json
+    SGCE-KG/Experiments/MYNE/QA_and_OthersAnswers/Plain_Text_100_Essays.json
 
 For each essay i:
   1) Clear data/{Chunks,Classes,Entities,KG,Relations}
@@ -10731,7 +10733,7 @@ For each essay i:
   5) Clear data/{Chunks,Classes,Entities,KG,Relations} again
 
 Records timing + status per essay to:
-    /home/mabolhas/MyReposOnSOL/SGCE-KG/KGs_from_Essays/trace_kg_essays_run_stats.json
+    SGCE-KG/KGs_from_Essays/trace_kg_essays_run_stats.json
 """
 
 import json
@@ -10747,7 +10749,7 @@ from tqdm import tqdm  # pip install tqdm
 # CONSTANT PATHS
 # --------------------------------------------------------------------
 
-BASE_ROOT = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG")
+BASE_ROOT = Path("SGCE-KG")
 DATA_ROOT = BASE_ROOT / "data"
 ESSAYS_JSON = BASE_ROOT / "Experiments/MYNE/QA_and_OthersAnswers/Plain_Text_100_Essays.json"
 PLAIN_TEXT_JSON = DATA_ROOT / "pdf_to_json" / "Plain_Text.json"
@@ -11046,8 +11048,8 @@ def run_trace_kg_for_all_essays():
             # --------------------------------------------------------
             t0 = time.time()
             sentence_chunks_token_driven(
-                "/home/mabolhas/MyReposOnSOL/SGCE-KG/data/pdf_to_json/Plain_Text.json",
-                "/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Chunks/chunks_sentence.jsonl",
+                "SGCE-KG/data/pdf_to_json/Plain_Text.json",
+                "SGCE-KG/data/Chunks/chunks_sentence.jsonl",
                 max_tokens_per_chunk=200,   # preferred upper bound (None to disable)
                 min_tokens_per_chunk=100,   # expand small chunks to reach this minimum (None to disable)
                 sentence_per_line=True,
@@ -11069,8 +11071,8 @@ def run_trace_kg_for_all_essays():
             # --------------------------------------------------------
             t0 = time.time()
             embed_and_index_chunks(
-                "/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Chunks/chunks_sentence.jsonl",
-                "/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Chunks/chunks_emb",
+                "SGCE-KG/data/Chunks/chunks_sentence.jsonl",
+                "SGCE-KG/data/Chunks/chunks_emb",
                 "BAAI/bge-large-en-v1.5",
                 "BAAI/bge-small-en-v1.5",
                 False,   # use_small_model_for_dev
@@ -11140,9 +11142,9 @@ def run_trace_kg_for_all_essays():
             # --------------------------------------------------------
             t0 = time.time()
             run_rel_rec(
-                entities_path="/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Classes/Cls_Res/Cls_Res_IterativeRuns/overall_summary/entities_with_class.jsonl",
-                chunks_path="/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Chunks/chunks_sentence.jsonl",
-                output_path="/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Relations/Rel Rec/relations_raw.jsonl",
+                entities_path="SGCE-KG/data/Classes/Cls_Res/Cls_Res_IterativeRuns/overall_summary/entities_with_class.jsonl",
+                chunks_path="SGCE-KG/data/Chunks/chunks_sentence.jsonl",
+                output_path="SGCE-KG/data/Relations/Rel Rec/relations_raw.jsonl",
                 model="gpt-5.1",
             )
             essay_stat["t_rel_recognition"] = time.time() - t0
@@ -11225,7 +11227,7 @@ if __name__ == "__main__":
 TRACE KG multi-essay runner (fixed entity seed issue + defined input_path/out_file)
 
 Runs the full pipeline independently for each essay in:
-    /home/mabolhas/MyReposOnSOL/SGCE-KG/Experiments/MYNE/QA_and_OthersAnswers/Plain_Text_100_Essays.json
+    SGCE-KG/Experiments/MYNE/QA_and_OthersAnswers/Plain_Text_100_Essays.json
 
 For each essay i:
   1) Clear data/{Chunks,Classes,Entities,KG,Relations}
@@ -11249,7 +11251,7 @@ For each essay i:
   5) Clear data/{Chunks,Classes,Entities,KG,Relations} again
 
 Records timing + status per essay to:
-    /home/mabolhas/MyReposOnSOL/SGCE-KG/KGs_from_Essays/trace_kg_essays_run_stats.json
+    SGCE-KG/KGs_from_Essays/trace_kg_essays_run_stats.json
 """
 
 import json
@@ -11265,7 +11267,7 @@ from tqdm import tqdm  # pip install tqdm
 # CONSTANT PATHS
 # --------------------------------------------------------------------
 
-BASE_ROOT = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG")
+BASE_ROOT = Path("SGCE-KG")
 DATA_ROOT = BASE_ROOT / "data"
 ESSAYS_JSON = BASE_ROOT / "Experiments/MYNE/QA_and_OthersAnswers/Plain_Text_100_Essays.json"
 PLAIN_TEXT_JSON = DATA_ROOT / "pdf_to_json" / "Plain_Text.json"
@@ -11588,8 +11590,8 @@ def run_trace_kg_for_all_essays():
             # --------------------------------------------------------
             t0 = time.time()
             sentence_chunks_token_driven(
-                "/home/mabolhas/MyReposOnSOL/SGCE-KG/data/pdf_to_json/Plain_Text.json",
-                "/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Chunks/chunks_sentence.jsonl",
+                "SGCE-KG/data/pdf_to_json/Plain_Text.json",
+                "SGCE-KG/data/Chunks/chunks_sentence.jsonl",
                 max_tokens_per_chunk=200,   # preferred upper bound (None to disable)
                 min_tokens_per_chunk=100,   # expand small chunks to reach this minimum (None to disable)
                 sentence_per_line=True,
@@ -11611,8 +11613,8 @@ def run_trace_kg_for_all_essays():
             # --------------------------------------------------------
             t0 = time.time()
             embed_and_index_chunks(
-                "/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Chunks/chunks_sentence.jsonl",
-                "/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Chunks/chunks_emb",
+                "SGCE-KG/data/Chunks/chunks_sentence.jsonl",
+                "SGCE-KG/data/Chunks/chunks_emb",
                 "BAAI/bge-large-en-v1.5",
                 "BAAI/bge-small-en-v1.5",
                 False,   # use_small_model_for_dev
@@ -11682,9 +11684,9 @@ def run_trace_kg_for_all_essays():
             # --------------------------------------------------------
             t0 = time.time()
             run_rel_rec(
-                entities_path="/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Classes/Cls_Res/Cls_Res_IterativeRuns/overall_summary/entities_with_class.jsonl",
-                chunks_path="/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Chunks/chunks_sentence.jsonl",
-                output_path="/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Relations/Rel Rec/relations_raw.jsonl",
+                entities_path="SGCE-KG/data/Classes/Cls_Res/Cls_Res_IterativeRuns/overall_summary/entities_with_class.jsonl",
+                chunks_path="SGCE-KG/data/Chunks/chunks_sentence.jsonl",
+                output_path="SGCE-KG/data/Relations/Rel Rec/relations_raw.jsonl",
                 model="gpt-5.1",
             )
             essay_stat["t_rel_recognition"] = time.time() - t0
@@ -11773,7 +11775,7 @@ if __name__ == "__main__":
 TRACE KG multi-essay runner (entity seed fix + entity_final path fix)
 
 Runs the full pipeline independently for each essay in:
-    /home/mabolhas/MyReposOnSOL/SGCE-KG/Experiments/MYNE/QA_and_OthersAnswers/Plain_Text_100_Essays.json
+    SGCE-KG/Experiments/MYNE/QA_and_OthersAnswers/Plain_Text_100_Essays.json
 
 For each essay i:
   1) Clear data/{Chunks,Classes,Entities,KG,Relations}
@@ -11798,7 +11800,7 @@ For each essay i:
   5) Clear data/{Chunks,Classes,Entities,KG,Relations} again
 
 Records timing + status per essay to:
-    /home/mabolhas/MyReposOnSOL/SGCE-KG/KGs_from_Essays/trace_kg_essays_run_stats.json
+    SGCE-KG/KGs_from_Essays/trace_kg_essays_run_stats.json
 """
 
 import json
@@ -11814,7 +11816,7 @@ from tqdm import tqdm  # pip install tqdm
 # CONSTANT PATHS
 # --------------------------------------------------------------------
 
-BASE_ROOT = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG")
+BASE_ROOT = Path("SGCE-KG")
 DATA_ROOT = BASE_ROOT / "data"
 ESSAYS_JSON = BASE_ROOT / "Experiments/MYNE/QA_and_OthersAnswers/Plain_Text_100_Essays.json"
 PLAIN_TEXT_JSON = DATA_ROOT / "pdf_to_json" / "Plain_Text.json"
@@ -12135,8 +12137,8 @@ def run_trace_kg_for_all_essays():
             # --------------------------------------------------------
             t0 = time.time()
             sentence_chunks_token_driven(
-                "/home/mabolhas/MyReposOnSOL/SGCE-KG/data/pdf_to_json/Plain_Text.json",
-                "/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Chunks/chunks_sentence.jsonl",
+                "SGCE-KG/data/pdf_to_json/Plain_Text.json",
+                "SGCE-KG/data/Chunks/chunks_sentence.jsonl",
                 max_tokens_per_chunk=200,   # preferred upper bound (None to disable)
                 min_tokens_per_chunk=100,   # expand small chunks to reach this minimum (None to disable)
                 sentence_per_line=True,
@@ -12158,8 +12160,8 @@ def run_trace_kg_for_all_essays():
             # --------------------------------------------------------
             t0 = time.time()
             embed_and_index_chunks(
-                "/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Chunks/chunks_sentence.jsonl",
-                "/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Chunks/chunks_emb",
+                "SGCE-KG/data/Chunks/chunks_sentence.jsonl",
+                "SGCE-KG/data/Chunks/chunks_emb",
                 "BAAI/bge-large-en-v1.5",
                 "BAAI/bge-small-en-v1.5",
                 False,   # use_small_model_for_dev
@@ -12254,9 +12256,9 @@ def run_trace_kg_for_all_essays():
             # --------------------------------------------------------
             t0 = time.time()
             run_rel_rec(
-                entities_path="/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Classes/Cls_Res/Cls_Res_IterativeRuns/overall_summary/entities_with_class.jsonl",
-                chunks_path="/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Chunks/chunks_sentence.jsonl",
-                output_path="/home/mabolhas/MyReposOnSOL/SGCE-KG/data/Relations/Rel Rec/relations_raw.jsonl",
+                entities_path="SGCE-KG/data/Classes/Cls_Res/Cls_Res_IterativeRuns/overall_summary/entities_with_class.jsonl",
+                chunks_path="SGCE-KG/data/Chunks/chunks_sentence.jsonl",
+                output_path="SGCE-KG/data/Relations/Rel Rec/relations_raw.jsonl",
                 model="gpt-5.1",
             )
             essay_stat["t_rel_recognition"] = time.time() - t0
