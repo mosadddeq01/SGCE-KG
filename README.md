@@ -110,12 +110,14 @@ SGCE-KG/
 ├── SGCE-KG_All_Versions.py    # Development history and alternative implementations
 ├── KGrowth_Env.yml            # Conda environment specification
 ├── data/                       # Data directory
-│   ├── Chunks/                 # Processed text chunks
+│   ├── Chunks/                 # Processed text chunks (created by pipeline)
 │   ├── pdf_to_json/           # Extracted PDF content
-│   └── Entities/              # Extracted and resolved entities
+│   └── Entities/              # Extracted and resolved entities (created by pipeline)
 ├── KGs_from_Essays/           # Knowledge graph outputs
 └── Experiments/               # Experimental code and tests
 ```
+
+Note: Some directories (like `Entities/`) are created automatically when you run the pipeline.
 
 ## Configuration
 
@@ -160,7 +162,7 @@ This is a research project. For questions, issues, or contributions, please open
 
 ## License
 
-[Add your license information here]
+This project is currently under development. Please contact the repository owner for licensing information.
 
 ## Acknowledgments
 
@@ -172,11 +174,11 @@ Built with:
 
 ## Citation
 
-If you use this project in your research, please cite:
+If you use this project in your research, please contact the repository owner for citation details.
 
-```
-[Add citation information when available]
-```
+---
+
+*This README provides a welcoming introduction to the SGCE-KG project and its capabilities.*
 
 ## Contact
 
