@@ -88,26 +88,19 @@ The main pipeline is implemented in `SGCE-KG_Latest.py`. The typical workflow in
 
 ### Example Workflow
 
-```python
-# 1. Chunk documents
-from SGCE-KG_Latest import sentence_chunks_token_driven
-chunks = sentence_chunks_token_driven(
-    sections_json_path="data/pdf_to_json/kept_sections.json",
-    out_path="data/Chunks/chunks_sentence.jsonl",
-    max_tokens_per_chunk=350,
-    min_tokens_per_chunk=250
-)
+The pipeline is implemented as a script with modular functions. To use it:
 
-# 2. Extract entities
-from SGCE-KG_Latest import run_entity_extraction_on_chunks
-entities = run_entity_extraction_on_chunks(
-    chunks_jsonl_path="data/Chunks/chunks_sentence.jsonl",
-    entities_out_path="data/Entities/entities_raw.jsonl"
-)
+1. **Prepare your input data**: Place PDF documents or extracted JSON sections in the `data/pdf_to_json/` directory
 
-# 3. Cluster and resolve entities
-# (See SGCE-KG_Latest.py for clustering and resolution functions)
-```
+2. **Run the chunking stage**: Open and edit `SGCE-KG_Latest.py` to configure the chunking parameters, then execute the relevant sections
+
+3. **Extract entities**: Configure and run the entity extraction functions with your OpenAI API key set
+
+4. **Cluster and resolve**: Run the clustering and resolution stages to create canonical entities
+
+5. **Build knowledge graph**: Use the resolved entities to construct the final knowledge graph
+
+Note: The main script is designed to be run in stages rather than imported as a module. Edit the script to uncomment and configure the specific pipeline stages you want to execute.
 
 ## Project Structure
 
