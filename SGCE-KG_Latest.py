@@ -6040,11 +6040,6 @@ def run_pipeline_iteratively():
 
 
 
-
-
-
-
-
 #!############################################# Start Chapter ##################################################
 #region:#!   Relation Identification
 
