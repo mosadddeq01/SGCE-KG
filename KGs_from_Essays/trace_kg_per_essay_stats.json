@@ -1,0 +1,60 @@
+{
+  "1": {
+    "steps": {
+      "sentence_chunks_token_driven": {
+        "ok": true,
+        "error": null,
+        "seconds": 0.10658907890319824
+      },
+      "embed_and_index_chunks": {
+        "ok": true,
+        "error": null,
+        "seconds": 3.027390956878662
+      },
+      "run_entity_extraction_on_chunks": {
+        "ok": false,
+        "error": "AssertionError('Chunks file not found: SGCE-KG/data/Chunks/chunks_sentence.jsonl')",
+        "seconds": 5.984306335449219e-05
+      },
+      "iterative_resolution": {
+        "ok": false,
+        "error": "FileNotFoundError(2, 'No such file or directory')",
+        "seconds": 0.00012683868408203125
+      },
+      "produce_clean_jsonl": {
+        "ok": false,
+        "error": "FileNotFoundError('No iteration files found in: SGCE-KG/data/Entities/iterative_runs')",
+        "seconds": 0.00010800361633300781
+      },
+      "classrec_iterative_main": {
+        "ok": false,
+        "error": "AssertionError('Input not found: SGCE-KG/data/Classes/Cls_Input/cls_input_entities.jsonl')",
+        "seconds": 2.47955322265625e-05
+      },
+      "main_input_for_cls_res": {
+        "ok": true,
+        "error": null,
+        "seconds": 0.00016999244689941406
+      },
+      "run_pipeline_iteratively": {
+        "ok": false,
+        "error": "FileNotFoundError('Input classes file not found: SGCE-KG/data/Classes/Cls_Res/Cls_Res_input/classes_for_cls_res.json')",
+        "seconds": 0.00030684471130371094
+      },
+      "run_relres_iteratively": {
+        "ok": false,
+        "error": "FileNotFoundError('Relations file not found: SGCE-KG/data/Relations/Rel Rec/relations_raw.jsonl')",
+        "seconds": 6.604194641113281e-05
+      },
+      "export_relations_and_nodes_to_csv": {
+        "ok": false,
+        "error": "FileNotFoundError(PosixPath('SGCE-KG/data/Classes/Cls_Res/Cls_Res_IterativeRuns/overall_summary/entities_with_class.jsonl'))",
+        "seconds": 0.00011014938354492188
+      }
+    },
+    "ok": false,
+    "error": "run_entity_extraction_on_chunks failed: Chunks file not found: SGCE-KG/data/Chunks/chunks_sentence.jsonl",
+    "seconds_total": 3.1384530067443848,
+    "snapshot_dir": "KGs_from_Essays/KG_Essay_001_FAILED"
+  }
+}
