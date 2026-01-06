@@ -41,6 +41,7 @@ import os
 import json
 from dataclasses import dataclass
 from pathlib import Path
+import pwd
 from typing import Dict, List, Optional, Tuple, Set
 
 import numpy as np
@@ -91,7 +92,7 @@ OPENAI_API_KEY_ENV = "OPENAI_API_KEY"
 
 def _load_openai_key(
     envvar: str = OPENAI_API_KEY_ENV,
-    fallback_path: str = "/home/mabolhas/MyReposOnSOL/SGCE-KG/.env",
+    fallback_path: str = ".env",
 ):
     key = os.getenv(envvar, None)
     if key:
@@ -604,7 +605,7 @@ def _get_openai_client() -> OpenAI:
     if not api_key:
         raise RuntimeError(
             "OpenAI API key not found. Set OPENAI_API_KEY env var or provide it "
-            "in /home/mabolhas/MyReposOnSOL/SGCE-KG/.env"
+            "in .env"
         )
     _openai_client = OpenAI(api_key=api_key)
     return _openai_client
@@ -869,10 +870,10 @@ def run_full_evaluation(
 
 def main():
     dataset_json_path = (
-        "/home/mabolhas/MyReposOnSOL/SGCE-KG/Experiments/MYNE/QA_and_OthersAnswers/mine_evaluation_dataset-short.json"
+        "Experiments/MYNE/QA_and_OthersAnswers/mine_evaluation_dataset-short.json"
     )
-    trace_nodes_csv = "/home/mabolhas/MyReposOnSOL/SGCE-KG/Experiments/MYNE/TRACEKG/nodes.csv"
-    trace_rels_csv = "/home/mabolhas/MyReposOnSOL/SGCE-KG/Experiments/MYNE/TRACEKG/rels.csv"
+    trace_nodes_csv = "Experiments/MYNE/TRACEKG/nodes.csv"
+    trace_rels_csv = "Experiments/MYNE/TRACEKG/rels.csv"
 
     output_root = "./tracekg_mine_results_weighted_openai_v5"
 
@@ -977,7 +978,7 @@ OPENAI_API_KEY_ENV = "OPENAI_API_KEY"
 
 def _load_openai_key(
     envvar: str = OPENAI_API_KEY_ENV,
-    fallback_path: str = "/home/mabolhas/MyReposOnSOL/SGCE-KG/.env",
+    fallback_path: str = ".env",
 ):
     key = os.getenv(envvar, None)
     if key:
@@ -1491,7 +1492,7 @@ def _get_openai_client() -> OpenAI:
     if not api_key:
         raise RuntimeError(
             "OpenAI API key not found. Set OPENAI_API_KEY env var or provide it "
-            "in /home/mabolhas/MyReposOnSOL/SGCE-KG/.env"
+            "in .env"
         )
     _openai_client = OpenAI(api_key=api_key)
     return _openai_client
@@ -1756,10 +1757,10 @@ def run_full_evaluation(
 
 def main():
     dataset_json_path = (
-        "/home/mabolhas/MyReposOnSOL/SGCE-KG/Experiments/MYNE/QA_and_OthersAnswers/mine_evaluation_dataset-short.json"
+        "Experiments/MYNE/QA_and_OthersAnswers/mine_evaluation_dataset-short.json"
     )
-    trace_nodes_csv = "/home/mabolhas/MyReposOnSOL/SGCE-KG/Experiments/MYNE/TRACEKG/nodes.csv"
-    trace_rels_csv = "/home/mabolhas/MyReposOnSOL/SGCE-KG/Experiments/MYNE/TRACEKG/rels.csv"
+    trace_nodes_csv = "Experiments/MYNE/TRACEKG/nodes.csv"
+    trace_rels_csv = "Experiments/MYNE/TRACEKG/rels.csv"
 
     output_root = "./tracekg_mine_results_weighted_openai_v5"
 
@@ -1812,7 +1813,7 @@ if __name__ == "__main__":
 
 
 
-
+  
 
 #!############################################# Start Chapter ##################################################
 #region:#!   000
@@ -1827,28 +1828,20 @@ if __name__ == "__main__":
 
 
 
-
 #?######################### Start ##########################
-#region:#?   100 KG - V1
-
-
-
+#region:#?   100 KG - V3
 
 
 #!/usr/bin/env python3
 """
-Drive the full TRACE KG pipeline in SGCE-KG_Latest.py once per essay.
+Drive the full TRACE KG pipeline in Trace_KG.py once per essay.
 
 For each essay i in:
-    /home/mabolhas/MyReposOnSOL/SGCE-KG/Experiments/MYNE/QA_and_OthersAnswers/Plain_Text_100_Essays.json
+    Experiments/MYNE/QA_and_OthersAnswers/Plain_Text_100_Essays.json
 
-we will:
-
-  1) Write the essay text into the pipeline's single‑document input:
-       /home/mabolhas/MyReposOnSOL/SGCE-KG/data/pdf_to_json/Plain_Text.json
-
-  2) Run ALL pipeline "run statements" in the EXACT order specified:
-
+1) Write essay i into:
+       data/pdf_to_json/Plain_Text.json
+2) Run, in order (STOP on first failure for that essay):
        sentence_chunks_token_driven(...)
        embed_and_index_chunks(...)
        run_entity_extraction_on_chunks(...)
@@ -1859,28 +1852,14 @@ we will:
        run_pipeline_iteratively()
        run_relres_iteratively()
        export_relations_and_nodes_to_csv()
+3) Snapshot data/ into
+       KGs_from_Essays/KG_Essay_{i} or ..._FAILED
+4) Clear only:
+       data/Chunks, data/Classes, data/Entities, data/KG, data/Relations
 
-  3) After a successful (or failed) run, copy the entire data directory
-       /home/mabolhas/MyReposOnSOL/SGCE-KG/data
-     to:
-       /home/mabolhas/MyReposOnSOL/SGCE-KG/KGs_from_Essays/KG_Essay_{i}
+We ALWAYS write the global stats file at the end, even if we stop early for some essays.
 
-  4) Then EMPTY only the following subfolders so the next essay
-     starts from a clean state:
-
-       /home/mabolhas/MyReposOnSOL/SGCE-KG/data/Chunks
-       /home/mabolhas/MyReposOnSOL/SGCE-KG/data/Classes
-       /home/mabolhas/MyReposOnSOL/SGCE-KG/data/Entities
-       /home/mabolhas/MyReposOnSOL/SGCE-KG/data/KG
-       /home/mabolhas/MyReposOnSOL/SGCE-KG/data/Relations
-
-The script:
-  - never reorders or abstracts the run‑statement calls;
-  - uses tqdm for progress;
-  - logs timing and errors per essay;
-  - continues to the next essay even if one fails.
-
-Adjust the `ESSAY_START` / `ESSAY_END` constants if you don't want all 100.
+Assumption: run this script from the SGCE-KG repo root.
 """
 
 import json
@@ -1892,9 +1871,7 @@ from typing import Dict, Any, List, Tuple
 
 from tqdm import tqdm
 
-# Import ALL pipeline functions explicitly from the monolithic file
-# (this assumes SGCE-KG_Latest.py is importable as a module on PYTHONPATH)
-from SGCE_KG_Latest import (   # adjust to `from SGCE-KG_Latest import` if your module name differs
+from Trace_KG import (  
     sentence_chunks_token_driven,
     embed_and_index_chunks,
     run_entity_extraction_on_chunks,
@@ -1911,22 +1888,13 @@ from SGCE_KG_Latest import (   # adjust to `from SGCE-KG_Latest import` if your 
 # CONFIG PATHS
 # ------------------------------------------------------------------------------------
 
-# Base repo root
-REPO_ROOT = Path("/home/mabolhas/MyReposOnSOL/SGCE-KG")
+REPO_ROOT = Path(".").resolve()
 
-# Single‑document input used by chunking
 PLAIN_TEXT_JSON = REPO_ROOT / "data/pdf_to_json/Plain_Text.json"
-
-# Multi‑essay source file
 ESSAYS_JSON = REPO_ROOT / "Experiments/MYNE/QA_and_OthersAnswers/Plain_Text_100_Essays.json"
-
-# Main data dir whose contents we copy per essay
 DATA_DIR = REPO_ROOT / "data"
-
-# Where we store per‑essay snapshots
 KG_OUT_ROOT = REPO_ROOT / "KGs_from_Essays"
 
-# Subfolders to wipe after each essay run
 DATA_SUBDIRS_TO_CLEAR = [
     DATA_DIR / "Chunks",
     DATA_DIR / "Classes",
@@ -1935,9 +1903,8 @@ DATA_SUBDIRS_TO_CLEAR = [
     DATA_DIR / "Relations",
 ]
 
-# Control which essays to run (1‑based index)
 ESSAY_START = 1
-ESSAY_END = 100  # inclusive
+ESSAY_END = 1  # inclusive
 
 
 # ------------------------------------------------------------------------------------
@@ -1949,10 +1916,6 @@ def ensure_dir(p: Path) -> None:
 
 
 def clear_subdir_contents(path: Path) -> None:
-    """
-    Remove all files and subdirectories inside `path`, but keep `path` itself.
-    If it does not exist, create it.
-    """
     ensure_dir(path)
     for entry in path.iterdir():
         if entry.is_dir():
@@ -1965,18 +1928,11 @@ def clear_subdir_contents(path: Path) -> None:
 
 
 def clear_pipeline_state() -> None:
-    """
-    Clear all pipeline output subdirectories between essays.
-    """
     for sub in DATA_SUBDIRS_TO_CLEAR:
         clear_subdir_contents(sub)
 
 
 def copy_data_for_essay(essay_index: int, ok: bool) -> Path:
-    """
-    Copy the entire DATA_DIR to a per‑essay folder.
-    If `ok` is False, we still snapshot, but with a `_FAILED` suffix.
-    """
     ensure_dir(KG_OUT_ROOT)
     suffix = "" if ok else "_FAILED"
     dest = KG_OUT_ROOT / f"KG_Essay_{essay_index:03d}{suffix}"
@@ -1987,36 +1943,19 @@ def copy_data_for_essay(essay_index: int, ok: bool) -> Path:
 
 
 def load_essays(path: Path) -> List[Dict[str, Any]]:
-    """
-    Load the essays from the supplied JSON.
-    This assumes either:
-      - a list[ { "id": ..., "text": ... } ], or
-      - a dict with a key like "essays" / "data" / "items" -> list[....]
-    You can adjust this based on your actual file structure.
-    """
     with path.open("r", encoding="utf-8") as f:
         data = json.load(f)
 
     if isinstance(data, list):
         return data
-
     if isinstance(data, dict):
-        # try some likely keys
         for key in ("essays", "data", "items", "documents"):
             if key in data and isinstance(data[key], list):
                 return data[key]
-
     raise ValueError(f"Cannot interpret essays structure in {path}")
 
 
 def write_single_plain_text_json(essay: Dict[str, Any]) -> None:
-    """
-    Write one essay to the Plain_Text.json that the pipeline expects.
-
-    We do NOT change the internal schema used by sentence_chunks_token_driven;
-    we only replace the 'text' field (and any optional id/title fields)
-    while keeping the same top‑level structure: a list with one section.
-    """
     ensure_dir(PLAIN_TEXT_JSON.parent)
 
     text = essay.get("text") or essay.get("content") or ""
@@ -2041,11 +1980,17 @@ def write_single_plain_text_json(essay: Dict[str, Any]) -> None:
 
 def run_full_pipeline_for_current_plain_text() -> Dict[str, Any]:
     """
-    Run ALL the run‑statement calls exactly in the order specified by the user,
-    using the fixed paths and parameters from SGCE_KG_Latest.py,
-    but invoked here explicitly.
+    Run all pipeline steps in order, STOPPING at the first failure.
 
-    Returns a dict with timing info and any error encountered.
+    Returns:
+      stats = {
+        "steps": {
+            step_name: {"ok": bool, "error": str|None, "seconds": float},
+            ...
+        },
+        "ok": bool,             # True only if all steps succeeded
+        "error": str|None       # first error message if any
+      }
     """
     stats: Dict[str, Any] = {
         "steps": {},
@@ -2053,8 +1998,11 @@ def run_full_pipeline_for_current_plain_text() -> Dict[str, Any]:
         "error": None,
     }
 
-    # Convenience: helper to run one step and record timing / errors
-    def _run_step(name: str, fn, *args, **kwargs):
+    def _run_step(name: str, fn, *args, **kwargs) -> bool:
+        """
+        Run one step, record timing and error.
+        Return True if succeeded, False if failed.
+        """
         t0 = time.time()
         step_info: Dict[str, Any] = {"ok": True, "error": None, "seconds": None}
         try:
@@ -2062,18 +2010,21 @@ def run_full_pipeline_for_current_plain_text() -> Dict[str, Any]:
         except Exception as e:
             step_info["ok"] = False
             step_info["error"] = repr(e)
-            stats["ok"] = False
-            stats["error"] = stats.get("error") or f"{name} failed: {e}"
+            if stats["ok"]:
+                stats["ok"] = False
+                stats["error"] = f"{name} failed: {e}"
         finally:
             step_info["seconds"] = time.time() - t0
             stats["steps"][name] = step_info
+        return step_info["ok"]
 
     # 1) Chunking
-    _run_step(
+    if not _run_step(
         "sentence_chunks_token_driven",
         sentence_chunks_token_driven,
         str(PLAIN_TEXT_JSON),
-        str(DATA_DIR / "Chunks/chunks_sentence.jsonl"),
+        # IMPORTANT: match Trace_KG.py's CHUNKS_JSONL path
+        "data/Chunks/chunks_sentence.jsonl",
         max_tokens_per_chunk=200,
         min_tokens_per_chunk=100,
         sentence_per_line=True,
@@ -2081,88 +2032,69 @@ def run_full_pipeline_for_current_plain_text() -> Dict[str, Any]:
         strip_leading_headings=True,
         force=True,
         debug=False,
-    )
+    ):
+        return stats  # stop on first failure
 
-    # 2) embed_and_index_chunks
-    _run_step(
+    # 2) Embed + index chunks
+    if not _run_step(
         "embed_and_index_chunks",
         embed_and_index_chunks,
-        str(DATA_DIR / "Chunks/chunks_sentence.jsonl"),
-        str(DATA_DIR / "Chunks/chunks_emb"),
+        "data/Chunks/chunks_sentence.jsonl",
+        "data/Chunks/chunks_emb",
         "BAAI/bge-large-en-v1.5",
         "BAAI/bge-small-en-v1.5",
-        False,   # use_small_model_for_dev
-        32,      # batch_size
-        None,    # device -> auto
-        True,    # save_index
-        True,    # force
-    )
+        False,
+        32,
+        None,
+        True,
+        True,
+    ):
+        return stats
 
     # 3) Entity Recognition
-    # NOTE: `chunk_ids` and other globals (CHUNKS_JSONL, etc.) are defined
-    # inside SGCE_KG_Latest.py and are used by run_entity_extraction_on_chunks.
-    _run_step(
+    if not _run_step(
         "run_entity_extraction_on_chunks",
         run_entity_extraction_on_chunks,
-        # This uses the same signature as in SGCE_KG_Latest.py:
-        #   run_entity_extraction_on_chunks(
-        #       chunk_ids: List[str] = None,
-        #       prev_chunks: int = 3,
-        #       save_debug: bool = False,
-        #       debug_dir: str = DEFAULT_DEBUG_DIR,
-        #       model: str = "gpt-5.1",
-        #       max_tokens: int = 16000
-        #   )
-        chunk_ids=None,   # let it derive from CHUNKS_JSONL
-        prev_chunks=5,
+        chunk_ids=None,
+        prev_chunks=4,
         save_debug=False,
         model="gpt-5.1",
         max_tokens=8000,
-    )
+    ):
+        return stats
 
-    # 4) Ent Resolution (Multi Run)
-    _run_step(
-        "iterative_resolution",
-        iterative_resolution,
-    )
+    # 4) Iterative entity resolution
+    if not _run_step("iterative_resolution", iterative_resolution):
+        return stats
 
-    # 5) Class‑Rec input producer
-    _run_step(
+    # 5) Class‑rec input producer
+    if not _run_step(
         "produce_clean_jsonl",
         produce_clean_jsonl,
-        None,  # use default latest iteration
-        None,  # use default cls_input_entities.jsonl
-    )
+        None,
+        None,
+    ):
+        return stats
 
     # 6) Class Recognition
-    _run_step(
-        "classrec_iterative_main",
-        classrec_iterative_main,
-    )
+    if not _run_step("classrec_iterative_main", classrec_iterative_main):
+        return stats
 
     # 7) Create input for Cls Res
-    _run_step(
-        "main_input_for_cls_res",
-        main_input_for_cls_res,
-    )
+    if not _run_step("main_input_for_cls_res", main_input_for_cls_res):
+        return stats
 
-    # 8) Cls Res Multi Run
-    _run_step(
-        "run_pipeline_iteratively",
-        run_pipeline_iteratively,
-    )
+    # 8) Class Res Multi Run
+    if not _run_step("run_pipeline_iteratively", run_pipeline_iteratively):
+        return stats
 
     # 9) Relation Res Multi Run
-    _run_step(
-        "run_relres_iteratively",
-        run_relres_iteratively,
-    )
+    if not _run_step("run_relres_iteratively", run_relres_iteratively):
+        return stats
 
     # 10) Export KG to CSVs
-    _run_step(
-        "export_relations_and_nodes_to_csv",
-        export_relations_and_nodes_to_csv,
-    )
+    if not _run_step("export_relations_and_nodes_to_csv", export_relations_and_nodes_to_csv):
+        return stats
 
     return stats
 
@@ -2174,10 +2106,18 @@ def run_full_pipeline_for_current_plain_text() -> Dict[str, Any]:
 def main():
     ensure_dir(KG_OUT_ROOT)
 
-    essays = load_essays(ESSAYS_JSON)
+    try:
+        essays = load_essays(ESSAYS_JSON)
+    except Exception as e:
+        print(f"FATAL: cannot load essays from {ESSAYS_JSON}: {e}")
+        # still write an empty stats file to show we tried
+        log_path = KG_OUT_ROOT / "Trace_KG_per_essay_stats.json"
+        with log_path.open("w", encoding="utf-8") as f:
+            json.dump({"_fatal_error": repr(e)}, f, ensure_ascii=False, indent=2)
+        return
+
     total = len(essays)
 
-    # Index essays 1..N for easier mapping to Essay_i
     indexed: List[Tuple[int, Dict[str, Any]]] = [
         (i + 1, essays[i]) for i in range(total)
         if ESSAY_START <= i + 1 <= ESSAY_END
@@ -2188,11 +2128,11 @@ def main():
 
     global_stats: Dict[int, Dict[str, Any]] = {}
 
-    for idx, (essay_idx, essay) in enumerate(tqdm(indexed, desc="Essays", unit="essay")):
+    for essay_idx, essay in tqdm(indexed, desc="Essays", unit="essay"):
         print(f"\n================ Essay {essay_idx} / {ESSAY_END} ================\n")
         t0_essay = time.time()
 
-        # 0) Clean pipeline state BEFORE starting this essay
+        # 0) Clean pipeline state BEFORE this essay
         clear_pipeline_state()
 
         # 1) Write this essay to Plain_Text.json
@@ -2200,26 +2140,27 @@ def main():
             write_single_plain_text_json(essay)
         except Exception as e:
             print(f"[Essay {essay_idx}] ERROR writing Plain_Text.json: {e}")
-            global_stats[essay_idx] = {
+            stats = {
                 "ok": False,
                 "error": f"Failed to write Plain_Text.json: {e}",
                 "steps": {},
                 "seconds_total": time.time() - t0_essay,
                 "snapshot_dir": None,
             }
-            # still snapshot current (empty) data dir so we know it failed
+            # snapshot current data dir so we know this essay failed at the start
             snap_dir = copy_data_for_essay(essay_idx, ok=False)
-            global_stats[essay_idx]["snapshot_dir"] = str(snap_dir)
+            stats["snapshot_dir"] = str(snap_dir)
+            global_stats[essay_idx] = stats
             continue
 
-        # 2) Run full pipeline
+        # 2) Run full pipeline (stops internally on first failed step)
         stats = run_full_pipeline_for_current_plain_text()
         essay_ok = stats.get("ok", False)
 
-        # 3) Snapshot data directory after pipeline (success or failure)
+        # 3) Snapshot data directory
         snapshot_dir = copy_data_for_essay(essay_idx, ok=essay_ok)
 
-        # 4) Clean pipeline state AFTER snapshot, ready for next essay
+        # 4) Clean pipeline state AFTER snapshot
         clear_pipeline_state()
 
         stats["seconds_total"] = time.time() - t0_essay
@@ -2229,11 +2170,11 @@ def main():
         if essay_ok:
             print(f"[Essay {essay_idx}] ✅ Completed in {stats['seconds_total']:.1f}s; snapshot: {snapshot_dir}")
         else:
-            print(f"[Essay {essay_idx}] ⚠️ FAILED (but continuing). Snapshot: {snapshot_dir}")
+            print(f"[Essay {essay_idx}] ❌ FAILED (stopped at first failing step). Snapshot: {snapshot_dir}")
             print(f"  Error: {stats.get('error')}")
 
-    # ------------- write overall log -------------
-    log_path = KG_OUT_ROOT / "trace_kg_per_essay_stats.json"
+    # ALWAYS write overall stats, even if some or all essays failed
+    log_path = KG_OUT_ROOT / "Trace_KG_per_essay_stats.json"
     with log_path.open("w", encoding="utf-8") as f:
         json.dump(global_stats, f, ensure_ascii=False, indent=2)
 
@@ -2243,7 +2184,8 @@ def main():
 if __name__ == "__main__":
     main()
 
-
-
-#endregion#? 100 KG - V1
+#endregion#? 100 KG - V3
 #?#########################  End  ##########################
+
+
+

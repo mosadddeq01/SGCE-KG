@@ -268,8 +268,8 @@ def sentence_chunks_token_driven(
 
 # if __name__ == "__main__":
 #     sentence_chunks_token_driven(
-#         "SGCE-KG/data/pdf_to_json/Plain_Text.json",
-#         "SGCE-KG/data/Chunks/chunks_sentence.jsonl",
+#         "data/pdf_to_json/Plain_Text.json",
+#         "data/Chunks/chunks_sentence.jsonl",
 #         max_tokens_per_chunk=200,   # preferred upper bound (None to disable)
 #         min_tokens_per_chunk=100,   # expand small chunks to reach this minimum (None to disable)
 #         sentence_per_line=True,
@@ -305,8 +305,8 @@ import faiss
 
 @torch.no_grad()
 def embed_and_index_chunks(
-    chunks_jsonl_path: str = "SGCE-KG/data/Chunks/chunks_sentence.jsonl",
-    output_prefix: str = "SGCE-KG/data/Chunks/chunks_emb",
+    chunks_jsonl_path: str = "data/Chunks/chunks_sentence.jsonl",
+    output_prefix: str = "data/Chunks/chunks_emb",
     embed_model_large: str = "BAAI/bge-large-en-v1.5",
     embed_model_small: str = "BAAI/bge-small-en-v1.5",
     use_small_model_for_dev: bool = True,
@@ -420,8 +420,8 @@ def embed_and_index_chunks(
 
 
 # embed_and_index_chunks(
-#     "SGCE-KG/data/Chunks/chunks_sentence.jsonl",
-#     "SGCE-KG/data/Chunks/chunks_emb",
+#     "data/Chunks/chunks_sentence.jsonl",
+#     "data/Chunks/chunks_emb",
 #     "BAAI/bge-large-en-v1.5",
 #     "BAAI/bge-small-en-v1.5",
 #     False,   # use_small_model_for_dev
@@ -453,9 +453,10 @@ from openai import OpenAI
 from datetime import datetime
 
 # ---------- CONFIG: paths ----------
-CHUNKS_JSONL =      "SGCE-KG/data/Chunks/chunks_sentence.jsonl"
-ENTITIES_OUT =      "SGCE-KG/data/Entities/Ent_Raw_0/entities_raw.jsonl"
-DEFAULT_DEBUG_DIR = "SGCE-KG/data/Entities/Ent_Raw_0/entity_raw_debug_prompts_outputs"
+# CHUNKS_JSONL =      "data/Chunks/chunks_sentence.jsonl"
+CHUNKS_JSONL =      "data/Chunks/chunks_sentence.jsonl"
+ENTITIES_OUT =      "data/Entities/Ent_Raw_0/entities_raw.jsonl"
+DEFAULT_DEBUG_DIR = "data/Entities/Ent_Raw_0/entity_raw_debug_prompts_outputs"
 
 # ---------- OPENAI client (load key from env or fallback file path) ----------
 def _load_openai_key(
@@ -1278,21 +1279,6 @@ def run_hdbscan(
     return labels, clusterer
 
 
-# def save_entities_with_clusters(entities: List[Dict], labels: np.ndarray, out_jsonl: str, clusters_summary_path: str):
-#     outp = Path(out_jsonl)
-#     outp.parent.mkdir(parents=True, exist_ok=True)
-#     with open(outp, "w", encoding="utf-8") as fh:
-#         for e, lab in zip(entities, labels):
-#             out = dict(e)
-#             out["_cluster_id"] = int(lab)
-#             fh.write(json.dumps(out, ensure_ascii=False) + "\n")
-#     # summary
-#     summary = {}
-#     for idx, lab in enumerate(labels):
-#         summary.setdefault(int(lab), []).append(entities[idx].get("entity_name") or f"En_{idx}")
-#     with open(clusters_summary_path, "w", encoding="utf-8") as fh:
-#         json.dump({"n_entities": len(entities), "n_clusters": len(summary), "clusters": {str(k): v for k, v in summary.items()}}, fh, ensure_ascii=False, indent=2)
-#     print(f"[save] wrote {out_jsonl} and summary {clusters_summary_path}")
 
 def save_entities_with_clusters(entities: List[Dict],
                                 labels: np.ndarray,
@@ -1401,11 +1387,37 @@ def main_cli(args):
     print("Combined embeddings shape:", combined.shape)
 
     # force HDBSCAN (ignore args.use_method)
-    labels, probs, clusterer = run_hdbscan(combined,
-                                          min_cluster_size=HDBSCAN_MIN_CLUSTER_SIZE,
-                                          min_samples=HDBSCAN_MIN_SAMPLES,
-                                          metric=HDBSCAN_METRIC,
-                                          use_umap=USE_UMAP if args.use_umap else False)
+    
+    
+    # labels, probs, clusterer = run_hdbscan(combined,
+    #                                       min_cluster_size=HDBSCAN_MIN_CLUSTER_SIZE,
+    #                                       min_samples=HDBSCAN_MIN_SAMPLES,
+    #                                       metric=HDBSCAN_METRIC,
+    #                                       use_umap=USE_UMAP if args.use_umap else False)
+
+    # # diagnostics
+    # import numpy as np
+    # from collections import Counter
+    # labels_arr = np.array(labels)
+    # n = len(labels_arr)
+    # n_clusters = len(set(labels_arr)) - (1 if -1 in labels_arr else 0)
+    # n_noise = int((labels_arr == -1).sum())
+    # print(f"[diagnostic] clusters (excl -1): {n_clusters}  noise: {n_noise} ({n_noise/n*100:.1f}%)")
+    # counts = Counter(labels_arr)
+    # top = sorted(((lab, sz) for lab, sz in counts.items() if lab != -1), key=lambda x: x[1], reverse=True)[:10]
+    # print("[diagnostic] top cluster sizes:", top)
+
+    # save_entities_with_clusters(entities, labels_arr, args.out_jsonl, args.clusters_summary)
+    # print("Clustering finished.")
+    
+    
+    labels, clusterer = run_hdbscan(
+    combined,
+    min_cluster_size=HDBSCAN_MIN_CLUSTER_SIZE,
+    min_samples=HDBSCAN_MIN_SAMPLES,
+    metric=HDBSCAN_METRIC,
+    use_umap=USE_UMAP if args.use_umap else False,
+)
 
     # diagnostics
     import numpy as np
@@ -1416,7 +1428,11 @@ def main_cli(args):
     n_noise = int((labels_arr == -1).sum())
     print(f"[diagnostic] clusters (excl -1): {n_clusters}  noise: {n_noise} ({n_noise/n*100:.1f}%)")
     counts = Counter(labels_arr)
-    top = sorted(((lab, sz) for lab, sz in counts.items() if lab != -1), key=lambda x: x[1], reverse=True)[:10]
+    top = sorted(
+        ((lab, sz) for lab, sz in counts.items() if lab != -1),
+        key=lambda x: x[1],
+        reverse=True
+    )[:10]
     print("[diagnostic] top cluster sizes:", top)
 
     save_entities_with_clusters(entities, labels_arr, args.out_jsonl, args.clusters_summary)
@@ -1501,12 +1517,12 @@ if not OPENAI_KEY or not isinstance(OPENAI_KEY, str) or len(OPENAI_KEY) < 10:
 client = OpenAI(api_key=OPENAI_KEY)
 
 # ---------------- Paths & config ----------------
-CLUSTERED_IN = Path("SGCE-KG/data/Entities/Ent_1st/Ent_Clustering_1st/entities_clustered.jsonl")   # input (from previous clustering)
-CHUNKS_JSONL = Path("SGCE-KG/data/Chunks/chunks_sentence.jsonl")
+CLUSTERED_IN = Path("data/Entities/Ent_1st/Ent_Clustering_1st/entities_clustered.jsonl")   # input (from previous clustering)
+CHUNKS_JSONL = Path("data/Chunks/chunks_sentence.jsonl")
 
-ENT_OUT = Path("SGCE-KG/data/Entities/Ent_1st/Ent_Resolved_1st/entities_resolved.jsonl")
-CANON_OUT = Path("SGCE-KG/data/Entities/Ent_1st/Ent_Resolved_1st/canonical_entities.jsonl")
-LOG_OUT = Path("SGCE-KG/data/Entities/Ent_1st/Ent_Resolved_1st/resolution_log.jsonl")
+ENT_OUT = Path("data/Entities/Ent_1st/Ent_Resolved_1st/entities_resolved.jsonl")
+CANON_OUT = Path("data/Entities/Ent_1st/Ent_Resolved_1st/canonical_entities.jsonl")
+LOG_OUT = Path("data/Entities/Ent_1st/Ent_Resolved_1st/resolution_log.jsonl")
 
 # NOTE: weights changed to match embed_and_cluster V3 (name, desc, ctx) — type is folded into ctx.
 WEIGHTS = {"name": 0.40, "desc": 0.25, "ctx": 0.35}
@@ -2199,9 +2215,9 @@ def orchestrate():
 # import matplotlib.pyplot as plt
 
 # # --------- Config / paths ----------
-# ENT_RES_FILE = Path("SGCE-KG/data/Entities/Ent_1st/Ent_Resolved_1st/entities_resolved.jsonl")
-# CANON_FILE = Path("SGCE-KG/data/Entities/Ent_1st/Ent_Resolved_1st/canonical_entities.jsonl")
-# OUT_DIR = Path("SGCE-KG/data/Entities/Ent_1st/Ent_1st_Analysis")
+# ENT_RES_FILE = Path("data/Entities/Ent_1st/Ent_Resolved_1st/entities_resolved.jsonl")
+# CANON_FILE = Path("data/Entities/Ent_1st/Ent_Resolved_1st/canonical_entities.jsonl")
+# OUT_DIR = Path("data/Entities/Ent_1st/Ent_1st_Analysis")
 # OUT_DIR.mkdir(parents=True, exist_ok=True)
 
 # # --------- Helpers ----------
@@ -2389,11 +2405,11 @@ DEFAULT_MAX_ITERS = 5
 MIN_MERGES_TO_CONTINUE = 1
 
 # ---------------- Paths ----------------
-ENT_RAW_SEED = Path("SGCE-KG/data/Entities/Ent_Raw_0/entities_raw.jsonl")
+ENT_RAW_SEED = Path("data/Entities/Ent_Raw_0/entities_raw.jsonl")
 
-CLUSTERED_PATH = Path("SGCE-KG/data/Entities/Ent_1st/Ent_Clustering_1st/entities_clustered.jsonl")
-CANONICAL_PATH = Path("SGCE-KG/data/Entities/Ent_1st/Ent_Resolved_1st/canonical_entities.jsonl")
-RESOLVED_PATH = Path("SGCE-KG/data/Entities/Ent_1st/Ent_Resolved_1st/entities_resolved.jsonl")
+CLUSTERED_PATH = Path("data/Entities/Ent_1st/Ent_Clustering_1st/entities_clustered.jsonl")
+CANONICAL_PATH = Path("data/Entities/Ent_1st/Ent_Resolved_1st/canonical_entities.jsonl")
+RESOLVED_PATH = Path("data/Entities/Ent_1st/Ent_Resolved_1st/entities_resolved.jsonl")
 
 ITER_DIR = (ENT_RAW_SEED.parent).parent / "iterative_runs"
 ITER_DIR.mkdir(parents=True, exist_ok=True)
@@ -2609,11 +2625,11 @@ from typing import Dict, List, Optional
 # ---------- CONFIG: adjust if needed ----------
 
 # Original raw entities (used to recover chunk_ids via merged_from)
-RAW_SEED_PATH = Path("SGCE-KG/data/Entities/Ent_Raw_0/entities_raw.jsonl")
+RAW_SEED_PATH = Path("data/Entities/Ent_Raw_0/entities_raw.jsonl")
 
 # Default locations for latest iteration entities and class-identification output
-DEFAULT_ITER_DIR = Path("SGCE-KG/data/Entities/iterative_runs/")
-DEFAULT_CLS_OUT_DIR = Path("SGCE-KG/data/Classes/Cls_Input")
+DEFAULT_ITER_DIR = Path("data/Entities/iterative_runs/")
+DEFAULT_CLS_OUT_DIR = Path("data/Classes/Cls_Input")
 DEFAULT_CLS_OUT_FILE = DEFAULT_CLS_OUT_DIR / "cls_input_entities.jsonl"
 
 # ---------- guard against ipykernel injected args ----------
@@ -2856,8 +2872,9 @@ except Exception:
 from openai import OpenAI
 
 # ----------------------------- CONFIG -----------------------------
-INPUT_PATH = Path("SGCE-KG/data/Classes/Cls_Input/cls_input_entities.jsonl")
-OUT_DIR = Path("SGCE-KG/data/Classes/Cls_Rec")
+INPUT_PATH = Path("data/Classes/Cls_Input/cls_input_entities.jsonl")
+# OUT_DIR = Path("data/Classes/Cls_Rec")
+OUT_DIR = Path("data/Classes/Cls_Rec")
 OUT_DIR.mkdir(parents=True, exist_ok=True)
 
 CLASS_CANDIDATES_OUT = OUT_DIR / "class_candidates.jsonl"
@@ -3539,18 +3556,21 @@ Merge per-round classes files (classes_round_*.json) into a single
 JSONL + JSON file suitable as input to the next step (Cls Res).
 
 Output:
- - SGCE-KG/data/Classes/Cls_Res/Cls_Res_input/classes_for_cls_res.jsonl
- - SGCE-KG/data/Classes/Cls_Res/Cls_Res_input/classes_for_cls_res.json
+ - data/Classes/Cls_Res/Cls_Res_input/classes_for_cls_res.jsonl
+ - data/Classes/Cls_Res/Cls_Res_input/classes_for_cls_res.json
 """
 
 import json
 from pathlib import Path
 from collections import defaultdict
 
-ROOT = Path("SGCE-KG/data/Classes/Cls_Rec")
+# ROOT = Path("data/Classes/Cls_Rec")
+ROOT = Path("data/Classes/Cls_Rec")
 PATTERN = "classes_round_*.json"
 
-OUTPUT_ROOT = Path("SGCE-KG/data/Classes/Cls_Res/Cls_Res_input")
+# OUTPUT_ROOT = Path("data/Classes/Cls_Res/Cls_Res_input")
+OUTPUT_ROOT = Path("data/Classes/Cls_Res/Cls_Res_input")
+
 OUT_JSONL = OUTPUT_ROOT / "classes_for_cls_res.jsonl"
 OUT_JSON  = OUTPUT_ROOT / "classes_for_cls_res.json"
 
@@ -3736,7 +3756,7 @@ Key features:
 - Summary folder with aggregated decisions and useful statistics.
 
 Input:
-  SGCE-KG/data/Classes/Cls_Rec/classes_for_cls_res.json
+  data/Classes/Cls_Rec/classes_for_cls_res.json
 
 Output (written under OUT_DIR):
   - per-cluster decisions: cluster_<N>_decisions.json
@@ -3787,10 +3807,10 @@ except Exception:
     OpenAI = None
 
 # ----------------------------- CONFIG -----------------------------
-INPUT_CLASSES =     Path("SGCE-KG/data/Classes/Cls_Res/Cls_Res_input/classes_for_cls_res.json")
-#INPUT_CLASSES = Path("SGCE-KG/data/Classes/Cls_Rec/classes_for_cls_res-Wrong.json")
-SRC_ENTITIES_PATH = Path("SGCE-KG/data/Classes/Cls_Input/cls_input_entities.jsonl")
-OUT_DIR = Path("SGCE-KG/data/Classes/Cls_Res")
+INPUT_CLASSES =     Path("data/Classes/Cls_Res/Cls_Res_input/classes_for_cls_res.json")
+#INPUT_CLASSES = Path("data/Classes/Cls_Rec/classes_for_cls_res-Wrong.json")
+SRC_ENTITIES_PATH = Path("data/Classes/Cls_Input/cls_input_entities.jsonl")
+OUT_DIR = Path("data/Classes/Cls_Res")
 OUT_DIR.mkdir(parents=True, exist_ok=True)
 RAW_LLM_DIR = OUT_DIR / "llm_raw"
 RAW_LLM_DIR.mkdir(exist_ok=True)
@@ -5095,8 +5115,8 @@ from typing import Any, Dict, List, Optional
 # -----------------------
 # CONFIG - reuse or override
 # -----------------------
-BASE_INPUT_CLASSES = Path("SGCE-KG/data/Classes/Cls_Res/Cls_Res_input/classes_for_cls_res.json")
-EXPERIMENT_ROOT = Path("SGCE-KG/data/Classes/Cls_Res/Cls_Res_IterativeRuns")
+BASE_INPUT_CLASSES = Path("data/Classes/Cls_Res/Cls_Res_input/classes_for_cls_res.json")
+EXPERIMENT_ROOT = Path("data/Classes/Cls_Res/Cls_Res_IterativeRuns")
 
 MAX_RUNS: int = 4
 STRUCTURAL_CHANGE_THRESHOLD: Optional[int] = 0
@@ -6009,7 +6029,8 @@ def parse_args() -> argparse.Namespace:
     return p.parse_args()
 
 #make output path directory if it doesn't exist
-output_dir = "SGCE-KG/data/Relations/Rel Rec"
+# output_dir = "data/Relations/Rel Rec"
+output_dir = "data/Relations/Rel Rec"
 import os
 if not os.path.exists(output_dir):
     os.makedirs(output_dir) 
@@ -6022,9 +6043,9 @@ if not os.path.exists(output_dir):
 
 
 # run_rel_rec(
-#     entities_path="SGCE-KG/data/Classes/Cls_Res/Cls_Res_IterativeRuns/overall_summary/entities_with_class.jsonl",
-#     chunks_path="SGCE-KG/data/Chunks/chunks_sentence.jsonl",
-#     output_path="SGCE-KG/data/Relations/Rel Rec/relations_raw.jsonl",
+#     entities_path="data/Classes/Cls_Res/Cls_Res_IterativeRuns/overall_summary/entities_with_class.jsonl",
+#     chunks_path="data/Chunks/chunks_sentence.jsonl",
+#     output_path="data/Relations/Rel Rec/relations_raw.jsonl",
 #     model="gpt-5.1"
 # )
 
@@ -6069,7 +6090,7 @@ Key properties:
   so LLM chunks stay reasonably small.
 
 Input:
-  SGCE-KG/data/Relations/Rel Rec/relations_raw.jsonl
+  data/Relations/Rel Rec/relations_raw.jsonl
 
 Output (under OUT_DIR):
   - per-(cluster,local,part) decisions: cluster_<ID>_decisions.json
@@ -6118,8 +6139,8 @@ except Exception:
 
 # ----------------------------- CONFIG -----------------------------
 
-INPUT_RELATIONS = Path("SGCE-KG/data/Relations/Rel Rec/relations_raw.jsonl")
-OUT_DIR = Path("SGCE-KG/data/Relations/Rel Res")
+INPUT_RELATIONS = Path("data/Relations/Rel Rec/relations_raw.jsonl")
+OUT_DIR = Path("data/Relations/Rel Res")
 OUT_DIR.mkdir(parents=True, exist_ok=True)
 RAW_LLM_DIR = OUT_DIR / "llm_raw"
 RAW_LLM_DIR.mkdir(exist_ok=True)
@@ -7444,10 +7465,10 @@ from typing import Any, Dict, List, Optional
 # -----------------------
 
 # First-run input: raw relations from Rel Rec
-BASE_INPUT_RELATIONS = Path("SGCE-KG/data/Relations/Rel Rec/relations_raw.jsonl")
+BASE_INPUT_RELATIONS = Path("data/Relations/Rel Rec/relations_raw.jsonl")
 
 # Root for iterative runs; each run gets its own subfolder
-EXPERIMENT_ROOT = Path("SGCE-KG/data/Relations/Rel Res_IterativeRuns")
+EXPERIMENT_ROOT = Path("data/Relations/Rel Res_IterativeRuns")
 
 MAX_RUNS: int = 4
 
@@ -7779,15 +7800,15 @@ def export_relations_and_nodes_to_csv():
 
     # Sources
     relations_jl = Path(
-        "SGCE-KG/data/Relations/Rel Res_IterativeRuns/overall_summary/relations_resolved.jsonl"
+        "data/Relations/Rel Res_IterativeRuns/overall_summary/relations_resolved.jsonl"
     )
     entities_cls_jl = Path(
-        "SGCE-KG/data/Classes/Cls_Res/Cls_Res_IterativeRuns/overall_summary/entities_with_class.jsonl"
+        "data/Classes/Cls_Res/Cls_Res_IterativeRuns/overall_summary/entities_with_class.jsonl"
     )
 
     # Outputs
-    rels_out_csv  = Path("SGCE-KG/data/KG/rels_fixed_no_raw.csv")
-    nodes_out_csv = Path("SGCE-KG/data/KG/nodes.csv")
+    rels_out_csv  = Path("data/KG/rels_fixed_no_raw.csv")
+    nodes_out_csv = Path("data/KG/nodes.csv")
 
 
     def sanitize_string_for_csv_json(s):
@@ -8221,8 +8242,8 @@ def export_relations_and_nodes_to_csv():
 
 if __name__ == "__main__":
     sentence_chunks_token_driven(
-        "SGCE-KG/data/pdf_to_json/Plain_Text.json",
-        "SGCE-KG/data/Chunks/chunks_sentence.jsonl",
+        "data/pdf_to_json/Plain_Text.json",
+        "data/Chunks/chunks_sentence.jsonl",
         max_tokens_per_chunk=200,   # preferred upper bound (None to disable)
         min_tokens_per_chunk=100,   # expand small chunks to reach this minimum (None to disable)
         sentence_per_line=True,
@@ -8239,8 +8260,8 @@ if __name__ == "__main__":
 
 if __name__ == "__main__":
     embed_and_index_chunks(
-        "SGCE-KG/data/Chunks/chunks_sentence.jsonl",
-        "SGCE-KG/data/Chunks/chunks_emb",
+        "data/Chunks/chunks_sentence.jsonl",
+        "data/Chunks/chunks_emb",
         "BAAI/bge-large-en-v1.5",
         "BAAI/bge-small-en-v1.5",
         False,   # use_small_model_for_dev
