@@ -1,0 +1,78 @@
+[
+  {
+    "function": "reassign_entities",
+    "args": {
+      "entity_ids": ["En_0e344608"],
+      "from_class_id": "ClsC_ea8cc1e2",
+      "to_class_id": "ClsC_c2a9c11a",
+      "justification": "The entity 'inclusivity' is a social value/theme that conceptually aligns better with 'Social Change Themes' (stereotypes, social justice) than with outcome-oriented social change processes, improving thematic coherence across classes.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_e78d2acf",
+      "new_name": "Gender-Related Social Concepts in Sport",
+      "new_description": "Abstract social concepts concerning gender in sport, including normative expectations and principles of fairness and equal treatment across genders.",
+      "new_class_type_hint": "Social Concept",
+      "new_class_group": "Sports, Social Issues, and Social Change",
+      "remark": null,
+      "justification": "Clarifies the sports-specific context and assigns a shared Class_Group connecting it to other sports-related social justice and change classes.",
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_9f91debd",
+      "new_name": "Gender Integration in Sports",
+      "new_description": "Practices, actors, and contexts involved in integrating women into traditionally male-dominated sports to challenge gender norms and promote equality.",
+      "new_class_type_hint": "Social Phenomenon",
+      "new_class_group": "Sports, Social Issues, and Social Change",
+      "remark": null,
+      "justification": "Keeps a distinct class for gender integration as a concrete social phenomenon while linking it via a common Class_Group to related social justice and equality concepts.",
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_ea8cc1e2",
+      "new_name": "Sports-Related Social Impact Processes",
+      "new_description": "Process-oriented concepts describing beneficial or transformative social effects associated with sports, such as social change and positive change.",
+      "new_class_type_hint": "SocialProcess",
+      "new_class_group": "Sports, Social Issues, and Social Change",
+      "remark": null,
+      "justification": "After moving 'inclusivity' to a theme-oriented class, this class now cleanly represents process-oriented social impacts, and is grouped with other sports-related social issue and change classes.",
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_c2a9c11a",
+      "new_name": "Sports-Related Social Change Themes",
+      "new_description": "Abstract social themes and values—such as stereotypes, inclusivity, and social justice—that sports can address or influence.",
+      "new_class_type_hint": "Social Concept",
+      "new_class_group": "Sports, Social Issues, and Social Change",
+      "remark": null,
+      "justification": "Incorporates 'inclusivity' alongside stereotypes and social justice, making this a coherent theme/value class, and links it via Class_Group to related social change and issue classes.",
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_99421fa7",
+      "new_name": "Sports-Related Social Issues",
+      "new_description": "Societal problems involving unfairness, rights violations, or broad public concerns that athletes address through advocacy and public statements, such as discrimination and injustice.",
+      "new_class_type_hint": "Social Issue Category",
+      "new_class_group": "Sports, Social Issues, and Social Change",
+      "remark": null,
+      "justification": "Keeps a distinct bucket for concrete social issues while aligning it under the same Class_Group as related gender, theme, and process classes for a coherent sports-and-social-change schema.",
+      "confidence": 0.9
+    }
+  }
+]

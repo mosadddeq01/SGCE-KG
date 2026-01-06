@@ -1,0 +1,134 @@
+{
+  "cluster_label": "11_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_e492b140ff7e",
+      "relation_name": "leads_to",
+      "rel_desc": "The Black Lives Matter movement is linked to the occurrence of widespread protests.",
+      "rel_hint_type": "causal",
+      "canonical_rel_name": "leads_to",
+      "canonical_rel_desc": "Indicates that the subject movement or process causally contributes to or brings about the occurrence of the object outcome, event, or response.",
+      "rel_cls": "movement_impact_relation",
+      "rel_cls_group": "CAUSALITY",
+      "subject_entity_name": "Black Lives Matter movement",
+      "object_entity_name": "public protest demonstrations",
+      "subject_class_label": "Police Brutality and Contemporary Racial Justice Movements",
+      "subject_class_group": "Civil Rights and Racial Justice Movements",
+      "object_class_label": "Protests, Strikes, and Political Dissent",
+      "object_class_group": "Political Collective Action and Contention",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "widespread (implying many locations)",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "leading to",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.9,
+      "remarks": [
+        "Direction chosen from movement to protests, absorbing intermediate conversation.",
+        "Direction chosen from movement to protests, absorbing intermediate conversation."
+      ]
+    },
+    {
+      "relation_id": "RelR_5406b3cd7dee",
+      "relation_name": "leads_to",
+      "rel_desc": "The Black Lives Matter movement contributed to generating calls for reform.",
+      "rel_hint_type": "causal",
+      "canonical_rel_name": "leads_to",
+      "canonical_rel_desc": "Indicates that the subject movement or process causally contributes to or brings about the occurrence of the object outcome, event, or response.",
+      "rel_cls": "movement_impact_relation",
+      "rel_cls_group": "CAUSALITY",
+      "subject_entity_name": "Black Lives Matter movement",
+      "object_entity_name": "calls for reform",
+      "subject_class_label": "Police Brutality and Contemporary Racial Justice Movements",
+      "subject_class_group": "Civil Rights and Racial Justice Movements",
+      "object_class_label": "Social Responses to Inequality",
+      "object_class_group": "Social Inequality and Justice",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "leading to",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.9,
+      "remarks": [
+        "Intermediate role of conversation not modeled separately here.",
+        "Intermediate role of conversation not modeled separately here."
+      ]
+    },
+    {
+      "relation_id": "RelR_30b15b0c2ed4",
+      "relation_name": "leads_toward",
+      "rel_desc": "The metaphorical road to progress implies movement toward a better world.",
+      "rel_hint_type": "directional",
+      "canonical_rel_name": "leads_toward",
+      "canonical_rel_desc": "The subject is conceptualized as a path, process, or trajectory that directs or tends toward the object as an outcome or destination.",
+      "rel_cls": "progress_direction_relation",
+      "rel_cls_group": "CAUSALITY",
+      "subject_entity_name": "road to progress",
+      "object_entity_name": "better world",
+      "subject_class_label": "Metaphorical Social Progress",
+      "subject_class_group": "Social Progress & Human Resilience Concepts",
+      "object_class_label": "Envisioned Just Future Society",
+      "object_class_group": "Social Progress & Human Resilience Concepts",
+      "qualifiers": {
+        "TemporalQualifier": "often long",
+        "SpatialQualifier": null,
+        "OperationalConstraint": "difficult path involving struggle",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "implicit, not explicitly stated",
+        "CausalHint": null,
+        "LogicalMarker": "while",
+        "OtherQualifier": "MetaphorType: journey metaphor for social change"
+      },
+      "confidence": 0.55,
+      "remarks": [
+        "Relation inferred to preserve implied teleology; semantics somewhat interpretive.",
+        "Relation inferred to preserve implied teleology; semantics somewhat interpretive."
+      ]
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_rel_schema\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_30b15b0c2ed4\"\n      ],\n      \"canonical_rel_name\": \"leads_toward\",\n      \"canonical_rel_desc\": \"The subject is conceptualized as a path, process, or trajectory that is directionally oriented toward the object as a destination, goal, or aspirational state, without necessarily implying direct causation.\",\n      \"rel_cls\": \"progress_direction_relation\",\n      \"rel_cls_group\": \"DIRECTIONALITY\",\n      \"justification\": \"This relation encodes a metaphorical, teleological direction of progress (a journey toward a better world), not a clear causal mechanism. The existing rel_cls_group=CAUSALITY is misleading given rel_hint_type='directional' and the metaphorical qualifiers. Using rel_cls_group='DIRECTIONALITY' better captures that this predicate expresses movement or orientation toward a goal state. The refined description explicitly removes a strong causal reading while keeping the idea of a path toward an aspirational outcome.\",\n      \"remark\": \"Adjusted broad class from CAUSALITY to DIRECTIONALITY to reflect that this is a metaphorical progress-path relation rather than a concrete causal impact relation.\",\n      \"confidence\": 0.79\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_rel_schema",
+      "args": {
+        "relation_ids": [
+          "RelR_30b15b0c2ed4"
+        ],
+        "canonical_rel_name": "leads_toward",
+        "canonical_rel_desc": "The subject is conceptualized as a path, process, or trajectory that is directionally oriented toward the object as a destination, goal, or aspirational state, without necessarily implying direct causation.",
+        "rel_cls": "progress_direction_relation",
+        "rel_cls_group": "DIRECTIONALITY",
+        "justification": "This relation encodes a metaphorical, teleological direction of progress (a journey toward a better world), not a clear causal mechanism. The existing rel_cls_group=CAUSALITY is misleading given rel_hint_type='directional' and the metaphorical qualifiers. Using rel_cls_group='DIRECTIONALITY' better captures that this predicate expresses movement or orientation toward a goal state. The refined description explicitly removes a strong causal reading while keeping the idea of a path toward an aspirational outcome.",
+        "remark": "Adjusted broad class from CAUSALITY to DIRECTIONALITY to reflect that this is a metaphorical progress-path relation rather than a concrete causal impact relation.",
+        "confidence": 0.79
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_rel_schema",
+      "relation_ids": [
+        "RelR_30b15b0c2ed4"
+      ],
+      "canonical_rel_name": "leads_toward",
+      "canonical_rel_desc": "The subject is conceptualized as a path, process, or trajectory that is directionally oriented toward the object as a destination, goal, or aspirational state, without necessarily implying direct causation.",
+      "rel_cls": "progress_direction_relation",
+      "rel_cls_group": "DIRECTIONALITY",
+      "new_relation_name": null,
+      "original_relation_name": null,
+      "justification": "This relation encodes a metaphorical, teleological direction of progress (a journey toward a better world), not a clear causal mechanism. The existing rel_cls_group=CAUSALITY is misleading given rel_hint_type='directional' and the metaphorical qualifiers. Using rel_cls_group='DIRECTIONALITY' better captures that this predicate expresses movement or orientation toward a goal state. The refined description explicitly removes a strong causal reading while keeping the idea of a path toward an aspirational outcome.",
+      "remark": "Adjusted broad class from CAUSALITY to DIRECTIONALITY to reflect that this is a metaphorical progress-path relation rather than a concrete causal impact relation.",
+      "confidence": 0.79
+    }
+  ],
+  "timestamp": "2026-01-06T13:23:51Z"
+}

@@ -1,0 +1,213 @@
+{
+  "cluster_label": "7_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_41df202002c1",
+      "relation_name": "transmitted_through",
+      "rel_desc": "Moral lessons are transmitted through successive generations.",
+      "rel_hint_type": "transmission",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "moral lessons",
+      "object_entity_name": "generations",
+      "subject_class_label": "Fairytale Concepts",
+      "subject_class_group": "Fairytales: Genre, Narratives, and Motifs",
+      "object_class_label": "Storytelling Temporal and Cultural Context",
+      "object_class_group": "Storytelling and Narrative (Practices, Effects, Context)",
+      "qualifiers": {
+        "TemporalQualifier": "over time (implied historical span)",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "passed down",
+        "LogicalMarker": "through",
+        "OtherQualifier": null
+      },
+      "confidence": 0.94,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_ce0e9f49c1c4",
+      "relation_name": "transmitted_across",
+      "rel_desc": "Oral traditions are passed down across generations.",
+      "rel_hint_type": "temporal_transmission",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "oral traditions",
+      "object_entity_name": "generations",
+      "subject_class_label": "Oral Storytelling Practices",
+      "subject_class_group": "Storytelling and Narrative (Practices, Effects, Context)",
+      "object_class_label": "Storytelling Temporal and Cultural Context",
+      "object_class_group": "Storytelling and Narrative (Practices, Effects, Context)",
+      "qualifiers": {
+        "TemporalQualifier": "over long periods of time",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": "through generations",
+        "UncertaintyQualifier": "reference span slightly ambiguous",
+        "CausalHint": null,
+        "LogicalMarker": "through",
+        "OtherQualifier": "TransmissionMode: verbal storytelling"
+      },
+      "confidence": 0.96,
+      "remarks": [
+        "While \"these\" could refer broadly to traditions, folklore, and myths, oral traditions are the clearest transmission medium."
+      ]
+    },
+    {
+      "relation_id": "RelR_d3aced2b792c",
+      "relation_name": "transmitted_across",
+      "rel_desc": "Folklore is transmitted across generations.",
+      "rel_hint_type": "temporal_transmission",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "folklore",
+      "object_entity_name": "generations",
+      "subject_class_label": "Folklore and Fairy-Tale Origins",
+      "subject_class_group": "Folklore and Fairy-Tale Traditions",
+      "object_class_label": "Storytelling Temporal and Cultural Context",
+      "object_class_group": "Storytelling and Narrative (Practices, Effects, Context)",
+      "qualifiers": {
+        "TemporalQualifier": "over many generations",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": "through generations",
+        "UncertaintyQualifier": "collective subject inferred",
+        "CausalHint": null,
+        "LogicalMarker": "through",
+        "OtherQualifier": null
+      },
+      "confidence": 0.78,
+      "remarks": [
+        "List-wide reference; applied to folklore by inference."
+      ]
+    },
+    {
+      "relation_id": "RelR_2bdf60fc425d",
+      "relation_name": "transmitted_across",
+      "rel_desc": "Cultural myths are passed down through generations.",
+      "rel_hint_type": "temporal_transmission",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "cultural myths",
+      "object_entity_name": "generations",
+      "subject_class_label": "Cultural Myths",
+      "subject_class_group": "Folklore and Mythic Narratives",
+      "object_class_label": "Storytelling Temporal and Cultural Context",
+      "object_class_group": "Storytelling and Narrative (Practices, Effects, Context)",
+      "qualifiers": {
+        "TemporalQualifier": "across multiple generations",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": "through generations",
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": "through",
+        "OtherQualifier": null
+      },
+      "confidence": 0.86,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_41df202002c1\",\n        \"RelR_ce0e9f49c1c4\",\n        \"RelR_d3aced2b792c\",\n        \"RelR_2bdf60fc425d\"\n      ],\n      \"canonical_rel_name\": \"is_transmitted_across_generations\",\n      \"canonical_rel_desc\": \"Indicates that an intangible cultural element (e.g., moral lessons, oral traditions, folklore, myths) is passed down across successive generations.\",\n      \"justification\": \"All four relations link an intangible cultural content type (moral lessons, oral traditions, folklore, cultural myths) to 'generations' with the same semantics: intergenerational transmission over time. Normalizing to a single predicate focused on transmission across generations improves schema consistency.\",\n      \"remark\": null,\n      \"confidence\": 0.95\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_41df202002c1\",\n        \"RelR_ce0e9f49c1c4\",\n        \"RelR_d3aced2b792c\",\n        \"RelR_2bdf60fc425d\"\n      ],\n      \"rel_cls\": \"cultural_transmission_relation\",\n      \"justification\": \"Each relation expresses the same family of phenomena: transmission of cultural or narrative content across generations. Grouping them under a common class 'cultural_transmission_relation' captures this shared semantics beyond the specific predicate.\",\n      \"remark\": null,\n      \"confidence\": 0.94\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_41df202002c1\",\n        \"RelR_ce0e9f49c1c4\",\n        \"RelR_d3aced2b792c\",\n        \"RelR_2bdf60fc425d\"\n      ],\n      \"rel_cls_group\": \"TEMPORALITY\",\n      \"justification\": \"The primary dimension is persistence and passage through time (across generations), rather than composition, causality, or spatial context. This fits best under a broad temporal group.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_41df202002c1",
+          "RelR_ce0e9f49c1c4",
+          "RelR_d3aced2b792c",
+          "RelR_2bdf60fc425d"
+        ],
+        "canonical_rel_name": "is_transmitted_across_generations",
+        "canonical_rel_desc": "Indicates that an intangible cultural element (e.g., moral lessons, oral traditions, folklore, myths) is passed down across successive generations.",
+        "justification": "All four relations link an intangible cultural content type (moral lessons, oral traditions, folklore, cultural myths) to 'generations' with the same semantics: intergenerational transmission over time. Normalizing to a single predicate focused on transmission across generations improves schema consistency.",
+        "remark": null,
+        "confidence": 0.95
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_41df202002c1",
+          "RelR_ce0e9f49c1c4",
+          "RelR_d3aced2b792c",
+          "RelR_2bdf60fc425d"
+        ],
+        "rel_cls": "cultural_transmission_relation",
+        "justification": "Each relation expresses the same family of phenomena: transmission of cultural or narrative content across generations. Grouping them under a common class 'cultural_transmission_relation' captures this shared semantics beyond the specific predicate.",
+        "remark": null,
+        "confidence": 0.94
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_41df202002c1",
+          "RelR_ce0e9f49c1c4",
+          "RelR_d3aced2b792c",
+          "RelR_2bdf60fc425d"
+        ],
+        "rel_cls_group": "TEMPORALITY",
+        "justification": "The primary dimension is persistence and passage through time (across generations), rather than composition, causality, or spatial context. This fits best under a broad temporal group.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_41df202002c1",
+        "RelR_ce0e9f49c1c4",
+        "RelR_d3aced2b792c",
+        "RelR_2bdf60fc425d"
+      ],
+      "canonical_rel_name": "is_transmitted_across_generations",
+      "canonical_rel_desc": "Indicates that an intangible cultural element (e.g., moral lessons, oral traditions, folklore, myths) is passed down across successive generations.",
+      "justification": "All four relations link an intangible cultural content type (moral lessons, oral traditions, folklore, cultural myths) to 'generations' with the same semantics: intergenerational transmission over time. Normalizing to a single predicate focused on transmission across generations improves schema consistency.",
+      "remark": null,
+      "confidence": 0.95
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_41df202002c1",
+        "RelR_ce0e9f49c1c4",
+        "RelR_d3aced2b792c",
+        "RelR_2bdf60fc425d"
+      ],
+      "rel_cls": "cultural_transmission_relation",
+      "justification": "Each relation expresses the same family of phenomena: transmission of cultural or narrative content across generations. Grouping them under a common class 'cultural_transmission_relation' captures this shared semantics beyond the specific predicate.",
+      "remark": null,
+      "confidence": 0.94
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_41df202002c1",
+        "RelR_ce0e9f49c1c4",
+        "RelR_d3aced2b792c",
+        "RelR_2bdf60fc425d"
+      ],
+      "rel_cls_group": "TEMPORALITY",
+      "justification": "The primary dimension is persistence and passage through time (across generations), rather than composition, causality, or spatial context. This fits best under a broad temporal group.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  ],
+  "timestamp": "2026-01-06T14:00:41Z"
+}

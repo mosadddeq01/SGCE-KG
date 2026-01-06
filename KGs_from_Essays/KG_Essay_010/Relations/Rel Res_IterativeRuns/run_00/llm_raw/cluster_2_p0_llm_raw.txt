@@ -1,0 +1,161 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_fbce12fe1da6",
+        "RelR_ab6c5b69cb8c"
+      ],
+      "canonical_rel_name": "describes",
+      "canonical_rel_desc": "Subject provides a description, account, or characterization of the object (typically a phenomenon or entity).",
+      "justification": "In both relations, the subject is an informational/attribute entity ('properties of black holes', 'description of black holes') that conceptually provides a description or characterization of the object ('black holes'), so they share the same descriptive predicate.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_015337c55f4e"
+      ],
+      "canonical_rel_name": "describes_evolution_of",
+      "canonical_rel_desc": "Subject describes or represents the temporal evolution or life cycle of the object.",
+      "justification": "The 'star life cycle' entity explicitly refers to the evolutionary progression of a massive star, so a predicate that encodes description of evolution/life cycle is appropriate.",
+      "remark": null,
+      "confidence": 0.86
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_68cf60afc1d3"
+      ],
+      "canonical_rel_name": "is_measured_by",
+      "canonical_rel_desc": "Subject quantity is operationally measured or quantified using the object measure, scale, or parameter.",
+      "justification": "The 'size of black holes' is quantified using the 'Schwarzschild radius'; semantically this is a standard measurement pattern where a quantity is measured by a specific metric.",
+      "remark": null,
+      "confidence": 0.97
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_3f2a6bf245a7"
+      ],
+      "canonical_rel_name": "is_defined_by",
+      "canonical_rel_desc": "Subject concept is defined in terms of, or via, the object condition or defining relation.",
+      "justification": "The relation states how the Schwarzschild radius is defined (via a specific escape-velocity condition), so a definitional predicate linking a concept to its defining condition is appropriate.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_726f81314b83"
+      ],
+      "canonical_rel_name": "is_characteristic_radius_of",
+      "canonical_rel_desc": "Subject radius is the characteristic or defining radius associated with the object, often marking a physical or conceptual boundary.",
+      "justification": "The Schwarzschild radius is described as the characteristic radius of the black hole, marking the boundary beyond which escape is impossible; a more specific predicate than a generic 'characterizes' improves schema precision.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_8e69d78aaedd"
+      ],
+      "canonical_rel_name": "describes_as",
+      "canonical_rel_desc": "Subject (typically a theory or model) describes or represents the object as having certain specified properties or nature.",
+      "justification": "Classical general relativity is explicitly said to describe the black hole singularity as a point of infinite density and curvature; a predicate capturing a theory’s characterization of an object is appropriate.",
+      "remark": null,
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_fbce12fe1da6",
+        "RelR_ab6c5b69cb8c",
+        "RelR_015337c55f4e",
+        "RelR_8e69d78aaedd"
+      ],
+      "rel_cls": "representation_relation",
+      "justification": "All these relations link descriptive or theoretical constructs (properties, descriptions, life cycles, or theories) to the phenomena they represent; they form a coherent class of representation/description-type relations.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_68cf60afc1d3",
+        "RelR_726f81314b83"
+      ],
+      "rel_cls": "measurement_relation",
+      "justification": "Both relations involve quantitative characterization of black holes: one explicitly states that size is measured by Schwarzschild radius, and the other relates the Schwarzschild radius as the characteristic radius of a black hole; both are best grouped as measurement/parameter relations.",
+      "remark": null,
+      "confidence": 0.88
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_3f2a6bf245a7"
+      ],
+      "rel_cls": "definition_relation",
+      "justification": "This relation ties the Schwarzschild radius to the escape-velocity condition that defines it, which is prototypically a definitional link between a concept and its defining criterion.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_fbce12fe1da6",
+        "RelR_ab6c5b69cb8c",
+        "RelR_015337c55f4e",
+        "RelR_8e69d78aaedd"
+      ],
+      "rel_cls_group": "REPRESENTATION",
+      "justification": "These links concern how entities are described, modeled, or characterized by informational or theoretical constructs, fitting a broad representation/description dimension.",
+      "remark": null,
+      "confidence": 0.88
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_68cf60afc1d3",
+        "RelR_726f81314b83"
+      ],
+      "rel_cls_group": "MEASUREMENT",
+      "justification": "Both relations deal with quantitative characterization using the Schwarzschild radius, which is a measurement-like construct; assigning them to a MEASUREMENT group reflects this semantic dimension.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_3f2a6bf245a7"
+      ],
+      "rel_cls_group": "IDENTITY",
+      "justification": "A definitional relation linking a concept (Schwarzschild radius) to its defining condition is primarily about intensional identity—what the concept is by definition—so an IDENTITY-oriented group is appropriate.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  }
+]

@@ -1,0 +1,163 @@
+{
+  "cluster_label": "9_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_0803cdb56d48",
+      "relation_name": "protects",
+      "rel_desc": "Communities aim to protect their loved ones through sharing these stories.",
+      "rel_hint_type": "protection",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "communities",
+      "object_entity_name": "loved ones",
+      "subject_class_label": "Urban Legend Dissemination Contexts",
+      "subject_class_group": "Urban Legend Contexts (Social, Spatial, Temporal)",
+      "object_class_label": "Community Social Groups in Urban Legends",
+      "object_class_group": "Urban Legend Contexts (Social, Spatial, Temporal)",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "within the community's social circle",
+        "OperationalConstraint": "by sharing cautionary tales",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "By sharing these tales",
+        "LogicalMarker": "By",
+        "OtherQualifier": "ProtectionType: social and psychological safeguarding"
+      },
+      "confidence": 0.93,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_0b63c0d42e4d",
+      "relation_name": "protects_against",
+      "rel_desc": "Communities use stories to protect against perceived threats, whether real or imagined.",
+      "rel_hint_type": "mitigation",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "communities",
+      "object_entity_name": "perceived threats",
+      "subject_class_label": "Urban Legend Dissemination Contexts",
+      "subject_class_group": "Urban Legend Contexts (Social, Spatial, Temporal)",
+      "object_class_label": "Urban Legend Warnings and Threats",
+      "object_class_group": "Urban Legend Fear and Risk Themes",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "in the world around them",
+        "OperationalConstraint": "through collective sharing of tales",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "real or imagined",
+        "CausalHint": "from",
+        "LogicalMarker": null,
+        "OtherQualifier": "ThreatScope: includes both actual and imagined risks"
+      },
+      "confidence": 0.93,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_0803cdb56d48\"],\n      \"canonical_rel_name\": \"provides_protection_to\",\n      \"canonical_rel_desc\": \"Indicates that the subject provides social or psychological protection or safeguarding to the object.\",\n      \"justification\": \"This relation links communities to their loved ones as beneficiaries of protection through shared stories; the predicate should capture a beneficiary-focused protection relation independent of the specific mechanism (stories).\",\n      \"remark\": \"Used where the object is the entity being safeguarded (beneficiary), not the threat.\",\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_0b63c0d42e4d\"],\n      \"canonical_rel_name\": \"provides_protection_against\",\n      \"canonical_rel_desc\": \"Indicates that the subject provides protection or mitigation against the object, which represents a threat, risk, or hazard.\",\n      \"justification\": \"This relation links communities to perceived threats as the hazards being mitigated through stories; the predicate should reflect protection directed against a threat rather than toward a beneficiary.\",\n      \"remark\": \"Used where the object is the threat or hazard from which protection is offered.\",\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_0803cdb56d48\",\n        \"RelR_0b63c0d42e4d\"\n      ],\n      \"rel_cls\": \"protective_function_relation\",\n      \"justification\": \"Both relations describe a protective function that communities perform via stories, whether toward loved ones or against perceived threats; they are part of the same broader family of protection-related relations.\",\n      \"remark\": \"Covers social/psychological protection, not physical shielding per se.\",\n      \"confidence\": 0.88\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_0803cdb56d48\",\n        \"RelR_0b63c0d42e4d\"\n      ],\n      \"rel_cls_group\": \"CAUSALITY\",\n      \"justification\": \"In both cases, communities (via stories) causally bring about protection or risk mitigation, so these relations are best grouped under causal/mitigating effects rather than simple association.\",\n      \"remark\": \"Protection is modeled as a causal effect of communal storytelling practices.\",\n      \"confidence\": 0.9\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_0803cdb56d48"
+        ],
+        "canonical_rel_name": "provides_protection_to",
+        "canonical_rel_desc": "Indicates that the subject provides social or psychological protection or safeguarding to the object.",
+        "justification": "This relation links communities to their loved ones as beneficiaries of protection through shared stories; the predicate should capture a beneficiary-focused protection relation independent of the specific mechanism (stories).",
+        "remark": "Used where the object is the entity being safeguarded (beneficiary), not the threat.",
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_0b63c0d42e4d"
+        ],
+        "canonical_rel_name": "provides_protection_against",
+        "canonical_rel_desc": "Indicates that the subject provides protection or mitigation against the object, which represents a threat, risk, or hazard.",
+        "justification": "This relation links communities to perceived threats as the hazards being mitigated through stories; the predicate should reflect protection directed against a threat rather than toward a beneficiary.",
+        "remark": "Used where the object is the threat or hazard from which protection is offered.",
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_0803cdb56d48",
+          "RelR_0b63c0d42e4d"
+        ],
+        "rel_cls": "protective_function_relation",
+        "justification": "Both relations describe a protective function that communities perform via stories, whether toward loved ones or against perceived threats; they are part of the same broader family of protection-related relations.",
+        "remark": "Covers social/psychological protection, not physical shielding per se.",
+        "confidence": 0.88
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_0803cdb56d48",
+          "RelR_0b63c0d42e4d"
+        ],
+        "rel_cls_group": "CAUSALITY",
+        "justification": "In both cases, communities (via stories) causally bring about protection or risk mitigation, so these relations are best grouped under causal/mitigating effects rather than simple association.",
+        "remark": "Protection is modeled as a causal effect of communal storytelling practices.",
+        "confidence": 0.9
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_0803cdb56d48"
+      ],
+      "canonical_rel_name": "provides_protection_to",
+      "canonical_rel_desc": "Indicates that the subject provides social or psychological protection or safeguarding to the object.",
+      "justification": "This relation links communities to their loved ones as beneficiaries of protection through shared stories; the predicate should capture a beneficiary-focused protection relation independent of the specific mechanism (stories).",
+      "remark": "Used where the object is the entity being safeguarded (beneficiary), not the threat.",
+      "confidence": 0.9
+    },
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_0b63c0d42e4d"
+      ],
+      "canonical_rel_name": "provides_protection_against",
+      "canonical_rel_desc": "Indicates that the subject provides protection or mitigation against the object, which represents a threat, risk, or hazard.",
+      "justification": "This relation links communities to perceived threats as the hazards being mitigated through stories; the predicate should reflect protection directed against a threat rather than toward a beneficiary.",
+      "remark": "Used where the object is the threat or hazard from which protection is offered.",
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_0803cdb56d48",
+        "RelR_0b63c0d42e4d"
+      ],
+      "rel_cls": "protective_function_relation",
+      "justification": "Both relations describe a protective function that communities perform via stories, whether toward loved ones or against perceived threats; they are part of the same broader family of protection-related relations.",
+      "remark": "Covers social/psychological protection, not physical shielding per se.",
+      "confidence": 0.88
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_0803cdb56d48",
+        "RelR_0b63c0d42e4d"
+      ],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "In both cases, communities (via stories) causally bring about protection or risk mitigation, so these relations are best grouped under causal/mitigating effects rather than simple association.",
+      "remark": "Protection is modeled as a causal effect of communal storytelling practices.",
+      "confidence": 0.9
+    }
+  ],
+  "timestamp": "2026-01-06T08:29:11Z"
+}

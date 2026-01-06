@@ -1,0 +1,93 @@
+{
+  "cluster_label": "26_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_be3c581402bb",
+      "relation_name": "transfers",
+      "rel_desc": "Butterflies transfer pollen as they move between flowers.",
+      "rel_hint_type": "causal/transport",
+      "canonical_rel_name": "transfers",
+      "canonical_rel_desc": "Indicates that the subject actively moves or carries the object (a material or entity) from one location or entity to another.",
+      "rel_cls": "material_transfer_relation",
+      "rel_cls_group": "INTERACTION",
+      "subject_entity_name": "butterflies",
+      "object_entity_name": "pollen",
+      "subject_class_label": "Butterflies",
+      "subject_class_group": "Butterfly Ecology and Interactions",
+      "object_class_label": "Flowering Plant Entities",
+      "object_class_group": "Plant Reproduction and Pollination",
+      "qualifiers": {
+        "TemporalQualifier": "during pollination",
+        "SpatialQualifier": "from one flower to another",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "by",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.98,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_aa649e4aaa11",
+      "relation_name": "moves_between",
+      "rel_desc": "Pollen is moved between flowers during pollination.",
+      "rel_hint_type": "spatial/transport",
+      "canonical_rel_name": "is_transferred",
+      "canonical_rel_desc": "Indicates that the subject material is transported or moved between instances of the object entity category, typically by some agent.",
+      "rel_cls": "material_transfer_relation",
+      "rel_cls_group": "INTERACTION",
+      "subject_entity_name": "pollen",
+      "object_entity_name": "flowers",
+      "subject_class_label": "Flowering Plant Entities",
+      "subject_class_group": "Plant Reproduction and Pollination",
+      "object_class_label": "Flowering Plant Entities",
+      "object_class_group": "Plant Reproduction and Pollination",
+      "qualifiers": {
+        "TemporalQualifier": "during pollination",
+        "SpatialQualifier": "between flowers",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "from ... to",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.95,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_e22e8fe78162",
+      "relation_name": "involves",
+      "rel_desc": "Pollination involves flowers as the structures between which pollen is transferred.",
+      "rel_hint_type": "process-component",
+      "canonical_rel_name": "involves_participant",
+      "canonical_rel_desc": "Links a process or event to an entity that participates in or is acted upon within that process (e.g., structures, organisms, organs, flowers).",
+      "rel_cls": "process_participant_relation",
+      "rel_cls_group": "PARTICIPATION",
+      "subject_entity_name": "pollination",
+      "object_entity_name": "flowers",
+      "subject_class_label": "Plant Reproduction Concepts",
+      "subject_class_group": "Plant Reproduction and Pollination",
+      "object_class_label": "Flowering Plant Entities",
+      "object_class_group": "Plant Reproduction and Pollination",
+      "qualifiers": {
+        "TemporalQualifier": "during pollination",
+        "SpatialQualifier": "between flowers",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "by transferring",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.94,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[]",
+  "parsed_steps": [],
+  "executed_decisions": [],
+  "timestamp": "2026-01-06T07:41:39Z"
+}

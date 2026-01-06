@@ -1,0 +1,19 @@
+[
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": [
+        "RelR_6ec45b10c9a4",
+        "RelR_14c81e5478d0",
+        "RelR_1b71d936b0c6"
+      ],
+      "canonical_rel_name": "has_purpose",
+      "canonical_rel_desc": "Indicates that the subject (typically a text, object, practice, or action) is intended or employed to achieve the object as its purpose, function, or goal.",
+      "rel_cls": "functional_purpose_relation",
+      "rel_cls_group": "USAGE",
+      "justification": "All three relations describe a functional or intended purpose of funerary texts in relation to outcomes for the deceased or their afterlife state. They are semantically equivalent purpose/usage predicates, so they should share a single normalized canonical predicate 'has_purpose' and a unified description. The existing rel_cls and rel_cls_group already correctly capture a functional purpose usage relation, so they are retained.",
+      "remark": null,
+      "confidence": 0.97
+    }
+  }
+]

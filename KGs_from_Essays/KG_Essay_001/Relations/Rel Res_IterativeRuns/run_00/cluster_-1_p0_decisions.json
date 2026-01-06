@@ -1,0 +1,725 @@
+{
+  "cluster_label": "-1_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_070113d93c60",
+      "relation_name": "uses_for_oviposition",
+      "rel_desc": "Female butterflies use specific host plants as sites to lay their eggs.",
+      "rel_hint_type": "usage",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "female butterflies",
+      "object_entity_name": "host plants",
+      "subject_class_label": "Butterflies",
+      "subject_class_group": "Butterfly Ecology and Interactions",
+      "object_class_label": "Butterfly Life Cycle Organisms and Host Plants",
+      "object_class_group": "Butterfly Life Cycle",
+      "qualifiers": {
+        "TemporalQualifier": "during egg-laying",
+        "SpatialQualifier": "on host plants",
+        "OperationalConstraint": "specific host plants",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "that",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.96,
+      "remarks": [
+        "Relation name chosen to emphasize oviposition usage."
+      ]
+    },
+    {
+      "relation_id": "RelR_2c9389d821a1",
+      "relation_name": "fills",
+      "rel_desc": "Fluid is pumped into the butterfly wings to make them expand and harden.",
+      "rel_hint_type": "functional",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "fluid in wings",
+      "object_entity_name": "butterfly wings",
+      "subject_class_label": "Post-Emergence Wing Development",
+      "subject_class_group": "Butterfly Life Cycle & Wing Development",
+      "object_class_label": "Butterfly Wings",
+      "object_class_group": "Butterfly Life Cycle & Wing Development",
+      "qualifiers": {
+        "TemporalQualifier": "shortly after emergence",
+        "SpatialQualifier": "inside the wings",
+        "OperationalConstraint": null,
+        "ConditionExpression": "required for expansion and hardening",
+        "UncertaintyQualifier": null,
+        "CausalHint": "to expand and harden",
+        "LogicalMarker": "to",
+        "OtherQualifier": null
+      },
+      "confidence": 0.96,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_51eaff1ced07",
+      "relation_name": "produced_by",
+      "rel_desc": "Nectar is produced by or obtained from flowers.",
+      "rel_hint_type": "source",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "nectar",
+      "object_entity_name": "flowers",
+      "subject_class_label": "Butterfly Feeding Components",
+      "subject_class_group": "Butterfly Ecology and Interactions",
+      "object_class_label": "Flowering Plant Entities",
+      "object_class_group": "Plant Reproduction and Pollination",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "in flowers",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "from",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.9,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_928b3dfa8e13",
+      "relation_name": "visits",
+      "rel_desc": "Adult butterflies visit flowers to obtain nectar.",
+      "rel_hint_type": "spatial/interaction",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "adult butterflies",
+      "object_entity_name": "flowers",
+      "subject_class_label": "Butterflies",
+      "subject_class_group": "Butterfly Ecology and Interactions",
+      "object_class_label": "Flowering Plant Entities",
+      "object_class_group": "Plant Reproduction and Pollination",
+      "qualifiers": {
+        "TemporalQualifier": "when feeding",
+        "SpatialQualifier": "at flowers",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "implied",
+        "CausalHint": "to obtain nectar",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.83,
+      "remarks": [
+        "Relation inferred; not stated with an explicit verb like 'visit'."
+      ]
+    },
+    {
+      "relation_id": "RelR_aa649e4aaa11",
+      "relation_name": "moves_between",
+      "rel_desc": "Pollen is moved between flowers during pollination.",
+      "rel_hint_type": "spatial/transport",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "pollen",
+      "object_entity_name": "flowers",
+      "subject_class_label": "Flowering Plant Entities",
+      "subject_class_group": "Plant Reproduction and Pollination",
+      "object_class_label": "Flowering Plant Entities",
+      "object_class_group": "Plant Reproduction and Pollination",
+      "qualifiers": {
+        "TemporalQualifier": "during pollination",
+        "SpatialQualifier": "between flowers",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "from ... to",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.95,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_d624b3f10cf5",
+      "relation_name": "is_stage_of",
+      "rel_desc": "The adult butterfly stage is a stage within the butterfly life cycle.",
+      "rel_hint_type": "life_cycle",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "adult butterfly stage",
+      "object_entity_name": "butterfly life cycle",
+      "subject_class_label": "Butterfly Life Cycle and Stages",
+      "subject_class_group": "Butterfly Life Cycle and Appreciation",
+      "object_class_label": "Butterfly Life Cycle and Stages",
+      "object_class_group": "Butterfly Life Cycle and Appreciation",
+      "qualifiers": {
+        "TemporalQualifier": "fourth and final stage (per entity descriptions)",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "to continue the life cycle",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.95,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_85d7956fe295",
+      "relation_name": "includes_stage",
+      "rel_desc": "The butterfly life cycle includes the egg stage as its initial phase.",
+      "rel_hint_type": "composition",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "butterfly life cycle",
+      "object_entity_name": "butterfly egg stage",
+      "subject_class_label": "Butterfly Life Cycle and Stages",
+      "subject_class_group": "Butterfly Life Cycle and Appreciation",
+      "object_class_label": "Butterfly Life Cycle and Stages",
+      "object_class_group": "Butterfly Life Cycle and Appreciation",
+      "qualifiers": {
+        "TemporalQualifier": "initial stage",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": "From",
+        "OtherQualifier": null
+      },
+      "confidence": 0.96,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_f2e00c1667c1",
+      "relation_name": "part_of",
+      "rel_desc": "The butterfly life cycle is one of the intricate processes that make up the natural world.",
+      "rel_hint_type": "composition",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "butterfly life cycle",
+      "object_entity_name": "natural world",
+      "subject_class_label": "Butterfly Life Cycle and Stages",
+      "subject_class_group": "Butterfly Life Cycle and Appreciation",
+      "object_class_label": "Ecology, Ecosystems, and Biodiversity",
+      "object_class_group": "Ecology & Ecosystem Concepts",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "within ecosystems of the natural world",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "implicit inclusion; not enumerated explicitly",
+        "CausalHint": null,
+        "LogicalMarker": "that",
+        "OtherQualifier": "EducationalContext: understanding this life cycle deepens appreciation of the natural world"
+      },
+      "confidence": 0.85,
+      "remarks": [
+        "Relation used to encode that the life cycle is considered one of the natural world's processes."
+      ]
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_070113d93c60\"],\n      \"canonical_rel_name\": \"uses_as_oviposition_site\",\n      \"canonical_rel_desc\": \"Subject organism uses the object (typically a plant or substrate) as a site for laying eggs (oviposition).\",\n      \"justification\": \"The description specifies that female butterflies use specific host plants as the sites where they lay eggs, which is best captured as using the object as an oviposition site.\",\n      \"remark\": null,\n      \"confidence\": 0.94\n    }\n  },\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_2c9389d821a1\"],\n      \"canonical_rel_name\": \"fills\",\n      \"canonical_rel_desc\": \"Subject fluid fills the internal structure or cavity of the object, typically to enable its expansion or functional development.\",\n      \"justification\": \"The instance describes fluid being pumped into butterfly wings, effectively filling them to allow expansion and hardening; a simple, reusable predicate 'fills' matches this.\",\n      \"remark\": null,\n      \"confidence\": 0.93\n    }\n  },\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_51eaff1ced07\"],\n      \"canonical_rel_name\": \"is_produced_by\",\n      \"canonical_rel_desc\": \"Subject substance is produced by the object organism or structure as its biological source.\",\n      \"justification\": \"Nectar originates from and is produced by flowers; a directional source predicate 'is_produced_by' cleanly captures that the subject (nectar) has the object (flowers) as its biological producer.\",\n      \"remark\": null,\n      \"confidence\": 0.92\n    }\n  },\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_928b3dfa8e13\"],\n      \"canonical_rel_name\": \"visits_for_feeding\",\n      \"canonical_rel_desc\": \"Subject organism visits the object (e.g., a flower) specifically to obtain food resources.\",\n      \"justification\": \"The description emphasizes adult butterflies going to flowers to obtain nectar; this is a visit driven by feeding, so a more specific predicate 'visits_for_feeding' is appropriate.\",\n      \"remark\": null,\n      \"confidence\": 0.88\n    }\n  },\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_aa649e4aaa11\"],\n      \"canonical_rel_name\": \"is_transferred_between\",\n      \"canonical_rel_desc\": \"Subject material is transported or moved between instances of the object category.\",\n      \"justification\": \"Pollen is described as being moved between flowers during pollination; this is a transfer of the subject (pollen) between multiple objects (flowers), best captured as 'is_transferred_between'.\",\n      \"remark\": null,\n      \"confidence\": 0.93\n    }\n  },\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_d624b3f10cf5\"],\n      \"canonical_rel_name\": \"is_life_cycle_stage_of\",\n      \"canonical_rel_desc\": \"Subject represents a distinct stage within the life cycle process denoted by the object.\",\n      \"justification\": \"The adult butterfly stage is explicitly a stage within the butterfly life cycle, so a directional predicate from stage to life cycle 'is_life_cycle_stage_of' is precise and reusable.\",\n      \"remark\": null,\n      \"confidence\": 0.95\n    }\n  },\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_85d7956fe295\"],\n      \"canonical_rel_name\": \"includes_life_cycle_stage\",\n      \"canonical_rel_desc\": \"Subject life cycle process includes the object as one of its distinct stages.\",\n      \"justification\": \"Here the butterfly life cycle has the egg stage as an included stage; the inverse view of the previous relation is needed, so 'includes_life_cycle_stage' from life cycle to stage is appropriate.\",\n      \"remark\": null,\n      \"confidence\": 0.95\n    }\n  },\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_f2e00c1667c1\"],\n      \"canonical_rel_name\": \"is_part_of\",\n      \"canonical_rel_desc\": \"Subject is a constituent element, process, or component within the broader system or whole denoted by the object.\",\n      \"justification\": \"The butterfly life cycle is described as one of the processes that make up the natural world, which is a standard part–whole relation; 'is_part_of' is the conventional predicate for that.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_070113d93c60\"],\n      \"rel_cls\": \"reproductive_behavior_relation\",\n      \"justification\": \"Using host plants as oviposition sites is a reproductive behavior of the butterfly, linking organism behavior to reproductive resources.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_2c9389d821a1\"],\n      \"rel_cls\": \"developmental_morphology_relation\",\n      \"justification\": \"Fluid filling the wings is part of post-emergence wing development and morphological change, so it fits a developmental morphology class.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_51eaff1ced07\"],\n      \"rel_cls\": \"biological_production_relation\",\n      \"justification\": \"Nectar being produced by flowers is a classic case of a biological structure producing a resource; grouping under biological production is appropriate.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_928b3dfa8e13\"],\n      \"rel_cls\": \"foraging_behavior_relation\",\n      \"justification\": \"Adult butterflies visiting flowers to obtain nectar is a feeding/foraging behavior linking consumer to resource locations.\",\n      \"remark\": null,\n      \"confidence\": 0.88\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_aa649e4aaa11\"],\n      \"rel_cls\": \"pollination_transfer_relation\",\n      \"justification\": \"Pollen movement between flowers during pollination is a transfer of reproductive material integral to pollination ecology.\",\n      \"remark\": null,\n      \"confidence\": 0.92\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_d624b3f10cf5\", \"RelR_85d7956fe295\"],\n      \"rel_cls\": \"life_cycle_stage_relation\",\n      \"justification\": \"Both relations connect life cycle stages and the overall life cycle (stage-to-cycle and cycle-to-stage), forming a coherent family of life cycle stage relations.\",\n      \"remark\": null,\n      \"confidence\": 0.95\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_f2e00c1667c1\"],\n      \"rel_cls\": \"ecological_part_whole_relation\",\n      \"justification\": \"The butterfly life cycle is modeled as one of many processes within the natural world, which is an ecological part–whole (component–system) relation.\",\n      \"remark\": null,\n      \"confidence\": 0.88\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_070113d93c60\", \"RelR_928b3dfa8e13\"],\n      \"rel_cls_group\": \"USAGE\",\n      \"justification\": \"Both relations describe butterflies using plant structures (host plants or flowers) as resources or sites for specific purposes (oviposition and feeding), fitting a usage dimension.\",\n      \"remark\": null,\n      \"confidence\": 0.88\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_2c9389d821a1\"],\n      \"rel_cls_group\": \"MODIFICATION\",\n      \"justification\": \"The fluid filling the wings changes their state (expansion and hardening), which is best categorized as a structural/state modification process.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_51eaff1ced07\"],\n      \"rel_cls_group\": \"CAUSALITY\",\n      \"justification\": \"The relation encodes that flowers are the causal biological source that produces nectar; this is a cause–effect style production relation.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_aa649e4aaa11\"],\n      \"rel_cls_group\": \"SPATIALITY\",\n      \"justification\": \"Pollen is moved between spatially distinct flowers; the core semantics involve transfer across locations within a pollination context.\",\n      \"remark\": null,\n      \"confidence\": 0.88\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_d624b3f10cf5\", \"RelR_85d7956fe295\"],\n      \"rel_cls_group\": \"TEMPORALITY\",\n      \"justification\": \"Life cycle stages (egg, adult, etc.) are temporally ordered phases within the butterfly life cycle; these relations primarily reflect temporal staging.\",\n      \"remark\": null,\n      \"confidence\": 0.95\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_f2e00c1667c1\"],\n      \"rel_cls_group\": \"COMPOSITION\",\n      \"justification\": \"Modeling the butterfly life cycle as one of many processes that make up the natural world is a part–whole / composition relation at an ecological scale.\",\n      \"remark\": null,\n      \"confidence\": 0.87\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_070113d93c60"
+        ],
+        "canonical_rel_name": "uses_as_oviposition_site",
+        "canonical_rel_desc": "Subject organism uses the object (typically a plant or substrate) as a site for laying eggs (oviposition).",
+        "justification": "The description specifies that female butterflies use specific host plants as the sites where they lay eggs, which is best captured as using the object as an oviposition site.",
+        "remark": null,
+        "confidence": 0.94
+      }
+    },
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_2c9389d821a1"
+        ],
+        "canonical_rel_name": "fills",
+        "canonical_rel_desc": "Subject fluid fills the internal structure or cavity of the object, typically to enable its expansion or functional development.",
+        "justification": "The instance describes fluid being pumped into butterfly wings, effectively filling them to allow expansion and hardening; a simple, reusable predicate 'fills' matches this.",
+        "remark": null,
+        "confidence": 0.93
+      }
+    },
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_51eaff1ced07"
+        ],
+        "canonical_rel_name": "is_produced_by",
+        "canonical_rel_desc": "Subject substance is produced by the object organism or structure as its biological source.",
+        "justification": "Nectar originates from and is produced by flowers; a directional source predicate 'is_produced_by' cleanly captures that the subject (nectar) has the object (flowers) as its biological producer.",
+        "remark": null,
+        "confidence": 0.92
+      }
+    },
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_928b3dfa8e13"
+        ],
+        "canonical_rel_name": "visits_for_feeding",
+        "canonical_rel_desc": "Subject organism visits the object (e.g., a flower) specifically to obtain food resources.",
+        "justification": "The description emphasizes adult butterflies going to flowers to obtain nectar; this is a visit driven by feeding, so a more specific predicate 'visits_for_feeding' is appropriate.",
+        "remark": null,
+        "confidence": 0.88
+      }
+    },
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_aa649e4aaa11"
+        ],
+        "canonical_rel_name": "is_transferred_between",
+        "canonical_rel_desc": "Subject material is transported or moved between instances of the object category.",
+        "justification": "Pollen is described as being moved between flowers during pollination; this is a transfer of the subject (pollen) between multiple objects (flowers), best captured as 'is_transferred_between'.",
+        "remark": null,
+        "confidence": 0.93
+      }
+    },
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_d624b3f10cf5"
+        ],
+        "canonical_rel_name": "is_life_cycle_stage_of",
+        "canonical_rel_desc": "Subject represents a distinct stage within the life cycle process denoted by the object.",
+        "justification": "The adult butterfly stage is explicitly a stage within the butterfly life cycle, so a directional predicate from stage to life cycle 'is_life_cycle_stage_of' is precise and reusable.",
+        "remark": null,
+        "confidence": 0.95
+      }
+    },
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_85d7956fe295"
+        ],
+        "canonical_rel_name": "includes_life_cycle_stage",
+        "canonical_rel_desc": "Subject life cycle process includes the object as one of its distinct stages.",
+        "justification": "Here the butterfly life cycle has the egg stage as an included stage; the inverse view of the previous relation is needed, so 'includes_life_cycle_stage' from life cycle to stage is appropriate.",
+        "remark": null,
+        "confidence": 0.95
+      }
+    },
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_f2e00c1667c1"
+        ],
+        "canonical_rel_name": "is_part_of",
+        "canonical_rel_desc": "Subject is a constituent element, process, or component within the broader system or whole denoted by the object.",
+        "justification": "The butterfly life cycle is described as one of the processes that make up the natural world, which is a standard part–whole relation; 'is_part_of' is the conventional predicate for that.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_070113d93c60"
+        ],
+        "rel_cls": "reproductive_behavior_relation",
+        "justification": "Using host plants as oviposition sites is a reproductive behavior of the butterfly, linking organism behavior to reproductive resources.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_2c9389d821a1"
+        ],
+        "rel_cls": "developmental_morphology_relation",
+        "justification": "Fluid filling the wings is part of post-emergence wing development and morphological change, so it fits a developmental morphology class.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_51eaff1ced07"
+        ],
+        "rel_cls": "biological_production_relation",
+        "justification": "Nectar being produced by flowers is a classic case of a biological structure producing a resource; grouping under biological production is appropriate.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_928b3dfa8e13"
+        ],
+        "rel_cls": "foraging_behavior_relation",
+        "justification": "Adult butterflies visiting flowers to obtain nectar is a feeding/foraging behavior linking consumer to resource locations.",
+        "remark": null,
+        "confidence": 0.88
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_aa649e4aaa11"
+        ],
+        "rel_cls": "pollination_transfer_relation",
+        "justification": "Pollen movement between flowers during pollination is a transfer of reproductive material integral to pollination ecology.",
+        "remark": null,
+        "confidence": 0.92
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_d624b3f10cf5",
+          "RelR_85d7956fe295"
+        ],
+        "rel_cls": "life_cycle_stage_relation",
+        "justification": "Both relations connect life cycle stages and the overall life cycle (stage-to-cycle and cycle-to-stage), forming a coherent family of life cycle stage relations.",
+        "remark": null,
+        "confidence": 0.95
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_f2e00c1667c1"
+        ],
+        "rel_cls": "ecological_part_whole_relation",
+        "justification": "The butterfly life cycle is modeled as one of many processes within the natural world, which is an ecological part–whole (component–system) relation.",
+        "remark": null,
+        "confidence": 0.88
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_070113d93c60",
+          "RelR_928b3dfa8e13"
+        ],
+        "rel_cls_group": "USAGE",
+        "justification": "Both relations describe butterflies using plant structures (host plants or flowers) as resources or sites for specific purposes (oviposition and feeding), fitting a usage dimension.",
+        "remark": null,
+        "confidence": 0.88
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_2c9389d821a1"
+        ],
+        "rel_cls_group": "MODIFICATION",
+        "justification": "The fluid filling the wings changes their state (expansion and hardening), which is best categorized as a structural/state modification process.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_51eaff1ced07"
+        ],
+        "rel_cls_group": "CAUSALITY",
+        "justification": "The relation encodes that flowers are the causal biological source that produces nectar; this is a cause–effect style production relation.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_aa649e4aaa11"
+        ],
+        "rel_cls_group": "SPATIALITY",
+        "justification": "Pollen is moved between spatially distinct flowers; the core semantics involve transfer across locations within a pollination context.",
+        "remark": null,
+        "confidence": 0.88
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_d624b3f10cf5",
+          "RelR_85d7956fe295"
+        ],
+        "rel_cls_group": "TEMPORALITY",
+        "justification": "Life cycle stages (egg, adult, etc.) are temporally ordered phases within the butterfly life cycle; these relations primarily reflect temporal staging.",
+        "remark": null,
+        "confidence": 0.95
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_f2e00c1667c1"
+        ],
+        "rel_cls_group": "COMPOSITION",
+        "justification": "Modeling the butterfly life cycle as one of many processes that make up the natural world is a part–whole / composition relation at an ecological scale.",
+        "remark": null,
+        "confidence": 0.87
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_070113d93c60"
+      ],
+      "canonical_rel_name": "uses_as_oviposition_site",
+      "canonical_rel_desc": "Subject organism uses the object (typically a plant or substrate) as a site for laying eggs (oviposition).",
+      "justification": "The description specifies that female butterflies use specific host plants as the sites where they lay eggs, which is best captured as using the object as an oviposition site.",
+      "remark": null,
+      "confidence": 0.94
+    },
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_2c9389d821a1"
+      ],
+      "canonical_rel_name": "fills",
+      "canonical_rel_desc": "Subject fluid fills the internal structure or cavity of the object, typically to enable its expansion or functional development.",
+      "justification": "The instance describes fluid being pumped into butterfly wings, effectively filling them to allow expansion and hardening; a simple, reusable predicate 'fills' matches this.",
+      "remark": null,
+      "confidence": 0.93
+    },
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_51eaff1ced07"
+      ],
+      "canonical_rel_name": "is_produced_by",
+      "canonical_rel_desc": "Subject substance is produced by the object organism or structure as its biological source.",
+      "justification": "Nectar originates from and is produced by flowers; a directional source predicate 'is_produced_by' cleanly captures that the subject (nectar) has the object (flowers) as its biological producer.",
+      "remark": null,
+      "confidence": 0.92
+    },
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_928b3dfa8e13"
+      ],
+      "canonical_rel_name": "visits_for_feeding",
+      "canonical_rel_desc": "Subject organism visits the object (e.g., a flower) specifically to obtain food resources.",
+      "justification": "The description emphasizes adult butterflies going to flowers to obtain nectar; this is a visit driven by feeding, so a more specific predicate 'visits_for_feeding' is appropriate.",
+      "remark": null,
+      "confidence": 0.88
+    },
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_aa649e4aaa11"
+      ],
+      "canonical_rel_name": "is_transferred_between",
+      "canonical_rel_desc": "Subject material is transported or moved between instances of the object category.",
+      "justification": "Pollen is described as being moved between flowers during pollination; this is a transfer of the subject (pollen) between multiple objects (flowers), best captured as 'is_transferred_between'.",
+      "remark": null,
+      "confidence": 0.93
+    },
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_d624b3f10cf5"
+      ],
+      "canonical_rel_name": "is_life_cycle_stage_of",
+      "canonical_rel_desc": "Subject represents a distinct stage within the life cycle process denoted by the object.",
+      "justification": "The adult butterfly stage is explicitly a stage within the butterfly life cycle, so a directional predicate from stage to life cycle 'is_life_cycle_stage_of' is precise and reusable.",
+      "remark": null,
+      "confidence": 0.95
+    },
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_85d7956fe295"
+      ],
+      "canonical_rel_name": "includes_life_cycle_stage",
+      "canonical_rel_desc": "Subject life cycle process includes the object as one of its distinct stages.",
+      "justification": "Here the butterfly life cycle has the egg stage as an included stage; the inverse view of the previous relation is needed, so 'includes_life_cycle_stage' from life cycle to stage is appropriate.",
+      "remark": null,
+      "confidence": 0.95
+    },
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_f2e00c1667c1"
+      ],
+      "canonical_rel_name": "is_part_of",
+      "canonical_rel_desc": "Subject is a constituent element, process, or component within the broader system or whole denoted by the object.",
+      "justification": "The butterfly life cycle is described as one of the processes that make up the natural world, which is a standard part–whole relation; 'is_part_of' is the conventional predicate for that.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_070113d93c60"
+      ],
+      "rel_cls": "reproductive_behavior_relation",
+      "justification": "Using host plants as oviposition sites is a reproductive behavior of the butterfly, linking organism behavior to reproductive resources.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_2c9389d821a1"
+      ],
+      "rel_cls": "developmental_morphology_relation",
+      "justification": "Fluid filling the wings is part of post-emergence wing development and morphological change, so it fits a developmental morphology class.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_51eaff1ced07"
+      ],
+      "rel_cls": "biological_production_relation",
+      "justification": "Nectar being produced by flowers is a classic case of a biological structure producing a resource; grouping under biological production is appropriate.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_928b3dfa8e13"
+      ],
+      "rel_cls": "foraging_behavior_relation",
+      "justification": "Adult butterflies visiting flowers to obtain nectar is a feeding/foraging behavior linking consumer to resource locations.",
+      "remark": null,
+      "confidence": 0.88
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_aa649e4aaa11"
+      ],
+      "rel_cls": "pollination_transfer_relation",
+      "justification": "Pollen movement between flowers during pollination is a transfer of reproductive material integral to pollination ecology.",
+      "remark": null,
+      "confidence": 0.92
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_d624b3f10cf5",
+        "RelR_85d7956fe295"
+      ],
+      "rel_cls": "life_cycle_stage_relation",
+      "justification": "Both relations connect life cycle stages and the overall life cycle (stage-to-cycle and cycle-to-stage), forming a coherent family of life cycle stage relations.",
+      "remark": null,
+      "confidence": 0.95
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_f2e00c1667c1"
+      ],
+      "rel_cls": "ecological_part_whole_relation",
+      "justification": "The butterfly life cycle is modeled as one of many processes within the natural world, which is an ecological part–whole (component–system) relation.",
+      "remark": null,
+      "confidence": 0.88
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_070113d93c60",
+        "RelR_928b3dfa8e13"
+      ],
+      "rel_cls_group": "USAGE",
+      "justification": "Both relations describe butterflies using plant structures (host plants or flowers) as resources or sites for specific purposes (oviposition and feeding), fitting a usage dimension.",
+      "remark": null,
+      "confidence": 0.88
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_2c9389d821a1"
+      ],
+      "rel_cls_group": "MODIFICATION",
+      "justification": "The fluid filling the wings changes their state (expansion and hardening), which is best categorized as a structural/state modification process.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_51eaff1ced07"
+      ],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "The relation encodes that flowers are the causal biological source that produces nectar; this is a cause–effect style production relation.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_aa649e4aaa11"
+      ],
+      "rel_cls_group": "SPATIALITY",
+      "justification": "Pollen is moved between spatially distinct flowers; the core semantics involve transfer across locations within a pollination context.",
+      "remark": null,
+      "confidence": 0.88
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_d624b3f10cf5",
+        "RelR_85d7956fe295"
+      ],
+      "rel_cls_group": "TEMPORALITY",
+      "justification": "Life cycle stages (egg, adult, etc.) are temporally ordered phases within the butterfly life cycle; these relations primarily reflect temporal staging.",
+      "remark": null,
+      "confidence": 0.95
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_f2e00c1667c1"
+      ],
+      "rel_cls_group": "COMPOSITION",
+      "justification": "Modeling the butterfly life cycle as one of many processes that make up the natural world is a part–whole / composition relation at an ecological scale.",
+      "remark": null,
+      "confidence": 0.87
+    }
+  ],
+  "timestamp": "2026-01-06T07:32:09Z"
+}

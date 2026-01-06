@@ -1,0 +1,65 @@
+[
+  {
+    "function": "split_class",
+    "args": {
+      "source_class_id": "ClsC_14b1fb86",
+      "splits": [
+        {
+          "name": "Quantum Gravity Candidate Frameworks",
+          "description": "Speculative or proposed frameworks such as string theory and quantum gravity that aim to unify quantum mechanics with gravity, often motivated by black hole phenomena.",
+          "class_type_hint": "Hypothesized Theory",
+          "member_ids": [
+            "En_5225fcc1",
+            "En_4379b01f"
+          ],
+          "provisional_id": "ClsC_14b1fb86_QG"
+        }
+      ],
+      "justification": "ClsC_14b1fb86 currently mixes established fundamental theories (gravitational theories, quantum mechanics) with speculative quantum gravity frameworks (string theory, quantum gravity); splitting out the speculative frameworks makes the classes semantically cleaner and aligns with how ClsC_89951d23 is scoped.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "merge_classes",
+    "args": {
+      "class_ids": [
+        "ClsC_89951d23",
+        "ClsC_14b1fb86_QG"
+      ],
+      "provisional_id": "MERGE(ClsC_89951d23|ClsC_14b1fb86_QG)",
+      "new_name": "Quantum Gravity and Beyond-Relativity Frameworks",
+      "new_description": "Speculative or extended theoretical frameworks that go beyond classical general relativity by incorporating quantum effects or unifying interactions, including quantum gravity, string theory, and related new physics inspired by black hole studies.",
+      "new_class_type_hint": "Hypothesized Theory",
+      "justification": "ClsC_89951d23 and the split-out ClsC_14b1fb86_QG both center on speculative beyond-general-relativity frameworks such as string theory and quantum gravity, share core entities, and are redundant if kept separate; merging them yields a single coherent class for quantum gravity and related new physics frameworks.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_14b1fb86",
+      "new_name": "Fundamental Physics Theories Tested with Black Holes",
+      "new_description": "Established fundamental theories such as gravitational theories (including general relativity) and quantum mechanics that are directly tested, constrained, or illuminated by black hole observations and models.",
+      "new_class_type_hint": "Physical Theory",
+      "new_class_group": "Gravity and Quantum Theory Frameworks",
+      "remark": null,
+      "justification": "After moving speculative quantum gravity frameworks into their own merged class, ClsC_14b1fb86 now cleanly represents established fundamental theories used as black hole testbeds; updating its label/description and assigning a class group clarifies this role and connects it to related theoretical physics classes.",
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "MERGE(ClsC_89951d23|ClsC_14b1fb86_QG)",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Gravity and Quantum Theory Frameworks",
+      "remark": null,
+      "justification": "The merged speculative frameworks class and the established-theory testbed class are closely related parts of the same theoretical physics domain around gravity and quantum theory; assigning the same class group links them coherently.",
+      "confidence": 0.9
+    }
+  }
+]

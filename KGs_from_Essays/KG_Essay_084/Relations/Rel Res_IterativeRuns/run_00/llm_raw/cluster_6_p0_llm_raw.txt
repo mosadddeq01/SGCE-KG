@@ -1,0 +1,57 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_5302f39b010c",
+        "RelR_5f32c9194486",
+        "RelR_83b96377bd47",
+        "RelR_7efd704d187c",
+        "RelR_931caa26e17b",
+        "RelR_5831dcce22b8",
+        "RelR_e3571d64e239"
+      ],
+      "canonical_rel_name": "uses",
+      "canonical_rel_desc": "Subject uses or employs the object as a method, tool, technique, principle, or resource to conduct forensic work or analysis.",
+      "justification": "All relations express an operational usage connection where forensic science or forensic scientists make use of methods, technologies, instruments, or principles as resources in their work; the direction and semantics are identical across instances.",
+      "remark": null,
+      "confidence": 0.97
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_5302f39b010c",
+        "RelR_5f32c9194486",
+        "RelR_83b96377bd47",
+        "RelR_7efd704d187c",
+        "RelR_931caa26e17b",
+        "RelR_5831dcce22b8",
+        "RelR_e3571d64e239"
+      ],
+      "rel_cls": "method_tool_usage_relation",
+      "justification": "Each relation links a practitioner or domain (forensic science/forensic scientists) to the methods, tools, technologies, or principles they employ, forming a coherent class of method/tool usage relations.",
+      "remark": null,
+      "confidence": 0.96
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_5302f39b010c",
+        "RelR_5f32c9194486",
+        "RelR_83b96377bd47",
+        "RelR_7efd704d187c",
+        "RelR_931caa26e17b",
+        "RelR_5831dcce22b8",
+        "RelR_e3571d64e239"
+      ],
+      "rel_cls_group": "USAGE",
+      "justification": "The primary semantic dimension is the use of objects (methods, instruments, technologies, principles) by a subject in performing tasks, which fits the broad USAGE group.",
+      "remark": null,
+      "confidence": 0.97
+    }
+  }
+]

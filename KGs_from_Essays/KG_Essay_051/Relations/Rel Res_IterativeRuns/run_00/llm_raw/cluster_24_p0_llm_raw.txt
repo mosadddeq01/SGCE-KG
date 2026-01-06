@@ -1,0 +1,42 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_0c2d5297ee9a",
+        "RelR_b19dbcaa9022"
+      ],
+      "canonical_rel_name": "facilitates",
+      "canonical_rel_desc": "The subject enables or supports the emergence, development, or strengthening of the object, without being the sole or strictly deterministic cause.",
+      "justification": "Both relations describe body language as a facilitating factor that helps create or strengthen interpersonal bonds (rapport, connections). The direction and semantics are identical: the subject eases or supports the formation of the object outcome. A generic predicate 'facilitates' with a clear description captures this consistently across such instances.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_0c2d5297ee9a",
+        "RelR_b19dbcaa9022"
+      ],
+      "rel_cls": "social_bond_formation_relation",
+      "justification": "In both instances, the relation centers on how one factor (body language) contributes to the formation or strengthening of social bonds (rapport, interpersonal connections). A class focused on social bond formation is more specific and reusable than a generic facilitation class while remaining broader than the exact canonical predicate.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_0c2d5297ee9a",
+        "RelR_b19dbcaa9022"
+      ],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "The relations describe a causal influence where body language helps bring about or support the outcome of rapport or connections. This is a soft/enablement form of causality, aligning best with a broad CAUSALITY group rather than pure ASSOCIATION.",
+      "remark": null,
+      "confidence": 0.92
+    }
+  }
+]

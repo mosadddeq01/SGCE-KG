@@ -1,0 +1,141 @@
+{
+  "cluster_label": "16_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_f236d6b32f97",
+      "relation_name": "impacts",
+      "rel_desc": "Social media has both positive and negative impacts on society as a whole.",
+      "rel_hint_type": "impact",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "social media",
+      "object_entity_name": "our society",
+      "subject_class_label": "Social Media Platforms",
+      "subject_class_group": "Social Media & Online Communication",
+      "object_class_label": "Social Collective Entity",
+      "object_class_group": "Social Media Societal Impact",
+      "qualifiers": {
+        "TemporalQualifier": "in contemporary digital society",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "effects it has had",
+        "LogicalMarker": null,
+        "OtherQualifier": "EffectPolarity: both positive and negative"
+      },
+      "confidence": 0.95,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_dabac96fa4ff",
+      "relation_name": "impacts",
+      "rel_desc": "Social media negatively impacts human communication in contemporary society by introducing challenges and drawbacks.",
+      "rel_hint_type": "impact",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "social media",
+      "object_entity_name": "human communication in contemporary society",
+      "subject_class_label": "Social Media Platforms",
+      "subject_class_group": "Social Media & Online Communication",
+      "object_class_label": "Contemporary Digital Society",
+      "object_class_group": "Digital Information & Communication in Contemporary Society",
+      "qualifiers": {
+        "TemporalQualifier": "in contemporary society",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "brought about",
+        "LogicalMarker": "despite",
+        "OtherQualifier": "ImpactValence: negative challenges and drawbacks"
+      },
+      "confidence": 0.86,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_f236d6b32f97\",\n        \"RelR_dabac96fa4ff\"\n      ],\n      \"canonical_rel_name\": \"impacts\",\n      \"canonical_rel_desc\": \"Indicates that the subject exerts a causal influence on the state or condition of the object, producing positive, negative, or mixed effects.\",\n      \"justification\": \"Both relations describe how social media exerts causal effects (positive, negative, or mixed) on aspects of society and communication. The existing raw relation_name already uses 'impacts' consistently, and the descriptions emphasize effects and consequences, so a single canonical predicate 'impacts' is appropriate for both.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_f236d6b32f97\",\n        \"RelR_dabac96fa4ff\"\n      ],\n      \"rel_cls\": \"societal_impact_relation\",\n      \"justification\": \"These relations connect social media to broad societal or communicative outcomes, focusing on its impact on society or human communication. Grouping them under a class 'societal_impact_relation' captures this family of predicates relating an influencing factor to social-level consequences.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_f236d6b32f97\",\n        \"RelR_dabac96fa4ff\"\n      ],\n      \"rel_cls_group\": \"CAUSALITY\",\n      \"justification\": \"The descriptions and qualifiers explicitly frame these as effects or consequences (positive/negative impacts) of social media on society and communication, which fits a broad causal semantics rather than simple association.\",\n      \"remark\": null,\n      \"confidence\": 0.95\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_f236d6b32f97",
+          "RelR_dabac96fa4ff"
+        ],
+        "canonical_rel_name": "impacts",
+        "canonical_rel_desc": "Indicates that the subject exerts a causal influence on the state or condition of the object, producing positive, negative, or mixed effects.",
+        "justification": "Both relations describe how social media exerts causal effects (positive, negative, or mixed) on aspects of society and communication. The existing raw relation_name already uses 'impacts' consistently, and the descriptions emphasize effects and consequences, so a single canonical predicate 'impacts' is appropriate for both.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_f236d6b32f97",
+          "RelR_dabac96fa4ff"
+        ],
+        "rel_cls": "societal_impact_relation",
+        "justification": "These relations connect social media to broad societal or communicative outcomes, focusing on its impact on society or human communication. Grouping them under a class 'societal_impact_relation' captures this family of predicates relating an influencing factor to social-level consequences.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_f236d6b32f97",
+          "RelR_dabac96fa4ff"
+        ],
+        "rel_cls_group": "CAUSALITY",
+        "justification": "The descriptions and qualifiers explicitly frame these as effects or consequences (positive/negative impacts) of social media on society and communication, which fits a broad causal semantics rather than simple association.",
+        "remark": null,
+        "confidence": 0.95
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_f236d6b32f97",
+        "RelR_dabac96fa4ff"
+      ],
+      "canonical_rel_name": "impacts",
+      "canonical_rel_desc": "Indicates that the subject exerts a causal influence on the state or condition of the object, producing positive, negative, or mixed effects.",
+      "justification": "Both relations describe how social media exerts causal effects (positive, negative, or mixed) on aspects of society and communication. The existing raw relation_name already uses 'impacts' consistently, and the descriptions emphasize effects and consequences, so a single canonical predicate 'impacts' is appropriate for both.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_f236d6b32f97",
+        "RelR_dabac96fa4ff"
+      ],
+      "rel_cls": "societal_impact_relation",
+      "justification": "These relations connect social media to broad societal or communicative outcomes, focusing on its impact on society or human communication. Grouping them under a class 'societal_impact_relation' captures this family of predicates relating an influencing factor to social-level consequences.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_f236d6b32f97",
+        "RelR_dabac96fa4ff"
+      ],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "The descriptions and qualifiers explicitly frame these as effects or consequences (positive/negative impacts) of social media on society and communication, which fits a broad causal semantics rather than simple association.",
+      "remark": null,
+      "confidence": 0.95
+    }
+  ],
+  "timestamp": "2026-01-06T11:07:25Z"
+}

@@ -1,0 +1,99 @@
+{
+  "cluster_label": "3_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_a4e8d959803a",
+      "relation_name": "determines_traits_of",
+      "rel_desc": "Butterfly species determine variation in the size, shape, and color of eggs.",
+      "rel_hint_type": "dependency",
+      "canonical_rel_name": "determines_traits_of",
+      "canonical_rel_desc": "Subject biological taxon determines specific phenotypic traits (e.g., size, shape, color) of the object life stage or structure.",
+      "rel_cls": "biological_dependency_relation",
+      "rel_cls_group": "CAUSALITY",
+      "subject_entity_name": "butterfly species",
+      "object_entity_name": "butterfly egg stage",
+      "subject_class_label": "Butterfly Life Cycle Organisms and Host Plants",
+      "subject_class_group": "Butterfly Life Cycle",
+      "object_class_label": "Butterfly Life Cycle and Stages",
+      "object_class_group": "Butterfly Life Cycle and Appreciation",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": "egg size, shape, and color depend on the species",
+        "UncertaintyQualifier": null,
+        "CausalHint": "depending on",
+        "LogicalMarker": null,
+        "OtherQualifier": "Traits affected: size, shape, color of eggs"
+      },
+      "confidence": 0.94,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_8d3d2c5568c5",
+      "relation_name": "duration_depends_on",
+      "rel_desc": "The time metamorphosis takes varies according to the butterfly species.",
+      "rel_hint_type": "dependency",
+      "canonical_rel_name": "duration_depends_on",
+      "canonical_rel_desc": "The temporal duration of the subject process varies as a function of the object factor (e.g., species).",
+      "rel_cls": "biological_dependency_relation",
+      "rel_cls_group": "CAUSALITY",
+      "subject_entity_name": "metamorphosis",
+      "object_entity_name": "butterfly species",
+      "subject_class_label": "Butterfly Metamorphosis System",
+      "subject_class_group": "Butterfly Life Cycle & Wing Development",
+      "object_class_label": "Butterfly Life Cycle Organisms and Host Plants",
+      "object_class_group": "Butterfly Life Cycle",
+      "qualifiers": {
+        "TemporalQualifier": "anywhere from a few days to several weeks",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": "duration range: few days–several weeks",
+        "UncertaintyQualifier": null,
+        "CausalHint": "depending on",
+        "LogicalMarker": null,
+        "OtherQualifier": "VariableAspect: duration"
+      },
+      "confidence": 0.98,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_rel_schema\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_a4e8d959803a\", \"RelR_8d3d2c5568c5\"],\n      \"canonical_rel_name\": null,\n      \"canonical_rel_desc\": null,\n      \"rel_cls\": \"biological_trait_dependency_relation\",\n      \"rel_cls_group\": null,\n      \"justification\": \"Both relations express that a biological trait or quantitative characteristic (egg phenotype, metamorphosis duration) systematically depends on butterfly species. Refining rel_cls from the generic 'biological_dependency_relation' to 'biological_trait_dependency_relation' better captures that this family of relations encodes species-dependent variation in biological traits, while keeping the existing canonical_rel_name values and the CAUSALITY group unchanged.\",\n      \"remark\": null,\n      \"confidence\": 0.87\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_rel_schema",
+      "args": {
+        "relation_ids": [
+          "RelR_a4e8d959803a",
+          "RelR_8d3d2c5568c5"
+        ],
+        "canonical_rel_name": null,
+        "canonical_rel_desc": null,
+        "rel_cls": "biological_trait_dependency_relation",
+        "rel_cls_group": null,
+        "justification": "Both relations express that a biological trait or quantitative characteristic (egg phenotype, metamorphosis duration) systematically depends on butterfly species. Refining rel_cls from the generic 'biological_dependency_relation' to 'biological_trait_dependency_relation' better captures that this family of relations encodes species-dependent variation in biological traits, while keeping the existing canonical_rel_name values and the CAUSALITY group unchanged.",
+        "remark": null,
+        "confidence": 0.87
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_rel_schema",
+      "relation_ids": [
+        "RelR_a4e8d959803a",
+        "RelR_8d3d2c5568c5"
+      ],
+      "canonical_rel_name": null,
+      "canonical_rel_desc": null,
+      "rel_cls": "biological_trait_dependency_relation",
+      "rel_cls_group": null,
+      "new_relation_name": null,
+      "original_relation_name": null,
+      "justification": "Both relations express that a biological trait or quantitative characteristic (egg phenotype, metamorphosis duration) systematically depends on butterfly species. Refining rel_cls from the generic 'biological_dependency_relation' to 'biological_trait_dependency_relation' better captures that this family of relations encodes species-dependent variation in biological traits, while keeping the existing canonical_rel_name values and the CAUSALITY group unchanged.",
+      "remark": null,
+      "confidence": 0.87
+    }
+  ],
+  "timestamp": "2026-01-06T07:39:50Z"
+}

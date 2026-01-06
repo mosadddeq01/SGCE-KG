@@ -1,0 +1,27 @@
+[
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_ddd8b5d46713",
+        "RelR_7b5e21c2d303"
+      ],
+      "rel_cls": "reproductive_support_relation",
+      "justification": "Both relations describe an agent or process (birds, seed dispersal) that enables or supports the reproduction and spatial spread/colonization of plant species. They already share the same canonical predicate 'facilitates_reproduction_and_dispersal_of', so they should be grouped into a single, consistent relation class capturing support of plant reproduction and dispersal.",
+      "remark": "Unifies previously split classes 'reproductive_ecosystem_service_relation' and 'reproductive_support_relation' into a single, semantically coherent class.",
+      "confidence": 0.92
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_ddd8b5d46713"
+      ],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "The relation states that birds support (enable) plant reproduction and colonization; this expresses a causal dependency rather than a generic 'FUNCTION' tag. It should align with RelR_7b5e21c2d303, which is already classified under CAUSALITY for the same canonical predicate.",
+      "remark": "Aligns the broad group of both instances of 'facilitates_reproduction_and_dispersal_of' under CAUSALITY.",
+      "confidence": 0.9
+    }
+  }
+]

@@ -1,0 +1,41 @@
+[
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": ["RelR_8538c3eb3b94"],
+      "canonical_rel_name": "is_initiated_by",
+      "canonical_rel_desc": "Indicates that a historical process or movement begins as a direct result of, or is first triggered by, a specific prior event or action.",
+      "rel_cls": null,
+      "rel_cls_group": null,
+      "justification": "Normalize the predicate to present-tense, schema-style form ('is_initiated_by') for consistency with other KG relations while preserving the same causal semantics.",
+      "remark": null,
+      "confidence": 0.94
+    }
+  },
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": ["RelR_052b2c72cb5c"],
+      "canonical_rel_name": "causes",
+      "canonical_rel_desc": "Indicates that one event or process brings about another event or outcome as a consequence.",
+      "rel_cls": null,
+      "rel_cls_group": null,
+      "justification": "Adjust from past-tense 'caused' to the normalized present-tense predicate 'causes' to align with KG convention of time-independent, schema-style relation names, without changing the causal meaning.",
+      "remark": null,
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": ["RelR_c8f9c4c657cf"],
+      "canonical_rel_name": "sparks_expectation_of",
+      "canonical_rel_desc": "Indicates that an event or process generates hopes, expectations, or anticipations about a potential outcome, without implying that the outcome is realized.",
+      "rel_cls": null,
+      "rel_cls_group": null,
+      "justification": "Change from past-tense 'sparked_expectation_of' to present-tense 'sparks_expectation_of' to match normalized KG predicate style and maintain consistent causal semantics about generating expectations.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  }
+]

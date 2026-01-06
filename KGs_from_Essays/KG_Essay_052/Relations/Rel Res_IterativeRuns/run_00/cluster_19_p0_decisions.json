@@ -1,0 +1,237 @@
+{
+  "cluster_label": "19_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_21c3b435d5b1",
+      "relation_name": "works_towards",
+      "rel_desc": "Athletes collaborate and direct their efforts toward a shared common goal.",
+      "rel_hint_type": "goal-orientation",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "athletes",
+      "object_entity_name": "common goal",
+      "subject_class_label": "Sports Participants",
+      "subject_class_group": "Sports-Based Personal Development",
+      "object_class_label": "Common Goal",
+      "object_class_group": "Sport, Community & Social Experience",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": "within sports participation",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "Collaboration: work together"
+      },
+      "confidence": 0.97,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_514393a1b996",
+      "relation_name": "learns_to_handle",
+      "rel_desc": "Athletes learn how to deal with success as part of sports participation.",
+      "rel_hint_type": "skill_acquisition",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "athletes",
+      "object_entity_name": "success",
+      "subject_class_label": "Sports Participants",
+      "subject_class_group": "Sports-Based Personal Development",
+      "object_class_label": "Performance Outcomes",
+      "object_class_group": "Sports-Based Personal Development",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": "through sports experiences",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "through",
+        "LogicalMarker": "and",
+        "OtherQualifier": null
+      },
+      "confidence": 0.95,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_e30b0515d20c",
+      "relation_name": "learns_to_handle",
+      "rel_desc": "Athletes learn how to deal with failure as part of sports participation.",
+      "rel_hint_type": "skill_acquisition",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "athletes",
+      "object_entity_name": "failure",
+      "subject_class_label": "Sports Participants",
+      "subject_class_group": "Sports-Based Personal Development",
+      "object_class_label": "Performance Outcomes",
+      "object_class_group": "Sports-Based Personal Development",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": "through sports experiences",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "through",
+        "LogicalMarker": "and",
+        "OtherQualifier": null
+      },
+      "confidence": 0.95,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_21c3b435d5b1\"],\n      \"canonical_rel_name\": \"pursues_goal\",\n      \"canonical_rel_desc\": \"Indicates that an agent directs effort toward achieving a specified goal.\",\n      \"justification\": \"The relation connects athletes to a common goal in a collaborative, goal-oriented manner; the core predicate is that the athletes are actively working toward (pursuing) that goal.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_514393a1b996\",\n        \"RelR_e30b0515d20c\"\n      ],\n      \"canonical_rel_name\": \"develops_ability_to_handle\",\n      \"canonical_rel_desc\": \"Indicates that an agent acquires or develops the capability to effectively handle or cope with a particular outcome or situation.\",\n      \"justification\": \"Both relations describe athletes learning how to deal with a type of performance outcome (success or failure) through sports experiences; semantically this is the acquisition of the ability to handle those outcomes, so a single canonical predicate fits both.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_21c3b435d5b1\"],\n      \"rel_cls\": \"motivation_and_goal_relation\",\n      \"justification\": \"The link expresses a motivational/goal-directed relationship between an agent (athletes) and a goal (common goal), fitting a class focused on goals and motivation rather than skill acquisition or composition.\",\n      \"remark\": null,\n      \"confidence\": 0.86\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_514393a1b996\",\n        \"RelR_e30b0515d20c\"\n      ],\n      \"rel_cls\": \"psychosocial_skill_acquisition_relation\",\n      \"justification\": \"Both relations describe athletes developing coping/handling skills regarding performance outcomes (success or failure), which are psychosocial abilities gained through experience; they naturally belong to a psychosocial skill acquisition class.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_21c3b435d5b1\"],\n      \"rel_cls_group\": \"AGENCY\",\n      \"justification\": \"Pursuing a goal is an agentive, intentional action directed toward an outcome, which fits the broad AGENCY dimension better than composition, identity, or temporality.\",\n      \"remark\": null,\n      \"confidence\": 0.86\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_514393a1b996\",\n        \"RelR_e30b0515d20c\"\n      ],\n      \"rel_cls_group\": \"MODIFICATION\",\n      \"justification\": \"These relations capture a change in the athletes themselves (they develop new abilities to handle success or failure) rather than a static property or simple association, fitting a broad MODIFICATION group focused on development or change in state.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_21c3b435d5b1"
+        ],
+        "canonical_rel_name": "pursues_goal",
+        "canonical_rel_desc": "Indicates that an agent directs effort toward achieving a specified goal.",
+        "justification": "The relation connects athletes to a common goal in a collaborative, goal-oriented manner; the core predicate is that the athletes are actively working toward (pursuing) that goal.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_514393a1b996",
+          "RelR_e30b0515d20c"
+        ],
+        "canonical_rel_name": "develops_ability_to_handle",
+        "canonical_rel_desc": "Indicates that an agent acquires or develops the capability to effectively handle or cope with a particular outcome or situation.",
+        "justification": "Both relations describe athletes learning how to deal with a type of performance outcome (success or failure) through sports experiences; semantically this is the acquisition of the ability to handle those outcomes, so a single canonical predicate fits both.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_21c3b435d5b1"
+        ],
+        "rel_cls": "motivation_and_goal_relation",
+        "justification": "The link expresses a motivational/goal-directed relationship between an agent (athletes) and a goal (common goal), fitting a class focused on goals and motivation rather than skill acquisition or composition.",
+        "remark": null,
+        "confidence": 0.86
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_514393a1b996",
+          "RelR_e30b0515d20c"
+        ],
+        "rel_cls": "psychosocial_skill_acquisition_relation",
+        "justification": "Both relations describe athletes developing coping/handling skills regarding performance outcomes (success or failure), which are psychosocial abilities gained through experience; they naturally belong to a psychosocial skill acquisition class.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_21c3b435d5b1"
+        ],
+        "rel_cls_group": "AGENCY",
+        "justification": "Pursuing a goal is an agentive, intentional action directed toward an outcome, which fits the broad AGENCY dimension better than composition, identity, or temporality.",
+        "remark": null,
+        "confidence": 0.86
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_514393a1b996",
+          "RelR_e30b0515d20c"
+        ],
+        "rel_cls_group": "MODIFICATION",
+        "justification": "These relations capture a change in the athletes themselves (they develop new abilities to handle success or failure) rather than a static property or simple association, fitting a broad MODIFICATION group focused on development or change in state.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_21c3b435d5b1"
+      ],
+      "canonical_rel_name": "pursues_goal",
+      "canonical_rel_desc": "Indicates that an agent directs effort toward achieving a specified goal.",
+      "justification": "The relation connects athletes to a common goal in a collaborative, goal-oriented manner; the core predicate is that the athletes are actively working toward (pursuing) that goal.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_514393a1b996",
+        "RelR_e30b0515d20c"
+      ],
+      "canonical_rel_name": "develops_ability_to_handle",
+      "canonical_rel_desc": "Indicates that an agent acquires or develops the capability to effectively handle or cope with a particular outcome or situation.",
+      "justification": "Both relations describe athletes learning how to deal with a type of performance outcome (success or failure) through sports experiences; semantically this is the acquisition of the ability to handle those outcomes, so a single canonical predicate fits both.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_21c3b435d5b1"
+      ],
+      "rel_cls": "motivation_and_goal_relation",
+      "justification": "The link expresses a motivational/goal-directed relationship between an agent (athletes) and a goal (common goal), fitting a class focused on goals and motivation rather than skill acquisition or composition.",
+      "remark": null,
+      "confidence": 0.86
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_514393a1b996",
+        "RelR_e30b0515d20c"
+      ],
+      "rel_cls": "psychosocial_skill_acquisition_relation",
+      "justification": "Both relations describe athletes developing coping/handling skills regarding performance outcomes (success or failure), which are psychosocial abilities gained through experience; they naturally belong to a psychosocial skill acquisition class.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_21c3b435d5b1"
+      ],
+      "rel_cls_group": "AGENCY",
+      "justification": "Pursuing a goal is an agentive, intentional action directed toward an outcome, which fits the broad AGENCY dimension better than composition, identity, or temporality.",
+      "remark": null,
+      "confidence": 0.86
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_514393a1b996",
+        "RelR_e30b0515d20c"
+      ],
+      "rel_cls_group": "MODIFICATION",
+      "justification": "These relations capture a change in the athletes themselves (they develop new abilities to handle success or failure) rather than a static property or simple association, fitting a broad MODIFICATION group focused on development or change in state.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  ],
+  "timestamp": "2026-01-06T12:41:28Z"
+}

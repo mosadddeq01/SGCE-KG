@@ -1,0 +1,211 @@
+{
+  "cluster_label": "22_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_9838f85866e7",
+      "relation_name": "involves",
+      "rel_desc": "Daily use of body language involves body language as the behavior being used routinely.",
+      "rel_hint_type": "participation",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "daily use of body language",
+      "object_entity_name": "body language",
+      "subject_class_label": "Body Language Usage in Daily Life",
+      "subject_class_group": "Nonverbal Communication & Body Language",
+      "object_class_label": "Body Language as Nonverbal Communication",
+      "object_class_group": "Nonverbal Communication & Body Language",
+      "qualifiers": {
+        "TemporalQualifier": "on a daily basis",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "often without even realizing it",
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "ConsciousAwareness: typically unconscious or automatic"
+      },
+      "confidence": 0.9,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_674d48e01608",
+      "relation_name": "involves",
+      "rel_desc": "The practice of using body language to convey emotions relies on body language behaviors.",
+      "rel_hint_type": "participation",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "use of body language to convey emotions",
+      "object_entity_name": "body language",
+      "subject_class_label": "Body Language Usage in Daily Life",
+      "subject_class_group": "Nonverbal Communication & Body Language",
+      "object_class_label": "Body Language as Nonverbal Communication",
+      "object_class_group": "Nonverbal Communication & Body Language",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": "common communicative practice",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "one of the most common ways",
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "Function: emotional expression"
+      },
+      "confidence": 0.86,
+      "remarks": [
+        "Relation mainly to anchor qualifiers about emotional expression usage."
+      ]
+    },
+    {
+      "relation_id": "RelR_05412e504484",
+      "relation_name": "involves",
+      "rel_desc": "Meaningful interactions occur with other people.",
+      "rel_hint_type": "participation",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "meaningful interactions",
+      "object_entity_name": "others",
+      "subject_class_label": "Positive Social Outcomes",
+      "subject_class_group": "Interpersonal Relationships & Social Interaction",
+      "object_class_label": "Social Interaction Partners",
+      "object_class_group": "Interpersonal Relationships & Social Interaction",
+      "qualifiers": {
+        "TemporalQualifier": "ultimately (for context of when they occur)",
+        "SpatialQualifier": "social context",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "can (occurrence is potential)",
+        "CausalHint": null,
+        "LogicalMarker": "with",
+        "OtherQualifier": "ParticipantRole: social partners"
+      },
+      "confidence": 0.9,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_51ae41278da4",
+      "relation_name": "involves",
+      "rel_desc": "Fulfilling interactions occur with other people.",
+      "rel_hint_type": "participation",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "fulfilling interactions",
+      "object_entity_name": "others",
+      "subject_class_label": "Positive Social Outcomes",
+      "subject_class_group": "Interpersonal Relationships & Social Interaction",
+      "object_class_label": "Social Interaction Partners",
+      "object_class_group": "Interpersonal Relationships & Social Interaction",
+      "qualifiers": {
+        "TemporalQualifier": "ultimately (for context of when they occur)",
+        "SpatialQualifier": "social context",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "can (occurrence is potential)",
+        "CausalHint": null,
+        "LogicalMarker": "with",
+        "OtherQualifier": "ParticipantRole: social partners"
+      },
+      "confidence": 0.9,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_9838f85866e7\",\n        \"RelR_674d48e01608\",\n        \"RelR_05412e504484\",\n        \"RelR_51ae41278da4\"\n      ],\n      \"canonical_rel_name\": \"involves_participant\",\n      \"canonical_rel_desc\": \"An interaction, activity, or usage event includes the referenced entity (person, group, behavior, or medium) as a participant or constitutive element.\",\n      \"justification\": \"All four relations link an event/interaction or usage process (e.g., daily use of body language, meaningful interactions) to something that participates in or constitutes that event (body language as the medium; others as social partners). This is best modeled as a general event-participant predicate rather than multiple narrower predicates.\",\n      \"remark\": null,\n      \"confidence\": 0.92\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_9838f85866e7\",\n        \"RelR_674d48e01608\",\n        \"RelR_05412e504484\",\n        \"RelR_51ae41278da4\"\n      ],\n      \"rel_cls\": \"event_participant_relation\",\n      \"justification\": \"Each relation connects an event-like subject (use, interaction) to an entity that participates in or helps constitute that event, which fits a common event-participant relation class.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_9838f85866e7\",\n        \"RelR_674d48e01608\",\n        \"RelR_05412e504484\",\n        \"RelR_51ae41278da4\"\n      ],\n      \"rel_cls_group\": \"PARTICIPATION\",\n      \"justification\": \"The rel_hint_type is 'participation' for all four, and conceptually these are about entities participating in events or interactions, which aligns with a broad PARTICIPATION group.\",\n      \"remark\": null,\n      \"confidence\": 0.93\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_9838f85866e7",
+          "RelR_674d48e01608",
+          "RelR_05412e504484",
+          "RelR_51ae41278da4"
+        ],
+        "canonical_rel_name": "involves_participant",
+        "canonical_rel_desc": "An interaction, activity, or usage event includes the referenced entity (person, group, behavior, or medium) as a participant or constitutive element.",
+        "justification": "All four relations link an event/interaction or usage process (e.g., daily use of body language, meaningful interactions) to something that participates in or constitutes that event (body language as the medium; others as social partners). This is best modeled as a general event-participant predicate rather than multiple narrower predicates.",
+        "remark": null,
+        "confidence": 0.92
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_9838f85866e7",
+          "RelR_674d48e01608",
+          "RelR_05412e504484",
+          "RelR_51ae41278da4"
+        ],
+        "rel_cls": "event_participant_relation",
+        "justification": "Each relation connects an event-like subject (use, interaction) to an entity that participates in or helps constitute that event, which fits a common event-participant relation class.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_9838f85866e7",
+          "RelR_674d48e01608",
+          "RelR_05412e504484",
+          "RelR_51ae41278da4"
+        ],
+        "rel_cls_group": "PARTICIPATION",
+        "justification": "The rel_hint_type is 'participation' for all four, and conceptually these are about entities participating in events or interactions, which aligns with a broad PARTICIPATION group.",
+        "remark": null,
+        "confidence": 0.93
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_9838f85866e7",
+        "RelR_674d48e01608",
+        "RelR_05412e504484",
+        "RelR_51ae41278da4"
+      ],
+      "canonical_rel_name": "involves_participant",
+      "canonical_rel_desc": "An interaction, activity, or usage event includes the referenced entity (person, group, behavior, or medium) as a participant or constitutive element.",
+      "justification": "All four relations link an event/interaction or usage process (e.g., daily use of body language, meaningful interactions) to something that participates in or constitutes that event (body language as the medium; others as social partners). This is best modeled as a general event-participant predicate rather than multiple narrower predicates.",
+      "remark": null,
+      "confidence": 0.92
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_9838f85866e7",
+        "RelR_674d48e01608",
+        "RelR_05412e504484",
+        "RelR_51ae41278da4"
+      ],
+      "rel_cls": "event_participant_relation",
+      "justification": "Each relation connects an event-like subject (use, interaction) to an entity that participates in or helps constitute that event, which fits a common event-participant relation class.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_9838f85866e7",
+        "RelR_674d48e01608",
+        "RelR_05412e504484",
+        "RelR_51ae41278da4"
+      ],
+      "rel_cls_group": "PARTICIPATION",
+      "justification": "The rel_hint_type is 'participation' for all four, and conceptually these are about entities participating in events or interactions, which aligns with a broad PARTICIPATION group.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  ],
+  "timestamp": "2026-01-06T12:12:00Z"
+}

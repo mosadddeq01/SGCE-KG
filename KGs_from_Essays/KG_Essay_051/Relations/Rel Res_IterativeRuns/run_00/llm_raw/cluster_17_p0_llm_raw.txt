@@ -1,0 +1,106 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_5531ccb158de"],
+      "canonical_rel_name": "measures_fraction_of",
+      "canonical_rel_desc": "The subject study quantitatively measures what fraction or proportion of the object phenomenon is attributable to a specified component or channel.",
+      "justification": "This relation links specific studies to the overall communication process they quantify in terms of proportion conveyed via body language; the key predicate is that the study measures a fraction of the communication.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_7901353659aa"],
+      "canonical_rel_name": "quantifies_contribution_of",
+      "canonical_rel_desc": "The subject study provides a quantitative estimate of how much the object contributes to a broader process or outcome, usually expressed as a proportion or percentage.",
+      "justification": "Here the studies quantitatively estimate the contribution of body language itself, rather than of the overall communication process; a separate but closely related predicate clarifies that the object is the contributing factor.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": ["RelR_5531ccb158de", "RelR_7901353659aa"],
+      "rel_cls": "quantitative_characterization_relation",
+      "justification": "Both relations describe studies that provide quantitative (percentage/proportion) characterizations of aspects of communication, differing only in what is being quantified; they naturally belong to a shared class of quantitative characterization/measurement links.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": ["RelR_5531ccb158de", "RelR_7901353659aa"],
+      "rel_cls_group": "MEASUREMENT",
+      "justification": "In both cases, the core semantic dimension is measurement/quantification (estimating proportions and contributions), not causation or composition per se.",
+      "remark": null,
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_261991d64889"],
+      "canonical_rel_name": "investigates",
+      "canonical_rel_desc": "The subject research activity examines, studies, or explores the properties, role, or behavior of the object.",
+      "justification": "The relation explicitly describes research on nonverbal communication examining nonverbal cues; the standard research predicate 'investigates' captures this focus clearly and is reusable.",
+      "remark": null,
+      "confidence": 0.94
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": ["RelR_261991d64889"],
+      "rel_cls": "research_focus_relation",
+      "justification": "This relates a research activity to its substantive focus (nonverbal cues), which is best modeled as a class of research-focus or topic relations.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": ["RelR_261991d64889"],
+      "rel_cls_group": "AGENCY",
+      "justification": "The subject (research activity) is an agentive process acting on or directed toward the object (nonverbal cues), so an agency-oriented group is appropriate.",
+      "remark": null,
+      "confidence": 0.83
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_044380970a47"],
+      "canonical_rel_name": "produces_research_output",
+      "canonical_rel_desc": "The subject research activity or program generates the object research outputs, such as specific studies, papers, or findings.",
+      "justification": "The description states that the broader body of research includes or gives rise to the specific studies estimating body language’s share of communication; modeling this as research producing research outputs makes the provenance explicit.",
+      "remark": "If later schema prefers a more generic provenance predicate, this can be normalized to a shared production/provenance canonical relation.",
+      "confidence": 0.85
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": ["RelR_044380970a47"],
+      "rel_cls": "research_output_relation",
+      "justification": "This relation connects a research activity to the concrete studies it yields, fitting a class that captures research-to-output or project-to-product relations.",
+      "remark": null,
+      "confidence": 0.86
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": ["RelR_044380970a47"],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "The semantics involve a generative causal link where the research activity leads to (produces) specific studies; this aligns best with a causality-oriented group.",
+      "remark": null,
+      "confidence": 0.84
+    }
+  }
+]

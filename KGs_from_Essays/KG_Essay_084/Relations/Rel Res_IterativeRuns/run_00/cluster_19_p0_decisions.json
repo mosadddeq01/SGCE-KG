@@ -1,0 +1,619 @@
+{
+  "cluster_label": "19_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_8ecdd769b7c4",
+      "relation_name": "applied_to",
+      "rel_desc": "Mass spectrometry is applied to a sample when identifying and quantifying drugs or toxins.",
+      "rel_hint_type": "procedural",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "mass spectrometry",
+      "object_entity_name": "sample",
+      "subject_class_label": "Forensic Analytical Techniques",
+      "subject_class_group": "Forensic Analytical Science",
+      "object_class_label": "Forensic Samples",
+      "object_class_group": "Forensic Evidence",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "in a sample",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "may",
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "SampleContent: drugs or toxins"
+      },
+      "confidence": 0.9,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_e75074270370",
+      "relation_name": "collects",
+      "rel_desc": "Forensic scientists collect and catalog evidence.",
+      "rel_hint_type": "procedural",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "forensic scientists",
+      "object_entity_name": "evidence",
+      "subject_class_label": "Forensic Scientists",
+      "subject_class_group": "Forensic Science Domain",
+      "object_class_label": "General Forensic Evidence",
+      "object_class_group": "Forensic Evidence",
+      "qualifiers": {
+        "TemporalQualifier": "for further analysis",
+        "SpatialQualifier": "at the crime scene",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "are responsible for",
+        "CausalHint": null,
+        "LogicalMarker": "as well as",
+        "OtherQualifier": "ProcessingSteps: collecting and cataloging"
+      },
+      "confidence": 0.97,
+      "remarks": [
+        "Cataloging is treated as part of the collection/handling relation."
+      ]
+    },
+    {
+      "relation_id": "RelR_0b9c19be281b",
+      "relation_name": "investigates",
+      "rel_desc": "Forensic scientists investigate the crime scene by meticulously documenting its details.",
+      "rel_hint_type": "activity",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "forensic scientists",
+      "object_entity_name": "crime scene",
+      "subject_class_label": "Forensic Scientists",
+      "subject_class_group": "Forensic Science Domain",
+      "object_class_label": "Forensic Context Locations",
+      "object_class_group": "Forensic Context & Locations",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "crime scene",
+        "OperationalConstraint": "meticulously documenting the details",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "InvestigationMethod: documentation of scene details"
+      },
+      "confidence": 0.9,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_19502f75bdbb",
+      "relation_name": "collects",
+      "rel_desc": "Forensic scientists collect all relevant evidence as part of their work.",
+      "rel_hint_type": "activity",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "forensic scientists",
+      "object_entity_name": "evidence",
+      "subject_class_label": "Forensic Scientists",
+      "subject_class_group": "Forensic Science Domain",
+      "object_class_label": "General Forensic Evidence",
+      "object_class_group": "Forensic Evidence",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": "all relevant evidence",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "CollectionContext: during crime scene work"
+      },
+      "confidence": 0.95,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_0eb72fe078f0",
+      "relation_name": "solves",
+      "rel_desc": "Forensic scientists solve complex investigative puzzles as part of their work.",
+      "rel_hint_type": "task",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "forensic scientists",
+      "object_entity_name": "complex puzzles",
+      "subject_class_label": "Forensic Scientists",
+      "subject_class_group": "Forensic Science Domain",
+      "object_class_label": "Investigative Analysis Elements",
+      "object_class_group": "Forensic Reasoning and Case Analysis",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": "working under pressure",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": "often",
+        "OtherQualifier": null
+      },
+      "confidence": 0.96,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_3b36f109e3f9",
+      "relation_name": "discovers",
+      "rel_desc": "Forensic scientists uncover hidden clues during investigations.",
+      "rel_hint_type": "task",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "forensic scientists",
+      "object_entity_name": "hidden clues",
+      "subject_class_label": "Forensic Scientists",
+      "subject_class_group": "Forensic Science Domain",
+      "object_class_label": "Investigative Analysis Elements",
+      "object_class_group": "Forensic Reasoning and Case Analysis",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": "working under pressure",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "may be crucial",
+        "CausalHint": null,
+        "LogicalMarker": "often",
+        "OtherQualifier": null
+      },
+      "confidence": 0.96,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_3b35c5f3df0a",
+      "relation_name": "important_for",
+      "rel_desc": "Hidden clues may be crucial for a case.",
+      "rel_hint_type": "importance",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "hidden clues",
+      "object_entity_name": "case",
+      "subject_class_label": "Investigative Analysis Elements",
+      "subject_class_group": "Forensic Reasoning and Case Analysis",
+      "object_class_label": "Forensic Cases and Issues",
+      "object_class_group": "Forensic Reasoning and Case Analysis",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "may be crucial",
+        "CausalHint": "crucial to",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.94,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_dfa5e4410b14",
+      "relation_name": "uncovers",
+      "rel_desc": "Forensic scientists uncover the truth behind challenging forensic cases.",
+      "rel_hint_type": "outcome",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "forensic scientists",
+      "object_entity_name": "truth behind challenging cases",
+      "subject_class_label": "Forensic Scientists",
+      "subject_class_group": "Forensic Science Domain",
+      "object_class_label": "Forensic Cases and Issues",
+      "object_class_group": "Forensic Reasoning and Case Analysis",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "By combining scientific principles with investigative techniques",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.95,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_8ecdd769b7c4\"],\n      \"canonical_rel_name\": \"applied_to\",\n      \"canonical_rel_desc\": \"Links an analytical technique to the sample or material to which it is applied.\",\n      \"justification\": \"This relation instance connects the analytical technique (mass spectrometry) with the sample it is used on; a generic predicate 'applied_to' accurately captures this procedural application without overspecifying context.\",\n      \"remark\": null,\n      \"confidence\": 0.93\n    }\n  },\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_e75074270370\", \"RelR_19502f75bdbb\"],\n      \"canonical_rel_name\": \"collects\",\n      \"canonical_rel_desc\": \"Indicates that an agent gathers or collects forensic evidence.\",\n      \"justification\": \"Both relations describe forensic scientists gathering evidence; direction and semantics are identical (agent → evidence collection), so they should share the same canonical predicate 'collects'.\",\n      \"remark\": \"Cataloging is treated as part of the broader evidence collection/handling activity.\",\n      \"confidence\": 0.96\n    }\n  },\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_0b9c19be281b\"],\n      \"canonical_rel_name\": \"investigates\",\n      \"canonical_rel_desc\": \"Denotes that an investigator examines or investigates a crime scene or context.\",\n      \"justification\": \"The relation links forensic scientists to a crime scene they are examining; 'investigates' succinctly captures this investigative activity.\",\n      \"remark\": null,\n      \"confidence\": 0.92\n    }\n  },\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_0eb72fe078f0\"],\n      \"canonical_rel_name\": \"solves\",\n      \"canonical_rel_desc\": \"Indicates that an investigator resolves or solves complex investigative problems or puzzles.\",\n      \"justification\": \"This relation connects forensic scientists to complex investigative puzzles they resolve; 'solves' is an appropriate, general predicate for this reasoning task.\",\n      \"remark\": null,\n      \"confidence\": 0.94\n    }\n  },\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_3b36f109e3f9\"],\n      \"canonical_rel_name\": \"discovers\",\n      \"canonical_rel_desc\": \"Indicates that an investigator identifies or uncovers previously unknown or hidden clues.\",\n      \"justification\": \"The instance describes forensic scientists uncovering hidden clues; 'discovers' captures the act of revealing previously unknown investigative elements.\",\n      \"remark\": null,\n      \"confidence\": 0.95\n    }\n  },\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_3b35c5f3df0a\"],\n      \"canonical_rel_name\": \"is_critical_for\",\n      \"canonical_rel_desc\": \"Expresses that one element (e.g., a clue) is crucial or highly important for the progress or outcome of a case.\",\n      \"justification\": \"The description states that hidden clues may be crucial for a case; the predicate 'is_critical_for' cleanly encodes this importance relation from clue to case.\",\n      \"remark\": null,\n      \"confidence\": 0.93\n    }\n  },\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_dfa5e4410b14\"],\n      \"canonical_rel_name\": \"uncovers_truth_about\",\n      \"canonical_rel_desc\": \"Indicates that an investigator reveals or uncovers the truth about a forensic case or issue.\",\n      \"justification\": \"The relation links forensic scientists to the truth behind challenging cases that they reveal; 'uncovers_truth_about' captures this outcome-focused investigative action with appropriate direction.\",\n      \"remark\": null,\n      \"confidence\": 0.94\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_8ecdd769b7c4\"],\n      \"rel_cls\": \"analytical_technique_application_relation\",\n      \"justification\": \"This relation models the application of an analytical technique (mass spectrometry) to a sample, fitting a class that groups uses of analytical methods on materials or samples.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_e75074270370\", \"RelR_19502f75bdbb\"],\n      \"rel_cls\": \"evidence_handling_relation\",\n      \"justification\": \"Both relations concern forensic scientists collecting and handling evidence at or related to a crime scene; they belong in a shared class for evidence acquisition and handling activities.\",\n      \"remark\": null,\n      \"confidence\": 0.95\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_0b9c19be281b\"],\n      \"rel_cls\": \"investigation_activity_relation\",\n      \"justification\": \"The relation captures the core investigative activity of examining a crime scene; a specific class for investigation activities is appropriate.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_0eb72fe078f0\", \"RelR_3b36f109e3f9\"],\n      \"rel_cls\": \"investigative_reasoning_relation\",\n      \"justification\": \"Both relations involve higher-level reasoning tasks by forensic scientists (solving investigative puzzles and discovering hidden clues); grouping them in a class for reasoning and inferential investigative actions is coherent.\",\n      \"remark\": null,\n      \"confidence\": 0.93\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_3b35c5f3df0a\"],\n      \"rel_cls\": \"evidential_significance_relation\",\n      \"justification\": \"This relation describes the importance of hidden clues for a case outcome; a class capturing the significance or probative value of evidence elements is appropriate.\",\n      \"remark\": null,\n      \"confidence\": 0.92\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_dfa5e4410b14\"],\n      \"rel_cls\": \"investigative_outcome_relation\",\n      \"justification\": \"The relation expresses an outcome of investigative work (uncovering the truth about cases); a class for outcome-level investigative relations fits this semantics.\",\n      \"remark\": null,\n      \"confidence\": 0.93\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_8ecdd769b7c4\"],\n      \"rel_cls_group\": \"USAGE\",\n      \"justification\": \"The relation focuses on how an analytical technique is used/applied to a sample, aligning best with a broad usage/application dimension.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_e75074270370\",\n        \"RelR_0b9c19be281b\",\n        \"RelR_19502f75bdbb\",\n        \"RelR_0eb72fe078f0\",\n        \"RelR_3b36f109e3f9\",\n        \"RelR_dfa5e4410b14\"\n      ],\n      \"rel_cls_group\": \"AGENCY\",\n      \"justification\": \"These relations all describe actions performed by agents (forensic scientists) on evidence, scenes, puzzles, clues, or cases; they are best grouped under an agency/agent-action dimension.\",\n      \"remark\": null,\n      \"confidence\": 0.93\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_3b35c5f3df0a\"],\n      \"rel_cls_group\": \"CAUSALITY\",\n      \"justification\": \"The relation states that hidden clues may be crucial for a case, implying that the presence or nature of clues causally or critically affects the case outcome; this fits a causal/importance dimension.\",\n      \"remark\": null,\n      \"confidence\": 0.92\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_8ecdd769b7c4"
+        ],
+        "canonical_rel_name": "applied_to",
+        "canonical_rel_desc": "Links an analytical technique to the sample or material to which it is applied.",
+        "justification": "This relation instance connects the analytical technique (mass spectrometry) with the sample it is used on; a generic predicate 'applied_to' accurately captures this procedural application without overspecifying context.",
+        "remark": null,
+        "confidence": 0.93
+      }
+    },
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_e75074270370",
+          "RelR_19502f75bdbb"
+        ],
+        "canonical_rel_name": "collects",
+        "canonical_rel_desc": "Indicates that an agent gathers or collects forensic evidence.",
+        "justification": "Both relations describe forensic scientists gathering evidence; direction and semantics are identical (agent → evidence collection), so they should share the same canonical predicate 'collects'.",
+        "remark": "Cataloging is treated as part of the broader evidence collection/handling activity.",
+        "confidence": 0.96
+      }
+    },
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_0b9c19be281b"
+        ],
+        "canonical_rel_name": "investigates",
+        "canonical_rel_desc": "Denotes that an investigator examines or investigates a crime scene or context.",
+        "justification": "The relation links forensic scientists to a crime scene they are examining; 'investigates' succinctly captures this investigative activity.",
+        "remark": null,
+        "confidence": 0.92
+      }
+    },
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_0eb72fe078f0"
+        ],
+        "canonical_rel_name": "solves",
+        "canonical_rel_desc": "Indicates that an investigator resolves or solves complex investigative problems or puzzles.",
+        "justification": "This relation connects forensic scientists to complex investigative puzzles they resolve; 'solves' is an appropriate, general predicate for this reasoning task.",
+        "remark": null,
+        "confidence": 0.94
+      }
+    },
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_3b36f109e3f9"
+        ],
+        "canonical_rel_name": "discovers",
+        "canonical_rel_desc": "Indicates that an investigator identifies or uncovers previously unknown or hidden clues.",
+        "justification": "The instance describes forensic scientists uncovering hidden clues; 'discovers' captures the act of revealing previously unknown investigative elements.",
+        "remark": null,
+        "confidence": 0.95
+      }
+    },
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_3b35c5f3df0a"
+        ],
+        "canonical_rel_name": "is_critical_for",
+        "canonical_rel_desc": "Expresses that one element (e.g., a clue) is crucial or highly important for the progress or outcome of a case.",
+        "justification": "The description states that hidden clues may be crucial for a case; the predicate 'is_critical_for' cleanly encodes this importance relation from clue to case.",
+        "remark": null,
+        "confidence": 0.93
+      }
+    },
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_dfa5e4410b14"
+        ],
+        "canonical_rel_name": "uncovers_truth_about",
+        "canonical_rel_desc": "Indicates that an investigator reveals or uncovers the truth about a forensic case or issue.",
+        "justification": "The relation links forensic scientists to the truth behind challenging cases that they reveal; 'uncovers_truth_about' captures this outcome-focused investigative action with appropriate direction.",
+        "remark": null,
+        "confidence": 0.94
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_8ecdd769b7c4"
+        ],
+        "rel_cls": "analytical_technique_application_relation",
+        "justification": "This relation models the application of an analytical technique (mass spectrometry) to a sample, fitting a class that groups uses of analytical methods on materials or samples.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_e75074270370",
+          "RelR_19502f75bdbb"
+        ],
+        "rel_cls": "evidence_handling_relation",
+        "justification": "Both relations concern forensic scientists collecting and handling evidence at or related to a crime scene; they belong in a shared class for evidence acquisition and handling activities.",
+        "remark": null,
+        "confidence": 0.95
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_0b9c19be281b"
+        ],
+        "rel_cls": "investigation_activity_relation",
+        "justification": "The relation captures the core investigative activity of examining a crime scene; a specific class for investigation activities is appropriate.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_0eb72fe078f0",
+          "RelR_3b36f109e3f9"
+        ],
+        "rel_cls": "investigative_reasoning_relation",
+        "justification": "Both relations involve higher-level reasoning tasks by forensic scientists (solving investigative puzzles and discovering hidden clues); grouping them in a class for reasoning and inferential investigative actions is coherent.",
+        "remark": null,
+        "confidence": 0.93
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_3b35c5f3df0a"
+        ],
+        "rel_cls": "evidential_significance_relation",
+        "justification": "This relation describes the importance of hidden clues for a case outcome; a class capturing the significance or probative value of evidence elements is appropriate.",
+        "remark": null,
+        "confidence": 0.92
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_dfa5e4410b14"
+        ],
+        "rel_cls": "investigative_outcome_relation",
+        "justification": "The relation expresses an outcome of investigative work (uncovering the truth about cases); a class for outcome-level investigative relations fits this semantics.",
+        "remark": null,
+        "confidence": 0.93
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_8ecdd769b7c4"
+        ],
+        "rel_cls_group": "USAGE",
+        "justification": "The relation focuses on how an analytical technique is used/applied to a sample, aligning best with a broad usage/application dimension.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_e75074270370",
+          "RelR_0b9c19be281b",
+          "RelR_19502f75bdbb",
+          "RelR_0eb72fe078f0",
+          "RelR_3b36f109e3f9",
+          "RelR_dfa5e4410b14"
+        ],
+        "rel_cls_group": "AGENCY",
+        "justification": "These relations all describe actions performed by agents (forensic scientists) on evidence, scenes, puzzles, clues, or cases; they are best grouped under an agency/agent-action dimension.",
+        "remark": null,
+        "confidence": 0.93
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_3b35c5f3df0a"
+        ],
+        "rel_cls_group": "CAUSALITY",
+        "justification": "The relation states that hidden clues may be crucial for a case, implying that the presence or nature of clues causally or critically affects the case outcome; this fits a causal/importance dimension.",
+        "remark": null,
+        "confidence": 0.92
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_8ecdd769b7c4"
+      ],
+      "canonical_rel_name": "applied_to",
+      "canonical_rel_desc": "Links an analytical technique to the sample or material to which it is applied.",
+      "justification": "This relation instance connects the analytical technique (mass spectrometry) with the sample it is used on; a generic predicate 'applied_to' accurately captures this procedural application without overspecifying context.",
+      "remark": null,
+      "confidence": 0.93
+    },
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_e75074270370",
+        "RelR_19502f75bdbb"
+      ],
+      "canonical_rel_name": "collects",
+      "canonical_rel_desc": "Indicates that an agent gathers or collects forensic evidence.",
+      "justification": "Both relations describe forensic scientists gathering evidence; direction and semantics are identical (agent → evidence collection), so they should share the same canonical predicate 'collects'.",
+      "remark": "Cataloging is treated as part of the broader evidence collection/handling activity.",
+      "confidence": 0.96
+    },
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_0b9c19be281b"
+      ],
+      "canonical_rel_name": "investigates",
+      "canonical_rel_desc": "Denotes that an investigator examines or investigates a crime scene or context.",
+      "justification": "The relation links forensic scientists to a crime scene they are examining; 'investigates' succinctly captures this investigative activity.",
+      "remark": null,
+      "confidence": 0.92
+    },
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_0eb72fe078f0"
+      ],
+      "canonical_rel_name": "solves",
+      "canonical_rel_desc": "Indicates that an investigator resolves or solves complex investigative problems or puzzles.",
+      "justification": "This relation connects forensic scientists to complex investigative puzzles they resolve; 'solves' is an appropriate, general predicate for this reasoning task.",
+      "remark": null,
+      "confidence": 0.94
+    },
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_3b36f109e3f9"
+      ],
+      "canonical_rel_name": "discovers",
+      "canonical_rel_desc": "Indicates that an investigator identifies or uncovers previously unknown or hidden clues.",
+      "justification": "The instance describes forensic scientists uncovering hidden clues; 'discovers' captures the act of revealing previously unknown investigative elements.",
+      "remark": null,
+      "confidence": 0.95
+    },
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_3b35c5f3df0a"
+      ],
+      "canonical_rel_name": "is_critical_for",
+      "canonical_rel_desc": "Expresses that one element (e.g., a clue) is crucial or highly important for the progress or outcome of a case.",
+      "justification": "The description states that hidden clues may be crucial for a case; the predicate 'is_critical_for' cleanly encodes this importance relation from clue to case.",
+      "remark": null,
+      "confidence": 0.93
+    },
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_dfa5e4410b14"
+      ],
+      "canonical_rel_name": "uncovers_truth_about",
+      "canonical_rel_desc": "Indicates that an investigator reveals or uncovers the truth about a forensic case or issue.",
+      "justification": "The relation links forensic scientists to the truth behind challenging cases that they reveal; 'uncovers_truth_about' captures this outcome-focused investigative action with appropriate direction.",
+      "remark": null,
+      "confidence": 0.94
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_8ecdd769b7c4"
+      ],
+      "rel_cls": "analytical_technique_application_relation",
+      "justification": "This relation models the application of an analytical technique (mass spectrometry) to a sample, fitting a class that groups uses of analytical methods on materials or samples.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_e75074270370",
+        "RelR_19502f75bdbb"
+      ],
+      "rel_cls": "evidence_handling_relation",
+      "justification": "Both relations concern forensic scientists collecting and handling evidence at or related to a crime scene; they belong in a shared class for evidence acquisition and handling activities.",
+      "remark": null,
+      "confidence": 0.95
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_0b9c19be281b"
+      ],
+      "rel_cls": "investigation_activity_relation",
+      "justification": "The relation captures the core investigative activity of examining a crime scene; a specific class for investigation activities is appropriate.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_0eb72fe078f0",
+        "RelR_3b36f109e3f9"
+      ],
+      "rel_cls": "investigative_reasoning_relation",
+      "justification": "Both relations involve higher-level reasoning tasks by forensic scientists (solving investigative puzzles and discovering hidden clues); grouping them in a class for reasoning and inferential investigative actions is coherent.",
+      "remark": null,
+      "confidence": 0.93
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_3b35c5f3df0a"
+      ],
+      "rel_cls": "evidential_significance_relation",
+      "justification": "This relation describes the importance of hidden clues for a case outcome; a class capturing the significance or probative value of evidence elements is appropriate.",
+      "remark": null,
+      "confidence": 0.92
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_dfa5e4410b14"
+      ],
+      "rel_cls": "investigative_outcome_relation",
+      "justification": "The relation expresses an outcome of investigative work (uncovering the truth about cases); a class for outcome-level investigative relations fits this semantics.",
+      "remark": null,
+      "confidence": 0.93
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_8ecdd769b7c4"
+      ],
+      "rel_cls_group": "USAGE",
+      "justification": "The relation focuses on how an analytical technique is used/applied to a sample, aligning best with a broad usage/application dimension.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_e75074270370",
+        "RelR_0b9c19be281b",
+        "RelR_19502f75bdbb",
+        "RelR_0eb72fe078f0",
+        "RelR_3b36f109e3f9",
+        "RelR_dfa5e4410b14"
+      ],
+      "rel_cls_group": "AGENCY",
+      "justification": "These relations all describe actions performed by agents (forensic scientists) on evidence, scenes, puzzles, clues, or cases; they are best grouped under an agency/agent-action dimension.",
+      "remark": null,
+      "confidence": 0.93
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_3b35c5f3df0a"
+      ],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "The relation states that hidden clues may be crucial for a case, implying that the presence or nature of clues causally or critically affects the case outcome; this fits a causal/importance dimension.",
+      "remark": null,
+      "confidence": 0.92
+    }
+  ],
+  "timestamp": "2026-01-06T14:35:40Z"
+}

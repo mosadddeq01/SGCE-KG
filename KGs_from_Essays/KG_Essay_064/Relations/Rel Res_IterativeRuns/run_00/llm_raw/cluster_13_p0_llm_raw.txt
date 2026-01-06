@@ -1,0 +1,64 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_5160067b4730"],
+      "canonical_rel_name": "seeks_to_preserve",
+      "canonical_rel_desc": "Denotes an intentional effort by an agent to preserve or safeguard a cultural, material, or conceptual object.",
+      "justification": "The description emphasizes the Brothers Grimm deliberately aiming to preserve oral traditions; modeling this as an intentional preservation effort (not mere state) is best captured by an action/purpose predicate like 'seeks_to_preserve'.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": ["RelR_5160067b4730"],
+      "rel_cls": "cultural_preservation_relation",
+      "justification": "The relation links cultural agents (Brothers Grimm) with cultural heritage (oral traditions) via an explicit goal of preservation; this fits a class of relations about preserving cultural or intangible heritage.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": ["RelR_5160067b4730"],
+      "rel_cls_group": "AGENCY",
+      "justification": "The core semantics are an agent (Brothers Grimm) intentionally acting on an object (oral traditions) with a preservation goal, which is best grouped under agentive action rather than static composition or identity.",
+      "remark": null,
+      "confidence": 0.85
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_a0f3686c8802"],
+      "canonical_rel_name": "used_for",
+      "canonical_rel_desc": "Indicates that the subject is used as a means, tool, or medium to achieve or perform the object activity or function.",
+      "justification": "The description states that fairytales function as a form of storytelling; modeling this as a functional or instrumental usage from fairytales to storytelling is naturally captured by a generic usage predicate like 'used_for'.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": ["RelR_a0f3686c8802"],
+      "rel_cls": "functional_usage_relation",
+      "justification": "The relation expresses that fairytales serve a particular function (storytelling) and are used instrumentally as a medium; this belongs to a family of functional/usage relations rather than compositional or hierarchical ones.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": ["RelR_a0f3686c8802"],
+      "rel_cls_group": "USAGE",
+      "justification": "The main semantic dimension is how fairytales are used (as a storytelling mode), which falls under a broad usage/functional grouping.",
+      "remark": null,
+      "confidence": 0.95
+    }
+  }
+]

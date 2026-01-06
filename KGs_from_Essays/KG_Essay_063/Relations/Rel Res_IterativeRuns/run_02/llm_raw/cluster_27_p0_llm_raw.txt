@@ -1,0 +1,33 @@
+[
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": [
+        "RelR_e6222803654a",
+        "RelR_6e8abada3154",
+        "RelR_7830c458d504",
+        "RelR_8993b154525b",
+        "RelR_766a969e0e97",
+        "RelR_3b803a98cd80"
+      ],
+      "canonical_rel_name": null,
+      "canonical_rel_desc": "Links an event, process, or movement to the geographic or political area where it takes place.",
+      "rel_cls": null,
+      "rel_cls_group": null,
+      "justification": "All these relations use the same predicate 'occurs_in' to connect an event or movement to the geographic or political region where it happens. Harmonizing their canonical_rel_desc to a single, concise definition improves schema consistency without changing the underlying semantics.",
+      "remark": null,
+      "confidence": 0.96
+    }
+  },
+  {
+    "function": "add_rel_remark",
+    "args": {
+      "relation_ids": [
+        "RelR_4c1e78b7fcb1"
+      ],
+      "remark": "Subject and object class_group labels appear to be mis-assigned (Ancient Egypt and Egyptian pyramids are grouped under 'Historical Labor Protests'), which likely reflects an upstream entity-classification issue rather than a relation-schema problem.",
+      "justification": "The relation schema (spatial containment of pyramids within Ancient Egypt) is correct, but the class_group metadata for the entities is incongruent with their actual types; flagging this helps future curation without altering the relation semantics.",
+      "confidence": 0.9
+    }
+  }
+]

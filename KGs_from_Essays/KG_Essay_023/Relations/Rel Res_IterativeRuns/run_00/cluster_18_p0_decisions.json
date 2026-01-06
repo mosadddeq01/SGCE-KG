@@ -1,0 +1,141 @@
+{
+  "cluster_label": "18_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_2f949af163ee",
+      "relation_name": "contributes_to",
+      "rel_desc": "Social media use is described as being able to lead to a lack of meaningful interaction.",
+      "rel_hint_type": "causal",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "social media",
+      "object_entity_name": "lack of meaningful interaction",
+      "subject_class_label": "Social Media Platforms",
+      "subject_class_group": "Social Media & Online Communication",
+      "object_class_label": "Interaction Quality States",
+      "object_class_group": "Social Media and Online Social Interaction",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": "during social media–mediated communication",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "can lead to",
+        "CausalHint": "lead to",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.87,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_63eab4c069c7",
+      "relation_name": "contributes_to",
+      "rel_desc": "The constant need for validation and approval is described as having negative effects on mental health, an impact of social media.",
+      "rel_hint_type": "causal",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "constant need for validation and approval",
+      "object_entity_name": "mental health impacts of social media",
+      "subject_class_label": "Validation-Seeking and Social Comparison Processes",
+      "subject_class_group": "Self-Worth and Social Comparison Dynamics",
+      "object_class_label": "Mental Health Impacts of Social Media",
+      "object_class_group": "Social Media: Impacts and Social Change",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": "when driven by social media engagement",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "can also have",
+        "CausalHint": "have ... effects on",
+        "LogicalMarker": "also",
+        "OtherQualifier": null
+      },
+      "confidence": 0.9,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_2f949af163ee\", \"RelR_63eab4c069c7\"],\n      \"canonical_rel_name\": \"contributes_to\",\n      \"canonical_rel_desc\": \"Indicates that the subject factor or process causally contributes to or increases the likelihood of the object outcome or state, without implying strict determinism.\",\n      \"justification\": \"Both relations describe a causal contribution where a psychosocial or technological factor (social media use; constant need for validation) leads to or exacerbates a negative social/mental outcome. The semantics match a generic directional causal contribution predicate, so they should share the same canonical_rel_name.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_2f949af163ee\", \"RelR_63eab4c069c7\"],\n      \"rel_cls\": \"psychosocial_effect_relation\",\n      \"justification\": \"In both cases, the subject is a psychosocial or media-related behavior/process and the object is a psychosocial or mental health outcome. Grouping them under a class for psychosocial effects captures that these are causal impact relations in a social/psychological context, more specific than a generic causal_relation.\",\n      \"remark\": null,\n      \"confidence\": 0.86\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_2f949af163ee\", \"RelR_63eab4c069c7\"],\n      \"rel_cls_group\": \"CAUSALITY\",\n      \"justification\": \"The descriptions and qualifiers explicitly indicate causation or contribution (e.g., 'lead to', 'have negative effects on'), so these relations fall under a broad causal semantics group.\",\n      \"remark\": null,\n      \"confidence\": 0.95\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_2f949af163ee",
+          "RelR_63eab4c069c7"
+        ],
+        "canonical_rel_name": "contributes_to",
+        "canonical_rel_desc": "Indicates that the subject factor or process causally contributes to or increases the likelihood of the object outcome or state, without implying strict determinism.",
+        "justification": "Both relations describe a causal contribution where a psychosocial or technological factor (social media use; constant need for validation) leads to or exacerbates a negative social/mental outcome. The semantics match a generic directional causal contribution predicate, so they should share the same canonical_rel_name.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_2f949af163ee",
+          "RelR_63eab4c069c7"
+        ],
+        "rel_cls": "psychosocial_effect_relation",
+        "justification": "In both cases, the subject is a psychosocial or media-related behavior/process and the object is a psychosocial or mental health outcome. Grouping them under a class for psychosocial effects captures that these are causal impact relations in a social/psychological context, more specific than a generic causal_relation.",
+        "remark": null,
+        "confidence": 0.86
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_2f949af163ee",
+          "RelR_63eab4c069c7"
+        ],
+        "rel_cls_group": "CAUSALITY",
+        "justification": "The descriptions and qualifiers explicitly indicate causation or contribution (e.g., 'lead to', 'have negative effects on'), so these relations fall under a broad causal semantics group.",
+        "remark": null,
+        "confidence": 0.95
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_2f949af163ee",
+        "RelR_63eab4c069c7"
+      ],
+      "canonical_rel_name": "contributes_to",
+      "canonical_rel_desc": "Indicates that the subject factor or process causally contributes to or increases the likelihood of the object outcome or state, without implying strict determinism.",
+      "justification": "Both relations describe a causal contribution where a psychosocial or technological factor (social media use; constant need for validation) leads to or exacerbates a negative social/mental outcome. The semantics match a generic directional causal contribution predicate, so they should share the same canonical_rel_name.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_2f949af163ee",
+        "RelR_63eab4c069c7"
+      ],
+      "rel_cls": "psychosocial_effect_relation",
+      "justification": "In both cases, the subject is a psychosocial or media-related behavior/process and the object is a psychosocial or mental health outcome. Grouping them under a class for psychosocial effects captures that these are causal impact relations in a social/psychological context, more specific than a generic causal_relation.",
+      "remark": null,
+      "confidence": 0.86
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_2f949af163ee",
+        "RelR_63eab4c069c7"
+      ],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "The descriptions and qualifiers explicitly indicate causation or contribution (e.g., 'lead to', 'have negative effects on'), so these relations fall under a broad causal semantics group.",
+      "remark": null,
+      "confidence": 0.95
+    }
+  ],
+  "timestamp": "2026-01-06T11:07:45Z"
+}

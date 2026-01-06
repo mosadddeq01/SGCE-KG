@@ -1,0 +1,15 @@
+[
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": ["RelR_84e8661abbfd"],
+      "canonical_rel_name": "is_component_of",
+      "canonical_rel_desc": "Indicates that the subject is a part, aspect, or modality of the larger whole, system, or process represented by the object.",
+      "rel_cls": "component_whole_relation",
+      "rel_cls_group": "COMPOSITION",
+      "justification": "This relation expresses the same generic part-whole semantics as the other three instances (a communication channel as a component of the overall communication process). To avoid over-fragmentation of relation classes and to keep canonical predicates consistent, its rel_cls should align with the other component_whole_relation instances, and the canonical_rel_desc should be unified across all uses of is_component_of.",
+      "remark": "Normalized this instance to the same component_whole_relation class and shared canonical description as other is_component_of relations in this cluster.",
+      "confidence": 0.88
+    }
+  }
+]

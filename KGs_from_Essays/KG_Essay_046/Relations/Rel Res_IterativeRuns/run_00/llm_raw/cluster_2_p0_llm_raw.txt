@@ -1,0 +1,91 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_1f0f295e4b80",
+        "RelR_b66433a34a64",
+        "RelR_60895e90a732",
+        "RelR_b37eef765662",
+        "RelR_49278d853c4b",
+        "RelR_71a8a02b5554"
+      ],
+      "canonical_rel_name": "provides_ecosystem_service",
+      "canonical_rel_desc": "Indicates that the subject acts as a source or provider of one or more ecosystem services (including directly delivering a service or functionally supporting its delivery).",
+      "justification": "All these relations describe subjects (birds, bird populations, habitats, or ecosystems) providing or supporting ecosystem services, such as natural pest control or general ecosystem services. Normalizing them under a single predicate 'provides_ecosystem_service' captures this shared semantics while allowing specific service types to remain in the object or qualifiers.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_ddd8b5d46713"
+      ],
+      "canonical_rel_name": "facilitates_reproduction_and_dispersal_of",
+      "canonical_rel_desc": "Indicates that the subject facilitates or supports the reproduction and spatial dispersal/colonization of the object population or species (e.g., via pollination or seed dispersal).",
+      "justification": "This relation specifically states that birds support the reproduction and colonization of new areas by plant species, which is a biotic interaction focused on reproductive and dispersal processes rather than a generic ecosystem-service provision edge to a service entity.",
+      "remark": "Although this process underpins an ecosystem service, the object here is the plant species themselves rather than a service node, so a reproduction/dispersal-focused predicate is more precise.",
+      "confidence": 0.88
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_1f0f295e4b80",
+        "RelR_b66433a34a64",
+        "RelR_60895e90a732",
+        "RelR_b37eef765662",
+        "RelR_49278d853c4b",
+        "RelR_71a8a02b5554"
+      ],
+      "rel_cls": "ecosystem_service_provision_relation",
+      "justification": "These relations all link ecological components (birds, habitats, ecosystems) to ecosystem services or specific service instances (e.g., natural pest control) that they provide or support, forming a coherent family of ecosystem-service provision edges.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_ddd8b5d46713"
+      ],
+      "rel_cls": "reproductive_ecosystem_service_relation",
+      "justification": "This relation describes birds enabling plant reproduction and colonization (e.g., through pollination or seed dispersal), which is a specific type of ecosystem service focused on reproductive processes, warranting a distinct but related relation class.",
+      "remark": null,
+      "confidence": 0.86
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_1f0f295e4b80",
+        "RelR_b66433a34a64",
+        "RelR_60895e90a732",
+        "RelR_b37eef765662",
+        "RelR_49278d853c4b",
+        "RelR_71a8a02b5554"
+      ],
+      "rel_cls_group": "FUNCTION",
+      "justification": "All these edges express that the subject performs ecological functions that result in ecosystem services (service provision/support), which fits a broad functional dimension rather than composition, identity, or mere association.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_ddd8b5d46713"
+      ],
+      "rel_cls_group": "FUNCTION",
+      "justification": "Birds facilitating plant reproduction and colonization reflects an ecological function they perform in the ecosystem, aligning with a functional grouping rather than pure spatiality or identity.",
+      "remark": null,
+      "confidence": 0.85
+    }
+  }
+]

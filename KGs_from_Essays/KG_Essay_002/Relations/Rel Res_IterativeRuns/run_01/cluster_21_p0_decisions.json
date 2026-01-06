@@ -1,0 +1,163 @@
+{
+  "cluster_label": "21_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_177460eaf6b3",
+      "relation_name": "transmitted_across",
+      "rel_desc": "Urban legends are transmitted across generations within communities.",
+      "rel_hint_type": "transmission",
+      "canonical_rel_name": "is_transmitted_within",
+      "canonical_rel_desc": "Indicates that a narrative, belief, or tradition is transmitted and circulates within a given social group or community over time.",
+      "rel_cls": "cultural_transmission_relation",
+      "rel_cls_group": "TEMPORALITY",
+      "subject_entity_name": "urban legends",
+      "object_entity_name": "communities",
+      "subject_class_label": "Contemporary Folklore",
+      "subject_class_group": "Urban Legends and Modern Folklore",
+      "object_class_label": "Urban Legend Dissemination Contexts",
+      "object_class_group": "Urban Legend Contexts (Social, Spatial, Temporal)",
+      "qualifiers": {
+        "TemporalQualifier": "through generations",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "often",
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "TransmissionMode: oral/retelling"
+      },
+      "confidence": 0.78,
+      "remarks": [
+        "Relation primarily created to preserve temporal and intergenerational transmission context.",
+        "Relation primarily created to preserve temporal and intergenerational transmission context."
+      ]
+    },
+    {
+      "relation_id": "RelR_6ace96c2965a",
+      "relation_name": "disseminated_to",
+      "rel_desc": "Urban legends are disseminated across different regions.",
+      "rel_hint_type": "spatial-spread",
+      "canonical_rel_name": "spreads_across",
+      "canonical_rel_desc": "Indicates that an informational or cultural phenomenon becomes present in or extends across multiple geographic regions.",
+      "rel_cls": "cultural_transmission_relation",
+      "rel_cls_group": "SPATIALITY",
+      "subject_entity_name": "urban legends",
+      "object_entity_name": "regions",
+      "subject_class_label": "Contemporary Folklore",
+      "subject_class_group": "Urban Legends and Modern Folklore",
+      "object_class_label": "Geographic Scales of Urban Legend Spread",
+      "object_class_group": "Urban Legend Contexts (Social, Spatial, Temporal)",
+      "qualifiers": {
+        "TemporalQualifier": "as societies became more interconnected",
+        "SpatialQualifier": "across regions",
+        "OperationalConstraint": "enabled by trade and travel",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "spread across",
+        "LogicalMarker": "and",
+        "OtherQualifier": null
+      },
+      "confidence": 0.95,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_ae06c6bd53c0",
+      "relation_name": "distributed_across",
+      "rel_desc": "New forms and variations of legends are distributed across different regions.",
+      "rel_hint_type": "spatial-distribution",
+      "canonical_rel_name": "is_spread_across",
+      "canonical_rel_desc": "Indicates that a legend or its variations are present and circulate across a geographic area or scale (regions, continents, the world).",
+      "rel_cls": "cultural_diffusion_relation",
+      "rel_cls_group": "SPATIALITY",
+      "subject_entity_name": "new forms and variations of legends",
+      "object_entity_name": "regions",
+      "subject_class_label": "Stories and Legends as Explanations",
+      "subject_class_group": "Narrative Truth, Sources, and Explanatory Roles",
+      "object_class_label": "Geographic Scales of Urban Legend Spread",
+      "object_class_group": "Urban Legend Contexts (Social, Spatial, Temporal)",
+      "qualifiers": {
+        "TemporalQualifier": "during spread",
+        "SpatialQualifier": "across regions",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "inferred locus of variation, not explicit",
+        "CausalHint": null,
+        "LogicalMarker": "as",
+        "OtherQualifier": null
+      },
+      "confidence": 0.7,
+      "remarks": [
+        "Slightly inferential; regions are not directly assigned the variations but are implied loci.",
+        "Slightly inferential; regions are not directly assigned the variations but are implied loci."
+      ]
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_rel_schema\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_6ace96c2965a\",\n        \"RelR_ae06c6bd53c0\"\n      ],\n      \"canonical_rel_name\": \"spreads_across\",\n      \"canonical_rel_desc\": \"Indicates that a legend, its variations, or a related cultural narrative becomes present in or extends across multiple geographic regions.\",\n      \"rel_cls\": \"cultural_spread_relation\",\n      \"rel_cls_group\": \"SPATIALITY\",\n      \"justification\": \"Both relations describe the spatial spread of legends (or their variations) across regions. They currently use slightly different but synonymous canonical names (\\\"spreads_across\\\" vs. \\\"is_spread_across\\\") and two different classes (\\\"cultural_transmission_relation\\\" vs. \\\"cultural_diffusion_relation\\\") for the same spatial diffusion semantics. Normalizing to a single predicate (\\\"spreads_across\\\"), a shared description, and a unified class (\\\"cultural_spread_relation\\\") improves schema consistency while keeping the broad group SPATIALITY appropriate.\",\n      \"remark\": null,\n      \"confidence\": 0.86\n    }\n  },\n  {\n    \"function\": \"modify_rel_schema\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_177460eaf6b3\"\n      ],\n      \"canonical_rel_name\": null,\n      \"canonical_rel_desc\": null,\n      \"rel_cls\": \"cultural_spread_relation\",\n      \"rel_cls_group\": null,\n      \"justification\": \"This relation captures the intergenerational spread of urban legends within communities (a form of cultural transmission over time). While its focus is temporal rather than spatial, it belongs to the same broader family of relations describing how legends propagate through social or contextual frameworks. Aligning its rel_cls with the other propagation relations as \\\"cultural_spread_relation\\\" yields a coherent class for all spread/transmission edges, while preserving its distinct canonical_rel_name and TEMPORALITY rel_cls_group.\",\n      \"remark\": null,\n      \"confidence\": 0.8\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_rel_schema",
+      "args": {
+        "relation_ids": [
+          "RelR_6ace96c2965a",
+          "RelR_ae06c6bd53c0"
+        ],
+        "canonical_rel_name": "spreads_across",
+        "canonical_rel_desc": "Indicates that a legend, its variations, or a related cultural narrative becomes present in or extends across multiple geographic regions.",
+        "rel_cls": "cultural_spread_relation",
+        "rel_cls_group": "SPATIALITY",
+        "justification": "Both relations describe the spatial spread of legends (or their variations) across regions. They currently use slightly different but synonymous canonical names (\"spreads_across\" vs. \"is_spread_across\") and two different classes (\"cultural_transmission_relation\" vs. \"cultural_diffusion_relation\") for the same spatial diffusion semantics. Normalizing to a single predicate (\"spreads_across\"), a shared description, and a unified class (\"cultural_spread_relation\") improves schema consistency while keeping the broad group SPATIALITY appropriate.",
+        "remark": null,
+        "confidence": 0.86
+      }
+    },
+    {
+      "function": "modify_rel_schema",
+      "args": {
+        "relation_ids": [
+          "RelR_177460eaf6b3"
+        ],
+        "canonical_rel_name": null,
+        "canonical_rel_desc": null,
+        "rel_cls": "cultural_spread_relation",
+        "rel_cls_group": null,
+        "justification": "This relation captures the intergenerational spread of urban legends within communities (a form of cultural transmission over time). While its focus is temporal rather than spatial, it belongs to the same broader family of relations describing how legends propagate through social or contextual frameworks. Aligning its rel_cls with the other propagation relations as \"cultural_spread_relation\" yields a coherent class for all spread/transmission edges, while preserving its distinct canonical_rel_name and TEMPORALITY rel_cls_group.",
+        "remark": null,
+        "confidence": 0.8
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_rel_schema",
+      "relation_ids": [
+        "RelR_6ace96c2965a",
+        "RelR_ae06c6bd53c0"
+      ],
+      "canonical_rel_name": "spreads_across",
+      "canonical_rel_desc": "Indicates that a legend, its variations, or a related cultural narrative becomes present in or extends across multiple geographic regions.",
+      "rel_cls": "cultural_spread_relation",
+      "rel_cls_group": "SPATIALITY",
+      "new_relation_name": null,
+      "original_relation_name": null,
+      "justification": "Both relations describe the spatial spread of legends (or their variations) across regions. They currently use slightly different but synonymous canonical names (\"spreads_across\" vs. \"is_spread_across\") and two different classes (\"cultural_transmission_relation\" vs. \"cultural_diffusion_relation\") for the same spatial diffusion semantics. Normalizing to a single predicate (\"spreads_across\"), a shared description, and a unified class (\"cultural_spread_relation\") improves schema consistency while keeping the broad group SPATIALITY appropriate.",
+      "remark": null,
+      "confidence": 0.86
+    },
+    {
+      "action": "modify_rel_schema",
+      "relation_ids": [
+        "RelR_177460eaf6b3"
+      ],
+      "canonical_rel_name": null,
+      "canonical_rel_desc": null,
+      "rel_cls": "cultural_spread_relation",
+      "rel_cls_group": null,
+      "new_relation_name": null,
+      "original_relation_name": null,
+      "justification": "This relation captures the intergenerational spread of urban legends within communities (a form of cultural transmission over time). While its focus is temporal rather than spatial, it belongs to the same broader family of relations describing how legends propagate through social or contextual frameworks. Aligning its rel_cls with the other propagation relations as \"cultural_spread_relation\" yields a coherent class for all spread/transmission edges, while preserving its distinct canonical_rel_name and TEMPORALITY rel_cls_group.",
+      "remark": null,
+      "confidence": 0.8
+    }
+  ],
+  "timestamp": "2026-01-06T08:37:21Z"
+}

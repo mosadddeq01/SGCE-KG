@@ -1,0 +1,275 @@
+{
+  "cluster_label": "4_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_01dee8b3426a",
+      "relation_name": "traveled_in",
+      "rel_desc": "The Brothers Grimm traveled through the German countryside while collecting stories.",
+      "rel_hint_type": "spatial",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "Brothers Grimm",
+      "object_entity_name": "German countryside",
+      "subject_class_label": "Grimm Brothers",
+      "subject_class_group": "Grimm Fairy Tales",
+      "object_class_label": "German Rural Regions (Grimm Settings)",
+      "object_class_group": "Grimm Brothers Folk Tale Collection – Rural German Context",
+      "qualifiers": {
+        "TemporalQualifier": "early 19th century (implied by previous sentence)",
+        "SpatialQualifier": "throughout the German countryside",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "in order to gather stories",
+        "LogicalMarker": null,
+        "OtherQualifier": "Purpose: collecting stories"
+      },
+      "confidence": 0.98,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_a616fb467ec9",
+      "relation_name": "moves_to",
+      "rel_desc": "Snow White flees into the forest.",
+      "rel_hint_type": "spatial movement",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "Snow White",
+      "object_entity_name": "forest",
+      "subject_class_label": "Snow White Characters",
+      "subject_class_group": "Snow White Fairy Tale",
+      "object_class_label": "Fictional Forest Location",
+      "object_class_group": "Grimm Fairy Tales",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "into the forest",
+        "OperationalConstraint": null,
+        "ConditionExpression": "to escape her wicked stepmother",
+        "UncertaintyQualifier": null,
+        "CausalHint": "to escape",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.98,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_2f2bf5b8e108",
+      "relation_name": "is_abandoned_in",
+      "rel_desc": "The siblings Hansel and Gretel are abandoned in the woods.",
+      "rel_hint_type": "spatial event",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "Hansel and Gretel (characters)",
+      "object_entity_name": "woods",
+      "subject_class_label": "Hansel and Gretel Characters",
+      "subject_class_group": "Grimm Fairy Tales",
+      "object_class_label": "Hansel and Gretel Settings",
+      "object_class_group": "Grimm Fairy Tales",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "in the woods",
+        "OperationalConstraint": null,
+        "ConditionExpression": "by their parents",
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.97,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_be9a11a641ce",
+      "relation_name": "located_in",
+      "rel_desc": "The house made of sweets is located in the woods where the siblings are abandoned.",
+      "rel_hint_type": "spatial containment",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "house made of sweets",
+      "object_entity_name": "woods",
+      "subject_class_label": "Hansel and Gretel Settings",
+      "subject_class_group": "Grimm Fairy Tales",
+      "object_class_label": "Hansel and Gretel Settings",
+      "object_class_group": "Grimm Fairy Tales",
+      "qualifiers": {
+        "TemporalQualifier": "after their abandonment",
+        "SpatialQualifier": "in the same woods",
+        "OperationalConstraint": null,
+        "ConditionExpression": "discovered by the siblings",
+        "UncertaintyQualifier": "implied, not directly stated",
+        "CausalHint": "and",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.78,
+      "remarks": [
+        "Location is inferred rather than explicitly stated."
+      ]
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_01dee8b3426a\"],\n      \"canonical_rel_name\": \"travels_through\",\n      \"canonical_rel_desc\": \"The subject travels through or across the object region or area.\",\n      \"justification\": \"This relation captures a directed movement traversal of the Brothers Grimm through the German countryside; a predicate ‘travels_through’ cleanly represents movement across a region without implying permanent location.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_a616fb467ec9\"],\n      \"canonical_rel_name\": \"moves_into\",\n      \"canonical_rel_desc\": \"The subject moves into or enters the object location.\",\n      \"justification\": \"Snow White’s action ‘flees into the forest’ is a spatial movement that ends with entering a location; ‘moves_into’ captures entry into a place regardless of motive (here captured in qualifiers).\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_2f2bf5b8e108\", \"RelR_be9a11a641ce\"],\n      \"canonical_rel_name\": \"is_in_location\",\n      \"canonical_rel_desc\": \"The subject is situated in or located within the object place at a specific time or during an event.\",\n      \"justification\": \"Both relations express that an entity (the siblings; the sweets house) is situated within the woods, independent of how they got there. A generic spatial containment/location predicate ‘is_in_location’ fits both abandonment and static location contexts; event-specific details are preserved in qualifiers.\",\n      \"remark\": null,\n      \"confidence\": 0.88\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_01dee8b3426a\", \"RelR_a616fb467ec9\"],\n      \"rel_cls\": \"spatial_movement_relation\",\n      \"justification\": \"Both relations describe motion of characters across or into locations (traveling through the countryside; fleeing into the forest). Grouping them under ‘spatial_movement_relation’ captures that they are about movement in space rather than static containment.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_2f2bf5b8e108\", \"RelR_be9a11a641ce\"],\n      \"rel_cls\": \"spatial_location_relation\",\n      \"justification\": \"These relations express that entities (the siblings; the sweets house) are located within the woods, focusing on spatial containment/position rather than motion. ‘spatial_location_relation’ distinguishes static or event-bound location from movement predicates.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_01dee8b3426a\", \"RelR_a616fb467ec9\", \"RelR_2f2bf5b8e108\", \"RelR_be9a11a641ce\"],\n      \"rel_cls_group\": \"SPATIALITY\",\n      \"justification\": \"All four relations fundamentally concern where subjects move or are situated in physical space (traveling through regions, moving into a forest, being in woods), so they belong to the broad spatial dimension rather than causal, temporal, or other groups.\",\n      \"remark\": null,\n      \"confidence\": 0.96\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_01dee8b3426a"
+        ],
+        "canonical_rel_name": "travels_through",
+        "canonical_rel_desc": "The subject travels through or across the object region or area.",
+        "justification": "This relation captures a directed movement traversal of the Brothers Grimm through the German countryside; a predicate 'travels_through' cleanly represents movement across a region without implying permanent location.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_a616fb467ec9"
+        ],
+        "canonical_rel_name": "moves_into",
+        "canonical_rel_desc": "The subject moves into or enters the object location.",
+        "justification": "Snow White's action 'flees into the forest' is a spatial movement that ends with entering a location; 'moves_into' captures entry into a place regardless of motive (here captured in qualifiers).",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_2f2bf5b8e108",
+          "RelR_be9a11a641ce"
+        ],
+        "canonical_rel_name": "is_in_location",
+        "canonical_rel_desc": "The subject is situated in or located within the object place at a specific time or during an event.",
+        "justification": "Both relations express that an entity (the siblings; the sweets house) is situated within the woods, independent of how they got there. A generic spatial containment/location predicate 'is_in_location' fits both abandonment and static location contexts; event-specific details are preserved in qualifiers.",
+        "remark": null,
+        "confidence": 0.88
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_01dee8b3426a",
+          "RelR_a616fb467ec9"
+        ],
+        "rel_cls": "spatial_movement_relation",
+        "justification": "Both relations describe motion of characters across or into locations (traveling through the countryside; fleeing into the forest). Grouping them under 'spatial_movement_relation' captures that they are about movement in space rather than static containment.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_2f2bf5b8e108",
+          "RelR_be9a11a641ce"
+        ],
+        "rel_cls": "spatial_location_relation",
+        "justification": "These relations express that entities (the siblings; the sweets house) are located within the woods, focusing on spatial containment/position rather than motion. 'spatial_location_relation' distinguishes static or event-bound location from movement predicates.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_01dee8b3426a",
+          "RelR_a616fb467ec9",
+          "RelR_2f2bf5b8e108",
+          "RelR_be9a11a641ce"
+        ],
+        "rel_cls_group": "SPATIALITY",
+        "justification": "All four relations fundamentally concern where subjects move or are situated in physical space (traveling through regions, moving into a forest, being in woods), so they belong to the broad spatial dimension rather than causal, temporal, or other groups.",
+        "remark": null,
+        "confidence": 0.96
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_01dee8b3426a"
+      ],
+      "canonical_rel_name": "travels_through",
+      "canonical_rel_desc": "The subject travels through or across the object region or area.",
+      "justification": "This relation captures a directed movement traversal of the Brothers Grimm through the German countryside; a predicate 'travels_through' cleanly represents movement across a region without implying permanent location.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_a616fb467ec9"
+      ],
+      "canonical_rel_name": "moves_into",
+      "canonical_rel_desc": "The subject moves into or enters the object location.",
+      "justification": "Snow White's action 'flees into the forest' is a spatial movement that ends with entering a location; 'moves_into' captures entry into a place regardless of motive (here captured in qualifiers).",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_2f2bf5b8e108",
+        "RelR_be9a11a641ce"
+      ],
+      "canonical_rel_name": "is_in_location",
+      "canonical_rel_desc": "The subject is situated in or located within the object place at a specific time or during an event.",
+      "justification": "Both relations express that an entity (the siblings; the sweets house) is situated within the woods, independent of how they got there. A generic spatial containment/location predicate 'is_in_location' fits both abandonment and static location contexts; event-specific details are preserved in qualifiers.",
+      "remark": null,
+      "confidence": 0.88
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_01dee8b3426a",
+        "RelR_a616fb467ec9"
+      ],
+      "rel_cls": "spatial_movement_relation",
+      "justification": "Both relations describe motion of characters across or into locations (traveling through the countryside; fleeing into the forest). Grouping them under 'spatial_movement_relation' captures that they are about movement in space rather than static containment.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_2f2bf5b8e108",
+        "RelR_be9a11a641ce"
+      ],
+      "rel_cls": "spatial_location_relation",
+      "justification": "These relations express that entities (the siblings; the sweets house) are located within the woods, focusing on spatial containment/position rather than motion. 'spatial_location_relation' distinguishes static or event-bound location from movement predicates.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_01dee8b3426a",
+        "RelR_a616fb467ec9",
+        "RelR_2f2bf5b8e108",
+        "RelR_be9a11a641ce"
+      ],
+      "rel_cls_group": "SPATIALITY",
+      "justification": "All four relations fundamentally concern where subjects move or are situated in physical space (traveling through regions, moving into a forest, being in woods), so they belong to the broad spatial dimension rather than causal, temporal, or other groups.",
+      "remark": null,
+      "confidence": 0.96
+    }
+  ],
+  "timestamp": "2026-01-06T13:59:31Z"
+}

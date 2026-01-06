@@ -1,0 +1,18 @@
+[
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": [
+        "RelR_d43a7d28c02b",
+        "RelR_0feef890977f"
+      ],
+      "canonical_rel_name": "enables",
+      "canonical_rel_desc": "Indicates that the subject makes it possible or easier for the object (a state, process, or outcome) to occur, often by providing means, opportunity, or capacity.",
+      "rel_cls": "empowerment_enablement_relation",
+      "rel_cls_group": "CAUSALITY",
+      "justification": "Both relations describe a causal enablement/empowerment effect where the subject makes the object state or capacity possible. Normalizing the predicate to a single canonical_rel_name ('enables') reduces trivial variation between 'empowers' and 'enables' while preserving semantics. The previous rel_cls 'voice_representation_relation' is too narrow and object-specific, whereas 'empowerment_enablement_relation' consistently captures the causal empowerment/enablement family for both instances, which both naturally fall under the CAUSALITY group.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  }
+]

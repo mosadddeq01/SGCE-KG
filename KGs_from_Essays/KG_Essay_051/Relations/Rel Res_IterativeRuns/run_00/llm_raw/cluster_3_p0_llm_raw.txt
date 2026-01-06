@@ -1,0 +1,42 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_99ef611d4ce1",
+        "RelR_b6cdf84754b9"
+      ],
+      "canonical_rel_name": "is_subtype_of",
+      "canonical_rel_desc": "Indicates that the subject concept is a more specific instance or subtype of the object concept within a taxonomy or hierarchy.",
+      "justification": "Both relations describe taxonomic hierarchy where the subject is a specific kind or subset of the object (a particular gesture vs. gestures; romantic body language vs. general body language). Normalizing both to 'is_subtype_of' ensures consistent hierarchical semantics and direction.",
+      "remark": null,
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_99ef611d4ce1",
+        "RelR_b6cdf84754b9"
+      ],
+      "rel_cls": "hierarchical_taxonomy_relation",
+      "justification": "Both relations express membership in a conceptual hierarchy (specific gesture within gestures; romantic body language within body language), fitting a shared class for taxonomic / hierarchical relations.",
+      "remark": null,
+      "confidence": 0.94
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_99ef611d4ce1",
+        "RelR_b6cdf84754b9"
+      ],
+      "rel_cls_group": "IDENTITY",
+      "justification": "Subtype relations are a form of identity/hierarchical equivalence where the subject is the same kind of thing as the object but more specific; they belong under a broad identity/hierarchy semantic group rather than composition, causality, or usage.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  }
+]

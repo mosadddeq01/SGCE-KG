@@ -1,0 +1,19 @@
+[
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": [
+        "RelR_9c9b8f06f7c3",
+        "RelR_318dd7e11fac",
+        "RelR_336e65c0d7bd"
+      ],
+      "canonical_rel_name": "is_cultural_aspect_of",
+      "canonical_rel_desc": "Indicates that a cultural practice, tradition, or domain is an aspect, expression, or component of a given civilization.",
+      "rel_cls": "civilization_culture_relation",
+      "rel_cls_group": "ASSOCIATION",
+      "justification": "The first three relations link cultural phenomena (Ancient Egyptian culture; ancient Egyptian burial practices) to the civilization of Ancient Egypt. The current predicate 'occurs_in_civilization' overemphasizes spatiality and sounds event-like, while these are enduring cultural aspects of a civilization, not transient events. A more accurate and reusable predicate is 'is_cultural_aspect_of', with a relation class that explicitly captures civilization–culture links. The broad semantic group is better modeled as ASSOCIATION (civilization–culture association/part–whole) rather than pure SPATIALITY.",
+      "remark": "Normalized the culture–civilization predicate to a non-eventive form and aligned the class/group to emphasize civilizational association instead of spatial occurrence.",
+      "confidence": 0.86
+    }
+  }
+]

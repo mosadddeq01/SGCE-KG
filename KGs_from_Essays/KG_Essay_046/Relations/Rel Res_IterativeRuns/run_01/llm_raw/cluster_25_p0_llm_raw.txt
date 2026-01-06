@@ -1,0 +1,33 @@
+[
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": [
+        "RelR_be7c0bd8f03a",
+        "RelR_e6eb7a6c964b"
+      ],
+      "canonical_rel_name": "reduces_need_for",
+      "canonical_rel_desc": "Subject decreases the required level, frequency, or dependence on the object (e.g., reducing the need for an input, intervention, or resource).",
+      "rel_cls": null,
+      "rel_cls_group": null,
+      "justification": "Both relations share the same predicate meaning (subject reduces the need for chemical pesticides) but had slightly different canonical descriptions. Harmonizing to a single canonical_rel_desc improves consistency without changing semantics.",
+      "remark": null,
+      "confidence": 0.96
+    }
+  },
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": [
+        "RelR_be7c0bd8f03a"
+      ],
+      "canonical_rel_name": null,
+      "canonical_rel_desc": null,
+      "rel_cls": "requirement_modification_relation",
+      "rel_cls_group": "REQUIREMENT",
+      "justification": "The first relation describes that natural pest control by birds reduces the need for chemical pesticides, which is a change in required use of an input. This aligns with the second relation already classified as 'requirement_modification_relation' in the REQUIREMENT group. The previous rel_cls 'biological_pest_control_relation' and rel_cls_group 'CAUSALITY' captured mechanism but not the primary semantic dimension (modifying how much of an intervention is needed).",
+      "remark": "Mechanistic aspect (biological pest control) is implicit in the subject node; the relation itself is better modeled as modifying the requirement for pesticide use.",
+      "confidence": 0.94
+    }
+  }
+]

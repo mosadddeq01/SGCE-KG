@@ -1,0 +1,162 @@
+{
+  "cluster_label": "20_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_d532bf1d82bb",
+      "relation_name": "realized_as",
+      "rel_desc": "The larval stage of a butterfly is realized as a caterpillar.",
+      "rel_hint_type": "classification",
+      "canonical_rel_name": "has_organismal_form",
+      "canonical_rel_desc": "Links a life stage concept to the characteristic organismal form that realizes that stage (e.g., the larval stage has organismal form caterpillar).",
+      "rel_cls": "life_stage_relation",
+      "rel_cls_group": "TEMPORALITY",
+      "subject_entity_name": "larval (caterpillar) stage of a butterfly",
+      "object_entity_name": "caterpillar",
+      "subject_class_label": "Butterfly Life Cycle and Stages",
+      "subject_class_group": "Butterfly Life Cycle and Appreciation",
+      "object_class_label": "Butterfly Life Cycle and Stages",
+      "object_class_group": "Butterfly Life Cycle and Appreciation",
+      "qualifiers": {
+        "TemporalQualifier": "during the larval stage",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "known as",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.95,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_6300b6a656ef",
+      "relation_name": "is_instance_of",
+      "rel_desc": "A caterpillar is the organismal form that constitutes the larval stage of a butterfly.",
+      "rel_hint_type": "classification",
+      "canonical_rel_name": "is_organismal_form_of",
+      "canonical_rel_desc": "Links an organismal form to the life stage concept that it realizes (inverse of has_organismal_form).",
+      "rel_cls": "life_stage_relation",
+      "rel_cls_group": "TEMPORALITY",
+      "subject_entity_name": "caterpillar",
+      "object_entity_name": "larval (caterpillar) stage of a butterfly",
+      "subject_class_label": "Butterfly Life Cycle and Stages",
+      "subject_class_group": "Butterfly Life Cycle and Appreciation",
+      "object_class_label": "Butterfly Life Cycle and Stages",
+      "object_class_group": "Butterfly Life Cycle and Appreciation",
+      "qualifiers": {
+        "TemporalQualifier": "when the butterfly is in its second life stage",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": "second stage of life cycle",
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.93,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_77297636eaaa",
+      "relation_name": "is_physical_form_of",
+      "rel_desc": "The chrysalis is the physical casing that characterizes the pupal (chrysalis) stage of a butterfly.",
+      "rel_hint_type": "representation",
+      "canonical_rel_name": "is_physical_form_of",
+      "canonical_rel_desc": "Indicates that a concrete physical structure or casing is the characteristic physical form associated with a more abstract life-cycle stage, state, or process.",
+      "rel_cls": "physical_form_relation",
+      "rel_cls_group": "REPRESENTATION",
+      "subject_entity_name": "chrysalis",
+      "object_entity_name": "pupal (chrysalis) stage of a butterfly",
+      "subject_class_label": "Butterfly Metamorphosis System",
+      "subject_class_group": "Butterfly Life Cycle & Wing Development",
+      "object_class_label": "Butterfly Life Cycle and Stages",
+      "object_class_group": "Butterfly Life Cycle and Appreciation",
+      "qualifiers": {
+        "TemporalQualifier": "during the pupa stage",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": "during",
+        "OtherQualifier": null
+      },
+      "confidence": 0.83,
+      "remarks": [
+        "Relation mainly to bind the physical casing (chrysalis) to the abstract life-cycle stage.",
+        "Relation mainly to bind the physical casing (chrysalis) to the abstract life-cycle stage.",
+        "Relation mainly to bind the physical casing (chrysalis) to the abstract life-cycle stage.",
+        "Relation mainly to bind the physical casing (chrysalis) to the abstract life-cycle stage."
+      ]
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_rel_schema\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_d532bf1d82bb\",\n        \"RelR_6300b6a656ef\"\n      ],\n      \"canonical_rel_name\": null,\n      \"canonical_rel_desc\": \"Connects an organismal life‑stage concept to the characteristic organismal form that realizes that stage (e.g., larval stage ↔ caterpillar), typically modeled as a pair of inverse predicates (has_organismal_form / is_organismal_form_of).\",\n      \"rel_cls\": \"life_stage_realization_relation\",\n      \"rel_cls_group\": \"TEMPORALITY\",\n      \"justification\": \"Both relations link butterfly life stages to the concrete organismal form (caterpillar) that realizes that stage; they are inverse predicates of the same semantic family. Using a more specific class name 'life_stage_realization_relation' better distinguishes these from other life-stage relations (e.g., ordering, duration) while keeping the broad group as TEMPORALITY. A shared canonical description clarifies the inverse pair semantics without changing the existing canonical_rel_name values.\",\n      \"remark\": null,\n      \"confidence\": 0.92\n    }\n  },\n  {\n    \"function\": \"modify_rel_schema\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_77297636eaaa\"\n      ],\n      \"canonical_rel_name\": null,\n      \"canonical_rel_desc\": \"Indicates that a concrete organismal form or physical casing is the characteristic realization of an abstract life‑cycle stage (e.g., chrysalis as the form of the pupal stage), aligning with the same life‑stage realization pattern as has_organismal_form / is_organismal_form_of.\",\n      \"rel_cls\": \"life_stage_realization_relation\",\n      \"rel_cls_group\": \"TEMPORALITY\",\n      \"justification\": \"This relation also links a life‑cycle stage (pupal stage) to its characteristic concrete form (chrysalis). Semantically it matches the same life‑stage realization pattern as the caterpillar–larval relations, so it should share the same relation class. The current rel_cls 'physical_form_relation' and rel_cls_group 'REPRESENTATION' overemphasize representation and underplay the temporal life‑stage aspect, making them inconsistent with the other two; TEMPORALITY is more appropriate for all three.\",\n      \"remark\": \"Kept the predicate name 'is_physical_form_of' as a specialized realization predicate for life stages, but aligned its class and grouping with the organismal form relations.\",\n      \"confidence\": 0.88\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_rel_schema",
+      "args": {
+        "relation_ids": [
+          "RelR_d532bf1d82bb",
+          "RelR_6300b6a656ef"
+        ],
+        "canonical_rel_name": null,
+        "canonical_rel_desc": "Connects an organismal life‑stage concept to the characteristic organismal form that realizes that stage (e.g., larval stage ↔ caterpillar), typically modeled as a pair of inverse predicates (has_organismal_form / is_organismal_form_of).",
+        "rel_cls": "life_stage_realization_relation",
+        "rel_cls_group": "TEMPORALITY",
+        "justification": "Both relations link butterfly life stages to the concrete organismal form (caterpillar) that realizes that stage; they are inverse predicates of the same semantic family. Using a more specific class name 'life_stage_realization_relation' better distinguishes these from other life-stage relations (e.g., ordering, duration) while keeping the broad group as TEMPORALITY. A shared canonical description clarifies the inverse pair semantics without changing the existing canonical_rel_name values.",
+        "remark": null,
+        "confidence": 0.92
+      }
+    },
+    {
+      "function": "modify_rel_schema",
+      "args": {
+        "relation_ids": [
+          "RelR_77297636eaaa"
+        ],
+        "canonical_rel_name": null,
+        "canonical_rel_desc": "Indicates that a concrete organismal form or physical casing is the characteristic realization of an abstract life‑cycle stage (e.g., chrysalis as the form of the pupal stage), aligning with the same life‑stage realization pattern as has_organismal_form / is_organismal_form_of.",
+        "rel_cls": "life_stage_realization_relation",
+        "rel_cls_group": "TEMPORALITY",
+        "justification": "This relation also links a life‑cycle stage (pupal stage) to its characteristic concrete form (chrysalis). Semantically it matches the same life‑stage realization pattern as the caterpillar–larval relations, so it should share the same relation class. The current rel_cls 'physical_form_relation' and rel_cls_group 'REPRESENTATION' overemphasize representation and underplay the temporal life‑stage aspect, making them inconsistent with the other two; TEMPORALITY is more appropriate for all three.",
+        "remark": "Kept the predicate name 'is_physical_form_of' as a specialized realization predicate for life stages, but aligned its class and grouping with the organismal form relations.",
+        "confidence": 0.88
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_rel_schema",
+      "relation_ids": [
+        "RelR_d532bf1d82bb",
+        "RelR_6300b6a656ef"
+      ],
+      "canonical_rel_name": null,
+      "canonical_rel_desc": "Connects an organismal life‑stage concept to the characteristic organismal form that realizes that stage (e.g., larval stage ↔ caterpillar), typically modeled as a pair of inverse predicates (has_organismal_form / is_organismal_form_of).",
+      "rel_cls": "life_stage_realization_relation",
+      "rel_cls_group": "TEMPORALITY",
+      "new_relation_name": null,
+      "original_relation_name": null,
+      "justification": "Both relations link butterfly life stages to the concrete organismal form (caterpillar) that realizes that stage; they are inverse predicates of the same semantic family. Using a more specific class name 'life_stage_realization_relation' better distinguishes these from other life-stage relations (e.g., ordering, duration) while keeping the broad group as TEMPORALITY. A shared canonical description clarifies the inverse pair semantics without changing the existing canonical_rel_name values.",
+      "remark": null,
+      "confidence": 0.92
+    },
+    {
+      "action": "modify_rel_schema",
+      "relation_ids": [
+        "RelR_77297636eaaa"
+      ],
+      "canonical_rel_name": null,
+      "canonical_rel_desc": "Indicates that a concrete organismal form or physical casing is the characteristic realization of an abstract life‑cycle stage (e.g., chrysalis as the form of the pupal stage), aligning with the same life‑stage realization pattern as has_organismal_form / is_organismal_form_of.",
+      "rel_cls": "life_stage_realization_relation",
+      "rel_cls_group": "TEMPORALITY",
+      "new_relation_name": null,
+      "original_relation_name": null,
+      "justification": "This relation also links a life‑cycle stage (pupal stage) to its characteristic concrete form (chrysalis). Semantically it matches the same life‑stage realization pattern as the caterpillar–larval relations, so it should share the same relation class. The current rel_cls 'physical_form_relation' and rel_cls_group 'REPRESENTATION' overemphasize representation and underplay the temporal life‑stage aspect, making them inconsistent with the other two; TEMPORALITY is more appropriate for all three.",
+      "remark": "Kept the predicate name 'is_physical_form_of' as a specialized realization predicate for life stages, but aligned its class and grouping with the organismal form relations.",
+      "confidence": 0.88
+    }
+  ],
+  "timestamp": "2026-01-06T07:41:13Z"
+}

@@ -1,0 +1,82 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_9c6811a5d04f",
+        "RelR_8a1477e7acdc"
+      ],
+      "canonical_rel_name": "serves_as_brand",
+      "canonical_rel_desc": "Indicates that the subject functions as a brand entity in a commercial or marketing context (e.g., as a marketable identity or asset).",
+      "justification": "Both relations describe entities (sports teams, athletes) functioning in the role of powerful brands; the semantics are that the subject is used/treated as a brand, not that it merely has one.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_a7c71a898e81",
+        "RelR_3481e4726ed9"
+      ],
+      "canonical_rel_name": "attracts",
+      "canonical_rel_desc": "Indicates that the subject draws or attracts the object (e.g., sponsors, endorsements) as a result of its characteristics or appeal.",
+      "justification": "Both relations describe powerful brands drawing in commercial counterparties (sponsors, endorsements); the core predicate is that the brands attract these objects.",
+      "remark": "Kept a general predicate ('attracts') so it can be reused for other attraction relations beyond sponsorship/endorsement if needed.",
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_9c6811a5d04f",
+        "RelR_8a1477e7acdc"
+      ],
+      "rel_cls": "branding_role_relation",
+      "justification": "These relations concern entities taking on the role or identity of a brand in marketing and sponsorship contexts, forming a coherent class of brand-role relations.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_a7c71a898e81",
+        "RelR_3481e4726ed9"
+      ],
+      "rel_cls": "commercial_attraction_relation",
+      "justification": "These relations describe commercial appeal, where a brand’s strength causes the attraction of sponsors and endorsements; they form a class of relations about attracting commercial partners or support.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_9c6811a5d04f",
+        "RelR_8a1477e7acdc"
+      ],
+      "rel_cls_group": "IDENTITY",
+      "justification": "The key semantics are that the subject is identified and used as a brand (a role/identity), rather than causing an outcome or composing a whole.",
+      "remark": null,
+      "confidence": 0.88
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_a7c71a898e81",
+        "RelR_3481e4726ed9"
+      ],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "The relations express that the existence or strength of the brand causes or leads to the attraction of sponsors and endorsements, fitting a causal/outcome dimension.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  }
+]

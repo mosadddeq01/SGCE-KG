@@ -1,0 +1,291 @@
+{
+  "cluster_label": 5,
+  "cluster_classes": [
+    {
+      "candidate_id": "ClsC_93b4852f",
+      "class_label": "Life Skills from Sports",
+      "class_description": "Psychological and social skills that individuals develop through participation in sports, such as teamwork, perseverance, and resilience.",
+      "class_type_hint": "Human Capability",
+      "class_group": "TBD",
+      "confidence": 0.93,
+      "evidence_excerpt": "Through participation in sports, individuals learn important life skills such as teamwork, perseverance, and resilience.",
+      "member_ids": [
+        "En_a9fad993",
+        "En_1e2a0ac7",
+        "En_f3813b78",
+        "En_c73327a3"
+      ],
+      "members": [
+        {
+          "id": "En_a9fad993",
+          "entity_name": "life skills",
+          "entity_description": "Important practical and psychological skills individuals learn from engaging in sports.",
+          "entity_type_hint": "Skill"
+        },
+        {
+          "id": "En_1e2a0ac7",
+          "entity_name": "teamwork",
+          "entity_description": "The ability to work effectively and cooperatively with others toward a common goal.",
+          "entity_type_hint": "Skill"
+        },
+        {
+          "id": "En_f3813b78",
+          "entity_name": "perseverance",
+          "entity_description": "The capacity to persist in efforts despite difficulties, learned through sports participation.",
+          "entity_type_hint": "Skill"
+        },
+        {
+          "id": "En_c73327a3",
+          "entity_name": "resilience",
+          "entity_description": "The ability to recover from setbacks and continue striving, developed through sports.",
+          "entity_type_hint": "Skill"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_4e93bd2e",
+      "class_label": "Life Domains",
+      "class_description": "Major areas of a person’s life—non-work and work contexts—where lessons from sports participation can be applied.",
+      "class_type_hint": "Life Domain",
+      "class_group": "TBD",
+      "confidence": 0.9,
+      "evidence_excerpt": "These lessons translate into other areas of life, helping individuals...in their personal and professional lives.",
+      "member_ids": [
+        "En_73bdd471",
+        "En_3950e78f"
+      ],
+      "members": [
+        {
+          "id": "En_73bdd471",
+          "entity_name": "personal lives",
+          "entity_description": "Individuals’ non-work life domains where lessons from sports help handle challenges.",
+          "entity_type_hint": "LifeDomain"
+        },
+        {
+          "id": "En_3950e78f",
+          "entity_name": "professional lives",
+          "entity_description": "Work-related life domains where lessons from sports assist in handling challenges.",
+          "entity_type_hint": "LifeDomain"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_d5e54e23",
+      "class_label": "Performance Outcomes",
+      "class_description": "Result states in sports that athletes must learn to handle, including both positive and negative outcomes.",
+      "class_type_hint": "Psychological State",
+      "class_group": "TBD",
+      "confidence": 0.86,
+      "evidence_excerpt": "athletes must ... learn how to deal with both success and failure",
+      "member_ids": [
+        "En_fcef2b54",
+        "En_f02e47a5"
+      ],
+      "members": [
+        {
+          "id": "En_fcef2b54",
+          "entity_name": "success",
+          "entity_description": "Positive outcomes in sports that athletes must learn how to handle.",
+          "entity_type_hint": "State"
+        },
+        {
+          "id": "En_f02e47a5",
+          "entity_name": "failure",
+          "entity_description": "Negative outcomes in sports that athletes must learn how to handle.",
+          "entity_type_hint": "State"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_d3b16ecf",
+      "class_label": "Sports Participants",
+      "class_description": "Persons who take part in sports activities and develop skills or life lessons through that participation.",
+      "class_type_hint": "Agent Type",
+      "class_group": "TBD",
+      "confidence": 0.86,
+      "evidence_excerpt": "People who participate in sports and gain life skills from that participation.",
+      "member_ids": [
+        "En_23789788",
+        "En_20c46718"
+      ],
+      "members": [
+        {
+          "id": "En_23789788",
+          "entity_name": "athletes",
+          "entity_description": "People who participate in sports and must collaborate, overcome obstacles, and handle success and failure.",
+          "entity_type_hint": "Agent"
+        },
+        {
+          "id": "En_20c46718",
+          "entity_name": "individuals",
+          "entity_description": "People who participate in sports and gain life skills from that participation.",
+          "entity_type_hint": "Actor"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_239ee82f",
+      "class_label": "Life Skills from Sports",
+      "class_description": "Concepts describing life skills and personal development outcomes gained through participation in sports, such as cooperation and coping with success and failure.",
+      "class_type_hint": "Psychosocial Concept",
+      "class_group": "TBD",
+      "confidence": 0.84,
+      "evidence_excerpt": "Life lessons learned through sports, such as cooperation and dealing with success and failure.",
+      "member_ids": [
+        "En_47e2fcd4"
+      ],
+      "members": [
+        {
+          "id": "En_47e2fcd4",
+          "entity_name": "lessons from sports participation",
+          "entity_description": "Life lessons learned through sports, such as cooperation and dealing with success and failure.",
+          "entity_type_hint": "Concept"
+        }
+      ],
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"merge_classes\",\n    \"args\": {\n      \"class_ids\": [\n        \"ClsC_93b4852f\",\n        \"ClsC_239ee82f\"\n      ],\n      \"provisional_id\": \"MERGE(ClsC_93b4852f|ClsC_239ee82f)\",\n      \"new_name\": \"Life Skills and Lessons from Sports\",\n      \"new_description\": \"Psychological, social, and practical life skills and lessons developed through participation in sports, such as teamwork, perseverance, resilience, cooperation, and coping with success and failure.\",\n      \"new_class_type_hint\": \"Human Capability\",\n      \"justification\": \"Both classes describe life skills and broader lessons gained from sports with overlapping semantics (skills like teamwork, perseverance, resilience and general lessons from sports participation), so they should be a single coherent class rather than two near-duplicates.\",\n      \"remark\": null,\n      \"confidence\": 0.93\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"MERGE(ClsC_93b4852f|ClsC_239ee82f)\",\n      \"new_name\": null,\n      \"new_description\": null,\n      \"new_class_type_hint\": null,\n      \"new_class_group\": \"Sports-Based Personal Development\",\n      \"remark\": null,\n      \"justification\": \"The merged class captures life skills and lessons specifically developed through sports participation, fitting a higher-level group focused on personal development outcomes from sports.\",\n      \"confidence\": 0.94\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_4e93bd2e\",\n      \"new_name\": null,\n      \"new_description\": null,\n      \"new_class_type_hint\": null,\n      \"new_class_group\": \"Sports-Based Personal Development\",\n      \"remark\": null,\n      \"justification\": \"Life Domains (personal and professional lives) are the application contexts for life skills learned from sports, so they belong in the same overarching group capturing sports-based personal development and its transfer to other life areas.\",\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_d5e54e23\",\n      \"new_name\": null,\n      \"new_description\": null,\n      \"new_class_type_hint\": null,\n      \"new_class_group\": \"Sports-Based Personal Development\",\n      \"remark\": null,\n      \"justification\": \"Performance Outcomes (success and failure) are key experiences athletes must learn to cope with through sports, tightly linked to the development of life skills and lessons, so they should share the same sports-based personal development group.\",\n      \"confidence\": 0.88\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_d3b16ecf\",\n      \"new_name\": null,\n      \"new_description\": null,\n      \"new_class_type_hint\": null,\n      \"new_class_group\": \"Sports-Based Personal Development\",\n      \"remark\": null,\n      \"justification\": \"Sports Participants (athletes/individuals) are the agents who acquire life skills and lessons through sports and apply them in other life domains, making them part of the same conceptual cluster of sports-based personal development.\",\n      \"confidence\": 0.89\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "merge_classes",
+      "args": {
+        "class_ids": [
+          "ClsC_93b4852f",
+          "ClsC_239ee82f"
+        ],
+        "provisional_id": "MERGE(ClsC_93b4852f|ClsC_239ee82f)",
+        "new_name": "Life Skills and Lessons from Sports",
+        "new_description": "Psychological, social, and practical life skills and lessons developed through participation in sports, such as teamwork, perseverance, resilience, cooperation, and coping with success and failure.",
+        "new_class_type_hint": "Human Capability",
+        "justification": "Both classes describe life skills and broader lessons gained from sports with overlapping semantics (skills like teamwork, perseverance, resilience and general lessons from sports participation), so they should be a single coherent class rather than two near-duplicates.",
+        "remark": null,
+        "confidence": 0.93
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "MERGE(ClsC_93b4852f|ClsC_239ee82f)",
+        "new_name": null,
+        "new_description": null,
+        "new_class_type_hint": null,
+        "new_class_group": "Sports-Based Personal Development",
+        "remark": null,
+        "justification": "The merged class captures life skills and lessons specifically developed through sports participation, fitting a higher-level group focused on personal development outcomes from sports.",
+        "confidence": 0.94
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_4e93bd2e",
+        "new_name": null,
+        "new_description": null,
+        "new_class_type_hint": null,
+        "new_class_group": "Sports-Based Personal Development",
+        "remark": null,
+        "justification": "Life Domains (personal and professional lives) are the application contexts for life skills learned from sports, so they belong in the same overarching group capturing sports-based personal development and its transfer to other life areas.",
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_d5e54e23",
+        "new_name": null,
+        "new_description": null,
+        "new_class_type_hint": null,
+        "new_class_group": "Sports-Based Personal Development",
+        "remark": null,
+        "justification": "Performance Outcomes (success and failure) are key experiences athletes must learn to cope with through sports, tightly linked to the development of life skills and lessons, so they should share the same sports-based personal development group.",
+        "confidence": 0.88
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_d3b16ecf",
+        "new_name": null,
+        "new_description": null,
+        "new_class_type_hint": null,
+        "new_class_group": "Sports-Based Personal Development",
+        "remark": null,
+        "justification": "Sports Participants (athletes/individuals) are the agents who acquire life skills and lessons through sports and apply them in other life domains, making them part of the same conceptual cluster of sports-based personal development.",
+        "confidence": 0.89
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "merge_classes",
+      "input_class_ids": [
+        "ClsC_93b4852f",
+        "ClsC_239ee82f"
+      ],
+      "result_class_id": "ClsR_7edbfa4b",
+      "provisional_id": "MERGE(ClsC_93b4852f|ClsC_239ee82f)",
+      "justification": "Both classes describe life skills and broader lessons gained from sports with overlapping semantics (skills like teamwork, perseverance, resilience and general lessons from sports participation), so they should be a single coherent class rather than two near-duplicates.",
+      "remark": null,
+      "confidence": 0.93
+    },
+    {
+      "action": "modify_class",
+      "class_id": "MERGE(ClsC_93b4852f|ClsC_239ee82f)",
+      "class_id_resolved": "ClsR_7edbfa4b",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Sports-Based Personal Development",
+      "remark": null,
+      "justification": "The merged class captures life skills and lessons specifically developed through sports participation, fitting a higher-level group focused on personal development outcomes from sports.",
+      "confidence": 0.94
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_4e93bd2e",
+      "class_id_resolved": "ClsC_4e93bd2e",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Sports-Based Personal Development",
+      "remark": null,
+      "justification": "Life Domains (personal and professional lives) are the application contexts for life skills learned from sports, so they belong in the same overarching group capturing sports-based personal development and its transfer to other life areas.",
+      "confidence": 0.9
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_d5e54e23",
+      "class_id_resolved": "ClsC_d5e54e23",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Sports-Based Personal Development",
+      "remark": null,
+      "justification": "Performance Outcomes (success and failure) are key experiences athletes must learn to cope with through sports, tightly linked to the development of life skills and lessons, so they should share the same sports-based personal development group.",
+      "confidence": 0.88
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_d3b16ecf",
+      "class_id_resolved": "ClsC_d3b16ecf",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Sports-Based Personal Development",
+      "remark": null,
+      "justification": "Sports Participants (athletes/individuals) are the agents who acquire life skills and lessons through sports and apply them in other life domains, making them part of the same conceptual cluster of sports-based personal development.",
+      "confidence": 0.89
+    }
+  ],
+  "provisional_to_real": {
+    "MERGE(ClsC_93b4852f|ClsC_239ee82f)": "ClsR_7edbfa4b",
+    "ClsC_93b4852f": "ClsR_7edbfa4b",
+    "ClsC_239ee82f": "ClsR_7edbfa4b"
+  },
+  "timestamp": "2026-01-06T12:29:29Z"
+}

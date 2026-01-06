@@ -1,0 +1,107 @@
+{
+  "cluster_label": "10_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_1bc13c763423",
+      "relation_name": "occurs_in",
+      "rel_desc": "Human communication in contemporary society is situated within today's digital age.",
+      "rel_hint_type": "contextual",
+      "canonical_rel_name": "provides_era_context_for",
+      "canonical_rel_desc": "Links a historical or societal era to a phenomenon or practice that is situated within that era as its contextual backdrop.",
+      "rel_cls": "era_context_relation",
+      "rel_cls_group": "TEMPORALITY",
+      "subject_entity_name": "today's digital age",
+      "object_entity_name": "human communication in contemporary society",
+      "subject_class_label": "Contemporary Digital Society",
+      "subject_class_group": "Digital Information & Communication in Contemporary Society",
+      "object_class_label": "Contemporary Digital Society",
+      "object_class_group": "Digital Information & Communication in Contemporary Society",
+      "qualifiers": {
+        "TemporalQualifier": "today's era of widespread digital technologies",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "EraType: contemporary digital era"
+      },
+      "confidence": 0.72,
+      "remarks": [
+        "Relation mainly encodes temporal/era context; borderline between context and intrinsic property.",
+        "Relation mainly encodes temporal/era context; borderline between context and intrinsic property.",
+        "Relation mainly encodes temporal/era context; borderline between context and intrinsic property.",
+        "Relation mainly encodes temporal/era context; borderline between context and intrinsic property."
+      ]
+    },
+    {
+      "relation_id": "RelR_a3d3db70e408",
+      "relation_name": "prevalent_in",
+      "rel_desc": "Social media is framed as a defining and prevalent feature of today's digital age.",
+      "rel_hint_type": "contextual",
+      "canonical_rel_name": "is_prevalent_in_era",
+      "canonical_rel_desc": "Links a phenomenon, practice, or technology to an era in which it is widespread, characteristic, or defining.",
+      "rel_cls": "era_context_relation",
+      "rel_cls_group": "TEMPORALITY",
+      "subject_entity_name": "social media",
+      "object_entity_name": "today's digital age",
+      "subject_class_label": "Social Media Platforms",
+      "subject_class_group": "Social Media & Online Communication",
+      "object_class_label": "Contemporary Digital Society",
+      "object_class_group": "Digital Information & Communication in Contemporary Society",
+      "qualifiers": {
+        "TemporalQualifier": "today's digital age",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "Context: widespread use of digital technologies and online connectivity"
+      },
+      "confidence": 0.7,
+      "remarks": [
+        "Relation mainly encodes era-context; semantics partly overlap with broader societal context.",
+        "Relation mainly encodes era-context; semantics partly overlap with broader societal context.",
+        "Relation mainly encodes era-context; semantics partly overlap with broader societal context.",
+        "Relation mainly encodes era-context; semantics partly overlap with broader societal context."
+      ]
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_rel_schema\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_a3d3db70e408\"],\n      \"canonical_rel_name\": \"is_characteristic_of_era\",\n      \"canonical_rel_desc\": \"Links a phenomenon, practice, or technology to a historical or societal era of which it is a defining or characteristic feature.\",\n      \"rel_cls\": \"era_context_relation\",\n      \"rel_cls_group\": \"TEMPORALITY\",\n      \"justification\": \"The relation describes social media as a defining and prevalent feature of today's digital age, which is better captured as being characteristic of the era rather than just prevalent in it. The updated canonical_rel_name generalizes more cleanly to any defining feature of an era while remaining consistent with the existing era_context_relation class and TEMPORALITY group.\",\n      \"remark\": null,\n      \"confidence\": 0.83\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_rel_schema",
+      "args": {
+        "relation_ids": [
+          "RelR_a3d3db70e408"
+        ],
+        "canonical_rel_name": "is_characteristic_of_era",
+        "canonical_rel_desc": "Links a phenomenon, practice, or technology to a historical or societal era of which it is a defining or characteristic feature.",
+        "rel_cls": "era_context_relation",
+        "rel_cls_group": "TEMPORALITY",
+        "justification": "The relation describes social media as a defining and prevalent feature of today's digital age, which is better captured as being characteristic of the era rather than just prevalent in it. The updated canonical_rel_name generalizes more cleanly to any defining feature of an era while remaining consistent with the existing era_context_relation class and TEMPORALITY group.",
+        "remark": null,
+        "confidence": 0.83
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_rel_schema",
+      "relation_ids": [
+        "RelR_a3d3db70e408"
+      ],
+      "canonical_rel_name": "is_characteristic_of_era",
+      "canonical_rel_desc": "Links a phenomenon, practice, or technology to a historical or societal era of which it is a defining or characteristic feature.",
+      "rel_cls": "era_context_relation",
+      "rel_cls_group": "TEMPORALITY",
+      "new_relation_name": null,
+      "original_relation_name": null,
+      "justification": "The relation describes social media as a defining and prevalent feature of today's digital age, which is better captured as being characteristic of the era rather than just prevalent in it. The updated canonical_rel_name generalizes more cleanly to any defining feature of an era while remaining consistent with the existing era_context_relation class and TEMPORALITY group.",
+      "remark": null,
+      "confidence": 0.83
+    }
+  ],
+  "timestamp": "2026-01-06T11:14:43Z"
+}

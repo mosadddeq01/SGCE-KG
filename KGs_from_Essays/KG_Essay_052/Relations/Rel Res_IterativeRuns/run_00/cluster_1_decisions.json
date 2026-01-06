@@ -1,0 +1,125 @@
+{
+  "cluster_label": 1,
+  "cluster_classes": [
+    {
+      "candidate_id": "ClsC_b4711a85",
+      "class_label": "Economic Systems",
+      "class_description": "Macro- and meso-level economic systems, including local, national, and global economies that interact with sports and other activities.",
+      "class_type_hint": "Economic Concept",
+      "class_group": "TBD",
+      "confidence": 0.9,
+      "evidence_excerpt": "local economies, the global economy, and the economy as systems of production and consumption affected by sports",
+      "member_ids": [
+        "En_773e7a73",
+        "En_bd2b783a",
+        "En_8d9080e4"
+      ],
+      "members": [
+        {
+          "id": "En_773e7a73",
+          "entity_name": "local economies",
+          "entity_description": "Regional economic systems around host locations that are stimulated by major sporting events.",
+          "entity_type_hint": "EconomicSystem"
+        },
+        {
+          "id": "En_bd2b783a",
+          "entity_name": "global economy",
+          "entity_description": "The worldwide economic system in which the sports industry now plays a major role.",
+          "entity_type_hint": "EconomicSystem"
+        },
+        {
+          "id": "En_8d9080e4",
+          "entity_name": "economy",
+          "entity_description": "The system of production and consumption to which sports contribute.",
+          "entity_type_hint": "EconomicSystem"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_a3e07193",
+      "class_label": "Sports Economy Sector",
+      "class_description": "The organized sports industry and its associated markets for sports-related goods and services.",
+      "class_type_hint": "Industry/Market",
+      "class_group": "TBD",
+      "confidence": 0.9,
+      "evidence_excerpt": "the sports industry as a major player with billions spent on sports-related products and services",
+      "member_ids": [
+        "En_9bea4110",
+        "En_c1354a37"
+      ],
+      "members": [
+        {
+          "id": "En_9bea4110",
+          "entity_name": "sports industry",
+          "entity_description": "The aggregate of businesses and activities related to sports, now a major global economic sector.",
+          "entity_type_hint": "Industry"
+        },
+        {
+          "id": "En_c1354a37",
+          "entity_name": "sports-related products and services",
+          "entity_description": "Goods and services associated with sports on which billions of dollars are spent annually.",
+          "entity_type_hint": "ProductCategory"
+        }
+      ],
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_b4711a85\",\n      \"new_name\": \"Economic Systems Affecting Sports\",\n      \"new_description\": \"Macro- and meso-level economic systems (local, national, and global) that interact with and are influenced by sports.\",\n      \"new_class_type_hint\": \"EconomicSystem\",\n      \"new_class_group\": \"Sports and Economics\",\n      \"remark\": null,\n      \"justification\": \"Refines the label and type hint to emphasize that this class covers broad economic systems (local, national, global) as contexts for sports, and assigns a shared Class_Group that captures its close relation to the sports economy domain.\",\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_a3e07193\",\n      \"new_name\": \"Sports Industry and Markets\",\n      \"new_description\": \"The organized sports industry and associated markets for sports-related goods and services as a distinct economic sector.\",\n      \"new_class_type_hint\": \"IndustrySector\",\n      \"new_class_group\": \"Sports and Economics\",\n      \"remark\": null,\n      \"justification\": \"Clarifies that this class covers the sports industry as a specific economic sector (firms and markets for sports-related goods and services), and aligns it under the same Sports and Economics Class_Group as the broader economic systems class while keeping the concepts distinct.\",\n      \"confidence\": 0.9\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_b4711a85",
+        "new_name": "Economic Systems Affecting Sports",
+        "new_description": "Macro- and meso-level economic systems (local, national, and global) that interact with and are influenced by sports.",
+        "new_class_type_hint": "EconomicSystem",
+        "new_class_group": "Sports and Economics",
+        "remark": null,
+        "justification": "Refines the label and type hint to emphasize that this class covers broad economic systems (local, national, global) as contexts for sports, and assigns a shared Class_Group that captures its close relation to the sports economy domain.",
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_a3e07193",
+        "new_name": "Sports Industry and Markets",
+        "new_description": "The organized sports industry and associated markets for sports-related goods and services as a distinct economic sector.",
+        "new_class_type_hint": "IndustrySector",
+        "new_class_group": "Sports and Economics",
+        "remark": null,
+        "justification": "Clarifies that this class covers the sports industry as a specific economic sector (firms and markets for sports-related goods and services), and aligns it under the same Sports and Economics Class_Group as the broader economic systems class while keeping the concepts distinct.",
+        "confidence": 0.9
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_b4711a85",
+      "class_id_resolved": "ClsC_b4711a85",
+      "new_name": "Economic Systems Affecting Sports",
+      "new_description": "Macro- and meso-level economic systems (local, national, and global) that interact with and are influenced by sports.",
+      "new_class_type_hint": "EconomicSystem",
+      "new_class_group": "Sports and Economics",
+      "remark": null,
+      "justification": "Refines the label and type hint to emphasize that this class covers broad economic systems (local, national, global) as contexts for sports, and assigns a shared Class_Group that captures its close relation to the sports economy domain.",
+      "confidence": 0.9
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_a3e07193",
+      "class_id_resolved": "ClsC_a3e07193",
+      "new_name": "Sports Industry and Markets",
+      "new_description": "The organized sports industry and associated markets for sports-related goods and services as a distinct economic sector.",
+      "new_class_type_hint": "IndustrySector",
+      "new_class_group": "Sports and Economics",
+      "remark": null,
+      "justification": "Clarifies that this class covers the sports industry as a specific economic sector (firms and markets for sports-related goods and services), and aligns it under the same Sports and Economics Class_Group as the broader economic systems class while keeping the concepts distinct.",
+      "confidence": 0.9
+    }
+  ],
+  "provisional_to_real": {},
+  "timestamp": "2026-01-06T12:27:46Z"
+}

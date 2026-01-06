@@ -1,0 +1,153 @@
+{
+  "cluster_label": "24_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_524065bcf0bb",
+      "relation_name": "pertains_to",
+      "rel_desc": "The concept of the existence of black holes refers to black holes as real cosmic entities.",
+      "rel_hint_type": "aboutness",
+      "canonical_rel_name": "is_about",
+      "canonical_rel_desc": "Indicates that the subject (e.g., question, mystery, study, document, or concept) is about, concerns, or focuses on the object topic or phenomenon.",
+      "rel_cls": "topical_aboutness_relation",
+      "rel_cls_group": "ABOUTNESS",
+      "subject_entity_name": "existence of black holes",
+      "object_entity_name": "black holes",
+      "subject_class_label": "Black Hole Concepts & Open Questions",
+      "subject_class_group": "Astrophysics – Black Holes",
+      "object_class_label": "Black Hole Phenomena",
+      "object_class_group": "Astrophysics",
+      "qualifiers": {
+        "TemporalQualifier": "since their existence was theorized",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "Initially theoretical, later accepted",
+        "CausalHint": null,
+        "LogicalMarker": "since",
+        "OtherQualifier": null
+      },
+      "confidence": 0.86,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_20eb616ff54e",
+      "relation_name": "applies_to",
+      "rel_desc": "The traditional understanding of information storage is about how information is stored in the universe.",
+      "rel_hint_type": "scope",
+      "canonical_rel_name": "has_scope",
+      "canonical_rel_desc": "Indicates that a theory, understanding, or concept has the object as its domain of applicability or scope.",
+      "rel_cls": "concept_scope_relation",
+      "rel_cls_group": "ASSOCIATION",
+      "subject_entity_name": "traditional understanding of how information is stored",
+      "object_entity_name": "universe",
+      "subject_class_label": "Black Hole Holographic Principle",
+      "subject_class_group": "Black Hole Information & Holography",
+      "object_class_label": "Universe (Cosmological Whole)",
+      "object_class_group": "Cosmology and Fundamental Physics",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "in the universe",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": "how",
+        "OtherQualifier": null
+      },
+      "confidence": 0.83,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_d1a52e43ac55",
+      "relation_name": "is_concept_in_field",
+      "rel_desc": "The holographic principle is an important concept within theoretical physics.",
+      "rel_hint_type": "membership",
+      "canonical_rel_name": "is_concept_in_research_field",
+      "canonical_rel_desc": "Indicates that a concept belongs to or is studied within a particular research field or discipline.",
+      "rel_cls": "domain_concept_membership_relation",
+      "rel_cls_group": "ASSOCIATION",
+      "subject_entity_name": "holographic principle",
+      "object_entity_name": "theoretical physics",
+      "subject_class_label": "Black Hole Holographic Principle",
+      "subject_class_group": "Black Hole Information & Holography",
+      "object_class_label": "Black Hole Research Fields",
+      "object_class_group": "Black Hole Science & Understanding",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": "such as",
+        "OtherQualifier": "Status: important concept"
+      },
+      "confidence": 0.96,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_12c2244b1b9d",
+      "relation_name": "is_concept_in_field",
+      "rel_desc": "The black hole information paradox is an important concept within theoretical physics.",
+      "rel_hint_type": "membership",
+      "canonical_rel_name": "is_concept_in_research_field",
+      "canonical_rel_desc": "Indicates that a concept belongs to or is studied within a particular research field or discipline.",
+      "rel_cls": "domain_concept_membership_relation",
+      "rel_cls_group": "ASSOCIATION",
+      "subject_entity_name": "black hole information paradox",
+      "object_entity_name": "theoretical physics",
+      "subject_class_label": "Black Hole Information & Paradox Concepts",
+      "subject_class_group": "Black Hole Information & Holography",
+      "object_class_label": "Black Hole Research Fields",
+      "object_class_group": "Black Hole Science & Understanding",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": "such as",
+        "OtherQualifier": "Status: important concept"
+      },
+      "confidence": 0.9,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_rel_schema\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_20eb616ff54e\"\n      ],\n      \"canonical_rel_name\": null,\n      \"canonical_rel_desc\": null,\n      \"rel_cls\": null,\n      \"rel_cls_group\": \"SCOPE\",\n      \"justification\": \"The relation expresses the domain of applicability of a conceptual understanding (its scope) rather than a generic association. Using a more specific rel_cls_group 'SCOPE' better distinguishes it from broad ASSOCIATION and aligns with the existing canonical_rel_name 'has_scope'.\",\n      \"remark\": \"Introduced a more specific rel_cls_group 'SCOPE' to capture domain-of-applicability relations.\",\n      \"confidence\": 0.77\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_rel_schema",
+      "args": {
+        "relation_ids": [
+          "RelR_20eb616ff54e"
+        ],
+        "canonical_rel_name": null,
+        "canonical_rel_desc": null,
+        "rel_cls": null,
+        "rel_cls_group": "SCOPE",
+        "justification": "The relation expresses the domain of applicability of a conceptual understanding (its scope) rather than a generic association. Using a more specific rel_cls_group 'SCOPE' better distinguishes it from broad ASSOCIATION and aligns with the existing canonical_rel_name 'has_scope'.",
+        "remark": "Introduced a more specific rel_cls_group 'SCOPE' to capture domain-of-applicability relations.",
+        "confidence": 0.77
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_rel_schema",
+      "relation_ids": [
+        "RelR_20eb616ff54e"
+      ],
+      "canonical_rel_name": null,
+      "canonical_rel_desc": null,
+      "rel_cls": null,
+      "rel_cls_group": "SCOPE",
+      "new_relation_name": null,
+      "original_relation_name": null,
+      "justification": "The relation expresses the domain of applicability of a conceptual understanding (its scope) rather than a generic association. Using a more specific rel_cls_group 'SCOPE' better distinguishes it from broad ASSOCIATION and aligns with the existing canonical_rel_name 'has_scope'.",
+      "remark": "Introduced a more specific rel_cls_group 'SCOPE' to capture domain-of-applicability relations.",
+      "confidence": 0.77
+    }
+  ],
+  "timestamp": "2026-01-06T09:56:05Z"
+}

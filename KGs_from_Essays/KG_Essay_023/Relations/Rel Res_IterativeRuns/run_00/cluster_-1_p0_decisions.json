@@ -1,0 +1,203 @@
+{
+  "cluster_label": "-1_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_fd7b2e916ebf",
+      "relation_name": "engages_with",
+      "rel_desc": "Individuals become more informed about and engaged in current events.",
+      "rel_hint_type": "participation",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "individuals",
+      "object_entity_name": "current events",
+      "subject_class_label": "Social Media Audiences",
+      "subject_class_group": "Social Media and Online Social Interaction",
+      "object_class_label": "Information Engagement Concepts",
+      "object_class_group": "Digital Information & Communication in Contemporary Society",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "EngagementType: being more informed and actively engaged"
+      },
+      "confidence": 0.86,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_b728acc6d9bf",
+      "relation_name": "has_property",
+      "rel_desc": "Social media possesses a significant power that can be harnessed.",
+      "rel_hint_type": "attribution",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "social media",
+      "object_entity_name": "power of social media",
+      "subject_class_label": "Social Media Platforms",
+      "subject_class_group": "Social Media & Online Communication",
+      "object_class_label": "Social Media–Driven Social Change",
+      "object_class_group": "Social Media: Impacts and Social Change",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": "when users and society engage with platforms",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "MoralFraming: can be harnessed for good"
+      },
+      "confidence": 0.88,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_fd7b2e916ebf\"],\n      \"canonical_rel_name\": \"engages_with_topic\",\n      \"canonical_rel_desc\": \"Indicates that individuals actively engage with, pay attention to, or interact around a particular topic or set of current events.\",\n      \"justification\": \"The relation connects individuals to current events with a participation/engagement meaning; a predicate emphasizing engagement with a topic captures this semantics precisely.\",\n      \"remark\": null,\n      \"confidence\": 0.86\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_fd7b2e916ebf\"],\n      \"rel_cls\": \"information_engagement_relation\",\n      \"justification\": \"This relation describes how people engage with informational content (current events), fitting a class focused on engagement with information rather than general social ties.\",\n      \"remark\": null,\n      \"confidence\": 0.86\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_fd7b2e916ebf\"],\n      \"rel_cls_group\": \"USAGE\",\n      \"justification\": \"Engaging with current events represents a way individuals use and interact with informational content, which aligns best with a broad usage/interaction dimension.\",\n      \"remark\": null,\n      \"confidence\": 0.86\n    }\n  },\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_b728acc6d9bf\"],\n      \"canonical_rel_name\": \"has_property\",\n      \"canonical_rel_desc\": \"Indicates that an entity possesses a particular property, characteristic, or abstract quality.\",\n      \"justification\": \"The description states that social media possesses a significant power; modeling this as the platform having a property or abstract quality is appropriate and reusable.\",\n      \"remark\": null,\n      \"confidence\": 0.88\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_b728acc6d9bf\"],\n      \"rel_cls\": \"entity_attribute_relation\",\n      \"justification\": \"The relation links an entity (social media) to one of its inherent qualities (its power), which is best grouped as an attribute/characteristic relation.\",\n      \"remark\": null,\n      \"confidence\": 0.88\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_b728acc6d9bf\"],\n      \"rel_cls_group\": \"IDENTITY\",\n      \"justification\": \"Attributing a property or power to an entity describes what it is like or what capabilities it inherently has, fitting a broad identity/attribution dimension.\",\n      \"remark\": null,\n      \"confidence\": 0.88\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_fd7b2e916ebf"
+        ],
+        "canonical_rel_name": "engages_with_topic",
+        "canonical_rel_desc": "Indicates that individuals actively engage with, pay attention to, or interact around a particular topic or set of current events.",
+        "justification": "The relation connects individuals to current events with a participation/engagement meaning; a predicate emphasizing engagement with a topic captures this semantics precisely.",
+        "remark": null,
+        "confidence": 0.86
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_fd7b2e916ebf"
+        ],
+        "rel_cls": "information_engagement_relation",
+        "justification": "This relation describes how people engage with informational content (current events), fitting a class focused on engagement with information rather than general social ties.",
+        "remark": null,
+        "confidence": 0.86
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_fd7b2e916ebf"
+        ],
+        "rel_cls_group": "USAGE",
+        "justification": "Engaging with current events represents a way individuals use and interact with informational content, which aligns best with a broad usage/interaction dimension.",
+        "remark": null,
+        "confidence": 0.86
+      }
+    },
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_b728acc6d9bf"
+        ],
+        "canonical_rel_name": "has_property",
+        "canonical_rel_desc": "Indicates that an entity possesses a particular property, characteristic, or abstract quality.",
+        "justification": "The description states that social media possesses a significant power; modeling this as the platform having a property or abstract quality is appropriate and reusable.",
+        "remark": null,
+        "confidence": 0.88
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_b728acc6d9bf"
+        ],
+        "rel_cls": "entity_attribute_relation",
+        "justification": "The relation links an entity (social media) to one of its inherent qualities (its power), which is best grouped as an attribute/characteristic relation.",
+        "remark": null,
+        "confidence": 0.88
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_b728acc6d9bf"
+        ],
+        "rel_cls_group": "IDENTITY",
+        "justification": "Attributing a property or power to an entity describes what it is like or what capabilities it inherently has, fitting a broad identity/attribution dimension.",
+        "remark": null,
+        "confidence": 0.88
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_fd7b2e916ebf"
+      ],
+      "canonical_rel_name": "engages_with_topic",
+      "canonical_rel_desc": "Indicates that individuals actively engage with, pay attention to, or interact around a particular topic or set of current events.",
+      "justification": "The relation connects individuals to current events with a participation/engagement meaning; a predicate emphasizing engagement with a topic captures this semantics precisely.",
+      "remark": null,
+      "confidence": 0.86
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_fd7b2e916ebf"
+      ],
+      "rel_cls": "information_engagement_relation",
+      "justification": "This relation describes how people engage with informational content (current events), fitting a class focused on engagement with information rather than general social ties.",
+      "remark": null,
+      "confidence": 0.86
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_fd7b2e916ebf"
+      ],
+      "rel_cls_group": "USAGE",
+      "justification": "Engaging with current events represents a way individuals use and interact with informational content, which aligns best with a broad usage/interaction dimension.",
+      "remark": null,
+      "confidence": 0.86
+    },
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_b728acc6d9bf"
+      ],
+      "canonical_rel_name": "has_property",
+      "canonical_rel_desc": "Indicates that an entity possesses a particular property, characteristic, or abstract quality.",
+      "justification": "The description states that social media possesses a significant power; modeling this as the platform having a property or abstract quality is appropriate and reusable.",
+      "remark": null,
+      "confidence": 0.88
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_b728acc6d9bf"
+      ],
+      "rel_cls": "entity_attribute_relation",
+      "justification": "The relation links an entity (social media) to one of its inherent qualities (its power), which is best grouped as an attribute/characteristic relation.",
+      "remark": null,
+      "confidence": 0.88
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_b728acc6d9bf"
+      ],
+      "rel_cls_group": "IDENTITY",
+      "justification": "Attributing a property or power to an entity describes what it is like or what capabilities it inherently has, fitting a broad identity/attribution dimension.",
+      "remark": null,
+      "confidence": 0.88
+    }
+  ],
+  "timestamp": "2026-01-06T11:09:23Z"
+}

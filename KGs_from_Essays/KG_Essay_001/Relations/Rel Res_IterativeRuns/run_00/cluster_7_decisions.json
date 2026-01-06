@@ -1,0 +1,118 @@
+{
+  "cluster_label": 7,
+  "cluster_classes": [
+    {
+      "candidate_id": "ClsC_9a7b1ddd",
+      "class_label": "Butterfly Reproduction",
+      "class_description": "Concepts related to butterfly reproduction, including the reproductive partner (mate) and the process of producing offspring to continue the species.",
+      "class_type_hint": "Biological Process Group",
+      "class_group": "TBD",
+      "confidence": 0.88,
+      "evidence_excerpt": "Butterflies focus on finding a mate and reproducing to continue the life cycle.",
+      "member_ids": [
+        "En_b0a72f1a",
+        "En_4c61b264"
+      ],
+      "members": [
+        {
+          "id": "En_b0a72f1a",
+          "entity_name": "mate",
+          "entity_description": "Reproductive partner that butterflies seek during the adult stage.",
+          "entity_type_hint": "Role"
+        },
+        {
+          "id": "En_4c61b264",
+          "entity_name": "reproducing",
+          "entity_description": "Process by which butterflies produce offspring and continue the species’ life cycle.",
+          "entity_type_hint": "BiologicalProcess"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_c2cef2d5",
+      "class_label": "Butterfly Life-Cycle Organisms",
+      "class_description": "Biological organisms directly involved in the butterfly life cycle, including the butterflies themselves at the species level and the specific plants they use for egg-laying and larval feeding.",
+      "class_type_hint": "Biological Entity",
+      "class_group": "TBD",
+      "confidence": 0.78,
+      "evidence_excerpt": "Species-level variation among butterflies and specific host plants chosen for egg-laying and larval feeding.",
+      "member_ids": [
+        "Can_62e205b2",
+        "Can_a7f14ebe"
+      ],
+      "members": [
+        {
+          "id": "Can_62e205b2",
+          "entity_name": "butterfly species",
+          "entity_description": "Different kinds of butterflies (biological taxa) whose characteristics, such as egg traits and metamorphosis duration, vary between species.",
+          "entity_type_hint": "BiologicalTaxon"
+        },
+        {
+          "id": "Can_a7f14ebe",
+          "entity_name": "host plants",
+          "entity_description": "Specific plant species on which female butterflies lay their eggs and which provide food for the emerging larvae.",
+          "entity_type_hint": "Environment"
+        }
+      ],
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_9a7b1ddd\",\n      \"new_name\": \"Butterfly Reproduction\",\n      \"new_description\": \"Concepts related to butterfly reproduction within the life cycle, including reproductive roles (mates) and the process of producing offspring.\",\n      \"new_class_type_hint\": \"Biological Reproductive Process\",\n      \"new_class_group\": \"Butterfly Life Cycle\",\n      \"remark\": null,\n      \"justification\": \"Aligns this class more clearly as the reproductive-process aspect of the butterfly life cycle and groups it under a coherent life cycle Class_Group shared with related classes.\",\n      \"confidence\": 0.92\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_c2cef2d5\",\n      \"new_name\": \"Butterfly Life Cycle Organisms and Host Plants\",\n      \"new_description\": \"Biological taxa and associated host plants directly involved in the butterfly life cycle, including butterfly species and the specific plant species used for egg-laying and larval feeding.\",\n      \"new_class_type_hint\": \"Biological Taxa and Associated Organisms\",\n      \"new_class_group\": \"Butterfly Life Cycle\",\n      \"remark\": null,\n      \"justification\": \"Clarifies that this class includes both butterfly species and their host plants and connects it under the same Butterfly Life Cycle Class_Group as the reproduction-focused class while keeping distinct scopes.\",\n      \"confidence\": 0.9\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_9a7b1ddd",
+        "new_name": "Butterfly Reproduction",
+        "new_description": "Concepts related to butterfly reproduction within the life cycle, including reproductive roles (mates) and the process of producing offspring.",
+        "new_class_type_hint": "Biological Reproductive Process",
+        "new_class_group": "Butterfly Life Cycle",
+        "remark": null,
+        "justification": "Aligns this class more clearly as the reproductive-process aspect of the butterfly life cycle and groups it under a coherent life cycle Class_Group shared with related classes.",
+        "confidence": 0.92
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_c2cef2d5",
+        "new_name": "Butterfly Life Cycle Organisms and Host Plants",
+        "new_description": "Biological taxa and associated host plants directly involved in the butterfly life cycle, including butterfly species and the specific plant species used for egg-laying and larval feeding.",
+        "new_class_type_hint": "Biological Taxa and Associated Organisms",
+        "new_class_group": "Butterfly Life Cycle",
+        "remark": null,
+        "justification": "Clarifies that this class includes both butterfly species and their host plants and connects it under the same Butterfly Life Cycle Class_Group as the reproduction-focused class while keeping distinct scopes.",
+        "confidence": 0.9
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_9a7b1ddd",
+      "class_id_resolved": "ClsC_9a7b1ddd",
+      "new_name": "Butterfly Reproduction",
+      "new_description": "Concepts related to butterfly reproduction within the life cycle, including reproductive roles (mates) and the process of producing offspring.",
+      "new_class_type_hint": "Biological Reproductive Process",
+      "new_class_group": "Butterfly Life Cycle",
+      "remark": null,
+      "justification": "Aligns this class more clearly as the reproductive-process aspect of the butterfly life cycle and groups it under a coherent life cycle Class_Group shared with related classes.",
+      "confidence": 0.92
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_c2cef2d5",
+      "class_id_resolved": "ClsC_c2cef2d5",
+      "new_name": "Butterfly Life Cycle Organisms and Host Plants",
+      "new_description": "Biological taxa and associated host plants directly involved in the butterfly life cycle, including butterfly species and the specific plant species used for egg-laying and larval feeding.",
+      "new_class_type_hint": "Biological Taxa and Associated Organisms",
+      "new_class_group": "Butterfly Life Cycle",
+      "remark": null,
+      "justification": "Clarifies that this class includes both butterfly species and their host plants and connects it under the same Butterfly Life Cycle Class_Group as the reproduction-focused class while keeping distinct scopes.",
+      "confidence": 0.9
+    }
+  ],
+  "provisional_to_real": {},
+  "timestamp": "2026-01-06T07:17:16Z"
+}

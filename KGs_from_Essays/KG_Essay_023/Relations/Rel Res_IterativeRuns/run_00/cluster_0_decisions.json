@@ -1,0 +1,212 @@
+{
+  "cluster_label": 0,
+  "cluster_classes": [
+    {
+      "candidate_id": "ClsC_0604ff82",
+      "class_label": "Marginalized and Diverse Voices",
+      "class_description": "Concepts and groups related to how social media amplifies, empowers, and increases the visibility of marginalized and diverse voices in public communication.",
+      "class_type_hint": "Social Concept",
+      "class_group": "TBD",
+      "confidence": 0.83,
+      "evidence_excerpt": "Social media ... amplification of our voices, visibility and empowerment of marginalized and diverse groups.",
+      "member_ids": [
+        "En_0e7ef7cd",
+        "En_1375e6a6",
+        "En_4bc2ebef",
+        "En_71f16db3",
+        "En_cab7bd08"
+      ],
+      "members": [
+        {
+          "id": "En_0e7ef7cd",
+          "entity_name": "amplification of our voices",
+          "entity_description": "Increase in reach and impact of individuals’ messages enabled by social media.",
+          "entity_type_hint": "Process"
+        },
+        {
+          "id": "En_1375e6a6",
+          "entity_name": "visibility of marginalized groups",
+          "entity_description": "Greater public awareness and presence of marginalized groups enabled by social media.",
+          "entity_type_hint": "Process"
+        },
+        {
+          "id": "En_4bc2ebef",
+          "entity_name": "marginalized groups",
+          "entity_description": "Groups with limited social, economic, or political power gaining visibility via social media.",
+          "entity_type_hint": "SocialGroup"
+        },
+        {
+          "id": "En_71f16db3",
+          "entity_name": "empowerment of marginalized voices",
+          "entity_description": "The increased ability of marginalized groups to express themselves and be heard via social media.",
+          "entity_type_hint": "Benefit"
+        },
+        {
+          "id": "En_cab7bd08",
+          "entity_name": "diverse voices",
+          "entity_description": "A wide range of perspectives and experiences expressed by different social media users.",
+          "entity_type_hint": "SocialActorGroup"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_37fdbaf1",
+      "class_label": "Social Equality Values",
+      "class_description": "Normative values emphasizing the presence, integration, and recognition of varied and historically marginalized identities in public discourse.",
+      "class_type_hint": "Value",
+      "class_group": "TBD",
+      "confidence": 0.92,
+      "evidence_excerpt": "promoting diversity, inclusion, and social activism",
+      "member_ids": [
+        "En_fda6114d",
+        "En_2b303fa8"
+      ],
+      "members": [
+        {
+          "id": "En_fda6114d",
+          "entity_name": "diversity",
+          "entity_description": "Presence and recognition of varied identities and perspectives promoted via social media.",
+          "entity_type_hint": "Value"
+        },
+        {
+          "id": "En_2b303fa8",
+          "entity_name": "inclusion",
+          "entity_description": "Practice of integrating and valuing marginalized voices within public discourse.",
+          "entity_type_hint": "Value"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_22ceae07",
+      "class_label": "Underrepresented Communities",
+      "class_description": "Communities that lack adequate representation or voice in mainstream institutions, media, and public discourse, often facing systemic barriers to visibility and influence.",
+      "class_type_hint": "Social Group Category",
+      "class_group": "TBD",
+      "confidence": 0.91,
+      "evidence_excerpt": "Underrepresented communities that use platforms to share stories, raise awareness about injustices, and advocate for change.",
+      "member_ids": [
+        "En_5cfa148a",
+        "En_4bc2ebef"
+      ],
+      "members": [
+        {
+          "id": "En_5cfa148a",
+          "entity_name": "underrepresented communities",
+          "entity_description": "Communities that lack adequate representation in mainstream media and public discourse.",
+          "entity_type_hint": "SocialGroup"
+        }
+      ],
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"reassign_entities\",\n    \"args\": {\n      \"entity_ids\": [\"En_4bc2ebef\"],\n      \"from_class_id\": \"ClsC_0604ff82\",\n      \"to_class_id\": \"ClsC_22ceae07\",\n      \"justification\": \"The entity 'marginalized groups' (En_4bc2ebef) is a social group concept that aligns more directly with the 'Underrepresented Communities' class, which is defined as communities lacking adequate representation and voice, rather than with the 'Marginalized and Diverse Voices' class that focuses on processes of amplification, visibility, and empowerment.\",\n      \"remark\": null,\n      \"confidence\": 0.84\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_0604ff82\",\n      \"new_name\": null,\n      \"new_description\": null,\n      \"new_class_type_hint\": null,\n      \"new_class_group\": \"Marginalization, Representation & Inclusion in Social Media\",\n      \"remark\": null,\n      \"justification\": \"Assign a coherent Class_Group connecting this class with related classes about marginalized/underrepresented communities and inclusion values in social media contexts.\",\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_37fdbaf1\",\n      \"new_name\": null,\n      \"new_description\": null,\n      \"new_class_type_hint\": null,\n      \"new_class_group\": \"Marginalization, Representation & Inclusion in Social Media\",\n      \"remark\": null,\n      \"justification\": \"Group 'Social Equality Values' with other classes dealing with marginalized voices and underrepresented communities under a shared higher-level theme of marginalization, representation, and inclusion in social media.\",\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_22ceae07\",\n      \"new_name\": null,\n      \"new_description\": null,\n      \"new_class_type_hint\": null,\n      \"new_class_group\": \"Marginalization, Representation & Inclusion in Social Media\",\n      \"remark\": null,\n      \"justification\": \"Place 'Underrepresented Communities' in the same Class_Group as related classes about marginalized voices and inclusion values to reflect their shared focus on representation and visibility in social media.\",\n      \"confidence\": 0.9\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "reassign_entities",
+      "args": {
+        "entity_ids": [
+          "En_4bc2ebef"
+        ],
+        "from_class_id": "ClsC_0604ff82",
+        "to_class_id": "ClsC_22ceae07",
+        "justification": "The entity 'marginalized groups' (En_4bc2ebef) is a social group concept that aligns more directly with the 'Underrepresented Communities' class, which is defined as communities lacking adequate representation and voice, rather than with the 'Marginalized and Diverse Voices' class that focuses on processes of amplification, visibility, and empowerment.",
+        "remark": null,
+        "confidence": 0.84
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_0604ff82",
+        "new_name": null,
+        "new_description": null,
+        "new_class_type_hint": null,
+        "new_class_group": "Marginalization, Representation & Inclusion in Social Media",
+        "remark": null,
+        "justification": "Assign a coherent Class_Group connecting this class with related classes about marginalized/underrepresented communities and inclusion values in social media contexts.",
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_37fdbaf1",
+        "new_name": null,
+        "new_description": null,
+        "new_class_type_hint": null,
+        "new_class_group": "Marginalization, Representation & Inclusion in Social Media",
+        "remark": null,
+        "justification": "Group 'Social Equality Values' with other classes dealing with marginalized voices and underrepresented communities under a shared higher-level theme of marginalization, representation, and inclusion in social media.",
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_22ceae07",
+        "new_name": null,
+        "new_description": null,
+        "new_class_type_hint": null,
+        "new_class_group": "Marginalization, Representation & Inclusion in Social Media",
+        "remark": null,
+        "justification": "Place 'Underrepresented Communities' in the same Class_Group as related classes about marginalized voices and inclusion values to reflect their shared focus on representation and visibility in social media.",
+        "confidence": 0.9
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "reassign_entities",
+      "entity_ids": [
+        "En_4bc2ebef"
+      ],
+      "from": "ClsC_0604ff82",
+      "from_resolved": "ClsC_0604ff82",
+      "to": "ClsC_22ceae07",
+      "to_resolved": "ClsC_22ceae07",
+      "justification": "The entity 'marginalized groups' (En_4bc2ebef) is a social group concept that aligns more directly with the 'Underrepresented Communities' class, which is defined as communities lacking adequate representation and voice, rather than with the 'Marginalized and Diverse Voices' class that focuses on processes of amplification, visibility, and empowerment.",
+      "remark": null,
+      "confidence": 0.84
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_0604ff82",
+      "class_id_resolved": "ClsC_0604ff82",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Marginalization, Representation & Inclusion in Social Media",
+      "remark": null,
+      "justification": "Assign a coherent Class_Group connecting this class with related classes about marginalized/underrepresented communities and inclusion values in social media contexts.",
+      "confidence": 0.9
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_37fdbaf1",
+      "class_id_resolved": "ClsC_37fdbaf1",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Marginalization, Representation & Inclusion in Social Media",
+      "remark": null,
+      "justification": "Group 'Social Equality Values' with other classes dealing with marginalized voices and underrepresented communities under a shared higher-level theme of marginalization, representation, and inclusion in social media.",
+      "confidence": 0.9
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_22ceae07",
+      "class_id_resolved": "ClsC_22ceae07",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Marginalization, Representation & Inclusion in Social Media",
+      "remark": null,
+      "justification": "Place 'Underrepresented Communities' in the same Class_Group as related classes about marginalized voices and inclusion values to reflect their shared focus on representation and visibility in social media.",
+      "confidence": 0.9
+    }
+  ],
+  "provisional_to_real": {},
+  "timestamp": "2026-01-06T10:52:30Z"
+}

@@ -1,0 +1,233 @@
+{
+  "cluster_label": "16_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_8ff2be5ea6db",
+      "relation_name": "has_aspect",
+      "rel_desc": "Collection of physical evidence is described as a key aspect of forensic science.",
+      "rel_hint_type": "part_of",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "forensic science",
+      "object_entity_name": "collection of physical evidence",
+      "subject_class_label": "Forensic Science",
+      "subject_class_group": "Forensic Science Domain",
+      "object_class_label": "Physical Evidence Handling",
+      "object_class_group": "Forensic Evidence & Crime Scene Procedures",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "is",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.98,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_95829e8b6041",
+      "relation_name": "has_aspect",
+      "rel_desc": "Analysis of physical evidence is described as a key aspect of forensic science.",
+      "rel_hint_type": "part_of",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "forensic science",
+      "object_entity_name": "analysis of physical evidence",
+      "subject_class_label": "Forensic Science",
+      "subject_class_group": "Forensic Science Domain",
+      "object_class_label": "Physical Evidence Handling",
+      "object_class_group": "Forensic Evidence & Crime Scene Procedures",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "is",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.98,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_dc585e245c33",
+      "relation_name": "includes_aspect",
+      "rel_desc": "Interpretation of evidence is an important aspect of forensic science.",
+      "rel_hint_type": "part-whole",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "forensic science",
+      "object_entity_name": "interpretation of evidence",
+      "subject_class_label": "Forensic Science",
+      "subject_class_group": "Forensic Science Domain",
+      "object_class_label": "Forensic Analytical Reasoning",
+      "object_class_group": "Forensic Reasoning and Case Analysis",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": "important aspect",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": "Another",
+        "OtherQualifier": null
+      },
+      "confidence": 0.97,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_7472ef1293c5",
+      "relation_name": "aspect_of",
+      "rel_desc": "The art of forensic science is an aspect or conceptual view of forensic science.",
+      "rel_hint_type": "component-of",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "art of forensic science",
+      "object_entity_name": "forensic science",
+      "subject_class_label": "Forensic Practice Competence",
+      "subject_class_group": "Forensic Science Professional Competencies",
+      "object_class_label": "Forensic Science",
+      "object_class_group": "Forensic Science Domain",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "implied aspect",
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.9,
+      "remarks": [
+        "Not explicit, but strongly implied conceptual relationship."
+      ]
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_8ff2be5ea6db\",\n        \"RelR_95829e8b6041\",\n        \"RelR_dc585e245c33\"\n      ],\n      \"canonical_rel_name\": \"has_aspect\",\n      \"canonical_rel_desc\": \"Links a broader domain or concept to one of its constituent aspects, activities, or conceptual components.\",\n      \"justification\": \"In these three relations, 'forensic science' is the broader domain and the object (collection of physical evidence, analysis of physical evidence, interpretation of evidence) is described as an aspect or component activity of that domain. They share the same whole→aspect semantics and should be normalized to a single predicate.\",\n      \"remark\": null,\n      \"confidence\": 0.96\n    }\n  },\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_7472ef1293c5\"\n      ],\n      \"canonical_rel_name\": \"is_aspect_of\",\n      \"canonical_rel_desc\": \"Links an aspect, activity, or component back to the broader domain or concept it is an aspect of (inverse of has_aspect).\",\n      \"justification\": \"Here the subject 'art of forensic science' is described as an aspect of the broader concept 'forensic science', i.e., aspect→whole, which is the inverse direction of the other three relations and warrants a distinct but inverse predicate.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_8ff2be5ea6db\",\n        \"RelR_95829e8b6041\",\n        \"RelR_dc585e245c33\",\n        \"RelR_7472ef1293c5\"\n      ],\n      \"rel_cls\": \"conceptual_component_relation\",\n      \"justification\": \"All four relations express a part–whole style link where an activity or conceptual facet (aspect) is related to the broader field of forensic science, differing only in direction. Grouping them under a shared class for conceptual/functional components supports consistent reasoning across both has_aspect and is_aspect_of.\",\n      \"remark\": null,\n      \"confidence\": 0.95\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_8ff2be5ea6db\",\n        \"RelR_95829e8b6041\",\n        \"RelR_dc585e245c33\",\n        \"RelR_7472ef1293c5\"\n      ],\n      \"rel_cls_group\": \"COMPOSITION\",\n      \"justification\": \"Each relation encodes that one concept is an aspect or component of another, which is a conceptual part–whole relationship; this fits best under a broad COMPOSITION group.\",\n      \"remark\": null,\n      \"confidence\": 0.95\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_8ff2be5ea6db",
+          "RelR_95829e8b6041",
+          "RelR_dc585e245c33"
+        ],
+        "canonical_rel_name": "has_aspect",
+        "canonical_rel_desc": "Links a broader domain or concept to one of its constituent aspects, activities, or conceptual components.",
+        "justification": "In these three relations, 'forensic science' is the broader domain and the object (collection of physical evidence, analysis of physical evidence, interpretation of evidence) is described as an aspect or component activity of that domain. They share the same whole→aspect semantics and should be normalized to a single predicate.",
+        "remark": null,
+        "confidence": 0.96
+      }
+    },
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_7472ef1293c5"
+        ],
+        "canonical_rel_name": "is_aspect_of",
+        "canonical_rel_desc": "Links an aspect, activity, or component back to the broader domain or concept it is an aspect of (inverse of has_aspect).",
+        "justification": "Here the subject 'art of forensic science' is described as an aspect of the broader concept 'forensic science', i.e., aspect→whole, which is the inverse direction of the other three relations and warrants a distinct but inverse predicate.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_8ff2be5ea6db",
+          "RelR_95829e8b6041",
+          "RelR_dc585e245c33",
+          "RelR_7472ef1293c5"
+        ],
+        "rel_cls": "conceptual_component_relation",
+        "justification": "All four relations express a part–whole style link where an activity or conceptual facet (aspect) is related to the broader field of forensic science, differing only in direction. Grouping them under a shared class for conceptual/functional components supports consistent reasoning across both has_aspect and is_aspect_of.",
+        "remark": null,
+        "confidence": 0.95
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_8ff2be5ea6db",
+          "RelR_95829e8b6041",
+          "RelR_dc585e245c33",
+          "RelR_7472ef1293c5"
+        ],
+        "rel_cls_group": "COMPOSITION",
+        "justification": "Each relation encodes that one concept is an aspect or component of another, which is a conceptual part–whole relationship; this fits best under a broad COMPOSITION group.",
+        "remark": null,
+        "confidence": 0.95
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_8ff2be5ea6db",
+        "RelR_95829e8b6041",
+        "RelR_dc585e245c33"
+      ],
+      "canonical_rel_name": "has_aspect",
+      "canonical_rel_desc": "Links a broader domain or concept to one of its constituent aspects, activities, or conceptual components.",
+      "justification": "In these three relations, 'forensic science' is the broader domain and the object (collection of physical evidence, analysis of physical evidence, interpretation of evidence) is described as an aspect or component activity of that domain. They share the same whole→aspect semantics and should be normalized to a single predicate.",
+      "remark": null,
+      "confidence": 0.96
+    },
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_7472ef1293c5"
+      ],
+      "canonical_rel_name": "is_aspect_of",
+      "canonical_rel_desc": "Links an aspect, activity, or component back to the broader domain or concept it is an aspect of (inverse of has_aspect).",
+      "justification": "Here the subject 'art of forensic science' is described as an aspect of the broader concept 'forensic science', i.e., aspect→whole, which is the inverse direction of the other three relations and warrants a distinct but inverse predicate.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_8ff2be5ea6db",
+        "RelR_95829e8b6041",
+        "RelR_dc585e245c33",
+        "RelR_7472ef1293c5"
+      ],
+      "rel_cls": "conceptual_component_relation",
+      "justification": "All four relations express a part–whole style link where an activity or conceptual facet (aspect) is related to the broader field of forensic science, differing only in direction. Grouping them under a shared class for conceptual/functional components supports consistent reasoning across both has_aspect and is_aspect_of.",
+      "remark": null,
+      "confidence": 0.95
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_8ff2be5ea6db",
+        "RelR_95829e8b6041",
+        "RelR_dc585e245c33",
+        "RelR_7472ef1293c5"
+      ],
+      "rel_cls_group": "COMPOSITION",
+      "justification": "Each relation encodes that one concept is an aspect or component of another, which is a conceptual part–whole relationship; this fits best under a broad COMPOSITION group.",
+      "remark": null,
+      "confidence": 0.95
+    }
+  ],
+  "timestamp": "2026-01-06T14:34:39Z"
+}

@@ -1,0 +1,62 @@
+[
+  {
+    "function": "split_class",
+    "args": {
+      "source_class_id": "ClsC_83b48f24",
+      "splits": [
+        {
+          "name": "Individual Fairy Tales",
+          "description": "Specific, named fairy tale narratives such as 'Snow White' and 'Hansel and Gretel'.",
+          "class_type_hint": "FairyTaleWork",
+          "member_ids": [
+            "Can_1744b5e1",
+            "En_4fda0e3e"
+          ],
+          "provisional_id": "SPLIT_IndividualFairyTales_83b48f24"
+        }
+      ],
+      "justification": "ClsC_83b48f24 currently mixes specific fairy tale works with abstract categories and sets; separating the individual tales into their own class yields more coherent, reusable classes.",
+      "remark": null,
+      "confidence": 0.86
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_83b48f24",
+      "new_name": "Fairy Tale Categories and Collections",
+      "new_description": "Abstract categories and groupings of fairy tales, including concepts like 'classic fairytale', 'timeless stories', and sets such as the Brothers Grimm fairy tales.",
+      "new_class_type_hint": "NarrativeCategoryOrSet",
+      "new_class_group": "Fairy Tales and Their Audiences",
+      "remark": null,
+      "justification": "After moving specific tales to a dedicated class, renaming and refining this class clarifies that it covers categories and collections, and aligning the class_group connects it to related audience classes.",
+      "confidence": 0.87
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "SPLIT_IndividualFairyTales_83b48f24",
+      "new_name": "Individual Fairy Tales",
+      "new_description": "Specific, named fairy tales such as 'Snow White' and 'Hansel and Gretel' that are traditional, widely known narratives.",
+      "new_class_type_hint": "FairyTaleWork",
+      "new_class_group": "Fairy Tales and Their Audiences",
+      "remark": null,
+      "justification": "Assigning a clear name, description, and class_group to the new split class makes its focus on individual fairy tale works explicit and links it to the wider fairy tale ecosystem.",
+      "confidence": 0.88
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_59561fa4",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Fairy Tales and Their Audiences",
+      "remark": null,
+      "justification": "ClsC_59561fa4 represents audiences for fairy tales, which is semantically related to classes about fairy tale works and categories; assigning the same class_group connects these related narrative and audience concepts.",
+      "confidence": 0.93
+    }
+  }
+]

@@ -1,0 +1,44 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_97a5feee3d70"],
+      "canonical_rel_name": "is_food_source_for",
+      "canonical_rel_desc": "Indicates that the subject serves as a primary or significant food resource for the object organism or life stage.",
+      "justification": "The subject 'host plants' function as the nutritional resource for the object 'larval (caterpillar) stage of a butterfly)'. This is best modeled as the resource-oriented predicate 'is_food_source_for' rather than a generic 'provides' relation.",
+      "remark": null,
+      "confidence": 0.97
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_571ffdfd8523"],
+      "canonical_rel_name": "feeds_on",
+      "canonical_rel_desc": "Indicates that the subject organism consumes the object as a food resource.",
+      "justification": "The subject 'adult butterflies' consume 'nectar' as food. This is a direct consumer-oriented trophic relation, well captured by the predicate 'feeds_on'.",
+      "remark": null,
+      "confidence": 0.98
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": ["RelR_97a5feee3d70", "RelR_571ffdfd8523"],
+      "rel_cls": "feeding_interaction_relation",
+      "justification": "Both relations describe trophic/feeding links between organisms and their food resources (plants to larvae; nectar to adult butterflies). Grouping them under a shared class for feeding/trophic interactions supports consistent ecological modeling.",
+      "remark": null,
+      "confidence": 0.96
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": ["RelR_97a5feee3d70", "RelR_571ffdfd8523"],
+      "rel_cls_group": "INTERACTION",
+      "justification": "These are biological interactions between organisms and their food sources. While nutritional in nature, their primary semantic dimension is biotic interaction (who interacts with whom through feeding).",
+      "remark": null,
+      "confidence": 0.95
+    }
+  }
+]

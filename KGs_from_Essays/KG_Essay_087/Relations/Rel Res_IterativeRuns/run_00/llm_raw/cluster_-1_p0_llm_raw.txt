@@ -1,0 +1,44 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_18cf5cd7eb12"],
+      "canonical_rel_name": "creates",
+      "canonical_rel_desc": "The subject actively creates or establishes the object, typically as a deliberate branding or design outcome.",
+      "justification": "This relation expresses that businesses, through their actions (color choices), bring into existence or establish a brand visual identity. A general predicate 'creates' captures this intentional production of a branding artifact.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_d968149de7ce"],
+      "canonical_rel_name": "contributes_to",
+      "canonical_rel_desc": "The subject positively contributes to, supports, or enhances the strength, likelihood, or quality of the object outcome.",
+      "justification": "This relation indicates that a distinctive color scheme is a contributing factor that strengthens or helps produce a strong brand presence, but does not fully create it on its own. The predicate 'contributes_to' accurately represents this partial, positive causal influence.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": ["RelR_18cf5cd7eb12", "RelR_d968149de7ce"],
+      "rel_cls": "branding_effect_relation",
+      "justification": "Both relations describe how branding-related design choices (business actions, color schemes) lead to or strengthen branding outcomes (visual identity, brand presence). Grouping them into 'branding_effect_relation' captures this shared family of cause/effect links in branding.",
+      "remark": null,
+      "confidence": 0.88
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": ["RelR_18cf5cd7eb12", "RelR_d968149de7ce"],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "In both cases, the subject exerts a causal influence on the object: businesses create brand identity, and a color scheme contributes to brand presence. This fits the broad CAUSALITY group.",
+      "remark": null,
+      "confidence": 0.95
+    }
+  }
+]

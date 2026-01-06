@@ -1,0 +1,172 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_b6439ea4f202",
+        "RelR_4a0ad14d0535"
+      ],
+      "canonical_rel_name": "contributes_to",
+      "canonical_rel_desc": "The subject's work, function, or existence helps to bring about, support, or improve the object within a broader system or outcome.",
+      "justification": "Both relations describe a domain or actor (forensic science / forensic scientists) playing a crucial role in achieving or supporting a broader justice-related system or outcome, which is well captured by a single contribution predicate.",
+      "remark": null,
+      "confidence": 0.96
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_39740bd15548"
+      ],
+      "canonical_rel_name": "analyzes",
+      "canonical_rel_desc": "The subject examines, evaluates, or analyzes the object as part of an investigative or professional activity.",
+      "justification": "This relation explicitly states that forensic scientists collect and analyze evidence; the core predicate is an action of analysis directed from actor to evidence.",
+      "remark": null,
+      "confidence": 0.99
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_a2aa939b6a70"
+      ],
+      "canonical_rel_name": "participates_in",
+      "canonical_rel_desc": "The subject takes part in or is involved in the object activity, process, or event.",
+      "justification": "The text describes forensic scientists playing a crucial role in crime scene investigation, which is naturally modeled as participation of the actor in the investigative process.",
+      "remark": null,
+      "confidence": 0.97
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_9cc5db1aeb17"
+      ],
+      "canonical_rel_name": "has_professional_role",
+      "canonical_rel_desc": "The subject, typically a person or professional group, holds or acts in the specified professional role in a given context.",
+      "justification": "The statement \"forensic scientists act as expert witnesses\" expresses a role relationship where the scientists serve in the role of expert witnesses; this is best normalized as a professional role predicate.",
+      "remark": null,
+      "confidence": 0.97
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_0412e82c8c86"
+      ],
+      "canonical_rel_name": "practices_domain",
+      "canonical_rel_desc": "The subject is a practitioner of, or professionally works within, the specified domain or field.",
+      "justification": "The relation links forensic scientists to forensic science as the domain they practice; this is a standard profession–domain linkage best captured as practicing a domain.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_d105471d0e87"
+      ],
+      "canonical_rel_name": "performs_action",
+      "canonical_rel_desc": "The subject carries out, performs, or is responsible for the specified actions or behaviors.",
+      "justification": "The description emphasizes that guilty individuals are accountable for their actions, framing a generic agent–action performance link; a generic performs_action predicate fits this semantics.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_b6439ea4f202",
+        "RelR_4a0ad14d0535"
+      ],
+      "rel_cls": "contribution_relation",
+      "justification": "Both relations express that a domain or professional activity contributes to broader justice systems or outcomes, which fall under a common family of contribution/impact relations.",
+      "remark": null,
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_39740bd15548",
+        "RelR_d105471d0e87"
+      ],
+      "rel_cls": "behavior_action_relation",
+      "justification": "These relations both link agents (forensic scientists, guilty individuals) to specific actions or behaviors they carry out (analyzing evidence, performing actions), fitting a shared class for agent–behavior/action relations.",
+      "remark": null,
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_a2aa939b6a70"
+      ],
+      "rel_cls": "participation_relation",
+      "justification": "This relation links an actor group to an investigative process they are involved in, which is a canonical example of participation in an event or activity.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_9cc5db1aeb17",
+        "RelR_0412e82c8c86"
+      ],
+      "rel_cls": "professional_role_expertise_relation",
+      "justification": "Both relations connect professionals (forensic scientists) to their roles (expert witnesses) or practiced domain (forensic science); these are tightly related as profession–role/domain expertise linkages.",
+      "remark": null,
+      "confidence": 0.94
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_b6439ea4f202",
+        "RelR_4a0ad14d0535"
+      ],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "Contribution to a system or outcome implies a causal or quasi-causal influence of the subject on the object (supporting justice and the justice system).",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_39740bd15548",
+        "RelR_d105471d0e87",
+        "RelR_a2aa939b6a70"
+      ],
+      "rel_cls_group": "AGENCY",
+      "justification": "These relations all describe agents (individuals or professional groups) performing or participating in actions and processes, which squarely falls under agentive behavior.",
+      "remark": null,
+      "confidence": 0.94
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_9cc5db1aeb17",
+        "RelR_0412e82c8c86"
+      ],
+      "rel_cls_group": "IDENTITY",
+      "justification": "Linking professionals to their roles and practiced domain is fundamentally about their professional identity and classification rather than a specific action or event.",
+      "remark": null,
+      "confidence": 0.92
+    }
+  }
+]

@@ -1,0 +1,377 @@
+{
+  "cluster_label": 4,
+  "cluster_classes": [
+    {
+      "candidate_id": "ClsC_7d3800f0",
+      "class_label": "Investigative Analysis Elements",
+      "class_description": "Concepts describing what forensic investigators analyze and reason about, including difficult investigative problems and subtle evidentiary indicators encountered during casework.",
+      "class_type_hint": "InvestigativeConcept",
+      "class_group": "TBD",
+      "confidence": 0.81,
+      "evidence_excerpt": "think creatively and analytically ... to solve complex puzzles and uncover hidden clues",
+      "member_ids": [
+        "En_49410034",
+        "En_d4105ccc"
+      ],
+      "members": [
+        {
+          "id": "En_49410034",
+          "entity_name": "complex puzzles",
+          "entity_description": "Challenging investigative problems that forensic scientists work to resolve.",
+          "entity_type_hint": "ProblemType"
+        },
+        {
+          "id": "En_d4105ccc",
+          "entity_name": "hidden clues",
+          "entity_description": "Subtle or non-obvious indicators in evidence that may be important for a case.",
+          "entity_type_hint": "EvidenceFeature"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_b4988c0e",
+      "class_label": "Forensic Cases and Issues",
+      "class_description": "Legal and investigative matters in which forensic science is applied, including individual cases, especially difficult or challenging ones, the legal issues arising from them, and the factual truth being sought.",
+      "class_type_hint": "LegalCaseContext",
+      "class_group": "TBD",
+      "confidence": 0.83,
+      "evidence_excerpt": "solve crimes and legal issues ... uncover the truth behind even the most challenging cases",
+      "member_ids": [
+        "En_b6c9b728",
+        "En_abad232f",
+        "En_93fb6b9e",
+        "En_68c01b1e"
+      ],
+      "members": [
+        {
+          "id": "En_b6c9b728",
+          "entity_name": "legal issues",
+          "entity_description": "Legal disputes or questions addressed using forensic scientific evidence.",
+          "entity_type_hint": "LegalConcept"
+        },
+        {
+          "id": "En_abad232f",
+          "entity_name": "case",
+          "entity_description": "Individual investigative or legal matter that forensic work contributes to resolving.",
+          "entity_type_hint": "LegalCase"
+        },
+        {
+          "id": "En_93fb6b9e",
+          "entity_name": "truth behind challenging cases",
+          "entity_description": "The factual sequence of events and circumstances in difficult forensic investigations.",
+          "entity_type_hint": "Concept"
+        },
+        {
+          "id": "En_68c01b1e",
+          "entity_name": "challenging cases",
+          "entity_description": "Difficult forensic or criminal investigations requiring advanced analysis and techniques.",
+          "entity_type_hint": "Case"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_7a2d35c7",
+      "class_label": "Forensic Analytical Reasoning",
+      "class_description": "Processes and outcomes involved in analyzing forensic evidence and deriving inferences, including interpretation of evidence, drawing logical conclusions, and articulating overall analysis and conclusions.",
+      "class_type_hint": "Cognitive Process",
+      "class_group": "TBD",
+      "confidence": 0.85,
+      "evidence_excerpt": "analyze complex data and draw logical conclusions based on the evidence... interpretation of evidence... explain their analysis and conclusions",
+      "member_ids": [
+        "En_fe1e3b10",
+        "En_f9e892bb",
+        "En_b0c08135"
+      ],
+      "members": [
+        {
+          "id": "En_fe1e3b10",
+          "entity_name": "interpretation of evidence",
+          "entity_description": "Process of analyzing and drawing meaning from collected forensic evidence.",
+          "entity_type_hint": "Process"
+        },
+        {
+          "id": "En_f9e892bb",
+          "entity_name": "logical conclusions",
+          "entity_description": "Reasoned inferences derived from forensic data and evidence analysis.",
+          "entity_type_hint": "Inference"
+        },
+        {
+          "id": "En_b0c08135",
+          "entity_name": "analysis and conclusions",
+          "entity_description": "Forensic scientists’ interpretive work and the final inferences derived from evidence.",
+          "entity_type_hint": "Result"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_8caba5b7",
+      "class_label": "Forensic Findings Communication",
+      "class_description": "Acts of communicating forensic results, especially to legal stakeholders, including formal presentation of findings and explanation of one’s analysis and conclusions.",
+      "class_type_hint": "Communication Act",
+      "class_group": "TBD",
+      "confidence": 0.8,
+      "evidence_excerpt": "presentation of findings in court... communicate their findings effectively... explain their analysis and conclusions",
+      "member_ids": [
+        "En_15d2ca12",
+        "En_b0c08135"
+      ],
+      "members": [
+        {
+          "id": "En_15d2ca12",
+          "entity_name": "presentation of findings",
+          "entity_description": "Communication of forensic analytical results, particularly in legal or courtroom settings.",
+          "entity_type_hint": "Process"
+        },
+        {
+          "id": "En_b0c08135",
+          "entity_name": "analysis and conclusions",
+          "entity_description": "Forensic scientists’ interpretive work and the final inferences derived from evidence.",
+          "entity_type_hint": "Result"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_d0efec71",
+      "class_label": "Forensic Determinations",
+      "class_description": "High-level conclusions reached from forensic analysis of physical evidence, such as identifying suspects, determining cause of death, or detecting specific substances.",
+      "class_type_hint": "Investigative Outcome",
+      "class_group": "TBD",
+      "confidence": 0.93,
+      "evidence_excerpt": "forensic scientists can determine important details such as the identity of a suspect, the cause of death, or the presence of a particular substance",
+      "member_ids": [
+        "En_eb13e80d",
+        "En_28bad9ab",
+        "En_8728898f"
+      ],
+      "members": [
+        {
+          "id": "En_eb13e80d",
+          "entity_name": "identity of a suspect",
+          "entity_description": "Determination of who a suspected individual is based on forensic evidence.",
+          "entity_type_hint": "InvestigativeOutcome"
+        },
+        {
+          "id": "En_28bad9ab",
+          "entity_name": "cause of death",
+          "entity_description": "Medical or physical reason a person died, inferred through forensic analysis.",
+          "entity_type_hint": "InvestigativeOutcome"
+        },
+        {
+          "id": "En_8728898f",
+          "entity_name": "presence of a particular substance",
+          "entity_description": "Detection that a specific chemical or material exists in a forensic sample or location.",
+          "entity_type_hint": "InvestigativeOutcome"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_5ea50982",
+      "class_label": "Complex Data",
+      "class_description": "Multifaceted, detailed datasets or information structures that require advanced analytical skills to interpret and draw conclusions, such as in forensic investigations.",
+      "class_type_hint": "Information Object",
+      "class_group": "TBD",
+      "confidence": 0.78,
+      "evidence_excerpt": "Forensic scientists must be able to analyze complex data and draw logical conclusions.",
+      "member_ids": [
+        "En_55ddebff"
+      ],
+      "members": [
+        {
+          "id": "En_55ddebff",
+          "entity_name": "complex data",
+          "entity_description": "Detailed, multifaceted forensic information that scientists analyze to reach conclusions.",
+          "entity_type_hint": "Data"
+        }
+      ],
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"reassign_entities\",\n    \"args\": {\n      \"entity_ids\": [\"En_b0c08135\"],\n      \"from_class_id\": \"ClsC_8caba5b7\",\n      \"to_class_id\": \"ClsC_7a2d35c7\",\n      \"justification\": \"The entity 'analysis and conclusions' describes the cognitive/interpretive outcome of evidence analysis and fits better exclusively in 'Forensic Analytical Reasoning' rather than in 'Forensic Findings Communication', which should focus on the act of presenting results.\",\n      \"remark\": null,\n      \"confidence\": 0.86\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_7d3800f0\",\n      \"new_name\": null,\n      \"new_description\": null,\n      \"new_class_type_hint\": null,\n      \"new_class_group\": \"Forensic Reasoning and Case Analysis\",\n      \"remark\": null,\n      \"justification\": \"This class covers investigative problems and evidentiary indicators that are part of the broader forensic reasoning and case analysis workflow, so it should share a Class_Group with related reasoning, determination, and case-context classes.\",\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_b4988c0e\",\n      \"new_name\": null,\n      \"new_description\": null,\n      \"new_class_type_hint\": null,\n      \"new_class_group\": \"Forensic Reasoning and Case Analysis\",\n      \"remark\": null,\n      \"justification\": \"This class represents forensic cases, legal issues, and the search for truth, which are the core contexts in which forensic reasoning and analysis are applied, so it belongs in the same Class_Group as other reasoning and outcome classes.\",\n      \"confidence\": 0.92\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_7a2d35c7\",\n      \"new_name\": null,\n      \"new_description\": null,\n      \"new_class_type_hint\": null,\n      \"new_class_group\": \"Forensic Reasoning and Case Analysis\",\n      \"remark\": null,\n      \"justification\": \"This class explicitly models the analytical reasoning processes and conclusions drawn from forensic evidence, forming the central cognitive component of forensic case analysis, so it should be grouped under 'Forensic Reasoning and Case Analysis'.\",\n      \"confidence\": 0.96\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_8caba5b7\",\n      \"new_name\": null,\n      \"new_description\": null,\n      \"new_class_type_hint\": null,\n      \"new_class_group\": \"Forensic Reasoning and Case Analysis\",\n      \"remark\": null,\n      \"justification\": \"Although focused on communication acts, this class deals specifically with explaining and presenting forensic analytical results within cases, making it part of the broader forensic reasoning and case analysis pipeline.\",\n      \"confidence\": 0.88\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_d0efec71\",\n      \"new_name\": null,\n      \"new_description\": null,\n      \"new_class_type_hint\": null,\n      \"new_class_group\": \"Forensic Reasoning and Case Analysis\",\n      \"remark\": null,\n      \"justification\": \"This class captures high-level determinations (identity, cause of death, substance presence) that are direct outcomes of forensic reasoning about evidence in a case, so it naturally fits in the 'Forensic Reasoning and Case Analysis' Class_Group.\",\n      \"confidence\": 0.95\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_5ea50982\",\n      \"new_name\": null,\n      \"new_description\": null,\n      \"new_class_type_hint\": null,\n      \"new_class_group\": \"Forensic Reasoning and Case Analysis\",\n      \"remark\": null,\n      \"justification\": \"This class describes complex data that forensic scientists analyze when reasoning about cases, making it part of the same forensic reasoning and case analysis domain as the other classes in this cluster.\",\n      \"confidence\": 0.9\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "reassign_entities",
+      "args": {
+        "entity_ids": [
+          "En_b0c08135"
+        ],
+        "from_class_id": "ClsC_8caba5b7",
+        "to_class_id": "ClsC_7a2d35c7",
+        "justification": "The entity 'analysis and conclusions' describes the cognitive/interpretive outcome of evidence analysis and fits better exclusively in 'Forensic Analytical Reasoning' rather than in 'Forensic Findings Communication', which should focus on the act of presenting results.",
+        "remark": null,
+        "confidence": 0.86
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_7d3800f0",
+        "new_name": null,
+        "new_description": null,
+        "new_class_type_hint": null,
+        "new_class_group": "Forensic Reasoning and Case Analysis",
+        "remark": null,
+        "justification": "This class covers investigative problems and evidentiary indicators that are part of the broader forensic reasoning and case analysis workflow, so it should share a Class_Group with related reasoning, determination, and case-context classes.",
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_b4988c0e",
+        "new_name": null,
+        "new_description": null,
+        "new_class_type_hint": null,
+        "new_class_group": "Forensic Reasoning and Case Analysis",
+        "remark": null,
+        "justification": "This class represents forensic cases, legal issues, and the search for truth, which are the core contexts in which forensic reasoning and analysis are applied, so it belongs in the same Class_Group as other reasoning and outcome classes.",
+        "confidence": 0.92
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_7a2d35c7",
+        "new_name": null,
+        "new_description": null,
+        "new_class_type_hint": null,
+        "new_class_group": "Forensic Reasoning and Case Analysis",
+        "remark": null,
+        "justification": "This class explicitly models the analytical reasoning processes and conclusions drawn from forensic evidence, forming the central cognitive component of forensic case analysis, so it should be grouped under 'Forensic Reasoning and Case Analysis'.",
+        "confidence": 0.96
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_8caba5b7",
+        "new_name": null,
+        "new_description": null,
+        "new_class_type_hint": null,
+        "new_class_group": "Forensic Reasoning and Case Analysis",
+        "remark": null,
+        "justification": "Although focused on communication acts, this class deals specifically with explaining and presenting forensic analytical results within cases, making it part of the broader forensic reasoning and case analysis pipeline.",
+        "confidence": 0.88
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_d0efec71",
+        "new_name": null,
+        "new_description": null,
+        "new_class_type_hint": null,
+        "new_class_group": "Forensic Reasoning and Case Analysis",
+        "remark": null,
+        "justification": "This class captures high-level determinations (identity, cause of death, substance presence) that are direct outcomes of forensic reasoning about evidence in a case, so it naturally fits in the 'Forensic Reasoning and Case Analysis' Class_Group.",
+        "confidence": 0.95
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_5ea50982",
+        "new_name": null,
+        "new_description": null,
+        "new_class_type_hint": null,
+        "new_class_group": "Forensic Reasoning and Case Analysis",
+        "remark": null,
+        "justification": "This class describes complex data that forensic scientists analyze when reasoning about cases, making it part of the same forensic reasoning and case analysis domain as the other classes in this cluster.",
+        "confidence": 0.9
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "reassign_entities",
+      "entity_ids": [
+        "En_b0c08135"
+      ],
+      "from": "ClsC_8caba5b7",
+      "from_resolved": "ClsC_8caba5b7",
+      "to": "ClsC_7a2d35c7",
+      "to_resolved": "ClsC_7a2d35c7",
+      "justification": "The entity 'analysis and conclusions' describes the cognitive/interpretive outcome of evidence analysis and fits better exclusively in 'Forensic Analytical Reasoning' rather than in 'Forensic Findings Communication', which should focus on the act of presenting results.",
+      "remark": null,
+      "confidence": 0.86
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_7d3800f0",
+      "class_id_resolved": "ClsC_7d3800f0",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Forensic Reasoning and Case Analysis",
+      "remark": null,
+      "justification": "This class covers investigative problems and evidentiary indicators that are part of the broader forensic reasoning and case analysis workflow, so it should share a Class_Group with related reasoning, determination, and case-context classes.",
+      "confidence": 0.9
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_b4988c0e",
+      "class_id_resolved": "ClsC_b4988c0e",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Forensic Reasoning and Case Analysis",
+      "remark": null,
+      "justification": "This class represents forensic cases, legal issues, and the search for truth, which are the core contexts in which forensic reasoning and analysis are applied, so it belongs in the same Class_Group as other reasoning and outcome classes.",
+      "confidence": 0.92
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_7a2d35c7",
+      "class_id_resolved": "ClsC_7a2d35c7",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Forensic Reasoning and Case Analysis",
+      "remark": null,
+      "justification": "This class explicitly models the analytical reasoning processes and conclusions drawn from forensic evidence, forming the central cognitive component of forensic case analysis, so it should be grouped under 'Forensic Reasoning and Case Analysis'.",
+      "confidence": 0.96
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_8caba5b7",
+      "class_id_resolved": "ClsC_8caba5b7",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Forensic Reasoning and Case Analysis",
+      "remark": null,
+      "justification": "Although focused on communication acts, this class deals specifically with explaining and presenting forensic analytical results within cases, making it part of the broader forensic reasoning and case analysis pipeline.",
+      "confidence": 0.88
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_d0efec71",
+      "class_id_resolved": "ClsC_d0efec71",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Forensic Reasoning and Case Analysis",
+      "remark": null,
+      "justification": "This class captures high-level determinations (identity, cause of death, substance presence) that are direct outcomes of forensic reasoning about evidence in a case, so it naturally fits in the 'Forensic Reasoning and Case Analysis' Class_Group.",
+      "confidence": 0.95
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_5ea50982",
+      "class_id_resolved": "ClsC_5ea50982",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Forensic Reasoning and Case Analysis",
+      "remark": null,
+      "justification": "This class describes complex data that forensic scientists analyze when reasoning about cases, making it part of the same forensic reasoning and case analysis domain as the other classes in this cluster.",
+      "confidence": 0.9
+    }
+  ],
+  "provisional_to_real": {},
+  "timestamp": "2026-01-06T14:24:29Z"
+}

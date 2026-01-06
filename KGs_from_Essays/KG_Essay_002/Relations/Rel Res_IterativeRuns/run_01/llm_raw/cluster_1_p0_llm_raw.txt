@@ -1,0 +1,34 @@
+[
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": [
+        "RelR_89981662ee53",
+        "RelR_4eb80b9067d4",
+        "RelR_67f93f276439"
+      ],
+      "canonical_rel_name": "is_enabled_by",
+      "canonical_rel_desc": null,
+      "rel_cls": null,
+      "rel_cls_group": null,
+      "justification": "These three relations all express that a state or process (interconnected societies, spread of urban legends) is causally enabled or facilitated by another factor (trade, travel, technological/communication advances). Normalizing the canonical_rel_name to the passive-voice pattern 'is_enabled_by' improves consistency with other predicate styles (e.g., 'is_implemented_by') while preserving the existing causal_enablement_relation class and CAUSALITY group.",
+      "remark": "Previous canonical_rel_name 'enabled_by' was semantically correct but slightly ungrammatical relative to other passive predicates; updated to 'is_enabled_by' for schema consistency.",
+      "confidence": 0.86
+    }
+  },
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": [
+        "RelR_617131c3700d"
+      ],
+      "canonical_rel_name": null,
+      "canonical_rel_desc": null,
+      "rel_cls": "causal_enablement_relation",
+      "rel_cls_group": null,
+      "justification": "This relation states that oral storytelling enables the intergenerational transmission of tales, which is a causal enablement (one process making another possible). The current rel_cls 'process_mechanism_relation' is better suited to implementation/realization links (as in 'is_implemented_by'), whereas the semantics here align with the same enablement family used for other 'is_enabled_by' relations in this chunk. Updating rel_cls to 'causal_enablement_relation' makes classification more coherent across similar enablement predicates.",
+      "remark": "Kept canonical_rel_name 'enables' because this edge is explicitly directional from mechanism to enabled process, but aligned its class with other enablement relations.",
+      "confidence": 0.83
+    }
+  }
+]

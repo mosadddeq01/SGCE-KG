@@ -1,0 +1,42 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_fccd2a661d02",
+        "RelR_f0380c65b414"
+      ],
+      "canonical_rel_name": "asserts",
+      "canonical_rel_desc": "Indicates that a document or declarative source explicitly asserts, states, or proclaims the associated principle, right, or proposition as part of its content.",
+      "justification": "Both relations describe the Declaration of Independence explicitly asserting certain principles or rights as its propositional content. The subject is the same foundational document and the objects are specific principles it proclaims, so a single predicate 'asserts' accurately and consistently captures this document-to-proposition relation.",
+      "remark": null,
+      "confidence": 0.96
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_fccd2a661d02",
+        "RelR_f0380c65b414"
+      ],
+      "rel_cls": "statement_content_relation",
+      "justification": "These relations connect a declarative document to the principles or rights it proclaims as its content. They are best grouped into a class that captures document-to-stated-content or statement-to-proposition relations, hence 'statement_content_relation'.",
+      "remark": null,
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_fccd2a661d02",
+        "RelR_f0380c65b414"
+      ],
+      "rel_cls_group": "ASSOCIATION",
+      "justification": "The relations associate a document with the ideas or propositions it contains; this is not primarily causal, temporal, or spatial but a content-based linkage between entities, fitting best under a broad ASSOCIATION group.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  }
+]

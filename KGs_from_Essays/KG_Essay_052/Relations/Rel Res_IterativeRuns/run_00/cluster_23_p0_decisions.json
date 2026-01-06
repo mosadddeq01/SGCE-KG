@@ -1,0 +1,295 @@
+{
+  "cluster_label": "23_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_27edd73031f9",
+      "relation_name": "occurs_in",
+      "rel_desc": "Sports are said to have been present and socially relevant since ancient civilizations.",
+      "rel_hint_type": "temporal context",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "sports",
+      "object_entity_name": "ancient civilizations",
+      "subject_class_label": "Sports (Domain Concept)",
+      "subject_class_group": "Sports and Society",
+      "object_class_label": "Sport-Influenced Societies",
+      "object_class_group": "Sports, Culture, and Society",
+      "qualifiers": {
+        "TemporalQualifier": "ancient era",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": "From",
+        "OtherQualifier": "ContinuitySpan: beginning of described historical range"
+      },
+      "confidence": 0.8,
+      "remarks": [
+        "Relation created to preserve temporal span of sports' influence."
+      ]
+    },
+    {
+      "relation_id": "RelR_390368d08e30",
+      "relation_name": "occurs_in",
+      "rel_desc": "Sports are described as continuing to serve social roles in modern societies.",
+      "rel_hint_type": "temporal context",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "sports",
+      "object_entity_name": "modern societies",
+      "subject_class_label": "Sports (Domain Concept)",
+      "subject_class_group": "Sports and Society",
+      "object_class_label": "Sport-Influenced Societies",
+      "object_class_group": "Sports, Culture, and Society",
+      "qualifiers": {
+        "TemporalQualifier": "modern era",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": "to",
+        "OtherQualifier": "ContinuitySpan: end of described historical range"
+      },
+      "confidence": 0.84,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_50540ba67d46",
+      "relation_name": "occurs_in_context_of",
+      "rel_desc": "The World Cup is a major event that occurs in the context of the sport of soccer.",
+      "rel_hint_type": "context",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "World Cup",
+      "object_entity_name": "soccer",
+      "subject_class_label": "Global Sporting Events",
+      "subject_class_group": "Global Sporting Events & Impacts",
+      "object_class_label": "Global Popular Sports",
+      "object_class_group": "Global Sporting Events & Impacts",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "around the globe",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "AudienceScale: millions of people"
+      },
+      "confidence": 0.96,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_51bddef63c5d",
+      "relation_name": "involves",
+      "rel_desc": "Participation in sports is an activity that involves sports as its context.",
+      "rel_hint_type": "context",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "participation in sports",
+      "object_entity_name": "sports",
+      "subject_class_label": "Sports Participation Activities",
+      "subject_class_group": "Sports and Society",
+      "object_class_label": "Sports (Domain Concept)",
+      "object_class_group": "Sports and Society",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": "in",
+        "OtherQualifier": null
+      },
+      "confidence": 0.9,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_27edd73031f9\", \"RelR_390368d08e30\"],\n      \"canonical_rel_name\": \"is_practiced_in\",\n      \"canonical_rel_desc\": \"Indicates that a sport or group of sports is practiced within a given society or historical context.\",\n      \"justification\": \"Both relations state that sports are present and socially relevant within particular societies/eras (ancient civilizations, modern societies). A single predicate 'is_practiced_in' captures the idea of sports being practiced in those societal/temporal contexts; the temporal qualifiers hold the time-span detail.\",\n      \"remark\": null,\n      \"confidence\": 0.87\n    }\n  },\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_50540ba67d46\"],\n      \"canonical_rel_name\": \"is_competition_in_sport\",\n      \"canonical_rel_desc\": \"Indicates that an event or competition belongs to and takes place within a particular sport.\",\n      \"justification\": \"The relation describes the World Cup as a major event that occurs in the context of the sport of soccer. This is best modeled as a specific competition being within a given sport, hence 'is_competition_in_sport'.\",\n      \"remark\": null,\n      \"confidence\": 0.93\n    }\n  },\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_51bddef63c5d\"],\n      \"canonical_rel_name\": \"is_activity_in_domain\",\n      \"canonical_rel_desc\": \"Indicates that an activity takes place within or is defined by a particular domain or field.\",\n      \"justification\": \"The relation states that 'participation in sports' is an activity that involves sports as its context. This is well captured by an activity being situated within a conceptual domain, here the domain of sports.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_27edd73031f9\", \"RelR_390368d08e30\"],\n      \"rel_cls\": \"sociohistorical_presence_relation\",\n      \"justification\": \"Both relations express that sports are present or practiced in specific societies across time, tying the concept of sports to sociohistorical contexts. Grouping them under 'sociohistorical_presence_relation' captures this family of meanings.\",\n      \"remark\": null,\n      \"confidence\": 0.86\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_50540ba67d46\", \"RelR_51bddef63c5d\"],\n      \"rel_cls\": \"sport_context_relation\",\n      \"justification\": \"Both relations link entities (World Cup; participation in sports) to the broader context of a sport or the sports domain. They are contextual, non-hierarchical links within the sports domain, so a shared class 'sport_context_relation' is appropriate.\",\n      \"remark\": null,\n      \"confidence\": 0.88\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_27edd73031f9\", \"RelR_390368d08e30\"],\n      \"rel_cls_group\": \"TEMPORALITY\",\n      \"justification\": \"These relations explicitly encode the presence of sports across historical eras and societies, with temporal qualifiers marking ancient and modern periods. Their primary semantic dimension is temporal/sociohistorical span.\",\n      \"remark\": null,\n      \"confidence\": 0.86\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_50540ba67d46\", \"RelR_51bddef63c5d\"],\n      \"rel_cls_group\": \"ASSOCIATION\",\n      \"justification\": \"These relations express contextual association between activities/events and the sports domain (an event within a sport; an activity within the domain of sports) without implying composition, causality, or hierarchy, so they best fit an ASSOCIATION group.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_27edd73031f9",
+          "RelR_390368d08e30"
+        ],
+        "canonical_rel_name": "is_practiced_in",
+        "canonical_rel_desc": "Indicates that a sport or group of sports is practiced within a given society or historical context.",
+        "justification": "Both relations state that sports are present and socially relevant within particular societies/eras (ancient civilizations, modern societies). A single predicate 'is_practiced_in' captures the idea of sports being practiced in those societal/temporal contexts; the temporal qualifiers hold the time-span detail.",
+        "remark": null,
+        "confidence": 0.87
+      }
+    },
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_50540ba67d46"
+        ],
+        "canonical_rel_name": "is_competition_in_sport",
+        "canonical_rel_desc": "Indicates that an event or competition belongs to and takes place within a particular sport.",
+        "justification": "The relation describes the World Cup as a major event that occurs in the context of the sport of soccer. This is best modeled as a specific competition being within a given sport, hence 'is_competition_in_sport'.",
+        "remark": null,
+        "confidence": 0.93
+      }
+    },
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_51bddef63c5d"
+        ],
+        "canonical_rel_name": "is_activity_in_domain",
+        "canonical_rel_desc": "Indicates that an activity takes place within or is defined by a particular domain or field.",
+        "justification": "The relation states that 'participation in sports' is an activity that involves sports as its context. This is well captured by an activity being situated within a conceptual domain, here the domain of sports.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_27edd73031f9",
+          "RelR_390368d08e30"
+        ],
+        "rel_cls": "sociohistorical_presence_relation",
+        "justification": "Both relations express that sports are present or practiced in specific societies across time, tying the concept of sports to sociohistorical contexts. Grouping them under 'sociohistorical_presence_relation' captures this family of meanings.",
+        "remark": null,
+        "confidence": 0.86
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_50540ba67d46",
+          "RelR_51bddef63c5d"
+        ],
+        "rel_cls": "sport_context_relation",
+        "justification": "Both relations link entities (World Cup; participation in sports) to the broader context of a sport or the sports domain. They are contextual, non-hierarchical links within the sports domain, so a shared class 'sport_context_relation' is appropriate.",
+        "remark": null,
+        "confidence": 0.88
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_27edd73031f9",
+          "RelR_390368d08e30"
+        ],
+        "rel_cls_group": "TEMPORALITY",
+        "justification": "These relations explicitly encode the presence of sports across historical eras and societies, with temporal qualifiers marking ancient and modern periods. Their primary semantic dimension is temporal/sociohistorical span.",
+        "remark": null,
+        "confidence": 0.86
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_50540ba67d46",
+          "RelR_51bddef63c5d"
+        ],
+        "rel_cls_group": "ASSOCIATION",
+        "justification": "These relations express contextual association between activities/events and the sports domain (an event within a sport; an activity within the domain of sports) without implying composition, causality, or hierarchy, so they best fit an ASSOCIATION group.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_27edd73031f9",
+        "RelR_390368d08e30"
+      ],
+      "canonical_rel_name": "is_practiced_in",
+      "canonical_rel_desc": "Indicates that a sport or group of sports is practiced within a given society or historical context.",
+      "justification": "Both relations state that sports are present and socially relevant within particular societies/eras (ancient civilizations, modern societies). A single predicate 'is_practiced_in' captures the idea of sports being practiced in those societal/temporal contexts; the temporal qualifiers hold the time-span detail.",
+      "remark": null,
+      "confidence": 0.87
+    },
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_50540ba67d46"
+      ],
+      "canonical_rel_name": "is_competition_in_sport",
+      "canonical_rel_desc": "Indicates that an event or competition belongs to and takes place within a particular sport.",
+      "justification": "The relation describes the World Cup as a major event that occurs in the context of the sport of soccer. This is best modeled as a specific competition being within a given sport, hence 'is_competition_in_sport'.",
+      "remark": null,
+      "confidence": 0.93
+    },
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_51bddef63c5d"
+      ],
+      "canonical_rel_name": "is_activity_in_domain",
+      "canonical_rel_desc": "Indicates that an activity takes place within or is defined by a particular domain or field.",
+      "justification": "The relation states that 'participation in sports' is an activity that involves sports as its context. This is well captured by an activity being situated within a conceptual domain, here the domain of sports.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_27edd73031f9",
+        "RelR_390368d08e30"
+      ],
+      "rel_cls": "sociohistorical_presence_relation",
+      "justification": "Both relations express that sports are present or practiced in specific societies across time, tying the concept of sports to sociohistorical contexts. Grouping them under 'sociohistorical_presence_relation' captures this family of meanings.",
+      "remark": null,
+      "confidence": 0.86
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_50540ba67d46",
+        "RelR_51bddef63c5d"
+      ],
+      "rel_cls": "sport_context_relation",
+      "justification": "Both relations link entities (World Cup; participation in sports) to the broader context of a sport or the sports domain. They are contextual, non-hierarchical links within the sports domain, so a shared class 'sport_context_relation' is appropriate.",
+      "remark": null,
+      "confidence": 0.88
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_27edd73031f9",
+        "RelR_390368d08e30"
+      ],
+      "rel_cls_group": "TEMPORALITY",
+      "justification": "These relations explicitly encode the presence of sports across historical eras and societies, with temporal qualifiers marking ancient and modern periods. Their primary semantic dimension is temporal/sociohistorical span.",
+      "remark": null,
+      "confidence": 0.86
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_50540ba67d46",
+        "RelR_51bddef63c5d"
+      ],
+      "rel_cls_group": "ASSOCIATION",
+      "justification": "These relations express contextual association between activities/events and the sports domain (an event within a sport; an activity within the domain of sports) without implying composition, causality, or hierarchy, so they best fit an ASSOCIATION group.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  ],
+  "timestamp": "2026-01-06T12:43:04Z"
+}

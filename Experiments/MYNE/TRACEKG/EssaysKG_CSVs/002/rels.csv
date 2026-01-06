@@ -1,0 +1,1073 @@
+"relation_id","start_id","end_id","raw_relation_name","canonical_rel_name","canonical_rel_desc","rel_cls","rel_cls_group","rel_hint_type","confidence","resolution_context","justification","remark","evidence_excerpt","chunk_id","qualifiers","rel_desc"
+"RelR_3849b7be6e41","Can_d6b2734a","Can_c452a54f","is_subtype_of","is_subtype_of","Indicates that the subject concept is a more specific subtype or category within the broader class represented by the object.","hierarchical_category_relation","IDENTITY","hierarchy","0.94","Direction chosen from specific narrative form (urban legends) to broader category (modern folklore).","The text explicitly calls urban legends 'a fascinating aspect of modern folklore', indicating they are part of or a type of modern folklore.","","Urban legends have been a fascinating aspect of modern folklore for centuries.","Ch_000001","{
+ ""TemporalQualifier"": ""for centuries"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": ""Characterization: fascinating aspect""
+}","Urban legends are presented as an aspect or subset of modern folklore."
+"RelR_d56a4bacbf85","Can_8330f9b7","Can_d6b2734a","is_theme_of","is_theme_of","Indicates that the subject is a central, recurring, or underlying theme, motif, or emotional focus within the object narrative, legend, or narrative genre.","narrative_theme_relation","CONTENT","content-theme","0.9","Direction from specific motif (haunted houses) to narrative type (urban legends) as the stories featuring that motif.","The phrase 'From haunted houses to mysterious creatures, urban legends...' lists haunted houses as example material that urban legends are about.","","From haunted houses to mysterious creatures, urban legends take on a life of their own...","Ch_000001","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""from"",
+ ""OtherQualifier"": ""Role: example motif in legends""
+}","Haunted houses are given as a thematic example of content featured in urban legends."
+"RelR_0cba31ba724d","Can_1dd2f021","Can_d6b2734a","is_theme_of","is_theme_of","Indicates that the subject is a central, recurring, or underlying theme, motif, or emotional focus within the object narrative, legend, or narrative genre.","narrative_theme_relation","CONTENT","content-theme","0.9","Direction from entity type (mysterious creatures) to narrative form (urban legends) that include them.","Mysterious creatures are listed alongside haunted houses as examples in the context of urban legends, implying legends often concern such creatures.","","From haunted houses to mysterious creatures, urban legends take on a life of their own...","Ch_000001","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""from"",
+ ""OtherQualifier"": ""Role: example motif in legends""
+}","Mysterious creatures are presented as example subjects or motifs featured within urban legends."
+"RelR_a8c302701e53","Can_d6b2734a","Can_fff1b8f8","circulated_in","circulates_within","Indicates that a narrative or information item is shared and transmitted within a particular social group or community.","narrative_dissemination_relation","COMMUNICATION","dissemination","0.96","Direction from stories (urban legends) to social groups (communities) where they circulate.","The text states that urban legends 'are shared and retold in communities both large and small', describing their circulation context.","","urban legends take on a life of their own as they are shared and retold in communities both large and small.","Ch_000001","{
+ ""TemporalQualifier"": ""passed down through generations"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""as"",
+ ""OtherQualifier"": ""CommunitySize: both large and small""
+}","Urban legends are disseminated by being shared and retold within communities."
+"RelR_177460eaf6b3","Can_d6b2734a","Can_fff1b8f8","transmitted_across","circulates_within","Indicates that a narrative or information item is shared and transmitted within a particular social group or community.","narrative_dissemination_relation","COMMUNICATION","transmission","0.78","Chosen to capture the intergenerational transmission of legends via communities; communities are implied carriers.","The text notes 'These tales, often passed down through generations', in the same context where sharing and retelling occur in communities.","Relation primarily created to preserve temporal and intergenerational transmission context.","These tales, often passed down through generations, capture the imagination...","Ch_000001","{
+ ""TemporalQualifier"": ""through generations"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": ""often"",
+ ""CausalHint"": null,
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": ""TransmissionMode: oral/retelling""
+}","Urban legends are transmitted across generations within communities."
+"RelR_1e4c8fc43f9e","Can_1c1217ea","Can_d6b2734a","concerns","is_about","Indicates that the subject entity (typically a text, concept, or discussion) has the object entity as its primary topic or focus.","topical_aboutness_relation","ASSOCIATION","aboutness","0.92","Direction from abstract topic (origins) to the phenomenon whose origins are being considered (urban legends).","The phrase 'origins of urban legends' grammatically indicates that the origins topic is about urban legends.","","we will explore the origins of urban legends, their impact on society, and why they continue to endure.","Ch_000001","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""of"",
+ ""OtherQualifier"": null
+}","The concept 'origins of urban legends' specifically pertains to how urban legends begin and develop."
+"RelR_495d10a97fd3","Can_d6b2734a","En_0fc23d88","produces_effect","has_impact_on","The subject has a social, cultural, or other impact on the object.","causal_effect_relation","CAUSALITY","causal-effect","0.86","Direction chosen from cause/source (urban legends) to resulting effect concept (impact on society).","The essay will explore 'their impact on society', where 'their' refers to urban legends, implying legends bring about social impacts.","","we will explore the origins of urban legends, their impact on society, and why they continue to endure.","Ch_000001","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": ""on society"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""impact"",
+ ""LogicalMarker"": ""and"",
+ ""OtherQualifier"": null
+}","Urban legends have an impact on society, influencing social attitudes or behaviors."
+"RelR_3dee0e53fc5e","Can_d6b2734a","En_c30532e4","exhibits","has_attribute","Indicates that the subject entity is characterized by or possesses the attribute or characteristic represented by the object node.","attribute_relation","ATTRIBUTE","property","0.84","Direction from phenomenon (urban legends) to abstract dynamic (their endurance).","The phrase 'why they continue to endure' refers back to urban legends, attributing endurance as a characteristic dynamic.","","we will explore the origins of urban legends, their impact on society, and why they continue to endure.","Ch_000001","{
+ ""TemporalQualifier"": ""continue to endure"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""why"",
+ ""LogicalMarker"": ""why"",
+ ""OtherQualifier"": null
+}","Urban legends are described as continuing to endure over time."
+"RelR_3df4c2f3648a","Can_d6b2734a","Can_fff1b8f8","influences","influences","Indicates that the subject exerts an influence or impact on the properties, behavior, or development of the object.","influence_relation","CAUSALITY","influence","0.74","Mapped 'people around the world' to communities as the nearest resolved social-group entity.","Urban legends 'capture the imagination and curiosity of people around the world'; people are the members of communities through which legends circulate.","Slight abstraction: using 'communities' to stand in for globally distributed people.","These tales, often passed down through generations, capture the imagination and curiosity of people around the world.","Ch_000001","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": ""around the world"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""capture"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": ""AffectiveImpact: imagination and curiosity""
+}","Urban legends influence people within communities by capturing their imagination and curiosity."
+"RelR_c9421dbb7623","En_fd450d70","Can_1c1217ea","discusses","is_about","Indicates that an information-bearing entity (such as an essay, report, or narrative) is about or thematically focused on the object topic or entity.","document_topic_relation","ASSOCIATION","aboutness","0.96","Direction from document (essay) to topic (origins of urban legends).","The sentence 'In this essay, we will explore the origins of urban legends...' explicitly sets the essay’s scope.","","In this essay, we will explore the origins of urban legends, their impact on society, and why they continue to endure.","Ch_000001","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": ""will (future intention)"",
+ ""CausalHint"": null,
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": ""RhetoricalRole: essay objective""
+}","The essay states it will explore the origins of urban legends as one of its main topics."
+"RelR_0e88fe2ee094","En_fd450d70","En_0fc23d88","discusses","is_about","Indicates that an information-bearing entity (such as an essay, report, or narrative) is about or thematically focused on the object topic or entity.","document_topic_relation","ASSOCIATION","aboutness","0.96","Direction from essay to the specific impact-focused topic.","The essay’s purpose statement includes 'their impact on society' among the topics to be explored.","","we will explore the origins of urban legends, their impact on society, and why they continue to endure.","Ch_000001","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": ""on society"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": ""will (future intention)"",
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""and"",
+ ""OtherQualifier"": ""RhetoricalRole: essay objective""
+}","The essay aims to explore the impact of urban legends on society."
+"RelR_7d0308323555","En_fd450d70","En_c30532e4","discusses","is_about","Indicates that an information-bearing entity (such as an essay, report, or narrative) is about or thematically focused on the object topic or entity.","document_topic_relation","ASSOCIATION","aboutness","0.96","Direction from essay to endurance-related topic.","The scope statement includes 'why they continue to endure' as a topic to be explored in the essay.","","we will explore the origins of urban legends, their impact on society, and why they continue to endure.","Ch_000001","{
+ ""TemporalQualifier"": ""continue to endure"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": ""will (future intention)"",
+ ""CausalHint"": ""why"",
+ ""LogicalMarker"": ""and"",
+ ""OtherQualifier"": ""RhetoricalRole: essay objective""
+}","The essay will discuss why urban legends continue to endure."
+"RelR_997dfb156da6","En_fd450d70","Can_d6b2734a","focuses_on","is_about","Indicates that the subject entity (typically a text, concept, or discussion) has the object entity as its primary topic or focus.","topical_aboutness_relation","ASSOCIATION","aboutness","0.93","Direction from document (essay) to its primary subject matter (urban legends).","The title 'Urban Legends and Their Origins' and subsequent text indicate the essay is about urban legends.","","Urban Legends and Their Origins
+
+Urban legends have been a fascinating aspect of modern folklore...","Ch_000001","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""and"",
+ ""OtherQualifier"": ""TextSection: title and introduction""
+}","The essay as a whole is focused on urban legends."
+"RelR_44d857c79486","En_ffc7e394","En_6938d10d","originates_in","originates_in_time_period","Indicates that the origins of the subject can be traced back to the specified historical time period.","temporal_origin_relation","TEMPORALITY","temporal-origin","0.93","Direction chosen as phenomenon (urban legends) → time period of origin.","Phrase explicitly links the origins of urban legends to ancient times as their starting period.","","The origins of urban legends can be traced back to ancient times","Ch_000002","{
+ ""TemporalQualifier"": ""origins in ancient times"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""can be traced back to"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": null
+}","The text states that the origins of urban legends trace back to ancient times."
+"RelR_751595989c3c","En_fc849d80","Can_42313147","used_for","used_to_explain","Indicates that the subject narrative or story is employed as a means to explain or make sense of the object concept or phenomenon.","narrative_function_relation","USAGE","functional-role","0.9","Stories as explanatory narratives → target domain being the supernatural.","Text: ""stories were used to explain the unknown and the supernatural"" directly states the function.","","when stories were used to explain the unknown and the supernatural","Ch_000002","{
+ ""TemporalQualifier"": ""in ancient times"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""used to explain"",
+ ""LogicalMarker"": ""when"",
+ ""OtherQualifier"": ""TargetDomain: the unknown and the supernatural""
+}","Stories were used to explain the supernatural."
+"RelR_ca5971871f8f","En_fc849d80","En_ffc7e394","historical_predecessor_of","is_narrative_predecessor_of","The subject narrative acts as a historical or conceptual predecessor that underpins or evolves into the object narrative.","narrative_source_relation","CAUSALITY","historical","0.76","Interprets the explanatory stories at the origin period as precursors of later urban legends.","Origins of urban legends are tied to a time ""when stories were used to explain"" suggesting those stories were early forms of urban legends.","Relation chosen to capture that origin-period explanatory stories underpin later urban legends.","The origins of urban legends can be traced back to ancient times when stories were used","Ch_000002","{
+ ""TemporalQualifier"": ""ancient times"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": ""implied, not explicitly named as urban legends"",
+ ""CausalHint"": ""origins ... traced back to when"",
+ ""LogicalMarker"": ""when"",
+ ""OtherQualifier"": null
+}","Explanatory stories in ancient times are presented as the historical roots of modern urban legends."
+"RelR_617131c3700d","En_8e0b6567","En_e6657ac6","enables","enables","Indicates that a process or mechanism functionally enables or makes possible another process or outcome.","causal_enablement_relation","CAUSALITY","transmission","0.94","Oral mode is the mechanism; intergenerational transmission is the process outcome.","The text links tales being ""shared orally"" with being ""passed down from one generation to the next"".","","These tales were often shared orally, passed down from one generation to the next","Ch_000002","{
+ ""TemporalQualifier"": ""over time"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""shared orally, passed down"",
+ ""LogicalMarker"": ""and"",
+ ""OtherQualifier"": ""Medium: spoken/oral performance""
+}","Oral storytelling enables the intergenerational transmission of tales."
+"RelR_53ee512d7c92","En_e6657ac6","En_8e0b6567","implemented_by","is_implemented_by","Indicates that a process or abstract function is realized or carried out through a specific mechanism, practice, or implementation method.","process_mechanism_relation","MECHANISM","implementation","0.82","Reverse direction captures the mechanism as implementation of the transmission process.","The passage indicates that passing tales between generations occurs via them being ""shared orally"".","Some redundancy with previous relation; included to preserve both process→mechanism and mechanism→process views.","These tales were often shared orally, passed down from one generation to the next","Ch_000002","{
+ ""TemporalQualifier"": ""as tales are retold across generations"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""often"",
+ ""OtherQualifier"": null
+}","Intergenerational transmission of tales is implemented by oral storytelling practices."
+"RelR_f37af8736827","En_854fdfcb","En_ffc7e394","affects","influences","Indicates that one narrative process or factor influences the content, form, or characteristics of another narrative or narrative category.","narrative_evolution_relation","CAUSALITY","change","0.78","Urban legends are among the tales that evolve over time to match audience interests and fears.","The paragraph discusses tales (contextually urban legends) evolving over time as they are retold.","Assumes the general ""tales"" include urban legends described in this passage.","and evolved over time to suit the interests and fears of different cultures","Ch_000002","{
+ ""TemporalQualifier"": ""over time"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": ""implicit linkage between tales and specifically urban legends"",
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""and"",
+ ""OtherQualifier"": ""Driver: to suit interests and fears of audiences""
+}","The evolution of tales over time affects the content and form of urban legends."
+"RelR_b3fc753a54ae","En_7f4ba4eb","En_854fdfcb","influences","influences","Indicates that the subject exerts an influence or impact on the properties, behavior, or development of the object.","influence_relation","CAUSALITY","influence","0.9","Cultures supply interests and fears that guide narrative evolution.","The clause states that tales evolved specifically ""to suit the interests and fears of different cultures"".","","evolved over time to suit the interests and fears of different cultures","Ch_000002","{
+ ""TemporalQualifier"": ""as tales are retold over time"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": ""to suit the interests and fears of different cultures"",
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""to suit"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": null
+}","Different cultures influence how tales evolve over time."
+"RelR_767dd95c3ea5","En_854fdfcb","En_b33f7c4f","results_in","results_in","The subject process or state leads to the creation or emergence of the object as a result.","narrative_evolution_relation","CAUSALITY","causal","0.88","Evolution process → outcome being altered forms/variations.","The passage links tales evolving over time and, with spreading, ""taking on new forms and variations"".","Captures outcome of narrative evolution explicitly.","evolved over time to suit the interests and fears of different cultures... taking on new forms and variations","Ch_000002","{
+ ""TemporalQualifier"": ""over time, as they spread"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""taking on"",
+ ""LogicalMarker"": ""as"",
+ ""OtherQualifier"": null
+}","The evolution of tales over time results in new forms and variations of legends."
+"RelR_89981662ee53","En_d314b910","En_70339306","facilitated_by","is_enabled_by","Indicates that the subject state or process is causally enabled or facilitated by the existence or operation of the object.","causal_enablement_relation","CAUSALITY","enabling-condition","0.89","Societal interconnectedness is described as occurring ""through"" trade.","""As societies became more interconnected through trade and travel"" indicates trade is a means.","","As societies became more interconnected through trade and travel","Ch_000002","{
+ ""TemporalQualifier"": ""as societies became more interconnected"",
+ ""SpatialQualifier"": ""between societies/regions"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""through"",
+ ""LogicalMarker"": ""as"",
+ ""OtherQualifier"": null
+}","Interconnected societies are facilitated by trade."
+"RelR_4eb80b9067d4","En_d314b910","En_64d7435c","facilitated_by","is_enabled_by","Indicates that the subject state or process is causally enabled or facilitated by the existence or operation of the object.","causal_enablement_relation","CAUSALITY","enabling-condition","0.89","Travel is another mechanism by which societies become interconnected.","Same clause attributes increased interconnection to both trade and travel.","","As societies became more interconnected through trade and travel","Ch_000002","{
+ ""TemporalQualifier"": ""as societies became more interconnected"",
+ ""SpatialQualifier"": ""between regions and continents"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""through"",
+ ""LogicalMarker"": ""and"",
+ ""OtherQualifier"": null
+}","Interconnected societies are facilitated by travel."
+"RelR_cc090afe46bb","En_d314b910","En_ffc7e394","facilitates_spread_of","facilitates_dissemination_of","Indicates that the subject context or structure makes it easier for a narrative or information item to spread more widely.","narrative_dissemination_relation","CAUSALITY","dissemination","0.9","Social interconnectedness is treated as a context enabling legend dissemination.","Temporal-causal framing links increasing interconnectedness with the beginning of widespread legend spread.","","As societies became more interconnected through trade and travel, urban legends began to spread","Ch_000002","{
+ ""TemporalQualifier"": ""as societies became more interconnected"",
+ ""SpatialQualifier"": ""across regions and continents"",
+ ""OperationalConstraint"": ""via trade and travel"",
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""As ... began to"",
+ ""LogicalMarker"": ""As"",
+ ""OtherQualifier"": null
+}","Interconnected societies facilitate the spread of urban legends."
+"RelR_6ace96c2965a","En_ffc7e394","En_c60673e6","disseminated_to","spreads_across","Indicates that a legend, information item, or its variations are disseminated and circulate across a geographic area or scale (e.g., regions, continents, the world).","cultural_diffusion_relation","SPATIALITY","spatial-spread","0.95","Urban legends as the spreading content; regions as target spatial units.","The text explicitly says urban legends ""began to spread across regions"".","","urban legends began to spread across regions and continents","Ch_000002","{
+ ""TemporalQualifier"": ""as societies became more interconnected"",
+ ""SpatialQualifier"": ""across regions"",
+ ""OperationalConstraint"": ""enabled by trade and travel"",
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""spread across"",
+ ""LogicalMarker"": ""and"",
+ ""OtherQualifier"": null
+}","Urban legends are disseminated across different regions."
+"RelR_856b9aef445c","En_ffc7e394","En_1db38548","disseminated_to","spreads_across","Indicates that a legend, information item, or its variations are disseminated and circulate across a geographic area or scale (e.g., regions, continents, the world).","cultural_diffusion_relation","SPATIALITY","spatial-spread","0.95","Same spread process, at a larger geographic scale.","""spread across regions and continents"" clearly includes continents as destinations.","","urban legends began to spread across regions and continents","Ch_000002","{
+ ""TemporalQualifier"": ""as societies became more interconnected"",
+ ""SpatialQualifier"": ""across continents"",
+ ""OperationalConstraint"": ""via trade and travel"",
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""spread across"",
+ ""LogicalMarker"": ""and"",
+ ""OtherQualifier"": null
+}","Urban legends are disseminated across continents."
+"RelR_9ddafaa09f4d","En_ffc7e394","En_b33f7c4f","develops_into","evolves_into","Indicates that one narrative or legend gradually changes over time into new forms or variations.","narrative_evolution_relation","CAUSALITY","evolution","0.9","The subject is the legends; the object is the altered versions they become.","Sentence: as legends spread, they ""tak[e] on new forms and variations"".","","urban legends began to spread across regions and continents, taking on new forms and variations","Ch_000002","{
+ ""TemporalQualifier"": ""during geographic spread"",
+ ""SpatialQualifier"": ""across regions and continents"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""taking on"",
+ ""LogicalMarker"": ""as"",
+ ""OtherQualifier"": null
+}","As urban legends spread, they develop into new forms and variations."
+"RelR_ae06c6bd53c0","En_b33f7c4f","En_c60673e6","distributed_across","spreads_across","Indicates that a legend, information item, or its variations are disseminated and circulate across a geographic area or scale (e.g., regions, continents, the world).","cultural_diffusion_relation","SPATIALITY","spatial-distribution","0.7","The variations arise in the context of spread across regions.","Wording implies that, as legends move through regions, they take on new forms there.","Slightly inferential; regions are not directly assigned the variations but are implied loci.","spread across regions and continents, taking on new forms and variations","Ch_000002","{
+ ""TemporalQualifier"": ""during spread"",
+ ""SpatialQualifier"": ""across regions"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": ""inferred locus of variation, not explicit"",
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""as"",
+ ""OtherQualifier"": null
+}","New forms and variations of legends are distributed across different regions."
+"RelR_9801b5dfb04e","En_b33f7c4f","En_1db38548","distributed_across","spreads_across","Indicates that a legend, information item, or its variations are disseminated and circulate across a geographic area or scale (e.g., regions, continents, the world).","cultural_diffusion_relation","SPATIALITY","spatial-distribution","0.7","Parallel to regions; continents are broader spatial context for variations.","Same sentence implies variations accompany spread over continents.","Again somewhat inferential but aligned with narrative logic.","spread across regions and continents, taking on new forms and variations","Ch_000002","{
+ ""TemporalQualifier"": ""during spread"",
+ ""SpatialQualifier"": ""across continents"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": ""inferred, not literal phrase"",
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""and"",
+ ""OtherQualifier"": null
+}","New forms and variations of legends are distributed across continents."
+"RelR_711c7d72d5f2","Can_3f1659ef","En_ffc7e394","instance_of","is_instance_of","Indicates that the subject is a concrete instance, example, or narrative realization of the more general class or type represented by the object.","instantiation_relation","IDENTITY","class-membership","0.98","Specific legend (Hook Man) is an instance of the general class urban legends.","The sentence explicitly calls Hook Man ""one of the most famous urban legends"".","","One of the most famous urban legends is that of the ""Hook Man""","Ch_000002","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""is that of"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": ""FameLevel: most famous""
+}","The Hook Man is identified as one of the most famous urban legends."
+"RelR_bac718768843","Can_3f1659ef","En_42f781cf","circulates_in","spreads_across","Indicates that a legend, information item, or its variations are disseminated and circulate across a geographic area or scale (e.g., regions, continents, the world).","cultural_diffusion_relation","SPATIALITY","spatial-spread","0.96","Hook Man as narrative; world as global scope of circulation.","Phrase ""told in various forms around the world"" directly links the legend to global scope.","","a story that has been told in various forms around the world","Ch_000002","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": ""around the world"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": ""in various forms"",
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": null
+}","The Hook Man legend circulates in various forms around the world."
+"RelR_1729699d54f7","Can_3f1659ef","En_b33f7c4f","exhibits","exemplifies_narrative_pattern","Indicates that a specific narrative or legend serves as an example of, or concretely manifests, a broader narrative pattern, form, or type.","narrative_pattern_relation","ATTRIBUTE","variation","0.8","The specific description of various forms is a concrete instance of legend variations.","Hook Man is described as being ""told in various forms"", which is an example of legend variation.","Maps the general idea of variations onto this concrete legend instance.","the ""Hook Man,"" a story that has been told in various forms around the world","Ch_000002","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": ""around the world"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": ""in various narrative forms"",
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": null
+}","The Hook Man legend exhibits new forms and variations of legends."
+"RelR_1873ffa1d429","Can_f4fcf4be","Can_3f1659ef","is_instance_of","is_instance_of","Indicates that the subject is a concrete instance, example, or narrative realization of the more general class or type represented by the object.","instantiation_relation","IDENTITY","classification","0.86","Direction chosen as tale → legend (instance to type).","Text contrasts “The tale” with “urban legends like the ""Hook Man""”, implying this tale is a version of the Hook Man legend.","","""The tale typically involves a young couple ... remain constant in urban legends like the ""Hook Man.""","Ch_000003","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": ""typically"",
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": ""NarrativeVariation: specifics of the story may vary""
+}","The specific Hook Man tale is a narrative instance of the broader Hook Man urban legend."
+"RelR_882d460a310d","Can_3f1659ef","En_9c20138b","is_instance_of","is_instance_of","Indicates that the subject is a concrete instance, example, or narrative realization of the more general class or type represented by the object.","instantiation_relation","IDENTITY","classification","0.9","Direction legend → genre (instance to type).","Phrase “urban legends like the ""Hook Man""” explicitly places Hook Man as a member of the urban legend category.","","remain constant in urban legends like the ""Hook Man.""","Ch_000003","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""like"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": null
+}","The Hook Man is given as an example of an urban legend."
+"RelR_6967aaff7826","Can_f4fcf4be","En_111fe794","features_character","features_narrative_role","Indicates that a narrative, legend, or motif includes the referenced entity as a participant occupying a specific narrative role (e.g., protagonist, antagonist, victim, threatening figure).","narrative_role_relation","COMPOSITION","composition","0.98","Subject is narrative; object is characters involved.","“The tale typically involves a young couple parked in a secluded area ...”.","","The tale typically involves a young couple parked in a secluded area","Ch_000003","{
+ ""TemporalQualifier"": ""as the story unfolds"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": ""typically"",
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""involves"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": null
+}","The Hook Man tale features a young couple as its main protagonists."
+"RelR_62c2a3400e5f","En_111fe794","En_5dddffd5","located_in","located_in","Indicates that an entity is situated within or at a broader location or area.","spatial_location_relation","SPATIALITY","spatial","0.99","Characters → location.","Explicit phrase “a young couple parked in a secluded area”.","","a young couple parked in a secluded area when they hear a news report","Ch_000003","{
+ ""TemporalQualifier"": ""when they hear a news report"",
+ ""SpatialQualifier"": ""in a secluded area"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": ""typically"",
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""when"",
+ ""OtherQualifier"": null
+}","The young couple is parked in a remote, secluded area in the story."
+"RelR_8aaa136f0f21","En_111fe794","En_c379b351","receives_information_from","receives_information_from","Indicates that the subject receives or obtains information or a message from the object.","information_transmission_relation","COMMUNICATION","communication","0.97","Recipients (couple) → message (news report).","Phrase “when they hear a news report about an escaped criminal”.","","parked in a secluded area when they hear a news report about an escaped criminal","Ch_000003","{
+ ""TemporalQualifier"": ""when parked in a secluded area"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""when"",
+ ""OtherQualifier"": null
+}","The young couple hears the news report as part of the narrative."
+"RelR_07bfb0d1c290","En_c379b351","En_780214c2","describes","is_about","Indicates that an information-bearing entity (such as an essay, report, or narrative) is about or thematically focused on the object topic or entity.","document_topic_relation","ASSOCIATION","information","0.99","Message → subject it is about.","The wording “news report about an escaped criminal” directly links the report to the criminal as its topic.","","they hear a news report about an escaped criminal with a hook for a hand.","Ch_000003","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""about"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": null
+}","The news report provides information about the escaped criminal."
+"RelR_b7b8aa3815b6","En_780214c2","En_9b2eeca8","has_attribute","has_attribute","Indicates that the subject entity is characterized by or possesses the attribute or characteristic represented by the object node.","attribute_relation","ATTRIBUTE","attribution","0.99","Criminal → bodily/weapon attribute.","Phrase “an escaped criminal with a hook for a hand” explicitly states the hook is a defining feature.","","an escaped criminal with a hook for a hand.","Ch_000003","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""with"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": null
+}","The escaped criminal is characterized by having a hook for a hand."
+"RelR_6d100d76aeb6","Can_f4fcf4be","En_780214c2","features_antagonist","features_narrative_role","Indicates that a narrative, legend, or motif includes the referenced entity as a participant occupying a specific narrative role (e.g., protagonist, antagonist, victim, threatening figure).","narrative_role_relation","COMPOSITION","composition","0.9","Narrative → main antagonist.","The criminal is central to the described events and is introduced in the news report as part of the tale’s setup.","Antagonist role inferred from context of being an escaped criminal with a hook in a horror-style legend.","a news report about an escaped criminal with a hook for a hand.","Ch_000003","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": ""typically"",
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": ""implied role; not named 'antagonist' explicitly"",
+ ""CausalHint"": null,
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": null
+}","The Hook Man tale features an escaped criminal as its antagonist."
+"RelR_52600ffcc198","En_22b9688a","En_da5abfeb","occurs_on","occurs_at_location","Indicates that an event, sound, or phenomenon occurs at or on a specific location or object.","spatial_location_relation","SPATIALITY","spatial","0.99","Sound event → surface where it is heard.","Text says “as they hear a scratching sound on the car door.”","","the couple becomes increasingly terrified as they hear a scratching sound on the car door","Ch_000003","{
+ ""TemporalQualifier"": ""as the story unfolds"",
+ ""SpatialQualifier"": ""on the car door"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""on"",
+ ""LogicalMarker"": ""as"",
+ ""OtherQualifier"": null
+}","The ominous scratching sound is heard on the car door."
+"RelR_b4016d65bcdd","En_b9ed6a82","En_2d4459a2","attached_to","attached_to","Indicates that a physical object is fastened, hanging from, or otherwise physically connected to another object.","spatial_configuration_relation","SPATIALITY","spatial","0.99","Physical object → vehicle component it is attached to.","Phrase “a bloody hook hanging from the handle” clearly links the hook to the car door handle.","","only to discover a bloody hook hanging from the handle.","Ch_000003","{
+ ""TemporalQualifier"": ""upon discovery"",
+ ""SpatialQualifier"": ""from the car door handle"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": ""only to discover a bloody hook"",
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""from"",
+ ""LogicalMarker"": ""only to"",
+ ""OtherQualifier"": null
+}","The bloody hook is found hanging from the car door handle."
+"RelR_488e43895aa3","En_22b9688a","En_111fe794","causes_emotion_in","evokes_emotion_in","The subject stimulus causes or intensifies a specific emotional state in the object (usually an audience or character).","causal_effect_relation","CAUSALITY","causal","0.97","Threat cue → emotional reaction in characters.","“the couple becomes increasingly terrified as they hear a scratching sound” indicates a causal connection between the sound and their fear.","","the couple becomes increasingly terrified as they hear a scratching sound on the car door","Ch_000003","{
+ ""TemporalQualifier"": ""as they hear it"",
+ ""SpatialQualifier"": ""on the car door"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""as"",
+ ""LogicalMarker"": ""as"",
+ ""OtherQualifier"": ""EmotionType: terror/fear""
+}","The scratching sound increases the young couple’s terror."
+"RelR_6aa9d041a6b4","En_b9ed6a82","En_5bad811e","symbolizes","symbolizes","Indicates that the subject serves as a symbolic or concrete representation of the object concept.","symbolic_representation_relation","REPRESENTATION","semantic_role","0.72","Hook is a physical token of the underlying abstract threat.","The discovery of a bloody hook is the climactic sign of danger in the narrative; the text then states “the threat of danger remain constant.”","Symbolic relation inferred; not explicitly stated but implied by narrative structure.","only to discover a bloody hook hanging from the handle. While the specifics of the story may vary, the ... threat of danger remain constant","Ch_000003","{
+ ""TemporalQualifier"": ""at the story’s climax (upon discovery)"",
+ ""SpatialQualifier"": ""on the car door handle"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": ""only to discover a bloody hook"",
+ ""UncertaintyQualifier"": ""inferred symbolism; not verbatim"",
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""only to"",
+ ""OtherQualifier"": null
+}","The bloody hook functions as a concrete manifestation of the persistent threat of danger."
+"RelR_61ca01917f64","En_87a4348b","Can_3f1659ef","underlies","is_theme_of","Indicates that the subject is a central, recurring, or underlying theme, motif, or emotional focus within the object narrative, legend, or narrative genre.","narrative_theme_relation","CONTENT","thematic","0.96","Theme → specific legend.","“the underlying fear of the unknown ... remain constant in urban legends like the ""Hook Man.""” links the fear to that legend.","","the underlying fear of the unknown and the threat of danger remain constant in urban legends like the ""Hook Man.","Ch_000003","{
+ ""TemporalQualifier"": ""across varying versions of the story"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": ""While the specifics of the story may vary"",
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""underlying"",
+ ""LogicalMarker"": ""while"",
+ ""OtherQualifier"": ""NarrativeStability: remains constant despite variation""
+}","Fear of the unknown is described as an underlying emotional theme of the Hook Man urban legend."
+"RelR_418c53340a45","En_5bad811e","Can_3f1659ef","underlies","is_theme_of","Indicates that the subject is a central, recurring, or underlying theme, motif, or emotional focus within the object narrative, legend, or narrative genre.","narrative_theme_relation","CONTENT","thematic","0.96","Threat theme → specific legend.","Same sentence states “the threat of danger remain constant in urban legends like the ""Hook Man.""”","","While the specifics of the story may vary, the ... threat of danger remain constant in urban legends like the ""Hook Man.","Ch_000003","{
+ ""TemporalQualifier"": ""across narrative variations"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": ""While the specifics of the story may vary"",
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""underlying"",
+ ""LogicalMarker"": ""while"",
+ ""OtherQualifier"": ""NarrativeStability: remains constant""
+}","Threat of danger is another persistent underlying theme of the Hook Man urban legend."
+"RelR_a309af16a85c","En_87a4348b","En_9c20138b","is_thematic_of","is_theme_of","Indicates that the subject is a central, recurring, or underlying theme, motif, or emotional focus within the object narrative, legend, or narrative genre.","narrative_theme_relation","CONTENT","thematic","0.9","Theme → genre.","It says this fear remains constant in “urban legends like the ""Hook Man,""” implying general relevance to the genre.","","the underlying fear of the unknown ... remain constant in urban legends like the ""Hook Man.","Ch_000003","{
+ ""TemporalQualifier"": ""generally; across stories"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": ""While the specifics of the story may vary"",
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""underlying"",
+ ""LogicalMarker"": ""while"",
+ ""OtherQualifier"": null
+}","Fear of the unknown is presented as a core theme of urban legends in general."
+"RelR_d3d100c235cb","En_5bad811e","En_9c20138b","is_thematic_of","is_theme_of","Indicates that the subject is a central, recurring, or underlying theme, motif, or emotional focus within the object narrative, legend, or narrative genre.","narrative_theme_relation","CONTENT","thematic","0.9","Threat theme → genre.","Same construction: “the threat of danger remain constant in urban legends like the ""Hook Man.""”","","the threat of danger remain constant in urban legends like the ""Hook Man.","Ch_000003","{
+ ""TemporalQualifier"": ""across varying stories"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": ""While the specifics of the story may vary"",
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""underlying"",
+ ""LogicalMarker"": ""while"",
+ ""OtherQualifier"": null
+}","Threat of danger is described as a core theme of urban legends."
+"RelR_3b7096430972","Can_d6b2734a","Can_42313147","has_theme","has_theme","Indicates that the subject narrative, legend, or narrative genre commonly involves, features, or explores the object as one of its central themes.","narrative_theme_relation","CONTENT","thematic","0.96","Direction chosen as story-collection (urban legends) → concept (supernatural) it centers on.","The text states that a common theme in urban legends is the supernatural.","","Another common theme in urban legends is the supernatural or paranormal.","Ch_000004","{
+ ""TemporalQualifier"": ""for generations"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": ""common"",
+ ""CausalHint"": null,
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": ""LegendType: urban legends featuring supernatural themes""
+}","Urban legends commonly feature the supernatural as a central theme."
+"RelR_5209552873c9","Can_d6b2734a","En_c0fe799e","has_theme","has_theme","Indicates that the subject narrative, legend, or narrative genre commonly involves, features, or explores the object as one of its central themes.","narrative_theme_relation","CONTENT","thematic","0.94","Parallel construction with supernatural; same direction.","The phrase ""the supernatural or paranormal"" presents both as common themes of urban legends.","","Another common theme in urban legends is the supernatural or paranormal.","Ch_000004","{
+ ""TemporalQualifier"": ""for generations"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": ""common"",
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""or"",
+ ""OtherQualifier"": ""LegendType: urban legends featuring paranormal themes""
+}","Urban legends also commonly center on paranormal phenomena."
+"RelR_6ef858b7eaed","Can_d6b2734a","Can_8330f9b7","includes_motif","features_motif","Indicates that a narrative type, genre, or tradition commonly includes a given motif, theme, setting, character type, or supernatural element as a typical part of its content.","narrative_motif_relation","COMPOSITION","composition","0.92","Collection (urban legends) → common narrative motif (haunted houses).","The text lists stories of haunted houses as part of these supernatural urban legends.","","Stories of haunted houses, ghostly apparitions, and mysterious creatures have captivated audiences for generations.","Ch_000004","{
+ ""TemporalQualifier"": ""for generations"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": ""often"",
+ ""CausalHint"": null,
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": ""NarrativeRole: typical setting/location in such legends""
+}","Urban legends often include stories centered on haunted houses."
+"RelR_c8cb131b915d","Can_d6b2734a","En_cc82cae9","includes_motif","features_motif","Indicates that a narrative type, genre, or tradition commonly includes a given motif, theme, setting, character type, or supernatural element as a typical part of its content.","narrative_motif_relation","COMPOSITION","composition","0.92","Same syntactic list as haunted houses and mysterious creatures.","Ghostly apparitions are explicitly listed among the captivating stories.","","Stories of haunted houses, ghostly apparitions, and mysterious creatures have captivated audiences for generations.","Ch_000004","{
+ ""TemporalQualifier"": ""for generations"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": ""often"",
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""and"",
+ ""OtherQualifier"": ""NarrativeRole: typical supernatural entity in such legends""
+}","Urban legends frequently feature ghostly apparitions as central elements."
+"RelR_a7923f87dc88","Can_d6b2734a","Can_1dd2f021","includes_motif","features_motif","Indicates that a narrative type, genre, or tradition commonly includes a given motif, theme, setting, character type, or supernatural element as a typical part of its content.","narrative_motif_relation","COMPOSITION","composition","0.92","Same enumerated pattern of motifs within these urban legends.","Mysterious creatures are part of the stories said to captivate audiences for generations.","","Stories of haunted houses, ghostly apparitions, and mysterious creatures have captivated audiences for generations.","Ch_000004","{
+ ""TemporalQualifier"": ""for generations"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": ""often"",
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""and"",
+ ""OtherQualifier"": ""NarrativeRole: central beings in such legends""
+}","Urban legends include stories about mysterious creatures."
+"RelR_17ba60531937","Can_42313147","Can_8330f9b7","manifested_as","is_manifested_as","Links an abstract supernatural concept to the concrete narrative motifs or entities through which it is depicted or embodied in stories.","narrative_manifestation_relation","REPRESENTATION","representation","0.78","Direction concept (supernatural) → specific narrative manifestation (haunted houses).","Haunted houses are listed within supernatural/paranormal stories; they function as a concrete manifestation of supernatural themes.","Relation chosen to capture that haunted houses concretize supernatural content in legends.","Stories of haunted houses, ghostly apparitions, and mysterious creatures have captivated audiences for generations.","Ch_000004","{
+ ""TemporalQualifier"": ""in urban legends"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": ""often"",
+ ""CausalHint"": null,
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": ""NarrativeContext: within stories of the supernatural or paranormal""
+}","The supernatural is portrayed through the motif of haunted houses."
+"RelR_f2d93ca69a4e","Can_42313147","En_cc82cae9","manifested_as","is_manifested_as","Links an abstract supernatural concept to the concrete narrative motifs or entities through which it is depicted or embodied in stories.","narrative_manifestation_relation","REPRESENTATION","representation","0.8","Supernatural phenomena materializing as ghostly apparitions in narratives.","Ghostly apparitions are part of the same supernatural story set, indicating they are a form of supernatural manifestation.","","Stories of haunted houses, ghostly apparitions, and mysterious creatures have captivated audiences for generations.","Ch_000004","{
+ ""TemporalQualifier"": ""in urban legends"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": ""often"",
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""and"",
+ ""OtherQualifier"": ""NarrativeRole: visual manifestation of ghosts/spirits""
+}","The supernatural is depicted through ghostly apparitions in these legends."
+"RelR_bf636c221afc","Can_42313147","Can_1dd2f021","manifested_as","is_manifested_as","Links an abstract supernatural concept to the concrete narrative motifs or entities through which it is depicted or embodied in stories.","narrative_manifestation_relation","REPRESENTATION","representation","0.78","Abstract supernatural → concrete mysterious beings in narrative.","Mysterious creatures appear within supernatural-themed stories; they represent supernatural entities.","","Stories of haunted houses, ghostly apparitions, and mysterious creatures have captivated audiences for generations.","Ch_000004","{
+ ""TemporalQualifier"": ""in urban legends"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": ""often"",
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""and"",
+ ""OtherQualifier"": ""NarrativeRole: central creatures in supernatural legends""
+}","The supernatural is embodied by mysterious creatures in these stories."
+"RelR_fc06f5f1cc02","En_2be61879","Can_42313147","about","is_about","Indicates that the subject entity (typically a text, concept, or discussion) has the object entity as its primary topic or focus.","topical_aboutness_relation","ASSOCIATION","topic","0.95","Abstract question entity → concept it concerns.","Listeners are said to wonder about the existence of the supernatural in their own lives.","","leaving listeners to wonder about the existence of the supernatural in their own lives.","Ch_000004","{
+ ""TemporalQualifier"": ""in listeners' own lives"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": ""wonder about"",
+ ""CausalHint"": null,
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": ""CognitiveState: audience speculation prompted by tales""
+}","The question of the existence of the supernatural is explicitly concerned with whether supernatural phenomena are real."
+"RelR_5c6c2302f545","Can_d6b2734a","En_2be61879","prompts_reflection_on","prompts_contemplation_of","The subject causes the audience to reflect on, ponder, or question the object (often a proposition or truth-claim).","audience_cognitive_effect_relation","CAUSALITY","causal","0.9","Stories (urban legends) → reflective question they trigger in audiences.","The tales blur fact and fiction, leaving listeners to wonder about the existence of the supernatural.","","These tales often blur the line between fact and fiction, leaving listeners to wonder about the existence of the supernatural.","Ch_000004","{
+ ""TemporalQualifier"": ""while listening to tales"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": ""wonder"",
+ ""CausalHint"": ""leaving"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": ""AudienceEffect: cognitive engagement with reality of supernatural""
+}","Urban legends cause listeners to contemplate the existence of the supernatural."
+"RelR_aba01312145f","En_90a93093","Can_d6b2734a","contributes_to_popularity_of","contributes_to_popularity_of","The subject factor increases or sustains the popularity of the object.","causal_effect_relation","CAUSALITY","causal","0.93","Cause (allure of unknown) → effect (popularity of urban legends).","The allure of the unknown is cited as contributing to the enduring popularity of these urban legends.","Popularity is implicit; modeled as qualifier rather than separate entity.","The allure of the unknown and the thrill of a good scare have contributed to the enduring popularity of these types of urban legends.","Ch_000004","{
+ ""TemporalQualifier"": ""enduring"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": ""have contributed"",
+ ""CausalHint"": ""have contributed to"",
+ ""LogicalMarker"": ""and"",
+ ""OtherQualifier"": ""OutcomeAspect: popularity of supernatural-themed urban legends""
+}","The allure of the unknown makes these urban legends enduringly popular."
+"RelR_b5d981074f7b","En_143dcb0c","Can_d6b2734a","contributes_to_popularity_of","contributes_to_popularity_of","The subject factor increases or sustains the popularity of the object.","causal_effect_relation","CAUSALITY","causal","0.93","Psychological appeal (thrill) → popularity of the legends.","The thrill of a good scare is paired with allure of the unknown as contributing to popularity.","","The allure of the unknown and the thrill of a good scare have contributed to the enduring popularity of these types of urban legends.","Ch_000004","{
+ ""TemporalQualifier"": ""enduring"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": ""have contributed"",
+ ""CausalHint"": ""have contributed to"",
+ ""LogicalMarker"": ""and"",
+ ""OtherQualifier"": ""OutcomeAspect: popularity of supernatural-themed urban legends""
+}","The thrill of a good scare increases the enduring popularity of these urban legends."
+"RelR_b7a8d894581f","Can_d6b2734a","Can_bf3d0e66","serves_as","serves_as","Indicates that the subject takes on or fulfills the functional role or category denoted by the object.","narrative_function_relation","USAGE","functional_role","0.97","Narrative form (urban legends) → functional role (cautionary tales).","The text directly states that urban legends serve as cautionary tales.","","In addition to their entertainment value, urban legends serve as cautionary tales that reflect the fears and anxieties of society.","Ch_000004","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": ""In addition to their entertainment value"",
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""In addition to"",
+ ""OtherQualifier"": ""Function: moral/safety warning role beyond entertainment""
+}","Urban legends function in part as cautionary tales."
+"RelR_4a8f160a34b2","Can_bf3d0e66","Can_c3377faf","reflects","reflects","Indicates that a narrative form (e.g., cautionary tales, urban legends) mirrors or expresses underlying collective fears, anxieties, or attitudes.","societal_fear_representation_relation","REPRESENTATION","representation","0.96","Story type (cautionary tales) → social content they reflect.","The phrase explicitly links cautionary tales with reflecting societal fears and anxieties.","","cautionary tales that reflect the fears and anxieties of society.","Ch_000004","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": ""of society"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""that"",
+ ""OtherQualifier"": ""ContentType: underlying fears and anxieties encoded in stories""
+}","Cautionary tales embody and mirror society's fears and anxieties."
+"RelR_ac08c4ce4603","Can_d6b2734a","Can_c3377faf","reflects","reflects","Indicates that a narrative form (e.g., cautionary tales, urban legends) mirrors or expresses underlying collective fears, anxieties, or attitudes.","societal_fear_representation_relation","REPRESENTATION","representation","0.9","Urban legends inherit reflective property from their cautionary-tale function.","Urban legends are said to serve as cautionary tales that reflect societal fears, implying the legends themselves carry this reflective function.","Slightly inferred via the intermediate entity 'cautionary tales'.","urban legends serve as cautionary tales that reflect the fears and anxieties of society.","Ch_000004","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": ""of society"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": ""In addition to their entertainment value"",
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""that"",
+ ""OtherQualifier"": ""MediatedBy: their function as cautionary tales""
+}","Through their role as cautionary tales, urban legends reflect society's fears and anxieties."
+"RelR_46a872e426ab","En_69d774f6","En_f6f561c7","warns","warns","Indicates that a communicative act or narrative serves to warn or caution a target audience.","warning_or_caution_relation","COMMUNICATION","communicative effect","0.94","Direction chosen as stories (messages) act on listeners (receivers).","The text states that such stories ""warn listeners about the dangers"".","","Stories of strangers luring children with candy, haunted houses... warn listeners about the dangers that lurk in the world around them.","Ch_000005","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": ""in the world around them"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": ""WarningType: cautionary about real-world dangers""
+}","Stories function to warn the listeners who hear them."
+"RelR_c0eeb0777e21","En_69d774f6","En_b295d0e0","warns_about","warns_about","Indicates that the subject (typically a story, motif, or entity within a narrative) functions as a warning about potential dangers, threats, or risks represented by the object.","warning_or_caution_relation","COMMUNICATION","warning","0.93","Subject is the narrative, object is the danger concept it highlights.","Phrase ""warn listeners about the dangers that lurk in the world around them"" connects stories to those dangers.","","Stories of strangers luring children with candy... warn listeners about the dangers that lurk in the world around them.","Ch_000005","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": ""in the world around them"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": ""generalized, not tied to a specific incident"",
+ ""CausalHint"": ""about"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": null
+}","Stories warn about generalized dangers that are said to lurk in the world."
+"RelR_176454fd7397","En_4f763ec7","En_69d774f6","is_part_of","is_narrative_element_of","Indicates that the subject is a recurring narrative motif, setting, or element that appears within and helps constitute the object story or story type.","narrative_structure_relation","COMPOSITION","composition","0.9","Motif is a specific kind of story; modeled as part-of the generic stories entity.","The phrase ""Stories of strangers luring children with candy"" treats that motif as an instance of the broader category of stories.","","Stories of strangers luring children with candy, haunted houses with dark pasts, and cursed objects warn listeners...","Ch_000005","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": ""NarrativeRole: example subtype of urban legend story""
+}","The strangers-luring-children-with-candy motif appears as one type of story being told."
+"RelR_c8fc8340f86c","Can_8330f9b7","En_69d774f6","is_part_of","is_narrative_element_of","Indicates that the subject is a recurring narrative motif, setting, or element that appears within and helps constitute the object story or story type.","narrative_structure_relation","COMPOSITION","composition","0.88","Haunted houses serve as story settings, treated as a narrative element of the stories entity.","They occur in the coordinated list ""Stories of strangers..., haunted houses..., and cursed objects"".","","Stories of strangers luring children with candy, haunted houses with dark pasts, and cursed objects...","Ch_000005","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": ""as narrative locations"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""and"",
+ ""OtherQualifier"": null
+}","Haunted houses are presented as a type or element of the stories being told."
+"RelR_0db7f7e9fa9f","En_328dac88","En_69d774f6","is_part_of","is_narrative_element_of","Indicates that the subject is a recurring narrative motif, setting, or element that appears within and helps constitute the object story or story type.","narrative_structure_relation","COMPOSITION","composition","0.88","Cursed objects are motifs within the broader category of stories.","They appear in the same list of story types: ""Stories of ... cursed objects"".","","Stories of strangers luring children with candy, haunted houses with dark pasts, and cursed objects warn listeners...","Ch_000005","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": ""as narrative items"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""and"",
+ ""OtherQualifier"": null
+}","Cursed objects are one of the narrative motifs that constitute these stories."
+"RelR_096076d4cbb9","En_4f763ec7","En_82b04d8e","poses_risk_to","poses_risk_to","Indicates that the subject represents or constitutes a potential threat, harm, or danger to the object.","risk_or_threat_relation","CAUSALITY","threat","0.86","Motif is modeled as threatening children, consistent with its cautionary function.","The description mentions ""strangers luring children with candy,"" indicating children are the ones being lured and endangered.","","Stories of strangers luring children with candy... warn listeners about the dangers that lurk...","Ch_000005","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": ""when approached by strangers offering candy"",
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": ""legendary, not necessarily factual"",
+ ""CausalHint"": ""luring"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": ""RiskType: abduction or harm""
+}","The candy-luring urban legend motif depicts children as the vulnerable targets."
+"RelR_120a3229b065","En_4f763ec7","En_13ec4f90","features_role","features_narrative_role","Indicates that a narrative, legend, or motif includes the referenced entity as a participant occupying a specific narrative role (e.g., protagonist, antagonist, victim, threatening figure).","narrative_role_relation","COMPOSITION","narrative role","0.84","Motif entity linked to social-role entity 'strangers' as its agent.","The motif is defined around ""strangers"" who lure children with candy.","","Stories of strangers luring children with candy...","Ch_000005","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": ""interaction between strangers and children"",
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""luring"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": ""RoleType: potential abductor""
+}","The motif features strangers as key threatening actors."
+"RelR_88f28b0b7193","En_4f763ec7","En_a8381e9c","uses_as_bait","uses_as_bait","Indicates that an entity is used instrumentally as bait or enticement to achieve a goal.","instrumental_use_relation","USAGE","instrumental use","0.9","Modeled as motif employing candy instrumentally.","Phrase ""luring children with candy"" implies candy is the means of enticement.","","Stories of strangers luring children with candy...","Ch_000005","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": ""during attempted luring of children"",
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""with"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": ""FunctionOfCandy: enticement tool""
+}","In the motif, candy is used as bait to lure children."
+"RelR_3c76eaed2ec2","Can_8330f9b7","En_b295d0e0","warns_about","warns_about","Indicates that the subject (typically a story, motif, or entity within a narrative) functions as a warning about potential dangers, threats, or risks represented by the object.","warning_or_caution_relation","COMMUNICATION","warning","0.72","The grammatical subject is stories, but haunted houses are core warning motifs within them.","Haunted houses are included among examples in stories that ""warn listeners about the dangers""; they function as warning motifs.","Relation extends clause-level meaning from 'stories' to the haunted house motif itself.","Stories of ... haunted houses with dark pasts... warn listeners about the dangers that lurk...","Ch_000005","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": ""in places with dark or unknown histories"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": ""implied rather than explicitly attributed to houses alone"",
+ ""CausalHint"": null,
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": ""DangerType: supernatural or history-related harm""
+}","Haunted house stories implicitly warn about lurking dangers linked to dark pasts."
+"RelR_b64ecead6b09","En_328dac88","En_b295d0e0","warns_about","warns_about","Indicates that the subject (typically a story, motif, or entity within a narrative) functions as a warning about potential dangers, threats, or risks represented by the object.","warning_or_caution_relation","COMMUNICATION","warning","0.72","As with haunted houses, danger-warning is mediated by stories of cursed objects.","Cursed objects are part of the listing of story types that together ""warn listeners about the dangers"".","Attribution of the warning function directly to the motif rather than only to the stories.","Stories of... cursed objects warn listeners about the dangers that lurk...","Ch_000005","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": ""when owned, used, or encountered"",
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": ""legendary framing"",
+ ""CausalHint"": ""cursed"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": ""DangerType: misfortune or harm from the object""
+}","Cursed object stories highlight lurking dangers associated with possessing such items."
+"RelR_126fe4265cb4","Can_fff1b8f8","En_69d774f6","shares","shares_story","Indicates that the subject shares, tells, or circulates a story or narrative represented by the object.","narrative_dissemination_relation","COMMUNICATION","communication","0.95","Communities are modeled as agents disseminating stories.","Text explicitly states ""By sharing these tales, communities can come together"".","","By sharing these tales, communities can come together...","Ch_000005","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": ""within and between community members"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""By sharing"",
+ ""LogicalMarker"": ""By"",
+ ""OtherQualifier"": ""SocialFunction: promotes cohesion and protection""
+}","Communities share stories among their members."
+"RelR_0803cdb56d48","Can_fff1b8f8","En_c7c3c461","protects","provides_protection_to","Indicates that the subject provides social or psychological protection or safeguarding to the object.","protective_function_relation","CAUSALITY","protection","0.93","Direction from community as protector to loved ones as those protected.","Sentence: communities ""protect themselves and their loved ones from perceived threats"".","","communities can come together to protect themselves and their loved ones from perceived threats...","Ch_000005","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": ""within the community's social circle"",
+ ""OperationalConstraint"": ""by sharing cautionary tales"",
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""By sharing these tales"",
+ ""LogicalMarker"": ""By"",
+ ""OtherQualifier"": ""ProtectionType: social and psychological safeguarding""
+}","Communities aim to protect their loved ones through sharing these stories."
+"RelR_0b63c0d42e4d","Can_fff1b8f8","En_d9bef479","protects_against","provides_protection_against","Indicates that the subject provides protection or mitigation against the object, which represents a threat, risk, or hazard.","protective_function_relation","CAUSALITY","mitigation","0.93","Threat is object; community acts to guard against it.","The phrase ""protect ... from perceived threats, real or imagined"" directly connects communities to perceived threats.","","protect themselves and their loved ones from perceived threats, real or imagined.","Ch_000005","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": ""in the world around them"",
+ ""OperationalConstraint"": ""through collective sharing of tales"",
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": ""real or imagined"",
+ ""CausalHint"": ""from"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": ""ThreatScope: includes both actual and imagined risks""
+}","Communities use stories to protect against perceived threats, whether real or imagined."
+"RelR_67f93f276439","En_17d4230b","En_b9a071aa","facilitated_by","is_enabled_by","Indicates that the subject state or process is causally enabled or facilitated by the existence or operation of the object.","causal_enablement_relation","CAUSALITY","causal enablement","0.97","Spread is the affected process; advancements act as enabling factors.","Direct statement: ""The spread of urban legends has been greatly facilitated by advancements in technology and communication.""","","The spread of urban legends has been greatly facilitated by advancements in technology and communication.","Ch_000005","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": ""across society"",
+ ""OperationalConstraint"": ""when modern technology and communication tools are available"",
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": ""has been greatly facilitated (qualitative, not quantified)"",
+ ""CausalHint"": ""has been greatly facilitated by"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": null
+}","The spread of urban legends is greatly facilitated by advancements in technology and communication."
+"RelR_6fbb9165d2ac","En_69d774f6","En_0d0f15b8","disseminated_via","is_disseminated_via","Indicates that the subject (e.g., a story or legend) is disseminated or transmitted through the medium, platform, or channel represented by the object.","information_transmission_relation","COMMUNICATION","medium","0.96","Internet is a channel/medium through which stories spread.","Text: ""In the age of the internet and social media, stories can be shared and disseminated at lightning speed"" implies internet as a dissemination medium.","","In the age of the internet and social media, stories can be shared and disseminated at lightning speed...","Ch_000005","{
+ ""TemporalQualifier"": ""In the age of the internet and social media"",
+ ""SpatialQualifier"": ""online environment"",
+ ""OperationalConstraint"": ""at lightning speed, in a matter of seconds"",
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""can be shared and disseminated"",
+ ""LogicalMarker"": ""In"",
+ ""OtherQualifier"": null
+}","Stories are disseminated via the internet, enabling rapid sharing."
+"RelR_ff784ec0633f","En_69d774f6","En_5bc0672c","disseminated_via","is_disseminated_via","Indicates that the subject (e.g., a story or legend) is disseminated or transmitted through the medium, platform, or channel represented by the object.","information_transmission_relation","COMMUNICATION","medium","0.96","Social media is another channel through which stories spread rapidly.","Social media is coupled with the internet as context for stories being shared and disseminated.","","In the age of the internet and social media, stories can be shared and disseminated at lightning speed...","Ch_000005","{
+ ""TemporalQualifier"": ""In the age of the internet and social media"",
+ ""SpatialQualifier"": ""on social media platforms"",
+ ""OperationalConstraint"": ""at lightning speed, in a matter of seconds"",
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""can be shared and disseminated"",
+ ""LogicalMarker"": ""In"",
+ ""OtherQualifier"": ""SharingMode: user-to-user reposting, broadcasting""
+}","Stories are disseminated via social media platforms."
+"RelR_77f1f8a7147e","En_69d774f6","En_d5f9e582","reaches","reaches_scope","Indicates the spatial or audience scope that an information item, story, or legend reaches or is disseminated to (e.g., continents, global audience).","information_dissemination_scope_relation","SPATIALITY","reach","0.97","Stories are the content, global audience the recipients.","Sentence: stories ""reaching a global audience in a matter of seconds.""","","stories can be shared and disseminated at lightning speed, reaching a global audience in a matter of seconds.","Ch_000005","{
+ ""TemporalQualifier"": ""in a matter of seconds"",
+ ""SpatialQualifier"": ""global"",
+ ""OperationalConstraint"": ""via internet and social media channels"",
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""reaching"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": null
+}","Stories disseminated online can reach a global audience."
+"RelR_dc284a2c520b","En_69d774f6","En_1823c871","occurs_in","occurs_in_context","Indicates that the subject exists, occurs, thrives, or is prevalent within the specified temporal, social, or cultural context.","contextual_occurrence_relation","ASSOCIATION","temporal context","0.9","Age is treated as temporal context for the dissemination behavior of stories.","Opening of the sentence frames the sharing as happening ""In the age of the internet and social media"".","","In the age of the internet and social media, stories can be shared and disseminated...","Ch_000005","{
+ ""TemporalQualifier"": ""In the age of the internet and social media"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": ""characterized by pervasive digital communication"",
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""In"",
+ ""OtherQualifier"": null
+}","The described rapid sharing of stories takes place in the age of the internet and social media."
+"RelR_73e66be10928","En_1823c871","En_0d0f15b8","characterized_by","is_characterized_by","Links a time period, context, or conceptual era to its defining features, technologies, or attributes that characterize it, without asserting strict identity.","context_characterization_relation","ATTRIBUTE","definition","0.89","Time period entity includes internet as a defining feature.","Phrase ""age of the internet and social media"" explicitly ties the period to the internet.","","In the age of the internet and social media...","Ch_000005","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": ""global digital infrastructure"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""of"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": null
+}","The age described is characterized by the internet."
+"RelR_6c021a7aab02","En_1823c871","En_5bc0672c","characterized_by","is_characterized_by","Links a time period, context, or conceptual era to its defining features, technologies, or attributes that characterize it, without asserting strict identity.","context_characterization_relation","ATTRIBUTE","definition","0.89","Same construction as with internet; both are defining traits of the age.","The time period is literally named ""age of the internet and social media"".","","In the age of the internet and social media...","Ch_000005","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": ""widespread online platforms"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""of"",
+ ""LogicalMarker"": ""and"",
+ ""OtherQualifier"": null
+}","The age described is characterized by social media."
+"RelR_0d3818d71df0","En_a7b73173","Can_d6b2734a","facilitates_spread_of","facilitates_dissemination_of","Indicates that the subject context or structure makes it easier for a narrative or information item to spread more widely.","narrative_dissemination_relation","CAUSALITY","causal","0.94","Direction chosen as cause (rapid information transmission) → effect (greater proliferation of urban legends).","The text explicitly states that rapid transmission of information ""has led to the proliferation of urban legends.""","","This rapid transmission of information has led to the proliferation of urban legends in popular culture","Ch_000006","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": ""across various platforms and mediums"",
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""has led to"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": ""AudienceContext: popular culture""
+}","Rapid transmission of information facilitates the proliferation and spread of urban legends."
+"RelR_84254ca66876","Can_d6b2734a","Can_dc68bd17","occurs_in","occurs_in_context","Indicates that the subject exists, occurs, thrives, or is prevalent within the specified temporal, social, or cultural context.","contextual_occurrence_relation","ASSOCIATION","context","0.9","Popular culture is the social/cultural context where urban legends circulate.","The proliferation of urban legends is said to be ""in popular culture.""","","proliferation of urban legends in popular culture","Ch_000006","{
+ ""TemporalQualifier"": ""contemporary era (implied by popular culture)"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": null
+}","Urban legends occur and proliferate within the sphere of popular culture."
+"RelR_66458e0da0eb","Can_d6b2734a","En_38008d9c","disseminated_via","is_disseminated_via","Indicates that the subject (e.g., a story or legend) is disseminated or transmitted through the medium, platform, or channel represented by the object.","information_transmission_relation","COMMUNICATION","usage","0.96","Urban legends are the content; platforms and mediums are the channels.","The text notes that ""they are shared and reshared across various platforms and mediums,"" referring to urban legends.","","they are shared and reshared across various platforms and mediums","Ch_000006","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": ""across various platforms and mediums"",
+ ""OperationalConstraint"": ""digital and other communication channels (implied)"",
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""as"",
+ ""OtherQualifier"": null
+}","Urban legends are disseminated by being shared and reshared across multiple platforms and mediums."
+"RelR_ade50d4ff5ca","Can_d6b2734a","En_89d2fdf3","prevalent_in","occurs_in_context","Indicates that the subject exists, occurs, thrives, or is prevalent within the specified temporal, social, or cultural context.","contextual_occurrence_relation","ASSOCIATION","context","0.93","Modern society is the broader social context where urban legends are common.","The text says, ""Despite the prevalence of urban legends in modern society.""","","Despite the prevalence of urban legends in modern society","Ch_000006","{
+ ""TemporalQualifier"": ""modern era"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": ""Despite the prevalence"",
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""Despite"",
+ ""OtherQualifier"": null
+}","Urban legends are prevalent within modern society."
+"RelR_2ec92b5230a3","Can_1c1217ea","Can_d6b2734a","concerns","is_about","Indicates that the subject entity (typically a text, concept, or discussion) has the object entity as its primary topic or focus.","topical_aboutness_relation","ASSOCIATION","aboutness","0.98","Possessive ""of"" construction indicates origins are specifically of urban legends.","Phrase ""origins ... of urban legends"" directly links origins to urban legends.","","their origins and authenticity remain shrouded in mystery","Ch_000006","{
+ ""TemporalQualifier"": ""initial development phase of stories"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": ""remain shrouded in mystery"",
+ ""CausalHint"": null,
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": ""EpistemicStatus: poorly understood""
+}","The origins entity explicitly refers to the beginnings of urban legends."
+"RelR_793bc4210d05","En_a8093f21","Can_d6b2734a","concerns","is_about","Indicates that the subject entity (typically a text, concept, or discussion) has the object entity as its primary topic or focus.","topical_aboutness_relation","ASSOCIATION","aboutness","0.98","Again, possessive ""of"" connects authenticity specifically to urban legends.","""their origins and authenticity"" clearly refers back to urban legends mentioned in the prior clause.","","their origins and authenticity remain shrouded in mystery","Ch_000006","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": ""remain shrouded in mystery"",
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""Despite"",
+ ""OtherQualifier"": ""EpistemicStatus: largely unknown to the audience""
+}","The authenticity entity refers to how genuine or factual urban legends are."
+"RelR_93bde3a82244","Can_d6b2734a","En_bd1fcfd3","based_on","is_based_on","The subject narrative or story derives its content, inspiration, or core elements from the object (event, figure, or situation).","narrative_source_relation","CAUSALITY","source","0.86","Stories referenced are contextually urban legends; direction is legend → source event.","The text says, ""some stories may be based on real events,"" in a discussion specifically about urban legends.","Assumes ""some stories"" refers primarily to urban legends.","While some stories may be based on real events or historical figures","Ch_000006","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": ""some stories"",
+ ""UncertaintyQualifier"": ""may be"",
+ ""CausalHint"": ""based on"",
+ ""LogicalMarker"": ""While"",
+ ""OtherQualifier"": null
+}","Some urban legends are based on real events."
+"RelR_4bf250420dcd","Can_d6b2734a","En_6cda083c","based_on","is_based_on","The subject narrative or story derives its content, inspiration, or core elements from the object (event, figure, or situation).","narrative_source_relation","CAUSALITY","source","0.86","Again interpreting ""some stories"" as urban legends; direction legend → source person.","The same clause notes that stories ""may be based on real events or historical figures"" during a discussion of urban legends.","Same ambiguity as with real events; modeled similarly.","some stories may be based on real events or historical figures","Ch_000006","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": ""some stories"",
+ ""UncertaintyQualifier"": ""may be"",
+ ""CausalHint"": ""based on"",
+ ""LogicalMarker"": ""While"",
+ ""OtherQualifier"": null
+}","Some urban legends are based on historical figures."
+"RelR_38e9aaa1038c","En_6f54356f","Can_d6b2734a","produces","gives_rise_to","The subject generates, originates, or gives rise to the object.","causal_effect_relation","CAUSALITY","causal","0.95","Urban legends are described as the product of collective imagination; direction is source → product.","""many urban legends are the product of collective imagination and creativity"" explicitly states this generative relation.","","many urban legends are the product of collective imagination and creativity","Ch_000006","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": ""social groups engaging in imaginative processes (implied)"",
+ ""ConditionExpression"": ""many urban legends"",
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""are the product of"",
+ ""LogicalMarker"": ""While"",
+ ""OtherQualifier"": null
+}","Collective imagination and creativity generate many urban legends."
+"RelR_bb0d4b13ec8d","Can_44979414","En_b44cfbbc","blends","blurs_boundary_with","Indicates that a narrative or concept blurs the distinction or boundary between itself and another category or truth status (e.g., fact, fiction).","narrative_truth_boundary_relation","ASSOCIATION","conceptual","0.9","""these tales"" in context refers to urban-legend-type stories; fact is one side of the blurred line.","The sentence states, ""The line between fact and fiction is often blurred in these tales.""","Relation direction chosen as tales → fact to indicate tales act on how fact is presented.","The line between fact and fiction is often blurred in these tales","Ch_000006","{
+ ""TemporalQualifier"": ""often"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": ""often (non-universal)"",
+ ""CausalHint"": ""is ... blurred"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": null
+}","Urban legend tales blend or blur their boundary with factual content."
+"RelR_7bba242ffa13","Can_44979414","En_fdc0a794","blends","blurs_boundary_with","Indicates that a narrative or concept blurs the distinction or boundary between itself and another category or truth status (e.g., fact, fiction).","narrative_truth_boundary_relation","ASSOCIATION","conceptual","0.9","Same clause; here focusing on the fiction side of the blurred line.","Fact and fiction are jointly mentioned as a blurred boundary within these tales.","Parallel relation to the fact entity for symmetry.","The line between fact and fiction is often blurred in these tales","Ch_000006","{
+ ""TemporalQualifier"": ""often"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": ""often (non-universal)"",
+ ""CausalHint"": ""is ... blurred"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": null
+}","Urban legend tales blend or blur their boundary with fictional content."
+"RelR_6a2b2df554fc","Can_44979414","En_98012256","prompts_questioning_of","prompts_contemplation_of","The subject causes the audience to reflect on, ponder, or question the object (often a proposition or truth-claim).","audience_cognitive_effect_relation","CAUSALITY","effect_on_audience","0.93","Stories/tales act as the cause; pondering truth is the cognitive effect.","The text attributes to ""these tales"" the effect of ""leaving listeners to ponder the truth behind the stories.""","","these tales, leaving listeners to ponder the truth behind the stories they hear","Ch_000006","{
+ ""TemporalQualifier"": ""when listeners hear the tales"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": ""for listeners engaging with the stories"",
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""leaving"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": ""AudienceRole: listeners""
+}","Urban legend tales lead listeners to ponder or question the truth behind the stories."
+"RelR_4a08969ed176","Can_d6b2734a","Can_c452a54f","is_part_of","is_subtype_of","Indicates that the subject concept is a more specific subtype or category within the broader class represented by the object.","hierarchical_category_relation","IDENTITY","hierarchical","0.96","Direction chosen as specific narrative form (urban legends) being part of the broader category (modern folklore).","The text states that urban legends have been a fascinating aspect of modern folklore.","","urban legends have been a fascinating aspect of modern folklore for centuries","Ch_000007","{
+ ""TemporalQualifier"": ""for centuries"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": ""Persistence: enduring aspect within modern folklore over time""
+}","Urban legends are presented as an aspect or component of modern folklore."
+"RelR_c917c695824c","Can_d6b2734a","Can_42313147","features_theme","has_theme","Indicates that the subject narrative, legend, or narrative genre commonly involves, features, or explores the object as one of its central themes.","narrative_theme_relation","CONTENT","thematic","0.94","Supernatural is a recurring content theme in urban legends.","The phrase ""their tales of the supernatural"" refers to the content of urban legends.","","captivating audiences with their tales of the supernatural","Ch_000007","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": ""AudienceEffect: captivating audiences""
+}","Urban legends are described as containing tales that involve the supernatural."
+"RelR_f4a633980a7b","Can_d6b2734a","En_81578e74","explores","has_theme","Indicates that the subject narrative, legend, or narrative genre commonly involves, features, or explores the object as one of its central themes.","narrative_theme_relation","CONTENT","thematic","0.93","The unknown is presented as subject matter of the legends' tales.","The text couples ""the supernatural and the unknown"" as topics of the tales within urban legends.","","their tales of the supernatural and the unknown","Ch_000007","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""and"",
+ ""OtherQualifier"": ""PairedTheme: supernatural and the unknown are linked themes""
+}","Urban legends are said to involve tales of the unknown, indicating they explore mysterious aspects of reality."
+"RelR_8dedac41d461","En_70001476","Can_d6b2734a","represents","refers_to","Indicates that, in the given discourse context, a more generic narrative label refers specifically to a more precise narrative category.","contextual_reference_relation","IDENTITY","equivalence","0.88","Pronoun reference: ""These stories"" refers back to urban legends just mentioned.","The prior sentence discusses urban legends, and the next begins with ""These stories,"" implying they are those urban legends.","Relation used to connect the generic 'stories' entity to the specific 'urban legends' entity for this context.","These stories, passed down through generations and shared in communities around the world","Ch_000007","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": ""communities around the world"",
+ ""OperationalConstraint"": ""passed down through generations; shared in communities"",
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": ""TransmissionMode: oral/communal sharing and intergenerational passing down""
+}","The referenced stories are the urban legends discussed in the passage."
+"RelR_514d26065a8e","En_70001476","Can_bf3d0e66","serves_as","serves_as","Indicates that the subject takes on or fulfills the functional role or category denoted by the object.","narrative_function_relation","USAGE","functional role","0.97","Stories adopt the functional form/role of cautionary tales.","The text explicitly states the stories ""serve as cautionary tales.""","","These stories, passed down through generations... serve as cautionary tales","Ch_000007","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": ""communities around the world"",
+ ""OperationalConstraint"": ""when circulated within society"",
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""serve as"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": ""Purpose: warn and reflect social concerns""
+}","The stories function in the role of cautionary tales."
+"RelR_06bf60a18220","Can_bf3d0e66","Can_c3377faf","reflects","reflects","Indicates that a narrative form (e.g., cautionary tales, urban legends) mirrors or expresses underlying collective fears, anxieties, or attitudes.","societal_fear_representation_relation","REPRESENTATION","representational","0.98","Direction chosen as narrative form (cautionary tales) reflecting societal emotional states.","The sentence states that these cautionary tales ""reflect the fears and anxieties of society.""","","serve as cautionary tales that reflect the fears and anxieties of society","Ch_000007","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": ""of society"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""that"",
+ ""OtherQualifier"": ""Function: narrative mirroring of collective emotions""
+}","Cautionary tales are said to mirror or reflect the fears and anxieties of society."
+"RelR_d807057452e1","Can_d6b2734a","Can_c3377faf","reflects","reflects","Indicates that a narrative form (e.g., cautionary tales, urban legends) mirrors or expresses underlying collective fears, anxieties, or attitudes.","societal_fear_representation_relation","REPRESENTATION","representational","0.86","Indirectly inferred through stories/legends serving as cautionary tales.","Urban legends are the stories that serve as cautionary tales reflecting these fears; therefore urban legends themselves are reflective of those fears.","Slightly indirect relation; mediated by their function as stories and cautionary tales.","These stories... serve as cautionary tales that reflect the fears and anxieties of society.","Ch_000007","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": ""within society"",
+ ""OperationalConstraint"": ""when told as cautionary tales"",
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": ""implicitly"",
+ ""CausalHint"": null,
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": ""Mediation: relation holds through their narrative function""
+}","Urban legends, via their role as cautionary tales, reflect the fears and anxieties of society."
+"RelR_5535503da4dc","Can_d6b2734a","Can_dc68bd17","influences","influences","Indicates that the subject exerts an influence or impact on the properties, behavior, or development of the object.","influence_relation","CAUSALITY","influence","0.97","Direction chosen as legends exerting influence on the broader cultural domain.","The text says their impact on popular culture is undeniable.","","their enduring popularity and impact on popular culture are undeniable","Ch_000007","{
+ ""TemporalQualifier"": ""enduring"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": ""undeniable (high certainty expressed)"",
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""while"",
+ ""OtherQualifier"": ""ImpactType: cultural influence and popularity""
+}","Urban legends are described as having an impact on popular culture."
+"RelR_662c8a0233af","Can_1c1217ea","Can_d6b2734a","pertains_to","is_about","Indicates that the subject entity (typically a text, concept, or discussion) has the object entity as its primary topic or focus.","topical_aboutness_relation","ASSOCIATION","aboutness","0.9","Composite entity ""origins of urban legends"" tied back to the urban legends it concerns.","Phrase directly links 'origins' with 'urban legends' as its topic.","Main informational content (difficulty to trace) is intrinsic to the 'origins' entity, but relation anchors it to urban legends.","While the origins of urban legends may be difficult to trace","Ch_000007","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": ""may be difficult to trace"",
+ ""UncertaintyQualifier"": ""may be difficult"",
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""while"",
+ ""OtherQualifier"": ""EpistemicStatus: origins are obscure or hard to identify""
+}","The origins being discussed specifically concern urban legends."
+"RelR_c2cfd2b48903","En_2d7d6939","Can_d6b2734a","enables","enables","Indicates that the subject functions as an enabling condition that allows or sustains the existence, continuation, or thriving of the object.","enabling_condition_relation","CAUSALITY","conditional","0.9","Direction chosen as mysteries being a precondition for the persistence of urban legends.","The clause ""As long as there are mysteries to be solved"" sets a condition for urban legends continuing to thrive.","Relation created mainly to capture the conditional nature of mysteries sustaining legends.","As long as there are mysteries to be solved ... urban legends will continue to thrive","Ch_000007","{
+ ""TemporalQualifier"": ""As long as there are mysteries to be solved"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": ""presence of unresolved questions and enigmas"",
+ ""ConditionExpression"": ""if mysteries to be solved exist, urban legends will continue to thrive"",
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""As long as; if"",
+ ""OtherQualifier"": ""Effect: supports continuation and thriving of legends""
+}","The existence of mysteries to be solved is presented as a condition that allows urban legends to continue thriving."
+"RelR_a26cf0b936de","En_36556057","Can_d6b2734a","enables","enables","Indicates that the subject functions as an enabling condition that allows or sustains the existence, continuation, or thriving of the object.","enabling_condition_relation","CAUSALITY","conditional","0.9","Fears function as underlying drivers of interest in and persistence of urban legends.","The phrase links ""fears to be faced"" to the continued thriving of urban legends via the 'As long as' condition.","Relation emphasizes the dependence of legends' vitality on human fears.","As long as there are mysteries to be solved and fears to be faced, urban legends will continue to thrive","Ch_000007","{
+ ""TemporalQualifier"": ""As long as there are fears to be faced"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": ""presence of confronting fears or challenges"",
+ ""ConditionExpression"": ""if fears to be faced exist, urban legends will continue to thrive"",
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""As long as; and"",
+ ""OtherQualifier"": ""PsychologicalBasis: fears as motivational substrate for legends""
+}","The existence of fears to be faced is another condition that supports the continued thriving of urban legends."
+"RelR_3a1d542e4a20","Can_d6b2734a","En_beb66b45","occurs_in","occurs_in_context","Indicates that the subject exists, occurs, thrives, or is prevalent within the specified temporal, social, or cultural context.","contextual_occurrence_relation","ASSOCIATION","locational","0.96","Imagination is treated as the social-cognitive 'space' where legends persist.","The text directly states that urban legends will continue to thrive in the collective imagination of society.","","urban legends will continue to thrive in the collective imagination of society","Ch_000007","{
+ ""TemporalQualifier"": ""will continue to thrive; future and ongoing"",
+ ""SpatialQualifier"": ""in the collective imagination of society"",
+ ""OperationalConstraint"": ""given ongoing mysteries and fears"",
+ ""ConditionExpression"": ""contingent on the presence of mysteries to be solved and fears to be faced"",
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""As long as"",
+ ""OtherQualifier"": ""Persistence: enduring cultural and psychological presence""
+}","Urban legends are said to thrive within the collective imagination of society."

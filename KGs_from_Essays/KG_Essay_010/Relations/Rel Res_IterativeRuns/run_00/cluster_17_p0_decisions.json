@@ -1,0 +1,165 @@
+{
+  "cluster_label": "17_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_9dc2f34e252f",
+      "relation_name": "affects",
+      "rel_desc": "Gravitational time dilation slows the passage of time near a black hole.",
+      "rel_hint_type": "causal",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "gravitational time dilation",
+      "object_entity_name": "time near a black hole",
+      "subject_class_label": "Gravitational Time Dilation",
+      "subject_class_group": "Gravitation and General Relativity",
+      "object_class_label": "Gravitational Time Dilation",
+      "object_class_group": "Gravitation and General Relativity",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "near a black hole",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "causes",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.97,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_822184ce3218",
+      "relation_name": "results_from",
+      "rel_desc": "Gravitational time dilation results from the strong gravitational pull of a black hole that warps spacetime.",
+      "rel_hint_type": "causal",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "gravitational time dilation",
+      "object_entity_name": "gravitational pull of a black hole",
+      "subject_class_label": "Gravitational Time Dilation",
+      "subject_class_group": "Gravitation and General Relativity",
+      "object_class_label": "Gravitational Phenomena",
+      "object_class_group": "Gravitation and General Relativity",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "in the region influenced by the black hole",
+        "OperationalConstraint": "very strong gravity",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "which is so strong that it warps spacetime; This phenomenon",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.78,
+      "remarks": [
+        "Causality between gravitational pull and time dilation is standard physics but only indirectly stated here."
+      ]
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_9dc2f34e252f\"],\n      \"canonical_rel_name\": \"slows\",\n      \"canonical_rel_desc\": \"Indicates that the subject process or phenomenon reduces the rate or speed of the object process or quantity.\",\n      \"justification\": \"The instance explicitly states that gravitational time dilation slows the passage of time near a black hole; this is a directional causal influence on the rate of time, so a specific predicate 'slows' is clearer and more informative than a generic 'affects'.\",\n      \"remark\": null,\n      \"confidence\": 0.87\n    }\n  },\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_822184ce3218\"],\n      \"canonical_rel_name\": \"results_from\",\n      \"canonical_rel_desc\": \"Indicates that the subject phenomenon or state is an effect that arises due to, or is caused by, the object phenomenon or condition.\",\n      \"justification\": \"The description states that gravitational time dilation results from the strong gravitational pull of a black hole; this is a standard effect-from-cause pattern, so 'results_from' accurately captures the effect–cause direction with the subject as the effect and the object as the cause.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_9dc2f34e252f\", \"RelR_822184ce3218\"],\n      \"rel_cls\": \"physical_causation_relation\",\n      \"justification\": \"Both relations describe physical cause–effect interactions: one where a phenomenon slows the passage of time, and one where a phenomenon (time dilation) arises from a gravitational field. Grouping them under 'physical_causation_relation' captures that they are instances of causal links in physical systems.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_9dc2f34e252f\", \"RelR_822184ce3218\"],\n      \"rel_cls_group\": \"CAUSALITY\",\n      \"justification\": \"In both cases, the relation expresses a cause–effect dependency between physical phenomena, which fits squarely under a broad CAUSALITY category.\",\n      \"remark\": null,\n      \"confidence\": 0.98\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_9dc2f34e252f"
+        ],
+        "canonical_rel_name": "slows",
+        "canonical_rel_desc": "Indicates that the subject process or phenomenon reduces the rate or speed of the object process or quantity.",
+        "justification": "The instance explicitly states that gravitational time dilation slows the passage of time near a black hole; this is a directional causal influence on the rate of time, so a specific predicate 'slows' is clearer and more informative than a generic 'affects'.",
+        "remark": null,
+        "confidence": 0.87
+      }
+    },
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_822184ce3218"
+        ],
+        "canonical_rel_name": "results_from",
+        "canonical_rel_desc": "Indicates that the subject phenomenon or state is an effect that arises due to, or is caused by, the object phenomenon or condition.",
+        "justification": "The description states that gravitational time dilation results from the strong gravitational pull of a black hole; this is a standard effect-from-cause pattern, so 'results_from' accurately captures the effect–cause direction with the subject as the effect and the object as the cause.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_9dc2f34e252f",
+          "RelR_822184ce3218"
+        ],
+        "rel_cls": "physical_causation_relation",
+        "justification": "Both relations describe physical cause–effect interactions: one where a phenomenon slows the passage of time, and one where a phenomenon (time dilation) arises from a gravitational field. Grouping them under 'physical_causation_relation' captures that they are instances of causal links in physical systems.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_9dc2f34e252f",
+          "RelR_822184ce3218"
+        ],
+        "rel_cls_group": "CAUSALITY",
+        "justification": "In both cases, the relation expresses a cause–effect dependency between physical phenomena, which fits squarely under a broad CAUSALITY category.",
+        "remark": null,
+        "confidence": 0.98
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_9dc2f34e252f"
+      ],
+      "canonical_rel_name": "slows",
+      "canonical_rel_desc": "Indicates that the subject process or phenomenon reduces the rate or speed of the object process or quantity.",
+      "justification": "The instance explicitly states that gravitational time dilation slows the passage of time near a black hole; this is a directional causal influence on the rate of time, so a specific predicate 'slows' is clearer and more informative than a generic 'affects'.",
+      "remark": null,
+      "confidence": 0.87
+    },
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_822184ce3218"
+      ],
+      "canonical_rel_name": "results_from",
+      "canonical_rel_desc": "Indicates that the subject phenomenon or state is an effect that arises due to, or is caused by, the object phenomenon or condition.",
+      "justification": "The description states that gravitational time dilation results from the strong gravitational pull of a black hole; this is a standard effect-from-cause pattern, so 'results_from' accurately captures the effect–cause direction with the subject as the effect and the object as the cause.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_9dc2f34e252f",
+        "RelR_822184ce3218"
+      ],
+      "rel_cls": "physical_causation_relation",
+      "justification": "Both relations describe physical cause–effect interactions: one where a phenomenon slows the passage of time, and one where a phenomenon (time dilation) arises from a gravitational field. Grouping them under 'physical_causation_relation' captures that they are instances of causal links in physical systems.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_9dc2f34e252f",
+        "RelR_822184ce3218"
+      ],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "In both cases, the relation expresses a cause–effect dependency between physical phenomena, which fits squarely under a broad CAUSALITY category.",
+      "remark": null,
+      "confidence": 0.98
+    }
+  ],
+  "timestamp": "2026-01-06T09:44:09Z"
+}

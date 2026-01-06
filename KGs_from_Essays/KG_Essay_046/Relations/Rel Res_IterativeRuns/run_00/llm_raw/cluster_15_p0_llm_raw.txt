@@ -1,0 +1,64 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_eaed17fdc1c9"],
+      "canonical_rel_name": "contains",
+      "canonical_rel_desc": "Indicates that the subject physically contains the object as a component or part within its boundaries.",
+      "justification": "The relation describes seeds being located inside fruits as components that are later dispersed; this is a stable physical part-whole containment relation, so the canonical predicate 'contains' fits well.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": ["RelR_eaed17fdc1c9"],
+      "rel_cls": "physical_component_relation",
+      "justification": "The relation expresses a part-whole structure (seeds as components within fruits), which is best modeled as a physical component / part relation rather than a generic association.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": ["RelR_eaed17fdc1c9"],
+      "rel_cls_group": "COMPOSITION",
+      "justification": "The semantics are about the compositional makeup of fruits (they are composed in part of seeds), which falls under a broad composition / part-whole grouping.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_099719430ec9"],
+      "canonical_rel_name": "disperses",
+      "canonical_rel_desc": "Indicates that the subject acts to spread or transport the object from one location to others, typically as part of a dispersal process.",
+      "justification": "The description states that birds spread seeds to different locations after fruit consumption; this is a clear dispersal action, so the canonical predicate 'disperses' directly matches the intended meaning.",
+      "remark": null,
+      "confidence": 0.97
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": ["RelR_099719430ec9"],
+      "rel_cls": "dispersal_relation",
+      "justification": "The relation involves active movement and spreading of seeds by birds as vectors; this fits a general class of dispersal or transport-by-agent relations rather than simple spatial co-occurrence.",
+      "remark": null,
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": ["RelR_099719430ec9"],
+      "rel_cls_group": "AGENCY",
+      "justification": "Birds are acting as agents that cause the movement of seeds; the core semantics center on an agent performing an action on an object, which aligns with an AGENCY-oriented group more than pure spatiality or composition.",
+      "remark": null,
+      "confidence": 0.92
+    }
+  }
+]

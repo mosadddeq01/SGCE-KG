@@ -1,0 +1,302 @@
+{
+  "cluster_label": 7,
+  "cluster_classes": [
+    {
+      "candidate_id": "ClsC_dea504c8",
+      "class_label": "Russian Revolution of 1917 Entities",
+      "class_description": "Core entities directly involved in or resulting from the Russian Revolution of 1917, including the revolutionary movement, its leadership, the deposed ruling dynasty, and the new communist state it created.",
+      "class_type_hint": "Historical Event Context",
+      "class_group": "TBD",
+      "confidence": 0.88,
+      "evidence_excerpt": "The Russian Revolution of 1917, led by the Bolsheviks under Vladimir Lenin, brought an end to the Romanov dynasty and established the world's first communist state.",
+      "member_ids": [
+        "En_684235ea",
+        "En_0d6dd098",
+        "En_53bdc790",
+        "En_e565e078",
+        "En_b8629934"
+      ],
+      "members": [
+        {
+          "id": "En_684235ea",
+          "entity_name": "Russian Revolution of 1917",
+          "entity_description": "Revolution in Russia that ended the Romanov dynasty and created the first communist state.",
+          "entity_type_hint": "PoliticalEvent"
+        },
+        {
+          "id": "En_0d6dd098",
+          "entity_name": "Bolsheviks",
+          "entity_description": "Revolutionary socialist faction that led the 1917 Russian Revolution.",
+          "entity_type_hint": "PoliticalOrganization"
+        },
+        {
+          "id": "En_53bdc790",
+          "entity_name": "Vladimir Lenin",
+          "entity_description": "Leader of the Bolsheviks who headed the Russian Revolution of 1917.",
+          "entity_type_hint": "Person"
+        },
+        {
+          "id": "En_e565e078",
+          "entity_name": "Romanov dynasty",
+          "entity_description": "Russian ruling royal family ended by the 1917 revolution.",
+          "entity_type_hint": "Dynasty"
+        },
+        {
+          "id": "En_b8629934",
+          "entity_name": "world's first communist state",
+          "entity_description": "The initial state-level implementation of a communist political system created after the Russian Revolution.",
+          "entity_type_hint": "State"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_c145be8d",
+      "class_label": "French Political Regimes",
+      "class_description": "Major forms of state organization in France directly connected by the overthrow of the monarchy in 1789 and the establishment of a republican government.",
+      "class_type_hint": "Political System",
+      "class_group": "TBD",
+      "confidence": 0.86,
+      "evidence_excerpt": "overthrew the monarchy and established a republic",
+      "member_ids": [
+        "En_8e946411",
+        "En_acd2496d"
+      ],
+      "members": [
+        {
+          "id": "En_8e946411",
+          "entity_name": "monarchy in France",
+          "entity_description": "The royal system of government in France that was overthrown in 1789.",
+          "entity_type_hint": "PoliticalInstitution"
+        },
+        {
+          "id": "En_acd2496d",
+          "entity_name": "First French Republic",
+          "entity_description": "The republican form of government established in France in 1792 following the overthrow of the monarchy during the French Revolution.",
+          "entity_type_hint": "PoliticalInstitution"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_15f8ba22",
+      "class_label": "French Revolutionary Legacy",
+      "class_description": "Ideological principles of the French Revolution and the later revolutionary movements they inspired in Europe and beyond.",
+      "class_type_hint": "Historical Theme",
+      "class_group": "TBD",
+      "confidence": 0.83,
+      "evidence_excerpt": "served as a model for revolutionary movements across Europe and beyond",
+      "member_ids": [
+        "En_f254de72",
+        "En_53951c70"
+      ],
+      "members": [
+        {
+          "id": "En_f254de72",
+          "entity_name": "liberty, equality, and fraternity",
+          "entity_description": "Core political and social principles underpinning the French revolutionary republic.",
+          "entity_type_hint": "IdeologicalPrinciple"
+        },
+        {
+          "id": "En_53951c70",
+          "entity_name": "revolutionary movements across Europe and beyond",
+          "entity_description": "Revolutionary political movements in Europe and other regions inspired by the French Revolution.",
+          "entity_type_hint": "SocialMovement"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_c37beb56",
+      "class_label": "French Revolution of 1789",
+      "class_description": "A major late-18th-century political revolution in France that overthrew the monarchy and established a republic based on the principles of liberty, equality, and fraternity.",
+      "class_type_hint": "Historical Event",
+      "class_group": "TBD",
+      "confidence": 0.9,
+      "evidence_excerpt": "Revolution in France that overthrew the monarchy and established a republic based on the principles of liberty, equality, and fraternity.",
+      "member_ids": [
+        "En_9e2692f5"
+      ],
+      "members": [
+        {
+          "id": "En_9e2692f5",
+          "entity_name": "French Revolution of 1789",
+          "entity_description": "Revolution in France that overthrew the monarchy and established a republic based on new principles.",
+          "entity_type_hint": "PoliticalEvent"
+        }
+      ],
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"split_class\",\n    \"args\": {\n      \"source_class_id\": \"ClsC_dea504c8\",\n      \"splits\": [\n        {\n          \"name\": \"Russian Revolution of 1917 (Event)\",\n          \"description\": \"The political revolution in Russia in 1917 that ended the Romanov dynasty and created the first communist state.\",\n          \"class_type_hint\": \"Political Event\",\n          \"member_ids\": [\"En_684235ea\"],\n          \"provisional_id\": \"SPLIT_RUSREV1917_EVENT\"\n        }\n      ],\n      \"justification\": \"ClsC_dea504c8 currently mixes the core event with its actors and outcomes, whereas French Revolution content is already split into event vs regimes/ideology; creating a dedicated event class improves consistency and semantic clarity.\",\n      \"remark\": null,\n      \"confidence\": 0.86\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"SPLIT_RUSREV1917_EVENT\",\n      \"new_name\": \"Russian Revolution of 1917 (Event)\",\n      \"new_description\": \"The 1917 political revolution in Russia that overthrew the Romanov dynasty and led to the creation of the world’s first communist state.\",\n      \"new_class_type_hint\": \"Historical Event\",\n      \"new_class_group\": \"Modern Political Revolutions\",\n      \"remark\": null,\n      \"justification\": \"The new split class should be explicitly typed and grouped with other major modern political revolutions for coherent cross-country comparison.\",\n      \"confidence\": 0.87\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_dea504c8\",\n      \"new_name\": \"Russian Revolution of 1917 Context & Actors\",\n      \"new_description\": \"Key organizations, leaders, deposed ruling dynasty, and resulting state structure directly connected to the Russian Revolution of 1917.\",\n      \"new_class_type_hint\": \"Historical Event Context\",\n      \"new_class_group\": \"Modern Political Revolutions\",\n      \"remark\": null,\n      \"justification\": \"After moving the core event to its own class, the remaining entities form a coherent context/actors class that should be labeled accordingly and grouped with other modern revolutions.\",\n      \"confidence\": 0.86\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_c37beb56\",\n      \"new_name\": null,\n      \"new_description\": null,\n      \"new_class_type_hint\": \"Historical Event\",\n      \"new_class_group\": \"Modern Political Revolutions\",\n      \"remark\": null,\n      \"justification\": \"ClsC_c37beb56 is the French Revolution of 1789 as a political event and should share a class_group with the Russian Revolution event as a major modern political revolution.\",\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_c145be8d\",\n      \"new_name\": null,\n      \"new_description\": null,\n      \"new_class_type_hint\": \"Political System\",\n      \"new_class_group\": \"Modern Political Revolutions\",\n      \"remark\": null,\n      \"justification\": \"ClsC_c145be8d covers regime forms directly linked to the French Revolution’s overthrow of the monarchy and should be grouped under the same Modern Political Revolutions umbrella.\",\n      \"confidence\": 0.85\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_15f8ba22\",\n      \"new_name\": null,\n      \"new_description\": null,\n      \"new_class_type_hint\": \"Historical Theme\",\n      \"new_class_group\": \"Modern Political Revolutions\",\n      \"remark\": null,\n      \"justification\": \"ClsC_15f8ba22 addresses the ideological legacy and derivative movements of the French Revolution and belongs in the same Modern Political Revolutions class_group to connect ideological and institutional aspects.\",\n      \"confidence\": 0.84\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "split_class",
+      "args": {
+        "source_class_id": "ClsC_dea504c8",
+        "splits": [
+          {
+            "name": "Russian Revolution of 1917 (Event)",
+            "description": "The political revolution in Russia in 1917 that ended the Romanov dynasty and created the first communist state.",
+            "class_type_hint": "Political Event",
+            "member_ids": [
+              "En_684235ea"
+            ],
+            "provisional_id": "SPLIT_RUSREV1917_EVENT"
+          }
+        ],
+        "justification": "ClsC_dea504c8 currently mixes the core event with its actors and outcomes, whereas French Revolution content is already split into event vs regimes/ideology; creating a dedicated event class improves consistency and semantic clarity.",
+        "remark": null,
+        "confidence": 0.86
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "SPLIT_RUSREV1917_EVENT",
+        "new_name": "Russian Revolution of 1917 (Event)",
+        "new_description": "The 1917 political revolution in Russia that overthrew the Romanov dynasty and led to the creation of the world's first communist state.",
+        "new_class_type_hint": "Historical Event",
+        "new_class_group": "Modern Political Revolutions",
+        "remark": null,
+        "justification": "The new split class should be explicitly typed and grouped with other major modern political revolutions for coherent cross-country comparison.",
+        "confidence": 0.87
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_dea504c8",
+        "new_name": "Russian Revolution of 1917 Context & Actors",
+        "new_description": "Key organizations, leaders, deposed ruling dynasty, and resulting state structure directly connected to the Russian Revolution of 1917.",
+        "new_class_type_hint": "Historical Event Context",
+        "new_class_group": "Modern Political Revolutions",
+        "remark": null,
+        "justification": "After moving the core event to its own class, the remaining entities form a coherent context/actors class that should be labeled accordingly and grouped with other modern revolutions.",
+        "confidence": 0.86
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_c37beb56",
+        "new_name": null,
+        "new_description": null,
+        "new_class_type_hint": "Historical Event",
+        "new_class_group": "Modern Political Revolutions",
+        "remark": null,
+        "justification": "ClsC_c37beb56 is the French Revolution of 1789 as a political event and should share a class_group with the Russian Revolution event as a major modern political revolution.",
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_c145be8d",
+        "new_name": null,
+        "new_description": null,
+        "new_class_type_hint": "Political System",
+        "new_class_group": "Modern Political Revolutions",
+        "remark": null,
+        "justification": "ClsC_c145be8d covers regime forms directly linked to the French Revolution's overthrow of the monarchy and should be grouped under the same Modern Political Revolutions umbrella.",
+        "confidence": 0.85
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_15f8ba22",
+        "new_name": null,
+        "new_description": null,
+        "new_class_type_hint": "Historical Theme",
+        "new_class_group": "Modern Political Revolutions",
+        "remark": null,
+        "justification": "ClsC_15f8ba22 addresses the ideological legacy and derivative movements of the French Revolution and belongs in the same Modern Political Revolutions class_group to connect ideological and institutional aspects.",
+        "confidence": 0.84
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "split_class",
+      "source_class_id": "ClsC_dea504c8",
+      "source_class_id_resolved": "ClsC_dea504c8",
+      "created_classes": [
+        {
+          "new_class_id": "ClsR_5cf440e4",
+          "provisional_id": "SPLIT_RUSREV1917_EVENT",
+          "member_ids": [
+            "En_684235ea"
+          ]
+        }
+      ],
+      "justification": "ClsC_dea504c8 currently mixes the core event with its actors and outcomes, whereas French Revolution content is already split into event vs regimes/ideology; creating a dedicated event class improves consistency and semantic clarity.",
+      "remark": null,
+      "confidence": 0.86
+    },
+    {
+      "action": "modify_class",
+      "class_id": "SPLIT_RUSREV1917_EVENT",
+      "class_id_resolved": "ClsR_5cf440e4",
+      "new_name": "Russian Revolution of 1917 (Event)",
+      "new_description": "The 1917 political revolution in Russia that overthrew the Romanov dynasty and led to the creation of the world's first communist state.",
+      "new_class_type_hint": "Historical Event",
+      "new_class_group": "Modern Political Revolutions",
+      "remark": null,
+      "justification": "The new split class should be explicitly typed and grouped with other major modern political revolutions for coherent cross-country comparison.",
+      "confidence": 0.87
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_dea504c8",
+      "class_id_resolved": "ClsC_dea504c8",
+      "new_name": "Russian Revolution of 1917 Context & Actors",
+      "new_description": "Key organizations, leaders, deposed ruling dynasty, and resulting state structure directly connected to the Russian Revolution of 1917.",
+      "new_class_type_hint": "Historical Event Context",
+      "new_class_group": "Modern Political Revolutions",
+      "remark": null,
+      "justification": "After moving the core event to its own class, the remaining entities form a coherent context/actors class that should be labeled accordingly and grouped with other modern revolutions.",
+      "confidence": 0.86
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_c37beb56",
+      "class_id_resolved": "ClsC_c37beb56",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": "Historical Event",
+      "new_class_group": "Modern Political Revolutions",
+      "remark": null,
+      "justification": "ClsC_c37beb56 is the French Revolution of 1789 as a political event and should share a class_group with the Russian Revolution event as a major modern political revolution.",
+      "confidence": 0.9
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_c145be8d",
+      "class_id_resolved": "ClsC_c145be8d",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": "Political System",
+      "new_class_group": "Modern Political Revolutions",
+      "remark": null,
+      "justification": "ClsC_c145be8d covers regime forms directly linked to the French Revolution's overthrow of the monarchy and should be grouped under the same Modern Political Revolutions umbrella.",
+      "confidence": 0.85
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_15f8ba22",
+      "class_id_resolved": "ClsC_15f8ba22",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": "Historical Theme",
+      "new_class_group": "Modern Political Revolutions",
+      "remark": null,
+      "justification": "ClsC_15f8ba22 addresses the ideological legacy and derivative movements of the French Revolution and belongs in the same Modern Political Revolutions class_group to connect ideological and institutional aspects.",
+      "confidence": 0.84
+    }
+  ],
+  "provisional_to_real": {
+    "SPLIT_RUSREV1917_EVENT": "ClsR_5cf440e4"
+  },
+  "timestamp": "2026-01-06T13:04:26Z"
+}

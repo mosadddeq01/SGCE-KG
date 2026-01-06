@@ -1,0 +1,143 @@
+{
+  "cluster_label": "19_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_5cac4b7b5b1c",
+      "relation_name": "has_stage",
+      "rel_desc": "The butterfly life cycle includes the butterfly egg stage as its first stage.",
+      "rel_hint_type": "composition",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "butterfly life cycle",
+      "object_entity_name": "butterfly egg stage",
+      "subject_class_label": "Butterfly Life Cycle and Stages",
+      "subject_class_group": "Butterfly Life Cycle and Appreciation",
+      "object_class_label": "Butterfly Life Cycle and Stages",
+      "object_class_group": "Butterfly Life Cycle and Appreciation",
+      "qualifiers": {
+        "TemporalQualifier": "first stage",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "StageOrder: 1"
+      },
+      "confidence": 0.97,
+      "remarks": [
+        "Ordering captured in qualifier."
+      ]
+    },
+    {
+      "relation_id": "RelR_a3d207123c06",
+      "relation_name": "has_stage",
+      "rel_desc": "The butterfly life cycle includes an egg stage.",
+      "rel_hint_type": "composition",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "butterfly life cycle",
+      "object_entity_name": "butterfly egg stage",
+      "subject_class_label": "Butterfly Life Cycle and Stages",
+      "subject_class_group": "Butterfly Life Cycle and Appreciation",
+      "object_class_label": "Butterfly Life Cycle and Stages",
+      "object_class_group": "Butterfly Life Cycle and Appreciation",
+      "qualifiers": {
+        "TemporalQualifier": "initial stage",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": "first in sequence before larval stage",
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "StageOrder: 1"
+      },
+      "confidence": 0.96,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_5cac4b7b5b1c\",\n        \"RelR_a3d207123c06\"\n      ],\n      \"canonical_rel_name\": \"has_stage\",\n      \"canonical_rel_desc\": \"Indicates that a process or life cycle includes a specific stage as a constituent phase.\",\n      \"justification\": \"Both relations link a butterfly life cycle to its egg stage, expressing the same part-whole stage membership predicate; qualifiers handle ordering, so a shared canonical predicate 'has_stage' is appropriate.\",\n      \"remark\": null,\n      \"confidence\": 0.97\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_5cac4b7b5b1c\",\n        \"RelR_a3d207123c06\"\n      ],\n      \"rel_cls\": \"process_stage_relation\",\n      \"justification\": \"These relations describe how a process or life cycle is composed of discrete stages, which fits a generic class for process–stage relationships.\",\n      \"remark\": null,\n      \"confidence\": 0.96\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_5cac4b7b5b1c\",\n        \"RelR_a3d207123c06\"\n      ],\n      \"rel_cls_group\": \"COMPOSITION\",\n      \"justification\": \"The primary semantics are part-whole composition (a life cycle composed of stages); temporal ordering is captured in qualifiers, so the broad group should be COMPOSITION.\",\n      \"remark\": null,\n      \"confidence\": 0.96\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_5cac4b7b5b1c",
+          "RelR_a3d207123c06"
+        ],
+        "canonical_rel_name": "has_stage",
+        "canonical_rel_desc": "Indicates that a process or life cycle includes a specific stage as a constituent phase.",
+        "justification": "Both relations link a butterfly life cycle to its egg stage, expressing the same part-whole stage membership predicate; qualifiers handle ordering, so a shared canonical predicate 'has_stage' is appropriate.",
+        "remark": null,
+        "confidence": 0.97
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_5cac4b7b5b1c",
+          "RelR_a3d207123c06"
+        ],
+        "rel_cls": "process_stage_relation",
+        "justification": "These relations describe how a process or life cycle is composed of discrete stages, which fits a generic class for process–stage relationships.",
+        "remark": null,
+        "confidence": 0.96
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_5cac4b7b5b1c",
+          "RelR_a3d207123c06"
+        ],
+        "rel_cls_group": "COMPOSITION",
+        "justification": "The primary semantics are part-whole composition (a life cycle composed of stages); temporal ordering is captured in qualifiers, so the broad group should be COMPOSITION.",
+        "remark": null,
+        "confidence": 0.96
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_5cac4b7b5b1c",
+        "RelR_a3d207123c06"
+      ],
+      "canonical_rel_name": "has_stage",
+      "canonical_rel_desc": "Indicates that a process or life cycle includes a specific stage as a constituent phase.",
+      "justification": "Both relations link a butterfly life cycle to its egg stage, expressing the same part-whole stage membership predicate; qualifiers handle ordering, so a shared canonical predicate 'has_stage' is appropriate.",
+      "remark": null,
+      "confidence": 0.97
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_5cac4b7b5b1c",
+        "RelR_a3d207123c06"
+      ],
+      "rel_cls": "process_stage_relation",
+      "justification": "These relations describe how a process or life cycle is composed of discrete stages, which fits a generic class for process–stage relationships.",
+      "remark": null,
+      "confidence": 0.96
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_5cac4b7b5b1c",
+        "RelR_a3d207123c06"
+      ],
+      "rel_cls_group": "COMPOSITION",
+      "justification": "The primary semantics are part-whole composition (a life cycle composed of stages); temporal ordering is captured in qualifiers, so the broad group should be COMPOSITION.",
+      "remark": null,
+      "confidence": 0.96
+    }
+  ],
+  "timestamp": "2026-01-06T07:30:18Z"
+}

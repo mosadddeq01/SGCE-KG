@@ -1,0 +1,221 @@
+{
+  "cluster_label": "11_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_9b8ced00079e",
+      "relation_name": "enables",
+      "rel_desc": "Bird pollinators enable or facilitate the reproduction of plants through nectar feeding and pollen transfer.",
+      "rel_hint_type": "causal",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "bird pollinators",
+      "object_entity_name": "reproduction of plants",
+      "subject_class_label": "Bird Pollinators",
+      "subject_class_group": "Bird-Mediated Plant Reproduction and Regeneration",
+      "object_class_label": "Plant Reproduction and Dispersal Processes",
+      "object_class_group": "Bird-Mediated Plant Reproduction and Regeneration",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": "when feeding on nectar and transferring pollen from flower to flower",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "by feeding on nectar and transferring pollen",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.98,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_059119a91622",
+      "relation_name": "contributes_to",
+      "rel_desc": "Bird pollinators contribute to plants' production of fruits and seeds as a result of pollination.",
+      "rel_hint_type": "causal",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "bird pollinators",
+      "object_entity_name": "production of fruits and seeds",
+      "subject_class_label": "Bird Pollinators",
+      "subject_class_group": "Bird-Mediated Plant Reproduction and Regeneration",
+      "object_class_label": "Plant Reproduction and Dispersal Processes",
+      "object_class_group": "Bird-Mediated Plant Reproduction and Regeneration",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": "when they feed on nectar and transfer pollen",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "contribute to",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.96,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_10fa8e24aba2",
+      "relation_name": "results_in",
+      "rel_desc": "Plant reproduction via pollination leads to the production of fruits and seeds.",
+      "rel_hint_type": "causal",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "reproduction of plants",
+      "object_entity_name": "production of fruits and seeds",
+      "subject_class_label": "Plant Reproduction and Dispersal Processes",
+      "subject_class_group": "Bird-Mediated Plant Reproduction and Regeneration",
+      "object_class_label": "Plant Reproduction and Dispersal Processes",
+      "object_class_group": "Bird-Mediated Plant Reproduction and Regeneration",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": "under successful pollination",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "contribute to the production of fruits and seeds",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.78,
+      "remarks": [
+        "Causality is implied rather than explicitly framed as reproduction causing fruit/seed production."
+      ]
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_9b8ced00079e\"],\n      \"canonical_rel_name\": \"facilitates\",\n      \"canonical_rel_desc\": \"Indicates that the subject process or agent makes the object process more likely or effective, without being the sole direct cause.\",\n      \"justification\": \"This relation describes bird pollinators enabling or facilitating plant reproduction by nectar feeding and pollen transfer; a predicate emphasizing facilitation rather than strict determinism best captures this semantics.\",\n      \"remark\": \"Used for enabling/mediating roles in biological or ecological processes, where the subject is a necessary or important facilitator.\",\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_059119a91622\"],\n      \"canonical_rel_name\": \"contributes_to\",\n      \"canonical_rel_desc\": \"Indicates that the subject is one of potentially several factors that add to or partially cause the occurrence or magnitude of the object outcome or process.\",\n      \"justification\": \"The description states that bird pollinators contribute to the production of fruits and seeds as a result of pollination, implying partial causal contribution among multiple factors rather than sole causation.\",\n      \"remark\": \"Appropriate for partial or multi-factor causal contributions in ecological and biological contexts.\",\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_10fa8e24aba2\"],\n      \"canonical_rel_name\": \"results_in\",\n      \"canonical_rel_desc\": \"Indicates that the subject process or state leads directly to, or produces, the object outcome or state as a primary causal result.\",\n      \"justification\": \"The relation explicitly describes plant reproduction via pollination leading to the production of fruits and seeds; this is a direct process-outcome causation best captured by 'results_in'.\",\n      \"remark\": \"Use for relatively direct, process-to-outcome causal relations in biological systems.\",\n      \"confidence\": 0.88\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_9b8ced00079e\",\n        \"RelR_059119a91622\",\n        \"RelR_10fa8e24aba2\"\n      ],\n      \"rel_cls\": \"biological_process_causal_relation\",\n      \"justification\": \"All three relations express causal or enabling links among biological/ecological processes and outcomes (pollination, plant reproduction, and fruit/seed production), differing only in causal strength (facilitation, contribution, direct result) but belonging to the same broader family of biological causal relations.\",\n      \"remark\": \"This class can group diverse causal predicates (e.g., facilitates, contributes_to, results_in) specifically in the context of biological and ecological processes.\",\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_9b8ced00079e\",\n        \"RelR_059119a91622\",\n        \"RelR_10fa8e24aba2\"\n      ],\n      \"rel_cls_group\": \"CAUSALITY\",\n      \"justification\": \"Each relation instance encodes a cause–effect or enabling relationship: pollinators facilitate reproduction, contribute to fruit/seed production, and reproduction results in fruit/seed production; these are all fundamentally causal semantics.\",\n      \"remark\": null,\n      \"confidence\": 0.96\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_9b8ced00079e"
+        ],
+        "canonical_rel_name": "facilitates",
+        "canonical_rel_desc": "Indicates that the subject process or agent makes the object process more likely or effective, without being the sole direct cause.",
+        "justification": "This relation describes bird pollinators enabling or facilitating plant reproduction by nectar feeding and pollen transfer; a predicate emphasizing facilitation rather than strict determinism best captures this semantics.",
+        "remark": "Used for enabling/mediating roles in biological or ecological processes, where the subject is a necessary or important facilitator.",
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_059119a91622"
+        ],
+        "canonical_rel_name": "contributes_to",
+        "canonical_rel_desc": "Indicates that the subject is one of potentially several factors that add to or partially cause the occurrence or magnitude of the object outcome or process.",
+        "justification": "The description states that bird pollinators contribute to the production of fruits and seeds as a result of pollination, implying partial causal contribution among multiple factors rather than sole causation.",
+        "remark": "Appropriate for partial or multi-factor causal contributions in ecological and biological contexts.",
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_10fa8e24aba2"
+        ],
+        "canonical_rel_name": "results_in",
+        "canonical_rel_desc": "Indicates that the subject process or state leads directly to, or produces, the object outcome or state as a primary causal result.",
+        "justification": "The relation explicitly describes plant reproduction via pollination leading to the production of fruits and seeds; this is a direct process-outcome causation best captured by 'results_in'.",
+        "remark": "Use for relatively direct, process-to-outcome causal relations in biological systems.",
+        "confidence": 0.88
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_9b8ced00079e",
+          "RelR_059119a91622",
+          "RelR_10fa8e24aba2"
+        ],
+        "rel_cls": "biological_process_causal_relation",
+        "justification": "All three relations express causal or enabling links among biological/ecological processes and outcomes (pollination, plant reproduction, and fruit/seed production), differing only in causal strength (facilitation, contribution, direct result) but belonging to the same broader family of biological causal relations.",
+        "remark": "This class can group diverse causal predicates (e.g., facilitates, contributes_to, results_in) specifically in the context of biological and ecological processes.",
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_9b8ced00079e",
+          "RelR_059119a91622",
+          "RelR_10fa8e24aba2"
+        ],
+        "rel_cls_group": "CAUSALITY",
+        "justification": "Each relation instance encodes a cause–effect or enabling relationship: pollinators facilitate reproduction, contribute to fruit/seed production, and reproduction results in fruit/seed production; these are all fundamentally causal semantics.",
+        "remark": null,
+        "confidence": 0.96
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_9b8ced00079e"
+      ],
+      "canonical_rel_name": "facilitates",
+      "canonical_rel_desc": "Indicates that the subject process or agent makes the object process more likely or effective, without being the sole direct cause.",
+      "justification": "This relation describes bird pollinators enabling or facilitating plant reproduction by nectar feeding and pollen transfer; a predicate emphasizing facilitation rather than strict determinism best captures this semantics.",
+      "remark": "Used for enabling/mediating roles in biological or ecological processes, where the subject is a necessary or important facilitator.",
+      "confidence": 0.9
+    },
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_059119a91622"
+      ],
+      "canonical_rel_name": "contributes_to",
+      "canonical_rel_desc": "Indicates that the subject is one of potentially several factors that add to or partially cause the occurrence or magnitude of the object outcome or process.",
+      "justification": "The description states that bird pollinators contribute to the production of fruits and seeds as a result of pollination, implying partial causal contribution among multiple factors rather than sole causation.",
+      "remark": "Appropriate for partial or multi-factor causal contributions in ecological and biological contexts.",
+      "confidence": 0.9
+    },
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_10fa8e24aba2"
+      ],
+      "canonical_rel_name": "results_in",
+      "canonical_rel_desc": "Indicates that the subject process or state leads directly to, or produces, the object outcome or state as a primary causal result.",
+      "justification": "The relation explicitly describes plant reproduction via pollination leading to the production of fruits and seeds; this is a direct process-outcome causation best captured by 'results_in'.",
+      "remark": "Use for relatively direct, process-to-outcome causal relations in biological systems.",
+      "confidence": 0.88
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_9b8ced00079e",
+        "RelR_059119a91622",
+        "RelR_10fa8e24aba2"
+      ],
+      "rel_cls": "biological_process_causal_relation",
+      "justification": "All three relations express causal or enabling links among biological/ecological processes and outcomes (pollination, plant reproduction, and fruit/seed production), differing only in causal strength (facilitation, contribution, direct result) but belonging to the same broader family of biological causal relations.",
+      "remark": "This class can group diverse causal predicates (e.g., facilitates, contributes_to, results_in) specifically in the context of biological and ecological processes.",
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_9b8ced00079e",
+        "RelR_059119a91622",
+        "RelR_10fa8e24aba2"
+      ],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "Each relation instance encodes a cause–effect or enabling relationship: pollinators facilitate reproduction, contribute to fruit/seed production, and reproduction results in fruit/seed production; these are all fundamentally causal semantics.",
+      "remark": null,
+      "confidence": 0.96
+    }
+  ],
+  "timestamp": "2026-01-06T11:29:34Z"
+}

@@ -1,0 +1,242 @@
+{
+  "cluster_label": 10,
+  "cluster_classes": [
+    {
+      "candidate_id": "ClsC_33c1cfd9",
+      "class_label": "Human Communication",
+      "class_description": "Concepts describing communication as the process of conveying information, including specific modalities such as body language.",
+      "class_type_hint": "Communication Concept",
+      "class_group": "TBD",
+      "confidence": 0.93,
+      "evidence_excerpt": "Conveying information, including nonverbal means like body language; a modality or method through which people exchange information.",
+      "member_ids": [
+        "Can_5c6c0c6f",
+        "En_abc3a8c8"
+      ],
+      "members": [
+        {
+          "id": "Can_5c6c0c6f",
+          "entity_name": "communication",
+          "entity_description": "The process of conveying information, meaning, or feelings between individuals, including through nonverbal means like body language.",
+          "entity_type_hint": "Process"
+        },
+        {
+          "id": "En_abc3a8c8",
+          "entity_name": "form of communication",
+          "entity_description": "A modality or method through which people exchange information, here referring to body language.",
+          "entity_type_hint": "CommunicationMode"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_aceb7753",
+      "class_label": "Communication Competence",
+      "class_description": "Interrelated constructs describing how well people convey and interpret messages, including both the qualities of interactions (clarity, effectiveness) and the underlying abilities (communication skills).",
+      "class_type_hint": "HumanCapability",
+      "class_group": "TBD",
+      "confidence": 0.86,
+      "evidence_excerpt": "Gestures can enhance the clarity and effectiveness of communication; reading body language improves communication skills.",
+      "member_ids": [
+        "En_8939685e",
+        "En_48f45e07",
+        "En_b8775177"
+      ],
+      "members": [
+        {
+          "id": "En_8939685e",
+          "entity_name": "clarity of communication",
+          "entity_description": "The degree to which a message is easily understood during interactions.",
+          "entity_type_hint": "CommunicationQuality"
+        },
+        {
+          "id": "En_48f45e07",
+          "entity_name": "effectiveness of communication",
+          "entity_description": "How successfully communication achieves its intended purpose in interactions.",
+          "entity_type_hint": "CommunicationQuality"
+        },
+        {
+          "id": "En_b8775177",
+          "entity_name": "communication skills",
+          "entity_description": "Abilities that allow individuals to effectively convey and interpret messages, improved by reading body language.",
+          "entity_type_hint": "Capability"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_876cdd2f",
+      "class_label": "Communicative Content",
+      "class_description": "Abstract information, meanings, or purposes that are conveyed or inferred in communication, including both explicit messages and underlying intentions.",
+      "class_type_hint": "Communication Semantics",
+      "class_group": "TBD",
+      "confidence": 0.84,
+      "evidence_excerpt": "Intentions and messages are both described as information or purposes conveyed or inferred through nonverbal cues.",
+      "member_ids": [
+        "Can_98ab8766",
+        "En_c7642e4f"
+      ],
+      "members": [
+        {
+          "id": "Can_98ab8766",
+          "entity_name": "intentions",
+          "entity_description": "Underlying plans, purposes, or desired actions that can be inferred or communicated through nonverbal body language cues.",
+          "entity_type_hint": "CognitiveState"
+        },
+        {
+          "id": "En_c7642e4f",
+          "entity_name": "messages",
+          "entity_description": "Information or meanings that can be conveyed through gestures without spoken language.",
+          "entity_type_hint": "AbstractConcept"
+        }
+      ],
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"split_class\",\n    \"args\": {\n      \"source_class_id\": \"ClsC_33c1cfd9\",\n      \"splits\": [\n        {\n          \"name\": \"Communication Modality\",\n          \"description\": \"Specific modalities or methods through which people exchange information, such as body language and other nonverbal forms.\",\n          \"class_type_hint\": \"CommunicationMode\",\n          \"member_ids\": [\"En_abc3a8c8\"],\n          \"provisional_id\": \"SPLIT(ClsC_33c1cfd9|Modality)\"\n        }\n      ],\n      \"justification\": \"ClsC_33c1cfd9 currently mixes the general process of communication with a specific modality, which are distinct ontological types (process vs mode), so splitting improves conceptual coherence.\",\n      \"remark\": null,\n      \"confidence\": 0.83\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_33c1cfd9\",\n      \"new_name\": \"Communication Process\",\n      \"new_description\": \"The general process of conveying information, meaning, or feelings between individuals, including verbal and nonverbal channels.\",\n      \"new_class_type_hint\": \"Process\",\n      \"new_class_group\": \"Human Communication & Meaning\",\n      \"remark\": null,\n      \"justification\": \"After moving the modality-specific entity out, the remaining member in ClsC_33c1cfd9 represents the general communication process; renaming, refining the description, and assigning a common communication-focused Class_Group clarifies its scope and linkage.\",\n      \"confidence\": 0.86\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"SPLIT(ClsC_33c1cfd9|Modality)\",\n      \"new_name\": \"Communication Modality\",\n      \"new_description\": \"Modalities or methods through which people exchange information, such as body language and other nonverbal forms of communication.\",\n      \"new_class_type_hint\": \"CommunicationMode\",\n      \"new_class_group\": \"Human Communication & Meaning\",\n      \"remark\": null,\n      \"justification\": \"The new split class cleanly captures communication modalities; setting a clear name, description, and aligning its Class_Group with other communication-related classes strengthens schema consistency.\",\n      \"confidence\": 0.86\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_aceb7753\",\n      \"new_name\": null,\n      \"new_description\": null,\n      \"new_class_type_hint\": null,\n      \"new_class_group\": \"Human Communication & Meaning\",\n      \"remark\": null,\n      \"justification\": \"ClsC_aceb7753 (communication competence) is semantically related to other communication constructs, so assigning it to the shared Class_Group 'Human Communication & Meaning' connects it appropriately.\",\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_876cdd2f\",\n      \"new_name\": null,\n      \"new_description\": null,\n      \"new_class_type_hint\": null,\n      \"new_class_group\": \"Human Communication & Meaning\",\n      \"remark\": null,\n      \"justification\": \"ClsC_876cdd2f (communicative content: intentions and messages) belongs in the same overarching domain as communication processes, modalities, and competence, so assigning the Class_Group 'Human Communication & Meaning' unifies these related classes.\",\n      \"confidence\": 0.9\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "split_class",
+      "args": {
+        "source_class_id": "ClsC_33c1cfd9",
+        "splits": [
+          {
+            "name": "Communication Modality",
+            "description": "Specific modalities or methods through which people exchange information, such as body language and other nonverbal forms.",
+            "class_type_hint": "CommunicationMode",
+            "member_ids": [
+              "En_abc3a8c8"
+            ],
+            "provisional_id": "SPLIT(ClsC_33c1cfd9|Modality)"
+          }
+        ],
+        "justification": "ClsC_33c1cfd9 currently mixes the general process of communication with a specific modality, which are distinct ontological types (process vs mode), so splitting improves conceptual coherence.",
+        "remark": null,
+        "confidence": 0.83
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_33c1cfd9",
+        "new_name": "Communication Process",
+        "new_description": "The general process of conveying information, meaning, or feelings between individuals, including verbal and nonverbal channels.",
+        "new_class_type_hint": "Process",
+        "new_class_group": "Human Communication & Meaning",
+        "remark": null,
+        "justification": "After moving the modality-specific entity out, the remaining member in ClsC_33c1cfd9 represents the general communication process; renaming, refining the description, and assigning a common communication-focused Class_Group clarifies its scope and linkage.",
+        "confidence": 0.86
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "SPLIT(ClsC_33c1cfd9|Modality)",
+        "new_name": "Communication Modality",
+        "new_description": "Modalities or methods through which people exchange information, such as body language and other nonverbal forms of communication.",
+        "new_class_type_hint": "CommunicationMode",
+        "new_class_group": "Human Communication & Meaning",
+        "remark": null,
+        "justification": "The new split class cleanly captures communication modalities; setting a clear name, description, and aligning its Class_Group with other communication-related classes strengthens schema consistency.",
+        "confidence": 0.86
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_aceb7753",
+        "new_name": null,
+        "new_description": null,
+        "new_class_type_hint": null,
+        "new_class_group": "Human Communication & Meaning",
+        "remark": null,
+        "justification": "ClsC_aceb7753 (communication competence) is semantically related to other communication constructs, so assigning it to the shared Class_Group 'Human Communication & Meaning' connects it appropriately.",
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_876cdd2f",
+        "new_name": null,
+        "new_description": null,
+        "new_class_type_hint": null,
+        "new_class_group": "Human Communication & Meaning",
+        "remark": null,
+        "justification": "ClsC_876cdd2f (communicative content: intentions and messages) belongs in the same overarching domain as communication processes, modalities, and competence, so assigning the Class_Group 'Human Communication & Meaning' unifies these related classes.",
+        "confidence": 0.9
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "split_class",
+      "source_class_id": "ClsC_33c1cfd9",
+      "source_class_id_resolved": "ClsC_33c1cfd9",
+      "created_classes": [
+        {
+          "new_class_id": "ClsR_f66a3ff7",
+          "provisional_id": "SPLIT(ClsC_33c1cfd9|Modality)",
+          "member_ids": [
+            "En_abc3a8c8"
+          ]
+        }
+      ],
+      "justification": "ClsC_33c1cfd9 currently mixes the general process of communication with a specific modality, which are distinct ontological types (process vs mode), so splitting improves conceptual coherence.",
+      "remark": null,
+      "confidence": 0.83
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_33c1cfd9",
+      "class_id_resolved": "ClsC_33c1cfd9",
+      "new_name": "Communication Process",
+      "new_description": "The general process of conveying information, meaning, or feelings between individuals, including verbal and nonverbal channels.",
+      "new_class_type_hint": "Process",
+      "new_class_group": "Human Communication & Meaning",
+      "remark": null,
+      "justification": "After moving the modality-specific entity out, the remaining member in ClsC_33c1cfd9 represents the general communication process; renaming, refining the description, and assigning a common communication-focused Class_Group clarifies its scope and linkage.",
+      "confidence": 0.86
+    },
+    {
+      "action": "modify_class",
+      "class_id": "SPLIT(ClsC_33c1cfd9|Modality)",
+      "class_id_resolved": "ClsR_f66a3ff7",
+      "new_name": "Communication Modality",
+      "new_description": "Modalities or methods through which people exchange information, such as body language and other nonverbal forms of communication.",
+      "new_class_type_hint": "CommunicationMode",
+      "new_class_group": "Human Communication & Meaning",
+      "remark": null,
+      "justification": "The new split class cleanly captures communication modalities; setting a clear name, description, and aligning its Class_Group with other communication-related classes strengthens schema consistency.",
+      "confidence": 0.86
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_aceb7753",
+      "class_id_resolved": "ClsC_aceb7753",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Human Communication & Meaning",
+      "remark": null,
+      "justification": "ClsC_aceb7753 (communication competence) is semantically related to other communication constructs, so assigning it to the shared Class_Group 'Human Communication & Meaning' connects it appropriately.",
+      "confidence": 0.9
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_876cdd2f",
+      "class_id_resolved": "ClsC_876cdd2f",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Human Communication & Meaning",
+      "remark": null,
+      "justification": "ClsC_876cdd2f (communicative content: intentions and messages) belongs in the same overarching domain as communication processes, modalities, and competence, so assigning the Class_Group 'Human Communication & Meaning' unifies these related classes.",
+      "confidence": 0.9
+    }
+  ],
+  "provisional_to_real": {
+    "SPLIT(ClsC_33c1cfd9|Modality)": "ClsR_f66a3ff7"
+  },
+  "timestamp": "2026-01-06T11:57:46Z"
+}

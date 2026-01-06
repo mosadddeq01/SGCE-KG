@@ -1,0 +1,15 @@
+[
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": ["RelR_83c8be769de5"],
+      "canonical_rel_name": null,
+      "canonical_rel_desc": null,
+      "rel_cls": "branding_context_relation",
+      "rel_cls_group": "CAUSALITY",
+      "justification": "The predicate 'is_shaped_by' expresses a directional influence of cultures on markets, which is fundamentally causal rather than merely contextual. Keeping rel_cls as 'branding_context_relation' preserves the domain focus, but rel_cls_group should be updated from 'CONTEXTUALITY' to 'CAUSALITY' to better align with the semantics of shaping/influence.",
+      "remark": "This relation encodes that cultural factors causally influence how markets form or behave, which is more accurately grouped under CAUSALITY than pure CONTEXTUALITY.",
+      "confidence": 0.78
+    }
+  }
+]

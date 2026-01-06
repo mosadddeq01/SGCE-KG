@@ -1,0 +1,245 @@
+{
+  "cluster_label": "3_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_e643eb322fc1",
+      "relation_name": "supports",
+      "rel_desc": "Forensic science supports the investigation of crimes by providing valuable evidence.",
+      "rel_hint_type": "support",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "forensic science",
+      "object_entity_name": "investigation of crimes",
+      "subject_class_label": "Forensic Science",
+      "subject_class_group": "Forensic Science Domain",
+      "object_class_label": "Criminal Justice Processes",
+      "object_class_group": "Criminal Justice & Forensic Context",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "helps",
+        "LogicalMarker": "that",
+        "OtherQualifier": null
+      },
+      "confidence": 0.95,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_e1ffa0e2ff89",
+      "relation_name": "supports",
+      "rel_desc": "Forensic science supports the prosecution of crimes by providing valuable evidence.",
+      "rel_hint_type": "support",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "forensic science",
+      "object_entity_name": "prosecution of crimes",
+      "subject_class_label": "Forensic Science",
+      "subject_class_group": "Forensic Science Domain",
+      "object_class_label": "Criminal Justice Processes",
+      "object_class_group": "Criminal Justice & Forensic Context",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "helps",
+        "LogicalMarker": "and",
+        "OtherQualifier": null
+      },
+      "confidence": 0.95,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_9909e236a8b6",
+      "relation_name": "supports",
+      "rel_desc": "Physical evidence supports the investigation of crimes.",
+      "rel_hint_type": "support",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "physical evidence",
+      "object_entity_name": "investigation of crimes",
+      "subject_class_label": "Forensic Physical Evidence",
+      "subject_class_group": "Forensic Evidence",
+      "object_class_label": "Criminal Justice Processes",
+      "object_class_group": "Criminal Justice & Forensic Context",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "helps",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.9,
+      "remarks": [
+        "Direction from evidence to investigation chosen to emphasize evidentiary role."
+      ]
+    },
+    {
+      "relation_id": "RelR_8d95f00cf685",
+      "relation_name": "supports",
+      "rel_desc": "Physical evidence supports the prosecution of crimes.",
+      "rel_hint_type": "support",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "physical evidence",
+      "object_entity_name": "prosecution of crimes",
+      "subject_class_label": "Forensic Physical Evidence",
+      "subject_class_group": "Forensic Evidence",
+      "object_class_label": "Criminal Justice Processes",
+      "object_class_group": "Criminal Justice & Forensic Context",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "in court (implied)",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "helps",
+        "LogicalMarker": "and",
+        "OtherQualifier": "ForumContext: legal prosecution setting"
+      },
+      "confidence": 0.9,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_0eec9be300c4",
+      "relation_name": "assists",
+      "rel_desc": "Forensic scientists assist investigators in understanding the case.",
+      "rel_hint_type": "support",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "forensic scientists",
+      "object_entity_name": "investigators",
+      "subject_class_label": "Forensic Scientists",
+      "subject_class_group": "Forensic Science Domain",
+      "object_class_label": "Criminal Justice Participants",
+      "object_class_group": "Criminal Justice & Forensic Context",
+      "qualifiers": {
+        "TemporalQualifier": "during crime investigation",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "help",
+        "LogicalMarker": "and",
+        "OtherQualifier": "AssistanceMode: providing reconstructed events and analyses"
+      },
+      "confidence": 0.94,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_e643eb322fc1\",\n        \"RelR_e1ffa0e2ff89\",\n        \"RelR_9909e236a8b6\",\n        \"RelR_8d95f00cf685\",\n        \"RelR_0eec9be300c4\"\n      ],\n      \"canonical_rel_name\": \"supports\",\n      \"canonical_rel_desc\": \"Indicates that the subject provides evidentiary, analytical, or operational help that facilitates or strengthens the object process or actor in the criminal justice/forensic context.\",\n      \"justification\": \"All relations express a helping/enabling predicate where the subject contributes support to a criminal justice process or actor (investigation, prosecution, investigators). Normalizing to the single predicate 'supports' captures this shared semantics and keeps the KG consistent, while instance-level qualifiers retain specific modes (evidence-based, expert assistance, etc.).\",\n      \"remark\": null,\n      \"confidence\": 0.93\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_e643eb322fc1\",\n        \"RelR_e1ffa0e2ff89\",\n        \"RelR_9909e236a8b6\",\n        \"RelR_8d95f00cf685\",\n        \"RelR_0eec9be300c4\"\n      ],\n      \"rel_cls\": \"forensic_support_relation\",\n      \"justification\": \"Each relation involves forensic domains (forensic science, physical evidence, forensic scientists) providing support to criminal justice activities (investigation, prosecution, investigators). Grouping them under 'forensic_support_relation' reflects this family of predicates where forensic resources or experts support justice system processes or actors.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_e643eb322fc1\",\n        \"RelR_e1ffa0e2ff89\",\n        \"RelR_9909e236a8b6\",\n        \"RelR_8d95f00cf685\",\n        \"RelR_0eec9be300c4\"\n      ],\n      \"rel_cls_group\": \"CAUSALITY\",\n      \"justification\": \"The relations describe that the subject helps, enables, or strengthens the outcome or functioning of the object (e.g., evidence helping investigations, scientists assisting investigators). This is a contributory causal/enablement relation, best placed under the broad CAUSALITY group rather than pure association.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_e643eb322fc1",
+          "RelR_e1ffa0e2ff89",
+          "RelR_9909e236a8b6",
+          "RelR_8d95f00cf685",
+          "RelR_0eec9be300c4"
+        ],
+        "canonical_rel_name": "supports",
+        "canonical_rel_desc": "Indicates that the subject provides evidentiary, analytical, or operational help that facilitates or strengthens the object process or actor in the criminal justice/forensic context.",
+        "justification": "All relations express a helping/enabling predicate where the subject contributes support to a criminal justice process or actor (investigation, prosecution, investigators). Normalizing to the single predicate 'supports' captures this shared semantics and keeps the KG consistent, while instance-level qualifiers retain specific modes (evidence-based, expert assistance, etc.).",
+        "remark": null,
+        "confidence": 0.93
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_e643eb322fc1",
+          "RelR_e1ffa0e2ff89",
+          "RelR_9909e236a8b6",
+          "RelR_8d95f00cf685",
+          "RelR_0eec9be300c4"
+        ],
+        "rel_cls": "forensic_support_relation",
+        "justification": "Each relation involves forensic domains (forensic science, physical evidence, forensic scientists) providing support to criminal justice activities (investigation, prosecution, investigators). Grouping them under 'forensic_support_relation' reflects this family of predicates where forensic resources or experts support justice system processes or actors.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_e643eb322fc1",
+          "RelR_e1ffa0e2ff89",
+          "RelR_9909e236a8b6",
+          "RelR_8d95f00cf685",
+          "RelR_0eec9be300c4"
+        ],
+        "rel_cls_group": "CAUSALITY",
+        "justification": "The relations describe that the subject helps, enables, or strengthens the outcome or functioning of the object (e.g., evidence helping investigations, scientists assisting investigators). This is a contributory causal/enablement relation, best placed under the broad CAUSALITY group rather than pure association.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_e643eb322fc1",
+        "RelR_e1ffa0e2ff89",
+        "RelR_9909e236a8b6",
+        "RelR_8d95f00cf685",
+        "RelR_0eec9be300c4"
+      ],
+      "canonical_rel_name": "supports",
+      "canonical_rel_desc": "Indicates that the subject provides evidentiary, analytical, or operational help that facilitates or strengthens the object process or actor in the criminal justice/forensic context.",
+      "justification": "All relations express a helping/enabling predicate where the subject contributes support to a criminal justice process or actor (investigation, prosecution, investigators). Normalizing to the single predicate 'supports' captures this shared semantics and keeps the KG consistent, while instance-level qualifiers retain specific modes (evidence-based, expert assistance, etc.).",
+      "remark": null,
+      "confidence": 0.93
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_e643eb322fc1",
+        "RelR_e1ffa0e2ff89",
+        "RelR_9909e236a8b6",
+        "RelR_8d95f00cf685",
+        "RelR_0eec9be300c4"
+      ],
+      "rel_cls": "forensic_support_relation",
+      "justification": "Each relation involves forensic domains (forensic science, physical evidence, forensic scientists) providing support to criminal justice activities (investigation, prosecution, investigators). Grouping them under 'forensic_support_relation' reflects this family of predicates where forensic resources or experts support justice system processes or actors.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_e643eb322fc1",
+        "RelR_e1ffa0e2ff89",
+        "RelR_9909e236a8b6",
+        "RelR_8d95f00cf685",
+        "RelR_0eec9be300c4"
+      ],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "The relations describe that the subject helps, enables, or strengthens the outcome or functioning of the object (e.g., evidence helping investigations, scientists assisting investigators). This is a contributory causal/enablement relation, best placed under the broad CAUSALITY group rather than pure association.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  ],
+  "timestamp": "2026-01-06T14:30:49Z"
+}

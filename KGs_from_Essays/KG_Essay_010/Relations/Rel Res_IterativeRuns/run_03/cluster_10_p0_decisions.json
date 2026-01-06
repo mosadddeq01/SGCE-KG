@@ -1,0 +1,132 @@
+{
+  "cluster_label": "10_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_309b8a3ba017",
+      "relation_name": "participates_in",
+      "rel_desc": "Scientists studying black holes are the community engaged in the study of black holes.",
+      "rel_hint_type": "membership",
+      "canonical_rel_name": "participates_in_research_field",
+      "canonical_rel_desc": "Indicates that a community or group of researchers is actively engaged in work within a particular research field.",
+      "rel_cls": "research_community_participation_relation",
+      "rel_cls_group": "AGENCY",
+      "subject_entity_name": "scientists studying black holes",
+      "object_entity_name": "study of black holes",
+      "subject_class_label": "Black Hole Scientific Communities",
+      "subject_class_group": "Black Hole Science & Understanding",
+      "object_class_label": "Black Hole Research Fields",
+      "object_class_group": "Black Hole Science & Understanding",
+      "qualifiers": {
+        "TemporalQualifier": "for decades (at least)",
+        "SpatialQualifier": "across the global scientific community",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "Role: researchers and scholars"
+      },
+      "confidence": 0.82,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_87630e44a32e",
+      "relation_name": "studies",
+      "rel_desc": "Scientists studying black holes direct their research toward black holes.",
+      "rel_hint_type": "research-focus",
+      "canonical_rel_name": "studies",
+      "canonical_rel_desc": "The subject (typically a researcher or research community) engages in scientific study of the object as a research topic or target of investigation.",
+      "rel_cls": "research_focus_relation",
+      "rel_cls_group": "AGENCY",
+      "subject_entity_name": "scientists studying black holes",
+      "object_entity_name": "black holes",
+      "subject_class_label": "Black Hole Scientific Communities",
+      "subject_class_group": "Black Hole Science & Understanding",
+      "object_class_label": "Black Hole Phenomena",
+      "object_class_group": "Astrophysics",
+      "qualifiers": {
+        "TemporalQualifier": "for decades",
+        "SpatialQualifier": "in scientific and academic settings",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "Study motivated by unresolved mysteries",
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.9,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_eebaa2930e8f",
+      "relation_name": "conducts",
+      "rel_desc": "Scientists studying black holes conduct the study of black holes.",
+      "rel_hint_type": "agent-activity",
+      "canonical_rel_name": "conducts_research_in",
+      "canonical_rel_desc": "The subject (researchers or a community) carries out research activity within the domain or field represented by the object.",
+      "rel_cls": "research_activity_relation",
+      "rel_cls_group": "AGENCY",
+      "subject_entity_name": "scientists studying black holes",
+      "object_entity_name": "study of black holes",
+      "subject_class_label": "Black Hole Scientific Communities",
+      "subject_class_group": "Black Hole Science & Understanding",
+      "object_class_label": "Black Hole Research Fields",
+      "object_class_group": "Black Hole Science & Understanding",
+      "qualifiers": {
+        "TemporalQualifier": "in recent years",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "implied, not directly stated",
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "Community: researchers in black hole physics"
+      },
+      "confidence": 0.8,
+      "remarks": [
+        "Agent not explicit in the second sentence but strongly implied; relation added with moderate confidence.",
+        "Agent not explicit in the second sentence but strongly implied; relation added with moderate confidence.",
+        "Agent not explicit in the second sentence but strongly implied; relation added with moderate confidence.",
+        "Agent not explicit in the second sentence but strongly implied; relation added with moderate confidence."
+      ]
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_rel_schema\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_309b8a3ba017\",\n        \"RelR_eebaa2930e8f\"\n      ],\n      \"canonical_rel_name\": \"conducts_research_in\",\n      \"canonical_rel_desc\": \"The subject (typically a researcher or research community) conducts research within the field or domain represented by the object.\",\n      \"rel_cls\": \"research_activity_relation\",\n      \"rel_cls_group\": \"AGENCY\",\n      \"justification\": \"Both relations link a research community to a research field ('study of black holes') as an ongoing research activity. Using a single canonical predicate 'conducts_research_in' and the shared class 'research_activity_relation' removes the artificial distinction between 'participates_in_research_field' and 'conducts_research_in' while preserving the AGENCY semantics.\",\n      \"remark\": null,\n      \"confidence\": 0.91\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_rel_schema",
+      "args": {
+        "relation_ids": [
+          "RelR_309b8a3ba017",
+          "RelR_eebaa2930e8f"
+        ],
+        "canonical_rel_name": "conducts_research_in",
+        "canonical_rel_desc": "The subject (typically a researcher or research community) conducts research within the field or domain represented by the object.",
+        "rel_cls": "research_activity_relation",
+        "rel_cls_group": "AGENCY",
+        "justification": "Both relations link a research community to a research field ('study of black holes') as an ongoing research activity. Using a single canonical predicate 'conducts_research_in' and the shared class 'research_activity_relation' removes the artificial distinction between 'participates_in_research_field' and 'conducts_research_in' while preserving the AGENCY semantics.",
+        "remark": null,
+        "confidence": 0.91
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_rel_schema",
+      "relation_ids": [
+        "RelR_309b8a3ba017",
+        "RelR_eebaa2930e8f"
+      ],
+      "canonical_rel_name": "conducts_research_in",
+      "canonical_rel_desc": "The subject (typically a researcher or research community) conducts research within the field or domain represented by the object.",
+      "rel_cls": "research_activity_relation",
+      "rel_cls_group": "AGENCY",
+      "new_relation_name": null,
+      "original_relation_name": null,
+      "justification": "Both relations link a research community to a research field ('study of black holes') as an ongoing research activity. Using a single canonical predicate 'conducts_research_in' and the shared class 'research_activity_relation' removes the artificial distinction between 'participates_in_research_field' and 'conducts_research_in' while preserving the AGENCY semantics.",
+      "remark": null,
+      "confidence": 0.91
+    }
+  ],
+  "timestamp": "2026-01-06T09:57:30Z"
+}

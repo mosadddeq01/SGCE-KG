@@ -1,0 +1,209 @@
+{
+  "cluster_label": "6_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_2dc196c8678a",
+      "relation_name": "promotes",
+      "rel_desc": "Participation in sports fosters a sense of community.",
+      "rel_hint_type": "value promotion",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "sports",
+      "object_entity_name": "sense of community",
+      "subject_class_label": "Sports (Domain Concept)",
+      "subject_class_group": "Sports and Society",
+      "object_class_label": "Sport-Driven Social Cohesion",
+      "object_class_group": "Sport, Community & Social Experience",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "served as a powerful means of",
+        "LogicalMarker": "as",
+        "OtherQualifier": null
+      },
+      "confidence": 0.95,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_6e7c3dca0a42",
+      "relation_name": "promotes",
+      "rel_desc": "Sports promote the value of teamwork.",
+      "rel_hint_type": "value promotion",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "sports",
+      "object_entity_name": "teamwork",
+      "subject_class_label": "Sports (Domain Concept)",
+      "subject_class_group": "Sports and Society",
+      "object_class_label": "Sports Values",
+      "object_class_group": "Sports and Society",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "promoting",
+        "LogicalMarker": "such as",
+        "OtherQualifier": null
+      },
+      "confidence": 0.97,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_ffb3f5761ac6",
+      "relation_name": "promotes",
+      "rel_desc": "Sports promote the value of discipline.",
+      "rel_hint_type": "value promotion",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "sports",
+      "object_entity_name": "discipline",
+      "subject_class_label": "Sports (Domain Concept)",
+      "subject_class_group": "Sports and Society",
+      "object_class_label": "Sports Values",
+      "object_class_group": "Sports and Society",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "promoting",
+        "LogicalMarker": "such as",
+        "OtherQualifier": null
+      },
+      "confidence": 0.97,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_ff3fb3e27061",
+      "relation_name": "promotes",
+      "rel_desc": "Sports promote the value of fair play.",
+      "rel_hint_type": "value promotion",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "sports",
+      "object_entity_name": "fair play",
+      "subject_class_label": "Sports (Domain Concept)",
+      "subject_class_group": "Sports and Society",
+      "object_class_label": "Sports Values",
+      "object_class_group": "Sports and Society",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "promoting",
+        "LogicalMarker": "such as",
+        "OtherQualifier": null
+      },
+      "confidence": 0.97,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_2dc196c8678a\",\n        \"RelR_6e7c3dca0a42\",\n        \"RelR_ffb3f5761ac6\",\n        \"RelR_ff3fb3e27061\"\n      ],\n      \"canonical_rel_name\": \"promotes\",\n      \"canonical_rel_desc\": \"The subject activity or domain fosters, encourages, or contributes to the development or strengthening of the object value, attitude, or social outcome.\",\n      \"justification\": \"All four relations describe sports as causally fostering or encouraging positive values or social outcomes (sense of community, teamwork, discipline, fair play). They share the same direction (sports → value/outcome) and positive, value-oriented promotion semantics, so they can be normalized under one canonical predicate 'promotes'.\",\n      \"remark\": null,\n      \"confidence\": 0.96\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_2dc196c8678a\",\n        \"RelR_6e7c3dca0a42\",\n        \"RelR_ffb3f5761ac6\",\n        \"RelR_ff3fb3e27061\"\n      ],\n      \"rel_cls\": \"social_value_promotion_relation\",\n      \"justification\": \"In each case, the relation links sports to promoted social values or outcomes (teamwork, discipline, fair play, sense of community). This is more specific than a generic causal class and captures that the effect concerns social or moral values promoted by participation in sports.\",\n      \"remark\": null,\n      \"confidence\": 0.95\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_2dc196c8678a\",\n        \"RelR_6e7c3dca0a42\",\n        \"RelR_ffb3f5761ac6\",\n        \"RelR_ff3fb3e27061\"\n      ],\n      \"rel_cls_group\": \"CAUSALITY\",\n      \"justification\": \"The relations encode that engaging in sports brings about or strengthens specific values and social outcomes (rather than merely co-occurring with them), which is inherently causal: sports causally promotes these values.\",\n      \"remark\": null,\n      \"confidence\": 0.95\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_2dc196c8678a",
+          "RelR_6e7c3dca0a42",
+          "RelR_ffb3f5761ac6",
+          "RelR_ff3fb3e27061"
+        ],
+        "canonical_rel_name": "promotes",
+        "canonical_rel_desc": "The subject activity or domain fosters, encourages, or contributes to the development or strengthening of the object value, attitude, or social outcome.",
+        "justification": "All four relations describe sports as causally fostering or encouraging positive values or social outcomes (sense of community, teamwork, discipline, fair play). They share the same direction (sports → value/outcome) and positive, value-oriented promotion semantics, so they can be normalized under one canonical predicate 'promotes'.",
+        "remark": null,
+        "confidence": 0.96
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_2dc196c8678a",
+          "RelR_6e7c3dca0a42",
+          "RelR_ffb3f5761ac6",
+          "RelR_ff3fb3e27061"
+        ],
+        "rel_cls": "social_value_promotion_relation",
+        "justification": "In each case, the relation links sports to promoted social values or outcomes (teamwork, discipline, fair play, sense of community). This is more specific than a generic causal class and captures that the effect concerns social or moral values promoted by participation in sports.",
+        "remark": null,
+        "confidence": 0.95
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_2dc196c8678a",
+          "RelR_6e7c3dca0a42",
+          "RelR_ffb3f5761ac6",
+          "RelR_ff3fb3e27061"
+        ],
+        "rel_cls_group": "CAUSALITY",
+        "justification": "The relations encode that engaging in sports brings about or strengthens specific values and social outcomes (rather than merely co-occurring with them), which is inherently causal: sports causally promotes these values.",
+        "remark": null,
+        "confidence": 0.95
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_2dc196c8678a",
+        "RelR_6e7c3dca0a42",
+        "RelR_ffb3f5761ac6",
+        "RelR_ff3fb3e27061"
+      ],
+      "canonical_rel_name": "promotes",
+      "canonical_rel_desc": "The subject activity or domain fosters, encourages, or contributes to the development or strengthening of the object value, attitude, or social outcome.",
+      "justification": "All four relations describe sports as causally fostering or encouraging positive values or social outcomes (sense of community, teamwork, discipline, fair play). They share the same direction (sports → value/outcome) and positive, value-oriented promotion semantics, so they can be normalized under one canonical predicate 'promotes'.",
+      "remark": null,
+      "confidence": 0.96
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_2dc196c8678a",
+        "RelR_6e7c3dca0a42",
+        "RelR_ffb3f5761ac6",
+        "RelR_ff3fb3e27061"
+      ],
+      "rel_cls": "social_value_promotion_relation",
+      "justification": "In each case, the relation links sports to promoted social values or outcomes (teamwork, discipline, fair play, sense of community). This is more specific than a generic causal class and captures that the effect concerns social or moral values promoted by participation in sports.",
+      "remark": null,
+      "confidence": 0.95
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_2dc196c8678a",
+        "RelR_6e7c3dca0a42",
+        "RelR_ffb3f5761ac6",
+        "RelR_ff3fb3e27061"
+      ],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "The relations encode that engaging in sports brings about or strengthens specific values and social outcomes (rather than merely co-occurring with them), which is inherently causal: sports causally promotes these values.",
+      "remark": null,
+      "confidence": 0.95
+    }
+  ],
+  "timestamp": "2026-01-06T12:38:01Z"
+}

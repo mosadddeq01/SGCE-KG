@@ -1,0 +1,20 @@
+[
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": [
+        "RelR_218ec0f9187f",
+        "RelR_b495fd06fb56",
+        "RelR_ff0c05da11e4",
+        "RelR_2a5c932a026f"
+      ],
+      "canonical_rel_name": "facilitates_social_connection",
+      "canonical_rel_desc": "Indicates that the subject creates, enables, or strengthens social connections involving the object (e.g., individuals, groups, or communities).",
+      "rel_cls": "social_connection_relation",
+      "rel_cls_group": "ASSOCIATION",
+      "justification": "All four relations describe the subject fostering or enabling social ties between or among people and communities. They only differ in minor wording (facilitates vs connects, social units vs individuals/communities). Normalizing them to a single predicate 'facilitates_social_connection' with a unified description improves schema consistency without changing the underlying semantics. The existing rel_cls and rel_cls_group are already appropriate and aligned across instances.",
+      "remark": "Canonical predicate normalized across all social-connection edges in this cluster for consistent KG querying and interpretation.",
+      "confidence": 0.94
+    }
+  }
+]

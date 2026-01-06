@@ -1,0 +1,299 @@
+{
+  "cluster_label": "10_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_79885daea465",
+      "relation_name": "compared_to",
+      "rel_desc": "Gravitational time dilation makes time near the black hole slower relative to time experienced by distant observers.",
+      "rel_hint_type": "comparative",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "gravitational time dilation",
+      "object_entity_name": "time for observers further away",
+      "subject_class_label": "Gravitational Time Dilation",
+      "subject_class_group": "Gravitation and General Relativity",
+      "object_class_label": "Gravitational Time Dilation",
+      "object_class_group": "Gravitation and General Relativity",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "near vs further away from the black hole",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "causes",
+        "LogicalMarker": null,
+        "OtherQualifier": "ComparisonAspect: rate of time passage"
+      },
+      "confidence": 0.95,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_062b2ae7ba86",
+      "relation_name": "slower_than",
+      "rel_desc": "The rate of time near a black hole is slower than the rate experienced by observers further away.",
+      "rel_hint_type": "comparative",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "time near a black hole",
+      "object_entity_name": "time for observers further away",
+      "subject_class_label": "Gravitational Time Dilation",
+      "subject_class_group": "Gravitation and General Relativity",
+      "object_class_label": "Gravitational Time Dilation",
+      "object_class_group": "Gravitation and General Relativity",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "near vs further away from a black hole",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "due to gravitational time dilation",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.94,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_03cd67cffdbd",
+      "relation_name": "extends_beyond",
+      "rel_desc": "New physics is conceived as extending beyond the domain of applicability of general relativity.",
+      "rel_hint_type": "comparison",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "new physics",
+      "object_entity_name": "general relativity",
+      "subject_class_label": "Quantum Gravity and Beyond-Relativity Frameworks",
+      "subject_class_group": "Gravity and Quantum Theory Frameworks",
+      "object_class_label": "General Relativity",
+      "object_class_group": "Cosmology and Fundamental Physics",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": "in regimes where GR breaks down (e.g., singularities)",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "beyond",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.9,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_79885daea465\"],\n      \"canonical_rel_name\": \"causes_time_to_pass_slower_than\",\n      \"canonical_rel_desc\": \"Indicates that a physical effect or phenomenon causes the passage of time in one region or frame to be slower than in another reference region or frame.\",\n      \"justification\": \"The subject is the phenomenon (gravitational time dilation) that, according to the description and the CausalHint='causes', leads to time passing more slowly relative to distant observers. This is not a pure symmetric comparison between two time rates, but a causal relation where one phenomenon causes a slower rate of time than a reference.\",\n      \"remark\": null,\n      \"confidence\": 0.88\n    }\n  },\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_062b2ae7ba86\"],\n      \"canonical_rel_name\": \"has_slower_rate_than\",\n      \"canonical_rel_desc\": \"Indicates that the rate of a quantity (here, passage of time) at the subject is slower than the corresponding rate at the object.\",\n      \"justification\": \"Here the subject is explicitly 'time near a black hole' and the object is 'time for observers further away'; the relation is a straightforward quantitative comparison of rates, with no additional causal predicate needed on the edge itself.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_03cd67cffdbd\"],\n      \"canonical_rel_name\": \"extends_beyond_applicability_of\",\n      \"canonical_rel_desc\": \"Indicates that the conceptual or theoretical scope of the subject framework extends beyond the domain of applicability of the object framework.\",\n      \"justification\": \"The description states that 'new physics' is conceived as extending beyond the domain of applicability of general relativity, which is a scope/coverage comparison between theoretical frameworks.\",\n      \"remark\": null,\n      \"confidence\": 0.89\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_79885daea465\"],\n      \"rel_cls\": \"causal_effect_comparison_relation\",\n      \"justification\": \"This relation combines causality (a phenomenon causes an effect) with a comparative outcome (time runs slower than in a reference frame). A class capturing causal effects expressed via comparative outcomes is appropriate.\",\n      \"remark\": null,\n      \"confidence\": 0.84\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_062b2ae7ba86\"],\n      \"rel_cls\": \"quantitative_comparison_relation\",\n      \"justification\": \"The relation strictly compares the rate of time between two locations, fitting a general class for quantitative comparisons (greater/less/slower/faster).\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_03cd67cffdbd\"],\n      \"rel_cls\": \"theoretical_scope_relation\",\n      \"justification\": \"The relation is about one theoretical framework extending beyond the scope or domain of another, which is best modeled as a class of relations about comparative theoretical scope or applicability.\",\n      \"remark\": null,\n      \"confidence\": 0.89\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_79885daea465\"],\n      \"rel_cls_group\": \"CAUSALITY\",\n      \"justification\": \"The qualifiers and description emphasize that gravitational time dilation causes the slower passage of time relative to distant observers; the primary semantic dimension is causal, even though a comparison is embedded in the effect description.\",\n      \"remark\": null,\n      \"confidence\": 0.86\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_062b2ae7ba86\"],\n      \"rel_cls_group\": \"COMPARISON\",\n      \"justification\": \"The relation encodes a direct comparative statement (slower than) between two time rates, with rel_hint_type='comparative'; its core semantics are comparative rather than causal.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_03cd67cffdbd\"],\n      \"rel_cls_group\": \"COMPARISON\",\n      \"justification\": \"The statement describes that 'new physics' extends beyond the applicability domain of general relativity, which is a comparison of scope or coverage between two theoretical frameworks.\",\n      \"remark\": null,\n      \"confidence\": 0.88\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_79885daea465"
+        ],
+        "canonical_rel_name": "causes_time_to_pass_slower_than",
+        "canonical_rel_desc": "Indicates that a physical effect or phenomenon causes the passage of time in one region or frame to be slower than in another reference region or frame.",
+        "justification": "The subject is the phenomenon (gravitational time dilation) that, according to the description and the CausalHint='causes', leads to time passing more slowly relative to distant observers. This is not a pure symmetric comparison between two time rates, but a causal relation where one phenomenon causes a slower rate of time than a reference.",
+        "remark": null,
+        "confidence": 0.88
+      }
+    },
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_062b2ae7ba86"
+        ],
+        "canonical_rel_name": "has_slower_rate_than",
+        "canonical_rel_desc": "Indicates that the rate of a quantity (here, passage of time) at the subject is slower than the corresponding rate at the object.",
+        "justification": "Here the subject is explicitly 'time near a black hole' and the object is 'time for observers further away'; the relation is a straightforward quantitative comparison of rates, with no additional causal predicate needed on the edge itself.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_03cd67cffdbd"
+        ],
+        "canonical_rel_name": "extends_beyond_applicability_of",
+        "canonical_rel_desc": "Indicates that the conceptual or theoretical scope of the subject framework extends beyond the domain of applicability of the object framework.",
+        "justification": "The description states that 'new physics' is conceived as extending beyond the domain of applicability of general relativity, which is a scope/coverage comparison between theoretical frameworks.",
+        "remark": null,
+        "confidence": 0.89
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_79885daea465"
+        ],
+        "rel_cls": "causal_effect_comparison_relation",
+        "justification": "This relation combines causality (a phenomenon causes an effect) with a comparative outcome (time runs slower than in a reference frame). A class capturing causal effects expressed via comparative outcomes is appropriate.",
+        "remark": null,
+        "confidence": 0.84
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_062b2ae7ba86"
+        ],
+        "rel_cls": "quantitative_comparison_relation",
+        "justification": "The relation strictly compares the rate of time between two locations, fitting a general class for quantitative comparisons (greater/less/slower/faster).",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_03cd67cffdbd"
+        ],
+        "rel_cls": "theoretical_scope_relation",
+        "justification": "The relation is about one theoretical framework extending beyond the scope or domain of another, which is best modeled as a class of relations about comparative theoretical scope or applicability.",
+        "remark": null,
+        "confidence": 0.89
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_79885daea465"
+        ],
+        "rel_cls_group": "CAUSALITY",
+        "justification": "The qualifiers and description emphasize that gravitational time dilation causes the slower passage of time relative to distant observers; the primary semantic dimension is causal, even though a comparison is embedded in the effect description.",
+        "remark": null,
+        "confidence": 0.86
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_062b2ae7ba86"
+        ],
+        "rel_cls_group": "COMPARISON",
+        "justification": "The relation encodes a direct comparative statement (slower than) between two time rates, with rel_hint_type='comparative'; its core semantics are comparative rather than causal.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_03cd67cffdbd"
+        ],
+        "rel_cls_group": "COMPARISON",
+        "justification": "The statement describes that 'new physics' extends beyond the applicability domain of general relativity, which is a comparison of scope or coverage between two theoretical frameworks.",
+        "remark": null,
+        "confidence": 0.88
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_79885daea465"
+      ],
+      "canonical_rel_name": "causes_time_to_pass_slower_than",
+      "canonical_rel_desc": "Indicates that a physical effect or phenomenon causes the passage of time in one region or frame to be slower than in another reference region or frame.",
+      "justification": "The subject is the phenomenon (gravitational time dilation) that, according to the description and the CausalHint='causes', leads to time passing more slowly relative to distant observers. This is not a pure symmetric comparison between two time rates, but a causal relation where one phenomenon causes a slower rate of time than a reference.",
+      "remark": null,
+      "confidence": 0.88
+    },
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_062b2ae7ba86"
+      ],
+      "canonical_rel_name": "has_slower_rate_than",
+      "canonical_rel_desc": "Indicates that the rate of a quantity (here, passage of time) at the subject is slower than the corresponding rate at the object.",
+      "justification": "Here the subject is explicitly 'time near a black hole' and the object is 'time for observers further away'; the relation is a straightforward quantitative comparison of rates, with no additional causal predicate needed on the edge itself.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_03cd67cffdbd"
+      ],
+      "canonical_rel_name": "extends_beyond_applicability_of",
+      "canonical_rel_desc": "Indicates that the conceptual or theoretical scope of the subject framework extends beyond the domain of applicability of the object framework.",
+      "justification": "The description states that 'new physics' is conceived as extending beyond the domain of applicability of general relativity, which is a scope/coverage comparison between theoretical frameworks.",
+      "remark": null,
+      "confidence": 0.89
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_79885daea465"
+      ],
+      "rel_cls": "causal_effect_comparison_relation",
+      "justification": "This relation combines causality (a phenomenon causes an effect) with a comparative outcome (time runs slower than in a reference frame). A class capturing causal effects expressed via comparative outcomes is appropriate.",
+      "remark": null,
+      "confidence": 0.84
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_062b2ae7ba86"
+      ],
+      "rel_cls": "quantitative_comparison_relation",
+      "justification": "The relation strictly compares the rate of time between two locations, fitting a general class for quantitative comparisons (greater/less/slower/faster).",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_03cd67cffdbd"
+      ],
+      "rel_cls": "theoretical_scope_relation",
+      "justification": "The relation is about one theoretical framework extending beyond the scope or domain of another, which is best modeled as a class of relations about comparative theoretical scope or applicability.",
+      "remark": null,
+      "confidence": 0.89
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_79885daea465"
+      ],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "The qualifiers and description emphasize that gravitational time dilation causes the slower passage of time relative to distant observers; the primary semantic dimension is causal, even though a comparison is embedded in the effect description.",
+      "remark": null,
+      "confidence": 0.86
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_062b2ae7ba86"
+      ],
+      "rel_cls_group": "COMPARISON",
+      "justification": "The relation encodes a direct comparative statement (slower than) between two time rates, with rel_hint_type='comparative'; its core semantics are comparative rather than causal.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_03cd67cffdbd"
+      ],
+      "rel_cls_group": "COMPARISON",
+      "justification": "The statement describes that 'new physics' extends beyond the applicability domain of general relativity, which is a comparison of scope or coverage between two theoretical frameworks.",
+      "remark": null,
+      "confidence": 0.88
+    }
+  ],
+  "timestamp": "2026-01-06T09:42:13Z"
+}

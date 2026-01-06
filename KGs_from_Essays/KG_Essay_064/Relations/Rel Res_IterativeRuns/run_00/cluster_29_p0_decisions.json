@@ -1,0 +1,141 @@
+{
+  "cluster_label": "29_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_53e27020e620",
+      "relation_name": "features",
+      "rel_desc": "Fairytales are characterized by timeless themes.",
+      "rel_hint_type": "composition",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "fairytales",
+      "object_entity_name": "timeless themes",
+      "subject_class_label": "Fairytale Concepts",
+      "subject_class_group": "Fairytales: Genre, Narratives, and Motifs",
+      "object_class_label": "Fairytale Narratives",
+      "object_class_group": "Fairytales: Genre, Narratives, and Motifs",
+      "qualifiers": {
+        "TemporalQualifier": "timeless (enduring across eras)",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": "enduring relevance across ages and cultures",
+        "UncertaintyQualifier": null,
+        "CausalHint": "and",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.95,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_8ef2bde9c212",
+      "relation_name": "features",
+      "rel_desc": "Fairytales often include fantastical creatures as part of their stories.",
+      "rel_hint_type": "composition",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "fairytales",
+      "object_entity_name": "fantastical creatures",
+      "subject_class_label": "Fairytale Concepts",
+      "subject_class_group": "Fairytales: Genre, Narratives, and Motifs",
+      "object_class_label": "Fairytale Motifs",
+      "object_class_group": "Fairytales: Genre, Narratives, and Motifs",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": "often",
+        "UncertaintyQualifier": null,
+        "CausalHint": "feature",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.96,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_53e27020e620\",\n        \"RelR_8ef2bde9c212\"\n      ],\n      \"canonical_rel_name\": \"features_narrative_element\",\n      \"canonical_rel_desc\": \"Indicates that a narrative genre or story type typically includes a given theme, motif, or other narrative element as part of its content.\",\n      \"justification\": \"Both relations link 'fairytales' to elements that are part of their narrative makeup (timeless themes, fantastical creatures). The predicate expresses that the genre characteristically features these elements, so a shared canonical relation 'features_narrative_element' is appropriate.\",\n      \"remark\": null,\n      \"confidence\": 0.93\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_53e27020e620\",\n        \"RelR_8ef2bde9c212\"\n      ],\n      \"rel_cls\": \"narrative_element_relation\",\n      \"justification\": \"These relations connect a narrative genre (fairytales) with constituent themes or motifs, which are narrative elements. Grouping them under a broader class 'narrative_element_relation' captures this family of composition-like links in storytelling.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_53e27020e620\",\n        \"RelR_8ef2bde9c212\"\n      ],\n      \"rel_cls_group\": \"COMPOSITION\",\n      \"justification\": \"The subject is a genre and the objects are parts of its typical content, i.e., what it is composed of in narrative terms. This aligns with a broad COMPOSITION grouping.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_53e27020e620",
+          "RelR_8ef2bde9c212"
+        ],
+        "canonical_rel_name": "features_narrative_element",
+        "canonical_rel_desc": "Indicates that a narrative genre or story type typically includes a given theme, motif, or other narrative element as part of its content.",
+        "justification": "Both relations link 'fairytales' to elements that are part of their narrative makeup (timeless themes, fantastical creatures). The predicate expresses that the genre characteristically features these elements, so a shared canonical relation 'features_narrative_element' is appropriate.",
+        "remark": null,
+        "confidence": 0.93
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_53e27020e620",
+          "RelR_8ef2bde9c212"
+        ],
+        "rel_cls": "narrative_element_relation",
+        "justification": "These relations connect a narrative genre (fairytales) with constituent themes or motifs, which are narrative elements. Grouping them under a broader class 'narrative_element_relation' captures this family of composition-like links in storytelling.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_53e27020e620",
+          "RelR_8ef2bde9c212"
+        ],
+        "rel_cls_group": "COMPOSITION",
+        "justification": "The subject is a genre and the objects are parts of its typical content, i.e., what it is composed of in narrative terms. This aligns with a broad COMPOSITION grouping.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_53e27020e620",
+        "RelR_8ef2bde9c212"
+      ],
+      "canonical_rel_name": "features_narrative_element",
+      "canonical_rel_desc": "Indicates that a narrative genre or story type typically includes a given theme, motif, or other narrative element as part of its content.",
+      "justification": "Both relations link 'fairytales' to elements that are part of their narrative makeup (timeless themes, fantastical creatures). The predicate expresses that the genre characteristically features these elements, so a shared canonical relation 'features_narrative_element' is appropriate.",
+      "remark": null,
+      "confidence": 0.93
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_53e27020e620",
+        "RelR_8ef2bde9c212"
+      ],
+      "rel_cls": "narrative_element_relation",
+      "justification": "These relations connect a narrative genre (fairytales) with constituent themes or motifs, which are narrative elements. Grouping them under a broader class 'narrative_element_relation' captures this family of composition-like links in storytelling.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_53e27020e620",
+        "RelR_8ef2bde9c212"
+      ],
+      "rel_cls_group": "COMPOSITION",
+      "justification": "The subject is a genre and the objects are parts of its typical content, i.e., what it is composed of in narrative terms. This aligns with a broad COMPOSITION grouping.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  ],
+  "timestamp": "2026-01-06T14:05:38Z"
+}

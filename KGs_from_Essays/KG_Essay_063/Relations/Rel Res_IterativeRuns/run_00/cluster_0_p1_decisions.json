@@ -1,0 +1,107 @@
+{
+  "cluster_label": "0_p1",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_cafeff568b04",
+      "relation_name": "extends_to_period",
+      "rel_desc": "The history of protests and revolutions is said to extend up to the present day.",
+      "rel_hint_type": "temporal",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "history of protests and revolutions",
+      "object_entity_name": "present day",
+      "subject_class_label": "Historical Impact of Protests and Revolutions",
+      "subject_class_group": "Protests and Revolutions – Historical Context",
+      "object_class_label": "Protest-Related Time Periods",
+      "object_class_group": "Protests and Revolutions – Historical Context",
+      "qualifiers": {
+        "TemporalQualifier": "end of the described historical span",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": "to",
+        "OtherQualifier": null
+      },
+      "confidence": 0.9,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_cafeff568b04\"],\n      \"canonical_rel_name\": \"extends_until\",\n      \"canonical_rel_desc\": \"Indicates that a described process, state, or historical span continues up to a specified end time or period.\",\n      \"justification\": \"The relation describes the temporal endpoint of the history of protests and revolutions, which is said to extend up to the present day. A predicate like 'extends_until' captures this directed temporal extent from subject (historical span) to object (end time).\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_cafeff568b04\"],\n      \"rel_cls\": \"temporal_extent_relation\",\n      \"justification\": \"The link expresses how long a phenomenon persists in time, i.e., the temporal extent or endpoint of the described history. This fits a class focused on temporal extent rather than, for example, causal or compositional relations.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_cafeff568b04\"],\n      \"rel_cls_group\": \"TEMPORALITY\",\n      \"justification\": \"The core semantics concern when the historical span ends ('up to the present day'), which is a temporal dimension.\",\n      \"remark\": null,\n      \"confidence\": 0.95\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_cafeff568b04"
+        ],
+        "canonical_rel_name": "extends_until",
+        "canonical_rel_desc": "Indicates that a described process, state, or historical span continues up to a specified end time or period.",
+        "justification": "The relation describes the temporal endpoint of the history of protests and revolutions, which is said to extend up to the present day. A predicate like 'extends_until' captures this directed temporal extent from subject (historical span) to object (end time).",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_cafeff568b04"
+        ],
+        "rel_cls": "temporal_extent_relation",
+        "justification": "The link expresses how long a phenomenon persists in time, i.e., the temporal extent or endpoint of the described history. This fits a class focused on temporal extent rather than, for example, causal or compositional relations.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_cafeff568b04"
+        ],
+        "rel_cls_group": "TEMPORALITY",
+        "justification": "The core semantics concern when the historical span ends ('up to the present day'), which is a temporal dimension.",
+        "remark": null,
+        "confidence": 0.95
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_cafeff568b04"
+      ],
+      "canonical_rel_name": "extends_until",
+      "canonical_rel_desc": "Indicates that a described process, state, or historical span continues up to a specified end time or period.",
+      "justification": "The relation describes the temporal endpoint of the history of protests and revolutions, which is said to extend up to the present day. A predicate like 'extends_until' captures this directed temporal extent from subject (historical span) to object (end time).",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_cafeff568b04"
+      ],
+      "rel_cls": "temporal_extent_relation",
+      "justification": "The link expresses how long a phenomenon persists in time, i.e., the temporal extent or endpoint of the described history. This fits a class focused on temporal extent rather than, for example, causal or compositional relations.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_cafeff568b04"
+      ],
+      "rel_cls_group": "TEMPORALITY",
+      "justification": "The core semantics concern when the historical span ends ('up to the present day'), which is a temporal dimension.",
+      "remark": null,
+      "confidence": 0.95
+    }
+  ],
+  "timestamp": "2026-01-06T13:13:25Z"
+}

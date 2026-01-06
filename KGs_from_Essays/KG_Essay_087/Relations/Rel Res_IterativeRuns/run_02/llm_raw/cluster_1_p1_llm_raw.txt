@@ -1,0 +1,13 @@
+[
+  {
+    "function": "add_rel_remark",
+    "args": {
+      "relation_ids": [
+        "RelR_cb660b4ff9e8"
+      ],
+      "remark": "The current canonical_rel_name 'has_brand' and rel_cls_group 'OWNERSHIP' treat the link primarily as an ownership relation, but the upstream hints ('owns_or_represented_by') also include a representational/identity aspect (a brand representing a business in the market). This dual semantics (ownership + representation) seems acceptable for now but may warrant future review if more fine-grained predicates (e.g., 'owns_brand' vs. 'is_represented_by_brand') are introduced.",
+      "justification": "Schema fields are broadly consistent and usable as-is, but there is a subtle mismatch between pure ownership and representational identity that future ontology refinement might want to separate; adding a remark preserves this nuance without changing the current schema.",
+      "confidence": 0.83
+    }
+  }
+]

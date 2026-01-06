@@ -1,0 +1,106 @@
+{
+  "cluster_label": "12_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_400c07f3c106",
+      "relation_name": "persists_over_time",
+      "rel_desc": "The Cinderella fairytale has been told for centuries, predating the early 19th century Grimms' work.",
+      "rel_hint_type": "temporal",
+      "canonical_rel_name": "persists_over_time",
+      "canonical_rel_desc": "Indicates that a narrative, practice, or entity continues to exist or remain culturally relevant over an extended period of time.",
+      "rel_cls": "temporal_persistence_relation",
+      "rel_cls_group": "TEMPORALITY",
+      "subject_entity_name": "Cinderella (fairytale)",
+      "object_entity_name": "early 19th century",
+      "subject_class_label": "Cinderella Narratives",
+      "subject_class_group": "Cinderella Narrative Tradition",
+      "object_class_label": "Storytelling Temporal and Cultural Context",
+      "object_class_group": "Storytelling and Narrative (Practices, Effects, Context)",
+      "qualifiers": {
+        "TemporalQualifier": "for centuries (long before and after early 19th century)",
+        "SpatialQualifier": "across different cultures",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": "for",
+        "OtherQualifier": "NarrativeStatus: widespread, multi-cultural variants"
+      },
+      "confidence": 0.78,
+      "remarks": [
+        "Relation mainly created to capture the long-duration qualifier \"for centuries\"; mapping to specific period node is approximate.",
+        "Relation mainly created to capture the long-duration qualifier \"for centuries\"; mapping to specific period node is approximate.",
+        "Relation mainly created to capture the long-duration qualifier \"for centuries\"; mapping to specific period node is approximate.",
+        "Relation mainly created to capture the long-duration qualifier \"for centuries\"; mapping to specific period node is approximate."
+      ]
+    },
+    {
+      "relation_id": "RelR_4d2527732fd2",
+      "relation_name": "endures_across",
+      "rel_desc": "The tales have persisted across time.",
+      "rel_hint_type": "temporal-persistence",
+      "canonical_rel_name": "persists_over_time",
+      "canonical_rel_desc": "Indicates that a narrative, practice, or entity continues to exist or remain culturally relevant over an extended period of time.",
+      "rel_cls": "temporal_persistence_relation",
+      "rel_cls_group": "TEMPORALITY",
+      "subject_entity_name": "these tales",
+      "object_entity_name": "time",
+      "subject_class_label": "Fairy Tale Categories and Collections",
+      "subject_class_group": "Fairy Tales and Their Audiences",
+      "object_class_label": "Storytelling Temporal and Cultural Context",
+      "object_class_group": "Storytelling and Narrative (Practices, Effects, Context)",
+      "qualifiers": {
+        "TemporalQualifier": "over long periods ('test of time')",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "test of time (metaphor for durability)",
+        "LogicalMarker": null,
+        "OtherQualifier": "PersistenceType: cultural longevity"
+      },
+      "confidence": 0.97,
+      "remarks": [
+        "Object entity 'time' is being used in a metaphorical/aggregate way as a stand-in for long historical duration, rather than a specific time period node. Consider later modeling this as a persistence attribute or linking to explicit time-span entities if the temporal model is refined."
+      ]
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_rel_schema\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_400c07f3c106\",\n        \"RelR_4d2527732fd2\"\n      ],\n      \"canonical_rel_name\": \"persists_over_time\",\n      \"canonical_rel_desc\": \"Indicates that an entity, concept, or practice continues to exist or remain relevant over an extended period of time.\",\n      \"rel_cls\": \"temporal_persistence_relation\",\n      \"rel_cls_group\": \"TEMPORALITY\",\n      \"justification\": \"Both relations describe long-term temporal endurance of narratives across extended periods. The existing canonical_rel_name, rel_cls, and rel_cls_group are consistent, but the previous description was overly specific to cultural relevance. The updated description generalizes to any entity, concept, or practice while preserving the temporal-persistence semantics shared by both instances.\",\n      \"remark\": null,\n      \"confidence\": 0.93\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_rel_schema",
+      "args": {
+        "relation_ids": [
+          "RelR_400c07f3c106",
+          "RelR_4d2527732fd2"
+        ],
+        "canonical_rel_name": "persists_over_time",
+        "canonical_rel_desc": "Indicates that an entity, concept, or practice continues to exist or remain relevant over an extended period of time.",
+        "rel_cls": "temporal_persistence_relation",
+        "rel_cls_group": "TEMPORALITY",
+        "justification": "Both relations describe long-term temporal endurance of narratives across extended periods. The existing canonical_rel_name, rel_cls, and rel_cls_group are consistent, but the previous description was overly specific to cultural relevance. The updated description generalizes to any entity, concept, or practice while preserving the temporal-persistence semantics shared by both instances.",
+        "remark": null,
+        "confidence": 0.93
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_rel_schema",
+      "relation_ids": [
+        "RelR_400c07f3c106",
+        "RelR_4d2527732fd2"
+      ],
+      "canonical_rel_name": "persists_over_time",
+      "canonical_rel_desc": "Indicates that an entity, concept, or practice continues to exist or remain relevant over an extended period of time.",
+      "rel_cls": "temporal_persistence_relation",
+      "rel_cls_group": "TEMPORALITY",
+      "new_relation_name": null,
+      "original_relation_name": null,
+      "justification": "Both relations describe long-term temporal endurance of narratives across extended periods. The existing canonical_rel_name, rel_cls, and rel_cls_group are consistent, but the previous description was overly specific to cultural relevance. The updated description generalizes to any entity, concept, or practice while preserving the temporal-persistence semantics shared by both instances.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  ],
+  "timestamp": "2026-01-06T14:14:02Z"
+}

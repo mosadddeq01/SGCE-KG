@@ -1,0 +1,17 @@
+[
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": [
+        "RelR_5a5b95e17ba7"
+      ],
+      "canonical_rel_name": "indicates_internal_state",
+      "canonical_rel_desc": "A nonverbal behavior or facial expression functions as a cue that indicates or signals an internal or inferred psychological or attitudinal state of a person.",
+      "rel_cls": "nonverbal_state_cue_relation",
+      "rel_cls_group": "COMMUNICATION",
+      "justification": "This relation instance has the same semantics as the other two in the chunk: a nonverbal behavior (eye contact) signaling an internal psychological state (engagement). To keep the KG schema consistent, it should share the same canonical predicate, relation class, and broad group as the other nonverbal state-cue signaling relations. The previous settings ('indicates_state', 'nonverbal_indicator_relation', rel_cls_group='ASSOCIATION') were redundant variants for the same communication-oriented cue relation.",
+      "remark": null,
+      "confidence": 0.96
+    }
+  }
+]

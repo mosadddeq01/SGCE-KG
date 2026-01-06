@@ -1,0 +1,209 @@
+{
+  "cluster_label": "0_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_023431eaa694",
+      "relation_name": "includes_color",
+      "rel_desc": "The warm colors group includes the color red.",
+      "rel_hint_type": "membership",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "warm colors",
+      "object_entity_name": "red",
+      "subject_class_label": "Color Temperature Groups",
+      "subject_class_group": "Color Psychology & Consumer Response in Branding",
+      "object_class_label": "Brand Color Attributes",
+      "object_class_group": "Color Psychology & Consumer Response in Branding",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "like (example rather than exhaustive)",
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "CategoryType: color temperature group membership"
+      },
+      "confidence": 0.98,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_971ed6fe6162",
+      "relation_name": "includes_color",
+      "rel_desc": "The warm colors group includes the color orange.",
+      "rel_hint_type": "membership",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "warm colors",
+      "object_entity_name": "orange",
+      "subject_class_label": "Color Temperature Groups",
+      "subject_class_group": "Color Psychology & Consumer Response in Branding",
+      "object_class_label": "Brand Color Attributes",
+      "object_class_group": "Color Psychology & Consumer Response in Branding",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "like (example rather than exhaustive)",
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "CategoryType: color temperature group membership"
+      },
+      "confidence": 0.98,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_74630e767884",
+      "relation_name": "includes_color",
+      "rel_desc": "The cool colors group includes the color blue.",
+      "rel_hint_type": "membership",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "cool colors",
+      "object_entity_name": "blue",
+      "subject_class_label": "Color Temperature Groups",
+      "subject_class_group": "Color Psychology & Consumer Response in Branding",
+      "object_class_label": "Brand Color Attributes",
+      "object_class_group": "Color Psychology & Consumer Response in Branding",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "like (example rather than exhaustive)",
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "CategoryType: color temperature group membership"
+      },
+      "confidence": 0.98,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_80b208110b4a",
+      "relation_name": "includes_color",
+      "rel_desc": "The cool colors group includes the color green.",
+      "rel_hint_type": "membership",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "cool colors",
+      "object_entity_name": "green",
+      "subject_class_label": "Color Temperature Groups",
+      "subject_class_group": "Color Psychology & Consumer Response in Branding",
+      "object_class_label": "Brand Color Attributes",
+      "object_class_group": "Color Psychology & Consumer Response in Branding",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "like (example rather than exhaustive)",
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "CategoryType: color temperature group membership"
+      },
+      "confidence": 0.98,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_023431eaa694\",\n        \"RelR_971ed6fe6162\",\n        \"RelR_74630e767884\",\n        \"RelR_80b208110b4a\"\n      ],\n      \"canonical_rel_name\": \"includes_member\",\n      \"canonical_rel_desc\": \"Indicates that the subject category or group includes the object as a member item or subtype (subject = group/category, object = member).\",\n      \"justification\": \"All four relations describe the same predicate: a color-temperature group (warm colors, cool colors) including specific colors (red, orange, blue, green) as members. The semantics are category membership with the subject as the group and the object as the member. Using a single normalized predicate 'includes_member' improves consistency and is not restricted to colors, so it can be reused for other category–member relations.\",\n      \"remark\": null,\n      \"confidence\": 0.97\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_023431eaa694\",\n        \"RelR_971ed6fe6162\",\n        \"RelR_74630e767884\",\n        \"RelR_80b208110b4a\"\n      ],\n      \"rel_cls\": \"category_membership_relation\",\n      \"justification\": \"Each relation instance links a category (color temperature group) to one of its member colors, which is a standard category–member or set–element pattern. Grouping them under a shared relation class 'category_membership_relation' reflects this family of predicates and can generalize to other domains beyond colors.\",\n      \"remark\": null,\n      \"confidence\": 0.96\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_023431eaa694\",\n        \"RelR_971ed6fe6162\",\n        \"RelR_74630e767884\",\n        \"RelR_80b208110b4a\"\n      ],\n      \"rel_cls_group\": \"IDENTITY\",\n      \"justification\": \"Category membership expresses a taxonomic/identity-like classification, where the object is identified as belonging to the category represented by the subject. Among the broad groups, IDENTITY best captures this classification/typing semantics, as opposed to COMPOSITION or ASSOCIATION.\",\n      \"remark\": null,\n      \"confidence\": 0.93\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_023431eaa694",
+          "RelR_971ed6fe6162",
+          "RelR_74630e767884",
+          "RelR_80b208110b4a"
+        ],
+        "canonical_rel_name": "includes_member",
+        "canonical_rel_desc": "Indicates that the subject category or group includes the object as a member item or subtype (subject = group/category, object = member).",
+        "justification": "All four relations describe the same predicate: a color-temperature group (warm colors, cool colors) including specific colors (red, orange, blue, green) as members. The semantics are category membership with the subject as the group and the object as the member. Using a single normalized predicate 'includes_member' improves consistency and is not restricted to colors, so it can be reused for other category–member relations.",
+        "remark": null,
+        "confidence": 0.97
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_023431eaa694",
+          "RelR_971ed6fe6162",
+          "RelR_74630e767884",
+          "RelR_80b208110b4a"
+        ],
+        "rel_cls": "category_membership_relation",
+        "justification": "Each relation instance links a category (color temperature group) to one of its member colors, which is a standard category–member or set–element pattern. Grouping them under a shared relation class 'category_membership_relation' reflects this family of predicates and can generalize to other domains beyond colors.",
+        "remark": null,
+        "confidence": 0.96
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_023431eaa694",
+          "RelR_971ed6fe6162",
+          "RelR_74630e767884",
+          "RelR_80b208110b4a"
+        ],
+        "rel_cls_group": "IDENTITY",
+        "justification": "Category membership expresses a taxonomic/identity-like classification, where the object is identified as belonging to the category represented by the subject. Among the broad groups, IDENTITY best captures this classification/typing semantics, as opposed to COMPOSITION or ASSOCIATION.",
+        "remark": null,
+        "confidence": 0.93
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_023431eaa694",
+        "RelR_971ed6fe6162",
+        "RelR_74630e767884",
+        "RelR_80b208110b4a"
+      ],
+      "canonical_rel_name": "includes_member",
+      "canonical_rel_desc": "Indicates that the subject category or group includes the object as a member item or subtype (subject = group/category, object = member).",
+      "justification": "All four relations describe the same predicate: a color-temperature group (warm colors, cool colors) including specific colors (red, orange, blue, green) as members. The semantics are category membership with the subject as the group and the object as the member. Using a single normalized predicate 'includes_member' improves consistency and is not restricted to colors, so it can be reused for other category–member relations.",
+      "remark": null,
+      "confidence": 0.97
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_023431eaa694",
+        "RelR_971ed6fe6162",
+        "RelR_74630e767884",
+        "RelR_80b208110b4a"
+      ],
+      "rel_cls": "category_membership_relation",
+      "justification": "Each relation instance links a category (color temperature group) to one of its member colors, which is a standard category–member or set–element pattern. Grouping them under a shared relation class 'category_membership_relation' reflects this family of predicates and can generalize to other domains beyond colors.",
+      "remark": null,
+      "confidence": 0.96
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_023431eaa694",
+        "RelR_971ed6fe6162",
+        "RelR_74630e767884",
+        "RelR_80b208110b4a"
+      ],
+      "rel_cls_group": "IDENTITY",
+      "justification": "Category membership expresses a taxonomic/identity-like classification, where the object is identified as belonging to the category represented by the subject. Among the broad groups, IDENTITY best captures this classification/typing semantics, as opposed to COMPOSITION or ASSOCIATION.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  ],
+  "timestamp": "2026-01-06T14:59:27Z"
+}

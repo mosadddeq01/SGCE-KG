@@ -1,0 +1,33 @@
+[
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": [
+        "RelR_c460038e6b2b"
+      ],
+      "canonical_rel_name": "has_stage",
+      "canonical_rel_desc": "Indicates that a life cycle or process includes a specific stage as one of its constituent phases.",
+      "rel_cls": null,
+      "rel_cls_group": null,
+      "justification": "RelR_c460038e6b2b expresses the same life-cycle-stage inclusion semantics as RelR_8be4d555e098 but currently uses a different canonical_rel_name ('includes_life_stage'). Normalizing to a single predicate 'has_stage' with a shared description improves schema consistency and reuse for all life cycle stage relations.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  },
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": [
+        "RelR_90038cce3f44",
+        "RelR_f2e00c1667c1"
+      ],
+      "canonical_rel_name": "is_part_of",
+      "canonical_rel_desc": "Indicates that the subject is a constituent element, region, component, or process within the broader whole denoted by the object.",
+      "rel_cls": "part_whole_relation",
+      "rel_cls_group": null,
+      "justification": "Both relations encode a generic part–whole relationship, but currently use slightly divergent rel_cls values and canonical descriptions (one emphasizing physical parts and the other ecological processes). Unifying them under rel_cls 'part_whole_relation' and a generalized canonical_rel_desc that covers physical parts, regions, components, and processes yields a cleaner, reusable part-of predicate across domains while keeping the same broad COMPOSITION group.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  }
+]

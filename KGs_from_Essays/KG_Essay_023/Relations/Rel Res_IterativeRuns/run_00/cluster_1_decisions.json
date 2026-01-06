@@ -1,0 +1,478 @@
+{
+  "cluster_label": 1,
+  "cluster_classes": [
+    {
+      "candidate_id": "ClsC_08f877d7",
+      "class_label": "Social Media Misinformation",
+      "class_description": "False or misleading information phenomena on social networking platforms, including misinformation, fake news, rumors, conspiracy theories, and propaganda.",
+      "class_type_hint": "Information Quality Issue",
+      "class_group": "TBD",
+      "confidence": 0.93,
+      "evidence_excerpt": "False or misleading information on social media, including misinformation, fake news, rumors, conspiracy theories, and propaganda.",
+      "member_ids": [
+        "Can_841e7aec",
+        "En_47c431f7",
+        "En_de26786f",
+        "En_ca31e620",
+        "En_2490fb58"
+      ],
+      "members": [
+        {
+          "id": "Can_841e7aec",
+          "entity_name": "misinformation",
+          "entity_description": "False or misleading information that is spread and circulated on social networking and social media platforms.",
+          "entity_type_hint": "InformationQualityIssue"
+        },
+        {
+          "id": "En_47c431f7",
+          "entity_name": "fake news",
+          "entity_description": "Deliberately fabricated or misleading news content circulating on social networking sites.",
+          "entity_type_hint": "InformationQualityIssue"
+        },
+        {
+          "id": "En_de26786f",
+          "entity_name": "rumors",
+          "entity_description": "Unverified pieces of information spreading rapidly through social media.",
+          "entity_type_hint": "Content"
+        },
+        {
+          "id": "En_ca31e620",
+          "entity_name": "conspiracy theories",
+          "entity_description": "Speculative or unfounded explanatory narratives that spread via social media.",
+          "entity_type_hint": "Content"
+        },
+        {
+          "id": "En_2490fb58",
+          "entity_name": "propaganda",
+          "entity_description": "Biased or manipulative information disseminated through social media to influence opinions.",
+          "entity_type_hint": "Content"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_5b2b842d",
+      "class_label": "Social Media Content Types",
+      "class_description": "Types of user-shared content on social networking platforms, including general information as well as specific narrative forms like rumors, conspiracy theories, and propaganda.",
+      "class_type_hint": "Content Type",
+      "class_group": "TBD",
+      "confidence": 0.86,
+      "evidence_excerpt": "Content and data shared by users, including rumors, conspiracy theories, and propaganda on social media.",
+      "member_ids": [
+        "En_6431d334",
+        "En_de26786f",
+        "En_ca31e620",
+        "En_2490fb58"
+      ],
+      "members": [
+        {
+          "id": "En_6431d334",
+          "entity_name": "information",
+          "entity_description": "Content and data shared by users on social networking platforms.",
+          "entity_type_hint": "Content"
+        },
+        {
+          "id": "En_de26786f",
+          "entity_name": "rumors",
+          "entity_description": "Unverified pieces of information spreading rapidly through social media.",
+          "entity_type_hint": "Content"
+        },
+        {
+          "id": "En_ca31e620",
+          "entity_name": "conspiracy theories",
+          "entity_description": "Speculative or unfounded explanatory narratives that spread via social media.",
+          "entity_type_hint": "Content"
+        },
+        {
+          "id": "En_2490fb58",
+          "entity_name": "propaganda",
+          "entity_description": "Biased or manipulative information disseminated through social media to influence opinions.",
+          "entity_type_hint": "Content"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_98d3a917",
+      "class_label": "Superficial Social Media Communication",
+      "class_description": "Communication patterns and interaction features on social platforms characterized by shallow engagement, such as likes, shares, and emojis, that prioritize quantity of interactions over their meaningfulness.",
+      "class_type_hint": "Communication Pattern",
+      "class_group": "TBD",
+      "confidence": 0.9,
+      "evidence_excerpt": "Shallow, surface-level communication on social media using likes, shares, and emojis that prioritize quantity over quality.",
+      "member_ids": [
+        "Can_8d8359fa",
+        "Can_13f0e2c5",
+        "En_12645b52",
+        "En_22faf1a6",
+        "En_57de7d35"
+      ],
+      "members": [
+        {
+          "id": "Can_8d8359fa",
+          "entity_name": "superficial communication on social media",
+          "entity_description": "Shallow or surface-level interaction styles on social media, often involving minimal engagement mechanisms such as likes, shares, and emojis instead of deeper exchanges.",
+          "entity_type_hint": "CommunicationPattern"
+        },
+        {
+          "id": "Can_13f0e2c5",
+          "entity_name": "likes",
+          "entity_description": "Positive engagement actions on social platforms that indicate user approval or support for content.",
+          "entity_type_hint": "PlatformFeature"
+        },
+        {
+          "id": "En_12645b52",
+          "entity_name": "shares",
+          "entity_description": "User actions that redistribute content to their own network on social platforms.",
+          "entity_type_hint": "InteractionFeature"
+        },
+        {
+          "id": "En_22faf1a6",
+          "entity_name": "emojis",
+          "entity_description": "Small digital icons used to express emotions or reactions in online communication.",
+          "entity_type_hint": "InteractionFeature"
+        },
+        {
+          "id": "En_57de7d35",
+          "entity_name": "quantity over quality",
+          "entity_description": "Preference for high volume of interactions rather than meaningful engagement on social media.",
+          "entity_type_hint": "ValuePreference"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_f515ea5c",
+      "class_label": "Social Media Posts",
+      "class_description": "Short personal content items, such as updates and reflections, shared by individuals on social platforms.",
+      "class_type_hint": "Content Type",
+      "class_group": "TBD",
+      "confidence": 0.9,
+      "evidence_excerpt": "individuals can share updates, photos, and thoughts in real-time",
+      "member_ids": [
+        "En_73d6e945",
+        "En_4f66a81b"
+      ],
+      "members": [
+        {
+          "id": "En_73d6e945",
+          "entity_name": "updates",
+          "entity_description": "Short textual or status posts shared by individuals on social media.",
+          "entity_type_hint": "ContentType"
+        },
+        {
+          "id": "En_4f66a81b",
+          "entity_name": "thoughts",
+          "entity_description": "Personal reflections or opinions shared as posts on social media.",
+          "entity_type_hint": "ContentType"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_26c284f9",
+      "class_label": "Social Media News Content",
+      "class_description": "Types of informational material that spread via social networking sites, including user-created posts and reports about recent events.",
+      "class_type_hint": "Information Type",
+      "class_group": "TBD",
+      "confidence": 0.84,
+      "evidence_excerpt": "user-generated content, news spreads rapidly through social networking sites",
+      "member_ids": [
+        "En_646e0929",
+        "En_5929471e"
+      ],
+      "members": [
+        {
+          "id": "En_646e0929",
+          "entity_name": "user-generated content",
+          "entity_description": "Content such as posts, images, and videos created and shared by platform users.",
+          "entity_type_hint": "ContentCategory"
+        },
+        {
+          "id": "En_5929471e",
+          "entity_name": "news",
+          "entity_description": "Information and reports about recent events that spread via social networking sites.",
+          "entity_type_hint": "InformationType"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_f053899b",
+      "class_label": "Traditional Mass Media",
+      "class_description": "Categories of legacy, large-scale news distribution channels such as television, radio, and newspapers that predate social media platforms.",
+      "class_type_hint": "Information Channel Type",
+      "class_group": "TBD",
+      "confidence": 0.93,
+      "evidence_excerpt": "legacy news distribution channels such as television, radio, and newspapers... mainstream media",
+      "member_ids": [
+        "En_97a0263c",
+        "En_4209c0db"
+      ],
+      "members": [
+        {
+          "id": "En_97a0263c",
+          "entity_name": "traditional media outlets",
+          "entity_description": "Legacy news distribution channels such as television, radio, and newspapers.",
+          "entity_type_hint": "OrganizationCategory"
+        },
+        {
+          "id": "En_4209c0db",
+          "entity_name": "mainstream media",
+          "entity_description": "Traditional mass media outlets that historically silenced or ignored some voices.",
+          "entity_type_hint": "OrganizationCategory"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_fbd08ee0",
+      "class_label": "Social Media Content",
+      "class_description": "User-generated artifacts shared on social platforms, such as textual reactions and visual media, that form the core of online interaction.",
+      "class_type_hint": "Digital Artifact",
+      "class_group": "TBD",
+      "confidence": 0.9,
+      "evidence_excerpt": "User-written responses to posts... Images shared by users on social media platforms as part of their content.",
+      "member_ids": [
+        "En_53e9d86a",
+        "En_b76b8d94"
+      ],
+      "members": [
+        {
+          "id": "En_53e9d86a",
+          "entity_name": "comments",
+          "entity_description": "User-written responses to posts or content on social media platforms.",
+          "entity_type_hint": "PlatformFeature"
+        },
+        {
+          "id": "En_b76b8d94",
+          "entity_name": "photos",
+          "entity_description": "Images shared by users on social media platforms as part of their content.",
+          "entity_type_hint": "ContentType"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_8b7d9f8c",
+      "class_label": "Citizen Journalism",
+      "class_description": "Practices where non-professionals gather, produce, and share news or information, typically via digital and social platforms.",
+      "class_type_hint": "Information Practice",
+      "class_group": "TBD",
+      "confidence": 0.86,
+      "evidence_excerpt": "News reporting and information sharing conducted by ordinary individuals rather than professional journalists.",
+      "member_ids": [
+        "En_a601c21d"
+      ],
+      "members": [
+        {
+          "id": "En_a601c21d",
+          "entity_name": "citizen journalism",
+          "entity_description": "News reporting and information sharing conducted by ordinary individuals rather than professional journalists.",
+          "entity_type_hint": "Process"
+        }
+      ],
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"merge_classes\",\n    \"args\": {\n      \"class_ids\": [\n        \"ClsC_5b2b842d\",\n        \"ClsC_f515ea5c\",\n        \"ClsC_26c284f9\",\n        \"ClsC_fbd08ee0\"\n      ],\n      \"provisional_id\": \"MERGE(ClsC_5b2b842d|ClsC_f515ea5c|ClsC_26c284f9|ClsC_fbd08ee0)\",\n      \"new_name\": \"Social Media Content Types\",\n      \"new_description\": \"Types of user-generated content and informational material shared on social networking platforms, including posts, comments, photos, user-generated content, news, and narrative forms such as rumors, conspiracy theories, and propaganda.\",\n      \"new_class_type_hint\": \"Content Type\",\n      \"justification\": \"All four classes describe types or categories of social media content (posts, comments, photos, user-generated content, news, rumors, conspiracy theories, propaganda) and are overlapping fragments of the same conceptual space, so they should form a single unified content-type class.\",\n      \"remark\": null,\n      \"confidence\": 0.93\n    }\n  },\n  {\n    \"function\": \"reassign_entities\",\n    \"args\": {\n      \"entity_ids\": [\n        \"En_de26786f\",\n        \"En_ca31e620\",\n        \"En_2490fb58\"\n      ],\n      \"from_class_id\": \"ClsC_08f877d7\",\n      \"to_class_id\": \"MERGE(ClsC_5b2b842d|ClsC_f515ea5c|ClsC_26c284f9|ClsC_fbd08ee0)\",\n      \"justification\": \"The entities 'rumors', 'conspiracy theories', and 'propaganda' are content/narrative types that can be misleading but are not intrinsically misinformation; they belong more coherently in the unified Social Media Content Types class while the Social Media Misinformation class should focus on explicitly false or misleading information like 'misinformation' and 'fake news'.\",\n      \"remark\": null,\n      \"confidence\": 0.87\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_08f877d7\",\n      \"new_name\": \"Social Media Misinformation\",\n      \"new_description\": \"False or misleading information phenomena on social networking platforms, including misinformation and deliberately fabricated news content.\",\n      \"new_class_type_hint\": \"Information Quality Issue\",\n      \"new_class_group\": \"Social Media Content & Information\",\n      \"remark\": null,\n      \"justification\": \"After moving general narrative content types out, this class cleanly represents misinformation-specific phenomena on social media and should be grouped with other social media content/information classes under a shared Class_Group.\",\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"MERGE(ClsC_5b2b842d|ClsC_f515ea5c|ClsC_26c284f9|ClsC_fbd08ee0)\",\n      \"new_name\": \"Social Media Content Types\",\n      \"new_description\": \"User-shared content and informational material on social networking platforms, including posts, updates, thoughts, comments, photos, user-generated content, news, and narrative forms such as rumors, conspiracy theories, and propaganda.\",\n      \"new_class_type_hint\": \"Content Type\",\n      \"new_class_group\": \"Social Media Content & Information\",\n      \"remark\": null,\n      \"justification\": \"The merged class covers all types of social media content and information and should be explicitly placed in a shared Class_Group with Social Media Misinformation to connect related concepts.\",\n      \"confidence\": 0.94\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_98d3a917\",\n      \"new_name\": \"Superficial Social Media Communication\",\n      \"new_description\": \"Shallow, surface-level interaction patterns on social platforms, characterized by minimal engagement mechanisms such as likes, shares, and emojis that prioritize quantity of interactions over meaningful communication.\",\n      \"new_class_type_hint\": \"Communication Pattern\",\n      \"new_class_group\": \"Social Media Interaction & Engagement\",\n      \"remark\": null,\n      \"justification\": \"This class focuses on interaction patterns (likes, shares, emojis) rather than content types, so it should remain distinct and be grouped under a Class_Group for social media interaction and engagement.\",\n      \"confidence\": 0.92\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_f053899b\",\n      \"new_name\": \"Traditional Mass Media\",\n      \"new_description\": \"Legacy, large-scale news distribution channels such as television, radio, and newspapers that predate social media platforms and constitute mainstream media outlets.\",\n      \"new_class_type_hint\": \"Information Channel Type\",\n      \"new_class_group\": \"News Media & Journalism\",\n      \"remark\": null,\n      \"justification\": \"This class represents traditional news/media channels and should be grouped with other journalism-related practices under a shared News Media & Journalism Class_Group.\",\n      \"confidence\": 0.93\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_8b7d9f8c\",\n      \"new_name\": \"Citizen Journalism\",\n      \"new_description\": \"News reporting and information sharing conducted by ordinary individuals rather than professional journalists, typically using digital and social media platforms.\",\n      \"new_class_type_hint\": \"Information Practice\",\n      \"new_class_group\": \"News Media & Journalism\",\n      \"remark\": null,\n      \"justification\": \"Citizen journalism is a news-production practice related to media and journalism and should share a Class_Group with Traditional Mass Media to connect professional and non-professional news ecosystems.\",\n      \"confidence\": 0.9\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "merge_classes",
+      "args": {
+        "class_ids": [
+          "ClsC_5b2b842d",
+          "ClsC_f515ea5c",
+          "ClsC_26c284f9",
+          "ClsC_fbd08ee0"
+        ],
+        "provisional_id": "MERGE(ClsC_5b2b842d|ClsC_f515ea5c|ClsC_26c284f9|ClsC_fbd08ee0)",
+        "new_name": "Social Media Content Types",
+        "new_description": "Types of user-generated content and informational material shared on social networking platforms, including posts, comments, photos, user-generated content, news, and narrative forms such as rumors, conspiracy theories, and propaganda.",
+        "new_class_type_hint": "Content Type",
+        "justification": "All four classes describe types or categories of social media content (posts, comments, photos, user-generated content, news, rumors, conspiracy theories, propaganda) and are overlapping fragments of the same conceptual space, so they should form a single unified content-type class.",
+        "remark": null,
+        "confidence": 0.93
+      }
+    },
+    {
+      "function": "reassign_entities",
+      "args": {
+        "entity_ids": [
+          "En_de26786f",
+          "En_ca31e620",
+          "En_2490fb58"
+        ],
+        "from_class_id": "ClsC_08f877d7",
+        "to_class_id": "MERGE(ClsC_5b2b842d|ClsC_f515ea5c|ClsC_26c284f9|ClsC_fbd08ee0)",
+        "justification": "The entities 'rumors', 'conspiracy theories', and 'propaganda' are content/narrative types that can be misleading but are not intrinsically misinformation; they belong more coherently in the unified Social Media Content Types class while the Social Media Misinformation class should focus on explicitly false or misleading information like 'misinformation' and 'fake news'.",
+        "remark": null,
+        "confidence": 0.87
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_08f877d7",
+        "new_name": "Social Media Misinformation",
+        "new_description": "False or misleading information phenomena on social networking platforms, including misinformation and deliberately fabricated news content.",
+        "new_class_type_hint": "Information Quality Issue",
+        "new_class_group": "Social Media Content & Information",
+        "remark": null,
+        "justification": "After moving general narrative content types out, this class cleanly represents misinformation-specific phenomena on social media and should be grouped with other social media content/information classes under a shared Class_Group.",
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "MERGE(ClsC_5b2b842d|ClsC_f515ea5c|ClsC_26c284f9|ClsC_fbd08ee0)",
+        "new_name": "Social Media Content Types",
+        "new_description": "User-shared content and informational material on social networking platforms, including posts, updates, thoughts, comments, photos, user-generated content, news, and narrative forms such as rumors, conspiracy theories, and propaganda.",
+        "new_class_type_hint": "Content Type",
+        "new_class_group": "Social Media Content & Information",
+        "remark": null,
+        "justification": "The merged class covers all types of social media content and information and should be explicitly placed in a shared Class_Group with Social Media Misinformation to connect related concepts.",
+        "confidence": 0.94
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_98d3a917",
+        "new_name": "Superficial Social Media Communication",
+        "new_description": "Shallow, surface-level interaction patterns on social platforms, characterized by minimal engagement mechanisms such as likes, shares, and emojis that prioritize quantity of interactions over meaningful communication.",
+        "new_class_type_hint": "Communication Pattern",
+        "new_class_group": "Social Media Interaction & Engagement",
+        "remark": null,
+        "justification": "This class focuses on interaction patterns (likes, shares, emojis) rather than content types, so it should remain distinct and be grouped under a Class_Group for social media interaction and engagement.",
+        "confidence": 0.92
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_f053899b",
+        "new_name": "Traditional Mass Media",
+        "new_description": "Legacy, large-scale news distribution channels such as television, radio, and newspapers that predate social media platforms and constitute mainstream media outlets.",
+        "new_class_type_hint": "Information Channel Type",
+        "new_class_group": "News Media & Journalism",
+        "remark": null,
+        "justification": "This class represents traditional news/media channels and should be grouped with other journalism-related practices under a shared News Media & Journalism Class_Group.",
+        "confidence": 0.93
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_8b7d9f8c",
+        "new_name": "Citizen Journalism",
+        "new_description": "News reporting and information sharing conducted by ordinary individuals rather than professional journalists, typically using digital and social media platforms.",
+        "new_class_type_hint": "Information Practice",
+        "new_class_group": "News Media & Journalism",
+        "remark": null,
+        "justification": "Citizen journalism is a news-production practice related to media and journalism and should share a Class_Group with Traditional Mass Media to connect professional and non-professional news ecosystems.",
+        "confidence": 0.9
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "merge_classes",
+      "input_class_ids": [
+        "ClsC_5b2b842d",
+        "ClsC_f515ea5c",
+        "ClsC_26c284f9",
+        "ClsC_fbd08ee0"
+      ],
+      "result_class_id": "ClsR_ea869ee6",
+      "provisional_id": "MERGE(ClsC_5b2b842d|ClsC_f515ea5c|ClsC_26c284f9|ClsC_fbd08ee0)",
+      "justification": "All four classes describe types or categories of social media content (posts, comments, photos, user-generated content, news, rumors, conspiracy theories, propaganda) and are overlapping fragments of the same conceptual space, so they should form a single unified content-type class.",
+      "remark": null,
+      "confidence": 0.93
+    },
+    {
+      "action": "reassign_entities",
+      "entity_ids": [
+        "En_de26786f",
+        "En_ca31e620",
+        "En_2490fb58"
+      ],
+      "from": "ClsC_08f877d7",
+      "from_resolved": "ClsC_08f877d7",
+      "to": "MERGE(ClsC_5b2b842d|ClsC_f515ea5c|ClsC_26c284f9|ClsC_fbd08ee0)",
+      "to_resolved": "ClsR_ea869ee6",
+      "justification": "The entities 'rumors', 'conspiracy theories', and 'propaganda' are content/narrative types that can be misleading but are not intrinsically misinformation; they belong more coherently in the unified Social Media Content Types class while the Social Media Misinformation class should focus on explicitly false or misleading information like 'misinformation' and 'fake news'.",
+      "remark": null,
+      "confidence": 0.87
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_08f877d7",
+      "class_id_resolved": "ClsC_08f877d7",
+      "new_name": "Social Media Misinformation",
+      "new_description": "False or misleading information phenomena on social networking platforms, including misinformation and deliberately fabricated news content.",
+      "new_class_type_hint": "Information Quality Issue",
+      "new_class_group": "Social Media Content & Information",
+      "remark": null,
+      "justification": "After moving general narrative content types out, this class cleanly represents misinformation-specific phenomena on social media and should be grouped with other social media content/information classes under a shared Class_Group.",
+      "confidence": 0.9
+    },
+    {
+      "action": "modify_class",
+      "class_id": "MERGE(ClsC_5b2b842d|ClsC_f515ea5c|ClsC_26c284f9|ClsC_fbd08ee0)",
+      "class_id_resolved": "ClsR_ea869ee6",
+      "new_name": "Social Media Content Types",
+      "new_description": "User-shared content and informational material on social networking platforms, including posts, updates, thoughts, comments, photos, user-generated content, news, and narrative forms such as rumors, conspiracy theories, and propaganda.",
+      "new_class_type_hint": "Content Type",
+      "new_class_group": "Social Media Content & Information",
+      "remark": null,
+      "justification": "The merged class covers all types of social media content and information and should be explicitly placed in a shared Class_Group with Social Media Misinformation to connect related concepts.",
+      "confidence": 0.94
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_98d3a917",
+      "class_id_resolved": "ClsC_98d3a917",
+      "new_name": "Superficial Social Media Communication",
+      "new_description": "Shallow, surface-level interaction patterns on social platforms, characterized by minimal engagement mechanisms such as likes, shares, and emojis that prioritize quantity of interactions over meaningful communication.",
+      "new_class_type_hint": "Communication Pattern",
+      "new_class_group": "Social Media Interaction & Engagement",
+      "remark": null,
+      "justification": "This class focuses on interaction patterns (likes, shares, emojis) rather than content types, so it should remain distinct and be grouped under a Class_Group for social media interaction and engagement.",
+      "confidence": 0.92
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_f053899b",
+      "class_id_resolved": "ClsC_f053899b",
+      "new_name": "Traditional Mass Media",
+      "new_description": "Legacy, large-scale news distribution channels such as television, radio, and newspapers that predate social media platforms and constitute mainstream media outlets.",
+      "new_class_type_hint": "Information Channel Type",
+      "new_class_group": "News Media & Journalism",
+      "remark": null,
+      "justification": "This class represents traditional news/media channels and should be grouped with other journalism-related practices under a shared News Media & Journalism Class_Group.",
+      "confidence": 0.93
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_8b7d9f8c",
+      "class_id_resolved": "ClsC_8b7d9f8c",
+      "new_name": "Citizen Journalism",
+      "new_description": "News reporting and information sharing conducted by ordinary individuals rather than professional journalists, typically using digital and social media platforms.",
+      "new_class_type_hint": "Information Practice",
+      "new_class_group": "News Media & Journalism",
+      "remark": null,
+      "justification": "Citizen journalism is a news-production practice related to media and journalism and should share a Class_Group with Traditional Mass Media to connect professional and non-professional news ecosystems.",
+      "confidence": 0.9
+    }
+  ],
+  "provisional_to_real": {
+    "MERGE(ClsC_5b2b842d|ClsC_f515ea5c|ClsC_26c284f9|ClsC_fbd08ee0)": "ClsR_ea869ee6",
+    "ClsC_5b2b842d": "ClsR_ea869ee6",
+    "ClsC_f515ea5c": "ClsR_ea869ee6",
+    "ClsC_26c284f9": "ClsR_ea869ee6",
+    "ClsC_fbd08ee0": "ClsR_ea869ee6"
+  },
+  "timestamp": "2026-01-06T10:53:00Z"
+}

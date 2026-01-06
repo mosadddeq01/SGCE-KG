@@ -1,0 +1,54 @@
+[
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_74c4a4e1",
+      "new_name": "Cultural Regions (Color Symbolism Contexts)",
+      "new_description": "Named cultural or civilizational groupings (e.g., Western, Eastern) that serve as contexts for differing interpretations and symbolism of colors.",
+      "new_class_type_hint": "CulturalContext",
+      "new_class_group": "Color Symbolism and Cultural Interpretation",
+      "remark": null,
+      "justification": "This class represents cultural contexts (Western/Eastern) in which color symbolism varies, so aligning its label/description/type with contextual role and assigning a shared class_group with related color-symbolism classes clarifies its function.",
+      "confidence": 0.93
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_a717e95f",
+      "new_name": "Symbolic Associations of White",
+      "new_description": "Abstract qualities, states, or concepts explicitly described as symbolic meanings of the color white in specific cultural contexts (e.g., purity, cleanliness, mourning, death).",
+      "new_class_type_hint": "ColorSymbolism",
+      "new_class_group": "Color Symbolism and Cultural Interpretation",
+      "remark": null,
+      "justification": "Entities here are abstract meanings (purity, mourning, etc.) attached to white, so refining the type_hint to ColorSymbolism and connecting via a common class_group with related classes makes the schema more coherent.",
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_cf69a0d0",
+      "new_name": "Color Interpretation Factors",
+      "new_description": "Cultural and situational factors (e.g., cultural associations, contextual associations) that shape how colors are interpreted, particularly in branding and communication.",
+      "new_class_type_hint": "ColorInterpretationFactor",
+      "new_class_group": "Color Symbolism and Cultural Interpretation",
+      "remark": null,
+      "justification": "This class groups overarching factors that influence color meaning, closely related to but distinct from specific symbols; updating the type hint and assigning it to the shared Color Symbolism and Cultural Interpretation class_group links it properly to the same conceptual domain.",
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_25ad8923",
+      "new_name": "Cultural Color Symbolism of White",
+      "new_description": "The color white considered as a symbol whose meanings vary across cultures, such as purity in some Western contexts and mourning in some Eastern contexts.",
+      "new_class_type_hint": "ColorSymbol",
+      "new_class_group": "Color Symbolism and Cultural Interpretation",
+      "remark": null,
+      "justification": "This class currently holds the color white as a culturally loaded symbol; refining its label and type to emphasize white as a color symbol and assigning it to the same Color Symbolism and Cultural Interpretation class_group clearly positions it alongside the associated meanings, regions, and factors.",
+      "confidence": 0.9
+    }
+  }
+]

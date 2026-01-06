@@ -1,0 +1,15 @@
+[
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": ["RelR_85295e3229d9", "RelR_9f312b398bd6"],
+      "canonical_rel_name": "is_prioritized_over",
+      "canonical_rel_desc": "Indicates that the subject is systematically given higher priority or preference than the object, for example in terms of attention, time, or importance.",
+      "rel_cls": "prioritization_relation",
+      "rel_cls_group": "AGENCY",
+      "justification": "Both relations describe a directional prioritization where the subject is favored over the object (quantity over quality; online relationships over face-to-face interaction). They should share a single normalized predicate capturing 'subject is prioritized over object'. The existing rel_cls 'prioritization_relation' is appropriate for this family of preference/priority links. The broad group should be aligned to AGENCY (intentional or systemic prioritization) for both, instead of mixing AGENCY and ASSOCIATION.",
+      "remark": "Canonical name unified to 'is_prioritized_over' for all prioritization comparisons where the subject is given higher priority than the object.",
+      "confidence": 0.93
+    }
+  }
+]

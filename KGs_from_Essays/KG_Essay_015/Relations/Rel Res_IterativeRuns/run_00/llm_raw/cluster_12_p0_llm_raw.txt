@@ -1,0 +1,45 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_a4daf5e76391",
+        "RelR_81432a9cf36a",
+        "RelR_45078e6f7e0a"
+      ],
+      "canonical_rel_name": "includes_process_step",
+      "canonical_rel_desc": "Indicates that a complex process or ritual includes a specific subprocess, operation, or procedural step as part of its overall execution.",
+      "justification": "All three relations describe the mummification process as a composite procedure that includes particular steps (organ removal, drying with salt, wrapping with linen). The common semantics is a whole process decomposed into constituent steps, so a single canonical predicate 'includes_process_step' fits all instances.",
+      "remark": null,
+      "confidence": 0.97
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_a4daf5e76391",
+        "RelR_81432a9cf36a",
+        "RelR_45078e6f7e0a"
+      ],
+      "rel_cls": "process_decomposition_relation",
+      "justification": "Each relation expresses that a complex ritual/process is composed of specific subordinate steps. This is best modeled as a process decomposition class rather than a generic composition relation.",
+      "remark": null,
+      "confidence": 0.96
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_a4daf5e76391",
+        "RelR_81432a9cf36a",
+        "RelR_45078e6f7e0a"
+      ],
+      "rel_cls_group": "COMPOSITION",
+      "justification": "The relations describe how a larger process is composed of constituent steps, which is a compositional (part–whole) dimension applied to processes.",
+      "remark": null,
+      "confidence": 0.96
+    }
+  }
+]

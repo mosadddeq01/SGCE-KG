@@ -1,0 +1,42 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_c4976924e5e4",
+        "RelR_5271a34dbdc4"
+      ],
+      "canonical_rel_name": "promotes",
+      "canonical_rel_desc": "Indicates that the subject fosters, encourages, or advances the development or prevalence of the object (typically a social or ethical value or outcome).",
+      "justification": "In both relations, 'sports' is described as fostering or advancing positive social or ethical values (important values, inclusivity). The predicate semantics are identical: sports causally contribute to the promotion of these values. Using the unified canonical predicate 'promotes' captures this consistent meaning.",
+      "remark": null,
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_c4976924e5e4",
+        "RelR_5271a34dbdc4"
+      ],
+      "rel_cls": "social_value_promotion_relation",
+      "justification": "Both relations express that sports contribute to the promotion of social or ethical values (e.g., inclusivity). Grouping them under a class focused on how entities promote social values captures the shared semantics and can generalize to similar value-promotion links.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_c4976924e5e4",
+        "RelR_5271a34dbdc4"
+      ],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "Promotion of values here is not just associative; it implies that sports act as a causal or contributing factor in fostering these values. This fits best under a broad causal/impact dimension rather than mere association.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  }
+]

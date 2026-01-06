@@ -1,0 +1,129 @@
+{
+  "cluster_label": "23_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_c3d5cb6cb399",
+      "relation_name": "intended_to_provide",
+      "rel_desc": "Grave goods are intended to provide comfort to the deceased in the afterlife.",
+      "rel_hint_type": "intended effect",
+      "canonical_rel_name": "intended_to_provide",
+      "canonical_rel_desc": "Indicates that the subject is intended to provide a specific benefit or provision (here, to the deceased) in the context of the afterlife.",
+      "rel_cls": "afterlife_provision_relation",
+      "rel_cls_group": "USAGE",
+      "subject_entity_name": "grave goods",
+      "object_entity_name": "comfort in the afterlife",
+      "subject_class_label": "Funerary / Grave Goods",
+      "subject_class_group": "Mortuary Practices and Grave Goods",
+      "object_class_label": "Ancient Egyptian Afterlife Beliefs and Concepts",
+      "object_class_group": "Ancient Egyptian Funerary Religion and Culture",
+      "qualifiers": {
+        "TemporalQualifier": "in the afterlife",
+        "SpatialQualifier": "in the post-mortem realm",
+        "OperationalConstraint": null,
+        "ConditionExpression": "if the deceased reaches the afterlife",
+        "UncertaintyQualifier": null,
+        "CausalHint": "intended to provide",
+        "LogicalMarker": "would be needed",
+        "OtherQualifier": "TargetRecipient: the deceased"
+      },
+      "confidence": 0.97,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_1664d1c2218e",
+      "relation_name": "intended_to_provide",
+      "rel_desc": "Grave goods are also intended to provide sustenance to the deceased in the afterlife.",
+      "rel_hint_type": "intended effect",
+      "canonical_rel_name": "intended_to_provide",
+      "canonical_rel_desc": "Indicates that the subject is intended to provide a specific benefit or provision (here, to the deceased) in the context of the afterlife.",
+      "rel_cls": "afterlife_provision_relation",
+      "rel_cls_group": "USAGE",
+      "subject_entity_name": "grave goods",
+      "object_entity_name": "sustenance in the afterlife",
+      "subject_class_label": "Funerary / Grave Goods",
+      "subject_class_group": "Mortuary Practices and Grave Goods",
+      "object_class_label": "Ancient Egyptian Afterlife Beliefs and Concepts",
+      "object_class_group": "Ancient Egyptian Funerary Religion and Culture",
+      "qualifiers": {
+        "TemporalQualifier": "in the afterlife",
+        "SpatialQualifier": "for the deceased in the afterlife",
+        "OperationalConstraint": null,
+        "ConditionExpression": "if the deceased requires provisions",
+        "UncertaintyQualifier": null,
+        "CausalHint": "intended to provide",
+        "LogicalMarker": "would be needed",
+        "OtherQualifier": "TypeOfBenefit: nourishment"
+      },
+      "confidence": 0.97,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_f2506cac7673",
+      "relation_name": "provisions_for",
+      "rel_desc": "Food offerings are meant as provisions for the deceased in the afterlife.",
+      "rel_hint_type": "intended use",
+      "canonical_rel_name": "intended_for_use_in",
+      "canonical_rel_desc": "Indicates that the subject is intended to be used in or within a particular context or realm (here, by the deceased in the afterlife).",
+      "rel_cls": "afterlife_provision_relation",
+      "rel_cls_group": "USAGE",
+      "subject_entity_name": "food offerings",
+      "object_entity_name": "afterlife",
+      "subject_class_label": "Funerary / Grave Goods",
+      "subject_class_group": "Mortuary Practices and Grave Goods",
+      "object_class_label": "Ancient Egyptian Afterlife Beliefs and Concepts",
+      "object_class_group": "Ancient Egyptian Funerary Religion and Culture",
+      "qualifiers": {
+        "TemporalQualifier": "after death",
+        "SpatialQualifier": "afterlife realm",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "would need (belief-based)",
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.95,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_rel_schema\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_c3d5cb6cb399\",\n        \"RelR_1664d1c2218e\",\n        \"RelR_f2506cac7673\"\n      ],\n      \"canonical_rel_name\": \"intended_for_afterlife_benefit\",\n      \"canonical_rel_desc\": \"Indicates that the subject is intended, within ancient Egyptian belief, to provide use, sustenance, or other benefits to the deceased in the afterlife.\",\n      \"rel_cls\": null,\n      \"rel_cls_group\": null,\n      \"justification\": \"All three relations describe the same underlying predicate: items (grave goods or food offerings) are intended to benefit or provision the deceased in the afterlife. Unifying the canonical_rel_name and description to a single, domain-appropriate predicate avoids having two near-duplicate predicates ('intended_to_provide' and 'intended_for_use_in') for the same semantics while keeping the existing relation class and group (afterlife_provision_relation, USAGE) intact.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_rel_schema",
+      "args": {
+        "relation_ids": [
+          "RelR_c3d5cb6cb399",
+          "RelR_1664d1c2218e",
+          "RelR_f2506cac7673"
+        ],
+        "canonical_rel_name": "intended_for_afterlife_benefit",
+        "canonical_rel_desc": "Indicates that the subject is intended, within ancient Egyptian belief, to provide use, sustenance, or other benefits to the deceased in the afterlife.",
+        "rel_cls": null,
+        "rel_cls_group": null,
+        "justification": "All three relations describe the same underlying predicate: items (grave goods or food offerings) are intended to benefit or provision the deceased in the afterlife. Unifying the canonical_rel_name and description to a single, domain-appropriate predicate avoids having two near-duplicate predicates ('intended_to_provide' and 'intended_for_use_in') for the same semantics while keeping the existing relation class and group (afterlife_provision_relation, USAGE) intact.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_rel_schema",
+      "relation_ids": [
+        "RelR_c3d5cb6cb399",
+        "RelR_1664d1c2218e",
+        "RelR_f2506cac7673"
+      ],
+      "canonical_rel_name": "intended_for_afterlife_benefit",
+      "canonical_rel_desc": "Indicates that the subject is intended, within ancient Egyptian belief, to provide use, sustenance, or other benefits to the deceased in the afterlife.",
+      "rel_cls": null,
+      "rel_cls_group": null,
+      "new_relation_name": null,
+      "original_relation_name": null,
+      "justification": "All three relations describe the same underlying predicate: items (grave goods or food offerings) are intended to benefit or provision the deceased in the afterlife. Unifying the canonical_rel_name and description to a single, domain-appropriate predicate avoids having two near-duplicate predicates ('intended_to_provide' and 'intended_for_use_in') for the same semantics while keeping the existing relation class and group (afterlife_provision_relation, USAGE) intact.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  ],
+  "timestamp": "2026-01-06T10:31:00Z"
+}

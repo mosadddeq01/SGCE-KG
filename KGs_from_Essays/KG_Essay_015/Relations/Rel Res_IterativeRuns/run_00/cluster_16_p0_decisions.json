@@ -1,0 +1,237 @@
+{
+  "cluster_label": "16_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_178358f6335a",
+      "relation_name": "involves",
+      "rel_desc": "Ancient Egyptian burial practices included constructing elaborate tombs as one of their most famous aspects.",
+      "rel_hint_type": "composition",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "ancient Egyptian burial practices",
+      "object_entity_name": "ancient Egyptian tombs",
+      "subject_class_label": "Ancient Egyptian Burial Practices (General)",
+      "subject_class_group": "Ancient Egyptian Funerary Religion and Culture",
+      "object_class_label": "Ancient Egyptian Tomb Structures",
+      "object_class_group": "Ancient Egypt: Society, Rulers, and Funerary Culture",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "in Ancient Egypt",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": "One of the most famous aspects of",
+        "OtherQualifier": "Fame: most famous aspect"
+      },
+      "confidence": 0.96,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_cf04537da6c7",
+      "relation_name": "part_of",
+      "rel_desc": "Ancient Egyptian burial practices formed a vital component of Ancient Egyptian culture.",
+      "rel_hint_type": "composition",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "ancient Egyptian burial practices",
+      "object_entity_name": "Ancient Egyptian culture",
+      "subject_class_label": "Ancient Egyptian Burial Practices (General)",
+      "subject_class_group": "Ancient Egyptian Funerary Religion and Culture",
+      "object_class_label": "Ancient Egyptian Civilization",
+      "object_class_group": "Ancient Egypt: Society, Rulers, and Funerary Culture",
+      "qualifiers": {
+        "TemporalQualifier": "in ancient Egypt",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "vital part of",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.98,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_3e7ab9cd1e9b",
+      "relation_name": "part_of",
+      "rel_desc": "Ancient Egyptian burial practices were also a vital part of Ancient Egyptian society.",
+      "rel_hint_type": "composition",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "ancient Egyptian burial practices",
+      "object_entity_name": "Ancient Egyptian society",
+      "subject_class_label": "Ancient Egyptian Burial Practices (General)",
+      "subject_class_group": "Ancient Egyptian Funerary Religion and Culture",
+      "object_class_label": "Ancient Egyptian Civilization",
+      "object_class_group": "Ancient Egypt: Society, Rulers, and Funerary Culture",
+      "qualifiers": {
+        "TemporalQualifier": "in the period of ancient Egypt",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "vital part of",
+        "LogicalMarker": "and",
+        "OtherQualifier": null
+      },
+      "confidence": 0.95,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_178358f6335a\"],\n      \"canonical_rel_name\": \"involves_construction_of\",\n      \"canonical_rel_desc\": \"Links a cultural or ritual practice to a type of structure whose construction is a defining element of that practice.\",\n      \"justification\": \"The relation states that ancient Egyptian burial practices included constructing tombs as one of their most famous aspects; this is best modeled as the practice involving the construction of a particular structure type, not as a simple part-whole relation between the practice and the tombs.\",\n      \"remark\": null,\n      \"confidence\": 0.87\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_178358f6335a\"],\n      \"rel_cls\": \"cultural_practice_structure_relation\",\n      \"justification\": \"This connects a cultural practice (burial practices) with a physical structure type (tombs) that the practice constructs or uses, fitting a class for relations between practices/rituals and associated built structures.\",\n      \"remark\": null,\n      \"confidence\": 0.83\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_178358f6335a\"],\n      \"rel_cls_group\": \"USAGE\",\n      \"justification\": \"The practice entails the construction and use of tombs, which is best captured as a usage/operational association between activity and structure rather than a pure compositional or identity relation.\",\n      \"remark\": null,\n      \"confidence\": 0.8\n    }\n  },\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_cf04537da6c7\", \"RelR_3e7ab9cd1e9b\"],\n      \"canonical_rel_name\": \"is_component_of\",\n      \"canonical_rel_desc\": \"Indicates that a practice, institution, or subsystem forms a constituent component of a broader social or cultural system.\",\n      \"justification\": \"Both relations explicitly describe ancient Egyptian burial practices as a vital part of a larger whole (Ancient Egyptian culture and Ancient Egyptian society), which is a standard component–whole relation rather than mere association.\",\n      \"remark\": null,\n      \"confidence\": 0.94\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_cf04537da6c7\", \"RelR_3e7ab9cd1e9b\"],\n      \"rel_cls\": \"cultural_system_component_relation\",\n      \"justification\": \"Each relation links a specific cultural practice to a broader cultural or societal system as one of its vital parts, which fits a relation class for components of social or cultural systems.\",\n      \"remark\": null,\n      \"confidence\": 0.93\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_cf04537da6c7\", \"RelR_3e7ab9cd1e9b\"],\n      \"rel_cls_group\": \"COMPOSITION\",\n      \"justification\": \"The semantics are explicitly about being a vital part of a larger whole (culture or society), which is a canonical compositional/part–whole relation.\",\n      \"remark\": null,\n      \"confidence\": 0.96\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_178358f6335a"
+        ],
+        "canonical_rel_name": "involves_construction_of",
+        "canonical_rel_desc": "Links a cultural or ritual practice to a type of structure whose construction is a defining element of that practice.",
+        "justification": "The relation states that ancient Egyptian burial practices included constructing tombs as one of their most famous aspects; this is best modeled as the practice involving the construction of a particular structure type, not as a simple part-whole relation between the practice and the tombs.",
+        "remark": null,
+        "confidence": 0.87
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_178358f6335a"
+        ],
+        "rel_cls": "cultural_practice_structure_relation",
+        "justification": "This connects a cultural practice (burial practices) with a physical structure type (tombs) that the practice constructs or uses, fitting a class for relations between practices/rituals and associated built structures.",
+        "remark": null,
+        "confidence": 0.83
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_178358f6335a"
+        ],
+        "rel_cls_group": "USAGE",
+        "justification": "The practice entails the construction and use of tombs, which is best captured as a usage/operational association between activity and structure rather than a pure compositional or identity relation.",
+        "remark": null,
+        "confidence": 0.8
+      }
+    },
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_cf04537da6c7",
+          "RelR_3e7ab9cd1e9b"
+        ],
+        "canonical_rel_name": "is_component_of",
+        "canonical_rel_desc": "Indicates that a practice, institution, or subsystem forms a constituent component of a broader social or cultural system.",
+        "justification": "Both relations explicitly describe ancient Egyptian burial practices as a vital part of a larger whole (Ancient Egyptian culture and Ancient Egyptian society), which is a standard component–whole relation rather than mere association.",
+        "remark": null,
+        "confidence": 0.94
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_cf04537da6c7",
+          "RelR_3e7ab9cd1e9b"
+        ],
+        "rel_cls": "cultural_system_component_relation",
+        "justification": "Each relation links a specific cultural practice to a broader cultural or societal system as one of its vital parts, which fits a relation class for components of social or cultural systems.",
+        "remark": null,
+        "confidence": 0.93
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_cf04537da6c7",
+          "RelR_3e7ab9cd1e9b"
+        ],
+        "rel_cls_group": "COMPOSITION",
+        "justification": "The semantics are explicitly about being a vital part of a larger whole (culture or society), which is a canonical compositional/part–whole relation.",
+        "remark": null,
+        "confidence": 0.96
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_178358f6335a"
+      ],
+      "canonical_rel_name": "involves_construction_of",
+      "canonical_rel_desc": "Links a cultural or ritual practice to a type of structure whose construction is a defining element of that practice.",
+      "justification": "The relation states that ancient Egyptian burial practices included constructing tombs as one of their most famous aspects; this is best modeled as the practice involving the construction of a particular structure type, not as a simple part-whole relation between the practice and the tombs.",
+      "remark": null,
+      "confidence": 0.87
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_178358f6335a"
+      ],
+      "rel_cls": "cultural_practice_structure_relation",
+      "justification": "This connects a cultural practice (burial practices) with a physical structure type (tombs) that the practice constructs or uses, fitting a class for relations between practices/rituals and associated built structures.",
+      "remark": null,
+      "confidence": 0.83
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_178358f6335a"
+      ],
+      "rel_cls_group": "USAGE",
+      "justification": "The practice entails the construction and use of tombs, which is best captured as a usage/operational association between activity and structure rather than a pure compositional or identity relation.",
+      "remark": null,
+      "confidence": 0.8
+    },
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_cf04537da6c7",
+        "RelR_3e7ab9cd1e9b"
+      ],
+      "canonical_rel_name": "is_component_of",
+      "canonical_rel_desc": "Indicates that a practice, institution, or subsystem forms a constituent component of a broader social or cultural system.",
+      "justification": "Both relations explicitly describe ancient Egyptian burial practices as a vital part of a larger whole (Ancient Egyptian culture and Ancient Egyptian society), which is a standard component–whole relation rather than mere association.",
+      "remark": null,
+      "confidence": 0.94
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_cf04537da6c7",
+        "RelR_3e7ab9cd1e9b"
+      ],
+      "rel_cls": "cultural_system_component_relation",
+      "justification": "Each relation links a specific cultural practice to a broader cultural or societal system as one of its vital parts, which fits a relation class for components of social or cultural systems.",
+      "remark": null,
+      "confidence": 0.93
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_cf04537da6c7",
+        "RelR_3e7ab9cd1e9b"
+      ],
+      "rel_cls_group": "COMPOSITION",
+      "justification": "The semantics are explicitly about being a vital part of a larger whole (culture or society), which is a canonical compositional/part–whole relation.",
+      "remark": null,
+      "confidence": 0.96
+    }
+  ],
+  "timestamp": "2026-01-06T10:23:57Z"
+}

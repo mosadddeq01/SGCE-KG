@@ -702,12 +702,12 @@ def call_openai(
     - `max_tokens` is mapped to Responses' `max_output_tokens`.
     """
     try:
-        print(
-            f"[call_openai] model={model} "
-            f"max_output_tokens={max_tokens} "
-            # f"temperature={temperature} "
-            f"reasoning_effort={reasoning_effort}"
-        )
+        # print(
+        #     f"[call_openai] model={model} "
+        #     f"max_output_tokens={max_tokens} "
+        #     # f"temperature={temperature} "
+        #     f"reasoning_effort={reasoning_effort}"
+        # )
 
         kwargs: Dict[str, object] = {
             "model": model,
@@ -840,7 +840,7 @@ def extract_entities_from_chunk(
 
     # debug: show short prompt preview in console (we keep this to avoid huge console dumps)
     p_shown = prompt if len(prompt) <= 2000 else prompt[:2000] + "\n\n...[TRUNCATED PROMPT]"
-    print(f"\n--- ENTITY EXTRACTION PROMPT for {chunk_id} (prev_ctx={len(prev_ctx)}) ---\n{p_shown}\n{'-'*80}")
+    # print(f"\n--- ENTITY EXTRACTION PROMPT for {chunk_id} (prev_ctx={len(prev_ctx)}) ---\n{p_shown}\n{'-'*80}")
 
     raw = call_openai(prompt, model=model, max_tokens=max_tokens, reasoning_effort="low")
     if not raw:
@@ -861,7 +861,7 @@ def extract_entities_from_chunk(
 
     # console preview of LLM output (short)
     preview = txt if len(txt) <= 4000 else txt[:4000] + "\n\n...[TRUNCATED OUTPUT]"
-    print(f"[LLM raw output preview]\n{preview}\n{'-'*80}")
+    # print(f"[LLM raw output preview]\n{preview}\n{'-'*80}")
 
     parsed = []
     error_msg = None
@@ -2526,12 +2526,17 @@ def build_next_entities(resolved_entities: List[Dict],
 
 # ---------------- Main iterative loop ----------------
 def iterative_resolution():
+    print("DEBUG iterative_resolution running from:", __file__)
+    print("DEBUG ENT_RAW_SEED =", ENT_RAW_SEED)
+    print("DEBUG ITER_DIR =", ITER_DIR)
 
     current_input = ENT_RAW_SEED
 
     # backup seed once
     seed_backup = ITER_DIR / "entities_raw_seed_backup.jsonl"
     if not seed_backup.exists():
+        print("DEBUG: creating seed backup:", seed_backup)
+        ITER_DIR.mkdir(parents=True, exist_ok=True)
         shutil.copy2(ENT_RAW_SEED, seed_backup)
 
     for it in range(1, DEFAULT_MAX_ITERS + 1):
@@ -3270,6 +3275,14 @@ def process_member_chunk_llm(members: List[Dict], single_entity_mode: bool = Fal
 
 # -------------------- Utility: write cluster files (full entity objects) -----------
 def write_cluster_summary(path: Path, cluster_map: Dict[int, List[int]], entities: List[Dict]):
+    """
+    Write initial cluster summary: full entity objects grouped by cluster label.
+
+    path: output JSON file path, e.g. data/Classes/Cls_Rec/initial_cluster_entities.json
+    """
+    # Ensure parent directory exists (fixes FileNotFoundError when writing)
+    path.parent.mkdir(parents=True, exist_ok=True)
+
     n_entities = len(entities)
     clusters = {}
     for k, idxs in sorted(cluster_map.items(), key=lambda x: x[0]):
@@ -3278,12 +3291,14 @@ def write_cluster_summary(path: Path, cluster_map: Dict[int, List[int]], entitie
             ent = entities[i]
             arr.append(ent)
         clusters[str(k)] = arr
-    meta = {"n_entities": n_entities, "n_clusters": len(clusters), "clusters": clusters}
+    meta = {"n_entities": n_entities, "n_clusters": len(clusters)}
+
     with open(path, "w", encoding="utf-8") as fh:
         fh.write('{\n')
         fh.write(f'  "n_entities": {meta["n_entities"]},\n')
         fh.write(f'  "n_clusters": {meta["n_clusters"]},\n')
         fh.write('  "clusters": {\n')
+
         cluster_items = list(clusters.items())
         for ci, (k, ents) in enumerate(cluster_items):
             fh.write(f'    "{k}": [\n')
@@ -3361,6 +3376,9 @@ def write_classes_round(path: Path, candidates: List[Dict], entities: List[Dict]
 def classrec_iterative_main():
     entities = load_entities(INPUT_PATH)
     print(f"[start] loaded {len(entities)} entities from {INPUT_PATH}")
+    
+    # Ensure the output directory exists before we try to write initial_cluster_entities.json
+    OUT_DIR.mkdir(parents=True, exist_ok=True)
 
     for e in entities:
         if "id" not in e:
@@ -3699,8 +3717,12 @@ def main_input_for_cls_res():
         total_classes += len(cls_map)
     print(f"[info] collected {len(all_classes)} raw class entries (from {total_classes} source classes). Merging...")
 
+    
     merged = merge_classes(all_classes)
     print(f"[info] merged -> {len(merged)} classes. Writing outputs...")
+
+    # Ensure output directory exists
+    OUTPUT_ROOT.mkdir(parents=True, exist_ok=True)
 
     # write JSONL (one merged class per line) and JSON (array)
     with open(OUT_JSONL, "w", encoding="utf-8") as fh_jsonl, open(OUT_JSON, "w", encoding="utf-8") as fh_json:
@@ -3712,7 +3734,7 @@ def main_input_for_cls_res():
     total_members = sum(len(c.get("members", [])) for c in merged)
     print(f"[done] wrote {OUT_JSONL} and {OUT_JSON}.")
     print(f"       classes: {len(merged)}, total member objects (post-merge, possibly duplicated across classes): {total_members}")
-
+    
 
 
 
@@ -5916,8 +5938,12 @@ def run_rel_rec(
     n_chunks_called = 0
     n_relations = 0
 
+    # Ensure the output directory exists (fixes FileNotFoundError when opening)
+    out_path = Path(output_path)
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+
     logger.info("Writing relations to %s", output_path)
-    with open(output_path, "w", encoding="utf-8") as out_f:
+    with open(out_path, "w", encoding="utf-8") as out_f:
         for chunk in iter_chunks(chunks_path):
             n_chunks += 1
             chunk_id = chunk["id"]
@@ -5997,8 +6023,6 @@ def run_rel_rec(
         n_chunks_called,
         n_relations,
     )
-
-
 
 # -----------------------------------------------------------------------------
 # CLI (optional for terminal use; in notebooks call run_rel_rec(...) directly)
@@ -7791,8 +7815,438 @@ def run_relres_iteratively():
 
 
 
+#*######################### Start ##########################
+#region:#?   CSV relations + nodes for Neo4j KG import - V7
+
+# def export_relations_and_nodes_to_csv():
+#     import json, csv
+#     from pathlib import Path
+
+#     # Sources
+#     relations_jl = Path(
+#         "data/Relations/Rel Res_IterativeRuns/overall_summary/relations_resolved.jsonl"
+#     )
+#     entities_cls_jl = Path(
+#         "data/Classes/Cls_Res/Cls_Res_IterativeRuns/overall_summary/entities_with_class.jsonl"
+#     )
+
+#     # Outputs
+#     rels_out_csv  = Path("data/KG/rels_fixed_no_raw.csv")
+#     nodes_out_csv = Path("data/KG/nodes.csv")
+
+
+#     def sanitize_string_for_csv_json(s):
+#         """
+#         For content that will be embedded inside JSON *inside* CSV (e.g., qualifiers),
+#         remove problematic double quotes that produce \" sequences which break Neo4j's
+#         CSV parser. Replace them with single quotes.
+#         """
+#         if s is None:
+#             return ""
+#         if not isinstance(s, str):
+#             s = str(s)
+#         return s.replace('"', "'")
+
+
+#     def sanitize_for_json_in_csv(obj):
+#         """
+#         Recursively sanitize dict/list structures so that any string values
+#         no longer contain raw double quotes. Keys almost never contain quotes,
+#         but we treat them too for safety.
+#         """
+#         if isinstance(obj, dict):
+#             return {
+#                 sanitize_string_for_csv_json(k) if isinstance(k, str) else k:
+#                     sanitize_for_json_in_csv(v)
+#                 for k, v in obj.items()
+#             }
+#         elif isinstance(obj, list):
+#             return [sanitize_for_json_in_csv(v) for v in obj]
+#         elif isinstance(obj, str):
+#             return sanitize_string_for_csv_json(obj)
+#         else:
+#             return obj
+
+
+#     def safe_str(x):
+#         """
+#         Safe string conversion for scalar values.
+#         For dict/list, we JSON-encode after sanitizing for CSV safety.
+#         """
+#         if x is None:
+#             return ""
+#         if isinstance(x, (dict, list)):
+#             return json.dumps(sanitize_for_json_in_csv(x), ensure_ascii=False)
+#         return str(x)
+
+
+#     def first_non_empty(obj, keys):
+#         """Return the first non-empty value among obj[key] for keys."""
+#         for k in keys:
+#             if k in obj and obj[k] not in (None, ""):
+#                 return obj[k]
+#         return None
+
+
+#     def new_entity_record(entity_id):
+#         """Initialize a canonical entity record in our in-memory table."""
+#         return {
+#             "entity_id":               entity_id,
+#             "entity_name":             "",
+#             "entity_description":      "",
+#             "entity_type_hint":        "",
+#             "entity_confidence":       "",  # stored as string in CSV
+#             "entity_resolution_context": "",
+#             "entity_flag":             "",
+#             "class_id":                "",
+#             "class_label":             "",
+#             "class_group":             "",
+#             "node_properties":         [],
+#             "seen_in_chunks":          set(),  # internal; becomes chunk_ids in CSV
+#         }
+
+
+#     # --- 1) Load entities from entities_with_class.jsonl (primary source of node info) ---
+
+#     entities = {}  # entity_id -> entity_record
+
+#     if not entities_cls_jl.exists():
+#         raise FileNotFoundError(entities_cls_jl)
+
+#     with entities_cls_jl.open("r", encoding="utf-8") as fh:
+#         for ln in fh:
+#             ln = ln.strip()
+#             if not ln:
+#                 continue
+#             obj = json.loads(ln)
+
+#             # entity_id is top-level, but we also fall back to nested entity.id
+#             eid = obj.get("entity_id")
+#             nested_ent = obj.get("entity") or {}
+#             if eid is None:
+#                 eid = nested_ent.get("id")
+#             if not eid:
+#                 continue
+
+#             ent = entities.get(eid)
+#             if ent is None:
+#                 ent = new_entity_record(eid)
+#                 entities[eid] = ent
+
+#             # --- Fill from nested "entity" object first ---
+#             # Name & description
+#             if not ent["entity_name"]:
+#                 val = nested_ent.get("entity_name") or nested_ent.get("name") or obj.get("entity_name")
+#                 if val is not None:
+#                     ent["entity_name"] = safe_str(val)
+
+#             if not ent["entity_description"]:
+#                 val = nested_ent.get("entity_description") or nested_ent.get("description") or obj.get("entity_description")
+#                 if val is not None:
+#                     ent["entity_description"] = safe_str(val)
+
+#             # Type hint
+#             if not ent["entity_type_hint"]:
+#                 val = nested_ent.get("entity_type_hint") or obj.get("entity_type_hint")
+#                 if val is not None:
+#                     ent["entity_type_hint"] = safe_str(val)
+
+#             # Confidence score
+#             if ent["entity_confidence"] in ("", None):
+#                 val = nested_ent.get("confidence_score") or obj.get("confidence_score")
+#                 if val is not None:
+#                     ent["entity_confidence"] = str(val)
+
+#             # Resolution context
+#             if not ent["entity_resolution_context"]:
+#                 val = nested_ent.get("resolution_context") or obj.get("resolution_context")
+#                 if val is not None:
+#                     ent["entity_resolution_context"] = safe_str(val)
+
+#             # Flag
+#             if not ent["entity_flag"]:
+#                 val = nested_ent.get("flag") or obj.get("flag")
+#                 if val is not None:
+#                     ent["entity_flag"] = safe_str(val)
+
+#             # Class info: prefer top-level, then nested _class_*
+#             if not ent["class_id"]:
+#                 val = obj.get("class_id") or nested_ent.get("_class_id")
+#                 if val is not None:
+#                     ent["class_id"] = safe_str(val)
+
+#             if not ent["class_label"]:
+#                 val = obj.get("class_label") or nested_ent.get("_class_label")
+#                 if val is not None:
+#                     ent["class_label"] = safe_str(val)
+
+#             if not ent["class_group"]:
+#                 val = obj.get("class_group") or nested_ent.get("_class_group")
+#                 if val is not None:
+#                     ent["class_group"] = safe_str(val)
+
+#             # Chunk IDs from the entities file
+#             chunk_candidates = []
+#             for key in ("chunk_id",):
+#                 v1 = nested_ent.get(key)
+#                 if v1 is not None:
+#                     if isinstance(v1, list):
+#                         chunk_candidates.extend(v1)
+#                     else:
+#                         chunk_candidates.append(v1)
+#                 v2 = obj.get(key)
+#                 if v2 is not None:
+#                     if isinstance(v2, list):
+#                         chunk_candidates.extend(v2)
+#                     else:
+#                         chunk_candidates.append(v2)
+
+#             for cid in chunk_candidates:
+#                 if cid is not None:
+#                     ent["seen_in_chunks"].add(str(cid))
+
+#             # Node properties from entities file
+#             np = nested_ent.get("node_properties") or obj.get("node_properties") or []
+#             if isinstance(np, list):
+#                 for item in np:
+#                     ent["node_properties"].append(item)
+#             else:
+#                 ent["node_properties"].append(np)
+
+#     print(f"Loaded {len(entities)} entities from classes file.")
+
+
+#     # --- 2) Load relation objects (same robustness as before) ---
+
+#     rows = []
+#     if not relations_jl.exists():
+#         raise FileNotFoundError(relations_jl)
+
+#     with relations_jl.open("r", encoding="utf-8") as fh:
+#         for ln in fh:
+#             ln = ln.strip()
+#             if not ln:
+#                 continue
+#             try:
+#                 obj = json.loads(ln)
+#             except Exception:
+#                 # line might be a JSON array
+#                 try:
+#                     arr = json.loads(ln)
+#                     if isinstance(arr, list):
+#                         rows.extend(arr)
+#                     continue
+#                 except Exception:
+#                     raise
+#             # If wrapper has "relations" list
+#             if isinstance(obj, dict) and "relations" in obj and isinstance(obj["relations"], list):
+#                 rows.extend(obj["relations"])
+#             elif isinstance(obj, list):
+#                 rows.extend(obj)
+#             else:
+#                 rows.append(obj)
+
+#     print(f"Loaded {len(rows)} relation objects.")
+
+
+#     def update_entity_from_relation(entities_dict, side_prefix, entity_id, rel_obj, chunk_id):
+#         """
+#         Enrich entity records with info available from relations (only filling empty fields),
+#         and accumulate chunk_ids from relations as well.
+#         """
+#         if not entity_id:
+#             return
+
+#         ent = entities_dict.get(entity_id)
+#         if ent is None:
+#             ent = new_entity_record(entity_id)
+#             entities_dict[entity_id] = ent
+
+#         if side_prefix == "subject":
+#             name_keys        = ["subject_entity_name", "subject_name", "subject"]
+#             desc_keys        = ["subject_entity_description", "subject_description", "subject_desc", "subject_entity_desc"]
+#             class_label_keys = ["subject_class_label", "subject_entity_class", "subject_entity_type", "subject_label", "subject_cls"]
+#             class_group_keys = ["subject_class_group", "subject_entity_group", "subject_group", "subject_cls_group"]
+#         else:
+#             name_keys        = ["object_entity_name", "object_name", "object"]
+#             desc_keys        = ["object_entity_description", "object_description", "object_desc", "object_entity_desc"]
+#             class_label_keys = ["object_class_label", "object_entity_class", "object_entity_type", "object_label", "object_cls"]
+#             class_group_keys = ["object_class_group", "object_entity_group", "object_group", "object_cls_group"]
+
+#         if not ent["entity_name"]:
+#             name_val = first_non_empty(rel_obj, name_keys)
+#             if name_val is not None:
+#                 ent["entity_name"] = safe_str(name_val)
+
+#         if not ent["entity_description"]:
+#             desc_val = first_non_empty(rel_obj, desc_keys)
+#             if desc_val is not None:
+#                 ent["entity_description"] = safe_str(desc_val)
+
+#         if not ent["class_label"]:
+#             cls_val = first_non_empty(rel_obj, class_label_keys)
+#             if cls_val is not None:
+#                 ent["class_label"] = safe_str(cls_val)
+
+#         if not ent["class_group"]:
+#             grp_val = first_non_empty(rel_obj, class_group_keys)
+#             if grp_val is not None:
+#                 ent["class_group"] = safe_str(grp_val)
+
+#         # accumulate chunk_id from relations as well
+#         if chunk_id:
+#             ent["seen_in_chunks"].add(chunk_id)
+
+
+#     # --- 3) Build relations CSV + enrich entities from relations ---
+
+#     rels_rows = []
+
+#     for r in rows:
+#         # IDs for subject and object
+#         subj = (
+#             r.get("subject_entity_id")
+#             or r.get("subject_id")
+#             or r.get("subject_entity")
+#             or r.get("subject_entity_name")
+#             or r.get("subject")
+#         )
+#         objt = (
+#             r.get("object_entity_id")
+#             or r.get("object_id")
+#             or r.get("object_entity")
+#             or r.get("object_entity_name")
+#             or r.get("object")
+#         )
+#         subj_id = safe_str(subj)
+#         objt_id = safe_str(objt)
+
+#         # chunk_id (for relation + union into entity.seen_in_chunks)
+#         chunk_id_val = r.get("chunk_id") or r.get("source_chunk") or r.get("context_chunk") or None
+#         chunk_id = safe_str(chunk_id_val)
+
+#         # qualifiers: sanitize inner quotes -> pretty JSON for nicer Neo4j view
+#         qualifiers_obj = r.get("qualifiers") or r.get("qualifier") or {}
+#         if qualifiers_obj is None:
+#             qualifiers_obj = {}
+#         qualifiers_sanitized = sanitize_for_json_in_csv(qualifiers_obj)
+#         qualifiers_json = json.dumps(qualifiers_sanitized, ensure_ascii=False, indent=1)
+
+#         # relation row (structure same as before)
+#         relation_row = {
+#             "relation_id":         safe_str(r.get("relation_id") or r.get("id") or r.get("rid") or ""),
+#             "start_id":            subj_id,
+#             "end_id":              objt_id,
+#             "raw_relation_name":   safe_str(r.get("relation_name") or r.get("rel_name") or ""),
+#             "canonical_rel_name":  safe_str(r.get("canonical_rel_name") or r.get("canonical") or ""),
+#             "canonical_rel_desc":  safe_str(r.get("canonical_rel_desc") or r.get("canonical_desc") or ""),
+#             "rel_cls":             safe_str(r.get("rel_cls") or r.get("relation_class") or ""),
+#             "rel_cls_group":       safe_str(r.get("rel_cls_group") or r.get("relation_class_group") or r.get("rel_group") or ""),
+#             "rel_hint_type":       safe_str(r.get("rel_hint_type") or r.get("hint") or ""),
+#             "confidence":          safe_str(r.get("confidence") if r.get("confidence") not in (None, "") else ""),
+#             "resolution_context":  safe_str(r.get("resolution_context") or r.get("resolution") or ""),
+#             "justification":       safe_str(r.get("justification") or ""),
+#             "remark":              safe_str(r.get("remark") or r.get("remarks") or ""),
+#             "evidence_excerpt":    safe_str(r.get("evidence_excerpt") or r.get("evidence") or ""),
+#             "chunk_id":            chunk_id,
+#             "qualifiers":          qualifiers_json,
+#             "rel_desc":            safe_str(r.get("rel_desc") or r.get("relation_description") or ""),
+#         }
+#         rels_rows.append(relation_row)
+
+#         # Enrich entities from relations (but do not override existing rich info from classes)
+#         update_entity_from_relation(entities, "subject", subj_id, r, chunk_id)
+#         update_entity_from_relation(entities, "object", objt_id, r, chunk_id)
+
+#     print(f"Collected {len(rels_rows)} relation rows.")
+#     print(f"Collected {len(entities)} unique entities (classes + relations).")
+
+
+#     # --- 4) Write relations CSV (rels_fixed_no_raw.csv) ---
+
+#     rel_fieldnames = [
+#         "relation_id","start_id","end_id","raw_relation_name","canonical_rel_name","canonical_rel_desc",
+#         "rel_cls","rel_cls_group","rel_hint_type","confidence","resolution_context","justification",
+#         "remark","evidence_excerpt","chunk_id","qualifiers","rel_desc"
+#     ]
+
+#     rels_out_csv.parent.mkdir(parents=True, exist_ok=True)
+#     with rels_out_csv.open("w", encoding="utf-8", newline="") as fh:
+#         writer = csv.DictWriter(fh, fieldnames=rel_fieldnames, quoting=csv.QUOTE_ALL)
+#         writer.writeheader()
+#         for rrow in rels_rows:
+#             writer.writerow(rrow)
+
+#     print("Wrote relations CSV:", rels_out_csv)
+
+
+#     # --- 5) Write nodes CSV (nodes.csv) ---
+#     # NOTE: we now expose more intrinsic entity info, and rename "seen_in_chunks" -> "chunk_ids"
+#     # for clearer, more consistent naming with relation.chunk_id.
+
+#     node_fieldnames = [
+#         "entity_id",
+#         "entity_name",
+#         "entity_description",
+#         "entity_type_hint",
+#         "entity_confidence",
+#         "entity_resolution_context",
+#         "entity_flag",
+#         "class_id",
+#         "class_label",
+#         "class_group",
+#         "chunk_ids",
+#         "node_properties",
+#     ]
+
+#     nodes_out_csv.parent.mkdir(parents=True, exist_ok=True)
+#     with nodes_out_csv.open("w", encoding="utf-8", newline="") as fh:
+#         writer = csv.DictWriter(fh, fieldnames=node_fieldnames, quoting=csv.QUOTE_ALL)
+#         writer.writeheader()
+#         for ent in entities.values():
+#             # chunk_ids: JSON list string for Neo4j apoc.convert.fromJsonList
+#             chunk_ids_str = json.dumps(sorted(ent["seen_in_chunks"]), ensure_ascii=False)
+
+#             # node_properties: JSON array string, sanitized
+#             node_props_sanitized = sanitize_for_json_in_csv(ent["node_properties"])
+#             node_props_str = json.dumps(node_props_sanitized, ensure_ascii=False)
+
+#             row = {
+#                 "entity_id":               ent["entity_id"],
+#                 "entity_name":             ent["entity_name"],
+#                 "entity_description":      ent["entity_description"],
+#                 "entity_type_hint":        ent["entity_type_hint"],
+#                 "entity_confidence":       ent["entity_confidence"],
+#                 "entity_resolution_context": ent["entity_resolution_context"],
+#                 "entity_flag":             ent["entity_flag"],
+#                 "class_id":                ent["class_id"],
+#                 "class_label":             ent["class_label"],
+#                 "class_group":             ent["class_group"],
+#                 "chunk_ids":               chunk_ids_str,
+#                 "node_properties":         node_props_str,
+#             }
+#             writer.writerow(row)
+
+#     print("Wrote nodes CSV:", nodes_out_csv)
+
+
+
+# # -----------------------
+# # Export KG to CSVs  - Run statement
+# # -----------------------
+
+# export_relations_and_nodes_to_csv()
+
+
+
+#endregion#? CSV relations + nodes for Neo4j KG import - V6
+#*#########################  End  ##########################
+
+
+
 #?######################### Start ##########################
 #region:#?   CSV relations + nodes for Neo4j KG import - V7
+
 
 def export_relations_and_nodes_to_csv():
     import json, csv
@@ -7802,14 +8256,30 @@ def export_relations_and_nodes_to_csv():
     relations_jl = Path(
         "data/Relations/Rel Res_IterativeRuns/overall_summary/relations_resolved.jsonl"
     )
-    entities_cls_jl = Path(
+
+    # Primary source for entities_with_class: ClassRes multi-run
+    entities_cls_primary = Path(
         "data/Classes/Cls_Res/Cls_Res_IterativeRuns/overall_summary/entities_with_class.jsonl"
     )
+    # Fallback source: RelRes multi-run (your logs show this one exists)
+    entities_cls_fallback = Path(
+        "data/Relations/Rel Res_IterativeRuns/overall_summary/entities_with_class.jsonl"
+    )
+
+    if entities_cls_primary.exists():
+        entities_cls_jl = entities_cls_primary
+    elif entities_cls_fallback.exists():
+        entities_cls_jl = entities_cls_fallback
+    else:
+        # Neither file exists -> fail with clear message
+        raise FileNotFoundError(
+            f"entities_with_class.jsonl not found at "
+            f"{entities_cls_primary} or {entities_cls_fallback}"
+        )
 
     # Outputs
     rels_out_csv  = Path("data/KG/rels_fixed_no_raw.csv")
     nodes_out_csv = Path("data/KG/nodes.csv")
-
 
     def sanitize_string_for_csv_json(s):
         """
@@ -7822,7 +8292,6 @@ def export_relations_and_nodes_to_csv():
         if not isinstance(s, str):
             s = str(s)
         return s.replace('"', "'")
-
 
     def sanitize_for_json_in_csv(obj):
         """
@@ -7843,7 +8312,6 @@ def export_relations_and_nodes_to_csv():
         else:
             return obj
 
-
     def safe_str(x):
         """
         Safe string conversion for scalar values.
@@ -7855,14 +8323,12 @@ def export_relations_and_nodes_to_csv():
             return json.dumps(sanitize_for_json_in_csv(x), ensure_ascii=False)
         return str(x)
 
-
     def first_non_empty(obj, keys):
         """Return the first non-empty value among obj[key] for keys."""
         for k in keys:
             if k in obj and obj[k] not in (None, ""):
                 return obj[k]
         return None
-
 
     def new_entity_record(entity_id):
         """Initialize a canonical entity record in our in-memory table."""
@@ -7880,7 +8346,6 @@ def export_relations_and_nodes_to_csv():
             "node_properties":         [],
             "seen_in_chunks":          set(),  # internal; becomes chunk_ids in CSV
         }
-
 
     # --- 1) Load entities from entities_with_class.jsonl (primary source of node info) ---
 
@@ -7989,8 +8454,7 @@ def export_relations_and_nodes_to_csv():
             else:
                 ent["node_properties"].append(np)
 
-    print(f"Loaded {len(entities)} entities from classes file.")
-
+    print(f"Loaded {len(entities)} entities from {entities_cls_jl}.")
 
     # --- 2) Load relation objects (same robustness as before) ---
 
@@ -8023,7 +8487,6 @@ def export_relations_and_nodes_to_csv():
                 rows.append(obj)
 
     print(f"Loaded {len(rows)} relation objects.")
-
 
     def update_entity_from_relation(entities_dict, side_prefix, entity_id, rel_obj, chunk_id):
         """
@@ -8072,7 +8535,6 @@ def export_relations_and_nodes_to_csv():
         # accumulate chunk_id from relations as well
         if chunk_id:
             ent["seen_in_chunks"].add(chunk_id)
-
 
     # --- 3) Build relations CSV + enrich entities from relations ---
 
@@ -8137,7 +8599,6 @@ def export_relations_and_nodes_to_csv():
     print(f"Collected {len(rels_rows)} relation rows.")
     print(f"Collected {len(entities)} unique entities (classes + relations).")
 
-
     # --- 4) Write relations CSV (rels_fixed_no_raw.csv) ---
 
     rel_fieldnames = [
@@ -8155,10 +8616,7 @@ def export_relations_and_nodes_to_csv():
 
     print("Wrote relations CSV:", rels_out_csv)
 
-
     # --- 5) Write nodes CSV (nodes.csv) ---
-    # NOTE: we now expose more intrinsic entity info, and rename "seen_in_chunks" -> "chunk_ids"
-    # for clearer, more consistent naming with relation.chunk_id.
 
     node_fieldnames = [
         "entity_id",

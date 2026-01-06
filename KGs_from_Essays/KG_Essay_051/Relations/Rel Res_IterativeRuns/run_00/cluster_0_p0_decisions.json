@@ -1,0 +1,177 @@
+{
+  "cluster_label": "0_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_7180d55b52db",
+      "relation_name": "is_type_of",
+      "rel_desc": "Mirroring another person's posture is a specific posture-related behavior.",
+      "rel_hint_type": "taxonomy",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "mirroring another person's posture",
+      "object_entity_name": "posture",
+      "subject_class_label": "Nonverbal Engagement Cues",
+      "subject_class_group": "Nonverbal Communication & Body Language",
+      "object_class_label": "Posture and Authority Cues",
+      "object_class_group": "Nonverbal Communication & Body Language",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "between individuals",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "inferred",
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.9,
+      "remarks": [
+        "Modeled as a posture-related nonverbal cue."
+      ]
+    },
+    {
+      "relation_id": "RelR_776891ac90a3",
+      "relation_name": "is_type_of",
+      "rel_desc": "Standing up straight with shoulders back is a specific kind of posture.",
+      "rel_hint_type": "taxonomy",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "standing up straight with shoulders back",
+      "object_entity_name": "posture",
+      "subject_class_label": "Posture and Authority Cues",
+      "subject_class_group": "Nonverbal Communication & Body Language",
+      "object_class_label": "Posture and Authority Cues",
+      "object_class_group": "Nonverbal Communication & Body Language",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.95,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_11a6189d1eac",
+      "relation_name": "is_type_of",
+      "rel_desc": "Slouching is characterized as a particular posture.",
+      "rel_hint_type": "taxonomy",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "slouching",
+      "object_entity_name": "posture",
+      "subject_class_label": "Posture and Authority Cues",
+      "subject_class_group": "Nonverbal Communication & Body Language",
+      "object_class_label": "Posture and Authority Cues",
+      "object_class_group": "Nonverbal Communication & Body Language",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.95,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_7180d55b52db\",\n        \"RelR_776891ac90a3\",\n        \"RelR_11a6189d1eac\"\n      ],\n      \"canonical_rel_name\": \"is_subtype_of\",\n      \"canonical_rel_desc\": \"Indicates that the subject is a more specific subtype or variant within the broader category represented by the object.\",\n      \"justification\": \"All three relations describe a specific posture-related behavior or stance (subject) as a particular kind or type of the broader category 'posture' (object). This matches a hierarchical subtype (taxonomy) relation, so they should share the canonical predicate 'is_subtype_of'.\",\n      \"remark\": null,\n      \"confidence\": 0.96\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_7180d55b52db\",\n        \"RelR_776891ac90a3\",\n        \"RelR_11a6189d1eac\"\n      ],\n      \"rel_cls\": \"hierarchical_taxonomy_relation\",\n      \"justification\": \"Each relation organizes a specific nonverbal or posture cue as a member of a broader posture category, which is a classic hierarchical taxonomy (type-of) structure. Grouping them under 'hierarchical_taxonomy_relation' captures this class-level semantics.\",\n      \"remark\": null,\n      \"confidence\": 0.95\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_7180d55b52db\",\n        \"RelR_776891ac90a3\",\n        \"RelR_11a6189d1eac\"\n      ],\n      \"rel_cls_group\": \"IDENTITY\",\n      \"justification\": \"Type-of / subtype relations express categorical identity between a specific instance or subtype and a broader class, placing them under a broad group that covers class-membership and identity-like taxonomic links.\",\n      \"remark\": null,\n      \"confidence\": 0.94\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_7180d55b52db",
+          "RelR_776891ac90a3",
+          "RelR_11a6189d1eac"
+        ],
+        "canonical_rel_name": "is_subtype_of",
+        "canonical_rel_desc": "Indicates that the subject is a more specific subtype or variant within the broader category represented by the object.",
+        "justification": "All three relations describe a specific posture-related behavior or stance (subject) as a particular kind or type of the broader category 'posture' (object). This matches a hierarchical subtype (taxonomy) relation, so they should share the canonical predicate 'is_subtype_of'.",
+        "remark": null,
+        "confidence": 0.96
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_7180d55b52db",
+          "RelR_776891ac90a3",
+          "RelR_11a6189d1eac"
+        ],
+        "rel_cls": "hierarchical_taxonomy_relation",
+        "justification": "Each relation organizes a specific nonverbal or posture cue as a member of a broader posture category, which is a classic hierarchical taxonomy (type-of) structure. Grouping them under 'hierarchical_taxonomy_relation' captures this class-level semantics.",
+        "remark": null,
+        "confidence": 0.95
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_7180d55b52db",
+          "RelR_776891ac90a3",
+          "RelR_11a6189d1eac"
+        ],
+        "rel_cls_group": "IDENTITY",
+        "justification": "Type-of / subtype relations express categorical identity between a specific instance or subtype and a broader class, placing them under a broad group that covers class-membership and identity-like taxonomic links.",
+        "remark": null,
+        "confidence": 0.94
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_7180d55b52db",
+        "RelR_776891ac90a3",
+        "RelR_11a6189d1eac"
+      ],
+      "canonical_rel_name": "is_subtype_of",
+      "canonical_rel_desc": "Indicates that the subject is a more specific subtype or variant within the broader category represented by the object.",
+      "justification": "All three relations describe a specific posture-related behavior or stance (subject) as a particular kind or type of the broader category 'posture' (object). This matches a hierarchical subtype (taxonomy) relation, so they should share the canonical predicate 'is_subtype_of'.",
+      "remark": null,
+      "confidence": 0.96
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_7180d55b52db",
+        "RelR_776891ac90a3",
+        "RelR_11a6189d1eac"
+      ],
+      "rel_cls": "hierarchical_taxonomy_relation",
+      "justification": "Each relation organizes a specific nonverbal or posture cue as a member of a broader posture category, which is a classic hierarchical taxonomy (type-of) structure. Grouping them under 'hierarchical_taxonomy_relation' captures this class-level semantics.",
+      "remark": null,
+      "confidence": 0.95
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_7180d55b52db",
+        "RelR_776891ac90a3",
+        "RelR_11a6189d1eac"
+      ],
+      "rel_cls_group": "IDENTITY",
+      "justification": "Type-of / subtype relations express categorical identity between a specific instance or subtype and a broader class, placing them under a broad group that covers class-membership and identity-like taxonomic links.",
+      "remark": null,
+      "confidence": 0.94
+    }
+  ],
+  "timestamp": "2026-01-06T12:08:04Z"
+}

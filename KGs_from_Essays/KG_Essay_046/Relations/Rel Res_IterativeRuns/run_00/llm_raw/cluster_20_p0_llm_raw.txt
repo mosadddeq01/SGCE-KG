@@ -1,0 +1,48 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_c19673f388aa",
+        "RelR_1f8f212a2139",
+        "RelR_767b675fc10f",
+        "RelR_4679f87947ea"
+      ],
+      "canonical_rel_name": "enhances_ecosystem_condition",
+      "canonical_rel_desc": "The subject contributes positively to the health, resilience, or overall condition of ecosystems.",
+      "justification": "All four relations describe how protecting bird populations or habitats has a positive, contributory effect on ecosystem health or resilience. A unified predicate capturing positive impact on ecosystem condition improves schema consistency while remaining faithful to the causal semantics indicated by the descriptions and qualifiers.",
+      "remark": "Chosen as a domain-specific but reusable predicate for positive impacts on ecosystem health/resilience.",
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_c19673f388aa",
+        "RelR_1f8f212a2139",
+        "RelR_767b675fc10f",
+        "RelR_4679f87947ea"
+      ],
+      "rel_cls": "ecosystem_condition_relation",
+      "justification": "Each relation links a conservation-related subject (bird populations or habitats) to an ecosystem condition attribute (health or resilience), expressing how the subject affects ecosystem condition. Grouping them under an ecosystem_condition_relation class captures this shared thematic focus.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_c19673f388aa",
+        "RelR_1f8f212a2139",
+        "RelR_767b675fc10f",
+        "RelR_4679f87947ea"
+      ],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "The descriptions and qualifiers (e.g., 'contributes to', 'is crucial for; ensuring') indicate that the subjects causally support or enhance the ecosystem attributes, not merely co-occur. This is best modeled as a causal impact relation rather than simple association.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  }
+]

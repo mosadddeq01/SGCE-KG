@@ -1,0 +1,165 @@
+{
+  "cluster_label": "8_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_f2ad8fffb834",
+      "relation_name": "encoded_on",
+      "rel_desc": "The information about the contents of a black hole is encoded on the event horizon.",
+      "rel_hint_type": "information-location",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "information about the contents of a black hole",
+      "object_entity_name": "event horizon",
+      "subject_class_label": "Black Hole Holographic Principle",
+      "subject_class_group": "Black Hole Information & Holography",
+      "object_class_label": "Black Hole Holographic Principle",
+      "object_class_group": "Black Hole Information & Holography",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "on its event horizon",
+        "OperationalConstraint": null,
+        "ConditionExpression": "all the information about the contents",
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "RepresentationType: boundary-surface encoding"
+      },
+      "confidence": 0.97,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_c0241b89e0f1",
+      "relation_name": "assigns_encoding_surface",
+      "rel_desc": "The holographic principle asserts that the event horizon serves as the encoding surface for black hole information.",
+      "rel_hint_type": "information-location",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "holographic principle",
+      "object_entity_name": "event horizon",
+      "subject_class_label": "Black Hole Holographic Principle",
+      "subject_class_group": "Black Hole Information & Holography",
+      "object_class_label": "Black Hole Holographic Principle",
+      "object_class_group": "Black Hole Information & Holography",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "on the event horizon",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "suggests",
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "Interpretation: event horizon as 2D encoding of 3D bulk"
+      },
+      "confidence": 0.9,
+      "remarks": [
+        "Relation represents the principle’s prescription of where information resides."
+      ]
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_f2ad8fffb834\"],\n      \"canonical_rel_name\": \"is_information_encoded_on\",\n      \"canonical_rel_desc\": \"Indicates that informational content about a physical system is encoded on a specified boundary or surface.\",\n      \"justification\": \"This relation connects the informational content of a black hole to the event horizon as the surface where that information is encoded; the direction is from information to its encoding surface, so a predicate emphasizing information being encoded on a surface is appropriate.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_c0241b89e0f1\"],\n      \"canonical_rel_name\": \"designates_information_encoding_surface\",\n      \"canonical_rel_desc\": \"Indicates that a theoretical principle or framework designates a particular boundary or surface as the locus where information about a system is encoded.\",\n      \"justification\": \"This relation connects the holographic principle (a theoretical framework) to the event horizon as the surface it designates for encoding information, which is conceptually different from a specific piece of information being encoded there; the predicate should capture the act of designation by the principle.\",\n      \"remark\": \"Kept separate from direct information–surface encoding predicates to distinguish a theory’s prescription from an instance of information being encoded.\",\n      \"confidence\": 0.88\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_f2ad8fffb834\", \"RelR_c0241b89e0f1\"],\n      \"rel_cls\": \"information_encoding_location_relation\",\n      \"justification\": \"Both relations concern where information about a physical system is encoded (on the event horizon), either as a factual encoding relation or as a theoretical designation of that encoding surface, so they belong to the same broader class of information–location/encoding relations.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_f2ad8fffb834\", \"RelR_c0241b89e0f1\"],\n      \"rel_cls_group\": \"SPATIALITY\",\n      \"justification\": \"In both cases the core semantics are about the spatial/boundary location of information encoding (on the event horizon), fitting a broad spatial or locational grouping.\",\n      \"remark\": \"A future refinement could introduce a more specialized high-level group such as REPRESENTATION if the ontology distinguishes it, but SPATIALITY is the closest standard broad group.\",\n      \"confidence\": 0.86\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_f2ad8fffb834"
+        ],
+        "canonical_rel_name": "is_information_encoded_on",
+        "canonical_rel_desc": "Indicates that informational content about a physical system is encoded on a specified boundary or surface.",
+        "justification": "This relation connects the informational content of a black hole to the event horizon as the surface where that information is encoded; the direction is from information to its encoding surface, so a predicate emphasizing information being encoded on a surface is appropriate.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_c0241b89e0f1"
+        ],
+        "canonical_rel_name": "designates_information_encoding_surface",
+        "canonical_rel_desc": "Indicates that a theoretical principle or framework designates a particular boundary or surface as the locus where information about a system is encoded.",
+        "justification": "This relation connects the holographic principle (a theoretical framework) to the event horizon as the surface it designates for encoding information, which is conceptually different from a specific piece of information being encoded there; the predicate should capture the act of designation by the principle.",
+        "remark": "Kept separate from direct information–surface encoding predicates to distinguish a theory's prescription from an instance of information being encoded.",
+        "confidence": 0.88
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_f2ad8fffb834",
+          "RelR_c0241b89e0f1"
+        ],
+        "rel_cls": "information_encoding_location_relation",
+        "justification": "Both relations concern where information about a physical system is encoded (on the event horizon), either as a factual encoding relation or as a theoretical designation of that encoding surface, so they belong to the same broader class of information–location/encoding relations.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_f2ad8fffb834",
+          "RelR_c0241b89e0f1"
+        ],
+        "rel_cls_group": "SPATIALITY",
+        "justification": "In both cases the core semantics are about the spatial/boundary location of information encoding (on the event horizon), fitting a broad spatial or locational grouping.",
+        "remark": "A future refinement could introduce a more specialized high-level group such as REPRESENTATION if the ontology distinguishes it, but SPATIALITY is the closest standard broad group.",
+        "confidence": 0.86
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_f2ad8fffb834"
+      ],
+      "canonical_rel_name": "is_information_encoded_on",
+      "canonical_rel_desc": "Indicates that informational content about a physical system is encoded on a specified boundary or surface.",
+      "justification": "This relation connects the informational content of a black hole to the event horizon as the surface where that information is encoded; the direction is from information to its encoding surface, so a predicate emphasizing information being encoded on a surface is appropriate.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_c0241b89e0f1"
+      ],
+      "canonical_rel_name": "designates_information_encoding_surface",
+      "canonical_rel_desc": "Indicates that a theoretical principle or framework designates a particular boundary or surface as the locus where information about a system is encoded.",
+      "justification": "This relation connects the holographic principle (a theoretical framework) to the event horizon as the surface it designates for encoding information, which is conceptually different from a specific piece of information being encoded there; the predicate should capture the act of designation by the principle.",
+      "remark": "Kept separate from direct information–surface encoding predicates to distinguish a theory's prescription from an instance of information being encoded.",
+      "confidence": 0.88
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_f2ad8fffb834",
+        "RelR_c0241b89e0f1"
+      ],
+      "rel_cls": "information_encoding_location_relation",
+      "justification": "Both relations concern where information about a physical system is encoded (on the event horizon), either as a factual encoding relation or as a theoretical designation of that encoding surface, so they belong to the same broader class of information–location/encoding relations.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_f2ad8fffb834",
+        "RelR_c0241b89e0f1"
+      ],
+      "rel_cls_group": "SPATIALITY",
+      "justification": "In both cases the core semantics are about the spatial/boundary location of information encoding (on the event horizon), fitting a broad spatial or locational grouping.",
+      "remark": "A future refinement could introduce a more specialized high-level group such as REPRESENTATION if the ontology distinguishes it, but SPATIALITY is the closest standard broad group.",
+      "confidence": 0.86
+    }
+  ],
+  "timestamp": "2026-01-06T09:40:57Z"
+}

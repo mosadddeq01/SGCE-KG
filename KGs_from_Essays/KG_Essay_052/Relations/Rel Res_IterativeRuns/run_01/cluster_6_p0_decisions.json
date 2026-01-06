@@ -1,0 +1,100 @@
+{
+  "cluster_label": "6_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_7fed1b2fba12",
+      "relation_name": "uses_for",
+      "rel_desc": "Societies use sports as a means to pursue various social aims.",
+      "rel_hint_type": "instrumental_use",
+      "canonical_rel_name": "uses_for",
+      "canonical_rel_desc": "Indicates that the subject employs the object as an instrument or means to pursue certain purposes or aims.",
+      "rel_cls": "instrumental_use_relation",
+      "rel_cls_group": "USAGE",
+      "subject_entity_name": "societies",
+      "object_entity_name": "sports",
+      "subject_class_label": "Sport-Influenced Societies",
+      "subject_class_group": "Sports, Culture, and Society",
+      "object_class_label": "Sports (Domain Concept)",
+      "object_class_group": "Sports and Society",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "in many societies",
+        "OperationalConstraint": null,
+        "ConditionExpression": "for challenging stereotypes, promoting gender equality, advocating for social justice",
+        "UncertaintyQualifier": null,
+        "CausalHint": "used to",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.9,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_27dc72bc58f1",
+      "relation_name": "can_be_used_for",
+      "rel_desc": "Sports are framed as a force that can be used to achieve positive change.",
+      "rel_hint_type": "purpose",
+      "canonical_rel_name": "is_used_for",
+      "canonical_rel_desc": "Connects an activity, practice, or instrument to a purpose or outcome it can be used to achieve.",
+      "rel_cls": "purpose_relation",
+      "rel_cls_group": "USAGE",
+      "subject_entity_name": "sports",
+      "object_entity_name": "positive change",
+      "subject_class_label": "Sports (Domain Concept)",
+      "subject_class_group": "Sports and Society",
+      "object_class_label": "Sports-Related Social Impact Processes",
+      "object_class_group": "Sports, Social Issues, and Social Change",
+      "qualifiers": {
+        "TemporalQualifier": "As we continue to celebrate the role of sports in our culture",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "as a force for",
+        "LogicalMarker": "as",
+        "OtherQualifier": null
+      },
+      "confidence": 0.92,
+      "remarks": [
+        "Direction chosen as sports → positive change to reflect instrumental use.",
+        "Direction chosen as sports → positive change to reflect instrumental use."
+      ]
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_rel_schema\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_7fed1b2fba12\"],\n      \"canonical_rel_name\": \"uses\",\n      \"canonical_rel_desc\": \"Indicates that the subject uses the object as an instrument or means, with any specific purposes or aims expressed via qualifiers or separate relations.\",\n      \"rel_cls\": \"instrumental_use_relation\",\n      \"rel_cls_group\": \"USAGE\",\n      \"justification\": \"In this instance, the subject (societies) is the agent and the object (sports) is the instrument. The current canonical_rel_name 'uses_for' misleadingly suggests the object is the purpose, whereas the actual purposes appear in qualifiers (e.g., challenging stereotypes, promoting gender equality). Renaming the predicate to 'uses' better captures the agent–instrument semantics while keeping it within the instrumental_use_relation class and USAGE group.\",\n      \"remark\": null,\n      \"confidence\": 0.86\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_rel_schema",
+      "args": {
+        "relation_ids": [
+          "RelR_7fed1b2fba12"
+        ],
+        "canonical_rel_name": "uses",
+        "canonical_rel_desc": "Indicates that the subject uses the object as an instrument or means, with any specific purposes or aims expressed via qualifiers or separate relations.",
+        "rel_cls": "instrumental_use_relation",
+        "rel_cls_group": "USAGE",
+        "justification": "In this instance, the subject (societies) is the agent and the object (sports) is the instrument. The current canonical_rel_name 'uses_for' misleadingly suggests the object is the purpose, whereas the actual purposes appear in qualifiers (e.g., challenging stereotypes, promoting gender equality). Renaming the predicate to 'uses' better captures the agent–instrument semantics while keeping it within the instrumental_use_relation class and USAGE group.",
+        "remark": null,
+        "confidence": 0.86
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_rel_schema",
+      "relation_ids": [
+        "RelR_7fed1b2fba12"
+      ],
+      "canonical_rel_name": "uses",
+      "canonical_rel_desc": "Indicates that the subject uses the object as an instrument or means, with any specific purposes or aims expressed via qualifiers or separate relations.",
+      "rel_cls": "instrumental_use_relation",
+      "rel_cls_group": "USAGE",
+      "new_relation_name": null,
+      "original_relation_name": null,
+      "justification": "In this instance, the subject (societies) is the agent and the object (sports) is the instrument. The current canonical_rel_name 'uses_for' misleadingly suggests the object is the purpose, whereas the actual purposes appear in qualifiers (e.g., challenging stereotypes, promoting gender equality). Renaming the predicate to 'uses' better captures the agent–instrument semantics while keeping it within the instrumental_use_relation class and USAGE group.",
+      "remark": null,
+      "confidence": 0.86
+    }
+  ],
+  "timestamp": "2026-01-06T12:44:01Z"
+}

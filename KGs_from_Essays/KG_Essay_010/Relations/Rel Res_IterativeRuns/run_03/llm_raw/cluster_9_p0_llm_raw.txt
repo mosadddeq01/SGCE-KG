@@ -1,0 +1,15 @@
+[
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": ["RelR_cbe57234df33"],
+      "canonical_rel_name": null,
+      "canonical_rel_desc": null,
+      "rel_cls": "research_focus_relation",
+      "rel_cls_group": "ASSOCIATION",
+      "justification": "For RelR_cbe57234df33, the subject is a research field or study (not an acting agent) and the predicate 'has_research_subject' encodes a topic/aboutness relation rather than active agency. The rel_cls 'research_focus_relation' is appropriate, but the broad group is better modeled as ASSOCIATION (topic/aboutness) instead of AGENCY, which is more suited to actor-driven actions like in RelR_cc0b3d434de5.",
+      "remark": "Adjusted rel_cls_group from AGENCY to ASSOCIATION to reflect that this is a study/field-to-topic relation, not an agent performing an action.",
+      "confidence": 0.9
+    }
+  }
+]

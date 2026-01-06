@@ -1,0 +1,159 @@
+{
+  "cluster_label": "-1_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_8d8e2b2352e1",
+      "relation_name": "marries",
+      "rel_desc": "Rhodopis marries the king in the Rhodopis Cinderella tale.",
+      "rel_hint_type": "familial",
+      "canonical_rel_name": "marries",
+      "canonical_rel_desc": "Indicates that the subject enters into a marriage with the object at some point in the narrative timeline.",
+      "rel_cls": "family_relationship_relation",
+      "rel_cls_group": "SOCIAL_RELATIONSHIP",
+      "subject_entity_name": "Rhodopis",
+      "object_entity_name": "King in the Rhodopis tale",
+      "subject_class_label": "Rhodopis Tale Characters",
+      "subject_class_group": "Cinderella Narrative Tradition",
+      "object_class_label": "Rhodopis Tale Characters",
+      "object_class_group": "Cinderella Narrative Tradition",
+      "qualifiers": {
+        "TemporalQualifier": "after he finds her lost slipper",
+        "SpatialQualifier": "ancient Greece (setting of the story)",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "after he finds her lost slipper",
+        "LogicalMarker": "after",
+        "OtherQualifier": "Outcome: resolution of the tale"
+      },
+      "confidence": 0.99,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_d36b0e1054ad",
+      "relation_name": "has_earliest_record_in",
+      "rel_desc": "The Cinderella story tradition has its earliest known recorded version in ancient Greece.",
+      "rel_hint_type": "origin",
+      "canonical_rel_name": "has_earliest_attested_in",
+      "canonical_rel_desc": "Indicates the cultural or geographic context in which a narrative or tradition has its earliest known recorded or attested form.",
+      "rel_cls": "narrative_origin_relation",
+      "rel_cls_group": "CAUSALITY",
+      "subject_entity_name": "Cinderella (fairytale)",
+      "object_entity_name": "ancient Greece",
+      "subject_class_label": "Cinderella Narratives",
+      "subject_class_group": "Cinderella Narrative Tradition",
+      "object_class_label": "Rhodopis Tale Elements",
+      "object_class_group": "Cinderella Narrative Tradition",
+      "qualifiers": {
+        "TemporalQualifier": "ancient period; earlier than other cultural variants told for centuries",
+        "SpatialQualifier": "ancient Greece",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "earliest known (may change with new evidence)",
+        "CausalHint": "can be traced back to",
+        "LogicalMarker": null,
+        "OtherQualifier": "Scope: within various forms across different cultures for centuries"
+      },
+      "confidence": 0.9,
+      "remarks": [
+        "Relation represents the tradition-level earliest record, distinct from the specific Rhodopis tale node.",
+        "Relation represents the tradition-level earliest record, distinct from the specific Rhodopis tale node."
+      ]
+    },
+    {
+      "relation_id": "RelR_b52497bb3679",
+      "relation_name": "is_stepmother_of",
+      "rel_desc": "The Evil Queen is described as the wicked stepmother of Snow White.",
+      "rel_hint_type": "familial role",
+      "canonical_rel_name": "is_stepmother_of",
+      "canonical_rel_desc": "Indicates that the subject is the stepmother of the object, a specific parental role established through marriage rather than birth.",
+      "rel_cls": "family_relationship_relation",
+      "rel_cls_group": "SOCIAL_RELATIONSHIP",
+      "subject_entity_name": "Evil Queen",
+      "object_entity_name": "Snow White",
+      "subject_class_label": "Snow White Characters",
+      "subject_class_group": "Snow White Fairy Tale",
+      "object_class_label": "Snow White Characters",
+      "object_class_group": "Snow White Fairy Tale",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "MoralAttribute: wicked"
+      },
+      "confidence": 0.97,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_cc659a1a3881",
+      "relation_name": "occurs_in",
+      "rel_desc": "The motif of tales of children outsmarting witches occurs within European folklore among other cultures.",
+      "rel_hint_type": "occurrence",
+      "canonical_rel_name": "occurs_in",
+      "canonical_rel_desc": "Indicates that the subject motif, pattern, or phenomenon is found within or occurs as part of the object cultural or narrative tradition.",
+      "rel_cls": "cultural_occurrence_relation",
+      "rel_cls_group": "SPATIALITY",
+      "subject_entity_name": "Tales of children outsmarting witches",
+      "object_entity_name": "European folklore",
+      "subject_class_label": "Children Outsmarting Witches Motif",
+      "subject_class_group": "Folklore and Mythic Narratives",
+      "object_class_label": "European Folklore Traditions",
+      "object_class_group": "Folklore and Mythic Narratives",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "among various cultural traditions, including Europe",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "appearing in various cultures",
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "Scope: not limited to Europe"
+      },
+      "confidence": 0.55,
+      "remarks": [
+        "Slightly speculative; text does not name European folklore explicitly for the motif, but implication is strong.",
+        "Slightly speculative; text does not name European folklore explicitly for the motif, but implication is strong."
+      ]
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_rel_schema\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_d36b0e1054ad\"\n      ],\n      \"canonical_rel_name\": null,\n      \"canonical_rel_desc\": null,\n      \"rel_cls\": null,\n      \"rel_cls_group\": \"TEMPORALITY\",\n      \"justification\": \"The relation describes the earliest known recorded occurrence of the Cinderella tradition in ancient Greece, which is about temporal attestation and historical first appearance rather than a causal mechanism. Therefore the broad group TEMPORALITY is more accurate than CAUSALITY.\",\n      \"remark\": \"This predicate also has a spatial/cultural aspect (ancient Greece), but its defining feature is being the earliest known attestation in time.\",\n      \"confidence\": 0.82\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_rel_schema",
+      "args": {
+        "relation_ids": [
+          "RelR_d36b0e1054ad"
+        ],
+        "canonical_rel_name": null,
+        "canonical_rel_desc": null,
+        "rel_cls": null,
+        "rel_cls_group": "TEMPORALITY",
+        "justification": "The relation describes the earliest known recorded occurrence of the Cinderella tradition in ancient Greece, which is about temporal attestation and historical first appearance rather than a causal mechanism. Therefore the broad group TEMPORALITY is more accurate than CAUSALITY.",
+        "remark": "This predicate also has a spatial/cultural aspect (ancient Greece), but its defining feature is being the earliest known attestation in time.",
+        "confidence": 0.82
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_rel_schema",
+      "relation_ids": [
+        "RelR_d36b0e1054ad"
+      ],
+      "canonical_rel_name": null,
+      "canonical_rel_desc": null,
+      "rel_cls": null,
+      "rel_cls_group": "TEMPORALITY",
+      "new_relation_name": null,
+      "original_relation_name": null,
+      "justification": "The relation describes the earliest known recorded occurrence of the Cinderella tradition in ancient Greece, which is about temporal attestation and historical first appearance rather than a causal mechanism. Therefore the broad group TEMPORALITY is more accurate than CAUSALITY.",
+      "remark": "This predicate also has a spatial/cultural aspect (ancient Greece), but its defining feature is being the earliest known attestation in time.",
+      "confidence": 0.82
+    }
+  ],
+  "timestamp": "2026-01-06T14:09:32Z"
+}

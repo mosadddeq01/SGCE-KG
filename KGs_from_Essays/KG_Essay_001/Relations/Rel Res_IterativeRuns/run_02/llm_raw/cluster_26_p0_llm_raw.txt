@@ -1,0 +1,18 @@
+[
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": [
+        "RelR_1fe83aeb066e",
+        "RelR_d22d6eacc4f9"
+      ],
+      "canonical_rel_name": "is_life_cycle_stage_of",
+      "canonical_rel_desc": "Indicates that the subject is a distinct stage within the life cycle process represented by the object.",
+      "rel_cls": "life_cycle_stage_relation",
+      "rel_cls_group": "TEMPORALITY",
+      "justification": "All four relations express the same predicate: a specific developmental stage belonging to a life cycle. Normalizing to a single canonical_rel_name ('is_life_cycle_stage_of') and description improves schema consistency, and using rel_cls_group 'TEMPORALITY' better captures that 'stage' is an ordered temporal phase of the life cycle rather than a generic hierarchy. The last two instances already follow this pattern; the first two are aligned to match.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  }
+]

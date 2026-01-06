@@ -1,0 +1,261 @@
+{
+  "cluster_label": "9_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_1f9e18a195ff",
+      "relation_name": "also_reaches",
+      "rel_desc": "Traditional media outlets also reach an audience, but more slowly than news via social networking sites.",
+      "rel_hint_type": "comparison",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "traditional media outlets",
+      "object_entity_name": "wider audience",
+      "subject_class_label": "Traditional Mass Media",
+      "subject_class_group": "News Media & Journalism",
+      "object_class_label": "Social Media Audiences",
+      "object_class_group": "Social Media and Online Social Interaction",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": "slower dissemination",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "implied",
+        "CausalHint": null,
+        "LogicalMarker": "than",
+        "OtherQualifier": "RelativeSpeed: slower than via social networking sites"
+      },
+      "confidence": 0.78,
+      "remarks": [
+        "Relation created mainly to encode comparative reach implied for traditional outlets."
+      ]
+    },
+    {
+      "relation_id": "RelR_85295e3229d9",
+      "relation_name": "prioritizes",
+      "rel_desc": "Superficial communication on social media prioritizes quantity over quality.",
+      "rel_hint_type": "preference",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "superficial communication on social media",
+      "object_entity_name": "quantity over quality",
+      "subject_class_label": "Superficial Social Media Communication",
+      "subject_class_group": "Social Media Interaction & Engagement",
+      "object_class_label": "Superficial Social Media Communication",
+      "object_class_group": "Social Media Interaction & Engagement",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "prioritize",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.96,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_9f312b398bd6",
+      "relation_name": "prioritized_over",
+      "rel_desc": "Online relationships are said to be prioritized over face-to-face interaction.",
+      "rel_hint_type": "comparative",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "online relationships",
+      "object_entity_name": "face-to-face interaction",
+      "subject_class_label": "Interaction Modalities",
+      "subject_class_group": "Social Media and Online Social Interaction",
+      "object_class_label": "Interaction Modalities",
+      "object_class_group": "Social Media and Online Social Interaction",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": "when relying heavily on social media",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "tendency",
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.95,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_1f9e18a195ff\"],\n      \"canonical_rel_name\": \"reaches_audience\",\n      \"canonical_rel_desc\": \"Indicates that a communication channel or medium reaches or can access a particular audience.\",\n      \"justification\": \"The instance links a communication medium (traditional media outlets) to the audience it can reach; qualifiers only modify speed and comparison to social networking sites, while the core predicate is that the medium reaches an audience.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_85295e3229d9\"],\n      \"canonical_rel_name\": \"prioritizes\",\n      \"canonical_rel_desc\": \"Indicates that the subject systematically gives precedence or greater importance to one aspect or dimension over another.\",\n      \"justification\": \"The relation describes superficial social media communication giving precedence to quantity over quality; this is a direct prioritization/preference action by the subject.\",\n      \"remark\": null,\n      \"confidence\": 0.93\n    }\n  },\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_9f312b398bd6\"],\n      \"canonical_rel_name\": \"is_prioritized_over\",\n      \"canonical_rel_desc\": \"Indicates that the subject is given higher priority or preference compared to the object.\",\n      \"justification\": \"The instance explicitly encodes that online relationships are favored relative to face-to-face interaction; the asymmetric comparative preference is best captured with an 'is_prioritized_over' predicate.\",\n      \"remark\": null,\n      \"confidence\": 0.94\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_1f9e18a195ff\"],\n      \"rel_cls\": \"audience_reach_relation\",\n      \"justification\": \"This relation concerns how a communication medium connects to or accesses an audience, which is a specific family of communication reach/coverage relations.\",\n      \"remark\": null,\n      \"confidence\": 0.88\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_85295e3229d9\", \"RelR_9f312b398bd6\"],\n      \"rel_cls\": \"prioritization_relation\",\n      \"justification\": \"Both instances encode that one option/aspect is given precedence over another (quantity vs. quality; online vs. face-to-face interaction), so they naturally belong to a shared prioritization/preference relation class.\",\n      \"remark\": null,\n      \"confidence\": 0.93\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_1f9e18a195ff\"],\n      \"rel_cls_group\": \"INTERACTION\",\n      \"justification\": \"The link represents interaction between a communication medium and its audience (who is reached by whom); this fits the broad category of communicative/interaction relations rather than composition or causality.\",\n      \"remark\": null,\n      \"confidence\": 0.86\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_85295e3229d9\", \"RelR_9f312b398bd6\"],\n      \"rel_cls_group\": \"AGENCY\",\n      \"justification\": \"Both relations capture choices or preferences enacted by agents or practices (communication style prioritizing quantity, users prioritizing online over face-to-face), which aligns with an agency/intentional-choice dimension.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_1f9e18a195ff"
+        ],
+        "canonical_rel_name": "reaches_audience",
+        "canonical_rel_desc": "Indicates that a communication channel or medium reaches or can access a particular audience.",
+        "justification": "The instance links a communication medium (traditional media outlets) to the audience it can reach; qualifiers only modify speed and comparison to social networking sites, while the core predicate is that the medium reaches an audience.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_85295e3229d9"
+        ],
+        "canonical_rel_name": "prioritizes",
+        "canonical_rel_desc": "Indicates that the subject systematically gives precedence or greater importance to one aspect or dimension over another.",
+        "justification": "The relation describes superficial social media communication giving precedence to quantity over quality; this is a direct prioritization/preference action by the subject.",
+        "remark": null,
+        "confidence": 0.93
+      }
+    },
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_9f312b398bd6"
+        ],
+        "canonical_rel_name": "is_prioritized_over",
+        "canonical_rel_desc": "Indicates that the subject is given higher priority or preference compared to the object.",
+        "justification": "The instance explicitly encodes that online relationships are favored relative to face-to-face interaction; the asymmetric comparative preference is best captured with an 'is_prioritized_over' predicate.",
+        "remark": null,
+        "confidence": 0.94
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_1f9e18a195ff"
+        ],
+        "rel_cls": "audience_reach_relation",
+        "justification": "This relation concerns how a communication medium connects to or accesses an audience, which is a specific family of communication reach/coverage relations.",
+        "remark": null,
+        "confidence": 0.88
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_85295e3229d9",
+          "RelR_9f312b398bd6"
+        ],
+        "rel_cls": "prioritization_relation",
+        "justification": "Both instances encode that one option/aspect is given precedence over another (quantity vs. quality; online vs. face-to-face interaction), so they naturally belong to a shared prioritization/preference relation class.",
+        "remark": null,
+        "confidence": 0.93
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_1f9e18a195ff"
+        ],
+        "rel_cls_group": "INTERACTION",
+        "justification": "The link represents interaction between a communication medium and its audience (who is reached by whom); this fits the broad category of communicative/interaction relations rather than composition or causality.",
+        "remark": null,
+        "confidence": 0.86
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_85295e3229d9",
+          "RelR_9f312b398bd6"
+        ],
+        "rel_cls_group": "AGENCY",
+        "justification": "Both relations capture choices or preferences enacted by agents or practices (communication style prioritizing quantity, users prioritizing online over face-to-face), which aligns with an agency/intentional-choice dimension.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_1f9e18a195ff"
+      ],
+      "canonical_rel_name": "reaches_audience",
+      "canonical_rel_desc": "Indicates that a communication channel or medium reaches or can access a particular audience.",
+      "justification": "The instance links a communication medium (traditional media outlets) to the audience it can reach; qualifiers only modify speed and comparison to social networking sites, while the core predicate is that the medium reaches an audience.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_85295e3229d9"
+      ],
+      "canonical_rel_name": "prioritizes",
+      "canonical_rel_desc": "Indicates that the subject systematically gives precedence or greater importance to one aspect or dimension over another.",
+      "justification": "The relation describes superficial social media communication giving precedence to quantity over quality; this is a direct prioritization/preference action by the subject.",
+      "remark": null,
+      "confidence": 0.93
+    },
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_9f312b398bd6"
+      ],
+      "canonical_rel_name": "is_prioritized_over",
+      "canonical_rel_desc": "Indicates that the subject is given higher priority or preference compared to the object.",
+      "justification": "The instance explicitly encodes that online relationships are favored relative to face-to-face interaction; the asymmetric comparative preference is best captured with an 'is_prioritized_over' predicate.",
+      "remark": null,
+      "confidence": 0.94
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_1f9e18a195ff"
+      ],
+      "rel_cls": "audience_reach_relation",
+      "justification": "This relation concerns how a communication medium connects to or accesses an audience, which is a specific family of communication reach/coverage relations.",
+      "remark": null,
+      "confidence": 0.88
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_85295e3229d9",
+        "RelR_9f312b398bd6"
+      ],
+      "rel_cls": "prioritization_relation",
+      "justification": "Both instances encode that one option/aspect is given precedence over another (quantity vs. quality; online vs. face-to-face interaction), so they naturally belong to a shared prioritization/preference relation class.",
+      "remark": null,
+      "confidence": 0.93
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_1f9e18a195ff"
+      ],
+      "rel_cls_group": "INTERACTION",
+      "justification": "The link represents interaction between a communication medium and its audience (who is reached by whom); this fits the broad category of communicative/interaction relations rather than composition or causality.",
+      "remark": null,
+      "confidence": 0.86
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_85295e3229d9",
+        "RelR_9f312b398bd6"
+      ],
+      "rel_cls_group": "AGENCY",
+      "justification": "Both relations capture choices or preferences enacted by agents or practices (communication style prioritizing quantity, users prioritizing online over face-to-face), which aligns with an agency/intentional-choice dimension.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  ],
+  "timestamp": "2026-01-06T11:04:06Z"
+}

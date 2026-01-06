@@ -1,0 +1,210 @@
+{
+  "cluster_label": 3,
+  "cluster_classes": [
+    {
+      "candidate_id": "ClsC_ca388388",
+      "class_label": "Ancient Pyramid Construction",
+      "class_description": "Entities related to the construction of the Egyptian pyramids, including the structures themselves and associated labor events.",
+      "class_type_hint": "Historical Context",
+      "class_group": "TBD",
+      "confidence": 0.8,
+      "evidence_excerpt": "workers on the construction of the pyramids reportedly staged a strike",
+      "member_ids": [
+        "En_50c8cb8b",
+        "En_dee9a0c2"
+      ],
+      "members": [
+        {
+          "id": "En_50c8cb8b",
+          "entity_name": "Egyptian pyramids",
+          "entity_description": "Monumental pyramid structures in ancient Egypt whose construction involved the striking workers.",
+          "entity_type_hint": "Structure"
+        },
+        {
+          "id": "En_dee9a0c2",
+          "entity_name": "strike by pyramid workers",
+          "entity_description": "An early recorded labor strike by pyramid construction workers in ancient Egypt.",
+          "entity_type_hint": "CollectiveAction"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_97d5a162",
+      "class_label": "Labor Demands",
+      "class_description": "Requested improvements related to workers’ employment conditions and compensation, such as better working conditions and wages.",
+      "class_type_hint": "Collective Claim",
+      "class_group": "TBD",
+      "confidence": 0.9,
+      "evidence_excerpt": "striking pyramid workers reportedly staged a strike to demand better working conditions and wages",
+      "member_ids": [
+        "En_4b4d5d48",
+        "En_b3797b2f"
+      ],
+      "members": [
+        {
+          "id": "En_4b4d5d48",
+          "entity_name": "better working conditions",
+          "entity_description": "Improved labor circumstances demanded by the striking pyramid workers.",
+          "entity_type_hint": "Demand"
+        },
+        {
+          "id": "En_b3797b2f",
+          "entity_name": "wages",
+          "entity_description": "Monetary or material compensation sought by striking workers.",
+          "entity_type_hint": "EconomicTerm"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_f3932294",
+      "class_label": "Ancient Egypt",
+      "class_description": "A specific ancient civilization and geographic region, used as a historical reference point for events such as early labor protests.",
+      "class_type_hint": "Historical Civilization",
+      "class_group": "TBD",
+      "confidence": 0.93,
+      "evidence_excerpt": "One of the earliest recorded protests in history dates back to ancient Egypt...",
+      "member_ids": [
+        "En_e300f192"
+      ],
+      "members": [
+        {
+          "id": "En_e300f192",
+          "entity_name": "ancient Egypt",
+          "entity_description": "Early civilization cited as location of one of the earliest recorded protests.",
+          "entity_type_hint": "Location"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_b3ea44db",
+      "class_label": "Historical Labor Protest Group",
+      "class_description": "Groups of workers in historical contexts who collectively protested or struck to demand better working conditions or compensation.",
+      "class_type_hint": "Social Actor Group",
+      "class_group": "TBD",
+      "confidence": 0.82,
+      "evidence_excerpt": "workers on the construction of the pyramids reportedly staged a strike to demand better working conditions and wages",
+      "member_ids": [
+        "En_0dd7e30d"
+      ],
+      "members": [
+        {
+          "id": "En_0dd7e30d",
+          "entity_name": "workers on the construction of the pyramids",
+          "entity_description": "Laborers building the pyramids who reportedly organized an early strike.",
+          "entity_type_hint": "ActorGroup"
+        }
+      ],
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_ca388388\",\n      \"new_name\": \"Pyramid Construction and Labor Strike (Ancient Egypt)\",\n      \"new_description\": \"Entities related to the construction of the Egyptian pyramids and the associated early labor strike by pyramid workers.\",\n      \"new_class_type_hint\": \"Historical Context\",\n      \"new_class_group\": \"Historical Labor Protests\",\n      \"remark\": null,\n      \"justification\": \"Refines the class label/description to emphasize the labor protest context and assigns a shared Class_Group that connects this contextual class to related labor protest classes in the cluster.\",\n      \"confidence\": 0.88\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_97d5a162\",\n      \"new_name\": null,\n      \"new_description\": null,\n      \"new_class_type_hint\": \"Labor Demand\",\n      \"new_class_group\": \"Historical Labor Protests\",\n      \"remark\": null,\n      \"justification\": \"Aligns the type hint with the class’s actual contents (specific labor demands: working conditions and wages) and assigns the same Class_Group to link it with other historical labor protest–related classes.\",\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_f3932294\",\n      \"new_name\": null,\n      \"new_description\": \"An ancient civilization and geographic region serving as the setting for early recorded labor protests, such as the pyramid workers’ strike.\",\n      \"new_class_type_hint\": \"Historical Civilization\",\n      \"new_class_group\": \"Historical Labor Protests\",\n      \"remark\": null,\n      \"justification\": \"Clarifies that the civilization is used specifically as contextual setting for labor protests and assigns it to the shared Historical Labor Protests Class_Group for schema connectivity.\",\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_b3ea44db\",\n      \"new_name\": \"Historical Labor Protest Worker Group\",\n      \"new_description\": \"Groups of workers in historical settings who collectively protested or struck to demand better working conditions or compensation, such as the pyramid construction workers’ strike in ancient Egypt.\",\n      \"new_class_type_hint\": \"Social Actor Group\",\n      \"new_class_group\": \"Historical Labor Protests\",\n      \"remark\": null,\n      \"justification\": \"Slightly refines the class name/description to clearly identify worker groups as protest actors and assigns the common Historical Labor Protests Class_Group shared with other classes in this cluster.\",\n      \"confidence\": 0.86\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_ca388388",
+        "new_name": "Pyramid Construction and Labor Strike (Ancient Egypt)",
+        "new_description": "Entities related to the construction of the Egyptian pyramids and the associated early labor strike by pyramid workers.",
+        "new_class_type_hint": "Historical Context",
+        "new_class_group": "Historical Labor Protests",
+        "remark": null,
+        "justification": "Refines the class label/description to emphasize the labor protest context and assigns a shared Class_Group that connects this contextual class to related labor protest classes in the cluster.",
+        "confidence": 0.88
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_97d5a162",
+        "new_name": null,
+        "new_description": null,
+        "new_class_type_hint": "Labor Demand",
+        "new_class_group": "Historical Labor Protests",
+        "remark": null,
+        "justification": "Aligns the type hint with the class's actual contents (specific labor demands: working conditions and wages) and assigns the same Class_Group to link it with other historical labor protest–related classes.",
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_f3932294",
+        "new_name": null,
+        "new_description": "An ancient civilization and geographic region serving as the setting for early recorded labor protests, such as the pyramid workers' strike.",
+        "new_class_type_hint": "Historical Civilization",
+        "new_class_group": "Historical Labor Protests",
+        "remark": null,
+        "justification": "Clarifies that the civilization is used specifically as contextual setting for labor protests and assigns it to the shared Historical Labor Protests Class_Group for schema connectivity.",
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_b3ea44db",
+        "new_name": "Historical Labor Protest Worker Group",
+        "new_description": "Groups of workers in historical settings who collectively protested or struck to demand better working conditions or compensation, such as the pyramid construction workers' strike in ancient Egypt.",
+        "new_class_type_hint": "Social Actor Group",
+        "new_class_group": "Historical Labor Protests",
+        "remark": null,
+        "justification": "Slightly refines the class name/description to clearly identify worker groups as protest actors and assigns the common Historical Labor Protests Class_Group shared with other classes in this cluster.",
+        "confidence": 0.86
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_ca388388",
+      "class_id_resolved": "ClsC_ca388388",
+      "new_name": "Pyramid Construction and Labor Strike (Ancient Egypt)",
+      "new_description": "Entities related to the construction of the Egyptian pyramids and the associated early labor strike by pyramid workers.",
+      "new_class_type_hint": "Historical Context",
+      "new_class_group": "Historical Labor Protests",
+      "remark": null,
+      "justification": "Refines the class label/description to emphasize the labor protest context and assigns a shared Class_Group that connects this contextual class to related labor protest classes in the cluster.",
+      "confidence": 0.88
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_97d5a162",
+      "class_id_resolved": "ClsC_97d5a162",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": "Labor Demand",
+      "new_class_group": "Historical Labor Protests",
+      "remark": null,
+      "justification": "Aligns the type hint with the class's actual contents (specific labor demands: working conditions and wages) and assigns the same Class_Group to link it with other historical labor protest–related classes.",
+      "confidence": 0.9
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_f3932294",
+      "class_id_resolved": "ClsC_f3932294",
+      "new_name": null,
+      "new_description": "An ancient civilization and geographic region serving as the setting for early recorded labor protests, such as the pyramid workers' strike.",
+      "new_class_type_hint": "Historical Civilization",
+      "new_class_group": "Historical Labor Protests",
+      "remark": null,
+      "justification": "Clarifies that the civilization is used specifically as contextual setting for labor protests and assigns it to the shared Historical Labor Protests Class_Group for schema connectivity.",
+      "confidence": 0.9
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_b3ea44db",
+      "class_id_resolved": "ClsC_b3ea44db",
+      "new_name": "Historical Labor Protest Worker Group",
+      "new_description": "Groups of workers in historical settings who collectively protested or struck to demand better working conditions or compensation, such as the pyramid construction workers' strike in ancient Egypt.",
+      "new_class_type_hint": "Social Actor Group",
+      "new_class_group": "Historical Labor Protests",
+      "remark": null,
+      "justification": "Slightly refines the class name/description to clearly identify worker groups as protest actors and assigns the common Historical Labor Protests Class_Group shared with other classes in this cluster.",
+      "confidence": 0.86
+    }
+  ],
+  "provisional_to_real": {},
+  "timestamp": "2026-01-06T13:03:18Z"
+}

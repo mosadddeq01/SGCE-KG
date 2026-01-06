@@ -1,0 +1,15 @@
+[
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": ["RelR_3caac9b9749c"],
+      "canonical_rel_name": "should_take_into_account",
+      "canonical_rel_desc": "Indicates that the subject (e.g., a branding process, organization, or decision-maker) is advised or expected to take the object factor into account when making decisions.",
+      "rel_cls": null,
+      "rel_cls_group": null,
+      "justification": "Relations RelR_52a6719b5daa and RelR_1b11f308dcca already use the predicate 'should_take_into_account' for normative branding guidelines where the subject must consider the object factor. RelR_3caac9b9749c encodes the same semantic pattern (businesses should take cultural considerations into account) but was modeled with the inverse predicate 'should_be_considered_by'. Normalizing it to 'should_take_into_account' aligns all three instances to a single, subject-as-decision-maker predicate and improves schema consistency.",
+      "remark": null,
+      "confidence": 0.92
+    }
+  }
+]

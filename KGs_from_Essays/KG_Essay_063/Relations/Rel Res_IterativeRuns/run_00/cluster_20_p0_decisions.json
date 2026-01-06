@@ -1,0 +1,141 @@
+{
+  "cluster_label": "20_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_78a3376538b1",
+      "relation_name": "motivates_demand_for",
+      "rel_desc": "The Black Lives Matter movement has galvanized people to demand racial justice.",
+      "rel_hint_type": "motivation",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "Black Lives Matter movement",
+      "object_entity_name": "racial justice",
+      "subject_class_label": "Police Brutality and Contemporary Racial Justice Movements",
+      "subject_class_group": "Civil Rights and Racial Justice Movements",
+      "object_class_label": "Racial Inequality Concepts",
+      "object_class_group": "Rights, Equality, and Social Justice",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "around the world",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "has galvanized",
+        "LogicalMarker": null,
+        "OtherQualifier": "Scale: millions of people"
+      },
+      "confidence": 0.95,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_f7585cf95b9e",
+      "relation_name": "motivates_demand_for",
+      "rel_desc": "The Black Lives Matter movement has galvanized people to demand equality.",
+      "rel_hint_type": "motivation",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "Black Lives Matter movement",
+      "object_entity_name": "equality",
+      "subject_class_label": "Police Brutality and Contemporary Racial Justice Movements",
+      "subject_class_group": "Civil Rights and Racial Justice Movements",
+      "object_class_label": "Social Justice and Equality Concepts",
+      "object_class_group": "Rights, Equality, and Social Justice",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "around the world",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "has galvanized",
+        "LogicalMarker": null,
+        "OtherQualifier": "Scale: millions of people"
+      },
+      "confidence": 0.93,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_78a3376538b1\", \"RelR_f7585cf95b9e\"],\n      \"canonical_rel_name\": \"motivates_demand_for\",\n      \"canonical_rel_desc\": \"Indicates that an actor or movement motivates or galvanizes people to demand a particular right, value, or social outcome.\",\n      \"justification\": \"Both relations describe the Black Lives Matter movement galvanizing people to demand a normative goal (racial justice or equality). The direction and semantics are identical, so a shared predicate 'motivates_demand_for' is appropriate.\",\n      \"remark\": null,\n      \"confidence\": 0.96\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_78a3376538b1\", \"RelR_f7585cf95b9e\"],\n      \"rel_cls\": \"social_mobilization_relation\",\n      \"justification\": \"These relations concern a social movement mobilizing or motivating public demands for social goals, fitting a class focused on social and political mobilization effects rather than generic causality.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_78a3376538b1\", \"RelR_f7585cf95b9e\"],\n      \"rel_cls_group\": \"CAUSALITY\",\n      \"justification\": \"The movement is framed as the cause that leads people to demand racial justice or equality (rel_hint_type='motivation', qualifier 'has galvanized'), so these are best grouped under causal relations.\",\n      \"remark\": null,\n      \"confidence\": 0.95\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_78a3376538b1",
+          "RelR_f7585cf95b9e"
+        ],
+        "canonical_rel_name": "motivates_demand_for",
+        "canonical_rel_desc": "Indicates that an actor or movement motivates or galvanizes people to demand a particular right, value, or social outcome.",
+        "justification": "Both relations describe the Black Lives Matter movement galvanizing people to demand a normative goal (racial justice or equality). The direction and semantics are identical, so a shared predicate 'motivates_demand_for' is appropriate.",
+        "remark": null,
+        "confidence": 0.96
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_78a3376538b1",
+          "RelR_f7585cf95b9e"
+        ],
+        "rel_cls": "social_mobilization_relation",
+        "justification": "These relations concern a social movement mobilizing or motivating public demands for social goals, fitting a class focused on social and political mobilization effects rather than generic causality.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_78a3376538b1",
+          "RelR_f7585cf95b9e"
+        ],
+        "rel_cls_group": "CAUSALITY",
+        "justification": "The movement is framed as the cause that leads people to demand racial justice or equality (rel_hint_type='motivation', qualifier 'has galvanized'), so these are best grouped under causal relations.",
+        "remark": null,
+        "confidence": 0.95
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_78a3376538b1",
+        "RelR_f7585cf95b9e"
+      ],
+      "canonical_rel_name": "motivates_demand_for",
+      "canonical_rel_desc": "Indicates that an actor or movement motivates or galvanizes people to demand a particular right, value, or social outcome.",
+      "justification": "Both relations describe the Black Lives Matter movement galvanizing people to demand a normative goal (racial justice or equality). The direction and semantics are identical, so a shared predicate 'motivates_demand_for' is appropriate.",
+      "remark": null,
+      "confidence": 0.96
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_78a3376538b1",
+        "RelR_f7585cf95b9e"
+      ],
+      "rel_cls": "social_mobilization_relation",
+      "justification": "These relations concern a social movement mobilizing or motivating public demands for social goals, fitting a class focused on social and political mobilization effects rather than generic causality.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_78a3376538b1",
+        "RelR_f7585cf95b9e"
+      ],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "The movement is framed as the cause that leads people to demand racial justice or equality (rel_hint_type='motivation', qualifier 'has galvanized'), so these are best grouped under causal relations.",
+      "remark": null,
+      "confidence": 0.95
+    }
+  ],
+  "timestamp": "2026-01-06T13:18:24Z"
+}

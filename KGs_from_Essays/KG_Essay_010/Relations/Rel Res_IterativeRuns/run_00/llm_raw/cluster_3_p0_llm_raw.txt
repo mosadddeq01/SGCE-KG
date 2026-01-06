@@ -1,0 +1,95 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_23f13c2ba078", "RelR_f6212cca2ec8"],
+      "canonical_rel_name": "prevents_escape_of",
+      "canonical_rel_desc": "Indicates that the subject exerts an influence or constraint that prevents the object (or entities associated with it) from escaping a region or potential well.",
+      "justification": "Both relations describe the black hole's gravitational pull acting as a constraint that prevents escape (of light or matter) once within/beyond a certain region; they share the same core predicate semantics of preventing escape.",
+      "remark": null,
+      "confidence": 0.92
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": ["RelR_23f13c2ba078", "RelR_f6212cca2ec8"],
+      "rel_cls": "escape_constraint_relation",
+      "justification": "These relations express that a physical influence (gravity) constrains the ability of entities to escape a region, fitting a class of relations about escape-preventing constraints.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": ["RelR_23f13c2ba078", "RelR_f6212cca2ec8"],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "The gravitational pull causally leads to the impossibility of escape; this is best modeled as a causal constraint between cause (gravity) and effect (no escape).",
+      "remark": null,
+      "confidence": 0.88
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_2089d031109a"],
+      "canonical_rel_name": "has_equal_value_as",
+      "canonical_rel_desc": "Indicates that two physical quantities have equal numerical value or magnitude under the stated conditions.",
+      "justification": "The relation states that the escape velocity at the Schwarzschild radius is equal to the speed of light; this is a numerical equivalence between two quantities, not merely a loose similarity.",
+      "remark": null,
+      "confidence": 0.97
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": ["RelR_2089d031109a"],
+      "rel_cls": "quantitative_equivalence_relation",
+      "justification": "This relation expresses strict equality between two physical quantities, which fits a class of quantitative equivalence relations.",
+      "remark": null,
+      "confidence": 0.96
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": ["RelR_2089d031109a"],
+      "rel_cls_group": "IDENTITY",
+      "justification": "Numerical equality between two quantities is a form of identity in value, so this belongs in a broad identity/equivalence group rather than causality or composition.",
+      "remark": null,
+      "confidence": 0.94
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_cf6d029f79e8"],
+      "canonical_rel_name": "defines_threshold_for",
+      "canonical_rel_desc": "Indicates that the subject specifies or marks the threshold or boundary at which a particular physical effect or condition (described by the object) becomes operative or qualitatively changes.",
+      "justification": "The Schwarzschild radius is described as the point where the gravitational pull becomes strong enough to prevent escape, i.e., it defines the threshold at which this effect holds; the predicate captures the idea of a boundary/threshold condition for a phenomenon.",
+      "remark": null,
+      "confidence": 0.86
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": ["RelR_cf6d029f79e8"],
+      "rel_cls": "threshold_condition_relation",
+      "justification": "This relation links a critical radius to the onset of a specific dynamical condition (escape impossible), which is characteristic of threshold or critical-condition relations.",
+      "remark": null,
+      "confidence": 0.84
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": ["RelR_cf6d029f79e8"],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "The Schwarzschild radius causally delimits where the physical behavior changes (from possible to impossible escape), making this a causal/conditional boundary relation.",
+      "remark": null,
+      "confidence": 0.83
+    }
+  }
+]

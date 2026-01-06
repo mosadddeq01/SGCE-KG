@@ -1,0 +1,161 @@
+{
+  "cluster_label": "7_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_0af19f39f8de",
+      "relation_name": "occurs_in",
+      "rel_desc": "The Book of the Dead is a funerary text that is found in ancient Egyptian tombs.",
+      "rel_hint_type": "spatial containment",
+      "canonical_rel_name": "located_in",
+      "canonical_rel_desc": "Indicates that an entity is (typically or characteristically) situated within, or contained by, a spatial region, structure, or geographic/cultural area.",
+      "rel_cls": "spatial_location_relation",
+      "rel_cls_group": "SPATIALITY",
+      "subject_entity_name": "Book of the Dead",
+      "object_entity_name": "ancient Egyptian tombs",
+      "subject_class_label": "Egyptian Funerary Texts",
+      "subject_class_group": "Ancient Egyptian Funerary Practices and Burials",
+      "object_class_label": "Ancient Egyptian Tomb Structures",
+      "object_class_group": "Ancient Egypt: Society, Rulers, and Funerary Culture",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "in Egyptian tombs",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "CulturalContext: ancient Egyptian funerary context"
+      },
+      "confidence": 0.97,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_5ce2ebba3f3b",
+      "relation_name": "located_in",
+      "rel_desc": "The deceased individual is located within the tomb.",
+      "rel_hint_type": "spatial containment",
+      "canonical_rel_name": "located_in",
+      "canonical_rel_desc": "Indicates that an entity is (typically or characteristically) situated within, or contained by, a spatial region, structure, or geographic/cultural area.",
+      "rel_cls": "spatial_location_relation",
+      "rel_cls_group": "SPATIALITY",
+      "subject_entity_name": "the deceased",
+      "object_entity_name": "ancient Egyptian tombs",
+      "subject_class_label": "Ancient Egyptian Deceased Individual (Burial Subject)",
+      "subject_class_group": "Ancient Egyptian Funerary Religion and Culture",
+      "object_class_label": "Ancient Egyptian Tomb Structures",
+      "object_class_group": "Ancient Egypt: Society, Rulers, and Funerary Culture",
+      "qualifiers": {
+        "TemporalQualifier": "at and after burial",
+        "SpatialQualifier": "within the tomb",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "implied",
+        "CausalHint": null,
+        "LogicalMarker": "with",
+        "OtherQualifier": null
+      },
+      "confidence": 0.92,
+      "remarks": [
+        "Relation is implied rather than explicitly stated.",
+        "Relation is implied rather than explicitly stated.",
+        "Relation is implied rather than explicitly stated."
+      ]
+    },
+    {
+      "relation_id": "RelR_cfbadb12046b",
+      "relation_name": "located_in",
+      "rel_desc": "Ancient Egyptian tombs are located within the geographical and cultural domain of Ancient Egypt.",
+      "rel_hint_type": "spatial containment",
+      "canonical_rel_name": "located_in",
+      "canonical_rel_desc": "Indicates that an entity is (typically or characteristically) situated within, or contained by, a spatial region, structure, or geographic/cultural area.",
+      "rel_cls": "spatial_location_relation",
+      "rel_cls_group": "SPATIALITY",
+      "subject_entity_name": "ancient Egyptian tombs",
+      "object_entity_name": "Ancient Egypt",
+      "subject_class_label": "Ancient Egyptian Tomb Structures",
+      "subject_class_group": "Ancient Egypt: Society, Rulers, and Funerary Culture",
+      "object_class_label": "Ancient Egyptian Civilization",
+      "object_class_group": "Ancient Egypt: Society, Rulers, and Funerary Culture",
+      "qualifiers": {
+        "TemporalQualifier": "during the era of Ancient Egypt",
+        "SpatialQualifier": "in Ancient Egypt",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "implicit",
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.93,
+      "remarks": [
+        "Standard geographic inference from adjectival 'Egyptian'.",
+        "Standard geographic inference from adjectival 'Egyptian'.",
+        "Standard geographic inference from adjectival 'Egyptian'."
+      ]
+    },
+    {
+      "relation_id": "RelR_bf5e7100e560",
+      "relation_name": "occurs_in",
+      "rel_desc": "The eternal existence of the deceased takes place in the realm of the gods.",
+      "rel_hint_type": "location",
+      "canonical_rel_name": "occurs_in",
+      "canonical_rel_desc": "Indicates that a process, state, or event takes place within a specified realm, domain, or context (physical or conceptual).",
+      "rel_cls": "spatial_location_relation",
+      "rel_cls_group": "SPATIALITY",
+      "subject_entity_name": "eternal existence in the realm of the gods",
+      "object_entity_name": "realm of the gods",
+      "subject_class_label": "Ancient Egyptian Afterlife Beliefs and Concepts",
+      "subject_class_group": "Ancient Egyptian Funerary Religion and Culture",
+      "object_class_label": "Ancient Egyptian Afterlife Beliefs and Concepts",
+      "object_class_group": "Ancient Egyptian Funerary Religion and Culture",
+      "qualifiers": {
+        "TemporalQualifier": "eternal",
+        "SpatialQualifier": "realm of the gods",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.99,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_rel_schema\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_bf5e7100e560\"\n      ],\n      \"canonical_rel_name\": \"occurs_in\",\n      \"canonical_rel_desc\": \"Indicates that a process, state, or event takes place within a specified realm, domain, or context (physical, conceptual, or spiritual).\",\n      \"rel_cls\": \"state_or_event_context_relation\",\n      \"rel_cls_group\": \"SPATIALITY\",\n      \"justification\": \"This relation links an ongoing state ('eternal existence') to a spiritual realm ('realm of the gods'). The canonical name 'occurs_in' is appropriate, but the previous class 'spatial_location_relation' was tuned for physical containment (e.g., objects in tombs). Updating the description and rel_cls to emphasize processes/states occurring in physical, conceptual, or spiritual contexts more accurately captures the semantics while keeping the broad group as SPATIALITY.\",\n      \"remark\": null,\n      \"confidence\": 0.86\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_rel_schema",
+      "args": {
+        "relation_ids": [
+          "RelR_bf5e7100e560"
+        ],
+        "canonical_rel_name": "occurs_in",
+        "canonical_rel_desc": "Indicates that a process, state, or event takes place within a specified realm, domain, or context (physical, conceptual, or spiritual).",
+        "rel_cls": "state_or_event_context_relation",
+        "rel_cls_group": "SPATIALITY",
+        "justification": "This relation links an ongoing state ('eternal existence') to a spiritual realm ('realm of the gods'). The canonical name 'occurs_in' is appropriate, but the previous class 'spatial_location_relation' was tuned for physical containment (e.g., objects in tombs). Updating the description and rel_cls to emphasize processes/states occurring in physical, conceptual, or spiritual contexts more accurately captures the semantics while keeping the broad group as SPATIALITY.",
+        "remark": null,
+        "confidence": 0.86
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_rel_schema",
+      "relation_ids": [
+        "RelR_bf5e7100e560"
+      ],
+      "canonical_rel_name": "occurs_in",
+      "canonical_rel_desc": "Indicates that a process, state, or event takes place within a specified realm, domain, or context (physical, conceptual, or spiritual).",
+      "rel_cls": "state_or_event_context_relation",
+      "rel_cls_group": "SPATIALITY",
+      "new_relation_name": null,
+      "original_relation_name": null,
+      "justification": "This relation links an ongoing state ('eternal existence') to a spiritual realm ('realm of the gods'). The canonical name 'occurs_in' is appropriate, but the previous class 'spatial_location_relation' was tuned for physical containment (e.g., objects in tombs). Updating the description and rel_cls to emphasize processes/states occurring in physical, conceptual, or spiritual contexts more accurately captures the semantics while keeping the broad group as SPATIALITY.",
+      "remark": null,
+      "confidence": 0.86
+    }
+  ],
+  "timestamp": "2026-01-06T10:33:04Z"
+}

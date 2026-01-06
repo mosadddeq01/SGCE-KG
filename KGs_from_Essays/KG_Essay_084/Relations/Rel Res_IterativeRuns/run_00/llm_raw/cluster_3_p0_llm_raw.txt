@@ -1,0 +1,51 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_e643eb322fc1",
+        "RelR_e1ffa0e2ff89",
+        "RelR_9909e236a8b6",
+        "RelR_8d95f00cf685",
+        "RelR_0eec9be300c4"
+      ],
+      "canonical_rel_name": "supports",
+      "canonical_rel_desc": "Indicates that the subject provides evidentiary, analytical, or operational help that facilitates or strengthens the object process or actor in the criminal justice/forensic context.",
+      "justification": "All relations express a helping/enabling predicate where the subject contributes support to a criminal justice process or actor (investigation, prosecution, investigators). Normalizing to the single predicate 'supports' captures this shared semantics and keeps the KG consistent, while instance-level qualifiers retain specific modes (evidence-based, expert assistance, etc.).",
+      "remark": null,
+      "confidence": 0.93
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_e643eb322fc1",
+        "RelR_e1ffa0e2ff89",
+        "RelR_9909e236a8b6",
+        "RelR_8d95f00cf685",
+        "RelR_0eec9be300c4"
+      ],
+      "rel_cls": "forensic_support_relation",
+      "justification": "Each relation involves forensic domains (forensic science, physical evidence, forensic scientists) providing support to criminal justice activities (investigation, prosecution, investigators). Grouping them under 'forensic_support_relation' reflects this family of predicates where forensic resources or experts support justice system processes or actors.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_e643eb322fc1",
+        "RelR_e1ffa0e2ff89",
+        "RelR_9909e236a8b6",
+        "RelR_8d95f00cf685",
+        "RelR_0eec9be300c4"
+      ],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "The relations describe that the subject helps, enables, or strengthens the outcome or functioning of the object (e.g., evidence helping investigations, scientists assisting investigators). This is a contributory causal/enablement relation, best placed under the broad CAUSALITY group rather than pure association.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  }
+]

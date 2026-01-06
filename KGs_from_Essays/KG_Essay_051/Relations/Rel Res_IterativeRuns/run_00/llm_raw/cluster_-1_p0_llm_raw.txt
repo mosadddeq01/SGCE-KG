@@ -1,0 +1,64 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_5f6138fe0bc5"],
+      "canonical_rel_name": "is_about",
+      "canonical_rel_desc": "Indicates that the subject work or discourse primarily concerns or discusses the object topic or domain.",
+      "justification": "The relation describes an essay whose content will discuss how body language affects relationships, which is a standard subject–topic aboutness relation.",
+      "remark": null,
+      "confidence": 0.96
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_a42e1cb0b6e9", "RelR_20d93fb1cf84"],
+      "canonical_rel_name": "facilitates",
+      "canonical_rel_desc": "Indicates that the subject factor or behavior makes it easier to achieve, experience, or improve the object outcome or state, without guaranteeing it.",
+      "justification": "Both relations describe a behavior or understanding (body language, leaning in) making a social outcome (navigating social situations, establishing rapport) easier, matching a generic facilitation predicate.",
+      "remark": "Specific nuances such as ‘navigate social situations’ or ‘establish rapport’ are captured in the descriptions and qualifiers rather than specializing the predicate name.",
+      "confidence": 0.94
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": ["RelR_5f6138fe0bc5"],
+      "rel_cls": "subject_matter_relation",
+      "justification": "This is a classic work-to-topic link where an essay’s subject matter is specified, fitting a subject_matter_relation class.",
+      "remark": null,
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": ["RelR_a42e1cb0b6e9", "RelR_20d93fb1cf84"],
+      "rel_cls": "social_effect_relation",
+      "justification": "Both edges capture how certain communicative behaviors or understandings affect social outcomes, so they belong to a shared class focused on social and interpersonal effects.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": ["RelR_5f6138fe0bc5"],
+      "rel_cls_group": "ABOUTNESS",
+      "justification": "The link encodes a content/aboutness relation between a document (essay) and its thematic domain (relationships).",
+      "remark": null,
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": ["RelR_a42e1cb0b6e9", "RelR_20d93fb1cf84"],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "In both cases the subject contributes causally to the ease or likelihood of a social outcome (navigation of situations, establishment of rapport), best modeled as a facilitative causal relation.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  }
+]

@@ -1,0 +1,167 @@
+{
+  "cluster_label": "5_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_e88cf661d71e",
+      "relation_name": "type_of",
+      "rel_desc": "Waving hello is given as an example of a gesture.",
+      "rel_hint_type": "categorization",
+      "canonical_rel_name": "is_instance_of",
+      "canonical_rel_desc": "Links a specific example or instance to the more general class or category it belongs to.",
+      "rel_cls": "categorization_relation",
+      "rel_cls_group": "IDENTITY",
+      "subject_entity_name": "waving hello",
+      "object_entity_name": "gestures",
+      "subject_class_label": "Nonverbal Gestures",
+      "subject_class_group": "Nonverbal Communication & Body Language",
+      "object_class_label": "Nonverbal Gestures",
+      "object_class_group": "Nonverbal Communication & Body Language",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "example of",
+        "LogicalMarker": "from",
+        "OtherQualifier": null
+      },
+      "confidence": 0.97,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_a629081e3ec0",
+      "relation_name": "type_of",
+      "rel_desc": "A thumbs up is presented as an example of a gesture.",
+      "rel_hint_type": "categorization",
+      "canonical_rel_name": "is_instance_of",
+      "canonical_rel_desc": "Links a specific example or instance to the more general class or category it belongs to.",
+      "rel_cls": "categorization_relation",
+      "rel_cls_group": "IDENTITY",
+      "subject_entity_name": "thumbs up",
+      "object_entity_name": "gestures",
+      "subject_class_label": "Nonverbal Gestures",
+      "subject_class_group": "Nonverbal Communication & Body Language",
+      "object_class_label": "Nonverbal Gestures",
+      "object_class_group": "Nonverbal Communication & Body Language",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "example of",
+        "LogicalMarker": "to",
+        "OtherQualifier": null
+      },
+      "confidence": 0.97,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_61a34a560426",
+      "relation_name": "type_of",
+      "rel_desc": "A furrowed brow is presented as a kind of facial expression.",
+      "rel_hint_type": "categorization",
+      "canonical_rel_name": "is_instance_of",
+      "canonical_rel_desc": "Links a specific example or instance to the more general class or category it belongs to.",
+      "rel_cls": "categorization_relation",
+      "rel_cls_group": "IDENTITY",
+      "subject_entity_name": "furrowed brow",
+      "object_entity_name": "facial expressions",
+      "subject_class_label": "Facial Expressions",
+      "subject_class_group": "Nonverbal Communication & Inferred States",
+      "object_class_label": "Facial Expressions",
+      "object_class_group": "Nonverbal Communication & Inferred States",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "on the forehead",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.9,
+      "remarks": [
+        "Partly supported by entity description; treated as facial expression instance.",
+        "Partly supported by entity description; treated as facial expression instance.",
+        "Partly supported by entity description; treated as facial expression instance."
+      ]
+    },
+    {
+      "relation_id": "RelR_1bee97beffff",
+      "relation_name": "includes_example",
+      "rel_desc": "Eye contact is given as an example of body language in the discussion of its role in nonverbal communication.",
+      "rel_hint_type": "component-of",
+      "canonical_rel_name": "has_example_instance",
+      "canonical_rel_desc": "Links a general category or behavior type to a specific instance that exemplifies that category.",
+      "rel_cls": "categorization_relation",
+      "rel_cls_group": "IDENTITY",
+      "subject_entity_name": "body language",
+      "object_entity_name": "eye contact",
+      "subject_class_label": "Body Language as Nonverbal Communication",
+      "subject_class_group": "Nonverbal Communication & Body Language",
+      "object_class_label": "Eye Contact Behaviors",
+      "object_class_group": "Nonverbal Communication & Inferred States",
+      "qualifiers": {
+        "TemporalQualifier": "during a conversation",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": "during a conversation",
+        "UncertaintyQualifier": "can",
+        "CausalHint": null,
+        "LogicalMarker": "for example",
+        "OtherQualifier": null
+      },
+      "confidence": 0.85,
+      "remarks": [
+        "Relation direction chosen as body language including eye contact as an example behavior.",
+        "Relation direction chosen as body language including eye contact as an example behavior.",
+        "Relation direction chosen as body language including eye contact as an example behavior."
+      ]
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_rel_schema\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_e88cf661d71e\",\n        \"RelR_a629081e3ec0\",\n        \"RelR_61a34a560426\",\n        \"RelR_1bee97beffff\"\n      ],\n      \"canonical_rel_name\": null,\n      \"canonical_rel_desc\": null,\n      \"rel_cls\": \"class_membership_relation\",\n      \"rel_cls_group\": null,\n      \"justification\": \"All four relations express membership of a specific behavior or gesture in a more general category (either as instance_of or its inverse has_example_instance). Using a more precise class label 'class_membership_relation' is clearer and less redundant than the generic 'categorization_relation' under rel_cls_group 'IDENTITY', while preserving the existing canonical_rel_name values.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_rel_schema",
+      "args": {
+        "relation_ids": [
+          "RelR_e88cf661d71e",
+          "RelR_a629081e3ec0",
+          "RelR_61a34a560426",
+          "RelR_1bee97beffff"
+        ],
+        "canonical_rel_name": null,
+        "canonical_rel_desc": null,
+        "rel_cls": "class_membership_relation",
+        "rel_cls_group": null,
+        "justification": "All four relations express membership of a specific behavior or gesture in a more general category (either as instance_of or its inverse has_example_instance). Using a more precise class label 'class_membership_relation' is clearer and less redundant than the generic 'categorization_relation' under rel_cls_group 'IDENTITY', while preserving the existing canonical_rel_name values.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_rel_schema",
+      "relation_ids": [
+        "RelR_e88cf661d71e",
+        "RelR_a629081e3ec0",
+        "RelR_61a34a560426",
+        "RelR_1bee97beffff"
+      ],
+      "canonical_rel_name": null,
+      "canonical_rel_desc": null,
+      "rel_cls": "class_membership_relation",
+      "rel_cls_group": null,
+      "new_relation_name": null,
+      "original_relation_name": null,
+      "justification": "All four relations express membership of a specific behavior or gesture in a more general category (either as instance_of or its inverse has_example_instance). Using a more precise class label 'class_membership_relation' is clearer and less redundant than the generic 'categorization_relation' under rel_cls_group 'IDENTITY', while preserving the existing canonical_rel_name values.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  ],
+  "timestamp": "2026-01-06T12:16:51Z"
+}

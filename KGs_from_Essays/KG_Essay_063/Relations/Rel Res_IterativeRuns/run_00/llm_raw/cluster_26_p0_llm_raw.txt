@@ -1,0 +1,42 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_fa9a6059b936",
+        "RelR_a06448d1fe2a"
+      ],
+      "canonical_rel_name": "aims_at",
+      "canonical_rel_desc": "Indicates that a collective action or protest is directed toward challenging or achieving a particular condition, outcome, or principle.",
+      "justification": "Both relations describe the purpose/target of public protest demonstrations (challenging injustice, demanding accountability). Despite different surface verbs ('challenges', 'demands'), the underlying predicate is that protests are intentionally directed at these conditions or outcomes, so a unified goal/target predicate 'aims_at' is appropriate.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_fa9a6059b936",
+        "RelR_a06448d1fe2a"
+      ],
+      "rel_cls": "collective_action_purpose_relation",
+      "justification": "In both cases, the relations connect a form of collective political action (public protest demonstrations) to the purpose or objective it serves (addressing injustice, securing accountability). This fits a shared class describing the purposive aim of collective actions.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_fa9a6059b936",
+        "RelR_a06448d1fe2a"
+      ],
+      "rel_cls_group": "AGENCY",
+      "justification": "These relations encode intentional, goal-directed behavior: agents using protests to pursue specific outcomes. This is best captured under a broad AGENCY/intentionality dimension rather than pure causality or association.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  }
+]

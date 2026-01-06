@@ -1,0 +1,131 @@
+{
+  "cluster_label": "17_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_a25f48e3d562",
+      "relation_name": "has_life_cycle",
+      "rel_desc": "Butterflies are described as having a life cycle that includes multiple stages.",
+      "rel_hint_type": "association",
+      "canonical_rel_name": "has_life_cycle",
+      "canonical_rel_desc": "Links an organism or group of organisms to the overall life cycle structure that characterizes them.",
+      "rel_cls": "organism_life_cycle_relation",
+      "rel_cls_group": "TEMPORALITY",
+      "subject_entity_name": "butterflies",
+      "object_entity_name": "butterfly life cycle",
+      "subject_class_label": "Butterflies",
+      "subject_class_group": "Butterfly Ecology and Interactions",
+      "object_class_label": "Butterfly Life Cycle and Stages",
+      "object_class_group": "Butterfly Life Cycle and Appreciation",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "LifeCycleType: complete metamorphosis implied by stages"
+      },
+      "confidence": 0.88,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_519e7aa97b76",
+      "relation_name": "has_life_stage",
+      "rel_desc": "Butterflies have an adult butterfly stage in their life cycle.",
+      "rel_hint_type": "life_cycle",
+      "canonical_rel_name": "has_life_stage",
+      "canonical_rel_desc": "Links an organism or group of organisms to a specific developmental or life stage within its life cycle.",
+      "rel_cls": "organism_life_cycle_relation",
+      "rel_cls_group": "TEMPORALITY",
+      "subject_entity_name": "butterflies",
+      "object_entity_name": "adult butterfly stage",
+      "subject_class_label": "Butterflies",
+      "subject_class_group": "Butterfly Ecology and Interactions",
+      "object_class_label": "Butterfly Life Cycle and Stages",
+      "object_class_group": "Butterfly Life Cycle and Appreciation",
+      "qualifiers": {
+        "TemporalQualifier": "adult stage",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": "throughout",
+        "OtherQualifier": null
+      },
+      "confidence": 0.9,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_3321a8fa4e2e",
+      "relation_name": "is_life_stage_of",
+      "rel_desc": "Adult butterflies represent the adult life stage of butterflies.",
+      "rel_hint_type": "taxonomic",
+      "canonical_rel_name": "is_life_stage_of_taxon",
+      "canonical_rel_desc": "Links organisms in a specific life stage to the broader taxon or species whose members they represent at that life stage (e.g., adult butterflies are the adult life stage of butterflies).",
+      "rel_cls": "life_stage_relation",
+      "rel_cls_group": "TEMPORALITY",
+      "subject_entity_name": "adult butterflies",
+      "object_entity_name": "butterflies",
+      "subject_class_label": "Butterflies",
+      "subject_class_group": "Butterfly Ecology and Interactions",
+      "object_class_label": "Butterflies",
+      "object_class_group": "Butterfly Ecology and Interactions",
+      "qualifiers": {
+        "TemporalQualifier": "adult stage",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "inferred",
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.86,
+      "remarks": [
+        "More of a conceptual mapping between the class 'adult butterflies' and the broader 'butterflies'.",
+        "More of a conceptual mapping between the class 'adult butterflies' and the broader 'butterflies'.",
+        "More of a conceptual mapping between the class 'adult butterflies' and the broader 'butterflies'.",
+        "More of a conceptual mapping between the class 'adult butterflies' and the broader 'butterflies'."
+      ]
+    },
+    {
+      "relation_id": "RelR_d62e35ad7822",
+      "relation_name": "instance_of_stage",
+      "rel_desc": "Adult butterflies represent organisms in the adult butterfly life stage.",
+      "rel_hint_type": "classification",
+      "canonical_rel_name": "is_in_life_stage",
+      "canonical_rel_desc": "Indicates that an organism or group of organisms is in a particular life stage (e.g., adult butterflies are in the adult butterfly stage).",
+      "rel_cls": "life_stage_relation",
+      "rel_cls_group": "TEMPORALITY",
+      "subject_entity_name": "adult butterflies",
+      "object_entity_name": "adult butterfly stage",
+      "subject_class_label": "Butterflies",
+      "subject_class_group": "Butterfly Ecology and Interactions",
+      "object_class_label": "Butterfly Life Cycle and Stages",
+      "object_class_group": "Butterfly Life Cycle and Appreciation",
+      "qualifiers": {
+        "TemporalQualifier": "fourth and final life stage",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "implicit, not explicitly labeled as a stage in the text",
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "LifespanContext: lifespan ranges from a few days to a few weeks depending on species"
+      },
+      "confidence": 0.7,
+      "remarks": [
+        "Relation added to connect the organism-level term with its life-stage abstraction.",
+        "Relation added to connect the organism-level term with its life-stage abstraction.",
+        "Relation added to connect the organism-level term with its life-stage abstraction.",
+        "Relation added to connect the organism-level term with its life-stage abstraction."
+      ]
+    }
+  ],
+  "llm_raw": "[]",
+  "parsed_steps": [],
+  "executed_decisions": [],
+  "timestamp": "2026-01-06T07:40:53Z"
+}

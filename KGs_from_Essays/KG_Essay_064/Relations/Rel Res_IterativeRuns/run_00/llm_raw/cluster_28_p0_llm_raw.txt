@@ -1,0 +1,44 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_a3d0f450a65a"],
+      "canonical_rel_name": "is_obscured_by",
+      "canonical_rel_desc": "Indicates that the subject concept or phenomenon is hidden, obscured, or made unclear by the object factor.",
+      "justification": "The relation links the origins of famous fairytales to mystery, expressing that the origins are hidden or made unclear by mystery. A predicate-style canonical name 'is_obscured_by' captures this asymmetrical, descriptive relation cleanly.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_e7fc1a712630"],
+      "canonical_rel_name": "is_characterized_by",
+      "canonical_rel_desc": "Indicates that the subject is defined, distinguished, or described by the presence of the object property or feature.",
+      "justification": "The relation expresses that timeless stories are defined or distinguished by magical elements. 'Is_characterized_by' is a standard predicate for narrative or conceptual features and fits this descriptive usage.",
+      "remark": null,
+      "confidence": 0.96
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": ["RelR_a3d0f450a65a", "RelR_e7fc1a712630"],
+      "rel_cls": "narrative_attribute_relation",
+      "justification": "Both relations connect narrative entities (origins of fairytales, timeless stories) to descriptive qualities or features (mystery, magical elements). They belong to the same family where an abstract narrative element bears or is affected by an attribute.",
+      "remark": "This class is intended for relations where stories, texts, or narrative concepts are linked to descriptive or defining qualities.",
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": ["RelR_a3d0f450a65a", "RelR_e7fc1a712630"],
+      "rel_cls_group": "ATTRIBUTE",
+      "justification": "In both cases, the object expresses a quality or property of the subject (being obscured by mystery; being characterized by magical elements), fitting a broad attribute/description grouping rather than causality or composition.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  }
+]

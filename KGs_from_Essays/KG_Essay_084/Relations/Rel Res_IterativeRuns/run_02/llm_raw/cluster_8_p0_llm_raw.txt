@@ -1,0 +1,17 @@
+[
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": [
+        "RelR_8ecdd769b7c4"
+      ],
+      "canonical_rel_name": "is_used_to_analyze",
+      "canonical_rel_desc": "Indicates that a method, technique, or technology is used to analyze a target material, sample, or evidence.",
+      "rel_cls": "analytical_technique_application_relation",
+      "rel_cls_group": "USAGE",
+      "justification": "This relation has the same semantics as the others in the chunk: a forensic analytical technique being used on a sample/evidence for analysis. Normalizing its canonical_rel_name and description to 'is_used_to_analyze' aligns it with the existing predicate used for microscopy, spectroscopy, chromatography, DNA profiling, and instrumentation, improving schema consistency while keeping the same relation class and group.",
+      "remark": null,
+      "confidence": 0.95
+    }
+  }
+]

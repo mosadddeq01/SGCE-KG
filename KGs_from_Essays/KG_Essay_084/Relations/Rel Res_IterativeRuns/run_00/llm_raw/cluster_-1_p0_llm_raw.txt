@@ -1,0 +1,95 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_510893311494"],
+      "canonical_rel_name": "includes_aspect",
+      "canonical_rel_desc": "Indicates that the subject domain or activity includes the object as one of its important aspects or components.",
+      "justification": "The relation links 'forensic science' to 'presentation of findings' with a part-whole/aspect semantics; a canonical predicate like 'includes_aspect' captures that the presentation of findings is an important aspect of the broader domain of forensic science.",
+      "remark": null,
+      "confidence": 0.91
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_8dd61f85be6e"],
+      "canonical_rel_name": "produces",
+      "canonical_rel_desc": "Indicates that the subject (typically an agent) creates or generates the object (a product, result, or artifact).",
+      "justification": "The relation describes forensic scientists creating 'analysis and conclusions' before testifying; this is a clear agent-to-produced-artifact relation best modeled with the canonical predicate 'produces'.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_5ec5d6fe03c2"],
+      "canonical_rel_name": "is_about",
+      "canonical_rel_desc": "Indicates that the subject content or statement concerns, focuses on, or is thematically related to the object.",
+      "justification": "The description states that 'the truth described is specifically about the challenging cases'; this is a standard aboutness/subject-matter relation, so 'is_about' is an appropriate canonical predicate.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": ["RelR_510893311494"],
+      "rel_cls": "domain_activity_component_relation",
+      "justification": "The link expresses that an aspect/activity (presentation of findings) is a component of a broader domain/practice (forensic science); this fits a class capturing how domains are structured into constituent activities or aspects.",
+      "remark": null,
+      "confidence": 0.86
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": ["RelR_8dd61f85be6e"],
+      "rel_cls": "knowledge_artifact_creation_relation",
+      "justification": "The relation connects human agents (forensic scientists) to the analyses and conclusions they generate, which are knowledge artifacts; a class focusing on creation/production of knowledge artifacts by agents is appropriate.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": ["RelR_5ec5d6fe03c2"],
+      "rel_cls": "aboutness_relation",
+      "justification": "The semantics is that a statement or truth is about a set of cases; this is best captured by a general aboutness/topic relation class rather than composition or causality.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": ["RelR_510893311494"],
+      "rel_cls_group": "COMPOSITION",
+      "justification": "The relation describes an aspect–whole structure within a domain (forensic science composed of particular aspects like presentation of findings), which is a conceptual part-whole composition.",
+      "remark": null,
+      "confidence": 0.86
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": ["RelR_8dd61f85be6e"],
+      "rel_cls_group": "AGENCY",
+      "justification": "The key semantics is an agent (forensic scientists) producing an output (analyses and conclusions); this is best grouped under agentive relations rather than pure causality or composition.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": ["RelR_5ec5d6fe03c2"],
+      "rel_cls_group": "ASSOCIATION",
+      "justification": "The aboutness link associates a piece of content (truth behind challenging cases) with its subject matter (challenging cases); this is a thematic association rather than composition, causality, or identity.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  }
+]

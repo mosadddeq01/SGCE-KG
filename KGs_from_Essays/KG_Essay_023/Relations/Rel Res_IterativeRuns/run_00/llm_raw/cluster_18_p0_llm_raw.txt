@@ -1,0 +1,33 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_2f949af163ee", "RelR_63eab4c069c7"],
+      "canonical_rel_name": "contributes_to",
+      "canonical_rel_desc": "Indicates that the subject factor or process causally contributes to or increases the likelihood of the object outcome or state, without implying strict determinism.",
+      "justification": "Both relations describe a causal contribution where a psychosocial or technological factor (social media use; constant need for validation) leads to or exacerbates a negative social/mental outcome. The semantics match a generic directional causal contribution predicate, so they should share the same canonical_rel_name.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": ["RelR_2f949af163ee", "RelR_63eab4c069c7"],
+      "rel_cls": "psychosocial_effect_relation",
+      "justification": "In both cases, the subject is a psychosocial or media-related behavior/process and the object is a psychosocial or mental health outcome. Grouping them under a class for psychosocial effects captures that these are causal impact relations in a social/psychological context, more specific than a generic causal_relation.",
+      "remark": null,
+      "confidence": 0.86
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": ["RelR_2f949af163ee", "RelR_63eab4c069c7"],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "The descriptions and qualifiers explicitly indicate causation or contribution (e.g., 'lead to', 'have negative effects on'), so these relations fall under a broad causal semantics group.",
+      "remark": null,
+      "confidence": 0.95
+    }
+  }
+]

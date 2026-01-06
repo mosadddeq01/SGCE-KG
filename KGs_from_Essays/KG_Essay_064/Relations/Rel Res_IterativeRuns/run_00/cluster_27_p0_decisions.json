@@ -1,0 +1,141 @@
+{
+  "cluster_label": "27_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_053593557786",
+      "relation_name": "known_and_loved_by",
+      "rel_desc": "Individual fairytale stories are widely known and loved by global audiences.",
+      "rel_hint_type": "audience_relation",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "stories",
+      "object_entity_name": "global audiences around the world",
+      "subject_class_label": "Fairytale Narratives",
+      "subject_class_group": "Fairytales: Genre, Narratives, and Motifs",
+      "object_class_label": "Story Audiences",
+      "object_class_group": "Fairy Tales and Their Audiences",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "around the world",
+        "OperationalConstraint": null,
+        "ConditionExpression": "many of these stories",
+        "UncertaintyQualifier": null,
+        "CausalHint": "have become",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.92,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_059620552e73",
+      "relation_name": "beloved_by",
+      "rel_desc": "The set of tales remains beloved by global audiences.",
+      "rel_hint_type": "audience",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "these tales",
+      "object_entity_name": "global audiences around the world",
+      "subject_class_label": "Fairy Tale Categories and Collections",
+      "subject_class_group": "Fairy Tales and Their Audiences",
+      "object_class_label": "Story Audiences",
+      "object_class_group": "Fairy Tales and Their Audiences",
+      "qualifiers": {
+        "TemporalQualifier": "endured the test of time; remain",
+        "SpatialQualifier": "around the world",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": "remain",
+        "OtherQualifier": "AudienceType: readers and listeners of fairy tales"
+      },
+      "confidence": 0.99,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_053593557786\",\n        \"RelR_059620552e73\"\n      ],\n      \"canonical_rel_name\": \"is_beloved_by\",\n      \"canonical_rel_desc\": \"Indicates that a narrative work (e.g., story, tale, collection) is widely loved, cherished, or positively received by a particular audience.\",\n      \"justification\": \"Both relations describe positive emotional reception of fairytale stories or collections by global audiences, i.e., they are loved/beloved by those audiences. The subject is the narrative work and the object is the audience group, so a single predicate 'is_beloved_by' consistently captures their semantics.\",\n      \"remark\": null,\n      \"confidence\": 0.95\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_053593557786\",\n        \"RelR_059620552e73\"\n      ],\n      \"rel_cls\": \"audience_appreciation_relation\",\n      \"justification\": \"Both relations capture how audiences feel about or value a narrative work (stories/tales being beloved by audiences). This is best modeled as a class of relations about audience appreciation or positive reception of works.\",\n      \"remark\": null,\n      \"confidence\": 0.94\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_053593557786\",\n        \"RelR_059620552e73\"\n      ],\n      \"rel_cls_group\": \"ASSOCIATION\",\n      \"justification\": \"The relations describe an associative/attitudinal link between works and their audiences (who loves/appreciates what), not composition, causality, or spatial/temporal aspects. This fits best under a broad ASSOCIATION-type group.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_053593557786",
+          "RelR_059620552e73"
+        ],
+        "canonical_rel_name": "is_beloved_by",
+        "canonical_rel_desc": "Indicates that a narrative work (e.g., story, tale, collection) is widely loved, cherished, or positively received by a particular audience.",
+        "justification": "Both relations describe positive emotional reception of fairytale stories or collections by global audiences, i.e., they are loved/beloved by those audiences. The subject is the narrative work and the object is the audience group, so a single predicate 'is_beloved_by' consistently captures their semantics.",
+        "remark": null,
+        "confidence": 0.95
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_053593557786",
+          "RelR_059620552e73"
+        ],
+        "rel_cls": "audience_appreciation_relation",
+        "justification": "Both relations capture how audiences feel about or value a narrative work (stories/tales being beloved by audiences). This is best modeled as a class of relations about audience appreciation or positive reception of works.",
+        "remark": null,
+        "confidence": 0.94
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_053593557786",
+          "RelR_059620552e73"
+        ],
+        "rel_cls_group": "ASSOCIATION",
+        "justification": "The relations describe an associative/attitudinal link between works and their audiences (who loves/appreciates what), not composition, causality, or spatial/temporal aspects. This fits best under a broad ASSOCIATION-type group.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_053593557786",
+        "RelR_059620552e73"
+      ],
+      "canonical_rel_name": "is_beloved_by",
+      "canonical_rel_desc": "Indicates that a narrative work (e.g., story, tale, collection) is widely loved, cherished, or positively received by a particular audience.",
+      "justification": "Both relations describe positive emotional reception of fairytale stories or collections by global audiences, i.e., they are loved/beloved by those audiences. The subject is the narrative work and the object is the audience group, so a single predicate 'is_beloved_by' consistently captures their semantics.",
+      "remark": null,
+      "confidence": 0.95
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_053593557786",
+        "RelR_059620552e73"
+      ],
+      "rel_cls": "audience_appreciation_relation",
+      "justification": "Both relations capture how audiences feel about or value a narrative work (stories/tales being beloved by audiences). This is best modeled as a class of relations about audience appreciation or positive reception of works.",
+      "remark": null,
+      "confidence": 0.94
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_053593557786",
+        "RelR_059620552e73"
+      ],
+      "rel_cls_group": "ASSOCIATION",
+      "justification": "The relations describe an associative/attitudinal link between works and their audiences (who loves/appreciates what), not composition, causality, or spatial/temporal aspects. This fits best under a broad ASSOCIATION-type group.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  ],
+  "timestamp": "2026-01-06T14:05:12Z"
+}

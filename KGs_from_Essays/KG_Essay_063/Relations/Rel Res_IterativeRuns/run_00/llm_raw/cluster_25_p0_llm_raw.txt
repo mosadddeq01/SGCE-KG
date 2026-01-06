@@ -1,0 +1,48 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_624ff749f807",
+        "RelR_3376520f4710",
+        "RelR_2fa550918a0e",
+        "RelR_4bd8a381277c"
+      ],
+      "canonical_rel_name": "opposes",
+      "canonical_rel_desc": "The subject is in active opposition to the object, challenging or seeking to end the authority, structure, rule, or discriminatory practice represented by the object.",
+      "justification": "All relations describe an active stance against an authority, system, or practice (challenging authority via protests, independence opposing colonial rule, the civil rights movement opposing segregation and discrimination). These are semantically equivalent forms of political or social opposition, so a single canonical predicate 'opposes' is appropriate.",
+      "remark": null,
+      "confidence": 0.96
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_624ff749f807",
+        "RelR_3376520f4710",
+        "RelR_2fa550918a0e",
+        "RelR_4bd8a381277c"
+      ],
+      "rel_cls": "political_opposition_relation",
+      "justification": "Each relation captures a form of political or socio-political opposition (people vs authority, independence vs colonial rule, movements vs segregation/discrimination). Grouping them under a shared class for political opposition relations reflects this common semantics while allowing for other kinds of conflict relations elsewhere.",
+      "remark": null,
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_624ff749f807",
+        "RelR_3376520f4710",
+        "RelR_2fa550918a0e",
+        "RelR_4bd8a381277c"
+      ],
+      "rel_cls_group": "CONFLICT",
+      "justification": "All relations encode contention or opposition between actors/ideals and existing systems of power or discrimination, which fits a broad conflict-oriented semantic group better than composition, identity, or other categories.",
+      "remark": null,
+      "confidence": 0.95
+    }
+  }
+]

@@ -1,0 +1,139 @@
+{
+  "cluster_label": "34_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_a42e1cb0b6e9",
+      "relation_name": "helps_with",
+      "rel_desc": "Understanding body language helps individuals navigate social situations more easily and effectively.",
+      "rel_hint_type": "pragmatic effect",
+      "canonical_rel_name": "facilitates",
+      "canonical_rel_desc": "Indicates that the subject behavior, signal, or factor makes it easier to achieve, enhances the likelihood of, or improves the quality of the social or interpersonal outcome described by the object, without guaranteeing it.",
+      "rel_cls": "social_outcome_facilitation_relation",
+      "rel_cls_group": "CAUSALITY",
+      "subject_entity_name": "body language",
+      "object_entity_name": "social situations",
+      "subject_class_label": "Body Language as Nonverbal Communication",
+      "subject_class_group": "Nonverbal Communication & Body Language",
+      "object_class_label": "Social Environments",
+      "object_class_group": "Social Environments and Interactions",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "in social situations",
+        "OperationalConstraint": null,
+        "ConditionExpression": "understanding these subtleties of body language",
+        "UncertaintyQualifier": "can",
+        "CausalHint": "help",
+        "LogicalMarker": null,
+        "OtherQualifier": "Outcome: greater ease and effectiveness"
+      },
+      "confidence": 0.95,
+      "remarks": [
+        "Assumes the understanding is of body language; subject kept as body language for simplicity.",
+        "Assumes the understanding is of body language; subject kept as body language for simplicity.",
+        "Assumes the understanding is of body language; subject kept as body language for simplicity.",
+        "Assumes the understanding is of body language; subject kept as body language for simplicity."
+      ]
+    },
+    {
+      "relation_id": "RelR_afafeb29e918",
+      "relation_name": "facilitates",
+      "rel_desc": "Effective use and reading of body language helps people connect with others.",
+      "rel_hint_type": "enabling",
+      "canonical_rel_name": "facilitates",
+      "canonical_rel_desc": "Indicates that the subject behavior, signal, or factor makes it easier to achieve, enhances the likelihood of, or improves the quality of the social or interpersonal outcome described by the object, without guaranteeing it.",
+      "rel_cls": "social_outcome_facilitation_relation",
+      "rel_cls_group": "CAUSALITY",
+      "subject_entity_name": "body language",
+      "object_entity_name": "connecting with others",
+      "subject_class_label": "Body Language as Nonverbal Communication",
+      "subject_class_group": "Nonverbal Communication & Body Language",
+      "object_class_label": "Interpersonal Improvement Processes",
+      "object_class_group": "Interpersonal Relationships & Social Interaction",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": "By becoming more attuned to the signals",
+        "UncertaintyQualifier": "can improve",
+        "CausalHint": "By becoming more attuned",
+        "LogicalMarker": "By",
+        "OtherQualifier": null
+      },
+      "confidence": 0.9,
+      "remarks": [
+        "Subject chosen as body language rather than individuals to emphasize the communicative channel.",
+        "Subject chosen as body language rather than individuals to emphasize the communicative channel.",
+        "Subject chosen as body language rather than individuals to emphasize the communicative channel.",
+        "Subject chosen as body language rather than individuals to emphasize the communicative channel."
+      ]
+    },
+    {
+      "relation_id": "RelR_e8147f36fcae",
+      "relation_name": "facilitates",
+      "rel_desc": "Use and interpretation of body language supports resolving conflicts.",
+      "rel_hint_type": "enabling",
+      "canonical_rel_name": "facilitates",
+      "canonical_rel_desc": "Indicates that the subject behavior or communication pattern makes it easier to achieve or enhances the likelihood/quality of the interpersonal state or social outcome described by the object.",
+      "rel_cls": "social_outcome_facilitation_relation",
+      "rel_cls_group": "CAUSALITY",
+      "subject_entity_name": "body language",
+      "object_entity_name": "conflict resolution",
+      "subject_class_label": "Body Language as Nonverbal Communication",
+      "subject_class_group": "Nonverbal Communication & Body Language",
+      "object_class_label": "Interpersonal Improvement Processes",
+      "object_class_group": "Interpersonal Relationships & Social Interaction",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": "By becoming more attuned to the signals",
+        "UncertaintyQualifier": "can improve",
+        "CausalHint": null,
+        "LogicalMarker": "By",
+        "OtherQualifier": null
+      },
+      "confidence": 0.88,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_rel_schema\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_a42e1cb0b6e9\",\n        \"RelR_afafeb29e918\",\n        \"RelR_e8147f36fcae\"\n      ],\n      \"canonical_rel_name\": \"facilitates\",\n      \"canonical_rel_desc\": \"Indicates that the subject behavior, signal, or factor makes it easier to achieve, enhances the likelihood of, or improves the quality of the social or interpersonal outcome described by the object, without guaranteeing it.\",\n      \"rel_cls\": \"social_outcome_facilitation_relation\",\n      \"rel_cls_group\": \"CAUSALITY\",\n      \"justification\": \"All three relations express the same enabling/assisting effect of body language on a social or interpersonal outcome (navigating social situations, connecting with others, resolving conflicts). They already share the canonical_rel_name 'facilitates' and the same rel_cls and rel_cls_group, but their canonical_rel_desc texts differ slightly. Standardizing on one consistent, reusable description improves schema coherence and makes this predicate definition uniform across instances.\",\n      \"remark\": null,\n      \"confidence\": 0.95\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_rel_schema",
+      "args": {
+        "relation_ids": [
+          "RelR_a42e1cb0b6e9",
+          "RelR_afafeb29e918",
+          "RelR_e8147f36fcae"
+        ],
+        "canonical_rel_name": "facilitates",
+        "canonical_rel_desc": "Indicates that the subject behavior, signal, or factor makes it easier to achieve, enhances the likelihood of, or improves the quality of the social or interpersonal outcome described by the object, without guaranteeing it.",
+        "rel_cls": "social_outcome_facilitation_relation",
+        "rel_cls_group": "CAUSALITY",
+        "justification": "All three relations express the same enabling/assisting effect of body language on a social or interpersonal outcome (navigating social situations, connecting with others, resolving conflicts). They already share the canonical_rel_name 'facilitates' and the same rel_cls and rel_cls_group, but their canonical_rel_desc texts differ slightly. Standardizing on one consistent, reusable description improves schema coherence and makes this predicate definition uniform across instances.",
+        "remark": null,
+        "confidence": 0.95
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_rel_schema",
+      "relation_ids": [
+        "RelR_a42e1cb0b6e9",
+        "RelR_afafeb29e918",
+        "RelR_e8147f36fcae"
+      ],
+      "canonical_rel_name": "facilitates",
+      "canonical_rel_desc": "Indicates that the subject behavior, signal, or factor makes it easier to achieve, enhances the likelihood of, or improves the quality of the social or interpersonal outcome described by the object, without guaranteeing it.",
+      "rel_cls": "social_outcome_facilitation_relation",
+      "rel_cls_group": "CAUSALITY",
+      "new_relation_name": null,
+      "original_relation_name": null,
+      "justification": "All three relations express the same enabling/assisting effect of body language on a social or interpersonal outcome (navigating social situations, connecting with others, resolving conflicts). They already share the canonical_rel_name 'facilitates' and the same rel_cls and rel_cls_group, but their canonical_rel_desc texts differ slightly. Standardizing on one consistent, reusable description improves schema coherence and makes this predicate definition uniform across instances.",
+      "remark": null,
+      "confidence": 0.95
+    }
+  ],
+  "timestamp": "2026-01-06T12:20:30Z"
+}

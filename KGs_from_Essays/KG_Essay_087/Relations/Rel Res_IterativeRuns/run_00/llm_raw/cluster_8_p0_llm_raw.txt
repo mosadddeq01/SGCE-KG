@@ -1,0 +1,95 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_18a3b3f222dd", "RelR_60de072cffb2"],
+      "canonical_rel_name": "conditions_use_of",
+      "canonical_rel_desc": "Contextual or cultural factors that constrain or condition how something is used or applied in branding or design.",
+      "justification": "Both relations describe cultural/contextual factors shaping or constraining how color or color psychology is applied in branding, so a shared predicate capturing conditional use is appropriate.",
+      "remark": null,
+      "confidence": 0.87
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": ["RelR_18a3b3f222dd", "RelR_60de072cffb2"],
+      "rel_cls": "contextual_constraint_relation",
+      "justification": "These relations model how contextual or cultural factors act as constraints/conditions on branding-related color decisions, fitting a contextual-constraint family.",
+      "remark": null,
+      "confidence": 0.86
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": ["RelR_18a3b3f222dd", "RelR_60de072cffb2"],
+      "rel_cls_group": "CONSTRAINT",
+      "justification": "The primary semantic is that certain factors restrict or condition how other practices can be carried out, which aligns best with a constraint-oriented group.",
+      "remark": null,
+      "confidence": 0.86
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_4d22de49cf45", "RelR_4727fe7d94de", "RelR_4493bd2b1627"],
+      "canonical_rel_name": "depends_on",
+      "canonical_rel_desc": "Indicates that the characteristics or interpretation of the subject are determined or strongly influenced by the object.",
+      "justification": "All three relations explicitly state that contextual meaning/effects depend on a specific factor (industry, target audience, brand positioning), so a unified dependency predicate is appropriate.",
+      "remark": null,
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": ["RelR_4d22de49cf45", "RelR_4727fe7d94de", "RelR_4493bd2b1627"],
+      "rel_cls": "context_dependency_relation",
+      "justification": "Each relation captures how contextual meaning or effects hinge on some contextual dimension (industry, audience, positioning), fitting a shared context-dependency relation class.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": ["RelR_4d22de49cf45", "RelR_4727fe7d94de", "RelR_4493bd2b1627"],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "The semantics are that changes in the object cause changes in how the subject is interpreted, which is best modeled as a causal/dependency group.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_ffe27dfae03e"],
+      "canonical_rel_name": "is_critical_for",
+      "canonical_rel_desc": "Indicates that the subject plays a crucial or essential role in enabling or shaping the object.",
+      "justification": "The description states that color psychology plays a crucial role in branding and marketing strategies, which is naturally captured by an essentiality/critical-for predicate.",
+      "remark": null,
+      "confidence": 0.94
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": ["RelR_ffe27dfae03e"],
+      "rel_cls": "strategic_dependency_relation",
+      "justification": "The relation expresses that effective branding/marketing strategies depend critically on color psychology, fitting a class of strategic-level dependency relations.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": ["RelR_ffe27dfae03e"],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "Being critical for something implies that the subject is a necessary causal contributor to the object’s success or functioning, aligning with a causal group.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  }
+]

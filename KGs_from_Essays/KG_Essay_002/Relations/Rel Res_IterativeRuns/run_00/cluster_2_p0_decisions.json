@@ -1,0 +1,203 @@
+{
+  "cluster_label": "2_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_3dee0e53fc5e",
+      "relation_name": "exhibits",
+      "rel_desc": "Urban legends are described as continuing to endure over time.",
+      "rel_hint_type": "property",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "urban legends",
+      "object_entity_name": "endurance of urban legends",
+      "subject_class_label": "Contemporary Folklore",
+      "subject_class_group": "Urban Legends and Modern Folklore",
+      "object_class_label": "Urban Legend Dynamics",
+      "object_class_group": "Urban Legend Contexts (Social, Spatial, Temporal)",
+      "qualifiers": {
+        "TemporalQualifier": "continue to endure",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "why",
+        "LogicalMarker": "why",
+        "OtherQualifier": null
+      },
+      "confidence": 0.84,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_07bfb0d1c290",
+      "relation_name": "describes",
+      "rel_desc": "The news report provides information about the escaped criminal.",
+      "rel_hint_type": "information",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "news report",
+      "object_entity_name": "escaped criminal",
+      "subject_class_label": "Urban Legend Narrative Scenario Elements",
+      "subject_class_group": "Urban Legends",
+      "object_class_label": "Hook Man Antagonist",
+      "object_class_group": "UrbanLegend: Hook Man",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "about",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.99,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_3dee0e53fc5e\"],\n      \"canonical_rel_name\": \"has_property\",\n      \"canonical_rel_desc\": \"Indicates that a concept or entity possesses a specific property or characteristic represented as a separate node.\",\n      \"justification\": \"The relation links 'urban legends' to 'endurance of urban legends', which is a property/quality node describing a characteristic of the subject; a generic property-predication like 'has_property' is appropriate and reusable.\",\n      \"remark\": null,\n      \"confidence\": 0.86\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_3dee0e53fc5e\"],\n      \"rel_cls\": \"attribute_relation\",\n      \"justification\": \"This edge expresses an attribution of a quality (endurance) to an entity (urban legends), fitting an attribute/quality family of relations.\",\n      \"remark\": null,\n      \"confidence\": 0.86\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_3dee0e53fc5e\"],\n      \"rel_cls_group\": \"ATTRIBUTE\",\n      \"justification\": \"The broad semantics are that of describing an inherent quality or property rather than composition, causality, or hierarchy.\",\n      \"remark\": null,\n      \"confidence\": 0.86\n    }\n  },\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_07bfb0d1c290\"],\n      \"canonical_rel_name\": \"is_about\",\n      \"canonical_rel_desc\": \"Indicates that an information-bearing entity (e.g., document, report, narrative) is about or describes a particular entity or topic.\",\n      \"justification\": \"The relation connects a 'news report' to an 'escaped criminal', with the description stating the report provides information about the criminal; this is a standard aboutness/content relation best captured as 'is_about'.\",\n      \"remark\": null,\n      \"confidence\": 0.97\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_07bfb0d1c290\"],\n      \"rel_cls\": \"aboutness_relation\",\n      \"justification\": \"This edge encodes the topical/content relation between an information source (news report) and its subject (escaped criminal), which fits an aboutness/content-description relation class.\",\n      \"remark\": null,\n      \"confidence\": 0.97\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_07bfb0d1c290\"],\n      \"rel_cls_group\": \"INFORMATION\",\n      \"justification\": \"The primary semantics are informational: the news report conveys information about the escaped criminal, so the relation belongs under a broad information/content group.\",\n      \"remark\": null,\n      \"confidence\": 0.97\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_3dee0e53fc5e"
+        ],
+        "canonical_rel_name": "has_property",
+        "canonical_rel_desc": "Indicates that a concept or entity possesses a specific property or characteristic represented as a separate node.",
+        "justification": "The relation links 'urban legends' to 'endurance of urban legends', which is a property/quality node describing a characteristic of the subject; a generic property-predication like 'has_property' is appropriate and reusable.",
+        "remark": null,
+        "confidence": 0.86
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_3dee0e53fc5e"
+        ],
+        "rel_cls": "attribute_relation",
+        "justification": "This edge expresses an attribution of a quality (endurance) to an entity (urban legends), fitting an attribute/quality family of relations.",
+        "remark": null,
+        "confidence": 0.86
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_3dee0e53fc5e"
+        ],
+        "rel_cls_group": "ATTRIBUTE",
+        "justification": "The broad semantics are that of describing an inherent quality or property rather than composition, causality, or hierarchy.",
+        "remark": null,
+        "confidence": 0.86
+      }
+    },
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_07bfb0d1c290"
+        ],
+        "canonical_rel_name": "is_about",
+        "canonical_rel_desc": "Indicates that an information-bearing entity (e.g., document, report, narrative) is about or describes a particular entity or topic.",
+        "justification": "The relation connects a 'news report' to an 'escaped criminal', with the description stating the report provides information about the criminal; this is a standard aboutness/content relation best captured as 'is_about'.",
+        "remark": null,
+        "confidence": 0.97
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_07bfb0d1c290"
+        ],
+        "rel_cls": "aboutness_relation",
+        "justification": "This edge encodes the topical/content relation between an information source (news report) and its subject (escaped criminal), which fits an aboutness/content-description relation class.",
+        "remark": null,
+        "confidence": 0.97
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_07bfb0d1c290"
+        ],
+        "rel_cls_group": "INFORMATION",
+        "justification": "The primary semantics are informational: the news report conveys information about the escaped criminal, so the relation belongs under a broad information/content group.",
+        "remark": null,
+        "confidence": 0.97
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_3dee0e53fc5e"
+      ],
+      "canonical_rel_name": "has_property",
+      "canonical_rel_desc": "Indicates that a concept or entity possesses a specific property or characteristic represented as a separate node.",
+      "justification": "The relation links 'urban legends' to 'endurance of urban legends', which is a property/quality node describing a characteristic of the subject; a generic property-predication like 'has_property' is appropriate and reusable.",
+      "remark": null,
+      "confidence": 0.86
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_3dee0e53fc5e"
+      ],
+      "rel_cls": "attribute_relation",
+      "justification": "This edge expresses an attribution of a quality (endurance) to an entity (urban legends), fitting an attribute/quality family of relations.",
+      "remark": null,
+      "confidence": 0.86
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_3dee0e53fc5e"
+      ],
+      "rel_cls_group": "ATTRIBUTE",
+      "justification": "The broad semantics are that of describing an inherent quality or property rather than composition, causality, or hierarchy.",
+      "remark": null,
+      "confidence": 0.86
+    },
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_07bfb0d1c290"
+      ],
+      "canonical_rel_name": "is_about",
+      "canonical_rel_desc": "Indicates that an information-bearing entity (e.g., document, report, narrative) is about or describes a particular entity or topic.",
+      "justification": "The relation connects a 'news report' to an 'escaped criminal', with the description stating the report provides information about the criminal; this is a standard aboutness/content relation best captured as 'is_about'.",
+      "remark": null,
+      "confidence": 0.97
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_07bfb0d1c290"
+      ],
+      "rel_cls": "aboutness_relation",
+      "justification": "This edge encodes the topical/content relation between an information source (news report) and its subject (escaped criminal), which fits an aboutness/content-description relation class.",
+      "remark": null,
+      "confidence": 0.97
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_07bfb0d1c290"
+      ],
+      "rel_cls_group": "INFORMATION",
+      "justification": "The primary semantics are informational: the news report conveys information about the escaped criminal, so the relation belongs under a broad information/content group.",
+      "remark": null,
+      "confidence": 0.97
+    }
+  ],
+  "timestamp": "2026-01-06T08:27:20Z"
+}

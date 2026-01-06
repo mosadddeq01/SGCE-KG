@@ -1,0 +1,265 @@
+{
+  "cluster_label": 5,
+  "cluster_classes": [
+    {
+      "candidate_id": "ClsC_0402a4af",
+      "class_label": "Forensic Physical Evidence",
+      "class_description": "Tangible items collected and examined in forensic investigations, such as fingerprints, firearms, and tool marks, used to identify suspects or reconstruct events.",
+      "class_type_hint": "Evidence Category",
+      "class_group": "TBD",
+      "confidence": 0.95,
+      "evidence_excerpt": "This evidence can range from fingerprints and DNA samples to firearms and tool marks.",
+      "member_ids": [
+        "En_e8030071",
+        "En_225a4641",
+        "En_67a4f128",
+        "Can_1818d2ff"
+      ],
+      "members": [
+        {
+          "id": "En_e8030071",
+          "entity_name": "fingerprints",
+          "entity_description": "Unique ridge patterns from fingers used as physical evidence in forensic investigations.",
+          "entity_type_hint": "EvidenceType"
+        },
+        {
+          "id": "En_225a4641",
+          "entity_name": "firearms",
+          "entity_description": "Guns and related weapons examined as forensic evidence for criminal investigations.",
+          "entity_type_hint": "EvidenceType"
+        },
+        {
+          "id": "En_67a4f128",
+          "entity_name": "tool marks",
+          "entity_description": "Impressions or striations left by tools on surfaces, analyzed in forensic investigations.",
+          "entity_type_hint": "EvidenceType"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_31bea111",
+      "class_label": "Trace Evidence",
+      "class_description": "Microscopic or small physical materials, including the general category of trace evidence and specific examples such as fibers and hair, used to link people or objects to crime scenes.",
+      "class_type_hint": "Forensic Evidence Category",
+      "class_group": "TBD",
+      "confidence": 0.93,
+      "evidence_excerpt": "trace evidence such as fibers or hair ... small or microscopic materials ... link people or objects to crime scenes",
+      "member_ids": [
+        "En_b6d7e01d",
+        "En_68423e43",
+        "En_4917bd86"
+      ],
+      "members": [
+        {
+          "id": "En_b6d7e01d",
+          "entity_name": "trace evidence",
+          "entity_description": "Small or microscopic materials like fibers or hair that can link people or objects to crime scenes.",
+          "entity_type_hint": "EvidenceType"
+        },
+        {
+          "id": "En_68423e43",
+          "entity_name": "fibers",
+          "entity_description": "Small strands from materials like textiles that can serve as trace evidence in investigations.",
+          "entity_type_hint": "EvidenceItem"
+        },
+        {
+          "id": "En_4917bd86",
+          "entity_name": "hair",
+          "entity_description": "Human or animal hair strands that can function as trace evidence in forensic analysis.",
+          "entity_type_hint": "EvidenceItem"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_0ff3c834",
+      "class_label": "Forensic Evidence",
+      "class_description": "Items or materials, physical or digital, collected in forensic investigations for preservation, examination, and potential use in court.",
+      "class_type_hint": "Forensic Concept",
+      "class_group": "TBD",
+      "confidence": 0.96,
+      "evidence_excerpt": "Physical or digital items and materials collected and handled in forensic investigations for documentation, preservation, and examination.",
+      "member_ids": [
+        "Can_1818d2ff",
+        "Can_0825e2f0"
+      ],
+      "members": [
+        {
+          "id": "Can_1818d2ff",
+          "entity_name": "physical evidence",
+          "entity_description": "Tangible materials or objects collected at a scene, such as biological traces, weapons, or trace particles, that are collected and analyzed by forensic science for investigations and presentation in court.",
+          "entity_type_hint": "Evidence"
+        },
+        {
+          "id": "Can_0825e2f0",
+          "entity_name": "evidence",
+          "entity_description": "Physical or digital items and materials collected and handled in forensic investigations for documentation, preservation, and examination.",
+          "entity_type_hint": "Evidence"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_19ce2396",
+      "class_label": "Forensic Samples",
+      "class_description": "Collected biological or material specimens that serve as evidence for forensic testing, including generic samples and DNA-specific samples.",
+      "class_type_hint": "Evidence",
+      "class_group": "TBD",
+      "confidence": 0.9,
+      "evidence_excerpt": "sample ... analyzed for drugs or toxins; evidence can range from fingerprints and DNA samples",
+      "member_ids": [
+        "En_322fdd51",
+        "En_282ae4c4"
+      ],
+      "members": [
+        {
+          "id": "En_322fdd51",
+          "entity_name": "sample",
+          "entity_description": "A collected portion of material, such as biological or chemical matter, analyzed for drugs or toxins.",
+          "entity_type_hint": "Specimen"
+        },
+        {
+          "id": "En_282ae4c4",
+          "entity_name": "DNA samples",
+          "entity_description": "Biological material containing genetic information collected for forensic identification.",
+          "entity_type_hint": "EvidenceType"
+        }
+      ],
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_0402a4af\",\n      \"new_name\": null,\n      \"new_description\": null,\n      \"new_class_type_hint\": null,\n      \"new_class_group\": \"Forensic Evidence\",\n      \"remark\": null,\n      \"justification\": \"Assigning a shared Class_Group 'Forensic Evidence' to connect this physical evidence subtype with related forensic evidence classes in the same domain.\",\n      \"confidence\": 0.96\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_31bea111\",\n      \"new_name\": null,\n      \"new_description\": null,\n      \"new_class_type_hint\": null,\n      \"new_class_group\": \"Forensic Evidence\",\n      \"remark\": null,\n      \"justification\": \"Trace evidence (fibers, hair, etc.) is a clear subtype of forensic evidence and should share the common Class_Group 'Forensic Evidence' with other related classes.\",\n      \"confidence\": 0.96\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_0ff3c834\",\n      \"new_name\": \"General Forensic Evidence\",\n      \"new_description\": \"Umbrella class for forensic evidence, covering physical or digital items and materials collected and handled in forensic investigations for documentation, preservation, examination, and potential use in court.\",\n      \"new_class_type_hint\": \"Forensic Evidence Category\",\n      \"new_class_group\": \"Forensic Evidence\",\n      \"remark\": null,\n      \"justification\": \"Clarifying this as the umbrella category for all forensic evidence (physical and digital) and aligning it in the shared Class_Group with its subtypes.\",\n      \"confidence\": 0.95\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_19ce2396\",\n      \"new_name\": null,\n      \"new_description\": \"Collected biological or material specimens (e.g., general samples and DNA-specific samples) that serve as forensic evidence for laboratory testing and analysis.\",\n      \"new_class_type_hint\": \"Forensic Evidence Category\",\n      \"new_class_group\": \"Forensic Evidence\",\n      \"remark\": null,\n      \"justification\": \"Positioning forensic samples as a specific category under the broader forensic evidence domain and updating description/type_hint to emphasize its role as a category of evidence.\",\n      \"confidence\": 0.93\n    }\n  },\n  {\n    \"function\": \"reassign_entities\",\n    \"args\": {\n      \"entity_ids\": [\n        \"Can_1818d2ff\"\n      ],\n      \"from_class_id\": \"ClsC_0ff3c834\",\n      \"to_class_id\": \"ClsC_0402a4af\",\n      \"justification\": \"The entity 'physical evidence' (tangible materials or objects) fits better under the 'Forensic Physical Evidence' class, which explicitly covers tangible forensic items such as fingerprints, firearms, and tool marks, while leaving 'General Forensic Evidence' as the umbrella class.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_0402a4af",
+        "new_name": null,
+        "new_description": null,
+        "new_class_type_hint": null,
+        "new_class_group": "Forensic Evidence",
+        "remark": null,
+        "justification": "Assigning a shared Class_Group 'Forensic Evidence' to connect this physical evidence subtype with related forensic evidence classes in the same domain.",
+        "confidence": 0.96
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_31bea111",
+        "new_name": null,
+        "new_description": null,
+        "new_class_type_hint": null,
+        "new_class_group": "Forensic Evidence",
+        "remark": null,
+        "justification": "Trace evidence (fibers, hair, etc.) is a clear subtype of forensic evidence and should share the common Class_Group 'Forensic Evidence' with other related classes.",
+        "confidence": 0.96
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_0ff3c834",
+        "new_name": "General Forensic Evidence",
+        "new_description": "Umbrella class for forensic evidence, covering physical or digital items and materials collected and handled in forensic investigations for documentation, preservation, examination, and potential use in court.",
+        "new_class_type_hint": "Forensic Evidence Category",
+        "new_class_group": "Forensic Evidence",
+        "remark": null,
+        "justification": "Clarifying this as the umbrella category for all forensic evidence (physical and digital) and aligning it in the shared Class_Group with its subtypes.",
+        "confidence": 0.95
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_19ce2396",
+        "new_name": null,
+        "new_description": "Collected biological or material specimens (e.g., general samples and DNA-specific samples) that serve as forensic evidence for laboratory testing and analysis.",
+        "new_class_type_hint": "Forensic Evidence Category",
+        "new_class_group": "Forensic Evidence",
+        "remark": null,
+        "justification": "Positioning forensic samples as a specific category under the broader forensic evidence domain and updating description/type_hint to emphasize its role as a category of evidence.",
+        "confidence": 0.93
+      }
+    },
+    {
+      "function": "reassign_entities",
+      "args": {
+        "entity_ids": [
+          "Can_1818d2ff"
+        ],
+        "from_class_id": "ClsC_0ff3c834",
+        "to_class_id": "ClsC_0402a4af",
+        "justification": "The entity 'physical evidence' (tangible materials or objects) fits better under the 'Forensic Physical Evidence' class, which explicitly covers tangible forensic items such as fingerprints, firearms, and tool marks, while leaving 'General Forensic Evidence' as the umbrella class.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_0402a4af",
+      "class_id_resolved": "ClsC_0402a4af",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Forensic Evidence",
+      "remark": null,
+      "justification": "Assigning a shared Class_Group 'Forensic Evidence' to connect this physical evidence subtype with related forensic evidence classes in the same domain.",
+      "confidence": 0.96
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_31bea111",
+      "class_id_resolved": "ClsC_31bea111",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Forensic Evidence",
+      "remark": null,
+      "justification": "Trace evidence (fibers, hair, etc.) is a clear subtype of forensic evidence and should share the common Class_Group 'Forensic Evidence' with other related classes.",
+      "confidence": 0.96
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_0ff3c834",
+      "class_id_resolved": "ClsC_0ff3c834",
+      "new_name": "General Forensic Evidence",
+      "new_description": "Umbrella class for forensic evidence, covering physical or digital items and materials collected and handled in forensic investigations for documentation, preservation, examination, and potential use in court.",
+      "new_class_type_hint": "Forensic Evidence Category",
+      "new_class_group": "Forensic Evidence",
+      "remark": null,
+      "justification": "Clarifying this as the umbrella category for all forensic evidence (physical and digital) and aligning it in the shared Class_Group with its subtypes.",
+      "confidence": 0.95
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_19ce2396",
+      "class_id_resolved": "ClsC_19ce2396",
+      "new_name": null,
+      "new_description": "Collected biological or material specimens (e.g., general samples and DNA-specific samples) that serve as forensic evidence for laboratory testing and analysis.",
+      "new_class_type_hint": "Forensic Evidence Category",
+      "new_class_group": "Forensic Evidence",
+      "remark": null,
+      "justification": "Positioning forensic samples as a specific category under the broader forensic evidence domain and updating description/type_hint to emphasize its role as a category of evidence.",
+      "confidence": 0.93
+    },
+    {
+      "action": "reassign_entities",
+      "entity_ids": [
+        "Can_1818d2ff"
+      ],
+      "from": "ClsC_0ff3c834",
+      "from_resolved": "ClsC_0ff3c834",
+      "to": "ClsC_0402a4af",
+      "to_resolved": "ClsC_0402a4af",
+      "justification": "The entity 'physical evidence' (tangible materials or objects) fits better under the 'Forensic Physical Evidence' class, which explicitly covers tangible forensic items such as fingerprints, firearms, and tool marks, while leaving 'General Forensic Evidence' as the umbrella class.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  ],
+  "provisional_to_real": {},
+  "timestamp": "2026-01-06T14:24:49Z"
+}

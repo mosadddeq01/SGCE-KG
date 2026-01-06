@@ -1,0 +1,241 @@
+{
+  "cluster_label": "13_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_3dee0e53fc5e",
+      "relation_name": "exhibits",
+      "rel_desc": "Urban legends are described as continuing to endure over time.",
+      "rel_hint_type": "property",
+      "canonical_rel_name": "has_property",
+      "canonical_rel_desc": "Indicates that a concept or entity possesses a specific property or characteristic represented as a separate node.",
+      "rel_cls": "attribute_relation",
+      "rel_cls_group": "ATTRIBUTE",
+      "subject_entity_name": "urban legends",
+      "object_entity_name": "endurance of urban legends",
+      "subject_class_label": "Contemporary Folklore",
+      "subject_class_group": "Urban Legends and Modern Folklore",
+      "object_class_label": "Urban Legend Dynamics",
+      "object_class_group": "Urban Legend Contexts (Social, Spatial, Temporal)",
+      "qualifiers": {
+        "TemporalQualifier": "continue to endure",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "why",
+        "LogicalMarker": "why",
+        "OtherQualifier": null
+      },
+      "confidence": 0.84,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_b7b8aa3815b6",
+      "relation_name": "has_attribute",
+      "rel_desc": "The escaped criminal is characterized by having a hook for a hand.",
+      "rel_hint_type": "attribution",
+      "canonical_rel_name": "has_physical_attribute",
+      "canonical_rel_desc": "Indicates that the subject entity possesses the specified physical feature or bodily attribute represented by the object.",
+      "rel_cls": "attribute_relation",
+      "rel_cls_group": "ASSOCIATION",
+      "subject_entity_name": "escaped criminal",
+      "object_entity_name": "hook for a hand",
+      "subject_class_label": "Hook Man Antagonist",
+      "subject_class_group": "UrbanLegend: Hook Man",
+      "object_class_label": "Hook Man Hook Weapon",
+      "object_class_group": "UrbanLegend: Hook Man",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "with",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.99,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_b4016d65bcdd",
+      "relation_name": "attached_to",
+      "rel_desc": "The bloody hook is found hanging from the car door handle.",
+      "rel_hint_type": "spatial",
+      "canonical_rel_name": "attached_to",
+      "canonical_rel_desc": "Indicates that a physical object is fastened, hanging from, or otherwise physically connected to another object.",
+      "rel_cls": "spatial_configuration_relation",
+      "rel_cls_group": "SPATIALITY",
+      "subject_entity_name": "bloody hook",
+      "object_entity_name": "car door handle",
+      "subject_class_label": "Urban Legend Threat Cues",
+      "subject_class_group": "Urban Legend Narrative Elements",
+      "object_class_label": "Vehicle Door Components (Urban Legend Scene)",
+      "object_class_group": "Urban Legend Narrative Elements",
+      "qualifiers": {
+        "TemporalQualifier": "upon discovery",
+        "SpatialQualifier": "from the car door handle",
+        "OperationalConstraint": null,
+        "ConditionExpression": "only to discover a bloody hook",
+        "UncertaintyQualifier": null,
+        "CausalHint": "from",
+        "LogicalMarker": "only to",
+        "OtherQualifier": null
+      },
+      "confidence": 0.99,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_73e66be10928",
+      "relation_name": "characterized_by",
+      "rel_desc": "The age described is characterized by the internet.",
+      "rel_hint_type": "definition",
+      "canonical_rel_name": "is_characterized_by",
+      "canonical_rel_desc": "Links a time period or conceptual era to key defining technologies, features, or attributes that characterize it.",
+      "rel_cls": "context_characterization_relation",
+      "rel_cls_group": "IDENTITY",
+      "subject_entity_name": "age of the internet and social media",
+      "object_entity_name": "internet",
+      "subject_class_label": "Urban Legend Time Periods",
+      "subject_class_group": "Urban Legend Contexts (Social, Spatial, Temporal)",
+      "object_class_label": "Digital Communication Channels",
+      "object_class_group": "Story Dissemination & Transmission Mechanisms",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "global digital infrastructure",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "of",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.89,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_6c021a7aab02",
+      "relation_name": "characterized_by",
+      "rel_desc": "The age described is characterized by social media.",
+      "rel_hint_type": "definition",
+      "canonical_rel_name": "is_characterized_by",
+      "canonical_rel_desc": "Links a time period or conceptual era to key defining technologies, features, or attributes that characterize it.",
+      "rel_cls": "context_characterization_relation",
+      "rel_cls_group": "IDENTITY",
+      "subject_entity_name": "age of the internet and social media",
+      "object_entity_name": "social media",
+      "subject_class_label": "Urban Legend Time Periods",
+      "subject_class_group": "Urban Legend Contexts (Social, Spatial, Temporal)",
+      "object_class_label": "Digital Communication Channels",
+      "object_class_group": "Story Dissemination & Transmission Mechanisms",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "widespread online platforms",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "of",
+        "LogicalMarker": "and",
+        "OtherQualifier": null
+      },
+      "confidence": 0.89,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_rel_schema\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_b7b8aa3815b6\"],\n      \"canonical_rel_name\": null,\n      \"canonical_rel_desc\": null,\n      \"rel_cls\": \"attribute_relation\",\n      \"rel_cls_group\": \"ATTRIBUTE\",\n      \"justification\": \"This relation encodes a physical feature of the subject ('escaped criminal' having 'hook for a hand'). The existing canonical_rel_name and rel_cls already treat this as an attribute, but rel_cls_group was set to 'ASSOCIATION', which is inconsistent with other attribute relations in the schema. It should be normalized to 'ATTRIBUTE' to align with its semantic role and with similar attribute_relation uses.\",\n      \"remark\": null,\n      \"confidence\": 0.96\n    }\n  },\n  {\n    \"function\": \"modify_rel_schema\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_73e66be10928\"],\n      \"canonical_rel_name\": \"is_characterized_by\",\n      \"canonical_rel_desc\": \"Links a time period, context, or conceptual era to its defining features, technologies, or attributes that characterize it, without asserting strict identity.\",\n      \"rel_cls\": \"context_characterization_relation\",\n      \"rel_cls_group\": \"ATTRIBUTE\",\n      \"justification\": \"The relation connects the 'age of the internet and social media' to 'internet' as a defining feature. This is a characterization via key attributes of the era, not an identity/equivalence statement. Therefore, the broad group should be 'ATTRIBUTE' rather than 'IDENTITY'. The description is slightly refined to emphasize characterization by attributes rather than identity, improving clarity for reuse.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"modify_rel_schema\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_6c021a7aab02\"],\n      \"canonical_rel_name\": \"is_characterized_by\",\n      \"canonical_rel_desc\": \"Links a time period, context, or conceptual era to its defining features, technologies, or attributes that characterize it, without asserting strict identity.\",\n      \"rel_cls\": \"context_characterization_relation\",\n      \"rel_cls_group\": \"ATTRIBUTE\",\n      \"justification\": \"As with RelR_73e66be10928, this relation links the same era to 'social media' as a defining feature. It encodes characterization by attributes, not identity. To keep schema consistent, it should share the same canonical description and be grouped under the 'ATTRIBUTE' class group rather than 'IDENTITY'.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_rel_schema",
+      "args": {
+        "relation_ids": [
+          "RelR_b7b8aa3815b6"
+        ],
+        "canonical_rel_name": null,
+        "canonical_rel_desc": null,
+        "rel_cls": "attribute_relation",
+        "rel_cls_group": "ATTRIBUTE",
+        "justification": "This relation encodes a physical feature of the subject ('escaped criminal' having 'hook for a hand'). The existing canonical_rel_name and rel_cls already treat this as an attribute, but rel_cls_group was set to 'ASSOCIATION', which is inconsistent with other attribute relations in the schema. It should be normalized to 'ATTRIBUTE' to align with its semantic role and with similar attribute_relation uses.",
+        "remark": null,
+        "confidence": 0.96
+      }
+    },
+    {
+      "function": "modify_rel_schema",
+      "args": {
+        "relation_ids": [
+          "RelR_73e66be10928"
+        ],
+        "canonical_rel_name": "is_characterized_by",
+        "canonical_rel_desc": "Links a time period, context, or conceptual era to its defining features, technologies, or attributes that characterize it, without asserting strict identity.",
+        "rel_cls": "context_characterization_relation",
+        "rel_cls_group": "ATTRIBUTE",
+        "justification": "The relation connects the 'age of the internet and social media' to 'internet' as a defining feature. This is a characterization via key attributes of the era, not an identity/equivalence statement. Therefore, the broad group should be 'ATTRIBUTE' rather than 'IDENTITY'. The description is slightly refined to emphasize characterization by attributes rather than identity, improving clarity for reuse.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "modify_rel_schema",
+      "args": {
+        "relation_ids": [
+          "RelR_6c021a7aab02"
+        ],
+        "canonical_rel_name": "is_characterized_by",
+        "canonical_rel_desc": "Links a time period, context, or conceptual era to its defining features, technologies, or attributes that characterize it, without asserting strict identity.",
+        "rel_cls": "context_characterization_relation",
+        "rel_cls_group": "ATTRIBUTE",
+        "justification": "As with RelR_73e66be10928, this relation links the same era to 'social media' as a defining feature. It encodes characterization by attributes, not identity. To keep schema consistent, it should share the same canonical description and be grouped under the 'ATTRIBUTE' class group rather than 'IDENTITY'.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_rel_schema",
+      "relation_ids": [
+        "RelR_b7b8aa3815b6"
+      ],
+      "canonical_rel_name": null,
+      "canonical_rel_desc": null,
+      "rel_cls": "attribute_relation",
+      "rel_cls_group": "ATTRIBUTE",
+      "new_relation_name": null,
+      "original_relation_name": null,
+      "justification": "This relation encodes a physical feature of the subject ('escaped criminal' having 'hook for a hand'). The existing canonical_rel_name and rel_cls already treat this as an attribute, but rel_cls_group was set to 'ASSOCIATION', which is inconsistent with other attribute relations in the schema. It should be normalized to 'ATTRIBUTE' to align with its semantic role and with similar attribute_relation uses.",
+      "remark": null,
+      "confidence": 0.96
+    },
+    {
+      "action": "modify_rel_schema",
+      "relation_ids": [
+        "RelR_73e66be10928"
+      ],
+      "canonical_rel_name": "is_characterized_by",
+      "canonical_rel_desc": "Links a time period, context, or conceptual era to its defining features, technologies, or attributes that characterize it, without asserting strict identity.",
+      "rel_cls": "context_characterization_relation",
+      "rel_cls_group": "ATTRIBUTE",
+      "new_relation_name": null,
+      "original_relation_name": null,
+      "justification": "The relation connects the 'age of the internet and social media' to 'internet' as a defining feature. This is a characterization via key attributes of the era, not an identity/equivalence statement. Therefore, the broad group should be 'ATTRIBUTE' rather than 'IDENTITY'. The description is slightly refined to emphasize characterization by attributes rather than identity, improving clarity for reuse.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "modify_rel_schema",
+      "relation_ids": [
+        "RelR_6c021a7aab02"
+      ],
+      "canonical_rel_name": "is_characterized_by",
+      "canonical_rel_desc": "Links a time period, context, or conceptual era to its defining features, technologies, or attributes that characterize it, without asserting strict identity.",
+      "rel_cls": "context_characterization_relation",
+      "rel_cls_group": "ATTRIBUTE",
+      "new_relation_name": null,
+      "original_relation_name": null,
+      "justification": "As with RelR_73e66be10928, this relation links the same era to 'social media' as a defining feature. It encodes characterization by attributes, not identity. To keep schema consistent, it should share the same canonical description and be grouped under the 'ATTRIBUTE' class group rather than 'IDENTITY'.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  ],
+  "timestamp": "2026-01-06T08:36:24Z"
+}

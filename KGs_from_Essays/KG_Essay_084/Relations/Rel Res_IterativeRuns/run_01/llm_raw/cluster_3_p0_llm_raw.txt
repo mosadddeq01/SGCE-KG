@@ -1,0 +1,17 @@
+[
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": [
+        "RelR_510893311494"
+      ],
+      "canonical_rel_name": "has_aspect",
+      "canonical_rel_desc": "Links a broader domain or concept to one of its constituent aspects, activities, or conceptual components.",
+      "rel_cls": "conceptual_component_relation",
+      "rel_cls_group": "COMPOSITION",
+      "justification": "This relation links the domain 'forensic science' to one of its key activities ('presentation of findings'), which is semantically the same conceptual-aspect pattern as the other has_aspect relations in this chunk. Normalizing the predicate from 'includes_aspect' to 'has_aspect' and aligning the class to 'conceptual_component_relation' ensures a consistent schema for domain-aspect components.",
+      "remark": "Normalized to use the same has_aspect predicate and conceptual_component_relation class as other forensic science aspect relations in this cluster.",
+      "confidence": 0.94
+    }
+  }
+]

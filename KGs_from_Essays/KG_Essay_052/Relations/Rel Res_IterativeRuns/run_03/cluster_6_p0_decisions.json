@@ -1,0 +1,104 @@
+{
+  "cluster_label": "6_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_1ea5b796708e",
+      "relation_name": "brings_together",
+      "rel_desc": "Sporting events unite people from different backgrounds and beliefs.",
+      "rel_hint_type": "social cohesion",
+      "canonical_rel_name": "promotes_social_cohesion_among",
+      "canonical_rel_desc": "Indicates that the subject activity or context helps unite or strengthen social bonds among the people or groups represented by the object.",
+      "rel_cls": "social_cohesion_and_bonding_relation",
+      "rel_cls_group": "ASSOCIATION",
+      "subject_entity_name": "sporting events",
+      "object_entity_name": "people from different backgrounds and beliefs",
+      "subject_class_label": "Sporting Events",
+      "subject_class_group": "Sports and Society",
+      "object_class_label": "Human Participants in Sport",
+      "object_class_group": "Sport, Community & Social Experience",
+      "qualifiers": {
+        "TemporalQualifier": "during sporting events",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "have the power to",
+        "CausalHint": "have the power to unite",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.96,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_218ec0f9187f",
+      "relation_name": "creates",
+      "rel_desc": "Sports are said to build metaphorical bridges between individuals and communities.",
+      "rel_hint_type": "connection",
+      "canonical_rel_name": "facilitates_social_connection",
+      "canonical_rel_desc": "Indicates that the subject creates, enables, or strengthens social connections involving the object (e.g., individuals, groups, or communities).",
+      "rel_cls": "social_connection_relation",
+      "rel_cls_group": "ASSOCIATION",
+      "subject_entity_name": "sports",
+      "object_entity_name": "bridges between individuals and communities",
+      "subject_class_label": "Sports (Domain Concept)",
+      "subject_class_group": "Sports and Society",
+      "object_class_label": "Social Connection Metaphors in Sport",
+      "object_class_group": "Sports, Social Divisions and Connections",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "have the power to",
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "Connection type: social and communal ties"
+      },
+      "confidence": 0.96,
+      "remarks": [
+        "Metaphorical 'bridges' captured as a social connection construct.",
+        "Metaphorical 'bridges' captured as a social connection construct.",
+        "Metaphorical 'bridges' captured as a social connection construct.",
+        "Metaphorical 'bridges' captured as a social connection construct."
+      ]
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_rel_schema\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_1ea5b796708e\",\n      \"RelR_218ec0f9187f\"\n      ],\n      \"canonical_rel_name\": \"promotes_social_connection_between\",\n      \"canonical_rel_desc\": \"Indicates that the subject promotes, enables, or strengthens social connection or cohesion between the people, groups, or communities represented by the object.\",\n      \"rel_cls\": \"social_cohesion_and_connection_relation\",\n      \"rel_cls_group\": \"ASSOCIATION\",\n      \"justification\": \"Both relations describe sports/sporting events as fostering or enabling social connection/cohesion between people or groups (bridge-building, uniting diverse backgrounds). The existing canonical names and relation classes diverge only in wording (social_cohesion vs social_connection) while sharing the same underlying predicate semantics. Normalizing them to a single canonical_rel_name and a unified rel_cls avoids trivial variants and better reflects that these edges are about social connection/cohesion between social actors.\",\n      \"remark\": null,\n      \"confidence\": 0.93\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_rel_schema",
+      "args": {
+        "relation_ids": [
+          "RelR_1ea5b796708e",
+          "RelR_218ec0f9187f"
+        ],
+        "canonical_rel_name": "promotes_social_connection_between",
+        "canonical_rel_desc": "Indicates that the subject promotes, enables, or strengthens social connection or cohesion between the people, groups, or communities represented by the object.",
+        "rel_cls": "social_cohesion_and_connection_relation",
+        "rel_cls_group": "ASSOCIATION",
+        "justification": "Both relations describe sports/sporting events as fostering or enabling social connection/cohesion between people or groups (bridge-building, uniting diverse backgrounds). The existing canonical names and relation classes diverge only in wording (social_cohesion vs social_connection) while sharing the same underlying predicate semantics. Normalizing them to a single canonical_rel_name and a unified rel_cls avoids trivial variants and better reflects that these edges are about social connection/cohesion between social actors.",
+        "remark": null,
+        "confidence": 0.93
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_rel_schema",
+      "relation_ids": [
+        "RelR_1ea5b796708e",
+        "RelR_218ec0f9187f"
+      ],
+      "canonical_rel_name": "promotes_social_connection_between",
+      "canonical_rel_desc": "Indicates that the subject promotes, enables, or strengthens social connection or cohesion between the people, groups, or communities represented by the object.",
+      "rel_cls": "social_cohesion_and_connection_relation",
+      "rel_cls_group": "ASSOCIATION",
+      "new_relation_name": null,
+      "original_relation_name": null,
+      "justification": "Both relations describe sports/sporting events as fostering or enabling social connection/cohesion between people or groups (bridge-building, uniting diverse backgrounds). The existing canonical names and relation classes diverge only in wording (social_cohesion vs social_connection) while sharing the same underlying predicate semantics. Normalizing them to a single canonical_rel_name and a unified rel_cls avoids trivial variants and better reflects that these edges are about social connection/cohesion between social actors.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  ],
+  "timestamp": "2026-01-06T12:47:27Z"
+}

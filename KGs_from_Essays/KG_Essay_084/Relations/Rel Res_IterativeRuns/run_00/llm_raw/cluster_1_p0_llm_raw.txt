@@ -1,0 +1,66 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_10bbb760d3da",
+        "RelR_dbd10b178a72",
+        "RelR_d79e39f2d62e",
+        "RelR_fc06a3f31361",
+        "RelR_a165ea679681"
+      ],
+      "canonical_rel_name": "is_used_to_analyze",
+      "canonical_rel_desc": "Indicates that a method, technique, or technology is used to analyze a target material, sample, or evidence.",
+      "justification": "All five relations connect a forensic analytical method or technology (microscopy, spectroscopy, chromatography, DNA profiling, instrumentation) to forensic evidence with the same semantics: the subject is used as a tool to analyze the object. Only qualifiers and specific technique types differ, so they should share one canonical predicate.",
+      "remark": null,
+      "confidence": 0.98
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_f1399f8bbced"
+      ],
+      "canonical_rel_name": "is_used_in",
+      "canonical_rel_desc": "Indicates that a method, process, or tool is used within or as part of an activity, context, or workflow.",
+      "justification": "This relation connects a process (forensic analysis) to a broader activity (modern criminal investigations). The semantics are that the process is employed within the investigation, which is better captured by a generic application predicate 'is_used_in' rather than 'is_used_to_analyze'.",
+      "remark": null,
+      "confidence": 0.96
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_10bbb760d3da",
+        "RelR_dbd10b178a72",
+        "RelR_d79e39f2d62e",
+        "RelR_fc06a3f31361",
+        "RelR_a165ea679681",
+        "RelR_f1399f8bbced"
+      ],
+      "rel_cls": "method_application_relation",
+      "justification": "All relations describe the application or use of a forensic method, technique, technology, or process in a specific analytical or investigative context. Grouping them under a common class for method/technique application captures this shared semantics across the different canonical predicates.",
+      "remark": null,
+      "confidence": 0.96
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_10bbb760d3da",
+        "RelR_dbd10b178a72",
+        "RelR_d79e39f2d62e",
+        "RelR_fc06a3f31361",
+        "RelR_a165ea679681",
+        "RelR_f1399f8bbced"
+      ],
+      "rel_cls_group": "USAGE",
+      "justification": "Each relation expresses that one entity (a method, technique, technology, or process) is used or applied in relation to another (evidence or investigations). This is fundamentally about functional use/application rather than composition, causality, or identity, so the broad group USAGE is appropriate.",
+      "remark": null,
+      "confidence": 0.97
+    }
+  }
+]

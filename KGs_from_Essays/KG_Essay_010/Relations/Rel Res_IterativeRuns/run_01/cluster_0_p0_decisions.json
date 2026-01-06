@@ -1,0 +1,123 @@
+{
+  "cluster_label": "0_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_f6212cca2ec8",
+      "relation_name": "prevents_escape_beyond",
+      "rel_desc": "The black hole’s gravitational pull prevents anything from escaping once past the event horizon.",
+      "rel_hint_type": "constraint",
+      "canonical_rel_name": "prevents_escape_of",
+      "canonical_rel_desc": "Indicates that the subject exerts an influence or constraint that prevents the object (or entities associated with it) from escaping a region or potential well.",
+      "rel_cls": "escape_constraint_relation",
+      "rel_cls_group": "CAUSALITY",
+      "subject_entity_name": "gravitational pull of a black hole",
+      "object_entity_name": "event horizon (black hole)",
+      "subject_class_label": "Gravitational Phenomena",
+      "subject_class_group": "Gravitation and General Relativity",
+      "object_class_label": "Black Hole Structural Components",
+      "object_class_group": "Black Holes",
+      "qualifiers": {
+        "TemporalQualifier": "for any time after crossing the horizon",
+        "SpatialQualifier": "beyond the event horizon",
+        "OperationalConstraint": "applies to all matter and light (implied)",
+        "ConditionExpression": "position > event horizon radius",
+        "UncertaintyQualifier": null,
+        "CausalHint": "beyond which",
+        "LogicalMarker": null,
+        "OtherQualifier": "Effect: prevents escape from black hole"
+      },
+      "confidence": 0.95,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_e80a2c08ea8f",
+      "relation_name": "prevents_escape_of",
+      "rel_desc": "The intense gravitational pull prevents light from escaping beyond the radius.",
+      "rel_hint_type": "causal",
+      "canonical_rel_name": "prevents_escape_of",
+      "canonical_rel_desc": "Indicates that a force, condition, or mechanism prevents an entity from escaping or leaving a specified region or state.",
+      "rel_cls": "inhibitory_causal_relation",
+      "rel_cls_group": "CAUSALITY",
+      "subject_entity_name": "gravitational pull of a black hole",
+      "object_entity_name": "light",
+      "subject_class_label": "Gravitational Phenomena",
+      "subject_class_group": "Gravitation and General Relativity",
+      "object_class_label": "Black Hole Event Horizon Light Trapping",
+      "object_class_group": "Black Hole Physics",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "beyond this radius",
+        "OperationalConstraint": "extremely strong gravitational field",
+        "ConditionExpression": "beyond the characteristic radius",
+        "UncertaintyQualifier": null,
+        "CausalHint": "so intense that",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.94,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_f6212cca2ec8\",\n        \"RelR_e80a2c08ea8f\"\n      ],\n      \"canonical_rel_name\": \"prevents_escape_of\",\n      \"canonical_rel_desc\": \"Indicates that the subject (typically a force, field, or condition) prevents the object (or entities associated with it) from escaping or leaving a specified region or potential well, often once a critical boundary has been crossed.\",\n      \"justification\": \"Both relations describe the same predicate: a gravitational pull preventing escape (of matter/light) beyond a boundary. They already share the same canonical_rel_name but slightly different descriptions; unifying them improves schema consistency for this predicate across instances.\",\n      \"remark\": null,\n      \"confidence\": 0.93\n    }\n  },\n  {\n    \"function\": \"modify_rel_schema\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_e80a2c08ea8f\"\n      ],\n      \"canonical_rel_name\": null,\n      \"canonical_rel_desc\": null,\n      \"rel_cls\": \"escape_constraint_relation\",\n      \"rel_cls_group\": null,\n      \"justification\": \"RelR_e80a2c08ea8f and RelR_f6212cca2ec8 express the same semantic family: a constraint preventing escape from a gravitational region. Using a more specific, shared class label 'escape_constraint_relation' instead of the broader 'inhibitory_causal_relation' aligns the classing of these closely related escape-prevention relations while keeping rel_cls_group as CAUSALITY.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_f6212cca2ec8",
+          "RelR_e80a2c08ea8f"
+        ],
+        "canonical_rel_name": "prevents_escape_of",
+        "canonical_rel_desc": "Indicates that the subject (typically a force, field, or condition) prevents the object (or entities associated with it) from escaping or leaving a specified region or potential well, often once a critical boundary has been crossed.",
+        "justification": "Both relations describe the same predicate: a gravitational pull preventing escape (of matter/light) beyond a boundary. They already share the same canonical_rel_name but slightly different descriptions; unifying them improves schema consistency for this predicate across instances.",
+        "remark": null,
+        "confidence": 0.93
+      }
+    },
+    {
+      "function": "modify_rel_schema",
+      "args": {
+        "relation_ids": [
+          "RelR_e80a2c08ea8f"
+        ],
+        "canonical_rel_name": null,
+        "canonical_rel_desc": null,
+        "rel_cls": "escape_constraint_relation",
+        "rel_cls_group": null,
+        "justification": "RelR_e80a2c08ea8f and RelR_f6212cca2ec8 express the same semantic family: a constraint preventing escape from a gravitational region. Using a more specific, shared class label 'escape_constraint_relation' instead of the broader 'inhibitory_causal_relation' aligns the classing of these closely related escape-prevention relations while keeping rel_cls_group as CAUSALITY.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_f6212cca2ec8",
+        "RelR_e80a2c08ea8f"
+      ],
+      "canonical_rel_name": "prevents_escape_of",
+      "canonical_rel_desc": "Indicates that the subject (typically a force, field, or condition) prevents the object (or entities associated with it) from escaping or leaving a specified region or potential well, often once a critical boundary has been crossed.",
+      "justification": "Both relations describe the same predicate: a gravitational pull preventing escape (of matter/light) beyond a boundary. They already share the same canonical_rel_name but slightly different descriptions; unifying them improves schema consistency for this predicate across instances.",
+      "remark": null,
+      "confidence": 0.93
+    },
+    {
+      "action": "modify_rel_schema",
+      "relation_ids": [
+        "RelR_e80a2c08ea8f"
+      ],
+      "canonical_rel_name": null,
+      "canonical_rel_desc": null,
+      "rel_cls": "escape_constraint_relation",
+      "rel_cls_group": null,
+      "new_relation_name": null,
+      "original_relation_name": null,
+      "justification": "RelR_e80a2c08ea8f and RelR_f6212cca2ec8 express the same semantic family: a constraint preventing escape from a gravitational region. Using a more specific, shared class label 'escape_constraint_relation' instead of the broader 'inhibitory_causal_relation' aligns the classing of these closely related escape-prevention relations while keeping rel_cls_group as CAUSALITY.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  ],
+  "timestamp": "2026-01-06T09:48:11Z"
+}

@@ -1,0 +1,65 @@
+{
+  "cluster_label": "26_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_0b0f8921d198",
+      "relation_name": "reconstructs",
+      "rel_desc": "Forensic scientists reconstruct the actual events that occurred around the crime.",
+      "rel_hint_type": "analytical",
+      "canonical_rel_name": "reconstructs_events",
+      "canonical_rel_desc": "A forensic or investigative actor reconstructs past events or event sequences on the basis of collected evidence and contextual information.",
+      "rel_cls": "forensic_cognitive_activity_relation",
+      "rel_cls_group": "AGENCY",
+      "subject_entity_name": "forensic scientists",
+      "object_entity_name": "events that took place",
+      "subject_class_label": "Forensic Scientists",
+      "subject_class_group": "Forensic Science Domain",
+      "object_class_label": "Crime Events",
+      "object_class_group": "Criminal Justice & Forensic Context",
+      "qualifiers": {
+        "TemporalQualifier": "after evidence collection and documentation",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "can (ability, not guaranteed)",
+        "CausalHint": "By meticulously documenting... and collecting all relevant evidence",
+        "LogicalMarker": "By",
+        "OtherQualifier": "ReconstructionBasis: crime scene details and collected evidence"
+      },
+      "confidence": 0.96,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_0c6b5fc4e42f",
+      "relation_name": "reconstructs",
+      "rel_desc": "Investigators reconstruct the sequence of events leading up to the crime.",
+      "rel_hint_type": "analytical",
+      "canonical_rel_name": "reconstructs_events",
+      "canonical_rel_desc": "A forensic or investigative actor reconstructs past events or event sequences on the basis of collected evidence and contextual information.",
+      "rel_cls": "forensic_cognitive_activity_relation",
+      "rel_cls_group": "AGENCY",
+      "subject_entity_name": "investigators",
+      "object_entity_name": "sequence of events leading up to a crime",
+      "subject_class_label": "Criminal Justice Participants",
+      "subject_class_group": "Criminal Justice & Forensic Context",
+      "object_class_label": "Crime Events",
+      "object_class_group": "Criminal Justice & Forensic Context",
+      "qualifiers": {
+        "TemporalQualifier": "leading up to a crime",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "ReconstructionScope: pre-crime sequence of events"
+      },
+      "confidence": 0.9,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[]",
+  "parsed_steps": [],
+  "executed_decisions": [],
+  "timestamp": "2026-01-06T14:42:09Z"
+}

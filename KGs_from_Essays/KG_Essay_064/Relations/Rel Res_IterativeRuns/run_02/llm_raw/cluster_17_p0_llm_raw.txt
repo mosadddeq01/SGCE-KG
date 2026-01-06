@@ -1,0 +1,33 @@
+[
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": [
+        "RelR_d6bc882fdfea",
+        "RelR_ec396dcbbe95"
+      ],
+      "canonical_rel_name": null,
+      "canonical_rel_desc": null,
+      "rel_cls": "narrative_origin_relation",
+      "rel_cls_group": null,
+      "justification": "These relations link the origins of fairytales to folklore/oral traditions, the same semantic family as other origin predicates already classified as 'narrative_origin_relation'. Using a single relation class for all narrative-origin links improves schema consistency over the ad hoc 'cultural_origin_relation' label.",
+      "remark": null,
+      "confidence": 0.88
+    }
+  },
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": [
+        "RelR_ca555f8d8314"
+      ],
+      "canonical_rel_name": "is_source_of",
+      "canonical_rel_desc": "Indicates that a narrative, myth, or story functions as a source, precursor, or formative influence for a later narrative, text, or work.",
+      "rel_cls": null,
+      "rel_cls_group": null,
+      "justification": "This relation has identical semantics to RelR_ad4cc3dd9038 (subject narrative is a source for the object narrative), which already uses canonical_rel_name 'is_source_of'. Normalizing to the same predicate avoids creating two labels ('is_narrative_source_of' vs 'is_source_of') for the same directional narrative source relation.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  }
+]

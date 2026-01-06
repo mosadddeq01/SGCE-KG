@@ -1,0 +1,141 @@
+{
+  "cluster_label": "13_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_e9f5d25e876c",
+      "relation_name": "facilitates",
+      "rel_desc": "Hummingbirds are important agents that facilitate pollination.",
+      "rel_hint_type": "agent-of-process",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "hummingbirds",
+      "object_entity_name": "pollination",
+      "subject_class_label": "Bird Pollinators",
+      "subject_class_group": "Bird-Mediated Plant Reproduction and Regeneration",
+      "object_class_label": "Plant Reproduction and Dispersal Processes",
+      "object_class_group": "Bird-Mediated Plant Reproduction and Regeneration",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "important (qualitative importance)",
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "Pollination mode: nectar-feeding visits to flowers"
+      },
+      "confidence": 0.95,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_6b6c9b05fd13",
+      "relation_name": "facilitates",
+      "rel_desc": "Sunbirds are important agents that facilitate pollination.",
+      "rel_hint_type": "agent-of-process",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "sunbirds",
+      "object_entity_name": "pollination",
+      "subject_class_label": "Bird Pollinators",
+      "subject_class_group": "Bird-Mediated Plant Reproduction and Regeneration",
+      "object_class_label": "Plant Reproduction and Dispersal Processes",
+      "object_class_group": "Bird-Mediated Plant Reproduction and Regeneration",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "important (qualitative importance)",
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "Pollination mode: nectar-feeding visits to flowers"
+      },
+      "confidence": 0.95,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_e9f5d25e876c\",\n        \"RelR_6b6c9b05fd13\"\n      ],\n      \"canonical_rel_name\": \"acts_as_agent_of_process\",\n      \"canonical_rel_desc\": \"Indicates that the subject serves as an active biological agent that enables or carries out the object process (e.g., an animal acting as a pollination agent).\",\n      \"justification\": \"In both relations, the subject (a bird pollinator group) is described as an important agent that facilitates the object process (pollination). This is a standard agent–process role relation, so a single predicate 'acts_as_agent_of_process' accurately and consistently captures that semantics.\",\n      \"remark\": \"Specific pollination mode and importance level are already captured as qualifiers and should not be encoded in the canonical predicate.\",\n      \"confidence\": 0.96\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_e9f5d25e876c\",\n        \"RelR_6b6c9b05fd13\"\n      ],\n      \"rel_cls\": \"biological_agent_of_process_relation\",\n      \"justification\": \"Both relations specify a biological entity (bird pollinator) acting as an agent that carries out or enables a biological/ecological process (pollination). Grouping them under 'biological_agent_of_process_relation' captures this family of agent–process role links.\",\n      \"remark\": null,\n      \"confidence\": 0.95\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_e9f5d25e876c\",\n        \"RelR_6b6c9b05fd13\"\n      ],\n      \"rel_cls_group\": \"AGENCY\",\n      \"justification\": \"The core semantics is that the subject acts as an agent performing or enabling the object process, which is best categorized under AGENCY rather than generic CAUSALITY or ASSOCIATION.\",\n      \"remark\": null,\n      \"confidence\": 0.95\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_e9f5d25e876c",
+          "RelR_6b6c9b05fd13"
+        ],
+        "canonical_rel_name": "acts_as_agent_of_process",
+        "canonical_rel_desc": "Indicates that the subject serves as an active biological agent that enables or carries out the object process (e.g., an animal acting as a pollination agent).",
+        "justification": "In both relations, the subject (a bird pollinator group) is described as an important agent that facilitates the object process (pollination). This is a standard agent–process role relation, so a single predicate 'acts_as_agent_of_process' accurately and consistently captures that semantics.",
+        "remark": "Specific pollination mode and importance level are already captured as qualifiers and should not be encoded in the canonical predicate.",
+        "confidence": 0.96
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_e9f5d25e876c",
+          "RelR_6b6c9b05fd13"
+        ],
+        "rel_cls": "biological_agent_of_process_relation",
+        "justification": "Both relations specify a biological entity (bird pollinator) acting as an agent that carries out or enables a biological/ecological process (pollination). Grouping them under 'biological_agent_of_process_relation' captures this family of agent–process role links.",
+        "remark": null,
+        "confidence": 0.95
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_e9f5d25e876c",
+          "RelR_6b6c9b05fd13"
+        ],
+        "rel_cls_group": "AGENCY",
+        "justification": "The core semantics is that the subject acts as an agent performing or enabling the object process, which is best categorized under AGENCY rather than generic CAUSALITY or ASSOCIATION.",
+        "remark": null,
+        "confidence": 0.95
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_e9f5d25e876c",
+        "RelR_6b6c9b05fd13"
+      ],
+      "canonical_rel_name": "acts_as_agent_of_process",
+      "canonical_rel_desc": "Indicates that the subject serves as an active biological agent that enables or carries out the object process (e.g., an animal acting as a pollination agent).",
+      "justification": "In both relations, the subject (a bird pollinator group) is described as an important agent that facilitates the object process (pollination). This is a standard agent–process role relation, so a single predicate 'acts_as_agent_of_process' accurately and consistently captures that semantics.",
+      "remark": "Specific pollination mode and importance level are already captured as qualifiers and should not be encoded in the canonical predicate.",
+      "confidence": 0.96
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_e9f5d25e876c",
+        "RelR_6b6c9b05fd13"
+      ],
+      "rel_cls": "biological_agent_of_process_relation",
+      "justification": "Both relations specify a biological entity (bird pollinator) acting as an agent that carries out or enables a biological/ecological process (pollination). Grouping them under 'biological_agent_of_process_relation' captures this family of agent–process role links.",
+      "remark": null,
+      "confidence": 0.95
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_e9f5d25e876c",
+        "RelR_6b6c9b05fd13"
+      ],
+      "rel_cls_group": "AGENCY",
+      "justification": "The core semantics is that the subject acts as an agent performing or enabling the object process, which is best categorized under AGENCY rather than generic CAUSALITY or ASSOCIATION.",
+      "remark": null,
+      "confidence": 0.95
+    }
+  ],
+  "timestamp": "2026-01-06T11:29:53Z"
+}

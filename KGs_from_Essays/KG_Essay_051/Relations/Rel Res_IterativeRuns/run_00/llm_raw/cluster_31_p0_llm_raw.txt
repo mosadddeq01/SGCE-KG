@@ -1,0 +1,45 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_48deb4367049",
+        "RelR_8e97cd793400",
+        "RelR_81054c5d0de9"
+      ],
+      "canonical_rel_name": "facilitates_interpersonal_bonding",
+      "canonical_rel_desc": "A nonverbal behavior or social action that helps initiate, build, or strengthen interpersonal rapport or social connections.",
+      "justification": "All three relations describe nonverbal behaviors (smiling, leaning in) that help build rapport or social connections. They share the same directional causal semantics: the behavior facilitates or promotes interpersonal bonding. Using a single canonical predicate 'facilitates_interpersonal_bonding' normalizes these equivalent facilitation edges while allowing qualifiers to capture contextual details (e.g., in social settings, during conversations).",
+      "remark": "Objects such as 'rapport' and 'connections' are treated as interpersonal bonding states under a unified facilitation predicate.",
+      "confidence": 0.94
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_48deb4367049",
+        "RelR_8e97cd793400",
+        "RelR_81054c5d0de9"
+      ],
+      "rel_cls": "interpersonal_bonding_effect_relation",
+      "justification": "These edges capture how specific behaviors affect the formation or strengthening of interpersonal bonds, a coherent family of relations concerning the impact of actions or cues on social closeness outcomes.",
+      "remark": "This class can group diverse behaviors (verbal and nonverbal) that influence rapport or social connection strength.",
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_48deb4367049",
+        "RelR_8e97cd793400",
+        "RelR_81054c5d0de9"
+      ],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "Each relation encodes that performing a behavior (smiling, leaning in) can lead to or help cause an increase in rapport or social connection, which is fundamentally a causal/facilitative link between an action and a social state.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  }
+]

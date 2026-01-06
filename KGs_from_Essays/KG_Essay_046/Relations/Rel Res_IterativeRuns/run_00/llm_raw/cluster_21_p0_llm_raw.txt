@@ -1,0 +1,45 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_7392475d7b5b",
+        "RelR_93b080a97463",
+        "RelR_57444e076d6f"
+      ],
+      "canonical_rel_name": "supports",
+      "canonical_rel_desc": "Indicates that the subject provides causal or functional support that maintains, enables, or enhances the state, process, or functioning of the object (e.g., organisms supporting biodiversity, ecosystem functioning, or growth processes).",
+      "justification": "All three relations describe a causal/functional contribution where the subject helps maintain or enhance an ecological state or process (birds supporting biodiversity, birds supporting ecosystem functioning, soils supporting plant growth). Using a single predicate 'supports' captures this consistent enabling/maintaining semantics across instances.",
+      "remark": null,
+      "confidence": 0.94
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_7392475d7b5b",
+        "RelR_93b080a97463",
+        "RelR_57444e076d6f"
+      ],
+      "rel_cls": "ecosystem_function_support_relation",
+      "justification": "Each relation links a biotic or abiotic component (birds, soils) to an ecological outcome (biodiversity, ecosystem functioning, plant growth) via a supporting/enabling role. Grouping them under 'ecosystem_function_support_relation' reflects this shared class of relations where components support functions or states in ecosystems.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_7392475d7b5b",
+        "RelR_93b080a97463",
+        "RelR_57444e076d6f"
+      ],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "The descriptions and causal hints ('contributing to', 'as a result of enrichment') show that these are not mere associations but causal/functional support relations, where the subject helps bring about or maintain the object state or process. This fits the CAUSALITY group.",
+      "remark": null,
+      "confidence": 0.96
+    }
+  }
+]

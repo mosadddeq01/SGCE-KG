@@ -1,0 +1,163 @@
+{
+  "cluster_label": "15_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_a4e8d959803a",
+      "relation_name": "determines_traits_of",
+      "rel_desc": "Butterfly species determine variation in the size, shape, and color of eggs.",
+      "rel_hint_type": "dependency",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "butterfly species",
+      "object_entity_name": "butterfly egg stage",
+      "subject_class_label": "Butterfly Life Cycle Organisms and Host Plants",
+      "subject_class_group": "Butterfly Life Cycle",
+      "object_class_label": "Butterfly Life Cycle and Stages",
+      "object_class_group": "Butterfly Life Cycle and Appreciation",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": "egg size, shape, and color depend on the species",
+        "UncertaintyQualifier": null,
+        "CausalHint": "depending on",
+        "LogicalMarker": null,
+        "OtherQualifier": "Traits affected: size, shape, color of eggs"
+      },
+      "confidence": 0.94,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_8d3d2c5568c5",
+      "relation_name": "duration_depends_on",
+      "rel_desc": "The time metamorphosis takes varies according to the butterfly species.",
+      "rel_hint_type": "dependency",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "metamorphosis",
+      "object_entity_name": "butterfly species",
+      "subject_class_label": "Butterfly Metamorphosis System",
+      "subject_class_group": "Butterfly Life Cycle & Wing Development",
+      "object_class_label": "Butterfly Life Cycle Organisms and Host Plants",
+      "object_class_group": "Butterfly Life Cycle",
+      "qualifiers": {
+        "TemporalQualifier": "anywhere from a few days to several weeks",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": "duration range: few days–several weeks",
+        "UncertaintyQualifier": null,
+        "CausalHint": "depending on",
+        "LogicalMarker": null,
+        "OtherQualifier": "VariableAspect: duration"
+      },
+      "confidence": 0.98,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_a4e8d959803a\"],\n      \"canonical_rel_name\": \"determines_traits_of\",\n      \"canonical_rel_desc\": \"Subject biological taxon determines specific phenotypic traits (e.g., size, shape, color) of the object life stage or structure.\",\n      \"justification\": \"The description states that egg size, shape, and color depend on the butterfly species; this is a directional causal determination from species to egg traits, so a predicate expressing trait determination is appropriate.\",\n      \"remark\": null,\n      \"confidence\": 0.94\n    }\n  },\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_8d3d2c5568c5\"],\n      \"canonical_rel_name\": \"duration_depends_on\",\n      \"canonical_rel_desc\": \"The temporal duration of the subject process varies as a function of the object factor (e.g., species).\",\n      \"justification\": \"The text explicitly says the time metamorphosis takes varies according to the butterfly species, which is a dependency of process duration on species; a predicate capturing duration dependence fits best.\",\n      \"remark\": null,\n      \"confidence\": 0.98\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_a4e8d959803a\", \"RelR_8d3d2c5568c5\"],\n      \"rel_cls\": \"biological_dependency_relation\",\n      \"justification\": \"Both relations describe biological properties (egg traits, metamorphosis duration) that systematically depend on or are determined by butterfly species, so they belong to the same family of dependency/causal relations.\",\n      \"remark\": null,\n      \"confidence\": 0.93\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_a4e8d959803a\", \"RelR_8d3d2c5568c5\"],\n      \"rel_cls_group\": \"CAUSALITY\",\n      \"justification\": \"In both cases the object (species) is a causal or determining factor for a property of the subject (traits, duration), matching a causal/dependency dimension rather than mere association.\",\n      \"remark\": null,\n      \"confidence\": 0.93\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_a4e8d959803a"
+        ],
+        "canonical_rel_name": "determines_traits_of",
+        "canonical_rel_desc": "Subject biological taxon determines specific phenotypic traits (e.g., size, shape, color) of the object life stage or structure.",
+        "justification": "The description states that egg size, shape, and color depend on the butterfly species; this is a directional causal determination from species to egg traits, so a predicate expressing trait determination is appropriate.",
+        "remark": null,
+        "confidence": 0.94
+      }
+    },
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_8d3d2c5568c5"
+        ],
+        "canonical_rel_name": "duration_depends_on",
+        "canonical_rel_desc": "The temporal duration of the subject process varies as a function of the object factor (e.g., species).",
+        "justification": "The text explicitly says the time metamorphosis takes varies according to the butterfly species, which is a dependency of process duration on species; a predicate capturing duration dependence fits best.",
+        "remark": null,
+        "confidence": 0.98
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_a4e8d959803a",
+          "RelR_8d3d2c5568c5"
+        ],
+        "rel_cls": "biological_dependency_relation",
+        "justification": "Both relations describe biological properties (egg traits, metamorphosis duration) that systematically depend on or are determined by butterfly species, so they belong to the same family of dependency/causal relations.",
+        "remark": null,
+        "confidence": 0.93
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_a4e8d959803a",
+          "RelR_8d3d2c5568c5"
+        ],
+        "rel_cls_group": "CAUSALITY",
+        "justification": "In both cases the object (species) is a causal or determining factor for a property of the subject (traits, duration), matching a causal/dependency dimension rather than mere association.",
+        "remark": null,
+        "confidence": 0.93
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_a4e8d959803a"
+      ],
+      "canonical_rel_name": "determines_traits_of",
+      "canonical_rel_desc": "Subject biological taxon determines specific phenotypic traits (e.g., size, shape, color) of the object life stage or structure.",
+      "justification": "The description states that egg size, shape, and color depend on the butterfly species; this is a directional causal determination from species to egg traits, so a predicate expressing trait determination is appropriate.",
+      "remark": null,
+      "confidence": 0.94
+    },
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_8d3d2c5568c5"
+      ],
+      "canonical_rel_name": "duration_depends_on",
+      "canonical_rel_desc": "The temporal duration of the subject process varies as a function of the object factor (e.g., species).",
+      "justification": "The text explicitly says the time metamorphosis takes varies according to the butterfly species, which is a dependency of process duration on species; a predicate capturing duration dependence fits best.",
+      "remark": null,
+      "confidence": 0.98
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_a4e8d959803a",
+        "RelR_8d3d2c5568c5"
+      ],
+      "rel_cls": "biological_dependency_relation",
+      "justification": "Both relations describe biological properties (egg traits, metamorphosis duration) that systematically depend on or are determined by butterfly species, so they belong to the same family of dependency/causal relations.",
+      "remark": null,
+      "confidence": 0.93
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_a4e8d959803a",
+        "RelR_8d3d2c5568c5"
+      ],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "In both cases the object (species) is a causal or determining factor for a property of the subject (traits, duration), matching a causal/dependency dimension rather than mere association.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  ],
+  "timestamp": "2026-01-06T07:29:39Z"
+}

@@ -1,0 +1,348 @@
+{
+  "cluster_label": -1,
+  "cluster_classes": [
+    {
+      "candidate_id": "ClsC_9e4cbfb9",
+      "class_label": "Social Media Justice Content",
+      "class_description": "Types of information shared on social platforms to highlight inequality, including personal narratives and depictions of unfair conditions.",
+      "class_type_hint": "Information Artifact",
+      "class_group": "TBD",
+      "confidence": 0.82,
+      "evidence_excerpt": "underrepresented communities to share their stories, raise awareness about social injustices",
+      "member_ids": [
+        "En_79c94e85",
+        "En_e1957ff6"
+      ],
+      "members": [
+        {
+          "id": "En_79c94e85",
+          "entity_name": "their stories",
+          "entity_description": "Personal narratives and experiences shared by underrepresented communities on social media.",
+          "entity_type_hint": "Content"
+        },
+        {
+          "id": "En_e1957ff6",
+          "entity_name": "social injustices",
+          "entity_description": "Unfair social conditions and discriminatory practices highlighted on social media.",
+          "entity_type_hint": "Topic"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_deddfe73",
+      "class_label": "Interaction Modalities",
+      "class_description": "Different primary modes through which interpersonal relationships are conducted, contrasting online relationships with in-person, face-to-face interaction.",
+      "class_type_hint": "Interaction Mode",
+      "class_group": "TBD",
+      "confidence": 0.88,
+      "evidence_excerpt": "tendency to prioritize online relationships over face-to-face interactions",
+      "member_ids": [
+        "En_2e408b5a",
+        "En_bca2ee16"
+      ],
+      "members": [
+        {
+          "id": "En_2e408b5a",
+          "entity_name": "online relationships",
+          "entity_description": "Interpersonal relationships primarily maintained through internet-based communication platforms.",
+          "entity_type_hint": "Relationship"
+        },
+        {
+          "id": "En_bca2ee16",
+          "entity_name": "face-to-face interaction",
+          "entity_description": "Direct, in-person communication and encounters between individuals who are physically co-present.",
+          "entity_type_hint": "Interaction"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_e49dec24",
+      "class_label": "Interaction Quality States",
+      "class_description": "States describing the depth and authenticity of interpersonal engagement, ranging from lack of meaningful interaction to genuine connections between individuals.",
+      "class_type_hint": "Psychosocial Condition",
+      "class_group": "TBD",
+      "confidence": 0.86,
+      "evidence_excerpt": "lack of meaningful interaction and genuine connections between individuals",
+      "member_ids": [
+        "En_b7c93723",
+        "En_22adee90"
+      ],
+      "members": [
+        {
+          "id": "En_b7c93723",
+          "entity_name": "lack of meaningful interaction",
+          "entity_description": "A state where communication lacks depth, reducing the quality of interpersonal engagement.",
+          "entity_type_hint": "Condition"
+        },
+        {
+          "id": "En_22adee90",
+          "entity_name": "genuine connections between individuals",
+          "entity_description": "Authentic, deep interpersonal relationships formed between people.",
+          "entity_type_hint": "Relationship"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_82e012f0",
+      "class_label": "Social Media Concepts",
+      "class_description": "Concepts related to social media platforms, their evolving environment, and guidelines for their responsible and constructive use.",
+      "class_type_hint": "Domain Concept",
+      "class_group": "TBD",
+      "confidence": 0.82,
+      "evidence_excerpt": "social media has also transformed the way we receive and share information... navigate the ever-evolving landscape of social media... use these platforms in a responsible and constructive manner",
+      "member_ids": [
+        "En_7bc81d09",
+        "En_92fd7489",
+        "En_ec88aa0c"
+      ],
+      "members": [
+        {
+          "id": "En_7bc81d09",
+          "entity_name": "social media",
+          "entity_description": "Online platforms and tools that enable social networking, content sharing, and communication.",
+          "entity_type_hint": "PlatformCategory"
+        },
+        {
+          "id": "En_92fd7489",
+          "entity_name": "ever-evolving landscape of social media",
+          "entity_description": "The continuously changing environment and features of social media platforms.",
+          "entity_type_hint": "Environment"
+        },
+        {
+          "id": "En_ec88aa0c",
+          "entity_name": "responsible and constructive use of platforms",
+          "entity_description": "Using social media platforms in ways that are ethical, thoughtful, and beneficial.",
+          "entity_type_hint": "Behavior"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_3f5dae8f",
+      "class_label": "Social Media Audiences",
+      "class_description": "Groups of people acting as recipients or participants in social media communication, including broad reachable publics and individual users.",
+      "class_type_hint": "Social Actor Group",
+      "class_group": "TBD",
+      "confidence": 0.78,
+      "evidence_excerpt": "A large group of people that can be reached quickly... individuals to be more informed and engaged.",
+      "member_ids": [
+        "En_7e5ce88e",
+        "En_41e81ebb"
+      ],
+      "members": [
+        {
+          "id": "En_7e5ce88e",
+          "entity_name": "wider audience",
+          "entity_description": "A large group of people that can be reached quickly via social networking sites.",
+          "entity_type_hint": "Audience"
+        },
+        {
+          "id": "En_41e81ebb",
+          "entity_name": "individuals",
+          "entity_description": "People using social media who become more informed and engaged in current events.",
+          "entity_type_hint": "Actor"
+        }
+      ],
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"split_class\",\n    \"args\": {\n      \"source_class_id\": \"ClsC_9e4cbfb9\",\n      \"splits\": [\n        {\n          \"name\": \"Social Justice Issues\",\n          \"description\": \"Topics describing unfair social conditions, inequalities, and discriminatory practices that are highlighted or discussed, including on social media.\",\n          \"class_type_hint\": \"Social Issue Topic\",\n          \"member_ids\": [\n            \"En_e1957ff6\"\n          ],\n          \"provisional_id\": \"SPLIT(ClsC_9e4cbfb9|issues)\"\n        }\n      ],\n      \"justification\": \"ClsC_9e4cbfb9 currently mixes a content form ('their stories') with an abstract issue topic ('social injustices'), so splitting isolates the topic into its own coherent class.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_9e4cbfb9\",\n      \"new_name\": \"Social Justice Narratives on Social Media\",\n      \"new_description\": \"Personal stories and narrative content shared by underrepresented communities on social media to highlight experiences of inequality and injustice.\",\n      \"new_class_type_hint\": \"Content Category\",\n      \"new_class_group\": \"Social Media and Online Social Interaction\",\n      \"remark\": null,\n      \"justification\": \"After splitting out the issue topic, the remaining entity is purely narrative content, so the class is renamed, its type clarified, and grouped under a unified social media interaction group.\",\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"SPLIT(ClsC_9e4cbfb9|issues)\",\n      \"new_name\": \"Social Justice Issues\",\n      \"new_description\": \"Unfair social conditions and discriminatory practices that are the focus of discussion and advocacy, including those highlighted on social media.\",\n      \"new_class_type_hint\": \"Social Issue Topic\",\n      \"new_class_group\": \"Social Media and Online Social Interaction\",\n      \"remark\": null,\n      \"justification\": \"The new split class encapsulates the abstract topic of social injustices and should be clearly labeled and attached to the same overarching social media interaction domain.\",\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_deddfe73\",\n      \"new_name\": null,\n      \"new_description\": null,\n      \"new_class_type_hint\": null,\n      \"new_class_group\": \"Social Media and Online Social Interaction\",\n      \"remark\": null,\n      \"justification\": \"Interaction modes (online vs face-to-face) are core to how social relationships play out around social media, so this class should share the same overarching Class_Group.\",\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_e49dec24\",\n      \"new_name\": null,\n      \"new_description\": null,\n      \"new_class_type_hint\": null,\n      \"new_class_group\": \"Social Media and Online Social Interaction\",\n      \"remark\": null,\n      \"justification\": \"Interaction quality states (meaningful vs shallow connections) are part of the same domain of social relationships and interactions in a social media context, warranting the same Class_Group.\",\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_82e012f0\",\n      \"new_name\": null,\n      \"new_description\": null,\n      \"new_class_type_hint\": null,\n      \"new_class_group\": \"Social Media and Online Social Interaction\",\n      \"remark\": null,\n      \"justification\": \"Concepts about social media platforms, their evolution, and responsible use are central to the same overarching domain and should be grouped consistently.\",\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_3f5dae8f\",\n      \"new_name\": null,\n      \"new_description\": null,\n      \"new_class_type_hint\": null,\n      \"new_class_group\": \"Social Media and Online Social Interaction\",\n      \"remark\": null,\n      \"justification\": \"Social media audiences (wider publics and individuals) are actors within the same social media interaction ecosystem, so assigning the shared Class_Group aligns them structurally.\",\n      \"confidence\": 0.9\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "split_class",
+      "args": {
+        "source_class_id": "ClsC_9e4cbfb9",
+        "splits": [
+          {
+            "name": "Social Justice Issues",
+            "description": "Topics describing unfair social conditions, inequalities, and discriminatory practices that are highlighted or discussed, including on social media.",
+            "class_type_hint": "Social Issue Topic",
+            "member_ids": [
+              "En_e1957ff6"
+            ],
+            "provisional_id": "SPLIT(ClsC_9e4cbfb9|issues)"
+          }
+        ],
+        "justification": "ClsC_9e4cbfb9 currently mixes a content form ('their stories') with an abstract issue topic ('social injustices'), so splitting isolates the topic into its own coherent class.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_9e4cbfb9",
+        "new_name": "Social Justice Narratives on Social Media",
+        "new_description": "Personal stories and narrative content shared by underrepresented communities on social media to highlight experiences of inequality and injustice.",
+        "new_class_type_hint": "Content Category",
+        "new_class_group": "Social Media and Online Social Interaction",
+        "remark": null,
+        "justification": "After splitting out the issue topic, the remaining entity is purely narrative content, so the class is renamed, its type clarified, and grouped under a unified social media interaction group.",
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "SPLIT(ClsC_9e4cbfb9|issues)",
+        "new_name": "Social Justice Issues",
+        "new_description": "Unfair social conditions and discriminatory practices that are the focus of discussion and advocacy, including those highlighted on social media.",
+        "new_class_type_hint": "Social Issue Topic",
+        "new_class_group": "Social Media and Online Social Interaction",
+        "remark": null,
+        "justification": "The new split class encapsulates the abstract topic of social injustices and should be clearly labeled and attached to the same overarching social media interaction domain.",
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_deddfe73",
+        "new_name": null,
+        "new_description": null,
+        "new_class_type_hint": null,
+        "new_class_group": "Social Media and Online Social Interaction",
+        "remark": null,
+        "justification": "Interaction modes (online vs face-to-face) are core to how social relationships play out around social media, so this class should share the same overarching Class_Group.",
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_e49dec24",
+        "new_name": null,
+        "new_description": null,
+        "new_class_type_hint": null,
+        "new_class_group": "Social Media and Online Social Interaction",
+        "remark": null,
+        "justification": "Interaction quality states (meaningful vs shallow connections) are part of the same domain of social relationships and interactions in a social media context, warranting the same Class_Group.",
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_82e012f0",
+        "new_name": null,
+        "new_description": null,
+        "new_class_type_hint": null,
+        "new_class_group": "Social Media and Online Social Interaction",
+        "remark": null,
+        "justification": "Concepts about social media platforms, their evolution, and responsible use are central to the same overarching domain and should be grouped consistently.",
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_3f5dae8f",
+        "new_name": null,
+        "new_description": null,
+        "new_class_type_hint": null,
+        "new_class_group": "Social Media and Online Social Interaction",
+        "remark": null,
+        "justification": "Social media audiences (wider publics and individuals) are actors within the same social media interaction ecosystem, so assigning the shared Class_Group aligns them structurally.",
+        "confidence": 0.9
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "split_class",
+      "source_class_id": "ClsC_9e4cbfb9",
+      "source_class_id_resolved": "ClsC_9e4cbfb9",
+      "created_classes": [
+        {
+          "new_class_id": "ClsR_24d71ec3",
+          "provisional_id": "SPLIT(ClsC_9e4cbfb9|issues)",
+          "member_ids": [
+            "En_e1957ff6"
+          ]
+        }
+      ],
+      "justification": "ClsC_9e4cbfb9 currently mixes a content form ('their stories') with an abstract issue topic ('social injustices'), so splitting isolates the topic into its own coherent class.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_9e4cbfb9",
+      "class_id_resolved": "ClsC_9e4cbfb9",
+      "new_name": "Social Justice Narratives on Social Media",
+      "new_description": "Personal stories and narrative content shared by underrepresented communities on social media to highlight experiences of inequality and injustice.",
+      "new_class_type_hint": "Content Category",
+      "new_class_group": "Social Media and Online Social Interaction",
+      "remark": null,
+      "justification": "After splitting out the issue topic, the remaining entity is purely narrative content, so the class is renamed, its type clarified, and grouped under a unified social media interaction group.",
+      "confidence": 0.9
+    },
+    {
+      "action": "modify_class",
+      "class_id": "SPLIT(ClsC_9e4cbfb9|issues)",
+      "class_id_resolved": "ClsR_24d71ec3",
+      "new_name": "Social Justice Issues",
+      "new_description": "Unfair social conditions and discriminatory practices that are the focus of discussion and advocacy, including those highlighted on social media.",
+      "new_class_type_hint": "Social Issue Topic",
+      "new_class_group": "Social Media and Online Social Interaction",
+      "remark": null,
+      "justification": "The new split class encapsulates the abstract topic of social injustices and should be clearly labeled and attached to the same overarching social media interaction domain.",
+      "confidence": 0.9
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_deddfe73",
+      "class_id_resolved": "ClsC_deddfe73",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Social Media and Online Social Interaction",
+      "remark": null,
+      "justification": "Interaction modes (online vs face-to-face) are core to how social relationships play out around social media, so this class should share the same overarching Class_Group.",
+      "confidence": 0.9
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_e49dec24",
+      "class_id_resolved": "ClsC_e49dec24",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Social Media and Online Social Interaction",
+      "remark": null,
+      "justification": "Interaction quality states (meaningful vs shallow connections) are part of the same domain of social relationships and interactions in a social media context, warranting the same Class_Group.",
+      "confidence": 0.9
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_82e012f0",
+      "class_id_resolved": "ClsC_82e012f0",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Social Media and Online Social Interaction",
+      "remark": null,
+      "justification": "Concepts about social media platforms, their evolution, and responsible use are central to the same overarching domain and should be grouped consistently.",
+      "confidence": 0.9
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_3f5dae8f",
+      "class_id_resolved": "ClsC_3f5dae8f",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Social Media and Online Social Interaction",
+      "remark": null,
+      "justification": "Social media audiences (wider publics and individuals) are actors within the same social media interaction ecosystem, so assigning the shared Class_Group aligns them structurally.",
+      "confidence": 0.9
+    }
+  ],
+  "provisional_to_real": {
+    "SPLIT(ClsC_9e4cbfb9|issues)": "ClsR_24d71ec3"
+  },
+  "timestamp": "2026-01-06T10:55:11Z"
+}

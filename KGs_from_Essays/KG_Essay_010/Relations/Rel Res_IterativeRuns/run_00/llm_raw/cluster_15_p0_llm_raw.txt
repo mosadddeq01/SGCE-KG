@@ -1,0 +1,106 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_d1a52e43ac55", "RelR_12c2244b1b9d"],
+      "canonical_rel_name": "is_concept_in_research_field",
+      "canonical_rel_desc": "Indicates that a concept belongs to or is studied within a particular research field or discipline.",
+      "justification": "Both relations describe specific theoretical concepts (holographic principle, black hole information paradox) as important concepts within the research field of theoretical physics; a unified predicate capturing concept–field membership is appropriate.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_309b8a3ba017"],
+      "canonical_rel_name": "participates_in_research_field",
+      "canonical_rel_desc": "Indicates that a community or group of researchers is actively engaged in work within a particular research field.",
+      "justification": "This relation links a scientific community (scientists studying black holes) to the field/activity they are engaged in (study of black holes), which is a participation relation rather than simple set membership.",
+      "remark": null,
+      "confidence": 0.88
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_520f5980d6d3"],
+      "canonical_rel_name": "includes_member",
+      "canonical_rel_desc": "Indicates that a set, category, or collection includes a particular member or example.",
+      "justification": "The subject is a plural category ('gravitational theories') and the object a specific theory ('general relativity'); the intended semantics is that general relativity is one member of the broader set.",
+      "remark": null,
+      "confidence": 0.92
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_83b291a63904"],
+      "canonical_rel_name": "is_example_of",
+      "canonical_rel_desc": "Indicates that the subject is an illustrative instance or example of the broader category or idea given by the object.",
+      "justification": "The text explicitly states that quantum gravity is given as an example of proposed new physics; the predicate 'is_example_of' directly captures this illustrative membership relation.",
+      "remark": null,
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": ["RelR_d1a52e43ac55", "RelR_12c2244b1b9d"],
+      "rel_cls": "domain_concept_membership_relation",
+      "justification": "Both relations represent membership of theoretical concepts within a research domain (theoretical physics), forming a coherent class of concept–domain membership links.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": ["RelR_309b8a3ba017"],
+      "rel_cls": "research_community_participation_relation",
+      "justification": "This relation captures how a research community engages in a specific field of study, which is distinct from abstract concept membership and merits its own participation-focused class.",
+      "remark": null,
+      "confidence": 0.88
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": ["RelR_520f5980d6d3", "RelR_83b291a63904"],
+      "rel_cls": "set_membership_and_example_relation",
+      "justification": "Both relations express that a specific entity (general relativity, quantum gravity) is a member or example of a broader set or category (gravitational theories, new physics); grouping them under a combined membership/example class is appropriate.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": ["RelR_d1a52e43ac55", "RelR_12c2244b1b9d"],
+      "rel_cls_group": "ASSOCIATION",
+      "justification": "Concept–research-field links represent associative domain membership rather than strict identity or causality, fitting best under a broad ASSOCIATION group.",
+      "remark": null,
+      "confidence": 0.86
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": ["RelR_309b8a3ba017"],
+      "rel_cls_group": "AGENCY",
+      "justification": "The relation describes an active role of agents (scientists) participating in a research activity/field, which aligns with an AGENCY-focused group.",
+      "remark": null,
+      "confidence": 0.89
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": ["RelR_520f5980d6d3", "RelR_83b291a63904"],
+      "rel_cls_group": "ASSOCIATION",
+      "justification": "Both relations describe membership or example-type associations between specific theories/frameworks and broader categories, which are associative rather than causal or temporal.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  }
+]

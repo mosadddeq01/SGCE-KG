@@ -1,0 +1,75 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_0e921b17b1b3"],
+      "canonical_rel_name": "results_in",
+      "canonical_rel_desc": "The subject process or phenomenon leads to the existence or occurrence of the object entity or phenomenon.",
+      "justification": "The relation connects a formation process specifically to the resulting black holes; this is a process-to-outcome mapping, best captured as 'results_in' rather than a generic causal verb.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_6d65eda99878"],
+      "canonical_rel_name": "causes",
+      "canonical_rel_desc": "The subject phenomenon is a direct physical cause of the object phenomenon.",
+      "justification": "The description and hint explicitly describe a physical causal mechanism (quantum effects leading to Hawking radiation), so the canonical predicate should be the straightforward causal verb 'causes'.",
+      "remark": null,
+      "confidence": 0.98
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": ["RelR_0e921b17b1b3", "RelR_6d65eda99878"],
+      "rel_cls": "physical_causation_relation",
+      "justification": "Both relations describe physical processes leading to outcomes (formation leading to black holes; quantum effects leading to Hawking radiation). Grouping them under 'physical_causation_relation' captures that they are specific physical cause–effect links, even though one is phrased as 'results_in' and the other as 'causes'.",
+      "remark": null,
+      "confidence": 0.92
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": ["RelR_0e921b17b1b3", "RelR_6d65eda99878"],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "Both relations encode that one phenomenon brings about another, which is squarely within a causal semantic dimension.",
+      "remark": null,
+      "confidence": 0.98
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_9dba1e5dc56a"],
+      "canonical_rel_name": "provides_evidence_for",
+      "canonical_rel_desc": "The subject observation or result serves as empirical or theoretical evidence supporting the object proposition, hypothesis, or phenomenon.",
+      "justification": "The relation is explicitly evidential: the gravitational-wave discovery supports the claim that black holes exist. 'provides_evidence_for' is a clear, reusable evidential predicate for this pattern.",
+      "remark": null,
+      "confidence": 0.99
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": ["RelR_9dba1e5dc56a"],
+      "rel_cls": "evidential_support_relation",
+      "justification": "This link connects an observation to the proposition it supports, which is best modeled as an evidential support family of relations rather than as physical causation or simple association.",
+      "remark": null,
+      "confidence": 0.97
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": ["RelR_9dba1e5dc56a"],
+      "rel_cls_group": "EPISTEMIC",
+      "justification": "The semantic role of the relation is to encode knowledge support (evidence for a claim), which belongs to an epistemic dimension rather than physical causality, composition, or mere association.",
+      "remark": null,
+      "confidence": 0.95
+    }
+  }
+]

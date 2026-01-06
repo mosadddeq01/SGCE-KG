@@ -1,0 +1,45 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_a5708d5aeabc",
+        "RelR_e3c3818dfb4b",
+        "RelR_1498e56d7032"
+      ],
+      "canonical_rel_name": "is_used_for",
+      "canonical_rel_desc": "Indicates that a capability, resource, or power is used for achieving a particular goal, outcome, or purpose.",
+      "justification": "In all three instances, the subject 'power of social media' functions as a resource/tool that is used for achieving specific goals (fostering meaningful connections, amplifying diverse voices, driving positive change). This is a canonical tool→purpose usage relation, so a unified predicate 'is_used_for' is appropriate.",
+      "remark": null,
+      "confidence": 0.96
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_a5708d5aeabc",
+        "RelR_e3c3818dfb4b",
+        "RelR_1498e56d7032"
+      ],
+      "rel_cls": "functional_usage_relation",
+      "justification": "Each relation links a capability (power of social media) to a function or purpose it serves (social connection, voice amplification, societal change). This fits a functional usage class rather than composition, causality, or hierarchy.",
+      "remark": null,
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_a5708d5aeabc",
+        "RelR_e3c3818dfb4b",
+        "RelR_1498e56d7032"
+      ],
+      "rel_cls_group": "USAGE",
+      "justification": "The primary semantics are about how the power of social media is used or leveraged for certain ends, which falls squarely under a broad USAGE dimension.",
+      "remark": null,
+      "confidence": 0.96
+    }
+  }
+]

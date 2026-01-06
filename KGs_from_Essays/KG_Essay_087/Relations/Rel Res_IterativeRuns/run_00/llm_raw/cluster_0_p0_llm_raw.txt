@@ -1,0 +1,48 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_023431eaa694",
+        "RelR_971ed6fe6162",
+        "RelR_74630e767884",
+        "RelR_80b208110b4a"
+      ],
+      "canonical_rel_name": "includes_member",
+      "canonical_rel_desc": "Indicates that the subject category or group includes the object as a member item or subtype (subject = group/category, object = member).",
+      "justification": "All four relations describe the same predicate: a color-temperature group (warm colors, cool colors) including specific colors (red, orange, blue, green) as members. The semantics are category membership with the subject as the group and the object as the member. Using a single normalized predicate 'includes_member' improves consistency and is not restricted to colors, so it can be reused for other category–member relations.",
+      "remark": null,
+      "confidence": 0.97
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_023431eaa694",
+        "RelR_971ed6fe6162",
+        "RelR_74630e767884",
+        "RelR_80b208110b4a"
+      ],
+      "rel_cls": "category_membership_relation",
+      "justification": "Each relation instance links a category (color temperature group) to one of its member colors, which is a standard category–member or set–element pattern. Grouping them under a shared relation class 'category_membership_relation' reflects this family of predicates and can generalize to other domains beyond colors.",
+      "remark": null,
+      "confidence": 0.96
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_023431eaa694",
+        "RelR_971ed6fe6162",
+        "RelR_74630e767884",
+        "RelR_80b208110b4a"
+      ],
+      "rel_cls_group": "IDENTITY",
+      "justification": "Category membership expresses a taxonomic/identity-like classification, where the object is identified as belonging to the category represented by the subject. Among the broad groups, IDENTITY best captures this classification/typing semantics, as opposed to COMPOSITION or ASSOCIATION.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  }
+]

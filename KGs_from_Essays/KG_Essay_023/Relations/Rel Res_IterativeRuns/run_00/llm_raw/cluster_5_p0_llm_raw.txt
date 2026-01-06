@@ -1,0 +1,60 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_d408b4337a07",
+        "RelR_0c1ba9289e6e",
+        "RelR_88cd8a94bd4e",
+        "RelR_c93a22f683f3",
+        "RelR_2b62f95b7b66",
+        "RelR_f26d9175a2ae",
+        "RelR_c4d8b8838929",
+        "RelR_d55b4c095dca"
+      ],
+      "canonical_rel_name": "enables",
+      "canonical_rel_desc": "Subject makes possible or substantially facilitates the existence, occurrence, use, or spread of the object (e.g., a capability, behavior, content, or impact).",
+      "justification": "All listed relations describe an enablement or affordance: social media or its use makes certain capabilities, interactions, or information dynamics possible (e.g., ability to connect across distance, communities using Twitter, sharing stories, spreading (mis)information, fostering meaningful connections, harnessing social media’s power). Although raw relation_name variants include 'provides_platform_for' and 'enables_spread_of', their semantics converge on a single causal affordance predicate, so they are normalized to the canonical predicate 'enables' for schema consistency.",
+      "remark": "Instance-level qualifiers (e.g., that the enabled effect is positive or negative, or that the subject is specifically a 'platform') remain on the relations; the canonical predicate captures the generic enablement semantics.",
+      "confidence": 0.92
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_d408b4337a07",
+        "RelR_0c1ba9289e6e",
+        "RelR_88cd8a94bd4e",
+        "RelR_c93a22f683f3",
+        "RelR_2b62f95b7b66",
+        "RelR_f26d9175a2ae",
+        "RelR_c4d8b8838929",
+        "RelR_d55b4c095dca"
+      ],
+      "rel_cls": "enablement_relation",
+      "justification": "Each relation expresses that the subject functions as an enabler or affordance for the object (a capability, social group activity, information flow, or impact). Grouping them under 'enablement_relation' captures this shared causal-affordance family, independent of whether the outcome is beneficial (meaningful connections, social good) or harmful (misinformation, fake news).",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_d408b4337a07",
+        "RelR_0c1ba9289e6e",
+        "RelR_88cd8a94bd4e",
+        "RelR_c93a22f683f3",
+        "RelR_2b62f95b7b66",
+        "RelR_f26d9175a2ae",
+        "RelR_c4d8b8838929",
+        "RelR_d55b4c095dca"
+      ],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "All relations describe a causal or quasi-causal influence where the subject brings about or facilitates the object outcome. This fits the broad CAUSALITY dimension better than alternatives like ASSOCIATION or USAGE, since the emphasis is on enabling effects rather than mere co-occurrence or simple use.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  }
+]

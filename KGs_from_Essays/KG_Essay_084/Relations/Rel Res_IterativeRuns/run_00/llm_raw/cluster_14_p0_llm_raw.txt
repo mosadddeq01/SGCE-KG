@@ -1,0 +1,174 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_7ef858ab930b",
+        "RelR_58f74eea277c",
+        "RelR_748f4768019a",
+        "RelR_40dc5b2b8c69"
+      ],
+      "canonical_rel_name": "takes_place_in",
+      "canonical_rel_desc": "Indicates that a forensic event, communication, or testimony occurs within a specific courtroom or legal venue.",
+      "justification": "All four relations connect courtroom-related subjects (evidence presentation, findings presentation, expert testimony, analyses and conclusions) to the location 'court' with qualifiers like 'in court' and 'during legal proceedings'; they share the same event-location semantics.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_fb105a8df5cd"
+      ],
+      "canonical_rel_name": "located_at_scene",
+      "canonical_rel_desc": "Indicates that a forensic presence, condition, or substance is situated at a specific crime scene.",
+      "justification": "This relation expresses that the presence of a particular substance is specifically at a crime scene; this is a static spatial localization at the scene, distinct from courtroom context or collection operations.",
+      "remark": null,
+      "confidence": 0.96
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_f1953fecdfa7"
+      ],
+      "canonical_rel_name": "collected_from",
+      "canonical_rel_desc": "Indicates that a piece of forensic evidence is collected from a specified source location such as a crime scene.",
+      "justification": "The subject is 'evidence' and the object is 'crime scene', with qualifiers explicitly stating that evidence is collected from the crime scene during investigation; this is a clear source-location collection relation.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_3ca9b0b9e68b"
+      ],
+      "canonical_rel_name": "has_collected_evidence",
+      "canonical_rel_desc": "Indicates that a crime scene or location has associated evidence that has been collected from it.",
+      "justification": "Here the subject is 'crime scene' and the object is 'evidence'; semantics are the inverse of evidence collected from a scene, so a canonical predicate describing the scene as having collected evidence is appropriate.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_2c2a75f74a79"
+      ],
+      "canonical_rel_name": "changes_during",
+      "canonical_rel_desc": "Indicates that a practice, competence, or concept is expected to change or evolve over a specified future time period.",
+      "justification": "The relation links 'art of forensic science' to a future period 'years to come' with qualifiers describing it becoming more sophisticated and effective; this is clearly a temporal evolution/change relation.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_7ef858ab930b",
+        "RelR_58f74eea277c",
+        "RelR_748f4768019a",
+        "RelR_40dc5b2b8c69"
+      ],
+      "rel_cls": "forensic_courtroom_context_relation",
+      "justification": "All four relations describe activities (presentation of evidence/findings, analyses, and expert testimony) taking place in the courtroom context; grouping them under a courtroom-context relation class reflects their shared semantics beyond generic spatiality.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_fb105a8df5cd"
+      ],
+      "rel_cls": "forensic_scene_location_relation",
+      "justification": "This relation localizes a forensic presence (substance) at a crime scene, which is a canonical scene-location pattern distinct from courtroom or operational collection relations.",
+      "remark": null,
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_f1953fecdfa7",
+        "RelR_3ca9b0b9e68b"
+      ],
+      "rel_cls": "evidence_collection_relation",
+      "justification": "Both relations concern evidence being collected in connection with a crime scene (one from the perspective of the evidence, one from the perspective of the scene); they belong to the same operational evidence-collection family.",
+      "remark": null,
+      "confidence": 0.92
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_2c2a75f74a79"
+      ],
+      "rel_cls": "evolution_over_time_relation",
+      "justification": "The relation models how forensic science practice will evolve over a future time period; this is a general class of temporal evolution/change relations.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_7ef858ab930b",
+        "RelR_58f74eea277c",
+        "RelR_748f4768019a",
+        "RelR_40dc5b2b8c69"
+      ],
+      "rel_cls_group": "SPATIALITY",
+      "justification": "All four involve events or actions situated in the spatial context of a courtroom (in court), so they belong under a broad spatial/location group, even though semantically they are courtroom-context specific.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_fb105a8df5cd"
+      ],
+      "rel_cls_group": "SPATIALITY",
+      "justification": "The relation expresses that a presence of a substance is at a crime scene ('at a crime scene'), which is a straightforward spatial localization.",
+      "remark": null,
+      "confidence": 0.97
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_f1953fecdfa7",
+        "RelR_3ca9b0b9e68b"
+      ],
+      "rel_cls_group": "OPERATIONAL",
+      "justification": "Both relations describe an operational forensic activity (collection of evidence from a crime scene) rather than mere static spatial location; grouping them under an operational/procedural dimension is appropriate.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_2c2a75f74a79"
+      ],
+      "rel_cls_group": "TEMPORALITY",
+      "justification": "The relation centers on change over a specified future time period ('years to come'), which squarely falls under temporal semantics.",
+      "remark": null,
+      "confidence": 0.95
+    }
+  }
+]

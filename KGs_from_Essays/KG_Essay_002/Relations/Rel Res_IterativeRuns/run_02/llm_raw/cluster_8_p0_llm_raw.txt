@@ -1,0 +1,28 @@
+[
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": ["RelR_177460eaf6b3"],
+      "canonical_rel_name": "circulates_within",
+      "canonical_rel_desc": "Indicates that a narrative or information item is shared and transmitted within a particular social group or community.",
+      "rel_cls": "narrative_dissemination_relation",
+      "rel_cls_group": "COMMUNICATION",
+      "justification": "This relation describes the same phenomenon as RelR_a8c302701e53: urban legends circulating/transmitting within communities. Normalizing the canonical_rel_name and description to 'circulates_within' aligns semantically equivalent predicates. The broader semantics is communication of narratives within groups; temporality is already captured via qualifiers, so the rel_cls_group should be COMMUNICATION rather than TEMPORALITY. Using the same rel_cls 'narrative_dissemination_relation' groups these dissemination edges consistently.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": ["RelR_126fe4265cb4"],
+      "canonical_rel_name": null,
+      "canonical_rel_desc": null,
+      "rel_cls": "narrative_dissemination_relation",
+      "rel_cls_group": null,
+      "justification": "This relation captures communities sharing stories among members, which is the same family of phenomena as legends circulating within communities. Aligning rel_cls to 'narrative_dissemination_relation' groups all narrative-sharing and circulation edges under a single, coherent dissemination class while keeping its existing COMMUNICATION rel_cls_group, which is already appropriate.",
+      "remark": null,
+      "confidence": 0.88
+    }
+  }
+]

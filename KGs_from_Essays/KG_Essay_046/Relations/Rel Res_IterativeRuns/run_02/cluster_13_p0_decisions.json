@@ -1,0 +1,101 @@
+{
+  "cluster_label": "13_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_28060d44593c",
+      "relation_name": "helps_maintain",
+      "rel_desc": "Birds help maintain overall biodiversity by supporting plant reproduction and dispersal.",
+      "rel_hint_type": "causal",
+      "canonical_rel_name": "supports_maintenance_of",
+      "canonical_rel_desc": "Indicates that the subject contributes causally to maintaining or preserving the state, integrity, or level of the object (e.g., biodiversity).",
+      "rel_cls": "conservation_outcome_relation",
+      "rel_cls_group": "CAUSALITY",
+      "subject_entity_name": "birds",
+      "object_entity_name": "biodiversity",
+      "subject_class_label": "Bird Biotic Components",
+      "subject_class_group": "Birds as Environmental Indicators & Conservation",
+      "object_class_label": "Ecosystem State and Stability",
+      "object_class_group": "Ecosystem Condition, Function & Services",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "overall biodiversity",
+        "OperationalConstraint": null,
+        "ConditionExpression": "Without birds, biodiversity declines",
+        "UncertaintyQualifier": null,
+        "CausalHint": "leading to",
+        "LogicalMarker": "Without",
+        "OtherQualifier": "Pathway: via plant reproduction and colonization"
+      },
+      "confidence": 0.9,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_c7725617428d",
+      "relation_name": "supports_maintenance_of",
+      "rel_desc": "Maintaining and protecting bird populations helps maintain biodiversity.",
+      "rel_hint_type": "conservation effect",
+      "canonical_rel_name": "supports_maintenance_of",
+      "canonical_rel_desc": "Indicates that the subject contributes causally to maintaining or preserving the state, integrity, or level of the object (e.g., biodiversity).",
+      "rel_cls": "conservation_outcome_relation",
+      "rel_cls_group": "CAUSALITY",
+      "subject_entity_name": "bird populations",
+      "object_entity_name": "biodiversity",
+      "subject_class_label": "Bird Biotic Components",
+      "subject_class_group": "Birds as Environmental Indicators & Conservation",
+      "object_class_label": "Ecosystem State and Stability",
+      "object_class_group": "Ecosystem Condition, Function & Services",
+      "qualifiers": {
+        "TemporalQualifier": "for future generations (long-term)",
+        "SpatialQualifier": "ecosystems around the world; natural systems",
+        "OperationalConstraint": "when bird populations are effectively protected along with their habitats",
+        "ConditionExpression": "if bird populations and their habitats are protected",
+        "UncertaintyQualifier": null,
+        "CausalHint": "crucial for",
+        "LogicalMarker": "for",
+        "OtherQualifier": null
+      },
+      "confidence": 0.9,
+      "remarks": [
+        "Relation direction chosen as bird populations (when protected) contributing to biodiversity maintenance.",
+        "Relation direction chosen as bird populations (when protected) contributing to biodiversity maintenance.",
+        "Relation direction chosen as bird populations (when protected) contributing to biodiversity maintenance."
+      ]
+    },
+    {
+      "relation_id": "RelR_4bbde1bc68df",
+      "relation_name": "supports_maintenance_of",
+      "rel_desc": "Protecting bird habitats is important for maintaining biodiversity.",
+      "rel_hint_type": "conservation effect",
+      "canonical_rel_name": "supports_maintenance_of",
+      "canonical_rel_desc": "Indicates that the subject contributes causally to maintaining or preserving the state, integrity, or level of the object (e.g., biodiversity).",
+      "rel_cls": "conservation_outcome_relation",
+      "rel_cls_group": "CAUSALITY",
+      "subject_entity_name": "habitats",
+      "object_entity_name": "biodiversity",
+      "subject_class_label": "Bird Habitats",
+      "subject_class_group": "Birds as Environmental Indicators & Conservation",
+      "object_class_label": "Ecosystem State and Stability",
+      "object_class_group": "Ecosystem Condition, Function & Services",
+      "qualifiers": {
+        "TemporalQualifier": "for future generations",
+        "SpatialQualifier": "ecosystems; natural systems",
+        "OperationalConstraint": "when habitats are protected along with bird populations",
+        "ConditionExpression": "if bird populations and their habitats are protected",
+        "UncertaintyQualifier": null,
+        "CausalHint": "is crucial for",
+        "LogicalMarker": "and; for",
+        "OtherQualifier": null
+      },
+      "confidence": 0.88,
+      "remarks": [
+        "Created to separately capture the effect of habitat protection.",
+        "Created to separately capture the effect of habitat protection.",
+        "Created to separately capture the effect of habitat protection."
+      ]
+    }
+  ],
+  "llm_raw": "[]",
+  "parsed_steps": [],
+  "executed_decisions": [],
+  "timestamp": "2026-01-06T11:36:33Z"
+}

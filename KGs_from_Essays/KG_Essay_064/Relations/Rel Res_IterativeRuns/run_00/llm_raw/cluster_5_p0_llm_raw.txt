@@ -1,0 +1,142 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_5b3a1e2b3930",
+        "RelR_8a5226ec9007",
+        "RelR_abad49984afa"
+      ],
+      "canonical_rel_name": "is_instance_of",
+      "canonical_rel_desc": "Indicates that the subject is a specific instance or individual example of the object class or category.",
+      "justification": "All three relations link a specific named fairy tale (Cinderella, Snow White, Hansel and Gretel) to the general category 'fairytales', expressing standard instance–of membership.",
+      "remark": null,
+      "confidence": 0.96
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_6050475fbe81"
+      ],
+      "canonical_rel_name": "is_subset_of",
+      "canonical_rel_desc": "Indicates that the subject collection or group is a subset of, or fully contained within, the object collection or category.",
+      "justification": "The description explicitly states that 'these tales' are a subset of the broader category of fairytales, which aligns with a subset relation between groups.",
+      "remark": null,
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_be535889a123"
+      ],
+      "canonical_rel_name": "classifies",
+      "canonical_rel_desc": "Indicates that the subject category or label is used to classify or categorize the object entity as belonging to that category.",
+      "justification": "The subject is the category term 'classic fairytale' and the object is the work 'Hansel and Gretel'; the semantics are that this label categorizes the work, best captured as a 'classifies' predicate in this direction.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_7d09d70f5a7a"
+      ],
+      "canonical_rel_name": "exemplifies",
+      "canonical_rel_desc": "Indicates that the subject is a concrete example or exemplar of the object concept, motif, or category.",
+      "justification": "The text states that Hansel and Gretel exemplifies the motif 'Tales of children outsmarting witches', which is a classic example–of relation.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_15d1498558e4"
+      ],
+      "canonical_rel_name": "is_form_of",
+      "canonical_rel_desc": "Indicates that the subject is a specific form, mode, or sub-type of the broader practice or concept represented by the object.",
+      "justification": "Fairytales are described as a form or mode of storytelling, matching a conceptual 'is a form of' relation between genre and practice.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_cc659a1a3881"
+      ],
+      "canonical_rel_name": "occurs_in",
+      "canonical_rel_desc": "Indicates that the subject motif, pattern, or phenomenon is found within or occurs as part of the object cultural or narrative tradition.",
+      "justification": "The relation states that the motif of children outsmarting witches occurs within European folklore; this is a standard motif-occurs-in-tradition relation.",
+      "remark": null,
+      "confidence": 0.78
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_5b3a1e2b3930",
+        "RelR_8a5226ec9007",
+        "RelR_abad49984afa",
+        "RelR_6050475fbe81",
+        "RelR_be535889a123",
+        "RelR_7d09d70f5a7a",
+        "RelR_15d1498558e4"
+      ],
+      "rel_cls": "genre_and_category_relation",
+      "justification": "All these relations express taxonomic or classificatory links among tales, motifs, and storytelling concepts: instance-of (individual tale to genre), subset-of (group of tales to genre), classifies (category to work), exemplifies (instance to motif), and is_form_of (genre to broader practice). They form a coherent family of genre/category membership and hierarchical relations.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_cc659a1a3881"
+      ],
+      "rel_cls": "cultural_occurrence_relation",
+      "justification": "This relation connects a narrative motif to a cultural tradition in which it appears, representing occurrence of a pattern within a folklore corpus rather than taxonomic membership.",
+      "remark": null,
+      "confidence": 0.82
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_5b3a1e2b3930",
+        "RelR_8a5226ec9007",
+        "RelR_abad49984afa",
+        "RelR_6050475fbe81",
+        "RelR_be535889a123",
+        "RelR_7d09d70f5a7a",
+        "RelR_15d1498558e4"
+      ],
+      "rel_cls_group": "IDENTITY",
+      "justification": "Classificatory and hierarchical relations between tales, motifs, and storytelling forms primarily describe identity and type-instance or subset identities (what something is or is an example/form of) rather than spatial, temporal, or causal aspects.",
+      "remark": null,
+      "confidence": 0.88
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_cc659a1a3881"
+      ],
+      "rel_cls_group": "SPATIALITY",
+      "justification": "The occurrence of a motif within 'European folklore' ties the motif to a cultural-geographical tradition; at the broadest level this is best captured as a where/within relation, i.e., spatial or locational within cultural space.",
+      "remark": "This relation also has an associative flavor (motif to tradition), but spatiality/geographical-cultural scope is the dominant organizing dimension.",
+      "confidence": 0.7
+    }
+  }
+]

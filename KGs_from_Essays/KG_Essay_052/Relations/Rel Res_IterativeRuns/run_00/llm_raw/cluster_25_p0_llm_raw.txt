@@ -1,0 +1,51 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_a7c52db9057c",
+        "RelR_f6799ddae294",
+        "RelR_d626d507be78",
+        "RelR_125c52df90ed",
+        "RelR_dbd6cd238368"
+      ],
+      "canonical_rel_name": "promotes_development_of",
+      "canonical_rel_desc": "Indicates that the subject activity or domain (e.g., participation in sports, sports) causally promotes the development or acquisition of the object skills, traits, or lessons in participants.",
+      "justification": "All five relations describe a causal effect where engaging in sports (or participation in sports) leads to the development or acquisition of life skills, specific personal traits (teamwork, perseverance, resilience), or broader lessons. A unified predicate 'promotes_development_of' captures this causal educational/skill-development semantics across these instances better than the raw verb 'develops' or 'provides'.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_a7c52db9057c",
+        "RelR_f6799ddae294",
+        "RelR_d626d507be78",
+        "RelR_125c52df90ed",
+        "RelR_dbd6cd238368"
+      ],
+      "rel_cls": "skill_development_relation",
+      "justification": "Each relation connects sports participation (or sports as a domain) to the development of life skills, traits, or lessons, forming a coherent family of causal relations about personal skill/competence development driven by an activity.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_a7c52db9057c",
+        "RelR_f6799ddae294",
+        "RelR_d626d507be78",
+        "RelR_125c52df90ed",
+        "RelR_dbd6cd238368"
+      ],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "The descriptions and rel_hint_type explicitly indicate a causal effect (sports participation leads to / helps develop / provides lessons), so these relations belong in a causal group rather than a purely associative one.",
+      "remark": null,
+      "confidence": 0.95
+    }
+  }
+]

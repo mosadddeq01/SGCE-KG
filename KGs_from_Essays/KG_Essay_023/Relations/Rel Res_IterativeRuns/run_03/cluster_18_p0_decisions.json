@@ -1,0 +1,127 @@
+{
+  "cluster_label": "18_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_85295e3229d9",
+      "relation_name": "prioritizes",
+      "rel_desc": "Superficial communication on social media prioritizes quantity over quality.",
+      "rel_hint_type": "preference",
+      "canonical_rel_name": "is_prioritized_over",
+      "canonical_rel_desc": "Indicates that the subject is systematically given higher priority or preference than the object, for example in terms of attention, time, or importance.",
+      "rel_cls": "prioritization_relation",
+      "rel_cls_group": "AGENCY",
+      "subject_entity_name": "superficial communication on social media",
+      "object_entity_name": "quantity over quality",
+      "subject_class_label": "Superficial Social Media Communication",
+      "subject_class_group": "Social Media Interaction & Engagement",
+      "object_class_label": "Superficial Social Media Communication",
+      "object_class_group": "Social Media Interaction & Engagement",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "prioritize",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.96,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_9f312b398bd6",
+      "relation_name": "prioritized_over",
+      "rel_desc": "Online relationships are said to be prioritized over face-to-face interaction.",
+      "rel_hint_type": "comparative",
+      "canonical_rel_name": "is_prioritized_over",
+      "canonical_rel_desc": "Indicates that the subject is systematically given higher priority or preference than the object, for example in terms of attention, time, or importance.",
+      "rel_cls": "prioritization_relation",
+      "rel_cls_group": "AGENCY",
+      "subject_entity_name": "online relationships",
+      "object_entity_name": "face-to-face interaction",
+      "subject_class_label": "Interaction Modalities",
+      "subject_class_group": "Social Media and Online Social Interaction",
+      "object_class_label": "Interaction Modalities",
+      "object_class_group": "Social Media and Online Social Interaction",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": "when relying heavily on social media",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "tendency",
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.95,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_rel_schema\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_85295e3229d9\"],\n      \"canonical_rel_name\": \"prioritizes\",\n      \"canonical_rel_desc\": \"Indicates that the subject actively gives higher priority, attention, or value to the object relative to alternatives.\",\n      \"rel_cls\": \"prioritization_relation\",\n      \"rel_cls_group\": \"PREFERENCE\",\n      \"justification\": \"In this instance, 'superficial communication on social media prioritizes quantity over quality' means the communication practice (subject) gives higher priority to a specific aspect (object: quantity over quality). The current canonical predicate 'is_prioritized_over' with a subject-as-recipient-of-priority semantics does not match; instead, the subject is the agent that prioritizes. Updating to 'prioritizes' aligns directionality and meaning. Both this and similar edges form a prioritization_relation and fit better under a broad PREFERENCE group than AGENCY.\",\n      \"remark\": null,\n      \"confidence\": 0.86\n    }\n  },\n  {\n    \"function\": \"modify_rel_schema\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_9f312b398bd6\"],\n      \"canonical_rel_name\": null,\n      \"canonical_rel_desc\": null,\n      \"rel_cls\": \"prioritization_relation\",\n      \"rel_cls_group\": \"PREFERENCE\",\n      \"justification\": \"This relation correctly uses 'is_prioritized_over' where the subject (online relationships) is given higher priority than the object (face-to-face interaction). Its existing canonical predicate and description are appropriate, but the broad class group 'AGENCY' is less precise than 'PREFERENCE' for prioritization and comparative preference relations. Aligning the rel_cls_group with that of similar prioritization relations improves schema coherence.\",\n      \"remark\": null,\n      \"confidence\": 0.84\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_rel_schema",
+      "args": {
+        "relation_ids": [
+          "RelR_85295e3229d9"
+        ],
+        "canonical_rel_name": "prioritizes",
+        "canonical_rel_desc": "Indicates that the subject actively gives higher priority, attention, or value to the object relative to alternatives.",
+        "rel_cls": "prioritization_relation",
+        "rel_cls_group": "PREFERENCE",
+        "justification": "In this instance, 'superficial communication on social media prioritizes quantity over quality' means the communication practice (subject) gives higher priority to a specific aspect (object: quantity over quality). The current canonical predicate 'is_prioritized_over' with a subject-as-recipient-of-priority semantics does not match; instead, the subject is the agent that prioritizes. Updating to 'prioritizes' aligns directionality and meaning. Both this and similar edges form a prioritization_relation and fit better under a broad PREFERENCE group than AGENCY.",
+        "remark": null,
+        "confidence": 0.86
+      }
+    },
+    {
+      "function": "modify_rel_schema",
+      "args": {
+        "relation_ids": [
+          "RelR_9f312b398bd6"
+        ],
+        "canonical_rel_name": null,
+        "canonical_rel_desc": null,
+        "rel_cls": "prioritization_relation",
+        "rel_cls_group": "PREFERENCE",
+        "justification": "This relation correctly uses 'is_prioritized_over' where the subject (online relationships) is given higher priority than the object (face-to-face interaction). Its existing canonical predicate and description are appropriate, but the broad class group 'AGENCY' is less precise than 'PREFERENCE' for prioritization and comparative preference relations. Aligning the rel_cls_group with that of similar prioritization relations improves schema coherence.",
+        "remark": null,
+        "confidence": 0.84
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_rel_schema",
+      "relation_ids": [
+        "RelR_85295e3229d9"
+      ],
+      "canonical_rel_name": "prioritizes",
+      "canonical_rel_desc": "Indicates that the subject actively gives higher priority, attention, or value to the object relative to alternatives.",
+      "rel_cls": "prioritization_relation",
+      "rel_cls_group": "PREFERENCE",
+      "new_relation_name": null,
+      "original_relation_name": null,
+      "justification": "In this instance, 'superficial communication on social media prioritizes quantity over quality' means the communication practice (subject) gives higher priority to a specific aspect (object: quantity over quality). The current canonical predicate 'is_prioritized_over' with a subject-as-recipient-of-priority semantics does not match; instead, the subject is the agent that prioritizes. Updating to 'prioritizes' aligns directionality and meaning. Both this and similar edges form a prioritization_relation and fit better under a broad PREFERENCE group than AGENCY.",
+      "remark": null,
+      "confidence": 0.86
+    },
+    {
+      "action": "modify_rel_schema",
+      "relation_ids": [
+        "RelR_9f312b398bd6"
+      ],
+      "canonical_rel_name": null,
+      "canonical_rel_desc": null,
+      "rel_cls": "prioritization_relation",
+      "rel_cls_group": "PREFERENCE",
+      "new_relation_name": null,
+      "original_relation_name": null,
+      "justification": "This relation correctly uses 'is_prioritized_over' where the subject (online relationships) is given higher priority than the object (face-to-face interaction). Its existing canonical predicate and description are appropriate, but the broad class group 'AGENCY' is less precise than 'PREFERENCE' for prioritization and comparative preference relations. Aligning the rel_cls_group with that of similar prioritization relations improves schema coherence.",
+      "remark": null,
+      "confidence": 0.84
+    }
+  ],
+  "timestamp": "2026-01-06T11:15:12Z"
+}

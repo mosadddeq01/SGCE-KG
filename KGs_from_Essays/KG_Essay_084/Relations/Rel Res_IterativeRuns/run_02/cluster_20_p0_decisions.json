@@ -1,0 +1,99 @@
+{
+  "cluster_label": "20_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_1d34a1f2daf2",
+      "relation_name": "analyzes",
+      "rel_desc": "Forensic science analyzes physical evidence as part of its practice.",
+      "rel_hint_type": "analytical",
+      "canonical_rel_name": "analyzes",
+      "canonical_rel_desc": "A forensic or investigative actor examines evidence or data to extract information, patterns, or insights.",
+      "rel_cls": "forensic_cognitive_activity_relation",
+      "rel_cls_group": "AGENCY",
+      "subject_entity_name": "forensic science",
+      "object_entity_name": "physical evidence",
+      "subject_class_label": "Forensic Science",
+      "subject_class_group": "Forensic Science Domain",
+      "object_class_label": "Forensic Physical Evidence",
+      "object_class_group": "Forensic Evidence",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "to",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.97,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_fd43b9df694c",
+      "relation_name": "analyzes",
+      "rel_desc": "Forensic scientists analyze complex data as part of their role.",
+      "rel_hint_type": "analytical",
+      "canonical_rel_name": "analyzes",
+      "canonical_rel_desc": "A forensic or investigative actor examines evidence or data to extract information, patterns, or insights.",
+      "rel_cls": "forensic_cognitive_activity_relation",
+      "rel_cls_group": "AGENCY",
+      "subject_entity_name": "forensic scientists",
+      "object_entity_name": "complex data",
+      "subject_class_label": "Forensic Scientists",
+      "subject_class_group": "Forensic Science Domain",
+      "object_class_label": "Complex Data",
+      "object_class_group": "Forensic Reasoning and Case Analysis",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": "must be able to",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": "must",
+        "OtherQualifier": null
+      },
+      "confidence": 0.98,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_rel_schema\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_1d34a1f2daf2\",\n        \"RelR_fd43b9df694c\"\n      ],\n      \"canonical_rel_name\": \"analyzes\",\n      \"canonical_rel_desc\": \"An agent examines evidence, data, or other information to extract facts, patterns, or insights.\",\n      \"rel_cls\": \"forensic_cognitive_activity_relation\",\n      \"rel_cls_group\": \"AGENCY\",\n      \"justification\": \"Both relations share the same predicate semantics ('analyzes') and already use a consistent canonical_rel_name and rel_cls. The only issue is that the existing canonical_rel_desc is unnecessarily restricted to 'forensic or investigative' actors, while the predicate itself is reusable for any analyzing agent. Updating the description to a domain-agnostic cognitive activity keeps compatibility with forensic cases but better supports reuse and consistency in the schema.\",\n      \"remark\": null,\n      \"confidence\": 0.93\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_rel_schema",
+      "args": {
+        "relation_ids": [
+          "RelR_1d34a1f2daf2",
+          "RelR_fd43b9df694c"
+        ],
+        "canonical_rel_name": "analyzes",
+        "canonical_rel_desc": "An agent examines evidence, data, or other information to extract facts, patterns, or insights.",
+        "rel_cls": "forensic_cognitive_activity_relation",
+        "rel_cls_group": "AGENCY",
+        "justification": "Both relations share the same predicate semantics ('analyzes') and already use a consistent canonical_rel_name and rel_cls. The only issue is that the existing canonical_rel_desc is unnecessarily restricted to 'forensic or investigative' actors, while the predicate itself is reusable for any analyzing agent. Updating the description to a domain-agnostic cognitive activity keeps compatibility with forensic cases but better supports reuse and consistency in the schema.",
+        "remark": null,
+        "confidence": 0.93
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_rel_schema",
+      "relation_ids": [
+        "RelR_1d34a1f2daf2",
+        "RelR_fd43b9df694c"
+      ],
+      "canonical_rel_name": "analyzes",
+      "canonical_rel_desc": "An agent examines evidence, data, or other information to extract facts, patterns, or insights.",
+      "rel_cls": "forensic_cognitive_activity_relation",
+      "rel_cls_group": "AGENCY",
+      "new_relation_name": null,
+      "original_relation_name": null,
+      "justification": "Both relations share the same predicate semantics ('analyzes') and already use a consistent canonical_rel_name and rel_cls. The only issue is that the existing canonical_rel_desc is unnecessarily restricted to 'forensic or investigative' actors, while the predicate itself is reusable for any analyzing agent. Updating the description to a domain-agnostic cognitive activity keeps compatibility with forensic cases but better supports reuse and consistency in the schema.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  ],
+  "timestamp": "2026-01-06T14:41:24Z"
+}

@@ -1,0 +1,20 @@
+[
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": [
+        "RelR_5b3a1e2b3930",
+        "RelR_8a5226ec9007",
+        "RelR_abad49984afa",
+        "RelR_6050475fbe81"
+      ],
+      "canonical_rel_name": null,
+      "canonical_rel_desc": null,
+      "rel_cls": "classification_hierarchy_relation",
+      "rel_cls_group": "HIERARCHY",
+      "justification": "All four relations (three is_instance_of and one is_subset_of) encode taxonomic / set-theoretic inclusion between specific tales or tale-collections and the broader category 'fairytales'. This is better modeled as a classification hierarchy rather than pure IDENTITY. The existing canonical_rel_name values are already appropriate and need no change, but rel_cls should emphasize classification hierarchy, and rel_cls_group should reflect hierarchical inclusion rather than identity.",
+      "remark": "Retains distinct predicates is_instance_of vs is_subset_of while aligning them under a common classification_hierarchy_relation class and broad HIERARCHY group.",
+      "confidence": 0.9
+    }
+  }
+]

@@ -1,0 +1,44 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_a3b901c1b9e8"],
+      "canonical_rel_name": "raises_awareness_of",
+      "canonical_rel_desc": "Subject brings attention to or increases public awareness of the object issue or topic, typically through communication or advocacy.",
+      "justification": "This relation instance describes athletes bringing attention to important social issues through public advocacy, which semantically aligns with raising awareness rather than directly shaping or determining outcomes.",
+      "remark": null,
+      "confidence": 0.92
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_8eb584c822f0", "RelR_7af97e1ce705"],
+      "canonical_rel_name": "shapes",
+      "canonical_rel_desc": "Subject plays a significant role in influencing the form, development, or characteristics of the object over time.",
+      "justification": "Both relations explicitly state that sports play a vital role in shaping culture or society; the subject is the same and the semantics are about structural influence on broad social constructs, so a shared canonical predicate 'shapes' is appropriate.",
+      "remark": null,
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": ["RelR_a3b901c1b9e8", "RelR_8eb584c822f0", "RelR_7af97e1ce705"],
+      "rel_cls": "social_influence_relation",
+      "justification": "All three relations describe how social actors or domains (athletes, sports) exert influence on broader social constructs (issues, culture, society), fitting a shared class capturing social influence effects.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": ["RelR_a3b901c1b9e8", "RelR_8eb584c822f0", "RelR_7af97e1ce705"],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "Each relation expresses that the subject has a causal or shaping effect on the object (raising awareness, shaping culture/society), which belongs in a broad causality/influence group.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  }
+]

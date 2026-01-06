@@ -1,0 +1,97 @@
+{
+  "cluster_label": "10_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_b09ef40c9e0f",
+      "relation_name": "plays_role_in",
+      "rel_desc": "Birds play crucial roles in ecosystems worldwide.",
+      "rel_hint_type": "functional involvement",
+      "canonical_rel_name": "has_ecological_role_in",
+      "canonical_rel_desc": "Links an organism or taxonomic group to the ecosystem context in which it plays one or more ecological roles or functions.",
+      "rel_cls": "ecosystem_function_relation",
+      "rel_cls_group": "FUNCTIONALITY",
+      "subject_entity_name": "birds",
+      "object_entity_name": "ecosystems",
+      "subject_class_label": "Bird Biotic Components",
+      "subject_class_group": "Birds as Environmental Indicators & Conservation",
+      "object_class_label": "Ecosystem State and Stability",
+      "object_class_group": "Ecosystem Condition, Function & Services",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "worldwide",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "crucial role",
+        "LogicalMarker": null,
+        "OtherQualifier": "EcosystemAspect: overall functioning and balance"
+      },
+      "confidence": 0.97,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_343e3478734c",
+      "relation_name": "performs_role",
+      "rel_desc": "Birds perform multiple ecological roles.",
+      "rel_hint_type": "role-performance",
+      "canonical_rel_name": "has_ecological_role_in",
+      "canonical_rel_desc": "Links an organism or taxonomic group to the ecosystem context in which it plays one or more ecological roles or functions.",
+      "rel_cls": "ecosystem_function_relation",
+      "rel_cls_group": "FUNCTIONALITY",
+      "subject_entity_name": "birds",
+      "object_entity_name": "ecological roles of birds",
+      "subject_class_label": "Bird Biotic Components",
+      "subject_class_group": "Birds as Environmental Indicators & Conservation",
+      "object_class_label": "Ecosystem Processes and Functions",
+      "object_class_group": "Ecosystem Condition, Function & Services",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "in ecosystems",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "Examples: seed dispersal, pest control"
+      },
+      "confidence": 0.93,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_rel_schema\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_343e3478734c\"\n      ],\n      \"canonical_rel_name\": \"has_ecological_role\",\n      \"canonical_rel_desc\": \"Links an organism or taxonomic group to a specific ecological role or function it performs (e.g., seed disperser, predator, pollinator).\",\n      \"rel_cls\": \"ecosystem_function_relation\",\n      \"rel_cls_group\": \"FUNCTIONALITY\",\n      \"justification\": \"For RelR_343e3478734c, the object is 'ecological roles of birds', i.e., the roles themselves, not the ecosystem context. The current canonical_rel_name 'has_ecological_role_in' (with description tying to ecosystem context) fits RelR_b09ef40c9e0f where the object is an ecosystem, but is semantically incorrect for a subject–role relation. Splitting into 'has_ecological_role' for organism→role and keeping 'has_ecological_role_in' for organism→ecosystem yields a cleaner, more precise schema while retaining the same relation class and group.\",\n      \"remark\": \"Normalized this relation to express a link from birds to their ecological roles, distinct from bird-to-ecosystem context relations.\",\n      \"confidence\": 0.9\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_rel_schema",
+      "args": {
+        "relation_ids": [
+          "RelR_343e3478734c"
+        ],
+        "canonical_rel_name": "has_ecological_role",
+        "canonical_rel_desc": "Links an organism or taxonomic group to a specific ecological role or function it performs (e.g., seed disperser, predator, pollinator).",
+        "rel_cls": "ecosystem_function_relation",
+        "rel_cls_group": "FUNCTIONALITY",
+        "justification": "For RelR_343e3478734c, the object is 'ecological roles of birds', i.e., the roles themselves, not the ecosystem context. The current canonical_rel_name 'has_ecological_role_in' (with description tying to ecosystem context) fits RelR_b09ef40c9e0f where the object is an ecosystem, but is semantically incorrect for a subject–role relation. Splitting into 'has_ecological_role' for organism→role and keeping 'has_ecological_role_in' for organism→ecosystem yields a cleaner, more precise schema while retaining the same relation class and group.",
+        "remark": "Normalized this relation to express a link from birds to their ecological roles, distinct from bird-to-ecosystem context relations.",
+        "confidence": 0.9
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_rel_schema",
+      "relation_ids": [
+        "RelR_343e3478734c"
+      ],
+      "canonical_rel_name": "has_ecological_role",
+      "canonical_rel_desc": "Links an organism or taxonomic group to a specific ecological role or function it performs (e.g., seed disperser, predator, pollinator).",
+      "rel_cls": "ecosystem_function_relation",
+      "rel_cls_group": "FUNCTIONALITY",
+      "new_relation_name": null,
+      "original_relation_name": null,
+      "justification": "For RelR_343e3478734c, the object is 'ecological roles of birds', i.e., the roles themselves, not the ecosystem context. The current canonical_rel_name 'has_ecological_role_in' (with description tying to ecosystem context) fits RelR_b09ef40c9e0f where the object is an ecosystem, but is semantically incorrect for a subject–role relation. Splitting into 'has_ecological_role' for organism→role and keeping 'has_ecological_role_in' for organism→ecosystem yields a cleaner, more precise schema while retaining the same relation class and group.",
+      "remark": "Normalized this relation to express a link from birds to their ecological roles, distinct from bird-to-ecosystem context relations.",
+      "confidence": 0.9
+    }
+  ],
+  "timestamp": "2026-01-06T11:33:22Z"
+}

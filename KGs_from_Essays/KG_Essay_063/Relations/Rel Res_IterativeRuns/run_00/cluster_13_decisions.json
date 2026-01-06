@@ -1,0 +1,118 @@
+{
+  "cluster_label": 13,
+  "cluster_classes": [
+    {
+      "candidate_id": "ClsC_c8272d0c",
+      "class_label": "Socio-Political Transformation",
+      "class_description": "Macro-level changes in societal structures and political systems, including both the shifting political landscape and broader social and political change.",
+      "class_type_hint": "Abstract Concept",
+      "class_group": "TBD",
+      "confidence": 0.73,
+      "evidence_excerpt": "Transformations in social and political structures and the overall configuration of political systems across many countries.",
+      "member_ids": [
+        "Can_a6b8db34",
+        "Can_c27097a9"
+      ],
+      "members": [
+        {
+          "id": "Can_a6b8db34",
+          "entity_name": "social and political change",
+          "entity_description": "Transformations or deep shifts in societal structures, norms, and political institutions driven by collective or political action.",
+          "entity_type_hint": "Outcome"
+        },
+        {
+          "id": "Can_c27097a9",
+          "entity_name": "political landscape of many countries",
+          "entity_description": "Overall configuration of political systems, institutions, and power structures across multiple countries.",
+          "entity_type_hint": "AbstractConcept"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_8b7c7584",
+      "class_label": "Global Sociopolitical Context",
+      "class_description": "Macro-level human collectivities and their global setting, encompassing the world as a whole and the societies within it that are shaped by protest and revolution.",
+      "class_type_hint": "Context Entity",
+      "class_group": "TBD",
+      "confidence": 0.8,
+      "evidence_excerpt": "change and transformation in societies around the world",
+      "member_ids": [
+        "En_2177cb05",
+        "En_8f233cbb"
+      ],
+      "members": [
+        {
+          "id": "En_2177cb05",
+          "entity_name": "the world",
+          "entity_description": "Global context in which protests inspire movements across different countries and societies.",
+          "entity_type_hint": "Location"
+        },
+        {
+          "id": "En_8f233cbb",
+          "entity_name": "societies",
+          "entity_description": "Human communities and nations affected by protests and revolutions.",
+          "entity_type_hint": "CollectiveActor"
+        }
+      ],
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_c8272d0c\",\n      \"new_name\": null,\n      \"new_description\": null,\n      \"new_class_type_hint\": null,\n      \"new_class_group\": \"Sociopolitical Systems and Change\",\n      \"remark\": null,\n      \"justification\": \"Assign a shared Class_Group capturing macro-level sociopolitical structures and transformations, aligning this class on socio-political change with the related context class.\",\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_8b7c7584\",\n      \"new_name\": null,\n      \"new_description\": null,\n      \"new_class_type_hint\": null,\n      \"new_class_group\": \"Sociopolitical Systems and Change\",\n      \"remark\": null,\n      \"justification\": \"Assign the same Class_Group to connect global sociopolitical context entities (world, societies) with related socio-political transformation concepts.\",\n      \"confidence\": 0.9\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_c8272d0c",
+        "new_name": null,
+        "new_description": null,
+        "new_class_type_hint": null,
+        "new_class_group": "Sociopolitical Systems and Change",
+        "remark": null,
+        "justification": "Assign a shared Class_Group capturing macro-level sociopolitical structures and transformations, aligning this class on socio-political change with the related context class.",
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_8b7c7584",
+        "new_name": null,
+        "new_description": null,
+        "new_class_type_hint": null,
+        "new_class_group": "Sociopolitical Systems and Change",
+        "remark": null,
+        "justification": "Assign the same Class_Group to connect global sociopolitical context entities (world, societies) with related socio-political transformation concepts.",
+        "confidence": 0.9
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_c8272d0c",
+      "class_id_resolved": "ClsC_c8272d0c",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Sociopolitical Systems and Change",
+      "remark": null,
+      "justification": "Assign a shared Class_Group capturing macro-level sociopolitical structures and transformations, aligning this class on socio-political change with the related context class.",
+      "confidence": 0.9
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_8b7c7584",
+      "class_id_resolved": "ClsC_8b7c7584",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Sociopolitical Systems and Change",
+      "remark": null,
+      "justification": "Assign the same Class_Group to connect global sociopolitical context entities (world, societies) with related socio-political transformation concepts.",
+      "confidence": 0.9
+    }
+  ],
+  "provisional_to_real": {},
+  "timestamp": "2026-01-06T13:06:02Z"
+}

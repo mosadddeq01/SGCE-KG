@@ -1,0 +1,42 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_782e7ed6db8c",
+        "RelR_ef171bc8bf94"
+      ],
+      "canonical_rel_name": "used_to_test",
+      "canonical_rel_desc": "Indicates that the subject is used as an experimental or observational tool to test, validate, or constrain the object (typically a theory, model, or hypothesis).",
+      "justification": "Both relations describe black holes being employed as tools or probes to test gravitational theories, including general relativity. The direction (subject as tool, object as theory) and semantics match exactly, so a single predicate 'used_to_test' is appropriate.",
+      "remark": null,
+      "confidence": 0.96
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_782e7ed6db8c",
+        "RelR_ef171bc8bf94"
+      ],
+      "rel_cls": "scientific_testing_relation",
+      "justification": "These relations link physical systems (black holes) to abstract theories in the context of using the former to test the latter, which is best captured as a family of scientific testing / validation relations rather than general usage or causality.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_782e7ed6db8c",
+        "RelR_ef171bc8bf94"
+      ],
+      "rel_cls_group": "USAGE",
+      "justification": "The primary semantic dimension is that black holes are being used as tools or probes for a purpose (testing theories), which falls under a broad usage/utility category rather than pure causality or identity.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  }
+]

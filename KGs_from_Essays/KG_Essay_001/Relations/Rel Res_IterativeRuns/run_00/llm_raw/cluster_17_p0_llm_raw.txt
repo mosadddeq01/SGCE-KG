@@ -1,0 +1,42 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_1fe83aeb066e",
+        "RelR_d22d6eacc4f9"
+      ],
+      "canonical_rel_name": "is_stage_of_life_cycle",
+      "canonical_rel_desc": "Indicates that the subject represents a distinct developmental stage within the object’s overall life cycle.",
+      "justification": "Both relations link a specific developmental phase (pupal stage, caterpillar) to the overall butterfly life cycle, expressing the same predicate meaning: a stage belonging to a larger life-cycle process.",
+      "remark": "Used for developmental or life-cycle stage membership relations.",
+      "confidence": 0.94
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_1fe83aeb066e",
+        "RelR_d22d6eacc4f9"
+      ],
+      "rel_cls": "life_cycle_stage_relation",
+      "justification": "These relations describe how specific developmental stages (caterpillar, pupal stage) relate to an organism’s life cycle, forming a coherent class of life-cycle stage membership relations.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_1fe83aeb066e",
+        "RelR_d22d6eacc4f9"
+      ],
+      "rel_cls_group": "HIERARCHY",
+      "justification": "A life cycle is an ordered structure, and a stage is a component within that structured whole; this is best modeled as a hierarchical part–whole relation within a developmental sequence.",
+      "remark": null,
+      "confidence": 0.88
+    }
+  }
+]

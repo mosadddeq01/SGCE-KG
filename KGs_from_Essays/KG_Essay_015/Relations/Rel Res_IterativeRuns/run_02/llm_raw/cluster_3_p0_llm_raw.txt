@@ -1,0 +1,21 @@
+[
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": [
+        "RelR_4c40e1b8fbcd",
+        "RelR_eb0d67c3ae79",
+        "RelR_00e7baf3a4b0",
+        "RelR_74701ed170b1",
+        "RelR_14b7411be58c"
+      ],
+      "canonical_rel_name": "expresses_cultural_belief_or_value",
+      "canonical_rel_desc": "Indicates that a cultural practice, custom, or ritual serves as an expression or manifestation of an underlying cultural belief, value, or attitude.",
+      "rel_cls": "cultural_expression_relation",
+      "rel_cls_group": "REPRESENTATION",
+      "justification": "All five relations link ancient Egyptian burial practices (a cultural practice) to underlying beliefs or values (afterlife beliefs or reverence for the deceased) with identical semantics of expression/manifestation. Normalizing them under a single canonical predicate 'expresses_cultural_belief_or_value' with a shared description improves schema consistency while preserving the existing, appropriate relation class and group.",
+      "remark": null,
+      "confidence": 0.97
+    }
+  }
+]

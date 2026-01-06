@@ -1,0 +1,65 @@
+{
+  "cluster_label": "19_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_45078e6f7e0a",
+      "relation_name": "involves",
+      "rel_desc": "Mummification includes wrapping the body in linen bandages.",
+      "rel_hint_type": "process-composition",
+      "canonical_rel_name": "includes_process_step",
+      "canonical_rel_desc": "Indicates that a complex process or ritual includes a specific subprocess, operation, or procedural step as part of its overall execution.",
+      "rel_cls": "process_decomposition_relation",
+      "rel_cls_group": "COMPOSITION",
+      "subject_entity_name": "mummification",
+      "object_entity_name": "linen bandages",
+      "subject_class_label": "Ancient Egyptian Mummification Practices",
+      "subject_class_group": "Ancient Egyptian Funerary Religion and Culture",
+      "object_class_label": "Ancient Egyptian Mummification Practices",
+      "object_class_group": "Ancient Egyptian Funerary Religion and Culture",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "around the body",
+        "OperationalConstraint": null,
+        "ConditionExpression": "before burial (implied)",
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": "before",
+        "OtherQualifier": "ProcessStepOrder: follows drying with salt"
+      },
+      "confidence": 0.97,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_8164fdaac05d",
+      "relation_name": "involves",
+      "rel_desc": "Ancient Egyptian burial practices also involved other unnamed skilled individuals.",
+      "rel_hint_type": "participation",
+      "canonical_rel_name": "has_participant",
+      "canonical_rel_desc": "Indicates that an event, process, or practice involves a specific participant (person, group, or role) taking part in it.",
+      "rel_cls": "participation_relation",
+      "rel_cls_group": "AGENCY",
+      "subject_entity_name": "ancient Egyptian burial practices",
+      "object_entity_name": "other skilled individuals",
+      "subject_class_label": "Ancient Egyptian Burial Practices (General)",
+      "subject_class_group": "Ancient Egyptian Funerary Religion and Culture",
+      "object_class_label": "Ancient Egyptian Burial Specialists",
+      "object_class_group": "Ancient Egyptian Funerary Religion and Culture",
+      "qualifiers": {
+        "TemporalQualifier": "during the process of burial",
+        "SpatialQualifier": "in ancient Egypt",
+        "OperationalConstraint": "complex and carefully orchestrated",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "required",
+        "LogicalMarker": "and",
+        "OtherQualifier": "Role: additional funerary specialists"
+      },
+      "confidence": 0.98,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[]",
+  "parsed_steps": [],
+  "executed_decisions": [],
+  "timestamp": "2026-01-06T10:37:20Z"
+}

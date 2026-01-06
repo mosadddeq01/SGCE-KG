@@ -1,0 +1,42 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_f50abc1014e0",
+        "RelR_6adffaeb29e4"
+      ],
+      "canonical_rel_name": "causes",
+      "canonical_rel_desc": "Indicates that the subject is a causal factor that brings about or gives rise to the object.",
+      "justification": "Both relations describe democratization of information bringing about downstream outcomes (important conversations, debates on social issues). This is a direct causal predicate from subject to object, so a normalized, directionally clear canonical name 'causes' fits both instances.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_f50abc1014e0",
+        "RelR_6adffaeb29e4"
+      ],
+      "rel_cls": "causal_effect_relation",
+      "justification": "These relations represent a general family where one phenomenon produces or shapes another (democratization of information leading to discourse outcomes). Grouping them under a broader class 'causal_effect_relation' captures this family beyond the specific canonical predicate.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_f50abc1014e0",
+        "RelR_6adffaeb29e4"
+      ],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "The hint type and descriptions explicitly state a cause–effect relationship (democratization of information leads to/sparks conversations and debates), which falls squarely under a broad CAUSALITY group.",
+      "remark": null,
+      "confidence": 0.96
+    }
+  }
+]

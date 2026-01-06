@@ -1,0 +1,21 @@
+[
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": [
+        "RelR_ef4ada1eaffe",
+        "RelR_831738cbfc65",
+        "RelR_f85b033c0f8f",
+        "RelR_415719da8fac",
+        "RelR_b488f3a4cd39"
+      ],
+      "canonical_rel_name": "generates",
+      "canonical_rel_desc": "Indicates that the subject produces or brings about the object, typically an experience, emotion, or social/cultural phenomenon.",
+      "rel_cls": "experience_generation_relation",
+      "rel_cls_group": "CAUSALITY",
+      "justification": "All five relations describe sports causally producing experiences or cultural phenomena (shared experiences, traditions, thrill, camaraderie, inspiration). Normalizing the predicate to a single canonical_rel_name 'generates' with a unified description improves schema consistency, and the existing rel_cls 'experience_generation_relation' and rel_cls_group 'CAUSALITY' remain semantically appropriate.",
+      "remark": "Canonical predicate normalized from mixed use of 'creates' and 'generates' to a single causal-generation predicate across all sports-related experiential and cultural effects.",
+      "confidence": 0.93
+    }
+  }
+]

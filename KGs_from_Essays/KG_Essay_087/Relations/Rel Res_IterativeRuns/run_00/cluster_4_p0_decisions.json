@@ -1,0 +1,175 @@
+{
+  "cluster_label": "4_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_8c1be1131e03",
+      "relation_name": "includes_dimension",
+      "rel_desc": "Overall consumer brand perceptions include brand personality as one dimension.",
+      "rel_hint_type": "part_whole",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "consumer brand perceptions",
+      "object_entity_name": "brand's personality",
+      "subject_class_label": "Consumer Brand Perception (Overall)",
+      "subject_class_group": "Consumer Psychology and Behavior in Branding",
+      "object_class_label": "Brand Perception Dimensions",
+      "object_class_group": "Consumer Psychology and Behavior in Branding",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": "and (list of dimensions)",
+        "OtherQualifier": "DimensionRole: component of overall brand perception"
+      },
+      "confidence": 0.93,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_2d9ee72204bb",
+      "relation_name": "includes_dimension",
+      "rel_desc": "Overall consumer brand perceptions include brand quality perception.",
+      "rel_hint_type": "part_whole",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "consumer brand perceptions",
+      "object_entity_name": "brand quality perception",
+      "subject_class_label": "Consumer Brand Perception (Overall)",
+      "subject_class_group": "Consumer Psychology and Behavior in Branding",
+      "object_class_label": "Brand Perception Dimensions",
+      "object_class_group": "Consumer Psychology and Behavior in Branding",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": "and (list of dimensions)",
+        "OtherQualifier": "DimensionRole: component of overall brand perception"
+      },
+      "confidence": 0.93,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_b11298e1de7b",
+      "relation_name": "includes_dimension",
+      "rel_desc": "Overall consumer brand perceptions include brand value perception.",
+      "rel_hint_type": "part_whole",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "consumer brand perceptions",
+      "object_entity_name": "brand value perception",
+      "subject_class_label": "Consumer Brand Perception (Overall)",
+      "subject_class_group": "Consumer Psychology and Behavior in Branding",
+      "object_class_label": "Brand Perception Dimensions",
+      "object_class_group": "Consumer Psychology and Behavior in Branding",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": "and (list of dimensions)",
+        "OtherQualifier": "DimensionRole: component of overall brand perception"
+      },
+      "confidence": 0.93,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_8c1be1131e03\",\n        \"RelR_2d9ee72204bb\",\n        \"RelR_b11298e1de7b\"\n      ],\n      \"canonical_rel_name\": \"has_dimension\",\n      \"canonical_rel_desc\": \"Indicates that an overall construct or perception includes a specific dimension or component aspect as part of its structure.\",\n      \"justification\": \"All three relations link the overall construct 'consumer brand perceptions' to specific component dimensions (brand personality, quality perception, value perception) with a clear part–whole (dimension-of) semantics. A single predicate 'has_dimension' consistently captures this direction (whole → dimension) across these instances.\",\n      \"remark\": \"Used for conceptual/psychological constructs where the object is a defined dimension of the overall subject.\",\n      \"confidence\": 0.95\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_8c1be1131e03\",\n        \"RelR_2d9ee72204bb\",\n        \"RelR_b11298e1de7b\"\n      ],\n      \"rel_cls\": \"conceptual_dimension_relation\",\n      \"justification\": \"Each relation connects an overall conceptual construct (overall brand perception) to one of its dimensions, forming a family of relations about how multi-dimensional constructs are structured.\",\n      \"remark\": \"Covers relations where a latent or conceptual variable is decomposed into multiple dimensions or facets.\",\n      \"confidence\": 0.94\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_8c1be1131e03\",\n        \"RelR_2d9ee72204bb\",\n        \"RelR_b11298e1de7b\"\n      ],\n      \"rel_cls_group\": \"COMPOSITION\",\n      \"justification\": \"The semantics are explicitly part–whole: overall brand perceptions are composed of multiple dimensions, so these edges describe compositional structure.\",\n      \"remark\": null,\n      \"confidence\": 0.95\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_8c1be1131e03",
+          "RelR_2d9ee72204bb",
+          "RelR_b11298e1de7b"
+        ],
+        "canonical_rel_name": "has_dimension",
+        "canonical_rel_desc": "Indicates that an overall construct or perception includes a specific dimension or component aspect as part of its structure.",
+        "justification": "All three relations link the overall construct 'consumer brand perceptions' to specific component dimensions (brand personality, quality perception, value perception) with a clear part–whole (dimension-of) semantics. A single predicate 'has_dimension' consistently captures this direction (whole → dimension) across these instances.",
+        "remark": "Used for conceptual/psychological constructs where the object is a defined dimension of the overall subject.",
+        "confidence": 0.95
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_8c1be1131e03",
+          "RelR_2d9ee72204bb",
+          "RelR_b11298e1de7b"
+        ],
+        "rel_cls": "conceptual_dimension_relation",
+        "justification": "Each relation connects an overall conceptual construct (overall brand perception) to one of its dimensions, forming a family of relations about how multi-dimensional constructs are structured.",
+        "remark": "Covers relations where a latent or conceptual variable is decomposed into multiple dimensions or facets.",
+        "confidence": 0.94
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_8c1be1131e03",
+          "RelR_2d9ee72204bb",
+          "RelR_b11298e1de7b"
+        ],
+        "rel_cls_group": "COMPOSITION",
+        "justification": "The semantics are explicitly part–whole: overall brand perceptions are composed of multiple dimensions, so these edges describe compositional structure.",
+        "remark": null,
+        "confidence": 0.95
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_8c1be1131e03",
+        "RelR_2d9ee72204bb",
+        "RelR_b11298e1de7b"
+      ],
+      "canonical_rel_name": "has_dimension",
+      "canonical_rel_desc": "Indicates that an overall construct or perception includes a specific dimension or component aspect as part of its structure.",
+      "justification": "All three relations link the overall construct 'consumer brand perceptions' to specific component dimensions (brand personality, quality perception, value perception) with a clear part–whole (dimension-of) semantics. A single predicate 'has_dimension' consistently captures this direction (whole → dimension) across these instances.",
+      "remark": "Used for conceptual/psychological constructs where the object is a defined dimension of the overall subject.",
+      "confidence": 0.95
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_8c1be1131e03",
+        "RelR_2d9ee72204bb",
+        "RelR_b11298e1de7b"
+      ],
+      "rel_cls": "conceptual_dimension_relation",
+      "justification": "Each relation connects an overall conceptual construct (overall brand perception) to one of its dimensions, forming a family of relations about how multi-dimensional constructs are structured.",
+      "remark": "Covers relations where a latent or conceptual variable is decomposed into multiple dimensions or facets.",
+      "confidence": 0.94
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_8c1be1131e03",
+        "RelR_2d9ee72204bb",
+        "RelR_b11298e1de7b"
+      ],
+      "rel_cls_group": "COMPOSITION",
+      "justification": "The semantics are explicitly part–whole: overall brand perceptions are composed of multiple dimensions, so these edges describe compositional structure.",
+      "remark": null,
+      "confidence": 0.95
+    }
+  ],
+  "timestamp": "2026-01-06T15:00:28Z"
+}

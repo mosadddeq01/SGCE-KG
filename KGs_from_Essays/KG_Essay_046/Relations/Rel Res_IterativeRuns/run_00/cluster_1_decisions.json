@@ -1,0 +1,263 @@
+{
+  "cluster_label": 1,
+  "cluster_classes": [
+    {
+      "candidate_id": "ClsC_56229c18",
+      "class_label": "Pest Organism Populations",
+      "class_description": "Groups of organisms considered pests whose population dynamics affect crops and vegetation, including insect populations serving as prey for birds and generalized pest groups that can cause outbreaks.",
+      "class_type_hint": "Organism Group",
+      "class_group": "TBD",
+      "confidence": 0.86,
+      "evidence_excerpt": "insects in ecosystems that serve as prey for birds… agricultural pests; organisms that can damage crops and vegetation",
+      "member_ids": [
+        "Can_5a77ee9e",
+        "En_5debf55d"
+      ],
+      "members": [
+        {
+          "id": "Can_5a77ee9e",
+          "entity_name": "insect populations",
+          "entity_description": "Groups of insects in ecosystems that serve as prey for birds, often functioning as agricultural pests in some contexts and contributing to nutrient cycling and ecosystem dynamics when their populations are naturally controlled by bird predation.",
+          "entity_type_hint": "OrganismGroup"
+        },
+        {
+          "id": "En_5debf55d",
+          "entity_name": "pests",
+          "entity_description": "Insects or organisms that can damage crops and vegetation when their populations outbreak.",
+          "entity_type_hint": "OrganismRole"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_c6698d0e",
+      "class_label": "Plant Resources at Risk",
+      "class_description": "Cultivated and natural plant resources that are vulnerable to damage from pest outbreaks, encompassing both agricultural crops and broader vegetation.",
+      "class_type_hint": "Protected Resource",
+      "class_group": "TBD",
+      "confidence": 0.83,
+      "evidence_excerpt": "can damage crops and other vegetation",
+      "member_ids": [
+        "En_b3356c2f",
+        "En_8f9ec9bd"
+      ],
+      "members": [
+        {
+          "id": "En_b3356c2f",
+          "entity_name": "crops",
+          "entity_description": "Cultivated plants grown for agriculture that can be damaged by pest outbreaks.",
+          "entity_type_hint": "Component"
+        },
+        {
+          "id": "En_8f9ec9bd",
+          "entity_name": "vegetation",
+          "entity_description": "General plant life that can be harmed by pest outbreaks and protected indirectly by birds.",
+          "entity_type_hint": "Environment"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_0f0485f2",
+      "class_label": "Pest Population Dynamics",
+      "class_description": "Ecological processes involving changes in pest populations, including rapid damaging outbreaks and their biological control by birds.",
+      "class_type_hint": "Ecological Process",
+      "class_group": "TBD",
+      "confidence": 0.73,
+      "evidence_excerpt": "Outbreaks of pests that can damage crops ... reduction of pest populations by birds.",
+      "member_ids": [
+        "En_a62530a3",
+        "Can_9f3f5982"
+      ],
+      "members": [
+        {
+          "id": "En_a62530a3",
+          "entity_name": "outbreaks of pests",
+          "entity_description": "Rapid increases in pest numbers that can damage crops and vegetation.",
+          "entity_type_hint": "EcologicalEvent"
+        },
+        {
+          "id": "Can_9f3f5982",
+          "entity_name": "natural pest control by birds",
+          "entity_description": "Ecosystem service in which birds biologically control pest species by feeding on them, reducing pest populations and contributing to ecosystem stability.",
+          "entity_type_hint": "EcosystemService"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_a864d609",
+      "class_label": "Synthetic Pesticides",
+      "class_description": "Man-made chemical substances formulated to kill or control pests in agricultural or environmental settings.",
+      "class_type_hint": "Material Category",
+      "class_group": "TBD",
+      "confidence": 0.92,
+      "evidence_excerpt": "Synthetic chemicals used to kill pests, whose use is reduced by natural pest control from birds.",
+      "member_ids": [
+        "En_3f364a49"
+      ],
+      "members": [
+        {
+          "id": "En_3f364a49",
+          "entity_name": "chemical pesticides",
+          "entity_description": "Synthetic chemicals used to kill pests, whose use is reduced by natural pest control from birds.",
+          "entity_type_hint": "Material"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_1cdb6232",
+      "class_label": "Human Health Impact",
+      "class_description": "Concerns the health and wellbeing of people, especially regarding adverse effects from chemical exposure such as pesticides.",
+      "class_type_hint": "Impact Domain",
+      "class_group": "TBD",
+      "confidence": 0.9,
+      "evidence_excerpt": "Health and wellbeing of people that can be adversely affected by chemical pesticides.",
+      "member_ids": [
+        "En_47c311a8"
+      ],
+      "members": [
+        {
+          "id": "En_47c311a8",
+          "entity_name": "human health",
+          "entity_description": "Health and wellbeing of people that can be adversely affected by chemical pesticides.",
+          "entity_type_hint": "HealthOutcome"
+        }
+      ],
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_56229c18\",\n      \"new_name\": null,\n      \"new_description\": null,\n      \"new_class_type_hint\": null,\n      \"new_class_group\": \"Pest Management & Ecosystem Services\",\n      \"remark\": null,\n      \"justification\": \"This class represents pest organism populations within an ecological pest management context and should be grouped with related classes on pest dynamics, pesticides, and their impacts under a shared Pest Management & Ecosystem Services class_group.\",\n      \"confidence\": 0.91\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_c6698d0e\",\n      \"new_name\": null,\n      \"new_description\": null,\n      \"new_class_type_hint\": null,\n      \"new_class_group\": \"Pest Management & Ecosystem Services\",\n      \"remark\": null,\n      \"justification\": \"This class covers plant resources (crops and vegetation) that are damaged or protected within the same pest management system, so it belongs in the same Pest Management & Ecosystem Services class_group as pests, pest dynamics, and control methods.\",\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_0f0485f2\",\n      \"new_name\": null,\n      \"new_description\": null,\n      \"new_class_type_hint\": null,\n      \"new_class_group\": \"Pest Management & Ecosystem Services\",\n      \"remark\": null,\n      \"justification\": \"This class models pest population dynamics and natural control by birds, which is central to ecological pest management and fits in a shared Pest Management & Ecosystem Services class_group with pest organisms, affected plants, and control measures.\",\n      \"confidence\": 0.93\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_a864d609\",\n      \"new_name\": null,\n      \"new_description\": null,\n      \"new_class_type_hint\": null,\n      \"new_class_group\": \"Pest Management & Ecosystem Services\",\n      \"remark\": null,\n      \"justification\": \"Synthetic pesticides are one of the main control tools in pest management and are explicitly contrasted with natural pest control by birds in the evidence, so they should share the Pest Management & Ecosystem Services class_group.\",\n      \"confidence\": 0.95\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_1cdb6232\",\n      \"new_name\": null,\n      \"new_description\": null,\n      \"new_class_type_hint\": null,\n      \"new_class_group\": \"Pest Management & Ecosystem Services\",\n      \"remark\": null,\n      \"justification\": \"Human health impacts from pesticide exposure are part of the broader consequences of pest management choices, so this impact domain class should be linked via the same Pest Management & Ecosystem Services class_group as pesticides and pest control processes.\",\n      \"confidence\": 0.9\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_56229c18",
+        "new_name": null,
+        "new_description": null,
+        "new_class_type_hint": null,
+        "new_class_group": "Pest Management & Ecosystem Services",
+        "remark": null,
+        "justification": "This class represents pest organism populations within an ecological pest management context and should be grouped with related classes on pest dynamics, pesticides, and their impacts under a shared Pest Management & Ecosystem Services class_group.",
+        "confidence": 0.91
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_c6698d0e",
+        "new_name": null,
+        "new_description": null,
+        "new_class_type_hint": null,
+        "new_class_group": "Pest Management & Ecosystem Services",
+        "remark": null,
+        "justification": "This class covers plant resources (crops and vegetation) that are damaged or protected within the same pest management system, so it belongs in the same Pest Management & Ecosystem Services class_group as pests, pest dynamics, and control methods.",
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_0f0485f2",
+        "new_name": null,
+        "new_description": null,
+        "new_class_type_hint": null,
+        "new_class_group": "Pest Management & Ecosystem Services",
+        "remark": null,
+        "justification": "This class models pest population dynamics and natural control by birds, which is central to ecological pest management and fits in a shared Pest Management & Ecosystem Services class_group with pest organisms, affected plants, and control measures.",
+        "confidence": 0.93
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_a864d609",
+        "new_name": null,
+        "new_description": null,
+        "new_class_type_hint": null,
+        "new_class_group": "Pest Management & Ecosystem Services",
+        "remark": null,
+        "justification": "Synthetic pesticides are one of the main control tools in pest management and are explicitly contrasted with natural pest control by birds in the evidence, so they should share the Pest Management & Ecosystem Services class_group.",
+        "confidence": 0.95
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_1cdb6232",
+        "new_name": null,
+        "new_description": null,
+        "new_class_type_hint": null,
+        "new_class_group": "Pest Management & Ecosystem Services",
+        "remark": null,
+        "justification": "Human health impacts from pesticide exposure are part of the broader consequences of pest management choices, so this impact domain class should be linked via the same Pest Management & Ecosystem Services class_group as pesticides and pest control processes.",
+        "confidence": 0.9
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_56229c18",
+      "class_id_resolved": "ClsC_56229c18",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Pest Management & Ecosystem Services",
+      "remark": null,
+      "justification": "This class represents pest organism populations within an ecological pest management context and should be grouped with related classes on pest dynamics, pesticides, and their impacts under a shared Pest Management & Ecosystem Services class_group.",
+      "confidence": 0.91
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_c6698d0e",
+      "class_id_resolved": "ClsC_c6698d0e",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Pest Management & Ecosystem Services",
+      "remark": null,
+      "justification": "This class covers plant resources (crops and vegetation) that are damaged or protected within the same pest management system, so it belongs in the same Pest Management & Ecosystem Services class_group as pests, pest dynamics, and control methods.",
+      "confidence": 0.9
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_0f0485f2",
+      "class_id_resolved": "ClsC_0f0485f2",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Pest Management & Ecosystem Services",
+      "remark": null,
+      "justification": "This class models pest population dynamics and natural control by birds, which is central to ecological pest management and fits in a shared Pest Management & Ecosystem Services class_group with pest organisms, affected plants, and control measures.",
+      "confidence": 0.93
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_a864d609",
+      "class_id_resolved": "ClsC_a864d609",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Pest Management & Ecosystem Services",
+      "remark": null,
+      "justification": "Synthetic pesticides are one of the main control tools in pest management and are explicitly contrasted with natural pest control by birds in the evidence, so they should share the Pest Management & Ecosystem Services class_group.",
+      "confidence": 0.95
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_1cdb6232",
+      "class_id_resolved": "ClsC_1cdb6232",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Pest Management & Ecosystem Services",
+      "remark": null,
+      "justification": "Human health impacts from pesticide exposure are part of the broader consequences of pest management choices, so this impact domain class should be linked via the same Pest Management & Ecosystem Services class_group as pesticides and pest control processes.",
+      "confidence": 0.9
+    }
+  ],
+  "provisional_to_real": {},
+  "timestamp": "2026-01-06T11:23:22Z"
+}

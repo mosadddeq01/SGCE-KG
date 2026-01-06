@@ -1,0 +1,17 @@
+[
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": [
+        "RelR_0215bd560e9a"
+      ],
+      "canonical_rel_name": "forms_structure",
+      "canonical_rel_desc": "An organism or biological process constructs or forms a new anatomical or protective structure (e.g., a caterpillar forming a chrysalis) as part of its development.",
+      "rel_cls": "developmental_structure_formation_relation",
+      "rel_cls_group": "CAUSALITY",
+      "justification": "The current canonical_rel_name 'forms_chrysalis' is too specific to a particular structure, whereas the pattern is a general developmental formation of a protective structure. Normalizing to 'forms_structure' provides a reusable predicate for similar organism/structure formation cases while retaining the existing, appropriate relation class and group.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  }
+]

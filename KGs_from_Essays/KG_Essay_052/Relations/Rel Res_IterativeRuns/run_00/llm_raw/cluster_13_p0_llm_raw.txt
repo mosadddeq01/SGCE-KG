@@ -1,0 +1,60 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_7f77490ba9ee",
+        "RelR_88262e82db36",
+        "RelR_1d801a70fa93"
+      ],
+      "canonical_rel_name": "provides_benefit_to",
+      "canonical_rel_desc": "Indicates that the subject (e.g., an activity, experience, or set of lessons) provides positive effects, advantages, or life skills to the target entity or life domain.",
+      "justification": "All three relations describe positive effects originating from sports participation or lessons from it and accruing to a target (individuals or aspects of their lives). They share the same directional semantics: the sports-related subject confers beneficial outcomes to the object.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_f6c995b88d1b"
+      ],
+      "canonical_rel_name": "contributes_to",
+      "canonical_rel_desc": "Indicates that the subject is a contributing factor that positively adds to or supports the state, functioning, or value of the object (e.g., sports contributing to the economy).",
+      "justification": "This relation specifically encodes that sports add to or support the economy; the existing raw relation_name already matches a clear, reusable predicate meaning 'acts as a contributing factor to'.",
+      "remark": null,
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_7f77490ba9ee",
+        "RelR_88262e82db36",
+        "RelR_1d801a70fa93",
+        "RelR_f6c995b88d1b"
+      ],
+      "rel_cls": "impact_relation",
+      "justification": "All four relations encode impacts or outcomes (personal, professional, or economic) resulting from sports or sports-derived lessons. Grouping them under a common 'impact_relation' class captures this shared semantics while allowing different predicates (e.g., 'provides_benefit_to', 'contributes_to').",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_7f77490ba9ee",
+        "RelR_88262e82db36",
+        "RelR_1d801a70fa93",
+        "RelR_f6c995b88d1b"
+      ],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "Each relation describes a causal or quasi-causal influence: sports participation and its lessons cause beneficial changes in individuals and their life domains, and sports cause positive contributions to the economy. This fits a broad causal/impact dimension best.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  }
+]

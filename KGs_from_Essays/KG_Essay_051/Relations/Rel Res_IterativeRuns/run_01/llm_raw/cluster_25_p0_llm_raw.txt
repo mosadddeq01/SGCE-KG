@@ -1,0 +1,19 @@
+[
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": [
+        "RelR_fad393a0b14b",
+        "RelR_0b87d4157156",
+        "RelR_fcafa93f2f18"
+      ],
+      "canonical_rel_name": "is_component_of",
+      "canonical_rel_desc": "Indicates that the subject is a part, aspect, or modality of the larger whole, system, or process represented by the object.",
+      "rel_cls": null,
+      "rel_cls_group": null,
+      "justification": "All three relations represent a consistent part–whole/component relation and already share the same canonical_rel_name. However, they currently have slightly different and partly confusing canonical_rel_desc texts (including wording like 'example of' and 'category' that can blur part-of vs instance-of semantics). Unifying them under a single clear description focused on part/aspect/modality of a larger whole improves schema consistency without changing their more specific rel_cls distinctions.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  }
+]

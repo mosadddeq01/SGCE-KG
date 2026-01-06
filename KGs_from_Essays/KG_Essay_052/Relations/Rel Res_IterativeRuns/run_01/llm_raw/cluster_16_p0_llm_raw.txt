@@ -1,0 +1,44 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_1ea5b796708e"],
+      "canonical_rel_name": "promotes_social_cohesion_among",
+      "canonical_rel_desc": "Indicates that the subject activity or context helps unite or strengthen social bonds among the people or groups represented by the object.",
+      "justification": "This relation expresses that sporting events help unite people from different backgrounds and beliefs; the core predicate is that events causally promote social cohesion among those people.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_f8d9b9acdb67"],
+      "canonical_rel_name": "creates_shared_passion_for",
+      "canonical_rel_desc": "Indicates that the subject generates or gives rise to a shared passion, interest, or enthusiasm represented by the object.",
+      "justification": "This relation states that sporting events unite diverse people in a common passion; the key predicate is that events causally create a shared passion (the object).",
+      "remark": null,
+      "confidence": 0.88
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": ["RelR_1ea5b796708e", "RelR_f8d9b9acdb67"],
+      "rel_cls": "social_cohesion_and_bonding_relation",
+      "justification": "Both relations concern how sporting events influence social bonds and shared affect (cohesion among people and a common passion); they naturally fall into a shared class focused on social cohesion and bonding effects.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": ["RelR_1ea5b796708e", "RelR_f8d9b9acdb67"],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "In both cases, sporting events are described as having the power to cause social effects (uniting people, generating a common passion), making a causal grouping most appropriate.",
+      "remark": "Although these are inherently social/associative phenomena, the descriptions emphasize that events bring them about, so we prioritize CAUSALITY over ASSOCIATION as the primary group.",
+      "confidence": 0.88
+    }
+  }
+]

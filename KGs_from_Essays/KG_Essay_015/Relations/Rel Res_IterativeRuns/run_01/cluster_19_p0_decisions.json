@@ -1,0 +1,160 @@
+{
+  "cluster_label": "19_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_d416455577ce",
+      "relation_name": "aims_to_support",
+      "rel_desc": "Ancient Egyptian burial practices were deliberately designed to secure safe passage into the afterlife envisioned in Egyptian afterlife beliefs.",
+      "rel_hint_type": "purpose",
+      "canonical_rel_name": "has_purpose",
+      "canonical_rel_desc": "The subject ritual, practice, or process is intentionally performed in order to achieve or support the outcome or goal represented by the object.",
+      "rel_cls": "purpose_relation",
+      "rel_cls_group": "USAGE",
+      "subject_entity_name": "ancient Egyptian burial practices",
+      "object_entity_name": "ancient Egyptian afterlife beliefs",
+      "subject_class_label": "Ancient Egyptian Burial Practices (General)",
+      "subject_class_group": "Ancient Egyptian Funerary Religion and Culture",
+      "object_class_label": "Ancient Egyptian Afterlife Beliefs and Concepts",
+      "object_class_group": "Ancient Egyptian Funerary Religion and Culture",
+      "qualifiers": {
+        "TemporalQualifier": "at and after death",
+        "SpatialQualifier": "from the tomb to the afterlife",
+        "OperationalConstraint": "when performed correctly according to custom",
+        "ConditionExpression": "if burial practices are properly carried out",
+        "UncertaintyQualifier": null,
+        "CausalHint": "designed to ensure",
+        "LogicalMarker": null,
+        "OtherQualifier": "Outcome: safe passage into the afterlife"
+      },
+      "confidence": 0.93,
+      "remarks": [
+        "This complements the earlier informed_by relation by emphasizing teleological purpose.",
+        "This complements the earlier informed_by relation by emphasizing teleological purpose."
+      ]
+    },
+    {
+      "relation_id": "RelR_f68090888eea",
+      "relation_name": "associated_with",
+      "rel_desc": "The soul is associated with and meant to reunite with the deceased’s body.",
+      "rel_hint_type": "association",
+      "canonical_rel_name": "intended_to_reunite_with",
+      "canonical_rel_desc": "Indicates that the subject is conceptually or ritually intended to reunite with the object.",
+      "rel_cls": "afterlife_reunion_relation",
+      "rel_cls_group": "ASSOCIATION",
+      "subject_entity_name": "soul",
+      "object_entity_name": "the deceased",
+      "subject_class_label": "Ancient Egyptian Afterlife Beliefs and Concepts",
+      "subject_class_group": "Ancient Egyptian Funerary Religion and Culture",
+      "object_class_label": "Ancient Egyptian Deceased Individual (Burial Subject)",
+      "object_class_group": "Ancient Egyptian Funerary Religion and Culture",
+      "qualifiers": {
+        "TemporalQualifier": "in the afterlife",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": "would need to be reunited",
+        "UncertaintyQualifier": null,
+        "CausalHint": "to ensure this reunion",
+        "LogicalMarker": "would need",
+        "OtherQualifier": null
+      },
+      "confidence": 0.9,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_b08b7829d5ea",
+      "relation_name": "used_for",
+      "rel_desc": "The mummification process is performed to ensure the deceased's safe passage into the afterlife.",
+      "rel_hint_type": "purpose",
+      "canonical_rel_name": "has_purpose",
+      "canonical_rel_desc": "The subject ritual, practice, or process is intentionally performed in order to achieve or support the outcome or goal represented by the object.",
+      "rel_cls": "purpose_relation",
+      "rel_cls_group": "USAGE",
+      "subject_entity_name": "mummification",
+      "object_entity_name": "safe passage into the afterlife",
+      "subject_class_label": "Ancient Egyptian Mummification Practices",
+      "subject_class_group": "Ancient Egyptian Funerary Religion and Culture",
+      "object_class_label": "Ancient Egyptian Afterlife Beliefs and Concepts",
+      "object_class_group": "Ancient Egyptian Funerary Religion and Culture",
+      "qualifiers": {
+        "TemporalQualifier": "during preparation for burial",
+        "SpatialQualifier": null,
+        "OperationalConstraint": "as part of funerary rites",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "serve to ensure",
+        "LogicalMarker": null,
+        "OtherQualifier": "RitualPhase: embalming and wrapping"
+      },
+      "confidence": 0.97,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_82d81667fb0c",
+      "relation_name": "used_for",
+      "rel_desc": "Ancient Egyptian burial practices as a whole are aimed at ensuring safe passage into the afterlife.",
+      "rel_hint_type": "purpose",
+      "canonical_rel_name": "has_purpose",
+      "canonical_rel_desc": "The subject ritual, practice, or process is intentionally performed in order to achieve or support the outcome or goal represented by the object.",
+      "rel_cls": "purpose_relation",
+      "rel_cls_group": "USAGE",
+      "subject_entity_name": "ancient Egyptian burial practices",
+      "object_entity_name": "safe passage into the afterlife",
+      "subject_class_label": "Ancient Egyptian Burial Practices (General)",
+      "subject_class_group": "Ancient Egyptian Funerary Religion and Culture",
+      "object_class_label": "Ancient Egyptian Afterlife Beliefs and Concepts",
+      "object_class_group": "Ancient Egyptian Funerary Religion and Culture",
+      "qualifiers": {
+        "TemporalQualifier": "at and after death",
+        "SpatialQualifier": "into the afterlife",
+        "OperationalConstraint": "when carried out properly",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "sought to ensure (intended, not guaranteed)",
+        "CausalHint": "sought to ensure",
+        "LogicalMarker": "through",
+        "OtherQualifier": null
+      },
+      "confidence": 0.98,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_rel_schema\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_d416455577ce\",\n        \"RelR_b08b7829d5ea\",\n        \"RelR_82d81667fb0c\"\n      ],\n      \"canonical_rel_name\": \"has_purpose\",\n      \"canonical_rel_desc\": \"The subject ritual, practice, or process is intentionally performed in order to achieve or support the outcome or goal represented by the object.\",\n      \"rel_cls\": \"ritual_purpose_relation\",\n      \"rel_cls_group\": \"USAGE\",\n      \"justification\": \"All three relations link funerary rituals or practices (burial practices, mummification) to their intended goal (safe passage / afterlife outcome). They already share the same canonical predicate 'has_purpose'; refining rel_cls from the generic 'purpose_relation' to 'ritual_purpose_relation' better captures that this is a specific family of teleological links for ritual or practice purposes, while keeping the broad group as USAGE.\",\n      \"remark\": null,\n      \"confidence\": 0.87\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_rel_schema",
+      "args": {
+        "relation_ids": [
+          "RelR_d416455577ce",
+          "RelR_b08b7829d5ea",
+          "RelR_82d81667fb0c"
+        ],
+        "canonical_rel_name": "has_purpose",
+        "canonical_rel_desc": "The subject ritual, practice, or process is intentionally performed in order to achieve or support the outcome or goal represented by the object.",
+        "rel_cls": "ritual_purpose_relation",
+        "rel_cls_group": "USAGE",
+        "justification": "All three relations link funerary rituals or practices (burial practices, mummification) to their intended goal (safe passage / afterlife outcome). They already share the same canonical predicate 'has_purpose'; refining rel_cls from the generic 'purpose_relation' to 'ritual_purpose_relation' better captures that this is a specific family of teleological links for ritual or practice purposes, while keeping the broad group as USAGE.",
+        "remark": null,
+        "confidence": 0.87
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_rel_schema",
+      "relation_ids": [
+        "RelR_d416455577ce",
+        "RelR_b08b7829d5ea",
+        "RelR_82d81667fb0c"
+      ],
+      "canonical_rel_name": "has_purpose",
+      "canonical_rel_desc": "The subject ritual, practice, or process is intentionally performed in order to achieve or support the outcome or goal represented by the object.",
+      "rel_cls": "ritual_purpose_relation",
+      "rel_cls_group": "USAGE",
+      "new_relation_name": null,
+      "original_relation_name": null,
+      "justification": "All three relations link funerary rituals or practices (burial practices, mummification) to their intended goal (safe passage / afterlife outcome). They already share the same canonical predicate 'has_purpose'; refining rel_cls from the generic 'purpose_relation' to 'ritual_purpose_relation' better captures that this is a specific family of teleological links for ritual or practice purposes, while keeping the broad group as USAGE.",
+      "remark": null,
+      "confidence": 0.87
+    }
+  ],
+  "timestamp": "2026-01-06T10:30:40Z"
+}

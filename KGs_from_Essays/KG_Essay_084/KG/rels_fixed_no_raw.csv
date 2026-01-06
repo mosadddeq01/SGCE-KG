@@ -1,0 +1,1071 @@
+"relation_id","start_id","end_id","raw_relation_name","canonical_rel_name","canonical_rel_desc","rel_cls","rel_cls_group","rel_hint_type","confidence","resolution_context","justification","remark","evidence_excerpt","chunk_id","qualifiers","rel_desc"
+"RelR_5302f39b010c","Can_8625e1a7","En_75e070f1","uses","uses","Subject uses or employs the object as a method, tool, technique, principle, or resource to carry out its activities or functions.","method_tool_usage_relation","USAGE","usage","0.96","Direction chosen as field (forensic science) using the methods and techniques.","The text explicitly defines forensic science as the application of scientific methods and techniques.","","Forensic science is the application of scientific methods and techniques","Ch_000001","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""application of"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": null
+}","Forensic science applies scientific methods and techniques."
+"RelR_e85bb5272e02","Can_8625e1a7","Can_8fe88d36","used_for","used_for","Indicates that the subject (a discipline, field, method, tool, or practice) is used or applied in order to achieve, address, or perform the object (a task, purpose, problem, or target).","functional_usage_relation","USAGE","purpose","0.97","Solving crimes is presented as a primary purpose of forensic science.","The definition states forensic science applies methods and techniques to solve crimes.","","application of scientific methods and techniques to solve crimes","Ch_000001","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""to"",
+ ""OtherQualifier"": null
+}","Forensic science is used to solve crimes."
+"RelR_ee02732b4d44","Can_8625e1a7","En_b6c9b728","used_for","used_for","Indicates that the subject (a discipline, field, method, tool, or practice) is used or applied in order to achieve, address, or perform the object (a task, purpose, problem, or target).","functional_usage_relation","USAGE","purpose","0.9","Legal issues appear alongside crimes as targets of forensic science.","The text links forensic science to solving legal issues via application of methods and techniques.","","application of scientific methods and techniques to solve crimes and legal issues","Ch_000001","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""and"",
+ ""OtherQualifier"": null
+}","Forensic science is used to address legal issues."
+"RelR_b6439ea4f202","Can_8625e1a7","En_f1d01ab0","contributes_to","contributes_to","The subject's work, function, or existence helps to bring about, support, or improve the object within a broader justice or criminal justice context.","justice_outcome_relation","CAUSALITY","functional_role","0.98","Direction from forensic science to criminal justice system reflects contribution.","The text directly states forensic science plays a crucial role in the criminal justice system.","","It plays a crucial role in the criminal justice system","Ch_000001","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": ""in the criminal justice system"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""by"",
+ ""OtherQualifier"": null
+}","Forensic science plays a crucial role in the criminal justice system."
+"RelR_1d34a1f2daf2","Can_8625e1a7","Can_1818d2ff","analyzes","analyzes","An investigative or forensic actor examines evidence, data, or other information to extract facts, patterns, or insights.","forensic_analysis_activity_relation","AGENCY","analytical","0.97","Text links forensic science and analysis of physical evidence directly.","The art of forensic science combines disciplines to analyze physical evidence; later, collection and analysis are key aspects.","","disciplines such as biology, chemistry, physics, and mathematics to analyze physical evidence","Ch_000001","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""to"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": null
+}","Forensic science analyzes physical evidence as part of its practice."
+"RelR_e643eb322fc1","Can_8625e1a7","En_5e2b0546","supports","supports","Indicates that the subject provides evidentiary, analytical, or operational help that facilitates or strengthens the object process or actor in the criminal justice/forensic context.","forensic_support_relation","CAUSALITY","support","0.95","Investigation is the process that is helped by evidence from forensic science.","The text states forensic science provides valuable evidence that helps in the investigation of crimes.","","providing valuable evidence that helps in the investigation ... of crimes","Ch_000001","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""helps"",
+ ""LogicalMarker"": ""that"",
+ ""OtherQualifier"": null
+}","Forensic science supports the investigation of crimes by providing valuable evidence."
+"RelR_e1ffa0e2ff89","Can_8625e1a7","En_f08e378d","supports","supports","Indicates that the subject provides evidentiary, analytical, or operational help that facilitates or strengthens the object process or actor in the criminal justice/forensic context.","forensic_support_relation","CAUSALITY","support","0.95","Prosecution is another process helped by forensic evidence from forensic science.","Same sentence links evidence from forensic science to prosecution of crimes.","","valuable evidence that helps in the investigation and prosecution of crimes","Ch_000001","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""helps"",
+ ""LogicalMarker"": ""and"",
+ ""OtherQualifier"": null
+}","Forensic science supports the prosecution of crimes by providing valuable evidence."
+"RelR_8ff2be5ea6db","Can_8625e1a7","En_70a019bd","has_aspect","has_aspect","Links a broader domain or concept to one of its constituent aspects, activities, or conceptual components.","conceptual_component_relation","COMPOSITION","part_of","0.98","Modeled as forensic science having collection as a constituent aspect.","The text explicitly labels the collection of physical evidence as a key aspect of forensic science.","","One of the key aspects of forensic science is the collection ... of physical evidence.","Ch_000001","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""is"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": null
+}","Collection of physical evidence is described as a key aspect of forensic science."
+"RelR_95829e8b6041","Can_8625e1a7","En_6ed9a385","has_aspect","has_aspect","Links a broader domain or concept to one of its constituent aspects, activities, or conceptual components.","conceptual_component_relation","COMPOSITION","part_of","0.98","Modeled similarly to collection as a key aspect.","The same sentence identifies analysis of physical evidence as part of the key aspect.","","One of the key aspects of forensic science is the collection and analysis of physical evidence.","Ch_000001","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""is"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": null
+}","Analysis of physical evidence is described as a key aspect of forensic science."
+"RelR_757166e211a1","En_70a019bd","Can_1818d2ff","acts_on","acts_on","A process is performed on, directed at, or targets this entity as its primary object or input.","process_target_relation","INTERACTION","process-target","0.9","Collection is modeled as a process whose target is physical evidence.","By definition, collection of physical evidence involves gathering physical evidence.","Relation created to anchor the process (collection) to its object (physical evidence).","key aspects of forensic science is the collection and analysis of physical evidence.","Ch_000001","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""of"",
+ ""OtherQualifier"": null
+}","The collection process operates on physical evidence, gathering it from scenes."
+"RelR_8c8695413950","En_6ed9a385","Can_1818d2ff","acts_on","acts_on","A process is performed on, directed at, or targets this entity as its primary object or input.","process_target_relation","INTERACTION","process-target","0.93","Analysis is the process; physical evidence is its object.","The phrase explicitly connects analysis with physical evidence.","","the collection and analysis of physical evidence.","Ch_000001","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""of"",
+ ""OtherQualifier"": null
+}","The analysis process is performed on physical evidence."
+"RelR_9909e236a8b6","Can_1818d2ff","En_5e2b0546","supports","supports","Indicates that the subject provides evidentiary, analytical, or operational help that facilitates or strengthens the object process or actor in the criminal justice/forensic context.","forensic_support_relation","CAUSALITY","support","0.9","Evidence (physical) is what directly helps investigations.","The text says forensic science provides valuable evidence that helps in the investigation of crimes, implying the evidence itself is supportive.","Direction from evidence to investigation chosen to emphasize evidentiary role.","valuable evidence that helps in the investigation ... of crimes.","Ch_000001","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""helps"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": null
+}","Physical evidence supports the investigation of crimes."
+"RelR_8d95f00cf685","Can_1818d2ff","En_f08e378d","supports","supports","Indicates that the subject provides evidentiary, analytical, or operational help that facilitates or strengthens the object process or actor in the criminal justice/forensic context.","forensic_support_relation","CAUSALITY","support","0.9","Evidence itself is what supports prosecution in court.","The same phrase extends the helping role of evidence to prosecution of crimes.","","valuable evidence that helps in the investigation and prosecution of crimes.","Ch_000001","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": ""in court (implied)"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""helps"",
+ ""LogicalMarker"": ""and"",
+ ""OtherQualifier"": ""ForumContext: legal prosecution setting""
+}","Physical evidence supports the prosecution of crimes."
+"RelR_7ef858ab930b","Can_1818d2ff","Can_abd0142e","presented_in","is_presented_in","Indicates that forensic evidence, analyses, or conclusions are presented within a specific courtroom or legal venue.","forensic_courtroom_context_relation","SPATIALITY","context","0.88","Court is the venue where conclusions from physical evidence are presented.","The sentence describes analysis of physical evidence leading to conclusions that can be presented in court, implying the evidence/conclusions appear there.","Evidence and conclusions are linked; relation focuses on evidence's courtroom context.","analyze physical evidence and draw conclusions that can be presented in court.","Ch_000001","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": ""in court"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": ""can be presented (potential, not mandatory)"",
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""that"",
+ ""OtherQualifier"": null
+}","Physical evidence may be presented in court as part of legal proceedings."
+"RelR_bf7bc8a1b141","Can_8625e1a7","En_b7302d47","incorporates","incorporates_discipline","Indicates that a field or domain incorporates, integrates, or draws upon the knowledge and methods of a scientific discipline.","disciplinary_integration_relation","COMPOSITION","composition","0.96","Biology named as one of the disciplines combined in forensic science.","The art of forensic science combines various scientific disciplines such as biology.","","combines various scientific disciplines such as biology","Ch_000001","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""combines"",
+ ""LogicalMarker"": ""such as"",
+ ""OtherQualifier"": null
+}","Forensic science incorporates the discipline of biology."
+"RelR_7cbba2e8f38f","Can_8625e1a7","En_0c845562","incorporates","incorporates_discipline","Indicates that a field or domain incorporates, integrates, or draws upon the knowledge and methods of a scientific discipline.","disciplinary_integration_relation","COMPOSITION","composition","0.96","Chemistry listed among disciplines combined in forensic science.","The text explicitly names chemistry as one of the disciplines combined.","","combines various scientific disciplines such as biology, chemistry, physics","Ch_000001","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""combines"",
+ ""LogicalMarker"": ""such as"",
+ ""OtherQualifier"": null
+}","Forensic science incorporates the discipline of chemistry."
+"RelR_1945ebdcb637","Can_8625e1a7","En_5ac9c136","incorporates","incorporates_discipline","Indicates that a field or domain incorporates, integrates, or draws upon the knowledge and methods of a scientific discipline.","disciplinary_integration_relation","COMPOSITION","composition","0.96","Physics also included among the combined disciplines.","Physics is directly listed as a discipline combined by forensic science.","","combines various scientific disciplines such as biology, chemistry, physics, and mathematics","Ch_000001","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""combines"",
+ ""LogicalMarker"": ""such as"",
+ ""OtherQualifier"": null
+}","Forensic science incorporates the discipline of physics."
+"RelR_7fa0752c5067","Can_8625e1a7","En_c71a7eb3","incorporates","incorporates_discipline","Indicates that a field or domain incorporates, integrates, or draws upon the knowledge and methods of a scientific discipline.","disciplinary_integration_relation","COMPOSITION","composition","0.96","Mathematics is listed among the combined disciplines in forensic science.","Mathematics appears in the list of various scientific disciplines combined.","","disciplines such as biology, chemistry, physics, and mathematics","Ch_000001","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""combines"",
+ ""LogicalMarker"": ""and"",
+ ""OtherQualifier"": null
+}","Forensic science incorporates the discipline of mathematics."
+"RelR_9c172ada9b26","En_b7302d47","En_6ed9a385","used_for","used_for","Indicates that the subject (a discipline, field, method, tool, technique, or practice) is used or applied in order to achieve or perform the object (a task, purpose, problem, or target).","functional_usage_relation","USAGE","purpose","0.78","All listed disciplines are collectively used to analyze evidence; relation specialized to biology.","Biology is part of the group of disciplines mentioned as being combined to analyze physical evidence.","Direction chosen from discipline to analysis process; text treats disciplines collectively.","combines various scientific disciplines such as biology, chemistry, physics, and mathematics to analyze physical evidence","Ch_000001","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": ""implicitly"",
+ ""CausalHint"": ""to analyze"",
+ ""LogicalMarker"": ""to"",
+ ""OtherQualifier"": null
+}","Biology is used as a discipline to analyze physical evidence in forensic science."
+"RelR_639269f188b6","En_0c845562","En_6ed9a385","used_for","used_for","Indicates that the subject (a discipline, field, method, tool, or practice) is used or applied in order to achieve, address, or perform the object (a task, purpose, problem, or target).","functional_usage_relation","USAGE","purpose","0.78","Chemistry included among disciplines used for analysis.","Chemistry appears in the same list of disciplines combined to analyze physical evidence.","Similar pattern applied to each discipline separately.","disciplines such as biology, chemistry, physics, and mathematics to analyze physical evidence","Ch_000001","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": ""implicitly"",
+ ""CausalHint"": ""to analyze"",
+ ""LogicalMarker"": ""to"",
+ ""OtherQualifier"": null
+}","Chemistry is used to perform analysis of physical evidence in forensic science."
+"RelR_7f8ec58837f4","En_5ac9c136","En_6ed9a385","used_for","used_for","Indicates that the subject (a discipline, field, or method) is used or applied in order to achieve, address, or perform the object (a task, purpose, or problem).","functional_usage_relation","USAGE","purpose","0.78","Physics is part of collective disciplines applied to analysis.","Physics is named in the list of disciplines used to analyze physical evidence.","","disciplines such as biology, chemistry, physics, and mathematics to analyze physical evidence","Ch_000001","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": ""implicitly"",
+ ""CausalHint"": ""to analyze"",
+ ""LogicalMarker"": ""to"",
+ ""OtherQualifier"": null
+}","Physics is used to conduct analysis of physical evidence."
+"RelR_ae356151ab74","En_c71a7eb3","En_6ed9a385","used_for","used_for","Indicates that the subject (a discipline, field, method, tool, technique, or practice) is used or applied in order to achieve or perform the object (a task, purpose, problem, or target).","functional_usage_relation","USAGE","purpose","0.78","Mathematics named with other disciplines applied to evidence analysis.","Mathematics appears in the series of disciplines combined to analyze physical evidence.","","physics, and mathematics to analyze physical evidence and draw conclusions","Ch_000001","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": ""implicitly"",
+ ""CausalHint"": ""to analyze"",
+ ""LogicalMarker"": ""to"",
+ ""OtherQualifier"": null
+}","Mathematics is used to analyze physical evidence, e.g., in drawing conclusions."
+"RelR_34df8d8d2209","En_5e2b0546","Can_8fe88d36","targets","acts_on","A process is performed on, directed at, or targets this entity as its primary object or input.","process_target_relation","INTERACTION","process-target","0.86","Modeled as the investigation process being directed at crime events.","The phrase explicitly says 'investigation of crimes', indicating crimes are what is investigated.","Captures the object of the investigation process.","valuable evidence that helps in the investigation and prosecution of crimes.","Ch_000001","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""of"",
+ ""OtherQualifier"": null
+}","The investigation of crimes is an investigative process targeting crimes."
+"RelR_e25465c9ef35","En_f08e378d","Can_8fe88d36","targets","acts_on","A process is performed on, directed at, or targets this entity as its primary object or input.","process_target_relation","INTERACTION","process-target","0.86","Prosecution is understood as legal action against crimes.","The phrase 'prosecution of crimes' indicates crimes are the object of prosecution.","","helps in the investigation and prosecution of crimes.","Ch_000001","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""of"",
+ ""OtherQualifier"": null
+}","The prosecution of crimes is a legal process directed at crimes."
+"RelR_9acbfcd263aa","En_e8030071","Can_1818d2ff","is_type_of","is_subtype_of","Indicates that the subject is a more specific type or subtype of the object within a conceptual or taxonomic hierarchy.","type_hierarchy_relation","HIERARCHY","type-subtype","0.97","Direction chosen from specific evidence item to broader physical evidence category.","The text explicitly lists fingerprints as part of the range of evidence, implying they are a kind of physical evidence.","","This evidence can range from fingerprints and DNA samples to firearms and tool marks.","Ch_000002","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": ""ExampleContext: listed as an example within a range of evidence types""
+}","Fingerprints are described as one type of physical evidence."
+"RelR_81f4074b1433","En_282ae4c4","Can_1818d2ff","is_type_of","is_subtype_of","Indicates that the subject is a more specific type or subtype of the object within a conceptual or taxonomic hierarchy.","type_hierarchy_relation","HIERARCHY","type-subtype","0.97","Specific sample category to overarching physical evidence.","DNA samples appear in the list of what this evidence can range from, indicating they are a kind of physical evidence.","","This evidence can range from fingerprints and DNA samples to firearms and tool marks.","Ch_000002","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": ""ExampleContext: part of enumerated examples of evidence""
+}","DNA samples are identified as a type of physical evidence."
+"RelR_7e622deca5b1","En_225a4641","Can_1818d2ff","is_type_of","is_subtype_of","Indicates that the subject is a more specific type or subtype of the object within a conceptual or taxonomic hierarchy.","type_hierarchy_relation","HIERARCHY","type-subtype","0.97","Concrete object (firearms) to physical evidence category.","Firearms appear in the range of evidence, indicating they function as physical evidence.","","This evidence can range from fingerprints and DNA samples to firearms and tool marks.","Ch_000002","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": ""ExampleContext: listed within the range of evidence types""
+}","Firearms are presented as an example of physical evidence."
+"RelR_34b9ad6b031d","En_67a4f128","Can_1818d2ff","is_type_of","is_subtype_of","Indicates that the subject is a more specific type or subtype of the object within a conceptual or taxonomic hierarchy.","type_hierarchy_relation","HIERARCHY","type-subtype","0.97","Specific trace feature (tool marks) to general physical evidence.","Tool marks are part of the listed range of evidence types.","","This evidence can range from fingerprints and DNA samples to firearms and tool marks.","Ch_000002","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": ""ExampleContext: part of enumerated physical evidence forms""
+}","Tool marks are identified as a type of physical evidence."
+"RelR_d0731a548a40","Can_1818d2ff","Can_0825e2f0","is_type_of","is_subtype_of","Indicates that the subject is a more specific type or subtype of the object within a conceptual or taxonomic hierarchy.","type_hierarchy_relation","HIERARCHY","type-subtype","0.86","The text uses 'this evidence' after listing concrete physical items; mapped to general evidence concept.","The passage discusses a range of tangible items and then refers to them collectively as 'this evidence', aligning physical evidence with the general evidence concept.","Upstream may already encode this hierarchy; included here for contextual clarity.","This evidence can range from fingerprints and DNA samples to firearms and tool marks.","Ch_000002","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": ""Scope: tangible forensic materials""
+}","Physical evidence is treated as a specific form of general evidence."
+"RelR_39740bd15548","Can_d2a80ca3","Can_0825e2f0","analyzes","analyzes","An investigative or forensic actor examines evidence, data, or other information to extract facts, patterns, or insights.","forensic_analysis_activity_relation","AGENCY","functional-role","0.99","Direction from agent (scientists) to object of analysis (evidence).","The sentence explicitly states that forensic scientists collect and analyze this evidence using various techniques.","","Forensic scientists use a variety of techniques to collect and analyze this evidence","Ch_000002","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": ""in the course of forensic investigations"",
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""to determine important details"",
+ ""LogicalMarker"": ""By"",
+ ""OtherQualifier"": null
+}","Forensic scientists collect and analyze evidence."
+"RelR_10bbb760d3da","En_f62c4387","Can_0825e2f0","used_to_analyze","is_used_to_analyze","Indicates that a method, technique, or technology is used to analyze a target material, sample, or evidence.","analytical_technique_application_relation","USAGE","usage","0.98","Technique → object it is applied to.","Microscopy is listed among techniques used to collect and analyze this evidence.","","including microscopy, spectroscopy, chromatography, and DNA profiling.","Ch_000002","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": ""within forensic analysis workflows"",
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""to collect and analyze"",
+ ""LogicalMarker"": ""including"",
+ ""OtherQualifier"": null
+}","Microscopy is one of the techniques used to analyze evidence."
+"RelR_dbd10b178a72","En_af8bcf5f","Can_0825e2f0","used_to_analyze","is_used_to_analyze","Indicates that a method, technique, or technology is used to analyze a target material, sample, or evidence.","analytical_technique_application_relation","USAGE","usage","0.98","Analytical technique applied to evidence.","Spectroscopy appears in the list of techniques used to collect and analyze evidence.","","including microscopy, spectroscopy, chromatography, and DNA profiling.","Ch_000002","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": ""as part of forensic laboratory methods"",
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""to collect and analyze"",
+ ""LogicalMarker"": ""including"",
+ ""OtherQualifier"": null
+}","Spectroscopy is used for the analysis of evidence."
+"RelR_d79e39f2d62e","En_78adefbf","Can_0825e2f0","used_to_analyze","is_used_to_analyze","Indicates that a method, technique, or technology is used to analyze a target material, sample, or evidence.","analytical_technique_application_relation","USAGE","usage","0.98","Technique to object relation.","Chromatography is included among the techniques for collecting and analyzing evidence.","","including microscopy, spectroscopy, chromatography, and DNA profiling.","Ch_000002","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": ""within forensic analytical workflows"",
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""to collect and analyze"",
+ ""LogicalMarker"": ""including"",
+ ""OtherQualifier"": null
+}","Chromatography is used to analyze evidence."
+"RelR_fc06a3f31361","En_4f9b303b","Can_0825e2f0","used_to_analyze","is_used_to_analyze","Indicates that a method, technique, or technology is used to analyze a target material, sample, or evidence.","analytical_technique_application_relation","USAGE","usage","0.99","Specific profiling technique applied to evidence.","DNA profiling is explicitly listed among techniques to collect and analyze evidence.","","including microscopy, spectroscopy, chromatography, and DNA profiling.","Ch_000002","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": ""as part of forensic identification procedures"",
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""to collect and analyze"",
+ ""LogicalMarker"": ""including"",
+ ""OtherQualifier"": null
+}","DNA profiling is used in analyzing forensic evidence."
+"RelR_31af248186f8","Can_0825e2f0","En_eb13e80d","used_to_determine","supports_inference_of","Indicates that evidence or complex data provides support for inferring, determining, or concluding a particular forensic determination or conclusion.","evidential_inference_relation","CAUSALITY","inference","0.99","From evidence (input) to determination (output).","By examining the physical characteristics of the evidence, forensic scientists can determine the identity of a suspect.","","By examining the physical characteristics of the evidence, forensic scientists can determine important details such as the identity of a suspect","Ch_000002","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": ""after examination of physical characteristics"",
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": ""can determine (not guaranteed)"",
+ ""CausalHint"": ""By examining the physical characteristics of the evidence"",
+ ""LogicalMarker"": ""such as"",
+ ""OtherQualifier"": null
+}","Evidence is used to determine the identity of a suspect."
+"RelR_32365166b934","Can_0825e2f0","En_28bad9ab","used_to_determine","supports_inference_of","Indicates that evidence or complex data provides support for inferring, determining, or concluding a particular forensic determination or conclusion.","evidential_inference_relation","CAUSALITY","inference","0.97","Evidence as basis for causal death determination.","The same sentence lists 'the cause of death' as one of the important details determined from evidence.","","determine important details such as the identity of a suspect, the cause of death, or the presence of a particular substance","Ch_000002","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": ""following analysis of physical characteristics"",
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": ""can determine (possibility, not certainty)"",
+ ""CausalHint"": ""By examining the physical characteristics of the evidence"",
+ ""LogicalMarker"": ""such as"",
+ ""OtherQualifier"": null
+}","Evidence supports determining the cause of death."
+"RelR_01aa1b8e4e67","Can_0825e2f0","En_8728898f","used_to_determine","supports_inference_of","Indicates that evidence or complex data provides support for inferring, determining, or concluding a particular forensic determination or conclusion.","evidential_inference_relation","CAUSALITY","inference","0.99","Evidence as input to detection of a specific substance.","The text explicitly says that examining evidence can determine the presence of a particular substance at a crime scene.","","or the presence of a particular substance at a crime scene.","Ch_000002","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": ""at a crime scene"",
+ ""OperationalConstraint"": ""after examination of physical characteristics"",
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": ""can determine (possible outcome)"",
+ ""CausalHint"": ""By examining the physical characteristics of the evidence"",
+ ""LogicalMarker"": ""such as"",
+ ""OtherQualifier"": null
+}","Evidence is used to determine whether a particular substance is present."
+"RelR_fb105a8df5cd","En_8728898f","Can_14b4e708","occurs_in","occurs_at_location","Indicates that a forensic event, condition, or presence occurs or is situated at a specific location or context.","forensic_location_context_relation","SPATIALITY","spatial","0.98","Determination (presence) associated with its location (crime scene).","The phrase directly states that the presence of a particular substance is 'at a crime scene'.","","the presence of a particular substance at a crime scene.","Ch_000002","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": ""at a crime scene"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": null
+}","The presence of a particular substance is specifically located at a crime scene."
+"RelR_5f32c9194486","Can_8625e1a7","Can_1b5b3813","uses","uses","Subject uses or employs the object as a method, tool, technique, principle, or resource to carry out its activities or functions.","method_tool_usage_relation","USAGE","usage","0.95","Field (forensic science) employing tools/advancements.","The passage states that forensic science involves the use of advanced technology, mapped to the forensic technology entity.","Mapped 'advanced technology' in text to the more general forensic technology and technological advancements entity.","Forensic science also involves the use of advanced technology and instrumentation to aid in the analysis of evidence.","Ch_000002","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": ""in forensic laboratories and investigative contexts"",
+ ""OperationalConstraint"": ""to aid in analysis of evidence"",
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""to aid in the analysis of evidence"",
+ ""LogicalMarker"": ""also"",
+ ""OtherQualifier"": null
+}","Forensic science involves the use of advanced forensic technology and technological advancements."
+"RelR_83b96377bd47","Can_8625e1a7","En_c07e74f8","uses","uses","Subject uses or employs the object as a method, tool, technique, principle, or resource to perform tasks or achieve goals.","method_tool_usage_relation","USAGE","usage","0.96","Discipline employing scientific instruments.","The text states that forensic science involves the use of instrumentation to aid in the analysis of evidence.","","Forensic science also involves the use of advanced technology and instrumentation to aid in the analysis of evidence.","Ch_000002","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": ""primarily in forensic laboratories"",
+ ""OperationalConstraint"": ""to aid in analysis of evidence"",
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""to aid in the analysis of evidence"",
+ ""LogicalMarker"": ""also"",
+ ""OtherQualifier"": null
+}","Forensic science uses specialized instrumentation."
+"RelR_a165ea679681","En_c07e74f8","Can_0825e2f0","used_to_analyze","is_used_to_analyze","Indicates that a method, technique, or technology is used to analyze a target material, sample, or evidence.","analytical_technique_application_relation","USAGE","usage","0.99","Tool (instrumentation) applied to evidence.","Instrumentation is described as being used to aid in the analysis of evidence.","","instrumentation to aid in the analysis of evidence.","Ch_000002","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": ""in forensic laboratory settings"",
+ ""OperationalConstraint"": ""as part of advanced technological methods"",
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""to aid in the analysis"",
+ ""LogicalMarker"": ""to"",
+ ""OtherQualifier"": null
+}","Instrumentation is used to assist in the analysis of evidence."
+"RelR_7efd704d187c","Can_d2a80ca3","En_f1ee7eff","uses","uses","Subject uses or employs the object as a method, tool, technique, principle, or resource to perform tasks or achieve goals.","method_tool_usage_relation","USAGE","usage","0.97","Direction chosen as user (forensic scientists) → tool (SEM).","The text states that forensic scientists may use scanning electron microscopes.","","forensic scientists may use scanning electron microscopes to examine trace evidence","Ch_000003","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": ""may"",
+ ""CausalHint"": null,
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": ""TaskContext: examining trace evidence""
+}","Forensic scientists use scanning electron microscopes as part of their work."
+"RelR_b958aa0b191e","En_f1ee7eff","En_b6d7e01d","used_for","used_for","Indicates that the subject (method, tool, technique, or practice) is used or applied for a particular purpose, target, or function represented by the object.","functional_usage_relation","USAGE","functional","0.96","Instrument (SEM) → target material (trace evidence).","The phrase explicitly links SEM usage with examining trace evidence.","","use scanning electron microscopes to examine trace evidence such as fibers or hair","Ch_000003","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": ""may"",
+ ""CausalHint"": null,
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": ""ExampleTypes: fibers or hair""
+}","Scanning electron microscopes are used to examine trace evidence."
+"RelR_4f6ed729eb95","En_b6d7e01d","En_68423e43","includes_example","has_example_instance","Indicates that the subject category or concept cites the object as an example instance of that category.","category_example_membership_relation","IDENTITY","membership","0.95","Trace evidence category → example subtype fibers.","The text lists fibers as an example of trace evidence.","","trace evidence such as fibers or hair","Ch_000003","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""such as"",
+ ""OtherQualifier"": null
+}","Fibers are given as an example of trace evidence."
+"RelR_92464d597030","En_b6d7e01d","En_4917bd86","includes_example","has_example_instance","Indicates that the subject category or concept cites the object as an example instance of that category.","category_example_membership_relation","IDENTITY","membership","0.95","Trace evidence category → example subtype hair.","The text lists hair as an example of trace evidence.","","trace evidence such as fibers or hair","Ch_000003","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""such as"",
+ ""OtherQualifier"": null
+}","Hair is given as an example of trace evidence."
+"RelR_931caa26e17b","Can_d2a80ca3","En_420bc726","uses","uses","Subject uses or employs the object as a method, tool, technique, principle, or resource to conduct forensic work or analysis.","method_tool_usage_relation","USAGE","usage","0.97","Practitioner → analytical technique.","The text says forensic scientists may use mass spectrometry.","","or they may use mass spectrometry to identify and quantify drugs or toxins","Ch_000003","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": ""may"",
+ ""CausalHint"": null,
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": ""TaskContext: identify and quantify drugs or toxins""
+}","Forensic scientists may use mass spectrometry as a technique in their work."
+"RelR_acf8b0e30d3e","En_420bc726","En_f977df28","used_for","used_for","Indicates that the subject (method, tool, technique, or practice) is used or applied for a particular purpose, target, or function represented by the object.","functional_usage_relation","USAGE","functional","0.98","Technique → analyte (drugs).","The phrase directly links mass spectrometry to identifying and quantifying drugs.","","use mass spectrometry to identify and quantify drugs","Ch_000003","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": ""may"",
+ ""CausalHint"": null,
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": ""MeasurementType: identify and quantify""
+}","Mass spectrometry is used to identify and quantify drugs."
+"RelR_5c80b6ed4c5b","En_420bc726","En_a8cf2268","used_for","used_for","Indicates that the subject (method, tool, technique, or practice) is used or applied for a particular purpose, target, or function represented by the object.","functional_usage_relation","USAGE","functional","0.98","Technique → analyte (toxins).","The phrase explicitly includes toxins as targets of mass spectrometry.","","use mass spectrometry to identify and quantify drugs or toxins in a sample","Ch_000003","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": ""may"",
+ ""CausalHint"": null,
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": ""MeasurementType: identify and quantify""
+}","Mass spectrometry is used to identify and quantify toxins."
+"RelR_8ecdd769b7c4","En_420bc726","En_322fdd51","applied_to","is_used_to_analyze","Indicates that a method, technique, or technology is used to analyze a target material, sample, or evidence.","analytical_technique_application_relation","USAGE","procedural","0.9","Analytical technique → material under analysis (sample).","The text specifies that drugs or toxins are identified and quantified in a sample using mass spectrometry.","","mass spectrometry to identify and quantify drugs or toxins in a sample","Ch_000003","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": ""in a sample"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": ""may"",
+ ""CausalHint"": null,
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": ""SampleContent: drugs or toxins""
+}","Mass spectrometry is applied to a sample when identifying and quantifying drugs or toxins."
+"RelR_3ab0f77734bf","En_f977df28","En_322fdd51","contained_in","is_contained_in","Indicates that a substance is present as content within a given forensic sample (substance → sample).","sample_content_relation","COMPOSITION","containment","0.86","Substance → matrix that contains it.","The wording indicates drugs are identified and quantified in a sample.","Direction chosen as substance → container for consistency with similar relations.","identify and quantify drugs or toxins in a sample","Ch_000003","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": ""in a sample"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""or"",
+ ""OtherQualifier"": null
+}","Drugs are present within the analyzed sample."
+"RelR_00e08fff23b5","En_a8cf2268","En_322fdd51","contained_in","is_contained_in","Indicates that a substance is present as content within a given forensic sample (substance → sample).","sample_content_relation","COMPOSITION","containment","0.86","Substance → matrix that contains it.","The same phrase specifies toxins in a sample.","Symmetric to relation for drugs and sample.","identify and quantify drugs or toxins in a sample","Ch_000003","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": ""in a sample"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""or"",
+ ""OtherQualifier"": null
+}","Toxins are present within the analyzed sample."
+"RelR_7c50423e0666","Can_1b5b3813","En_a24a6192","improves","improves","Indicates that the subject causes an increase in the quality, performance, or effectiveness of the object.","quality_and_effectiveness_impact_relation","CAUSALITY","quality impact","0.96","Advancements (tools/techniques) → quality metric (accuracy).","The text says these technological advancements have greatly improved the accuracy of forensic analysis.","Refers back to previously mentioned tools like SEM and mass spectrometry as part of advancements.","These technological advancements have greatly improved the accuracy of forensic analysis","Ch_000003","{
+ ""TemporalQualifier"": ""have greatly improved"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""improved"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": null
+}","Forensic technological advancements improve the accuracy of forensic analysis."
+"RelR_b0cc9b0b96a3","Can_1b5b3813","En_c18d8a5f","improves","improves","Indicates that the subject causes an increase in the quality, performance, or effectiveness of the object.","quality_and_effectiveness_impact_relation","CAUSALITY","quality impact","0.96","Same subject as accuracy relation, affecting another quality metric.","The same sentence states improvements to the reliability of forensic analysis.","","have greatly improved the accuracy and reliability of forensic analysis","Ch_000003","{
+ ""TemporalQualifier"": ""have greatly improved"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""improved"",
+ ""LogicalMarker"": ""and"",
+ ""OtherQualifier"": null
+}","Forensic technological advancements improve the reliability of forensic analysis."
+"RelR_f1399f8bbced","En_cdb930c3","En_38bdfca8","used_in","used_in","Indicates that the subject (a method, process, or tool) is employed within or as part of the activity, context, or workflow represented by the object.","functional_usage_relation","USAGE","application","0.97","Process (forensic analysis) → investigative context (modern criminal investigations).","The pronoun 'it' refers to forensic analysis being indispensable in modern criminal investigations.","","forensic analysis, making it an indispensable tool in modern criminal investigations","Ch_000003","{
+ ""TemporalQualifier"": ""modern"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": ""indispensable (strong necessity)"",
+ ""CausalHint"": ""making it"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": null
+}","Forensic analysis is an indispensable tool in modern criminal investigations."
+"RelR_a2aa939b6a70","Can_d2a80ca3","En_53107a37","participates_in","participates_in","The subject takes part in or is involved in the object activity, process, or event.","participation_relation","AGENCY","role","0.98","Actor → investigative process.","The text explicitly assigns a crucial role in crime scene investigation to forensic scientists.","","forensic scientists also play a crucial role in crime scene investigation","Ch_000003","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": ""in crime scene investigation"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": ""crucial (emphasized importance)"",
+ ""CausalHint"": null,
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": ""RoleType: crucial role""
+}","Forensic scientists play a crucial role in crime scene investigation."
+"RelR_bfe6e5e3182f","Can_d2a80ca3","Can_14b4e708","responsible_for","has_professional_responsibility_for","Indicates that an agent (such as a forensic scientist) has a formal or professional duty to perform actions involving the referenced object (e.g., documenting, preserving, or properly handling it).","professional_duty_relation","AGENCY","responsibility","0.96","Actor → location/context they must document and preserve.","The text states they are responsible for documenting the crime scene.","Preservation of integrity is modeled separately with crime scene integrity.","They are responsible for documenting and preserving the integrity of the crime scene","Ch_000003","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": ""of the crime scene"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""as well as"",
+ ""OtherQualifier"": ""TaskType: documenting and preserving""
+}","Forensic scientists are responsible for documenting the crime scene."
+"RelR_248bf3e174a4","Can_d2a80ca3","En_b660dbfb","maintains","has_professional_responsibility_for","Indicates that an agent (such as a forensic scientist) has a formal or professional duty to perform actions involving the referenced object (e.g., documenting, preserving, or properly handling it).","professional_duty_relation","AGENCY","responsibility","0.97","Actor → quality state they must preserve.","The phrase links their responsibility directly to preserving the integrity of the crime scene.","","responsible for documenting and preserving the integrity of the crime scene","Ch_000003","{
+ ""TemporalQualifier"": ""during crime scene investigation"",
+ ""SpatialQualifier"": ""at the crime scene"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": ""are responsible for"",
+ ""CausalHint"": ""preserving"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": null
+}","Forensic scientists are responsible for preserving crime scene integrity."
+"RelR_e75074270370","Can_d2a80ca3","Can_0825e2f0","collects","collects","Indicates that an agent gathers or collects forensic evidence.","evidence_handling_relation","AGENCY","procedural","0.97","Actor → material they handle.","The text explicitly assigns responsibility for collecting and cataloging evidence to forensic scientists.","Cataloging is treated as part of the collection/handling relation.","as well as collecting and cataloging evidence for further analysis","Ch_000003","{
+ ""TemporalQualifier"": ""for further analysis"",
+ ""SpatialQualifier"": ""at the crime scene"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": ""are responsible for"",
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""as well as"",
+ ""OtherQualifier"": ""ProcessingSteps: collecting and cataloging""
+}","Forensic scientists collect and catalog evidence."
+"RelR_f1953fecdfa7","Can_0825e2f0","Can_14b4e708","collected_from","collected_from","Indicates that a piece of forensic evidence is collected from a specified source location such as a crime scene.","evidence_collection_relation","PROVENANCE","source-location","0.78","Evidence ↔ crime scene inferred from description of crime scene investigation.","While not said verbatim, in the context of crime scene investigation and documenting the crime scene, collected evidence clearly refers to material from that scene.","Relation inferred from standard forensic practice described; slightly lower confidence due to implicitness.","crime scene investigation. They are responsible for documenting and preserving the integrity of the crime scene, as well as collecting and cataloging evidence","Ch_000003","{
+ ""TemporalQualifier"": ""during crime scene investigation"",
+ ""SpatialQualifier"": ""from the crime scene"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": ""implied"",
+ ""CausalHint"": null,
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": null
+}","Evidence is collected from the crime scene."
+"RelR_81f7129a0c28","Can_1818d2ff","Can_0825e2f0","is_type_of","is_subtype_of","Indicates that the subject is a more specific type or subtype of the object within a conceptual or taxonomic hierarchy.","type_hierarchy_relation","HIERARCHY","type-instance","0.8","More specific category (physical evidence) mapped to general category (evidence).","The phrasing contrasts analyzing physical evidence with other duties involving evidence, implying physical evidence is a subset of evidence.","Modeled as type relation to capture hierarchy between physical evidence and general evidence.","In addition to analyzing physical evidence, forensic scientists also play a crucial role","Ch_000003","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": ""implied"",
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""In addition to"",
+ ""OtherQualifier"": null
+}","Physical evidence is a specific kind of evidence being analyzed."
+"RelR_3ca9b0b9e68b","Can_14b4e708","Can_0825e2f0","evidence_collected_from","has_collected_evidence","Indicates that a crime scene or location has associated evidence that has been collected from it.","evidence_collection_relation","PROVENANCE","source","0.93","Crime scene is the location from which relevant evidence is collected.","The text explicitly links the crime scene with the collection of all relevant evidence.","[""RelR_f1953fecdfa7 (evidence -> crime scene) and RelR_3ca9b0b9e68b (crime scene -> evidence) represent inverse directions of the same evidence-collection provenance relation. If inverse properties are modeled in the ontology, these two canonical predicates should be declared as inverses and kept in sync.""]","documenting the details of a crime scene and collecting all relevant evidence","Ch_000004","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": ""at the crime scene"",
+ ""OperationalConstraint"": ""meticulous documentation and collection"",
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""by documenting the details of a crime scene and collecting all relevant evidence"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": null
+}","Evidence is collected from the crime scene during forensic work."
+"RelR_0b9c19be281b","Can_d2a80ca3","Can_14b4e708","investigates","investigates","Denotes that an investigator examines or investigates a crime scene or context.","forensic_investigation_activity_relation","AGENCY","activity","0.9","Investigation is represented via documentation of crime scene details.","The text states that forensic scientists meticulously document the details of a crime scene.","","By meticulously documenting the details of a crime scene","Ch_000004","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": ""crime scene"",
+ ""OperationalConstraint"": ""meticulously documenting the details"",
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": ""InvestigationMethod: documentation of scene details""
+}","Forensic scientists investigate the crime scene by meticulously documenting its details."
+"RelR_19502f75bdbb","Can_d2a80ca3","Can_0825e2f0","collects","collects","Indicates that an agent gathers or collects forensic evidence.","evidence_handling_relation","AGENCY","activity","0.95","Collection is an explicit forensic scientist task.","The text directly attributes the collection of all relevant evidence to forensic scientists.","","forensic scientists can reconstruct the events... by ... collecting all relevant evidence","Ch_000004","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": ""all relevant evidence"",
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": ""CollectionContext: during crime scene work""
+}","Forensic scientists collect all relevant evidence as part of their work."
+"RelR_0b0f8921d198","Can_d2a80ca3","En_6188cf2f","reconstructs","reconstructs_events","A forensic or investigative actor reconstructs past events or event sequences on the basis of collected evidence and contextual information.","forensic_cognitive_activity_relation","AGENCY","analytical","0.96","Reconstruction is enabled by documentation and evidence collection.","The text says forensic scientists can reconstruct the events that took place.","","forensic scientists can reconstruct the events that took place","Ch_000004","{
+ ""TemporalQualifier"": ""after evidence collection and documentation"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": ""can (ability, not guaranteed)"",
+ ""CausalHint"": ""By meticulously documenting... and collecting all relevant evidence"",
+ ""LogicalMarker"": ""By"",
+ ""OtherQualifier"": ""ReconstructionBasis: crime scene details and collected evidence""
+}","Forensic scientists reconstruct the actual events that occurred around the crime."
+"RelR_0eec9be300c4","Can_d2a80ca3","En_9881e4b9","assists","supports","Indicates that the subject provides evidentiary, analytical, or operational help that facilitates or strengthens the object process or actor in the criminal justice/forensic context.","forensic_support_relation","CAUSALITY","support","0.94","Assistance is via reconstruction and evidence-based analysis.","The text states that forensic scientists help investigators piece together the sequence of events.","","help investigators piece together the sequence of events leading up to a crime","Ch_000004","{
+ ""TemporalQualifier"": ""during crime investigation"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""help"",
+ ""LogicalMarker"": ""and"",
+ ""OtherQualifier"": ""AssistanceMode: providing reconstructed events and analyses""
+}","Forensic scientists assist investigators in understanding the case."
+"RelR_0c6b5fc4e42f","En_9881e4b9","En_18a1ef71","reconstructs","reconstructs_events","A forensic or investigative actor reconstructs past events or event sequences on the basis of collected evidence and contextual information.","forensic_cognitive_activity_relation","AGENCY","analytical","0.9","Piecemeal reconstruction is modeled as reconstructs.","The text says investigators piece together the sequence of events leading up to a crime.","","help investigators piece together the sequence of events leading up to a crime","Ch_000004","{
+ ""TemporalQualifier"": ""leading up to a crime"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": ""ReconstructionScope: pre-crime sequence of events""
+}","Investigators reconstruct the sequence of events leading up to the crime."
+"RelR_dc585e245c33","Can_8625e1a7","En_fe1e3b10","includes_aspect","has_aspect","Links a broader domain or concept to one of its constituent aspects, activities, or conceptual components.","conceptual_component_relation","COMPOSITION","part-whole","0.97","Modeled as forensic science including the interpretation activity.","The text explicitly frames interpretation of evidence as an aspect of forensic science.","","Another important aspect of forensic science is the interpretation of evidence","Ch_000004","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": ""important aspect"",
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""Another"",
+ ""OtherQualifier"": null
+}","Interpretation of evidence is an important aspect of forensic science."
+"RelR_510893311494","Can_8625e1a7","En_15d2ca12","includes_aspect","has_aspect","Links a broader domain or concept to one of its constituent aspects, activities, or conceptual components.","conceptual_component_relation","COMPOSITION","part-whole","0.97","Presentation is treated as a component activity of forensic science.","The text lists presentation of findings in court as another important aspect of forensic science.","","Another important aspect of forensic science is the interpretation of evidence and the presentation of findings in court.","Ch_000004","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": ""in court"",
+ ""OperationalConstraint"": ""important aspect"",
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""Another"",
+ ""OtherQualifier"": null
+}","Presentation of findings in court is an important aspect of forensic science."
+"RelR_fd43b9df694c","Can_d2a80ca3","En_55ddebff","analyzes","analyzes","An investigative or forensic actor examines evidence, data, or other information to extract facts, patterns, or insights.","forensic_analysis_activity_relation","AGENCY","analytical","0.98","Data analysis is an explicit responsibility of forensic scientists.","The text states that forensic scientists must be able to analyze complex data.","","Forensic scientists must be able to analyze complex data","Ch_000004","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": ""must be able to"",
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""must"",
+ ""OtherQualifier"": null
+}","Forensic scientists analyze complex data as part of their role."
+"RelR_21191335a9c7","En_55ddebff","En_f9e892bb","basis_for","supports_inference_of","Indicates that evidence or complex data provides support for inferring, determining, or concluding a particular forensic determination or conclusion.","evidential_inference_relation","CAUSALITY","evidential","0.86","Both complex data and evidence are inputs; here we isolate complex data as a basis.","Logical conclusions are described as resulting from analysis of complex data.","Evidence is also mentioned as a basis; handled in a separate relation.","analyze complex data and draw logical conclusions based on the evidence available","Ch_000004","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": ""after analysis"",
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""draw ... based on"",
+ ""LogicalMarker"": ""based on"",
+ ""OtherQualifier"": null
+}","Complex data serves as a basis for drawing logical conclusions."
+"RelR_b93d862d45de","Can_0825e2f0","En_f9e892bb","supports","supports_inference_of","Indicates that evidence or complex data provides support for inferring, determining, or concluding a particular forensic determination or conclusion.","evidential_inference_relation","CAUSALITY","evidential","0.95","Evidence is modeled as supporting logical conclusions.","The phrase 'based on the evidence available to them' indicates evidence underpins the conclusions.","","draw logical conclusions based on the evidence available to them","Ch_000004","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": ""available evidence"",
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""based on"",
+ ""LogicalMarker"": ""based on"",
+ ""OtherQualifier"": null
+}","Evidence supports the drawing of logical conclusions."
+"RelR_f92f9b100d7c","Can_d2a80ca3","En_f9e892bb","infers","infers_conclusion","A forensic or investigative actor infers or derives a conclusion based on prior analysis of data and evidence.","forensic_cognitive_activity_relation","AGENCY","analytical","0.96","Drawing conclusions is modeled as inference.","The text specifies that forensic scientists must be able to draw logical conclusions.","","and draw logical conclusions based on the evidence available to them.","Ch_000004","{
+ ""TemporalQualifier"": ""after analysis of data and evidence"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": ""must be able to"",
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""and"",
+ ""OtherQualifier"": null
+}","Forensic scientists infer logical conclusions from analyzed data and evidence."
+"RelR_58f74eea277c","En_15d2ca12","Can_abd0142e","occurs_in","occurs_at_location","Indicates that a forensic event, condition, or presence occurs or is situated at a specific location or context.","forensic_location_context_relation","SPATIALITY","location","0.98","Court is the setting for the presentation of findings.","The phrase 'presentation of findings in court' clearly locates the activity.","","the presentation of findings in court.","Ch_000004","{
+ ""TemporalQualifier"": ""during legal proceedings"",
+ ""SpatialQualifier"": ""in court"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": null
+}","Presentation of findings takes place in court."
+"RelR_02e6e09428be","Can_d2a80ca3","En_12608f56","communicates_findings_to","communicates_findings_to","Indicates that a forensic scientist conveys or reports forensic findings to a specified criminal justice participant or body.","forensic_findings_communication_relation","COMMUNICATION","communication","0.97","Modeled as directed communication from forensic scientists to agencies.","The text explicitly mentions communicating findings to law enforcement agencies.","","communicate their findings effectively to law enforcement agencies","Ch_000004","{
+ ""TemporalQualifier"": ""after drawing conclusions"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": ""effectively"",
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": ""must be able to"",
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""to"",
+ ""OtherQualifier"": null
+}","Forensic scientists communicate their findings to law enforcement agencies."
+"RelR_e9324d8002b6","Can_d2a80ca3","En_6f6b31dd","communicates_findings_to","communicates_findings_to","Indicates that a forensic scientist conveys or reports forensic findings to a specified criminal justice participant or body.","forensic_findings_communication_relation","COMMUNICATION","communication","0.96","Same communication pattern as with law enforcement agencies.","Lawyers are included among the audiences for communicated findings.","","communicate their findings effectively to law enforcement agencies, lawyers, and judges","Ch_000004","{
+ ""TemporalQualifier"": ""in the context of legal proceedings"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": ""effectively"",
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": ""must be able to"",
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""and"",
+ ""OtherQualifier"": null
+}","Forensic scientists communicate their findings to lawyers."
+"RelR_8328d841030e","Can_d2a80ca3","En_4ae4f857","communicates_findings_to","communicates_findings_to","Indicates that a forensic scientist conveys or reports forensic findings to a specified criminal justice participant or body.","forensic_findings_communication_relation","COMMUNICATION","communication","0.96","Judges are another target audience for findings communication.","Judges are explicitly listed among those to whom findings are communicated.","","communicate their findings effectively to law enforcement agencies, lawyers, and judges","Ch_000004","{
+ ""TemporalQualifier"": ""as part of courtroom processes"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": ""effectively"",
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": ""must be able to"",
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""and"",
+ ""OtherQualifier"": null
+}","Forensic scientists communicate their findings to judges."
+"RelR_9cc5db1aeb17","Can_d2a80ca3","En_a3725e42","acts_as","has_professional_role","The subject, typically a person or professional group, holds or acts in the specified professional role in a given context.","professional_role_expertise_relation","IDENTITY","role","0.98","Modeled as forensic scientists assuming the role of expert witnesses.","The text says they often testify as expert witnesses in court.","","often testifying as expert witnesses in court to explain their analysis and conclusions.","Ch_000004","{
+ ""TemporalQualifier"": ""during court proceedings"",
+ ""SpatialQualifier"": ""in court"",
+ ""OperationalConstraint"": ""often"",
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": ""often (not always)"",
+ ""CausalHint"": null,
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": ""RoleContext: explaining their analysis and conclusions""
+}","Forensic scientists act as expert witnesses in court."
+"RelR_748f4768019a","En_a3725e42","Can_abd0142e","testifies_in","testifies_in","Indicates that an expert witness provides testimony within a specific court or legal venue.","forensic_courtroom_context_relation","SPATIALITY","location","0.92","Court is the location for expert witness testimony.","The phrase 'expert witnesses in court' implies testimony occurs there.","[""The predicate 'takes_place_in' is applied here between an agent ('expert witnesses') and a location ('court'), implicitly referring to the event of their testimony occurring in court. In a more granular schema, this could be modeled via an intermediate testimony event node (e.g., 'expert testimony') that 'takes_place_in' the court and is 'given_by' the expert witnesses.""]","often testifying as expert witnesses in court","Ch_000004","{
+ ""TemporalQualifier"": ""during trials or hearings"",
+ ""SpatialQualifier"": ""in court"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": ""often"",
+ ""CausalHint"": null,
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": null
+}","Expert witnesses provide testimony in court."
+"RelR_8dd61f85be6e","Can_d2a80ca3","En_b0c08135","produces","produces","Indicates that the subject (typically an agent) creates or generates the object (a product, result, or artifact).","knowledge_artifact_creation_relation","AGENCY","production","0.84","Analyses and conclusions are attributed to forensic scientists via possessive 'their'.","The text refers to 'their analysis and conclusions' in connection with forensic scientists testifying.","Possessive reference used to infer production relationship.","expert witnesses in court to explain their analysis and conclusions.","Ch_000004","{
+ ""TemporalQualifier"": ""before testifying in court"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": ""inferred from context"",
+ ""CausalHint"": null,
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": ""UsageContext: explained during expert witness testimony""
+}","Forensic scientists produce analyses and conclusions that they later explain in court."
+"RelR_40dc5b2b8c69","En_b0c08135","Can_abd0142e","presented_in","is_presented_in","Indicates that forensic evidence, analyses, or conclusions are presented within a specific courtroom or legal venue.","forensic_courtroom_context_relation","SPATIALITY","location","0.9","Explaining analysis and conclusions happens in the courtroom setting.","The explanation of analysis and conclusions is tied to testifying in court.","","often testifying as expert witnesses in court to explain their analysis and conclusions.","Ch_000004","{
+ ""TemporalQualifier"": ""during expert testimony"",
+ ""SpatialQualifier"": ""in court"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": ""often"",
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""to"",
+ ""OtherQualifier"": null
+}","Analyses and conclusions are presented/explained in court."
+"RelR_ff45bebb67ba","Can_0825e2f0","En_fe1e3b10","subject_of_interpretation","is_subject_of_interpretation","Indicates that an item (e.g., evidence) is the subject matter being interpreted or analyzed within a forensic interpretation process.","evidence_interpretation_relation","USAGE","evidential","0.93","Modeled as evidence being what is interpreted.","The phrase 'interpretation of evidence' indicates evidence is being interpreted.","","Another important aspect of forensic science is the interpretation of evidence","Ch_000004","{
+ ""TemporalQualifier"": ""after evidence collection"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""of"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": null
+}","Evidence is the subject matter that is interpreted in forensic science."
+"RelR_8da670d00ce2","En_4cf2a808","En_b46e3404","requires","requires_competence","Indicates that an activity, role, or practice requires a specific competency or skill as a prerequisite for effective or proper performance.","competency_requirement_relation","REQUIREMENT","dependency","0.98","Direction chosen from overall practice (art of forensic science) to needed competence (technical expertise).","“The art of forensic science requires not only technical expertise…”","","The art of forensic science requires not only technical expertise but also critical thinking skills and attention to detail.","Ch_000005","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""requires"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": null
+}","The art of forensic science requires technical expertise."
+"RelR_37193f68e165","En_4cf2a808","En_c1473e8b","requires","requires_competence","Indicates that an activity, role, or practice requires a specific competency or skill as a prerequisite for effective or proper performance.","competency_requirement_relation","REQUIREMENT","dependency","0.98","Same pattern as with technical expertise; art-as-practice needs these skills.","“The art of forensic science requires not only technical expertise but also critical thinking skills…”","","The art of forensic science requires not only technical expertise but also critical thinking skills…","Ch_000005","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""requires"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": null
+}","The art of forensic science requires critical thinking skills."
+"RelR_2126a4ed8fd8","En_4cf2a808","En_1d4c091c","requires","requires_competence","Indicates that an activity, role, or practice requires a specific competency or skill as a prerequisite for effective or proper performance.","competency_requirement_relation","REQUIREMENT","dependency","0.98","Art-of-practice depends on this cognitive skill.","“…requires not only technical expertise but also critical thinking skills and attention to detail.”","","…requires not only technical expertise but also critical thinking skills and attention to detail.","Ch_000005","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""requires"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": null
+}","The art of forensic science requires attention to detail."
+"RelR_6e4b7cac7564","Can_d2a80ca3","En_25d49791","performs","performs","An agent or role carries out or executes an action, behavior, or process.","agent_action_relation","AGENCY","process-responsibility","0.95","Subject is the practitioner; object is the process executed and documented.","“Forensic scientists must be meticulous in their work, carefully documenting every step of the analysis process…”","Relation chosen to capture that scientists execute and record the process; could also be modeled as 'documents'.","Forensic scientists must be meticulous in their work, carefully documenting every step of the analysis process…","Ch_000005","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": ""in their work"",
+ ""OperationalConstraint"": ""meticulous; controlled and consistent manner"",
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""must"",
+ ""OtherQualifier"": ""DocumentationRequirement: carefully documenting every step""
+}","Forensic scientists carry out and document every step of the forensic evidence analysis process."
+"RelR_17ca6b508ca8","En_25d49791","Can_0825e2f0","operates_on","acts_on","A process is performed on, directed at, or targets this entity as its primary object or input.","process_target_relation","INTERACTION","process-input","0.93","Process is subject acting on its input object, evidence.","“…ensuring that all evidence is handled and processed in a controlled and consistent manner.”","","…ensuring that all evidence is handled and processed in a controlled and consistent manner.","Ch_000005","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": ""controlled and consistent manner"",
+ ""ConditionExpression"": ""all evidence"",
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""ensuring"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": null
+}","The forensic evidence analysis process involves handling and processing evidence."
+"RelR_313a80964a65","Can_d2a80ca3","Can_0825e2f0","handles","has_professional_responsibility_for","Indicates that an agent (such as a forensic scientist) has a formal or professional duty to perform actions involving the referenced object (e.g., documenting, preserving, or properly handling it).","professional_duty_relation","AGENCY","responsibility","0.9","Scientists as agents ensuring correct treatment of evidence.","“Forensic scientists must be meticulous… ensuring that all evidence is handled and processed in a controlled and consistent manner.”","Focuses on responsibility rather than physical handling alone.","Forensic scientists must be meticulous in their work, carefully documenting… and ensuring that all evidence is handled and processed…","Ch_000005","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": ""in their work"",
+ ""OperationalConstraint"": ""controlled and consistent manner"",
+ ""ConditionExpression"": ""all evidence"",
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""ensuring"",
+ ""LogicalMarker"": ""must"",
+ ""OtherQualifier"": null
+}","Forensic scientists are responsible for ensuring evidence is properly handled and processed."
+"RelR_0eb72fe078f0","Can_d2a80ca3","En_49410034","solves","solves","Indicates that an investigator resolves or solves complex investigative problems or puzzles.","investigative_task_relation","AGENCY","task","0.96","Scientists are agents; complex puzzles are problems they resolve.","“…often working under pressure to solve complex puzzles and uncover hidden clues…”","","They must also be able to think creatively and analytically, often working under pressure to solve complex puzzles…","Ch_000005","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": ""working under pressure"",
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""often"",
+ ""OtherQualifier"": null
+}","Forensic scientists solve complex investigative puzzles as part of their work."
+"RelR_3b36f109e3f9","Can_d2a80ca3","En_d4105ccc","discovers","discovers","Indicates that an investigator identifies or uncovers previously unknown or hidden clues.","investigative_task_relation","AGENCY","task","0.96","Scientists as discoverers; hidden clues as objects found.","“…working under pressure to solve complex puzzles and uncover hidden clues that may be crucial to a case.”","","…often working under pressure to solve complex puzzles and uncover hidden clues that may be crucial to a case.","Ch_000005","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": ""working under pressure"",
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": ""may be crucial"",
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""often"",
+ ""OtherQualifier"": null
+}","Forensic scientists uncover hidden clues during investigations."
+"RelR_3b35c5f3df0a","En_d4105ccc","En_abad232f","important_for","is_critical_for","Expresses that one element (e.g., a clue) is crucial or highly important for the progress or outcome of a case.","evidential_significance_relation","ASSOCIATION","importance","0.94","Direction from clue to the case it affects.","“…hidden clues that may be crucial to a case.”","","…uncover hidden clues that may be crucial to a case.","Ch_000005","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": ""may be crucial"",
+ ""CausalHint"": ""crucial to"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": null
+}","Hidden clues may be crucial for a case."
+"RelR_7472ef1293c5","En_4cf2a808","Can_8625e1a7","aspect_of","is_aspect_of","Links an aspect, activity, or component back to the broader domain or concept it is an aspect of (inverse of has_aspect).","conceptual_component_relation","COMPOSITION","component-of","0.9","Conceptual art/practice is treated as part or facet of the broader field.","“The art of forensic science…” and later “…the art of forensic science is a powerful tool…”, clearly tied to forensic science as a field.","Not explicit, but strongly implied conceptual relationship.","The art of forensic science requires not only technical expertise…","Ch_000005","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": ""implied aspect"",
+ ""CausalHint"": null,
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": null
+}","The art of forensic science is an aspect or conceptual view of forensic science."
+"RelR_0412e82c8c86","Can_d2a80ca3","Can_8625e1a7","practices","practices_field","The subject, typically a professional or practitioner group, professionally practices or works within the specified field or domain of expertise.","professional_role_expertise_relation","IDENTITY","role-domain","0.9","Profession (scientists) associated with its domain (forensic science).","By definition, “Forensic scientists” apply scientific methods in forensic investigations, implying practice of forensic science; supported by context of the passage.","Intrinsic role-domain relation inferred from naming and context.","Forensic scientists must be meticulous in their work…","Ch_000005","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": ""inferred"",
+ ""CausalHint"": null,
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": null
+}","Forensic scientists are practitioners of forensic science."
+"RelR_1a9476c57b4a","En_4cf2a808","Can_8fe88d36","used_for","used_for","Indicates that the subject (a discipline, field, method, tool, technique, or practice) is used or applied in order to achieve or perform the object (a task, purpose, problem, or target).","functional_purpose_relation","USAGE","functional-use","0.95","Tool (art of forensic science) applied to target problem (crime).","“…the art of forensic science is a powerful tool in the fight against crime…”","","…the art of forensic science is a powerful tool in the fight against crime…","Ch_000005","{
+ ""TemporalQualifier"": ""in the fight"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""tool in the fight against"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": null
+}","The art of forensic science is used as a tool to fight crime."
+"RelR_0095897659e3","En_4cf2a808","En_fdee3195","used_for","used_for","Indicates that the subject (a discipline, field, method, tool, technique, or practice) is used or applied in order to achieve or perform the object (a task, purpose, problem, or target).","functional_purpose_relation","USAGE","functional-use","0.95","Same construction as with crime; injustice is another target problem.","“…a powerful tool in the fight against crime and injustice.”","","…a powerful tool in the fight against crime and injustice.","Ch_000005","{
+ ""TemporalQualifier"": ""in the fight"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""tool in the fight against"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": null
+}","The art of forensic science is used to fight injustice."
+"RelR_c29c8ab5ee37","Can_d2a80ca3","En_c1473e8b","utilizes","requires_competence","Indicates that an activity, role, or practice requires a specific competency or skill as a prerequisite for effective or proper performance.","competency_requirement_relation","REQUIREMENT","competence-use","0.9","Maps ‘think… analytically’ to critical thinking skills already defined as an entity.","“They must also be able to think creatively and analytically…” aligns with the earlier need for critical thinking skills.","Analytical thinking is treated as an expression of critical thinking skills.","They must also be able to think creatively and analytically, often working under pressure…","Ch_000005","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": ""in their work"",
+ ""OperationalConstraint"": ""often working under pressure"",
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""must"",
+ ""OtherQualifier"": null
+}","Forensic scientists must use critical thinking skills (analytical thinking) in their work."
+"RelR_26a0cd8aecbb","Can_d2a80ca3","En_1d4c091c","utilizes","requires_competence","Indicates that an activity, role, or practice requires a specific competency or skill as a prerequisite for effective or proper performance.","competency_requirement_relation","REQUIREMENT","competence-use","0.88","Maps the described meticulousness to the attention to detail competence entity.","“Forensic scientists must be meticulous in their work…”; meticulousness implies close attention to detail.","Slight abstraction from 'meticulous' to the named skill 'attention to detail'.","Forensic scientists must be meticulous in their work, carefully documenting every step…","Ch_000005","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": ""in their work"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""must be"",
+ ""LogicalMarker"": ""must"",
+ ""OtherQualifier"": null
+}","Forensic scientists must exercise attention to detail (meticulousness) in their work."
+"RelR_5831dcce22b8","Can_d2a80ca3","En_878f93b0","uses","uses","Subject uses or employs the object as a method, tool, technique, principle, or resource to conduct forensic work or analysis.","method_tool_usage_relation","USAGE","usage","0.95","Direction chosen as practitioner (forensic scientists) applying foundational concepts (scientific principles).","The phrase indicates that forensic scientists rely on scientific principles in combination with techniques to perform their role.","","By combining scientific principles with investigative techniques, forensic scientists are able to uncover the truth…","Ch_000006","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": ""WorkContext: conducting forensic investigations""
+}","Forensic scientists use scientific principles as part of their investigative work."
+"RelR_e3571d64e239","Can_d2a80ca3","En_65fff597","uses","uses","Subject uses or employs the object as a method, tool, technique, principle, or resource to conduct forensic work or analysis.","method_tool_usage_relation","USAGE","usage","0.95","Practitioner-to-method direction to reflect application of techniques.","Text states forensic scientists combine investigative techniques with scientific principles.","","By combining scientific principles with investigative techniques, forensic scientists are able to uncover the truth…","Ch_000006","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""By"",
+ ""OtherQualifier"": ""WorkContext: uncovering the truth in cases""
+}","Forensic scientists employ investigative techniques alongside scientific principles."
+"RelR_00d228bf7bcc","En_878f93b0","En_65fff597","used_together_with","used_in_conjunction_with","Indicates that the subject and object methods, principles, or techniques are applied together as part of the same investigative or analytical process.","method_combination_relation","INTERACTION","method_combination","0.9","Modeled symmetrically as combination of conceptual foundations and methods.","The phrase explicitly says scientific principles are combined with investigative techniques.","","By combining scientific principles with investigative techniques, forensic scientists are able to uncover the truth…","Ch_000006","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""By"",
+ ""OtherQualifier"": ""PurposeContext: to uncover the truth in cases""
+}","Scientific principles are used together with investigative techniques in forensic work."
+"RelR_dfa5e4410b14","Can_d2a80ca3","En_93fb6b9e","uncovers","uncovers_truth_about","Indicates that an investigator reveals or uncovers the truth about a forensic case or issue.","investigative_outcome_relation","AGENCY","outcome","0.95","Direction from actor (forensic scientists) to outcome (truth behind challenging cases).","The sentence states forensic scientists are able to uncover the truth behind challenging cases.","","…forensic scientists are able to uncover the truth behind even the most challenging cases.","Ch_000006","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""By combining scientific principles with investigative techniques"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": null
+}","Forensic scientists uncover the truth behind challenging forensic cases."
+"RelR_5ec5d6fe03c2","En_93fb6b9e","En_68c01b1e","is_about","is_about","Indicates that the subject content or statement concerns, focuses on, or is thematically related to the object.","aboutness_relation","ASSOCIATION","aboutness","0.92","Truth is modeled as content relating to the cases.","The expression 'truth behind ... challenging cases' links the truth to those cases.","","…uncover the truth behind even the most challenging cases.","Ch_000006","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""behind"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": null
+}","The truth described is specifically about the challenging cases."
+"RelR_4a0ad14d0535","Can_d2a80ca3","En_9b7f4724","contributes_to","contributes_to","The subject's work, function, or existence helps to bring about, support, or improve the object within a broader system or outcome.","justice_outcome_relation","CAUSALITY","contribution","0.96","Forensic scientists’ work is a means to the justice outcome.","The text directly attributes a 'crucial role' in ensuring justice to their work.","","Their work plays a crucial role in ensuring that justice is served…","Ch_000006","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""plays a crucial role in ensuring"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": ""NormativeStrength: crucial role""
+}","The work of forensic scientists contributes to ensuring justice is achieved."
+"RelR_f769df3cbe04","Can_d2a80ca3","En_b75ca601","supports_accountability_of","supports_accountability_of","The subject's work, function, or actions help ensure that the referenced individuals are held accountable within the justice system.","justice_outcome_relation","CAUSALITY","accountability","0.94","Work → persons held accountable, following justice process.","The sentence links their work to guilty individuals being held accountable.","","…ensuring that justice is served and that the guilty are held accountable…","Ch_000006","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""plays a crucial role in ensuring"",
+ ""LogicalMarker"": ""and that"",
+ ""OtherQualifier"": null
+}","The work of forensic scientists helps ensure that guilty individuals are held accountable."
+"RelR_d105471d0e87","En_b75ca601","En_0cb018f4","performs","performs","An agent or role carries out or executes an action, behavior, or process.","agent_action_relation","AGENCY","role_action","0.88","Direction from actors (guilty individuals) to their behaviors.","The phrase 'the guilty are held accountable for their actions' ties actions to guilty individuals.","Modeled as a generic performs relation to link individuals to their actions.","…that the guilty are held accountable for their actions.","Ch_000006","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""for"",
+ ""OtherQualifier"": null
+}","Guilty individuals are accountable specifically for their actions."
+"RelR_32364d044769","Can_1b5b3813","En_071a2ab0","enhances","improves","Indicates that the subject causes an increase in the quality, performance, or effectiveness of the object.","quality_and_effectiveness_impact_relation","CAUSALITY","improvement","0.9","Cause (technology advancement) → effect (improved art of forensic science).","The sentence links technological advancement with future increases in sophistication and effectiveness.","Technology entity represents 'forensic technology and technological advancements' derived from 'As technology continues to advance'.","As technology continues to advance…the art of forensic science will only become more sophisticated and effective…","Ch_000006","{
+ ""TemporalQualifier"": ""in the years to come"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": ""will only become"",
+ ""CausalHint"": ""As technology continues to advance"",
+ ""LogicalMarker"": ""As"",
+ ""OtherQualifier"": ""ChangeType: more sophisticated and effective""
+}","Advancing forensic technology enhances the sophistication and effectiveness of the art of forensic science."
+"RelR_c89d77084325","En_11f15c4e","En_071a2ab0","enhances","improves","Indicates that the subject causes an increase in the quality, performance, or effectiveness of the object.","quality_and_effectiveness_impact_relation","CAUSALITY","improvement","0.9","New techniques are another cause for increased sophistication/effectiveness.","The clause ties the development of new techniques to the future improvement of forensic science.","","…and new techniques are developed, the art of forensic science will only become more sophisticated and effective…","Ch_000006","{
+ ""TemporalQualifier"": ""in the years to come"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": ""will only become"",
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""and"",
+ ""OtherQualifier"": ""ChangeType: more sophisticated and effective""
+}","Development of new techniques improves the art of forensic science."
+"RelR_2c2a75f74a79","En_071a2ab0","En_1c844c25","exhibits_change_during","changes_over_time","Indicates that the subject changes or evolves over the temporal period represented by the object.","evolution_over_time_relation","TEMPORALITY","temporal_change","0.86","Art of forensic science linked to future time span when change occurs.","The phrase explicitly localizes the anticipated improvement 'in the years to come'.","Relation created mainly to attach the temporal qualifier to the evolution of forensic science.","…the art of forensic science will only become more sophisticated and effective in the years to come.","Ch_000006","{
+ ""TemporalQualifier"": ""in the years to come"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": ""will only become"",
+ ""CausalHint"": null,
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": ""ChangeType: more sophisticated and effective""
+}","The art of forensic science is expected to become more sophisticated and effective during the future time period."

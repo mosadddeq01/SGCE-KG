@@ -1,0 +1,18 @@
+[
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": [
+        "RelR_070113d93c60",
+        "RelR_f96f9714f10d"
+      ],
+      "canonical_rel_name": "lays_eggs_on",
+      "canonical_rel_desc": "Subject organism deposits its eggs on the object, which serves as the oviposition site (egg-laying substrate).",
+      "rel_cls": "oviposition_behavior_relation",
+      "rel_cls_group": "USAGE",
+      "justification": "Both relations describe the same reproductive behavior: female butterflies depositing eggs on host plants, which function as oviposition sites. To normalize the schema, they should share a single canonical predicate. 'lays_eggs_on' is a precise, action-focused predicate that directly encodes the egg-deposition event. The broader class 'oviposition_behavior_relation' captures this as a type of reproductive behavior, and the rel_cls_group 'USAGE' reflects that the host plant is being used as an oviposition site rather than representing a purely spatial relation. This also resolves the current inconsistency where one instance is typed as reproductive/usage and the other as spatial.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  }
+]

@@ -1,0 +1,267 @@
+{
+  "cluster_label": "7_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_e6222803654a",
+      "relation_name": "occurs_in",
+      "rel_desc": "The strike by pyramid workers took place in ancient Egypt.",
+      "rel_hint_type": "spatial",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "strike by pyramid workers",
+      "object_entity_name": "ancient Egypt",
+      "subject_class_label": "Pyramid Construction and Labor Strike (Ancient Egypt)",
+      "subject_class_group": "Historical Labor Protests",
+      "object_class_label": "Ancient Egypt",
+      "object_class_group": "Historical Labor Protests",
+      "qualifiers": {
+        "TemporalQualifier": "ancient times",
+        "SpatialQualifier": "ancient Egypt",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "reportedly",
+        "CausalHint": null,
+        "LogicalMarker": "where",
+        "OtherQualifier": null
+      },
+      "confidence": 0.97,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_4c1e78b7fcb1",
+      "relation_name": "located_in",
+      "rel_desc": "The Egyptian pyramids are situated in ancient Egypt.",
+      "rel_hint_type": "spatial",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "ancient Egypt",
+      "object_entity_name": "Egyptian pyramids",
+      "subject_class_label": "Ancient Egypt",
+      "subject_class_group": "Historical Labor Protests",
+      "object_class_label": "Pyramid Construction and Labor Strike (Ancient Egypt)",
+      "object_class_group": "Historical Labor Protests",
+      "qualifiers": {
+        "TemporalQualifier": "ancient times",
+        "SpatialQualifier": "ancient Egypt",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "reportedly",
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.96,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_7830c458d504",
+      "relation_name": "occurs_in",
+      "rel_desc": "The initial protests took place in Tunisia.",
+      "rel_hint_type": "spatial",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "protests in Tunisia",
+      "object_entity_name": "Tunisia",
+      "subject_class_label": "Arab Spring Core Events",
+      "subject_class_group": "Arab Spring and Its Context",
+      "object_class_label": "Arab Spring Regions",
+      "object_class_group": "Arab Spring and Its Context",
+      "qualifiers": {
+        "TemporalQualifier": "2010",
+        "SpatialQualifier": "Tunisia",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 1.0,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_8993b154525b",
+      "relation_name": "occurs_in",
+      "rel_desc": "The Arab Spring spread across the Middle East and North Africa region.",
+      "rel_hint_type": "spatial",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "Arab Spring",
+      "object_entity_name": "Middle East and North Africa (MENA)",
+      "subject_class_label": "Arab Spring Core Events",
+      "subject_class_group": "Arab Spring and Its Context",
+      "object_class_label": "Arab Spring Regions",
+      "object_class_group": "Arab Spring and Its Context",
+      "qualifiers": {
+        "TemporalQualifier": "from 2010 onward during Arab Spring",
+        "SpatialQualifier": "Middle East and North Africa (MENA)",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "spread across",
+        "LogicalMarker": "and",
+        "OtherQualifier": null
+      },
+      "confidence": 0.98,
+      "remarks": [
+        "MENA entity used to capture combined regional reference."
+      ]
+    },
+    {
+      "relation_id": "RelR_3b803a98cd80",
+      "relation_name": "occurs_in",
+      "rel_desc": "The Arab Spring took place in North Africa.",
+      "rel_hint_type": "spatial",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "Arab Spring",
+      "object_entity_name": "North Africa",
+      "subject_class_label": "Arab Spring Core Events",
+      "subject_class_group": "Arab Spring and Its Context",
+      "object_class_label": "Arab Spring Regions",
+      "object_class_group": "Arab Spring and Its Context",
+      "qualifiers": {
+        "TemporalQualifier": "from 2010 onward",
+        "SpatialQualifier": "North Africa",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "spread across",
+        "LogicalMarker": "and",
+        "OtherQualifier": null
+      },
+      "confidence": 0.96,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_e6222803654a\",\n        \"RelR_7830c458d504\",\n        \"RelR_8993b154525b\",\n        \"RelR_3b803a98cd80\"\n      ],\n      \"canonical_rel_name\": \"occurs_in\",\n      \"canonical_rel_desc\": \"An event or process takes place within a specified geographic, political, or administrative region.\",\n      \"justification\": \"All four relations link an event or episode (strike, protests, Arab Spring) to the region where it took place, matching an event-oriented spatial predicate 'occurs_in'.\",\n      \"remark\": null,\n      \"confidence\": 0.97\n    }\n  },\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_4c1e78b7fcb1\"\n      ],\n      \"canonical_rel_name\": \"located_in\",\n      \"canonical_rel_desc\": \"An entity or object is geographically or spatially situated within a specified place or region.\",\n      \"justification\": \"This relation connects a physical entity (Egyptian pyramids) to the broader region (ancient Egypt) where it is situated, which is better modeled as a generic spatial containment predicate 'located_in' rather than an event-occurrence relation.\",\n      \"remark\": null,\n      \"confidence\": 0.96\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_e6222803654a\",\n        \"RelR_4c1e78b7fcb1\",\n        \"RelR_7830c458d504\",\n        \"RelR_8993b154525b\",\n        \"RelR_3b803a98cd80\"\n      ],\n      \"rel_cls\": \"spatial_location_relation\",\n      \"justification\": \"All relations express spatial placement of an event or entity with respect to a geographic or regional entity, so they belong to the same broader class of spatial location relations even though the specific predicates differ (occurs_in vs located_in).\",\n      \"remark\": null,\n      \"confidence\": 0.97\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_e6222803654a\",\n        \"RelR_4c1e78b7fcb1\",\n        \"RelR_7830c458d504\",\n        \"RelR_8993b154525b\",\n        \"RelR_3b803a98cd80\"\n      ],\n      \"rel_cls_group\": \"SPATIALITY\",\n      \"justification\": \"Each relation encodes a spatial relationship between subject and object (events or entities situated in regions), fitting the broad semantic dimension of spatiality.\",\n      \"remark\": null,\n      \"confidence\": 0.98\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_e6222803654a",
+          "RelR_7830c458d504",
+          "RelR_8993b154525b",
+          "RelR_3b803a98cd80"
+        ],
+        "canonical_rel_name": "occurs_in",
+        "canonical_rel_desc": "An event or process takes place within a specified geographic, political, or administrative region.",
+        "justification": "All four relations link an event or episode (strike, protests, Arab Spring) to the region where it took place, matching an event-oriented spatial predicate 'occurs_in'.",
+        "remark": null,
+        "confidence": 0.97
+      }
+    },
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_4c1e78b7fcb1"
+        ],
+        "canonical_rel_name": "located_in",
+        "canonical_rel_desc": "An entity or object is geographically or spatially situated within a specified place or region.",
+        "justification": "This relation connects a physical entity (Egyptian pyramids) to the broader region (ancient Egypt) where it is situated, which is better modeled as a generic spatial containment predicate 'located_in' rather than an event-occurrence relation.",
+        "remark": null,
+        "confidence": 0.96
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_e6222803654a",
+          "RelR_4c1e78b7fcb1",
+          "RelR_7830c458d504",
+          "RelR_8993b154525b",
+          "RelR_3b803a98cd80"
+        ],
+        "rel_cls": "spatial_location_relation",
+        "justification": "All relations express spatial placement of an event or entity with respect to a geographic or regional entity, so they belong to the same broader class of spatial location relations even though the specific predicates differ (occurs_in vs located_in).",
+        "remark": null,
+        "confidence": 0.97
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_e6222803654a",
+          "RelR_4c1e78b7fcb1",
+          "RelR_7830c458d504",
+          "RelR_8993b154525b",
+          "RelR_3b803a98cd80"
+        ],
+        "rel_cls_group": "SPATIALITY",
+        "justification": "Each relation encodes a spatial relationship between subject and object (events or entities situated in regions), fitting the broad semantic dimension of spatiality.",
+        "remark": null,
+        "confidence": 0.98
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_e6222803654a",
+        "RelR_7830c458d504",
+        "RelR_8993b154525b",
+        "RelR_3b803a98cd80"
+      ],
+      "canonical_rel_name": "occurs_in",
+      "canonical_rel_desc": "An event or process takes place within a specified geographic, political, or administrative region.",
+      "justification": "All four relations link an event or episode (strike, protests, Arab Spring) to the region where it took place, matching an event-oriented spatial predicate 'occurs_in'.",
+      "remark": null,
+      "confidence": 0.97
+    },
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_4c1e78b7fcb1"
+      ],
+      "canonical_rel_name": "located_in",
+      "canonical_rel_desc": "An entity or object is geographically or spatially situated within a specified place or region.",
+      "justification": "This relation connects a physical entity (Egyptian pyramids) to the broader region (ancient Egypt) where it is situated, which is better modeled as a generic spatial containment predicate 'located_in' rather than an event-occurrence relation.",
+      "remark": null,
+      "confidence": 0.96
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_e6222803654a",
+        "RelR_4c1e78b7fcb1",
+        "RelR_7830c458d504",
+        "RelR_8993b154525b",
+        "RelR_3b803a98cd80"
+      ],
+      "rel_cls": "spatial_location_relation",
+      "justification": "All relations express spatial placement of an event or entity with respect to a geographic or regional entity, so they belong to the same broader class of spatial location relations even though the specific predicates differ (occurs_in vs located_in).",
+      "remark": null,
+      "confidence": 0.97
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_e6222803654a",
+        "RelR_4c1e78b7fcb1",
+        "RelR_7830c458d504",
+        "RelR_8993b154525b",
+        "RelR_3b803a98cd80"
+      ],
+      "rel_cls_group": "SPATIALITY",
+      "justification": "Each relation encodes a spatial relationship between subject and object (events or entities situated in regions), fitting the broad semantic dimension of spatiality.",
+      "remark": null,
+      "confidence": 0.98
+    }
+  ],
+  "timestamp": "2026-01-06T13:15:05Z"
+}

@@ -1,0 +1,207 @@
+{
+  "cluster_label": "13_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_2ebe97aec0c0",
+      "relation_name": "has_visual_identity",
+      "rel_desc": "A brand has an associated brand visual identity.",
+      "rel_hint_type": "attribute_link",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "brand",
+      "object_entity_name": "brand visual identity",
+      "subject_class_label": "Branding Concepts",
+      "subject_class_group": "Branding, Positioning & Market Context",
+      "object_class_label": "Branding Concepts",
+      "object_class_group": "Branding, Positioning & Market Context",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": "when defined via design and color choices",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "for",
+        "LogicalMarker": null,
+        "OtherQualifier": "OwnershipType: conceptual/representational"
+      },
+      "confidence": 0.9,
+      "remarks": [
+        "Treated as relation though it may resemble an intrinsic property."
+      ]
+    },
+    {
+      "relation_id": "RelR_cb660b4ff9e8",
+      "relation_name": "owns_or_represented_by",
+      "rel_desc": "Businesses are the organizations whose brands are being presented.",
+      "rel_hint_type": "organizational link",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "businesses",
+      "object_entity_name": "brand",
+      "subject_class_label": "Brands Using Color Strategy",
+      "subject_class_group": "Branding and Visual Identity",
+      "object_class_label": "Branding Concepts",
+      "object_class_group": "Branding, Positioning & Market Context",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": "in branding and market presentation",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": "their",
+        "OtherQualifier": "Possessive: 'their brand'"
+      },
+      "confidence": 0.8,
+      "remarks": [
+        "Generic ownership relation used to bind business to its brand."
+      ]
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_2ebe97aec0c0\"],\n      \"canonical_rel_name\": \"has_visual_identity\",\n      \"canonical_rel_desc\": \"Links a brand to its defined visual identity (e.g., logos, colors, typography) used to represent it.\",\n      \"justification\": \"The subject is a brand and the object is its brand visual identity; this is a stable, attribute-like relation describing how a brand is represented visually. The existing raw relation_name already matches this semantics and can be normalized as a canonical predicate.\",\n      \"remark\": null,\n      \"confidence\": 0.93\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_2ebe97aec0c0\"],\n      \"rel_cls\": \"branding_attribute_relation\",\n      \"justification\": \"This relation captures an attribute of a branding concept (a brand’s visual identity), so it fits a class for relations linking branding entities to their descriptive or representational attributes.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_2ebe97aec0c0\"],\n      \"rel_cls_group\": \"ATTRIBUTE\",\n      \"justification\": \"The link describes a characteristic/feature of a brand (its visual identity), which is best modeled as an ATTRIBUTE-type relation at the broad semantic level.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_cb660b4ff9e8\"],\n      \"canonical_rel_name\": \"has_brand\",\n      \"canonical_rel_desc\": \"Links a business or organization to a brand that it owns or that represents it in the market.\",\n      \"justification\": \"The subject is businesses and the object is brand, with qualifiers indicating possessive language ('their brand') and organizational presentation. A concise, directionally correct predicate is that a business has a brand.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_cb660b4ff9e8\"],\n      \"rel_cls\": \"organizational_brand_relation\",\n      \"justification\": \"This relation family covers links between organizations (businesses) and the brands they own or operate, which is distinct from general attribute links and fits well as an organizational–branding relation class.\",\n      \"remark\": null,\n      \"confidence\": 0.88\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_cb660b4ff9e8\"],\n      \"rel_cls_group\": \"OWNERSHIP\",\n      \"justification\": \"The semantics reflect a possessive/ownership-type link (businesses whose brands are being presented, with possessive qualifier 'their brand'), which is best categorized under an OWNERSHIP-style relation group.\",\n      \"remark\": null,\n      \"confidence\": 0.87\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_2ebe97aec0c0"
+        ],
+        "canonical_rel_name": "has_visual_identity",
+        "canonical_rel_desc": "Links a brand to its defined visual identity (e.g., logos, colors, typography) used to represent it.",
+        "justification": "The subject is a brand and the object is its brand visual identity; this is a stable, attribute-like relation describing how a brand is represented visually. The existing raw relation_name already matches this semantics and can be normalized as a canonical predicate.",
+        "remark": null,
+        "confidence": 0.93
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_2ebe97aec0c0"
+        ],
+        "rel_cls": "branding_attribute_relation",
+        "justification": "This relation captures an attribute of a branding concept (a brand's visual identity), so it fits a class for relations linking branding entities to their descriptive or representational attributes.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_2ebe97aec0c0"
+        ],
+        "rel_cls_group": "ATTRIBUTE",
+        "justification": "The link describes a characteristic/feature of a brand (its visual identity), which is best modeled as an ATTRIBUTE-type relation at the broad semantic level.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_cb660b4ff9e8"
+        ],
+        "canonical_rel_name": "has_brand",
+        "canonical_rel_desc": "Links a business or organization to a brand that it owns or that represents it in the market.",
+        "justification": "The subject is businesses and the object is brand, with qualifiers indicating possessive language ('their brand') and organizational presentation. A concise, directionally correct predicate is that a business has a brand.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_cb660b4ff9e8"
+        ],
+        "rel_cls": "organizational_brand_relation",
+        "justification": "This relation family covers links between organizations (businesses) and the brands they own or operate, which is distinct from general attribute links and fits well as an organizational–branding relation class.",
+        "remark": null,
+        "confidence": 0.88
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_cb660b4ff9e8"
+        ],
+        "rel_cls_group": "OWNERSHIP",
+        "justification": "The semantics reflect a possessive/ownership-type link (businesses whose brands are being presented, with possessive qualifier 'their brand'), which is best categorized under an OWNERSHIP-style relation group.",
+        "remark": null,
+        "confidence": 0.87
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_2ebe97aec0c0"
+      ],
+      "canonical_rel_name": "has_visual_identity",
+      "canonical_rel_desc": "Links a brand to its defined visual identity (e.g., logos, colors, typography) used to represent it.",
+      "justification": "The subject is a brand and the object is its brand visual identity; this is a stable, attribute-like relation describing how a brand is represented visually. The existing raw relation_name already matches this semantics and can be normalized as a canonical predicate.",
+      "remark": null,
+      "confidence": 0.93
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_2ebe97aec0c0"
+      ],
+      "rel_cls": "branding_attribute_relation",
+      "justification": "This relation captures an attribute of a branding concept (a brand's visual identity), so it fits a class for relations linking branding entities to their descriptive or representational attributes.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_2ebe97aec0c0"
+      ],
+      "rel_cls_group": "ATTRIBUTE",
+      "justification": "The link describes a characteristic/feature of a brand (its visual identity), which is best modeled as an ATTRIBUTE-type relation at the broad semantic level.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_cb660b4ff9e8"
+      ],
+      "canonical_rel_name": "has_brand",
+      "canonical_rel_desc": "Links a business or organization to a brand that it owns or that represents it in the market.",
+      "justification": "The subject is businesses and the object is brand, with qualifiers indicating possessive language ('their brand') and organizational presentation. A concise, directionally correct predicate is that a business has a brand.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_cb660b4ff9e8"
+      ],
+      "rel_cls": "organizational_brand_relation",
+      "justification": "This relation family covers links between organizations (businesses) and the brands they own or operate, which is distinct from general attribute links and fits well as an organizational–branding relation class.",
+      "remark": null,
+      "confidence": 0.88
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_cb660b4ff9e8"
+      ],
+      "rel_cls_group": "OWNERSHIP",
+      "justification": "The semantics reflect a possessive/ownership-type link (businesses whose brands are being presented, with possessive qualifier 'their brand'), which is best categorized under an OWNERSHIP-style relation group.",
+      "remark": null,
+      "confidence": 0.87
+    }
+  ],
+  "timestamp": "2026-01-06T15:02:29Z"
+}

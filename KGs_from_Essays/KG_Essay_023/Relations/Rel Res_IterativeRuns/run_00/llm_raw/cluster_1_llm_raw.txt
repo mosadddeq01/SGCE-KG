@@ -1,0 +1,100 @@
+[
+  {
+    "function": "merge_classes",
+    "args": {
+      "class_ids": [
+        "ClsC_5b2b842d",
+        "ClsC_f515ea5c",
+        "ClsC_26c284f9",
+        "ClsC_fbd08ee0"
+      ],
+      "provisional_id": "MERGE(ClsC_5b2b842d|ClsC_f515ea5c|ClsC_26c284f9|ClsC_fbd08ee0)",
+      "new_name": "Social Media Content Types",
+      "new_description": "Types of user-generated content and informational material shared on social networking platforms, including posts, comments, photos, user-generated content, news, and narrative forms such as rumors, conspiracy theories, and propaganda.",
+      "new_class_type_hint": "Content Type",
+      "justification": "All four classes describe types or categories of social media content (posts, comments, photos, user-generated content, news, rumors, conspiracy theories, propaganda) and are overlapping fragments of the same conceptual space, so they should form a single unified content-type class.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  },
+  {
+    "function": "reassign_entities",
+    "args": {
+      "entity_ids": [
+        "En_de26786f",
+        "En_ca31e620",
+        "En_2490fb58"
+      ],
+      "from_class_id": "ClsC_08f877d7",
+      "to_class_id": "MERGE(ClsC_5b2b842d|ClsC_f515ea5c|ClsC_26c284f9|ClsC_fbd08ee0)",
+      "justification": "The entities 'rumors', 'conspiracy theories', and 'propaganda' are content/narrative types that can be misleading but are not intrinsically misinformation; they belong more coherently in the unified Social Media Content Types class while the Social Media Misinformation class should focus on explicitly false or misleading information like 'misinformation' and 'fake news'.",
+      "remark": null,
+      "confidence": 0.87
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_08f877d7",
+      "new_name": "Social Media Misinformation",
+      "new_description": "False or misleading information phenomena on social networking platforms, including misinformation and deliberately fabricated news content.",
+      "new_class_type_hint": "Information Quality Issue",
+      "new_class_group": "Social Media Content & Information",
+      "remark": null,
+      "justification": "After moving general narrative content types out, this class cleanly represents misinformation-specific phenomena on social media and should be grouped with other social media content/information classes under a shared Class_Group.",
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "MERGE(ClsC_5b2b842d|ClsC_f515ea5c|ClsC_26c284f9|ClsC_fbd08ee0)",
+      "new_name": "Social Media Content Types",
+      "new_description": "User-shared content and informational material on social networking platforms, including posts, updates, thoughts, comments, photos, user-generated content, news, and narrative forms such as rumors, conspiracy theories, and propaganda.",
+      "new_class_type_hint": "Content Type",
+      "new_class_group": "Social Media Content & Information",
+      "remark": null,
+      "justification": "The merged class covers all types of social media content and information and should be explicitly placed in a shared Class_Group with Social Media Misinformation to connect related concepts.",
+      "confidence": 0.94
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_98d3a917",
+      "new_name": "Superficial Social Media Communication",
+      "new_description": "Shallow, surface-level interaction patterns on social platforms, characterized by minimal engagement mechanisms such as likes, shares, and emojis that prioritize quantity of interactions over meaningful communication.",
+      "new_class_type_hint": "Communication Pattern",
+      "new_class_group": "Social Media Interaction & Engagement",
+      "remark": null,
+      "justification": "This class focuses on interaction patterns (likes, shares, emojis) rather than content types, so it should remain distinct and be grouped under a Class_Group for social media interaction and engagement.",
+      "confidence": 0.92
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_f053899b",
+      "new_name": "Traditional Mass Media",
+      "new_description": "Legacy, large-scale news distribution channels such as television, radio, and newspapers that predate social media platforms and constitute mainstream media outlets.",
+      "new_class_type_hint": "Information Channel Type",
+      "new_class_group": "News Media & Journalism",
+      "remark": null,
+      "justification": "This class represents traditional news/media channels and should be grouped with other journalism-related practices under a shared News Media & Journalism Class_Group.",
+      "confidence": 0.93
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_8b7d9f8c",
+      "new_name": "Citizen Journalism",
+      "new_description": "News reporting and information sharing conducted by ordinary individuals rather than professional journalists, typically using digital and social media platforms.",
+      "new_class_type_hint": "Information Practice",
+      "new_class_group": "News Media & Journalism",
+      "remark": null,
+      "justification": "Citizen journalism is a news-production practice related to media and journalism and should share a Class_Group with Traditional Mass Media to connect professional and non-professional news ecosystems.",
+      "confidence": 0.9
+    }
+  }
+]

@@ -1,0 +1,242 @@
+{
+  "cluster_label": 10,
+  "cluster_classes": [
+    {
+      "candidate_id": "ClsC_9c876411",
+      "class_label": "Black Hole Quantum Radiation",
+      "class_description": "Interrelated physical phenomena and processes describing quantum radiation from black holes and its consequence of black hole mass loss and evaporation.",
+      "class_type_hint": "Physical Phenomenon",
+      "class_group": "TBD",
+      "confidence": 0.91,
+      "evidence_excerpt": "quantum effects near the event horizon ... emitted by black holes ... causes black holes to slowly lose mass and eventually evaporate",
+      "member_ids": [
+        "Can_fc5448f6",
+        "En_3f74c537",
+        "En_a2ca9ce5"
+      ],
+      "members": [
+        {
+          "id": "Can_fc5448f6",
+          "entity_name": "Hawking radiation",
+          "entity_description": "A theoretically predicted quantum radiation emitted by black holes from near the event horizon, which carries away energy and causes the black hole to lose mass and eventually evaporate.",
+          "entity_type_hint": "PhysicalPhenomenon"
+        },
+        {
+          "id": "En_3f74c537",
+          "entity_name": "quantum effects near the event horizon",
+          "entity_description": "Microscopic quantum phenomena occurring in the region close to a black hole’s event horizon, causing Hawking radiation.",
+          "entity_type_hint": "PhysicalPhenomenon"
+        },
+        {
+          "id": "En_a2ca9ce5",
+          "entity_name": "black hole evaporation",
+          "entity_description": "The process by which a black hole gradually disappears over time due to mass loss from radiation.",
+          "entity_type_hint": "PhysicalProcess"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_63a59bf9",
+      "class_label": "Hawking Radiation Theory Context",
+      "class_description": "People, dates, and theoretical constructs that define the origin and formulation of Hawking’s prediction that black holes emit radiation.",
+      "class_type_hint": "Historical/Scientific Context",
+      "class_group": "TBD",
+      "confidence": 0.89,
+      "evidence_excerpt": "Hawking radiation, predicted by physicist Stephen Hawking in 1974 ... According to Hawking's theory",
+      "member_ids": [
+        "En_e8e1c28f",
+        "En_f18775d0",
+        "En_a7a8ffbe"
+      ],
+      "members": [
+        {
+          "id": "En_e8e1c28f",
+          "entity_name": "Stephen Hawking",
+          "entity_description": "The physicist who predicted the phenomenon of Hawking radiation in 1974.",
+          "entity_type_hint": "Person"
+        },
+        {
+          "id": "En_f18775d0",
+          "entity_name": "1974",
+          "entity_description": "The year in which Stephen Hawking predicted the phenomenon of Hawking radiation.",
+          "entity_type_hint": "TimePeriod"
+        },
+        {
+          "id": "En_a7a8ffbe",
+          "entity_name": "Hawking's theory",
+          "entity_description": "Stephen Hawking’s theoretical framework proposing that black holes emit radiation and slowly evaporate.",
+          "entity_type_hint": "Theory"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_d23ca81f",
+      "class_label": "Black Hole Light Confinement",
+      "class_description": "Electromagnetic radiation in the gravitational field of a black hole, specifically the inability of light to escape from within the event horizon.",
+      "class_type_hint": "Physical Phenomenon",
+      "class_group": "TBD",
+      "confidence": 0.78,
+      "evidence_excerpt": "Electromagnetic radiation (light) that cannot escape from within a black hole’s event horizon.",
+      "member_ids": [
+        "Can_87fb5eaa"
+      ],
+      "members": [
+        {
+          "id": "Can_87fb5eaa",
+          "entity_name": "light",
+          "entity_description": "Electromagnetic radiation that cannot escape from within a black hole’s event horizon due to its extreme gravitational field.",
+          "entity_type_hint": "PhysicalPhenomenon"
+        }
+      ],
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"split_class\",\n    \"args\": {\n      \"source_class_id\": \"ClsC_63a59bf9\",\n      \"splits\": [\n        {\n          \"name\": \"Hawking Radiation Theory\",\n          \"description\": \"Stephen Hawking’s theoretical framework proposing that black holes emit thermal radiation due to quantum effects near the event horizon, leading to gradual black hole mass loss and evaporation.\",\n          \"class_type_hint\": \"Scientific Theory\",\n          \"member_ids\": [\"En_a7a8ffbe\"],\n          \"provisional_id\": \"SPLIT(ClsC_63a59bf9|theory)\"\n        }\n      ],\n      \"justification\": \"The original class mixes historical context entities (person and year) with a distinct theoretical construct; splitting isolates the scientific theory from biographical/date context for clearer semantics.\",\n      \"remark\": null,\n      \"confidence\": 0.85\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_9c876411\",\n      \"new_name\": \"Hawking Radiation and Black Hole Evaporation (Phenomena)\",\n      \"new_description\": \"Interrelated physical phenomena and processes describing Hawking radiation from black holes, the underlying quantum effects near the event horizon, and the resulting black hole mass loss and evaporation.\",\n      \"new_class_type_hint\": \"Physical Phenomenon\",\n      \"new_class_group\": \"Black Hole Physics\",\n      \"remark\": null,\n      \"justification\": \"Refined the name for clarity and assigned the shared Class_Group 'Black Hole Physics' to link this physical-phenomena class with related black hole radiation and context classes.\",\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_63a59bf9\",\n      \"new_name\": \"Hawking Radiation Historical Context\",\n      \"new_description\": \"People and dates associated with the prediction and early development of Hawking radiation, such as Stephen Hawking and the year 1974.\",\n      \"new_class_type_hint\": \"Historical/Scientific Context\",\n      \"new_class_group\": \"Black Hole Physics\",\n      \"remark\": null,\n      \"justification\": \"After removing the theory entity, the remaining members are purely historical context; updating the label and assigning the 'Black Hole Physics' Class_Group clarifies its scope and links it to related classes.\",\n      \"confidence\": 0.88\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"SPLIT(ClsC_63a59bf9|theory)\",\n      \"new_name\": \"Hawking Radiation Theory\",\n      \"new_description\": \"Stephen Hawking’s theoretical framework proposing that black holes emit radiation due to quantum effects near the event horizon, causing them to lose mass and eventually evaporate.\",\n      \"new_class_type_hint\": \"Scientific Theory\",\n      \"new_class_group\": \"Black Hole Physics\",\n      \"remark\": null,\n      \"justification\": \"Set metadata and Class_Group on the newly split theory-focused class so it is clearly distinguished as the theoretical description of Hawking radiation while remaining linked to related black hole physics classes.\",\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_d23ca81f\",\n      \"new_name\": \"Black Hole Event Horizon Light Trapping\",\n      \"new_description\": \"The behavior of electromagnetic radiation in the gravitational field of a black hole, specifically the inability of light to escape from within the event horizon.\",\n      \"new_class_type_hint\": \"Physical Phenomenon\",\n      \"new_class_group\": \"Black Hole Physics\",\n      \"remark\": null,\n      \"justification\": \"Updated the label for precision and assigned the shared Class_Group 'Black Hole Physics' to connect this distinct but related physical phenomenon with Hawking-radiation-related classes.\",\n      \"confidence\": 0.86\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "split_class",
+      "args": {
+        "source_class_id": "ClsC_63a59bf9",
+        "splits": [
+          {
+            "name": "Hawking Radiation Theory",
+            "description": "Stephen Hawking's theoretical framework proposing that black holes emit thermal radiation due to quantum effects near the event horizon, leading to gradual black hole mass loss and evaporation.",
+            "class_type_hint": "Scientific Theory",
+            "member_ids": [
+              "En_a7a8ffbe"
+            ],
+            "provisional_id": "SPLIT(ClsC_63a59bf9|theory)"
+          }
+        ],
+        "justification": "The original class mixes historical context entities (person and year) with a distinct theoretical construct; splitting isolates the scientific theory from biographical/date context for clearer semantics.",
+        "remark": null,
+        "confidence": 0.85
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_9c876411",
+        "new_name": "Hawking Radiation and Black Hole Evaporation (Phenomena)",
+        "new_description": "Interrelated physical phenomena and processes describing Hawking radiation from black holes, the underlying quantum effects near the event horizon, and the resulting black hole mass loss and evaporation.",
+        "new_class_type_hint": "Physical Phenomenon",
+        "new_class_group": "Black Hole Physics",
+        "remark": null,
+        "justification": "Refined the name for clarity and assigned the shared Class_Group 'Black Hole Physics' to link this physical-phenomena class with related black hole radiation and context classes.",
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_63a59bf9",
+        "new_name": "Hawking Radiation Historical Context",
+        "new_description": "People and dates associated with the prediction and early development of Hawking radiation, such as Stephen Hawking and the year 1974.",
+        "new_class_type_hint": "Historical/Scientific Context",
+        "new_class_group": "Black Hole Physics",
+        "remark": null,
+        "justification": "After removing the theory entity, the remaining members are purely historical context; updating the label and assigning the 'Black Hole Physics' Class_Group clarifies its scope and links it to related classes.",
+        "confidence": 0.88
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "SPLIT(ClsC_63a59bf9|theory)",
+        "new_name": "Hawking Radiation Theory",
+        "new_description": "Stephen Hawking's theoretical framework proposing that black holes emit radiation due to quantum effects near the event horizon, causing them to lose mass and eventually evaporate.",
+        "new_class_type_hint": "Scientific Theory",
+        "new_class_group": "Black Hole Physics",
+        "remark": null,
+        "justification": "Set metadata and Class_Group on the newly split theory-focused class so it is clearly distinguished as the theoretical description of Hawking radiation while remaining linked to related black hole physics classes.",
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_d23ca81f",
+        "new_name": "Black Hole Event Horizon Light Trapping",
+        "new_description": "The behavior of electromagnetic radiation in the gravitational field of a black hole, specifically the inability of light to escape from within the event horizon.",
+        "new_class_type_hint": "Physical Phenomenon",
+        "new_class_group": "Black Hole Physics",
+        "remark": null,
+        "justification": "Updated the label for precision and assigned the shared Class_Group 'Black Hole Physics' to connect this distinct but related physical phenomenon with Hawking-radiation-related classes.",
+        "confidence": 0.86
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "split_class",
+      "source_class_id": "ClsC_63a59bf9",
+      "source_class_id_resolved": "ClsC_63a59bf9",
+      "created_classes": [
+        {
+          "new_class_id": "ClsR_65a916ef",
+          "provisional_id": "SPLIT(ClsC_63a59bf9|theory)",
+          "member_ids": [
+            "En_a7a8ffbe"
+          ]
+        }
+      ],
+      "justification": "The original class mixes historical context entities (person and year) with a distinct theoretical construct; splitting isolates the scientific theory from biographical/date context for clearer semantics.",
+      "remark": null,
+      "confidence": 0.85
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_9c876411",
+      "class_id_resolved": "ClsC_9c876411",
+      "new_name": "Hawking Radiation and Black Hole Evaporation (Phenomena)",
+      "new_description": "Interrelated physical phenomena and processes describing Hawking radiation from black holes, the underlying quantum effects near the event horizon, and the resulting black hole mass loss and evaporation.",
+      "new_class_type_hint": "Physical Phenomenon",
+      "new_class_group": "Black Hole Physics",
+      "remark": null,
+      "justification": "Refined the name for clarity and assigned the shared Class_Group 'Black Hole Physics' to link this physical-phenomena class with related black hole radiation and context classes.",
+      "confidence": 0.9
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_63a59bf9",
+      "class_id_resolved": "ClsC_63a59bf9",
+      "new_name": "Hawking Radiation Historical Context",
+      "new_description": "People and dates associated with the prediction and early development of Hawking radiation, such as Stephen Hawking and the year 1974.",
+      "new_class_type_hint": "Historical/Scientific Context",
+      "new_class_group": "Black Hole Physics",
+      "remark": null,
+      "justification": "After removing the theory entity, the remaining members are purely historical context; updating the label and assigning the 'Black Hole Physics' Class_Group clarifies its scope and links it to related classes.",
+      "confidence": 0.88
+    },
+    {
+      "action": "modify_class",
+      "class_id": "SPLIT(ClsC_63a59bf9|theory)",
+      "class_id_resolved": "ClsR_65a916ef",
+      "new_name": "Hawking Radiation Theory",
+      "new_description": "Stephen Hawking's theoretical framework proposing that black holes emit radiation due to quantum effects near the event horizon, causing them to lose mass and eventually evaporate.",
+      "new_class_type_hint": "Scientific Theory",
+      "new_class_group": "Black Hole Physics",
+      "remark": null,
+      "justification": "Set metadata and Class_Group on the newly split theory-focused class so it is clearly distinguished as the theoretical description of Hawking radiation while remaining linked to related black hole physics classes.",
+      "confidence": 0.9
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_d23ca81f",
+      "class_id_resolved": "ClsC_d23ca81f",
+      "new_name": "Black Hole Event Horizon Light Trapping",
+      "new_description": "The behavior of electromagnetic radiation in the gravitational field of a black hole, specifically the inability of light to escape from within the event horizon.",
+      "new_class_type_hint": "Physical Phenomenon",
+      "new_class_group": "Black Hole Physics",
+      "remark": null,
+      "justification": "Updated the label for precision and assigned the shared Class_Group 'Black Hole Physics' to connect this distinct but related physical phenomenon with Hawking-radiation-related classes.",
+      "confidence": 0.86
+    }
+  ],
+  "provisional_to_real": {
+    "SPLIT(ClsC_63a59bf9|theory)": "ClsR_65a916ef"
+  },
+  "timestamp": "2026-01-06T09:26:03Z"
+}

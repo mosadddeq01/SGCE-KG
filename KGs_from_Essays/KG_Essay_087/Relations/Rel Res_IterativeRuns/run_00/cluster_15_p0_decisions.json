@@ -1,0 +1,145 @@
+{
+  "cluster_label": "15_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_be62e17e21aa",
+      "relation_name": "represents_brand",
+      "rel_desc": "The McDonald's arches logo symbolizes the McDonald's brand.",
+      "rel_hint_type": "representation",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "McDonald's arches",
+      "object_entity_name": "McDonald's",
+      "subject_class_label": "Brand Logos",
+      "subject_class_group": "Brand Visual Identity",
+      "object_class_label": "Consumer Brand Examples",
+      "object_class_group": "Brands and Branding Outcomes",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": "in brand communications",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.8,
+      "remarks": [
+        "Brand–logo association is generic knowledge but strongly implied by example use."
+      ]
+    },
+    {
+      "relation_id": "RelR_e4c24ab05dfe",
+      "relation_name": "represents_brand",
+      "rel_desc": "The Coca-Cola logo symbolizes the Coca-Cola brand.",
+      "rel_hint_type": "representation",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "Coca-Cola's logo",
+      "object_entity_name": "Coca-Cola",
+      "subject_class_label": "Brand Logos",
+      "subject_class_group": "Brand Visual Identity",
+      "object_class_label": "Consumer Brand Examples",
+      "object_class_group": "Brands and Branding Outcomes",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": "in brand communications",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.8,
+      "remarks": [
+        "Relation draws on standard branding semantics, supported by example context."
+      ]
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_be62e17e21aa\",\n        \"RelR_e4c24ab05dfe\"\n      ],\n      \"canonical_rel_name\": \"is_logo_of\",\n      \"canonical_rel_desc\": \"Indicates that a visual logo serves as the official brand mark for a specific brand entity.\",\n      \"justification\": \"In both relations the subject is a brand logo and the object is the corresponding brand; the semantics are that the logo is the official brand mark of that brand. A concise, directionally clear predicate for logo → brand is `is_logo_of`.\",\n      \"remark\": null,\n      \"confidence\": 0.96\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_be62e17e21aa\",\n        \"RelR_e4c24ab05dfe\"\n      ],\n      \"rel_cls\": \"brand_visual_identity_relation\",\n      \"justification\": \"Both relations link a brand’s visual identity element (logo) to the brand entity itself, which is a consistent family of relations concerning brand visual identity.\",\n      \"remark\": null,\n      \"confidence\": 0.94\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_be62e17e21aa\",\n        \"RelR_e4c24ab05dfe\"\n      ],\n      \"rel_cls_group\": \"IDENTITY\",\n      \"justification\": \"The relations capture a symbolic/representational identity mapping between a logo and the brand it stands for, which fits best under a broad IDENTITY-type grouping rather than generic ASSOCIATION.\",\n      \"remark\": null,\n      \"confidence\": 0.92\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_be62e17e21aa",
+          "RelR_e4c24ab05dfe"
+        ],
+        "canonical_rel_name": "is_logo_of",
+        "canonical_rel_desc": "Indicates that a visual logo serves as the official brand mark for a specific brand entity.",
+        "justification": "In both relations the subject is a brand logo and the object is the corresponding brand; the semantics are that the logo is the official brand mark of that brand. A concise, directionally clear predicate for logo → brand is `is_logo_of`.",
+        "remark": null,
+        "confidence": 0.96
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_be62e17e21aa",
+          "RelR_e4c24ab05dfe"
+        ],
+        "rel_cls": "brand_visual_identity_relation",
+        "justification": "Both relations link a brand's visual identity element (logo) to the brand entity itself, which is a consistent family of relations concerning brand visual identity.",
+        "remark": null,
+        "confidence": 0.94
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_be62e17e21aa",
+          "RelR_e4c24ab05dfe"
+        ],
+        "rel_cls_group": "IDENTITY",
+        "justification": "The relations capture a symbolic/representational identity mapping between a logo and the brand it stands for, which fits best under a broad IDENTITY-type grouping rather than generic ASSOCIATION.",
+        "remark": null,
+        "confidence": 0.92
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_be62e17e21aa",
+        "RelR_e4c24ab05dfe"
+      ],
+      "canonical_rel_name": "is_logo_of",
+      "canonical_rel_desc": "Indicates that a visual logo serves as the official brand mark for a specific brand entity.",
+      "justification": "In both relations the subject is a brand logo and the object is the corresponding brand; the semantics are that the logo is the official brand mark of that brand. A concise, directionally clear predicate for logo → brand is `is_logo_of`.",
+      "remark": null,
+      "confidence": 0.96
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_be62e17e21aa",
+        "RelR_e4c24ab05dfe"
+      ],
+      "rel_cls": "brand_visual_identity_relation",
+      "justification": "Both relations link a brand's visual identity element (logo) to the brand entity itself, which is a consistent family of relations concerning brand visual identity.",
+      "remark": null,
+      "confidence": 0.94
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_be62e17e21aa",
+        "RelR_e4c24ab05dfe"
+      ],
+      "rel_cls_group": "IDENTITY",
+      "justification": "The relations capture a symbolic/representational identity mapping between a logo and the brand it stands for, which fits best under a broad IDENTITY-type grouping rather than generic ASSOCIATION.",
+      "remark": null,
+      "confidence": 0.92
+    }
+  ],
+  "timestamp": "2026-01-06T15:02:43Z"
+}

@@ -1,0 +1,64 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_e98dcf88231a"],
+      "canonical_rel_name": "creates",
+      "canonical_rel_desc": "Indicates that the subject brings the object into existence as a created work or artifact.",
+      "justification": "The relation instance describes Pygmalion as the sculptor who brings the statue Galatea into existence; this is a straightforward creator–creation predicate.",
+      "remark": null,
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_aff500b56d1b"],
+      "canonical_rel_name": "loves",
+      "canonical_rel_desc": "Indicates that the subject has romantic or strong affectionate feelings toward the object.",
+      "justification": "The instance describes Pygmalion falling in love with Galatea, which is a clear emotional/affective predicate from subject to object.",
+      "remark": null,
+      "confidence": 0.96
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": ["RelR_e98dcf88231a"],
+      "rel_cls": "artistic_creation_relation",
+      "justification": "The relation captures a sculptor–statue creation event, which fits a more specific class of artistic or creative production relations.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": ["RelR_aff500b56d1b"],
+      "rel_cls": "emotional_relation",
+      "justification": "The predicate models an affective state (love) from one character toward another, fitting an emotional/affective relation class.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": ["RelR_e98dcf88231a"],
+      "rel_cls_group": "AGENCY",
+      "justification": "Creation here involves an intentional agent (the sculptor) producing an artifact, which best aligns with an agency/actor-driven category.",
+      "remark": null,
+      "confidence": 0.88
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": ["RelR_aff500b56d1b"],
+      "rel_cls_group": "ASSOCIATION",
+      "justification": "Love is an interpersonal, affective tie between entities and fits a broad group of social/relational associations.",
+      "remark": null,
+      "confidence": 0.88
+    }
+  }
+]

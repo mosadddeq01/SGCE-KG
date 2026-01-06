@@ -1,0 +1,165 @@
+{
+  "cluster_label": "15_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_218ec0f9187f",
+      "relation_name": "creates",
+      "rel_desc": "Sports are said to build metaphorical bridges between individuals and communities.",
+      "rel_hint_type": "connection",
+      "canonical_rel_name": "facilitates_social_connection",
+      "canonical_rel_desc": "Indicates that the subject fosters or enables the formation of social ties or connections represented by the object.",
+      "rel_cls": "social_connection_relation",
+      "rel_cls_group": "ASSOCIATION",
+      "subject_entity_name": "sports",
+      "object_entity_name": "bridges between individuals and communities",
+      "subject_class_label": "Sports (Domain Concept)",
+      "subject_class_group": "Sports and Society",
+      "object_class_label": "Social Connection Metaphors in Sport",
+      "object_class_group": "Sports, Social Divisions and Connections",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "have the power to",
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "Connection type: social and communal ties"
+      },
+      "confidence": 0.96,
+      "remarks": [
+        "Metaphorical 'bridges' captured as a social connection construct.",
+        "Metaphorical 'bridges' captured as a social connection construct."
+      ]
+    },
+    {
+      "relation_id": "RelR_b495fd06fb56",
+      "relation_name": "connects",
+      "rel_desc": "The metaphorical bridges are specifically between individuals.",
+      "rel_hint_type": "connection",
+      "canonical_rel_name": "connects_social_units",
+      "canonical_rel_desc": "Indicates that the subject serves to connect or link distinct social units (e.g., individuals, groups, communities) represented by the object.",
+      "rel_cls": "social_connection_relation",
+      "rel_cls_group": "ASSOCIATION",
+      "subject_entity_name": "bridges between individuals and communities",
+      "object_entity_name": "individuals",
+      "subject_class_label": "Social Connection Metaphors in Sport",
+      "subject_class_group": "Sports, Social Divisions and Connections",
+      "object_class_label": "Social Units",
+      "object_class_group": "Sports and Society",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "between",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.88,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_ff0c05da11e4",
+      "relation_name": "connects",
+      "rel_desc": "The metaphorical bridges are specifically between communities (and individuals).",
+      "rel_hint_type": "connection",
+      "canonical_rel_name": "connects_socially",
+      "canonical_rel_desc": "Indicates that the subject serves to create or strengthen social connections between the object (and related individuals or groups).",
+      "rel_cls": "social_connection_relation",
+      "rel_cls_group": "ASSOCIATION",
+      "subject_entity_name": "bridges between individuals and communities",
+      "object_entity_name": "communities",
+      "subject_class_label": "Social Connection Metaphors in Sport",
+      "subject_class_group": "Sports, Social Divisions and Connections",
+      "object_class_label": "Social Units",
+      "object_class_group": "Sports and Society",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "between",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.88,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_2a5c932a026f",
+      "relation_name": "connects",
+      "rel_desc": "Sports bring individuals together socially.",
+      "rel_hint_type": "social-connection",
+      "canonical_rel_name": "connects_socially",
+      "canonical_rel_desc": "Indicates that the subject serves to create or strengthen social connections between the object (and related individuals or groups).",
+      "rel_cls": "social_connection_relation",
+      "rel_cls_group": "ASSOCIATION",
+      "subject_entity_name": "sports",
+      "object_entity_name": "individuals",
+      "subject_class_label": "Sports (Domain Concept)",
+      "subject_class_group": "Sports and Society",
+      "object_class_label": "Social Units",
+      "object_class_group": "Sports and Society",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "bring together",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.9,
+      "remarks": [
+        "Individuals used as the stand-in for \"people\"; communities captured separately via bridges relation.",
+        "Individuals used as the stand-in for \"people\"; communities captured separately via bridges relation."
+      ]
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_rel_schema\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_218ec0f9187f\",\n        \"RelR_b495fd06fb56\",\n        \"RelR_ff0c05da11e4\",\n        \"RelR_2a5c932a026f\"\n      ],\n      \"canonical_rel_name\": \"facilitates_social_connection\",\n      \"canonical_rel_desc\": \"Indicates that the subject creates, enables, or strengthens social connections involving the object (e.g., individuals, groups, or communities).\",\n      \"rel_cls\": \"social_connection_relation\",\n      \"rel_cls_group\": \"ASSOCIATION\",\n      \"justification\": \"All four relations describe the subject fostering or enabling social ties between or among people and communities. They only differ in minor wording (facilitates vs connects, social units vs individuals/communities). Normalizing them to a single predicate 'facilitates_social_connection' with a unified description improves schema consistency without changing the underlying semantics. The existing rel_cls and rel_cls_group are already appropriate and aligned across instances.\",\n      \"remark\": \"Canonical predicate normalized across all social-connection edges in this cluster for consistent KG querying and interpretation.\",\n      \"confidence\": 0.94\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_rel_schema",
+      "args": {
+        "relation_ids": [
+          "RelR_218ec0f9187f",
+          "RelR_b495fd06fb56",
+          "RelR_ff0c05da11e4",
+          "RelR_2a5c932a026f"
+        ],
+        "canonical_rel_name": "facilitates_social_connection",
+        "canonical_rel_desc": "Indicates that the subject creates, enables, or strengthens social connections involving the object (e.g., individuals, groups, or communities).",
+        "rel_cls": "social_connection_relation",
+        "rel_cls_group": "ASSOCIATION",
+        "justification": "All four relations describe the subject fostering or enabling social ties between or among people and communities. They only differ in minor wording (facilitates vs connects, social units vs individuals/communities). Normalizing them to a single predicate 'facilitates_social_connection' with a unified description improves schema consistency without changing the underlying semantics. The existing rel_cls and rel_cls_group are already appropriate and aligned across instances.",
+        "remark": "Canonical predicate normalized across all social-connection edges in this cluster for consistent KG querying and interpretation.",
+        "confidence": 0.94
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_rel_schema",
+      "relation_ids": [
+        "RelR_218ec0f9187f",
+        "RelR_b495fd06fb56",
+        "RelR_ff0c05da11e4",
+        "RelR_2a5c932a026f"
+      ],
+      "canonical_rel_name": "facilitates_social_connection",
+      "canonical_rel_desc": "Indicates that the subject creates, enables, or strengthens social connections involving the object (e.g., individuals, groups, or communities).",
+      "rel_cls": "social_connection_relation",
+      "rel_cls_group": "ASSOCIATION",
+      "new_relation_name": null,
+      "original_relation_name": null,
+      "justification": "All four relations describe the subject fostering or enabling social ties between or among people and communities. They only differ in minor wording (facilitates vs connects, social units vs individuals/communities). Normalizing them to a single predicate 'facilitates_social_connection' with a unified description improves schema consistency without changing the underlying semantics. The existing rel_cls and rel_cls_group are already appropriate and aligned across instances.",
+      "remark": "Canonical predicate normalized across all social-connection edges in this cluster for consistent KG querying and interpretation.",
+      "confidence": 0.94
+    }
+  ],
+  "timestamp": "2026-01-06T12:44:30Z"
+}

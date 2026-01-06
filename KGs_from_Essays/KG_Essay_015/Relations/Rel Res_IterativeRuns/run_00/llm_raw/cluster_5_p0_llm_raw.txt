@@ -1,0 +1,48 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_e10a4054b22c",
+        "RelR_4a675391eaf2",
+        "RelR_9a8385eeee11",
+        "RelR_8164fdaac05d"
+      ],
+      "canonical_rel_name": "has_participant",
+      "canonical_rel_desc": "Indicates that an event, process, or practice involves a specific participant (person, group, or role) taking part in it.",
+      "justification": "All four relations connect an event or ritual process (journey to the afterlife; burial practices) to human actors or roles (the deceased, priests, embalmers, other specialists) that take part in or are required for the process. This is a standard event–participant predicate, so a unified canonical_rel_name 'has_participant' best captures the semantics.",
+      "remark": null,
+      "confidence": 0.96
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_e10a4054b22c",
+        "RelR_4a675391eaf2",
+        "RelR_9a8385eeee11",
+        "RelR_8164fdaac05d"
+      ],
+      "rel_cls": "participation_relation",
+      "justification": "Each relation describes which actors participate in or are involved in a ritual or process. This is a clear case of an event–participant or process–participant family of relations, appropriately captured by the class label 'participation_relation'.",
+      "remark": null,
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_e10a4054b22c",
+        "RelR_4a675391eaf2",
+        "RelR_9a8385eeee11",
+        "RelR_8164fdaac05d"
+      ],
+      "rel_cls_group": "AGENCY",
+      "justification": "These links specify which agents (the deceased, priests, embalmers, other specialists) are involved in carrying out or experiencing an event or process. This is best categorized under a broad AGENCY dimension, emphasizing involvement of actors in actions or rituals.",
+      "remark": null,
+      "confidence": 0.94
+    }
+  }
+]

@@ -1,0 +1,131 @@
+{
+  "cluster_label": "11_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_91e37826672b",
+      "relation_name": "inheres_in",
+      "rel_desc": "The power of storytelling is a property or capacity of the practice of storytelling.",
+      "rel_hint_type": "attribute",
+      "canonical_rel_name": "inheres_in",
+      "canonical_rel_desc": "Relates a property or capacity to the practice or bearer in which it inheres.",
+      "rel_cls": "property_bearer_relation",
+      "rel_cls_group": "ATTRIBUTE",
+      "subject_entity_name": "power of storytelling",
+      "object_entity_name": "storytelling",
+      "subject_class_label": "Storytelling and Human Connection",
+      "subject_class_group": "Storytelling and Narrative (Practices, Effects, Context)",
+      "object_class_label": "Oral Storytelling Practices",
+      "object_class_group": "Storytelling and Narrative (Practices, Effects, Context)",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": "of",
+        "OtherQualifier": "PowerType: capacity to connect and convey meaning"
+      },
+      "confidence": 0.95,
+      "remarks": [
+        "Relation used to link the abstract 'power' concept back to the base practice node.",
+        "Relation used to link the abstract 'power' concept back to the base practice node.",
+        "Relation used to link the abstract 'power' concept back to the base practice node."
+      ]
+    },
+    {
+      "relation_id": "RelR_7a129d9da487",
+      "relation_name": "connects_across",
+      "rel_desc": "The power of storytelling is described as connecting people across time.",
+      "rel_hint_type": "connectivity",
+      "canonical_rel_name": "enables_connection_across",
+      "canonical_rel_desc": "Indicates that the subject enables or facilitates human connection across the type of boundary represented by the object (e.g., time, cultures).",
+      "rel_cls": "cross_context_connection_relation",
+      "rel_cls_group": "ASSOCIATION",
+      "subject_entity_name": "power of storytelling",
+      "object_entity_name": "time",
+      "subject_class_label": "Storytelling and Human Connection",
+      "subject_class_group": "Storytelling and Narrative (Practices, Effects, Context)",
+      "object_class_label": "Storytelling Temporal and Cultural Context",
+      "object_class_group": "Storytelling and Narrative (Practices, Effects, Context)",
+      "qualifiers": {
+        "TemporalQualifier": "across time",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "to connect",
+        "LogicalMarker": null,
+        "OtherQualifier": "ConnectionTarget: people ('us')"
+      },
+      "confidence": 0.99,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_76732dae3278",
+      "relation_name": "connects_across",
+      "rel_desc": "The power of storytelling is described as connecting people across cultures.",
+      "rel_hint_type": "connectivity",
+      "canonical_rel_name": "enables_connection_across",
+      "canonical_rel_desc": "Indicates that the subject enables or facilitates human connection across the type of boundary represented by the object (e.g., time, cultures).",
+      "rel_cls": "cross_context_connection_relation",
+      "rel_cls_group": "ASSOCIATION",
+      "subject_entity_name": "power of storytelling",
+      "object_entity_name": "cultures",
+      "subject_class_label": "Storytelling and Human Connection",
+      "subject_class_group": "Storytelling and Narrative (Practices, Effects, Context)",
+      "object_class_label": "Storytelling Temporal and Cultural Context",
+      "object_class_group": "Storytelling and Narrative (Practices, Effects, Context)",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "across cultures",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "to connect",
+        "LogicalMarker": "and",
+        "OtherQualifier": "ConnectionTarget: people ('us') from different cultures"
+      },
+      "confidence": 0.99,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_rel_schema\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_7a129d9da487\",\n        \"RelR_76732dae3278\"\n      ],\n      \"canonical_rel_name\": null,\n      \"canonical_rel_desc\": null,\n      \"rel_cls\": null,\n      \"rel_cls_group\": \"CAUSALITY\",\n      \"justification\": \"Both relations describe the 'power of storytelling' as producing or enabling human connection across time and cultures. This is more accurately modeled as a causal/enablement effect rather than a mere associative linkage, so the broad relation class group should be CAUSALITY while retaining the more specific rel_cls and canonical_rel_name.\",\n      \"remark\": \"Reclassified from ASSOCIATION to CAUSALITY to reflect that storytelling power actively enables cross-context connection.\",\n      \"confidence\": 0.82\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_rel_schema",
+      "args": {
+        "relation_ids": [
+          "RelR_7a129d9da487",
+          "RelR_76732dae3278"
+        ],
+        "canonical_rel_name": null,
+        "canonical_rel_desc": null,
+        "rel_cls": null,
+        "rel_cls_group": "CAUSALITY",
+        "justification": "Both relations describe the 'power of storytelling' as producing or enabling human connection across time and cultures. This is more accurately modeled as a causal/enablement effect rather than a mere associative linkage, so the broad relation class group should be CAUSALITY while retaining the more specific rel_cls and canonical_rel_name.",
+        "remark": "Reclassified from ASSOCIATION to CAUSALITY to reflect that storytelling power actively enables cross-context connection.",
+        "confidence": 0.82
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_rel_schema",
+      "relation_ids": [
+        "RelR_7a129d9da487",
+        "RelR_76732dae3278"
+      ],
+      "canonical_rel_name": null,
+      "canonical_rel_desc": null,
+      "rel_cls": null,
+      "rel_cls_group": "CAUSALITY",
+      "new_relation_name": null,
+      "original_relation_name": null,
+      "justification": "Both relations describe the 'power of storytelling' as producing or enabling human connection across time and cultures. This is more accurately modeled as a causal/enablement effect rather than a mere associative linkage, so the broad relation class group should be CAUSALITY while retaining the more specific rel_cls and canonical_rel_name.",
+      "remark": "Reclassified from ASSOCIATION to CAUSALITY to reflect that storytelling power actively enables cross-context connection.",
+      "confidence": 0.82
+    }
+  ],
+  "timestamp": "2026-01-06T14:10:42Z"
+}

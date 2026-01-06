@@ -1,0 +1,133 @@
+{
+  "cluster_label": "19_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_66feed2d9de4",
+      "relation_name": "is_component_of",
+      "rel_desc": "Posture is identified as a key component of body language.",
+      "rel_hint_type": "composition",
+      "canonical_rel_name": "is_component_of",
+      "canonical_rel_desc": "Indicates that the subject is a component, aspect, or example of the object, which represents a larger whole, system, or category.",
+      "rel_cls": "component_whole_relation",
+      "rel_cls_group": "COMPOSITION",
+      "subject_entity_name": "posture",
+      "object_entity_name": "body language",
+      "subject_class_label": "Posture and Authority Cues",
+      "subject_class_group": "Nonverbal Communication & Body Language",
+      "object_class_label": "Body Language as Nonverbal Communication",
+      "object_class_group": "Nonverbal Communication & Body Language",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.99,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_1479108371fa",
+      "relation_name": "is_component_of",
+      "rel_desc": "Gestures are a type of nonverbal behavior that functions as part of body language.",
+      "rel_hint_type": "composition",
+      "canonical_rel_name": "is_component_of",
+      "canonical_rel_desc": "Indicates that the subject is a component, aspect, or example of the object, which represents a larger whole, system, or category.",
+      "rel_cls": "component_whole_relation",
+      "rel_cls_group": "COMPOSITION",
+      "subject_entity_name": "gestures",
+      "object_entity_name": "body language",
+      "subject_class_label": "Nonverbal Gestures",
+      "subject_class_group": "Nonverbal Communication & Body Language",
+      "object_class_label": "Body Language as Nonverbal Communication",
+      "object_class_group": "Nonverbal Communication & Body Language",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "inferred",
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "TypeOfNonverbal: gestures as part of body language"
+      },
+      "confidence": 0.9,
+      "remarks": [
+        "Relation inferred from conceptual grouping; text implies gestures are within body language.",
+        "Relation inferred from conceptual grouping; text implies gestures are within body language.",
+        "Relation inferred from conceptual grouping; text implies gestures are within body language."
+      ]
+    },
+    {
+      "relation_id": "RelR_273c3c0ce64a",
+      "relation_name": "is_component_of",
+      "rel_desc": "Posture is treated as a specific aspect of body language that people can observe and be mindful of.",
+      "rel_hint_type": "component-of",
+      "canonical_rel_name": "is_aspect_of",
+      "canonical_rel_desc": "Indicates that the subject is a specific aspect, feature, or component of the broader phenomenon described by the object.",
+      "rel_cls": "nonverbal_component_relation",
+      "rel_cls_group": "COMPOSITION",
+      "subject_entity_name": "posture",
+      "object_entity_name": "body language",
+      "subject_class_label": "Posture and Authority Cues",
+      "subject_class_group": "Nonverbal Communication & Body Language",
+      "object_class_label": "Body Language as Nonverbal Communication",
+      "object_class_group": "Nonverbal Communication & Body Language",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "Implied by sequencing of posture and body language discussion"
+      },
+      "confidence": 0.72,
+      "remarks": [
+        "Semantics partly rely on domain knowledge that posture is a form of body language; text implies but does not state it explicitly.",
+        "Semantics partly rely on domain knowledge that posture is a form of body language; text implies but does not state it explicitly.",
+        "Semantics partly rely on domain knowledge that posture is a form of body language; text implies but does not state it explicitly."
+      ]
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_rel_schema\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_273c3c0ce64a\"\n      ],\n      \"canonical_rel_name\": \"is_component_of\",\n      \"canonical_rel_desc\": \"Indicates that the subject is a component, aspect, or example of the object, which represents a larger whole, system, or category.\",\n      \"rel_cls\": \"component_whole_relation\",\n      \"rel_cls_group\": \"COMPOSITION\",\n      \"justification\": \"This relation has the same semantics as the other two instances (posture/gestures as parts or aspects of body language). To maintain a consistent predicate and class across semantically identical composition relations, normalize from 'is_aspect_of' and 'nonverbal_component_relation' to the already used 'is_component_of' and 'component_whole_relation'.\",\n      \"remark\": \"Normalized to align with other component relations linking parts/aspects to body language.\",\n      \"confidence\": 0.93\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_rel_schema",
+      "args": {
+        "relation_ids": [
+          "RelR_273c3c0ce64a"
+        ],
+        "canonical_rel_name": "is_component_of",
+        "canonical_rel_desc": "Indicates that the subject is a component, aspect, or example of the object, which represents a larger whole, system, or category.",
+        "rel_cls": "component_whole_relation",
+        "rel_cls_group": "COMPOSITION",
+        "justification": "This relation has the same semantics as the other two instances (posture/gestures as parts or aspects of body language). To maintain a consistent predicate and class across semantically identical composition relations, normalize from 'is_aspect_of' and 'nonverbal_component_relation' to the already used 'is_component_of' and 'component_whole_relation'.",
+        "remark": "Normalized to align with other component relations linking parts/aspects to body language.",
+        "confidence": 0.93
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_rel_schema",
+      "relation_ids": [
+        "RelR_273c3c0ce64a"
+      ],
+      "canonical_rel_name": "is_component_of",
+      "canonical_rel_desc": "Indicates that the subject is a component, aspect, or example of the object, which represents a larger whole, system, or category.",
+      "rel_cls": "component_whole_relation",
+      "rel_cls_group": "COMPOSITION",
+      "new_relation_name": null,
+      "original_relation_name": null,
+      "justification": "This relation has the same semantics as the other two instances (posture/gestures as parts or aspects of body language). To maintain a consistent predicate and class across semantically identical composition relations, normalize from 'is_aspect_of' and 'nonverbal_component_relation' to the already used 'is_component_of' and 'component_whole_relation'.",
+      "remark": "Normalized to align with other component relations linking parts/aspects to body language.",
+      "confidence": 0.93
+    }
+  ],
+  "timestamp": "2026-01-06T12:17:51Z"
+}

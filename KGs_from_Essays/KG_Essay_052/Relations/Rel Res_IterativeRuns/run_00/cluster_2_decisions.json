@@ -1,0 +1,205 @@
+{
+  "cluster_label": 2,
+  "cluster_classes": [
+    {
+      "candidate_id": "ClsC_b6ef6de0",
+      "class_label": "Event Host Locations",
+      "class_description": "Geopolitical locations that host major sporting events and experience related economic impacts such as revenue and tourism.",
+      "class_type_hint": "Location Role",
+      "class_group": "TBD",
+      "confidence": 0.95,
+      "evidence_excerpt": "host cities and countries that generate revenue, create jobs, and boost tourism from major sporting events",
+      "member_ids": [
+        "En_8cc4caec",
+        "En_6bbaf7ab"
+      ],
+      "members": [
+        {
+          "id": "En_8cc4caec",
+          "entity_name": "host cities",
+          "entity_description": "Cities that host major sporting events and experience associated economic impacts such as revenue and tourism.",
+          "entity_type_hint": "Location"
+        },
+        {
+          "id": "En_6bbaf7ab",
+          "entity_name": "host countries",
+          "entity_description": "Countries that host major sporting events and benefit economically through revenue and related activities.",
+          "entity_type_hint": "Location"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_480a20b7",
+      "class_label": "Global Sporting Events",
+      "class_description": "Large-scale sports events that bring together participants or teams from multiple countries and attract worldwide audiences.",
+      "class_type_hint": "Event Category",
+      "class_group": "TBD",
+      "confidence": 0.93,
+      "evidence_excerpt": "events that bring together millions of people from around the globe, transcending language barriers and political divisions",
+      "member_ids": [
+        "En_9b169f66",
+        "En_92d5b4f3",
+        "En_f090fa17",
+        "En_3e065bee"
+      ],
+      "members": [
+        {
+          "id": "En_9b169f66",
+          "entity_name": "international tournaments",
+          "entity_description": "Large sports competitions between teams or individuals from multiple countries.",
+          "entity_type_hint": "Event"
+        },
+        {
+          "id": "En_92d5b4f3",
+          "entity_name": "World Cup",
+          "entity_description": "A major international soccer tournament bringing together teams and fans from many countries.",
+          "entity_type_hint": "Event"
+        },
+        {
+          "id": "En_f090fa17",
+          "entity_name": "Olympics",
+          "entity_description": "A major international multi-sport event involving athletes from around the world.",
+          "entity_type_hint": "Event"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_d7c21bf5",
+      "class_label": "Global Sports Phenomena",
+      "class_description": "Sports and sports-related events with large international followings and significant cultural and economic impact, such as soccer and major sporting events like the World Cup or Olympics.",
+      "class_type_hint": "Social Phenomenon",
+      "class_group": "TBD",
+      "confidence": 0.79,
+      "evidence_excerpt": "World Cup in soccer or the Olympics are events that bring together millions of people from around the globe.",
+      "member_ids": [
+        "En_3e065bee",
+        "En_563f6e97"
+      ],
+      "members": [
+        {
+          "id": "En_3e065bee",
+          "entity_name": "major sporting events",
+          "entity_description": "Large-scale sports competitions that generate revenue, jobs, tourism, and broader economic activity for hosts.",
+          "entity_type_hint": "EventType"
+        },
+        {
+          "id": "En_563f6e97",
+          "entity_name": "soccer",
+          "entity_description": "A global team sport in which the World Cup is a premier international tournament.",
+          "entity_type_hint": "Sport"
+        }
+      ],
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"reassign_entities\",\n    \"args\": {\n      \"entity_ids\": [\"En_3e065bee\"],\n      \"from_class_id\": \"ClsC_d7c21bf5\",\n      \"to_class_id\": \"ClsC_480a20b7\",\n      \"justification\": \"The entity 'major sporting events' is an event-type concept aligned with other international tournaments (World Cup, Olympics) in ClsC_480a20b7, while ClsC_d7c21bf5 should focus on broader sports phenomena such as the sport 'soccer' itself.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_480a20b7\",\n      \"new_name\": \"Global Sporting Events\",\n      \"new_description\": \"Large-scale international sports competitions and tournaments (e.g., World Cup, Olympics, major sporting events) that bring together participants or teams from multiple countries and attract worldwide audiences.\",\n      \"new_class_type_hint\": \"Event Category\",\n      \"new_class_group\": \"Global Sporting Events & Impacts\",\n      \"remark\": null,\n      \"justification\": \"After adding 'major sporting events' to this class, updating the description and assigning a shared class_group clarifies that this class is the canonical home for global sports tournaments and connects it to related location/phenomenon classes.\",\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_b6ef6de0\",\n      \"new_name\": \"Event Host Locations\",\n      \"new_description\": \"Geopolitical locations (cities, countries) that host major international sporting events and experience related economic impacts such as revenue, jobs, and tourism.\",\n      \"new_class_type_hint\": \"Location Role\",\n      \"new_class_group\": \"Global Sporting Events & Impacts\",\n      \"remark\": null,\n      \"justification\": \"This class describes cities and countries in their role as hosts of global sporting events, so assigning it to the same 'Global Sporting Events & Impacts' class_group links it with the events and related phenomena while keeping its location-specific scope.\",\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_d7c21bf5\",\n      \"new_name\": \"Global Popular Sports\",\n      \"new_description\": \"Sports with large international followings and significant cultural and economic impact, such as soccer as a global team sport.\",\n      \"new_class_type_hint\": \"Sport\",\n      \"new_class_group\": \"Global Sporting Events & Impacts\",\n      \"remark\": null,\n      \"justification\": \"Once the event-type member 'major sporting events' is reassigned, this class is effectively about the sport 'soccer' as a global phenomenon; renaming, updating the type hint/description, and aligning the class_group clarifies its focus on globally popular sports within the broader global sporting events ecosystem.\",\n      \"confidence\": 0.88\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "reassign_entities",
+      "args": {
+        "entity_ids": [
+          "En_3e065bee"
+        ],
+        "from_class_id": "ClsC_d7c21bf5",
+        "to_class_id": "ClsC_480a20b7",
+        "justification": "The entity 'major sporting events' is an event-type concept aligned with other international tournaments (World Cup, Olympics) in ClsC_480a20b7, while ClsC_d7c21bf5 should focus on broader sports phenomena such as the sport 'soccer' itself.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_480a20b7",
+        "new_name": "Global Sporting Events",
+        "new_description": "Large-scale international sports competitions and tournaments (e.g., World Cup, Olympics, major sporting events) that bring together participants or teams from multiple countries and attract worldwide audiences.",
+        "new_class_type_hint": "Event Category",
+        "new_class_group": "Global Sporting Events & Impacts",
+        "remark": null,
+        "justification": "After adding 'major sporting events' to this class, updating the description and assigning a shared class_group clarifies that this class is the canonical home for global sports tournaments and connects it to related location/phenomenon classes.",
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_b6ef6de0",
+        "new_name": "Event Host Locations",
+        "new_description": "Geopolitical locations (cities, countries) that host major international sporting events and experience related economic impacts such as revenue, jobs, and tourism.",
+        "new_class_type_hint": "Location Role",
+        "new_class_group": "Global Sporting Events & Impacts",
+        "remark": null,
+        "justification": "This class describes cities and countries in their role as hosts of global sporting events, so assigning it to the same 'Global Sporting Events & Impacts' class_group links it with the events and related phenomena while keeping its location-specific scope.",
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_d7c21bf5",
+        "new_name": "Global Popular Sports",
+        "new_description": "Sports with large international followings and significant cultural and economic impact, such as soccer as a global team sport.",
+        "new_class_type_hint": "Sport",
+        "new_class_group": "Global Sporting Events & Impacts",
+        "remark": null,
+        "justification": "Once the event-type member 'major sporting events' is reassigned, this class is effectively about the sport 'soccer' as a global phenomenon; renaming, updating the type hint/description, and aligning the class_group clarifies its focus on globally popular sports within the broader global sporting events ecosystem.",
+        "confidence": 0.88
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "reassign_entities",
+      "entity_ids": [
+        "En_3e065bee"
+      ],
+      "from": "ClsC_d7c21bf5",
+      "from_resolved": "ClsC_d7c21bf5",
+      "to": "ClsC_480a20b7",
+      "to_resolved": "ClsC_480a20b7",
+      "justification": "The entity 'major sporting events' is an event-type concept aligned with other international tournaments (World Cup, Olympics) in ClsC_480a20b7, while ClsC_d7c21bf5 should focus on broader sports phenomena such as the sport 'soccer' itself.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_480a20b7",
+      "class_id_resolved": "ClsC_480a20b7",
+      "new_name": "Global Sporting Events",
+      "new_description": "Large-scale international sports competitions and tournaments (e.g., World Cup, Olympics, major sporting events) that bring together participants or teams from multiple countries and attract worldwide audiences.",
+      "new_class_type_hint": "Event Category",
+      "new_class_group": "Global Sporting Events & Impacts",
+      "remark": null,
+      "justification": "After adding 'major sporting events' to this class, updating the description and assigning a shared class_group clarifies that this class is the canonical home for global sports tournaments and connects it to related location/phenomenon classes.",
+      "confidence": 0.9
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_b6ef6de0",
+      "class_id_resolved": "ClsC_b6ef6de0",
+      "new_name": "Event Host Locations",
+      "new_description": "Geopolitical locations (cities, countries) that host major international sporting events and experience related economic impacts such as revenue, jobs, and tourism.",
+      "new_class_type_hint": "Location Role",
+      "new_class_group": "Global Sporting Events & Impacts",
+      "remark": null,
+      "justification": "This class describes cities and countries in their role as hosts of global sporting events, so assigning it to the same 'Global Sporting Events & Impacts' class_group links it with the events and related phenomena while keeping its location-specific scope.",
+      "confidence": 0.9
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_d7c21bf5",
+      "class_id_resolved": "ClsC_d7c21bf5",
+      "new_name": "Global Popular Sports",
+      "new_description": "Sports with large international followings and significant cultural and economic impact, such as soccer as a global team sport.",
+      "new_class_type_hint": "Sport",
+      "new_class_group": "Global Sporting Events & Impacts",
+      "remark": null,
+      "justification": "Once the event-type member 'major sporting events' is reassigned, this class is effectively about the sport 'soccer' as a global phenomenon; renaming, updating the type hint/description, and aligning the class_group clarifies its focus on globally popular sports within the broader global sporting events ecosystem.",
+      "confidence": 0.88
+    }
+  ],
+  "provisional_to_real": {},
+  "timestamp": "2026-01-06T12:28:01Z"
+}

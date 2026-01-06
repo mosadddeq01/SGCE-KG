@@ -1,0 +1,143 @@
+{
+  "cluster_label": "4_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_bca32e33bd5a",
+      "relation_name": "is_type_of",
+      "rel_desc": "Nodding is treated as a specific kind of gesture.",
+      "rel_hint_type": "taxonomy",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "nodding",
+      "object_entity_name": "gestures",
+      "subject_class_label": "Nonverbal Gestures",
+      "subject_class_group": "Nonverbal Communication & Body Language",
+      "object_class_label": "Nonverbal Gestures",
+      "object_class_group": "Nonverbal Communication & Body Language",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "inferred",
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.92,
+      "remarks": [
+        "Type-of relation inferred from how examples are presented."
+      ]
+    },
+    {
+      "relation_id": "RelR_092b16a778c2",
+      "relation_name": "specialized_form_of",
+      "rel_desc": "The art of body language is the skillful, mastered use of body language.",
+      "rel_hint_type": "taxonomy",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "art of body language",
+      "object_entity_name": "body language",
+      "subject_class_label": "Body Language as Communication",
+      "subject_class_group": "Body Language & Nonverbal Communication",
+      "object_class_label": "Body Language as Nonverbal Communication",
+      "object_class_group": "Nonverbal Communication & Body Language",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": "requires learning/mastery (implied by 'art')",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "SkillLevel: mastery"
+      },
+      "confidence": 0.9,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_bca32e33bd5a\",\n        \"RelR_092b16a778c2\"\n      ],\n      \"canonical_rel_name\": \"is_subtype_of\",\n      \"canonical_rel_desc\": \"Indicates that the subject is a more specific kind, subtype, or specialized form of the object within a conceptual or taxonomic hierarchy.\",\n      \"justification\": \"Both relations describe taxonomic or hierarchical specialization: (1) nodding is treated as a specific kind of gesture, and (2) the art of body language is a mastered/specialized form of body language. In both cases, the subject is a subtype or more specific instance within the category given by the object, so they should share the canonical predicate 'is_subtype_of'.\",\n      \"remark\": null,\n      \"confidence\": 0.93\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_bca32e33bd5a\",\n        \"RelR_092b16a778c2\"\n      ],\n      \"rel_cls\": \"hierarchical_category_relation\",\n      \"justification\": \"These relations define hierarchical category links where one concept is a more specific member or specialization of a broader category. This fits a relation class capturing taxonomic or conceptual hierarchy between categories or concepts.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_bca32e33bd5a\",\n        \"RelR_092b16a778c2\"\n      ],\n      \"rel_cls_group\": \"IDENTITY\",\n      \"justification\": \"Taxonomic subtype relations are a form of identity/equivalence along a hierarchy, expressing what the subject 'is' in relation to a broader conceptual category. Among the broad semantic groups provided, IDENTITY best matches these is-a / type-of semantics.\",\n      \"remark\": null,\n      \"confidence\": 0.86\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_bca32e33bd5a",
+          "RelR_092b16a778c2"
+        ],
+        "canonical_rel_name": "is_subtype_of",
+        "canonical_rel_desc": "Indicates that the subject is a more specific kind, subtype, or specialized form of the object within a conceptual or taxonomic hierarchy.",
+        "justification": "Both relations describe taxonomic or hierarchical specialization: (1) nodding is treated as a specific kind of gesture, and (2) the art of body language is a mastered/specialized form of body language. In both cases, the subject is a subtype or more specific instance within the category given by the object, so they should share the canonical predicate 'is_subtype_of'.",
+        "remark": null,
+        "confidence": 0.93
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_bca32e33bd5a",
+          "RelR_092b16a778c2"
+        ],
+        "rel_cls": "hierarchical_category_relation",
+        "justification": "These relations define hierarchical category links where one concept is a more specific member or specialization of a broader category. This fits a relation class capturing taxonomic or conceptual hierarchy between categories or concepts.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_bca32e33bd5a",
+          "RelR_092b16a778c2"
+        ],
+        "rel_cls_group": "IDENTITY",
+        "justification": "Taxonomic subtype relations are a form of identity/equivalence along a hierarchy, expressing what the subject 'is' in relation to a broader conceptual category. Among the broad semantic groups provided, IDENTITY best matches these is-a / type-of semantics.",
+        "remark": null,
+        "confidence": 0.86
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_bca32e33bd5a",
+        "RelR_092b16a778c2"
+      ],
+      "canonical_rel_name": "is_subtype_of",
+      "canonical_rel_desc": "Indicates that the subject is a more specific kind, subtype, or specialized form of the object within a conceptual or taxonomic hierarchy.",
+      "justification": "Both relations describe taxonomic or hierarchical specialization: (1) nodding is treated as a specific kind of gesture, and (2) the art of body language is a mastered/specialized form of body language. In both cases, the subject is a subtype or more specific instance within the category given by the object, so they should share the canonical predicate 'is_subtype_of'.",
+      "remark": null,
+      "confidence": 0.93
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_bca32e33bd5a",
+        "RelR_092b16a778c2"
+      ],
+      "rel_cls": "hierarchical_category_relation",
+      "justification": "These relations define hierarchical category links where one concept is a more specific member or specialization of a broader category. This fits a relation class capturing taxonomic or conceptual hierarchy between categories or concepts.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_bca32e33bd5a",
+        "RelR_092b16a778c2"
+      ],
+      "rel_cls_group": "IDENTITY",
+      "justification": "Taxonomic subtype relations are a form of identity/equivalence along a hierarchy, expressing what the subject 'is' in relation to a broader conceptual category. Among the broad semantic groups provided, IDENTITY best matches these is-a / type-of semantics.",
+      "remark": null,
+      "confidence": 0.86
+    }
+  ],
+  "timestamp": "2026-01-06T12:08:33Z"
+}

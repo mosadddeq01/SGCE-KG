@@ -1,0 +1,18 @@
+[
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": [
+        "RelR_a737134aa14f",
+        "RelR_d624b3f10cf5"
+      ],
+      "canonical_rel_name": "is_life_cycle_stage_of",
+      "canonical_rel_desc": "Indicates that the subject is a distinct stage within the life cycle process represented by the object.",
+      "rel_cls": "life_cycle_stage_relation",
+      "rel_cls_group": "TEMPORALITY",
+      "justification": "Both relations connect the same entities (adult butterfly stage → butterfly life cycle) with identical semantics: a stage belonging to a life cycle. To ensure schema consistency, they should share a unified canonical predicate. The more specific and clear predicate is 'is_life_cycle_stage_of'. The existing rel_cls 'life_cycle_stage_relation' is appropriate, but the broad group 'COMPOSITION' for RelR_a737134aa14f is less accurate than 'TEMPORALITY', since stages of a life cycle primarily describe temporal phases rather than part-whole composition. Therefore both are normalized to the same canonical_rel_name and rel_cls_group = 'TEMPORALITY'.",
+      "remark": "Normalized the life cycle stage relation across instances to a single predicate and temporal grouping.",
+      "confidence": 0.93
+    }
+  }
+]

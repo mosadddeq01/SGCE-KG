@@ -1,0 +1,15 @@
+[
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": ["RelR_3321a8fa4e2e"],
+      "canonical_rel_name": "is_life_stage_of_taxon",
+      "canonical_rel_desc": "Links organisms in a specific life stage to the broader taxon or species whose members they represent at that life stage (e.g., adult butterflies are the adult life stage of butterflies).",
+      "rel_cls": "life_stage_relation",
+      "rel_cls_group": "TEMPORALITY",
+      "justification": "The existing canonical_rel_name 'is_life_stage_subset_of' is awkward and ambiguous. The relation clearly connects a life-stage-specific group ('adult butterflies') to its parent taxon ('butterflies'). Renaming to 'is_life_stage_of_taxon' makes the direction and semantics explicit while remaining aligned with the same life_stage_relation class and TEMPORALITY group used for life-stage links.",
+      "remark": null,
+      "confidence": 0.86
+    }
+  }
+]

@@ -1,0 +1,42 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_10bedaf8ee3d",
+        "RelR_39458f5ce628"
+      ],
+      "canonical_rel_name": "seeks_to_overthrow",
+      "canonical_rel_desc": "Actor (e.g., movement or uprising) aims to overthrow or remove the target regime or power structure.",
+      "justification": "Both relations describe collective political actors (socialist movements, uprisings) whose explicit aim is to overthrow oppressive regimes; they share identical adversarial, regime-change intent toward the same type of object, so one canonical predicate capturing the goal of overthrow is appropriate.",
+      "remark": "Use qualifiers (temporal, spatial) to distinguish specific episodes; the canonical predicate focuses on the general regime-overthrow intent.",
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_10bedaf8ee3d",
+        "RelR_39458f5ce628"
+      ],
+      "rel_cls": "regime_change_target_relation",
+      "justification": "These relations encode which regimes are targeted for overthrow by contentious political actors, fitting a regime-change targeting family of relations rather than a generic adversarial or compositional link.",
+      "remark": null,
+      "confidence": 0.88
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_10bedaf8ee3d",
+        "RelR_39458f5ce628"
+      ],
+      "rel_cls_group": "AGENCY",
+      "justification": "The semantic core is an intentional action/goal (seeking to overthrow) directed by an agent toward a target, which is best modeled as an agency/intentional-action relation rather than mere association.",
+      "remark": null,
+      "confidence": 0.88
+    }
+  }
+]

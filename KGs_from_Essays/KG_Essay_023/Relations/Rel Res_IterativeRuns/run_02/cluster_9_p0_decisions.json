@@ -1,0 +1,165 @@
+{
+  "cluster_label": "9_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_52fd6e3c271d",
+      "relation_name": "enables",
+      "rel_desc": "Social media enables amplification of individuals' voices.",
+      "rel_hint_type": "functional impact",
+      "canonical_rel_name": "enables_amplification_of_voices",
+      "canonical_rel_desc": "Subject provides functionality or affordances that make it possible for the object's voices or perspectives to be amplified in public discourse.",
+      "rel_cls": "voice_representation_relation",
+      "rel_cls_group": "CAUSALITY",
+      "subject_entity_name": "social media",
+      "object_entity_name": "amplification of our voices",
+      "subject_class_label": "Social Media Platforms",
+      "subject_class_group": "Social Media & Online Communication",
+      "object_class_label": "Marginalized and Diverse Voices",
+      "object_class_group": "Marginalization, Representation & Inclusion in Social Media",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "impact of",
+        "LogicalMarker": null,
+        "OtherQualifier": "ImpactDomain: communication"
+      },
+      "confidence": 0.93,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_88a10b384da7",
+      "relation_name": "gives_voice_to",
+      "rel_desc": "Social media gives a voice to marginalized groups previously silenced or ignored.",
+      "rel_hint_type": "empowerment",
+      "canonical_rel_name": "amplifies_voice_of",
+      "canonical_rel_desc": "Subject increases the audibility, visibility, or reach of the object's voice or perspectives in public discourse.",
+      "rel_cls": "voice_representation_relation",
+      "rel_cls_group": "CAUSALITY",
+      "subject_entity_name": "social media",
+      "object_entity_name": "marginalized groups",
+      "subject_class_label": "Social Media Platforms",
+      "subject_class_group": "Social Media & Online Communication",
+      "object_class_label": "Underrepresented Communities",
+      "object_class_group": "Marginalization, Representation & Inclusion in Social Media",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "in online public discourse",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "may have been",
+        "CausalHint": "By giving a voice",
+        "LogicalMarker": "By",
+        "OtherQualifier": "PreviouslySilencedBy: mainstream media"
+      },
+      "confidence": 0.88,
+      "remarks": [
+        "Subject groups are broadly described; mapped to marginalized groups entity.",
+        "Subject groups are broadly described; mapped to marginalized groups entity.",
+        "Subject groups are broadly described; mapped to marginalized groups entity."
+      ]
+    },
+    {
+      "relation_id": "RelR_82329e60d9e3",
+      "relation_name": "silences_or_ignores",
+      "rel_desc": "Mainstream media has historically silenced or ignored marginalized groups.",
+      "rel_hint_type": "exclusion",
+      "canonical_rel_name": "suppresses_voice_of",
+      "canonical_rel_desc": "Subject diminishes, silences, or neglects the object's voice or perspectives in public discourse.",
+      "rel_cls": "voice_representation_relation",
+      "rel_cls_group": "CAUSALITY",
+      "subject_entity_name": "mainstream media",
+      "object_entity_name": "marginalized groups",
+      "subject_class_label": "Traditional Mass Media",
+      "subject_class_group": "News Media & Journalism",
+      "object_class_label": "Underrepresented Communities",
+      "object_class_group": "Marginalization, Representation & Inclusion in Social Media",
+      "qualifiers": {
+        "TemporalQualifier": "historically",
+        "SpatialQualifier": "within mainstream media channels",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "may have been",
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "Mode: limited coverage or negative framing"
+      },
+      "confidence": 0.84,
+      "remarks": [
+        "Maps implicitly referenced 'those' to marginalized groups, consistent with context.",
+        "Maps implicitly referenced 'those' to marginalized groups, consistent with context.",
+        "Maps implicitly referenced 'those' to marginalized groups, consistent with context."
+      ]
+    },
+    {
+      "relation_id": "RelR_e0820b014179",
+      "relation_name": "amplifies",
+      "rel_desc": "Empowerment of marginalized voices results in amplification of diverse voices.",
+      "rel_hint_type": "causal",
+      "canonical_rel_name": "amplifies_voice_of",
+      "canonical_rel_desc": "Subject increases the audibility, visibility, or reach of the object's voice or perspectives in public discourse.",
+      "rel_cls": "voice_representation_relation",
+      "rel_cls_group": "CAUSALITY",
+      "subject_entity_name": "empowerment of marginalized voices",
+      "object_entity_name": "diverse voices",
+      "subject_class_label": "Marginalized and Diverse Voices",
+      "subject_class_group": "Marginalization, Representation & Inclusion in Social Media",
+      "object_class_label": "Marginalized and Diverse Voices",
+      "object_class_group": "Marginalization, Representation & Inclusion in Social Media",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "across social media discourse",
+        "OperationalConstraint": "when social media is harnessed for good",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "inferred linkage",
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.68,
+      "remarks": [
+        "Relation inferred to connect two separately mentioned but conceptually related effects.",
+        "Relation inferred to connect two separately mentioned but conceptually related effects.",
+        "Relation inferred to connect two separately mentioned but conceptually related effects."
+      ]
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_rel_schema\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_52fd6e3c271d\"],\n      \"canonical_rel_name\": \"enables_voice_amplification\",\n      \"canonical_rel_desc\": \"Subject provides functionality or affordances that make it possible for the amplification of voices or perspectives in public discourse.\",\n      \"rel_cls\": \"voice_representation_relation\",\n      \"rel_cls_group\": \"CAUSALITY\",\n      \"justification\": \"For RelR_52fd6e3c271d, the object is the process/event 'amplification of our voices', not a group whose voice is directly acted on. Normalizing the predicate to 'enables_voice_amplification' removes the awkward and slightly misleading implication that the object is itself a voice-bearing group, while keeping alignment with the other voice_representation_relation instances that directly amplify or suppress the voices of marginalized groups.\",\n      \"remark\": null,\n      \"confidence\": 0.87\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_rel_schema",
+      "args": {
+        "relation_ids": [
+          "RelR_52fd6e3c271d"
+        ],
+        "canonical_rel_name": "enables_voice_amplification",
+        "canonical_rel_desc": "Subject provides functionality or affordances that make it possible for the amplification of voices or perspectives in public discourse.",
+        "rel_cls": "voice_representation_relation",
+        "rel_cls_group": "CAUSALITY",
+        "justification": "For RelR_52fd6e3c271d, the object is the process/event 'amplification of our voices', not a group whose voice is directly acted on. Normalizing the predicate to 'enables_voice_amplification' removes the awkward and slightly misleading implication that the object is itself a voice-bearing group, while keeping alignment with the other voice_representation_relation instances that directly amplify or suppress the voices of marginalized groups.",
+        "remark": null,
+        "confidence": 0.87
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_rel_schema",
+      "relation_ids": [
+        "RelR_52fd6e3c271d"
+      ],
+      "canonical_rel_name": "enables_voice_amplification",
+      "canonical_rel_desc": "Subject provides functionality or affordances that make it possible for the amplification of voices or perspectives in public discourse.",
+      "rel_cls": "voice_representation_relation",
+      "rel_cls_group": "CAUSALITY",
+      "new_relation_name": null,
+      "original_relation_name": null,
+      "justification": "For RelR_52fd6e3c271d, the object is the process/event 'amplification of our voices', not a group whose voice is directly acted on. Normalizing the predicate to 'enables_voice_amplification' removes the awkward and slightly misleading implication that the object is itself a voice-bearing group, while keeping alignment with the other voice_representation_relation instances that directly amplify or suppress the voices of marginalized groups.",
+      "remark": null,
+      "confidence": 0.87
+    }
+  ],
+  "timestamp": "2026-01-06T11:12:53Z"
+}

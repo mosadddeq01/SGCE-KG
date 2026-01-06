@@ -1,0 +1,171 @@
+{
+  "cluster_label": 3,
+  "cluster_classes": [
+    {
+      "candidate_id": "ClsC_a7cc4581",
+      "class_label": "Interpersonal Improvement Processes",
+      "class_description": "Active processes through which individuals form bonds or address disagreements, where attention to body language can improve outcomes.",
+      "class_type_hint": "Social Process",
+      "class_group": "TBD",
+      "confidence": 0.8,
+      "evidence_excerpt": "connect with others, resolve conflicts, and build stronger relationships via body language",
+      "member_ids": [
+        "En_381a55aa",
+        "En_3ad4768c"
+      ],
+      "members": [
+        {
+          "id": "En_381a55aa",
+          "entity_name": "connecting with others",
+          "entity_description": "The act of forming or enhancing social bonds with other people.",
+          "entity_type_hint": "SocialProcess"
+        },
+        {
+          "id": "En_3ad4768c",
+          "entity_name": "conflict resolution",
+          "entity_description": "The process of addressing and settling disagreements between individuals.",
+          "entity_type_hint": "Process"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_d5ae52f4",
+      "class_label": "Positive Social Outcomes",
+      "class_description": "Desired positive results of social interaction, including stronger relationships and interactions that are meaningful or fulfilling for participants.",
+      "class_type_hint": "Psychosocial Outcome",
+      "class_group": "TBD",
+      "confidence": 0.86,
+      "evidence_excerpt": "Body language can improve ability to connect, build stronger relationships, and lead to more meaningful and fulfilling interactions.",
+      "member_ids": [
+        "En_90b47c71",
+        "En_b2e2f279",
+        "En_50184402"
+      ],
+      "members": [
+        {
+          "id": "En_90b47c71",
+          "entity_name": "stronger relationships",
+          "entity_description": "More resilient and positive interpersonal connections between people.",
+          "entity_type_hint": "Outcome"
+        },
+        {
+          "id": "En_b2e2f279",
+          "entity_name": "meaningful interactions",
+          "entity_description": "Social exchanges that carry depth, relevance, or significance between people.",
+          "entity_type_hint": "SocialProcess"
+        },
+        {
+          "id": "En_50184402",
+          "entity_name": "fulfilling interactions",
+          "entity_description": "Social exchanges that provide satisfaction or a sense of fulfillment to participants.",
+          "entity_type_hint": "SocialProcess"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_efd894ef",
+      "class_label": "Social Interaction Partners",
+      "class_description": "Individuals with whom a person engages in social and nonverbal interactions, such as conversations, shared activities, and everyday encounters.",
+      "class_type_hint": "Social Agent",
+      "class_group": "TBD",
+      "confidence": 0.86,
+      "evidence_excerpt": "the people with whom an individual interacts socially and nonverbally",
+      "member_ids": [
+        "En_064bbc63"
+      ],
+      "members": [
+        {
+          "id": "En_064bbc63",
+          "entity_name": "others",
+          "entity_description": "The people with whom an individual interacts socially and nonverbally.",
+          "entity_type_hint": "Agent"
+        }
+      ],
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_a7cc4581\",\n      \"new_name\": null,\n      \"new_description\": null,\n      \"new_class_type_hint\": null,\n      \"new_class_group\": \"Interpersonal Relationships & Social Interaction\",\n      \"remark\": null,\n      \"justification\": \"This class covers active social processes (connecting with others, conflict resolution) that are part of the broader domain of interpersonal relationships and social interaction; aligning its Class_Group with related classes clarifies the shared domain.\",\n      \"confidence\": 0.93\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_d5ae52f4\",\n      \"new_name\": null,\n      \"new_description\": null,\n      \"new_class_type_hint\": null,\n      \"new_class_group\": \"Interpersonal Relationships & Social Interaction\",\n      \"remark\": null,\n      \"justification\": \"This class represents desired outcomes of social interaction (stronger relationships, meaningful and fulfilling interactions), which sit in the same high-level domain as interpersonal improvement processes and partners, warranting a shared Class_Group.\",\n      \"confidence\": 0.93\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_efd894ef\",\n      \"new_name\": null,\n      \"new_description\": null,\n      \"new_class_type_hint\": null,\n      \"new_class_group\": \"Interpersonal Relationships & Social Interaction\",\n      \"remark\": null,\n      \"justification\": \"This class captures the agents involved in social and nonverbal interaction (others), which are conceptually tied to the processes and outcomes of interpersonal relationships; assigning the same Class_Group emphasizes this cohesive domain.\",\n      \"confidence\": 0.93\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_a7cc4581",
+        "new_name": null,
+        "new_description": null,
+        "new_class_type_hint": null,
+        "new_class_group": "Interpersonal Relationships & Social Interaction",
+        "remark": null,
+        "justification": "This class covers active social processes (connecting with others, conflict resolution) that are part of the broader domain of interpersonal relationships and social interaction; aligning its Class_Group with related classes clarifies the shared domain.",
+        "confidence": 0.93
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_d5ae52f4",
+        "new_name": null,
+        "new_description": null,
+        "new_class_type_hint": null,
+        "new_class_group": "Interpersonal Relationships & Social Interaction",
+        "remark": null,
+        "justification": "This class represents desired outcomes of social interaction (stronger relationships, meaningful and fulfilling interactions), which sit in the same high-level domain as interpersonal improvement processes and partners, warranting a shared Class_Group.",
+        "confidence": 0.93
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_efd894ef",
+        "new_name": null,
+        "new_description": null,
+        "new_class_type_hint": null,
+        "new_class_group": "Interpersonal Relationships & Social Interaction",
+        "remark": null,
+        "justification": "This class captures the agents involved in social and nonverbal interaction (others), which are conceptually tied to the processes and outcomes of interpersonal relationships; assigning the same Class_Group emphasizes this cohesive domain.",
+        "confidence": 0.93
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_a7cc4581",
+      "class_id_resolved": "ClsC_a7cc4581",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Interpersonal Relationships & Social Interaction",
+      "remark": null,
+      "justification": "This class covers active social processes (connecting with others, conflict resolution) that are part of the broader domain of interpersonal relationships and social interaction; aligning its Class_Group with related classes clarifies the shared domain.",
+      "confidence": 0.93
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_d5ae52f4",
+      "class_id_resolved": "ClsC_d5ae52f4",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Interpersonal Relationships & Social Interaction",
+      "remark": null,
+      "justification": "This class represents desired outcomes of social interaction (stronger relationships, meaningful and fulfilling interactions), which sit in the same high-level domain as interpersonal improvement processes and partners, warranting a shared Class_Group.",
+      "confidence": 0.93
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_efd894ef",
+      "class_id_resolved": "ClsC_efd894ef",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Interpersonal Relationships & Social Interaction",
+      "remark": null,
+      "justification": "This class captures the agents involved in social and nonverbal interaction (others), which are conceptually tied to the processes and outcomes of interpersonal relationships; assigning the same Class_Group emphasizes this cohesive domain.",
+      "confidence": 0.93
+    }
+  ],
+  "provisional_to_real": {},
+  "timestamp": "2026-01-06T11:54:43Z"
+}

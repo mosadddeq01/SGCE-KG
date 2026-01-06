@@ -1,0 +1,17 @@
+[
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": [
+        "RelR_862f1d770bb7"
+      ],
+      "canonical_rel_name": null,
+      "canonical_rel_desc": null,
+      "rel_cls": "branding_impact_relation",
+      "rel_cls_group": null,
+      "justification": "The relation where 'color psychology in branding' enhances connection with the 'target audience' describes a causal branding impact analogous to the other instances already using rel_cls='branding_impact_relation'. Using a separate class 'brand_audience_impact_relation' for a single instance over-fragments the schema; audience connection is a specific form of branding impact rather than a distinct relation family.",
+      "remark": "Normalized rel_cls to 'branding_impact_relation' for consistency with other causal effects of branding constructs on outcomes.",
+      "confidence": 0.86
+    }
+  }
+]

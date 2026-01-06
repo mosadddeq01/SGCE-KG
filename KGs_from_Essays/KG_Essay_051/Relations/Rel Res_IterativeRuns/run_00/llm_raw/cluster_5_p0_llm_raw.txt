@@ -1,0 +1,97 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_a5838a29f2d1",
+        "RelR_c66ec185451d",
+        "RelR_5d5e4c104bc2",
+        "RelR_a41dc39e8aa2",
+        "RelR_7786e8f7ef8c",
+        "RelR_8dbe659375ef",
+        "RelR_70c09a15561a",
+        "RelR_d1611d8bc58c"
+      ],
+      "canonical_rel_name": "improves",
+      "canonical_rel_desc": "Subject has a positive causal effect on the quality, effectiveness, or degree of the object.",
+      "justification": "All these relations describe a positive, beneficial causal effect where attending to or using nonverbal cues (gestures, facial expressions, posture) increases clarity, effectiveness, communication skills, or understanding. Normalizing under a single predicate 'improves' avoids trivial variants like 'enhances' while preserving the same semantics.",
+      "remark": "Causal direction is consistently from nonverbal cue or behavior to communication-related competence or understanding.",
+      "confidence": 0.94
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_6e18bff4e168"
+      ],
+      "canonical_rel_name": "is_strengthened_form_of",
+      "canonical_rel_desc": "Subject represents a stronger, more resilient, or enhanced state of the same underlying relationship type as the object.",
+      "justification": "This relation links 'stronger relationships' to generic 'relationships' as an enhanced state, not as a causal benefit on a separate variable. A dedicated predicate capturing an intensity/state refinement between closely related relationship states is more precise than reusing a generic improvement predicate used for skills or outcomes.",
+      "remark": null,
+      "confidence": 0.88
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_a5838a29f2d1",
+        "RelR_c66ec185451d",
+        "RelR_5d5e4c104bc2",
+        "RelR_a41dc39e8aa2",
+        "RelR_7786e8f7ef8c",
+        "RelR_8dbe659375ef",
+        "RelR_70c09a15561a",
+        "RelR_d1611d8bc58c"
+      ],
+      "rel_cls": "beneficial_effect_relation",
+      "justification": "Each relation expresses that a behavior or cue has a beneficial causal effect on a communication-related outcome (clarity, effectiveness, skills, understanding). Grouping them under 'beneficial_effect_relation' captures this shared semantics at a class level beyond the specific predicate wording.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_6e18bff4e168"
+      ],
+      "rel_cls": "state_intensity_relation",
+      "justification": "The relation compares two closely related relationship states, where the subject is a more intense or enhanced version of the object. This fits a class describing intensity or degree relationships between states of the same underlying concept.",
+      "remark": null,
+      "confidence": 0.86
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_a5838a29f2d1",
+        "RelR_c66ec185451d",
+        "RelR_5d5e4c104bc2",
+        "RelR_a41dc39e8aa2",
+        "RelR_7786e8f7ef8c",
+        "RelR_8dbe659375ef",
+        "RelR_70c09a15561a",
+        "RelR_d1611d8bc58c"
+      ],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "All these edges denote that the presence or attention to nonverbal cues causes an improvement in communication-related outcomes. This is best captured as a causal group, specifically positive/beneficial causality.",
+      "remark": null,
+      "confidence": 0.94
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_6e18bff4e168"
+      ],
+      "rel_cls_group": "MODIFICATION",
+      "justification": "The link between 'stronger relationships' and generic 'relationships' reflects a modified or enhanced state rather than a separate entity or a direct causal effect on a different variable. This is best modeled as a modification/intensity relation between states of the same concept.",
+      "remark": null,
+      "confidence": 0.84
+    }
+  }
+]

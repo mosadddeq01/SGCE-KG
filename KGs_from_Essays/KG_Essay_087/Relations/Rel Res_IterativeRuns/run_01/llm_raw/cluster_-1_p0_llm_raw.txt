@@ -1,0 +1,15 @@
+[
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": ["RelR_ce7621313920"],
+      "canonical_rel_name": "intended_for",
+      "canonical_rel_desc": "Indicates the target audience or recipient that a brand asset, message, or communication is designed for or aims to resonate with.",
+      "rel_cls": "communication_audience_relation",
+      "rel_cls_group": "USAGE",
+      "justification": "The existing canonical_rel_name 'intended_for_audience' is overly specific and encodes the object type ('audience') into the predicate, which reduces reusability. Normalizing it to the more general predicate-style 'intended_for' keeps the semantics of audience targeting while making the relation reusable for other recipient-like objects, without changing directionality or meaning.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  }
+]

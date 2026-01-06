@@ -1,0 +1,135 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_495d10a97fd3"
+      ],
+      "canonical_rel_name": "has_impact_on",
+      "canonical_rel_desc": "The subject has a social, cultural, or other impact on the object.",
+      "justification": "This relation instance describes urban legends having an impact on society; a general causal-impact predicate 'has_impact_on' captures this without baking in specific impact types.",
+      "remark": null,
+      "confidence": 0.89
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_767dd95c3ea5"
+      ],
+      "canonical_rel_name": "results_in",
+      "canonical_rel_desc": "The subject process or state leads to the creation or emergence of the object as a result.",
+      "justification": "The evolution of tales over time leads to new forms and variations; 'results_in' is an appropriate generic causal-outcome predicate here.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_488e43895aa3"
+      ],
+      "canonical_rel_name": "evokes_emotion_in",
+      "canonical_rel_desc": "The subject stimulus causes or intensifies a specific emotional state in the object (usually an audience or character).",
+      "justification": "The scratching sound increases the couple’s terror; this is a stimulus->emotion effect, so 'evokes_emotion_in' precisely models the causal emotional response.",
+      "remark": null,
+      "confidence": 0.96
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_5c6c2302f545",
+        "RelR_6a2b2df554fc"
+      ],
+      "canonical_rel_name": "prompts_contemplation_of",
+      "canonical_rel_desc": "The subject causes the audience to reflect on, ponder, or question the object (often a proposition or truth-claim).",
+      "justification": "Both relations describe narratives (urban legends/tales) causing listeners to contemplate or question some underlying proposition (existence of the supernatural; truth behind the stories). A unified cognitive-effect predicate 'prompts_contemplation_of' fits both cases.",
+      "remark": "Covers reflection and questioning as forms of contemplation for audience cognition.",
+      "confidence": 0.93
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_aba01312145f",
+        "RelR_b5d981074f7b"
+      ],
+      "canonical_rel_name": "contributes_to_popularity_of",
+      "canonical_rel_desc": "The subject factor increases or sustains the popularity of the object.",
+      "justification": "Both instances express that specific affective appeals (allure of the unknown; thrill of a scare) increase or sustain the popularity of urban legends, so they share the same causal popularity-boost predicate.",
+      "remark": null,
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_0d3818d71df0"
+      ],
+      "canonical_rel_name": "facilitates_spread_of",
+      "canonical_rel_desc": "The subject condition or mechanism makes it easier for the object (e.g., stories, information) to disseminate or proliferate.",
+      "justification": "Rapid transmission of information making it easier for urban legends to proliferate is a clear facilitation-of-spread relation; the existing hint maps cleanly to 'facilitates_spread_of'.",
+      "remark": null,
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_38e9aaa1038c"
+      ],
+      "canonical_rel_name": "gives_rise_to",
+      "canonical_rel_desc": "The subject generates, originates, or gives rise to the object.",
+      "justification": "Collective imagination and creativity generate many urban legends; this is an origin/production relation, for which 'gives_rise_to' is a concise, reusable causal-generation predicate.",
+      "remark": null,
+      "confidence": 0.94
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_495d10a97fd3",
+        "RelR_767dd95c3ea5",
+        "RelR_488e43895aa3",
+        "RelR_5c6c2302f545",
+        "RelR_aba01312145f",
+        "RelR_b5d981074f7b",
+        "RelR_0d3818d71df0",
+        "RelR_38e9aaa1038c",
+        "RelR_6a2b2df554fc"
+      ],
+      "rel_cls": "causal_effect_relation",
+      "justification": "All these predicates describe some form of causal influence or effect (impact on society, resulting in new forms, evoking emotions, prompting contemplation, contributing to popularity, facilitating spread, giving rise to legends). Grouping them under 'causal_effect_relation' captures this shared semantic family at a broader level.",
+      "remark": null,
+      "confidence": 0.96
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_495d10a97fd3",
+        "RelR_767dd95c3ea5",
+        "RelR_488e43895aa3",
+        "RelR_5c6c2302f545",
+        "RelR_aba01312145f",
+        "RelR_b5d981074f7b",
+        "RelR_0d3818d71df0",
+        "RelR_38e9aaa1038c",
+        "RelR_6a2b2df554fc"
+      ],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "Each relation explicitly encodes a cause–effect linkage (or enabling condition), so the broad semantic dimension is causality for the entire set.",
+      "remark": null,
+      "confidence": 0.98
+    }
+  }
+]

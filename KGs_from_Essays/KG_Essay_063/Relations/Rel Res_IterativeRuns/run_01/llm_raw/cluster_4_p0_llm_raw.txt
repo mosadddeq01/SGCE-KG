@@ -1,0 +1,37 @@
+[
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": [
+        "RelR_e6222803654a",
+        "RelR_989b8999b30f",
+        "RelR_6e8abada3154",
+        "RelR_7830c458d504",
+        "RelR_8993b154525b",
+        "RelR_3b803a98cd80"
+      ],
+      "canonical_rel_name": null,
+      "canonical_rel_desc": null,
+      "rel_cls": "event_or_process_location_relation",
+      "rel_cls_group": null,
+      "justification": "All these relations link historical or sociopolitical events/processes (strikes, protests, movements, uprisings, legislation) to the geographic/political region where they took place. They currently use slightly different but overlapping classes (e.g., 'spatial_location_relation', 'event_location_relation'); normalizing them to a single class 'event_or_process_location_relation' provides a consistent schema for event-location semantics under the SPATIALITY group.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  },
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": [
+        "RelR_4c1e78b7fcb1"
+      ],
+      "canonical_rel_name": "contains",
+      "canonical_rel_desc": "Indicates that a place or region includes or contains a physical site, structure, or object within its boundaries.",
+      "rel_cls": "spatial_containment_relation",
+      "rel_cls_group": null,
+      "justification": "In this relation, the subject is 'ancient Egypt' and the object is 'Egyptian pyramids'. Semantically, the country/region contains the pyramids, rather than the pyramids being located in (subject) Egypt. Using the canonical predicate 'contains' with class 'spatial_containment_relation' correctly captures the direction of containment and distinguishes it from event-location relations like 'occurs_in'.",
+      "remark": "Subject-object direction here encodes that the region (ancient Egypt) contains the pyramids; hence 'contains' is more accurate than 'located_in' for the canonical predicate.",
+      "confidence": 0.9
+    }
+  }
+]

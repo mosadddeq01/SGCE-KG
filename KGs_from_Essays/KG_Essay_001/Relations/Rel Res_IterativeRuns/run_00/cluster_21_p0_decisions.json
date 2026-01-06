@@ -1,0 +1,231 @@
+{
+  "cluster_label": "21_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_e7221d14e6a4",
+      "relation_name": "feeds_on",
+      "rel_desc": "Caterpillars feed on leaves as their primary food source.",
+      "rel_hint_type": "trophic",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "caterpillar",
+      "object_entity_name": "leaves",
+      "subject_class_label": "Butterfly Life Cycle and Stages",
+      "subject_class_group": "Butterfly Life Cycle and Appreciation",
+      "object_class_label": "Plant Organs and Leaf Surfaces",
+      "object_class_group": "Plant Morphology",
+      "qualifiers": {
+        "TemporalQualifier": "during the larval (caterpillar) stage",
+        "SpatialQualifier": "on host plant leaves",
+        "OperationalConstraint": "most of their time is spent feeding",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": "and",
+        "OtherQualifier": "Behavior: voracious eating; Effect: rapid growth"
+      },
+      "confidence": 0.98,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_03ad6dd0bcc3",
+      "relation_name": "is_prey_of",
+      "rel_desc": "Butterflies are prey for birds, serving as a food source.",
+      "rel_hint_type": "trophic",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "butterflies",
+      "object_entity_name": "birds",
+      "subject_class_label": "Butterflies",
+      "subject_class_group": "Butterfly Ecology and Interactions",
+      "object_class_label": "Butterfly Predators",
+      "object_class_group": "Butterfly Ecology and Interactions",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "within their ecosystem",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "serve as a food source for",
+        "LogicalMarker": "also",
+        "OtherQualifier": null
+      },
+      "confidence": 0.98,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_4ce8341392f6",
+      "relation_name": "is_prey_of",
+      "rel_desc": "Butterflies serve as prey for reptiles.",
+      "rel_hint_type": "trophic",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "butterflies",
+      "object_entity_name": "reptiles",
+      "subject_class_label": "Butterflies",
+      "subject_class_group": "Butterfly Ecology and Interactions",
+      "object_class_label": "Butterfly Predators",
+      "object_class_group": "Butterfly Ecology and Interactions",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "within their ecosystem",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "serve as a food source for",
+        "LogicalMarker": "also",
+        "OtherQualifier": null
+      },
+      "confidence": 0.97,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_03dfc2103fb2",
+      "relation_name": "is_prey_of",
+      "rel_desc": "Butterflies serve as prey for other insects.",
+      "rel_hint_type": "trophic",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "butterflies",
+      "object_entity_name": "insects",
+      "subject_class_label": "Butterflies",
+      "subject_class_group": "Butterfly Ecology and Interactions",
+      "object_class_label": "Butterfly Predators",
+      "object_class_group": "Butterfly Ecology and Interactions",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "within their ecosystem",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "serve as a food source for",
+        "LogicalMarker": "also",
+        "OtherQualifier": null
+      },
+      "confidence": 0.96,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_e7221d14e6a4\"],\n      \"canonical_rel_name\": \"feeds_on\",\n      \"canonical_rel_desc\": \"Indicates that the subject organism consumes the object as a primary food source.\",\n      \"justification\": \"This relation instance describes a consumer-resource feeding interaction (caterpillars consuming leaves). The natural, directionally correct predicate is 'feeds_on' from consumer to food item.\",\n      \"remark\": null,\n      \"confidence\": 0.97\n    }\n  },\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_03ad6dd0bcc3\",\n        \"RelR_4ce8341392f6\",\n        \"RelR_03dfc2103fb2\"\n      ],\n      \"canonical_rel_name\": \"is_prey_of\",\n      \"canonical_rel_desc\": \"Indicates that the subject organism is hunted or consumed as prey by the object organism.\",\n      \"justification\": \"All three instances describe butterflies serving as prey (food) for different predator groups (birds, reptiles, other insects) with the same direction: prey (subject) to predator (object). A single canonical predicate 'is_prey_of' consistently captures this.\",\n      \"remark\": null,\n      \"confidence\": 0.97\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_e7221d14e6a4\",\n        \"RelR_03ad6dd0bcc3\",\n        \"RelR_4ce8341392f6\",\n        \"RelR_03dfc2103fb2\"\n      ],\n      \"rel_cls\": \"trophic_interaction_relation\",\n      \"justification\": \"All relations describe feeding or predator–prey (consumer–resource) interactions, which fall under the same broader class of trophic interactions, regardless of whether the direction is consumer→resource or prey→predator.\",\n      \"remark\": null,\n      \"confidence\": 0.96\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_e7221d14e6a4\",\n        \"RelR_03ad6dd0bcc3\",\n        \"RelR_4ce8341392f6\",\n        \"RelR_03dfc2103fb2\"\n      ],\n      \"rel_cls_group\": \"INTERACTION\",\n      \"justification\": \"Each relation represents a biological interaction between organisms (feeding/predation), fitting the broad category of INTERACTION rather than composition, identity, or causality.\",\n      \"remark\": null,\n      \"confidence\": 0.96\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_e7221d14e6a4"
+        ],
+        "canonical_rel_name": "feeds_on",
+        "canonical_rel_desc": "Indicates that the subject organism consumes the object as a primary food source.",
+        "justification": "This relation instance describes a consumer-resource feeding interaction (caterpillars consuming leaves). The natural, directionally correct predicate is 'feeds_on' from consumer to food item.",
+        "remark": null,
+        "confidence": 0.97
+      }
+    },
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_03ad6dd0bcc3",
+          "RelR_4ce8341392f6",
+          "RelR_03dfc2103fb2"
+        ],
+        "canonical_rel_name": "is_prey_of",
+        "canonical_rel_desc": "Indicates that the subject organism is hunted or consumed as prey by the object organism.",
+        "justification": "All three instances describe butterflies serving as prey (food) for different predator groups (birds, reptiles, other insects) with the same direction: prey (subject) to predator (object). A single canonical predicate 'is_prey_of' consistently captures this.",
+        "remark": null,
+        "confidence": 0.97
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_e7221d14e6a4",
+          "RelR_03ad6dd0bcc3",
+          "RelR_4ce8341392f6",
+          "RelR_03dfc2103fb2"
+        ],
+        "rel_cls": "trophic_interaction_relation",
+        "justification": "All relations describe feeding or predator–prey (consumer–resource) interactions, which fall under the same broader class of trophic interactions, regardless of whether the direction is consumer→resource or prey→predator.",
+        "remark": null,
+        "confidence": 0.96
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_e7221d14e6a4",
+          "RelR_03ad6dd0bcc3",
+          "RelR_4ce8341392f6",
+          "RelR_03dfc2103fb2"
+        ],
+        "rel_cls_group": "INTERACTION",
+        "justification": "Each relation represents a biological interaction between organisms (feeding/predation), fitting the broad category of INTERACTION rather than composition, identity, or causality.",
+        "remark": null,
+        "confidence": 0.96
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_e7221d14e6a4"
+      ],
+      "canonical_rel_name": "feeds_on",
+      "canonical_rel_desc": "Indicates that the subject organism consumes the object as a primary food source.",
+      "justification": "This relation instance describes a consumer-resource feeding interaction (caterpillars consuming leaves). The natural, directionally correct predicate is 'feeds_on' from consumer to food item.",
+      "remark": null,
+      "confidence": 0.97
+    },
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_03ad6dd0bcc3",
+        "RelR_4ce8341392f6",
+        "RelR_03dfc2103fb2"
+      ],
+      "canonical_rel_name": "is_prey_of",
+      "canonical_rel_desc": "Indicates that the subject organism is hunted or consumed as prey by the object organism.",
+      "justification": "All three instances describe butterflies serving as prey (food) for different predator groups (birds, reptiles, other insects) with the same direction: prey (subject) to predator (object). A single canonical predicate 'is_prey_of' consistently captures this.",
+      "remark": null,
+      "confidence": 0.97
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_e7221d14e6a4",
+        "RelR_03ad6dd0bcc3",
+        "RelR_4ce8341392f6",
+        "RelR_03dfc2103fb2"
+      ],
+      "rel_cls": "trophic_interaction_relation",
+      "justification": "All relations describe feeding or predator–prey (consumer–resource) interactions, which fall under the same broader class of trophic interactions, regardless of whether the direction is consumer→resource or prey→predator.",
+      "remark": null,
+      "confidence": 0.96
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_e7221d14e6a4",
+        "RelR_03ad6dd0bcc3",
+        "RelR_4ce8341392f6",
+        "RelR_03dfc2103fb2"
+      ],
+      "rel_cls_group": "INTERACTION",
+      "justification": "Each relation represents a biological interaction between organisms (feeding/predation), fitting the broad category of INTERACTION rather than composition, identity, or causality.",
+      "remark": null,
+      "confidence": 0.96
+    }
+  ],
+  "timestamp": "2026-01-06T07:30:41Z"
+}

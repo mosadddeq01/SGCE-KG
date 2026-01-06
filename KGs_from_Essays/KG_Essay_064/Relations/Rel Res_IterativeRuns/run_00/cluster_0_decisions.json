@@ -1,0 +1,219 @@
+{
+  "cluster_label": 0,
+  "cluster_classes": [
+    {
+      "candidate_id": "ClsC_c1e76cc8",
+      "class_label": "Rural Social Groups",
+      "class_description": "Social groups of rural inhabitants (peasants and villagers) who served as primary sources for the Grimm brothers' collected tales.",
+      "class_type_hint": "Social Group",
+      "class_group": "TBD",
+      "confidence": 0.93,
+      "evidence_excerpt": "gathering stories from peasants and villagers to preserve the oral traditions",
+      "member_ids": [
+        "En_eafa6b91",
+        "En_556ff174"
+      ],
+      "members": [
+        {
+          "id": "En_eafa6b91",
+          "entity_name": "peasants",
+          "entity_description": "Rural, lower-class inhabitants of the German countryside who shared oral stories with the Grimms.",
+          "entity_type_hint": "SocialGroup"
+        },
+        {
+          "id": "En_556ff174",
+          "entity_name": "villagers",
+          "entity_description": "Residents of small rural settlements in Germany who recounted tales to the Grimm brothers.",
+          "entity_type_hint": "SocialGroup"
+        }
+      ],
+      "remarks": [
+        "This parent class is now mostly a fallback for unspecified rural informants after splitting out peasants and villagers; consider deprecating if it remains empty."
+      ]
+    },
+    {
+      "candidate_id": "ClsC_78e60a44",
+      "class_label": "German Rural Regions",
+      "class_description": "Rural areas within Germany that serve as cultural and geographical settings, such as those traveled by the Brothers Grimm to collect folk stories.",
+      "class_type_hint": "Geographical Location",
+      "class_group": "TBD",
+      "confidence": 0.86,
+      "evidence_excerpt": "traveled throughout the German countryside, gathering stories from peasants and villagers",
+      "member_ids": [
+        "En_09a0c18b"
+      ],
+      "members": [
+        {
+          "id": "En_09a0c18b",
+          "entity_name": "German countryside",
+          "entity_description": "Rural regions of Germany where the Grimm brothers traveled to collect stories.",
+          "entity_type_hint": "Location"
+        }
+      ],
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"split_class\",\n    \"args\": {\n      \"source_class_id\": \"ClsC_c1e76cc8\",\n      \"splits\": [\n        {\n          \"name\": \"German Peasants (Grimm Sources)\",\n          \"description\": \"Rural, lower-class inhabitants of the German countryside who shared oral stories with the Brothers Grimm.\",\n          \"class_type_hint\": \"Social Group\",\n          \"member_ids\": [\"En_eafa6b91\"],\n          \"provisional_id\": \"SPLIT(ClsC_c1e76cc8)_peasants\"\n        },\n        {\n          \"name\": \"German Villagers (Grimm Sources)\",\n          \"description\": \"Residents of small rural settlements in Germany who recounted tales to the Brothers Grimm.\",\n          \"class_type_hint\": \"Social Group\",\n          \"member_ids\": [\"En_556ff174\"],\n          \"provisional_id\": \"SPLIT(ClsC_c1e76cc8)_villagers\"\n        }\n      ],\n      \"justification\": \"The original 'Rural Social Groups' class bundles two distinct but related social groups—peasants and villagers—which are each meaningful and separately referenced sources for Grimm tales; splitting improves semantic coherence and granularity.\",\n      \"remark\": null,\n      \"confidence\": 0.85\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"SPLIT(ClsC_c1e76cc8)_peasants\",\n      \"new_name\": \"German Peasants (Grimm Sources)\",\n      \"new_description\": \"Rural, lower-class inhabitants of the German countryside who shared oral stories with the Brothers Grimm.\",\n      \"new_class_type_hint\": \"Social Group\",\n      \"new_class_group\": \"Grimm Brothers Folk Tale Collection – Rural German Context\",\n      \"remark\": null,\n      \"justification\": \"Aligns the new peasants class with a shared class group capturing the rural German context of Grimm fieldwork and ensures consistent metadata.\",\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"SPLIT(ClsC_c1e76cc8)_villagers\",\n      \"new_name\": \"German Villagers (Grimm Sources)\",\n      \"new_description\": \"Residents of small rural settlements in Germany who recounted tales to the Brothers Grimm.\",\n      \"new_class_type_hint\": \"Social Group\",\n      \"new_class_group\": \"Grimm Brothers Folk Tale Collection – Rural German Context\",\n      \"remark\": null,\n      \"justification\": \"Places the new villagers class in the same higher-level grouping as related social and geographical context classes for Grimm tale collection.\",\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_c1e76cc8\",\n      \"new_name\": \"Rural Grimm Informants (Unspecified)\",\n      \"new_description\": \"Rural inhabitants who served as informants for the Brothers Grimm when not otherwise specified as peasants or villagers.\",\n      \"new_class_type_hint\": \"Social Group\",\n      \"new_class_group\": \"Grimm Brothers Folk Tale Collection – Rural German Context\",\n      \"remark\": \"This parent class is now mostly a fallback for unspecified rural informants after splitting out peasants and villagers; consider deprecating if it remains empty.\",\n      \"justification\": \"Renames and aligns the residual class to reflect its new, narrower role after splitting and to share the common rural Grimm context group.\",\n      \"confidence\": 0.78\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_78e60a44\",\n      \"new_name\": \"German Rural Regions (Grimm Settings)\",\n      \"new_description\": \"Rural areas within Germany that served as cultural and geographical settings for the Brothers Grimm as they traveled to collect folk stories.\",\n      \"new_class_type_hint\": \"Geographical Location\",\n      \"new_class_group\": \"Grimm Brothers Folk Tale Collection – Rural German Context\",\n      \"remark\": null,\n      \"justification\": \"Connects the geographic rural regions class to the same higher-level grouping as the rural social groups, reflecting their shared role in the Grimm collection context.\",\n      \"confidence\": 0.9\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "split_class",
+      "args": {
+        "source_class_id": "ClsC_c1e76cc8",
+        "splits": [
+          {
+            "name": "German Peasants (Grimm Sources)",
+            "description": "Rural, lower-class inhabitants of the German countryside who shared oral stories with the Brothers Grimm.",
+            "class_type_hint": "Social Group",
+            "member_ids": [
+              "En_eafa6b91"
+            ],
+            "provisional_id": "SPLIT(ClsC_c1e76cc8)_peasants"
+          },
+          {
+            "name": "German Villagers (Grimm Sources)",
+            "description": "Residents of small rural settlements in Germany who recounted tales to the Brothers Grimm.",
+            "class_type_hint": "Social Group",
+            "member_ids": [
+              "En_556ff174"
+            ],
+            "provisional_id": "SPLIT(ClsC_c1e76cc8)_villagers"
+          }
+        ],
+        "justification": "The original 'Rural Social Groups' class bundles two distinct but related social groups—peasants and villagers—which are each meaningful and separately referenced sources for Grimm tales; splitting improves semantic coherence and granularity.",
+        "remark": null,
+        "confidence": 0.85
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "SPLIT(ClsC_c1e76cc8)_peasants",
+        "new_name": "German Peasants (Grimm Sources)",
+        "new_description": "Rural, lower-class inhabitants of the German countryside who shared oral stories with the Brothers Grimm.",
+        "new_class_type_hint": "Social Group",
+        "new_class_group": "Grimm Brothers Folk Tale Collection – Rural German Context",
+        "remark": null,
+        "justification": "Aligns the new peasants class with a shared class group capturing the rural German context of Grimm fieldwork and ensures consistent metadata.",
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "SPLIT(ClsC_c1e76cc8)_villagers",
+        "new_name": "German Villagers (Grimm Sources)",
+        "new_description": "Residents of small rural settlements in Germany who recounted tales to the Brothers Grimm.",
+        "new_class_type_hint": "Social Group",
+        "new_class_group": "Grimm Brothers Folk Tale Collection – Rural German Context",
+        "remark": null,
+        "justification": "Places the new villagers class in the same higher-level grouping as related social and geographical context classes for Grimm tale collection.",
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_c1e76cc8",
+        "new_name": "Rural Grimm Informants (Unspecified)",
+        "new_description": "Rural inhabitants who served as informants for the Brothers Grimm when not otherwise specified as peasants or villagers.",
+        "new_class_type_hint": "Social Group",
+        "new_class_group": "Grimm Brothers Folk Tale Collection – Rural German Context",
+        "remark": "This parent class is now mostly a fallback for unspecified rural informants after splitting out peasants and villagers; consider deprecating if it remains empty.",
+        "justification": "Renames and aligns the residual class to reflect its new, narrower role after splitting and to share the common rural Grimm context group.",
+        "confidence": 0.78
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_78e60a44",
+        "new_name": "German Rural Regions (Grimm Settings)",
+        "new_description": "Rural areas within Germany that served as cultural and geographical settings for the Brothers Grimm as they traveled to collect folk stories.",
+        "new_class_type_hint": "Geographical Location",
+        "new_class_group": "Grimm Brothers Folk Tale Collection – Rural German Context",
+        "remark": null,
+        "justification": "Connects the geographic rural regions class to the same higher-level grouping as the rural social groups, reflecting their shared role in the Grimm collection context.",
+        "confidence": 0.9
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "split_class",
+      "source_class_id": "ClsC_c1e76cc8",
+      "source_class_id_resolved": "ClsC_c1e76cc8",
+      "created_classes": [
+        {
+          "new_class_id": "ClsR_83571adf",
+          "provisional_id": "SPLIT(ClsC_c1e76cc8)_peasants",
+          "member_ids": [
+            "En_eafa6b91"
+          ]
+        },
+        {
+          "new_class_id": "ClsR_6a6b2771",
+          "provisional_id": "SPLIT(ClsC_c1e76cc8)_villagers",
+          "member_ids": [
+            "En_556ff174"
+          ]
+        }
+      ],
+      "justification": "The original 'Rural Social Groups' class bundles two distinct but related social groups—peasants and villagers—which are each meaningful and separately referenced sources for Grimm tales; splitting improves semantic coherence and granularity.",
+      "remark": null,
+      "confidence": 0.85
+    },
+    {
+      "action": "modify_class",
+      "class_id": "SPLIT(ClsC_c1e76cc8)_peasants",
+      "class_id_resolved": "ClsR_83571adf",
+      "new_name": "German Peasants (Grimm Sources)",
+      "new_description": "Rural, lower-class inhabitants of the German countryside who shared oral stories with the Brothers Grimm.",
+      "new_class_type_hint": "Social Group",
+      "new_class_group": "Grimm Brothers Folk Tale Collection – Rural German Context",
+      "remark": null,
+      "justification": "Aligns the new peasants class with a shared class group capturing the rural German context of Grimm fieldwork and ensures consistent metadata.",
+      "confidence": 0.9
+    },
+    {
+      "action": "modify_class",
+      "class_id": "SPLIT(ClsC_c1e76cc8)_villagers",
+      "class_id_resolved": "ClsR_6a6b2771",
+      "new_name": "German Villagers (Grimm Sources)",
+      "new_description": "Residents of small rural settlements in Germany who recounted tales to the Brothers Grimm.",
+      "new_class_type_hint": "Social Group",
+      "new_class_group": "Grimm Brothers Folk Tale Collection – Rural German Context",
+      "remark": null,
+      "justification": "Places the new villagers class in the same higher-level grouping as related social and geographical context classes for Grimm tale collection.",
+      "confidence": 0.9
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_c1e76cc8",
+      "class_id_resolved": "ClsC_c1e76cc8",
+      "new_name": "Rural Grimm Informants (Unspecified)",
+      "new_description": "Rural inhabitants who served as informants for the Brothers Grimm when not otherwise specified as peasants or villagers.",
+      "new_class_type_hint": "Social Group",
+      "new_class_group": "Grimm Brothers Folk Tale Collection – Rural German Context",
+      "remark": "This parent class is now mostly a fallback for unspecified rural informants after splitting out peasants and villagers; consider deprecating if it remains empty.",
+      "justification": "Renames and aligns the residual class to reflect its new, narrower role after splitting and to share the common rural Grimm context group.",
+      "confidence": 0.78
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_78e60a44",
+      "class_id_resolved": "ClsC_78e60a44",
+      "new_name": "German Rural Regions (Grimm Settings)",
+      "new_description": "Rural areas within Germany that served as cultural and geographical settings for the Brothers Grimm as they traveled to collect folk stories.",
+      "new_class_type_hint": "Geographical Location",
+      "new_class_group": "Grimm Brothers Folk Tale Collection – Rural German Context",
+      "remark": null,
+      "justification": "Connects the geographic rural regions class to the same higher-level grouping as the rural social groups, reflecting their shared role in the Grimm collection context.",
+      "confidence": 0.9
+    }
+  ],
+  "provisional_to_real": {
+    "SPLIT(ClsC_c1e76cc8)_peasants": "ClsR_83571adf",
+    "SPLIT(ClsC_c1e76cc8)_villagers": "ClsR_6a6b2771"
+  },
+  "timestamp": "2026-01-06T13:47:50Z"
+}

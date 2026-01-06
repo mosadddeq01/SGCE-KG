@@ -1,0 +1,78 @@
+[
+  {
+    "function": "create_class",
+    "args": {
+      "name": "Butterfly Life Stages",
+      "description": "Distinct life stages of butterflies, such as the newly emerged adult immediately after leaving the chrysalis.",
+      "class_type_hint": "OrganismLifeStage",
+      "member_ids": ["En_42f589c5"],
+      "provisional_id": "NEW_ButterflyLifeStages",
+      "justification": "The entity 'newly emerged butterfly' is an organism life stage rather than a process step and is better modeled in a dedicated life-stage class than inside a process-focused class.",
+      "remark": null,
+      "confidence": 0.86
+    }
+  },
+  {
+    "function": "reassign_entities",
+    "args": {
+      "entity_ids": ["En_42f589c5"],
+      "from_class_id": "ClsC_67148f3d",
+      "to_class_id": "NEW_ButterflyLifeStages",
+      "justification": "'newly emerged butterfly' represents a life stage of the organism, while 'Post-Emergence Wing Development' is a biological process; moving this entity clarifies the distinction between life stages and developmental processes.",
+      "remark": null,
+      "confidence": 0.86
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_54701321",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Butterfly Life Cycle & Wing Development",
+      "remark": null,
+      "justification": "The 'Butterfly Metamorphosis System' class covers chrysalis structures and metamorphosis processes, which belong under a broader butterfly life cycle and development domain shared with wing development.",
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_8c18a05a",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Butterfly Life Cycle & Wing Development",
+      "remark": null,
+      "justification": "The 'Butterfly Wings' class captures anatomical wing structures and their developmental states, which are part of the same butterfly life cycle and wing development domain as metamorphosis and post-emergence processes.",
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_67148f3d",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Butterfly Life Cycle & Wing Development",
+      "remark": null,
+      "justification": "The 'Post-Emergence Wing Development' class describes processes immediately after emergence (wing expansion, fluid pumping, first flight), which fit naturally within the butterfly life cycle and wing development domain.",
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "NEW_ButterflyLifeStages",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Butterfly Life Cycle & Wing Development",
+      "remark": null,
+      "justification": "The newly created 'Butterfly Life Stages' class (including the newly emerged adult stage) is tightly coupled to metamorphosis and wing development and should share the same higher-level life cycle & development domain.",
+      "confidence": 0.86
+    }
+  }
+]

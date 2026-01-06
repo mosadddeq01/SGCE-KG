@@ -1,0 +1,17 @@
+[
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": [
+        "RelR_8e69d78aaedd"
+      ],
+      "canonical_rel_name": "describes",
+      "canonical_rel_desc": "Subject (typically a theory, model, or description) provides an account or characterization of the object and/or its properties.",
+      "rel_cls": null,
+      "rel_cls_group": null,
+      "justification": "The predicate \"describes_as\" is a trivial variant of \"describes\" and expresses the same core representation semantics (a theory or model describing the nature/properties of an entity). To keep the KG schema consistent and avoid unnecessary predicate variants, this relation should use the same canonical_rel_name as the other description/characterization relations in this cluster.",
+      "remark": "Normalized from 'describes_as' to 'describes' to align with other representation relations that connect descriptive accounts or theories to black hole entities.",
+      "confidence": 0.9
+    }
+  }
+]

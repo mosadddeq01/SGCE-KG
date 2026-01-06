@@ -1,0 +1,19 @@
+[
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": [
+        "RelR_b85561a3f52c",
+        "RelR_5fae8330966b",
+        "RelR_cac458baaf09"
+      ],
+      "canonical_rel_name": "influences",
+      "canonical_rel_desc": "Indicates that the subject branding or psychological construct exerts a causal or enabling effect on the object (consumer responses, brand perceptions, or brand outcomes).",
+      "rel_cls": "branding_impact_relation",
+      "rel_cls_group": "CAUSALITY",
+      "justification": "All three relations describe a causal influence from a branding or psychological construct on consumer perceptions or behaviors. They should share a unified predicate ('influences'), a single generalized description that covers both branding and psychological constructs, and the same relation class 'branding_impact_relation'. The second relation previously used a different rel_cls ('consumer_behavior_relation') and a slightly different description, which would fragment a single coherent causal-influence family.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  }
+]

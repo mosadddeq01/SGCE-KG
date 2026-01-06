@@ -1,0 +1,44 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_736941796173"],
+      "canonical_rel_name": "is_version_of",
+      "canonical_rel_desc": "Indicates that the subject narrative is a version or variant of the object narrative, distinguished by period, culture, or other features.",
+      "justification": "The Rhodopis Cinderella tale is described as the earliest known version of the broader Cinderella fairytale; this fits a generic versioning predicate from specific variant (subject) to overarching narrative (object). Temporal qualifiers already capture the 'earliest known' aspect, so the canonical predicate can remain general.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_27242e3173c2"],
+      "canonical_rel_name": "has_version",
+      "canonical_rel_desc": "Indicates that the subject narrative has the object as one of its specific versions or variants.",
+      "justification": "Here the subject is the general Cinderella fairytale and the object is Perrault's specific version; this is the inverse direction of a versioning relation, so a predicate from whole work to specific version ('has_version') is appropriate, while keeping the Rhodopis relation as 'is_version_of'.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": ["RelR_736941796173", "RelR_27242e3173c2"],
+      "rel_cls": "narrative_version_relation",
+      "justification": "Both relations concern different textual or narrative versions of the Cinderella story (variant-to-work and work-to-variant). Grouping them under a shared class for versioning among narratives captures their common semantics despite inverse direction.",
+      "remark": null,
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": ["RelR_736941796173", "RelR_27242e3173c2"],
+      "rel_cls_group": "IDENTITY",
+      "justification": "Narrative versions represent alternate realizations of essentially the same identity (the Cinderella story) rather than composition, causality, or mere association; versioning is best treated as an identity/variant relationship.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  }
+]

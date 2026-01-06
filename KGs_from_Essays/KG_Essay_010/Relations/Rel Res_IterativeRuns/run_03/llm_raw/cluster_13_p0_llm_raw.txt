@@ -1,0 +1,19 @@
+[
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": [
+        "RelR_b6b32e66a3d7",
+        "RelR_410072abaead",
+        "RelR_8331c8d145cd"
+      ],
+      "canonical_rel_name": "results_in",
+      "canonical_rel_desc": "Indicates that the subject astrophysical object or event causally leads to the object as its evolutionary end state or remnant.",
+      "rel_cls": "evolutionary_outcome_relation",
+      "rel_cls_group": "CAUSALITY",
+      "justification": "The existing canonical_rel_desc is slightly too narrow because it mentions only 'remnant', while one instance connects a stellar remnant to a black hole, which is an evolutionary end state rather than a remnant. Updating the description to 'evolutionary end state or remnant' better captures all three relations without changing their intended causal, evolutionary semantics.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  }
+]

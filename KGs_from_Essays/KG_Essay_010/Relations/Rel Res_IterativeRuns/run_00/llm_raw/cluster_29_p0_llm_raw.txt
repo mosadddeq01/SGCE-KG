@@ -1,0 +1,45 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_b6b32e66a3d7",
+        "RelR_410072abaead",
+        "RelR_8331c8d145cd"
+      ],
+      "canonical_rel_name": "results_in",
+      "canonical_rel_desc": "Indicates that the subject astrophysical object or event causally leads to or leaves behind the object as its evolutionary outcome or remnant.",
+      "justification": "All three relations describe a causal evolutionary outcome where one astrophysical entity or event (supernova explosion, massive star, stellar remnant) produces or transforms into another entity (stellar remnant, black hole). The direction is consistently from precursor to outcome, so a single predicate 'results_in' appropriately captures this outcome/production relation across these instances.",
+      "remark": "Specific mechanisms (e.g., collapse, explosion) and conditions (e.g., sufficiently massive remnant) should remain as qualifiers rather than being embedded in the predicate name.",
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_b6b32e66a3d7",
+        "RelR_410072abaead",
+        "RelR_8331c8d145cd"
+      ],
+      "rel_cls": "evolutionary_outcome_relation",
+      "justification": "Each relation links a prior astrophysical state or event to a subsequent state (stellar remnant or black hole) as part of stellar evolution and end-of-life processes. Grouping them under 'evolutionary_outcome_relation' captures that these are outcome/remnant links rather than generic causality.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_b6b32e66a3d7",
+        "RelR_410072abaead",
+        "RelR_8331c8d145cd"
+      ],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "All three instances encode that the subject brings about or leads to the object (explosion leading to remnant, star leaving remnant, remnant forming black hole), which is fundamentally causal/transformational in nature.",
+      "remark": null,
+      "confidence": 0.95
+    }
+  }
+]

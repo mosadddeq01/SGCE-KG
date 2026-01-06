@@ -1,0 +1,39 @@
+[
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": [
+        "RelR_71810f19fcac",
+        "RelR_05546e3f9cfb",
+        "RelR_5aec879cda20",
+        "RelR_e34ebac71d13",
+        "RelR_008c5b71f088",
+        "RelR_54b735899d34",
+        "RelR_466919d6f55e"
+      ],
+      "canonical_rel_name": "signals",
+      "canonical_rel_desc": "The subject acts as a nonverbal cue that signals or projects the psychological, social, or relational state represented by the object.",
+      "rel_cls": null,
+      "rel_cls_group": null,
+      "justification": "All relations represent the same predicate: a nonverbal cue (body language, posture, eye contact, romantic body language) signaling an internal or relational state (confidence, authority, attraction, intimacy). Unifying the canonical_rel_desc improves consistency and expressiveness, while keeping the existing canonical_rel_name 'signals' which is already correct.",
+      "remark": null,
+      "confidence": 0.97
+    }
+  },
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": [
+        "RelR_71810f19fcac",
+        "RelR_5aec879cda20"
+      ],
+      "canonical_rel_name": null,
+      "canonical_rel_desc": null,
+      "rel_cls": "nonverbal_signaling_relation",
+      "rel_cls_group": "COMMUNICATION",
+      "justification": "These two relations are semantically identical in type to the others (nonverbal cues communicating states) but currently use the slightly different rel_cls 'nonverbal_signal_relation' and the broader rel_cls_group 'INTERACTION'. For schema normalization, they should share the same relation class 'nonverbal_signaling_relation' and high-level group 'COMMUNICATION' as the rest, since the primary function is communicative signaling, not generic interaction.",
+      "remark": null,
+      "confidence": 0.96
+    }
+  }
+]

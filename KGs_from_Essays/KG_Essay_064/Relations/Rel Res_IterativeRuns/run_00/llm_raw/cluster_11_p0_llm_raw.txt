@@ -1,0 +1,63 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_2420422126f7"],
+      "canonical_rel_name": "is_sibling_of",
+      "canonical_rel_desc": "Indicates that the subject and object are siblings (brothers or sisters) within a family.",
+      "justification": "The description states Jacob Grimm and Wilhelm Grimm are brothers, which is a symmetric sibling relation; a normalized predicate 'is_sibling_of' is appropriate for KG use.",
+      "remark": "Conceptually symmetric; only one directed edge is stored.",
+      "confidence": 0.97
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_8d8e2b2352e1"],
+      "canonical_rel_name": "marries",
+      "canonical_rel_desc": "Indicates that the subject enters into a marriage with the object at some point in the narrative timeline.",
+      "justification": "The instance explicitly describes a marriage event (Rhodopis marries the king), so a directional event-style predicate 'marries' accurately captures the action.",
+      "remark": "Represents the marriage event; a separate symmetric long-term spouse relation could be modeled if needed.",
+      "confidence": 0.98
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_b52497bb3679"],
+      "canonical_rel_name": "is_stepmother_of",
+      "canonical_rel_desc": "Indicates that the subject is the stepmother of the object, a specific parental role established through marriage rather than birth.",
+      "justification": "The Evil Queen is explicitly described as the wicked stepmother of Snow White; a role-specific kinship predicate 'is_stepmother_of' precisely captures this relationship.",
+      "remark": null,
+      "confidence": 0.97
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_2420422126f7",
+        "RelR_8d8e2b2352e1",
+        "RelR_b52497bb3679"
+      ],
+      "rel_cls": "family_relationship_relation",
+      "justification": "All three relations encode familial or marital ties (siblings, marriage, stepmother), which naturally belong to a shared class capturing family and marital relationships between characters.",
+      "remark": null,
+      "confidence": 0.96
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_2420422126f7",
+        "RelR_8d8e2b2352e1",
+        "RelR_b52497bb3679"
+      ],
+      "rel_cls_group": "SOCIAL_RELATIONSHIP",
+      "justification": "Sibling, marital, and step-parent relations are all social ties between persons and fit under a broad social-relationship dimension rather than composition, causality, or spatiality.",
+      "remark": null,
+      "confidence": 0.96
+    }
+  }
+]

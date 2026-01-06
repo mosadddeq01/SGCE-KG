@@ -1,0 +1,175 @@
+{
+  "cluster_label": "25_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_7d2cb71aa5e3",
+      "relation_name": "part_of",
+      "rel_desc": "The concept of a gateway to the afterlife is part of ancient Egyptian afterlife beliefs.",
+      "rel_hint_type": "conceptual inclusion",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "gateway to the afterlife",
+      "object_entity_name": "ancient Egyptian afterlife beliefs",
+      "subject_class_label": "Ancient Egyptian Afterlife Beliefs and Concepts",
+      "subject_class_group": "Ancient Egyptian Funerary Religion and Culture",
+      "object_class_label": "Ancient Egyptian Afterlife Beliefs and Concepts",
+      "object_class_group": "Ancient Egyptian Funerary Religion and Culture",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "inferred from conceptual description, not spelled out",
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "BeliefAspect: transition mechanism"
+      },
+      "confidence": 0.9,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_f0d2b9496fa5",
+      "relation_name": "concerns",
+      "rel_desc": "Ancient Egyptian afterlife beliefs include the belief in a soul.",
+      "rel_hint_type": "concept-membership",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "ancient Egyptian afterlife beliefs",
+      "object_entity_name": "soul",
+      "subject_class_label": "Ancient Egyptian Afterlife Beliefs and Concepts",
+      "subject_class_group": "Ancient Egyptian Funerary Religion and Culture",
+      "object_class_label": "Ancient Egyptian Afterlife Beliefs and Concepts",
+      "object_class_group": "Ancient Egyptian Funerary Religion and Culture",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": "also",
+        "OtherQualifier": null
+      },
+      "confidence": 0.98,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_2b4fbc3787f7",
+      "relation_name": "includes",
+      "rel_desc": "Ancient Egyptian afterlife beliefs include the notion of a journey to the afterlife.",
+      "rel_hint_type": "concept-membership",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "ancient Egyptian afterlife beliefs",
+      "object_entity_name": "journey to the afterlife",
+      "subject_class_label": "Ancient Egyptian Afterlife Beliefs and Concepts",
+      "subject_class_group": "Ancient Egyptian Funerary Religion and Culture",
+      "object_class_label": "Ancient Egyptian Afterlife Beliefs and Concepts",
+      "object_class_group": "Ancient Egyptian Funerary Religion and Culture",
+      "qualifiers": {
+        "TemporalQualifier": "post-mortem",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.89,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_7d2cb71aa5e3\",\n        \"RelR_f0d2b9496fa5\",\n        \"RelR_2b4fbc3787f7\"\n      ],\n      \"canonical_rel_name\": \"includes_concept\",\n      \"canonical_rel_desc\": \"A belief system or broader conceptual complex includes a specific subordinate concept, element, or aspect.\",\n      \"justification\": \"All three relations link a broader set of ancient Egyptian afterlife beliefs to particular constituent concepts (gateway, soul, journey), with the same directionality (belief system -> component concept). This is best captured as a single predicate for conceptual inclusion.\",\n      \"remark\": null,\n      \"confidence\": 0.95\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_7d2cb71aa5e3\",\n        \"RelR_f0d2b9496fa5\",\n        \"RelR_2b4fbc3787f7\"\n      ],\n      \"rel_cls\": \"conceptual_component_relation\",\n      \"justification\": \"Each relation expresses that a larger belief-complex is composed of or specified by subordinate concepts; this is a conceptual component or part-whole relation within an abstract belief system.\",\n      \"remark\": null,\n      \"confidence\": 0.93\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_7d2cb71aa5e3\",\n        \"RelR_f0d2b9496fa5\",\n        \"RelR_2b4fbc3787f7\"\n      ],\n      \"rel_cls_group\": \"COMPOSITION\",\n      \"justification\": \"The semantics are part-whole at the conceptual level (a belief system composed of constituent ideas), fitting the broad COMPOSITION group rather than, e.g., ASSOCIATION or CAUSALITY.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_7d2cb71aa5e3",
+          "RelR_f0d2b9496fa5",
+          "RelR_2b4fbc3787f7"
+        ],
+        "canonical_rel_name": "includes_concept",
+        "canonical_rel_desc": "A belief system or broader conceptual complex includes a specific subordinate concept, element, or aspect.",
+        "justification": "All three relations link a broader set of ancient Egyptian afterlife beliefs to particular constituent concepts (gateway, soul, journey), with the same directionality (belief system -> component concept). This is best captured as a single predicate for conceptual inclusion.",
+        "remark": null,
+        "confidence": 0.95
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_7d2cb71aa5e3",
+          "RelR_f0d2b9496fa5",
+          "RelR_2b4fbc3787f7"
+        ],
+        "rel_cls": "conceptual_component_relation",
+        "justification": "Each relation expresses that a larger belief-complex is composed of or specified by subordinate concepts; this is a conceptual component or part-whole relation within an abstract belief system.",
+        "remark": null,
+        "confidence": 0.93
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_7d2cb71aa5e3",
+          "RelR_f0d2b9496fa5",
+          "RelR_2b4fbc3787f7"
+        ],
+        "rel_cls_group": "COMPOSITION",
+        "justification": "The semantics are part-whole at the conceptual level (a belief system composed of constituent ideas), fitting the broad COMPOSITION group rather than, e.g., ASSOCIATION or CAUSALITY.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_7d2cb71aa5e3",
+        "RelR_f0d2b9496fa5",
+        "RelR_2b4fbc3787f7"
+      ],
+      "canonical_rel_name": "includes_concept",
+      "canonical_rel_desc": "A belief system or broader conceptual complex includes a specific subordinate concept, element, or aspect.",
+      "justification": "All three relations link a broader set of ancient Egyptian afterlife beliefs to particular constituent concepts (gateway, soul, journey), with the same directionality (belief system -> component concept). This is best captured as a single predicate for conceptual inclusion.",
+      "remark": null,
+      "confidence": 0.95
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_7d2cb71aa5e3",
+        "RelR_f0d2b9496fa5",
+        "RelR_2b4fbc3787f7"
+      ],
+      "rel_cls": "conceptual_component_relation",
+      "justification": "Each relation expresses that a larger belief-complex is composed of or specified by subordinate concepts; this is a conceptual component or part-whole relation within an abstract belief system.",
+      "remark": null,
+      "confidence": 0.93
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_7d2cb71aa5e3",
+        "RelR_f0d2b9496fa5",
+        "RelR_2b4fbc3787f7"
+      ],
+      "rel_cls_group": "COMPOSITION",
+      "justification": "The semantics are part-whole at the conceptual level (a belief system composed of constituent ideas), fitting the broad COMPOSITION group rather than, e.g., ASSOCIATION or CAUSALITY.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  ],
+  "timestamp": "2026-01-06T10:26:32Z"
+}

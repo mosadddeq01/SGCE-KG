@@ -1,0 +1,357 @@
+{
+  "cluster_label": "8_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_c00fe8a23b0c",
+      "relation_name": "shared_by",
+      "rel_desc": "The common passion is shared among people from different backgrounds and beliefs.",
+      "rel_hint_type": "participation",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "common passion",
+      "object_entity_name": "people from different backgrounds and beliefs",
+      "subject_class_label": "Sport-Driven Social Cohesion",
+      "subject_class_group": "Sport, Community & Social Experience",
+      "object_class_label": "Human Participants in Sport",
+      "object_class_group": "Sport, Community & Social Experience",
+      "qualifiers": {
+        "TemporalQualifier": "during sporting events",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "unite ... in",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.78,
+      "remarks": [
+        "Relation semantics approximate a many-to-many sharing relation."
+      ]
+    },
+    {
+      "relation_id": "RelR_cf8227716342",
+      "relation_name": "engages_audience",
+      "rel_desc": "The World Cup engages fans, contributing to emotional experiences among them.",
+      "rel_hint_type": "participation",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "World Cup",
+      "object_entity_name": "fans",
+      "subject_class_label": "Global Sporting Events",
+      "subject_class_group": "Global Sporting Events & Impacts",
+      "object_class_label": "Sports Fandom Actors",
+      "object_class_group": "Sport, Community & Social Experience",
+      "qualifiers": {
+        "TemporalQualifier": "during and around the event",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "create",
+        "LogicalMarker": null,
+        "OtherQualifier": "Mode: celebrations and gatherings"
+      },
+      "confidence": 0.8,
+      "remarks": [
+        "Relation chosen to capture fans’ involvement; could also be seen as causing emotions directly."
+      ]
+    },
+    {
+      "relation_id": "RelR_2ceb6a1f36d9",
+      "relation_name": "engages_audience",
+      "rel_desc": "The Olympics engage fans, contributing to emotional experiences among them.",
+      "rel_hint_type": "participation",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "Olympics",
+      "object_entity_name": "fans",
+      "subject_class_label": "Global Sporting Events",
+      "subject_class_group": "Global Sporting Events & Impacts",
+      "object_class_label": "Sports Fandom Actors",
+      "object_class_group": "Sport, Community & Social Experience",
+      "qualifiers": {
+        "TemporalQualifier": "during and around the event",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "create",
+        "LogicalMarker": null,
+        "OtherQualifier": "Mode: celebrations and gatherings"
+      },
+      "confidence": 0.8,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_db1d72364f85",
+      "relation_name": "participates_in",
+      "rel_desc": "Women participate in sports that have traditionally been male-dominated.",
+      "rel_hint_type": "participation",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "women",
+      "object_entity_name": "male-dominated sports",
+      "subject_class_label": "Gender Integration in Sports",
+      "subject_class_group": "Sports, Social Issues, and Social Change",
+      "object_class_label": "Gender Integration in Sports",
+      "object_class_group": "Sports, Social Issues, and Social Change",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "in traditionally male-dominated sports",
+        "OperationalConstraint": null,
+        "ConditionExpression": "inclusion of women",
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.9,
+      "remarks": [
+        "Relation abstracted from the inclusion phrasing."
+      ]
+    },
+    {
+      "relation_id": "RelR_509450f03086",
+      "relation_name": "involves_participation_of",
+      "rel_desc": "Sports activities involve the participation of athletes.",
+      "rel_hint_type": "participation",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "sports",
+      "object_entity_name": "athletes",
+      "subject_class_label": "Sports (Domain Concept)",
+      "subject_class_group": "Sports and Society",
+      "object_class_label": "Sports Participants",
+      "object_class_group": "Sports-Based Personal Development",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": "in the context of sports",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "implied",
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.82,
+      "remarks": [
+        "Not explicitly stated as 'athletes participate in sports', but strongly implied."
+      ]
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_c00fe8a23b0c\"\n      ],\n      \"canonical_rel_name\": \"is_shared_by\",\n      \"canonical_rel_desc\": \"Indicates that an experience, feeling, or passion is jointly held or experienced by a group of people.\",\n      \"justification\": \"The subject is a 'common passion' and the object is 'people from different backgrounds and beliefs'; the relation expresses that this passion is shared among them, not participation in an event or membership in a group.\",\n      \"remark\": null,\n      \"confidence\": 0.84\n    }\n  },\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_cf8227716342\",\n        \"RelR_2ceb6a1f36d9\"\n      ],\n      \"canonical_rel_name\": \"engages_audience\",\n      \"canonical_rel_desc\": \"Indicates that an event or activity attracts and involves an audience or fans emotionally or attentively.\",\n      \"justification\": \"Both relations link large sporting events (World Cup, Olympics) to 'fans' with a focus on emotional and experiential engagement; they are symmetric in meaning and differ only in which event is referenced.\",\n      \"remark\": null,\n      \"confidence\": 0.88\n    }\n  },\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_db1d72364f85\"\n      ],\n      \"canonical_rel_name\": \"participates_in\",\n      \"canonical_rel_desc\": \"Indicates that an actor (person or group) takes part in, or actively engages in, a sport, event, or activity.\",\n      \"justification\": \"The relation explicitly encodes the standard direction 'women' (actors) -> 'male-dominated sports' (activities), which matches the conventional predicate 'participates_in'.\",\n      \"remark\": null,\n      \"confidence\": 0.93\n    }\n  },\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_509450f03086\"\n      ],\n      \"canonical_rel_name\": \"has_participant\",\n      \"canonical_rel_desc\": \"Indicates that an event, activity, or domain (e.g., a sport) includes or involves certain participants.\",\n      \"justification\": \"Here the subject is 'sports' and the object is 'athletes'; semantically this is the inverse of 'athletes participate in sports'. Using 'has_participant' captures this inverse role clearly and keeps it distinct from the actor-oriented 'participates_in'.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_cf8227716342\",\n        \"RelR_2ceb6a1f36d9\",\n        \"RelR_db1d72364f85\",\n        \"RelR_509450f03086\"\n      ],\n      \"rel_cls\": \"participation_and_engagement_relation\",\n      \"justification\": \"All four relations concern people’s involvement with sports or sporting events: audiences being engaged by events and individuals participating in or being participants of sports. They naturally form a broader class covering both active participation and audience engagement.\",\n      \"remark\": null,\n      \"confidence\": 0.87\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_c00fe8a23b0c\"\n      ],\n      \"rel_cls\": \"collective_experience_relation\",\n      \"justification\": \"This relation expresses that a 'common passion' is shared among diverse people, emphasizing a jointly held experience rather than participation in a specific activity or event.\",\n      \"remark\": null,\n      \"confidence\": 0.83\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_cf8227716342\",\n        \"RelR_2ceb6a1f36d9\",\n        \"RelR_db1d72364f85\",\n        \"RelR_509450f03086\"\n      ],\n      \"rel_cls_group\": \"AGENCY\",\n      \"justification\": \"These relations all involve agents (people/fans/athletes) taking action or being actively engaged in events or sports. The primary semantic dimension is agency and active involvement rather than simple association.\",\n      \"remark\": null,\n      \"confidence\": 0.86\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_c00fe8a23b0c\"\n      ],\n      \"rel_cls_group\": \"ASSOCIATION\",\n      \"justification\": \"The 'is_shared_by' relation captures an associative, co-experienced passion linking multiple people; it is about a shared attribute/experience that associates individuals rather than direct action or causality.\",\n      \"remark\": null,\n      \"confidence\": 0.84\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_c00fe8a23b0c"
+        ],
+        "canonical_rel_name": "is_shared_by",
+        "canonical_rel_desc": "Indicates that an experience, feeling, or passion is jointly held or experienced by a group of people.",
+        "justification": "The subject is a 'common passion' and the object is 'people from different backgrounds and beliefs'; the relation expresses that this passion is shared among them, not participation in an event or membership in a group.",
+        "remark": null,
+        "confidence": 0.84
+      }
+    },
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_cf8227716342",
+          "RelR_2ceb6a1f36d9"
+        ],
+        "canonical_rel_name": "engages_audience",
+        "canonical_rel_desc": "Indicates that an event or activity attracts and involves an audience or fans emotionally or attentively.",
+        "justification": "Both relations link large sporting events (World Cup, Olympics) to 'fans' with a focus on emotional and experiential engagement; they are symmetric in meaning and differ only in which event is referenced.",
+        "remark": null,
+        "confidence": 0.88
+      }
+    },
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_db1d72364f85"
+        ],
+        "canonical_rel_name": "participates_in",
+        "canonical_rel_desc": "Indicates that an actor (person or group) takes part in, or actively engages in, a sport, event, or activity.",
+        "justification": "The relation explicitly encodes the standard direction 'women' (actors) -> 'male-dominated sports' (activities), which matches the conventional predicate 'participates_in'.",
+        "remark": null,
+        "confidence": 0.93
+      }
+    },
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_509450f03086"
+        ],
+        "canonical_rel_name": "has_participant",
+        "canonical_rel_desc": "Indicates that an event, activity, or domain (e.g., a sport) includes or involves certain participants.",
+        "justification": "Here the subject is 'sports' and the object is 'athletes'; semantically this is the inverse of 'athletes participate in sports'. Using 'has_participant' captures this inverse role clearly and keeps it distinct from the actor-oriented 'participates_in'.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_cf8227716342",
+          "RelR_2ceb6a1f36d9",
+          "RelR_db1d72364f85",
+          "RelR_509450f03086"
+        ],
+        "rel_cls": "participation_and_engagement_relation",
+        "justification": "All four relations concern people's involvement with sports or sporting events: audiences being engaged by events and individuals participating in or being participants of sports. They naturally form a broader class covering both active participation and audience engagement.",
+        "remark": null,
+        "confidence": 0.87
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_c00fe8a23b0c"
+        ],
+        "rel_cls": "collective_experience_relation",
+        "justification": "This relation expresses that a 'common passion' is shared among diverse people, emphasizing a jointly held experience rather than participation in a specific activity or event.",
+        "remark": null,
+        "confidence": 0.83
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_cf8227716342",
+          "RelR_2ceb6a1f36d9",
+          "RelR_db1d72364f85",
+          "RelR_509450f03086"
+        ],
+        "rel_cls_group": "AGENCY",
+        "justification": "These relations all involve agents (people/fans/athletes) taking action or being actively engaged in events or sports. The primary semantic dimension is agency and active involvement rather than simple association.",
+        "remark": null,
+        "confidence": 0.86
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_c00fe8a23b0c"
+        ],
+        "rel_cls_group": "ASSOCIATION",
+        "justification": "The 'is_shared_by' relation captures an associative, co-experienced passion linking multiple people; it is about a shared attribute/experience that associates individuals rather than direct action or causality.",
+        "remark": null,
+        "confidence": 0.84
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_c00fe8a23b0c"
+      ],
+      "canonical_rel_name": "is_shared_by",
+      "canonical_rel_desc": "Indicates that an experience, feeling, or passion is jointly held or experienced by a group of people.",
+      "justification": "The subject is a 'common passion' and the object is 'people from different backgrounds and beliefs'; the relation expresses that this passion is shared among them, not participation in an event or membership in a group.",
+      "remark": null,
+      "confidence": 0.84
+    },
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_cf8227716342",
+        "RelR_2ceb6a1f36d9"
+      ],
+      "canonical_rel_name": "engages_audience",
+      "canonical_rel_desc": "Indicates that an event or activity attracts and involves an audience or fans emotionally or attentively.",
+      "justification": "Both relations link large sporting events (World Cup, Olympics) to 'fans' with a focus on emotional and experiential engagement; they are symmetric in meaning and differ only in which event is referenced.",
+      "remark": null,
+      "confidence": 0.88
+    },
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_db1d72364f85"
+      ],
+      "canonical_rel_name": "participates_in",
+      "canonical_rel_desc": "Indicates that an actor (person or group) takes part in, or actively engages in, a sport, event, or activity.",
+      "justification": "The relation explicitly encodes the standard direction 'women' (actors) -> 'male-dominated sports' (activities), which matches the conventional predicate 'participates_in'.",
+      "remark": null,
+      "confidence": 0.93
+    },
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_509450f03086"
+      ],
+      "canonical_rel_name": "has_participant",
+      "canonical_rel_desc": "Indicates that an event, activity, or domain (e.g., a sport) includes or involves certain participants.",
+      "justification": "Here the subject is 'sports' and the object is 'athletes'; semantically this is the inverse of 'athletes participate in sports'. Using 'has_participant' captures this inverse role clearly and keeps it distinct from the actor-oriented 'participates_in'.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_cf8227716342",
+        "RelR_2ceb6a1f36d9",
+        "RelR_db1d72364f85",
+        "RelR_509450f03086"
+      ],
+      "rel_cls": "participation_and_engagement_relation",
+      "justification": "All four relations concern people's involvement with sports or sporting events: audiences being engaged by events and individuals participating in or being participants of sports. They naturally form a broader class covering both active participation and audience engagement.",
+      "remark": null,
+      "confidence": 0.87
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_c00fe8a23b0c"
+      ],
+      "rel_cls": "collective_experience_relation",
+      "justification": "This relation expresses that a 'common passion' is shared among diverse people, emphasizing a jointly held experience rather than participation in a specific activity or event.",
+      "remark": null,
+      "confidence": 0.83
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_cf8227716342",
+        "RelR_2ceb6a1f36d9",
+        "RelR_db1d72364f85",
+        "RelR_509450f03086"
+      ],
+      "rel_cls_group": "AGENCY",
+      "justification": "These relations all involve agents (people/fans/athletes) taking action or being actively engaged in events or sports. The primary semantic dimension is agency and active involvement rather than simple association.",
+      "remark": null,
+      "confidence": 0.86
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_c00fe8a23b0c"
+      ],
+      "rel_cls_group": "ASSOCIATION",
+      "justification": "The 'is_shared_by' relation captures an associative, co-experienced passion linking multiple people; it is about a shared attribute/experience that associates individuals rather than direct action or causality.",
+      "remark": null,
+      "confidence": 0.84
+    }
+  ],
+  "timestamp": "2026-01-06T12:38:33Z"
+}

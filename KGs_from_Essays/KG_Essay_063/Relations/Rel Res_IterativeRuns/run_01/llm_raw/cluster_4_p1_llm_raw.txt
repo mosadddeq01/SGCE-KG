@@ -1,0 +1,18 @@
+[
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": [
+        "RelR_524f191ee68b",
+        "RelR_19b43275da64"
+      ],
+      "canonical_rel_name": "occurs_in",
+      "canonical_rel_desc": "Indicates that an event, process, or phenomenon takes place within a specified spatial or societal context.",
+      "rel_cls": "event_or_process_location_relation",
+      "rel_cls_group": "SPATIALITY",
+      "justification": "All three relations describe where an event or collective action occurs. The third relation already uses a more general class label ('event_or_process_location_relation') and a broader canonical description that covers events, processes, and phenomena. The first two are semantically identical and should be harmonized to the same rel_cls and canonical_rel_desc for schema consistency while keeping the shared canonical_rel_name 'occurs_in' and rel_cls_group 'SPATIALITY'.",
+      "remark": null,
+      "confidence": 0.96
+    }
+  }
+]

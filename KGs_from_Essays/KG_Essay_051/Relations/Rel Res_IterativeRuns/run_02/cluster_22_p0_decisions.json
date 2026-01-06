@@ -1,0 +1,133 @@
+{
+  "cluster_label": "22_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_fad393a0b14b",
+      "relation_name": "part_of",
+      "rel_desc": "Gestures are described as an aspect or component of body language.",
+      "rel_hint_type": "composition",
+      "canonical_rel_name": "is_component_of",
+      "canonical_rel_desc": "Indicates that the subject is a part, aspect, or modality of the larger whole, system, or process represented by the object.",
+      "rel_cls": "component_whole_relation",
+      "rel_cls_group": "COMPOSITION",
+      "subject_entity_name": "gestures",
+      "object_entity_name": "body language",
+      "subject_class_label": "Nonverbal Gestures",
+      "subject_class_group": "Nonverbal Communication & Body Language",
+      "object_class_label": "Body Language as Nonverbal Communication",
+      "object_class_group": "Nonverbal Communication & Body Language",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "in body language",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "aspect of",
+        "LogicalMarker": "another",
+        "OtherQualifier": null
+      },
+      "confidence": 0.99,
+      "remarks": [
+        "Direction set from gestures to body language as part-to-whole.",
+        "Direction set from gestures to body language as part-to-whole.",
+        "Direction set from gestures to body language as part-to-whole."
+      ]
+    },
+    {
+      "relation_id": "RelR_0b87d4157156",
+      "relation_name": "part_of",
+      "rel_desc": "Facial expressions are implicitly framed as one aspect of body language, with gestures being 'another' aspect.",
+      "rel_hint_type": "composition",
+      "canonical_rel_name": "is_component_of",
+      "canonical_rel_desc": "Indicates that the subject is a part, aspect, or modality of the larger whole, system, or process represented by the object.",
+      "rel_cls": "component_whole_relation",
+      "rel_cls_group": "COMPOSITION",
+      "subject_entity_name": "facial expressions",
+      "object_entity_name": "body language",
+      "subject_class_label": "Facial Expressions",
+      "subject_class_group": "Nonverbal Communication & Inferred States",
+      "object_class_label": "Body Language as Nonverbal Communication",
+      "object_class_group": "Nonverbal Communication & Body Language",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "within nonverbal communication",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "inferred",
+        "CausalHint": null,
+        "LogicalMarker": "another",
+        "OtherQualifier": null
+      },
+      "confidence": 0.65,
+      "remarks": [
+        "Relation partly inferred from discourse structure; semantics match standard definition of body language.",
+        "Relation partly inferred from discourse structure; semantics match standard definition of body language.",
+        "Relation partly inferred from discourse structure; semantics match standard definition of body language."
+      ]
+    },
+    {
+      "relation_id": "RelR_fcafa93f2f18",
+      "relation_name": "is_part_of",
+      "rel_desc": "Nonverbal cues constitute a substantial portion of overall communication.",
+      "rel_hint_type": "part-whole",
+      "canonical_rel_name": "is_component_of",
+      "canonical_rel_desc": "Indicates that the subject is a part, aspect, or modality of the larger whole, system, or process represented by the object.",
+      "rel_cls": "communication_channel_relation",
+      "rel_cls_group": "COMPOSITION",
+      "subject_entity_name": "nonverbal cues",
+      "object_entity_name": "communication",
+      "subject_class_label": "Nonverbal Communication",
+      "subject_class_group": "Nonverbal Communication",
+      "object_class_label": "Communication Process",
+      "object_class_group": "Human Communication & Meaning",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "can",
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "PortionMagnitude: significant portion"
+      },
+      "confidence": 0.98,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_rel_schema\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_fcafa93f2f18\"\n      ],\n      \"canonical_rel_name\": null,\n      \"canonical_rel_desc\": null,\n      \"rel_cls\": \"component_whole_relation\",\n      \"rel_cls_group\": \"COMPOSITION\",\n      \"justification\": \"This relation describes a straightforward part–whole composition (nonverbal cues as a component of overall communication), semantically aligned with the other two relations in this chunk that already use rel_cls \\\"component_whole_relation\\\" and rel_cls_group \\\"COMPOSITION\\\". Using a different rel_cls (\\\"communication_channel_relation\\\") for the same part–whole pattern would fragment the schema without adding meaningful distinction, so it is normalized to the same component_whole_relation class.\",\n      \"remark\": null,\n      \"confidence\": 0.93\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_rel_schema",
+      "args": {
+        "relation_ids": [
+          "RelR_fcafa93f2f18"
+        ],
+        "canonical_rel_name": null,
+        "canonical_rel_desc": null,
+        "rel_cls": "component_whole_relation",
+        "rel_cls_group": "COMPOSITION",
+        "justification": "This relation describes a straightforward part–whole composition (nonverbal cues as a component of overall communication), semantically aligned with the other two relations in this chunk that already use rel_cls \"component_whole_relation\" and rel_cls_group \"COMPOSITION\". Using a different rel_cls (\"communication_channel_relation\") for the same part–whole pattern would fragment the schema without adding meaningful distinction, so it is normalized to the same component_whole_relation class.",
+        "remark": null,
+        "confidence": 0.93
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_rel_schema",
+      "relation_ids": [
+        "RelR_fcafa93f2f18"
+      ],
+      "canonical_rel_name": null,
+      "canonical_rel_desc": null,
+      "rel_cls": "component_whole_relation",
+      "rel_cls_group": "COMPOSITION",
+      "new_relation_name": null,
+      "original_relation_name": null,
+      "justification": "This relation describes a straightforward part–whole composition (nonverbal cues as a component of overall communication), semantically aligned with the other two relations in this chunk that already use rel_cls \"component_whole_relation\" and rel_cls_group \"COMPOSITION\". Using a different rel_cls (\"communication_channel_relation\") for the same part–whole pattern would fragment the schema without adding meaningful distinction, so it is normalized to the same component_whole_relation class.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  ],
+  "timestamp": "2026-01-06T12:18:02Z"
+}

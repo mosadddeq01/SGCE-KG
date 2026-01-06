@@ -1,0 +1,20 @@
+[
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": [
+        "RelR_e88cf661d71e",
+        "RelR_a629081e3ec0",
+        "RelR_61a34a560426",
+        "RelR_1bee97beffff"
+      ],
+      "canonical_rel_name": null,
+      "canonical_rel_desc": null,
+      "rel_cls": "class_membership_relation",
+      "rel_cls_group": null,
+      "justification": "All four relations express membership of a specific behavior or gesture in a more general category (either as instance_of or its inverse has_example_instance). Using a more precise class label 'class_membership_relation' is clearer and less redundant than the generic 'categorization_relation' under rel_cls_group 'IDENTITY', while preserving the existing canonical_rel_name values.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  }
+]

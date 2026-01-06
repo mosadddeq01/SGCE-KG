@@ -1,0 +1,45 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_d1ebe34f104c",
+        "RelR_0b9320735fbc",
+        "RelR_81a8a453c8de"
+      ],
+      "canonical_rel_name": "contributes_to",
+      "canonical_rel_desc": "Indicates that the subject is a causal or contributing factor that increases the likelihood or intensity of the object outcome, without implying strict determinism.",
+      "justification": "All three relations describe a non-deterministic causal influence of 'constant need for validation and approval' on different negative psychological outcomes (self-esteem impairment, feelings of inadequacy, comparison with others). Using a single generic causal predicate 'contributes_to' captures the risk-factor style causality suggested by qualifiers like 'can ... have' and 'contributing to'.",
+      "remark": null,
+      "confidence": 0.92
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_d1ebe34f104c",
+        "RelR_0b9320735fbc",
+        "RelR_81a8a453c8de"
+      ],
+      "rel_cls": "causal_influence_relation",
+      "justification": "Each relation represents a causal influence from a psychological/social process (validation seeking) to another psychological state or process (self-esteem impairment, inadequacy, comparison). Grouping them under 'causal_influence_relation' captures this family of risk-factor style causal links without tying it to a specific outcome type.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_d1ebe34f104c",
+        "RelR_0b9320735fbc",
+        "RelR_81a8a453c8de"
+      ],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "All relations express that one factor leads to or contributes to another, which is squarely within a causal semantic dimension.",
+      "remark": null,
+      "confidence": 0.96
+    }
+  }
+]

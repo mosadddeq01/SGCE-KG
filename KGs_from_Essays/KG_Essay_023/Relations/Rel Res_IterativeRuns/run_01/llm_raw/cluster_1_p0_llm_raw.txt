@@ -1,0 +1,25 @@
+[
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": [
+        "RelR_f236d6b32f97",
+        "RelR_4dc1efa0fc34",
+        "RelR_ca505435b3c3",
+        "RelR_dabac96fa4ff",
+        "RelR_9887a17f19fc",
+        "RelR_b10b7b1e757e",
+        "RelR_dd371d1a7caf",
+        "RelR_1c976c2b35e2",
+        "RelR_cf070258f06d",
+        "RelR_2ace0143a8db"
+      ],
+      "canonical_rel_name": "has_impact_on",
+      "canonical_rel_desc": "Indicates that the subject has a causal or influential effect on the state or outcome of the object, leading to positive, negative, or mixed consequences.",
+      "rel_cls": "social_media_impact_relation",
+      "justification": "All relations describe the causal influence of social media on various societal, psychological, and communicative outcomes. Normalizing the predicate to 'has_impact_on' removes the minor variant 'impacts' and yields a consistent causal-impact edge. Similarly, consolidating rel_cls to 'social_media_impact_relation' is appropriate because every instance involves social media as the causal source, whereas the previous split between 'societal_impact_relation' and 'social_media_impact_relation' was arbitrary and redundant.",
+      "remark": "Rel_cls_group 'CAUSALITY' is already consistent across all instances and is therefore left unchanged.",
+      "confidence": 0.94
+    }
+  }
+]

@@ -1,0 +1,17 @@
+[
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": [
+        "RelR_343e3478734c"
+      ],
+      "canonical_rel_name": "has_ecological_role",
+      "canonical_rel_desc": "Links an organism or taxonomic group to a specific ecological role or function it performs (e.g., seed disperser, predator, pollinator).",
+      "rel_cls": "ecosystem_function_relation",
+      "rel_cls_group": "FUNCTIONALITY",
+      "justification": "For RelR_343e3478734c, the object is 'ecological roles of birds', i.e., the roles themselves, not the ecosystem context. The current canonical_rel_name 'has_ecological_role_in' (with description tying to ecosystem context) fits RelR_b09ef40c9e0f where the object is an ecosystem, but is semantically incorrect for a subject–role relation. Splitting into 'has_ecological_role' for organism→role and keeping 'has_ecological_role_in' for organism→ecosystem yields a cleaner, more precise schema while retaining the same relation class and group.",
+      "remark": "Normalized this relation to express a link from birds to their ecological roles, distinct from bird-to-ecosystem context relations.",
+      "confidence": 0.9
+    }
+  }
+]

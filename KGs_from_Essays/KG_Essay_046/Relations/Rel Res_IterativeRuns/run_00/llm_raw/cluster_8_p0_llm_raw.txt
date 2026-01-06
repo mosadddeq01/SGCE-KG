@@ -1,0 +1,79 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_29f955e5f3c1",
+        "RelR_57c6de548481"
+      ],
+      "canonical_rel_name": "participates_in_ecological_process",
+      "canonical_rel_desc": "Indicates that an organism or biotic component acts as an agent or participant in a specified ecological process.",
+      "justification": "Both relations link birds to the ecological process of seed dispersal and describe birds as performing/participating in that process. Normalizing to a single predicate focused on process participation avoids redundant variants ('performs', 'performs_process') and captures that birds are agents in the ecological process.",
+      "remark": null,
+      "confidence": 0.94
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_b1ea91df10f0"
+      ],
+      "canonical_rel_name": "has_ecosystem_functioning",
+      "canonical_rel_desc": "Indicates that an ecosystem possesses or exhibits overall ecosystem functioning as one of its core properties or processual attributes.",
+      "justification": "This relation captures that ecosystem functioning is an attribute/processual property of ecosystems ('ecosystems have and exhibit ecosystem functioning'). A dedicated predicate emphasizing that functioning is something the ecosystem has/exhibits is more precise than the noisy source label.",
+      "remark": null,
+      "confidence": 0.88
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_29f955e5f3c1",
+        "RelR_57c6de548481"
+      ],
+      "rel_cls": "ecological_process_participation_relation",
+      "justification": "Both relations describe biotic components (birds) acting in or carrying out ecological processes (seed dispersal). They belong to a class capturing participation/agency of organisms in ecological processes.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_b1ea91df10f0"
+      ],
+      "rel_cls": "ecosystem_function_property_relation",
+      "justification": "The relation links an ecosystem to its functioning, which is treated as a property-like processual attribute of the ecosystem. A relation class for ecosystem function / property best captures this family of links.",
+      "remark": null,
+      "confidence": 0.87
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_29f955e5f3c1",
+        "RelR_57c6de548481"
+      ],
+      "rel_cls_group": "AGENCY",
+      "justification": "These relations express that birds act as agents performing or participating in an ecological process (seed dispersal), which fits the broad notion of agency/actor-to-process relations.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_b1ea91df10f0"
+      ],
+      "rel_cls_group": "PROPERTY",
+      "justification": "The relation captures that ecosystem functioning is something ecosystems have or exhibit, i.e., a property-like attribute, so it belongs under a broad PROPERTY group rather than agency or composition.",
+      "remark": null,
+      "confidence": 0.86
+    }
+  }
+]

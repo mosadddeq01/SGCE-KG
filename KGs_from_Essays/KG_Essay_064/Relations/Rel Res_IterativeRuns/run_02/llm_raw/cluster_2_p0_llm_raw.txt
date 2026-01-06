@@ -1,0 +1,20 @@
+[
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": [
+        "RelR_736941796173",
+        "RelR_4124cf30863b",
+        "RelR_a6e3421eb0c3",
+        "RelR_dd76c029da3c"
+      ],
+      "canonical_rel_name": "is_version_of",
+      "canonical_rel_desc": "Indicates that the subject narrative or tradition is a version or variant of the object narrative, sharing core plot identity with possible differences in period, culture, time, or other features.",
+      "rel_cls": null,
+      "rel_cls_group": null,
+      "justification": "All four relations describe a specific narrative or narrative tradition as a version/variant of a more general story (e.g., Cinderella, Snow White). Using a single canonical predicate 'is_version_of' with a unified description avoids unnecessary duplication between 'is_variant_of' and 'is_version_of' while capturing that variants are simply culturally or temporally specific versions. The relation class and group already correctly reflect narrative versioning under IDENTITY, so only the canonical name/description need alignment.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  }
+]

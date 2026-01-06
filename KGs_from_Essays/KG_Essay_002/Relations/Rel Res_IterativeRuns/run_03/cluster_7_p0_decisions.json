@@ -1,0 +1,102 @@
+{
+  "cluster_label": "7_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_617131c3700d",
+      "relation_name": "enables",
+      "rel_desc": "Oral storytelling enables the intergenerational transmission of tales.",
+      "rel_hint_type": "transmission",
+      "canonical_rel_name": "enables",
+      "canonical_rel_desc": "Indicates that a process or mechanism functionally enables or makes possible another process or outcome.",
+      "rel_cls": "causal_enablement_relation",
+      "rel_cls_group": "CAUSALITY",
+      "subject_entity_name": "oral storytelling",
+      "object_entity_name": "intergenerational transmission of tales",
+      "subject_class_label": "Story Transmission Processes",
+      "subject_class_group": "Story Dissemination & Transmission Mechanisms",
+      "object_class_label": "Story Transmission Processes",
+      "object_class_group": "Story Dissemination & Transmission Mechanisms",
+      "qualifiers": {
+        "TemporalQualifier": "over time",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "shared orally, passed down",
+        "LogicalMarker": "and",
+        "OtherQualifier": "Medium: spoken/oral performance"
+      },
+      "confidence": 0.94,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_53ee512d7c92",
+      "relation_name": "implemented_by",
+      "rel_desc": "Intergenerational transmission of tales is implemented by oral storytelling practices.",
+      "rel_hint_type": "implementation",
+      "canonical_rel_name": "is_implemented_by",
+      "canonical_rel_desc": "Indicates that a process or abstract function is realized or carried out through a specific mechanism, practice, or implementation method.",
+      "rel_cls": "process_mechanism_relation",
+      "rel_cls_group": "CAUSALITY",
+      "subject_entity_name": "intergenerational transmission of tales",
+      "object_entity_name": "oral storytelling",
+      "subject_class_label": "Story Transmission Processes",
+      "subject_class_group": "Story Dissemination & Transmission Mechanisms",
+      "object_class_label": "Story Transmission Processes",
+      "object_class_group": "Story Dissemination & Transmission Mechanisms",
+      "qualifiers": {
+        "TemporalQualifier": "as tales are retold across generations",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": "often",
+        "OtherQualifier": null
+      },
+      "confidence": 0.82,
+      "remarks": [
+        "Some redundancy with previous relation; included to preserve both process→mechanism and mechanism→process views.",
+        "Some redundancy with previous relation; included to preserve both process→mechanism and mechanism→process views.",
+        "Some redundancy with previous relation; included to preserve both process→mechanism and mechanism→process views.",
+        "Some redundancy with previous relation; included to preserve both process→mechanism and mechanism→process views."
+      ]
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_rel_schema\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_53ee512d7c92\"\n      ],\n      \"canonical_rel_name\": null,\n      \"canonical_rel_desc\": null,\n      \"rel_cls\": null,\n      \"rel_cls_group\": \"MECHANISM\",\n      \"justification\": \"The relation explicitly captures that an abstract process (intergenerational transmission of tales) is realized via a concrete practice (oral storytelling), which is best modeled as a mechanism/implementation link rather than a generic causal link. Using a more specific rel_cls_group 'MECHANISM' improves semantic clarity and orthogonality relative to general causal relations.\",\n      \"remark\": \"Rel classified under MECHANISM to distinguish process–implementation links from broader causal enablement relations.\",\n      \"confidence\": 0.84\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_rel_schema",
+      "args": {
+        "relation_ids": [
+          "RelR_53ee512d7c92"
+        ],
+        "canonical_rel_name": null,
+        "canonical_rel_desc": null,
+        "rel_cls": null,
+        "rel_cls_group": "MECHANISM",
+        "justification": "The relation explicitly captures that an abstract process (intergenerational transmission of tales) is realized via a concrete practice (oral storytelling), which is best modeled as a mechanism/implementation link rather than a generic causal link. Using a more specific rel_cls_group 'MECHANISM' improves semantic clarity and orthogonality relative to general causal relations.",
+        "remark": "Rel classified under MECHANISM to distinguish process–implementation links from broader causal enablement relations.",
+        "confidence": 0.84
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_rel_schema",
+      "relation_ids": [
+        "RelR_53ee512d7c92"
+      ],
+      "canonical_rel_name": null,
+      "canonical_rel_desc": null,
+      "rel_cls": null,
+      "rel_cls_group": "MECHANISM",
+      "new_relation_name": null,
+      "original_relation_name": null,
+      "justification": "The relation explicitly captures that an abstract process (intergenerational transmission of tales) is realized via a concrete practice (oral storytelling), which is best modeled as a mechanism/implementation link rather than a generic causal link. Using a more specific rel_cls_group 'MECHANISM' improves semantic clarity and orthogonality relative to general causal relations.",
+      "remark": "Rel classified under MECHANISM to distinguish process–implementation links from broader causal enablement relations.",
+      "confidence": 0.84
+    }
+  ],
+  "timestamp": "2026-01-06T08:42:21Z"
+}

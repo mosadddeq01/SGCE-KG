@@ -1,0 +1,91 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_e85bb5272e02",
+        "RelR_ee02732b4d44",
+        "RelR_9c172ada9b26",
+        "RelR_639269f188b6",
+        "RelR_7f8ec58837f4",
+        "RelR_ae356151ab74"
+      ],
+      "canonical_rel_name": "used_for",
+      "canonical_rel_desc": "Indicates that the subject (a discipline, field, or method) is used or applied in order to achieve, address, or perform the object (a task, purpose, or problem).",
+      "justification": "All six relations describe a discipline or field (forensic science, biology, chemistry, physics, mathematics) being applied to achieve a particular purpose or task (solving crimes, addressing legal issues, analyzing physical evidence). They share the same direction and clear functional-purpose semantics, so a single predicate 'used_for' with a generic purpose-oriented description is appropriate.",
+      "remark": null,
+      "confidence": 0.96
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_00d228bf7bcc"
+      ],
+      "canonical_rel_name": "used_in_conjunction_with",
+      "canonical_rel_desc": "Indicates that the subject and object methods, principles, or techniques are applied together as part of the same investigative or analytical process.",
+      "justification": "This relation specifically encodes that scientific principles are used together with investigative techniques, i.e., joint or combined use of methods rather than a simple purpose relation. A distinct canonical predicate 'used_in_conjunction_with' captures method combination semantics more precisely than generic 'used_for'.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_e85bb5272e02",
+        "RelR_ee02732b4d44",
+        "RelR_9c172ada9b26",
+        "RelR_639269f188b6",
+        "RelR_7f8ec58837f4",
+        "RelR_ae356151ab74"
+      ],
+      "rel_cls": "functional_purpose_relation",
+      "justification": "These relations all express that a scientific discipline or domain is functionally employed to achieve a forensic or analytical purpose (solving crimes, addressing legal issues, analyzing evidence). Grouping them under 'functional_purpose_relation' captures this shared pattern of a method/field serving a specific purpose.",
+      "remark": null,
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_00d228bf7bcc"
+      ],
+      "rel_cls": "method_combination_relation",
+      "justification": "This relation captures that two methodological elements (scientific principles and investigative techniques) are deliberately combined in practice. A class 'method_combination_relation' distinguishes it from simple purpose-use and highlights that it belongs to a family of relations about joint use of methods or tools.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_e85bb5272e02",
+        "RelR_ee02732b4d44",
+        "RelR_9c172ada9b26",
+        "RelR_639269f188b6",
+        "RelR_7f8ec58837f4",
+        "RelR_ae356151ab74"
+      ],
+      "rel_cls_group": "USAGE",
+      "justification": "Each of these relations is about how a discipline or field is used or applied for a specific purpose or task. This fits squarely under a broad USAGE dimension rather than, e.g., COMPOSITION or IDENTITY.",
+      "remark": null,
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_00d228bf7bcc"
+      ],
+      "rel_cls_group": "INTERACTION",
+      "justification": "The relation describes two methodological components being used together within the same process, emphasizing their interaction and combination rather than solely their individual purposes. This is best captured under a broad INTERACTION group.",
+      "remark": null,
+      "confidence": 0.88
+    }
+  }
+]

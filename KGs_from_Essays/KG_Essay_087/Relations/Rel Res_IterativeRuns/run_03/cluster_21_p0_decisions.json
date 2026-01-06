@@ -1,0 +1,97 @@
+{
+  "cluster_label": "21_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_862f1d770bb7",
+      "relation_name": "improves_connection_with",
+      "rel_desc": "Applying color psychology in branding helps brands connect more effectively with their target audience.",
+      "rel_hint_type": "effectiveness",
+      "canonical_rel_name": "enhances_connection_with",
+      "canonical_rel_desc": "Subject improves the strength, quality, or effectiveness of connection or engagement with the object (typically an audience or stakeholder group).",
+      "rel_cls": "branding_impact_relation",
+      "rel_cls_group": "CAUSALITY",
+      "subject_entity_name": "color psychology in branding",
+      "object_entity_name": "target audience",
+      "subject_class_label": "Brand Communication Concepts",
+      "subject_class_group": "Branding, Positioning & Market Context",
+      "object_class_label": "Brand Communication Concepts",
+      "object_class_group": "Branding, Positioning & Market Context",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "in branding and marketing",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "can",
+        "CausalHint": "help",
+        "LogicalMarker": null,
+        "OtherQualifier": "Degree: more effectively"
+      },
+      "confidence": 0.93,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_aeba848b99c3",
+      "relation_name": "contributes_to",
+      "rel_desc": "Color psychology in branding enables the use of colors to create brand differentiation.",
+      "rel_hint_type": "causal",
+      "canonical_rel_name": "influences",
+      "canonical_rel_desc": "Indicates that the subject branding-related construct exerts a causal or enabling effect on the object (such as brands, businesses, consumer responses, brand perceptions, or branding outcomes).",
+      "rel_cls": "branding_impact_relation",
+      "rel_cls_group": "CAUSALITY",
+      "subject_entity_name": "color psychology in branding",
+      "object_entity_name": "brand differentiation",
+      "subject_class_label": "Brand Communication Concepts",
+      "subject_class_group": "Branding, Positioning & Market Context",
+      "object_class_label": "Brand Strategy Concepts",
+      "object_class_group": "Branding, Positioning & Market Context",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "can create",
+        "CausalHint": null,
+        "LogicalMarker": "and (part of a list of effects)",
+        "OtherQualifier": null
+      },
+      "confidence": 0.9,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_rel_schema\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_aeba848b99c3\"],\n      \"canonical_rel_name\": \"contributes_to\",\n      \"canonical_rel_desc\": \"Subject contributes causally or enablingly to the achievement or strengthening of the object branding outcome (e.g., brand differentiation, recognition, or perception).\",\n      \"rel_cls\": null,\n      \"rel_cls_group\": null,\n      \"justification\": \"The current canonical_rel_name 'influences' is overly generic. The instance-level description and raw relation_name explicitly frame the effect as contributing to the creation of brand differentiation rather than a broad, unspecified influence. Normalizing this predicate to 'contributes_to' yields a more precise and reusable causal branding-outcome relation, while keeping the existing rel_cls and rel_cls_group, which already fit well.\",\n      \"remark\": null,\n      \"confidence\": 0.83\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_rel_schema",
+      "args": {
+        "relation_ids": [
+          "RelR_aeba848b99c3"
+        ],
+        "canonical_rel_name": "contributes_to",
+        "canonical_rel_desc": "Subject contributes causally or enablingly to the achievement or strengthening of the object branding outcome (e.g., brand differentiation, recognition, or perception).",
+        "rel_cls": null,
+        "rel_cls_group": null,
+        "justification": "The current canonical_rel_name 'influences' is overly generic. The instance-level description and raw relation_name explicitly frame the effect as contributing to the creation of brand differentiation rather than a broad, unspecified influence. Normalizing this predicate to 'contributes_to' yields a more precise and reusable causal branding-outcome relation, while keeping the existing rel_cls and rel_cls_group, which already fit well.",
+        "remark": null,
+        "confidence": 0.83
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_rel_schema",
+      "relation_ids": [
+        "RelR_aeba848b99c3"
+      ],
+      "canonical_rel_name": "contributes_to",
+      "canonical_rel_desc": "Subject contributes causally or enablingly to the achievement or strengthening of the object branding outcome (e.g., brand differentiation, recognition, or perception).",
+      "rel_cls": null,
+      "rel_cls_group": null,
+      "new_relation_name": null,
+      "original_relation_name": null,
+      "justification": "The current canonical_rel_name 'influences' is overly generic. The instance-level description and raw relation_name explicitly frame the effect as contributing to the creation of brand differentiation rather than a broad, unspecified influence. Normalizing this predicate to 'contributes_to' yields a more precise and reusable causal branding-outcome relation, while keeping the existing rel_cls and rel_cls_group, which already fit well.",
+      "remark": null,
+      "confidence": 0.83
+    }
+  ],
+  "timestamp": "2026-01-06T15:09:41Z"
+}

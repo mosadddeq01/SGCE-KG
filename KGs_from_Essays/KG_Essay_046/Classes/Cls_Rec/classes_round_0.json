@@ -1,0 +1,194 @@
+{
+  "n_classes": 15,
+  "n_members_total": 38,
+  "classes": {
+    "ClsC_f160090b": {
+      "class_label": "Bird Pollinators",
+      "class_description": "Nectar-feeding bird species and groups that act as pollinators, transferring pollen between flowers and facilitating plant reproduction.",
+      "class_type_hint": "Biological Functional Group",
+      "confidence": 0.94,
+      "evidence_excerpt": "Some bird species, such as hummingbirds and sunbirds, are important pollinators for certain plant species.",
+      "source_cluster_id": {"coarse_cluster": 0, "local_subcluster": null},
+      "members": [
+        {"id": "En_6e99e028","entity_name": "hummingbirds","entity_description": "Nectar-feeding bird species that act as important pollinators for some plants.","entity_type_hint": "BiologicalEntity","confidence_score": 0.97,"resolution_context": "Some bird species, such as hummingbirds and sunbirds, are important pollinators for certain plant species.","flag": "entity_raw","chunk_id": ["Ch_000003"],"node_properties": []},
+        {"id": "En_6f01a7b6","entity_name": "sunbirds","entity_description": "Nectar-feeding bird species functioning as pollinators for certain plants.","entity_type_hint": "BiologicalEntity","confidence_score": 0.96,"resolution_context": "Some bird species, such as hummingbirds and sunbirds, are important pollinators for certain plant species.","flag": "entity_raw","chunk_id": ["Ch_000003"],"node_properties": []},
+        {"id": "En_f3620521","entity_name": "bird pollinators","entity_description": "Bird species that feed on nectar and transfer pollen, enabling plant reproduction through pollination.","entity_type_hint": "BiologicalAgent","confidence_score": 0.97,"resolution_context": "By feeding on nectar and transferring pollen from flower to flower, these birds facilitate the reproduction of plants and contribute to the production of fruits and seeds. Without bird pollinators, many plant species would struggle to reproduce and maintain their populations.","flag": "entity_raw","chunk_id": ["Ch_000004"],"node_properties": []}
+      ]
+    },
+    "ClsC_671f9150": {
+      "class_label": "Plant Reproduction Processes",
+      "class_description": "Biological processes involved in the production of offspring in plants, including the transfer of pollen and subsequent formation of fruits and seeds.",
+      "class_type_hint": "BiologicalProcess",
+      "confidence": 0.93,
+      "evidence_excerpt": "Bird-mediated pollen transfer enabling plant reproduction, contributing to fruits and seeds.",
+      "source_cluster_id": {"coarse_cluster": 1, "local_subcluster": null},
+      "members": [
+        {"id": "Can_5fbdb82a","entity_name": "pollination","entity_description": "Biological and ecological process in which pollen is transferred between flowers, enabling plant reproduction, sometimes facilitated by birds.","entity_type_hint": "BiologicalProcess","confidence_score": 0.97,"resolution_context": "Both describe the same process of pollen transfer enabling plant reproduction, with only minor variation in type hint and wording.","flag": "entity_raw","chunk_id": ["Ch_000003","Ch_000005"],"node_properties": []},
+        {"id": "En_99bba824","entity_name": "reproduction of plants","entity_description": "Biological process by which plants produce offspring, supported by bird-mediated pollination.","entity_type_hint": "BiologicalProcess","confidence_score": 0.93,"resolution_context": "By feeding on nectar and transferring pollen from flower to flower, these birds facilitate the reproduction of plants and contribute to the production of fruits and seeds.","flag": "entity_raw","chunk_id": ["Ch_000004"],"node_properties": []}
+      ]
+    },
+    "ClsC_7ed7545f": {
+      "class_label": "Seabird Nutrient Vectors",
+      "class_description": "Biotic and material components directly involved in transporting marine-derived nutrients onto land, specifically seabirds producing nutrient-rich guano.",
+      "class_type_hint": "Ecological Interaction",
+      "confidence": 0.9,
+      "evidence_excerpt": "seabirds deposit nutrients from marine environments onto land through their guano",
+      "source_cluster_id": {"coarse_cluster": 2, "local_subcluster": null},
+      "members": [
+        {"id": "En_460c2055","entity_name": "seabirds","entity_description": "Bird species that live in marine environments and often nest on land.","entity_type_hint": "BiologicalEntity","confidence_score": 0.96,"resolution_context": "For example, seabirds deposit nutrients from marine environments onto land through their guano, enriching soils and supporting plant growth.","flag": "entity_raw","chunk_id": ["Ch_000003"],"node_properties": []},
+        {"id": "En_a4de230f","entity_name": "guano","entity_description": "Bird excrement, especially from seabirds, rich in nutrients that fertilize soils.","entity_type_hint": "Material","confidence_score": 0.97,"resolution_context": "For example, seabirds deposit nutrients from marine environments onto land through their guano, enriching soils and supporting plant growth.","flag": "entity_raw","chunk_id": ["Ch_000003"],"node_properties": []}
+      ]
+    },
+    "ClsC_08a751ad": {
+      "class_label": "Habitat Substrates",
+      "class_description": "Physical environments or substrates that host biota and receive or contain nutrients, including marine habitats, terrestrial land surfaces, and soils.",
+      "class_type_hint": "Environment",
+      "confidence": 0.83,
+      "evidence_excerpt": "marine environments onto land through their guano, enriching soils and supporting plant growth",
+      "source_cluster_id": {"coarse_cluster": 2, "local_subcluster": null},
+      "members": [
+        {"id": "En_f444ec5e","entity_name": "marine environments","entity_description": "Oceanic and sea habitats from which seabirds obtain nutrients.","entity_type_hint": "Environment","confidence_score": 0.93,"resolution_context": "For example, seabirds deposit nutrients from marine environments onto land through their guano, enriching soils and supporting plant growth.","flag": "entity_raw","chunk_id": ["Ch_000003"],"node_properties": []},
+        {"id": "En_fb413d55","entity_name": "land","entity_description": "Terrestrial surfaces where seabirds deposit marine-derived nutrients.","entity_type_hint": "Location","confidence_score": 0.87,"resolution_context": "For example, seabirds deposit nutrients from marine environments onto land through their guano, enriching soils and supporting plant growth.","flag": "entity_raw","chunk_id": ["Ch_000003"],"node_properties": []},
+        {"id": "En_16d77cef","entity_name": "soils","entity_description": "Terrestrial substrates that are enriched by seabird guano and support plant growth.","entity_type_hint": "Material","confidence_score": 0.9,"resolution_context": "For example, seabirds deposit nutrients from marine environments onto land through their guano, enriching soils and supporting plant growth.","flag": "entity_raw","chunk_id": ["Ch_000003"],"node_properties": []}
+      ]
+    },
+    "ClsC_1b281398": {
+      "class_label": "Ecosystem Nutrient Cycling Elements",
+      "class_description": "Entities that participate directly in the cycling and redistribution of nutrients within ecosystems, including habitats and materials involved in nutrient transfer.",
+      "class_type_hint": "Ecological Entity",
+      "confidence": 0.78,
+      "evidence_excerpt": "In forests, birds that feed on insects help to cycle nutrients by redistributing them through their droppings.",
+      "source_cluster_id": {"coarse_cluster": 3, "local_subcluster": null},
+      "members": [
+        {"id": "En_15e9f2db","entity_name": "forests","entity_description": "Terrestrial ecosystems where insect-feeding birds help cycle nutrients.","entity_type_hint": "Environment","confidence_score": 0.93,"resolution_context": "In forests, birds that feed on insects help to cycle nutrients by redistributing them through their droppings.","flag": "entity_raw","chunk_id": ["Ch_000003"],"node_properties": []},
+        {"id": "En_0f1af47a","entity_name": "bird droppings","entity_description": "Excreta of birds that redistribute nutrients within ecosystems.","entity_type_hint": "Material","confidence_score": 0.95,"resolution_context": "In forests, birds that feed on insects help to cycle nutrients by redistributing them through their droppings.","flag": "entity_raw","chunk_id": ["Ch_000003"],"node_properties": []}
+      ]
+    },
+    "ClsC_74aa27c9": {
+      "class_label": "Pest Organism Populations",
+      "class_description": "Groups of organisms considered pests whose population dynamics affect crops and vegetation, including insect populations serving as prey for birds and generalized pest groups that can cause outbreaks.",
+      "class_type_hint": "Organism Group",
+      "confidence": 0.86,
+      "evidence_excerpt": "insects in ecosystems that serve as prey for birds… agricultural pests; organisms that can damage crops and vegetation",
+      "source_cluster_id": {"coarse_cluster": 4, "local_subcluster": null},
+      "members": [
+        {"id": "Can_5a77ee9e","entity_name": "insect populations","entity_description": "Groups of insects in ecosystems that serve as prey for birds, often functioning as agricultural pests in some contexts and contributing to nutrient cycling and ecosystem dynamics when their populations are naturally controlled by bird predation.","entity_type_hint": "OrganismGroup","confidence_score": 0.97,"resolution_context": "Both entities describe the same biological group—populations of insects that are preyed upon by birds in similar ecological and pest-control contexts—differing mainly in phrasing and emphasis.","flag": "entity_raw","chunk_id": ["Ch_000002","Ch_000003"],"node_properties": []},
+        {"id": "En_5debf55d","entity_name": "pests","entity_description": "Insects or organisms that can damage crops and vegetation when their populations outbreak.","entity_type_hint": "OrganismRole","confidence_score": 0.9,"resolution_context": "By preying on insects, birds help prevent outbreaks of pests that can damage crops and other vegetation.","flag": "entity_raw","chunk_id": ["Ch_000002"],"node_properties": []}
+      ]
+    },
+    "ClsC_54169ad0": {
+      "class_label": "Plant Resources at Risk",
+      "class_description": "Cultivated and natural plant resources that are vulnerable to damage from pest outbreaks, encompassing both agricultural crops and broader vegetation.",
+      "class_type_hint": "Protected Resource",
+      "confidence": 0.83,
+      "evidence_excerpt": "can damage crops and other vegetation",
+      "source_cluster_id": {"coarse_cluster": 4, "local_subcluster": null},
+      "members": [
+        {"id": "En_b3356c2f","entity_name": "crops","entity_description": "Cultivated plants grown for agriculture that can be damaged by pest outbreaks.","entity_type_hint": "Component","confidence_score": 0.9,"resolution_context": "By preying on insects, birds help prevent outbreaks of pests that can damage crops and other vegetation.","flag": "entity_raw","chunk_id": ["Ch_000002"],"node_properties": []},
+        {"id": "En_8f9ec9bd","entity_name": "vegetation","entity_description": "General plant life that can be harmed by pest outbreaks and protected indirectly by birds.","entity_type_hint": "Environment","confidence_score": 0.9,"resolution_context": "By preying on insects, birds help prevent outbreaks of pests that can damage crops and other vegetation.","flag": "entity_raw","chunk_id": ["Ch_000002"],"node_properties": []}
+      ]
+    },
+    "ClsC_17ac2428": {
+      "class_label": "Avian Environmental Indicators",
+      "class_description": "Bird-related metrics, including behaviors and geographic distributions, that serve as indicators of environmental conditions and change.",
+      "class_type_hint": "Indicator",
+      "confidence": 0.93,
+      "evidence_excerpt": "Changes in bird populations, behaviors, or distributions can signal shifts in environmental conditions.",
+      "source_cluster_id": {"coarse_cluster": 5, "local_subcluster": null},
+      "members": [
+        {"id": "En_1edc3149","entity_name": "bird behaviors","entity_description": "Patterns of actions and activities of birds, whose changes can indicate environmental shifts.","entity_type_hint": "BiologicalBehavior","confidence_score": 0.9,"resolution_context": "Changes in bird populations, behaviors, or distributions can signal shifts in environmental conditions, such as habitat loss, pollution, or climate change.","flag": "entity_raw","chunk_id": ["Ch_000004"],"node_properties": []},
+        {"id": "En_7db665da","entity_name": "bird distributions","entity_description": "Geographical spread and locations of bird species, used as indicators of environmental conditions.","entity_type_hint": "SpatialDistribution","confidence_score": 0.9,"resolution_context": "Changes in bird populations, behaviors, or distributions can signal shifts in environmental conditions, such as habitat loss, pollution, or climate change.","flag": "entity_raw","chunk_id": ["Ch_000004"],"node_properties": []}
+      ]
+    },
+    "ClsC_cc71edde": {
+      "class_label": "Environmental Pressures",
+      "class_description": "Broad-scale environmental stressors, such as habitat loss, pollution, and climate change, that drive changes in ecosystems and bird populations.",
+      "class_type_hint": "EnvironmentalDriver",
+      "confidence": 0.96,
+      "evidence_excerpt": "Shifts in environmental conditions, such as habitat loss, pollution, or climate change.",
+      "source_cluster_id": {"coarse_cluster": 5, "local_subcluster": null},
+      "members": [
+        {"id": "En_2dfb2b08","entity_name": "habitat loss","entity_description": "Reduction or degradation of natural habitats, affecting bird populations and signaling environmental change.","entity_type_hint": "EnvironmentalPressure","confidence_score": 0.96,"resolution_context": "Changes in bird populations, behaviors, or distributions can signal shifts in environmental conditions, such as habitat loss, pollution, or climate change.","flag": "entity_raw","chunk_id": ["Ch_000004"],"node_properties": []},
+        {"id": "En_49cb81e0","entity_name": "pollution","entity_description": "Introduction of harmful substances or contaminants into the environment impacting ecosystems and birds.","entity_type_hint": "EnvironmentalPressure","confidence_score": 0.96,"resolution_context": "Changes in bird populations, behaviors, or distributions can signal shifts in environmental conditions, such as habitat loss, pollution, or climate change.","flag": "entity_raw","chunk_id": ["Ch_000004"],"node_properties": []},
+        {"id": "En_8c8a0295","entity_name": "climate change","entity_description": "Long-term alteration of climate patterns, influencing bird distributions and ecosystem conditions.","entity_type_hint": "EnvironmentalPressure","confidence_score": 0.96,"resolution_context": "Changes in bird populations, behaviors, or distributions can signal shifts in environmental conditions, such as habitat loss, pollution, or climate change.","flag": "entity_raw","chunk_id": ["Ch_000004"],"node_properties": []}
+      ]
+    },
+    "ClsC_d8b3afdd": {
+      "class_label": "Bird-Dispersed Plant Propagules",
+      "class_description": "Plant reproductive structures (fruits and seeds) that are consumed and later dispersed by birds, aiding plant regeneration and distribution.",
+      "class_type_hint": "Biological Material Category",
+      "confidence": 0.86,
+      "evidence_excerpt": "Many bird species consume fruits and then spread seeds far and wide as they fly and excrete them.",
+      "source_cluster_id": {"coarse_cluster": 6, "local_subcluster": null},
+      "members": [
+        {"id": "En_2c1674ac","entity_name": "fruits","entity_description": "Plant reproductive structures eaten by birds, containing seeds that are later dispersed.","entity_type_hint": "BiologicalMaterial","confidence_score": 0.93,"resolution_context": "Many bird species consume fruits and then spread seeds far and wide as they fly and excrete them in different locations.","flag": "entity_raw","chunk_id": ["Ch_000001"],"node_properties": []},
+        {"id": "En_62c98f2d","entity_name": "seeds","entity_description": "Plant reproductive units dispersed by birds after fruit consumption and excretion.","entity_type_hint": "BiologicalMaterial","confidence_score": 0.96,"resolution_context": "Many bird species consume fruits and then spread seeds far and wide as they fly and excrete them in different locations. This process helps to regenerate plant populations, promote genetic diversity, and support the growth of new vegetation.","flag": "entity_raw","chunk_id": ["Ch_000001"],"node_properties": []}
+      ]
+    },
+    "ClsC_0e9d6552": {
+      "class_label": "Plant Population Dynamics",
+      "class_description": "Ecological outcomes related to how plant populations renew, vary genetically, and establish new individuals, particularly through mechanisms like bird-mediated seed dispersal.",
+      "class_type_hint": "Ecological Process/Concept",
+      "confidence": 0.9,
+      "evidence_excerpt": "This process helps to regenerate plant populations, promote genetic diversity, and support the growth of new vegetation.",
+      "source_cluster_id": {"coarse_cluster": 7, "local_subcluster": null},
+      "members": [
+        {"id": "En_1c17bb48","entity_name": "plant population regeneration","entity_description": "Renewal and recovery of plant populations aided by bird-mediated seed dispersal.","entity_type_hint": "EcologicalProcess","confidence_score": 0.91,"resolution_context": "Many bird species consume fruits and then spread seeds far and wide as they fly and excrete them in different locations. This process helps to regenerate plant populations, promote genetic diversity, and support the growth of new vegetation.","flag": "entity_raw","chunk_id": ["Ch_000001"],"node_properties": []},
+        {"id": "En_6bd937b5","entity_name": "genetic diversity","entity_description": "Variation in genetic makeup of plant populations promoted by wide seed dispersal.","entity_type_hint": "EcologicalConcept","confidence_score": 0.94,"resolution_context": "This process helps to regenerate plant populations, promote genetic diversity, and support the growth of new vegetation.","flag": "entity_raw","chunk_id": ["Ch_000001"],"node_properties": []},
+        {"id": "En_953fae54","entity_name": "growth of new vegetation","entity_description": "Establishment and development of new plants supported by bird-mediated seed dispersal.","entity_type_hint": "EcologicalProcess","confidence_score": 0.9,"resolution_context": "This process helps to regenerate plant populations, promote genetic diversity, and support the growth of new vegetation.","flag": "entity_raw","chunk_id": ["Ch_000001"],"node_properties": []}
+      ]
+    },
+    "ClsC_540e0336": {
+      "class_label": "Biodiversity Conservation Activities",
+      "class_description": "Actions and processes that use monitoring and indicator species (such as birds) to assess ecosystem status and guide efforts to protect biodiversity and maintain ecosystem function.",
+      "class_type_hint": "EnvironmentalManagementProcess",
+      "confidence": 0.84,
+      "evidence_excerpt": "Monitoring bird populations can provide valuable insights... and help guide conservation efforts to protect biodiversity and ecosystem function.",
+      "source_cluster_id": {"coarse_cluster": 8, "local_subcluster": null},
+      "members": [
+        {"id": "En_8fd624ce","entity_name": "monitoring bird populations","entity_description": "Systematic observation and measurement of bird numbers and trends to assess ecosystem status.","entity_type_hint": "MonitoringActivity","confidence_score": 0.95,"resolution_context": "Monitoring bird populations can provide valuable insights into the state of ecosystems and help guide conservation efforts to protect biodiversity and ecosystem function.","flag": "entity_raw","chunk_id": ["Ch_000004"],"node_properties": []},
+        {"id": "En_ba621d91","entity_name": "conservation efforts","entity_description": "Actions and initiatives aimed at protecting biodiversity and maintaining ecosystem function.","entity_type_hint": "MitigationAction","confidence_score": 0.92,"resolution_context": "Monitoring bird populations can provide valuable insights into the state of ecosystems and help guide conservation efforts to protect biodiversity and ecosystem function.","flag": "entity_raw","chunk_id": ["Ch_000004"],"node_properties": []},
+        {"id": "En_a45958d9","entity_name": "environmental monitoring","entity_description": "Use of birds as indicators to monitor environmental conditions and ecosystem health.","entity_type_hint": "MonitoringProcess","confidence_score": 0.92,"resolution_context": "From seed dispersal to pest control, nutrient cycling, pollination, and environmental monitoring, birds contribute in numerous ways to the functioning and stability of natural systems.","flag": "entity_raw","chunk_id": ["Ch_000005"],"node_properties": []}
+      ]
+    },
+    "ClsC_42d6e043": {
+      "class_label": "Ecosystem Condition Attributes",
+      "class_description": "Ecological state descriptors that characterize how well an ecosystem is functioning, including its overall health and its capacity to withstand and recover from disturbances.",
+      "class_type_hint": "EcologicalAttribute",
+      "confidence": 0.9,
+      "evidence_excerpt": "health and resilience of ecosystems that bird conservation helps ensure",
+      "source_cluster_id": {"coarse_cluster": 9, "local_subcluster": null},
+      "members": [
+        {"id": "En_ebb57550","entity_name": "health of ecosystems","entity_description": "Overall ecological condition of ecosystems that protection of birds helps ensure.","entity_type_hint": "EcologicalAttribute","confidence_score": 0.9,"resolution_context": "Protecting bird populations and their habitats is crucial for maintaining biodiversity, supporting ecosystem services, and ensuring the health and resilience of ecosystems for future generations.","flag": "entity_raw","chunk_id": ["Ch_000005"],"node_properties": []},
+        {"id": "En_7d913f0f","entity_name": "resilience of ecosystems","entity_description": "Capacity of ecosystems to withstand and recover from disturbances, supported by bird conservation.","entity_type_hint": "EcologicalAttribute","confidence_score": 0.9,"resolution_context": "Protecting bird populations and their habitats is crucial for maintaining biodiversity, supporting ecosystem services, and ensuring the health and resilience of ecosystems for future generations.","flag": "entity_raw","chunk_id": ["Ch_000005"],"node_properties": []}
+      ]
+    },
+    "ClsC_45fe1009": {
+      "class_label": "Ecosystem State and Stability",
+      "class_description": "Concepts describing the overall state, health, structure, and stability of ecosystems, including their condition, diversity of life, and resilience to disturbance.",
+      "class_type_hint": "Ecological Concept",
+      "confidence": 0.9,
+      "evidence_excerpt": "overall state/health of ecosystems, variety of life, and stability/resistance to disturbance",
+      "source_cluster_id": {"coarse_cluster": 10, "local_subcluster": null},
+      "members": [
+        {"id": "Can_a7a62f64","entity_name": "ecosystem condition","entity_description": "Overall state, health, and quality of the environment and its ecosystems, including habitat quality, functioning, and factors such as species populations, pollution, and climate.","entity_type_hint": "EnvironmentalCondition","confidence_score": 0.96,"resolution_context": "Both mentions describe the same underlying concept—the overall state/health of ecosystems and the environment—with identical type hints and overlapping semantic scope.","flag": "entity_raw","chunk_id": ["Ch_000001","Ch_000004","Ch_000003"],"node_properties": []},
+        {"id": "Can_e67dc3e0","entity_name": "ecosystems","entity_description": "Ecological systems consisting of interacting communities of organisms and their physical environment, sometimes referred to as natural systems, within which birds perform important ecological roles and whose functioning, balance, and stability can be affected by factors such as pesticide use and nutrient cycling.","entity_type_hint": "Environment","confidence_score": 0.96,"resolution_context": "All three mentions refer to the same broad ecological concept (ecosystems/natural systems) in indistinguishable environmental contexts.","flag": "entity_raw","chunk_id": ["Ch_000002","Ch_000003","Ch_000001","Ch_000005"],"node_properties": []},
+        {"id": "Can_374bb0ad","entity_name": "biodiversity","entity_description": "The variety and variability of living organisms and their ecosystems, whose maintenance is supported by birds through roles such as seed dispersal, pest control, pollination, and ecosystem monitoring.","entity_type_hint": "EcologicalConcept","confidence_score": 0.97,"resolution_context": "All four mentions use the same term “biodiversity” in the same ecological context and sense (variety of life in ecosystems) within one cohesive passage, differing only in emphasis and type_hint granularity.","flag": "entity_raw","chunk_id": ["Ch_000001","Ch_000002","Ch_000004","Ch_000005"],"node_properties": []},
+        {"id": "En_a15c6d59","entity_name": "stability of ecosystems","entity_description": "Resistance to disturbance and maintenance of ecological balance in ecosystems to which birds contribute.","entity_type_hint": "EcologicalConcept","confidence_score": 0.9,"resolution_context": "From seed dispersal to pest control, birds contribute to the functioning and stability of ecosystems worldwide.","flag": "entity_raw","chunk_id": ["Ch_000001"],"node_properties": []}
+      ]
+    },
+    "ClsC_6f74928b": {
+      "class_label": "Ecosystem Processes and Functions",
+      "class_description": "Ecological processes and functional roles that maintain ecosystem operation and services, including biogeochemical cycling and the specific functional contributions of birds.",
+      "class_type_hint": "Ecological Process/Function",
+      "confidence": 0.9,
+      "evidence_excerpt": "how ecosystems operate and are maintained, nutrient recycling, and birds’ ecological roles",
+      "source_cluster_id": {"coarse_cluster": 10, "local_subcluster": null},
+      "members": [
+        {"id": "Can_9a985b31","entity_name": "ecosystem functioning","entity_description": "Ecological processes and interactions that maintain the operation, services, and stability of ecosystems, which birds help support through their activities.","entity_type_hint": "EcologicalConcept","confidence_score": 0.95,"resolution_context": "Both refer to the same concept of how ecosystems operate and are maintained, differing only in wording ('functioning' vs 'function').","flag": "entity_raw","chunk_id": ["Ch_000001","Ch_000004"],"node_properties": []},
+        {"id": "Can_4f84cd8a","entity_name": "nutrient cycling","entity_description": "Ecological process where nutrients are moved, reused, and recycled through different parts of ecosystems, including via animal activities such as those of birds.","entity_type_hint": "EcologicalProcess","confidence_score": 0.96,"resolution_context": "All three mentions describe the same ecological process of nutrient movement and recycling in ecosystems, differing only in wording or context, so they should be unified into a single canonical entity.","flag": "entity_raw","chunk_id": ["Ch_000003","Ch_000005"],"node_properties": []},
+        {"id": "En_782dbed9","entity_name": "ecological roles of birds","entity_description": "Various functions birds perform in ecosystems, helping maintain balance and system stability.","entity_type_hint": "EcologicalFunction","confidence_score": 0.9,"resolution_context": "Birds play a crucial role in ecosystems, serving as indicators of environmental health, contributing to biodiversity, and playing various ecological roles that help maintain balance in natural systems.","flag": "entity_raw","chunk_id": ["Ch_000001"],"node_properties": []}
+      ]
+    }
+  }
+}

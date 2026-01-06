@@ -1,0 +1,26 @@
+[
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": [
+        "RelR_dc552feb359d",
+        "RelR_926fb14c65b7",
+        "RelR_c13dd589897b",
+        "RelR_cf05df44c90f",
+        "RelR_5f5b97317e70",
+        "RelR_e4a04cc0899c",
+        "RelR_aedf12b3354a",
+        "RelR_e2003edc2618",
+        "RelR_b64f75559821",
+        "RelR_afc3f66f396f"
+      ],
+      "canonical_rel_name": "indicates_internal_state",
+      "canonical_rel_desc": "A nonverbal behavior or facial expression functions as a cue that indicates or signals an internal or inferred psychological or attitudinal state of a person.",
+      "rel_cls": "nonverbal_state_cue_relation",
+      "rel_cls_group": "COMMUNICATION",
+      "justification": "All relations connect a nonverbal behavior or facial expression (gestures, posture, eye contact, facial expressions) to an inferred internal state (emotions, attitudes such as concern, defensiveness, agreement, etc.). The current split into two canonical_rel_names ('signals_emotional_state' vs. 'indicates_state'), two rel_cls values ('nonverbal_signal_relation' vs. 'nonverbal_indicator_relation'), and two rel_cls_groups ('COMMUNICATION' vs. 'ASSOCIATION') is artificial: semantically they are all nonverbal cues that communicate internal states, regardless of whether the object is strictly emotional or more generally psychological/attitudinal. Unifying them under 'indicates_internal_state', with a single class 'nonverbal_state_cue_relation' and broad group 'COMMUNICATION', yields a cleaner, more reusable predicate and avoids redundant, slightly different labels for the same relation family.",
+      "remark": "Harmonized facial-expression and body-language indicator relations into a single predicate and class to reflect that they are all communicative nonverbal cues of internal states.",
+      "confidence": 0.9
+    }
+  }
+]

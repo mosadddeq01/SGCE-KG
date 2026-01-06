@@ -1,0 +1,15 @@
+[
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": ["RelR_e225503ee4a5"],
+      "canonical_rel_name": null,
+      "canonical_rel_desc": null,
+      "rel_cls": "impact_relation",
+      "rel_cls_group": null,
+      "justification": "The existing rel_cls 'social_media_impact_relation' is too domain-specific for a schema-level relation class. The canonical_rel_name 'has_impact_on' and rel_cls_group 'CAUSALITY' already capture the domain context via entities; using a generic class name 'impact_relation' makes the schema reusable across domains while preserving the causal/impact semantics.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  }
+]

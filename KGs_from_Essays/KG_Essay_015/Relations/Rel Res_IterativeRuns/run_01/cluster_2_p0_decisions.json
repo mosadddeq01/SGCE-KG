@@ -1,0 +1,69 @@
+{
+  "cluster_label": "2_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_9dfa8f93e7be",
+      "relation_name": "protects",
+      "rel_desc": "Egyptian pyramids were designed to protect the deceased's body.",
+      "rel_hint_type": "protective",
+      "canonical_rel_name": "protects",
+      "canonical_rel_desc": "Indicates that the subject serves to protect or safeguard the object from harm, loss, or disturbance.",
+      "rel_cls": "protective_function_relation",
+      "rel_cls_group": "FUNCTION",
+      "subject_entity_name": "Egyptian pyramids",
+      "object_entity_name": "deceased's body",
+      "subject_class_label": "Ancient Egyptian Tomb Structures",
+      "subject_class_group": "Ancient Egypt: Society, Rulers, and Funerary Culture",
+      "object_class_label": "Ancient Egyptian Deceased Individual (Burial Subject)",
+      "object_class_group": "Ancient Egyptian Funerary Religion and Culture",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "inside the pyramid/tomb",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "Purpose: funerary protection"
+      },
+      "confidence": 0.96,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_f0e6f5dd21ff",
+      "relation_name": "protects",
+      "rel_desc": "Egyptian pyramids were designed to protect the deceased's possessions, represented here as grave goods.",
+      "rel_hint_type": "protective",
+      "canonical_rel_name": "protects",
+      "canonical_rel_desc": "Indicates that the subject serves to protect or safeguard the object from harm, loss, or disturbance.",
+      "rel_cls": "protective_function_relation",
+      "rel_cls_group": "FUNCTION",
+      "subject_entity_name": "Egyptian pyramids",
+      "object_entity_name": "grave goods",
+      "subject_class_label": "Ancient Egyptian Tomb Structures",
+      "subject_class_group": "Ancient Egypt: Society, Rulers, and Funerary Culture",
+      "object_class_label": "Funerary / Grave Goods",
+      "object_class_group": "Mortuary Practices and Grave Goods",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "inside the pyramid/tomb",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "implicit mapping from possessions to grave goods",
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "Purpose: safeguard buried items"
+      },
+      "confidence": 0.72,
+      "remarks": [
+        "Relation relies on aligning 'possessions' with 'grave goods'.",
+        "Object 'grave goods' is used as a stand-in for the more general notion of the deceased's possessions; mapping is approximate but acceptable for KG purposes.",
+        "Relation relies on aligning 'possessions' with 'grave goods'."
+      ]
+    }
+  ],
+  "llm_raw": "[]",
+  "parsed_steps": [],
+  "executed_decisions": [],
+  "timestamp": "2026-01-06T10:28:12Z"
+}

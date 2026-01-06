@@ -1,0 +1,186 @@
+{
+  "cluster_label": "5_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_06f65f309748",
+      "relation_name": "engages",
+      "rel_desc": "Fairytales captivate and engage global audiences around the world.",
+      "rel_hint_type": "effect",
+      "canonical_rel_name": "engages_audiences",
+      "canonical_rel_desc": "Narrative works that capture and hold the attention of audiences.",
+      "rel_cls": "narrative_effect_relation",
+      "rel_cls_group": "EFFECT",
+      "subject_entity_name": "fairytales",
+      "object_entity_name": "global audiences around the world",
+      "subject_class_label": "Fairytale Concepts",
+      "subject_class_group": "Fairytales: Genre, Narratives, and Motifs",
+      "object_class_label": "Story Audiences",
+      "object_class_group": "Fairy Tales and Their Audiences",
+      "qualifiers": {
+        "TemporalQualifier": "for centuries",
+        "SpatialQualifier": "around the world",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "captivating",
+        "LogicalMarker": null,
+        "OtherQualifier": "AudienceAgeRange: all ages"
+      },
+      "confidence": 0.9,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_52bd8b672d07",
+      "relation_name": "enchants",
+      "rel_desc": "Timeless stories enchant readers.",
+      "rel_hint_type": "affective_effect",
+      "canonical_rel_name": "enchants_audience",
+      "canonical_rel_desc": "Narrative works or stories emotionally captivate or enchant their audience.",
+      "rel_cls": "audience_affective_response_relation",
+      "rel_cls_group": "AFFECTIVE_EFFECT",
+      "subject_entity_name": "timeless stories",
+      "object_entity_name": "readers",
+      "subject_class_label": "Fairy Tale Categories and Collections",
+      "subject_class_group": "Fairy Tales and Their Audiences",
+      "object_class_label": "Story Audiences",
+      "object_class_group": "Fairy Tales and Their Audiences",
+      "qualifiers": {
+        "TemporalQualifier": "continue to",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "enchant",
+        "LogicalMarker": null,
+        "OtherQualifier": "AudienceType: reading audience"
+      },
+      "confidence": 0.98,
+      "remarks": [
+        "Pronoun \"These\" resolved to timeless stories derived from famous fairytales.",
+        "Pronoun \"These\" resolved to timeless stories derived from famous fairytales."
+      ]
+    },
+    {
+      "relation_id": "RelR_0b5ac2606f13",
+      "relation_name": "enchants",
+      "rel_desc": "Timeless stories enchant listeners.",
+      "rel_hint_type": "affective_effect",
+      "canonical_rel_name": "enchants_audience",
+      "canonical_rel_desc": "Narrative works or stories emotionally captivate or enchant their audience.",
+      "rel_cls": "audience_affective_response_relation",
+      "rel_cls_group": "AFFECTIVE_EFFECT",
+      "subject_entity_name": "timeless stories",
+      "object_entity_name": "listeners",
+      "subject_class_label": "Fairy Tale Categories and Collections",
+      "subject_class_group": "Fairy Tales and Their Audiences",
+      "object_class_label": "Story Audiences",
+      "object_class_group": "Fairy Tales and Their Audiences",
+      "qualifiers": {
+        "TemporalQualifier": "continue to",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "enchant",
+        "LogicalMarker": "and",
+        "OtherQualifier": "AudienceType: listening audience"
+      },
+      "confidence": 0.98,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_151832bbf17f",
+      "relation_name": "offers_insight_into",
+      "rel_desc": "Fairytales are said to provide valuable insights into the human experience.",
+      "rel_hint_type": "epistemic",
+      "canonical_rel_name": "provides_insight_into",
+      "canonical_rel_desc": "Narrative works that offer conceptual or emotional understanding of an aspect of human life or experience.",
+      "rel_cls": "narrative_effect_relation",
+      "rel_cls_group": "EFFECT",
+      "subject_entity_name": "fairytales",
+      "object_entity_name": "human experience",
+      "subject_class_label": "Fairytale Concepts",
+      "subject_class_group": "Fairytales: Genre, Narratives, and Motifs",
+      "object_class_label": "Storytelling and Human Connection",
+      "object_class_group": "Storytelling and Narrative (Practices, Effects, Context)",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "offer",
+        "LogicalMarker": null,
+        "OtherQualifier": "InsightValue: valuable"
+      },
+      "confidence": 0.99,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_rel_schema\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_06f65f309748\"],\n      \"canonical_rel_name\": \"engages_audience\",\n      \"canonical_rel_desc\": \"A narrative work captures and holds the attention of its audience.\",\n      \"rel_cls\": \"audience_affective_response_relation\",\n      \"rel_cls_group\": \"AFFECTIVE_EFFECT\",\n      \"justification\": \"This relation describes how fairytales captivate audiences, which is an affective/engagement response similar in nature to the 'enchants_audience' relations. Aligning the rel_cls with 'audience_affective_response_relation' and rel_cls_group with 'AFFECTIVE_EFFECT' groups it consistently with the other audience-response edges, while slightly tightening the canonical_rel_desc to focus on audience engagement.\",\n      \"remark\": null,\n      \"confidence\": 0.93\n    }\n  },\n  {\n    \"function\": \"modify_rel_schema\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_151832bbf17f\"],\n      \"canonical_rel_name\": \"provides_insight_into\",\n      \"canonical_rel_desc\": \"A narrative work offers conceptual or emotional understanding of an aspect of human life or experience.\",\n      \"rel_cls\": \"narrative_insight_relation\",\n      \"rel_cls_group\": \"EPISTEMIC_EFFECT\",\n      \"justification\": \"This relation is about fairytales giving insight into the human experience, which is epistemic rather than purely affective or generic effect. Defining a more specific class 'narrative_insight_relation' and assigning the broad group 'EPISTEMIC_EFFECT' better captures that this is an understanding/knowledge effect, not just a generic narrative effect.\",\n      \"remark\": null,\n      \"confidence\": 0.94\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_rel_schema",
+      "args": {
+        "relation_ids": [
+          "RelR_06f65f309748"
+        ],
+        "canonical_rel_name": "engages_audience",
+        "canonical_rel_desc": "A narrative work captures and holds the attention of its audience.",
+        "rel_cls": "audience_affective_response_relation",
+        "rel_cls_group": "AFFECTIVE_EFFECT",
+        "justification": "This relation describes how fairytales captivate audiences, which is an affective/engagement response similar in nature to the 'enchants_audience' relations. Aligning the rel_cls with 'audience_affective_response_relation' and rel_cls_group with 'AFFECTIVE_EFFECT' groups it consistently with the other audience-response edges, while slightly tightening the canonical_rel_desc to focus on audience engagement.",
+        "remark": null,
+        "confidence": 0.93
+      }
+    },
+    {
+      "function": "modify_rel_schema",
+      "args": {
+        "relation_ids": [
+          "RelR_151832bbf17f"
+        ],
+        "canonical_rel_name": "provides_insight_into",
+        "canonical_rel_desc": "A narrative work offers conceptual or emotional understanding of an aspect of human life or experience.",
+        "rel_cls": "narrative_insight_relation",
+        "rel_cls_group": "EPISTEMIC_EFFECT",
+        "justification": "This relation is about fairytales giving insight into the human experience, which is epistemic rather than purely affective or generic effect. Defining a more specific class 'narrative_insight_relation' and assigning the broad group 'EPISTEMIC_EFFECT' better captures that this is an understanding/knowledge effect, not just a generic narrative effect.",
+        "remark": null,
+        "confidence": 0.94
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_rel_schema",
+      "relation_ids": [
+        "RelR_06f65f309748"
+      ],
+      "canonical_rel_name": "engages_audience",
+      "canonical_rel_desc": "A narrative work captures and holds the attention of its audience.",
+      "rel_cls": "audience_affective_response_relation",
+      "rel_cls_group": "AFFECTIVE_EFFECT",
+      "new_relation_name": null,
+      "original_relation_name": null,
+      "justification": "This relation describes how fairytales captivate audiences, which is an affective/engagement response similar in nature to the 'enchants_audience' relations. Aligning the rel_cls with 'audience_affective_response_relation' and rel_cls_group with 'AFFECTIVE_EFFECT' groups it consistently with the other audience-response edges, while slightly tightening the canonical_rel_desc to focus on audience engagement.",
+      "remark": null,
+      "confidence": 0.93
+    },
+    {
+      "action": "modify_rel_schema",
+      "relation_ids": [
+        "RelR_151832bbf17f"
+      ],
+      "canonical_rel_name": "provides_insight_into",
+      "canonical_rel_desc": "A narrative work offers conceptual or emotional understanding of an aspect of human life or experience.",
+      "rel_cls": "narrative_insight_relation",
+      "rel_cls_group": "EPISTEMIC_EFFECT",
+      "new_relation_name": null,
+      "original_relation_name": null,
+      "justification": "This relation is about fairytales giving insight into the human experience, which is epistemic rather than purely affective or generic effect. Defining a more specific class 'narrative_insight_relation' and assigning the broad group 'EPISTEMIC_EFFECT' better captures that this is an understanding/knowledge effect, not just a generic narrative effect.",
+      "remark": null,
+      "confidence": 0.94
+    }
+  ],
+  "timestamp": "2026-01-06T14:07:27Z"
+}

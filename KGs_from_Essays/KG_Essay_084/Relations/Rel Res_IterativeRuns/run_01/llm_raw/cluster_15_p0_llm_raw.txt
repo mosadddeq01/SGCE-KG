@@ -1,0 +1,17 @@
+[
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": [
+        "RelR_3b35c5f3df0a"
+      ],
+      "canonical_rel_name": null,
+      "canonical_rel_desc": null,
+      "rel_cls": "evidential_significance_relation",
+      "rel_cls_group": "ASSOCIATION",
+      "justification": "This relation expresses that hidden clues are important or potentially crucial for a case (significance/importance), not a direct causal mechanism. Keeping the existing specific class 'evidential_significance_relation' is appropriate, but the broad group 'CAUSALITY' is misleading. Mapping it instead to a broader associative dimension (ASSOCIATION) better reflects that the relation encodes relevance/importance between clue and case rather than a direct cause-effect chain.",
+      "remark": "Adjusted rel_cls_group from CAUSALITY to ASSOCIATION to reflect evidential importance rather than direct causation.",
+      "confidence": 0.83
+    }
+  }
+]

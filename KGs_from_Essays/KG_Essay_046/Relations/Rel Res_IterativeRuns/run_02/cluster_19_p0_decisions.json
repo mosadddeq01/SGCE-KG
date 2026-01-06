@@ -1,0 +1,133 @@
+{
+  "cluster_label": "19_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_1f24eb3b1836",
+      "relation_name": "prevents",
+      "rel_desc": "Natural pest control by birds helps prevent outbreaks of pests.",
+      "rel_hint_type": "preventive",
+      "canonical_rel_name": "helps_prevent",
+      "canonical_rel_desc": "Subject contributes to reducing the likelihood or occurrence of the object event or state, without guaranteeing complete prevention.",
+      "rel_cls": "biological_pest_control_relation",
+      "rel_cls_group": "CAUSALITY",
+      "subject_entity_name": "natural pest control by birds",
+      "object_entity_name": "outbreaks of pests",
+      "subject_class_label": "Pest Population Dynamics",
+      "subject_class_group": "Pest Management & Ecosystem Services",
+      "object_class_label": "Pest Population Dynamics",
+      "object_class_group": "Pest Management & Ecosystem Services",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "in agricultural and vegetated areas",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "help prevent (not guaranteed)",
+        "CausalHint": "By preying on insects",
+        "LogicalMarker": "By",
+        "OtherQualifier": null
+      },
+      "confidence": 0.96,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_87d5fb5017da",
+      "relation_name": "indirectly_protects",
+      "rel_desc": "By preventing pest outbreaks, birds indirectly protect crops from damage.",
+      "rel_hint_type": "indirect_effect",
+      "canonical_rel_name": "provides_protection_to",
+      "canonical_rel_desc": "Subject contributes to protecting the object from harm or damage, either directly or indirectly (e.g., via trophic or ecological pathways).",
+      "rel_cls": "protective_ecosystem_service_relation",
+      "rel_cls_group": "CAUSALITY",
+      "subject_entity_name": "birds",
+      "object_entity_name": "crops",
+      "subject_class_label": "Bird Biotic Components",
+      "subject_class_group": "Birds as Environmental Indicators & Conservation",
+      "object_class_label": "Plant Resources at Risk",
+      "object_class_group": "Pest Management & Ecosystem Services",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "agricultural areas",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "help prevent (partial protection)",
+        "CausalHint": "By preying on insects",
+        "LogicalMarker": "By",
+        "OtherQualifier": "Pathway: via reduction of pest outbreaks"
+      },
+      "confidence": 0.9,
+      "remarks": [
+        "Relation added to capture the implied protective service to crops.",
+        "Relation added to capture the implied protective service to crops.",
+        "Relation added to capture the implied protective service to crops."
+      ]
+    },
+    {
+      "relation_id": "RelR_39cb0f503816",
+      "relation_name": "indirectly_protects",
+      "rel_desc": "By preventing pest outbreaks, birds indirectly protect other vegetation from damage.",
+      "rel_hint_type": "indirect_effect",
+      "canonical_rel_name": "provides_protection_to",
+      "canonical_rel_desc": "Subject contributes to protecting the object from harm or damage, either directly or indirectly (e.g., via trophic or ecological pathways).",
+      "rel_cls": "protective_ecosystem_service_relation",
+      "rel_cls_group": "CAUSALITY",
+      "subject_entity_name": "birds",
+      "object_entity_name": "vegetation",
+      "subject_class_label": "Bird Biotic Components",
+      "subject_class_group": "Birds as Environmental Indicators & Conservation",
+      "object_class_label": "Plant Resources at Risk",
+      "object_class_group": "Pest Management & Ecosystem Services",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "vegetated ecosystems",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "help prevent (partial protection)",
+        "CausalHint": "By preying on insects",
+        "LogicalMarker": "By",
+        "OtherQualifier": "Pathway: via reduction of pest outbreaks"
+      },
+      "confidence": 0.9,
+      "remarks": [
+        "Captures broader vegetation protection beyond crops.",
+        "Captures broader vegetation protection beyond crops.",
+        "Captures broader vegetation protection beyond crops."
+      ]
+    },
+    {
+      "relation_id": "RelR_e6eb7a6c964b",
+      "relation_name": "indirectly_reduces_need_for",
+      "rel_desc": "By providing natural pest control, birds indirectly reduce the need for chemical pesticides.",
+      "rel_hint_type": "indirect_effect",
+      "canonical_rel_name": "reduces_need_for",
+      "canonical_rel_desc": "Subject decreases the required level, frequency, or dependence on the object (e.g., reducing the need for an input, intervention, or resource).",
+      "rel_cls": "requirement_modification_relation",
+      "rel_cls_group": "REQUIREMENT",
+      "subject_entity_name": "birds",
+      "object_entity_name": "chemical pesticides",
+      "subject_class_label": "Bird Biotic Components",
+      "subject_class_group": "Birds as Environmental Indicators & Conservation",
+      "object_class_label": "Synthetic Pesticides",
+      "object_class_group": "Pest Management & Ecosystem Services",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "managed ecosystems (e.g., agriculture)",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "This natural form of pest control reduces the need",
+        "LogicalMarker": "This",
+        "OtherQualifier": "Pathway: via natural pest control service"
+      },
+      "confidence": 0.88,
+      "remarks": [
+        "Relation added to make explicit birds’ role beyond the service node.",
+        "Relation added to make explicit birds’ role beyond the service node.",
+        "Relation added to make explicit birds’ role beyond the service node."
+      ]
+    }
+  ],
+  "llm_raw": "[]",
+  "parsed_steps": [],
+  "executed_decisions": [],
+  "timestamp": "2026-01-06T11:36:53Z"
+}

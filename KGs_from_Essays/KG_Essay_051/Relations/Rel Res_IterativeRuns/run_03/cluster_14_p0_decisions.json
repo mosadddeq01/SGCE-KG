@@ -1,0 +1,130 @@
+{
+  "cluster_label": "14_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_c13dd589897b",
+      "relation_name": "signals",
+      "rel_desc": "Facial expressions are said to signal how a person is feeling, i.e., their emotions.",
+      "rel_hint_type": "signal",
+      "canonical_rel_name": "indicates_internal_state",
+      "canonical_rel_desc": "A nonverbal behavior or facial expression functions as a cue that indicates or signals an internal or inferred psychological or attitudinal state of a person.",
+      "rel_cls": "nonverbal_state_cue_relation",
+      "rel_cls_group": "COMMUNICATION",
+      "subject_entity_name": "facial expressions",
+      "object_entity_name": "emotions",
+      "subject_class_label": "Facial Expressions",
+      "subject_class_group": "Nonverbal Communication & Inferred States",
+      "object_class_label": "Emotional States (General)",
+      "object_class_group": "Nonverbal Communication & Inferred States",
+      "qualifiers": {
+        "TemporalQualifier": "at any given moment",
+        "SpatialQualifier": "on the face",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "can",
+        "CausalHint": "signal",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.94,
+      "remarks": [
+        "Object mapped to general 'emotions' entity since 'how a person is feeling' denotes emotional states.",
+        "Object mapped to general 'emotions' entity since 'how a person is feeling' denotes emotional states.",
+        "Object mapped to general 'emotions' entity since 'how a person is feeling' denotes emotional states.",
+        "Object mapped to general 'emotions' entity since 'how a person is feeling' denotes emotional states."
+      ]
+    },
+    {
+      "relation_id": "RelR_afc3f66f396f",
+      "relation_name": "signals",
+      "rel_desc": "Maintaining eye contact during a conversation signals attentiveness.",
+      "rel_hint_type": "indicator",
+      "canonical_rel_name": "indicates_internal_state",
+      "canonical_rel_desc": "A nonverbal behavior or facial expression functions as a cue that indicates or signals an internal or inferred psychological or attitudinal state of a person.",
+      "rel_cls": "nonverbal_state_cue_relation",
+      "rel_cls_group": "COMMUNICATION",
+      "subject_entity_name": "eye contact",
+      "object_entity_name": "attentiveness",
+      "subject_class_label": "Eye Contact Behaviors",
+      "subject_class_group": "Nonverbal Communication & Inferred States",
+      "object_class_label": "Eye Contact Inferred States",
+      "object_class_group": "Nonverbal Communication & Inferred States",
+      "qualifiers": {
+        "TemporalQualifier": "during a conversation",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": "during a conversation",
+        "UncertaintyQualifier": "can",
+        "CausalHint": "signal",
+        "LogicalMarker": "while",
+        "OtherQualifier": null
+      },
+      "confidence": 0.98,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_5a5b95e17ba7",
+      "relation_name": "signals",
+      "rel_desc": "Maintaining eye contact during a conversation signals engagement.",
+      "rel_hint_type": "indicator",
+      "canonical_rel_name": "indicates_state",
+      "canonical_rel_desc": "A nonverbal behavior (gesture, posture, or eye contact pattern) that serves as an indicator or cue of an internal or inferred psychological state.",
+      "rel_cls": "nonverbal_indicator_relation",
+      "rel_cls_group": "ASSOCIATION",
+      "subject_entity_name": "eye contact",
+      "object_entity_name": "engagement",
+      "subject_class_label": "Eye Contact Behaviors",
+      "subject_class_group": "Nonverbal Communication & Inferred States",
+      "object_class_label": "Eye Contact Inferred States",
+      "object_class_group": "Nonverbal Communication & Inferred States",
+      "qualifiers": {
+        "TemporalQualifier": "during a conversation",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": "during a conversation",
+        "UncertaintyQualifier": "can",
+        "CausalHint": "signal",
+        "LogicalMarker": "while",
+        "OtherQualifier": null
+      },
+      "confidence": 0.98,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_rel_schema\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_5a5b95e17ba7\"\n      ],\n      \"canonical_rel_name\": \"indicates_internal_state\",\n      \"canonical_rel_desc\": \"A nonverbal behavior or facial expression functions as a cue that indicates or signals an internal or inferred psychological or attitudinal state of a person.\",\n      \"rel_cls\": \"nonverbal_state_cue_relation\",\n      \"rel_cls_group\": \"COMMUNICATION\",\n      \"justification\": \"This relation instance has the same semantics as the other two in the chunk: a nonverbal behavior (eye contact) signaling an internal psychological state (engagement). To keep the KG schema consistent, it should share the same canonical predicate, relation class, and broad group as the other nonverbal state-cue signaling relations. The previous settings ('indicates_state', 'nonverbal_indicator_relation', rel_cls_group='ASSOCIATION') were redundant variants for the same communication-oriented cue relation.\",\n      \"remark\": null,\n      \"confidence\": 0.96\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_rel_schema",
+      "args": {
+        "relation_ids": [
+          "RelR_5a5b95e17ba7"
+        ],
+        "canonical_rel_name": "indicates_internal_state",
+        "canonical_rel_desc": "A nonverbal behavior or facial expression functions as a cue that indicates or signals an internal or inferred psychological or attitudinal state of a person.",
+        "rel_cls": "nonverbal_state_cue_relation",
+        "rel_cls_group": "COMMUNICATION",
+        "justification": "This relation instance has the same semantics as the other two in the chunk: a nonverbal behavior (eye contact) signaling an internal psychological state (engagement). To keep the KG schema consistent, it should share the same canonical predicate, relation class, and broad group as the other nonverbal state-cue signaling relations. The previous settings ('indicates_state', 'nonverbal_indicator_relation', rel_cls_group='ASSOCIATION') were redundant variants for the same communication-oriented cue relation.",
+        "remark": null,
+        "confidence": 0.96
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_rel_schema",
+      "relation_ids": [
+        "RelR_5a5b95e17ba7"
+      ],
+      "canonical_rel_name": "indicates_internal_state",
+      "canonical_rel_desc": "A nonverbal behavior or facial expression functions as a cue that indicates or signals an internal or inferred psychological or attitudinal state of a person.",
+      "rel_cls": "nonverbal_state_cue_relation",
+      "rel_cls_group": "COMMUNICATION",
+      "new_relation_name": null,
+      "original_relation_name": null,
+      "justification": "This relation instance has the same semantics as the other two in the chunk: a nonverbal behavior (eye contact) signaling an internal psychological state (engagement). To keep the KG schema consistent, it should share the same canonical predicate, relation class, and broad group as the other nonverbal state-cue signaling relations. The previous settings ('indicates_state', 'nonverbal_indicator_relation', rel_cls_group='ASSOCIATION') were redundant variants for the same communication-oriented cue relation.",
+      "remark": null,
+      "confidence": 0.96
+    }
+  ],
+  "timestamp": "2026-01-06T12:19:34Z"
+}

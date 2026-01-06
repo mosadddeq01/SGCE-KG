@@ -1,0 +1,45 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_e88cf661d71e",
+        "RelR_a629081e3ec0",
+        "RelR_61a34a560426"
+      ],
+      "canonical_rel_name": "is_instance_of",
+      "canonical_rel_desc": "Links a specific example or instance to the more general class or category it belongs to.",
+      "justification": "In all three relations, the subject is a concrete example (waving hello, thumbs up, furrowed brow) and the object is a broader category (gestures, facial expressions). This is best modeled as an instance-to-class relation rather than a generic 'type_of' label.",
+      "remark": "Normalized all example-of/category relations in this chunk to the canonical predicate 'is_instance_of'.",
+      "confidence": 0.96
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_e88cf661d71e",
+        "RelR_a629081e3ec0",
+        "RelR_61a34a560426"
+      ],
+      "rel_cls": "categorization_relation",
+      "justification": "These relations express taxonomic categorization, connecting individual nonverbal behaviors to their broader gesture/facial-expression categories, fitting a classification/taxonomy relation class.",
+      "remark": "Used a generic but specific-enough class name to cover instance-to-category and similar taxonomy edges.",
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_e88cf661d71e",
+        "RelR_a629081e3ec0",
+        "RelR_61a34a560426"
+      ],
+      "rel_cls_group": "IDENTITY",
+      "justification": "Instance-of and taxonomic categorization relations are best grouped under a broad identity/equivalence dimension, since they define what kind of thing the subject is relative to a general category.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  }
+]

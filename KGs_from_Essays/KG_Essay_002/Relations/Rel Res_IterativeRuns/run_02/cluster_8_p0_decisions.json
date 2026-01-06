@@ -1,0 +1,159 @@
+{
+  "cluster_label": "8_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_a8c302701e53",
+      "relation_name": "circulated_in",
+      "rel_desc": "Urban legends are disseminated by being shared and retold within communities.",
+      "rel_hint_type": "dissemination",
+      "canonical_rel_name": "circulates_within",
+      "canonical_rel_desc": "Indicates that a narrative or information item is shared and transmitted within a particular social group or community.",
+      "rel_cls": "narrative_dissemination_relation",
+      "rel_cls_group": "COMMUNICATION",
+      "subject_entity_name": "urban legends",
+      "object_entity_name": "communities",
+      "subject_class_label": "Contemporary Folklore",
+      "subject_class_group": "Urban Legends and Modern Folklore",
+      "object_class_label": "Urban Legend Dissemination Contexts",
+      "object_class_group": "Urban Legend Contexts (Social, Spatial, Temporal)",
+      "qualifiers": {
+        "TemporalQualifier": "passed down through generations",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": "as",
+        "OtherQualifier": "CommunitySize: both large and small"
+      },
+      "confidence": 0.96,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_177460eaf6b3",
+      "relation_name": "transmitted_across",
+      "rel_desc": "Urban legends are transmitted across generations within communities.",
+      "rel_hint_type": "transmission",
+      "canonical_rel_name": "is_transmitted_within",
+      "canonical_rel_desc": "Indicates that a narrative, belief, or tradition is transmitted and circulates within a given social group or community over time.",
+      "rel_cls": "cultural_spread_relation",
+      "rel_cls_group": "TEMPORALITY",
+      "subject_entity_name": "urban legends",
+      "object_entity_name": "communities",
+      "subject_class_label": "Contemporary Folklore",
+      "subject_class_group": "Urban Legends and Modern Folklore",
+      "object_class_label": "Urban Legend Dissemination Contexts",
+      "object_class_group": "Urban Legend Contexts (Social, Spatial, Temporal)",
+      "qualifiers": {
+        "TemporalQualifier": "through generations",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "often",
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "TransmissionMode: oral/retelling"
+      },
+      "confidence": 0.78,
+      "remarks": [
+        "Relation primarily created to preserve temporal and intergenerational transmission context.",
+        "Relation primarily created to preserve temporal and intergenerational transmission context.",
+        "Relation primarily created to preserve temporal and intergenerational transmission context."
+      ]
+    },
+    {
+      "relation_id": "RelR_126fe4265cb4",
+      "relation_name": "shares",
+      "rel_desc": "Communities share stories among their members.",
+      "rel_hint_type": "communication",
+      "canonical_rel_name": "shares_story",
+      "canonical_rel_desc": "Indicates that the subject shares, tells, or circulates a story or narrative represented by the object.",
+      "rel_cls": "information_transmission_relation",
+      "rel_cls_group": "COMMUNICATION",
+      "subject_entity_name": "communities",
+      "object_entity_name": "stories",
+      "subject_class_label": "Urban Legend Dissemination Contexts",
+      "subject_class_group": "Urban Legend Contexts (Social, Spatial, Temporal)",
+      "object_class_label": "Urban Legend Stories",
+      "object_class_group": "Urban Legends & Folklore Narratives",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "within and between community members",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "By sharing",
+        "LogicalMarker": "By",
+        "OtherQualifier": "SocialFunction: promotes cohesion and protection"
+      },
+      "confidence": 0.95,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_rel_schema\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_177460eaf6b3\"],\n      \"canonical_rel_name\": \"circulates_within\",\n      \"canonical_rel_desc\": \"Indicates that a narrative or information item is shared and transmitted within a particular social group or community.\",\n      \"rel_cls\": \"narrative_dissemination_relation\",\n      \"rel_cls_group\": \"COMMUNICATION\",\n      \"justification\": \"This relation describes the same phenomenon as RelR_a8c302701e53: urban legends circulating/transmitting within communities. Normalizing the canonical_rel_name and description to 'circulates_within' aligns semantically equivalent predicates. The broader semantics is communication of narratives within groups; temporality is already captured via qualifiers, so the rel_cls_group should be COMMUNICATION rather than TEMPORALITY. Using the same rel_cls 'narrative_dissemination_relation' groups these dissemination edges consistently.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"modify_rel_schema\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_126fe4265cb4\"],\n      \"canonical_rel_name\": null,\n      \"canonical_rel_desc\": null,\n      \"rel_cls\": \"narrative_dissemination_relation\",\n      \"rel_cls_group\": null,\n      \"justification\": \"This relation captures communities sharing stories among members, which is the same family of phenomena as legends circulating within communities. Aligning rel_cls to 'narrative_dissemination_relation' groups all narrative-sharing and circulation edges under a single, coherent dissemination class while keeping its existing COMMUNICATION rel_cls_group, which is already appropriate.\",\n      \"remark\": null,\n      \"confidence\": 0.88\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_rel_schema",
+      "args": {
+        "relation_ids": [
+          "RelR_177460eaf6b3"
+        ],
+        "canonical_rel_name": "circulates_within",
+        "canonical_rel_desc": "Indicates that a narrative or information item is shared and transmitted within a particular social group or community.",
+        "rel_cls": "narrative_dissemination_relation",
+        "rel_cls_group": "COMMUNICATION",
+        "justification": "This relation describes the same phenomenon as RelR_a8c302701e53: urban legends circulating/transmitting within communities. Normalizing the canonical_rel_name and description to 'circulates_within' aligns semantically equivalent predicates. The broader semantics is communication of narratives within groups; temporality is already captured via qualifiers, so the rel_cls_group should be COMMUNICATION rather than TEMPORALITY. Using the same rel_cls 'narrative_dissemination_relation' groups these dissemination edges consistently.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "modify_rel_schema",
+      "args": {
+        "relation_ids": [
+          "RelR_126fe4265cb4"
+        ],
+        "canonical_rel_name": null,
+        "canonical_rel_desc": null,
+        "rel_cls": "narrative_dissemination_relation",
+        "rel_cls_group": null,
+        "justification": "This relation captures communities sharing stories among members, which is the same family of phenomena as legends circulating within communities. Aligning rel_cls to 'narrative_dissemination_relation' groups all narrative-sharing and circulation edges under a single, coherent dissemination class while keeping its existing COMMUNICATION rel_cls_group, which is already appropriate.",
+        "remark": null,
+        "confidence": 0.88
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_rel_schema",
+      "relation_ids": [
+        "RelR_177460eaf6b3"
+      ],
+      "canonical_rel_name": "circulates_within",
+      "canonical_rel_desc": "Indicates that a narrative or information item is shared and transmitted within a particular social group or community.",
+      "rel_cls": "narrative_dissemination_relation",
+      "rel_cls_group": "COMMUNICATION",
+      "new_relation_name": null,
+      "original_relation_name": null,
+      "justification": "This relation describes the same phenomenon as RelR_a8c302701e53: urban legends circulating/transmitting within communities. Normalizing the canonical_rel_name and description to 'circulates_within' aligns semantically equivalent predicates. The broader semantics is communication of narratives within groups; temporality is already captured via qualifiers, so the rel_cls_group should be COMMUNICATION rather than TEMPORALITY. Using the same rel_cls 'narrative_dissemination_relation' groups these dissemination edges consistently.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "modify_rel_schema",
+      "relation_ids": [
+        "RelR_126fe4265cb4"
+      ],
+      "canonical_rel_name": null,
+      "canonical_rel_desc": null,
+      "rel_cls": "narrative_dissemination_relation",
+      "rel_cls_group": null,
+      "new_relation_name": null,
+      "original_relation_name": null,
+      "justification": "This relation captures communities sharing stories among members, which is the same family of phenomena as legends circulating within communities. Aligning rel_cls to 'narrative_dissemination_relation' groups all narrative-sharing and circulation edges under a single, coherent dissemination class while keeping its existing COMMUNICATION rel_cls_group, which is already appropriate.",
+      "remark": null,
+      "confidence": 0.88
+    }
+  ],
+  "timestamp": "2026-01-06T08:39:23Z"
+}

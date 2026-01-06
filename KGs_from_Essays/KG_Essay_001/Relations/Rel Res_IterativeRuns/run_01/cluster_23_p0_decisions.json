@@ -1,0 +1,99 @@
+{
+  "cluster_label": "23_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_dd99a6afa295",
+      "relation_name": "enables_reproduction_of",
+      "rel_desc": "Pollination helps plants reproduce.",
+      "rel_hint_type": "causal",
+      "canonical_rel_name": "facilitates_reproduction_of",
+      "canonical_rel_desc": "Indicates that the subject process or agent helps or supports the reproductive success of the object organism or group, without guaranteeing it.",
+      "rel_cls": "causal_process_relation",
+      "rel_cls_group": "CAUSALITY",
+      "subject_entity_name": "pollination",
+      "object_entity_name": "plants",
+      "subject_class_label": "Plant Reproduction Concepts",
+      "subject_class_group": "Plant Reproduction and Pollination",
+      "object_class_label": "Flowering Plant Entities",
+      "object_class_group": "Plant Reproduction and Pollination",
+      "qualifiers": {
+        "TemporalQualifier": "when pollination occurs",
+        "SpatialQualifier": "in flowering plants",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "helps (facilitates rather than guarantees)",
+        "CausalHint": "helping",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.99,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_52ce2462426d",
+      "relation_name": "helps_reproduce",
+      "rel_desc": "Butterflies help plants reproduce through their pollination activities.",
+      "rel_hint_type": "causal",
+      "canonical_rel_name": "facilitates_reproduction_of",
+      "canonical_rel_desc": "Indicates that the subject process or agent helps or supports the reproductive success of the object organism or group, without guaranteeing it.",
+      "rel_cls": "causal_process_relation",
+      "rel_cls_group": "CAUSALITY",
+      "subject_entity_name": "butterflies",
+      "object_entity_name": "plants",
+      "subject_class_label": "Butterflies",
+      "subject_class_group": "Butterfly Ecology and Interactions",
+      "object_class_label": "Flowering Plant Entities",
+      "object_class_group": "Plant Reproduction and Pollination",
+      "qualifiers": {
+        "TemporalQualifier": "while acting as pollinators",
+        "SpatialQualifier": "in plant communities with flowers",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "helps (supporting role)",
+        "CausalHint": "helping",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.9,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_rel_schema\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_dd99a6afa295\",\n        \"RelR_52ce2462426d\"\n      ],\n      \"canonical_rel_name\": \"facilitates_reproduction_of\",\n      \"canonical_rel_desc\": \"Indicates that the subject process or agent helps or supports the reproductive success of the object organism or group, without guaranteeing it.\",\n      \"rel_cls\": \"reproductive_support_relation\",\n      \"rel_cls_group\": \"CAUSALITY\",\n      \"justification\": \"Both relations describe a process or agent (pollination, butterflies) that supports the reproductive success of plants in a causal but non-deterministic way. The existing canonical_rel_name and description already capture this well, but the rel_cls 'causal_process_relation' is too generic and slightly misleading because one subject is an ecological agent rather than a pure process. Normalizing both instances to a more specific class 'reproductive_support_relation' better reflects that these are causal relations specifically about aiding reproduction, while keeping rel_cls_group as CAUSALITY.\",\n      \"remark\": null,\n      \"confidence\": 0.93\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_rel_schema",
+      "args": {
+        "relation_ids": [
+          "RelR_dd99a6afa295",
+          "RelR_52ce2462426d"
+        ],
+        "canonical_rel_name": "facilitates_reproduction_of",
+        "canonical_rel_desc": "Indicates that the subject process or agent helps or supports the reproductive success of the object organism or group, without guaranteeing it.",
+        "rel_cls": "reproductive_support_relation",
+        "rel_cls_group": "CAUSALITY",
+        "justification": "Both relations describe a process or agent (pollination, butterflies) that supports the reproductive success of plants in a causal but non-deterministic way. The existing canonical_rel_name and description already capture this well, but the rel_cls 'causal_process_relation' is too generic and slightly misleading because one subject is an ecological agent rather than a pure process. Normalizing both instances to a more specific class 'reproductive_support_relation' better reflects that these are causal relations specifically about aiding reproduction, while keeping rel_cls_group as CAUSALITY.",
+        "remark": null,
+        "confidence": 0.93
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_rel_schema",
+      "relation_ids": [
+        "RelR_dd99a6afa295",
+        "RelR_52ce2462426d"
+      ],
+      "canonical_rel_name": "facilitates_reproduction_of",
+      "canonical_rel_desc": "Indicates that the subject process or agent helps or supports the reproductive success of the object organism or group, without guaranteeing it.",
+      "rel_cls": "reproductive_support_relation",
+      "rel_cls_group": "CAUSALITY",
+      "new_relation_name": null,
+      "original_relation_name": null,
+      "justification": "Both relations describe a process or agent (pollination, butterflies) that supports the reproductive success of plants in a causal but non-deterministic way. The existing canonical_rel_name and description already capture this well, but the rel_cls 'causal_process_relation' is too generic and slightly misleading because one subject is an ecological agent rather than a pure process. Normalizing both instances to a more specific class 'reproductive_support_relation' better reflects that these are causal relations specifically about aiding reproduction, while keeping rel_cls_group as CAUSALITY.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  ],
+  "timestamp": "2026-01-06T07:35:21Z"
+}

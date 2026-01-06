@@ -1,0 +1,233 @@
+{
+  "cluster_label": "23_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_ea0ac459038e",
+      "relation_name": "provides_context_for",
+      "rel_desc": "Various situations are described as contexts in which body language is used.",
+      "rel_hint_type": "context",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "various situations",
+      "object_entity_name": "body language",
+      "subject_class_label": "Body Language Communication Contexts",
+      "subject_class_group": "Nonverbal Communication & Body Language",
+      "object_class_label": "Body Language as Nonverbal Communication",
+      "object_class_group": "Nonverbal Communication & Body Language",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "different social or situational settings",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "various",
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "ContextScope: diverse interaction scenarios"
+      },
+      "confidence": 0.9,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_539c1b2f67a2",
+      "relation_name": "used_in_context",
+      "rel_desc": "Body language is used by individuals specifically within professional settings.",
+      "rel_hint_type": "context-of-use",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "body language",
+      "object_entity_name": "professional settings",
+      "subject_class_label": "Body Language as Nonverbal Communication",
+      "subject_class_group": "Nonverbal Communication & Body Language",
+      "object_class_label": "Professional Social Contexts",
+      "object_class_group": "Social Environments and Interactions",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": "professional settings",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "may",
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "Actors: individuals"
+      },
+      "confidence": 0.97,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_554743f945a3",
+      "relation_name": "used_in_context",
+      "rel_desc": "Body language is used by individuals within social situations.",
+      "rel_hint_type": "context-of-use",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "body language",
+      "object_entity_name": "social situations",
+      "subject_class_label": "Body Language as Nonverbal Communication",
+      "subject_class_group": "Nonverbal Communication & Body Language",
+      "object_class_label": "Social Environments",
+      "object_class_group": "Social Environments and Interactions",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": "social settings",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "can",
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "Function: establishing rapport and building connections"
+      },
+      "confidence": 0.96,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_dd911aa164b5",
+      "relation_name": "involves",
+      "rel_desc": "Social interactions are contexts in which communication occurs.",
+      "rel_hint_type": "context",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "social interactions",
+      "object_entity_name": "communication",
+      "subject_class_label": "Social Interactions",
+      "subject_class_group": "Social Environments and Interactions",
+      "object_class_label": "Communication Process",
+      "object_class_group": "Human Communication & Meaning",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "in social contexts",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "implicit",
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.72,
+      "remarks": [
+        "Implicit relation; not literally stated but strongly suggested by framing."
+      ]
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_ea0ac459038e\",\n        \"RelR_dd911aa164b5\"\n      ],\n      \"canonical_rel_name\": \"provides_context_for\",\n      \"canonical_rel_desc\": \"The subject represents a social or situational context within which the object behavior or process occurs or is expressed.\",\n      \"justification\": \"In both relations, the subject is a social/situational setting (various situations, social interactions) that serves as the context in which the object (body language, communication) takes place. This is best modeled as the context providing the setting for the communicative behavior/process.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_539c1b2f67a2\",\n        \"RelR_554743f945a3\"\n      ],\n      \"canonical_rel_name\": \"occurs_in_context\",\n      \"canonical_rel_desc\": \"The subject behavior or process takes place within, or is used in, the social or situational context represented by the object.\",\n      \"justification\": \"In both relations, body language is the behavior and the object (professional settings, social situations) is the situational environment where this behavior is used. This is most naturally modeled as the behavior occurring in a context rather than the context providing for the behavior.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_ea0ac459038e\",\n        \"RelR_dd911aa164b5\",\n        \"RelR_539c1b2f67a2\",\n        \"RelR_554743f945a3\"\n      ],\n      \"rel_cls\": \"communication_context_relation\",\n      \"justification\": \"All four relations describe how communicative behaviors or processes (body language, communication) are situated within, or related to, social/situational contexts. They belong to the same broader family of relations connecting communication to its usage context.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_ea0ac459038e\",\n        \"RelR_dd911aa164b5\",\n        \"RelR_539c1b2f67a2\",\n        \"RelR_554743f945a3\"\n      ],\n      \"rel_cls_group\": \"SPATIALITY\",\n      \"justification\": \"Each relation anchors communicative behavior/processes to the situational or environmental setting in which they occur or are used. In the absence of a dedicated CONTEXTUALITY group, this is best captured under SPATIALITY as it covers where/under what situational setting something happens.\",\n      \"remark\": \"If a higher-level CONTEXTUALITY/SETTING group is later introduced, these relations would be good candidates to migrate there.\",\n      \"confidence\": 0.82\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_ea0ac459038e",
+          "RelR_dd911aa164b5"
+        ],
+        "canonical_rel_name": "provides_context_for",
+        "canonical_rel_desc": "The subject represents a social or situational context within which the object behavior or process occurs or is expressed.",
+        "justification": "In both relations, the subject is a social/situational setting (various situations, social interactions) that serves as the context in which the object (body language, communication) takes place. This is best modeled as the context providing the setting for the communicative behavior/process.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_539c1b2f67a2",
+          "RelR_554743f945a3"
+        ],
+        "canonical_rel_name": "occurs_in_context",
+        "canonical_rel_desc": "The subject behavior or process takes place within, or is used in, the social or situational context represented by the object.",
+        "justification": "In both relations, body language is the behavior and the object (professional settings, social situations) is the situational environment where this behavior is used. This is most naturally modeled as the behavior occurring in a context rather than the context providing for the behavior.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_ea0ac459038e",
+          "RelR_dd911aa164b5",
+          "RelR_539c1b2f67a2",
+          "RelR_554743f945a3"
+        ],
+        "rel_cls": "communication_context_relation",
+        "justification": "All four relations describe how communicative behaviors or processes (body language, communication) are situated within, or related to, social/situational contexts. They belong to the same broader family of relations connecting communication to its usage context.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_ea0ac459038e",
+          "RelR_dd911aa164b5",
+          "RelR_539c1b2f67a2",
+          "RelR_554743f945a3"
+        ],
+        "rel_cls_group": "SPATIALITY",
+        "justification": "Each relation anchors communicative behavior/processes to the situational or environmental setting in which they occur or are used. In the absence of a dedicated CONTEXTUALITY group, this is best captured under SPATIALITY as it covers where/under what situational setting something happens.",
+        "remark": "If a higher-level CONTEXTUALITY/SETTING group is later introduced, these relations would be good candidates to migrate there.",
+        "confidence": 0.82
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_ea0ac459038e",
+        "RelR_dd911aa164b5"
+      ],
+      "canonical_rel_name": "provides_context_for",
+      "canonical_rel_desc": "The subject represents a social or situational context within which the object behavior or process occurs or is expressed.",
+      "justification": "In both relations, the subject is a social/situational setting (various situations, social interactions) that serves as the context in which the object (body language, communication) takes place. This is best modeled as the context providing the setting for the communicative behavior/process.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_539c1b2f67a2",
+        "RelR_554743f945a3"
+      ],
+      "canonical_rel_name": "occurs_in_context",
+      "canonical_rel_desc": "The subject behavior or process takes place within, or is used in, the social or situational context represented by the object.",
+      "justification": "In both relations, body language is the behavior and the object (professional settings, social situations) is the situational environment where this behavior is used. This is most naturally modeled as the behavior occurring in a context rather than the context providing for the behavior.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_ea0ac459038e",
+        "RelR_dd911aa164b5",
+        "RelR_539c1b2f67a2",
+        "RelR_554743f945a3"
+      ],
+      "rel_cls": "communication_context_relation",
+      "justification": "All four relations describe how communicative behaviors or processes (body language, communication) are situated within, or related to, social/situational contexts. They belong to the same broader family of relations connecting communication to its usage context.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_ea0ac459038e",
+        "RelR_dd911aa164b5",
+        "RelR_539c1b2f67a2",
+        "RelR_554743f945a3"
+      ],
+      "rel_cls_group": "SPATIALITY",
+      "justification": "Each relation anchors communicative behavior/processes to the situational or environmental setting in which they occur or are used. In the absence of a dedicated CONTEXTUALITY group, this is best captured under SPATIALITY as it covers where/under what situational setting something happens.",
+      "remark": "If a higher-level CONTEXTUALITY/SETTING group is later introduced, these relations would be good candidates to migrate there.",
+      "confidence": 0.82
+    }
+  ],
+  "timestamp": "2026-01-06T12:12:13Z"
+}

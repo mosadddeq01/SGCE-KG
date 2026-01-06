@@ -1,0 +1,87 @@
+[
+  {
+    "function": "split_class",
+    "args": {
+      "source_class_id": "ClsC_4f06f4bc",
+      "splits": [
+        {
+          "name": "Mental Health Impacts of Social Media",
+          "description": "Specific mental and emotional health consequences associated with social media use.",
+          "class_type_hint": "HealthImpact",
+          "member_ids": [
+            "Can_cd9c7665"
+          ],
+          "provisional_id": "SPLIT(ClsC_4f06f4bc|MentalHealth)"
+        }
+      ],
+      "justification": "The class 'Social Media Effects' mixes general social effects with a distinct health-specific impact; separating mental health impacts into their own class yields a cleaner, more coherent schema.",
+      "remark": null,
+      "confidence": 0.86
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_4f06f4bc",
+      "new_name": "General Social Media Effects",
+      "new_description": "Consequences of social media use on individuals and society, focusing on general positive and negative impacts on communication and social life.",
+      "new_class_type_hint": "Social Impact",
+      "new_class_group": "Social Media: Impacts and Social Change",
+      "remark": null,
+      "justification": "After moving mental health impacts to a dedicated class, the remaining entities represent general positive and negative societal effects of social media and should be labeled and grouped accordingly.",
+      "confidence": 0.88
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "SPLIT(ClsC_4f06f4bc|MentalHealth)",
+      "new_name": "Mental Health Impacts of Social Media",
+      "new_description": "Adverse and potentially beneficial effects of social media on users’ mental and emotional well-being.",
+      "new_class_type_hint": "HealthImpact",
+      "new_class_group": "Social Media: Impacts and Social Change",
+      "remark": null,
+      "justification": "The new split class is health-specific and should be clearly labeled and grouped under the broader social media impacts and social change domain.",
+      "confidence": 0.88
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_7c3c2a73",
+      "new_name": "Social Change and Activism",
+      "new_description": "Processes and outcomes related to efforts—often supported by social media—to transform social or political conditions, including activism and the changes it seeks to produce.",
+      "new_class_type_hint": "Social Phenomenon",
+      "new_class_group": "Social Media: Impacts and Social Change",
+      "remark": null,
+      "justification": "This class covers social change and activism that are conceptually linked to social media–enabled transformation and should be placed in the same overarching group as other social media impact classes.",
+      "confidence": 0.84
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_a324909c",
+      "new_name": "Social Media–Driven Social Change",
+      "new_description": "Concepts describing how social media’s influence can be harnessed to produce beneficial transformations in society.",
+      "new_class_type_hint": "Social Process",
+      "new_class_group": "Social Media: Impacts and Social Change",
+      "remark": null,
+      "justification": "This class explicitly addresses social change driven by social media and should share a common Class_Group with other social media impact and change classes.",
+      "confidence": 0.86
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_7c57ec8e",
+      "new_name": "Online Information Consequences",
+      "new_description": "Real-world outcomes that result from the spread or misuse of online information—such as rumors, conspiracy theories, or propaganda—affecting society or events.",
+      "new_class_type_hint": "Outcome",
+      "new_class_group": "Social Media: Impacts and Social Change",
+      "remark": null,
+      "justification": "Consequences of online information spread are a specific kind of social media impact and should be labeled more clearly and grouped with other social media impact and social change classes.",
+      "confidence": 0.84
+    }
+  }
+]

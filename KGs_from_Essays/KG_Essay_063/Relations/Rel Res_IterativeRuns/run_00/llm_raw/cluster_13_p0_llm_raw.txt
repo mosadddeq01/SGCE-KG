@@ -1,0 +1,63 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_9a02e1e78eb2"],
+      "canonical_rel_name": "inspires_opposition_to",
+      "canonical_rel_desc": "Indicates that the subject inspires or motivates others to actively oppose the object (typically an injustice or oppressive condition).",
+      "justification": "The description and hints show a causal motivational link where the movement inspires people to oppose injustice; a predicate centered on inspiring opposition best captures this reusable semantics.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_769ce3f680d3"],
+      "canonical_rel_name": "overcomes",
+      "canonical_rel_desc": "Indicates that the subject has the power or capacity to overcome, defeat, or prevail over the object (typically an oppressive or unjust condition).",
+      "justification": "The instance explicitly frames the human spirit as having power to overcome oppression; a general predicate 'overcomes' fits this causal, success-against-adversity relation and is reusable for similar cases.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_e86d02027ce8"],
+      "canonical_rel_name": "contributes_to_creation_of",
+      "canonical_rel_desc": "Indicates that the subject plays a causal or enabling role in bringing about or creating the object (often an envisioned improved social state).",
+      "justification": "The relation describes the human spirit as having the power to create a better world; modeling this as contributing to the creation of the object captures the causal, constructive role without over-specifying context.",
+      "remark": null,
+      "confidence": 0.88
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_9a02e1e78eb2",
+        "RelR_769ce3f680d3",
+        "RelR_e86d02027ce8"
+      ],
+      "rel_cls": "social_change_causal_relation",
+      "justification": "All three relations express how abstract social agents or forces (movements, human spirit) causally influence social conditions or outcomes (opposition to injustice, overcoming oppression, creating a better world); grouping them under a common class for causal relations in social change contexts is appropriate.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_9a02e1e78eb2",
+        "RelR_769ce3f680d3",
+        "RelR_e86d02027ce8"
+      ],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "Each predicate encodes a causal or enabling effect from subject to object (inspiring opposition, overcoming oppression, contributing to creation of a better world), so they all fall naturally under a broad causality group.",
+      "remark": null,
+      "confidence": 0.96
+    }
+  }
+]

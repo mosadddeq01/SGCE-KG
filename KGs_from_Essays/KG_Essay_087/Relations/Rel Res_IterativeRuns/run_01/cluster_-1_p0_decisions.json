@@ -1,0 +1,100 @@
+{
+  "cluster_label": "-1_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_ce7621313920",
+      "relation_name": "intended_for",
+      "rel_desc": "The desired message is intended for the target audience.",
+      "rel_hint_type": "audience_targeting",
+      "canonical_rel_name": "intended_for_audience",
+      "canonical_rel_desc": "Indicates the target audience or recipient that a brand asset, message, or communication is designed for or aims to resonate with.",
+      "rel_cls": "communication_audience_relation",
+      "rel_cls_group": "USAGE",
+      "subject_entity_name": "desired message",
+      "object_entity_name": "target audience",
+      "subject_class_label": "Brand Communication Concepts",
+      "subject_class_group": "Branding, Positioning & Market Context",
+      "object_class_label": "Brand Communication Concepts",
+      "object_class_group": "Branding, Positioning & Market Context",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": "within brand communications",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "implicit, not stated directly",
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "CommunicationContext: brand-to-consumer messaging"
+      },
+      "confidence": 0.86,
+      "remarks": [
+        "Direction inferred from branding communication norms.",
+        "Direction inferred from branding communication norms."
+      ]
+    },
+    {
+      "relation_id": "RelR_ffe27dfae03e",
+      "relation_name": "critical_for",
+      "rel_desc": "Color psychology in branding is said to play a crucial role in branding and marketing strategies.",
+      "rel_hint_type": "dependency",
+      "canonical_rel_name": "is_critical_for",
+      "canonical_rel_desc": "Indicates that the subject plays a crucial or essential role in enabling or shaping the object.",
+      "rel_cls": "strategic_dependency_relation",
+      "rel_cls_group": "CAUSALITY",
+      "subject_entity_name": "color psychology in branding",
+      "object_entity_name": "branding and marketing strategies",
+      "subject_class_label": "Brand Communication Concepts",
+      "subject_class_group": "Branding, Positioning & Market Context",
+      "object_class_label": "Brand Communication Concepts",
+      "object_class_group": "Branding, Positioning & Market Context",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "crucial (strong necessity implication)",
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.95,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_rel_schema\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_ce7621313920\"],\n      \"canonical_rel_name\": \"intended_for\",\n      \"canonical_rel_desc\": \"Indicates the target audience or recipient that a brand asset, message, or communication is designed for or aims to resonate with.\",\n      \"rel_cls\": \"communication_audience_relation\",\n      \"rel_cls_group\": \"USAGE\",\n      \"justification\": \"The existing canonical_rel_name 'intended_for_audience' is overly specific and encodes the object type ('audience') into the predicate, which reduces reusability. Normalizing it to the more general predicate-style 'intended_for' keeps the semantics of audience targeting while making the relation reusable for other recipient-like objects, without changing directionality or meaning.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_rel_schema",
+      "args": {
+        "relation_ids": [
+          "RelR_ce7621313920"
+        ],
+        "canonical_rel_name": "intended_for",
+        "canonical_rel_desc": "Indicates the target audience or recipient that a brand asset, message, or communication is designed for or aims to resonate with.",
+        "rel_cls": "communication_audience_relation",
+        "rel_cls_group": "USAGE",
+        "justification": "The existing canonical_rel_name 'intended_for_audience' is overly specific and encodes the object type ('audience') into the predicate, which reduces reusability. Normalizing it to the more general predicate-style 'intended_for' keeps the semantics of audience targeting while making the relation reusable for other recipient-like objects, without changing directionality or meaning.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_rel_schema",
+      "relation_ids": [
+        "RelR_ce7621313920"
+      ],
+      "canonical_rel_name": "intended_for",
+      "canonical_rel_desc": "Indicates the target audience or recipient that a brand asset, message, or communication is designed for or aims to resonate with.",
+      "rel_cls": "communication_audience_relation",
+      "rel_cls_group": "USAGE",
+      "new_relation_name": null,
+      "original_relation_name": null,
+      "justification": "The existing canonical_rel_name 'intended_for_audience' is overly specific and encodes the object type ('audience') into the predicate, which reduces reusability. Normalizing it to the more general predicate-style 'intended_for' keeps the semantics of audience targeting while making the relation reusable for other recipient-like objects, without changing directionality or meaning.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  ],
+  "timestamp": "2026-01-06T15:06:19Z"
+}

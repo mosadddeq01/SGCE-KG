@@ -1,0 +1,42 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_7b5e21c2d303",
+        "RelR_a4614ed123fb"
+      ],
+      "canonical_rel_name": "facilitates_reproduction_of",
+      "canonical_rel_desc": "Indicates that the subject (organism, agent, or process) functionally enables or supports the reproductive success and population maintenance of the object species.",
+      "justification": "Both relations describe a functional/causal role in which the subject (seed dispersal, bird pollinators) enables or supports the reproduction and spread/maintenance of plant species. A single predicate 'facilitates_reproduction_of' captures this consistent, directional meaning without overfitting to a specific mechanism (pollination vs dispersal).",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_7b5e21c2d303",
+        "RelR_a4614ed123fb"
+      ],
+      "rel_cls": "reproductive_support_relation",
+      "justification": "Both relations express that a subject provides necessary or beneficial support to the reproductive processes of plant species. Grouping them under a mid-level class 'reproductive_support_relation' captures this shared ecological function across different mechanisms (pollination, dispersal).",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_7b5e21c2d303",
+        "RelR_a4614ed123fb"
+      ],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "In both cases, the subject is framed as a causal or enabling factor for the reproductive success of the plant species; the descriptions emphasize dependence and consequences in the absence of the subject, fitting a causal/functional dependency grouping.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  }
+]

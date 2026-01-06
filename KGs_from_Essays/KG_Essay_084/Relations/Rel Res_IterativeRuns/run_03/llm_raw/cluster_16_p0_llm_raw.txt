@@ -1,0 +1,19 @@
+[
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": [
+        "RelR_1d34a1f2daf2",
+        "RelR_39740bd15548",
+        "RelR_fd43b9df694c"
+      ],
+      "canonical_rel_name": "analyzes",
+      "canonical_rel_desc": "An investigative or forensic actor examines evidence, data, or other information to extract facts, patterns, or insights.",
+      "rel_cls": "forensic_analysis_activity_relation",
+      "rel_cls_group": "AGENCY",
+      "justification": "All three relations describe the same forensic analysis activity: an investigative/forensic actor performing analytical examination of evidence or data. They currently use slightly different canonical descriptions and two different rel_cls values ('forensic_cognitive_activity_relation' and 'forensic_investigation_activity_relation'). Normalizing them under a single canonical description and a more precise, shared class 'forensic_analysis_activity_relation' improves schema consistency while keeping the broad group as AGENCY.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  }
+]

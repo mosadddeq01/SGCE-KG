@@ -1,0 +1,17 @@
+[
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": [
+        "RelR_748f4768019a"
+      ],
+      "canonical_rel_name": "testifies_in",
+      "canonical_rel_desc": "Indicates that an expert witness provides testimony within a specific court or legal venue.",
+      "rel_cls": "forensic_courtroom_context_relation",
+      "rel_cls_group": "SPATIALITY",
+      "justification": "The current canonical_rel_name 'takes_place_in' is event-centric and ambiguous for a direct edge between an agent (expert witnesses) and a location (court). The instance explicitly describes testimony given by expert witnesses in court; aligning the predicate to 'testifies_in' makes the agent-role and courtroom testimony semantics clear while retaining the spatial/legal context class.",
+      "remark": "If the KG later introduces explicit testimony event nodes, this edge could be refactored so that 'expert witnesses' PARTICIPATE_IN a 'testimony' event that TAKES_PLACE_IN the 'court'.",
+      "confidence": 0.9
+    }
+  }
+]

@@ -1,0 +1,132 @@
+{
+  "cluster_label": 3,
+  "cluster_classes": [
+    {
+      "candidate_id": "ClsC_e8bce0f4",
+      "class_label": "Funerary Goods",
+      "class_description": "Objects intentionally buried with the deceased for use or comfort in the afterlife, including both general assemblages of items and specific implements such as tools.",
+      "class_type_hint": "Cultural Object Category",
+      "class_group": "TBD",
+      "confidence": 0.9,
+      "evidence_excerpt": "items buried with the dead for use in the afterlife, such as food, tools, and personal belongings",
+      "member_ids": [
+        "Can_10cfe1bd",
+        "En_6b1deedb"
+      ],
+      "members": [
+        {
+          "id": "Can_10cfe1bd",
+          "entity_name": "grave goods",
+          "entity_description": "Collections of the deceased's personal belongings and other items, such as food, tools, jewelry, and clothing, placed in the tomb or grave for use and comfort in the afterlife.",
+          "entity_type_hint": "ObjectCollection"
+        },
+        {
+          "id": "En_6b1deedb",
+          "entity_name": "tools",
+          "entity_description": "Implements buried with the deceased to be used in the afterlife.",
+          "entity_type_hint": "Object"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_d38c9751",
+      "class_label": "Burial Offerings",
+      "class_description": "Grave goods intentionally buried with the deceased, including food, clothing, and jewelry meant for use or benefit in the afterlife.",
+      "class_type_hint": "Cultural Practice",
+      "class_group": "TBD",
+      "confidence": 0.96,
+      "evidence_excerpt": "Items could include food, clothing, jewelry, and other personal belongings buried with the deceased.",
+      "member_ids": [
+        "Can_039da56d",
+        "En_89408067",
+        "En_60c8bd1b"
+      ],
+      "members": [
+        {
+          "id": "Can_039da56d",
+          "entity_name": "food offerings",
+          "entity_description": "Edible items placed in tombs or graves as provisions for the deceased in the afterlife.",
+          "entity_type_hint": "Component"
+        },
+        {
+          "id": "En_89408067",
+          "entity_name": "clothing offerings",
+          "entity_description": "Garments buried with the deceased to be used in the afterlife.",
+          "entity_type_hint": "Component"
+        },
+        {
+          "id": "En_60c8bd1b",
+          "entity_name": "jewelry offerings",
+          "entity_description": "Jewelry placed in the tomb with the deceased as grave goods for the afterlife.",
+          "entity_type_hint": "Component"
+        }
+      ],
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"merge_classes\",\n    \"args\": {\n      \"class_ids\": [\"ClsC_e8bce0f4\", \"ClsC_d38c9751\"],\n      \"provisional_id\": \"MERGE(ClsC_e8bce0f4|ClsC_d38c9751)\",\n      \"new_name\": \"Funerary / Grave Goods\",\n      \"new_description\": \"Objects and assemblages intentionally buried with the deceased—such as food, tools, clothing, jewelry, and other personal belongings—intended for use, provision, or comfort in the afterlife.\",\n      \"new_class_type_hint\": \"Cultural Object Category\",\n      \"justification\": \"Both classes describe the same concept of objects buried with the dead for use or benefit in the afterlife (grave goods, food, clothing, jewelry, tools) and differ only in emphasis and type_hint, so they should be unified into a single funerary goods class.\",\n      \"remark\": null,\n      \"confidence\": 0.96\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"MERGE(ClsC_e8bce0f4|ClsC_d38c9751)\",\n      \"new_name\": null,\n      \"new_description\": null,\n      \"new_class_type_hint\": null,\n      \"new_class_group\": \"Mortuary Practices and Grave Goods\",\n      \"remark\": null,\n      \"justification\": \"The merged class clearly belongs to the domain of objects associated with burials and the afterlife, so assigning a mortuary-focused Class_Group connects it appropriately within the schema.\",\n      \"confidence\": 0.94\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "merge_classes",
+      "args": {
+        "class_ids": [
+          "ClsC_e8bce0f4",
+          "ClsC_d38c9751"
+        ],
+        "provisional_id": "MERGE(ClsC_e8bce0f4|ClsC_d38c9751)",
+        "new_name": "Funerary / Grave Goods",
+        "new_description": "Objects and assemblages intentionally buried with the deceased—such as food, tools, clothing, jewelry, and other personal belongings—intended for use, provision, or comfort in the afterlife.",
+        "new_class_type_hint": "Cultural Object Category",
+        "justification": "Both classes describe the same concept of objects buried with the dead for use or benefit in the afterlife (grave goods, food, clothing, jewelry, tools) and differ only in emphasis and type_hint, so they should be unified into a single funerary goods class.",
+        "remark": null,
+        "confidence": 0.96
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "MERGE(ClsC_e8bce0f4|ClsC_d38c9751)",
+        "new_name": null,
+        "new_description": null,
+        "new_class_type_hint": null,
+        "new_class_group": "Mortuary Practices and Grave Goods",
+        "remark": null,
+        "justification": "The merged class clearly belongs to the domain of objects associated with burials and the afterlife, so assigning a mortuary-focused Class_Group connects it appropriately within the schema.",
+        "confidence": 0.94
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "merge_classes",
+      "input_class_ids": [
+        "ClsC_e8bce0f4",
+        "ClsC_d38c9751"
+      ],
+      "result_class_id": "ClsR_3423bd4a",
+      "provisional_id": "MERGE(ClsC_e8bce0f4|ClsC_d38c9751)",
+      "justification": "Both classes describe the same concept of objects buried with the dead for use or benefit in the afterlife (grave goods, food, clothing, jewelry, tools) and differ only in emphasis and type_hint, so they should be unified into a single funerary goods class.",
+      "remark": null,
+      "confidence": 0.96
+    },
+    {
+      "action": "modify_class",
+      "class_id": "MERGE(ClsC_e8bce0f4|ClsC_d38c9751)",
+      "class_id_resolved": "ClsR_3423bd4a",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Mortuary Practices and Grave Goods",
+      "remark": null,
+      "justification": "The merged class clearly belongs to the domain of objects associated with burials and the afterlife, so assigning a mortuary-focused Class_Group connects it appropriately within the schema.",
+      "confidence": 0.94
+    }
+  ],
+  "provisional_to_real": {
+    "MERGE(ClsC_e8bce0f4|ClsC_d38c9751)": "ClsR_3423bd4a",
+    "ClsC_e8bce0f4": "ClsR_3423bd4a",
+    "ClsC_d38c9751": "ClsR_3423bd4a"
+  },
+  "timestamp": "2026-01-06T10:11:32Z"
+}

@@ -1,0 +1,17 @@
+[
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": [
+        "RelR_273c3c0ce64a"
+      ],
+      "canonical_rel_name": "is_component_of",
+      "canonical_rel_desc": "Indicates that the subject is a component, aspect, or example of the object, which represents a larger whole, system, or category.",
+      "rel_cls": "component_whole_relation",
+      "rel_cls_group": "COMPOSITION",
+      "justification": "This relation has the same semantics as the other two instances (posture/gestures as parts or aspects of body language). To maintain a consistent predicate and class across semantically identical composition relations, normalize from 'is_aspect_of' and 'nonverbal_component_relation' to the already used 'is_component_of' and 'component_whole_relation'.",
+      "remark": "Normalized to align with other component relations linking parts/aspects to body language.",
+      "confidence": 0.93
+    }
+  }
+]

@@ -1,0 +1,128 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_949b9398552e",
+        "RelR_4a64cdbcc3d3",
+        "RelR_9c4ced04cc14"
+      ],
+      "canonical_rel_name": "facilitates_contact_with",
+      "canonical_rel_desc": "Indicates that a communication platform or feature makes it easier for users to maintain contact and communication with specific social contacts or relationship groups.",
+      "justification": "All three relations describe the same functional predicate: social media platforms help users maintain contact with different types of social contacts (friends, family, acquaintances). A single canonical predicate 'facilitates_contact_with' captures this function without tying it to a specific contact type.",
+      "remark": null,
+      "confidence": 0.94
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_229d3e9df8b4",
+        "RelR_7399c4e7410c",
+        "RelR_4b6ebaad3668"
+      ],
+      "canonical_rel_name": "enables_sharing_of",
+      "canonical_rel_desc": "Indicates that a communication feature or tool allows users to share or transmit specific types of content.",
+      "justification": "These three relations all express that instant messaging as a feature allows sharing of different content types (updates, photos, thoughts). The direction and semantics are identical, so they should share the same canonical predicate 'enables_sharing_of'.",
+      "remark": "Content-type differences are handled at the object node level; the predicate remains the same.",
+      "confidence": 0.93
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_e22631e82f8e",
+        "RelR_3920fd88518c"
+      ],
+      "canonical_rel_name": "provide_mechanism_for",
+      "canonical_rel_desc": "Indicates that a feature or element serves as a channel or mechanism through which a psychological or social process can occur or be fulfilled.",
+      "justification": "Both relations describe likes and comments as mechanisms 'through which' validation and approval are obtained. The shared causal-functional semantics are best captured by the generic predicate 'provide_mechanism_for'.",
+      "remark": null,
+      "confidence": 0.92
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_949b9398552e",
+        "RelR_4a64cdbcc3d3",
+        "RelR_9c4ced04cc14"
+      ],
+      "rel_cls": "social_connection_support_relation",
+      "justification": "These relations describe how a platform functionally supports social connections and ongoing communication between users and their social contacts, which fits a social-connection-support class rather than a generic function class.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_229d3e9df8b4",
+        "RelR_7399c4e7410c",
+        "RelR_4b6ebaad3668"
+      ],
+      "rel_cls": "content_sharing_function_relation",
+      "justification": "All three relations concern a feature (instant messaging) enabling users to share various content types, which naturally falls under a content-sharing function relation class.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_e22631e82f8e",
+        "RelR_3920fd88518c"
+      ],
+      "rel_cls": "social_feedback_mechanism_relation",
+      "justification": "Likes and comments are social feedback features that act as mechanisms for validation and approval. Grouping them under a social-feedback mechanism relation class captures this shared role.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_949b9398552e",
+        "RelR_4a64cdbcc3d3",
+        "RelR_9c4ced04cc14"
+      ],
+      "rel_cls_group": "USAGE",
+      "justification": "These edges describe how social media is functionally used to maintain contact with social contacts, reflecting a usage/functionality dimension rather than pure identity or composition.",
+      "remark": null,
+      "confidence": 0.86
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_229d3e9df8b4",
+        "RelR_7399c4e7410c",
+        "RelR_4b6ebaad3668"
+      ],
+      "rel_cls_group": "USAGE",
+      "justification": "The relations indicate the functional use of instant messaging for sharing specific kinds of content, which aligns with a broad usage/functionality group.",
+      "remark": null,
+      "confidence": 0.86
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_e22631e82f8e",
+        "RelR_3920fd88518c"
+      ],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "The descriptions emphasize that likes and comments are mechanisms 'through which' validation and approval are obtained, implying an enabling causal relationship between the features and the psychological process.",
+      "remark": null,
+      "confidence": 0.88
+    }
+  }
+]

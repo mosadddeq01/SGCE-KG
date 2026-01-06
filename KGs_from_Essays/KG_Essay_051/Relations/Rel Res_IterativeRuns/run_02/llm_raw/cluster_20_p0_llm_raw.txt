@@ -1,0 +1,19 @@
+[
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": [
+        "RelR_edde7d97698c",
+        "RelR_77b49f171ba4",
+        "RelR_451fe404dab2"
+      ],
+      "canonical_rel_name": "is_example_of",
+      "canonical_rel_desc": "Indicates that the subject is an example, instance, or specific manifestation of the object, which represents a broader category or type.",
+      "rel_cls": "category_membership_relation",
+      "rel_cls_group": "IDENTITY",
+      "justification": "In all three relations, the subject (touching, gazing, mirroring gestures) is not a physical component of the object but rather an example/instance of the broader category 'romantic body language'. Using 'is_component_of' and 'COMPOSITION' is misleading, as this is about category membership or exemplification, closer to identity/taxonomic semantics than part-whole structure. Normalizing to 'is_example_of' with a 'category_membership_relation' class and rel_cls_group 'IDENTITY' better captures that these behaviors exemplify the category of romantic body language.",
+      "remark": null,
+      "confidence": 0.86
+    }
+  }
+]

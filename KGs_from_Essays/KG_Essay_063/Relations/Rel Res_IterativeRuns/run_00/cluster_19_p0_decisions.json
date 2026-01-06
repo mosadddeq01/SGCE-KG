@@ -1,0 +1,231 @@
+{
+  "cluster_label": "19_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_303d7f474208",
+      "relation_name": "works_on",
+      "rel_desc": "This worker group was engaged in constructing the Egyptian pyramids.",
+      "rel_hint_type": "participation",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "workers on the construction of the pyramids",
+      "object_entity_name": "Egyptian pyramids",
+      "subject_class_label": "Historical Labor Protest Worker Group",
+      "subject_class_group": "Historical Labor Protests",
+      "object_class_label": "Pyramid Construction and Labor Strike (Ancient Egypt)",
+      "object_class_group": "Historical Labor Protests",
+      "qualifiers": {
+        "TemporalQualifier": "ancient times",
+        "SpatialQualifier": "ancient Egypt",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "reportedly",
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.97,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_cd1574a9ef6c",
+      "relation_name": "initiated",
+      "rel_desc": "The pyramid construction workers initiated the strike.",
+      "rel_hint_type": "participation",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "workers on the construction of the pyramids",
+      "object_entity_name": "strike by pyramid workers",
+      "subject_class_label": "Historical Labor Protest Worker Group",
+      "subject_class_group": "Historical Labor Protests",
+      "object_class_label": "Pyramid Construction and Labor Strike (Ancient Egypt)",
+      "object_class_group": "Historical Labor Protests",
+      "qualifiers": {
+        "TemporalQualifier": "ancient times",
+        "SpatialQualifier": "ancient Egypt",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "reportedly",
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "HistoricalStatus: one of the earliest recorded protests"
+      },
+      "confidence": 0.97,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_d97b3bf976b6",
+      "relation_name": "engages_in",
+      "rel_desc": "People engage in public protest demonstrations as a form of protest to assert their rights and challenge authority.",
+      "rel_hint_type": "participation",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "people",
+      "object_entity_name": "public protest demonstrations",
+      "subject_class_label": "Political Stakeholder Actors",
+      "subject_class_group": "Contentious Politics Actors & Power Structures",
+      "object_class_label": "Protests, Strikes, and Political Dissent",
+      "object_class_group": "Political Collective Action and Contention",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "Purpose: to assert rights and challenge authority"
+      },
+      "confidence": 0.83,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_4c73dab2ea16",
+      "relation_name": "engages_in",
+      "rel_desc": "People engage in violent uprisings as another form of protest to assert rights and challenge authority.",
+      "rel_hint_type": "participation",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "people",
+      "object_entity_name": "violent uprisings",
+      "subject_class_label": "Political Stakeholder Actors",
+      "subject_class_group": "Contentious Politics Actors & Power Structures",
+      "object_class_label": "Revolutions and Uprisings",
+      "object_class_group": "Political Collective Action and Contention",
+      "qualifiers": {
+        "TemporalQualifier": "Throughout the centuries",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "Purpose: to assert rights and challenge authority"
+      },
+      "confidence": 0.86,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_303d7f474208\",\n        \"RelR_d97b3bf976b6\",\n        \"RelR_4c73dab2ea16\"\n      ],\n      \"canonical_rel_name\": \"participates_in\",\n      \"canonical_rel_desc\": \"Indicates that an actor or group takes part in an event, activity, or form of collective action.\",\n      \"justification\": \"All three relations link human actors (workers or people) to actions/events (pyramid construction, public protest demonstrations, violent uprisings) where the semantics are that they take part or are engaged in those activities, not that they cause or control them.\",\n      \"remark\": null,\n      \"confidence\": 0.94\n    }\n  },\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_cd1574a9ef6c\"\n      ],\n      \"canonical_rel_name\": \"initiated\",\n      \"canonical_rel_desc\": \"Indicates that an actor or group started or triggered an event or form of collective action.\",\n      \"justification\": \"This relation specifically states that the workers initiated the strike, which is stronger than mere participation and indicates a causal, starting role in the collective action.\",\n      \"remark\": null,\n      \"confidence\": 0.93\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_303d7f474208\",\n        \"RelR_cd1574a9ef6c\",\n        \"RelR_d97b3bf976b6\",\n        \"RelR_4c73dab2ea16\"\n      ],\n      \"rel_cls\": \"collective_action_actor_role_relation\",\n      \"justification\": \"All relations connect actors (workers or people) to forms of collective action (construction labor, strikes, protests, uprisings) and describe their role in these actions (participating or initiating). Grouping them under an actor-role-in-collective-action class captures this common semantics.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_303d7f474208\",\n        \"RelR_cd1574a9ef6c\",\n        \"RelR_d97b3bf976b6\",\n        \"RelR_4c73dab2ea16\"\n      ],\n      \"rel_cls_group\": \"AGENCY\",\n      \"justification\": \"Each relation expresses how agents (people or worker groups) act in relation to events or activities (participating in or initiating them), which falls under broad agency/actor–action semantics rather than composition, identity, or purely temporal/spatial relations.\",\n      \"remark\": null,\n      \"confidence\": 0.92\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_303d7f474208",
+          "RelR_d97b3bf976b6",
+          "RelR_4c73dab2ea16"
+        ],
+        "canonical_rel_name": "participates_in",
+        "canonical_rel_desc": "Indicates that an actor or group takes part in an event, activity, or form of collective action.",
+        "justification": "All three relations link human actors (workers or people) to actions/events (pyramid construction, public protest demonstrations, violent uprisings) where the semantics are that they take part or are engaged in those activities, not that they cause or control them.",
+        "remark": null,
+        "confidence": 0.94
+      }
+    },
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_cd1574a9ef6c"
+        ],
+        "canonical_rel_name": "initiated",
+        "canonical_rel_desc": "Indicates that an actor or group started or triggered an event or form of collective action.",
+        "justification": "This relation specifically states that the workers initiated the strike, which is stronger than mere participation and indicates a causal, starting role in the collective action.",
+        "remark": null,
+        "confidence": 0.93
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_303d7f474208",
+          "RelR_cd1574a9ef6c",
+          "RelR_d97b3bf976b6",
+          "RelR_4c73dab2ea16"
+        ],
+        "rel_cls": "collective_action_actor_role_relation",
+        "justification": "All relations connect actors (workers or people) to forms of collective action (construction labor, strikes, protests, uprisings) and describe their role in these actions (participating or initiating). Grouping them under an actor-role-in-collective-action class captures this common semantics.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_303d7f474208",
+          "RelR_cd1574a9ef6c",
+          "RelR_d97b3bf976b6",
+          "RelR_4c73dab2ea16"
+        ],
+        "rel_cls_group": "AGENCY",
+        "justification": "Each relation expresses how agents (people or worker groups) act in relation to events or activities (participating in or initiating them), which falls under broad agency/actor–action semantics rather than composition, identity, or purely temporal/spatial relations.",
+        "remark": null,
+        "confidence": 0.92
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_303d7f474208",
+        "RelR_d97b3bf976b6",
+        "RelR_4c73dab2ea16"
+      ],
+      "canonical_rel_name": "participates_in",
+      "canonical_rel_desc": "Indicates that an actor or group takes part in an event, activity, or form of collective action.",
+      "justification": "All three relations link human actors (workers or people) to actions/events (pyramid construction, public protest demonstrations, violent uprisings) where the semantics are that they take part or are engaged in those activities, not that they cause or control them.",
+      "remark": null,
+      "confidence": 0.94
+    },
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_cd1574a9ef6c"
+      ],
+      "canonical_rel_name": "initiated",
+      "canonical_rel_desc": "Indicates that an actor or group started or triggered an event or form of collective action.",
+      "justification": "This relation specifically states that the workers initiated the strike, which is stronger than mere participation and indicates a causal, starting role in the collective action.",
+      "remark": null,
+      "confidence": 0.93
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_303d7f474208",
+        "RelR_cd1574a9ef6c",
+        "RelR_d97b3bf976b6",
+        "RelR_4c73dab2ea16"
+      ],
+      "rel_cls": "collective_action_actor_role_relation",
+      "justification": "All relations connect actors (workers or people) to forms of collective action (construction labor, strikes, protests, uprisings) and describe their role in these actions (participating or initiating). Grouping them under an actor-role-in-collective-action class captures this common semantics.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_303d7f474208",
+        "RelR_cd1574a9ef6c",
+        "RelR_d97b3bf976b6",
+        "RelR_4c73dab2ea16"
+      ],
+      "rel_cls_group": "AGENCY",
+      "justification": "Each relation expresses how agents (people or worker groups) act in relation to events or activities (participating in or initiating them), which falls under broad agency/actor–action semantics rather than composition, identity, or purely temporal/spatial relations.",
+      "remark": null,
+      "confidence": 0.92
+    }
+  ],
+  "timestamp": "2026-01-06T13:18:15Z"
+}

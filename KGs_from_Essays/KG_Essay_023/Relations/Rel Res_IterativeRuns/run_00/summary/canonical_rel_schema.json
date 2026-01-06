@@ -1,0 +1,556 @@
+[
+  {
+    "canonical_rel_name": "transforms",
+    "canonical_rel_desc": "Indicates that the subject causes a fundamental change in the nature, structure, or mode of operation of the object.",
+    "rel_cls": [
+      "causal_effect_relation"
+    ],
+    "rel_cls_group": [],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_44a2aebf98c5"
+    ]
+  },
+  {
+    "canonical_rel_name": "provides_era_context_for",
+    "canonical_rel_desc": "Links a historical or societal era to a phenomenon or practice that is situated within that era as its contextual backdrop.",
+    "rel_cls": [
+      "era_context_relation"
+    ],
+    "rel_cls_group": [
+      "TEMPORALITY"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_1bc13c763423"
+    ]
+  },
+  {
+    "canonical_rel_name": "influences",
+    "canonical_rel_desc": "Denotes that the subject exerts a causal or shaping effect on the object (e.g., social media influencing communication, relationships, behaviors, or perceptions).",
+    "rel_cls": [
+      "social_media_impact_relation"
+    ],
+    "rel_cls_group": [
+      "CAUSALITY"
+    ],
+    "instance_count": 8,
+    "example_relation_ids": [
+      "RelR_7c8985bb4d69",
+      "RelR_cfb899503bce",
+      "RelR_5d3fe8f7f5e6",
+      "RelR_c8cfe53a9728",
+      "RelR_f3d1254a1285",
+      "RelR_15c0ec016c5a",
+      "RelR_ac80d3f0a451",
+      "RelR_0e30e64a1011"
+    ]
+  },
+  {
+    "canonical_rel_name": "impacts",
+    "canonical_rel_desc": "Indicates that the subject exerts a causal influence on the state or condition of the object, producing positive, negative, or mixed effects.",
+    "rel_cls": [
+      "societal_impact_relation"
+    ],
+    "rel_cls_group": [
+      "CAUSALITY"
+    ],
+    "instance_count": 2,
+    "example_relation_ids": [
+      "RelR_f236d6b32f97",
+      "RelR_dabac96fa4ff"
+    ]
+  },
+  {
+    "canonical_rel_name": "has_impact_on",
+    "canonical_rel_desc": "The subject exerts a causal or influential effect on the object, contributing to the presence, increase, decrease, or change in that outcome or state.",
+    "rel_cls": [
+      "social_media_impact_relation"
+    ],
+    "rel_cls_group": [
+      "CAUSALITY"
+    ],
+    "instance_count": 9,
+    "example_relation_ids": [
+      "RelR_4dc1efa0fc34",
+      "RelR_ca505435b3c3",
+      "RelR_9887a17f19fc",
+      "RelR_b10b7b1e757e",
+      "RelR_dd371d1a7caf",
+      "RelR_1c976c2b35e2",
+      "RelR_cf070258f06d",
+      "RelR_2ace0143a8db",
+      "RelR_e225503ee4a5"
+    ]
+  },
+  {
+    "canonical_rel_name": "enables",
+    "canonical_rel_desc": "Subject makes possible or substantially facilitates the existence, occurrence, use, or spread of the object (e.g., a capability, behavior, content, or impact).",
+    "rel_cls": [
+      "enablement_relation",
+      "voice_representation_relation"
+    ],
+    "rel_cls_group": [
+      "CAUSALITY"
+    ],
+    "instance_count": 9,
+    "example_relation_ids": [
+      "RelR_d408b4337a07",
+      "RelR_0c1ba9289e6e",
+      "RelR_88cd8a94bd4e",
+      "RelR_c93a22f683f3",
+      "RelR_2b62f95b7b66",
+      "RelR_f26d9175a2ae",
+      "RelR_0feef890977f",
+      "RelR_c4d8b8838929",
+      "RelR_d55b4c095dca"
+    ]
+  },
+  {
+    "canonical_rel_name": "enhances",
+    "canonical_rel_desc": "Indicates that the subject has a positive, beneficial effect on the quality, intensity, or strength of the object (e.g., enhancing communication, closeness, or sense of community).",
+    "rel_cls": [
+      "social_experience_effect_relation"
+    ],
+    "rel_cls_group": [
+      "CAUSALITY"
+    ],
+    "instance_count": 3,
+    "example_relation_ids": [
+      "RelR_d6a9e87213dc",
+      "RelR_27cc9614be16",
+      "RelR_f7ac40813f23"
+    ]
+  },
+  {
+    "canonical_rel_name": "is_prevalent_in_era",
+    "canonical_rel_desc": "Links a phenomenon, practice, or technology to an era in which it is widespread, characteristic, or defining.",
+    "rel_cls": [
+      "era_context_relation"
+    ],
+    "rel_cls_group": [
+      "TEMPORALITY"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_a3d3db70e408"
+    ]
+  },
+  {
+    "canonical_rel_name": "is_instance_of",
+    "canonical_rel_desc": "Indicates that the subject entity is a concrete instance or example of the object category or class.",
+    "rel_cls": [
+      "class_membership_relation"
+    ],
+    "rel_cls_group": [
+      "IDENTITY"
+    ],
+    "instance_count": 4,
+    "example_relation_ids": [
+      "RelR_986dc73784ad",
+      "RelR_076ee30fb36e",
+      "RelR_04f469abed46",
+      "RelR_7b4711d16d9e"
+    ]
+  },
+  {
+    "canonical_rel_name": "facilitates_contact_with",
+    "canonical_rel_desc": "Indicates that a communication platform or feature makes it easier for users to maintain contact and communication with specific social contacts or relationship groups.",
+    "rel_cls": [
+      "social_connection_support_relation"
+    ],
+    "rel_cls_group": [
+      "USAGE"
+    ],
+    "instance_count": 3,
+    "example_relation_ids": [
+      "RelR_949b9398552e",
+      "RelR_4a64cdbcc3d3",
+      "RelR_9c4ced04cc14"
+    ]
+  },
+  {
+    "canonical_rel_name": "is_feature_of",
+    "canonical_rel_desc": "Indicates that the subject is a feature or functionality provided by the platform or system represented by the object.",
+    "rel_cls": [
+      "platform_feature_relation"
+    ],
+    "rel_cls_group": [
+      "COMPOSITION"
+    ],
+    "instance_count": 3,
+    "example_relation_ids": [
+      "RelR_85f1d04edd70",
+      "RelR_a34a1f21c04a",
+      "RelR_c653a88a8cc3"
+    ]
+  },
+  {
+    "canonical_rel_name": "enables_sharing_of",
+    "canonical_rel_desc": "Indicates that a communication feature or tool allows users to share or transmit specific types of content.",
+    "rel_cls": [
+      "content_sharing_function_relation"
+    ],
+    "rel_cls_group": [
+      "USAGE"
+    ],
+    "instance_count": 3,
+    "example_relation_ids": [
+      "RelR_229d3e9df8b4",
+      "RelR_7399c4e7410c",
+      "RelR_4b6ebaad3668"
+    ]
+  },
+  {
+    "canonical_rel_name": "contributes_to",
+    "canonical_rel_desc": "Indicates that the subject factor or activity causally supports or helps bring about the development or strengthening of the object state or outcome.",
+    "rel_cls": [
+      "causal_influence_relation",
+      "psychosocial_effect_relation",
+      "social_connectedness_effect_relation"
+    ],
+    "rel_cls_group": [
+      "CAUSALITY"
+    ],
+    "instance_count": 7,
+    "example_relation_ids": [
+      "RelR_31e35112fe2d",
+      "RelR_32f223cd1950",
+      "RelR_2f949af163ee",
+      "RelR_63eab4c069c7",
+      "RelR_d1ebe34f104c",
+      "RelR_0b9320735fbc",
+      "RelR_81a8a453c8de"
+    ]
+  },
+  {
+    "canonical_rel_name": "shapes_dissemination_of",
+    "canonical_rel_desc": "Indicates that the subject changes or structures how the object is distributed, shared, or disseminated, without necessarily creating the object itself.",
+    "rel_cls": [
+      "information_dissemination_causal_relation"
+    ],
+    "rel_cls_group": [
+      "CAUSALITY"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_b9dedd3c0dcc"
+    ]
+  },
+  {
+    "canonical_rel_name": "facilitates_spread_of",
+    "canonical_rel_desc": "Indicates that the subject increases the speed, reach, or likelihood of the dissemination of the object information or content.",
+    "rel_cls": [
+      "information_dissemination_relation"
+    ],
+    "rel_cls_group": [
+      "CAUSALITY"
+    ],
+    "instance_count": 2,
+    "example_relation_ids": [
+      "RelR_8e910ed39551",
+      "RelR_c0069b4fdd7b"
+    ]
+  },
+  {
+    "canonical_rel_name": "disseminated_via_channel",
+    "canonical_rel_desc": "Indicates that an information item is disseminated through a specific communication channel or medium.",
+    "rel_cls": [
+      "information_dissemination_relation"
+    ],
+    "rel_cls_group": [
+      "INTERACTION"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_7751f75352bf"
+    ]
+  },
+  {
+    "canonical_rel_name": "reaches_audience",
+    "canonical_rel_desc": "Indicates that a communication channel or medium reaches or can access a particular audience.",
+    "rel_cls": [
+      "audience_reach_relation",
+      "information_dissemination_relation"
+    ],
+    "rel_cls_group": [
+      "INTERACTION"
+    ],
+    "instance_count": 2,
+    "example_relation_ids": [
+      "RelR_860e8152d480",
+      "RelR_1f9e18a195ff"
+    ]
+  },
+  {
+    "canonical_rel_name": "empowers",
+    "canonical_rel_desc": "Indicates that the subject provides the object with increased capability, agency, or power to act.",
+    "rel_cls": [
+      "causal_effect_relation"
+    ],
+    "rel_cls_group": [
+      "CAUSALITY"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_d43a7d28c02b"
+    ]
+  },
+  {
+    "canonical_rel_name": "engages_with_topic",
+    "canonical_rel_desc": "Indicates that individuals actively engage with, pay attention to, or interact around a particular topic or set of current events.",
+    "rel_cls": [
+      "information_engagement_relation"
+    ],
+    "rel_cls_group": [
+      "USAGE"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_fd7b2e916ebf"
+    ]
+  },
+  {
+    "canonical_rel_name": "causes",
+    "canonical_rel_desc": "Indicates that the subject is a causal factor that brings about or gives rise to the object.",
+    "rel_cls": [
+      "causal_effect_relation",
+      "information_consequence_relation"
+    ],
+    "rel_cls_group": [
+      "CAUSALITY"
+    ],
+    "instance_count": 6,
+    "example_relation_ids": [
+      "RelR_f50abc1014e0",
+      "RelR_6adffaeb29e4",
+      "RelR_c1a405c47e66",
+      "RelR_db7475ccdf07",
+      "RelR_81ca144d7a66",
+      "RelR_ad0abe33113e"
+    ]
+  },
+  {
+    "canonical_rel_name": "has_topic",
+    "canonical_rel_desc": "Indicates that a communicative act or discourse instance is thematically about or centered on a given topic or issue.",
+    "rel_cls": [
+      "topic_relation"
+    ],
+    "rel_cls_group": [
+      "ASSOCIATION"
+    ],
+    "instance_count": 2,
+    "example_relation_ids": [
+      "RelR_82c7d5d59223",
+      "RelR_69a1b99c3a9c"
+    ]
+  },
+  {
+    "canonical_rel_name": "enables_voice_amplification_of",
+    "canonical_rel_desc": "Indicates that the subject provides the affordances or functionality that allow the object's voices to be amplified or more widely expressed.",
+    "rel_cls": [
+      "communication_impact_relation"
+    ],
+    "rel_cls_group": [
+      "CAUSALITY"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_52fd6e3c271d"
+    ]
+  },
+  {
+    "canonical_rel_name": "increases_visibility_of",
+    "canonical_rel_desc": "Indicates that the subject raises the visibility, exposure, or public prominence of the object.",
+    "rel_cls": [
+      "communication_impact_relation"
+    ],
+    "rel_cls_group": [
+      "CAUSALITY"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_c5fc18e1c819"
+    ]
+  },
+  {
+    "canonical_rel_name": "shares_content",
+    "canonical_rel_desc": "Subject shares or communicates its own stories, experiences, or narratives as content on a communication channel or platform.",
+    "rel_cls": [
+      "content_sharing_relation"
+    ],
+    "rel_cls_group": [
+      "COMMUNICATION"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_0c5be970213a"
+    ]
+  },
+  {
+    "canonical_rel_name": "enables_social_justice_engagement",
+    "canonical_rel_desc": "Subject platform or medium enables or facilitates engagement with social justice issues, including raising awareness, advocacy, or efforts toward social or political change.",
+    "rel_cls": [
+      "platform_enabling_relation"
+    ],
+    "rel_cls_group": [
+      "CAUSALITY"
+    ],
+    "instance_count": 2,
+    "example_relation_ids": [
+      "RelR_20bab189c49a",
+      "RelR_018ffb7b76b4"
+    ]
+  },
+  {
+    "canonical_rel_name": "amplifies_voice_of",
+    "canonical_rel_desc": "Subject increases the audibility, visibility, or reach of the object's voice or perspectives in public discourse.",
+    "rel_cls": [
+      "voice_representation_relation"
+    ],
+    "rel_cls_group": [
+      "CAUSALITY"
+    ],
+    "instance_count": 2,
+    "example_relation_ids": [
+      "RelR_88a10b384da7",
+      "RelR_e0820b014179"
+    ]
+  },
+  {
+    "canonical_rel_name": "suppresses_voice_of",
+    "canonical_rel_desc": "Subject diminishes, silences, or neglects the object's voice or perspectives in public discourse.",
+    "rel_cls": [
+      "voice_representation_relation"
+    ],
+    "rel_cls_group": [
+      "CAUSALITY"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_82329e60d9e3"
+    ]
+  },
+  {
+    "canonical_rel_name": "promotes",
+    "canonical_rel_desc": "Subject actively supports, encourages, or increases the visibility, prevalence, or strength of the object concept, value, or activity.",
+    "rel_cls": [
+      "social_influence_relation"
+    ],
+    "rel_cls_group": [
+      "CAUSALITY"
+    ],
+    "instance_count": 3,
+    "example_relation_ids": [
+      "RelR_82435aac9b13",
+      "RelR_69ffb2e7c9e7",
+      "RelR_1e21b249706d"
+    ]
+  },
+  {
+    "canonical_rel_name": "leads_to_proliferation_of",
+    "canonical_rel_desc": "Indicates that the subject causally contributes to a significant increase in the amount or spread of the object (e.g., content types such as rumors, conspiracy theories, or propaganda).",
+    "rel_cls": [
+      "information_dissemination_causal_relation"
+    ],
+    "rel_cls_group": [
+      "CAUSALITY"
+    ],
+    "instance_count": 3,
+    "example_relation_ids": [
+      "RelR_393e02201d4a",
+      "RelR_0e777860f9ba",
+      "RelR_e17eec26ef9e"
+    ]
+  },
+  {
+    "canonical_rel_name": "is_characterized_by",
+    "canonical_rel_desc": "Indicates that the subject is defined, typified, or distinguished by the presence or use of the object (a feature, behavior, or property).",
+    "rel_cls": [
+      "characterization_relation"
+    ],
+    "rel_cls_group": [
+      "ATTRIBUTE"
+    ],
+    "instance_count": 4,
+    "example_relation_ids": [
+      "RelR_a1263ca9df79",
+      "RelR_af51a3b3b431",
+      "RelR_2818c515ddaf",
+      "RelR_6187da6b7e45"
+    ]
+  },
+  {
+    "canonical_rel_name": "prioritizes",
+    "canonical_rel_desc": "Indicates that the subject systematically gives precedence or greater importance to one aspect or dimension over another.",
+    "rel_cls": [
+      "prioritization_relation"
+    ],
+    "rel_cls_group": [
+      "AGENCY"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_85295e3229d9"
+    ]
+  },
+  {
+    "canonical_rel_name": "is_prioritized_over",
+    "canonical_rel_desc": "Indicates that the subject is given higher priority or preference compared to the object.",
+    "rel_cls": [
+      "prioritization_relation"
+    ],
+    "rel_cls_group": [
+      "AGENCY"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_9f312b398bd6"
+    ]
+  },
+  {
+    "canonical_rel_name": "provide_mechanism_for",
+    "canonical_rel_desc": "Indicates that a feature or element serves as a channel or mechanism through which a psychological or social process can occur or be fulfilled.",
+    "rel_cls": [
+      "social_feedback_mechanism_relation"
+    ],
+    "rel_cls_group": [
+      "CAUSALITY"
+    ],
+    "instance_count": 2,
+    "example_relation_ids": [
+      "RelR_e22631e82f8e",
+      "RelR_3920fd88518c"
+    ]
+  },
+  {
+    "canonical_rel_name": "is_used_for",
+    "canonical_rel_desc": "Indicates that a capability, resource, or power is used for achieving a particular goal, outcome, or purpose.",
+    "rel_cls": [
+      "functional_usage_relation"
+    ],
+    "rel_cls_group": [
+      "USAGE"
+    ],
+    "instance_count": 3,
+    "example_relation_ids": [
+      "RelR_a5708d5aeabc",
+      "RelR_e3c3818dfb4b",
+      "RelR_1498e56d7032"
+    ]
+  },
+  {
+    "canonical_rel_name": "has_property",
+    "canonical_rel_desc": "Indicates that an entity possesses a particular property, characteristic, or abstract quality.",
+    "rel_cls": [
+      "entity_attribute_relation"
+    ],
+    "rel_cls_group": [
+      "IDENTITY"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_b728acc6d9bf"
+    ]
+  }
+]

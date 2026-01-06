@@ -1,0 +1,163 @@
+{
+  "cluster_label": "28_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_a3d0f450a65a",
+      "relation_name": "obscured_by",
+      "rel_desc": "The origins of famous fairytales are obscured or hidden by mystery.",
+      "rel_hint_type": "descriptive",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "origins of famous fairytales",
+      "object_entity_name": "mystery",
+      "subject_class_label": "Folklore and Fairy-Tale Origins",
+      "subject_class_group": "Folklore and Fairy-Tale Traditions",
+      "object_class_label": "Narrative Mystery in Fairytales",
+      "object_class_group": "Fairytales: Genre, Narratives, and Motifs",
+      "qualifiers": {
+        "TemporalQualifier": "often",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": "often shrouded (frequent but not universal)",
+        "UncertaintyQualifier": null,
+        "CausalHint": "shrouded in",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.9,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_e7fc1a712630",
+      "relation_name": "characterized_by",
+      "rel_desc": "Timeless stories are characterized by magical elements.",
+      "rel_hint_type": "descriptive",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "timeless stories",
+      "object_entity_name": "magical elements",
+      "subject_class_label": "Fairy Tale Categories and Collections",
+      "subject_class_group": "Fairy Tales and Their Audiences",
+      "object_class_label": "Fairytale Motifs",
+      "object_class_group": "Fairytales: Genre, Narratives, and Motifs",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "within the narratives",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "with their",
+        "LogicalMarker": "with",
+        "OtherQualifier": "AestheticEffect: sense of wonder"
+      },
+      "confidence": 0.97,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_a3d0f450a65a\"],\n      \"canonical_rel_name\": \"is_obscured_by\",\n      \"canonical_rel_desc\": \"Indicates that the subject concept or phenomenon is hidden, obscured, or made unclear by the object factor.\",\n      \"justification\": \"The relation links the origins of famous fairytales to mystery, expressing that the origins are hidden or made unclear by mystery. A predicate-style canonical name 'is_obscured_by' captures this asymmetrical, descriptive relation cleanly.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_e7fc1a712630\"],\n      \"canonical_rel_name\": \"is_characterized_by\",\n      \"canonical_rel_desc\": \"Indicates that the subject is defined, distinguished, or described by the presence of the object property or feature.\",\n      \"justification\": \"The relation expresses that timeless stories are defined or distinguished by magical elements. 'Is_characterized_by' is a standard predicate for narrative or conceptual features and fits this descriptive usage.\",\n      \"remark\": null,\n      \"confidence\": 0.96\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_a3d0f450a65a\", \"RelR_e7fc1a712630\"],\n      \"rel_cls\": \"narrative_attribute_relation\",\n      \"justification\": \"Both relations connect narrative entities (origins of fairytales, timeless stories) to descriptive qualities or features (mystery, magical elements). They belong to the same family where an abstract narrative element bears or is affected by an attribute.\",\n      \"remark\": \"This class is intended for relations where stories, texts, or narrative concepts are linked to descriptive or defining qualities.\",\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_a3d0f450a65a\", \"RelR_e7fc1a712630\"],\n      \"rel_cls_group\": \"ATTRIBUTE\",\n      \"justification\": \"In both cases, the object expresses a quality or property of the subject (being obscured by mystery; being characterized by magical elements), fitting a broad attribute/description grouping rather than causality or composition.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_a3d0f450a65a"
+        ],
+        "canonical_rel_name": "is_obscured_by",
+        "canonical_rel_desc": "Indicates that the subject concept or phenomenon is hidden, obscured, or made unclear by the object factor.",
+        "justification": "The relation links the origins of famous fairytales to mystery, expressing that the origins are hidden or made unclear by mystery. A predicate-style canonical name 'is_obscured_by' captures this asymmetrical, descriptive relation cleanly.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_e7fc1a712630"
+        ],
+        "canonical_rel_name": "is_characterized_by",
+        "canonical_rel_desc": "Indicates that the subject is defined, distinguished, or described by the presence of the object property or feature.",
+        "justification": "The relation expresses that timeless stories are defined or distinguished by magical elements. 'Is_characterized_by' is a standard predicate for narrative or conceptual features and fits this descriptive usage.",
+        "remark": null,
+        "confidence": 0.96
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_a3d0f450a65a",
+          "RelR_e7fc1a712630"
+        ],
+        "rel_cls": "narrative_attribute_relation",
+        "justification": "Both relations connect narrative entities (origins of fairytales, timeless stories) to descriptive qualities or features (mystery, magical elements). They belong to the same family where an abstract narrative element bears or is affected by an attribute.",
+        "remark": "This class is intended for relations where stories, texts, or narrative concepts are linked to descriptive or defining qualities.",
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_a3d0f450a65a",
+          "RelR_e7fc1a712630"
+        ],
+        "rel_cls_group": "ATTRIBUTE",
+        "justification": "In both cases, the object expresses a quality or property of the subject (being obscured by mystery; being characterized by magical elements), fitting a broad attribute/description grouping rather than causality or composition.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_a3d0f450a65a"
+      ],
+      "canonical_rel_name": "is_obscured_by",
+      "canonical_rel_desc": "Indicates that the subject concept or phenomenon is hidden, obscured, or made unclear by the object factor.",
+      "justification": "The relation links the origins of famous fairytales to mystery, expressing that the origins are hidden or made unclear by mystery. A predicate-style canonical name 'is_obscured_by' captures this asymmetrical, descriptive relation cleanly.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_e7fc1a712630"
+      ],
+      "canonical_rel_name": "is_characterized_by",
+      "canonical_rel_desc": "Indicates that the subject is defined, distinguished, or described by the presence of the object property or feature.",
+      "justification": "The relation expresses that timeless stories are defined or distinguished by magical elements. 'Is_characterized_by' is a standard predicate for narrative or conceptual features and fits this descriptive usage.",
+      "remark": null,
+      "confidence": 0.96
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_a3d0f450a65a",
+        "RelR_e7fc1a712630"
+      ],
+      "rel_cls": "narrative_attribute_relation",
+      "justification": "Both relations connect narrative entities (origins of fairytales, timeless stories) to descriptive qualities or features (mystery, magical elements). They belong to the same family where an abstract narrative element bears or is affected by an attribute.",
+      "remark": "This class is intended for relations where stories, texts, or narrative concepts are linked to descriptive or defining qualities.",
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_a3d0f450a65a",
+        "RelR_e7fc1a712630"
+      ],
+      "rel_cls_group": "ATTRIBUTE",
+      "justification": "In both cases, the object expresses a quality or property of the subject (being obscured by mystery; being characterized by magical elements), fitting a broad attribute/description grouping rather than causality or composition.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  ],
+  "timestamp": "2026-01-06T14:05:29Z"
+}

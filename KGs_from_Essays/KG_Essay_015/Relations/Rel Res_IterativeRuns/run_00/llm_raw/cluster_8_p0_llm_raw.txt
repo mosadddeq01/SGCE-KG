@@ -1,0 +1,33 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_37f5c3e61c72", "RelR_3ca81eea4690"],
+      "canonical_rel_name": "serves_as_burial_place_for",
+      "canonical_rel_desc": "Indicates that a tomb or burial structure is intended to serve as the burial place for a specific person or social group, typically in the afterlife context.",
+      "justification": "Both relations describe the same core predicate: ancient Egyptian tombs are constructed with the purpose of housing particular persons (pharaohs or elite) after death. The direction (tomb → person/group) and semantics (intended burial place/purpose) are identical, so they should share a single canonical predicate capturing that these structures function as the burial place for the referenced individuals.",
+      "remark": "Qualifiers like 'after death' and 'in the afterlife' are instance-level temporal/intended-realm details and should remain as qualifiers, not be folded into the canonical predicate.",
+      "confidence": 0.93
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": ["RelR_37f5c3e61c72", "RelR_3ca81eea4690"],
+      "rel_cls": "burial_purpose_relation",
+      "justification": "These relations connect tomb structures to the persons or social groups they are meant to house in death, reflecting the intended funerary/burial purpose of the structures. Grouping them under a more specific class 'burial_purpose_relation' (rather than a generic 'purpose_relation') better captures the consistent funerary semantics across such links.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": ["RelR_37f5c3e61c72", "RelR_3ca81eea4690"],
+      "rel_cls_group": "USAGE",
+      "justification": "The primary semantic dimension is that tombs are used/intended to be used as burial places for specific individuals or groups, which is a purpose/usage relationship rather than composition, identity, or causality. Therefore, these relations best fit under a broad USAGE group.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  }
+]

@@ -1,0 +1,99 @@
+{
+  "cluster_label": "6_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_3dee0e53fc5e",
+      "relation_name": "exhibits",
+      "rel_desc": "Urban legends are described as continuing to endure over time.",
+      "rel_hint_type": "property",
+      "canonical_rel_name": "has_property",
+      "canonical_rel_desc": "Indicates that a concept or entity possesses a specific property or characteristic represented as a separate node.",
+      "rel_cls": "attribute_relation",
+      "rel_cls_group": "ATTRIBUTE",
+      "subject_entity_name": "urban legends",
+      "object_entity_name": "endurance of urban legends",
+      "subject_class_label": "Contemporary Folklore",
+      "subject_class_group": "Urban Legends and Modern Folklore",
+      "object_class_label": "Urban Legend Dynamics",
+      "object_class_group": "Urban Legend Contexts (Social, Spatial, Temporal)",
+      "qualifiers": {
+        "TemporalQualifier": "continue to endure",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "why",
+        "LogicalMarker": "why",
+        "OtherQualifier": null
+      },
+      "confidence": 0.84,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_b7b8aa3815b6",
+      "relation_name": "has_attribute",
+      "rel_desc": "The escaped criminal is characterized by having a hook for a hand.",
+      "rel_hint_type": "attribution",
+      "canonical_rel_name": "has_physical_attribute",
+      "canonical_rel_desc": "Indicates that the subject entity possesses the specified physical feature or bodily attribute represented by the object.",
+      "rel_cls": "attribute_relation",
+      "rel_cls_group": "ATTRIBUTE",
+      "subject_entity_name": "escaped criminal",
+      "object_entity_name": "hook for a hand",
+      "subject_class_label": "Hook Man Antagonist",
+      "subject_class_group": "UrbanLegend: Hook Man",
+      "object_class_label": "Hook Man Hook Weapon",
+      "object_class_group": "UrbanLegend: Hook Man",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "with",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.99,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_rel_schema\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_3dee0e53fc5e\",\n        \"RelR_b7b8aa3815b6\"\n      ],\n      \"canonical_rel_name\": \"has_attribute\",\n      \"canonical_rel_desc\": \"Indicates that the subject entity is characterized by or possesses the attribute or characteristic represented by the object node.\",\n      \"rel_cls\": \"attribute_relation\",\n      \"rel_cls_group\": \"ATTRIBUTE\",\n      \"justification\": \"Both relations express that the subject possesses or is characterized by some attribute (endurance over time; a hook for a hand). Normalizing to a single, general canonical predicate 'has_attribute' avoids unnecessary splitting into generic vs physical variants while preserving the shared attribute_relation / ATTRIBUTE semantics.\",\n      \"remark\": null,\n      \"confidence\": 0.93\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_rel_schema",
+      "args": {
+        "relation_ids": [
+          "RelR_3dee0e53fc5e",
+          "RelR_b7b8aa3815b6"
+        ],
+        "canonical_rel_name": "has_attribute",
+        "canonical_rel_desc": "Indicates that the subject entity is characterized by or possesses the attribute or characteristic represented by the object node.",
+        "rel_cls": "attribute_relation",
+        "rel_cls_group": "ATTRIBUTE",
+        "justification": "Both relations express that the subject possesses or is characterized by some attribute (endurance over time; a hook for a hand). Normalizing to a single, general canonical predicate 'has_attribute' avoids unnecessary splitting into generic vs physical variants while preserving the shared attribute_relation / ATTRIBUTE semantics.",
+        "remark": null,
+        "confidence": 0.93
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_rel_schema",
+      "relation_ids": [
+        "RelR_3dee0e53fc5e",
+        "RelR_b7b8aa3815b6"
+      ],
+      "canonical_rel_name": "has_attribute",
+      "canonical_rel_desc": "Indicates that the subject entity is characterized by or possesses the attribute or characteristic represented by the object node.",
+      "rel_cls": "attribute_relation",
+      "rel_cls_group": "ATTRIBUTE",
+      "new_relation_name": null,
+      "original_relation_name": null,
+      "justification": "Both relations express that the subject possesses or is characterized by some attribute (endurance over time; a hook for a hand). Normalizing to a single, general canonical predicate 'has_attribute' avoids unnecessary splitting into generic vs physical variants while preserving the shared attribute_relation / ATTRIBUTE semantics.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  ],
+  "timestamp": "2026-01-06T08:42:12Z"
+}

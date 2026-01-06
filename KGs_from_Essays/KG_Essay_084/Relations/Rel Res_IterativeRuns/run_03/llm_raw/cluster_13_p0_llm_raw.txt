@@ -1,0 +1,18 @@
+[
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": [
+        "RelR_83b96377bd47",
+        "RelR_7efd704d187c"
+      ],
+      "canonical_rel_name": "uses",
+      "canonical_rel_desc": "Subject uses or employs the object as a method, tool, technique, principle, or resource to perform tasks or achieve goals.",
+      "rel_cls": "method_tool_usage_relation",
+      "rel_cls_group": "USAGE",
+      "justification": "Both relations express the same generic usage predicate; the previous description was narrowly framed around forensic work. Updating the canonical_rel_desc to a domain-agnostic formulation improves schema reusability across the KG while keeping the existing canonical_rel_name, rel_cls, and rel_cls_group consistent.",
+      "remark": null,
+      "confidence": 0.96
+    }
+  }
+]

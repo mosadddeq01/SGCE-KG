@@ -1,0 +1,18 @@
+[
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": [
+        "RelR_d43a7d28c02b",
+        "RelR_0feef890977f"
+      ],
+      "canonical_rel_name": "enables",
+      "canonical_rel_desc": "Subject makes possible or substantially facilitates the existence, occurrence, use, or spread of the object (e.g., a capability, behavior, content, or impact).",
+      "rel_cls": "enablement_relation",
+      "rel_cls_group": "CAUSALITY",
+      "justification": "These two relations are semantically the same type of enablement as the others in the chunk: the subject provides the capacity or conditions that allow the object (empowerment/effects) to occur. Their current rel_cls 'empowerment_enablement_relation' is an unnecessary variant of 'enablement_relation', and their canonical_rel_desc is a slightly different but equivalent wording. Normalizing rel_cls to 'enablement_relation' and canonical_rel_desc to the shared formulation used by the other enablement edges improves schema consistency without changing semantics.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  }
+]

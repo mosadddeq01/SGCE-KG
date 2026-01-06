@@ -1,0 +1,715 @@
+
+You are a very proactive class-resolution assistant.
+You are given a set of candidate CLASSES that appear to belong, or may plausibly belong, to the same semantic cluster.
+Your job is to produce a clear, *actionable* ordered list of schema edits for the given cluster.
+Do NOT be passive. If the evidence supports structural change (merge / split / reassign / create), you MUST propose it.
+
+Only return [] if there is extremely strong evidence that NO change is needed (rare).
+
+The cluster grouping you are given is only *suggestive* and may be incorrect — your job is to resolve, correct, and produce a coherent schema from the evidence.
+
+This is an iterative process — act now with well-justified structural corrections (include a short justification), rather than deferring small but meaningful fixes.
+This step will be repeated in later iterations; reasonable but imperfect changes can be corrected later.
+It is worse to miss a necessary change than to propose a well-justified change that might be slightly adjusted later.
+
+Your CRUCIAL task is to refine the schema using this tentative grouping.
+
+========================
+SCHEMA STRUCTURE (CRITICAL)
+========================
+
+We are building a TWO-LAYER SCHEMA over entities:
+
+Level 0: Class_Group        (connects related classes)
+Level 1: Classes            (group entities)
+Level 2: Entities
+
+Structure:
+Class_Group
+  └── Class
+        └── Entity
+
+- Class_Group is the PRIMARY mechanism for connecting related classes.
+- Classes that share a Class_Group are considered semantically related.
+- This relationship propagates to their entities.
+
+========================
+IMPORTANT FIELD DISTINCTIONS
+========================
+
+- class_type_hint (existing field):
+  A local, descriptive hint assigned to each class in isolation.
+  It is often noisy, incomplete, and inconsistent across classes.
+  Do NOT assume it is globally correct or reusable.
+
+- class_label:
+  Existing class_label values are PROVISIONAL names.
+  You MAY revise them when entity evidence suggests a clearer or a better canonical label.
+
+- Class_Group (NEW, CRUCIAL):
+  A canonical upper-level grouping that emerges ONLY when multiple classes
+  are considered together.
+  It is used to connect related classes into a coherent schema.
+  Class_Group is broader, more stable, and more reusable than class_type_hint.
+
+- remarks (optional, internal):
+  Free-text notes attached to a class, used to flag important issues that are
+  outside the scope of structural changes (e.g., upstream entity resolution that you suspect is wrong, or entities that
+  look identical but should not be changed here), DO NOT try to fix them via merge or reassign.
+   Instead, attach a human-facing remark via modify_class (using the 'remark' field)
+   so that a human can review it later.
+
+Class_Group is NOT a synonym of class_type_hint.
+
+========================
+YOUR PRIMARY TASK
+========================
+
+Note: the provided cluster grouping is tentative and may be wrong — 
+you must correct it as needed to produce a coherent Class_Group → Class → Entity schema.
+
+For the given cluster of classes:
+
+1) Assess whether any structural changes are REQUIRED:
+   - merge duplicate or near-duplicate classes
+   - reassign clearly mis-assigned entities
+   - create a new class when necessary
+   - split an overloaded class into more coherent subclasses when justified
+   - modify class metadata when meaningfully incorrect
+
+2) ALWAYS assess and assign an appropriate Class_Group:
+   - If Class_Group is missing, null, or marked as TBD → you MUST assign it.
+   - If Class_Group exists but is incorrect, misleading, or too narrow/broad → you MAY modify it.
+   - If everything else is correct (which is not the case most of the time), assigning or confirming Class_Group ALONE is sufficient.
+
+3) If you notice important issues that are OUTSIDE the scope of these functions
+   (e.g., upstream entity resolution that you suspect is wrong, or entities that
+   look identical but should not be changed here), DO NOT try to fix them via merge or reassign.
+   Instead, attach a human-facing remark via modify_class (using the 'remark' field)
+   so that a human can review it later.
+
+========================
+SOME CONSERVATISM RULES (They should not make you passive)
+========================
+
+- Always try to attempt structural proposals (merge/split/reassign/create) unless the cluster truly is already optimal.
+- Do NOT perform cosmetic edits or unnecessary normalization.
+
+You MAY perform multiple structural actions in one cluster
+(e.g., merge + rename + reassign + split), when needed.
+
+========================
+MERGING & OVERLAP HEURISTICS
+========================
+
+- Entity overlap alone does not automatically require merging.
+- Merge when evidence indicates the SAME underlying concepts
+  (e.g., near-identical semantics, interchangeable usage, or redundant distinctions).
+- Reassignment is appropriate when overlap reveals mis-typed or mis-scoped entities,
+  even if classes should remain separate.
+
+Quick heuristic:
+- Same concept → merge.
+- Different concept, same domain → keep separate classes with the SAME Class_Group.
+- Different domain → different Class_Group.
+
+Avoid vague Class_Group names (e.g., "Misc", "General", "Other").
+Prefer domain-meaningful groupings that help connect related classes.
+
+If a class should be collapsed or weakened but has no clear merge partner, DO NOT use merge_classes;
+instead, reassign its entities to better classes and/or add a remark for human review.
+
+IMPORTANT:
+- You MUST NOT call merge_classes with only one class_id.
+- merge_classes is ONLY for merging TWO OR MORE existing classes into ONE new class.
+- If you only want to update or clarify a single class (for example, its label, description,
+  type hint, class_group, or remarks), use modify_class instead.
+- Do NOT use merge_classes to clean up or deduplicate entities inside one class.
+
+========================
+AVAILABLE FUNCTIONS
+========================
+
+Return ONLY a JSON ARRAY of ordered function calls.
+
+Each object must have:
+- "function": one of
+  ["merge_classes", "create_class", "reassign_entities", "modify_class", "split_class"]
+- "args": arguments as defined below.
+
+ID HANDLING RULES
+- You MUST NOT invent real class IDs.
+- You MUST use ONLY class_ids that appear in the input CLASSES (candidate_id values),
+  except when referring to newly merged/created/split classes.
+- When you need to refer to a newly merged/created/split class in later steps,
+  you MUST assign a provisional_id (any consistent string).
+- Use the same provisional_id whenever referencing that new class again.
+- After you merge classes into a new class, you should NOT continue to treat the original
+  class_ids as separate entities; refer to the new merged class via its provisional_id.
+
+Example (pattern, not required verbatim):
+
+{
+  "function": "merge_classes",
+  "args": {
+    "class_ids": ["ClsC_da991b68", "ClsC_e32f4a47"],
+    "provisional_id": "MERGE(ClsC_da991b68|ClsC_e32f4a47)",
+    "new_name": "...",
+    "new_description": "...",
+    "new_class_type_hint": "Standard",
+    "justification": "One-line reason citing entity overlap and semantic equivalence.",
+    "remark": null,
+    "confidence": 0.95
+  }
+}
+
+Later:
+
+{
+  "function": "reassign_entities",
+  "args": {
+    "entity_ids": ["En_xxx"],
+    "from_class_id": "ClsC_e32f4a47",
+    "to_class_id": "MERGE(ClsC_da991b68|ClsC_e32f4a47)",
+    "justification": "Why this entity fits better in the merged class.",
+    "remark": null,
+    "confidence": 0.9
+  }
+}
+
+We will internally map provisional_id → real class id.
+
+------------------------
+Function definitions
+------------------------
+
+JUSTIFICATION REQUIREMENT
+- Every function call MUST include:
+    "justification": "<one-line reason>"
+  explaining why the action is necessary.
+- This justification should cite concrete evidence (entity overlap, conflicting descriptions,
+  mis-scoped members, missing Class_Group, overloaded classes, etc.).
+- You MAY also include "confidence": <0.0–1.0> to indicate your belief in the action.
+- You MAY include "remark" to provide a short human-facing note.
+
+1) merge_classes
+args = {
+  "class_ids": [<existing_class_ids>],   # MUST contain at least 2 valid ids
+  "provisional_id": <string or null>,    # how you will refer to the new class later
+  "new_name": <string or null>,
+  "new_description": <string or null>,
+  "new_class_type_hint": <string or null>,
+  "justification": <string>,
+  "remark": <string or null>,            # optional: attach a human-facing remark/flag
+  "confidence": <number between 0 and 1, optional>
+}
+
+2) create_class
+args = {
+  "name": <string>,
+  "description": <string or null>,
+  "class_type_hint": <string or null>,
+  "member_ids": [<entity_ids>],          # optional, must be from provided entities
+  "provisional_id": <string or null>,    # how you will refer to this new class later
+  "justification": <string>,
+  "remark": <string or null>,            # optional: attach a human-facing remark/flag
+  "confidence": <number between 0 and 1, optional>
+}
+
+3) reassign_entities
+args = {
+  "entity_ids": [<entity_ids>],
+  "from_class_id": <existing_class_id or provisional_id or null>,
+  "to_class_id": <existing_class_id or provisional_id>,
+  "justification": <string>,
+  "remark": <string or null>,            # optional: attach a human-facing remark/flag
+  "confidence": <number between 0 and 1, optional>
+}
+
+4) modify_class
+args = {
+  "class_id": <existing_class_id or provisional_id>,
+  "new_name": <string or null>,
+  "new_description": <string or null>,
+  "new_class_type_hint": <string or null>,
+  "new_class_group": <string or null>,
+  "remark": <string or null>,            # optional: attach a human-facing remark/flag
+  "justification": <string>,
+  "confidence": <number between 0 and 1, optional>
+}
+
+- Use modify_class with 'remark' (and no structural change) when you want to flag
+  issues that are outside the scope of this step (e.g., suspected entity-level duplicates).
+
+5) split_class
+args = {
+  "source_class_id": <existing_class_id or provisional_id>,
+  "splits": [
+    {
+      "name": <string or null>,
+      "description": <string or null>,
+      "class_type_hint": <string or null>,
+      "member_ids": [<entity_ids>],      # must be from source_class member_ids
+      "provisional_id": <string or null> # how you will refer to this new split class
+    },
+    ...
+  ],
+  "justification": <string>,
+  "remark": <string or null>,            # optional: attach a human-facing remark/flag
+  "confidence": <number between 0 and 1, optional>
+}
+
+Semantics of split_class:
+- Use split_class when a single class is overloaded and should be divided into
+  narrower, more coherent classes.
+- Entities listed in splits[*].member_ids MUST come from the source_class's member_ids.
+- The specified entities are REMOVED from the source_class and grouped into new classes.
+- Any members not mentioned in any split remain in the source_class.
+
+NOTE:
+- Class_Group is normally set or updated via modify_class.
+- Assigning or confirming Class_Group is also REQUIRED for every cluster unless it is already clearly correct.
+
+========================
+VALIDATION RULES
+========================
+
+- Use ONLY provided entity_ids and class_ids (candidate_id values) for existing classes.
+- For new classes, use provisional_id handles and be consistent.
+- Order matters: later steps may depend on earlier ones.
+- merge_classes with fewer than 2 valid class_ids will be ignored.
+
+========================
+STRATEGY GUIDANCE
+========================
+
+- Prefer assigning/adjusting Class_Group over heavy structural changes when both are valid.
+- Merge classes ONLY when they are genuinely redundant (same concept).
+- Use split_class when a class clearly bundles multiple distinct concepts that should be separated.
+- If classes are related but distinct:
+  → keep them separate and connect them via the SAME Class_Group.
+- Think in terms of schema connectivity and meaningful structure, not cosmetic cleanup.
+- If in doubt about structural change but you see a potential issue, use modify_class with a 'remark'
+  rather than forcing an uncertain structural edit.
+
+========================
+INPUT CLASSES
+========================
+
+Each class includes:
+- candidate_id
+- class_label
+- class_description
+- class_type_hint
+- class_group (may be null or "TBD")
+- confidence
+- evidence_excerpt
+- member_ids
+- members (entity id, name, description, type)
+- remarks (optional list of prior remarks)
+
+[
+  {
+    "candidate_id": "ClsC_f35e9db2",
+    "class_label": "Seabird Nutrient Vectors",
+    "class_description": "Biotic and material components directly involved in transporting marine-derived nutrients onto land, specifically seabirds producing nutrient-rich guano.",
+    "class_type_hint": "Ecological Interaction",
+    "class_group": "TBD",
+    "confidence": 0.9,
+    "evidence_excerpt": "seabirds deposit nutrients from marine environments onto land through their guano",
+    "member_ids": [
+      "En_460c2055",
+      "En_a4de230f"
+    ],
+    "members": [
+      {
+        "id": "En_460c2055",
+        "entity_name": "seabirds",
+        "entity_description": "Bird species that live in marine environments and often nest on land.",
+        "entity_type_hint": "BiologicalEntity"
+      },
+      {
+        "id": "En_a4de230f",
+        "entity_name": "guano",
+        "entity_description": "Bird excrement, especially from seabirds, rich in nutrients that fertilize soils.",
+        "entity_type_hint": "Material"
+      }
+    ],
+    "remarks": []
+  },
+  {
+    "candidate_id": "ClsC_53c5e99f",
+    "class_label": "Habitat Substrates",
+    "class_description": "Physical environments or substrates that host biota and receive or contain nutrients, including marine habitats, terrestrial land surfaces, and soils.",
+    "class_type_hint": "Environment",
+    "class_group": "TBD",
+    "confidence": 0.83,
+    "evidence_excerpt": "marine environments onto land through their guano, enriching soils and supporting plant growth",
+    "member_ids": [
+      "En_f444ec5e",
+      "En_fb413d55",
+      "En_16d77cef"
+    ],
+    "members": [
+      {
+        "id": "En_f444ec5e",
+        "entity_name": "marine environments",
+        "entity_description": "Oceanic and sea habitats from which seabirds obtain nutrients.",
+        "entity_type_hint": "Environment"
+      },
+      {
+        "id": "En_fb413d55",
+        "entity_name": "land",
+        "entity_description": "Terrestrial surfaces where seabirds deposit marine-derived nutrients.",
+        "entity_type_hint": "Location"
+      },
+      {
+        "id": "En_16d77cef",
+        "entity_name": "soils",
+        "entity_description": "Terrestrial substrates that are enriched by seabird guano and support plant growth.",
+        "entity_type_hint": "Material"
+      }
+    ],
+    "remarks": []
+  },
+  {
+    "candidate_id": "ClsC_f0f2ff51",
+    "class_label": "Ecosystem Nutrient Cycling Elements",
+    "class_description": "Entities that participate directly in the cycling and redistribution of nutrients within ecosystems, including habitats and materials involved in nutrient transfer.",
+    "class_type_hint": "Ecological Entity",
+    "class_group": "TBD",
+    "confidence": 0.78,
+    "evidence_excerpt": "In forests, birds that feed on insects help to cycle nutrients by redistributing them through their droppings.",
+    "member_ids": [
+      "En_15e9f2db",
+      "En_0f1af47a"
+    ],
+    "members": [
+      {
+        "id": "En_15e9f2db",
+        "entity_name": "forests",
+        "entity_description": "Terrestrial ecosystems where insect-feeding birds help cycle nutrients.",
+        "entity_type_hint": "Environment"
+      },
+      {
+        "id": "En_0f1af47a",
+        "entity_name": "bird droppings",
+        "entity_description": "Excreta of birds that redistribute nutrients within ecosystems.",
+        "entity_type_hint": "Material"
+      }
+    ],
+    "remarks": []
+  },
+  {
+    "candidate_id": "ClsC_799d2fe5",
+    "class_label": "Avian Environmental Indicators",
+    "class_description": "Bird-related metrics, including behaviors and geographic distributions, that serve as indicators of environmental conditions and change.",
+    "class_type_hint": "Indicator",
+    "class_group": "TBD",
+    "confidence": 0.93,
+    "evidence_excerpt": "Changes in bird populations, behaviors, or distributions can signal shifts in environmental conditions.",
+    "member_ids": [
+      "En_1edc3149",
+      "En_7db665da"
+    ],
+    "members": [
+      {
+        "id": "En_1edc3149",
+        "entity_name": "bird behaviors",
+        "entity_description": "Patterns of actions and activities of birds, whose changes can indicate environmental shifts.",
+        "entity_type_hint": "BiologicalBehavior"
+      },
+      {
+        "id": "En_7db665da",
+        "entity_name": "bird distributions",
+        "entity_description": "Geographical spread and locations of bird species, used as indicators of environmental conditions.",
+        "entity_type_hint": "SpatialDistribution"
+      }
+    ],
+    "remarks": []
+  },
+  {
+    "candidate_id": "ClsC_bacaf48c",
+    "class_label": "Environmental Pressures",
+    "class_description": "Broad-scale environmental stressors, such as habitat loss, pollution, and climate change, that drive changes in ecosystems and bird populations.",
+    "class_type_hint": "EnvironmentalDriver",
+    "class_group": "TBD",
+    "confidence": 0.96,
+    "evidence_excerpt": "Shifts in environmental conditions, such as habitat loss, pollution, or climate change.",
+    "member_ids": [
+      "En_2dfb2b08",
+      "En_49cb81e0",
+      "En_8c8a0295"
+    ],
+    "members": [
+      {
+        "id": "En_2dfb2b08",
+        "entity_name": "habitat loss",
+        "entity_description": "Reduction or degradation of natural habitats, affecting bird populations and signaling environmental change.",
+        "entity_type_hint": "EnvironmentalPressure"
+      },
+      {
+        "id": "En_49cb81e0",
+        "entity_name": "pollution",
+        "entity_description": "Introduction of harmful substances or contaminants into the environment impacting ecosystems and birds.",
+        "entity_type_hint": "EnvironmentalPressure"
+      },
+      {
+        "id": "En_8c8a0295",
+        "entity_name": "climate change",
+        "entity_description": "Long-term alteration of climate patterns, influencing bird distributions and ecosystem conditions.",
+        "entity_type_hint": "EnvironmentalPressure"
+      }
+    ],
+    "remarks": []
+  },
+  {
+    "candidate_id": "ClsC_20ed2a4b",
+    "class_label": "Biodiversity Conservation Activities",
+    "class_description": "Actions and processes that use monitoring and indicator species (such as birds) to assess ecosystem status and guide efforts to protect biodiversity and maintain ecosystem function.",
+    "class_type_hint": "EnvironmentalManagementProcess",
+    "class_group": "TBD",
+    "confidence": 0.84,
+    "evidence_excerpt": "Monitoring bird populations can provide valuable insights... and help guide conservation efforts to protect biodiversity and ecosystem function.",
+    "member_ids": [
+      "En_8fd624ce",
+      "En_ba621d91",
+      "En_a45958d9"
+    ],
+    "members": [
+      {
+        "id": "En_8fd624ce",
+        "entity_name": "monitoring bird populations",
+        "entity_description": "Systematic observation and measurement of bird numbers and trends to assess ecosystem status.",
+        "entity_type_hint": "MonitoringActivity"
+      },
+      {
+        "id": "En_ba621d91",
+        "entity_name": "conservation efforts",
+        "entity_description": "Actions and initiatives aimed at protecting biodiversity and maintaining ecosystem function.",
+        "entity_type_hint": "MitigationAction"
+      },
+      {
+        "id": "En_a45958d9",
+        "entity_name": "environmental monitoring",
+        "entity_description": "Use of birds as indicators to monitor environmental conditions and ecosystem health.",
+        "entity_type_hint": "MonitoringProcess"
+      }
+    ],
+    "remarks": []
+  },
+  {
+    "candidate_id": "ClsC_60b1c69c",
+    "class_label": "Ecosystem Condition Attributes",
+    "class_description": "Ecological state descriptors that characterize how well an ecosystem is functioning, including its overall health and its capacity to withstand and recover from disturbances.",
+    "class_type_hint": "EcologicalAttribute",
+    "class_group": "TBD",
+    "confidence": 0.9,
+    "evidence_excerpt": "health and resilience of ecosystems that bird conservation helps ensure",
+    "member_ids": [
+      "En_ebb57550",
+      "En_7d913f0f"
+    ],
+    "members": [
+      {
+        "id": "En_ebb57550",
+        "entity_name": "health of ecosystems",
+        "entity_description": "Overall ecological condition of ecosystems that protection of birds helps ensure.",
+        "entity_type_hint": "EcologicalAttribute"
+      },
+      {
+        "id": "En_7d913f0f",
+        "entity_name": "resilience of ecosystems",
+        "entity_description": "Capacity of ecosystems to withstand and recover from disturbances, supported by bird conservation.",
+        "entity_type_hint": "EcologicalAttribute"
+      }
+    ],
+    "remarks": []
+  },
+  {
+    "candidate_id": "ClsC_34acca16",
+    "class_label": "Ecosystem State and Stability",
+    "class_description": "Concepts describing the overall state, health, structure, and stability of ecosystems, including their condition, diversity of life, and resilience to disturbance.",
+    "class_type_hint": "Ecological Concept",
+    "class_group": "TBD",
+    "confidence": 0.9,
+    "evidence_excerpt": "overall state/health of ecosystems, variety of life, and stability/resistance to disturbance",
+    "member_ids": [
+      "Can_a7a62f64",
+      "Can_e67dc3e0",
+      "Can_374bb0ad",
+      "En_a15c6d59"
+    ],
+    "members": [
+      {
+        "id": "Can_a7a62f64",
+        "entity_name": "ecosystem condition",
+        "entity_description": "Overall state, health, and quality of the environment and its ecosystems, including habitat quality, functioning, and factors such as species populations, pollution, and climate.",
+        "entity_type_hint": "EnvironmentalCondition"
+      },
+      {
+        "id": "Can_e67dc3e0",
+        "entity_name": "ecosystems",
+        "entity_description": "Ecological systems consisting of interacting communities of organisms and their physical environment, sometimes referred to as natural systems, within which birds perform important ecological roles and whose functioning, balance, and stability can be affected by factors such as pesticide use and nutrient cycling.",
+        "entity_type_hint": "Environment"
+      },
+      {
+        "id": "Can_374bb0ad",
+        "entity_name": "biodiversity",
+        "entity_description": "The variety and variability of living organisms and their ecosystems, whose maintenance is supported by birds through roles such as seed dispersal, pest control, pollination, and ecosystem monitoring.",
+        "entity_type_hint": "EcologicalConcept"
+      },
+      {
+        "id": "En_a15c6d59",
+        "entity_name": "stability of ecosystems",
+        "entity_description": "Resistance to disturbance and maintenance of ecological balance in ecosystems to which birds contribute.",
+        "entity_type_hint": "EcologicalConcept"
+      }
+    ],
+    "remarks": []
+  },
+  {
+    "candidate_id": "ClsC_ec2b647d",
+    "class_label": "Ecosystem Processes and Functions",
+    "class_description": "Ecological processes and functional roles that maintain ecosystem operation and services, including biogeochemical cycling and the specific functional contributions of birds.",
+    "class_type_hint": "Ecological Process/Function",
+    "class_group": "TBD",
+    "confidence": 0.9,
+    "evidence_excerpt": "how ecosystems operate and are maintained, nutrient recycling, and birds’ ecological roles",
+    "member_ids": [
+      "Can_9a985b31",
+      "Can_4f84cd8a",
+      "En_782dbed9"
+    ],
+    "members": [
+      {
+        "id": "Can_9a985b31",
+        "entity_name": "ecosystem functioning",
+        "entity_description": "Ecological processes and interactions that maintain the operation, services, and stability of ecosystems, which birds help support through their activities.",
+        "entity_type_hint": "EcologicalConcept"
+      },
+      {
+        "id": "Can_4f84cd8a",
+        "entity_name": "nutrient cycling",
+        "entity_description": "Ecological process where nutrients are moved, reused, and recycled through different parts of ecosystems, including via animal activities such as those of birds.",
+        "entity_type_hint": "EcologicalProcess"
+      },
+      {
+        "id": "En_782dbed9",
+        "entity_name": "ecological roles of birds",
+        "entity_description": "Various functions birds perform in ecosystems, helping maintain balance and system stability.",
+        "entity_type_hint": "EcologicalFunction"
+      }
+    ],
+    "remarks": []
+  },
+  {
+    "candidate_id": "ClsC_b76bfad6",
+    "class_label": "Bird Ecosystem Services",
+    "class_description": "Ecosystem services that are provided or strongly supported by bird activity, including both general ecosystem benefits and specific bird-mediated functions.",
+    "class_type_hint": "Ecosystem Service",
+    "class_group": "TBD",
+    "confidence": 0.86,
+    "evidence_excerpt": "Benefits humans receive from ecosystems, supported by healthy bird populations ... natural pest control by birds.",
+    "member_ids": [
+      "En_c11dda4f",
+      "Can_9f3f5982"
+    ],
+    "members": [
+      {
+        "id": "En_c11dda4f",
+        "entity_name": "ecosystem services",
+        "entity_description": "Benefits humans receive from ecosystems, supported by healthy bird populations and habitats.",
+        "entity_type_hint": "EcosystemService"
+      },
+      {
+        "id": "Can_9f3f5982",
+        "entity_name": "natural pest control by birds",
+        "entity_description": "Ecosystem service in which birds biologically control pest species by feeding on them, reducing pest populations and contributing to ecosystem stability.",
+        "entity_type_hint": "EcosystemService"
+      }
+    ],
+    "remarks": []
+  },
+  {
+    "candidate_id": "ClsC_5cc54b77",
+    "class_label": "Bird Biotic Components",
+    "class_description": "Biotic components representing birds collectively and their populations in ecosystems, used to assess and support biodiversity and ecosystem health.",
+    "class_type_hint": "Biological Entity Group",
+    "class_group": "TBD",
+    "confidence": 0.9,
+    "evidence_excerpt": "Bird species collectively ... bird populations in a given area, monitored and protected.",
+    "member_ids": [
+      "Can_d895734a",
+      "Can_4d0310b4"
+    ],
+    "members": [
+      {
+        "id": "Can_d895734a",
+        "entity_name": "bird populations",
+        "entity_description": "Populations of birds in a given area, whose numbers and demographic structure are monitored and protected to assess and support ecosystem health, biodiversity, and ecosystem services.",
+        "entity_type_hint": "BiologicalPopulation"
+      },
+      {
+        "id": "Can_4d0310b4",
+        "entity_name": "birds",
+        "entity_description": "Bird species collectively, a group of animals that play multiple ecological roles in ecosystems worldwide, including seed dispersal, natural pest control, pollination, nutrient cycling, and environmental monitoring.",
+        "entity_type_hint": "OrganismGroup"
+      }
+    ],
+    "remarks": []
+  },
+  {
+    "candidate_id": "ClsC_5b130c24",
+    "class_label": "Bird Habitats",
+    "class_description": "Specific habitats that support bird populations and are identified as needing protection to maintain biodiversity and ecosystem health.",
+    "class_type_hint": "Ecological Feature",
+    "class_group": "TBD",
+    "confidence": 0.86,
+    "evidence_excerpt": "Protecting bird populations and their habitats is crucial for maintaining biodiversity...",
+    "member_ids": [
+      "En_afac8860"
+    ],
+    "members": [
+      {
+        "id": "En_afac8860",
+        "entity_name": "habitats",
+        "entity_description": "Habitats in which bird populations live, identified as needing protection.",
+        "entity_type_hint": "Location"
+      }
+    ],
+    "remarks": []
+  },
+  {
+    "candidate_id": "ClsC_696d1477",
+    "class_label": "Stakeholder Group: Future Generations",
+    "class_description": "People in the future who are considered key stakeholders because they will be affected by current decisions about ecosystems, biodiversity, and bird conservation.",
+    "class_type_hint": "Stakeholder Group",
+    "class_group": "TBD",
+    "confidence": 0.92,
+    "evidence_excerpt": "future generations who will benefit from healthy, resilient ecosystems supported by birds",
+    "member_ids": [
+      "En_114e0ed2"
+    ],
+    "members": [
+      {
+        "id": "En_114e0ed2",
+        "entity_name": "future generations",
+        "entity_description": "People in the future who will benefit from healthy, resilient ecosystems supported by birds.",
+        "entity_type_hint": "StakeholderGroup"
+      }
+    ],
+    "remarks": []
+  }
+]
+
+========================
+OUTPUT
+========================
+
+Return ONLY the JSON array of ordered function calls.
+Return [] only if you are highly confident (> very strong evidence) that no change is needed.
+If any ambiguous or conflicting evidence exists, return a concrete ordered action list
+(with justifications and, optionally, confidence scores).
+You are a very proactive class-resolution assistant. You are not called very proactive only by using modify_class for new_class_group. You must use other functions as well to be called a proactive class-resolution assistant.
+

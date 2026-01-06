@@ -1,0 +1,17 @@
+[
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": [
+        "RelR_8be4d555e098"
+      ],
+      "canonical_rel_name": "has_life_cycle_stage",
+      "canonical_rel_desc": "Indicates that a life cycle concept includes a specific life-cycle stage as one of its constituent phases.",
+      "rel_cls": "life_cycle_stage_relation",
+      "rel_cls_group": "COMPOSITION",
+      "justification": "This relation has the same semantics as the other relations in this chunk (a life cycle including a specific life-cycle stage), but its canonical_rel_name is 'has_stage' and its description is more generic. To maintain a consistent, domain-appropriate predicate for life-cycle modeling, it should be aligned to the already used 'has_life_cycle_stage' with the corresponding life-cycle-specific description.",
+      "remark": "Normalized canonical_rel_name and description to match other butterfly life cycle stage relations for schema consistency.",
+      "confidence": 0.96
+    }
+  }
+]

@@ -1,0 +1,130 @@
+{
+  "cluster_label": "-1_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_1729699d54f7",
+      "relation_name": "exhibits",
+      "rel_desc": "The Hook Man legend exhibits new forms and variations of legends.",
+      "rel_hint_type": "variation",
+      "canonical_rel_name": "exhibits_characteristic",
+      "canonical_rel_desc": "Indicates that an entity (such as a specific legend) displays or embodies a particular characteristic, feature, or pattern.",
+      "rel_cls": "narrative_attribute_relation",
+      "rel_cls_group": "ATTRIBUTE",
+      "subject_entity_name": "Hook Man (urban legend)",
+      "object_entity_name": "new forms and variations of legends",
+      "subject_class_label": "Hook Man Urban Legend",
+      "subject_class_group": "UrbanLegend: Hook Man",
+      "object_class_label": "Stories and Legends as Explanations",
+      "object_class_group": "Narrative Truth, Sources, and Explanatory Roles",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "around the world",
+        "OperationalConstraint": null,
+        "ConditionExpression": "in various narrative forms",
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.8,
+      "remarks": [
+        "Maps the general idea of variations onto this concrete legend instance.",
+        "Maps the general idea of variations onto this concrete legend instance.",
+        "Maps the general idea of variations onto this concrete legend instance.",
+        "Maps the general idea of variations onto this concrete legend instance."
+      ]
+    },
+    {
+      "relation_id": "RelR_b4016d65bcdd",
+      "relation_name": "attached_to",
+      "rel_desc": "The bloody hook is found hanging from the car door handle.",
+      "rel_hint_type": "spatial",
+      "canonical_rel_name": "attached_to",
+      "canonical_rel_desc": "Indicates that a physical object is fastened, hanging from, or otherwise physically connected to another object.",
+      "rel_cls": "spatial_configuration_relation",
+      "rel_cls_group": "SPATIALITY",
+      "subject_entity_name": "bloody hook",
+      "object_entity_name": "car door handle",
+      "subject_class_label": "Urban Legend Threat Cues",
+      "subject_class_group": "Urban Legend Narrative Elements",
+      "object_class_label": "Vehicle Door Components (Urban Legend Scene)",
+      "object_class_group": "Urban Legend Narrative Elements",
+      "qualifiers": {
+        "TemporalQualifier": "upon discovery",
+        "SpatialQualifier": "from the car door handle",
+        "OperationalConstraint": null,
+        "ConditionExpression": "only to discover a bloody hook",
+        "UncertaintyQualifier": null,
+        "CausalHint": "from",
+        "LogicalMarker": "only to",
+        "OtherQualifier": null
+      },
+      "confidence": 0.99,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_67f93f276439",
+      "relation_name": "facilitated_by",
+      "rel_desc": "The spread of urban legends is greatly facilitated by advancements in technology and communication.",
+      "rel_hint_type": "causal enablement",
+      "canonical_rel_name": "is_enabled_by",
+      "canonical_rel_desc": "Indicates that the subject state or process is causally enabled or facilitated by the existence or operation of the object.",
+      "rel_cls": "causal_enablement_relation",
+      "rel_cls_group": "CAUSALITY",
+      "subject_entity_name": "spread of urban legends",
+      "object_entity_name": "advancements in technology and communication",
+      "subject_class_label": "Urban Legend Dynamics",
+      "subject_class_group": "Urban Legend Contexts (Social, Spatial, Temporal)",
+      "object_class_label": "Information Dissemination Enablers",
+      "object_class_group": "Story Dissemination & Transmission Mechanisms",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "across society",
+        "OperationalConstraint": "when modern technology and communication tools are available",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "has been greatly facilitated (qualitative, not quantified)",
+        "CausalHint": "has been greatly facilitated by",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.97,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_rel_schema\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_1729699d54f7\"\n      ],\n      \"canonical_rel_name\": \"exemplifies_narrative_pattern\",\n      \"canonical_rel_desc\": \"Indicates that a specific narrative or legend serves as an example of, or concretely manifests, a broader narrative pattern, form, or type.\",\n      \"rel_cls\": \"narrative_pattern_relation\",\n      \"rel_cls_group\": \"ATTRIBUTE\",\n      \"justification\": \"The relation describes the Hook Man legend as an instance that manifests new forms and variations of legends, which is closer to exemplifying a broader narrative pattern than merely exhibiting a generic characteristic. Updating the canonical name to 'exemplifies_narrative_pattern' and the class to 'narrative_pattern_relation' better captures that it links an instance to an abstract pattern/type, while still fitting under the broad ATTRIBUTE group.\",\n      \"remark\": null,\n      \"confidence\": 0.87\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_rel_schema",
+      "args": {
+        "relation_ids": [
+          "RelR_1729699d54f7"
+        ],
+        "canonical_rel_name": "exemplifies_narrative_pattern",
+        "canonical_rel_desc": "Indicates that a specific narrative or legend serves as an example of, or concretely manifests, a broader narrative pattern, form, or type.",
+        "rel_cls": "narrative_pattern_relation",
+        "rel_cls_group": "ATTRIBUTE",
+        "justification": "The relation describes the Hook Man legend as an instance that manifests new forms and variations of legends, which is closer to exemplifying a broader narrative pattern than merely exhibiting a generic characteristic. Updating the canonical name to 'exemplifies_narrative_pattern' and the class to 'narrative_pattern_relation' better captures that it links an instance to an abstract pattern/type, while still fitting under the broad ATTRIBUTE group.",
+        "remark": null,
+        "confidence": 0.87
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_rel_schema",
+      "relation_ids": [
+        "RelR_1729699d54f7"
+      ],
+      "canonical_rel_name": "exemplifies_narrative_pattern",
+      "canonical_rel_desc": "Indicates that a specific narrative or legend serves as an example of, or concretely manifests, a broader narrative pattern, form, or type.",
+      "rel_cls": "narrative_pattern_relation",
+      "rel_cls_group": "ATTRIBUTE",
+      "new_relation_name": null,
+      "original_relation_name": null,
+      "justification": "The relation describes the Hook Man legend as an instance that manifests new forms and variations of legends, which is closer to exemplifying a broader narrative pattern than merely exhibiting a generic characteristic. Updating the canonical name to 'exemplifies_narrative_pattern' and the class to 'narrative_pattern_relation' better captures that it links an instance to an abstract pattern/type, while still fitting under the broad ATTRIBUTE group.",
+      "remark": null,
+      "confidence": 0.87
+    }
+  ],
+  "timestamp": "2026-01-06T08:44:02Z"
+}

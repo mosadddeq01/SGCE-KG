@@ -1,0 +1,42 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_01e80b0f2105",
+        "RelR_4a044a4332e8"
+      ],
+      "canonical_rel_name": "aims_to_protect",
+      "canonical_rel_desc": "Indicates that an action or set of actions has the explicit goal of protecting or safeguarding the target entity or process, even if the protection is indirect or mediated.",
+      "justification": "Both relations describe conservation efforts whose explicit goal is to protect some aspect of the ecosystem (biodiversity, ecosystem functioning). The direction (efforts → protected aspect) and the semantics (goal-oriented protection, possibly indirect) are identical, so a single canonical predicate 'aims_to_protect' is appropriate.",
+      "remark": "Protection is described as a goal of conservation actions, not guaranteed or fully realized; the canonical predicate focuses on intent/aim rather than outcome.",
+      "confidence": 0.93
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_01e80b0f2105",
+        "RelR_4a044a4332e8"
+      ],
+      "rel_cls": "conservation_goal_relation",
+      "justification": "In both instances the predicate links conservation actions to their intended protective goals (what they seek to safeguard). This is a specific family of relations: goals or objectives of conservation activities, so 'conservation_goal_relation' is an appropriate class.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_01e80b0f2105",
+        "RelR_4a044a4332e8"
+      ],
+      "rel_cls_group": "GOAL",
+      "justification": "The rel_hint_type is 'goal', and the descriptions explicitly use goal-oriented phrasing ('aim to protect', 'work to protect'). This places the relation in a broad intentional/goal-oriented semantic group rather than pure causality or composition.",
+      "remark": null,
+      "confidence": 0.91
+    }
+  }
+]

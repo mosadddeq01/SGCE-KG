@@ -1,0 +1,45 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_6ef858b7eaed",
+        "RelR_c8cb131b915d",
+        "RelR_a7923f87dc88"
+      ],
+      "canonical_rel_name": "features_motif",
+      "canonical_rel_desc": "Indicates that a narrative type or tradition commonly includes a given motif, setting, or supernatural element as part of its typical content.",
+      "justification": "All three relations link the category 'urban legends' to recurring narrative elements (haunted houses, ghostly apparitions, mysterious creatures), describing typical content motifs rather than hierarchical or causal links. A unified predicate 'features_motif' best captures that the subject narrative tradition commonly includes the object as a motif.",
+      "remark": "Used for narrative-content composition: subject is a legend/genre/tradition; object is a recurring motif, setting, or entity.",
+      "confidence": 0.93
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_6ef858b7eaed",
+        "RelR_c8cb131b915d",
+        "RelR_a7923f87dc88"
+      ],
+      "rel_cls": "narrative_motif_relation",
+      "justification": "Each relation expresses that a narrative tradition (urban legends) is associated with specific recurring motifs or elements. Grouping them under 'narrative_motif_relation' captures this family of relations across different narrative domains.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_6ef858b7eaed",
+        "RelR_c8cb131b915d",
+        "RelR_a7923f87dc88"
+      ],
+      "rel_cls_group": "COMPOSITION",
+      "justification": "These relations describe what narrative content urban legends are composed of (their typical motifs and elements), which fits best under a broad composition/content-structure dimension.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  }
+]

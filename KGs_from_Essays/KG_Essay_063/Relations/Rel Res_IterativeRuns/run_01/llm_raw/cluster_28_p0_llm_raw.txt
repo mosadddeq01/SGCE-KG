@@ -1,0 +1,19 @@
+[
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": [
+        "RelR_fa9a6059b936",
+        "RelR_a06448d1fe2a",
+        "RelR_53a271b2887c"
+      ],
+      "canonical_rel_name": "aims_to_achieve",
+      "canonical_rel_desc": "Indicates that a collective action (such as a protest or demonstration) is undertaken with the goal of achieving, securing, or affecting the object (e.g., challenging injustice, demanding accountability, securing rights and freedoms).",
+      "rel_cls": "collective_action_goal_relation",
+      "rel_cls_group": "AGENCY",
+      "justification": "All three relations link public protest demonstrations to abstract political or moral ends (challenging injustice, demanding accountability, securing rights and freedoms). They share the same semantics of protest-as-instrument toward a goal, so they should use one normalized predicate and one relation class. The canonical_rel_name is unified to 'aims_to_achieve' (previously split between 'aims_at' and 'aims_to_achieve'), and the class labels 'collective_action_purpose_relation' and 'political_struggle_goal_relation' are consolidated into the more consistent 'collective_action_goal_relation'. The broad group AGENCY already fits all three, as these describe intentional goal-directed collective action.",
+      "remark": "Harmonized previously slightly divergent purpose/goal semantics for protests into a single canonical predicate and class.",
+      "confidence": 0.93
+    }
+  }
+]

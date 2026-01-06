@@ -1,0 +1,15 @@
+[
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": ["RelR_2c2a75f74a79"],
+      "canonical_rel_name": "changes_over_time",
+      "canonical_rel_desc": "Indicates that the subject changes or evolves over the temporal period represented by the object.",
+      "rel_cls": "evolution_over_time_relation",
+      "rel_cls_group": "TEMPORALITY",
+      "justification": "The current canonical_rel_desc is overly specific to future time periods, while the predicate itself is general to any temporal span. Renaming the predicate from 'changes_during' to 'changes_over_time' and generalizing the description makes the relation reusable for any temporal evolution scenario, while preserving its temporality semantics.",
+      "remark": "Generalized the temporal evolution predicate so it can be applied beyond explicitly future periods.",
+      "confidence": 0.86
+    }
+  }
+]

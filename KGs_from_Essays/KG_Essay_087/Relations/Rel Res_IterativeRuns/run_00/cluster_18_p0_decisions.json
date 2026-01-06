@@ -1,0 +1,177 @@
+{
+  "cluster_label": "18_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_535e7b6484a2",
+      "relation_name": "aimed_at",
+      "rel_desc": "Brand visual identity is intended to resonate with the target audience.",
+      "rel_hint_type": "audience_targeting",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "brand visual identity",
+      "object_entity_name": "target audience",
+      "subject_class_label": "Branding Concepts",
+      "subject_class_group": "Branding, Positioning & Market Context",
+      "object_class_label": "Brand Communication Concepts",
+      "object_class_group": "Branding, Positioning & Market Context",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": "when colors are chosen appropriately",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "can (potential resonance)",
+        "CausalHint": "resonates with",
+        "LogicalMarker": null,
+        "OtherQualifier": "CommunicationGoal: audience connection"
+      },
+      "confidence": 0.94,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_ce7621313920",
+      "relation_name": "intended_for",
+      "rel_desc": "The desired message is intended for the target audience.",
+      "rel_hint_type": "audience_targeting",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "desired message",
+      "object_entity_name": "target audience",
+      "subject_class_label": "Brand Communication Concepts",
+      "subject_class_group": "Branding, Positioning & Market Context",
+      "object_class_label": "Brand Communication Concepts",
+      "object_class_group": "Branding, Positioning & Market Context",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": "within brand communications",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "implicit, not stated directly",
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "CommunicationContext: brand-to-consumer messaging"
+      },
+      "confidence": 0.86,
+      "remarks": [
+        "Direction inferred from branding communication norms."
+      ]
+    },
+    {
+      "relation_id": "RelR_e7931bd31179",
+      "relation_name": "resonates_with",
+      "rel_desc": "The created brand visual identity is intended to resonate with the target audience.",
+      "rel_hint_type": "audience_fit",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "brand visual identity",
+      "object_entity_name": "target audience",
+      "subject_class_label": "Branding Concepts",
+      "subject_class_group": "Branding, Positioning & Market Context",
+      "object_class_label": "Brand Communication Concepts",
+      "object_class_group": "Branding, Positioning & Market Context",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": "when businesses effectively apply color psychology principles",
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.87,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_535e7b6484a2\",\n        \"RelR_ce7621313920\",\n        \"RelR_e7931bd31179\"\n      ],\n      \"canonical_rel_name\": \"intended_for_audience\",\n      \"canonical_rel_desc\": \"Indicates the target audience or recipient that a brand asset, message, or communication is designed for or aims to resonate with.\",\n      \"justification\": \"All three relations describe a branding or communication artifact (brand visual identity or desired message) being directed toward a target audience. Variants like 'aimed_at', 'intended_for', and 'resonates_with' are used here specifically in the sense of audience targeting rather than generic similarity, so they can be normalized into a single predicate expressing intended audience.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_535e7b6484a2\",\n        \"RelR_ce7621313920\",\n        \"RelR_e7931bd31179\"\n      ],\n      \"rel_cls\": \"communication_audience_relation\",\n      \"justification\": \"Each relation links a communication or branding artifact (visual identity or message) to the audience it is designed for, which fits a common class capturing audience-targeting relations in communication and branding contexts.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_535e7b6484a2\",\n        \"RelR_ce7621313920\",\n        \"RelR_e7931bd31179\"\n      ],\n      \"rel_cls_group\": \"USAGE\",\n      \"justification\": \"The semantics revolve around who the brand asset or message is meant to be used by or directed toward (its intended users/consumers), which aligns best with a broad USAGE-oriented group rather than generic association or identity.\",\n      \"remark\": null,\n      \"confidence\": 0.86\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_535e7b6484a2",
+          "RelR_ce7621313920",
+          "RelR_e7931bd31179"
+        ],
+        "canonical_rel_name": "intended_for_audience",
+        "canonical_rel_desc": "Indicates the target audience or recipient that a brand asset, message, or communication is designed for or aims to resonate with.",
+        "justification": "All three relations describe a branding or communication artifact (brand visual identity or desired message) being directed toward a target audience. Variants like 'aimed_at', 'intended_for', and 'resonates_with' are used here specifically in the sense of audience targeting rather than generic similarity, so they can be normalized into a single predicate expressing intended audience.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_535e7b6484a2",
+          "RelR_ce7621313920",
+          "RelR_e7931bd31179"
+        ],
+        "rel_cls": "communication_audience_relation",
+        "justification": "Each relation links a communication or branding artifact (visual identity or message) to the audience it is designed for, which fits a common class capturing audience-targeting relations in communication and branding contexts.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_535e7b6484a2",
+          "RelR_ce7621313920",
+          "RelR_e7931bd31179"
+        ],
+        "rel_cls_group": "USAGE",
+        "justification": "The semantics revolve around who the brand asset or message is meant to be used by or directed toward (its intended users/consumers), which aligns best with a broad USAGE-oriented group rather than generic association or identity.",
+        "remark": null,
+        "confidence": 0.86
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_535e7b6484a2",
+        "RelR_ce7621313920",
+        "RelR_e7931bd31179"
+      ],
+      "canonical_rel_name": "intended_for_audience",
+      "canonical_rel_desc": "Indicates the target audience or recipient that a brand asset, message, or communication is designed for or aims to resonate with.",
+      "justification": "All three relations describe a branding or communication artifact (brand visual identity or desired message) being directed toward a target audience. Variants like 'aimed_at', 'intended_for', and 'resonates_with' are used here specifically in the sense of audience targeting rather than generic similarity, so they can be normalized into a single predicate expressing intended audience.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_535e7b6484a2",
+        "RelR_ce7621313920",
+        "RelR_e7931bd31179"
+      ],
+      "rel_cls": "communication_audience_relation",
+      "justification": "Each relation links a communication or branding artifact (visual identity or message) to the audience it is designed for, which fits a common class capturing audience-targeting relations in communication and branding contexts.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_535e7b6484a2",
+        "RelR_ce7621313920",
+        "RelR_e7931bd31179"
+      ],
+      "rel_cls_group": "USAGE",
+      "justification": "The semantics revolve around who the brand asset or message is meant to be used by or directed toward (its intended users/consumers), which aligns best with a broad USAGE-oriented group rather than generic association or identity.",
+      "remark": null,
+      "confidence": 0.86
+    }
+  ],
+  "timestamp": "2026-01-06T15:03:33Z"
+}

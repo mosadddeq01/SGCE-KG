@@ -1,0 +1,48 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_90e96f7c2d56",
+        "RelR_af3b225d5cab",
+        "RelR_17ff77ddd498",
+        "RelR_6c2acaab2fd3"
+      ],
+      "canonical_rel_name": "causes",
+      "canonical_rel_desc": "Indicates that the subject is a causal factor giving rise to the object (e.g., a phenomenon, process, or concept leading to another).",
+      "justification": "All four relations express a directional causal link: studies or phenomena lead to the emergence or occurrence of other phenomena or concepts (development of principles, paradoxes, evaporation). Normalizing to a general predicate 'causes' avoids over-specific phrasing like 'led_to_development_of' and covers both conceptual development and physical causation.",
+      "remark": null,
+      "confidence": 0.97
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_90e96f7c2d56",
+        "RelR_af3b225d5cab",
+        "RelR_17ff77ddd498",
+        "RelR_6c2acaab2fd3"
+      ],
+      "rel_cls": "causal_influence_relation",
+      "justification": "Each instance represents a causal influence where one research area or physical process brings about another concept or phenomenon. Grouping them under 'causal_influence_relation' captures this family of cause–effect predicates more specifically than a generic class name.",
+      "remark": null,
+      "confidence": 0.96
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_90e96f7c2d56",
+        "RelR_af3b225d5cab",
+        "RelR_17ff77ddd498",
+        "RelR_6c2acaab2fd3"
+      ],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "The rel_hint_type is 'causal' in all cases and the descriptions consistently describe cause–effect relations, so the broad semantic dimension is clearly causality.",
+      "remark": null,
+      "confidence": 0.99
+    }
+  }
+]

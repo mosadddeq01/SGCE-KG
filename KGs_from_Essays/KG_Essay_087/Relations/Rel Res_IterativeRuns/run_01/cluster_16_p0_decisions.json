@@ -1,0 +1,131 @@
+{
+  "cluster_label": "16_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_b85561a3f52c",
+      "relation_name": "influences",
+      "rel_desc": "Color in branding and design is described as influencing consumer behavior.",
+      "rel_hint_type": "causal",
+      "canonical_rel_name": "influences",
+      "canonical_rel_desc": "Indicates that the subject branding construct exerts a causal or enabling effect on the object (consumer responses, brand perceptions, or brand outcomes).",
+      "rel_cls": "branding_impact_relation",
+      "rel_cls_group": "CAUSALITY",
+      "subject_entity_name": "color in branding and design",
+      "object_entity_name": "consumer behavior",
+      "subject_class_label": "Branding Concepts",
+      "subject_class_group": "Branding, Positioning & Market Context",
+      "object_class_label": "Consumer Behavior",
+      "object_class_group": "Consumer Psychology and Behavior in Branding",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "in branding and marketing",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "has the power to",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.95,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_5fae8330966b",
+      "relation_name": "facilitates",
+      "rel_desc": "A sense of urgency contributes to or facilitates impulse purchases.",
+      "rel_hint_type": "causal",
+      "canonical_rel_name": "facilitates_consumer_behavior",
+      "canonical_rel_desc": "The subject psychological state or condition contributes to, supports, or facilitates the occurrence of a specific consumer behavior or action.",
+      "rel_cls": "consumer_behavior_relation",
+      "rel_cls_group": "CAUSALITY",
+      "subject_entity_name": "sense of urgency",
+      "object_entity_name": "impulse purchases",
+      "subject_class_label": "Warm Color Purchase Activation",
+      "subject_class_group": "Color Psychology & Consumer Response in Branding",
+      "object_class_label": "Warm Color Purchase Activation",
+      "object_class_group": "Color Psychology & Consumer Response in Branding",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": "during consumer purchase decision moments",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "inferred; not directly stated",
+        "CausalHint": "and (co-listed outcomes, suggesting linkage)",
+        "LogicalMarker": null,
+        "OtherQualifier": "InferenceBasis: common marketing interpretation"
+      },
+      "confidence": 0.6,
+      "remarks": [
+        "Relation inferred from domain logic rather than explicit wording.",
+        "Relation inferred from domain logic rather than explicit wording."
+      ]
+    },
+    {
+      "relation_id": "RelR_cac458baaf09",
+      "relation_name": "influences",
+      "rel_desc": "Color psychology in branding explains how colors influence consumer brand perceptions.",
+      "rel_hint_type": "causal",
+      "canonical_rel_name": "influences",
+      "canonical_rel_desc": "Indicates that the subject branding construct exerts a causal or enabling effect on the object (consumer responses, brand perceptions, or brand outcomes).",
+      "rel_cls": "branding_impact_relation",
+      "rel_cls_group": "CAUSALITY",
+      "subject_entity_name": "color psychology in branding",
+      "object_entity_name": "consumer brand perceptions",
+      "subject_class_label": "Brand Communication Concepts",
+      "subject_class_group": "Branding, Positioning & Market Context",
+      "object_class_label": "Consumer Brand Perception (Overall)",
+      "object_class_group": "Consumer Psychology and Behavior in Branding",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "can (implicit with previous clause)",
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.9,
+      "remarks": [
+        "Assumes \"perceptions\" refers specifically to consumer brand perceptions based on entity resolution.",
+        "Assumes \"perceptions\" refers specifically to consumer brand perceptions based on entity resolution."
+      ]
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_rel_schema\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_5fae8330966b\"\n      ],\n      \"canonical_rel_name\": \"influences\",\n      \"canonical_rel_desc\": \"Indicates that the subject branding or psychological construct exerts a causal or enabling effect on the object (consumer responses, brand perceptions, or brand outcomes).\",\n      \"rel_cls\": null,\n      \"rel_cls_group\": null,\n      \"justification\": \"This relation is semantically the same directional causal influence as the other two relations in the chunk (a branding/psychological construct affecting consumer behavior). Normalizing the predicate to the already-used canonical 'influences' with a slightly generalized description improves schema consistency and avoids having a one-off verb variant 'facilitates_consumer_behavior' for the same type of causal link.\",\n      \"remark\": null,\n      \"confidence\": 0.86\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_rel_schema",
+      "args": {
+        "relation_ids": [
+          "RelR_5fae8330966b"
+        ],
+        "canonical_rel_name": "influences",
+        "canonical_rel_desc": "Indicates that the subject branding or psychological construct exerts a causal or enabling effect on the object (consumer responses, brand perceptions, or brand outcomes).",
+        "rel_cls": null,
+        "rel_cls_group": null,
+        "justification": "This relation is semantically the same directional causal influence as the other two relations in the chunk (a branding/psychological construct affecting consumer behavior). Normalizing the predicate to the already-used canonical 'influences' with a slightly generalized description improves schema consistency and avoids having a one-off verb variant 'facilitates_consumer_behavior' for the same type of causal link.",
+        "remark": null,
+        "confidence": 0.86
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_rel_schema",
+      "relation_ids": [
+        "RelR_5fae8330966b"
+      ],
+      "canonical_rel_name": "influences",
+      "canonical_rel_desc": "Indicates that the subject branding or psychological construct exerts a causal or enabling effect on the object (consumer responses, brand perceptions, or brand outcomes).",
+      "rel_cls": null,
+      "rel_cls_group": null,
+      "new_relation_name": null,
+      "original_relation_name": null,
+      "justification": "This relation is semantically the same directional causal influence as the other two relations in the chunk (a branding/psychological construct affecting consumer behavior). Normalizing the predicate to the already-used canonical 'influences' with a slightly generalized description improves schema consistency and avoids having a one-off verb variant 'facilitates_consumer_behavior' for the same type of causal link.",
+      "remark": null,
+      "confidence": 0.86
+    }
+  ],
+  "timestamp": "2026-01-06T15:05:47Z"
+}

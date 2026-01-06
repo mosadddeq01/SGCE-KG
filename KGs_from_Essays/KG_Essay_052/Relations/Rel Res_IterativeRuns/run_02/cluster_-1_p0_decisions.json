@@ -1,0 +1,129 @@
+{
+  "cluster_label": "-1_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_d626d507be78",
+      "relation_name": "develops",
+      "rel_desc": "Participation in sports helps individuals develop perseverance.",
+      "rel_hint_type": "causal",
+      "canonical_rel_name": "promotes_development_of",
+      "canonical_rel_desc": "Indicates that the subject activity or domain (e.g., participation in sports, sports) causally promotes the development or acquisition of the object skills, traits, or lessons in participants.",
+      "rel_cls": "skill_development_relation",
+      "rel_cls_group": "CAUSALITY",
+      "subject_entity_name": "participation in sports",
+      "object_entity_name": "perseverance",
+      "subject_class_label": "Sports Participation Activities",
+      "subject_class_group": "Sports and Society",
+      "object_class_label": "Life Skills and Lessons from Sports",
+      "object_class_group": "Sports-Based Personal Development",
+      "qualifiers": {
+        "TemporalQualifier": "with ongoing participation",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": "through participation in sports",
+        "UncertaintyQualifier": null,
+        "CausalHint": "learn",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.9,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_21c3b435d5b1",
+      "relation_name": "works_towards",
+      "rel_desc": "Athletes collaborate and direct their efforts toward a shared common goal.",
+      "rel_hint_type": "goal-orientation",
+      "canonical_rel_name": "pursues_goal",
+      "canonical_rel_desc": "Indicates that an agent directs effort toward achieving a specified goal.",
+      "rel_cls": "motivation_and_goal_relation",
+      "rel_cls_group": "AGENCY",
+      "subject_entity_name": "athletes",
+      "object_entity_name": "common goal",
+      "subject_class_label": "Sports Participants",
+      "subject_class_group": "Sports-Based Personal Development",
+      "object_class_label": "Common Goal",
+      "object_class_group": "Sport, Community & Social Experience",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": "within sports participation",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "Collaboration: work together"
+      },
+      "confidence": 0.97,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_dbd6cd238368",
+      "relation_name": "provides",
+      "rel_desc": "Sports provide lessons such as cooperation and dealing with success and failure.",
+      "rel_hint_type": "derivation",
+      "canonical_rel_name": "promotes_development_of",
+      "canonical_rel_desc": "Indicates that the subject activity or domain (e.g., participation in sports, sports) causally promotes the development or acquisition of the object skills, traits, or lessons in participants.",
+      "rel_cls": "skill_development_relation",
+      "rel_cls_group": "CAUSALITY",
+      "subject_entity_name": "sports",
+      "object_entity_name": "lessons from sports participation",
+      "subject_class_label": "Sports (Domain Concept)",
+      "subject_class_group": "Sports and Society",
+      "object_class_label": "Life Skills and Lessons from Sports",
+      "object_class_group": "Sports-Based Personal Development",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": "through participation in sports",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "from",
+        "LogicalMarker": null,
+        "OtherQualifier": "LessonContent: cooperation, overcoming obstacles, handling success and failure"
+      },
+      "confidence": 0.88,
+      "remarks": [
+        "Relation created to capture source of lessons; text is slightly indirect.",
+        "Relation created to capture source of lessons; text is slightly indirect.",
+        "Relation created to capture source of lessons; text is slightly indirect."
+      ]
+    },
+    {
+      "relation_id": "RelR_3bb023b2062a",
+      "relation_name": "has_role",
+      "rel_desc": "There is an explicitly celebrated role that sports play in culture.",
+      "rel_hint_type": "meta-role",
+      "canonical_rel_name": "has_social_role",
+      "canonical_rel_desc": "Links a social practice or institution to an abstract role it plays within a culture or society.",
+      "rel_cls": "social_role_relation",
+      "rel_cls_group": "IDENTITY",
+      "subject_entity_name": "sports",
+      "object_entity_name": "role of sports in our culture",
+      "subject_class_label": "Sports (Domain Concept)",
+      "subject_class_group": "Sports and Society",
+      "object_class_label": "Sports-Promoted Social Values",
+      "object_class_group": "Sports, Culture, and Society",
+      "qualifiers": {
+        "TemporalQualifier": "As we continue to celebrate",
+        "SpatialQualifier": "in our culture",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": "as",
+        "OtherQualifier": null
+      },
+      "confidence": 0.84,
+      "remarks": [
+        "Modeled as sports possessing a role entity rather than repeating influence relation.",
+        "Modeled as sports possessing a role entity rather than repeating influence relation.",
+        "Modeled as sports possessing a role entity rather than repeating influence relation."
+      ]
+    }
+  ],
+  "llm_raw": "[]",
+  "parsed_steps": [],
+  "executed_decisions": [],
+  "timestamp": "2026-01-06T12:46:46Z"
+}

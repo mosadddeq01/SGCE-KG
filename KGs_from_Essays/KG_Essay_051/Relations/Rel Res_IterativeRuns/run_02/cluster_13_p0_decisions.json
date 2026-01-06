@@ -1,0 +1,125 @@
+{
+  "cluster_label": "13_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_e16fcd0008c6",
+      "relation_name": "addresses",
+      "rel_desc": "The essay on body language focuses on body language as its main topic.",
+      "rel_hint_type": "aboutness",
+      "canonical_rel_name": "is_about",
+      "canonical_rel_desc": "Indicates that a document, text, or discourse takes the object as its main topic or subject matter.",
+      "rel_cls": "aboutness_relation",
+      "rel_cls_group": "ASSOCIATION",
+      "subject_entity_name": "essay on body language",
+      "object_entity_name": "body language",
+      "subject_class_label": "Body Language as Subject Matter",
+      "subject_class_group": "Body Language & Nonverbal Communication",
+      "object_class_label": "Body Language as Nonverbal Communication",
+      "object_class_group": "Nonverbal Communication & Body Language",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "will explore",
+        "LogicalMarker": null,
+        "OtherQualifier": "Genre: explanatory essay"
+      },
+      "confidence": 0.98,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_436182babbe8",
+      "relation_name": "addresses",
+      "rel_desc": "The essay will discuss the use of body language across various situations.",
+      "rel_hint_type": "aboutness",
+      "canonical_rel_name": "is_about",
+      "canonical_rel_desc": "Indicates that a document or discourse is about, discusses, or focuses on a given topic or subject.",
+      "rel_cls": "document_subject_relation",
+      "rel_cls_group": "ABOUTNESS",
+      "subject_entity_name": "essay on body language",
+      "object_entity_name": "various situations",
+      "subject_class_label": "Body Language as Subject Matter",
+      "subject_class_group": "Body Language & Nonverbal Communication",
+      "object_class_label": "Body Language Communication Contexts",
+      "object_class_group": "Nonverbal Communication & Body Language",
+      "qualifiers": {
+        "TemporalQualifier": "future discussion in the essay",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "will",
+        "CausalHint": "will explore",
+        "LogicalMarker": null,
+        "OtherQualifier": "Scope: contextual diversity of use"
+      },
+      "confidence": 0.93,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_5f6138fe0bc5",
+      "relation_name": "addresses",
+      "rel_desc": "The essay will discuss how body language affects relationships.",
+      "rel_hint_type": "aboutness",
+      "canonical_rel_name": "is_about",
+      "canonical_rel_desc": "Indicates that a document or discourse is about, discusses, or focuses on a given topic or subject.",
+      "rel_cls": "document_subject_relation",
+      "rel_cls_group": "ABOUTNESS",
+      "subject_entity_name": "essay on body language",
+      "object_entity_name": "relationships",
+      "subject_class_label": "Body Language as Subject Matter",
+      "subject_class_group": "Body Language & Nonverbal Communication",
+      "object_class_label": "Interpersonal Bond States",
+      "object_class_group": "Interpersonal Relationship and Closeness States",
+      "qualifiers": {
+        "TemporalQualifier": "future discussion in the essay",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "can have; will explore",
+        "CausalHint": "impact",
+        "LogicalMarker": null,
+        "OtherQualifier": "Focus: long-term interpersonal bonds"
+      },
+      "confidence": 0.95,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_rel_schema\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_e16fcd0008c6\"\n      ],\n      \"canonical_rel_name\": \"is_about\",\n      \"canonical_rel_desc\": \"Indicates that a document or discourse is about, discusses, or focuses on a given topic or subject.\",\n      \"rel_cls\": \"document_subject_relation\",\n      \"rel_cls_group\": \"ABOUTNESS\",\n      \"justification\": \"All three relations link the same subject document ('essay on body language') to topics it discusses, so they share the same aboutness semantics. For consistency, the first relation should use the same relation class ('document_subject_relation') and group ('ABOUTNESS') as the others, and align the canonical description to a single reusable definition.\",\n      \"remark\": null,\n      \"confidence\": 0.95\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_rel_schema",
+      "args": {
+        "relation_ids": [
+          "RelR_e16fcd0008c6"
+        ],
+        "canonical_rel_name": "is_about",
+        "canonical_rel_desc": "Indicates that a document or discourse is about, discusses, or focuses on a given topic or subject.",
+        "rel_cls": "document_subject_relation",
+        "rel_cls_group": "ABOUTNESS",
+        "justification": "All three relations link the same subject document ('essay on body language') to topics it discusses, so they share the same aboutness semantics. For consistency, the first relation should use the same relation class ('document_subject_relation') and group ('ABOUTNESS') as the others, and align the canonical description to a single reusable definition.",
+        "remark": null,
+        "confidence": 0.95
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_rel_schema",
+      "relation_ids": [
+        "RelR_e16fcd0008c6"
+      ],
+      "canonical_rel_name": "is_about",
+      "canonical_rel_desc": "Indicates that a document or discourse is about, discusses, or focuses on a given topic or subject.",
+      "rel_cls": "document_subject_relation",
+      "rel_cls_group": "ABOUTNESS",
+      "new_relation_name": null,
+      "original_relation_name": null,
+      "justification": "All three relations link the same subject document ('essay on body language') to topics it discusses, so they share the same aboutness semantics. For consistency, the first relation should use the same relation class ('document_subject_relation') and group ('ABOUTNESS') as the others, and align the canonical description to a single reusable definition.",
+      "remark": null,
+      "confidence": 0.95
+    }
+  ],
+  "timestamp": "2026-01-06T12:17:19Z"
+}

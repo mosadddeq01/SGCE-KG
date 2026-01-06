@@ -1,0 +1,369 @@
+{
+  "cluster_label": "7_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_b9dedd3c0dcc",
+      "relation_name": "transforms_distribution_of",
+      "rel_desc": "Social media changes how news and information are received and shared.",
+      "rel_hint_type": "causal",
+      "canonical_rel_name": "shapes_dissemination_of",
+      "canonical_rel_desc": "Indicates that the subject changes or structures how the object is distributed, shared, or disseminated, without necessarily creating the object itself.",
+      "rel_cls": "information_dissemination_causal_relation",
+      "rel_cls_group": "CAUSALITY",
+      "subject_entity_name": "social media",
+      "object_entity_name": "news",
+      "subject_class_label": "Social Media Concepts",
+      "subject_class_group": "Social Media and Online Social Interaction",
+      "object_class_label": "Social Media Content Types",
+      "object_class_group": "Social Media Content & Information",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "through social networking sites",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "transformed the way",
+        "LogicalMarker": null,
+        "OtherQualifier": "Medium: online social media channels"
+      },
+      "confidence": 0.88,
+      "remarks": [
+        "Information is broader than news, but news is the salient case here.",
+        "Information is broader than news, but news is the salient case here."
+      ]
+    },
+    {
+      "relation_id": "RelR_8e910ed39551",
+      "relation_name": "contributes_to",
+      "rel_desc": "Citizen journalism contributes to the rapid spread of news.",
+      "rel_hint_type": "causal",
+      "canonical_rel_name": "facilitates_spread_of",
+      "canonical_rel_desc": "Indicates that the subject increases the speed, reach, or likelihood of the dissemination of the object information or content.",
+      "rel_cls": "information_dissemination_relation",
+      "rel_cls_group": "CAUSALITY",
+      "subject_entity_name": "citizen journalism",
+      "object_entity_name": "news",
+      "subject_class_label": "Citizen Journalism",
+      "subject_class_group": "News Media & Journalism",
+      "object_class_label": "Social Media Content Types",
+      "object_class_group": "Social Media Content & Information",
+      "qualifiers": {
+        "TemporalQualifier": "with the rise",
+        "SpatialQualifier": "through social networking sites",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "With the rise of",
+        "LogicalMarker": null,
+        "OtherQualifier": "Actors: ordinary individuals"
+      },
+      "confidence": 0.87,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_c0069b4fdd7b",
+      "relation_name": "contributes_to",
+      "rel_desc": "User-generated content is a key factor in news spreading rapidly.",
+      "rel_hint_type": "causal",
+      "canonical_rel_name": "facilitates_spread_of",
+      "canonical_rel_desc": "Indicates that the subject increases the speed, reach, or likelihood of the dissemination of the object information or content.",
+      "rel_cls": "information_dissemination_relation",
+      "rel_cls_group": "CAUSALITY",
+      "subject_entity_name": "user-generated content",
+      "object_entity_name": "news",
+      "subject_class_label": "Social Media Content Types",
+      "subject_class_group": "Social Media Content & Information",
+      "object_class_label": "Social Media Content Types",
+      "object_class_group": "Social Media Content & Information",
+      "qualifiers": {
+        "TemporalQualifier": "with the rise",
+        "SpatialQualifier": "through social networking sites",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "With the rise of",
+        "LogicalMarker": null,
+        "OtherQualifier": "ContentSource: platform users"
+      },
+      "confidence": 0.87,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_7751f75352bf",
+      "relation_name": "spreads_through",
+      "rel_desc": "News propagates rapidly via social networking sites on social media platforms.",
+      "rel_hint_type": "distribution",
+      "canonical_rel_name": "disseminated_via_channel",
+      "canonical_rel_desc": "Indicates that an information item is disseminated through a specific communication channel or medium.",
+      "rel_cls": "information_dissemination_relation",
+      "rel_cls_group": "INTERACTION",
+      "subject_entity_name": "news",
+      "object_entity_name": "social media",
+      "subject_class_label": "Social Media Content Types",
+      "subject_class_group": "Social Media Content & Information",
+      "object_class_label": "Social Media Platforms",
+      "object_class_group": "Social Media & Online Communication",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "through social networking sites",
+        "OperationalConstraint": "rapid online diffusion",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "spreads rapidly",
+        "LogicalMarker": null,
+        "OtherQualifier": "ChannelType: social networking sites"
+      },
+      "confidence": 0.9,
+      "remarks": [
+        "Mapped social networking sites to the generic social media platforms entity.",
+        "Mapped social networking sites to the generic social media platforms entity."
+      ]
+    },
+    {
+      "relation_id": "RelR_860e8152d480",
+      "relation_name": "reaches",
+      "rel_desc": "News disseminated via social networking sites reaches a wider audience.",
+      "rel_hint_type": "distribution",
+      "canonical_rel_name": "reaches_audience",
+      "canonical_rel_desc": "Indicates that an information item reaches or becomes accessible to a specified audience or recipient group.",
+      "rel_cls": "information_dissemination_relation",
+      "rel_cls_group": "INTERACTION",
+      "subject_entity_name": "news",
+      "object_entity_name": "wider audience",
+      "subject_class_label": "Social Media Content Types",
+      "subject_class_group": "Social Media Content & Information",
+      "object_class_label": "Social Media Audiences",
+      "object_class_group": "Social Media and Online Social Interaction",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "via social networking sites",
+        "OperationalConstraint": "online dissemination",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "spreads rapidly",
+        "LogicalMarker": null,
+        "OtherQualifier": "RelativeReach: larger than via traditional media outlets"
+      },
+      "confidence": 0.93,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_1f9e18a195ff",
+      "relation_name": "also_reaches",
+      "rel_desc": "Traditional media outlets also reach an audience, but more slowly than news via social networking sites.",
+      "rel_hint_type": "comparison",
+      "canonical_rel_name": "reaches_audience",
+      "canonical_rel_desc": "Indicates that a communication channel or medium reaches or can access a particular audience.",
+      "rel_cls": "audience_reach_relation",
+      "rel_cls_group": "INTERACTION",
+      "subject_entity_name": "traditional media outlets",
+      "object_entity_name": "wider audience",
+      "subject_class_label": "Traditional Mass Media",
+      "subject_class_group": "News Media & Journalism",
+      "object_class_label": "Social Media Audiences",
+      "object_class_group": "Social Media and Online Social Interaction",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": "slower dissemination",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "implied",
+        "CausalHint": null,
+        "LogicalMarker": "than",
+        "OtherQualifier": "RelativeSpeed: slower than via social networking sites"
+      },
+      "confidence": 0.78,
+      "remarks": [
+        "Relation created mainly to encode comparative reach implied for traditional outlets.",
+        "Relation created mainly to encode comparative reach implied for traditional outlets."
+      ]
+    },
+    {
+      "relation_id": "RelR_393e02201d4a",
+      "relation_name": "results_in",
+      "rel_desc": "The way information is shared and spread results in the proliferation of rumors.",
+      "rel_hint_type": "causal",
+      "canonical_rel_name": "leads_to_proliferation_of",
+      "canonical_rel_desc": "Indicates that the subject causally contributes to a significant increase in the amount or spread of the object (e.g., content types such as rumors, conspiracy theories, or propaganda).",
+      "rel_cls": "information_dissemination_causal_relation",
+      "rel_cls_group": "CAUSALITY",
+      "subject_entity_name": "information",
+      "object_entity_name": "rumors",
+      "subject_class_label": "Social Media Content Types",
+      "subject_class_group": "Social Media Content & Information",
+      "object_class_label": "Social Media Content Types",
+      "object_class_group": "Social Media Content & Information",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "on these platforms / social media",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "leading to",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.76,
+      "remarks": [
+        "Rumors are implicitly treated as a particular problematic subset of the information being spread.",
+        "Rumors are implicitly treated as a particular problematic subset of the information being spread."
+      ]
+    },
+    {
+      "relation_id": "RelR_0e777860f9ba",
+      "relation_name": "results_in",
+      "rel_desc": "The mode of information sharing results in proliferation of conspiracy theories.",
+      "rel_hint_type": "causal",
+      "canonical_rel_name": "leads_to_proliferation_of",
+      "canonical_rel_desc": "Indicates that the subject causally contributes to a significant increase in the amount or spread of the object (e.g., content types such as rumors, conspiracy theories, or propaganda).",
+      "rel_cls": "information_dissemination_causal_relation",
+      "rel_cls_group": "CAUSALITY",
+      "subject_entity_name": "information",
+      "object_entity_name": "conspiracy theories",
+      "subject_class_label": "Social Media Content Types",
+      "subject_class_group": "Social Media Content & Information",
+      "object_class_label": "Social Media Content Types",
+      "object_class_group": "Social Media Content & Information",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "on these platforms / social media",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "leading to",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.76,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_e17eec26ef9e",
+      "relation_name": "results_in",
+      "rel_desc": "The way information spreads leads to proliferation of propaganda.",
+      "rel_hint_type": "causal",
+      "canonical_rel_name": "leads_to_proliferation_of",
+      "canonical_rel_desc": "Indicates that the subject causally contributes to a significant increase in the amount or spread of the object (e.g., content types such as rumors, conspiracy theories, or propaganda).",
+      "rel_cls": "information_dissemination_causal_relation",
+      "rel_cls_group": "CAUSALITY",
+      "subject_entity_name": "information",
+      "object_entity_name": "propaganda",
+      "subject_class_label": "Social Media Content Types",
+      "subject_class_group": "Social Media Content & Information",
+      "object_class_label": "Social Media Content Types",
+      "object_class_group": "Social Media Content & Information",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "on these platforms / social media",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "leading to",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.78,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_rel_schema\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_8e910ed39551\", \"RelR_c0069b4fdd7b\"],\n      \"canonical_rel_name\": null,\n      \"canonical_rel_desc\": null,\n      \"rel_cls\": \"information_dissemination_causal_relation\",\n      \"rel_cls_group\": null,\n      \"justification\": \"Both relations describe citizen journalism and user-generated content causally contributing to faster or broader spreading of news. Their rel_hint_type is 'causal', and they are parallel in meaning to other instances already using rel_cls 'information_dissemination_causal_relation', so the class should explicitly reflect the causal nature rather than the more generic 'information_dissemination_relation'.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"modify_rel_schema\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_1f9e18a195ff\"],\n      \"canonical_rel_name\": null,\n      \"canonical_rel_desc\": null,\n      \"rel_cls\": \"information_dissemination_relation\",\n      \"rel_cls_group\": null,\n      \"justification\": \"RelR_1f9e18a195ff encodes that traditional media outlets reach an audience, which is semantically parallel to RelR_860e8152d480 (news reaching a wider audience). To keep the schema consistent, both audience-reach edges should share the same broader class 'information_dissemination_relation' rather than splitting this single predicate into a separate 'audience_reach_relation' class used only once.\",\n      \"remark\": null,\n      \"confidence\": 0.8\n    }\n  },\n  {\n    \"function\": \"modify_rel_schema\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_860e8152d480\", \"RelR_1f9e18a195ff\"],\n      \"canonical_rel_name\": \"reaches_audience\",\n      \"canonical_rel_desc\": \"Indicates that the subject (an information item or communication channel) reaches or becomes accessible to a specified audience or recipient group.\",\n      \"rel_cls\": null,\n      \"rel_cls_group\": null,\n      \"justification\": \"Both relations use the same canonical predicate 'reaches_audience' but currently have slightly different canonical_rel_desc wordings (one focused on information items, the other on communication channels). Unifying them under a single description that explicitly covers both types of subjects improves schema consistency and reuse of the predicate definition.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_rel_schema",
+      "args": {
+        "relation_ids": [
+          "RelR_8e910ed39551",
+          "RelR_c0069b4fdd7b"
+        ],
+        "canonical_rel_name": null,
+        "canonical_rel_desc": null,
+        "rel_cls": "information_dissemination_causal_relation",
+        "rel_cls_group": null,
+        "justification": "Both relations describe citizen journalism and user-generated content causally contributing to faster or broader spreading of news. Their rel_hint_type is 'causal', and they are parallel in meaning to other instances already using rel_cls 'information_dissemination_causal_relation', so the class should explicitly reflect the causal nature rather than the more generic 'information_dissemination_relation'.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "modify_rel_schema",
+      "args": {
+        "relation_ids": [
+          "RelR_1f9e18a195ff"
+        ],
+        "canonical_rel_name": null,
+        "canonical_rel_desc": null,
+        "rel_cls": "information_dissemination_relation",
+        "rel_cls_group": null,
+        "justification": "RelR_1f9e18a195ff encodes that traditional media outlets reach an audience, which is semantically parallel to RelR_860e8152d480 (news reaching a wider audience). To keep the schema consistent, both audience-reach edges should share the same broader class 'information_dissemination_relation' rather than splitting this single predicate into a separate 'audience_reach_relation' class used only once.",
+        "remark": null,
+        "confidence": 0.8
+      }
+    },
+    {
+      "function": "modify_rel_schema",
+      "args": {
+        "relation_ids": [
+          "RelR_860e8152d480",
+          "RelR_1f9e18a195ff"
+        ],
+        "canonical_rel_name": "reaches_audience",
+        "canonical_rel_desc": "Indicates that the subject (an information item or communication channel) reaches or becomes accessible to a specified audience or recipient group.",
+        "rel_cls": null,
+        "rel_cls_group": null,
+        "justification": "Both relations use the same canonical predicate 'reaches_audience' but currently have slightly different canonical_rel_desc wordings (one focused on information items, the other on communication channels). Unifying them under a single description that explicitly covers both types of subjects improves schema consistency and reuse of the predicate definition.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_rel_schema",
+      "relation_ids": [
+        "RelR_8e910ed39551",
+        "RelR_c0069b4fdd7b"
+      ],
+      "canonical_rel_name": null,
+      "canonical_rel_desc": null,
+      "rel_cls": "information_dissemination_causal_relation",
+      "rel_cls_group": null,
+      "new_relation_name": null,
+      "original_relation_name": null,
+      "justification": "Both relations describe citizen journalism and user-generated content causally contributing to faster or broader spreading of news. Their rel_hint_type is 'causal', and they are parallel in meaning to other instances already using rel_cls 'information_dissemination_causal_relation', so the class should explicitly reflect the causal nature rather than the more generic 'information_dissemination_relation'.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "modify_rel_schema",
+      "relation_ids": [
+        "RelR_1f9e18a195ff"
+      ],
+      "canonical_rel_name": null,
+      "canonical_rel_desc": null,
+      "rel_cls": "information_dissemination_relation",
+      "rel_cls_group": null,
+      "new_relation_name": null,
+      "original_relation_name": null,
+      "justification": "RelR_1f9e18a195ff encodes that traditional media outlets reach an audience, which is semantically parallel to RelR_860e8152d480 (news reaching a wider audience). To keep the schema consistent, both audience-reach edges should share the same broader class 'information_dissemination_relation' rather than splitting this single predicate into a separate 'audience_reach_relation' class used only once.",
+      "remark": null,
+      "confidence": 0.8
+    },
+    {
+      "action": "modify_rel_schema",
+      "relation_ids": [
+        "RelR_860e8152d480",
+        "RelR_1f9e18a195ff"
+      ],
+      "canonical_rel_name": "reaches_audience",
+      "canonical_rel_desc": "Indicates that the subject (an information item or communication channel) reaches or becomes accessible to a specified audience or recipient group.",
+      "rel_cls": null,
+      "rel_cls_group": null,
+      "new_relation_name": null,
+      "original_relation_name": null,
+      "justification": "Both relations use the same canonical predicate 'reaches_audience' but currently have slightly different canonical_rel_desc wordings (one focused on information items, the other on communication channels). Unifying them under a single description that explicitly covers both types of subjects improves schema consistency and reuse of the predicate definition.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  ],
+  "timestamp": "2026-01-06T11:11:06Z"
+}

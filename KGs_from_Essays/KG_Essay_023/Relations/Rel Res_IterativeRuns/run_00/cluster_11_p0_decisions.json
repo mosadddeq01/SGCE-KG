@@ -1,0 +1,163 @@
+{
+  "cluster_label": "11_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_52fd6e3c271d",
+      "relation_name": "enables",
+      "rel_desc": "Social media enables amplification of individuals' voices.",
+      "rel_hint_type": "functional impact",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "social media",
+      "object_entity_name": "amplification of our voices",
+      "subject_class_label": "Social Media Platforms",
+      "subject_class_group": "Social Media & Online Communication",
+      "object_class_label": "Marginalized and Diverse Voices",
+      "object_class_group": "Marginalization, Representation & Inclusion in Social Media",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "impact of",
+        "LogicalMarker": null,
+        "OtherQualifier": "ImpactDomain: communication"
+      },
+      "confidence": 0.93,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_c5fc18e1c819",
+      "relation_name": "increases_visibility_of",
+      "rel_desc": "Social media increases the visibility of marginalized groups.",
+      "rel_hint_type": "exposure",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "social media",
+      "object_entity_name": "visibility of marginalized groups",
+      "subject_class_label": "Social Media Platforms",
+      "subject_class_group": "Social Media & Online Communication",
+      "object_class_label": "Marginalized and Diverse Voices",
+      "object_class_group": "Marginalization, Representation & Inclusion in Social Media",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "impact of",
+        "LogicalMarker": null,
+        "OtherQualifier": "Audience: broader public sphere"
+      },
+      "confidence": 0.95,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_52fd6e3c271d\"],\n      \"canonical_rel_name\": \"enables_voice_amplification_of\",\n      \"canonical_rel_desc\": \"Indicates that the subject provides the affordances or functionality that allow the object's voices to be amplified or more widely expressed.\",\n      \"justification\": \"This relation describes a capability/affordance where social media allows or makes possible the amplification of individuals' voices; a predicate emphasizing enabling voice amplification best captures this semantics.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_c5fc18e1c819\"],\n      \"canonical_rel_name\": \"increases_visibility_of\",\n      \"canonical_rel_desc\": \"Indicates that the subject raises the visibility, exposure, or public prominence of the object.\",\n      \"justification\": \"This relation explicitly states that social media raises the visibility of marginalized groups; a predicate focused on increasing visibility directly matches the described exposure effect.\",\n      \"remark\": null,\n      \"confidence\": 0.95\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_52fd6e3c271d\", \"RelR_c5fc18e1c819\"],\n      \"rel_cls\": \"communication_impact_relation\",\n      \"justification\": \"Both relations describe how social media, as a communication medium, affects the reach, expression, or visibility of voices and groups; they fit into a common class capturing communicative impact on audiences and representation.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_52fd6e3c271d\", \"RelR_c5fc18e1c819\"],\n      \"rel_cls_group\": \"CAUSALITY\",\n      \"justification\": \"In both cases, social media is the cause or driver of a change (more amplified voices, increased visibility); this is best modeled under a causal/impact-oriented relation group rather than, for example, mere association.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_52fd6e3c271d"
+        ],
+        "canonical_rel_name": "enables_voice_amplification_of",
+        "canonical_rel_desc": "Indicates that the subject provides the affordances or functionality that allow the object's voices to be amplified or more widely expressed.",
+        "justification": "This relation describes a capability/affordance where social media allows or makes possible the amplification of individuals' voices; a predicate emphasizing enabling voice amplification best captures this semantics.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_c5fc18e1c819"
+        ],
+        "canonical_rel_name": "increases_visibility_of",
+        "canonical_rel_desc": "Indicates that the subject raises the visibility, exposure, or public prominence of the object.",
+        "justification": "This relation explicitly states that social media raises the visibility of marginalized groups; a predicate focused on increasing visibility directly matches the described exposure effect.",
+        "remark": null,
+        "confidence": 0.95
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_52fd6e3c271d",
+          "RelR_c5fc18e1c819"
+        ],
+        "rel_cls": "communication_impact_relation",
+        "justification": "Both relations describe how social media, as a communication medium, affects the reach, expression, or visibility of voices and groups; they fit into a common class capturing communicative impact on audiences and representation.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_52fd6e3c271d",
+          "RelR_c5fc18e1c819"
+        ],
+        "rel_cls_group": "CAUSALITY",
+        "justification": "In both cases, social media is the cause or driver of a change (more amplified voices, increased visibility); this is best modeled under a causal/impact-oriented relation group rather than, for example, mere association.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_52fd6e3c271d"
+      ],
+      "canonical_rel_name": "enables_voice_amplification_of",
+      "canonical_rel_desc": "Indicates that the subject provides the affordances or functionality that allow the object's voices to be amplified or more widely expressed.",
+      "justification": "This relation describes a capability/affordance where social media allows or makes possible the amplification of individuals' voices; a predicate emphasizing enabling voice amplification best captures this semantics.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_c5fc18e1c819"
+      ],
+      "canonical_rel_name": "increases_visibility_of",
+      "canonical_rel_desc": "Indicates that the subject raises the visibility, exposure, or public prominence of the object.",
+      "justification": "This relation explicitly states that social media raises the visibility of marginalized groups; a predicate focused on increasing visibility directly matches the described exposure effect.",
+      "remark": null,
+      "confidence": 0.95
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_52fd6e3c271d",
+        "RelR_c5fc18e1c819"
+      ],
+      "rel_cls": "communication_impact_relation",
+      "justification": "Both relations describe how social media, as a communication medium, affects the reach, expression, or visibility of voices and groups; they fit into a common class capturing communicative impact on audiences and representation.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_52fd6e3c271d",
+        "RelR_c5fc18e1c819"
+      ],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "In both cases, social media is the cause or driver of a change (more amplified voices, increased visibility); this is best modeled under a causal/impact-oriented relation group rather than, for example, mere association.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  ],
+  "timestamp": "2026-01-06T11:04:49Z"
+}

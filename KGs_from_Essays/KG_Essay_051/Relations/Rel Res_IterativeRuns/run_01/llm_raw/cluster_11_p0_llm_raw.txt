@@ -1,0 +1,15 @@
+[
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": ["RelR_73c6366941df"],
+      "canonical_rel_name": "is_about",
+      "canonical_rel_desc": "Indicates that a document or discourse is about, discusses, or focuses on a given topic or subject.",
+      "rel_cls": "document_subject_relation",
+      "rel_cls_group": "ABOUTNESS",
+      "justification": "Both relations represent the same document-to-topic aboutness predicate. Normalize RelR_73c6366941df to use the same relation class (document_subject_relation) and broad group (ABOUTNESS) as RelR_8d4942082ed4, and align the canonical description so this predicate is consistently defined across instances.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  }
+]

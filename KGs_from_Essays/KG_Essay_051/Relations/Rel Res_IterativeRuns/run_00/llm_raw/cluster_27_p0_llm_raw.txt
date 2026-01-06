@@ -1,0 +1,42 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_0ffef0b14f3e",
+        "RelR_724a60e8029d"
+      ],
+      "canonical_rel_name": "contributes_to",
+      "canonical_rel_desc": "Subject process or behavior helps bring about or enhance the object outcome, without being the sole determining cause.",
+      "justification": "Both relations describe interpersonal processes (connecting with others, conflict resolution) that help produce the positive outcome of stronger relationships. The direction is from process to outcome, and the semantics are clearly a soft causal contribution rather than strict determinism, so they can share the canonical predicate 'contributes_to'.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_0ffef0b14f3e",
+        "RelR_724a60e8029d"
+      ],
+      "rel_cls": "causal_contribution_relation",
+      "justification": "In both instances, the subject is an interpersonal improvement process that helps bring about a positive social outcome. This fits a general family of relations where one factor contributes to, but does not solely determine, an outcome, best captured as 'causal_contribution_relation'.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_0ffef0b14f3e",
+        "RelR_724a60e8029d"
+      ],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "Both relations express that certain behaviors or processes lead to or support the emergence of stronger relationships, which is inherently causal in nature (even if probabilistic). They therefore belong in the broad CAUSALITY group.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  }
+]

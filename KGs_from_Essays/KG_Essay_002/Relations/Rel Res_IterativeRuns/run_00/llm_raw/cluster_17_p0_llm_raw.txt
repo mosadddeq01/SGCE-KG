@@ -1,0 +1,64 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_73e66be10928", "RelR_6c021a7aab02"],
+      "canonical_rel_name": "is_characterized_by",
+      "canonical_rel_desc": "Links a time period or conceptual era to key defining technologies, features, or attributes that characterize it.",
+      "justification": "Both relations describe the same predicate: the 'age of the internet and social media' is defined or characterized by specific technologies (internet, social media). A single canonical predicate 'is_characterized_by' captures this definitional attribute relation clearly and is reusable for similar context-defining links.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": ["RelR_73e66be10928", "RelR_6c021a7aab02"],
+      "rel_cls": "context_characterization_relation",
+      "justification": "These relations express how a temporal or contextual entity (a historical/urban-legend era) is characterized by specific contextual factors (technologies, media). This is more specific than a generic attribute relation and groups similar 'X is characterized by Y' edges.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": ["RelR_73e66be10928", "RelR_6c021a7aab02"],
+      "rel_cls_group": "IDENTITY",
+      "justification": "Characterization here is quasi-definitional: the internet and social media are core to what this age 'is'. This fits best under a broad identity/definitional grouping rather than mere association or causality.",
+      "remark": null,
+      "confidence": 0.86
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_bb0d4b13ec8d", "RelR_7bba242ffa13"],
+      "canonical_rel_name": "blurs_boundary_with",
+      "canonical_rel_desc": "Indicates that a narrative or concept blurs the distinction or boundary between itself and another category or truth status (e.g., fact, fiction).",
+      "justification": "Both relations describe the same underlying predicate: urban legend tales blur the boundary between themselves and factual or fictional content. The phrase 'blurs_boundary_with' captures the mutual, fuzzy-border relation more accurately than plain 'blends' and can be reused for similar ambiguity relations.",
+      "remark": "Direction is kept as tales → fact/fiction even though the boundary-blurring is conceptually symmetric, to maintain consistency with narrative-centric modeling.",
+      "confidence": 0.92
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": ["RelR_bb0d4b13ec8d", "RelR_7bba242ffa13"],
+      "rel_cls": "narrative_truth_boundary_relation",
+      "justification": "These edges relate narratives to categories of truth (fact, fiction) specifically in terms of boundary-blurring. A dedicated class for narrative truth-boundary or ambiguity relations is more informative than a generic association or narrative_relation label.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": ["RelR_bb0d4b13ec8d", "RelR_7bba242ffa13"],
+      "rel_cls_group": "ASSOCIATION",
+      "justification": "The relations express a conceptual association/overlap between narratives and truth categories, not a strict hierarchy or temporal/causal link. This fits best under a broad ASSOCIATION grouping focused on conceptual overlap.",
+      "remark": null,
+      "confidence": 0.86
+    }
+  }
+]

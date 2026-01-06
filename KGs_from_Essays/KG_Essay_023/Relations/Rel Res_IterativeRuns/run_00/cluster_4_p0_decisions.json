@@ -1,0 +1,179 @@
+{
+  "cluster_label": "4_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_85f1d04edd70",
+      "relation_name": "is_feature_of",
+      "rel_desc": "Instant messaging is described as a means through which social media platforms enable sharing.",
+      "rel_hint_type": "part-whole",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "instant messaging",
+      "object_entity_name": "social media",
+      "subject_class_label": "Social Media Communication Features",
+      "subject_class_group": "Social Media & Online Communication",
+      "object_class_label": "Social Media Platforms",
+      "object_class_group": "Social Media & Online Communication",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": "real-time",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "Through",
+        "LogicalMarker": null,
+        "OtherQualifier": "Medium: text-based communication"
+      },
+      "confidence": 0.9,
+      "remarks": [
+        "Platform host not named explicitly, inferred from overall context of social media platforms."
+      ]
+    },
+    {
+      "relation_id": "RelR_a34a1f21c04a",
+      "relation_name": "is_feature_of",
+      "rel_desc": "Video calls are presented as a communication feature of social media platforms.",
+      "rel_hint_type": "part-whole",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "video calls",
+      "object_entity_name": "social media",
+      "subject_class_label": "Social Media Communication Features",
+      "subject_class_group": "Social Media & Online Communication",
+      "object_class_label": "Social Media Platforms",
+      "object_class_group": "Social Media & Online Communication",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": "real-time",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "Through",
+        "LogicalMarker": null,
+        "OtherQualifier": "Medium: audiovisual communication"
+      },
+      "confidence": 0.9,
+      "remarks": [
+        "Platform entity inferred as the social media platforms already introduced."
+      ]
+    },
+    {
+      "relation_id": "RelR_c653a88a8cc3",
+      "relation_name": "is_feature_of",
+      "rel_desc": "Social networking features are functionalities provided by social media platforms.",
+      "rel_hint_type": "part-whole",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "social networking features",
+      "object_entity_name": "social media",
+      "subject_class_label": "Social Media Communication Features",
+      "subject_class_group": "Social Media & Online Communication",
+      "object_class_label": "Social Media Platforms",
+      "object_class_group": "Social Media & Online Communication",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": "real-time interaction",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "Through",
+        "LogicalMarker": null,
+        "OtherQualifier": "Function: connecting and interacting among users"
+      },
+      "confidence": 0.92,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_85f1d04edd70\",\n        \"RelR_a34a1f21c04a\",\n        \"RelR_c653a88a8cc3\"\n      ],\n      \"canonical_rel_name\": \"is_feature_of\",\n      \"canonical_rel_desc\": \"Indicates that the subject is a feature or functionality provided by the platform or system represented by the object.\",\n      \"justification\": \"In all three relations, the subject is a communication or networking functionality (instant messaging, video calls, social networking features) that is offered by the social media platform (object). The existing relation_name hint and the part-whole semantics align well with a unified predicate 'is_feature_of' from feature → platform.\",\n      \"remark\": null,\n      \"confidence\": 0.95\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_85f1d04edd70\",\n        \"RelR_a34a1f21c04a\",\n        \"RelR_c653a88a8cc3\"\n      ],\n      \"rel_cls\": \"platform_feature_relation\",\n      \"justification\": \"All instances describe relationships where various communication or networking capabilities are features offered by a social media platform. Grouping them under a class 'platform_feature_relation' captures this family of relations more specifically than a generic part-whole or composition label.\",\n      \"remark\": null,\n      \"confidence\": 0.94\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_85f1d04edd70\",\n        \"RelR_a34a1f21c04a\",\n        \"RelR_c653a88a8cc3\"\n      ],\n      \"rel_cls_group\": \"COMPOSITION\",\n      \"justification\": \"Each relation expresses that specific features (parts) belong to or are contained within a larger system (the social media platform as a whole), which is a standard part-whole / compositional semantics.\",\n      \"remark\": null,\n      \"confidence\": 0.93\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_85f1d04edd70",
+          "RelR_a34a1f21c04a",
+          "RelR_c653a88a8cc3"
+        ],
+        "canonical_rel_name": "is_feature_of",
+        "canonical_rel_desc": "Indicates that the subject is a feature or functionality provided by the platform or system represented by the object.",
+        "justification": "In all three relations, the subject is a communication or networking functionality (instant messaging, video calls, social networking features) that is offered by the social media platform (object). The existing relation_name hint and the part-whole semantics align well with a unified predicate 'is_feature_of' from feature → platform.",
+        "remark": null,
+        "confidence": 0.95
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_85f1d04edd70",
+          "RelR_a34a1f21c04a",
+          "RelR_c653a88a8cc3"
+        ],
+        "rel_cls": "platform_feature_relation",
+        "justification": "All instances describe relationships where various communication or networking capabilities are features offered by a social media platform. Grouping them under a class 'platform_feature_relation' captures this family of relations more specifically than a generic part-whole or composition label.",
+        "remark": null,
+        "confidence": 0.94
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_85f1d04edd70",
+          "RelR_a34a1f21c04a",
+          "RelR_c653a88a8cc3"
+        ],
+        "rel_cls_group": "COMPOSITION",
+        "justification": "Each relation expresses that specific features (parts) belong to or are contained within a larger system (the social media platform as a whole), which is a standard part-whole / compositional semantics.",
+        "remark": null,
+        "confidence": 0.93
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_85f1d04edd70",
+        "RelR_a34a1f21c04a",
+        "RelR_c653a88a8cc3"
+      ],
+      "canonical_rel_name": "is_feature_of",
+      "canonical_rel_desc": "Indicates that the subject is a feature or functionality provided by the platform or system represented by the object.",
+      "justification": "In all three relations, the subject is a communication or networking functionality (instant messaging, video calls, social networking features) that is offered by the social media platform (object). The existing relation_name hint and the part-whole semantics align well with a unified predicate 'is_feature_of' from feature → platform.",
+      "remark": null,
+      "confidence": 0.95
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_85f1d04edd70",
+        "RelR_a34a1f21c04a",
+        "RelR_c653a88a8cc3"
+      ],
+      "rel_cls": "platform_feature_relation",
+      "justification": "All instances describe relationships where various communication or networking capabilities are features offered by a social media platform. Grouping them under a class 'platform_feature_relation' captures this family of relations more specifically than a generic part-whole or composition label.",
+      "remark": null,
+      "confidence": 0.94
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_85f1d04edd70",
+        "RelR_a34a1f21c04a",
+        "RelR_c653a88a8cc3"
+      ],
+      "rel_cls_group": "COMPOSITION",
+      "justification": "Each relation expresses that specific features (parts) belong to or are contained within a larger system (the social media platform as a whole), which is a standard part-whole / compositional semantics.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  ],
+  "timestamp": "2026-01-06T11:02:13Z"
+}

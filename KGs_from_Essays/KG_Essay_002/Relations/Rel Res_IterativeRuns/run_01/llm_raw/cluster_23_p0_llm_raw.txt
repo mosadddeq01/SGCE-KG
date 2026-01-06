@@ -1,0 +1,20 @@
+[
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": [
+        "RelR_c9421dbb7623",
+        "RelR_0e88fe2ee094",
+        "RelR_7d0308323555",
+        "RelR_07bfb0d1c290"
+      ],
+      "canonical_rel_name": "is_about",
+      "canonical_rel_desc": "Indicates that an information-bearing entity (such as an essay, report, or narrative) is about or thematically focused on the object topic or entity.",
+      "rel_cls": "document_topic_relation",
+      "rel_cls_group": "ASSOCIATION",
+      "justification": "All four relations link a text-like, information-bearing subject (essay or news report) to the topic or entity it discusses, so they share the same aboutness predicate. Normalizing them under a single canonical description and the class 'document_topic_relation' improves schema consistency. The broad semantic dimension is aboutness/association between document and topic, so 'ASSOCIATION' is more accurate and uniform than mixing 'ASSOCIATION' and 'INFORMATION'.",
+      "remark": null,
+      "confidence": 0.96
+    }
+  }
+]

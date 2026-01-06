@@ -1,0 +1,19 @@
+[
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": [
+        "RelR_67371442a3ea",
+        "RelR_b1409919e426",
+        "RelR_8889b377fd7c"
+      ],
+      "canonical_rel_name": "promotes",
+      "canonical_rel_desc": "A causal relation where a biological or ecological process increases, supports, or facilitates a beneficial ecological outcome (such as regeneration, diversity, or growth).",
+      "rel_cls": "positive_ecological_effect_relation",
+      "rel_cls_group": "CAUSALITY",
+      "justification": "All three relations describe the same directional causal pattern: seed dispersal leading to beneficial ecological outcomes (regeneration, genetic diversity, vegetation growth). The existing canonical_rel_name, rel_cls, and rel_cls_group are coherent and correctly normalized, but the canonical_rel_desc was slightly narrow (focused on populations/communities). It is refined here to cover the broader range of ecological outcomes actually used in these instances while preserving the same predicate and class.",
+      "remark": null,
+      "confidence": 0.96
+    }
+  }
+]

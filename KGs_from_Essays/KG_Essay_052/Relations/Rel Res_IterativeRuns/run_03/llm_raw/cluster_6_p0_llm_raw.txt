@@ -1,0 +1,18 @@
+[
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": [
+        "RelR_1ea5b796708e",
+      "RelR_218ec0f9187f"
+      ],
+      "canonical_rel_name": "promotes_social_connection_between",
+      "canonical_rel_desc": "Indicates that the subject promotes, enables, or strengthens social connection or cohesion between the people, groups, or communities represented by the object.",
+      "rel_cls": "social_cohesion_and_connection_relation",
+      "rel_cls_group": "ASSOCIATION",
+      "justification": "Both relations describe sports/sporting events as fostering or enabling social connection/cohesion between people or groups (bridge-building, uniting diverse backgrounds). The existing canonical names and relation classes diverge only in wording (social_cohesion vs social_connection) while sharing the same underlying predicate semantics. Normalizing them to a single canonical_rel_name and a unified rel_cls avoids trivial variants and better reflects that these edges are about social connection/cohesion between social actors.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  }
+]

@@ -1,0 +1,175 @@
+{
+  "cluster_label": "21_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_7392475d7b5b",
+      "relation_name": "supports",
+      "rel_desc": "Birds contribute to and support biodiversity.",
+      "rel_hint_type": "support",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "birds",
+      "object_entity_name": "biodiversity",
+      "subject_class_label": "Bird Biotic Components",
+      "subject_class_group": "Birds as Environmental Indicators & Conservation",
+      "object_class_label": "Ecosystem State and Stability",
+      "object_class_group": "Ecosystem Condition, Function & Services",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "in ecosystems",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "contributing to",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.94,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_93b080a97463",
+      "relation_name": "supports_functioning_of",
+      "rel_desc": "Bird activities contribute to ecosystem functioning.",
+      "rel_hint_type": "support",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "birds",
+      "object_entity_name": "ecosystem functioning",
+      "subject_class_label": "Bird Biotic Components",
+      "subject_class_group": "Birds as Environmental Indicators & Conservation",
+      "object_class_label": "Ecosystem Processes and Functions",
+      "object_class_group": "Ecosystem Condition, Function & Services",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "worldwide",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "contribute to",
+        "LogicalMarker": null,
+        "OtherQualifier": "ServiceExamples: seed dispersal, pest control"
+      },
+      "confidence": 0.95,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_57444e076d6f",
+      "relation_name": "supports",
+      "rel_desc": "Nutrient-enriched soils support plant growth.",
+      "rel_hint_type": "enables",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "soils",
+      "object_entity_name": "plant growth",
+      "subject_class_label": "Habitat Substrates",
+      "subject_class_group": "Bird-Mediated Nutrient Cycling & Habitats",
+      "object_class_label": "Plant Growth Processes",
+      "object_class_group": "Bird-Mediated Plant Reproduction and Regeneration",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "on land",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "as a result of enrichment",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.94,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_7392475d7b5b\",\n        \"RelR_93b080a97463\",\n        \"RelR_57444e076d6f\"\n      ],\n      \"canonical_rel_name\": \"supports\",\n      \"canonical_rel_desc\": \"Indicates that the subject provides causal or functional support that maintains, enables, or enhances the state, process, or functioning of the object (e.g., organisms supporting biodiversity, ecosystem functioning, or growth processes).\",\n      \"justification\": \"All three relations describe a causal/functional contribution where the subject helps maintain or enhance an ecological state or process (birds supporting biodiversity, birds supporting ecosystem functioning, soils supporting plant growth). Using a single predicate 'supports' captures this consistent enabling/maintaining semantics across instances.\",\n      \"remark\": null,\n      \"confidence\": 0.94\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_7392475d7b5b\",\n        \"RelR_93b080a97463\",\n        \"RelR_57444e076d6f\"\n      ],\n      \"rel_cls\": \"ecosystem_function_support_relation\",\n      \"justification\": \"Each relation links a biotic or abiotic component (birds, soils) to an ecological outcome (biodiversity, ecosystem functioning, plant growth) via a supporting/enabling role. Grouping them under 'ecosystem_function_support_relation' reflects this shared class of relations where components support functions or states in ecosystems.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_7392475d7b5b\",\n        \"RelR_93b080a97463\",\n        \"RelR_57444e076d6f\"\n      ],\n      \"rel_cls_group\": \"CAUSALITY\",\n      \"justification\": \"The descriptions and causal hints ('contributing to', 'as a result of enrichment') show that these are not mere associations but causal/functional support relations, where the subject helps bring about or maintain the object state or process. This fits the CAUSALITY group.\",\n      \"remark\": null,\n      \"confidence\": 0.96\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_7392475d7b5b",
+          "RelR_93b080a97463",
+          "RelR_57444e076d6f"
+        ],
+        "canonical_rel_name": "supports",
+        "canonical_rel_desc": "Indicates that the subject provides causal or functional support that maintains, enables, or enhances the state, process, or functioning of the object (e.g., organisms supporting biodiversity, ecosystem functioning, or growth processes).",
+        "justification": "All three relations describe a causal/functional contribution where the subject helps maintain or enhance an ecological state or process (birds supporting biodiversity, birds supporting ecosystem functioning, soils supporting plant growth). Using a single predicate 'supports' captures this consistent enabling/maintaining semantics across instances.",
+        "remark": null,
+        "confidence": 0.94
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_7392475d7b5b",
+          "RelR_93b080a97463",
+          "RelR_57444e076d6f"
+        ],
+        "rel_cls": "ecosystem_function_support_relation",
+        "justification": "Each relation links a biotic or abiotic component (birds, soils) to an ecological outcome (biodiversity, ecosystem functioning, plant growth) via a supporting/enabling role. Grouping them under 'ecosystem_function_support_relation' reflects this shared class of relations where components support functions or states in ecosystems.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_7392475d7b5b",
+          "RelR_93b080a97463",
+          "RelR_57444e076d6f"
+        ],
+        "rel_cls_group": "CAUSALITY",
+        "justification": "The descriptions and causal hints ('contributing to', 'as a result of enrichment') show that these are not mere associations but causal/functional support relations, where the subject helps bring about or maintain the object state or process. This fits the CAUSALITY group.",
+        "remark": null,
+        "confidence": 0.96
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_7392475d7b5b",
+        "RelR_93b080a97463",
+        "RelR_57444e076d6f"
+      ],
+      "canonical_rel_name": "supports",
+      "canonical_rel_desc": "Indicates that the subject provides causal or functional support that maintains, enables, or enhances the state, process, or functioning of the object (e.g., organisms supporting biodiversity, ecosystem functioning, or growth processes).",
+      "justification": "All three relations describe a causal/functional contribution where the subject helps maintain or enhance an ecological state or process (birds supporting biodiversity, birds supporting ecosystem functioning, soils supporting plant growth). Using a single predicate 'supports' captures this consistent enabling/maintaining semantics across instances.",
+      "remark": null,
+      "confidence": 0.94
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_7392475d7b5b",
+        "RelR_93b080a97463",
+        "RelR_57444e076d6f"
+      ],
+      "rel_cls": "ecosystem_function_support_relation",
+      "justification": "Each relation links a biotic or abiotic component (birds, soils) to an ecological outcome (biodiversity, ecosystem functioning, plant growth) via a supporting/enabling role. Grouping them under 'ecosystem_function_support_relation' reflects this shared class of relations where components support functions or states in ecosystems.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_7392475d7b5b",
+        "RelR_93b080a97463",
+        "RelR_57444e076d6f"
+      ],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "The descriptions and causal hints ('contributing to', 'as a result of enrichment') show that these are not mere associations but causal/functional support relations, where the subject helps bring about or maintain the object state or process. This fits the CAUSALITY group.",
+      "remark": null,
+      "confidence": 0.96
+    }
+  ],
+  "timestamp": "2026-01-06T11:31:23Z"
+}

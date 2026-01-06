@@ -1,0 +1,28 @@
+[
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_abad8be0",
+      "new_name": "Funerary Participants and Roles",
+      "new_description": "Human agents who participate in or organize funerary activities, including relatives of the deceased, professional mourners, and other ritual specialists.",
+      "new_class_type_hint": "Social Role",
+      "new_class_group": "Funerary Roles and Ritual Practices",
+      "remark": null,
+      "justification": "This class is correctly scoped to human agents involved in funerary contexts and should remain distinct from ritual processes; updating the label/description for clarity and assigning a shared funerary-focused Class_Group connects it appropriately to related classes without merging different concepts.",
+      "confidence": 0.93
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_37762aeb",
+      "new_name": "Funerary Practices and Rituals",
+      "new_description": "Ceremonial processes conducted as part of funerals, including funeral processions and associated ritual actions performed to honor the deceased.",
+      "new_class_type_hint": "Ceremonial Process",
+      "new_class_group": "Funerary Roles and Ritual Practices",
+      "remark": null,
+      "justification": "This class cleanly captures funerary processes rather than social roles; refining the label/description and placing it in the same Funerary Roles and Ritual Practices Class_Group as the participants class preserves the role–process distinction while structurally linking related funerary concepts.",
+      "confidence": 0.94
+    }
+  }
+]

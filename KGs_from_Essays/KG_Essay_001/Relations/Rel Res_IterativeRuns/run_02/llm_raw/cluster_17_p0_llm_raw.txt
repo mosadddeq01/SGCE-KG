@@ -1,0 +1,17 @@
+[
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": [
+        "RelR_77297636eaaa"
+      ],
+      "canonical_rel_name": "is_physical_form_of",
+      "canonical_rel_desc": "Indicates that a concrete physical structure or casing is the characteristic physical form associated with a more abstract life-cycle stage, state, or process.",
+      "rel_cls": "physical_form_relation",
+      "rel_cls_group": "REPRESENTATION",
+      "justification": "The current predicate describes the chrysalis as the concrete casing that represents the pupal stage, not as being identical to the abstract stage itself. Using 'is_physical_form_of' and rel_cls_group 'REPRESENTATION' better captures that this is a representational/embodiment relation rather than strict identity. The more specific rel_cls 'physical_form_relation' is clearer than the generic 'physical_manifestation_relation'.",
+      "remark": null,
+      "confidence": 0.83
+    }
+  }
+]

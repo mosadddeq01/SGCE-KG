@@ -1,0 +1,219 @@
+{
+  "cluster_label": 2,
+  "cluster_classes": [
+    {
+      "candidate_id": "ClsC_45efec12",
+      "class_label": "Social Contexts",
+      "class_description": "Situational settings and exchanges where people interact and body language is expressed, such as informal gatherings and ongoing interactions.",
+      "class_type_hint": "Social Context",
+      "class_group": "TBD",
+      "confidence": 0.9,
+      "evidence_excerpt": "social environments where people interact; interpersonal exchanges shaped by body language in social contexts",
+      "member_ids": [
+        "Can_b9114ed6",
+        "Can_9254128d"
+      ],
+      "members": [
+        {
+          "id": "Can_b9114ed6",
+          "entity_name": "social situations",
+          "entity_description": "Social environments or contexts in which individuals interact with others and apply body language, such as informal or casual gatherings.",
+          "entity_type_hint": "SocialContext"
+        },
+        {
+          "id": "Can_9254128d",
+          "entity_name": "social interactions",
+          "entity_description": "Exchanges and engagements between people in social contexts, where nonverbal cues such as body language, posture, and facial expressions influence communication and relationship dynamics.",
+          "entity_type_hint": "SocialProcess"
+        }
+      ],
+      "remarks": [
+        "This class was split into 'Social Environments' and 'Social Interactions'. It should no longer receive new entities; consider deprecating or removing after migration is fully verified."
+      ]
+    },
+    {
+      "candidate_id": "ClsC_dc2ef29c",
+      "class_label": "Professional Social Contexts",
+      "class_description": "Work-related or career-oriented environments where people interact in a professional capacity, such as offices, meetings, or formal workplace events.",
+      "class_type_hint": "Social Context",
+      "class_group": "TBD",
+      "confidence": 0.93,
+      "evidence_excerpt": "In professional settings, individuals may use body language to project confidence and authority.",
+      "member_ids": [
+        "En_bf7bbf1e"
+      ],
+      "members": [
+        {
+          "id": "En_bf7bbf1e",
+          "entity_name": "professional settings",
+          "entity_description": "Work-related or career-oriented environments where individuals interact in a professional capacity.",
+          "entity_type_hint": "SocialContext"
+        }
+      ],
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"split_class\",\n    \"args\": {\n      \"source_class_id\": \"ClsC_45efec12\",\n      \"splits\": [\n        {\n          \"name\": \"Social Environments\",\n          \"description\": \"Social settings or contexts in which individuals are present with others, such as informal or casual gatherings, where body language may be expressed.\",\n          \"class_type_hint\": \"Social Context\",\n          \"member_ids\": [\n            \"Can_b9114ed6\"\n          ],\n          \"provisional_id\": \"Split_SocialEnvironments\"\n        },\n        {\n          \"name\": \"Social Interactions\",\n          \"description\": \"Exchanges and engagements between people in social contexts, where nonverbal cues such as body language, posture, and facial expressions influence communication and relationship dynamics.\",\n          \"class_type_hint\": \"Social Process\",\n          \"member_ids\": [\n            \"Can_9254128d\"\n          ],\n          \"provisional_id\": \"Split_SocialInteractions\"\n        }\n      ],\n      \"justification\": \"The original 'Social Contexts' class mixed situational environments (social situations) with dynamic processes (social interactions); splitting yields a clearer separation between static contexts and interactional processes.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"Split_SocialEnvironments\",\n      \"new_name\": \"Social Environments\",\n      \"new_description\": \"Social settings or contexts in which individuals are present with others, such as informal or casual gatherings, where body language may be expressed.\",\n      \"new_class_type_hint\": \"Social Context\",\n      \"new_class_group\": \"Social Environments and Interactions\",\n      \"remark\": null,\n      \"justification\": \"Assigning a clear label, context-focused type hint, and a shared Class_Group emphasizes this class as representing social settings rather than interactions, and aligns it with related social-interaction classes.\",\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"Split_SocialInteractions\",\n      \"new_name\": \"Social Interactions\",\n      \"new_description\": \"Exchanges and engagements between people in social contexts, where nonverbal cues such as body language, posture, and facial expressions influence communication and relationship dynamics.\",\n      \"new_class_type_hint\": \"Social Process\",\n      \"new_class_group\": \"Social Environments and Interactions\",\n      \"remark\": null,\n      \"justification\": \"Assigning a process-oriented type hint and the same Class_Group clarifies that this class covers interactional dynamics that occur within social environments.\",\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_dc2ef29c\",\n      \"new_name\": \"Professional Social Contexts\",\n      \"new_description\": \"Work-related or career-oriented environments where people interact in a professional capacity, such as offices, meetings, or formal workplace events.\",\n      \"new_class_type_hint\": \"Social Context\",\n      \"new_class_group\": \"Social Environments and Interactions\",\n      \"remark\": null,\n      \"justification\": \"This class represents a specialized subset of social environments (professional settings), so it should share the same higher-level Class_Group as general social environments and interactions.\",\n      \"confidence\": 0.92\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_45efec12\",\n      \"new_name\": \"Social Contexts (legacy container)\",\n      \"new_description\": \"Legacy container class that originally mixed social environments and social interactions; members have been split into more specific classes.\",\n      \"new_class_type_hint\": \"Deprecated\",\n      \"new_class_group\": \"Social Environments and Interactions\",\n      \"remark\": \"This class was split into 'Social Environments' and 'Social Interactions'. It should no longer receive new entities; consider deprecating or removing after migration is fully verified.\",\n      \"justification\": \"After splitting its members into more precise classes, the original class should be marked as a legacy/deprecated container but remain linked to the same overarching Class_Group for traceability.\",\n      \"confidence\": 0.88\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "split_class",
+      "args": {
+        "source_class_id": "ClsC_45efec12",
+        "splits": [
+          {
+            "name": "Social Environments",
+            "description": "Social settings or contexts in which individuals are present with others, such as informal or casual gatherings, where body language may be expressed.",
+            "class_type_hint": "Social Context",
+            "member_ids": [
+              "Can_b9114ed6"
+            ],
+            "provisional_id": "Split_SocialEnvironments"
+          },
+          {
+            "name": "Social Interactions",
+            "description": "Exchanges and engagements between people in social contexts, where nonverbal cues such as body language, posture, and facial expressions influence communication and relationship dynamics.",
+            "class_type_hint": "Social Process",
+            "member_ids": [
+              "Can_9254128d"
+            ],
+            "provisional_id": "Split_SocialInteractions"
+          }
+        ],
+        "justification": "The original 'Social Contexts' class mixed situational environments (social situations) with dynamic processes (social interactions); splitting yields a clearer separation between static contexts and interactional processes.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "Split_SocialEnvironments",
+        "new_name": "Social Environments",
+        "new_description": "Social settings or contexts in which individuals are present with others, such as informal or casual gatherings, where body language may be expressed.",
+        "new_class_type_hint": "Social Context",
+        "new_class_group": "Social Environments and Interactions",
+        "remark": null,
+        "justification": "Assigning a clear label, context-focused type hint, and a shared Class_Group emphasizes this class as representing social settings rather than interactions, and aligns it with related social-interaction classes.",
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "Split_SocialInteractions",
+        "new_name": "Social Interactions",
+        "new_description": "Exchanges and engagements between people in social contexts, where nonverbal cues such as body language, posture, and facial expressions influence communication and relationship dynamics.",
+        "new_class_type_hint": "Social Process",
+        "new_class_group": "Social Environments and Interactions",
+        "remark": null,
+        "justification": "Assigning a process-oriented type hint and the same Class_Group clarifies that this class covers interactional dynamics that occur within social environments.",
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_dc2ef29c",
+        "new_name": "Professional Social Contexts",
+        "new_description": "Work-related or career-oriented environments where people interact in a professional capacity, such as offices, meetings, or formal workplace events.",
+        "new_class_type_hint": "Social Context",
+        "new_class_group": "Social Environments and Interactions",
+        "remark": null,
+        "justification": "This class represents a specialized subset of social environments (professional settings), so it should share the same higher-level Class_Group as general social environments and interactions.",
+        "confidence": 0.92
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_45efec12",
+        "new_name": "Social Contexts (legacy container)",
+        "new_description": "Legacy container class that originally mixed social environments and social interactions; members have been split into more specific classes.",
+        "new_class_type_hint": "Deprecated",
+        "new_class_group": "Social Environments and Interactions",
+        "remark": "This class was split into 'Social Environments' and 'Social Interactions'. It should no longer receive new entities; consider deprecating or removing after migration is fully verified.",
+        "justification": "After splitting its members into more precise classes, the original class should be marked as a legacy/deprecated container but remain linked to the same overarching Class_Group for traceability.",
+        "confidence": 0.88
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "split_class",
+      "source_class_id": "ClsC_45efec12",
+      "source_class_id_resolved": "ClsC_45efec12",
+      "created_classes": [
+        {
+          "new_class_id": "ClsR_e1b9e529",
+          "provisional_id": "Split_SocialEnvironments",
+          "member_ids": [
+            "Can_b9114ed6"
+          ]
+        },
+        {
+          "new_class_id": "ClsR_dbb441fb",
+          "provisional_id": "Split_SocialInteractions",
+          "member_ids": [
+            "Can_9254128d"
+          ]
+        }
+      ],
+      "justification": "The original 'Social Contexts' class mixed situational environments (social situations) with dynamic processes (social interactions); splitting yields a clearer separation between static contexts and interactional processes.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "modify_class",
+      "class_id": "Split_SocialEnvironments",
+      "class_id_resolved": "ClsR_e1b9e529",
+      "new_name": "Social Environments",
+      "new_description": "Social settings or contexts in which individuals are present with others, such as informal or casual gatherings, where body language may be expressed.",
+      "new_class_type_hint": "Social Context",
+      "new_class_group": "Social Environments and Interactions",
+      "remark": null,
+      "justification": "Assigning a clear label, context-focused type hint, and a shared Class_Group emphasizes this class as representing social settings rather than interactions, and aligns it with related social-interaction classes.",
+      "confidence": 0.9
+    },
+    {
+      "action": "modify_class",
+      "class_id": "Split_SocialInteractions",
+      "class_id_resolved": "ClsR_dbb441fb",
+      "new_name": "Social Interactions",
+      "new_description": "Exchanges and engagements between people in social contexts, where nonverbal cues such as body language, posture, and facial expressions influence communication and relationship dynamics.",
+      "new_class_type_hint": "Social Process",
+      "new_class_group": "Social Environments and Interactions",
+      "remark": null,
+      "justification": "Assigning a process-oriented type hint and the same Class_Group clarifies that this class covers interactional dynamics that occur within social environments.",
+      "confidence": 0.9
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_dc2ef29c",
+      "class_id_resolved": "ClsC_dc2ef29c",
+      "new_name": "Professional Social Contexts",
+      "new_description": "Work-related or career-oriented environments where people interact in a professional capacity, such as offices, meetings, or formal workplace events.",
+      "new_class_type_hint": "Social Context",
+      "new_class_group": "Social Environments and Interactions",
+      "remark": null,
+      "justification": "This class represents a specialized subset of social environments (professional settings), so it should share the same higher-level Class_Group as general social environments and interactions.",
+      "confidence": 0.92
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_45efec12",
+      "class_id_resolved": "ClsC_45efec12",
+      "new_name": "Social Contexts (legacy container)",
+      "new_description": "Legacy container class that originally mixed social environments and social interactions; members have been split into more specific classes.",
+      "new_class_type_hint": "Deprecated",
+      "new_class_group": "Social Environments and Interactions",
+      "remark": "This class was split into 'Social Environments' and 'Social Interactions'. It should no longer receive new entities; consider deprecating or removing after migration is fully verified.",
+      "justification": "After splitting its members into more precise classes, the original class should be marked as a legacy/deprecated container but remain linked to the same overarching Class_Group for traceability.",
+      "confidence": 0.88
+    }
+  ],
+  "provisional_to_real": {
+    "Split_SocialEnvironments": "ClsR_e1b9e529",
+    "Split_SocialInteractions": "ClsR_dbb441fb"
+  },
+  "timestamp": "2026-01-06T11:54:31Z"
+}

@@ -1,0 +1,99 @@
+{
+  "cluster_label": "21_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_0b82932f38f5",
+      "relation_name": "collected",
+      "rel_desc": "The Brothers Grimm collected a particular version of the Snow White tale.",
+      "rel_hint_type": "collection",
+      "canonical_rel_name": "collects_story",
+      "canonical_rel_desc": "The subject collector or authorial figure gathers or records the specified story or tale.",
+      "rel_cls": "textual_collection_relation",
+      "rel_cls_group": "AGENCY",
+      "subject_entity_name": "Brothers Grimm",
+      "object_entity_name": "Snow White",
+      "subject_class_label": "Grimm Brothers",
+      "subject_class_group": "Grimm Fairy Tales",
+      "object_class_label": "Individual Fairy Tales",
+      "object_class_group": "Fairy Tales and Their Audiences",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": "is",
+        "OtherQualifier": "VersionStatus: most well-known version"
+      },
+      "confidence": 0.96,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_890124d5a774",
+      "relation_name": "collected",
+      "rel_desc": "The Brothers Grimm collected the tale 'Hansel and Gretel.'",
+      "rel_hint_type": "authorship/collection",
+      "canonical_rel_name": "collected_story",
+      "canonical_rel_desc": "Connects a collector or editor to an individual tale or story that they collected as part of a larger body of work, without implying original authorship.",
+      "rel_cls": "creative_work_creation_relation",
+      "rel_cls_group": "CREATION",
+      "subject_entity_name": "Brothers Grimm",
+      "object_entity_name": "Hansel and Gretel",
+      "subject_class_label": "Grimm Brothers",
+      "subject_class_group": "Grimm Fairy Tales",
+      "object_class_label": "Grimm Fairy-Tale Works",
+      "object_class_group": "Grimm Fairy Tales",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": "as part of their fairy tale collection",
+        "UncertaintyQualifier": null,
+        "CausalHint": "also",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.98,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_rel_schema\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_0b82932f38f5\",\n        \"RelR_890124d5a774\"\n      ],\n      \"canonical_rel_name\": \"collects_story\",\n      \"canonical_rel_desc\": \"Links a collector or editor (e.g., the Brothers Grimm) to an individual tale or story that they gathered or recorded as part of a larger body of work, without implying original authorship.\",\n      \"rel_cls\": \"textual_collection_relation\",\n      \"rel_cls_group\": \"AGENCY\",\n      \"justification\": \"Both relations connect the Brothers Grimm as collectors/editors to specific fairy tales they gathered, not as original authors. They share identical semantics (collection of tales into a corpus). The canonical_rel_name variants 'collects_story' and 'collected_story' should be normalized to a single predicate 'collects_story'. The broader relation class is best described as a textual collection/editorial relation rather than creative authorship, and both should consistently fall under the AGENCY group since the emphasis is on the act of collecting rather than creating the original work.\",\n      \"remark\": null,\n      \"confidence\": 0.93\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_rel_schema",
+      "args": {
+        "relation_ids": [
+          "RelR_0b82932f38f5",
+          "RelR_890124d5a774"
+        ],
+        "canonical_rel_name": "collects_story",
+        "canonical_rel_desc": "Links a collector or editor (e.g., the Brothers Grimm) to an individual tale or story that they gathered or recorded as part of a larger body of work, without implying original authorship.",
+        "rel_cls": "textual_collection_relation",
+        "rel_cls_group": "AGENCY",
+        "justification": "Both relations connect the Brothers Grimm as collectors/editors to specific fairy tales they gathered, not as original authors. They share identical semantics (collection of tales into a corpus). The canonical_rel_name variants 'collects_story' and 'collected_story' should be normalized to a single predicate 'collects_story'. The broader relation class is best described as a textual collection/editorial relation rather than creative authorship, and both should consistently fall under the AGENCY group since the emphasis is on the act of collecting rather than creating the original work.",
+        "remark": null,
+        "confidence": 0.93
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_rel_schema",
+      "relation_ids": [
+        "RelR_0b82932f38f5",
+        "RelR_890124d5a774"
+      ],
+      "canonical_rel_name": "collects_story",
+      "canonical_rel_desc": "Links a collector or editor (e.g., the Brothers Grimm) to an individual tale or story that they gathered or recorded as part of a larger body of work, without implying original authorship.",
+      "rel_cls": "textual_collection_relation",
+      "rel_cls_group": "AGENCY",
+      "new_relation_name": null,
+      "original_relation_name": null,
+      "justification": "Both relations connect the Brothers Grimm as collectors/editors to specific fairy tales they gathered, not as original authors. They share identical semantics (collection of tales into a corpus). The canonical_rel_name variants 'collects_story' and 'collected_story' should be normalized to a single predicate 'collects_story'. The broader relation class is best described as a textual collection/editorial relation rather than creative authorship, and both should consistently fall under the AGENCY group since the emphasis is on the act of collecting rather than creating the original work.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  ],
+  "timestamp": "2026-01-06T14:09:14Z"
+}

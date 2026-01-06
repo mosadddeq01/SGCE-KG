@@ -1,0 +1,20 @@
+[
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": [
+        "RelR_60044182a043",
+        "RelR_cca6af7d5b7b",
+        "RelR_0a626c6253d0",
+        "RelR_d4f1bf33576b"
+      ],
+      "canonical_rel_name": "originates_from",
+      "canonical_rel_desc": "Indicates that the subject (e.g., a narrative, tradition, or concept) historically originates from, or is grounded in, the object as its source cultural, folkloric, or geographic context.",
+      "rel_cls": "narrative_origin_relation",
+      "rel_cls_group": "CAUSALITY",
+      "justification": "All four relations describe the historical or cultural source from which a tale or group of fairytales originates (e.g., ancient Greece, European folklore, folklore, cultural myths). They share the same direction and semantics, so they should use a single normalized predicate 'originates_from'. The relation class can be unified as 'narrative_origin_relation' since each subject is a story or its origins, and the broad group is better modeled as CAUSALITY (source/origin) rather than SPATIALITY. This also removes unnecessary variation between 'origin_context_relation' and 'cultural_origin_relation' while keeping a clear, reusable schema.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  }
+]

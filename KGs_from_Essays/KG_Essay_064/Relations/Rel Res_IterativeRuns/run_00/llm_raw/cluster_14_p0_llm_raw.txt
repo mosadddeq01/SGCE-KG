@@ -1,0 +1,63 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_d36b0e1054ad"],
+      "canonical_rel_name": "has_earliest_attested_in",
+      "canonical_rel_desc": "Indicates the cultural or geographic context in which a narrative or tradition has its earliest known recorded or attested form.",
+      "justification": "This relation links a narrative tradition (Cinderella) to the place/culture of its earliest known record (ancient Greece), emphasizing earliest attestation rather than general origin.",
+      "remark": "Use this predicate for ‘earliest known record’ situations, distinct from broader narrative origins.",
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_cca6af7d5b7b"],
+      "canonical_rel_name": "originates_from",
+      "canonical_rel_desc": "Indicates the cultural, folkloric, or geographic tradition from which a narrative or story is generally considered to originate.",
+      "justification": "This relation connects a specific story (Hansel and Gretel) to its broader folkloric source tradition (European folklore), capturing general origin rather than specific source texts.",
+      "remark": null,
+      "confidence": 0.94
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_fcd84ecfe3a2"],
+      "canonical_rel_name": "is_derived_from",
+      "canonical_rel_desc": "Indicates that a narrative, text, or work is derived from or based on earlier narratives, myths, or source stories.",
+      "justification": "This relation links Beauty and the Beast to its earlier mythic and narrative sources, emphasizing derivation from prior stories rather than geographic origin or earliest record.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_d36b0e1054ad",
+        "RelR_cca6af7d5b7b",
+        "RelR_fcd84ecfe3a2"
+      ],
+      "rel_cls": "narrative_origin_relation",
+      "justification": "All three relations describe how a narrative relates to its origins: earliest attested context, originating tradition, or derivation from earlier myths/stories. Grouping them in a single class captures different facets of narrative provenance.",
+      "remark": "This class can cover predicates like has_earliest_attested_in, originates_from, and is_derived_from for stories and traditions.",
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_d36b0e1054ad",
+        "RelR_cca6af7d5b7b",
+        "RelR_fcd84ecfe3a2"
+      ],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "Narrative origins and derivations describe source–result relationships: earlier traditions, places, or myths causally underlie the existence and form of the later narrative.",
+      "remark": "Although there are temporal and spatial aspects, the primary semantic dimension is provenance/causal source, so CAUSALITY is the best fit.",
+      "confidence": 0.86
+    }
+  }
+]

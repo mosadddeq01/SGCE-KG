@@ -1,0 +1,17 @@
+[
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": [
+        "RelR_5c47c658a114"
+      ],
+      "canonical_rel_name": "is_primarily_realized_as",
+      "canonical_rel_desc": "Indicates that the subject type of cue is mainly instantiated or realized as the object modality/form (here, subtle cues are primarily facial expressions).",
+      "rel_cls": "nonverbal_cue_modality_relation",
+      "rel_cls_group": "MODALITY",
+      "justification": "The text states that subtle cues in this context primarily refer to facial expressions, meaning that the cue type is chiefly realized as facial expressions rather than being something abstract merely \"expressed through\" them. Renaming the predicate to `is_primarily_realized_as` better captures this instantiation/realization relation, and specializing the class to `nonverbal_cue_modality_relation` makes the relation family clearer while still fitting under the broad MODALITY group.",
+      "remark": null,
+      "confidence": 0.83
+    }
+  }
+]

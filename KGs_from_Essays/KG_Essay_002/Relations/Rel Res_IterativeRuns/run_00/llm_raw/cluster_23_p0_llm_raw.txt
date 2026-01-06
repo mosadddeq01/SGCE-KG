@@ -1,0 +1,57 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_93bde3a82244",
+        "RelR_4bf250420dcd"
+      ],
+      "canonical_rel_name": "is_based_on",
+      "canonical_rel_desc": "The subject narrative or story derives its content, inspiration, or core elements from the object (event, figure, or situation).",
+      "justification": "Both relations describe urban legends deriving their content or inspiration from real-world sources (real events or historical figures). They share the same directional predicate semantics and differ only in the specific type of source, so a single canonical predicate 'is_based_on' fits both.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_ca5971871f8f"
+      ],
+      "canonical_rel_name": "is_narrative_predecessor_of",
+      "canonical_rel_desc": "The subject narrative acts as a historical or conceptual predecessor that underpins or evolves into the object narrative.",
+      "justification": "This relation connects earlier explanatory stories to later urban legends, emphasizing a historical-developmental predecessor → successor narrative link rather than a direct factual source relationship. A distinct predicate 'is_narrative_predecessor_of' captures this temporal-evolutionary narrative relationship.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_93bde3a82244",
+        "RelR_4bf250420dcd",
+        "RelR_ca5971871f8f"
+      ],
+      "rel_cls": "narrative_source_relation",
+      "justification": "All three relations describe how one narrative form (urban legends or later stories) is derived from, inspired by, or historically rooted in another narrative or real-world source. Grouping them under 'narrative_source_relation' captures this shared notion of narrative derivation/origin while allowing different canonical predicates for direct sourcing vs. historical predecessors.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_93bde3a82244",
+        "RelR_4bf250420dcd",
+        "RelR_ca5971871f8f"
+      ],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "Each relation encodes a directional origin/influence: sources (events, figures, earlier explanatory stories) give rise to or shape urban legends. This is a causal/influence-type linkage rather than mere co-occurrence or classification, so the broad group CAUSALITY is appropriate.",
+      "remark": null,
+      "confidence": 0.88
+    }
+  }
+]

@@ -1,0 +1,193 @@
+{
+  "cluster_label": "15_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_0ffef0b14f3e",
+      "relation_name": "contributes_to",
+      "rel_desc": "Connecting with others helps in forming or enhancing stronger relationships.",
+      "rel_hint_type": "causal contribution",
+      "canonical_rel_name": "contributes_to",
+      "canonical_rel_desc": "Subject process or behavior helps bring about or enhance the object outcome, without being the sole determining cause.",
+      "rel_cls": "causal_contribution_relation",
+      "rel_cls_group": "CAUSALITY",
+      "subject_entity_name": "connecting with others",
+      "object_entity_name": "stronger relationships",
+      "subject_class_label": "Interpersonal Improvement Processes",
+      "subject_class_group": "Interpersonal Relationships & Social Interaction",
+      "object_class_label": "Positive Social Outcomes",
+      "object_class_group": "Interpersonal Relationships & Social Interaction",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": "when supported by effective body language",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "can",
+        "CausalHint": "and",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.8,
+      "remarks": [
+        "Causal direction inferred from typical social dynamics, not explicitly stated.",
+        "Causal direction inferred from typical social dynamics, not explicitly stated."
+      ]
+    },
+    {
+      "relation_id": "RelR_724a60e8029d",
+      "relation_name": "contributes_to",
+      "rel_desc": "Successfully resolving conflicts supports the development of stronger relationships.",
+      "rel_hint_type": "causal contribution",
+      "canonical_rel_name": "contributes_to",
+      "canonical_rel_desc": "Subject process or behavior helps bring about or enhance the object outcome, without being the sole determining cause.",
+      "rel_cls": "causal_contribution_relation",
+      "rel_cls_group": "CAUSALITY",
+      "subject_entity_name": "conflict resolution",
+      "object_entity_name": "stronger relationships",
+      "subject_class_label": "Interpersonal Improvement Processes",
+      "subject_class_group": "Interpersonal Relationships & Social Interaction",
+      "object_class_label": "Positive Social Outcomes",
+      "object_class_group": "Interpersonal Relationships & Social Interaction",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": "when aided by effective body language",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "can",
+        "CausalHint": "and",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.84,
+      "remarks": [
+        "Causal link is inferred from domain knowledge rather than literal wording.",
+        "Causal link is inferred from domain knowledge rather than literal wording."
+      ]
+    },
+    {
+      "relation_id": "RelR_ed88082a96c6",
+      "relation_name": "leads_to",
+      "rel_desc": "Mastery of the art of body language results in more meaningful interactions.",
+      "rel_hint_type": "causal",
+      "canonical_rel_name": "contributes_to",
+      "canonical_rel_desc": "A skill, practice, or capability that tends to produce or enhance a positive outcome, without guaranteeing it.",
+      "rel_cls": "skill_outcome_relation",
+      "rel_cls_group": "CAUSALITY",
+      "subject_entity_name": "art of body language",
+      "object_entity_name": "meaningful interactions",
+      "subject_class_label": "Body Language as Communication",
+      "subject_class_group": "Body Language & Nonverbal Communication",
+      "object_class_label": "Positive Social Outcomes",
+      "object_class_group": "Interpersonal Relationships & Social Interaction",
+      "qualifiers": {
+        "TemporalQualifier": "ultimately",
+        "SpatialQualifier": "in social exchanges with others",
+        "OperationalConstraint": "when the art of body language is mastered",
+        "ConditionExpression": "mastering the art of body language",
+        "UncertaintyQualifier": "can (potential, not guaranteed)",
+        "CausalHint": "can lead to",
+        "LogicalMarker": null,
+        "OtherQualifier": "OutcomeQuality: more meaningful"
+      },
+      "confidence": 0.93,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_a43c939b20c5",
+      "relation_name": "leads_to",
+      "rel_desc": "Mastery of the art of body language results in more fulfilling interactions.",
+      "rel_hint_type": "causal",
+      "canonical_rel_name": "contributes_to",
+      "canonical_rel_desc": "A skill, practice, or capability that tends to produce or enhance a positive outcome, without guaranteeing it.",
+      "rel_cls": "skill_outcome_relation",
+      "rel_cls_group": "CAUSALITY",
+      "subject_entity_name": "art of body language",
+      "object_entity_name": "fulfilling interactions",
+      "subject_class_label": "Body Language as Communication",
+      "subject_class_group": "Body Language & Nonverbal Communication",
+      "object_class_label": "Positive Social Outcomes",
+      "object_class_group": "Interpersonal Relationships & Social Interaction",
+      "qualifiers": {
+        "TemporalQualifier": "ultimately",
+        "SpatialQualifier": "in social exchanges with others",
+        "OperationalConstraint": "when the art of body language is mastered",
+        "ConditionExpression": "mastering the art of body language",
+        "UncertaintyQualifier": "can (potential, not guaranteed)",
+        "CausalHint": "can lead to",
+        "LogicalMarker": null,
+        "OtherQualifier": "OutcomeQuality: more fulfilling"
+      },
+      "confidence": 0.93,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_rel_schema\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_0ffef0b14f3e\",\n        \"RelR_724a60e8029d\"\n      ],\n      \"canonical_rel_name\": null,\n      \"canonical_rel_desc\": \"Subject process, skill, or behavior helps bring about or enhance the object outcome, without being the sole determining cause.\",\n      \"rel_cls\": \"skill_outcome_relation\",\n      \"rel_cls_group\": null,\n      \"justification\": \"All four relations describe skills/behaviors (e.g., connecting with others, conflict resolution) that causally contribute to positive social outcomes. The first two were using a more generic rel_cls ('causal_contribution_relation') and a slightly different canonical_rel_desc. Normalizing them to the more specific existing class 'skill_outcome_relation' and a shared description improves schema consistency while preserving the CAUSALITY group.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"modify_rel_schema\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_ed88082a96c6\",\n        \"RelR_a43c939b20c5\"\n      ],\n      \"canonical_rel_name\": null,\n      \"canonical_rel_desc\": \"Subject process, skill, or behavior helps bring about or enhance the object outcome, without being the sole determining cause.\",\n      \"rel_cls\": null,\n      \"rel_cls_group\": null,\n      \"justification\": \"These two relations already use canonical_rel_name 'contributes_to' and rel_cls 'skill_outcome_relation', consistent with the other instances. However, their canonical_rel_desc wording differs slightly from the other 'contributes_to' descriptions. Unifying the description across all 'contributes_to' skill-outcome links ensures a reusable, predicate-level definition without changing semantics.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_rel_schema",
+      "args": {
+        "relation_ids": [
+          "RelR_0ffef0b14f3e",
+          "RelR_724a60e8029d"
+        ],
+        "canonical_rel_name": null,
+        "canonical_rel_desc": "Subject process, skill, or behavior helps bring about or enhance the object outcome, without being the sole determining cause.",
+        "rel_cls": "skill_outcome_relation",
+        "rel_cls_group": null,
+        "justification": "All four relations describe skills/behaviors (e.g., connecting with others, conflict resolution) that causally contribute to positive social outcomes. The first two were using a more generic rel_cls ('causal_contribution_relation') and a slightly different canonical_rel_desc. Normalizing them to the more specific existing class 'skill_outcome_relation' and a shared description improves schema consistency while preserving the CAUSALITY group.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "modify_rel_schema",
+      "args": {
+        "relation_ids": [
+          "RelR_ed88082a96c6",
+          "RelR_a43c939b20c5"
+        ],
+        "canonical_rel_name": null,
+        "canonical_rel_desc": "Subject process, skill, or behavior helps bring about or enhance the object outcome, without being the sole determining cause.",
+        "rel_cls": null,
+        "rel_cls_group": null,
+        "justification": "These two relations already use canonical_rel_name 'contributes_to' and rel_cls 'skill_outcome_relation', consistent with the other instances. However, their canonical_rel_desc wording differs slightly from the other 'contributes_to' descriptions. Unifying the description across all 'contributes_to' skill-outcome links ensures a reusable, predicate-level definition without changing semantics.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_rel_schema",
+      "relation_ids": [
+        "RelR_0ffef0b14f3e",
+        "RelR_724a60e8029d"
+      ],
+      "canonical_rel_name": null,
+      "canonical_rel_desc": "Subject process, skill, or behavior helps bring about or enhance the object outcome, without being the sole determining cause.",
+      "rel_cls": "skill_outcome_relation",
+      "rel_cls_group": null,
+      "new_relation_name": null,
+      "original_relation_name": null,
+      "justification": "All four relations describe skills/behaviors (e.g., connecting with others, conflict resolution) that causally contribute to positive social outcomes. The first two were using a more generic rel_cls ('causal_contribution_relation') and a slightly different canonical_rel_desc. Normalizing them to the more specific existing class 'skill_outcome_relation' and a shared description improves schema consistency while preserving the CAUSALITY group.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "modify_rel_schema",
+      "relation_ids": [
+        "RelR_ed88082a96c6",
+        "RelR_a43c939b20c5"
+      ],
+      "canonical_rel_name": null,
+      "canonical_rel_desc": "Subject process, skill, or behavior helps bring about or enhance the object outcome, without being the sole determining cause.",
+      "rel_cls": null,
+      "rel_cls_group": null,
+      "new_relation_name": null,
+      "original_relation_name": null,
+      "justification": "These two relations already use canonical_rel_name 'contributes_to' and rel_cls 'skill_outcome_relation', consistent with the other instances. However, their canonical_rel_desc wording differs slightly from the other 'contributes_to' descriptions. Unifying the description across all 'contributes_to' skill-outcome links ensures a reusable, predicate-level definition without changing semantics.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  ],
+  "timestamp": "2026-01-06T12:14:47Z"
+}

@@ -1,0 +1,33 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_2f7f474da8cd", "RelR_518898593175"],
+      "canonical_rel_name": "performed_on",
+      "canonical_rel_desc": "Indicates that a ritual, procedure, or practice is carried out on a specific subject or target (e.g., a deceased individual or body).",
+      "justification": "Both relations describe funerary or mummification procedures (salt drying; general burial practices) being carried out on the deceased as the target of the action. A shared predicate 'performed_on' captures this process-to-subject application consistently.",
+      "remark": "Temporal and spatial qualifiers (e.g., 'during mummification', 'after death', 'in tombs') remain as qualifiers on the relation instances.",
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": ["RelR_2f7f474da8cd", "RelR_518898593175"],
+      "rel_cls": "procedure_application_relation",
+      "justification": "These edges link ritual/procedural practices to the subjects they are applied to; this fits a class describing how procedures are applied to or enacted upon targets.",
+      "remark": "Covers ritual, funerary, and other procedural applications where a practice is enacted on a person or body.",
+      "confidence": 0.88
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": ["RelR_2f7f474da8cd", "RelR_518898593175"],
+      "rel_cls_group": "INTERACTION",
+      "justification": "The semantics emphasize an action (ritual/procedure) interacting with and affecting a target (the deceased), which fits an action–object interaction dimension more than composition or identity.",
+      "remark": null,
+      "confidence": 0.87
+    }
+  }
+]

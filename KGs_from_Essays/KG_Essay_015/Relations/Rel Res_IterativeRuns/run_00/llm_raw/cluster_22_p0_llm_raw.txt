@@ -1,0 +1,48 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_0eeca423118a",
+        "RelR_0a2cd275dffc",
+        "RelR_1b71d936b0c6",
+        "RelR_9ca4b8551015"
+      ],
+      "canonical_rel_name": "has_purpose",
+      "canonical_rel_desc": "Indicates that the subject practice, object, or action is intended or used to achieve the object as its purpose or goal.",
+      "justification": "All four relations describe funerary structures, practices, or texts whose intended goal is to secure the deceased's eternal existence in the realm of the gods. The semantics are teleological (purpose) with direction subject=means and object=goal, so a unified predicate 'has_purpose' is appropriate.",
+      "remark": null,
+      "confidence": 0.96
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_0eeca423118a",
+        "RelR_0a2cd275dffc",
+        "RelR_1b71d936b0c6",
+        "RelR_9ca4b8551015"
+      ],
+      "rel_cls": "functional_purpose_relation",
+      "justification": "Each relation links a funerary practice or object to its intended function or goal in the religious system (ensuring eternal existence among the gods). This is best modeled as a functional purpose class rather than composition, identity, or hierarchy.",
+      "remark": null,
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_0eeca423118a",
+        "RelR_0a2cd275dffc",
+        "RelR_1b71d936b0c6",
+        "RelR_9ca4b8551015"
+      ],
+      "rel_cls_group": "USAGE",
+      "justification": "The relations capture how funerary elements are used or intended to be used to achieve a religious goal, fitting the broad dimension of usage/purpose rather than strict causality or identity.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  }
+]

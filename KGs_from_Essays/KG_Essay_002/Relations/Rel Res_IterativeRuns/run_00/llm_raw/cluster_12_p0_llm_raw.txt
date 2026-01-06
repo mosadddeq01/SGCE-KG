@@ -1,0 +1,45 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_176454fd7397",
+        "RelR_c8fc8340f86c",
+        "RelR_0db7f7e9fa9f"
+      ],
+      "canonical_rel_name": "is_narrative_element_of",
+      "canonical_rel_desc": "Indicates that the subject is a recurring narrative motif, setting, or element that appears within and helps constitute the object story or story type.",
+      "justification": "In all three relations, the subject (urban legend motif, location motif, or cursed object motif) functions as a narrative element or motif within the object (stories). This is more precise than a generic part_of and reflects their role in story composition.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_176454fd7397",
+        "RelR_c8fc8340f86c",
+        "RelR_0db7f7e9fa9f"
+      ],
+      "rel_cls": "narrative_structure_relation",
+      "justification": "Each relation links a narrative motif or element to the stories it helps structure, which fits a class for relations about narrative structure and components of stories.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_176454fd7397",
+        "RelR_c8fc8340f86c",
+        "RelR_0db7f7e9fa9f"
+      ],
+      "rel_cls_group": "COMPOSITION",
+      "justification": "These relations describe how stories are composed from narrative elements or motifs, which is a compositional (whole–part) dimension.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  }
+]

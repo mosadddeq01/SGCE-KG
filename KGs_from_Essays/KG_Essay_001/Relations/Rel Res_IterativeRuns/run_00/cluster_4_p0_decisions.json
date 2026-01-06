@@ -1,0 +1,521 @@
+{
+  "cluster_label": "4_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_f9c619a8c66a",
+      "relation_name": "undergoes_life_cycle",
+      "rel_desc": "Butterflies undergo the butterfly life cycle as their developmental sequence.",
+      "rel_hint_type": "process-membership",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "butterflies",
+      "object_entity_name": "butterfly life cycle",
+      "subject_class_label": "Butterflies",
+      "subject_class_group": "Butterfly Ecology and Interactions",
+      "object_class_label": "Butterfly Life Cycle and Stages",
+      "object_class_group": "Butterfly Life Cycle and Appreciation",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "undergo",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.95,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_9f438429918d",
+      "relation_name": "undergoes",
+      "rel_desc": "Caterpillars shed their skin several times as they grow; this process is called molting, which caterpillars repeatedly undergo.",
+      "rel_hint_type": "biological process",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "caterpillars",
+      "object_entity_name": "molting",
+      "subject_class_label": "Caterpillar Larval Stage",
+      "subject_class_group": "Caterpillar Biology & Adaptations",
+      "object_class_label": "Caterpillar Molting",
+      "object_class_group": "Caterpillar Biology & Adaptations",
+      "qualifiers": {
+        "TemporalQualifier": "several times as they grow",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": "as",
+        "OtherQualifier": null
+      },
+      "confidence": 0.97,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_a52120e0dce4",
+      "relation_name": "acts_on",
+      "rel_desc": "Molting is the process that causes the caterpillar to shed its existing skin.",
+      "rel_hint_type": "process target",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "molting",
+      "object_entity_name": "caterpillar skin",
+      "subject_class_label": "Caterpillar Molting",
+      "subject_class_group": "Caterpillar Biology & Adaptations",
+      "object_class_label": "Caterpillar Molting",
+      "object_class_group": "Caterpillar Biology & Adaptations",
+      "qualifiers": {
+        "TemporalQualifier": "each time they molt",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "a process known as",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.93,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_b446db2042f1",
+      "relation_name": "acts_on",
+      "rel_desc": "Metamorphosis is the process that causes significant changes in the caterpillar's body.",
+      "rel_hint_type": "process-participant",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "metamorphosis",
+      "object_entity_name": "caterpillar",
+      "subject_class_label": "Butterfly Metamorphosis System",
+      "subject_class_group": "Butterfly Life Cycle & Wing Development",
+      "object_class_label": "Butterfly Life Cycle and Stages",
+      "object_class_group": "Butterfly Life Cycle and Appreciation",
+      "qualifiers": {
+        "TemporalQualifier": "during metamorphosis",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "undergoes",
+        "LogicalMarker": "During",
+        "OtherQualifier": null
+      },
+      "confidence": 0.96,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_44a3bbd764c0",
+      "relation_name": "transforms_into",
+      "rel_desc": "The caterpillar ultimately transforms into a butterfly through metamorphosis.",
+      "rel_hint_type": "conversion",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "caterpillar",
+      "object_entity_name": "butterflies",
+      "subject_class_label": "Butterfly Life Cycle and Stages",
+      "subject_class_group": "Butterfly Life Cycle and Appreciation",
+      "object_class_label": "Butterflies",
+      "object_class_group": "Butterfly Ecology and Interactions",
+      "qualifiers": {
+        "TemporalQualifier": "during metamorphosis",
+        "SpatialQualifier": "inside the chrysalis",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "develops into",
+        "LogicalMarker": "as",
+        "OtherQualifier": null
+      },
+      "confidence": 0.95,
+      "remarks": [
+        "Metamorphosis is the mediating process; captured separately in another relation."
+      ]
+    },
+    {
+      "relation_id": "RelR_53da6e438474",
+      "relation_name": "transforms_into",
+      "rel_desc": "The caterpillar's organs break down and become a soupy substance during metamorphosis.",
+      "rel_hint_type": "state_change",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "organs",
+      "object_entity_name": "soupy substance",
+      "subject_class_label": "Insect Body Structures",
+      "subject_class_group": "Insect Metamorphosis Anatomy and States",
+      "object_class_label": "Insect Metamorphic Fluid",
+      "object_class_group": "Insect Metamorphosis Anatomy and States",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": "during metamorphosis within the chrysalis",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "dissolve into",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.96,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_200c41ba83c0",
+      "relation_name": "affects_state_of",
+      "rel_desc": "Metamorphosis involves the breakdown of the caterpillar's organs.",
+      "rel_hint_type": "process-participant",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "metamorphosis",
+      "object_entity_name": "organs",
+      "subject_class_label": "Butterfly Metamorphosis System",
+      "subject_class_group": "Butterfly Life Cycle & Wing Development",
+      "object_class_label": "Insect Body Structures",
+      "object_class_group": "Insect Metamorphosis Anatomy and States",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "inside the chrysalis",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "ProcessPhase: internal reorganization stage"
+      },
+      "confidence": 0.86,
+      "remarks": [
+        "Relation used to capture that organ dissolution is a component of metamorphosis."
+      ]
+    },
+    {
+      "relation_id": "RelR_e22e8fe78162",
+      "relation_name": "involves",
+      "rel_desc": "Pollination involves flowers as the structures between which pollen is transferred.",
+      "rel_hint_type": "process-component",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "pollination",
+      "object_entity_name": "flowers",
+      "subject_class_label": "Plant Reproduction Concepts",
+      "subject_class_group": "Plant Reproduction and Pollination",
+      "object_class_label": "Flowering Plant Entities",
+      "object_class_group": "Plant Reproduction and Pollination",
+      "qualifiers": {
+        "TemporalQualifier": "during pollination",
+        "SpatialQualifier": "between flowers",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "by transferring",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.94,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_edf14a53570e",
+      "relation_name": "undergoes_life_cycle",
+      "rel_desc": "Butterflies undergo the butterfly life cycle described (egg, larva, pupa, adult).",
+      "rel_hint_type": "biological_process",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "butterflies",
+      "object_entity_name": "butterfly life cycle",
+      "subject_class_label": "Butterflies",
+      "subject_class_group": "Butterfly Ecology and Interactions",
+      "object_class_label": "Butterfly Life Cycle and Stages",
+      "object_class_group": "Butterfly Life Cycle and Appreciation",
+      "qualifiers": {
+        "TemporalQualifier": "from egg to adult butterfly",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "filled with intricate stages and astonishing transformations",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.93,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_18fa9999033c",
+      "relation_name": "undergoes",
+      "rel_desc": "The butterfly undergoes an incredible life journey before the observed moment.",
+      "rel_hint_type": "process-participation",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "butterflies",
+      "object_entity_name": "butterfly life journey",
+      "subject_class_label": "Butterflies",
+      "subject_class_group": "Butterfly Ecology and Interactions",
+      "object_class_label": "Butterfly Appreciation",
+      "object_class_group": "Butterfly Life Cycle and Appreciation",
+      "qualifiers": {
+        "TemporalQualifier": "before the observed moment of beauty and grace",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "AffectiveContext: prompting the observer to marvel at this journey"
+      },
+      "confidence": 0.93,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_f9c619a8c66a\",\n        \"RelR_9f438429918d\",\n        \"RelR_edf14a53570e\",\n        \"RelR_18fa9999033c\"\n      ],\n      \"canonical_rel_name\": \"undergoes_biological_process\",\n      \"canonical_rel_desc\": \"Links an organism or life stage to a biological process or life cycle it undergoes over time (e.g., life cycle, molting, life journey).\",\n      \"justification\": \"All these relations connect an organism (butterflies or caterpillars) to a biological process or life-cycle-like journey it experiences, with the subject as the participant and the object as the process. A single predicate 'undergoes_biological_process' normalizes these semantically equivalent patterns.\",\n      \"remark\": null,\n      \"confidence\": 0.95\n    }\n  },\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_a52120e0dce4\",\n        \"RelR_b446db2042f1\",\n        \"RelR_200c41ba83c0\",\n        \"RelR_e22e8fe78162\"\n      ],\n      \"canonical_rel_name\": \"involves_participant\",\n      \"canonical_rel_desc\": \"Links a process or event to an entity that participates in or is acted upon within that process (e.g., structures, organisms, organs, flowers).\",\n      \"justification\": \"These relations all describe a process (molting, metamorphosis, pollination) having a participant or target entity (skin, caterpillar, organs, flowers). Normalizing to 'involves_participant' captures the generic process→participant semantics without overfitting to specific verbs like 'acts_on' or 'involves'.\",\n      \"remark\": null,\n      \"confidence\": 0.93\n    }\n  },\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_44a3bbd764c0\",\n        \"RelR_53da6e438474\"\n      ],\n      \"canonical_rel_name\": \"transforms_into\",\n      \"canonical_rel_desc\": \"Links an entity or material state to a new entity or state it becomes through a transformation process.\",\n      \"justification\": \"Both relations describe a source entity (caterpillar, organs) changing into a different entity or state (butterfly, soupy substance). The existing raw predicate 'transforms_into' is already appropriate and consistent for these state-change conversions.\",\n      \"remark\": null,\n      \"confidence\": 0.95\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_f9c619a8c66a\",\n        \"RelR_9f438429918d\",\n        \"RelR_edf14a53570e\",\n        \"RelR_18fa9999033c\"\n      ],\n      \"rel_cls\": \"biological_process_participation_relation\",\n      \"justification\": \"These edges all represent organisms participating in or experiencing biological processes (life cycle, molting, life journey). Grouping them under 'biological_process_participation_relation' captures this family of subject-as-organism, object-as-process relations.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_a52120e0dce4\",\n        \"RelR_b446db2042f1\",\n        \"RelR_200c41ba83c0\",\n        \"RelR_e22e8fe78162\"\n      ],\n      \"rel_cls\": \"process_participant_relation\",\n      \"justification\": \"All these relations connect a process (molting, metamorphosis, pollination) to entities that participate in or are affected by that process (skin, caterpillar, organs, flowers). 'process_participant_relation' is an appropriate, reusable class for this family.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_44a3bbd764c0\",\n        \"RelR_53da6e438474\"\n      ],\n      \"rel_cls\": \"state_change_relation\",\n      \"justification\": \"These relations capture a change of state or identity of an entity (caterpillar to butterfly, organs to soupy substance). A broader class 'state_change_relation' appropriately groups such transformation predicates.\",\n      \"remark\": null,\n      \"confidence\": 0.92\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_f9c619a8c66a\",\n        \"RelR_9f438429918d\",\n        \"RelR_edf14a53570e\",\n        \"RelR_18fa9999033c\",\n        \"RelR_a52120e0dce4\",\n        \"RelR_b446db2042f1\",\n        \"RelR_200c41ba83c0\",\n        \"RelR_e22e8fe78162\"\n      ],\n      \"rel_cls_group\": \"BIOLOGICAL_PROCESS\",\n      \"justification\": \"All these relations involve biological processes and their participants (organisms, structures, organs, flowers). Grouping them under a broad 'BIOLOGICAL_PROCESS' dimension reflects their shared process-centric semantics.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_44a3bbd764c0\",\n        \"RelR_53da6e438474\"\n      ],\n      \"rel_cls_group\": \"MODIFICATION\",\n      \"justification\": \"These edges describe entities being transformed into other entities or states, which is a form of modification or change. The 'MODIFICATION' group is suitable for such state-change relations.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_f9c619a8c66a",
+          "RelR_9f438429918d",
+          "RelR_edf14a53570e",
+          "RelR_18fa9999033c"
+        ],
+        "canonical_rel_name": "undergoes_biological_process",
+        "canonical_rel_desc": "Links an organism or life stage to a biological process or life cycle it undergoes over time (e.g., life cycle, molting, life journey).",
+        "justification": "All these relations connect an organism (butterflies or caterpillars) to a biological process or life-cycle-like journey it experiences, with the subject as the participant and the object as the process. A single predicate 'undergoes_biological_process' normalizes these semantically equivalent patterns.",
+        "remark": null,
+        "confidence": 0.95
+      }
+    },
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_a52120e0dce4",
+          "RelR_b446db2042f1",
+          "RelR_200c41ba83c0",
+          "RelR_e22e8fe78162"
+        ],
+        "canonical_rel_name": "involves_participant",
+        "canonical_rel_desc": "Links a process or event to an entity that participates in or is acted upon within that process (e.g., structures, organisms, organs, flowers).",
+        "justification": "These relations all describe a process (molting, metamorphosis, pollination) having a participant or target entity (skin, caterpillar, organs, flowers). Normalizing to 'involves_participant' captures the generic process→participant semantics without overfitting to specific verbs like 'acts_on' or 'involves'.",
+        "remark": null,
+        "confidence": 0.93
+      }
+    },
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_44a3bbd764c0",
+          "RelR_53da6e438474"
+        ],
+        "canonical_rel_name": "transforms_into",
+        "canonical_rel_desc": "Links an entity or material state to a new entity or state it becomes through a transformation process.",
+        "justification": "Both relations describe a source entity (caterpillar, organs) changing into a different entity or state (butterfly, soupy substance). The existing raw predicate 'transforms_into' is already appropriate and consistent for these state-change conversions.",
+        "remark": null,
+        "confidence": 0.95
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_f9c619a8c66a",
+          "RelR_9f438429918d",
+          "RelR_edf14a53570e",
+          "RelR_18fa9999033c"
+        ],
+        "rel_cls": "biological_process_participation_relation",
+        "justification": "These edges all represent organisms participating in or experiencing biological processes (life cycle, molting, life journey). Grouping them under 'biological_process_participation_relation' captures this family of subject-as-organism, object-as-process relations.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_a52120e0dce4",
+          "RelR_b446db2042f1",
+          "RelR_200c41ba83c0",
+          "RelR_e22e8fe78162"
+        ],
+        "rel_cls": "process_participant_relation",
+        "justification": "All these relations connect a process (molting, metamorphosis, pollination) to entities that participate in or are affected by that process (skin, caterpillar, organs, flowers). 'process_participant_relation' is an appropriate, reusable class for this family.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_44a3bbd764c0",
+          "RelR_53da6e438474"
+        ],
+        "rel_cls": "state_change_relation",
+        "justification": "These relations capture a change of state or identity of an entity (caterpillar to butterfly, organs to soupy substance). A broader class 'state_change_relation' appropriately groups such transformation predicates.",
+        "remark": null,
+        "confidence": 0.92
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_f9c619a8c66a",
+          "RelR_9f438429918d",
+          "RelR_edf14a53570e",
+          "RelR_18fa9999033c",
+          "RelR_a52120e0dce4",
+          "RelR_b446db2042f1",
+          "RelR_200c41ba83c0",
+          "RelR_e22e8fe78162"
+        ],
+        "rel_cls_group": "BIOLOGICAL_PROCESS",
+        "justification": "All these relations involve biological processes and their participants (organisms, structures, organs, flowers). Grouping them under a broad 'BIOLOGICAL_PROCESS' dimension reflects their shared process-centric semantics.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_44a3bbd764c0",
+          "RelR_53da6e438474"
+        ],
+        "rel_cls_group": "MODIFICATION",
+        "justification": "These edges describe entities being transformed into other entities or states, which is a form of modification or change. The 'MODIFICATION' group is suitable for such state-change relations.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_f9c619a8c66a",
+        "RelR_9f438429918d",
+        "RelR_edf14a53570e",
+        "RelR_18fa9999033c"
+      ],
+      "canonical_rel_name": "undergoes_biological_process",
+      "canonical_rel_desc": "Links an organism or life stage to a biological process or life cycle it undergoes over time (e.g., life cycle, molting, life journey).",
+      "justification": "All these relations connect an organism (butterflies or caterpillars) to a biological process or life-cycle-like journey it experiences, with the subject as the participant and the object as the process. A single predicate 'undergoes_biological_process' normalizes these semantically equivalent patterns.",
+      "remark": null,
+      "confidence": 0.95
+    },
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_a52120e0dce4",
+        "RelR_b446db2042f1",
+        "RelR_200c41ba83c0",
+        "RelR_e22e8fe78162"
+      ],
+      "canonical_rel_name": "involves_participant",
+      "canonical_rel_desc": "Links a process or event to an entity that participates in or is acted upon within that process (e.g., structures, organisms, organs, flowers).",
+      "justification": "These relations all describe a process (molting, metamorphosis, pollination) having a participant or target entity (skin, caterpillar, organs, flowers). Normalizing to 'involves_participant' captures the generic process→participant semantics without overfitting to specific verbs like 'acts_on' or 'involves'.",
+      "remark": null,
+      "confidence": 0.93
+    },
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_44a3bbd764c0",
+        "RelR_53da6e438474"
+      ],
+      "canonical_rel_name": "transforms_into",
+      "canonical_rel_desc": "Links an entity or material state to a new entity or state it becomes through a transformation process.",
+      "justification": "Both relations describe a source entity (caterpillar, organs) changing into a different entity or state (butterfly, soupy substance). The existing raw predicate 'transforms_into' is already appropriate and consistent for these state-change conversions.",
+      "remark": null,
+      "confidence": 0.95
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_f9c619a8c66a",
+        "RelR_9f438429918d",
+        "RelR_edf14a53570e",
+        "RelR_18fa9999033c"
+      ],
+      "rel_cls": "biological_process_participation_relation",
+      "justification": "These edges all represent organisms participating in or experiencing biological processes (life cycle, molting, life journey). Grouping them under 'biological_process_participation_relation' captures this family of subject-as-organism, object-as-process relations.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_a52120e0dce4",
+        "RelR_b446db2042f1",
+        "RelR_200c41ba83c0",
+        "RelR_e22e8fe78162"
+      ],
+      "rel_cls": "process_participant_relation",
+      "justification": "All these relations connect a process (molting, metamorphosis, pollination) to entities that participate in or are affected by that process (skin, caterpillar, organs, flowers). 'process_participant_relation' is an appropriate, reusable class for this family.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_44a3bbd764c0",
+        "RelR_53da6e438474"
+      ],
+      "rel_cls": "state_change_relation",
+      "justification": "These relations capture a change of state or identity of an entity (caterpillar to butterfly, organs to soupy substance). A broader class 'state_change_relation' appropriately groups such transformation predicates.",
+      "remark": null,
+      "confidence": 0.92
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_f9c619a8c66a",
+        "RelR_9f438429918d",
+        "RelR_edf14a53570e",
+        "RelR_18fa9999033c",
+        "RelR_a52120e0dce4",
+        "RelR_b446db2042f1",
+        "RelR_200c41ba83c0",
+        "RelR_e22e8fe78162"
+      ],
+      "rel_cls_group": "BIOLOGICAL_PROCESS",
+      "justification": "All these relations involve biological processes and their participants (organisms, structures, organs, flowers). Grouping them under a broad 'BIOLOGICAL_PROCESS' dimension reflects their shared process-centric semantics.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_44a3bbd764c0",
+        "RelR_53da6e438474"
+      ],
+      "rel_cls_group": "MODIFICATION",
+      "justification": "These edges describe entities being transformed into other entities or states, which is a form of modification or change. The 'MODIFICATION' group is suitable for such state-change relations.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  ],
+  "timestamp": "2026-01-06T07:26:48Z"
+}

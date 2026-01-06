@@ -1,0 +1,45 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_3d2913e7f4e4",
+        "RelR_6e2e91d9c703",
+        "RelR_dc6a11611919"
+      ],
+      "canonical_rel_name": "is_part_of",
+      "canonical_rel_desc": "Indicates that the subject is a constituent, sub-aspect, or component of the object within a broader whole (which may be a concept, practice, belief system, or other structured entity).",
+      "justification": "All three relations describe a clear part-whole or aspect-whole membership: burial practices as part of Egyptian culture, mummification as an aspect of burial practices, and the realm of the gods as a component/destination within afterlife beliefs. These are best normalized under a single canonical predicate expressing conceptual part-whole structure.",
+      "remark": null,
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_3d2913e7f4e4",
+        "RelR_6e2e91d9c703",
+        "RelR_dc6a11611919"
+      ],
+      "rel_cls": "part_whole_relation",
+      "justification": "Each relation links an aspect, component, or sub-domain to a larger cultural or religious whole, which fits a generic part-whole relation class that can cover conceptual and practice-based hierarchies.",
+      "remark": null,
+      "confidence": 0.94
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_3d2913e7f4e4",
+        "RelR_6e2e91d9c703",
+        "RelR_dc6a11611919"
+      ],
+      "rel_cls_group": "COMPOSITION",
+      "justification": "The semantics concern how broader entities (culture, burial practices, afterlife beliefs) are composed from sub-practices, sub-aspects, or sub-realms, which aligns with a compositional/part-whole grouping.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  }
+]

@@ -1,0 +1,69 @@
+{
+  "cluster_label": "22_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_fd1b47d5a7fc",
+      "relation_name": "threatens",
+      "rel_desc": "The Evil Queen threatens Snow White, forcing her to flee into the forest.",
+      "rel_hint_type": "antagonistic",
+      "canonical_rel_name": "poses_threat_to",
+      "canonical_rel_desc": "Subject poses a danger or harmful intent toward the object, creating an antagonistic or threatening situation.",
+      "rel_cls": "adversarial_interaction_relation",
+      "rel_cls_group": "INTERACTION",
+      "subject_entity_name": "Evil Queen",
+      "object_entity_name": "Snow White",
+      "subject_class_label": "Snow White Characters",
+      "subject_class_group": "Snow White Fairy Tale",
+      "object_class_label": "Snow White Characters",
+      "object_class_group": "Snow White Fairy Tale",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "toward the forest",
+        "OperationalConstraint": null,
+        "ConditionExpression": "to escape her wicked stepmother",
+        "UncertaintyQualifier": null,
+        "CausalHint": "to escape",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.86,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_a8668b9dda59",
+      "relation_name": "poses_threat_to",
+      "rel_desc": "As a cannibalistic witch whose house the siblings enter, she poses a threat to Hansel and Gretel.",
+      "rel_hint_type": "antagonistic",
+      "canonical_rel_name": "poses_threat_to",
+      "canonical_rel_desc": "Subject poses a danger or harmful intent toward the object, creating an antagonistic or threatening situation.",
+      "rel_cls": "adversarial_interaction_relation",
+      "rel_cls_group": "INTERACTION",
+      "subject_entity_name": "cannibalistic witch",
+      "object_entity_name": "Hansel and Gretel (characters)",
+      "subject_class_label": "Hansel and Gretel Characters",
+      "subject_class_group": "Grimm Fairy Tales",
+      "object_class_label": "Hansel and Gretel Characters",
+      "object_class_group": "Grimm Fairy Tales",
+      "qualifiers": {
+        "TemporalQualifier": "after they stumble upon her house",
+        "SpatialQualifier": "at the house made of sweets",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "implied by role, not directly mentioned",
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.55,
+      "remarks": [
+        "Relation added to capture implied antagonism; not explicitly stated in this short excerpt.",
+        "Relation added to capture implied antagonism; not explicitly stated in this short excerpt.",
+        "Relation added to capture implied antagonism; not explicitly stated in this short excerpt."
+      ]
+    }
+  ],
+  "llm_raw": "[]",
+  "parsed_steps": [],
+  "executed_decisions": [],
+  "timestamp": "2026-01-06T14:11:58Z"
+}

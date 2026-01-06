@@ -1,0 +1,125 @@
+{
+  "cluster_label": "29_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_9dc2f34e252f",
+      "relation_name": "affects",
+      "rel_desc": "Gravitational time dilation slows the passage of time near a black hole.",
+      "rel_hint_type": "causal",
+      "canonical_rel_name": "slows",
+      "canonical_rel_desc": "Indicates that the subject process or phenomenon reduces the rate or speed of the object process or quantity.",
+      "rel_cls": "physical_causation_relation",
+      "rel_cls_group": "CAUSALITY",
+      "subject_entity_name": "gravitational time dilation",
+      "object_entity_name": "time near a black hole",
+      "subject_class_label": "Gravitational Time Dilation",
+      "subject_class_group": "Gravitation and General Relativity",
+      "object_class_label": "Gravitational Time Dilation",
+      "object_class_group": "Gravitation and General Relativity",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "near a black hole",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "causes",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.97,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_79885daea465",
+      "relation_name": "compared_to",
+      "rel_desc": "Gravitational time dilation makes time near the black hole slower relative to time experienced by distant observers.",
+      "rel_hint_type": "comparative",
+      "canonical_rel_name": "slows_time_relative_to",
+      "canonical_rel_desc": "Indicates that a physical effect or phenomenon causes time to pass more slowly in the subject context relative to the object reference context.",
+      "rel_cls": "causal_effect_comparison_relation",
+      "rel_cls_group": "CAUSALITY",
+      "subject_entity_name": "gravitational time dilation",
+      "object_entity_name": "time for observers further away",
+      "subject_class_label": "Gravitational Time Dilation",
+      "subject_class_group": "Gravitation and General Relativity",
+      "object_class_label": "Gravitational Time Dilation",
+      "object_class_group": "Gravitation and General Relativity",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "near vs further away from the black hole",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "causes",
+        "LogicalMarker": null,
+        "OtherQualifier": "ComparisonAspect: rate of time passage"
+      },
+      "confidence": 0.95,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_062b2ae7ba86",
+      "relation_name": "slower_than",
+      "rel_desc": "The rate of time near a black hole is slower than the rate experienced by observers further away.",
+      "rel_hint_type": "comparative",
+      "canonical_rel_name": "has_slower_rate_than",
+      "canonical_rel_desc": "Indicates that the rate of a quantity (here, passage of time) at the subject is slower than the corresponding rate at the object.",
+      "rel_cls": "quantitative_comparison_relation",
+      "rel_cls_group": "COMPARISON",
+      "subject_entity_name": "time near a black hole",
+      "object_entity_name": "time for observers further away",
+      "subject_class_label": "Gravitational Time Dilation",
+      "subject_class_group": "Gravitation and General Relativity",
+      "object_class_label": "Gravitational Time Dilation",
+      "object_class_group": "Gravitation and General Relativity",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "near vs further away from a black hole",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "due to gravitational time dilation",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.94,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_rel_schema\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_79885daea465\"],\n      \"canonical_rel_name\": null,\n      \"canonical_rel_desc\": null,\n      \"rel_cls\": null,\n      \"rel_cls_group\": \"COMPARISON\",\n      \"justification\": \"This relation instance primarily encodes a comparison between the rate of time near the black hole and for distant observers, as indicated by rel_hint_type='comparative' and qualifiers like 'ComparisonAspect: rate of time passage'. Although the phenomenon (gravitational time dilation) is causal, the edge itself is about relative rates, aligning better with a COMPARISON group than pure CAUSALITY. The existing rel_cls 'causal_effect_comparison_relation' can remain, but the broader group should emphasize the comparative nature.\",\n      \"remark\": \"Rel_cls kept as 'causal_effect_comparison_relation' to capture that the comparison arises from a causal effect, but the top-level grouping is normalized to COMPARISON to reflect the relation’s primary semantics.\",\n      \"confidence\": 0.86\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_rel_schema",
+      "args": {
+        "relation_ids": [
+          "RelR_79885daea465"
+        ],
+        "canonical_rel_name": null,
+        "canonical_rel_desc": null,
+        "rel_cls": null,
+        "rel_cls_group": "COMPARISON",
+        "justification": "This relation instance primarily encodes a comparison between the rate of time near the black hole and for distant observers, as indicated by rel_hint_type='comparative' and qualifiers like 'ComparisonAspect: rate of time passage'. Although the phenomenon (gravitational time dilation) is causal, the edge itself is about relative rates, aligning better with a COMPARISON group than pure CAUSALITY. The existing rel_cls 'causal_effect_comparison_relation' can remain, but the broader group should emphasize the comparative nature.",
+        "remark": "Rel_cls kept as 'causal_effect_comparison_relation' to capture that the comparison arises from a causal effect, but the top-level grouping is normalized to COMPARISON to reflect the relation's primary semantics.",
+        "confidence": 0.86
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_rel_schema",
+      "relation_ids": [
+        "RelR_79885daea465"
+      ],
+      "canonical_rel_name": null,
+      "canonical_rel_desc": null,
+      "rel_cls": null,
+      "rel_cls_group": "COMPARISON",
+      "new_relation_name": null,
+      "original_relation_name": null,
+      "justification": "This relation instance primarily encodes a comparison between the rate of time near the black hole and for distant observers, as indicated by rel_hint_type='comparative' and qualifiers like 'ComparisonAspect: rate of time passage'. Although the phenomenon (gravitational time dilation) is causal, the edge itself is about relative rates, aligning better with a COMPARISON group than pure CAUSALITY. The existing rel_cls 'causal_effect_comparison_relation' can remain, but the broader group should emphasize the comparative nature.",
+      "remark": "Rel_cls kept as 'causal_effect_comparison_relation' to capture that the comparison arises from a causal effect, but the top-level grouping is normalized to COMPARISON to reflect the relation's primary semantics.",
+      "confidence": 0.86
+    }
+  ],
+  "timestamp": "2026-01-06T09:59:39Z"
+}

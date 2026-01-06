@@ -1,0 +1,141 @@
+{
+  "cluster_label": "18_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_fc899f9582b9",
+      "relation_name": "enhances_stability_of",
+      "rel_desc": "Birds contribute to the stability of ecosystems.",
+      "rel_hint_type": "stabilizing effect",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "birds",
+      "object_entity_name": "stability of ecosystems",
+      "subject_class_label": "Bird Biotic Components",
+      "subject_class_group": "Birds as Environmental Indicators & Conservation",
+      "object_class_label": "Ecosystem State and Stability",
+      "object_class_group": "Ecosystem Condition, Function & Services",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "worldwide",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "contribute to",
+        "LogicalMarker": null,
+        "OtherQualifier": "Mechanism: through roles like seed dispersal and pest control"
+      },
+      "confidence": 0.95,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_7d52a2cd6581",
+      "relation_name": "maintains_balance_of",
+      "rel_desc": "Ecological roles of birds help maintain balance within ecosystems.",
+      "rel_hint_type": "stabilizing effect",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "ecological roles of birds",
+      "object_entity_name": "ecosystems",
+      "subject_class_label": "Ecosystem Processes and Functions",
+      "subject_class_group": "Ecosystem Condition, Function & Services",
+      "object_class_label": "Ecosystem State and Stability",
+      "object_class_group": "Ecosystem Condition, Function & Services",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "in natural systems (ecosystems)",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "help maintain balance",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.9,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_fc899f9582b9\", \"RelR_7d52a2cd6581\"],\n      \"canonical_rel_name\": \"stabilizes\",\n      \"canonical_rel_desc\": \"Indicates that the subject contributes causally to the stability or balanced functioning of the ecosystem or ecological system represented by the object.\",\n      \"justification\": \"Both relations describe a causal stabilizing/balancing effect of birds or their ecological roles on ecosystems or their stability; using a single predicate 'stabilizes' captures this shared semantics regardless of whether the object is the ecosystem itself or its stability state.\",\n      \"remark\": null,\n      \"confidence\": 0.93\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_fc899f9582b9\", \"RelR_7d52a2cd6581\"],\n      \"rel_cls\": \"ecosystem_stability_relation\",\n      \"justification\": \"Both relations express how organisms or their ecological roles affect the stability or balance of ecosystems, which fits a shared class focused on ecosystem stability effects.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_fc899f9582b9\", \"RelR_7d52a2cd6581\"],\n      \"rel_cls_group\": \"CAUSALITY\",\n      \"justification\": \"Each relation encodes a causal influence (birds or their roles causing increased stability/balance of ecosystems), which belongs under a broad causal semantics group.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_fc899f9582b9",
+          "RelR_7d52a2cd6581"
+        ],
+        "canonical_rel_name": "stabilizes",
+        "canonical_rel_desc": "Indicates that the subject contributes causally to the stability or balanced functioning of the ecosystem or ecological system represented by the object.",
+        "justification": "Both relations describe a causal stabilizing/balancing effect of birds or their ecological roles on ecosystems or their stability; using a single predicate 'stabilizes' captures this shared semantics regardless of whether the object is the ecosystem itself or its stability state.",
+        "remark": null,
+        "confidence": 0.93
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_fc899f9582b9",
+          "RelR_7d52a2cd6581"
+        ],
+        "rel_cls": "ecosystem_stability_relation",
+        "justification": "Both relations express how organisms or their ecological roles affect the stability or balance of ecosystems, which fits a shared class focused on ecosystem stability effects.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_fc899f9582b9",
+          "RelR_7d52a2cd6581"
+        ],
+        "rel_cls_group": "CAUSALITY",
+        "justification": "Each relation encodes a causal influence (birds or their roles causing increased stability/balance of ecosystems), which belongs under a broad causal semantics group.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_fc899f9582b9",
+        "RelR_7d52a2cd6581"
+      ],
+      "canonical_rel_name": "stabilizes",
+      "canonical_rel_desc": "Indicates that the subject contributes causally to the stability or balanced functioning of the ecosystem or ecological system represented by the object.",
+      "justification": "Both relations describe a causal stabilizing/balancing effect of birds or their ecological roles on ecosystems or their stability; using a single predicate 'stabilizes' captures this shared semantics regardless of whether the object is the ecosystem itself or its stability state.",
+      "remark": null,
+      "confidence": 0.93
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_fc899f9582b9",
+        "RelR_7d52a2cd6581"
+      ],
+      "rel_cls": "ecosystem_stability_relation",
+      "justification": "Both relations express how organisms or their ecological roles affect the stability or balance of ecosystems, which fits a shared class focused on ecosystem stability effects.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_fc899f9582b9",
+        "RelR_7d52a2cd6581"
+      ],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "Each relation encodes a causal influence (birds or their roles causing increased stability/balance of ecosystems), which belongs under a broad causal semantics group.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  ],
+  "timestamp": "2026-01-06T11:30:50Z"
+}

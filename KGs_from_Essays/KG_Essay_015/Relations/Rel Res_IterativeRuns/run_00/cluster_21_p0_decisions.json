@@ -1,0 +1,143 @@
+{
+  "cluster_label": "21_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_2f7f474da8cd",
+      "relation_name": "applied_to",
+      "rel_desc": "Salt drying is applied to the deceased’s body during mummification.",
+      "rel_hint_type": "process-target",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "salt drying",
+      "object_entity_name": "the deceased",
+      "subject_class_label": "Ancient Egyptian Mummification Practices",
+      "subject_class_group": "Ancient Egyptian Funerary Religion and Culture",
+      "object_class_label": "Ancient Egyptian Deceased Individual (Burial Subject)",
+      "object_class_group": "Ancient Egyptian Funerary Religion and Culture",
+      "qualifiers": {
+        "TemporalQualifier": "during mummification",
+        "SpatialQualifier": "on the deceased’s body",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.83,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_518898593175",
+      "relation_name": "applied_to",
+      "rel_desc": "Ancient Egyptian burial practices are carried out on the deceased individual.",
+      "rel_hint_type": "process-subject",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "ancient Egyptian burial practices",
+      "object_entity_name": "the deceased",
+      "subject_class_label": "Ancient Egyptian Burial Practices (General)",
+      "subject_class_group": "Ancient Egyptian Funerary Religion and Culture",
+      "object_class_label": "Ancient Egyptian Deceased Individual (Burial Subject)",
+      "object_class_group": "Ancient Egyptian Funerary Religion and Culture",
+      "qualifiers": {
+        "TemporalQualifier": "after death",
+        "SpatialQualifier": "in tombs / burial settings",
+        "OperationalConstraint": "complex and carefully orchestrated affair",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "implied",
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.88,
+      "remarks": [
+        "Slightly inferential but consistent with context of funerary practices."
+      ]
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_2f7f474da8cd\", \"RelR_518898593175\"],\n      \"canonical_rel_name\": \"performed_on\",\n      \"canonical_rel_desc\": \"Indicates that a ritual, procedure, or practice is carried out on a specific subject or target (e.g., a deceased individual or body).\",\n      \"justification\": \"Both relations describe funerary or mummification procedures (salt drying; general burial practices) being carried out on the deceased as the target of the action. A shared predicate 'performed_on' captures this process-to-subject application consistently.\",\n      \"remark\": \"Temporal and spatial qualifiers (e.g., 'during mummification', 'after death', 'in tombs') remain as qualifiers on the relation instances.\",\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_2f7f474da8cd\", \"RelR_518898593175\"],\n      \"rel_cls\": \"procedure_application_relation\",\n      \"justification\": \"These edges link ritual/procedural practices to the subjects they are applied to; this fits a class describing how procedures are applied to or enacted upon targets.\",\n      \"remark\": \"Covers ritual, funerary, and other procedural applications where a practice is enacted on a person or body.\",\n      \"confidence\": 0.88\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_2f7f474da8cd\", \"RelR_518898593175\"],\n      \"rel_cls_group\": \"INTERACTION\",\n      \"justification\": \"The semantics emphasize an action (ritual/procedure) interacting with and affecting a target (the deceased), which fits an action–object interaction dimension more than composition or identity.\",\n      \"remark\": null,\n      \"confidence\": 0.87\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_2f7f474da8cd",
+          "RelR_518898593175"
+        ],
+        "canonical_rel_name": "performed_on",
+        "canonical_rel_desc": "Indicates that a ritual, procedure, or practice is carried out on a specific subject or target (e.g., a deceased individual or body).",
+        "justification": "Both relations describe funerary or mummification procedures (salt drying; general burial practices) being carried out on the deceased as the target of the action. A shared predicate 'performed_on' captures this process-to-subject application consistently.",
+        "remark": "Temporal and spatial qualifiers (e.g., 'during mummification', 'after death', 'in tombs') remain as qualifiers on the relation instances.",
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_2f7f474da8cd",
+          "RelR_518898593175"
+        ],
+        "rel_cls": "procedure_application_relation",
+        "justification": "These edges link ritual/procedural practices to the subjects they are applied to; this fits a class describing how procedures are applied to or enacted upon targets.",
+        "remark": "Covers ritual, funerary, and other procedural applications where a practice is enacted on a person or body.",
+        "confidence": 0.88
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_2f7f474da8cd",
+          "RelR_518898593175"
+        ],
+        "rel_cls_group": "INTERACTION",
+        "justification": "The semantics emphasize an action (ritual/procedure) interacting with and affecting a target (the deceased), which fits an action–object interaction dimension more than composition or identity.",
+        "remark": null,
+        "confidence": 0.87
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_2f7f474da8cd",
+        "RelR_518898593175"
+      ],
+      "canonical_rel_name": "performed_on",
+      "canonical_rel_desc": "Indicates that a ritual, procedure, or practice is carried out on a specific subject or target (e.g., a deceased individual or body).",
+      "justification": "Both relations describe funerary or mummification procedures (salt drying; general burial practices) being carried out on the deceased as the target of the action. A shared predicate 'performed_on' captures this process-to-subject application consistently.",
+      "remark": "Temporal and spatial qualifiers (e.g., 'during mummification', 'after death', 'in tombs') remain as qualifiers on the relation instances.",
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_2f7f474da8cd",
+        "RelR_518898593175"
+      ],
+      "rel_cls": "procedure_application_relation",
+      "justification": "These edges link ritual/procedural practices to the subjects they are applied to; this fits a class describing how procedures are applied to or enacted upon targets.",
+      "remark": "Covers ritual, funerary, and other procedural applications where a practice is enacted on a person or body.",
+      "confidence": 0.88
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_2f7f474da8cd",
+        "RelR_518898593175"
+      ],
+      "rel_cls_group": "INTERACTION",
+      "justification": "The semantics emphasize an action (ritual/procedure) interacting with and affecting a target (the deceased), which fits an action–object interaction dimension more than composition or identity.",
+      "remark": null,
+      "confidence": 0.87
+    }
+  ],
+  "timestamp": "2026-01-06T10:25:45Z"
+}

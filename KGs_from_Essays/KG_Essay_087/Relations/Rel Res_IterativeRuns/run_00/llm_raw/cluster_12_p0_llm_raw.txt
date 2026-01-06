@@ -1,0 +1,42 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_e0d8d3964110",
+        "RelR_de088c34612f"
+      ],
+      "canonical_rel_name": "supports_brand_differentiation",
+      "canonical_rel_desc": "Indicates that the subject is a factor or mechanism that helps a brand stand out or be distinguished from other brands or competitors in the marketplace.",
+      "justification": "Both relations describe the role of color in branding and design as a factor that helps a brand differentiate itself from others in the marketplace. In one case the object is the brand, in the other it is competitors, but the underlying predicate is that the subject contributes to brand differentiation. A single canonical predicate 'supports_brand_differentiation' captures this causal contribution without overfitting to specific subject/object wording.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_e0d8d3964110",
+        "RelR_de088c34612f"
+      ],
+      "rel_cls": "brand_positioning_differentiation_relation",
+      "justification": "Both relations concern how an element of branding (color in branding and design) contributes to positioning a brand as distinct from others. This is a specific type of brand positioning relation focused on differentiation, so grouping them under 'brand_positioning_differentiation_relation' provides an appropriate mid-level class.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_e0d8d3964110",
+        "RelR_de088c34612f"
+      ],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "In both instances, color usage is described as helping or enabling differentiation, i.e., it is a causal factor affecting brand positioning relative to competitors. This fits the broad CAUSALITY group better than simple ASSOCIATION, since an effect (differentiation) is implied.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  }
+]

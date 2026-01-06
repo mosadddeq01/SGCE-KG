@@ -1,0 +1,163 @@
+{
+  "cluster_label": "26_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_63182b59f8fc",
+      "relation_name": "is_caused_by",
+      "rel_desc": "Stellar collapse is driven by the star’s own gravity.",
+      "rel_hint_type": "causal",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "stellar collapse",
+      "object_entity_name": "gravity",
+      "subject_class_label": "Stellar End-of-Life Processes",
+      "subject_class_group": "Stellar Evolution and End States",
+      "object_class_label": "Gravitational Phenomena",
+      "object_class_group": "Gravitation and General Relativity",
+      "qualifiers": {
+        "TemporalQualifier": "after fuel exhaustion/end of life",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": "when pressure support is insufficient (implied)",
+        "UncertaintyQualifier": null,
+        "CausalHint": "under",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.95,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_55eafb144ed3",
+      "relation_name": "causes_breakdown_of",
+      "rel_desc": "The black hole singularity is a region where the fundamental laws of physics break down.",
+      "rel_hint_type": "causal",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "black hole singularity",
+      "object_entity_name": "fundamental laws of physics",
+      "subject_class_label": "Black Hole Structural Components",
+      "subject_class_group": "Black Holes",
+      "object_class_label": "Fundamental Laws of Physics",
+      "object_class_group": "Cosmology and Fundamental Physics",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "at the singularity",
+        "OperationalConstraint": "extreme density and curvature",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "where",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.9,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_63182b59f8fc\"],\n      \"canonical_rel_name\": \"is_caused_by\",\n      \"canonical_rel_desc\": \"Indicates that the subject phenomenon or event occurs as a result of the object cause or driving factor.\",\n      \"justification\": \"In this instance, the subject (stellar collapse) is the effect and the object (gravity) is the cause, matching an effect-oriented causal predicate. Using 'is_caused_by' keeps the direction consistent with the current subject–object orientation and clearly expresses that gravity is the cause.\",\n      \"remark\": null,\n      \"confidence\": 0.93\n    }\n  },\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_55eafb144ed3\"],\n      \"canonical_rel_name\": \"causes\",\n      \"canonical_rel_desc\": \"Indicates that the subject entity or condition brings about or produces the object effect or outcome.\",\n      \"justification\": \"Here the subject (black hole singularity) is the cause and the object (fundamental laws of physics) is the effect (their breakdown). A cause-oriented predicate 'causes' is appropriate and aligns with the described semantics.\",\n      \"remark\": null,\n      \"confidence\": 0.93\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_63182b59f8fc\", \"RelR_55eafb144ed3\"],\n      \"rel_cls\": \"causal_relation\",\n      \"justification\": \"Both relations describe a causal dependency between phenomena (gravity causing collapse; singularity causing breakdown of laws). Grouping them under a shared causal relation class is appropriate regardless of directional differences in the canonical predicate.\",\n      \"remark\": null,\n      \"confidence\": 0.95\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_63182b59f8fc\", \"RelR_55eafb144ed3\"],\n      \"rel_cls_group\": \"CAUSALITY\",\n      \"justification\": \"Each relation encodes a cause–effect linkage between physical entities or principles, which squarely belongs under a broad CAUSALITY group.\",\n      \"remark\": null,\n      \"confidence\": 0.98\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_63182b59f8fc"
+        ],
+        "canonical_rel_name": "is_caused_by",
+        "canonical_rel_desc": "Indicates that the subject phenomenon or event occurs as a result of the object cause or driving factor.",
+        "justification": "In this instance, the subject (stellar collapse) is the effect and the object (gravity) is the cause, matching an effect-oriented causal predicate. Using 'is_caused_by' keeps the direction consistent with the current subject–object orientation and clearly expresses that gravity is the cause.",
+        "remark": null,
+        "confidence": 0.93
+      }
+    },
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_55eafb144ed3"
+        ],
+        "canonical_rel_name": "causes",
+        "canonical_rel_desc": "Indicates that the subject entity or condition brings about or produces the object effect or outcome.",
+        "justification": "Here the subject (black hole singularity) is the cause and the object (fundamental laws of physics) is the effect (their breakdown). A cause-oriented predicate 'causes' is appropriate and aligns with the described semantics.",
+        "remark": null,
+        "confidence": 0.93
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_63182b59f8fc",
+          "RelR_55eafb144ed3"
+        ],
+        "rel_cls": "causal_relation",
+        "justification": "Both relations describe a causal dependency between phenomena (gravity causing collapse; singularity causing breakdown of laws). Grouping them under a shared causal relation class is appropriate regardless of directional differences in the canonical predicate.",
+        "remark": null,
+        "confidence": 0.95
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_63182b59f8fc",
+          "RelR_55eafb144ed3"
+        ],
+        "rel_cls_group": "CAUSALITY",
+        "justification": "Each relation encodes a cause–effect linkage between physical entities or principles, which squarely belongs under a broad CAUSALITY group.",
+        "remark": null,
+        "confidence": 0.98
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_63182b59f8fc"
+      ],
+      "canonical_rel_name": "is_caused_by",
+      "canonical_rel_desc": "Indicates that the subject phenomenon or event occurs as a result of the object cause or driving factor.",
+      "justification": "In this instance, the subject (stellar collapse) is the effect and the object (gravity) is the cause, matching an effect-oriented causal predicate. Using 'is_caused_by' keeps the direction consistent with the current subject–object orientation and clearly expresses that gravity is the cause.",
+      "remark": null,
+      "confidence": 0.93
+    },
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_55eafb144ed3"
+      ],
+      "canonical_rel_name": "causes",
+      "canonical_rel_desc": "Indicates that the subject entity or condition brings about or produces the object effect or outcome.",
+      "justification": "Here the subject (black hole singularity) is the cause and the object (fundamental laws of physics) is the effect (their breakdown). A cause-oriented predicate 'causes' is appropriate and aligns with the described semantics.",
+      "remark": null,
+      "confidence": 0.93
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_63182b59f8fc",
+        "RelR_55eafb144ed3"
+      ],
+      "rel_cls": "causal_relation",
+      "justification": "Both relations describe a causal dependency between phenomena (gravity causing collapse; singularity causing breakdown of laws). Grouping them under a shared causal relation class is appropriate regardless of directional differences in the canonical predicate.",
+      "remark": null,
+      "confidence": 0.95
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_63182b59f8fc",
+        "RelR_55eafb144ed3"
+      ],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "Each relation encodes a cause–effect linkage between physical entities or principles, which squarely belongs under a broad CAUSALITY group.",
+      "remark": null,
+      "confidence": 0.98
+    }
+  ],
+  "timestamp": "2026-01-06T09:46:23Z"
+}

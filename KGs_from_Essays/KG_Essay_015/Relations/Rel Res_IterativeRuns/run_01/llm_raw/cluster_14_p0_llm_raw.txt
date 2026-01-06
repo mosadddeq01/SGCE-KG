@@ -1,0 +1,34 @@
+[
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": [
+        "RelR_2d23901db161",
+        "RelR_044089d8b6a8"
+      ],
+      "canonical_rel_name": "is_motivated_by",
+      "canonical_rel_desc": "Indicates that the subject practice or action is performed, structured, or maintained because it is motivated or justified by the object belief, goal, or rationale.",
+      "rel_cls": "motivational_causality_relation",
+      "rel_cls_group": "CAUSALITY",
+      "justification": "Both relations link a ritual/funerary practice (burial practices, mummification) as being caused or driven by afterlife beliefs. They should share the same inverse-direction predicate 'is_motivated_by' and be placed in a unified class 'motivational_causality_relation' under the CAUSALITY group for consistency with the other motivational belief–practice links in the cluster.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  },
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": [
+        "RelR_3f39c187d1aa",
+        "RelR_4e9a286d4c8e"
+      ],
+      "canonical_rel_name": "motivates",
+      "canonical_rel_desc": "Indicates that the subject belief, goal, or rationale provides the motivation for performing the object practice or including/using the object item in a ritual, burial, or other context.",
+      "rel_cls": "motivational_causality_relation",
+      "rel_cls_group": "CAUSALITY",
+      "justification": "These relations capture the forward causal direction: afterlife beliefs motivate inclusion/use of funerary items (texts, amulets). The previous name 'motivates_use_of' is overly specific to 'use of' and not needed when the object already encodes the item/practice. Normalizing to the more general predicate 'motivates' keeps them as the forward counterpart of 'is_motivated_by' while retaining their membership in the same motivational_causality_relation class under CAUSALITY.",
+      "remark": null,
+      "confidence": 0.94
+    }
+  }
+]

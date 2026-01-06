@@ -1,0 +1,239 @@
+{
+  "cluster_label": 1,
+  "cluster_classes": [
+    {
+      "candidate_id": "ClsC_c0b00e43",
+      "class_label": "Consumer Brand Perceptions",
+      "class_description": "Cognitive and affective judgments consumers form about brands, including overall perception and specific dimensions such as personality, quality, and value, which can be influenced by color.",
+      "class_type_hint": "Psychological Construct",
+      "class_group": "TBD",
+      "confidence": 0.93,
+      "evidence_excerpt": "Research has shown that colors can affect how consumers perceive a brand's personality, quality, and value.",
+      "member_ids": [
+        "Can_dff77fa2",
+        "En_c420596c",
+        "En_6f21b441",
+        "En_aa311568"
+      ],
+      "members": [
+        {
+          "id": "Can_dff77fa2",
+          "entity_name": "consumer brand perceptions",
+          "entity_description": "Overall ways consumers interpret, evaluate, and form views of brands (including personality, quality, and value), which can be influenced by color usage.",
+          "entity_type_hint": "BrandPerception"
+        },
+        {
+          "id": "En_c420596c",
+          "entity_name": "brand's personality",
+          "entity_description": "Set of human-like traits consumers attribute to a brand, shaped by color.",
+          "entity_type_hint": "BrandPerception"
+        },
+        {
+          "id": "En_6f21b441",
+          "entity_name": "brand quality perception",
+          "entity_description": "Consumer judgment of how good or superior a brand is, influenced by color.",
+          "entity_type_hint": "BrandPerception"
+        },
+        {
+          "id": "En_aa311568",
+          "entity_name": "brand value perception",
+          "entity_description": "Consumer judgment of the worth or value offered by a brand, influenced by color.",
+          "entity_type_hint": "BrandPerception"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_4ee99d85",
+      "class_label": "Consumer Behavior",
+      "class_description": "Patterns of actions and decisions made by consumers, particularly as influenced by external factors such as color in branding and marketing.",
+      "class_type_hint": "Behavioral Concept",
+      "class_group": "TBD",
+      "confidence": 0.9,
+      "evidence_excerpt": "actions and decisions of consumers affected by color in branding and marketing",
+      "member_ids": [
+        "Can_c45bf0ba"
+      ],
+      "members": [
+        {
+          "id": "Can_c45bf0ba",
+          "entity_name": "consumer behavior",
+          "entity_description": "Observable actions and decisions of consumers, such as purchasing, that can be influenced by color in branding and marketing.",
+          "entity_type_hint": "Behavior"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_a635692e",
+      "class_label": "Consumers",
+      "class_description": "Individuals who purchase or use products and whose perceptions, such as brand color recognition, influence marketing effectiveness.",
+      "class_type_hint": "Actor Role",
+      "class_group": "TBD",
+      "confidence": 0.84,
+      "evidence_excerpt": "stand out in the minds of consumers",
+      "member_ids": [
+        "En_92d56af0"
+      ],
+      "members": [
+        {
+          "id": "En_92d56af0",
+          "entity_name": "consumers",
+          "entity_description": "People whose minds recognize and distinguish brands by their colors.",
+          "entity_type_hint": "Actor"
+        }
+      ],
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"split_class\",\n    \"args\": {\n      \"source_class_id\": \"ClsC_c0b00e43\",\n      \"splits\": [\n        {\n          \"name\": \"Brand Perception Dimensions\",\n          \"description\": \"Specific evaluative dimensions of brand perception such as personality, perceived quality, and perceived value that can be influenced by color.\",\n          \"class_type_hint\": \"Psychological Construct\",\n          \"member_ids\": [\n            \"En_c420596c\",\n            \"En_6f21b441\",\n            \"En_aa311568\"\n          ],\n          \"provisional_id\": \"SPLIT_BrandPerceptionDimensions_ClsC_c0b00e43\"\n        }\n      ],\n      \"justification\": \"ClsC_c0b00e43 currently mixes the overall construct of consumer brand perception with specific evaluative dimensions (personality, quality, value); splitting out the dimensions yields two cleaner, more coherent classes.\",\n      \"remark\": null,\n      \"confidence\": 0.86\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_c0b00e43\",\n      \"new_name\": \"Consumer Brand Perception (Overall)\",\n      \"new_description\": \"The overall cognitive and affective judgment consumers form about a brand, encompassing their general impression and attitude, which can be influenced by color.\",\n      \"new_class_type_hint\": \"Psychological Construct\",\n      \"new_class_group\": \"Consumer Psychology and Behavior in Branding\",\n      \"remark\": null,\n      \"justification\": \"After moving specific dimensions into a separate class, renaming and refining the description of ClsC_c0b00e43 clarifies that it now represents the overarching brand perception construct and assigns it to the appropriate consumer-branding group.\",\n      \"confidence\": 0.87\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"SPLIT_BrandPerceptionDimensions_ClsC_c0b00e43\",\n      \"new_name\": \"Brand Perception Dimensions\",\n      \"new_description\": \"Key evaluative aspects of how consumers perceive a brand—such as brand personality, perceived quality, and perceived value—that may be shaped by brand color.\",\n      \"new_class_type_hint\": \"Psychological Construct\",\n      \"new_class_group\": \"Consumer Psychology and Behavior in Branding\",\n      \"remark\": null,\n      \"justification\": \"The new split class gathers related evaluative dimensions of brand perception into a focused construct and is grouped under the same higher-level consumer-branding psychology domain.\",\n      \"confidence\": 0.86\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_4ee99d85\",\n      \"new_name\": null,\n      \"new_description\": \"Observable actions and decisions of consumers (e.g., attention, choice, and purchasing) as influenced by factors such as color in branding and marketing.\",\n      \"new_class_type_hint\": \"Behavioral Concept\",\n      \"new_class_group\": \"Consumer Psychology and Behavior in Branding\",\n      \"remark\": null,\n      \"justification\": \"ClsC_4ee99d85 is conceptually distinct from perception but closely related within the consumer-brand domain; assigning it to the same Class_Group and refining the description aligns it with the broader consumer psychology and behavior in branding schema.\",\n      \"confidence\": 0.88\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_a635692e\",\n      \"new_name\": null,\n      \"new_description\": \"Individuals who purchase or use products and whose perceptions and behaviors toward brands (including responses to brand color) affect marketing effectiveness.\",\n      \"new_class_type_hint\": \"Actor Role\",\n      \"new_class_group\": \"Consumer Psychology and Behavior in Branding\",\n      \"remark\": null,\n      \"justification\": \"ClsC_a635692e represents the actor role at the center of the related perception and behavior constructs; assigning it to the same consumer psychology and behavior in branding group connects the role with those related classes.\",\n      \"confidence\": 0.87\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "split_class",
+      "args": {
+        "source_class_id": "ClsC_c0b00e43",
+        "splits": [
+          {
+            "name": "Brand Perception Dimensions",
+            "description": "Specific evaluative dimensions of brand perception such as personality, perceived quality, and perceived value that can be influenced by color.",
+            "class_type_hint": "Psychological Construct",
+            "member_ids": [
+              "En_c420596c",
+              "En_6f21b441",
+              "En_aa311568"
+            ],
+            "provisional_id": "SPLIT_BrandPerceptionDimensions_ClsC_c0b00e43"
+          }
+        ],
+        "justification": "ClsC_c0b00e43 currently mixes the overall construct of consumer brand perception with specific evaluative dimensions (personality, quality, value); splitting out the dimensions yields two cleaner, more coherent classes.",
+        "remark": null,
+        "confidence": 0.86
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_c0b00e43",
+        "new_name": "Consumer Brand Perception (Overall)",
+        "new_description": "The overall cognitive and affective judgment consumers form about a brand, encompassing their general impression and attitude, which can be influenced by color.",
+        "new_class_type_hint": "Psychological Construct",
+        "new_class_group": "Consumer Psychology and Behavior in Branding",
+        "remark": null,
+        "justification": "After moving specific dimensions into a separate class, renaming and refining the description of ClsC_c0b00e43 clarifies that it now represents the overarching brand perception construct and assigns it to the appropriate consumer-branding group.",
+        "confidence": 0.87
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "SPLIT_BrandPerceptionDimensions_ClsC_c0b00e43",
+        "new_name": "Brand Perception Dimensions",
+        "new_description": "Key evaluative aspects of how consumers perceive a brand—such as brand personality, perceived quality, and perceived value—that may be shaped by brand color.",
+        "new_class_type_hint": "Psychological Construct",
+        "new_class_group": "Consumer Psychology and Behavior in Branding",
+        "remark": null,
+        "justification": "The new split class gathers related evaluative dimensions of brand perception into a focused construct and is grouped under the same higher-level consumer-branding psychology domain.",
+        "confidence": 0.86
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_4ee99d85",
+        "new_name": null,
+        "new_description": "Observable actions and decisions of consumers (e.g., attention, choice, and purchasing) as influenced by factors such as color in branding and marketing.",
+        "new_class_type_hint": "Behavioral Concept",
+        "new_class_group": "Consumer Psychology and Behavior in Branding",
+        "remark": null,
+        "justification": "ClsC_4ee99d85 is conceptually distinct from perception but closely related within the consumer-brand domain; assigning it to the same Class_Group and refining the description aligns it with the broader consumer psychology and behavior in branding schema.",
+        "confidence": 0.88
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_a635692e",
+        "new_name": null,
+        "new_description": "Individuals who purchase or use products and whose perceptions and behaviors toward brands (including responses to brand color) affect marketing effectiveness.",
+        "new_class_type_hint": "Actor Role",
+        "new_class_group": "Consumer Psychology and Behavior in Branding",
+        "remark": null,
+        "justification": "ClsC_a635692e represents the actor role at the center of the related perception and behavior constructs; assigning it to the same consumer psychology and behavior in branding group connects the role with those related classes.",
+        "confidence": 0.87
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "split_class",
+      "source_class_id": "ClsC_c0b00e43",
+      "source_class_id_resolved": "ClsC_c0b00e43",
+      "created_classes": [
+        {
+          "new_class_id": "ClsR_31748c2c",
+          "provisional_id": "SPLIT_BrandPerceptionDimensions_ClsC_c0b00e43",
+          "member_ids": [
+            "En_c420596c",
+            "En_6f21b441",
+            "En_aa311568"
+          ]
+        }
+      ],
+      "justification": "ClsC_c0b00e43 currently mixes the overall construct of consumer brand perception with specific evaluative dimensions (personality, quality, value); splitting out the dimensions yields two cleaner, more coherent classes.",
+      "remark": null,
+      "confidence": 0.86
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_c0b00e43",
+      "class_id_resolved": "ClsC_c0b00e43",
+      "new_name": "Consumer Brand Perception (Overall)",
+      "new_description": "The overall cognitive and affective judgment consumers form about a brand, encompassing their general impression and attitude, which can be influenced by color.",
+      "new_class_type_hint": "Psychological Construct",
+      "new_class_group": "Consumer Psychology and Behavior in Branding",
+      "remark": null,
+      "justification": "After moving specific dimensions into a separate class, renaming and refining the description of ClsC_c0b00e43 clarifies that it now represents the overarching brand perception construct and assigns it to the appropriate consumer-branding group.",
+      "confidence": 0.87
+    },
+    {
+      "action": "modify_class",
+      "class_id": "SPLIT_BrandPerceptionDimensions_ClsC_c0b00e43",
+      "class_id_resolved": "ClsR_31748c2c",
+      "new_name": "Brand Perception Dimensions",
+      "new_description": "Key evaluative aspects of how consumers perceive a brand—such as brand personality, perceived quality, and perceived value—that may be shaped by brand color.",
+      "new_class_type_hint": "Psychological Construct",
+      "new_class_group": "Consumer Psychology and Behavior in Branding",
+      "remark": null,
+      "justification": "The new split class gathers related evaluative dimensions of brand perception into a focused construct and is grouped under the same higher-level consumer-branding psychology domain.",
+      "confidence": 0.86
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_4ee99d85",
+      "class_id_resolved": "ClsC_4ee99d85",
+      "new_name": null,
+      "new_description": "Observable actions and decisions of consumers (e.g., attention, choice, and purchasing) as influenced by factors such as color in branding and marketing.",
+      "new_class_type_hint": "Behavioral Concept",
+      "new_class_group": "Consumer Psychology and Behavior in Branding",
+      "remark": null,
+      "justification": "ClsC_4ee99d85 is conceptually distinct from perception but closely related within the consumer-brand domain; assigning it to the same Class_Group and refining the description aligns it with the broader consumer psychology and behavior in branding schema.",
+      "confidence": 0.88
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_a635692e",
+      "class_id_resolved": "ClsC_a635692e",
+      "new_name": null,
+      "new_description": "Individuals who purchase or use products and whose perceptions and behaviors toward brands (including responses to brand color) affect marketing effectiveness.",
+      "new_class_type_hint": "Actor Role",
+      "new_class_group": "Consumer Psychology and Behavior in Branding",
+      "remark": null,
+      "justification": "ClsC_a635692e represents the actor role at the center of the related perception and behavior constructs; assigning it to the same consumer psychology and behavior in branding group connects the role with those related classes.",
+      "confidence": 0.87
+    }
+  ],
+  "provisional_to_real": {
+    "SPLIT_BrandPerceptionDimensions_ClsC_c0b00e43": "ClsR_31748c2c"
+  },
+  "timestamp": "2026-01-06T14:54:50Z"
+}

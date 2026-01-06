@@ -1,0 +1,70 @@
+{
+  "cluster_label": "21_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_e75074270370",
+      "relation_name": "collects",
+      "rel_desc": "Forensic scientists collect and catalog evidence.",
+      "rel_hint_type": "procedural",
+      "canonical_rel_name": "collects",
+      "canonical_rel_desc": "Indicates that an agent gathers or collects forensic evidence.",
+      "rel_cls": "evidence_handling_relation",
+      "rel_cls_group": "AGENCY",
+      "subject_entity_name": "forensic scientists",
+      "object_entity_name": "evidence",
+      "subject_class_label": "Forensic Scientists",
+      "subject_class_group": "Forensic Science Domain",
+      "object_class_label": "General Forensic Evidence",
+      "object_class_group": "Forensic Evidence",
+      "qualifiers": {
+        "TemporalQualifier": "for further analysis",
+        "SpatialQualifier": "at the crime scene",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "are responsible for",
+        "CausalHint": null,
+        "LogicalMarker": "as well as",
+        "OtherQualifier": "ProcessingSteps: collecting and cataloging"
+      },
+      "confidence": 0.97,
+      "remarks": [
+        "Cataloging is treated as part of the collection/handling relation.",
+        "Cataloging is treated as part of the collection/handling relation.",
+        "Cataloging is treated as part of the collection/handling relation.",
+        "Cataloging is treated as part of the collection/handling relation."
+      ]
+    },
+    {
+      "relation_id": "RelR_19502f75bdbb",
+      "relation_name": "collects",
+      "rel_desc": "Forensic scientists collect all relevant evidence as part of their work.",
+      "rel_hint_type": "activity",
+      "canonical_rel_name": "collects",
+      "canonical_rel_desc": "Indicates that an agent gathers or collects forensic evidence.",
+      "rel_cls": "evidence_handling_relation",
+      "rel_cls_group": "AGENCY",
+      "subject_entity_name": "forensic scientists",
+      "object_entity_name": "evidence",
+      "subject_class_label": "Forensic Scientists",
+      "subject_class_group": "Forensic Science Domain",
+      "object_class_label": "General Forensic Evidence",
+      "object_class_group": "Forensic Evidence",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": "all relevant evidence",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "CollectionContext: during crime scene work"
+      },
+      "confidence": 0.95,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[]",
+  "parsed_steps": [],
+  "executed_decisions": [],
+  "timestamp": "2026-01-06T14:44:27Z"
+}

@@ -1,0 +1,17 @@
+[
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": [
+        "RelR_d43058359de7"
+      ],
+      "canonical_rel_name": "is_subtype_of",
+      "canonical_rel_desc": "Connects a more specific subclass, form, or subtype to a more general class or category within a conceptual or taxonomic hierarchy.",
+      "rel_cls": "taxonomic_hierarchy_relation",
+      "rel_cls_group": "IDENTITY",
+      "justification": "The relation between 'systemic racism' and 'inequality' is best modeled as a hierarchical subtype relation, parallel to other type/instance relations in this cluster. Normalizing to 'is_subtype_of' and using the same 'taxonomic_hierarchy_relation' class ensures consistent treatment of hierarchical conceptual relations, while the updated description still covers 'form' as a subtype-like specialization.",
+      "remark": "Normalized from 'is_form_of' to 'is_subtype_of' to keep a consistent hierarchy predicate across inequality-related and protest-related concepts.",
+      "confidence": 0.78
+    }
+  }
+]

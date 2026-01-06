@@ -1,0 +1,134 @@
+{
+  "cluster_label": "16_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_fbce12fe1da6",
+      "relation_name": "characterizes",
+      "rel_desc": "The properties of black holes characterize what black holes are like.",
+      "rel_hint_type": "descriptive",
+      "canonical_rel_name": "describes",
+      "canonical_rel_desc": "Subject provides a description, account, or characterization of the object (typically a phenomenon or entity).",
+      "rel_cls": "representation_relation",
+      "rel_cls_group": "REPRESENTATION",
+      "subject_entity_name": "properties of black holes",
+      "object_entity_name": "black holes",
+      "subject_class_label": "Black Holes and Physical Properties",
+      "subject_class_group": "Black Holes and Their Properties",
+      "object_class_label": "Black Hole Phenomena",
+      "object_class_group": "Astrophysics",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "Includes: formation-related features and observable effects"
+      },
+      "confidence": 0.84,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_8e69d78aaedd",
+      "relation_name": "describes_as",
+      "rel_desc": "Classical general relativity describes the black hole singularity as a point of infinite density and curvature.",
+      "rel_hint_type": "definitional",
+      "canonical_rel_name": "describes",
+      "canonical_rel_desc": "Subject (typically a theory, model, or description) provides an account or characterization of the object and/or its properties.",
+      "rel_cls": "representation_relation",
+      "rel_cls_group": "REPRESENTATION",
+      "subject_entity_name": "general relativity",
+      "object_entity_name": "black hole singularity",
+      "subject_class_label": "General Relativity",
+      "subject_class_group": "Cosmology and Fundamental Physics",
+      "object_class_label": "Black Hole Structural Components",
+      "object_class_group": "Black Holes",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "at the singularity",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": "According to",
+        "OtherQualifier": "DescriptionDetails: point of infinite density and curvature"
+      },
+      "confidence": 0.97,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_ab6c5b69cb8c",
+      "relation_name": "describes",
+      "rel_desc": "The description of black holes is an account or model that characterizes black holes.",
+      "rel_hint_type": "definitional",
+      "canonical_rel_name": "describes",
+      "canonical_rel_desc": "Subject provides a description, account, or characterization of the object (typically a phenomenon or entity).",
+      "rel_cls": "representation_relation",
+      "rel_cls_group": "REPRESENTATION",
+      "subject_entity_name": "description of black holes",
+      "object_entity_name": "black holes",
+      "subject_class_label": "Black Hole Concepts & Open Questions",
+      "subject_class_group": "Astrophysics – Black Holes",
+      "object_class_label": "Black Hole Phenomena",
+      "object_class_group": "Astrophysics",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "CompletenessAspect: degree of completeness of description"
+      },
+      "confidence": 0.75,
+      "remarks": [
+        "This relation is somewhat intrinsic to the 'description of black holes' entity but kept to anchor later relations.",
+        "This relation is somewhat intrinsic to the 'description of black holes' entity but kept to anchor later relations.",
+        "This relation is somewhat intrinsic to the 'description of black holes' entity but kept to anchor later relations.",
+        "This relation is somewhat intrinsic to the 'description of black holes' entity but kept to anchor later relations."
+      ]
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_rel_schema\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_fbce12fe1da6\",\n        \"RelR_8e69d78aaedd\",\n        \"RelR_ab6c5b69cb8c\"\n      ],\n      \"canonical_rel_name\": \"describes\",\n      \"canonical_rel_desc\": \"Subject provides a description, account, or characterization of the object (typically an entity, process, or phenomenon).\",\n      \"rel_cls\": \"representation_relation\",\n      \"rel_cls_group\": \"REPRESENTATION\",\n      \"justification\": \"All three relations express the same representational predicate where the subject (properties, a theory, or a description) characterizes or provides an account of the object (black holes or their singularity). Their existing canonical names and classes are already aligned, but the canonical_rel_desc texts differ slightly; standardizing to a single, slightly more general description improves schema consistency without changing semantics.\",\n      \"remark\": null,\n      \"confidence\": 0.95\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_rel_schema",
+      "args": {
+        "relation_ids": [
+          "RelR_fbce12fe1da6",
+          "RelR_8e69d78aaedd",
+          "RelR_ab6c5b69cb8c"
+        ],
+        "canonical_rel_name": "describes",
+        "canonical_rel_desc": "Subject provides a description, account, or characterization of the object (typically an entity, process, or phenomenon).",
+        "rel_cls": "representation_relation",
+        "rel_cls_group": "REPRESENTATION",
+        "justification": "All three relations express the same representational predicate where the subject (properties, a theory, or a description) characterizes or provides an account of the object (black holes or their singularity). Their existing canonical names and classes are already aligned, but the canonical_rel_desc texts differ slightly; standardizing to a single, slightly more general description improves schema consistency without changing semantics.",
+        "remark": null,
+        "confidence": 0.95
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_rel_schema",
+      "relation_ids": [
+        "RelR_fbce12fe1da6",
+        "RelR_8e69d78aaedd",
+        "RelR_ab6c5b69cb8c"
+      ],
+      "canonical_rel_name": "describes",
+      "canonical_rel_desc": "Subject provides a description, account, or characterization of the object (typically an entity, process, or phenomenon).",
+      "rel_cls": "representation_relation",
+      "rel_cls_group": "REPRESENTATION",
+      "new_relation_name": null,
+      "original_relation_name": null,
+      "justification": "All three relations express the same representational predicate where the subject (properties, a theory, or a description) characterizes or provides an account of the object (black holes or their singularity). Their existing canonical names and classes are already aligned, but the canonical_rel_desc texts differ slightly; standardizing to a single, slightly more general description improves schema consistency without changing semantics.",
+      "remark": null,
+      "confidence": 0.95
+    }
+  ],
+  "timestamp": "2026-01-06T09:58:39Z"
+}

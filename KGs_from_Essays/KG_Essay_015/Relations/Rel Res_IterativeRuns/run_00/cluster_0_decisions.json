@@ -1,0 +1,238 @@
+{
+  "cluster_label": 0,
+  "cluster_classes": [
+    {
+      "candidate_id": "ClsC_d66b6c42",
+      "class_label": "Ancient Egyptian Social Strata",
+      "class_description": "Social groups within ancient Egyptian society distinguished by status and burial practices, including both elite and non-elite non-royal populations.",
+      "class_type_hint": "Social Group",
+      "class_group": "TBD",
+      "confidence": 0.93,
+      "evidence_excerpt": "High-status non-royal individuals... and common people in ancient Egypt, both described as social groups differentiated by status.",
+      "member_ids": [
+        "Can_170ea38e",
+        "Can_da508b5f"
+      ],
+      "members": [
+        {
+          "id": "Can_170ea38e",
+          "entity_name": "ancient Egyptian elite",
+          "entity_description": "High-status non-royal individuals in ancient Egyptian society who were granted elaborate tombs and burials.",
+          "entity_type_hint": "SocialGroup"
+        },
+        {
+          "id": "Can_da508b5f",
+          "entity_name": "non-elite ancient Egyptians",
+          "entity_description": "Typical, non-elite members of ancient Egyptian society who, despite lacking the resources of the elite, were buried with care, respect, and items for use in the afterlife.",
+          "entity_type_hint": "SocialGroup"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_5b71f10c",
+      "class_label": "Ancient Egyptian Tomb Structures",
+      "class_description": "Monumental tomb constructions in ancient Egypt, including pyramids and related burial complexes built to house the dead and support their afterlife.",
+      "class_type_hint": "Cultural Heritage Structure",
+      "class_group": "TBD",
+      "confidence": 0.93,
+      "evidence_excerpt": "complex burial structures in ancient Egypt, including pyramids and monumental tombs such as the pyramids at Giza",
+      "member_ids": [
+        "Can_2309ffd7",
+        "Can_9da4d6ac",
+        "En_5da37af9"
+      ],
+      "members": [
+        {
+          "id": "Can_2309ffd7",
+          "entity_name": "ancient Egyptian tombs",
+          "entity_description": "Complex, carefully constructed burial structures and chambers in ancient Egypt, including pyramids and other monumental tombs, built to house the deceased and their funerary goods and to ensure their passage into the afterlife.",
+          "entity_type_hint": "Structure"
+        },
+        {
+          "id": "Can_9da4d6ac",
+          "entity_name": "Egyptian pyramids",
+          "entity_description": "Large monumental pyramid structures in ancient Egypt built as tombs to house and protect the deceased.",
+          "entity_type_hint": "Structure"
+        },
+        {
+          "id": "En_5da37af9",
+          "entity_name": "pyramids at Giza",
+          "entity_description": "Famous pyramid complexes on the Giza Plateau built as monumental tombs for Egyptian rulers.",
+          "entity_type_hint": "Location"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_3e55c332",
+      "class_label": "Ancient Egyptian Civilization",
+      "class_description": "Collective representations of ancient Egypt as a historical civilization, including its people, culture, and social structures.",
+      "class_type_hint": "Sociocultural System",
+      "class_group": "TBD",
+      "confidence": 0.94,
+      "evidence_excerpt": "ancient Egyptian burial practices were a vital part of Egyptian culture and society... people of ancient Egypt... overall cultural system of ancient Egypt",
+      "member_ids": [
+        "Can_b9424bd9",
+        "Can_0a8d053d",
+        "Can_343049fe",
+        "En_1b376fd7"
+      ],
+      "members": [
+        {
+          "id": "Can_b9424bd9",
+          "entity_name": "ancient Egyptians",
+          "entity_description": "The people of ancient Egypt, responsible for developing and practicing the civilization's religious, social, and funerary customs, including mummification and tomb burials.",
+          "entity_type_hint": "Population"
+        },
+        {
+          "id": "Can_0a8d053d",
+          "entity_name": "Ancient Egypt",
+          "entity_description": "Historical civilization along the Nile River in northeastern Africa, known for its complex culture, elaborate burial practices, and monumental architecture.",
+          "entity_type_hint": "Civilization"
+        },
+        {
+          "id": "Can_343049fe",
+          "entity_name": "Ancient Egyptian culture",
+          "entity_description": "The social, religious, artistic, and broader cultural traditions and practices that characterized the civilization of ancient Egypt.",
+          "entity_type_hint": "Culture"
+        },
+        {
+          "id": "En_1b376fd7",
+          "entity_name": "Ancient Egyptian society",
+          "entity_description": "The social structure, institutions, and communal life of ancient Egypt, including relationships between different social groups and classes.",
+          "entity_type_hint": "CulturalContext"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_83d6f014",
+      "class_label": "Ancient Egyptian Rulers",
+      "class_description": "Supreme monarchs who governed ancient Egypt and for whom monumental tombs, such as pyramids, were constructed as burial places.",
+      "class_type_hint": "Historical Role",
+      "class_group": "TBD",
+      "confidence": 0.9,
+      "evidence_excerpt": "monumental structures were built to house the pharaohs and other important individuals in the afterlife",
+      "member_ids": [
+        "En_565cfcfe"
+      ],
+      "members": [
+        {
+          "id": "En_565cfcfe",
+          "entity_name": "pharaohs",
+          "entity_description": "Rulers of ancient Egypt for whom monumental tombs like pyramids were constructed.",
+          "entity_type_hint": "Role"
+        }
+      ],
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_d66b6c42\",\n      \"new_name\": \"Ancient Egyptian Social Strata\",\n      \"new_description\": null,\n      \"new_class_type_hint\": null,\n      \"new_class_group\": \"Ancient Egypt: Society, Rulers, and Funerary Culture\",\n      \"remark\": null,\n      \"justification\": \"This class models social groups within ancient Egyptian society that are explicitly discussed in the context of burial practices, so it should be grouped with other classes covering ancient Egyptian society, rulers, and funerary culture.\",\n      \"confidence\": 0.95\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_5b71f10c\",\n      \"new_name\": \"Ancient Egyptian Tomb Structures\",\n      \"new_description\": null,\n      \"new_class_type_hint\": null,\n      \"new_class_group\": \"Ancient Egypt: Society, Rulers, and Funerary Culture\",\n      \"remark\": null,\n      \"justification\": \"This class covers monumental tomb structures (including pyramids at Giza) used in ancient Egyptian funerary practices and should share a Class_Group with other classes about ancient Egyptian society and burial-related culture.\",\n      \"confidence\": 0.95\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_3e55c332\",\n      \"new_name\": \"Ancient Egyptian Civilization\",\n      \"new_description\": null,\n      \"new_class_type_hint\": null,\n      \"new_class_group\": \"Ancient Egypt: Society, Rulers, and Funerary Culture\",\n      \"remark\": null,\n      \"justification\": \"This class already describes the overall ancient Egyptian civilization, including its culture and burial practices, so it should anchor the shared Class_Group that connects to social strata, rulers, and tomb structures.\",\n      \"confidence\": 0.96\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_83d6f014\",\n      \"new_name\": \"Ancient Egyptian Rulers\",\n      \"new_description\": null,\n      \"new_class_type_hint\": null,\n      \"new_class_group\": \"Ancient Egypt: Society, Rulers, and Funerary Culture\",\n      \"remark\": null,\n      \"justification\": \"This class covers pharaohs, the rulers for whom pyramids and other tomb structures were built; it belongs in the same Class_Group as the civilization, social strata, and tomb structure classes to reflect a coherent model of ancient Egyptian society and funerary culture.\",\n      \"confidence\": 0.95\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_d66b6c42",
+        "new_name": "Ancient Egyptian Social Strata",
+        "new_description": null,
+        "new_class_type_hint": null,
+        "new_class_group": "Ancient Egypt: Society, Rulers, and Funerary Culture",
+        "remark": null,
+        "justification": "This class models social groups within ancient Egyptian society that are explicitly discussed in the context of burial practices, so it should be grouped with other classes covering ancient Egyptian society, rulers, and funerary culture.",
+        "confidence": 0.95
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_5b71f10c",
+        "new_name": "Ancient Egyptian Tomb Structures",
+        "new_description": null,
+        "new_class_type_hint": null,
+        "new_class_group": "Ancient Egypt: Society, Rulers, and Funerary Culture",
+        "remark": null,
+        "justification": "This class covers monumental tomb structures (including pyramids at Giza) used in ancient Egyptian funerary practices and should share a Class_Group with other classes about ancient Egyptian society and burial-related culture.",
+        "confidence": 0.95
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_3e55c332",
+        "new_name": "Ancient Egyptian Civilization",
+        "new_description": null,
+        "new_class_type_hint": null,
+        "new_class_group": "Ancient Egypt: Society, Rulers, and Funerary Culture",
+        "remark": null,
+        "justification": "This class already describes the overall ancient Egyptian civilization, including its culture and burial practices, so it should anchor the shared Class_Group that connects to social strata, rulers, and tomb structures.",
+        "confidence": 0.96
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_83d6f014",
+        "new_name": "Ancient Egyptian Rulers",
+        "new_description": null,
+        "new_class_type_hint": null,
+        "new_class_group": "Ancient Egypt: Society, Rulers, and Funerary Culture",
+        "remark": null,
+        "justification": "This class covers pharaohs, the rulers for whom pyramids and other tomb structures were built; it belongs in the same Class_Group as the civilization, social strata, and tomb structure classes to reflect a coherent model of ancient Egyptian society and funerary culture.",
+        "confidence": 0.95
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_d66b6c42",
+      "class_id_resolved": "ClsC_d66b6c42",
+      "new_name": "Ancient Egyptian Social Strata",
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Ancient Egypt: Society, Rulers, and Funerary Culture",
+      "remark": null,
+      "justification": "This class models social groups within ancient Egyptian society that are explicitly discussed in the context of burial practices, so it should be grouped with other classes covering ancient Egyptian society, rulers, and funerary culture.",
+      "confidence": 0.95
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_5b71f10c",
+      "class_id_resolved": "ClsC_5b71f10c",
+      "new_name": "Ancient Egyptian Tomb Structures",
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Ancient Egypt: Society, Rulers, and Funerary Culture",
+      "remark": null,
+      "justification": "This class covers monumental tomb structures (including pyramids at Giza) used in ancient Egyptian funerary practices and should share a Class_Group with other classes about ancient Egyptian society and burial-related culture.",
+      "confidence": 0.95
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_3e55c332",
+      "class_id_resolved": "ClsC_3e55c332",
+      "new_name": "Ancient Egyptian Civilization",
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Ancient Egypt: Society, Rulers, and Funerary Culture",
+      "remark": null,
+      "justification": "This class already describes the overall ancient Egyptian civilization, including its culture and burial practices, so it should anchor the shared Class_Group that connects to social strata, rulers, and tomb structures.",
+      "confidence": 0.96
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_83d6f014",
+      "class_id_resolved": "ClsC_83d6f014",
+      "new_name": "Ancient Egyptian Rulers",
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Ancient Egypt: Society, Rulers, and Funerary Culture",
+      "remark": null,
+      "justification": "This class covers pharaohs, the rulers for whom pyramids and other tomb structures were built; it belongs in the same Class_Group as the civilization, social strata, and tomb structure classes to reflect a coherent model of ancient Egyptian society and funerary culture.",
+      "confidence": 0.95
+    }
+  ],
+  "provisional_to_real": {},
+  "timestamp": "2026-01-06T10:10:28Z"
+}

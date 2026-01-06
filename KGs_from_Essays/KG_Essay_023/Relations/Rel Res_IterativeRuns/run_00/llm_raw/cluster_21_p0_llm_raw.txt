@@ -1,0 +1,42 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_31e35112fe2d",
+        "RelR_32f223cd1950"
+      ],
+      "canonical_rel_name": "contributes_to",
+      "canonical_rel_desc": "Indicates that the subject factor or activity causally supports or helps bring about the development or strengthening of the object state or outcome.",
+      "justification": "In both relations, sharing updates is described as a causal factor that supports or helps bring about a psychosocial outcome (sense of closeness or sense of community). The semantic predicate is the same causal contribution relation, so they should share one canonical predicate 'contributes_to'.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_31e35112fe2d",
+        "RelR_32f223cd1950"
+      ],
+      "rel_cls": "social_connectedness_effect_relation",
+      "justification": "Both relations describe how a social media content behavior (sharing updates) affects social connectedness outcomes (sense of closeness, sense of community). They naturally belong to a relation class capturing effects of platform behaviors on social connectedness.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_31e35112fe2d",
+        "RelR_32f223cd1950"
+      ],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "The rel_hint_type is 'effect' and the descriptions use causal language like 'helps foster' and 'supports the development', indicating that sharing updates is treated as a causal contributor to the psychosocial outcomes. This fits a broad causal group.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  }
+]

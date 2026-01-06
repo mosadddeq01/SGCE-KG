@@ -1,0 +1,175 @@
+{
+  "cluster_label": "21_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_6d09cc79e053",
+      "relation_name": "character_in",
+      "rel_desc": "Rhodopis is the central young girl character in the Rhodopis Cinderella tale.",
+      "rel_hint_type": "narrative-role",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "Rhodopis",
+      "object_entity_name": "Rhodopis Cinderella tale",
+      "subject_class_label": "Rhodopis Tale Characters",
+      "subject_class_group": "Cinderella Narrative Tradition",
+      "object_class_label": "Rhodopis Tale Elements",
+      "object_class_group": "Cinderella Narrative Tradition",
+      "qualifiers": {
+        "TemporalQualifier": "ancient Greece",
+        "SpatialQualifier": "setting: ancient Greece",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": "named",
+        "OtherQualifier": "Role: heroine of the tale"
+      },
+      "confidence": 0.99,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_26ee58f93a9d",
+      "relation_name": "character_in",
+      "rel_desc": "The king in the Rhodopis tale is a character in the Rhodopis Cinderella story.",
+      "rel_hint_type": "narrative-role",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "King in the Rhodopis tale",
+      "object_entity_name": "Rhodopis Cinderella tale",
+      "subject_class_label": "Rhodopis Tale Characters",
+      "subject_class_group": "Cinderella Narrative Tradition",
+      "object_class_label": "Rhodopis Tale Elements",
+      "object_class_group": "Cinderella Narrative Tradition",
+      "qualifiers": {
+        "TemporalQualifier": "ancient Greece",
+        "SpatialQualifier": "setting: ancient Greece",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "after he finds her lost slipper",
+        "LogicalMarker": "after",
+        "OtherQualifier": "Role: ruler who selects heroine via slipper"
+      },
+      "confidence": 0.96,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_0d5d29680ae7",
+      "relation_name": "plot_element_of",
+      "rel_desc": "The lost slipper is a key plot element in the Rhodopis Cinderella tale.",
+      "rel_hint_type": "narrative-element",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "lost slipper",
+      "object_entity_name": "Rhodopis Cinderella tale",
+      "subject_class_label": "Rhodopis Tale Elements",
+      "subject_class_group": "Cinderella Narrative Tradition",
+      "object_class_label": "Rhodopis Tale Elements",
+      "object_class_group": "Cinderella Narrative Tradition",
+      "qualifiers": {
+        "TemporalQualifier": "within the events of the tale",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "enables the king to identify her",
+        "LogicalMarker": "after",
+        "OtherQualifier": "Function: identification token for the heroine"
+      },
+      "confidence": 0.97,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_6d09cc79e053\",\n        \"RelR_26ee58f93a9d\",\n        \"RelR_0d5d29680ae7\"\n      ],\n      \"canonical_rel_name\": \"is_element_of_narrative\",\n      \"canonical_rel_desc\": \"Indicates that the subject is a narrative element (e.g., character, object, or plot device) that belongs to or appears within the specified narrative work or tale.\",\n      \"justification\": \"All three relations link a narrative component (characters or a plot device) to the same tale. Despite different raw labels ('character_in', 'plot_element_of'), the semantics are the same: the subject is an element of the narrative. A unified predicate 'is_element_of_narrative' captures this without overfitting to role type.\",\n      \"remark\": null,\n      \"confidence\": 0.94\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_6d09cc79e053\",\n        \"RelR_26ee58f93a9d\",\n        \"RelR_0d5d29680ae7\"\n      ],\n      \"rel_cls\": \"narrative_structure_relation\",\n      \"justification\": \"Each relation connects a component of a story (character or plot element) to the overarching tale, which is best modeled as a structural relation within a narrative. Grouping them under 'narrative_structure_relation' captures this family of predicates.\",\n      \"remark\": null,\n      \"confidence\": 0.93\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_6d09cc79e053\",\n        \"RelR_26ee58f93a9d\",\n        \"RelR_0d5d29680ae7\"\n      ],\n      \"rel_cls_group\": \"ASSOCIATION\",\n      \"justification\": \"The relations express membership/association of narrative elements with a specific tale, not causality, temporality, or composition in a material sense. The broad category 'ASSOCIATION' best captures this membership-style narrative linkage.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_6d09cc79e053",
+          "RelR_26ee58f93a9d",
+          "RelR_0d5d29680ae7"
+        ],
+        "canonical_rel_name": "is_element_of_narrative",
+        "canonical_rel_desc": "Indicates that the subject is a narrative element (e.g., character, object, or plot device) that belongs to or appears within the specified narrative work or tale.",
+        "justification": "All three relations link a narrative component (characters or a plot device) to the same tale. Despite different raw labels ('character_in', 'plot_element_of'), the semantics are the same: the subject is an element of the narrative. A unified predicate 'is_element_of_narrative' captures this without overfitting to role type.",
+        "remark": null,
+        "confidence": 0.94
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_6d09cc79e053",
+          "RelR_26ee58f93a9d",
+          "RelR_0d5d29680ae7"
+        ],
+        "rel_cls": "narrative_structure_relation",
+        "justification": "Each relation connects a component of a story (character or plot element) to the overarching tale, which is best modeled as a structural relation within a narrative. Grouping them under 'narrative_structure_relation' captures this family of predicates.",
+        "remark": null,
+        "confidence": 0.93
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_6d09cc79e053",
+          "RelR_26ee58f93a9d",
+          "RelR_0d5d29680ae7"
+        ],
+        "rel_cls_group": "ASSOCIATION",
+        "justification": "The relations express membership/association of narrative elements with a specific tale, not causality, temporality, or composition in a material sense. The broad category 'ASSOCIATION' best captures this membership-style narrative linkage.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_6d09cc79e053",
+        "RelR_26ee58f93a9d",
+        "RelR_0d5d29680ae7"
+      ],
+      "canonical_rel_name": "is_element_of_narrative",
+      "canonical_rel_desc": "Indicates that the subject is a narrative element (e.g., character, object, or plot device) that belongs to or appears within the specified narrative work or tale.",
+      "justification": "All three relations link a narrative component (characters or a plot device) to the same tale. Despite different raw labels ('character_in', 'plot_element_of'), the semantics are the same: the subject is an element of the narrative. A unified predicate 'is_element_of_narrative' captures this without overfitting to role type.",
+      "remark": null,
+      "confidence": 0.94
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_6d09cc79e053",
+        "RelR_26ee58f93a9d",
+        "RelR_0d5d29680ae7"
+      ],
+      "rel_cls": "narrative_structure_relation",
+      "justification": "Each relation connects a component of a story (character or plot element) to the overarching tale, which is best modeled as a structural relation within a narrative. Grouping them under 'narrative_structure_relation' captures this family of predicates.",
+      "remark": null,
+      "confidence": 0.93
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_6d09cc79e053",
+        "RelR_26ee58f93a9d",
+        "RelR_0d5d29680ae7"
+      ],
+      "rel_cls_group": "ASSOCIATION",
+      "justification": "The relations express membership/association of narrative elements with a specific tale, not causality, temporality, or composition in a material sense. The broad category 'ASSOCIATION' best captures this membership-style narrative linkage.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  ],
+  "timestamp": "2026-01-06T14:04:15Z"
+}

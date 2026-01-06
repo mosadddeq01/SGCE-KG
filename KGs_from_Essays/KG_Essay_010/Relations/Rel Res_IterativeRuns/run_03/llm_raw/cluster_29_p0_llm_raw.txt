@@ -1,0 +1,15 @@
+[
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": ["RelR_79885daea465"],
+      "canonical_rel_name": null,
+      "canonical_rel_desc": null,
+      "rel_cls": null,
+      "rel_cls_group": "COMPARISON",
+      "justification": "This relation instance primarily encodes a comparison between the rate of time near the black hole and for distant observers, as indicated by rel_hint_type='comparative' and qualifiers like 'ComparisonAspect: rate of time passage'. Although the phenomenon (gravitational time dilation) is causal, the edge itself is about relative rates, aligning better with a COMPARISON group than pure CAUSALITY. The existing rel_cls 'causal_effect_comparison_relation' can remain, but the broader group should emphasize the comparative nature.",
+      "remark": "Rel_cls kept as 'causal_effect_comparison_relation' to capture that the comparison arises from a causal effect, but the top-level grouping is normalized to COMPARISON to reflect the relation’s primary semantics.",
+      "confidence": 0.86
+    }
+  }
+]

@@ -1,0 +1,19 @@
+[
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": [
+        "RelR_d416455577ce",
+        "RelR_b08b7829d5ea",
+        "RelR_82d81667fb0c"
+      ],
+      "canonical_rel_name": "has_purpose",
+      "canonical_rel_desc": "The subject ritual, practice, or process is intentionally performed in order to achieve or support the outcome or goal represented by the object.",
+      "rel_cls": "ritual_purpose_relation",
+      "rel_cls_group": "USAGE",
+      "justification": "All three relations link funerary rituals or practices (burial practices, mummification) to their intended goal (safe passage / afterlife outcome). They already share the same canonical predicate 'has_purpose'; refining rel_cls from the generic 'purpose_relation' to 'ritual_purpose_relation' better captures that this is a specific family of teleological links for ritual or practice purposes, while keeping the broad group as USAGE.",
+      "remark": null,
+      "confidence": 0.87
+    }
+  }
+]

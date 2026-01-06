@@ -1,0 +1,19 @@
+[
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": [
+        "RelR_c478ec7e5941",
+        "RelR_5fae8330966b",
+        "RelR_a072e7cb2652"
+      ],
+      "canonical_rel_name": "influences",
+      "canonical_rel_desc": "Indicates that the subject branding- or psychology-related construct exerts a causal or enabling effect on the object (such as brands, businesses, consumer responses, brand perceptions, or branding outcomes).",
+      "rel_cls": "branding_impact_relation",
+      "rel_cls_group": "CAUSALITY",
+      "justification": "All three relations describe a causal or enabling influence of a branding- or psychology-related construct (color psychology, sense of urgency) on branding outcomes or consumer behavior. They already share the same canonical_rel_name and rel_cls_group; this call harmonizes the canonical_rel_desc into a single generalized definition and confirms a consistent relation class and group across the cluster.",
+      "remark": "Standardized the canonical relation description across these similar causal influence relations for schema consistency.",
+      "confidence": 0.93
+    }
+  }
+]

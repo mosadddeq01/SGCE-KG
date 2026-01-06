@@ -1,0 +1,162 @@
+{
+  "cluster_label": "14_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_44a2aebf98c5",
+      "relation_name": "transforms",
+      "rel_desc": "Social media fundamentally transforms human communication in contemporary society.",
+      "rel_hint_type": "causal influence",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "social media",
+      "object_entity_name": "human communication in contemporary society",
+      "subject_class_label": "Social Media Platforms",
+      "subject_class_group": "Social Media & Online Communication",
+      "object_class_label": "Contemporary Digital Society",
+      "object_class_group": "Digital Information & Communication in Contemporary Society",
+      "qualifiers": {
+        "TemporalQualifier": "in today's digital age",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "has revolutionized",
+        "LogicalMarker": null,
+        "OtherQualifier": "Context: contemporary digital-technology-dependent society"
+      },
+      "confidence": 0.95,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_d43a7d28c02b",
+      "relation_name": "empowers",
+      "rel_desc": "Democratization of information empowers individuals using social media.",
+      "rel_hint_type": "causal",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "democratization of information",
+      "object_entity_name": "individuals",
+      "subject_class_label": "Information Engagement Concepts",
+      "subject_class_group": "Digital Information & Communication in Contemporary Society",
+      "object_class_label": "Social Media Audiences",
+      "object_class_group": "Social Media and Online Social Interaction",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "has",
+        "LogicalMarker": null,
+        "OtherQualifier": "Effect: more informed and engaged in current events"
+      },
+      "confidence": 0.9,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_44a2aebf98c5\"],\n      \"canonical_rel_name\": \"transforms\",\n      \"canonical_rel_desc\": \"Indicates that the subject causes a fundamental change in the nature, structure, or mode of operation of the object.\",\n      \"justification\": \"The relation describes social media causally changing how human communication operates; 'transforms' is an appropriate, concise predicate capturing a strong causal change effect.\",\n      \"remark\": null,\n      \"confidence\": 0.93\n    }\n  },\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_d43a7d28c02b\"],\n      \"canonical_rel_name\": \"empowers\",\n      \"canonical_rel_desc\": \"Indicates that the subject provides the object with increased capability, agency, or power to act.\",\n      \"justification\": \"The relation states that democratization of information gives individuals more capability and agency; 'empowers' is a clear causal predicate for this enabling effect.\",\n      \"remark\": null,\n      \"confidence\": 0.93\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_44a2aebf98c5\", \"RelR_d43a7d28c02b\"],\n      \"rel_cls\": \"causal_effect_relation\",\n      \"justification\": \"Both relations express that the subject has a causal impact on the object (transforming communication, empowering individuals). Grouping them under a general causal_effect_relation class captures their shared semantics while allowing different specific predicates like 'transforms' and 'empowers'.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_44a2ebf98c5\", \"RelR_d43a7d28c02b\"],\n      \"rel_cls_group\": \"CAUSALITY\",\n      \"justification\": \"In both cases the subject is explicitly framed as causing or enabling a change in the object (causal influence / effect), so they belong to the broad CAUSALITY group.\",\n      \"remark\": null,\n      \"confidence\": 0.95\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_44a2aebf98c5"
+        ],
+        "canonical_rel_name": "transforms",
+        "canonical_rel_desc": "Indicates that the subject causes a fundamental change in the nature, structure, or mode of operation of the object.",
+        "justification": "The relation describes social media causally changing how human communication operates; 'transforms' is an appropriate, concise predicate capturing a strong causal change effect.",
+        "remark": null,
+        "confidence": 0.93
+      }
+    },
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_d43a7d28c02b"
+        ],
+        "canonical_rel_name": "empowers",
+        "canonical_rel_desc": "Indicates that the subject provides the object with increased capability, agency, or power to act.",
+        "justification": "The relation states that democratization of information gives individuals more capability and agency; 'empowers' is a clear causal predicate for this enabling effect.",
+        "remark": null,
+        "confidence": 0.93
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_44a2aebf98c5",
+          "RelR_d43a7d28c02b"
+        ],
+        "rel_cls": "causal_effect_relation",
+        "justification": "Both relations express that the subject has a causal impact on the object (transforming communication, empowering individuals). Grouping them under a general causal_effect_relation class captures their shared semantics while allowing different specific predicates like 'transforms' and 'empowers'.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_44a2ebf98c5",
+          "RelR_d43a7d28c02b"
+        ],
+        "rel_cls_group": "CAUSALITY",
+        "justification": "In both cases the subject is explicitly framed as causing or enabling a change in the object (causal influence / effect), so they belong to the broad CAUSALITY group.",
+        "remark": null,
+        "confidence": 0.95
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_44a2aebf98c5"
+      ],
+      "canonical_rel_name": "transforms",
+      "canonical_rel_desc": "Indicates that the subject causes a fundamental change in the nature, structure, or mode of operation of the object.",
+      "justification": "The relation describes social media causally changing how human communication operates; 'transforms' is an appropriate, concise predicate capturing a strong causal change effect.",
+      "remark": null,
+      "confidence": 0.93
+    },
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_d43a7d28c02b"
+      ],
+      "canonical_rel_name": "empowers",
+      "canonical_rel_desc": "Indicates that the subject provides the object with increased capability, agency, or power to act.",
+      "justification": "The relation states that democratization of information gives individuals more capability and agency; 'empowers' is a clear causal predicate for this enabling effect.",
+      "remark": null,
+      "confidence": 0.93
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_44a2aebf98c5",
+        "RelR_d43a7d28c02b"
+      ],
+      "rel_cls": "causal_effect_relation",
+      "justification": "Both relations express that the subject has a causal impact on the object (transforming communication, empowering individuals). Grouping them under a general causal_effect_relation class captures their shared semantics while allowing different specific predicates like 'transforms' and 'empowers'.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_d43a7d28c02b"
+      ],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "In both cases the subject is explicitly framed as causing or enabling a change in the object (causal influence / effect), so they belong to the broad CAUSALITY group.",
+      "remark": null,
+      "confidence": 0.95
+    }
+  ],
+  "timestamp": "2026-01-06T11:06:27Z"
+}

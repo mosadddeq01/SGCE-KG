@@ -1,0 +1,209 @@
+{
+  "cluster_label": "0_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_8df214573366",
+      "relation_name": "has_instance",
+      "rel_desc": "Cinderella is treated as an example of a fairytale.",
+      "rel_hint_type": "type-instance",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "fairytales",
+      "object_entity_name": "Cinderella (fairytale)",
+      "subject_class_label": "Fairytale Concepts",
+      "subject_class_group": "Fairytales: Genre, Narratives, and Motifs",
+      "object_class_label": "Cinderella Narratives",
+      "object_class_group": "Cinderella Narrative Tradition",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": "like",
+        "OtherQualifier": "ExampleStatus: illustrative example of the genre"
+      },
+      "confidence": 0.98,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_875e9c699e27",
+      "relation_name": "has_instance",
+      "rel_desc": "Snow White is presented as an example of a fairytale.",
+      "rel_hint_type": "type-instance",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "fairytales",
+      "object_entity_name": "Snow White",
+      "subject_class_label": "Fairytale Concepts",
+      "subject_class_group": "Fairytales: Genre, Narratives, and Motifs",
+      "object_class_label": "Individual Fairy Tales",
+      "object_class_group": "Fairy Tales and Their Audiences",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": "like",
+        "OtherQualifier": "ExampleStatus: illustrative example of the genre"
+      },
+      "confidence": 0.98,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_d7b8652a4f95",
+      "relation_name": "has_instance",
+      "rel_desc": "Hansel and Gretel is described as one of the fairytale examples.",
+      "rel_hint_type": "type-instance",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "fairytales",
+      "object_entity_name": "Hansel and Gretel",
+      "subject_class_label": "Fairytale Concepts",
+      "subject_class_group": "Fairytales: Genre, Narratives, and Motifs",
+      "object_class_label": "Grimm Fairy-Tale Works",
+      "object_class_group": "Grimm Fairy Tales",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": "like",
+        "OtherQualifier": "ExampleStatus: illustrative example of the genre"
+      },
+      "confidence": 0.98,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_dabc7874053c",
+      "relation_name": "has_instance",
+      "rel_desc": "Beauty and the Beast is treated as one of the fairytale examples.",
+      "rel_hint_type": "type-instance",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "fairytales",
+      "object_entity_name": "Beauty and the Beast",
+      "subject_class_label": "Fairytale Concepts",
+      "subject_class_group": "Fairytales: Genre, Narratives, and Motifs",
+      "object_class_label": "Beauty and the Beast Storyworld",
+      "object_class_group": "Beauty and the Beast Storyworld",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": "and",
+        "OtherQualifier": "ExampleStatus: illustrative example of the genre"
+      },
+      "confidence": 0.96,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_8df214573366\",\n        \"RelR_875e9c699e27\",\n        \"RelR_d7b8652a4f95\",\n        \"RelR_dabc7874053c\"\n      ],\n      \"canonical_rel_name\": \"has_instance\",\n      \"canonical_rel_desc\": \"Relates a general category or type to a specific instance or illustrative example of that category.\",\n      \"justification\": \"In all four relations, the subject is the general category 'fairytales' and the object is a specific tale (Cinderella, Snow White, Hansel and Gretel, Beauty and the Beast) used as an example. This is a standard type–instance (class–individual) pattern and can be consistently modeled with the canonical predicate 'has_instance'.\",\n      \"remark\": null,\n      \"confidence\": 0.97\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_8df214573366\",\n        \"RelR_875e9c699e27\",\n        \"RelR_d7b8652a4f95\",\n        \"RelR_dabc7874053c\"\n      ],\n      \"rel_cls\": \"type_instance_relation\",\n      \"justification\": \"Each relation encodes that a specific story is an example/instance of the broader category 'fairytales', which is a classic type–instance (class–individual) membership relation. Grouping them under a shared relation class 'type_instance_relation' captures this family of semantics.\",\n      \"remark\": null,\n      \"confidence\": 0.96\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_8df214573366\",\n        \"RelR_875e9c699e27\",\n        \"RelR_d7b8652a4f95\",\n        \"RelR_dabc7874053c\"\n      ],\n      \"rel_cls_group\": \"IDENTITY\",\n      \"justification\": \"Type–instance (class–individual) links are fundamentally about classificatory identity and membership (identifying a particular as belonging to a given type). Among the broad semantic groups, 'IDENTITY' best covers this category–instance relationship.\",\n      \"remark\": null,\n      \"confidence\": 0.94\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_8df214573366",
+          "RelR_875e9c699e27",
+          "RelR_d7b8652a4f95",
+          "RelR_dabc7874053c"
+        ],
+        "canonical_rel_name": "has_instance",
+        "canonical_rel_desc": "Relates a general category or type to a specific instance or illustrative example of that category.",
+        "justification": "In all four relations, the subject is the general category 'fairytales' and the object is a specific tale (Cinderella, Snow White, Hansel and Gretel, Beauty and the Beast) used as an example. This is a standard type–instance (class–individual) pattern and can be consistently modeled with the canonical predicate 'has_instance'.",
+        "remark": null,
+        "confidence": 0.97
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_8df214573366",
+          "RelR_875e9c699e27",
+          "RelR_d7b8652a4f95",
+          "RelR_dabc7874053c"
+        ],
+        "rel_cls": "type_instance_relation",
+        "justification": "Each relation encodes that a specific story is an example/instance of the broader category 'fairytales', which is a classic type–instance (class–individual) membership relation. Grouping them under a shared relation class 'type_instance_relation' captures this family of semantics.",
+        "remark": null,
+        "confidence": 0.96
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_8df214573366",
+          "RelR_875e9c699e27",
+          "RelR_d7b8652a4f95",
+          "RelR_dabc7874053c"
+        ],
+        "rel_cls_group": "IDENTITY",
+        "justification": "Type–instance (class–individual) links are fundamentally about classificatory identity and membership (identifying a particular as belonging to a given type). Among the broad semantic groups, 'IDENTITY' best covers this category–instance relationship.",
+        "remark": null,
+        "confidence": 0.94
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_8df214573366",
+        "RelR_875e9c699e27",
+        "RelR_d7b8652a4f95",
+        "RelR_dabc7874053c"
+      ],
+      "canonical_rel_name": "has_instance",
+      "canonical_rel_desc": "Relates a general category or type to a specific instance or illustrative example of that category.",
+      "justification": "In all four relations, the subject is the general category 'fairytales' and the object is a specific tale (Cinderella, Snow White, Hansel and Gretel, Beauty and the Beast) used as an example. This is a standard type–instance (class–individual) pattern and can be consistently modeled with the canonical predicate 'has_instance'.",
+      "remark": null,
+      "confidence": 0.97
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_8df214573366",
+        "RelR_875e9c699e27",
+        "RelR_d7b8652a4f95",
+        "RelR_dabc7874053c"
+      ],
+      "rel_cls": "type_instance_relation",
+      "justification": "Each relation encodes that a specific story is an example/instance of the broader category 'fairytales', which is a classic type–instance (class–individual) membership relation. Grouping them under a shared relation class 'type_instance_relation' captures this family of semantics.",
+      "remark": null,
+      "confidence": 0.96
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_8df214573366",
+        "RelR_875e9c699e27",
+        "RelR_d7b8652a4f95",
+        "RelR_dabc7874053c"
+      ],
+      "rel_cls_group": "IDENTITY",
+      "justification": "Type–instance (class–individual) links are fundamentally about classificatory identity and membership (identifying a particular as belonging to a given type). Among the broad semantic groups, 'IDENTITY' best covers this category–instance relationship.",
+      "remark": null,
+      "confidence": 0.94
+    }
+  ],
+  "timestamp": "2026-01-06T13:58:25Z"
+}

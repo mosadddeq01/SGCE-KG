@@ -1,0 +1,129 @@
+{
+  "cluster_label": "-1_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_f1399f8bbced",
+      "relation_name": "used_in",
+      "rel_desc": "Forensic analysis is an indispensable tool in modern criminal investigations.",
+      "rel_hint_type": "application",
+      "canonical_rel_name": "is_used_in",
+      "canonical_rel_desc": "Indicates that a method, process, or tool is used within or as part of an activity, context, or workflow.",
+      "rel_cls": "method_application_relation",
+      "rel_cls_group": "USAGE",
+      "subject_entity_name": "forensic analysis",
+      "object_entity_name": "modern criminal investigations",
+      "subject_class_label": "Forensic Analysis Processes",
+      "subject_class_group": "Forensic Science & Analysis",
+      "object_class_label": "Criminal Investigation Processes",
+      "object_class_group": "TBD",
+      "qualifiers": {
+        "TemporalQualifier": "modern",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "indispensable (strong necessity)",
+        "CausalHint": "making it",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.97,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_8dd61f85be6e",
+      "relation_name": "produces",
+      "rel_desc": "Forensic scientists produce analyses and conclusions that they later explain in court.",
+      "rel_hint_type": "production",
+      "canonical_rel_name": "produces",
+      "canonical_rel_desc": "Indicates that the subject (typically an agent) creates or generates the object (a product, result, or artifact).",
+      "rel_cls": "knowledge_artifact_creation_relation",
+      "rel_cls_group": "AGENCY",
+      "subject_entity_name": "forensic scientists",
+      "object_entity_name": "analysis and conclusions",
+      "subject_class_label": "Forensic Scientists",
+      "subject_class_group": "Forensic Science Domain",
+      "object_class_label": "Forensic Analytical Reasoning",
+      "object_class_group": "Forensic Reasoning and Case Analysis",
+      "qualifiers": {
+        "TemporalQualifier": "before testifying in court",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "inferred from context",
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "UsageContext: explained during expert witness testimony"
+      },
+      "confidence": 0.84,
+      "remarks": [
+        "Possessive reference used to infer production relationship.",
+        "Possessive reference used to infer production relationship.",
+        "Possessive reference used to infer production relationship."
+      ]
+    },
+    {
+      "relation_id": "RelR_5ec5d6fe03c2",
+      "relation_name": "is_about",
+      "rel_desc": "The truth described is specifically about the challenging cases.",
+      "rel_hint_type": "aboutness",
+      "canonical_rel_name": "is_about",
+      "canonical_rel_desc": "Indicates that the subject content or statement concerns, focuses on, or is thematically related to the object.",
+      "rel_cls": "aboutness_relation",
+      "rel_cls_group": "ASSOCIATION",
+      "subject_entity_name": "truth behind challenging cases",
+      "object_entity_name": "challenging cases",
+      "subject_class_label": "Forensic Cases and Issues",
+      "subject_class_group": "Forensic Reasoning and Case Analysis",
+      "object_class_label": "Forensic Cases and Issues",
+      "object_class_group": "Forensic Reasoning and Case Analysis",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "behind",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.92,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_2c2a75f74a79",
+      "relation_name": "exhibits_change_during",
+      "rel_desc": "The art of forensic science is expected to become more sophisticated and effective during the future time period.",
+      "rel_hint_type": "temporal_change",
+      "canonical_rel_name": "changes_over_time",
+      "canonical_rel_desc": "Indicates that the subject changes or evolves over the temporal period represented by the object.",
+      "rel_cls": "evolution_over_time_relation",
+      "rel_cls_group": "TEMPORALITY",
+      "subject_entity_name": "art of forensic science",
+      "object_entity_name": "years to come",
+      "subject_class_label": "Forensic Practice Competence",
+      "subject_class_group": "Forensic Science Professional Competencies",
+      "object_class_label": "Future Time Period",
+      "object_class_group": "Temporal References",
+      "qualifiers": {
+        "TemporalQualifier": "in the years to come",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "will only become",
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "ChangeType: more sophisticated and effective"
+      },
+      "confidence": 0.86,
+      "remarks": [
+        "Relation created mainly to attach the temporal qualifier to the evolution of forensic science.",
+        "Relation created mainly to attach the temporal qualifier to the evolution of forensic science.",
+        "Relation created mainly to attach the temporal qualifier to the evolution of forensic science."
+      ]
+    }
+  ],
+  "llm_raw": "[]",
+  "parsed_steps": [],
+  "executed_decisions": [],
+  "timestamp": "2026-01-06T14:42:15Z"
+}

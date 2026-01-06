@@ -1,0 +1,65 @@
+{
+  "cluster_label": "23_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_71e919950abb",
+      "relation_name": "is_fuel_of",
+      "rel_desc": "Nuclear fuel is the fusion fuel used by massive stars during their life cycle.",
+      "rel_hint_type": "composition",
+      "canonical_rel_name": "is_fuel_for",
+      "canonical_rel_desc": "Indicates that the subject serves as the fuel or energy source for the object.",
+      "rel_cls": "energy_usage_relation",
+      "rel_cls_group": "USAGE",
+      "subject_entity_name": "nuclear fuel",
+      "object_entity_name": "massive star",
+      "subject_class_label": "Massive Star End-of-Life Components",
+      "subject_class_group": "Stellar Evolution and End States",
+      "object_class_label": "Massive Star End-of-Life Components",
+      "object_class_group": "Stellar Evolution and End States",
+      "qualifiers": {
+        "TemporalQualifier": "during the star's life cycle",
+        "SpatialQualifier": "in the star’s core (implied)",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.84,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_b72956ddf4f0",
+      "relation_name": "consumes",
+      "rel_desc": "The massive star consumes its nuclear fuel until it is exhausted.",
+      "rel_hint_type": "process",
+      "canonical_rel_name": "consumes",
+      "canonical_rel_desc": "Indicates that the subject uses up or expends the object as a consumable resource.",
+      "rel_cls": "energy_usage_relation",
+      "rel_cls_group": "USAGE",
+      "subject_entity_name": "massive star",
+      "object_entity_name": "nuclear fuel",
+      "subject_class_label": "Massive Star End-of-Life Components",
+      "subject_class_group": "Stellar Evolution and End States",
+      "object_class_label": "Massive Star End-of-Life Components",
+      "object_class_group": "Stellar Evolution and End States",
+      "qualifiers": {
+        "TemporalQualifier": "toward the end of the star's life cycle",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": "at end of fuel supply",
+        "UncertaintyQualifier": null,
+        "CausalHint": "exhausted",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.86,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[]",
+  "parsed_steps": [],
+  "executed_decisions": [],
+  "timestamp": "2026-01-06T09:59:14Z"
+}

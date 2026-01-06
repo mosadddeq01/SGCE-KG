@@ -1,0 +1,99 @@
+{
+  "cluster_label": "17_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_e5c19495ea49",
+      "relation_name": "benefits",
+      "rel_desc": "Safe passage into the afterlife is a desired outcome specifically for the deceased individual.",
+      "rel_hint_type": "beneficiary",
+      "canonical_rel_name": "is_afterlife_outcome_for",
+      "canonical_rel_desc": "Links an afterlife condition, state, or benefit to the deceased individual who is intended to experience or receive it.",
+      "rel_cls": "afterlife_benefit_relation",
+      "rel_cls_group": "AGENCY",
+      "subject_entity_name": "safe passage into the afterlife",
+      "object_entity_name": "the deceased",
+      "subject_class_label": "Ancient Egyptian Afterlife Beliefs and Concepts",
+      "subject_class_group": "Ancient Egyptian Funerary Religion and Culture",
+      "object_class_label": "Ancient Egyptian Deceased Individual (Burial Subject)",
+      "object_class_group": "Ancient Egyptian Funerary Religion and Culture",
+      "qualifiers": {
+        "TemporalQualifier": "after death",
+        "SpatialQualifier": "into the afterlife",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.95,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_e8d331f82d54",
+      "relation_name": "experienced_by",
+      "rel_desc": "The eternal existence in the realm of the gods is something experienced by the deceased.",
+      "rel_hint_type": "beneficiary",
+      "canonical_rel_name": "is_afterlife_outcome_for",
+      "canonical_rel_desc": "Links an afterlife condition, state, or benefit to the deceased individual who is intended to experience or receive it.",
+      "rel_cls": "afterlife_benefit_relation",
+      "rel_cls_group": "AGENCY",
+      "subject_entity_name": "eternal existence in the realm of the gods",
+      "object_entity_name": "the deceased",
+      "subject_class_label": "Ancient Egyptian Afterlife Beliefs and Concepts",
+      "subject_class_group": "Ancient Egyptian Funerary Religion and Culture",
+      "object_class_label": "Ancient Egyptian Deceased Individual (Burial Subject)",
+      "object_class_group": "Ancient Egyptian Funerary Religion and Culture",
+      "qualifiers": {
+        "TemporalQualifier": "eternal / ongoing after death",
+        "SpatialQualifier": "in the realm of the gods",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "continued existence",
+        "LogicalMarker": "and",
+        "OtherQualifier": null
+      },
+      "confidence": 0.93,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_rel_schema\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_e5c19495ea49\",\n        \"RelR_e8d331f82d54\"\n      ],\n      \"canonical_rel_name\": null,\n      \"canonical_rel_desc\": null,\n      \"rel_cls\": null,\n      \"rel_cls_group\": \"ASSOCIATION\",\n      \"justification\": \"Both relations link an afterlife state/benefit to the deceased as the experiencer/beneficiary, not as an active causal agent. The current group 'AGENCY' suggests active doing or causing, which is misleading here. An associative grouping better reflects that these predicates capture an experiential/beneficiary association between the deceased and an afterlife condition.\",\n      \"remark\": \"Rel_cls_group normalized from 'AGENCY' to 'ASSOCIATION' to avoid implying causal agency by the deceased in receiving afterlife benefits.\",\n      \"confidence\": 0.8\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_rel_schema",
+      "args": {
+        "relation_ids": [
+          "RelR_e5c19495ea49",
+          "RelR_e8d331f82d54"
+        ],
+        "canonical_rel_name": null,
+        "canonical_rel_desc": null,
+        "rel_cls": null,
+        "rel_cls_group": "ASSOCIATION",
+        "justification": "Both relations link an afterlife state/benefit to the deceased as the experiencer/beneficiary, not as an active causal agent. The current group 'AGENCY' suggests active doing or causing, which is misleading here. An associative grouping better reflects that these predicates capture an experiential/beneficiary association between the deceased and an afterlife condition.",
+        "remark": "Rel_cls_group normalized from 'AGENCY' to 'ASSOCIATION' to avoid implying causal agency by the deceased in receiving afterlife benefits.",
+        "confidence": 0.8
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_rel_schema",
+      "relation_ids": [
+        "RelR_e5c19495ea49",
+        "RelR_e8d331f82d54"
+      ],
+      "canonical_rel_name": null,
+      "canonical_rel_desc": null,
+      "rel_cls": null,
+      "rel_cls_group": "ASSOCIATION",
+      "new_relation_name": null,
+      "original_relation_name": null,
+      "justification": "Both relations link an afterlife state/benefit to the deceased as the experiencer/beneficiary, not as an active causal agent. The current group 'AGENCY' suggests active doing or causing, which is misleading here. An associative grouping better reflects that these predicates capture an experiential/beneficiary association between the deceased and an afterlife condition.",
+      "remark": "Rel_cls_group normalized from 'AGENCY' to 'ASSOCIATION' to avoid implying causal agency by the deceased in receiving afterlife benefits.",
+      "confidence": 0.8
+    }
+  ],
+  "timestamp": "2026-01-06T10:30:15Z"
+}

@@ -1,0 +1,20 @@
+[
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": [
+        "RelR_8c37f62f60bd",
+        "RelR_d039e7c0dc9c",
+        "RelR_30349ebef018",
+        "RelR_40e891e203cc"
+      ],
+      "canonical_rel_name": "occurs_in_or_on_location",
+      "canonical_rel_desc": "A biological stage, life stage, or process takes place within or on a specified physical location, substrate, or host organism.",
+      "rel_cls": "biological_stage_or_process_location_relation",
+      "rel_cls_group": "SPATIALITY",
+      "justification": "All four relations describe where a biological stage or process occurs (in or on leaves, plants, or chrysalis). They currently use two slightly different canonical_rel_name values (occurs_at_location vs occurs_in_location) and two rel_cls values (biological_stage_or_process_location_relation vs spatial_occurrence_relation) for the same spatial-occurrence semantics. Normalizing them to a single canonical_rel_name 'occurs_in_or_on_location' and a unified relation class 'biological_stage_or_process_location_relation' improves schema consistency while keeping rel_cls_group as SPATIALITY.",
+      "remark": "Temporal qualifiers on some of these relations remain as qualifiers on the edge; the core predicate is purely spatial.",
+      "confidence": 0.93
+    }
+  }
+]

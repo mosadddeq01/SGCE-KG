@@ -1,0 +1,69 @@
+{
+  "cluster_label": "24_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_71d4b7ad60c0",
+      "relation_name": "preys_on",
+      "rel_desc": "Birds feed on pest organisms, acting as natural pest control agents.",
+      "rel_hint_type": "trophic_interaction",
+      "canonical_rel_name": "preys_on",
+      "canonical_rel_desc": "Subject organism acts as a predator on the object organism, reducing its population through predation.",
+      "rel_cls": "trophic_interaction_relation",
+      "rel_cls_group": "INTERACTION",
+      "subject_entity_name": "birds",
+      "object_entity_name": "pests",
+      "subject_class_label": "Bird Biotic Components",
+      "subject_class_group": "Birds as Environmental Indicators & Conservation",
+      "object_class_label": "Pest Organism Populations",
+      "object_class_group": "Pest Management & Ecosystem Services",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "in agricultural and vegetated areas",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "Many (not all) bird species",
+        "CausalHint": "By preying on insects",
+        "LogicalMarker": "By",
+        "OtherQualifier": "Role: natural pest control agents"
+      },
+      "confidence": 0.88,
+      "remarks": [
+        "Maps 'insects' in text to the pest concept provided.",
+        "Maps 'insects' in text to the pest concept provided.",
+        "Maps 'insects' in text to the pest concept provided."
+      ]
+    },
+    {
+      "relation_id": "RelR_be7c0bd8f03a",
+      "relation_name": "reduces_need_for",
+      "rel_desc": "Natural pest control by birds reduces the need to use chemical pesticides.",
+      "rel_hint_type": "substitution",
+      "canonical_rel_name": "reduces_need_for",
+      "canonical_rel_desc": "Subject decreases the required level, frequency, or dependence on the object (e.g., reducing the need for an input, intervention, or resource).",
+      "rel_cls": "requirement_modification_relation",
+      "rel_cls_group": "REQUIREMENT",
+      "subject_entity_name": "natural pest control by birds",
+      "object_entity_name": "chemical pesticides",
+      "subject_class_label": "Pest Population Dynamics",
+      "subject_class_group": "Pest Management & Ecosystem Services",
+      "object_class_label": "Synthetic Pesticides",
+      "object_class_group": "Pest Management & Ecosystem Services",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "in managed ecosystems such as agriculture",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "reduces the need for",
+        "LogicalMarker": null,
+        "OtherQualifier": "ManagementImplication: lower pesticide application"
+      },
+      "confidence": 0.98,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[]",
+  "parsed_steps": [],
+  "executed_decisions": [],
+  "timestamp": "2026-01-06T11:37:32Z"
+}

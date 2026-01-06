@@ -1,0 +1,159 @@
+{
+  "cluster_label": "-1_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_71d4b7ad60c0",
+      "relation_name": "preys_on",
+      "rel_desc": "Birds feed on pest organisms, acting as natural pest control agents.",
+      "rel_hint_type": "trophic_interaction",
+      "canonical_rel_name": "preys_on",
+      "canonical_rel_desc": "Subject organism acts as a predator on the object organism, reducing its population through predation.",
+      "rel_cls": "trophic_interaction_relation",
+      "rel_cls_group": "INTERACTION",
+      "subject_entity_name": "birds",
+      "object_entity_name": "pests",
+      "subject_class_label": "Bird Biotic Components",
+      "subject_class_group": "Birds as Environmental Indicators & Conservation",
+      "object_class_label": "Pest Organism Populations",
+      "object_class_group": "Pest Management & Ecosystem Services",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "in agricultural and vegetated areas",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "Many (not all) bird species",
+        "CausalHint": "By preying on insects",
+        "LogicalMarker": "By",
+        "OtherQualifier": "Role: natural pest control agents"
+      },
+      "confidence": 0.88,
+      "remarks": [
+        "Maps 'insects' in text to the pest concept provided.",
+        "Maps 'insects' in text to the pest concept provided."
+      ]
+    },
+    {
+      "relation_id": "RelR_059119a91622",
+      "relation_name": "contributes_to",
+      "rel_desc": "Bird pollinators contribute to plants' production of fruits and seeds as a result of pollination.",
+      "rel_hint_type": "causal",
+      "canonical_rel_name": "contributes_to",
+      "canonical_rel_desc": "Indicates that the subject is one of potentially several factors that add to or partially cause the occurrence or magnitude of the object outcome or process.",
+      "rel_cls": "biological_process_causal_relation",
+      "rel_cls_group": "CAUSALITY",
+      "subject_entity_name": "bird pollinators",
+      "object_entity_name": "production of fruits and seeds",
+      "subject_class_label": "Bird Pollinators",
+      "subject_class_group": "Bird-Mediated Plant Reproduction and Regeneration",
+      "object_class_label": "Plant Reproduction and Dispersal Processes",
+      "object_class_group": "Bird-Mediated Plant Reproduction and Regeneration",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": "when they feed on nectar and transfer pollen",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "contribute to",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.96,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_60895e90a732",
+      "relation_name": "contributes_to",
+      "rel_desc": "Birds provide natural pest control as one of their ecological roles.",
+      "rel_hint_type": "ecosystem service",
+      "canonical_rel_name": "provides_ecosystem_service",
+      "canonical_rel_desc": "Indicates that the subject acts as a source or provider of one or more ecosystem services (including directly delivering a service or functionally supporting its delivery).",
+      "rel_cls": "ecosystem_service_provision_relation",
+      "rel_cls_group": "FUNCTION",
+      "subject_entity_name": "birds",
+      "object_entity_name": "natural pest control by birds",
+      "subject_class_label": "Bird Biotic Components",
+      "subject_class_group": "Birds as Environmental Indicators & Conservation",
+      "object_class_label": "Pest Population Dynamics",
+      "object_class_group": "Pest Management & Ecosystem Services",
+      "qualifiers": {
+        "TemporalQualifier": "ongoing ecological interactions",
+        "SpatialQualifier": "ecosystems around the world",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "contribute in numerous ways",
+        "LogicalMarker": null,
+        "OtherQualifier": "ServiceType: biological control of pests"
+      },
+      "confidence": 0.93,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_49278d853c4b",
+      "relation_name": "supports",
+      "rel_desc": "Protection of bird habitats contributes to supporting ecosystem services.",
+      "rel_hint_type": "ecosystem service",
+      "canonical_rel_name": "provides_ecosystem_service",
+      "canonical_rel_desc": "Indicates that the subject acts as a source or provider of one or more ecosystem services (including directly delivering a service or functionally supporting its delivery).",
+      "rel_cls": "ecosystem_service_provision_relation",
+      "rel_cls_group": "FUNCTION",
+      "subject_entity_name": "habitats",
+      "object_entity_name": "ecosystem services",
+      "subject_class_label": "Bird Habitats",
+      "subject_class_group": "Birds as Environmental Indicators & Conservation",
+      "object_class_label": "General Ecosystem Services",
+      "object_class_group": "Ecosystem Condition, Function & Services",
+      "qualifiers": {
+        "TemporalQualifier": "for future generations (implicit)",
+        "SpatialQualifier": "ecosystems; natural systems",
+        "OperationalConstraint": "when habitats are effectively protected",
+        "ConditionExpression": "if bird populations and their habitats are protected",
+        "UncertaintyQualifier": null,
+        "CausalHint": "is crucial for",
+        "LogicalMarker": "and; for",
+        "OtherQualifier": null
+      },
+      "confidence": 0.86,
+      "remarks": [
+        "Parallel to the relation from bird populations to ecosystem services.",
+        "Parallel to the relation from bird populations to ecosystem services."
+      ]
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_rel_schema\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_49278d853c4b\"],\n      \"canonical_rel_name\": \"supports_ecosystem_services\",\n      \"canonical_rel_desc\": \"Subject supports or enables the maintenance or delivery of one or more ecosystem services, indirectly contributing to them rather than directly providing them.\",\n      \"rel_cls\": null,\n      \"rel_cls_group\": null,\n      \"justification\": \"The relation from habitats to ecosystem services describes a supporting/enabling role (via habitat protection) rather than direct provision of a specific service. Using 'supports_ecosystem_services' better distinguishes this enabling relation from cases where an organism directly provides a service (e.g., birds providing pest control), while keeping it in the same broader ecosystem_service_provision_relation class and FUNCTION group.\",\n      \"remark\": null,\n      \"confidence\": 0.86\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_rel_schema",
+      "args": {
+        "relation_ids": [
+          "RelR_49278d853c4b"
+        ],
+        "canonical_rel_name": "supports_ecosystem_services",
+        "canonical_rel_desc": "Subject supports or enables the maintenance or delivery of one or more ecosystem services, indirectly contributing to them rather than directly providing them.",
+        "rel_cls": null,
+        "rel_cls_group": null,
+        "justification": "The relation from habitats to ecosystem services describes a supporting/enabling role (via habitat protection) rather than direct provision of a specific service. Using 'supports_ecosystem_services' better distinguishes this enabling relation from cases where an organism directly provides a service (e.g., birds providing pest control), while keeping it in the same broader ecosystem_service_provision_relation class and FUNCTION group.",
+        "remark": null,
+        "confidence": 0.86
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_rel_schema",
+      "relation_ids": [
+        "RelR_49278d853c4b"
+      ],
+      "canonical_rel_name": "supports_ecosystem_services",
+      "canonical_rel_desc": "Subject supports or enables the maintenance or delivery of one or more ecosystem services, indirectly contributing to them rather than directly providing them.",
+      "rel_cls": null,
+      "rel_cls_group": null,
+      "new_relation_name": null,
+      "original_relation_name": null,
+      "justification": "The relation from habitats to ecosystem services describes a supporting/enabling role (via habitat protection) rather than direct provision of a specific service. Using 'supports_ecosystem_services' better distinguishes this enabling relation from cases where an organism directly provides a service (e.g., birds providing pest control), while keeping it in the same broader ecosystem_service_provision_relation class and FUNCTION group.",
+      "remark": null,
+      "confidence": 0.86
+    }
+  ],
+  "timestamp": "2026-01-06T11:35:14Z"
+}

@@ -1,0 +1,182 @@
+{
+  "cluster_label": 2,
+  "cluster_classes": [
+    {
+      "candidate_id": "ClsC_ca4af84d",
+      "class_label": "Urban Legend Narratives",
+      "class_description": "Narrative forms in which urban legends are expressed and shared, including specific urban legend stories and closely related tales whose fact–fiction boundary is blurred.",
+      "class_type_hint": "Narrative Genre",
+      "class_group": "TBD",
+      "confidence": 0.86,
+      "evidence_excerpt": "Narrative stories, such as urban legends and similar tales, whose line between fact and fiction is often blurred.",
+      "member_ids": [
+        "En_9c20138b",
+        "Can_44979414",
+        "En_69d774f6"
+      ],
+      "members": [
+        {
+          "id": "En_9c20138b",
+          "entity_name": "urban legend",
+          "entity_description": "A modern folklore story, such as the Hook Man, widely shared in communities.",
+          "entity_type_hint": "NarrativeGenre"
+        },
+        {
+          "id": "Can_44979414",
+          "entity_name": "urban legend tales",
+          "entity_description": "Narrative stories, such as urban legends and similar tales, whose line between fact and fiction is often blurred for listeners.",
+          "entity_type_hint": "Narrative"
+        },
+        {
+          "id": "En_69d774f6",
+          "entity_name": "stories",
+          "entity_description": "Narratives, including urban legends, that can be quickly shared via internet and social media.",
+          "entity_type_hint": "InformationObject"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_456d6747",
+      "class_label": "Urban Legend Studies",
+      "class_description": "Documents that analyze the origins, societal impact, and persistence of urban legends.",
+      "class_type_hint": "Document Theme",
+      "class_group": "TBD",
+      "confidence": 0.86,
+      "evidence_excerpt": "An essay discussing the origins, societal impact, and endurance of urban legends.",
+      "member_ids": [
+        "En_fd450d70"
+      ],
+      "members": [
+        {
+          "id": "En_fd450d70",
+          "entity_name": "Urban Legends and Their Origins",
+          "entity_description": "An essay discussing the origins, societal impact, and endurance of urban legends.",
+          "entity_type_hint": "Document"
+        }
+      ],
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"split_class\",\n    \"args\": {\n      \"source_class_id\": \"ClsC_ca4af84d\",\n      \"splits\": [\n        {\n          \"name\": \"Urban Legend Genre\",\n          \"description\": \"The abstract modern folklore genre of urban legends, treated as a narrative type distinct from individual stories or examples.\",\n          \"class_type_hint\": \"NarrativeGenre\",\n          \"member_ids\": [\"En_9c20138b\"],\n          \"provisional_id\": \"SPLIT(ClsC_ca4af84d|Genre)\"\n        }\n      ],\n      \"justification\": \"The entity 'urban legend' (En_9c20138b) represents the abstract narrative genre, while the other members describe concrete stories/tales; splitting isolates the genre concept from specific narrative instances for cleaner schema.\",\n      \"remark\": null,\n      \"confidence\": 0.86\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_ca4af84d\",\n      \"new_name\": \"Urban Legend Stories\",\n      \"new_description\": \"Specific urban legend stories and closely related modern folklore narratives whose boundary between fact and fiction is blurred, including those shared via the internet and social media.\",\n      \"new_class_type_hint\": \"Narrative\",\n      \"new_class_group\": \"Urban Legends & Folklore Narratives\",\n      \"remark\": null,\n      \"justification\": \"After splitting out the abstract genre entity, the remaining members describe specific stories/tales; renaming and updating the type hint and class_group clarifies this scope and connects it to related urban legend classes.\",\n      \"confidence\": 0.87\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"SPLIT(ClsC_ca4af84d|Genre)\",\n      \"new_name\": \"Urban Legend Genre\",\n      \"new_description\": \"The modern folklore narrative genre characterized by purportedly true stories such as the Hook Man and similar tales, independent of any particular telling.\",\n      \"new_class_type_hint\": \"NarrativeGenre\",\n      \"new_class_group\": \"Urban Legends & Folklore Narratives\",\n      \"remark\": null,\n      \"justification\": \"The split-out class groups the abstract concept of the urban legend narrative type; assigning a clear name, refined description, and shared class_group aligns it with related urban legend material.\",\n      \"confidence\": 0.87\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_456d6747\",\n      \"new_name\": \"Urban Legend Studies\",\n      \"new_description\": \"Documents and analyses that examine the origins, societal impact, cultural meanings, and persistence of urban legends as a modern folklore genre.\",\n      \"new_class_type_hint\": \"Document Theme\",\n      \"new_class_group\": \"Urban Legends & Folklore Narratives\",\n      \"remark\": null,\n      \"justification\": \"This class covers scholarly or analytical documents about urban legends rather than narratives themselves; assigning the same class_group as the narrative and genre classes ties together the domain of urban legend folklore.\",\n      \"confidence\": 0.88\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "split_class",
+      "args": {
+        "source_class_id": "ClsC_ca4af84d",
+        "splits": [
+          {
+            "name": "Urban Legend Genre",
+            "description": "The abstract modern folklore genre of urban legends, treated as a narrative type distinct from individual stories or examples.",
+            "class_type_hint": "NarrativeGenre",
+            "member_ids": [
+              "En_9c20138b"
+            ],
+            "provisional_id": "SPLIT(ClsC_ca4af84d|Genre)"
+          }
+        ],
+        "justification": "The entity 'urban legend' (En_9c20138b) represents the abstract narrative genre, while the other members describe concrete stories/tales; splitting isolates the genre concept from specific narrative instances for cleaner schema.",
+        "remark": null,
+        "confidence": 0.86
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_ca4af84d",
+        "new_name": "Urban Legend Stories",
+        "new_description": "Specific urban legend stories and closely related modern folklore narratives whose boundary between fact and fiction is blurred, including those shared via the internet and social media.",
+        "new_class_type_hint": "Narrative",
+        "new_class_group": "Urban Legends & Folklore Narratives",
+        "remark": null,
+        "justification": "After splitting out the abstract genre entity, the remaining members describe specific stories/tales; renaming and updating the type hint and class_group clarifies this scope and connects it to related urban legend classes.",
+        "confidence": 0.87
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "SPLIT(ClsC_ca4af84d|Genre)",
+        "new_name": "Urban Legend Genre",
+        "new_description": "The modern folklore narrative genre characterized by purportedly true stories such as the Hook Man and similar tales, independent of any particular telling.",
+        "new_class_type_hint": "NarrativeGenre",
+        "new_class_group": "Urban Legends & Folklore Narratives",
+        "remark": null,
+        "justification": "The split-out class groups the abstract concept of the urban legend narrative type; assigning a clear name, refined description, and shared class_group aligns it with related urban legend material.",
+        "confidence": 0.87
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_456d6747",
+        "new_name": "Urban Legend Studies",
+        "new_description": "Documents and analyses that examine the origins, societal impact, cultural meanings, and persistence of urban legends as a modern folklore genre.",
+        "new_class_type_hint": "Document Theme",
+        "new_class_group": "Urban Legends & Folklore Narratives",
+        "remark": null,
+        "justification": "This class covers scholarly or analytical documents about urban legends rather than narratives themselves; assigning the same class_group as the narrative and genre classes ties together the domain of urban legend folklore.",
+        "confidence": 0.88
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "split_class",
+      "source_class_id": "ClsC_ca4af84d",
+      "source_class_id_resolved": "ClsC_ca4af84d",
+      "created_classes": [
+        {
+          "new_class_id": "ClsR_84c02e71",
+          "provisional_id": "SPLIT(ClsC_ca4af84d|Genre)",
+          "member_ids": [
+            "En_9c20138b"
+          ]
+        }
+      ],
+      "justification": "The entity 'urban legend' (En_9c20138b) represents the abstract narrative genre, while the other members describe concrete stories/tales; splitting isolates the genre concept from specific narrative instances for cleaner schema.",
+      "remark": null,
+      "confidence": 0.86
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_ca4af84d",
+      "class_id_resolved": "ClsC_ca4af84d",
+      "new_name": "Urban Legend Stories",
+      "new_description": "Specific urban legend stories and closely related modern folklore narratives whose boundary between fact and fiction is blurred, including those shared via the internet and social media.",
+      "new_class_type_hint": "Narrative",
+      "new_class_group": "Urban Legends & Folklore Narratives",
+      "remark": null,
+      "justification": "After splitting out the abstract genre entity, the remaining members describe specific stories/tales; renaming and updating the type hint and class_group clarifies this scope and connects it to related urban legend classes.",
+      "confidence": 0.87
+    },
+    {
+      "action": "modify_class",
+      "class_id": "SPLIT(ClsC_ca4af84d|Genre)",
+      "class_id_resolved": "ClsR_84c02e71",
+      "new_name": "Urban Legend Genre",
+      "new_description": "The modern folklore narrative genre characterized by purportedly true stories such as the Hook Man and similar tales, independent of any particular telling.",
+      "new_class_type_hint": "NarrativeGenre",
+      "new_class_group": "Urban Legends & Folklore Narratives",
+      "remark": null,
+      "justification": "The split-out class groups the abstract concept of the urban legend narrative type; assigning a clear name, refined description, and shared class_group aligns it with related urban legend material.",
+      "confidence": 0.87
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_456d6747",
+      "class_id_resolved": "ClsC_456d6747",
+      "new_name": "Urban Legend Studies",
+      "new_description": "Documents and analyses that examine the origins, societal impact, cultural meanings, and persistence of urban legends as a modern folklore genre.",
+      "new_class_type_hint": "Document Theme",
+      "new_class_group": "Urban Legends & Folklore Narratives",
+      "remark": null,
+      "justification": "This class covers scholarly or analytical documents about urban legends rather than narratives themselves; assigning the same class_group as the narrative and genre classes ties together the domain of urban legend folklore.",
+      "confidence": 0.88
+    }
+  ],
+  "provisional_to_real": {
+    "SPLIT(ClsC_ca4af84d|Genre)": "ClsR_84c02e71"
+  },
+  "timestamp": "2026-01-06T08:16:38Z"
+}

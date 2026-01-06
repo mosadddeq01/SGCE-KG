@@ -1,0 +1,88 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_757166e211a1",
+        "RelR_8c8695413950",
+        "RelR_34df8d8d2209",
+        "RelR_e25465c9ef35",
+        "RelR_17ca6b508ca8"
+      ],
+      "canonical_rel_name": "acts_on",
+      "canonical_rel_desc": "A process is performed on, directed at, or targets this entity as its primary object or input.",
+      "justification": "All these relations link a process (collection of evidence, analysis, investigation, prosecution, forensic analysis) to the entity it is performed on or directed at (evidence or crime). Despite wording differences like 'acts_on', 'targets', and 'operates_on', they share the same semantics of a process acting on or targeting an object.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_757166e211a1",
+        "RelR_8c8695413950",
+        "RelR_34df8d8d2209",
+        "RelR_e25465c9ef35",
+        "RelR_17ca6b508ca8"
+      ],
+      "rel_cls": "process_target_relation",
+      "justification": "Each relation connects a process to the primary object or target it operates on (evidence or crime), which is a coherent family of process-to-target links.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_757166e211a1",
+        "RelR_8c8695413950",
+        "RelR_34df8d8d2209",
+        "RelR_e25465c9ef35",
+        "RelR_17ca6b508ca8"
+      ],
+      "rel_cls_group": "INTERACTION",
+      "justification": "These relations describe how a process interacts with or operates on another entity, fitting an INTERACTION-type group rather than composition, identity, or temporality.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_6e4b7cac7564"
+      ],
+      "canonical_rel_name": "performs",
+      "canonical_rel_desc": "An agent or role carries out or executes a process or procedure.",
+      "justification": "This relation links 'forensic scientists' as agents to the 'forensic evidence analysis process' they carry out, which is best captured as an agent performing a process.",
+      "remark": "Documentation requirements are modeled via qualifiers rather than a separate predicate here.",
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_6e4b7cac7564"
+      ],
+      "rel_cls": "process_agent_relation",
+      "justification": "The relation connects an agent (forensic scientists) to a process they execute, which is a canonical agent–process (who performs what) pattern.",
+      "remark": null,
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_6e4b7cac7564"
+      ],
+      "rel_cls_group": "AGENCY",
+      "justification": "The focus is on who is responsible for and carries out the process, fitting an AGENCY-oriented class group.",
+      "remark": null,
+      "confidence": 0.95
+    }
+  }
+]

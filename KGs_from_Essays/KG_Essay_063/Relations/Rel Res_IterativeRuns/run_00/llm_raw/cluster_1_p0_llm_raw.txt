@@ -1,0 +1,57 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_ad78ea36b674",
+        "RelR_dc0b5970eee1",
+        "RelR_511bd7423a36",
+        "RelR_8eccb0f68183",
+        "RelR_29f438dd72bc",
+        "RelR_44f7d921545e",
+        "RelR_8fa0e3cbbd6b"
+      ],
+      "canonical_rel_name": "influences",
+      "canonical_rel_desc": "The subject has a significant causal or transformative impact on the state, development, or trajectory of the object (e.g., shaping history, societies, political landscapes, or specific actors).",
+      "justification": "All these relations describe a causal or transformative impact of sociopolitical events/collective actions (protests, revolutions, overthrows, specific historical revolutions) on broader historical trajectories, societies, political landscapes, or directly on actors. Normalizing them under a single predicate 'influences' captures this shared impact semantics while avoiding minor wording differences like 'affects' vs. 'shapes'.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_ad78ea36b674",
+        "RelR_dc0b5970eee1",
+        "RelR_511bd7423a36",
+        "RelR_8eccb0f68183",
+        "RelR_29f438dd72bc",
+        "RelR_44f7d921545e",
+        "RelR_8fa0e3cbbd6b"
+      ],
+      "rel_cls": "sociopolitical_impact_relation",
+      "justification": "Each relation links sociopolitical events or processes (protests, revolutions, overthrows) to their effects on historical development, societies, political landscapes, or rulers. Grouping them under 'sociopolitical_impact_relation' captures this as a family of relations about the impact of political contention on sociopolitical structures and history.",
+      "remark": null,
+      "confidence": 0.92
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_ad78ea36b674",
+        "RelR_dc0b5970eee1",
+        "RelR_511bd7423a36",
+        "RelR_8eccb0f68183",
+        "RelR_29f438dd72bc",
+        "RelR_44f7d921545e",
+        "RelR_8fa0e3cbbd6b"
+      ],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "The core semantics in each case is that the subject causes or brings about changes in the object (shaping history, transforming societies, affecting dictators, and shaping political landscapes). This is best captured under the broad causal dimension.",
+      "remark": null,
+      "confidence": 0.95
+    }
+  }
+]

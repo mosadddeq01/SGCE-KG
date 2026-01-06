@@ -1,0 +1,203 @@
+{
+  "cluster_label": 4,
+  "cluster_classes": [
+    {
+      "candidate_id": "ClsC_bd4622ca",
+      "class_label": "Egyptian Funerary Texts",
+      "class_description": "Religious written works placed in ancient Egyptian burials, such as the Book of the Dead, intended to guide and protect the deceased in the afterlife.",
+      "class_type_hint": "Text Genre",
+      "class_group": "TBD",
+      "confidence": 0.93,
+      "evidence_excerpt": "religious texts and prayers placed in tombs to aid the deceased in navigating the afterlife",
+      "member_ids": [
+        "Can_e8375c41",
+        "Can_b5ece7b4"
+      ],
+      "members": [
+        {
+          "id": "Can_e8375c41",
+          "entity_name": "Book of the Dead",
+          "entity_description": "Ancient Egyptian funerary text consisting of a collection of spells and prayers, often written on papyrus scrolls and placed in tombs to aid the deceased in navigating the afterlife.",
+          "entity_type_hint": "Document"
+        },
+        {
+          "id": "Can_b5ece7b4",
+          "entity_name": "religious texts in ancient Egyptian burials",
+          "entity_description": "Sacred written works placed in ancient Egyptian tombs or burial chambers to guide and aid the deceased in the afterlife.",
+          "entity_type_hint": "Text"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_cdc339cd",
+      "class_label": "Egyptian Burial Amulets",
+      "class_description": "Protective or magical objects placed in ancient Egyptian burials to aid and protect the deceased in the afterlife.",
+      "class_type_hint": "Cultural Artifact",
+      "class_group": "TBD",
+      "confidence": 0.93,
+      "evidence_excerpt": "Protective ritual objects included in burials for afterlife protection.",
+      "member_ids": [
+        "Can_5133c009"
+      ],
+      "members": [
+        {
+          "id": "Can_5133c009",
+          "entity_name": "amulets",
+          "entity_description": "Protective or magical objects placed in ancient Egyptian burials to aid and protect the deceased in the afterlife.",
+          "entity_type_hint": "Object"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_058c1fcf",
+      "class_label": "Ancient Egyptian Burial Chambers",
+      "class_description": "Rooms or enclosed spaces designed to house mummified bodies along with religious texts, amulets, and other provisions for the journey to the afterlife in ancient Egyptian mortuary contexts.",
+      "class_type_hint": "Archaeological Feature",
+      "class_group": "TBD",
+      "confidence": 0.86,
+      "evidence_excerpt": "Room or space in which the mummified deceased, texts, and amulets were placed.",
+      "member_ids": [
+        "En_ebe076ea"
+      ],
+      "members": [
+        {
+          "id": "En_ebe076ea",
+          "entity_name": "burial chamber",
+          "entity_description": "Room or space in which the mummified deceased, texts, and amulets were placed.",
+          "entity_type_hint": "Location"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_3afb20a7",
+      "class_label": "Papyrus Manuscripts",
+      "class_description": "Papyrus-based scrolls or sheets used as writing supports, particularly for inscribing religious or funerary texts such as the Book of the Dead.",
+      "class_type_hint": "Artifact Type",
+      "class_group": "TBD",
+      "confidence": 0.86,
+      "evidence_excerpt": "The Book of the Dead was often inscribed on papyrus scrolls and placed in the tomb.",
+      "member_ids": [
+        "En_250878b6"
+      ],
+      "members": [
+        {
+          "id": "En_250878b6",
+          "entity_name": "papyrus scrolls",
+          "entity_description": "Papyrus-based writing material used to inscribe the Book of the Dead.",
+          "entity_type_hint": "Artifact"
+        }
+      ],
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_bd4622ca\",\n      \"new_name\": null,\n      \"new_description\": null,\n      \"new_class_type_hint\": null,\n      \"new_class_group\": \"Ancient Egyptian Funerary Practices and Burials\",\n      \"remark\": null,\n      \"justification\": \"This class describes funerary religious texts used in ancient Egyptian burials, aligning with the shared domain of Egyptian funerary practice alongside amulets, burial chambers, and papyrus manuscripts.\",\n      \"confidence\": 0.95\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_cdc339cd\",\n      \"new_name\": null,\n      \"new_description\": null,\n      \"new_class_type_hint\": null,\n      \"new_class_group\": \"Ancient Egyptian Funerary Practices and Burials\",\n      \"remark\": null,\n      \"justification\": \"This class covers amulets placed in tombs for afterlife protection, clearly part of the same ancient Egyptian funerary and burial practice domain as the other classes in the cluster.\",\n      \"confidence\": 0.95\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_058c1fcf\",\n      \"new_name\": null,\n      \"new_description\": null,\n      \"new_class_type_hint\": null,\n      \"new_class_group\": \"Ancient Egyptian Funerary Practices and Burials\",\n      \"remark\": null,\n      \"justification\": \"This class represents burial chambers that house mummies along with texts and amulets, making it part of the same overarching domain of ancient Egyptian funerary practices and burials.\",\n      \"confidence\": 0.94\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_3afb20a7\",\n      \"new_name\": null,\n      \"new_description\": null,\n      \"new_class_type_hint\": null,\n      \"new_class_group\": \"Ancient Egyptian Funerary Practices and Burials\",\n      \"remark\": null,\n      \"justification\": \"Papyrus manuscripts here are specifically used as supports for funerary texts like the Book of the Dead in tombs, so they belong in the same class group focused on ancient Egyptian funerary practices and burial contexts.\",\n      \"confidence\": 0.94\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_bd4622ca",
+        "new_name": null,
+        "new_description": null,
+        "new_class_type_hint": null,
+        "new_class_group": "Ancient Egyptian Funerary Practices and Burials",
+        "remark": null,
+        "justification": "This class describes funerary religious texts used in ancient Egyptian burials, aligning with the shared domain of Egyptian funerary practice alongside amulets, burial chambers, and papyrus manuscripts.",
+        "confidence": 0.95
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_cdc339cd",
+        "new_name": null,
+        "new_description": null,
+        "new_class_type_hint": null,
+        "new_class_group": "Ancient Egyptian Funerary Practices and Burials",
+        "remark": null,
+        "justification": "This class covers amulets placed in tombs for afterlife protection, clearly part of the same ancient Egyptian funerary and burial practice domain as the other classes in the cluster.",
+        "confidence": 0.95
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_058c1fcf",
+        "new_name": null,
+        "new_description": null,
+        "new_class_type_hint": null,
+        "new_class_group": "Ancient Egyptian Funerary Practices and Burials",
+        "remark": null,
+        "justification": "This class represents burial chambers that house mummies along with texts and amulets, making it part of the same overarching domain of ancient Egyptian funerary practices and burials.",
+        "confidence": 0.94
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_3afb20a7",
+        "new_name": null,
+        "new_description": null,
+        "new_class_type_hint": null,
+        "new_class_group": "Ancient Egyptian Funerary Practices and Burials",
+        "remark": null,
+        "justification": "Papyrus manuscripts here are specifically used as supports for funerary texts like the Book of the Dead in tombs, so they belong in the same class group focused on ancient Egyptian funerary practices and burial contexts.",
+        "confidence": 0.94
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_bd4622ca",
+      "class_id_resolved": "ClsC_bd4622ca",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Ancient Egyptian Funerary Practices and Burials",
+      "remark": null,
+      "justification": "This class describes funerary religious texts used in ancient Egyptian burials, aligning with the shared domain of Egyptian funerary practice alongside amulets, burial chambers, and papyrus manuscripts.",
+      "confidence": 0.95
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_cdc339cd",
+      "class_id_resolved": "ClsC_cdc339cd",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Ancient Egyptian Funerary Practices and Burials",
+      "remark": null,
+      "justification": "This class covers amulets placed in tombs for afterlife protection, clearly part of the same ancient Egyptian funerary and burial practice domain as the other classes in the cluster.",
+      "confidence": 0.95
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_058c1fcf",
+      "class_id_resolved": "ClsC_058c1fcf",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Ancient Egyptian Funerary Practices and Burials",
+      "remark": null,
+      "justification": "This class represents burial chambers that house mummies along with texts and amulets, making it part of the same overarching domain of ancient Egyptian funerary practices and burials.",
+      "confidence": 0.94
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_3afb20a7",
+      "class_id_resolved": "ClsC_3afb20a7",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Ancient Egyptian Funerary Practices and Burials",
+      "remark": null,
+      "justification": "Papyrus manuscripts here are specifically used as supports for funerary texts like the Book of the Dead in tombs, so they belong in the same class group focused on ancient Egyptian funerary practices and burial contexts.",
+      "confidence": 0.94
+    }
+  ],
+  "provisional_to_real": {},
+  "timestamp": "2026-01-06T10:11:49Z"
+}

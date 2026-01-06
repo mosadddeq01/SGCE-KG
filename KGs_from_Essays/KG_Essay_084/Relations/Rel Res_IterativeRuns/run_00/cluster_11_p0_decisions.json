@@ -1,0 +1,275 @@
+{
+  "cluster_label": "11_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_bfe6e5e3182f",
+      "relation_name": "responsible_for",
+      "rel_desc": "Forensic scientists are responsible for documenting the crime scene.",
+      "rel_hint_type": "responsibility",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "forensic scientists",
+      "object_entity_name": "crime scene",
+      "subject_class_label": "Forensic Scientists",
+      "subject_class_group": "Forensic Science Domain",
+      "object_class_label": "Forensic Context Locations",
+      "object_class_group": "Forensic Context & Locations",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "of the crime scene",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": "as well as",
+        "OtherQualifier": "TaskType: documenting and preserving"
+      },
+      "confidence": 0.96,
+      "remarks": [
+        "Preservation of integrity is modeled separately with crime scene integrity."
+      ]
+    },
+    {
+      "relation_id": "RelR_248bf3e174a4",
+      "relation_name": "maintains",
+      "rel_desc": "Forensic scientists are responsible for preserving crime scene integrity.",
+      "rel_hint_type": "responsibility",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "forensic scientists",
+      "object_entity_name": "crime scene integrity",
+      "subject_class_label": "Forensic Scientists",
+      "subject_class_group": "Forensic Science Domain",
+      "object_class_label": "Crime Scene Integrity",
+      "object_class_group": "Forensic Evidence & Crime Scene Procedures",
+      "qualifiers": {
+        "TemporalQualifier": "during crime scene investigation",
+        "SpatialQualifier": "at the crime scene",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "are responsible for",
+        "CausalHint": "preserving",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.97,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_313a80964a65",
+      "relation_name": "handles",
+      "rel_desc": "Forensic scientists are responsible for ensuring evidence is properly handled and processed.",
+      "rel_hint_type": "responsibility",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "forensic scientists",
+      "object_entity_name": "evidence",
+      "subject_class_label": "Forensic Scientists",
+      "subject_class_group": "Forensic Science Domain",
+      "object_class_label": "General Forensic Evidence",
+      "object_class_group": "Forensic Evidence",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "in their work",
+        "OperationalConstraint": "controlled and consistent manner",
+        "ConditionExpression": "all evidence",
+        "UncertaintyQualifier": null,
+        "CausalHint": "ensuring",
+        "LogicalMarker": "must",
+        "OtherQualifier": null
+      },
+      "confidence": 0.9,
+      "remarks": [
+        "Focuses on responsibility rather than physical handling alone."
+      ]
+    },
+    {
+      "relation_id": "RelR_f769df3cbe04",
+      "relation_name": "supports_accountability_of",
+      "rel_desc": "The work of forensic scientists helps ensure that guilty individuals are held accountable.",
+      "rel_hint_type": "accountability",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "forensic scientists",
+      "object_entity_name": "guilty individuals",
+      "subject_class_label": "Forensic Scientists",
+      "subject_class_group": "Forensic Science Domain",
+      "object_class_label": "Criminal Justice Participants",
+      "object_class_group": "Criminal Justice & Forensic Context",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "plays a crucial role in ensuring",
+        "LogicalMarker": "and that",
+        "OtherQualifier": null
+      },
+      "confidence": 0.94,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_bfe6e5e3182f\",\n        \"RelR_248bf3e174a4\",\n        \"RelR_313a80964a65\"\n      ],\n      \"canonical_rel_name\": \"has_professional_responsibility_for\",\n      \"canonical_rel_desc\": \"Indicates that an agent (such as a forensic scientist) has a formal or professional duty to perform actions involving the referenced object (e.g., documenting, preserving, or properly handling it).\",\n      \"justification\": \"All three relations describe that forensic scientists have a formal duty toward specific tasks or objects (documenting the crime scene, preserving its integrity, and properly handling evidence). The core semantics is professional responsibility rather than mere physical interaction, so a unified predicate expressing professional responsibility toward the object is appropriate.\",\n      \"remark\": null,\n      \"confidence\": 0.93\n    }\n  },\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_f769df3cbe04\"\n      ],\n      \"canonical_rel_name\": \"contributes_to_accountability_of\",\n      \"canonical_rel_desc\": \"Indicates that the subject’s work or actions play a role in ensuring that the referenced individuals are held accountable (e.g., within the justice system).\",\n      \"justification\": \"This relation captures that the work of forensic scientists helps ensure that guilty individuals are held accountable. This is not a direct duty toward those individuals in the same way as handling evidence; it is a causal/supporting contribution to an accountability outcome, so a distinct predicate reflecting contribution to accountability is needed.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_bfe6e5e3182f\",\n        \"RelR_248bf3e174a4\",\n        \"RelR_313a80964a65\"\n      ],\n      \"rel_cls\": \"professional_duty_relation\",\n      \"justification\": \"These relations all express professional duties or obligations that forensic scientists have with respect to scenes, integrity, and evidence handling. Grouping them into a class of professional duty relations reflects that they are about assigned responsibilities rather than physical processes alone.\",\n      \"remark\": null,\n      \"confidence\": 0.92\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_f769df3cbe04\"\n      ],\n      \"rel_cls\": \"justice_outcome_relation\",\n      \"justification\": \"This relation connects forensic scientists’ work to the justice outcome of holding guilty individuals accountable. It belongs to a class of relations that link forensic activities to broader criminal justice outcomes.\",\n      \"remark\": null,\n      \"confidence\": 0.88\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_bfe6e5e3182f\",\n        \"RelR_248bf3e174a4\",\n        \"RelR_313a80964a65\"\n      ],\n      \"rel_cls_group\": \"AGENCY\",\n      \"justification\": \"The core semantics is that an agent (forensic scientists) bears responsibilities and must act on specific objects or tasks. This falls under AGENCY, emphasizing role-based duties of an actor.\",\n      \"remark\": null,\n      \"confidence\": 0.91\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_f769df3cbe04\"\n      ],\n      \"rel_cls_group\": \"CAUSALITY\",\n      \"justification\": \"The relation describes how the work of forensic scientists helps ensure that guilty individuals are held accountable, i.e., it causally contributes to an accountability outcome in the justice process. This fits best under a causal group.\",\n      \"remark\": null,\n      \"confidence\": 0.89\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_bfe6e5e3182f",
+          "RelR_248bf3e174a4",
+          "RelR_313a80964a65"
+        ],
+        "canonical_rel_name": "has_professional_responsibility_for",
+        "canonical_rel_desc": "Indicates that an agent (such as a forensic scientist) has a formal or professional duty to perform actions involving the referenced object (e.g., documenting, preserving, or properly handling it).",
+        "justification": "All three relations describe that forensic scientists have a formal duty toward specific tasks or objects (documenting the crime scene, preserving its integrity, and properly handling evidence). The core semantics is professional responsibility rather than mere physical interaction, so a unified predicate expressing professional responsibility toward the object is appropriate.",
+        "remark": null,
+        "confidence": 0.93
+      }
+    },
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_f769df3cbe04"
+        ],
+        "canonical_rel_name": "contributes_to_accountability_of",
+        "canonical_rel_desc": "Indicates that the subject's work or actions play a role in ensuring that the referenced individuals are held accountable (e.g., within the justice system).",
+        "justification": "This relation captures that the work of forensic scientists helps ensure that guilty individuals are held accountable. This is not a direct duty toward those individuals in the same way as handling evidence; it is a causal/supporting contribution to an accountability outcome, so a distinct predicate reflecting contribution to accountability is needed.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_bfe6e5e3182f",
+          "RelR_248bf3e174a4",
+          "RelR_313a80964a65"
+        ],
+        "rel_cls": "professional_duty_relation",
+        "justification": "These relations all express professional duties or obligations that forensic scientists have with respect to scenes, integrity, and evidence handling. Grouping them into a class of professional duty relations reflects that they are about assigned responsibilities rather than physical processes alone.",
+        "remark": null,
+        "confidence": 0.92
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_f769df3cbe04"
+        ],
+        "rel_cls": "justice_outcome_relation",
+        "justification": "This relation connects forensic scientists' work to the justice outcome of holding guilty individuals accountable. It belongs to a class of relations that link forensic activities to broader criminal justice outcomes.",
+        "remark": null,
+        "confidence": 0.88
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_bfe6e5e3182f",
+          "RelR_248bf3e174a4",
+          "RelR_313a80964a65"
+        ],
+        "rel_cls_group": "AGENCY",
+        "justification": "The core semantics is that an agent (forensic scientists) bears responsibilities and must act on specific objects or tasks. This falls under AGENCY, emphasizing role-based duties of an actor.",
+        "remark": null,
+        "confidence": 0.91
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_f769df3cbe04"
+        ],
+        "rel_cls_group": "CAUSALITY",
+        "justification": "The relation describes how the work of forensic scientists helps ensure that guilty individuals are held accountable, i.e., it causally contributes to an accountability outcome in the justice process. This fits best under a causal group.",
+        "remark": null,
+        "confidence": 0.89
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_bfe6e5e3182f",
+        "RelR_248bf3e174a4",
+        "RelR_313a80964a65"
+      ],
+      "canonical_rel_name": "has_professional_responsibility_for",
+      "canonical_rel_desc": "Indicates that an agent (such as a forensic scientist) has a formal or professional duty to perform actions involving the referenced object (e.g., documenting, preserving, or properly handling it).",
+      "justification": "All three relations describe that forensic scientists have a formal duty toward specific tasks or objects (documenting the crime scene, preserving its integrity, and properly handling evidence). The core semantics is professional responsibility rather than mere physical interaction, so a unified predicate expressing professional responsibility toward the object is appropriate.",
+      "remark": null,
+      "confidence": 0.93
+    },
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_f769df3cbe04"
+      ],
+      "canonical_rel_name": "contributes_to_accountability_of",
+      "canonical_rel_desc": "Indicates that the subject's work or actions play a role in ensuring that the referenced individuals are held accountable (e.g., within the justice system).",
+      "justification": "This relation captures that the work of forensic scientists helps ensure that guilty individuals are held accountable. This is not a direct duty toward those individuals in the same way as handling evidence; it is a causal/supporting contribution to an accountability outcome, so a distinct predicate reflecting contribution to accountability is needed.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_bfe6e5e3182f",
+        "RelR_248bf3e174a4",
+        "RelR_313a80964a65"
+      ],
+      "rel_cls": "professional_duty_relation",
+      "justification": "These relations all express professional duties or obligations that forensic scientists have with respect to scenes, integrity, and evidence handling. Grouping them into a class of professional duty relations reflects that they are about assigned responsibilities rather than physical processes alone.",
+      "remark": null,
+      "confidence": 0.92
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_f769df3cbe04"
+      ],
+      "rel_cls": "justice_outcome_relation",
+      "justification": "This relation connects forensic scientists' work to the justice outcome of holding guilty individuals accountable. It belongs to a class of relations that link forensic activities to broader criminal justice outcomes.",
+      "remark": null,
+      "confidence": 0.88
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_bfe6e5e3182f",
+        "RelR_248bf3e174a4",
+        "RelR_313a80964a65"
+      ],
+      "rel_cls_group": "AGENCY",
+      "justification": "The core semantics is that an agent (forensic scientists) bears responsibilities and must act on specific objects or tasks. This falls under AGENCY, emphasizing role-based duties of an actor.",
+      "remark": null,
+      "confidence": 0.91
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_f769df3cbe04"
+      ],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "The relation describes how the work of forensic scientists helps ensure that guilty individuals are held accountable, i.e., it causally contributes to an accountability outcome in the justice process. This fits best under a causal group.",
+      "remark": null,
+      "confidence": 0.89
+    }
+  ],
+  "timestamp": "2026-01-06T14:33:07Z"
+}

@@ -1,0 +1,28 @@
+[
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_8aa06b5c",
+      "new_name": "Black Hole Structural Components",
+      "new_description": "Fundamental regions that constitute the internal structure of a black hole, including the event horizon (boundary of no return) and the central singularity where classical physics breaks down.",
+      "new_class_type_hint": "AstrophysicalStructure",
+      "new_class_group": "Black Holes",
+      "remark": null,
+      "justification": "This class cleanly represents internal regions of black holes rather than whole objects; updating the name/description and assigning the shared Class_Group ‘Black Holes’ clarifies its scope and connects it to the related black-hole-object class.",
+      "confidence": 0.94
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_84f3008c",
+      "new_name": "Black Holes (Astrophysical Objects)",
+      "new_description": "Astrophysical compact objects with gravity so strong that nothing, not even light, can escape from within their event horizon, typically formed from the collapse of massive stars and characterized by an event horizon and central singularity.",
+      "new_class_type_hint": "AstrophysicalObject",
+      "new_class_group": "Black Holes",
+      "remark": "This class contains two entities both labeled generically as ‘black hole’ that appear to be duplicate representations of the same astrophysical concept; consider upstream entity-level deduplication.",
+      "justification": "This class represents whole black holes as objects, distinct from their internal regions; updating the name and description sharpens that distinction, assigning the shared Class_Group ‘Black Holes’ links it to the components class, and the remark flags likely duplicate black-hole entities for human review without changing membership.",
+      "confidence": 0.93
+    }
+  }
+]

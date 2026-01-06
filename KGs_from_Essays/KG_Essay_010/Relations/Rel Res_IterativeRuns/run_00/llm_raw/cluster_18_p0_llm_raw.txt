@@ -1,0 +1,42 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_ef709731c2dd",
+        "RelR_dea796f884b5"
+      ],
+      "canonical_rel_name": "warps_spacetime",
+      "canonical_rel_desc": "Indicates that a gravitational source or black hole causes curvature or warping of spacetime in its vicinity.",
+      "justification": "Both relations describe essentially the same predicate: a gravitational entity (black hole or its gravitational pull) causing curvature of spacetime. Using a single canonical predicate 'warps_spacetime' captures this effect consistently while remaining domain-appropriate for general relativity.",
+      "remark": null,
+      "confidence": 0.94
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_ef709731c2dd",
+        "RelR_dea796f884b5"
+      ],
+      "rel_cls": "gravitational_spacetime_interaction",
+      "justification": "These relations belong to a family where gravitational phenomena interact with and modify the geometry of spacetime (curvature/warping), which is more specific than a generic causal or physical-interaction class.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_ef709731c2dd",
+        "RelR_dea796f884b5"
+      ],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "In both instances, the subject (black hole or its gravitational pull) is explicitly described as causing the warping of the object (spacetime), making this primarily a causal relation rather than purely spatial or associative.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  }
+]

@@ -1,0 +1,175 @@
+{
+  "cluster_label": "20_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_89981662ee53",
+      "relation_name": "facilitated_by",
+      "rel_desc": "Interconnected societies are facilitated by trade.",
+      "rel_hint_type": "enabling-condition",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "interconnected societies",
+      "object_entity_name": "trade",
+      "subject_class_label": "Urban Legend Dissemination Contexts",
+      "subject_class_group": "Urban Legend Contexts (Social, Spatial, Temporal)",
+      "object_class_label": "Story Dissemination Processes",
+      "object_class_group": "Story Dissemination & Transmission Mechanisms",
+      "qualifiers": {
+        "TemporalQualifier": "as societies became more interconnected",
+        "SpatialQualifier": "between societies/regions",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "through",
+        "LogicalMarker": "as",
+        "OtherQualifier": null
+      },
+      "confidence": 0.89,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_4eb80b9067d4",
+      "relation_name": "facilitated_by",
+      "rel_desc": "Interconnected societies are facilitated by travel.",
+      "rel_hint_type": "enabling-condition",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "interconnected societies",
+      "object_entity_name": "travel",
+      "subject_class_label": "Urban Legend Dissemination Contexts",
+      "subject_class_group": "Urban Legend Contexts (Social, Spatial, Temporal)",
+      "object_class_label": "Story Dissemination Processes",
+      "object_class_group": "Story Dissemination & Transmission Mechanisms",
+      "qualifiers": {
+        "TemporalQualifier": "as societies became more interconnected",
+        "SpatialQualifier": "between regions and continents",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "through",
+        "LogicalMarker": "and",
+        "OtherQualifier": null
+      },
+      "confidence": 0.89,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_67f93f276439",
+      "relation_name": "facilitated_by",
+      "rel_desc": "The spread of urban legends is greatly facilitated by advancements in technology and communication.",
+      "rel_hint_type": "causal enablement",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "spread of urban legends",
+      "object_entity_name": "advancements in technology and communication",
+      "subject_class_label": "Urban Legend Dynamics",
+      "subject_class_group": "Urban Legend Contexts (Social, Spatial, Temporal)",
+      "object_class_label": "Information Dissemination Enablers",
+      "object_class_group": "Story Dissemination & Transmission Mechanisms",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "across society",
+        "OperationalConstraint": "when modern technology and communication tools are available",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "has been greatly facilitated (qualitative, not quantified)",
+        "CausalHint": "has been greatly facilitated by",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.97,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_89981662ee53\",\n        \"RelR_4eb80b9067d4\",\n        \"RelR_67f93f276439\"\n      ],\n      \"canonical_rel_name\": \"enabled_by\",\n      \"canonical_rel_desc\": \"Indicates that the subject state or process is causally enabled or facilitated by the existence or operation of the object.\",\n      \"justification\": \"In all three relations, the object (trade, travel, technological/communication advances) functions as an enabling condition that facilitates the subject (interconnected societies or spread of urban legends). A single predicate 'enabled_by' cleanly captures this causal enablement meaning across instances.\",\n      \"remark\": null,\n      \"confidence\": 0.96\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_89981662ee53\",\n        \"RelR_4eb80b9067d4\",\n        \"RelR_67f93f276439\"\n      ],\n      \"rel_cls\": \"causal_enablement_relation\",\n      \"justification\": \"Each relation expresses that the object is a facilitating or enabling factor for the subject, a characteristic pattern of causal enablement rather than mere correlation or association.\",\n      \"remark\": null,\n      \"confidence\": 0.95\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_89981662ee53\",\n        \"RelR_4eb80b9067d4\",\n        \"RelR_67f93f276439\"\n      ],\n      \"rel_cls_group\": \"CAUSALITY\",\n      \"justification\": \"The semantics are explicitly causal: interconnected societies arise through trade and travel, and the spread of urban legends is greatly facilitated by technology and communication; these are causal-enablement links.\",\n      \"remark\": null,\n      \"confidence\": 0.96\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_89981662ee53",
+          "RelR_4eb80b9067d4",
+          "RelR_67f93f276439"
+        ],
+        "canonical_rel_name": "enabled_by",
+        "canonical_rel_desc": "Indicates that the subject state or process is causally enabled or facilitated by the existence or operation of the object.",
+        "justification": "In all three relations, the object (trade, travel, technological/communication advances) functions as an enabling condition that facilitates the subject (interconnected societies or spread of urban legends). A single predicate 'enabled_by' cleanly captures this causal enablement meaning across instances.",
+        "remark": null,
+        "confidence": 0.96
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_89981662ee53",
+          "RelR_4eb80b9067d4",
+          "RelR_67f93f276439"
+        ],
+        "rel_cls": "causal_enablement_relation",
+        "justification": "Each relation expresses that the object is a facilitating or enabling factor for the subject, a characteristic pattern of causal enablement rather than mere correlation or association.",
+        "remark": null,
+        "confidence": 0.95
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_89981662ee53",
+          "RelR_4eb80b9067d4",
+          "RelR_67f93f276439"
+        ],
+        "rel_cls_group": "CAUSALITY",
+        "justification": "The semantics are explicitly causal: interconnected societies arise through trade and travel, and the spread of urban legends is greatly facilitated by technology and communication; these are causal-enablement links.",
+        "remark": null,
+        "confidence": 0.96
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_89981662ee53",
+        "RelR_4eb80b9067d4",
+        "RelR_67f93f276439"
+      ],
+      "canonical_rel_name": "enabled_by",
+      "canonical_rel_desc": "Indicates that the subject state or process is causally enabled or facilitated by the existence or operation of the object.",
+      "justification": "In all three relations, the object (trade, travel, technological/communication advances) functions as an enabling condition that facilitates the subject (interconnected societies or spread of urban legends). A single predicate 'enabled_by' cleanly captures this causal enablement meaning across instances.",
+      "remark": null,
+      "confidence": 0.96
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_89981662ee53",
+        "RelR_4eb80b9067d4",
+        "RelR_67f93f276439"
+      ],
+      "rel_cls": "causal_enablement_relation",
+      "justification": "Each relation expresses that the object is a facilitating or enabling factor for the subject, a characteristic pattern of causal enablement rather than mere correlation or association.",
+      "remark": null,
+      "confidence": 0.95
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_89981662ee53",
+        "RelR_4eb80b9067d4",
+        "RelR_67f93f276439"
+      ],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "The semantics are explicitly causal: interconnected societies arise through trade and travel, and the spread of urban legends is greatly facilitated by technology and communication; these are causal-enablement links.",
+      "remark": null,
+      "confidence": 0.96
+    }
+  ],
+  "timestamp": "2026-01-06T08:32:25Z"
+}

@@ -1,0 +1,125 @@
+{
+  "cluster_label": 2,
+  "cluster_classes": [
+    {
+      "candidate_id": "ClsC_1015ee43",
+      "class_label": "Plant Leaf Surfaces",
+      "class_description": "Plant leaf structures that serve as sites for butterfly egg laying and caterpillar feeding, including the general leaf and its specific underside surface.",
+      "class_type_hint": "Biological Structure",
+      "class_group": "TBD",
+      "confidence": 0.86,
+      "evidence_excerpt": "The eggs are usually laid on the underside of leaves... feeding on leaves and growing rapidly.",
+      "member_ids": [
+        "En_79d63365",
+        "En_572416ff"
+      ],
+      "members": [
+        {
+          "id": "En_79d63365",
+          "entity_name": "underside of leaves",
+          "entity_description": "The lower surface of plant leaves where butterfly eggs are commonly laid.",
+          "entity_type_hint": "Location"
+        },
+        {
+          "id": "En_572416ff",
+          "entity_name": "leaves",
+          "entity_description": "Plant leaves that provide a surface for egg laying and food for caterpillars.",
+          "entity_type_hint": "Environment"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_1d2a314d",
+      "class_label": "Plant Organs",
+      "class_description": "Macroscopic structural parts of a plant, such as leaves and stems, that provide support, transport, or surface functions.",
+      "class_type_hint": "Biological Structure",
+      "class_group": "TBD",
+      "confidence": 0.94,
+      "evidence_excerpt": "The caterpillar attaches itself to a leaf or stem and forms a protective shell around itself.",
+      "member_ids": [
+        "En_a47f34c2",
+        "En_4fad15a1"
+      ],
+      "members": [
+        {
+          "id": "En_a47f34c2",
+          "entity_name": "leaf",
+          "entity_description": "Flat, typically green plant organ where photosynthesis occurs; serves as an attachment surface for the caterpillar when forming a chrysalis.",
+          "entity_type_hint": "BiologicalStructure"
+        },
+        {
+          "id": "En_4fad15a1",
+          "entity_name": "stem",
+          "entity_description": "Supporting plant axis that transports water and nutrients and can serve as an attachment surface for a caterpillar forming a chrysalis.",
+          "entity_type_hint": "BiologicalStructure"
+        }
+      ],
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"merge_classes\",\n    \"args\": {\n      \"class_ids\": [\n        \"ClsC_1015ee43\",\n        \"ClsC_1d2a314d\"\n      ],\n      \"provisional_id\": \"MERGE(ClsC_1015ee43|ClsC_1d2a314d)\",\n      \"new_name\": \"Plant Organs and Leaf Surfaces\",\n      \"new_description\": \"Macroscopic plant organs and their surfaces (e.g., leaves, leaf undersides, stems) that provide structure, support, and attachment/feeding surfaces relevant to butterfly eggs, caterpillars, and chrysalides.\",\n      \"new_class_type_hint\": \"Biological Structure\",\n      \"justification\": \"Both classes cover the same domain of macroscopic plant structures (leaves, leaf undersides, stems) with overlapping entities (leaf/leaves) and shared functional role as surfaces for butterfly life stages, so they should form a single coherent plant-structure class.\",\n      \"remark\": null,\n      \"confidence\": 0.93\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"MERGE(ClsC_1015ee43|ClsC_1d2a314d)\",\n      \"new_name\": null,\n      \"new_description\": null,\n      \"new_class_type_hint\": null,\n      \"new_class_group\": \"Plant Morphology\",\n      \"remark\": null,\n      \"justification\": \"The merged class represents macroscopic plant organs and their surfaces, which fits a higher-level Class_Group of plant morphological structures.\",\n      \"confidence\": 0.9\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "merge_classes",
+      "args": {
+        "class_ids": [
+          "ClsC_1015ee43",
+          "ClsC_1d2a314d"
+        ],
+        "provisional_id": "MERGE(ClsC_1015ee43|ClsC_1d2a314d)",
+        "new_name": "Plant Organs and Leaf Surfaces",
+        "new_description": "Macroscopic plant organs and their surfaces (e.g., leaves, leaf undersides, stems) that provide structure, support, and attachment/feeding surfaces relevant to butterfly eggs, caterpillars, and chrysalides.",
+        "new_class_type_hint": "Biological Structure",
+        "justification": "Both classes cover the same domain of macroscopic plant structures (leaves, leaf undersides, stems) with overlapping entities (leaf/leaves) and shared functional role as surfaces for butterfly life stages, so they should form a single coherent plant-structure class.",
+        "remark": null,
+        "confidence": 0.93
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "MERGE(ClsC_1015ee43|ClsC_1d2a314d)",
+        "new_name": null,
+        "new_description": null,
+        "new_class_type_hint": null,
+        "new_class_group": "Plant Morphology",
+        "remark": null,
+        "justification": "The merged class represents macroscopic plant organs and their surfaces, which fits a higher-level Class_Group of plant morphological structures.",
+        "confidence": 0.9
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "merge_classes",
+      "input_class_ids": [
+        "ClsC_1015ee43",
+        "ClsC_1d2a314d"
+      ],
+      "result_class_id": "ClsR_0c323562",
+      "provisional_id": "MERGE(ClsC_1015ee43|ClsC_1d2a314d)",
+      "justification": "Both classes cover the same domain of macroscopic plant structures (leaves, leaf undersides, stems) with overlapping entities (leaf/leaves) and shared functional role as surfaces for butterfly life stages, so they should form a single coherent plant-structure class.",
+      "remark": null,
+      "confidence": 0.93
+    },
+    {
+      "action": "modify_class",
+      "class_id": "MERGE(ClsC_1015ee43|ClsC_1d2a314d)",
+      "class_id_resolved": "ClsR_0c323562",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Plant Morphology",
+      "remark": null,
+      "justification": "The merged class represents macroscopic plant organs and their surfaces, which fits a higher-level Class_Group of plant morphological structures.",
+      "confidence": 0.9
+    }
+  ],
+  "provisional_to_real": {
+    "MERGE(ClsC_1015ee43|ClsC_1d2a314d)": "ClsR_0c323562",
+    "ClsC_1015ee43": "ClsR_0c323562",
+    "ClsC_1d2a314d": "ClsR_0c323562"
+  },
+  "timestamp": "2026-01-06T07:15:32Z"
+}

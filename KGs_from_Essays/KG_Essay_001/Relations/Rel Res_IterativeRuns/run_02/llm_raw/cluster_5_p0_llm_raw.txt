@@ -1,0 +1,34 @@
+[
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": [
+        "RelR_0215bd560e9a",
+        "RelR_c09c08f71265",
+        "RelR_ae4c5b80621b"
+      ],
+      "canonical_rel_name": "forms_anatomical_structure",
+      "canonical_rel_desc": "A developing organism or developmental process generates or forms a new anatomical or protective structure (e.g., a caterpillar forming a chrysalis, metamorphosis forming wings or antennae).",
+      "rel_cls": "developmental_morphogenesis_relation",
+      "rel_cls_group": "CAUSALITY",
+      "justification": "All three relations describe developmental processes that causally produce new anatomical or protective structures. They should share a single canonical predicate and relation class for morphogenetic formation, rather than split between 'forms_structure' and 'develops_structure' and two slightly different formation-class labels.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  },
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": [
+        "RelR_f7472a36113e"
+      ],
+      "canonical_rel_name": "transitions_to_life_stage",
+      "canonical_rel_desc": "A life-cycle structure or stage transitions into a subsequent life-cycle stage (e.g., chrysalis transitioning to the adult butterfly stage).",
+      "rel_cls": "life_cycle_transition_relation",
+      "rel_cls_group": "TEMPORALITY",
+      "justification": "The relation describes a temporal life-cycle transition from one distinct stage to another. 'Transitions_to_life_stage' is a clearer and more standard predicate than 'gives_rise_to_stage' while preserving the same life-cycle transition class and temporal grouping.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  }
+]

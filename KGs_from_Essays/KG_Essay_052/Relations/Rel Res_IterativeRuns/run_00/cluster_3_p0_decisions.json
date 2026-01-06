@@ -1,0 +1,165 @@
+{
+  "cluster_label": "3_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_218ec0f9187f",
+      "relation_name": "creates",
+      "rel_desc": "Sports are said to build metaphorical bridges between individuals and communities.",
+      "rel_hint_type": "connection",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "sports",
+      "object_entity_name": "bridges between individuals and communities",
+      "subject_class_label": "Sports (Domain Concept)",
+      "subject_class_group": "Sports and Society",
+      "object_class_label": "Social Connection Metaphors in Sport",
+      "object_class_group": "Sports, Social Divisions and Connections",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "have the power to",
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "Connection type: social and communal ties"
+      },
+      "confidence": 0.96,
+      "remarks": [
+        "Metaphorical 'bridges' captured as a social connection construct."
+      ]
+    },
+    {
+      "relation_id": "RelR_b495fd06fb56",
+      "relation_name": "connects",
+      "rel_desc": "The metaphorical bridges are specifically between individuals.",
+      "rel_hint_type": "connection",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "bridges between individuals and communities",
+      "object_entity_name": "individuals",
+      "subject_class_label": "Social Connection Metaphors in Sport",
+      "subject_class_group": "Sports, Social Divisions and Connections",
+      "object_class_label": "Social Units",
+      "object_class_group": "Sports and Society",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "between",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.88,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_218ec0f9187f\"\n      ],\n      \"canonical_rel_name\": \"facilitates_social_connection\",\n      \"canonical_rel_desc\": \"Indicates that the subject fosters or enables the formation of social ties or connections represented by the object.\",\n      \"justification\": \"This relation instance describes sports as building metaphorical bridges between individuals and communities, i.e., enabling social ties rather than literally creating a physical object. A predicate emphasizing facilitation of social connection best captures this.\",\n      \"remark\": null,\n      \"confidence\": 0.93\n    }\n  },\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_b495fd06fb56\"\n      ],\n      \"canonical_rel_name\": \"connects_social_units\",\n      \"canonical_rel_desc\": \"Indicates that the subject serves to connect or link distinct social units (e.g., individuals, groups, communities) represented by the object.\",\n      \"justification\": \"Here the subject is the metaphorical bridges and the object is individuals; the semantics are that the metaphorical construct connects social units. A predicate that explicitly encodes connecting social units is appropriate and distinct from the more general facilitation predicate used for sports.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_218ec0f9187f\",\n        \"RelR_b495fd06fb56\"\n      ],\n      \"rel_cls\": \"social_connection_relation\",\n      \"justification\": \"Both relations describe how entities participate in or enable social connections: sports facilitating social bridges, and metaphorical bridges connecting individuals. Grouping them under a shared class focused on social connection captures this common semantics.\",\n      \"remark\": null,\n      \"confidence\": 0.92\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_218ec0f9187f\",\n        \"RelR_b495fd06fb56\"\n      ],\n      \"rel_cls_group\": \"ASSOCIATION\",\n      \"justification\": \"These relations describe associative and relational ties between social actors and constructs (sports, metaphorical bridges, individuals), rather than composition, causality, or spatiality. The broad semantic dimension is how entities are socially associated/connected.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_218ec0f9187f"
+        ],
+        "canonical_rel_name": "facilitates_social_connection",
+        "canonical_rel_desc": "Indicates that the subject fosters or enables the formation of social ties or connections represented by the object.",
+        "justification": "This relation instance describes sports as building metaphorical bridges between individuals and communities, i.e., enabling social ties rather than literally creating a physical object. A predicate emphasizing facilitation of social connection best captures this.",
+        "remark": null,
+        "confidence": 0.93
+      }
+    },
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_b495fd06fb56"
+        ],
+        "canonical_rel_name": "connects_social_units",
+        "canonical_rel_desc": "Indicates that the subject serves to connect or link distinct social units (e.g., individuals, groups, communities) represented by the object.",
+        "justification": "Here the subject is the metaphorical bridges and the object is individuals; the semantics are that the metaphorical construct connects social units. A predicate that explicitly encodes connecting social units is appropriate and distinct from the more general facilitation predicate used for sports.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_218ec0f9187f",
+          "RelR_b495fd06fb56"
+        ],
+        "rel_cls": "social_connection_relation",
+        "justification": "Both relations describe how entities participate in or enable social connections: sports facilitating social bridges, and metaphorical bridges connecting individuals. Grouping them under a shared class focused on social connection captures this common semantics.",
+        "remark": null,
+        "confidence": 0.92
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_218ec0f9187f",
+          "RelR_b495fd06fb56"
+        ],
+        "rel_cls_group": "ASSOCIATION",
+        "justification": "These relations describe associative and relational ties between social actors and constructs (sports, metaphorical bridges, individuals), rather than composition, causality, or spatiality. The broad semantic dimension is how entities are socially associated/connected.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_218ec0f9187f"
+      ],
+      "canonical_rel_name": "facilitates_social_connection",
+      "canonical_rel_desc": "Indicates that the subject fosters or enables the formation of social ties or connections represented by the object.",
+      "justification": "This relation instance describes sports as building metaphorical bridges between individuals and communities, i.e., enabling social ties rather than literally creating a physical object. A predicate emphasizing facilitation of social connection best captures this.",
+      "remark": null,
+      "confidence": 0.93
+    },
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_b495fd06fb56"
+      ],
+      "canonical_rel_name": "connects_social_units",
+      "canonical_rel_desc": "Indicates that the subject serves to connect or link distinct social units (e.g., individuals, groups, communities) represented by the object.",
+      "justification": "Here the subject is the metaphorical bridges and the object is individuals; the semantics are that the metaphorical construct connects social units. A predicate that explicitly encodes connecting social units is appropriate and distinct from the more general facilitation predicate used for sports.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_218ec0f9187f",
+        "RelR_b495fd06fb56"
+      ],
+      "rel_cls": "social_connection_relation",
+      "justification": "Both relations describe how entities participate in or enable social connections: sports facilitating social bridges, and metaphorical bridges connecting individuals. Grouping them under a shared class focused on social connection captures this common semantics.",
+      "remark": null,
+      "confidence": 0.92
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_218ec0f9187f",
+        "RelR_b495fd06fb56"
+      ],
+      "rel_cls_group": "ASSOCIATION",
+      "justification": "These relations describe associative and relational ties between social actors and constructs (sports, metaphorical bridges, individuals), rather than composition, causality, or spatiality. The broad semantic dimension is how entities are socially associated/connected.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  ],
+  "timestamp": "2026-01-06T12:37:27Z"
+}

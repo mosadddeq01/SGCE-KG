@@ -1,0 +1,45 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_dd7e67eaa675",
+        "RelR_518b0eb1c4e9",
+        "RelR_3fb3dec554b9"
+      ],
+      "canonical_rel_name": "plays_role_in",
+      "canonical_rel_desc": "Indicates that the subject has an important functional role or influence within the process, domain, or context represented by the object.",
+      "justification": "All three relations describe body language having an important functional role or influence within a broader domain or type of interaction (nonverbal communication, social interactions, relationships). Despite slightly different original relation_names, the core predicate meaning is the same: body language plays a crucial role in these contexts.",
+      "remark": null,
+      "confidence": 0.92
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_dd7e67eaa675",
+        "RelR_518b0eb1c4e9",
+        "RelR_3fb3dec554b9"
+      ],
+      "rel_cls": "functional_role_relation",
+      "justification": "Each relation expresses that the subject serves a key functional role or contributes significantly within a broader context (communication domain, social interaction, interpersonal relationships). Grouping them under a functional_role_relation class captures this shared semantics more precisely than generic association.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_dd7e67eaa675",
+        "RelR_518b0eb1c4e9",
+        "RelR_3fb3dec554b9"
+      ],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "The relations indicate that body language exerts influence and plays a crucial role in the outcomes or qualities of the target contexts (nonverbal communication effectiveness, social interactions, relationships). This is best modeled as a broad causal/impact dimension rather than simple co-occurrence.",
+      "remark": null,
+      "confidence": 0.86
+    }
+  }
+]

@@ -1,0 +1,65 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_ed800d3224be", "RelR_c739edb907b9"],
+      "canonical_rel_name": "regulates_population_of",
+      "canonical_rel_desc": "Subject exerts a controlling effect that regulates the size or density of the object's population.",
+      "justification": "Both relations describe birds (or natural pest control by birds) exerting a regulatory effect on insect populations via predation, i.e., a population control/regulation mechanism. Aligning them under 'regulates_population_of' normalizes semantically equivalent population-control predicates.",
+      "remark": "Covers both direct biological agents (birds) and the ecosystem service they provide as regulators of insect populations.",
+      "confidence": 0.96
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_1f24eb3b1836"],
+      "canonical_rel_name": "helps_prevent",
+      "canonical_rel_desc": "Subject contributes to reducing the likelihood or occurrence of the object event or state, without guaranteeing complete prevention.",
+      "justification": "The relation captures that natural pest control by birds contributes to preventing pest outbreaks, with qualifiers indicating non-absolute prevention. A generic causal-preventive predicate 'helps_prevent' best reflects the hedged, contributory prevention semantics.",
+      "remark": "This is distinct from population regulation edges by focusing specifically on avoiding extreme outbreak events.",
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_be7c0bd8f03a"],
+      "canonical_rel_name": "reduces_need_for",
+      "canonical_rel_desc": "Subject decreases the required or typical extent of use or reliance on the object.",
+      "justification": "The relation explicitly states that natural pest control by birds leads to a lower requirement for chemical pesticides. This is a causal reduction in dependency, well captured by the predicate 'reduces_need_for'.",
+      "remark": "This captures a management/usage implication (less pesticide use) rather than direct mortality of pests.",
+      "confidence": 0.98
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_ed800d3224be",
+        "RelR_c739edb907b9",
+        "RelR_1f24eb3b1836",
+        "RelR_be7c0bd8f03a"
+      ],
+      "rel_cls": "biological_pest_control_relation",
+      "justification": "All four relations describe causal effects arising from biological pest control by birds: regulation of insect populations, prevention of pest outbreaks, and reduction in pesticide use. Grouping them under 'biological_pest_control_relation' reflects that they are different manifestations of the same ecosystem service (avian biological control) rather than generic causality or population relations alone.",
+      "remark": "This class can generally cover relations where natural enemies (e.g., birds) affect pest populations and associated management outcomes.",
+      "confidence": 0.94
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_ed800d3224be",
+        "RelR_c739edb907b9",
+        "RelR_1f24eb3b1836",
+        "RelR_be7c0bd8f03a"
+      ],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "In each case, the subject brings about or contributes to a change in the object (regulating populations, preventing outbreaks, or reducing pesticide need). These are all explicit causal-effect relationships, fitting the broad CAUSALITY group.",
+      "remark": "Even though one edge has a management/usage implication (reduced pesticide need), it is still modeled as a causal consequence of biological pest control.",
+      "confidence": 0.96
+    }
+  }
+]

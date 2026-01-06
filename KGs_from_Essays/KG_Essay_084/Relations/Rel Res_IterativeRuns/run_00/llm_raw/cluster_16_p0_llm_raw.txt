@@ -1,0 +1,60 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_8ff2be5ea6db",
+        "RelR_95829e8b6041",
+        "RelR_dc585e245c33"
+      ],
+      "canonical_rel_name": "has_aspect",
+      "canonical_rel_desc": "Links a broader domain or concept to one of its constituent aspects, activities, or conceptual components.",
+      "justification": "In these three relations, 'forensic science' is the broader domain and the object (collection of physical evidence, analysis of physical evidence, interpretation of evidence) is described as an aspect or component activity of that domain. They share the same whole→aspect semantics and should be normalized to a single predicate.",
+      "remark": null,
+      "confidence": 0.96
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_7472ef1293c5"
+      ],
+      "canonical_rel_name": "is_aspect_of",
+      "canonical_rel_desc": "Links an aspect, activity, or component back to the broader domain or concept it is an aspect of (inverse of has_aspect).",
+      "justification": "Here the subject 'art of forensic science' is described as an aspect of the broader concept 'forensic science', i.e., aspect→whole, which is the inverse direction of the other three relations and warrants a distinct but inverse predicate.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_8ff2be5ea6db",
+        "RelR_95829e8b6041",
+        "RelR_dc585e245c33",
+        "RelR_7472ef1293c5"
+      ],
+      "rel_cls": "conceptual_component_relation",
+      "justification": "All four relations express a part–whole style link where an activity or conceptual facet (aspect) is related to the broader field of forensic science, differing only in direction. Grouping them under a shared class for conceptual/functional components supports consistent reasoning across both has_aspect and is_aspect_of.",
+      "remark": null,
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_8ff2be5ea6db",
+        "RelR_95829e8b6041",
+        "RelR_dc585e245c33",
+        "RelR_7472ef1293c5"
+      ],
+      "rel_cls_group": "COMPOSITION",
+      "justification": "Each relation encodes that one concept is an aspect or component of another, which is a conceptual part–whole relationship; this fits best under a broad COMPOSITION group.",
+      "remark": null,
+      "confidence": 0.95
+    }
+  }
+]

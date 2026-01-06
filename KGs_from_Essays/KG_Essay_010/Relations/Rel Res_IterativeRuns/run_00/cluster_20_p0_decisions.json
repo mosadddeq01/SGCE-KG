@@ -1,0 +1,197 @@
+{
+  "cluster_label": "20_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_9fb2350ba068",
+      "relation_name": "has_aspect",
+      "rel_desc": "The formation of black holes is one of the key aspects discussed about black holes.",
+      "rel_hint_type": "topic-aspect",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "black holes",
+      "object_entity_name": "formation of black holes",
+      "subject_class_label": "Black Hole Phenomena",
+      "subject_class_group": "Astrophysics",
+      "object_class_label": "Black Hole Phenomena",
+      "object_class_group": "Astrophysics",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "DescriptiveScope: listed as one of several key aspects"
+      },
+      "confidence": 0.93,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_0da2ffdd6f47",
+      "relation_name": "aspect_of",
+      "rel_desc": "The formation of black holes is presented as one aspect of black holes being discussed.",
+      "rel_hint_type": "part-whole",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "formation of black holes",
+      "object_entity_name": "black holes",
+      "subject_class_label": "Black Hole Phenomena",
+      "subject_class_group": "Astrophysics",
+      "object_class_label": "Black Hole Phenomena",
+      "object_class_group": "Astrophysics",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "Scope: dimension in which black holes are studied"
+      },
+      "confidence": 0.84,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_132528676c15",
+      "relation_name": "aspect_of",
+      "rel_desc": "The properties of black holes are treated as a key aspect of black holes.",
+      "rel_hint_type": "part-whole",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "properties of black holes",
+      "object_entity_name": "black holes",
+      "subject_class_label": "Black Holes and Physical Properties",
+      "subject_class_group": "Black Holes and Their Properties",
+      "object_class_label": "Black Hole Phenomena",
+      "object_class_group": "Astrophysics",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "Scope: physical and conceptual attributes considered"
+      },
+      "confidence": 0.9,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_9fb2350ba068\"],\n      \"canonical_rel_name\": \"has_aspect\",\n      \"canonical_rel_desc\": \"Indicates that the subject topic includes the object as one of its aspects, dimensions, or subtopics of discussion.\",\n      \"justification\": \"In this instance, 'black holes' (subject) is the broader topic and 'formation of black holes' (object) is one specific aspect of that topic, so the predicate should run from whole-topic to aspect.\",\n      \"remark\": null,\n      \"confidence\": 0.93\n    }\n  },\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_0da2ffdd6f47\",\n        \"RelR_132528676c15\"\n      ],\n      \"canonical_rel_name\": \"is_aspect_of\",\n      \"canonical_rel_desc\": \"Indicates that the subject is an aspect, dimension, or subtopic of the broader topic given by the object.\",\n      \"justification\": \"In both cases, the subject ('formation of black holes'; 'properties of black holes') is described as an aspect of the broader topic 'black holes', so the predicate should run from aspect to whole-topic.\",\n      \"remark\": null,\n      \"confidence\": 0.93\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_9fb2350ba068\",\n        \"RelR_0da2ffdd6f47\",\n        \"RelR_132528676c15\"\n      ],\n      \"rel_cls\": \"topic_aspect_relation\",\n      \"justification\": \"All three relations connect a broader topic with a conceptual aspect or dimension of that topic within the same subject area (black holes), so they belong to the same class of topic–aspect relations.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_9fb2350ba068\",\n        \"RelR_0da2ffdd6f47\",\n        \"RelR_132528676c15\"\n      ],\n      \"rel_cls_group\": \"PART_WHOLE\",\n      \"justification\": \"An aspect is a conceptual part or component of a broader topic, so these relations fall under a general part–whole grouping rather than, for example, causality or temporality.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_9fb2350ba068"
+        ],
+        "canonical_rel_name": "has_aspect",
+        "canonical_rel_desc": "Indicates that the subject topic includes the object as one of its aspects, dimensions, or subtopics of discussion.",
+        "justification": "In this instance, 'black holes' (subject) is the broader topic and 'formation of black holes' (object) is one specific aspect of that topic, so the predicate should run from whole-topic to aspect.",
+        "remark": null,
+        "confidence": 0.93
+      }
+    },
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_0da2ffdd6f47",
+          "RelR_132528676c15"
+        ],
+        "canonical_rel_name": "is_aspect_of",
+        "canonical_rel_desc": "Indicates that the subject is an aspect, dimension, or subtopic of the broader topic given by the object.",
+        "justification": "In both cases, the subject ('formation of black holes'; 'properties of black holes') is described as an aspect of the broader topic 'black holes', so the predicate should run from aspect to whole-topic.",
+        "remark": null,
+        "confidence": 0.93
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_9fb2350ba068",
+          "RelR_0da2ffdd6f47",
+          "RelR_132528676c15"
+        ],
+        "rel_cls": "topic_aspect_relation",
+        "justification": "All three relations connect a broader topic with a conceptual aspect or dimension of that topic within the same subject area (black holes), so they belong to the same class of topic–aspect relations.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_9fb2350ba068",
+          "RelR_0da2ffdd6f47",
+          "RelR_132528676c15"
+        ],
+        "rel_cls_group": "PART_WHOLE",
+        "justification": "An aspect is a conceptual part or component of a broader topic, so these relations fall under a general part–whole grouping rather than, for example, causality or temporality.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_9fb2350ba068"
+      ],
+      "canonical_rel_name": "has_aspect",
+      "canonical_rel_desc": "Indicates that the subject topic includes the object as one of its aspects, dimensions, or subtopics of discussion.",
+      "justification": "In this instance, 'black holes' (subject) is the broader topic and 'formation of black holes' (object) is one specific aspect of that topic, so the predicate should run from whole-topic to aspect.",
+      "remark": null,
+      "confidence": 0.93
+    },
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_0da2ffdd6f47",
+        "RelR_132528676c15"
+      ],
+      "canonical_rel_name": "is_aspect_of",
+      "canonical_rel_desc": "Indicates that the subject is an aspect, dimension, or subtopic of the broader topic given by the object.",
+      "justification": "In both cases, the subject ('formation of black holes'; 'properties of black holes') is described as an aspect of the broader topic 'black holes', so the predicate should run from aspect to whole-topic.",
+      "remark": null,
+      "confidence": 0.93
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_9fb2350ba068",
+        "RelR_0da2ffdd6f47",
+        "RelR_132528676c15"
+      ],
+      "rel_cls": "topic_aspect_relation",
+      "justification": "All three relations connect a broader topic with a conceptual aspect or dimension of that topic within the same subject area (black holes), so they belong to the same class of topic–aspect relations.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_9fb2350ba068",
+        "RelR_0da2ffdd6f47",
+        "RelR_132528676c15"
+      ],
+      "rel_cls_group": "PART_WHOLE",
+      "justification": "An aspect is a conceptual part or component of a broader topic, so these relations fall under a general part–whole grouping rather than, for example, causality or temporality.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  ],
+  "timestamp": "2026-01-06T09:45:07Z"
+}

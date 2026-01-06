@@ -1,0 +1,92 @@
+[
+  {
+    "function": "split_class",
+    "args": {
+      "source_class_id": "ClsC_ecfd5740",
+      "splits": [
+        {
+          "name": "Spacetime",
+          "description": "The four-dimensional continuum of space and time that is affected and warped by gravity, including by massive objects and black holes.",
+          "class_type_hint": "PhysicalConcept",
+          "member_ids": ["Can_95b9f400"],
+          "provisional_id": "SPLIT_Spacetime_ClsC_ecfd5740"
+        },
+        {
+          "name": "General Relativity",
+          "description": "Einstein’s classical theory of gravitation describing gravity as the curvature of spacetime and defining the domain where its predictions are applicable, including black hole singularities.",
+          "class_type_hint": "PhysicalTheory",
+          "member_ids": ["Can_99ffc86d"],
+          "provisional_id": "SPLIT_GR_ClsC_ecfd5740"
+        }
+      ],
+      "justification": "The original 'Relativistic Gravity' class bundles a core geometrical concept (spacetime) and a specific theory (general relativity); splitting improves type coherence between concepts and theories.",
+      "remark": "Source class ClsC_ecfd5740 has had all members moved into more precise subclasses; consider deprecating or removing this legacy container in a later cleanup pass.",
+      "confidence": 0.78
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "SPLIT_Spacetime_ClsC_ecfd5740",
+      "new_name": "Spacetime",
+      "new_description": "The four-dimensional continuum of space and time that is affected and warped by gravity, forming the geometric arena for relativistic physics and cosmology.",
+      "new_class_type_hint": "PhysicalConcept",
+      "new_class_group": "Cosmology and Fundamental Physics",
+      "remark": null,
+      "justification": "Assigns a stable class group tying spacetime to related cosmology and gravity concepts and slightly clarifies its role as the geometric arena of relativistic physics.",
+      "confidence": 0.86
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "SPLIT_GR_ClsC_ecfd5740",
+      "new_name": "General Relativity",
+      "new_description": "Einstein’s classical theory of gravitation that describes gravity as the curvature of spacetime and underpins modern cosmology and black hole physics.",
+      "new_class_type_hint": "PhysicalTheory",
+      "new_class_group": "Cosmology and Fundamental Physics",
+      "remark": null,
+      "justification": "Places general relativity in the same high-level group as cosmology and fundamental physics while refining its description to match its role in the schema.",
+      "confidence": 0.88
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_a0839634",
+      "new_name": "Universe (Cosmological Whole)",
+      "new_description": "The totality of cosmic space, time, matter, energy, and physical laws considered as an ordered, unified whole, within which structures like galaxies and black holes exist.",
+      "new_class_type_hint": "CosmologicalEntity",
+      "new_class_group": "Cosmology and Fundamental Physics",
+      "remark": null,
+      "justification": "Aligns the universe class with the same overarching group as relativistic gravity and fundamental laws, clarifying its role as the cosmological whole.",
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_300f73d2",
+      "new_name": "Fundamental Laws of Physics",
+      "new_description": "The core set of physical principles governing matter, energy, space, and time, which may require modification in extreme regimes such as black hole singularities.",
+      "new_class_type_hint": "PhysicalLawSet",
+      "new_class_group": "Cosmology and Fundamental Physics",
+      "remark": null,
+      "justification": "Groups the fundamental laws of physics with cosmology and relativistic gravity, reflecting that these laws govern the same spacetime and cosmic domain.",
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_ecfd5740",
+      "new_name": "Relativistic Gravity (legacy container)",
+      "new_description": "Former container class for both spacetime and general relativity; all members have been moved into more precise classes.",
+      "new_class_type_hint": "DeprecatedContainer",
+      "new_class_group": "Cosmology and Fundamental Physics",
+      "remark": "This class is now an empty legacy container after splitting its members into dedicated spacetime and general relativity classes; consider removing or hiding it in future revisions.",
+      "justification": "Updates metadata to reflect that this class is now an empty legacy container after splitting, while still tying it to the same high-level cosmology and fundamental physics group.",
+      "confidence": 0.8
+    }
+  }
+]

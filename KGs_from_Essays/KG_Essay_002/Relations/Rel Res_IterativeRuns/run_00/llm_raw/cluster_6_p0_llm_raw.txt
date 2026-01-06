@@ -1,0 +1,122 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_3849b7be6e41",
+        "RelR_4a08969ed176"
+      ],
+      "canonical_rel_name": "is_subtype_of",
+      "canonical_rel_desc": "Indicates that the subject concept is a more specific subtype or category within the broader class represented by the object.",
+      "justification": "Both relations describe 'urban legends' as a more specific category or aspect within the broader class 'modern folklore'; modeling this as a subtype (IS-A) relation provides a cleaner and more standard schema than mixing subtype and part-of for the same conceptual linkage.",
+      "remark": "The original 'is_part_of' variant for this pair is normalized to 'is_subtype_of' to maintain consistent hierarchical modeling.",
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_3849b7be6e41",
+        "RelR_4a08969ed176"
+      ],
+      "rel_cls": "hierarchical_category_relation",
+      "justification": "These relations capture taxonomic placement of one folklore category within a broader category, which is best represented as a hierarchical category/class relation rather than partonomy or mere association.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_3849b7be6e41",
+        "RelR_4a08969ed176"
+      ],
+      "rel_cls_group": "IDENTITY",
+      "justification": "IS-A / subtype relations are core identity-defining links (what something is in terms of category membership), so they fit the IDENTITY group.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_711c7d72d5f2",
+        "RelR_1873ffa1d429",
+        "RelR_882d460a310d"
+      ],
+      "canonical_rel_name": "is_instance_of",
+      "canonical_rel_desc": "Indicates that the subject is a concrete instance, example, or narrative realization of the more general class or type represented by the object.",
+      "justification": "All three relations describe a particular legend or specific tale as an example/member of a more general class (urban legends, Hook Man urban legend, urban legend genre); this is standard instantiation semantics and should be normalized under a single 'is_instance_of' predicate.",
+      "remark": null,
+      "confidence": 0.96
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_711c7d72d5f2",
+        "RelR_1873ffa1d429",
+        "RelR_882d460a310d"
+      ],
+      "rel_cls": "instantiation_relation",
+      "justification": "These links all express instance-to-class membership (examples of a category), which fits a common instantiation/typing relation class used across the schema.",
+      "remark": null,
+      "confidence": 0.96
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_711c7d72d5f2",
+        "RelR_1873ffa1d429",
+        "RelR_882d460a310d"
+      ],
+      "rel_cls_group": "IDENTITY",
+      "justification": "Instance-of relations define what an entity is in terms of its type/class, which is an identity-defining linkage and best grouped under IDENTITY.",
+      "remark": null,
+      "confidence": 0.96
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_b7b8aa3815b6"
+      ],
+      "canonical_rel_name": "has_physical_attribute",
+      "canonical_rel_desc": "Indicates that the subject entity possesses the specified physical feature or bodily attribute represented by the object.",
+      "justification": "The relation describes the escaped criminal as characterized by a hook for a hand, which is a concrete physical feature; modeling this as 'has_physical_attribute' is more precise than a generic 'has_attribute'.",
+      "remark": null,
+      "confidence": 0.97
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_b7b8aa3815b6"
+      ],
+      "rel_cls": "attribute_relation",
+      "justification": "The edge expresses a property of the entity (a defining physical trait), which fits an attribute/property relation class distinct from hierarchy or composition.",
+      "remark": null,
+      "confidence": 0.97
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_b7b8aa3815b6"
+      ],
+      "rel_cls_group": "ASSOCIATION",
+      "justification": "Attribute/property links associate an entity with a characteristic but do not themselves represent hierarchy, causality, or composition; thus they are best grouped under a broad ASSOCIATION category.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  }
+]

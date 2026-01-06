@@ -1,0 +1,143 @@
+{
+  "cluster_label": "32_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_0e30746707ad",
+      "relation_name": "establishes",
+      "rel_desc": "The French Revolution of 1789 established the First French Republic.",
+      "rel_hint_type": "causal",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "French Revolution of 1789",
+      "object_entity_name": "First French Republic",
+      "subject_class_label": "French Revolution of 1789",
+      "subject_class_group": "Modern Political Revolutions",
+      "object_class_label": "French Political Regimes",
+      "object_class_group": "Modern Political Revolutions",
+      "qualifiers": {
+        "TemporalQualifier": "1789 (French Revolution period)",
+        "SpatialQualifier": "France",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "established",
+        "LogicalMarker": "and",
+        "OtherQualifier": null
+      },
+      "confidence": 0.95,
+      "remarks": [
+        "Object normalized from 'a republic' to 'First French Republic' per entity list."
+      ]
+    },
+    {
+      "relation_id": "RelR_a89853952b7f",
+      "relation_name": "establishes",
+      "rel_desc": "The Russian Revolution of 1917 established the world's first communist state.",
+      "rel_hint_type": "causal",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "Russian Revolution of 1917",
+      "object_entity_name": "world's first communist state",
+      "subject_class_label": "Russian Revolution of 1917 (Event)",
+      "subject_class_group": "Modern Political Revolutions",
+      "object_class_label": "Russian Revolution of 1917 Context & Actors",
+      "object_class_group": "Modern Political Revolutions",
+      "qualifiers": {
+        "TemporalQualifier": "1917",
+        "SpatialQualifier": "Russia",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "established",
+        "LogicalMarker": "and",
+        "OtherQualifier": null
+      },
+      "confidence": 0.99,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_0e30746707ad\",\n        \"RelR_a89853952b7f\"\n      ],\n      \"canonical_rel_name\": \"establishes_political_regime\",\n      \"canonical_rel_desc\": \"A revolutionary or political event that causally results in the creation or formal establishment of a new political regime or state.\",\n      \"justification\": \"In both relations, a major revolution (subject) causally brings into existence a new political regime or state (object). The semantics are not just generic causation but specifically the founding/establishment of a political order, so a shared canonical predicate focusing on establishing a political regime is appropriate.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_0e30746707ad\",\n        \"RelR_a89853952b7f\"\n      ],\n      \"rel_cls\": \"founding_political_order_relation\",\n      \"justification\": \"Both relations describe a class of links where transformative events (revolutions) found or bring about new political orders (republic, communist state). Grouping them under a founding/creation-of-political-order relation class captures this family of predicates more generally than the specific canonical name.\",\n      \"remark\": null,\n      \"confidence\": 0.88\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_0e30746707ad\",\n        \"RelR_a89853952b7f\"\n      ],\n      \"rel_cls_group\": \"CAUSALITY\",\n      \"justification\": \"The descriptions and qualifiers (rel_hint_type='causal', CausalHint='established') indicate that the revolutions are causes and the regimes/states are their effects. This is a clear causal creation relationship, so the broad group CAUSALITY is appropriate.\",\n      \"remark\": null,\n      \"confidence\": 0.96\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_0e30746707ad",
+          "RelR_a89853952b7f"
+        ],
+        "canonical_rel_name": "establishes_political_regime",
+        "canonical_rel_desc": "A revolutionary or political event that causally results in the creation or formal establishment of a new political regime or state.",
+        "justification": "In both relations, a major revolution (subject) causally brings into existence a new political regime or state (object). The semantics are not just generic causation but specifically the founding/establishment of a political order, so a shared canonical predicate focusing on establishing a political regime is appropriate.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_0e30746707ad",
+          "RelR_a89853952b7f"
+        ],
+        "rel_cls": "founding_political_order_relation",
+        "justification": "Both relations describe a class of links where transformative events (revolutions) found or bring about new political orders (republic, communist state). Grouping them under a founding/creation-of-political-order relation class captures this family of predicates more generally than the specific canonical name.",
+        "remark": null,
+        "confidence": 0.88
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_0e30746707ad",
+          "RelR_a89853952b7f"
+        ],
+        "rel_cls_group": "CAUSALITY",
+        "justification": "The descriptions and qualifiers (rel_hint_type='causal', CausalHint='established') indicate that the revolutions are causes and the regimes/states are their effects. This is a clear causal creation relationship, so the broad group CAUSALITY is appropriate.",
+        "remark": null,
+        "confidence": 0.96
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_0e30746707ad",
+        "RelR_a89853952b7f"
+      ],
+      "canonical_rel_name": "establishes_political_regime",
+      "canonical_rel_desc": "A revolutionary or political event that causally results in the creation or formal establishment of a new political regime or state.",
+      "justification": "In both relations, a major revolution (subject) causally brings into existence a new political regime or state (object). The semantics are not just generic causation but specifically the founding/establishment of a political order, so a shared canonical predicate focusing on establishing a political regime is appropriate.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_0e30746707ad",
+        "RelR_a89853952b7f"
+      ],
+      "rel_cls": "founding_political_order_relation",
+      "justification": "Both relations describe a class of links where transformative events (revolutions) found or bring about new political orders (republic, communist state). Grouping them under a founding/creation-of-political-order relation class captures this family of predicates more generally than the specific canonical name.",
+      "remark": null,
+      "confidence": 0.88
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_0e30746707ad",
+        "RelR_a89853952b7f"
+      ],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "The descriptions and qualifiers (rel_hint_type='causal', CausalHint='established') indicate that the revolutions are causes and the regimes/states are their effects. This is a clear causal creation relationship, so the broad group CAUSALITY is appropriate.",
+      "remark": null,
+      "confidence": 0.96
+    }
+  ],
+  "timestamp": "2026-01-06T13:21:10Z"
+}

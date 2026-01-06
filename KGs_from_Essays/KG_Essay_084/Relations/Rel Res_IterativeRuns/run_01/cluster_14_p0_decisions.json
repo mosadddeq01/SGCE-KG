@@ -1,0 +1,97 @@
+{
+  "cluster_label": "14_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_31af248186f8",
+      "relation_name": "used_to_determine",
+      "rel_desc": "Evidence is used to determine the identity of a suspect.",
+      "rel_hint_type": "inference",
+      "canonical_rel_name": "supports_inference_of",
+      "canonical_rel_desc": "Indicates that evidence or complex data provides support for inferring, determining, or concluding a particular forensic determination or conclusion.",
+      "rel_cls": "evidential_inference_relation",
+      "rel_cls_group": "CAUSALITY",
+      "subject_entity_name": "evidence",
+      "object_entity_name": "identity of a suspect",
+      "subject_class_label": "General Forensic Evidence",
+      "subject_class_group": "Forensic Evidence",
+      "object_class_label": "Forensic Determinations",
+      "object_class_group": "Forensic Reasoning and Case Analysis",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": "after examination of physical characteristics",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "can determine (not guaranteed)",
+        "CausalHint": "By examining the physical characteristics of the evidence",
+        "LogicalMarker": "such as",
+        "OtherQualifier": null
+      },
+      "confidence": 0.99,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_f92f9b100d7c",
+      "relation_name": "infers",
+      "rel_desc": "Forensic scientists infer logical conclusions from analyzed data and evidence.",
+      "rel_hint_type": "analytical",
+      "canonical_rel_name": "infers_conclusions",
+      "canonical_rel_desc": "A forensic or investigative actor derives logical conclusions based on prior analysis of data and evidence.",
+      "rel_cls": "forensic_cognitive_activity_relation",
+      "rel_cls_group": "AGENCY",
+      "subject_entity_name": "forensic scientists",
+      "object_entity_name": "logical conclusions",
+      "subject_class_label": "Forensic Scientists",
+      "subject_class_group": "Forensic Science Domain",
+      "object_class_label": "Forensic Analytical Reasoning",
+      "object_class_group": "Forensic Reasoning and Case Analysis",
+      "qualifiers": {
+        "TemporalQualifier": "after analysis of data and evidence",
+        "SpatialQualifier": null,
+        "OperationalConstraint": "must be able to",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": "and",
+        "OtherQualifier": null
+      },
+      "confidence": 0.96,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_rel_schema\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_f92f9b100d7c\"\n      ],\n      \"canonical_rel_name\": \"infers_conclusion\",\n      \"canonical_rel_desc\": \"A forensic or investigative actor infers or derives a conclusion based on prior analysis of data and evidence.\",\n      \"rel_cls\": null,\n      \"rel_cls_group\": null,\n      \"justification\": \"The existing canonical_rel_name 'infers_conclusions' is slightly awkward and number-specific; normalizing to the singular verb-object form 'infers_conclusion' better matches predicate naming conventions while preserving the same meaning. The description is minimally adjusted to align with the normalized label; the relation class and group remain appropriate and are left unchanged.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_rel_schema",
+      "args": {
+        "relation_ids": [
+          "RelR_f92f9b100d7c"
+        ],
+        "canonical_rel_name": "infers_conclusion",
+        "canonical_rel_desc": "A forensic or investigative actor infers or derives a conclusion based on prior analysis of data and evidence.",
+        "rel_cls": null,
+        "rel_cls_group": null,
+        "justification": "The existing canonical_rel_name 'infers_conclusions' is slightly awkward and number-specific; normalizing to the singular verb-object form 'infers_conclusion' better matches predicate naming conventions while preserving the same meaning. The description is minimally adjusted to align with the normalized label; the relation class and group remain appropriate and are left unchanged.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_rel_schema",
+      "relation_ids": [
+        "RelR_f92f9b100d7c"
+      ],
+      "canonical_rel_name": "infers_conclusion",
+      "canonical_rel_desc": "A forensic or investigative actor infers or derives a conclusion based on prior analysis of data and evidence.",
+      "rel_cls": null,
+      "rel_cls_group": null,
+      "new_relation_name": null,
+      "original_relation_name": null,
+      "justification": "The existing canonical_rel_name 'infers_conclusions' is slightly awkward and number-specific; normalizing to the singular verb-object form 'infers_conclusion' better matches predicate naming conventions while preserving the same meaning. The description is minimally adjusted to align with the normalized label; the relation class and group remain appropriate and are left unchanged.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  ],
+  "timestamp": "2026-01-06T14:37:36Z"
+}

@@ -1,0 +1,141 @@
+{
+  "cluster_label": "21_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_73e5d739209b",
+      "relation_name": "motivates_pursuit_of",
+      "rel_desc": "The American Revolution motivated global struggles aimed at achieving freedom.",
+      "rel_hint_type": "goal_influence",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "American Revolution of 1776",
+      "object_entity_name": "freedom",
+      "subject_class_label": "American Independence (Revolution and Foundational Documents)",
+      "subject_class_group": "Colonial Freedom and Independence (Ideals & Movements)",
+      "object_class_label": "Freedom as Political Ideal",
+      "object_class_group": "Colonial Freedom and Independence (Ideals & Movements)",
+      "qualifiers": {
+        "TemporalQualifier": "after 1776",
+        "SpatialQualifier": "around the world",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "inspired",
+        "LogicalMarker": "as",
+        "OtherQualifier": null
+      },
+      "confidence": 0.9,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_14fc7b869f4d",
+      "relation_name": "motivates_pursuit_of",
+      "rel_desc": "The American Revolution encouraged struggles for independence from colonial rule.",
+      "rel_hint_type": "goal_influence",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "American Revolution of 1776",
+      "object_entity_name": "independence from colonial rule",
+      "subject_class_label": "American Independence (Revolution and Foundational Documents)",
+      "subject_class_group": "Colonial Freedom and Independence (Ideals & Movements)",
+      "object_class_label": "Anti-Colonial Independence Goal",
+      "object_class_group": "Colonial Freedom and Independence (Ideals & Movements)",
+      "qualifiers": {
+        "TemporalQualifier": "after 1776",
+        "SpatialQualifier": "around the world",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "inspired",
+        "LogicalMarker": "as",
+        "OtherQualifier": null
+      },
+      "confidence": 0.9,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_73e5d739209b\",\n        \"RelR_14fc7b869f4d\"\n      ],\n      \"canonical_rel_name\": \"inspires_pursuit_of\",\n      \"canonical_rel_desc\": \"Indicates that an event or movement serves as an inspiration or motivating example for pursuing a particular ideal, goal, or struggle.\",\n      \"justification\": \"Both relations describe the American Revolution acting as an inspiring cause that motivates other actors to pursue abstract goals (freedom, independence from colonial rule). The subject is an historical event and the objects are ideals/goals; the direction is consistent (event → inspired pursuit of ideal), so a single predicate 'inspires_pursuit_of' fits both.\",\n      \"remark\": null,\n      \"confidence\": 0.93\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_73e5d739209b\",\n        \"RelR_14fc7b869f4d\"\n      ],\n      \"rel_cls\": \"ideological_influence_relation\",\n      \"justification\": \"Both relations express that a historical revolution exerted ideological influence that shaped or motivated later pursuits of political goals. This is broader than the specific predicate wording but narrower than generic causality, so an 'ideological_influence_relation' class is appropriate.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_73e5d739209b\",\n        \"RelR_14fc7b869f4d\"\n      ],\n      \"rel_cls_group\": \"CAUSALITY\",\n      \"justification\": \"The semantics are causal/influential: the American Revolution is presented as a cause or inspiration leading to later pursuits of freedom and anti-colonial independence. This fits best under a broad causality/influence group.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_73e5d739209b",
+          "RelR_14fc7b869f4d"
+        ],
+        "canonical_rel_name": "inspires_pursuit_of",
+        "canonical_rel_desc": "Indicates that an event or movement serves as an inspiration or motivating example for pursuing a particular ideal, goal, or struggle.",
+        "justification": "Both relations describe the American Revolution acting as an inspiring cause that motivates other actors to pursue abstract goals (freedom, independence from colonial rule). The subject is an historical event and the objects are ideals/goals; the direction is consistent (event → inspired pursuit of ideal), so a single predicate 'inspires_pursuit_of' fits both.",
+        "remark": null,
+        "confidence": 0.93
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_73e5d739209b",
+          "RelR_14fc7b869f4d"
+        ],
+        "rel_cls": "ideological_influence_relation",
+        "justification": "Both relations express that a historical revolution exerted ideological influence that shaped or motivated later pursuits of political goals. This is broader than the specific predicate wording but narrower than generic causality, so an 'ideological_influence_relation' class is appropriate.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_73e5d739209b",
+          "RelR_14fc7b869f4d"
+        ],
+        "rel_cls_group": "CAUSALITY",
+        "justification": "The semantics are causal/influential: the American Revolution is presented as a cause or inspiration leading to later pursuits of freedom and anti-colonial independence. This fits best under a broad causality/influence group.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_73e5d739209b",
+        "RelR_14fc7b869f4d"
+      ],
+      "canonical_rel_name": "inspires_pursuit_of",
+      "canonical_rel_desc": "Indicates that an event or movement serves as an inspiration or motivating example for pursuing a particular ideal, goal, or struggle.",
+      "justification": "Both relations describe the American Revolution acting as an inspiring cause that motivates other actors to pursue abstract goals (freedom, independence from colonial rule). The subject is an historical event and the objects are ideals/goals; the direction is consistent (event → inspired pursuit of ideal), so a single predicate 'inspires_pursuit_of' fits both.",
+      "remark": null,
+      "confidence": 0.93
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_73e5d739209b",
+        "RelR_14fc7b869f4d"
+      ],
+      "rel_cls": "ideological_influence_relation",
+      "justification": "Both relations express that a historical revolution exerted ideological influence that shaped or motivated later pursuits of political goals. This is broader than the specific predicate wording but narrower than generic causality, so an 'ideological_influence_relation' class is appropriate.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_73e5d739209b",
+        "RelR_14fc7b869f4d"
+      ],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "The semantics are causal/influential: the American Revolution is presented as a cause or inspiration leading to later pursuits of freedom and anti-colonial independence. This fits best under a broad causality/influence group.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  ],
+  "timestamp": "2026-01-06T13:18:33Z"
+}

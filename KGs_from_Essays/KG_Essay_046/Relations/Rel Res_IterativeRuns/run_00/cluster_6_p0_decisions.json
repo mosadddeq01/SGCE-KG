@@ -1,0 +1,231 @@
+{
+  "cluster_label": "6_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_67371442a3ea",
+      "relation_name": "promotes",
+      "rel_desc": "Seed dispersal helps regenerate plant populations.",
+      "rel_hint_type": "causal benefit",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "seed dispersal",
+      "object_entity_name": "plant population regeneration",
+      "subject_class_label": "Plant Reproduction and Dispersal Processes",
+      "subject_class_group": "Bird-Mediated Plant Reproduction and Regeneration",
+      "object_class_label": "Plant Population Dynamics",
+      "object_class_group": "Bird-Mediated Plant Reproduction and Regeneration",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "helps to regenerate",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.97,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_b1409919e426",
+      "relation_name": "promotes",
+      "rel_desc": "Seed dispersal promotes genetic diversity in plant populations.",
+      "rel_hint_type": "causal benefit",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "seed dispersal",
+      "object_entity_name": "genetic diversity",
+      "subject_class_label": "Plant Reproduction and Dispersal Processes",
+      "subject_class_group": "Bird-Mediated Plant Reproduction and Regeneration",
+      "object_class_label": "Plant Population Dynamics",
+      "object_class_group": "Bird-Mediated Plant Reproduction and Regeneration",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "promote",
+        "LogicalMarker": "and",
+        "OtherQualifier": null
+      },
+      "confidence": 0.97,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_8889b377fd7c",
+      "relation_name": "supports",
+      "rel_desc": "Seed dispersal supports the growth of new vegetation.",
+      "rel_hint_type": "causal benefit",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "seed dispersal",
+      "object_entity_name": "growth of new vegetation",
+      "subject_class_label": "Plant Reproduction and Dispersal Processes",
+      "subject_class_group": "Bird-Mediated Plant Reproduction and Regeneration",
+      "object_class_label": "Plant Population Dynamics",
+      "object_class_group": "Bird-Mediated Plant Reproduction and Regeneration",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "support",
+        "LogicalMarker": "and",
+        "OtherQualifier": null
+      },
+      "confidence": 0.97,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_00f9904910f8",
+      "relation_name": "enriches",
+      "rel_desc": "Guano enriches soils with nutrients.",
+      "rel_hint_type": "beneficial effect",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "guano",
+      "object_entity_name": "soils",
+      "subject_class_label": "Seabird Nutrient Vectors",
+      "subject_class_group": "Bird-Mediated Nutrient Cycling & Habitats",
+      "object_class_label": "Habitat Substrates",
+      "object_class_group": "Bird-Mediated Nutrient Cycling & Habitats",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "on land soils",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "Enrichment type: nutrient fertilization"
+      },
+      "confidence": 0.96,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_67371442a3ea\",\n        \"RelR_b1409919e426\",\n        \"RelR_8889b377fd7c\"\n      ],\n      \"canonical_rel_name\": \"promotes\",\n      \"canonical_rel_desc\": \"A causal relation where a biological or ecological process increases, supports, or facilitates a beneficial outcome for a population or community.\",\n      \"justification\": \"All three relations describe seed dispersal causally leading to beneficial plant population outcomes (regeneration, genetic diversity, growth of new vegetation). Despite minor wording differences ('promotes', 'supports'), the core predicate is a positive causal influence, which can be normalized to 'promotes'.\",\n      \"remark\": null,\n      \"confidence\": 0.93\n    }\n  },\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_00f9904910f8\"\n      ],\n      \"canonical_rel_name\": \"enriches_with_nutrients\",\n      \"canonical_rel_desc\": \"A causal relation where a material or substance increases the nutrient content of an environmental substrate or habitat.\",\n      \"justification\": \"This relation specifically describes guano increasing the nutrient content of soils (nutrient fertilization). This is more precise than a generic 'promotes' predicate and captures the ecological nutrient-enrichment semantics.\",\n      \"remark\": null,\n      \"confidence\": 0.92\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_67371442a3ea\",\n        \"RelR_b1409919e426\",\n        \"RelR_8889b377fd7c\",\n        \"RelR_00f9904910f8\"\n      ],\n      \"rel_cls\": \"positive_ecological_effect_relation\",\n      \"justification\": \"All four relations describe beneficial ecological effects of biological processes or materials: seed dispersal improving plant population processes and guano enriching soils. Grouping them under 'positive_ecological_effect_relation' captures that they are causal, beneficial impacts within ecosystems, even though the specific predicates differ.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_67371442a3ea\",\n        \"RelR_b1409919e426\",\n        \"RelR_8889b377fd7c\",\n        \"RelR_00f9904910f8\"\n      ],\n      \"rel_cls_group\": \"CAUSALITY\",\n      \"justification\": \"Each relation encodes a directional causal influence (seed dispersal causing various beneficial plant outcomes; guano causing nutrient enrichment of soils). The primary semantic dimension is cause–effect, so they belong in the CAUSALITY group.\",\n      \"remark\": null,\n      \"confidence\": 0.95\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_67371442a3ea",
+          "RelR_b1409919e426",
+          "RelR_8889b377fd7c"
+        ],
+        "canonical_rel_name": "promotes",
+        "canonical_rel_desc": "A causal relation where a biological or ecological process increases, supports, or facilitates a beneficial outcome for a population or community.",
+        "justification": "All three relations describe seed dispersal causally leading to beneficial plant population outcomes (regeneration, genetic diversity, growth of new vegetation). Despite minor wording differences ('promotes', 'supports'), the core predicate is a positive causal influence, which can be normalized to 'promotes'.",
+        "remark": null,
+        "confidence": 0.93
+      }
+    },
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_00f9904910f8"
+        ],
+        "canonical_rel_name": "enriches_with_nutrients",
+        "canonical_rel_desc": "A causal relation where a material or substance increases the nutrient content of an environmental substrate or habitat.",
+        "justification": "This relation specifically describes guano increasing the nutrient content of soils (nutrient fertilization). This is more precise than a generic 'promotes' predicate and captures the ecological nutrient-enrichment semantics.",
+        "remark": null,
+        "confidence": 0.92
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_67371442a3ea",
+          "RelR_b1409919e426",
+          "RelR_8889b377fd7c",
+          "RelR_00f9904910f8"
+        ],
+        "rel_cls": "positive_ecological_effect_relation",
+        "justification": "All four relations describe beneficial ecological effects of biological processes or materials: seed dispersal improving plant population processes and guano enriching soils. Grouping them under 'positive_ecological_effect_relation' captures that they are causal, beneficial impacts within ecosystems, even though the specific predicates differ.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_67371442a3ea",
+          "RelR_b1409919e426",
+          "RelR_8889b377fd7c",
+          "RelR_00f9904910f8"
+        ],
+        "rel_cls_group": "CAUSALITY",
+        "justification": "Each relation encodes a directional causal influence (seed dispersal causing various beneficial plant outcomes; guano causing nutrient enrichment of soils). The primary semantic dimension is cause–effect, so they belong in the CAUSALITY group.",
+        "remark": null,
+        "confidence": 0.95
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_67371442a3ea",
+        "RelR_b1409919e426",
+        "RelR_8889b377fd7c"
+      ],
+      "canonical_rel_name": "promotes",
+      "canonical_rel_desc": "A causal relation where a biological or ecological process increases, supports, or facilitates a beneficial outcome for a population or community.",
+      "justification": "All three relations describe seed dispersal causally leading to beneficial plant population outcomes (regeneration, genetic diversity, growth of new vegetation). Despite minor wording differences ('promotes', 'supports'), the core predicate is a positive causal influence, which can be normalized to 'promotes'.",
+      "remark": null,
+      "confidence": 0.93
+    },
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_00f9904910f8"
+      ],
+      "canonical_rel_name": "enriches_with_nutrients",
+      "canonical_rel_desc": "A causal relation where a material or substance increases the nutrient content of an environmental substrate or habitat.",
+      "justification": "This relation specifically describes guano increasing the nutrient content of soils (nutrient fertilization). This is more precise than a generic 'promotes' predicate and captures the ecological nutrient-enrichment semantics.",
+      "remark": null,
+      "confidence": 0.92
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_67371442a3ea",
+        "RelR_b1409919e426",
+        "RelR_8889b377fd7c",
+        "RelR_00f9904910f8"
+      ],
+      "rel_cls": "positive_ecological_effect_relation",
+      "justification": "All four relations describe beneficial ecological effects of biological processes or materials: seed dispersal improving plant population processes and guano enriching soils. Grouping them under 'positive_ecological_effect_relation' captures that they are causal, beneficial impacts within ecosystems, even though the specific predicates differ.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_67371442a3ea",
+        "RelR_b1409919e426",
+        "RelR_8889b377fd7c",
+        "RelR_00f9904910f8"
+      ],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "Each relation encodes a directional causal influence (seed dispersal causing various beneficial plant outcomes; guano causing nutrient enrichment of soils). The primary semantic dimension is cause–effect, so they belong in the CAUSALITY group.",
+      "remark": null,
+      "confidence": 0.95
+    }
+  ],
+  "timestamp": "2026-01-06T11:28:35Z"
+}

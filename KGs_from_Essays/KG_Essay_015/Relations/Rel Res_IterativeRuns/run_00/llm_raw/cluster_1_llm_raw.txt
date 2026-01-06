@@ -1,0 +1,118 @@
+[
+  {
+    "function": "split_class",
+    "args": {
+      "source_class_id": "ClsC_cbdd742c",
+      "splits": [
+        {
+          "name": "Ancient Egyptian Burial Practices",
+          "description": "The complex customs, rituals, and methods used in ancient Egypt to prepare and inter the dead, including preparation of the body, tomb arrangements, and associated rites to ensure a proper transition to the afterlife.",
+          "class_type_hint": "Burial Practice",
+          "member_ids": ["Can_f68c2fcf"],
+          "provisional_id": "SPLIT_BurialPractices_ClsC_cbdd742c"
+        },
+        {
+          "name": "Reverence for the Deceased in Ancient Egypt",
+          "description": "The cultural and moral value in ancient Egyptian society of showing honor, respect, and veneration to the dead, expressed through funerary rites, memorial practices, and beliefs about the afterlife.",
+          "class_type_hint": "Cultural Value",
+          "member_ids": ["Can_185bea15"],
+          "provisional_id": "SPLIT_Reverence_ClsC_cbdd742c"
+        }
+      ],
+      "justification": "ClsC_cbdd742c mixes a concrete process ('ancient Egyptian burial practices') with an abstract moral value ('reverence for the deceased'); splitting yields cleaner, single-focus classes for practices vs values.",
+      "remark": null,
+      "confidence": 0.85
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_eb8b19d2",
+      "new_name": "Ancient Egyptian Deceased Individual (Burial Subject)",
+      "new_description": "Concepts referring to the dead individual as the subject of ancient Egyptian burial, mummification, and afterlife practices, including both the person and their preserved body.",
+      "new_class_type_hint": "Religious Person-Concept",
+      "new_class_group": "Ancient Egyptian Funerary Religion and Culture",
+      "remark": null,
+      "justification": "Renaming clarifies that this class covers the deceased as the focal subject of funerary treatment, and assigning a shared Class_Group connects it to the broader ancient Egyptian funerary schema.",
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_415d25b8",
+      "new_name": "Ancient Egyptian Mummification Practices",
+      "new_description": "Interrelated practices involved in ancient Egyptian mummification, including the embalming process, treatment and removal of internal organs, desiccation using salts, and wrapping with linen bandages.",
+      "new_class_type_hint": "Cultural Practice",
+      "new_class_group": "Ancient Egyptian Funerary Religion and Culture",
+      "remark": null,
+      "justification": "Updated name and description emphasize practical, ritual actions and aligning the Class_Group situates mummification within the overall funerary religion and culture domain.",
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_cf008631",
+      "new_name": "Ancient Egyptian Afterlife Beliefs and Concepts",
+      "new_description": "Beliefs, states, locations, and processes that constitute the ancient Egyptian conception of the afterlife, including the post-death realm, the soul’s journey, desired conditions such as comfort and sustenance, and eternal existence among the gods.",
+      "new_class_type_hint": "Religious Concept",
+      "new_class_group": "Ancient Egyptian Funerary Religion and Culture",
+      "remark": null,
+      "justification": "Minor renaming and shared Class_Group clarify that this class focuses on the belief and conceptual side of the same funerary religious system as the other classes.",
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_cbdd742c",
+      "new_name": "Ancient Egyptian Funerary Culture (Superseded Container)",
+      "new_description": "Former umbrella class for both burial practices and reverence values in ancient Egyptian funerary culture; its members have been split into more specific classes.",
+      "new_class_type_hint": "Deprecated Container",
+      "new_class_group": "Ancient Egyptian Funerary Religion and Culture",
+      "remark": "This class has been structurally split into more specific subclasses; consider deprecating or hiding it from primary use once downstream references are updated.",
+      "justification": "After splitting ClsC_cbdd742c into focused practice and value classes, updating its metadata and Class_Group clarifies its superseded/container status for maintainers.",
+      "confidence": 0.82
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "SPLIT_BurialPractices_ClsC_cbdd742c",
+      "new_name": "Ancient Egyptian Burial Practices (General)",
+      "new_description": "The complex customs, rituals, and methods used in ancient Egypt to prepare and inter the dead, encompassing body preparation, tomb arrangements, offerings, and associated rites to ensure a proper transition to the afterlife.",
+      "new_class_type_hint": "Burial Practice",
+      "new_class_group": "Ancient Egyptian Funerary Religion and Culture",
+      "remark": null,
+      "justification": "Assigning an explicit Class_Group and refining the name/description position this split-out class as the general umbrella for burial procedures within the funerary system.",
+      "confidence": 0.88
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "SPLIT_Reverence_ClsC_cbdd742c",
+      "new_name": "Reverence for the Deceased in Ancient Egypt",
+      "new_description": "The cultural and moral value in ancient Egyptian society of honoring, respecting, and venerating the dead, expressed through funerary rites, memorialization, and beliefs about the afterlife.",
+      "new_class_type_hint": "Cultural Value",
+      "new_class_group": "Ancient Egyptian Funerary Religion and Culture",
+      "remark": null,
+      "justification": "Clarifying this split-out class as a cultural value and assigning the shared Class_Group highlights its role as the normative/ideological dimension of the funerary system.",
+      "confidence": 0.88
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_a5b981a7",
+      "new_name": "Ancient Egyptian Burial Specialists",
+      "new_description": "Occupational roles comprising the professional participants in ancient Egyptian burial practices, including priests, embalmers, and other specialized contributors involved in funerary rituals and body preparation.",
+      "new_class_type_hint": "Occupational Role",
+      "new_class_group": "Ancient Egyptian Funerary Religion and Culture",
+      "remark": null,
+      "justification": "Assigning the shared Class_Group and slightly expanding the description clearly link these roles to the common funerary religion and culture context.",
+      "confidence": 0.9
+    }
+  }
+]

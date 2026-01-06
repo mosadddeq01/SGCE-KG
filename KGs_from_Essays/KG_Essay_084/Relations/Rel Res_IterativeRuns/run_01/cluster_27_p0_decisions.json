@@ -1,0 +1,157 @@
+{
+  "cluster_label": "27_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_1d34a1f2daf2",
+      "relation_name": "analyzes",
+      "rel_desc": "Forensic science analyzes physical evidence as part of its practice.",
+      "rel_hint_type": "analytical",
+      "canonical_rel_name": "analyzes",
+      "canonical_rel_desc": "A forensic or investigative actor examines evidence or data to extract information, patterns, or insights.",
+      "rel_cls": "forensic_cognitive_activity_relation",
+      "rel_cls_group": "AGENCY",
+      "subject_entity_name": "forensic science",
+      "object_entity_name": "physical evidence",
+      "subject_class_label": "Forensic Science",
+      "subject_class_group": "Forensic Science Domain",
+      "object_class_label": "Forensic Physical Evidence",
+      "object_class_group": "Forensic Evidence",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "to",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.97,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_39740bd15548",
+      "relation_name": "analyzes",
+      "rel_desc": "Forensic scientists collect and analyze evidence.",
+      "rel_hint_type": "functional-role",
+      "canonical_rel_name": "analyzes",
+      "canonical_rel_desc": "The subject examines, evaluates, or analyzes the object as part of an investigative or professional activity.",
+      "rel_cls": "behavior_action_relation",
+      "rel_cls_group": "AGENCY",
+      "subject_entity_name": "forensic scientists",
+      "object_entity_name": "evidence",
+      "subject_class_label": "Forensic Scientists",
+      "subject_class_group": "Forensic Science Domain",
+      "object_class_label": "General Forensic Evidence",
+      "object_class_group": "Forensic Evidence",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": "in the course of forensic investigations",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "to determine important details",
+        "LogicalMarker": "By",
+        "OtherQualifier": null
+      },
+      "confidence": 0.99,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_0b9c19be281b",
+      "relation_name": "investigates",
+      "rel_desc": "Forensic scientists investigate the crime scene by meticulously documenting its details.",
+      "rel_hint_type": "activity",
+      "canonical_rel_name": "investigates",
+      "canonical_rel_desc": "Denotes that an investigator examines or investigates a crime scene or context.",
+      "rel_cls": "investigation_activity_relation",
+      "rel_cls_group": "AGENCY",
+      "subject_entity_name": "forensic scientists",
+      "object_entity_name": "crime scene",
+      "subject_class_label": "Forensic Scientists",
+      "subject_class_group": "Forensic Science Domain",
+      "object_class_label": "Forensic Context Locations",
+      "object_class_group": "Forensic Context & Locations",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "crime scene",
+        "OperationalConstraint": "meticulously documenting the details",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "InvestigationMethod: documentation of scene details"
+      },
+      "confidence": 0.9,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_fd43b9df694c",
+      "relation_name": "analyzes",
+      "rel_desc": "Forensic scientists analyze complex data as part of their role.",
+      "rel_hint_type": "analytical",
+      "canonical_rel_name": "analyzes",
+      "canonical_rel_desc": "A forensic or investigative actor examines evidence or data to extract information, patterns, or insights.",
+      "rel_cls": "forensic_cognitive_activity_relation",
+      "rel_cls_group": "AGENCY",
+      "subject_entity_name": "forensic scientists",
+      "object_entity_name": "complex data",
+      "subject_class_label": "Forensic Scientists",
+      "subject_class_group": "Forensic Science Domain",
+      "object_class_label": "Complex Data",
+      "object_class_group": "Forensic Reasoning and Case Analysis",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": "must be able to",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": "must",
+        "OtherQualifier": null
+      },
+      "confidence": 0.98,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_rel_schema\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_1d34a1f2daf2\",\n        \"RelR_39740bd15548\",\n        \"RelR_fd43b9df694c\"\n      ],\n      \"canonical_rel_name\": \"analyzes\",\n      \"canonical_rel_desc\": \"A forensic or investigative actor examines evidence or data to extract information, patterns, or insights.\",\n      \"rel_cls\": \"forensic_cognitive_activity_relation\",\n      \"rel_cls_group\": \"AGENCY\",\n      \"justification\": \"All three relations describe the same cognitive/analytical predicate where a forensic actor analyzes evidence or data. Normalizing them to a single canonical_rel_name ('analyzes'), shared description, and shared rel_cls ('forensic_cognitive_activity_relation') improves schema consistency. The second relation previously used a more generic class ('behavior_action_relation') despite clearly describing an analytical activity similar to the other two.\",\n      \"remark\": null,\n      \"confidence\": 0.96\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_rel_schema",
+      "args": {
+        "relation_ids": [
+          "RelR_1d34a1f2daf2",
+          "RelR_39740bd15548",
+          "RelR_fd43b9df694c"
+        ],
+        "canonical_rel_name": "analyzes",
+        "canonical_rel_desc": "A forensic or investigative actor examines evidence or data to extract information, patterns, or insights.",
+        "rel_cls": "forensic_cognitive_activity_relation",
+        "rel_cls_group": "AGENCY",
+        "justification": "All three relations describe the same cognitive/analytical predicate where a forensic actor analyzes evidence or data. Normalizing them to a single canonical_rel_name ('analyzes'), shared description, and shared rel_cls ('forensic_cognitive_activity_relation') improves schema consistency. The second relation previously used a more generic class ('behavior_action_relation') despite clearly describing an analytical activity similar to the other two.",
+        "remark": null,
+        "confidence": 0.96
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_rel_schema",
+      "relation_ids": [
+        "RelR_1d34a1f2daf2",
+        "RelR_39740bd15548",
+        "RelR_fd43b9df694c"
+      ],
+      "canonical_rel_name": "analyzes",
+      "canonical_rel_desc": "A forensic or investigative actor examines evidence or data to extract information, patterns, or insights.",
+      "rel_cls": "forensic_cognitive_activity_relation",
+      "rel_cls_group": "AGENCY",
+      "new_relation_name": null,
+      "original_relation_name": null,
+      "justification": "All three relations describe the same cognitive/analytical predicate where a forensic actor analyzes evidence or data. Normalizing them to a single canonical_rel_name ('analyzes'), shared description, and shared rel_cls ('forensic_cognitive_activity_relation') improves schema consistency. The second relation previously used a more generic class ('behavior_action_relation') despite clearly describing an analytical activity similar to the other two.",
+      "remark": null,
+      "confidence": 0.96
+    }
+  ],
+  "timestamp": "2026-01-06T14:39:03Z"
+}

@@ -1,0 +1,163 @@
+{
+  "cluster_label": "17_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_1009484586a5",
+      "relation_name": "associated_with",
+      "rel_desc": "The Schwarzschild radius is a characteristic radius associated with a black hole.",
+      "rel_hint_type": "association",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "Schwarzschild radius",
+      "object_entity_name": "black holes",
+      "subject_class_label": "Black Hole Size Measures",
+      "subject_class_group": "Black Hole Schwarzschild Radius Concepts",
+      "object_class_label": "Black Hole Phenomena",
+      "object_class_group": "Astrophysics",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "around a black hole",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.96,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_28f185d047eb",
+      "relation_name": "aspect_of",
+      "rel_desc": "The mysteries are unresolved aspects associated with black holes.",
+      "rel_hint_type": "association",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "mysteries of black holes",
+      "object_entity_name": "black holes",
+      "subject_class_label": "Black Hole Concepts & Open Questions",
+      "subject_class_group": "Astrophysics – Black Holes",
+      "object_class_label": "Black Hole Phenomena",
+      "object_class_group": "Astrophysics",
+      "qualifiers": {
+        "TemporalQualifier": "ongoing quest",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "Status: open scientific questions about black holes"
+      },
+      "confidence": 0.9,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_1009484586a5\"],\n      \"canonical_rel_name\": \"characteristic_of\",\n      \"canonical_rel_desc\": \"Indicates that the subject is a defining or characteristic quantity, property, or feature of the object.\",\n      \"justification\": \"The Schwarzschild radius is described as a characteristic radius associated with a black hole, i.e., a defining property of black holes rather than a generic loose association; 'characteristic_of' captures this predicate precisely.\",\n      \"remark\": null,\n      \"confidence\": 0.93\n    }\n  },\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_28f185d047eb\"],\n      \"canonical_rel_name\": \"is_about\",\n      \"canonical_rel_desc\": \"Indicates that the subject concept, topic, or question concerns or is about the object.\",\n      \"justification\": \"The 'mysteries of black holes' are conceptual questions whose topic is black holes; the most accurate predicate is that these mysteries are about black holes, not that they are a defining characteristic of black holes.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_1009484586a5\", \"RelR_28f185d047eb\"],\n      \"rel_cls\": \"conceptual_association_relation\",\n      \"justification\": \"Both relations connect conceptual entities (a characteristic radius; conceptual mysteries/questions) with black holes in a non-material, non-temporal way, fitting a shared class for conceptual/topic-based associations.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_1009484586a5\", \"RelR_28f185d047eb\"],\n      \"rel_cls_group\": \"ASSOCIATION\",\n      \"justification\": \"Neither relation is compositional, causal, or spatial in a strict sense; both express that the subject is conceptually tied to or concerns the object, which falls under a broad ASSOCIATION group.\",\n      \"remark\": null,\n      \"confidence\": 0.95\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_1009484586a5"
+        ],
+        "canonical_rel_name": "characteristic_of",
+        "canonical_rel_desc": "Indicates that the subject is a defining or characteristic quantity, property, or feature of the object.",
+        "justification": "The Schwarzschild radius is described as a characteristic radius associated with a black hole, i.e., a defining property of black holes rather than a generic loose association; 'characteristic_of' captures this predicate precisely.",
+        "remark": null,
+        "confidence": 0.93
+      }
+    },
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_28f185d047eb"
+        ],
+        "canonical_rel_name": "is_about",
+        "canonical_rel_desc": "Indicates that the subject concept, topic, or question concerns or is about the object.",
+        "justification": "The 'mysteries of black holes' are conceptual questions whose topic is black holes; the most accurate predicate is that these mysteries are about black holes, not that they are a defining characteristic of black holes.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_1009484586a5",
+          "RelR_28f185d047eb"
+        ],
+        "rel_cls": "conceptual_association_relation",
+        "justification": "Both relations connect conceptual entities (a characteristic radius; conceptual mysteries/questions) with black holes in a non-material, non-temporal way, fitting a shared class for conceptual/topic-based associations.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_1009484586a5",
+          "RelR_28f185d047eb"
+        ],
+        "rel_cls_group": "ASSOCIATION",
+        "justification": "Neither relation is compositional, causal, or spatial in a strict sense; both express that the subject is conceptually tied to or concerns the object, which falls under a broad ASSOCIATION group.",
+        "remark": null,
+        "confidence": 0.95
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_1009484586a5"
+      ],
+      "canonical_rel_name": "characteristic_of",
+      "canonical_rel_desc": "Indicates that the subject is a defining or characteristic quantity, property, or feature of the object.",
+      "justification": "The Schwarzschild radius is described as a characteristic radius associated with a black hole, i.e., a defining property of black holes rather than a generic loose association; 'characteristic_of' captures this predicate precisely.",
+      "remark": null,
+      "confidence": 0.93
+    },
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_28f185d047eb"
+      ],
+      "canonical_rel_name": "is_about",
+      "canonical_rel_desc": "Indicates that the subject concept, topic, or question concerns or is about the object.",
+      "justification": "The 'mysteries of black holes' are conceptual questions whose topic is black holes; the most accurate predicate is that these mysteries are about black holes, not that they are a defining characteristic of black holes.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_1009484586a5",
+        "RelR_28f185d047eb"
+      ],
+      "rel_cls": "conceptual_association_relation",
+      "justification": "Both relations connect conceptual entities (a characteristic radius; conceptual mysteries/questions) with black holes in a non-material, non-temporal way, fitting a shared class for conceptual/topic-based associations.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_1009484586a5",
+        "RelR_28f185d047eb"
+      ],
+      "rel_cls_group": "ASSOCIATION",
+      "justification": "Neither relation is compositional, causal, or spatial in a strict sense; both express that the subject is conceptually tied to or concerns the object, which falls under a broad ASSOCIATION group.",
+      "remark": null,
+      "confidence": 0.95
+    }
+  ],
+  "timestamp": "2026-01-06T09:50:11Z"
+}

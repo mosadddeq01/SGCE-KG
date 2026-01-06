@@ -1,0 +1,105 @@
+{
+  "cluster_label": "9_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_18a3b3f222dd",
+      "relation_name": "constrains_use_of",
+      "rel_desc": "Cultural considerations constrain or frame how color is used in branding and design.",
+      "rel_hint_type": "constraint",
+      "canonical_rel_name": "conditions_use_of",
+      "canonical_rel_desc": "Contextual or cultural factors that constrain or condition how something is used or applied in branding or design.",
+      "rel_cls": "contextual_constraint_relation",
+      "rel_cls_group": "CONSTRAINT",
+      "subject_entity_name": "cultural considerations",
+      "object_entity_name": "color in branding and design",
+      "subject_class_label": "Branding Cultural Context",
+      "subject_class_group": "Branding, Positioning & Market Context",
+      "object_class_label": "Branding Concepts",
+      "object_class_group": "Branding, Positioning & Market Context",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": "when using color in branding and presenting a brand",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "should",
+        "CausalHint": null,
+        "LogicalMarker": "In addition to",
+        "OtherQualifier": "DesignDecisionPhase: brand color selection and presentation"
+      },
+      "confidence": 0.7,
+      "remarks": [
+        "Semantics approximated as constraint to capture that cultural considerations are design factors.",
+        "Semantics approximated as constraint to capture that cultural considerations are design factors."
+      ]
+    },
+    {
+      "relation_id": "RelR_60de072cffb2",
+      "relation_name": "conditions",
+      "rel_desc": "Cultural and contextual factors are considerations that condition how businesses leverage color psychology in branding.",
+      "rel_hint_type": "constraint",
+      "canonical_rel_name": "conditions_use_of",
+      "canonical_rel_desc": "Contextual or cultural factors that constrain or condition how something is used or applied in branding or design.",
+      "rel_cls": "contextual_constraint_relation",
+      "rel_cls_group": "CONSTRAINT",
+      "subject_entity_name": "cultural and contextual factors",
+      "object_entity_name": "color psychology in branding",
+      "subject_class_label": "Branding Cultural Context",
+      "subject_class_group": "Branding, Positioning & Market Context",
+      "object_class_label": "Brand Communication Concepts",
+      "object_class_group": "Branding, Positioning & Market Context",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": "must be considered in color decisions",
+        "ConditionExpression": "by carefully choosing the right colors and considering cultural and contextual factors",
+        "UncertaintyQualifier": null,
+        "CausalHint": "by (instrumental)",
+        "LogicalMarker": "by (conditional method)",
+        "OtherQualifier": null
+      },
+      "confidence": 0.86,
+      "remarks": [
+        "Relation created to capture that cultural/contextual context shapes application of color psychology.",
+        "Relation created to capture that cultural/contextual context shapes application of color psychology."
+      ]
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_rel_schema\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_18a3b3f222dd\",\n      \"RelR_60de072cffb2\"\n      ],\n      \"canonical_rel_name\": null,\n      \"canonical_rel_desc\": \"Contextual or cultural factors that constrain or condition how something is used or applied.\",\n      \"rel_cls\": null,\n      \"rel_cls_group\": null,\n      \"justification\": \"The existing canonical_rel_name, rel_cls, and rel_cls_group are consistent and appropriate, but the canonical_rel_desc is overly specific to branding and design. Generalizing the description makes this predicate reusable for other domains where contextual or cultural factors condition the use or application of something, while still accurately covering these instances.\",\n      \"remark\": null,\n      \"confidence\": 0.85\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_rel_schema",
+      "args": {
+        "relation_ids": [
+          "RelR_18a3b3f222dd",
+          "RelR_60de072cffb2"
+        ],
+        "canonical_rel_name": null,
+        "canonical_rel_desc": "Contextual or cultural factors that constrain or condition how something is used or applied.",
+        "rel_cls": null,
+        "rel_cls_group": null,
+        "justification": "The existing canonical_rel_name, rel_cls, and rel_cls_group are consistent and appropriate, but the canonical_rel_desc is overly specific to branding and design. Generalizing the description makes this predicate reusable for other domains where contextual or cultural factors condition the use or application of something, while still accurately covering these instances.",
+        "remark": null,
+        "confidence": 0.85
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_rel_schema",
+      "relation_ids": [
+        "RelR_18a3b3f222dd",
+        "RelR_60de072cffb2"
+      ],
+      "canonical_rel_name": null,
+      "canonical_rel_desc": "Contextual or cultural factors that constrain or condition how something is used or applied.",
+      "rel_cls": null,
+      "rel_cls_group": null,
+      "new_relation_name": null,
+      "original_relation_name": null,
+      "justification": "The existing canonical_rel_name, rel_cls, and rel_cls_group are consistent and appropriate, but the canonical_rel_desc is overly specific to branding and design. Generalizing the description makes this predicate reusable for other domains where contextual or cultural factors condition the use or application of something, while still accurately covering these instances.",
+      "remark": null,
+      "confidence": 0.85
+    }
+  ],
+  "timestamp": "2026-01-06T15:05:18Z"
+}

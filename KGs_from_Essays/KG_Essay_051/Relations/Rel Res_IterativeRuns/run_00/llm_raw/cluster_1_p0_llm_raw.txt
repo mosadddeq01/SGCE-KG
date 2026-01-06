@@ -1,0 +1,57 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_fad393a0b14b",
+        "RelR_0b87d4157156",
+        "RelR_66feed2d9de4",
+        "RelR_1479108371fa",
+        "RelR_edde7d97698c",
+        "RelR_77b49f171ba4",
+        "RelR_451fe404dab2"
+      ],
+      "canonical_rel_name": "is_component_of",
+      "canonical_rel_desc": "Indicates that the subject is a component, aspect, or example of the object, which represents a larger whole, system, or category.",
+      "justification": "All relations describe a consistent part-to-whole or example-to-category composition: specific nonverbal behaviors (gestures, facial expressions, posture, touching, gazing, mirroring gestures) are described as aspects or components of broader constructs (body language or romantic body language). Normalizing to a single predicate 'is_component_of' removes minor wording differences like 'part_of' vs 'is_component_of' while preserving the same directional semantics.",
+      "remark": null,
+      "confidence": 0.97
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_fad393a0b14b",
+        "RelR_0b87d4157156",
+        "RelR_66feed2d9de4",
+        "RelR_1479108371fa",
+        "RelR_edde7d97698c",
+        "RelR_77b49f171ba4",
+        "RelR_451fe404dab2"
+      ],
+      "rel_cls": "component_whole_relation",
+      "justification": "Each relation links a more specific behavior to a broader construct in a clear part-to-whole fashion (component within a system or category). A generic class 'component_whole_relation' captures this structural semantics and can be reused beyond nonverbal communication.",
+      "remark": null,
+      "confidence": 0.96
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_fad393a0b14b",
+        "RelR_0b87d4157156",
+        "RelR_66feed2d9de4",
+        "RelR_1479108371fa",
+        "RelR_edde7d97698c",
+        "RelR_77b49f171ba4",
+        "RelR_451fe404dab2"
+      ],
+      "rel_cls_group": "COMPOSITION",
+      "justification": "All relations describe compositional structure where the subject contributes to the makeup of the object as a larger whole or category, which is prototypical COMPOSITION semantics.",
+      "remark": null,
+      "confidence": 0.98
+    }
+  }
+]

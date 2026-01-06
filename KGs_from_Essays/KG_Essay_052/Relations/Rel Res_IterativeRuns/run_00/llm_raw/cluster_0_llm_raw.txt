@@ -1,0 +1,28 @@
+[
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_fb9d0a7a",
+      "new_name": "Sports Brands",
+      "new_description": "Sports teams and related entities considered as commercial brands in sports marketing and sponsorship contexts.",
+      "new_class_type_hint": "Commercial Brand",
+      "new_class_group": "Sports Marketing & Sponsorship",
+      "remark": null,
+      "justification": "The class cleanly captures sports-related brand entities; only the broader Class_Group and a more precise commercial-brand type hint need to be set to align it with related sponsorship concepts.",
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_8c95eae6",
+      "new_name": "Sports Sponsorship Relationships",
+      "new_description": "Commercial sponsorship and endorsement relationships between organizations and sports teams or athletes.",
+      "new_class_type_hint": "Commercial Relationship",
+      "new_class_group": "Sports Marketing & Sponsorship",
+      "remark": null,
+      "justification": "This class represents sponsorship and endorsement relationships in sports; assigning it to the same Sports Marketing & Sponsorship Class_Group as Sports Brands captures their shared domain while preserving their distinct scopes.",
+      "confidence": 0.9
+    }
+  }
+]

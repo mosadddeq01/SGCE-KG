@@ -1,0 +1,51 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_1e4c8fc43f9e",
+        "RelR_997dfb156da6",
+        "RelR_2ec92b5230a3",
+        "RelR_793bc4210d05",
+        "RelR_662c8a0233af"
+      ],
+      "canonical_rel_name": "is_about",
+      "canonical_rel_desc": "Indicates that the subject entity (typically a text, concept, or discussion) has the object entity as its primary topic or focus.",
+      "justification": "All relations describe that a concept or discussion (origins, authenticity, or an essay on urban legends) concerns or focuses on urban legends as its topic, which is a standard aboutness/topicality relation. Normalizing to a single predicate 'is_about' captures this consistent semantics across instances.",
+      "remark": null,
+      "confidence": 0.97
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_1e4c8fc43f9e",
+        "RelR_997dfb156da6",
+        "RelR_2ec92b5230a3",
+        "RelR_793bc4210d05",
+        "RelR_662c8a0233af"
+      ],
+      "rel_cls": "topical_aboutness_relation",
+      "justification": "Each relation links a subject that is a conceptual focus (origins, authenticity, or an essay) to the object urban legends as the topic. This is a stable family of relations expressing topical aboutness, so a shared class 'topical_aboutness_relation' is appropriate.",
+      "remark": null,
+      "confidence": 0.96
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_1e4c8fc43f9e",
+        "RelR_997dfb156da6",
+        "RelR_2ec92b5230a3",
+        "RelR_793bc4210d05",
+        "RelR_662c8a0233af"
+      ],
+      "rel_cls_group": "ASSOCIATION",
+      "justification": "Aboutness/topicality expresses a semantic association between entities (here, concepts or texts and the topic 'urban legends'), rather than composition, causality, or hierarchy. Thus these relations fall under the broad ASSOCIATION group.",
+      "remark": null,
+      "confidence": 0.95
+    }
+  }
+]

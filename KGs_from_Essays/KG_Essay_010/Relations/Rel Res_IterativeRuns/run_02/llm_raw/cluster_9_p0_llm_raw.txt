@@ -1,0 +1,18 @@
+[
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": [
+        "RelR_d7c24a27c6f4",
+        "RelR_eed46e3075ef"
+      ],
+      "canonical_rel_name": "improves_theoretical_description_of",
+      "canonical_rel_desc": "Indicates that the subject theoretical framework provides a more complete or improved theoretical description or explanation of the object phenomenon, relative to existing theories.",
+      "rel_cls": "theoretical_explanation_relation",
+      "rel_cls_group": "CAUSALITY",
+      "justification": "The current canonical_rel_name 'could_improve_description_of' encodes modality ('could'), which should instead be represented via qualifiers (e.g., UncertaintyQualifier) rather than in the predicate itself. Normalizing to 'improves_theoretical_description_of' yields a cleaner, reusable predicate focused on the semantic effect (improved theoretical description). The canonical_rel_desc is updated to remove the modal 'could' and to generalize to theoretical description/explanation. The rel_cls is simplified from 'theoretical_explanation_improvement_relation' to 'theoretical_explanation_relation', since the improvement aspect is already captured in the canonical predicate, while keeping rel_cls_group='CAUSALITY' to reflect that the framework is posited as a causal/explanatory improvement over existing theories.",
+      "remark": "Modality (e.g., 'could', 'potentially') should be handled in qualifiers rather than in the canonical relation name for schema consistency.",
+      "confidence": 0.9
+    }
+  }
+]

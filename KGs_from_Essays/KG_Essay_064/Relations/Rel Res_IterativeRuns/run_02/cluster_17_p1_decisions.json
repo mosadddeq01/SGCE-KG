@@ -1,0 +1,69 @@
+{
+  "cluster_label": "17_p1",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_d4f1bf33576b",
+      "relation_name": "rooted_in",
+      "rel_desc": "The origins of famous fairytales are rooted in cultural myths.",
+      "rel_hint_type": "source",
+      "canonical_rel_name": "originates_from",
+      "canonical_rel_desc": "Indicates that the subject (e.g., a narrative, tradition, or concept) historically originates from, or is grounded in, the object as its source cultural, folkloric, or geographic context.",
+      "rel_cls": "narrative_origin_relation",
+      "rel_cls_group": "CAUSALITY",
+      "subject_entity_name": "origins of famous fairytales",
+      "object_entity_name": "cultural myths",
+      "subject_class_label": "Folklore and Fairy-Tale Origins",
+      "subject_class_group": "Folklore and Fairy-Tale Traditions",
+      "object_class_label": "Cultural Myths",
+      "object_class_group": "Folklore and Mythic Narratives",
+      "qualifiers": {
+        "TemporalQualifier": "historically",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "rooted in",
+        "LogicalMarker": "and",
+        "OtherQualifier": null
+      },
+      "confidence": 0.99,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_rel_schema\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_d4f1bf33576b\"],\n      \"canonical_rel_name\": \"originates_from\",\n      \"canonical_rel_desc\": \"Indicates that the subject (e.g., a narrative, tradition, or concept) historically originates from, or is grounded in, the object as its source cultural, folkloric, or geographic context, without implying direct causal mechanism.\",\n      \"rel_cls\": \"narrative_origin_relation\",\n      \"rel_cls_group\": \"PROVENANCE\",\n      \"justification\": \"The existing canonical_rel_name and rel_cls correctly capture that the subject narrative has its origin in the object cultural context. However, the current rel_cls_group=CAUSALITY overemphasizes causal mechanisms, while this relation is about source/provenance and historical grounding rather than cause-effect. Changing rel_cls_group to PROVENANCE better reflects that this is an origin/source relation, consistent with rel_hint_type='source' and the description 'rooted in cultural myths'. The canonical_rel_desc is slightly refined to explicitly de-emphasize causality and emphasize provenance.\",\n      \"remark\": null,\n      \"confidence\": 0.86\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_rel_schema",
+      "args": {
+        "relation_ids": [
+          "RelR_d4f1bf33576b"
+        ],
+        "canonical_rel_name": "originates_from",
+        "canonical_rel_desc": "Indicates that the subject (e.g., a narrative, tradition, or concept) historically originates from, or is grounded in, the object as its source cultural, folkloric, or geographic context, without implying direct causal mechanism.",
+        "rel_cls": "narrative_origin_relation",
+        "rel_cls_group": "PROVENANCE",
+        "justification": "The existing canonical_rel_name and rel_cls correctly capture that the subject narrative has its origin in the object cultural context. However, the current rel_cls_group=CAUSALITY overemphasizes causal mechanisms, while this relation is about source/provenance and historical grounding rather than cause-effect. Changing rel_cls_group to PROVENANCE better reflects that this is an origin/source relation, consistent with rel_hint_type='source' and the description 'rooted in cultural myths'. The canonical_rel_desc is slightly refined to explicitly de-emphasize causality and emphasize provenance.",
+        "remark": null,
+        "confidence": 0.86
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_rel_schema",
+      "relation_ids": [
+        "RelR_d4f1bf33576b"
+      ],
+      "canonical_rel_name": "originates_from",
+      "canonical_rel_desc": "Indicates that the subject (e.g., a narrative, tradition, or concept) historically originates from, or is grounded in, the object as its source cultural, folkloric, or geographic context, without implying direct causal mechanism.",
+      "rel_cls": "narrative_origin_relation",
+      "rel_cls_group": "PROVENANCE",
+      "new_relation_name": null,
+      "original_relation_name": null,
+      "justification": "The existing canonical_rel_name and rel_cls correctly capture that the subject narrative has its origin in the object cultural context. However, the current rel_cls_group=CAUSALITY overemphasizes causal mechanisms, while this relation is about source/provenance and historical grounding rather than cause-effect. Changing rel_cls_group to PROVENANCE better reflects that this is an origin/source relation, consistent with rel_hint_type='source' and the description 'rooted in cultural myths'. The canonical_rel_desc is slightly refined to explicitly de-emphasize causality and emphasize provenance.",
+      "remark": null,
+      "confidence": 0.86
+    }
+  ],
+  "timestamp": "2026-01-06T14:11:30Z"
+}

@@ -1,0 +1,45 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_0aeef4568200",
+        "RelR_f5cb372d1e29",
+        "RelR_3158eff143b7"
+      ],
+      "canonical_rel_name": "contributes_to",
+      "canonical_rel_desc": "Indicates that the subject exerts a positive causal or functional influence on the state, process, or property represented by the object, without implying sole responsibility or strict determinism.",
+      "justification": "All three relations describe the subject providing a positive causal or functional contribution to a broader ecological state or process (biodiversity, seed dispersal, pollination). The direction and semantics match a generic 'contributes_to' predicate, so they can be normalized under a single canonical relation.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_0aeef4568200",
+        "RelR_f5cb372d1e29",
+        "RelR_3158eff143b7"
+      ],
+      "rel_cls": "ecosystem_function_contribution_relation",
+      "justification": "Each relation captures how a biotic component or its status (plant species, birds) contributes to an ecosystem function, process, or state (biodiversity, seed dispersal, pollination). Grouping them under an 'ecosystem_function_contribution_relation' class reflects this common ecological-function contribution pattern.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_0aeef4568200",
+        "RelR_f5cb372d1e29",
+        "RelR_3158eff143b7"
+      ],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "The relations express that the subject has a causal or enabling effect on the object (e.g., birds enabling seed dispersal and pollination, plant species status affecting biodiversity), which fits a causal influence dimension better than purely associative or compositional categories.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  }
+]

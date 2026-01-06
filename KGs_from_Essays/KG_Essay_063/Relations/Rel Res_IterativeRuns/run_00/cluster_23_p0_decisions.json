@@ -1,0 +1,175 @@
+{
+  "cluster_label": "23_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_f897e7d1818e",
+      "relation_name": "inspires",
+      "rel_desc": "The American Revolution inspired people globally to struggle for freedom and independence.",
+      "rel_hint_type": "inspiration",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "American Revolution of 1776",
+      "object_entity_name": "people",
+      "subject_class_label": "American Independence (Revolution and Foundational Documents)",
+      "subject_class_group": "Colonial Freedom and Independence (Ideals & Movements)",
+      "object_class_label": "Political Stakeholder Actors",
+      "object_class_group": "Contentious Politics Actors & Power Structures",
+      "qualifiers": {
+        "TemporalQualifier": "after 1776",
+        "SpatialQualifier": "around the world",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "as it inspired",
+        "LogicalMarker": "as",
+        "OtherQualifier": "ResultingAction: to fight for freedom and independence from colonial rule"
+      },
+      "confidence": 0.95,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_164be1c62406",
+      "relation_name": "inspires",
+      "rel_desc": "The French Revolution of 1789 served as a model for revolutionary movements across Europe and beyond.",
+      "rel_hint_type": "influence",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "French Revolution of 1789",
+      "object_entity_name": "revolutionary movements across Europe and beyond",
+      "subject_class_label": "French Revolution of 1789",
+      "subject_class_group": "Modern Political Revolutions",
+      "object_class_label": "French Revolutionary Legacy",
+      "object_class_group": "Modern Political Revolutions",
+      "qualifiers": {
+        "TemporalQualifier": "after 1789",
+        "SpatialQualifier": "across Europe and beyond",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "served as a model for",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.97,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_748c7f334867",
+      "relation_name": "inspires",
+      "rel_desc": "The Russian Revolution of 1917 sparked uprisings around the world.",
+      "rel_hint_type": "influence",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "Russian Revolution of 1917",
+      "object_entity_name": "uprisings around the world",
+      "subject_class_label": "Russian Revolution of 1917 (Event)",
+      "subject_class_group": "Modern Political Revolutions",
+      "object_class_label": "Revolutions and Uprisings",
+      "object_class_group": "Political Collective Action and Contention",
+      "qualifiers": {
+        "TemporalQualifier": "after 1917",
+        "SpatialQualifier": "around the world",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "sparked a wave of",
+        "LogicalMarker": "and",
+        "OtherQualifier": null
+      },
+      "confidence": 0.96,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_f897e7d1818e\",\n        \"RelR_164be1c62406\",\n        \"RelR_748c7f334867\"\n      ],\n      \"canonical_rel_name\": \"inspires_political_mobilization\",\n      \"canonical_rel_desc\": \"A historical revolution or political event provides ideological example or motivation that leads other peoples, uprisings, or movements to pursue similar struggles or mobilizations.\",\n      \"justification\": \"All three relations describe major revolutions acting as ideological models or triggers for subsequent struggles, uprisings, or revolutionary movements elsewhere. The subject is always a revolution; the object is people or movements engaging in political contention as a result. Using a unified predicate ‘inspires_political_mobilization’ captures this causal-inspirational influence without being tied to a specific case.\",\n      \"remark\": \"Kept the predicate oriented to political collective action (mobilization) to distinguish it from generic cultural inspiration.\",\n      \"confidence\": 0.93\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_f897e7d1818e\",\n        \"RelR_164be1c62406\",\n        \"RelR_748c7f334867\"\n      ],\n      \"rel_cls\": \"ideological_influence_relation\",\n      \"justification\": \"Each relation represents ideological or model-based influence from a revolution onto later political actors or movements. Grouping them under an ‘ideological_influence_relation’ class captures that they are about transmission of revolutionary ideas or examples, not material composition or simple association.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_f897e7d1818e\",\n        \"RelR_164be1c62406\",\n        \"RelR_748c7f334867\"\n      ],\n      \"rel_cls_group\": \"CAUSALITY\",\n      \"justification\": \"In all three cases, the revolution is presented as a cause or trigger (through inspiration or serving as a model) for subsequent uprisings or movements. This is more than mere co-occurrence or association; it is an explicitly causal influence.\",\n      \"remark\": null,\n      \"confidence\": 0.94\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_f897e7d1818e",
+          "RelR_164be1c62406",
+          "RelR_748c7f334867"
+        ],
+        "canonical_rel_name": "inspires_political_mobilization",
+        "canonical_rel_desc": "A historical revolution or political event provides ideological example or motivation that leads other peoples, uprisings, or movements to pursue similar struggles or mobilizations.",
+        "justification": "All three relations describe major revolutions acting as ideological models or triggers for subsequent struggles, uprisings, or revolutionary movements elsewhere. The subject is always a revolution; the object is people or movements engaging in political contention as a result. Using a unified predicate 'inspires_political_mobilization' captures this causal-inspirational influence without being tied to a specific case.",
+        "remark": "Kept the predicate oriented to political collective action (mobilization) to distinguish it from generic cultural inspiration.",
+        "confidence": 0.93
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_f897e7d1818e",
+          "RelR_164be1c62406",
+          "RelR_748c7f334867"
+        ],
+        "rel_cls": "ideological_influence_relation",
+        "justification": "Each relation represents ideological or model-based influence from a revolution onto later political actors or movements. Grouping them under an 'ideological_influence_relation' class captures that they are about transmission of revolutionary ideas or examples, not material composition or simple association.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_f897e7d1818e",
+          "RelR_164be1c62406",
+          "RelR_748c7f334867"
+        ],
+        "rel_cls_group": "CAUSALITY",
+        "justification": "In all three cases, the revolution is presented as a cause or trigger (through inspiration or serving as a model) for subsequent uprisings or movements. This is more than mere co-occurrence or association; it is an explicitly causal influence.",
+        "remark": null,
+        "confidence": 0.94
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_f897e7d1818e",
+        "RelR_164be1c62406",
+        "RelR_748c7f334867"
+      ],
+      "canonical_rel_name": "inspires_political_mobilization",
+      "canonical_rel_desc": "A historical revolution or political event provides ideological example or motivation that leads other peoples, uprisings, or movements to pursue similar struggles or mobilizations.",
+      "justification": "All three relations describe major revolutions acting as ideological models or triggers for subsequent struggles, uprisings, or revolutionary movements elsewhere. The subject is always a revolution; the object is people or movements engaging in political contention as a result. Using a unified predicate 'inspires_political_mobilization' captures this causal-inspirational influence without being tied to a specific case.",
+      "remark": "Kept the predicate oriented to political collective action (mobilization) to distinguish it from generic cultural inspiration.",
+      "confidence": 0.93
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_f897e7d1818e",
+        "RelR_164be1c62406",
+        "RelR_748c7f334867"
+      ],
+      "rel_cls": "ideological_influence_relation",
+      "justification": "Each relation represents ideological or model-based influence from a revolution onto later political actors or movements. Grouping them under an 'ideological_influence_relation' class captures that they are about transmission of revolutionary ideas or examples, not material composition or simple association.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_f897e7d1818e",
+        "RelR_164be1c62406",
+        "RelR_748c7f334867"
+      ],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "In all three cases, the revolution is presented as a cause or trigger (through inspiration or serving as a model) for subsequent uprisings or movements. This is more than mere co-occurrence or association; it is an explicitly causal influence.",
+      "remark": null,
+      "confidence": 0.94
+    }
+  ],
+  "timestamp": "2026-01-06T13:18:56Z"
+}

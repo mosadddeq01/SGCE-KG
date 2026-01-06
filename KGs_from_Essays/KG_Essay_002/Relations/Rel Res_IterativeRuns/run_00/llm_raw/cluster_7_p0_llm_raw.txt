@@ -1,0 +1,106 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_751595989c3c"],
+      "canonical_rel_name": "used_to_explain",
+      "canonical_rel_desc": "Indicates that the subject narrative or story is employed as a means to explain or make sense of the object concept or phenomenon.",
+      "justification": "The relation describes stories being employed instrumentally to explain the supernatural; a predicate emphasizing explanatory usage best captures this functional role.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_6aa9d041a6b4"],
+      "canonical_rel_name": "symbolizes",
+      "canonical_rel_desc": "Indicates that the subject serves as a symbolic or concrete representation of the object concept.",
+      "justification": "The bloody hook is described as a concrete manifestation of an abstract threat, which is a standard symbolic representation relation; the predicate 'symbolizes' directly fits this semantics.",
+      "remark": "Symbolism is inferred from narrative structure but is still the clearest canonical predicate.",
+      "confidence": 0.83
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_b7a8d894581f", "RelR_514d26065a8e"],
+      "canonical_rel_name": "serves_as",
+      "canonical_rel_desc": "Indicates that the subject takes on or fulfills the functional role or category denoted by the object.",
+      "justification": "Both relations state that narratives (urban legends or stories) function in the role of cautionary tales; this is a shared functional-role predicate where the subject serves as an instance of the role indicated by the object.",
+      "remark": null,
+      "confidence": 0.96
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_120a3229b065"],
+      "canonical_rel_name": "features_role",
+      "canonical_rel_desc": "Indicates that the subject narrative or motif includes the object as a key participant occupying a specific narrative role.",
+      "justification": "The relation describes a motif that includes strangers as key threatening actors; a predicate emphasizing that the narrative features a participant role accurately captures this semantics.",
+      "remark": null,
+      "confidence": 0.86
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": ["RelR_751595989c3c", "RelR_b7a8d894581f", "RelR_514d26065a8e"],
+      "rel_cls": "narrative_function_relation",
+      "justification": "All three relations describe what narratives or stories functionally do (explaining the supernatural, serving as cautionary tales), so they belong to a common class capturing functional roles of narratives.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": ["RelR_6aa9d041a6b4"],
+      "rel_cls": "symbolic_representation_relation",
+      "justification": "The relation links a concrete object (bloody hook) to an abstract concept (threat of danger) via a symbolic representational function, warranting a dedicated symbolic representation class.",
+      "remark": null,
+      "confidence": 0.86
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": ["RelR_120a3229b065"],
+      "rel_cls": "narrative_role_relation",
+      "justification": "The relation is about a narrative motif featuring a specific type of actor (strangers) in a key role, which fits a class capturing who plays what role within a narrative.",
+      "remark": null,
+      "confidence": 0.87
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": ["RelR_751595989c3c", "RelR_b7a8d894581f", "RelR_514d26065a8e"],
+      "rel_cls_group": "USAGE",
+      "justification": "These relations concern how narratives are used functionally (to explain, to serve as cautionary tales), aligning with a broad usage/functional-role dimension.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": ["RelR_6aa9d041a6b4"],
+      "rel_cls_group": "ASSOCIATION",
+      "justification": "Symbolic representation connects two entities via a conceptual association (the symbol and what it stands for), fitting a broad associative/semantic-link group.",
+      "remark": null,
+      "confidence": 0.84
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": ["RelR_120a3229b065"],
+      "rel_cls_group": "STRUCTURE",
+      "justification": "Featuring a specific actor role within a narrative describes how the narrative is structured in terms of participants and roles, which is best captured as a structural relation.",
+      "remark": "If a dedicated group like 'ROLE' or 'NARRATIVE_STRUCTURE' is later standardized, this instance could be reassigned there.",
+      "confidence": 0.8
+    }
+  }
+]

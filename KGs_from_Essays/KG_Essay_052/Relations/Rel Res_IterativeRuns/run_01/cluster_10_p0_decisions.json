@@ -1,0 +1,132 @@
+{
+  "cluster_label": "10_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_7f77490ba9ee",
+      "relation_name": "benefits",
+      "rel_desc": "Individuals benefit from participation in sports.",
+      "rel_hint_type": "benefit",
+      "canonical_rel_name": "provides_benefit_to",
+      "canonical_rel_desc": "Indicates that the subject (e.g., an activity, experience, or set of lessons) provides positive effects, advantages, or life skills to the target entity or life domain.",
+      "rel_cls": "impact_relation",
+      "rel_cls_group": "CAUSALITY",
+      "subject_entity_name": "participation in sports",
+      "object_entity_name": "individuals",
+      "subject_class_label": "Sports Participation Activities",
+      "subject_class_group": "Sports and Society",
+      "object_class_label": "Sports Participants",
+      "object_class_group": "Sports-Based Personal Development",
+      "qualifiers": {
+        "TemporalQualifier": "during and after participation",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": "through participation",
+        "UncertaintyQualifier": null,
+        "CausalHint": "through",
+        "LogicalMarker": null,
+        "OtherQualifier": "BenefitType: life skills"
+      },
+      "confidence": 0.86,
+      "remarks": [
+        "Relation introduced to attach skill-learning benefits to individuals.",
+        "Relation introduced to attach skill-learning benefits to individuals."
+      ]
+    },
+    {
+      "relation_id": "RelR_88262e82db36",
+      "relation_name": "benefits",
+      "rel_desc": "Lessons from sports participation help individuals handle challenges in their personal lives.",
+      "rel_hint_type": "impact",
+      "canonical_rel_name": "provides_benefit_to",
+      "canonical_rel_desc": "Indicates that the subject (e.g., an activity, experience, or set of lessons) provides positive effects, advantages, or life skills to the target entity or life domain.",
+      "rel_cls": "impact_relation",
+      "rel_cls_group": "CAUSALITY",
+      "subject_entity_name": "lessons from sports participation",
+      "object_entity_name": "personal lives",
+      "subject_class_label": "Life Skills and Lessons from Sports",
+      "subject_class_group": "Sports-Based Personal Development",
+      "object_class_label": "Life Domains",
+      "object_class_group": "Sports-Based Personal Development",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "in their personal lives",
+        "OperationalConstraint": null,
+        "ConditionExpression": "helping individuals become better equipped to handle challenges",
+        "UncertaintyQualifier": null,
+        "CausalHint": "helping",
+        "LogicalMarker": null,
+        "OtherQualifier": "EffectType: improved ability to handle challenges"
+      },
+      "confidence": 0.94,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_1d801a70fa93",
+      "relation_name": "benefits",
+      "rel_desc": "Lessons from sports participation help individuals handle challenges in their professional lives.",
+      "rel_hint_type": "impact",
+      "canonical_rel_name": "provides_benefit_to",
+      "canonical_rel_desc": "Indicates that the subject (e.g., an activity, experience, or set of lessons) provides positive effects, advantages, or life skills to the target entity or life domain.",
+      "rel_cls": "impact_relation",
+      "rel_cls_group": "CAUSALITY",
+      "subject_entity_name": "lessons from sports participation",
+      "object_entity_name": "professional lives",
+      "subject_class_label": "Life Skills and Lessons from Sports",
+      "subject_class_group": "Sports-Based Personal Development",
+      "object_class_label": "Life Domains",
+      "object_class_group": "Sports-Based Personal Development",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "in their professional lives",
+        "OperationalConstraint": null,
+        "ConditionExpression": "helping individuals become better equipped to handle challenges",
+        "UncertaintyQualifier": null,
+        "CausalHint": "helping",
+        "LogicalMarker": "and",
+        "OtherQualifier": "EffectType: improved ability to handle work-related challenges"
+      },
+      "confidence": 0.94,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_rel_schema\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_7f77490ba9ee\",\n        \"RelR_88262e82db36\",\n        \"RelR_1d801a70fa93\"\n      ],\n      \"canonical_rel_name\": \"provides_benefit_to\",\n      \"canonical_rel_desc\": \"Indicates that the subject (e.g., an activity, experience, or set of lessons) provides positive effects, advantages, or improvements to the target entity or life domain.\",\n      \"rel_cls\": \"impact_relation\",\n      \"rel_cls_group\": \"CAUSALITY\",\n      \"justification\": \"All three relations represent the same causal impact semantics where a sports-related activity or lesson confers positive effects on individuals or their life domains. The existing canonical name, rel_cls, and rel_cls_group are appropriate, but the description was slightly over-specific to 'life skills'; broadening it to generic positive effects and improvements better covers benefits to personal and professional lives while remaining consistent across instances.\",\n      \"remark\": null,\n      \"confidence\": 0.94\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_rel_schema",
+      "args": {
+        "relation_ids": [
+          "RelR_7f77490ba9ee",
+          "RelR_88262e82db36",
+          "RelR_1d801a70fa93"
+        ],
+        "canonical_rel_name": "provides_benefit_to",
+        "canonical_rel_desc": "Indicates that the subject (e.g., an activity, experience, or set of lessons) provides positive effects, advantages, or improvements to the target entity or life domain.",
+        "rel_cls": "impact_relation",
+        "rel_cls_group": "CAUSALITY",
+        "justification": "All three relations represent the same causal impact semantics where a sports-related activity or lesson confers positive effects on individuals or their life domains. The existing canonical name, rel_cls, and rel_cls_group are appropriate, but the description was slightly over-specific to 'life skills'; broadening it to generic positive effects and improvements better covers benefits to personal and professional lives while remaining consistent across instances.",
+        "remark": null,
+        "confidence": 0.94
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_rel_schema",
+      "relation_ids": [
+        "RelR_7f77490ba9ee",
+        "RelR_88262e82db36",
+        "RelR_1d801a70fa93"
+      ],
+      "canonical_rel_name": "provides_benefit_to",
+      "canonical_rel_desc": "Indicates that the subject (e.g., an activity, experience, or set of lessons) provides positive effects, advantages, or improvements to the target entity or life domain.",
+      "rel_cls": "impact_relation",
+      "rel_cls_group": "CAUSALITY",
+      "new_relation_name": null,
+      "original_relation_name": null,
+      "justification": "All three relations represent the same causal impact semantics where a sports-related activity or lesson confers positive effects on individuals or their life domains. The existing canonical name, rel_cls, and rel_cls_group are appropriate, but the description was slightly over-specific to 'life skills'; broadening it to generic positive effects and improvements better covers benefits to personal and professional lives while remaining consistent across instances.",
+      "remark": null,
+      "confidence": 0.94
+    }
+  ],
+  "timestamp": "2026-01-06T12:44:14Z"
+}

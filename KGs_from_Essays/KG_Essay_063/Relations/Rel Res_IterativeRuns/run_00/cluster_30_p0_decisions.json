@@ -1,0 +1,141 @@
+{
+  "cluster_label": "30_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_5fc88eed8980",
+      "relation_name": "suppresses",
+      "rel_desc": "Governments use force as a means to suppress dissent.",
+      "rel_hint_type": "repression",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "governments",
+      "object_entity_name": "dissent",
+      "subject_class_label": "State Authorities",
+      "subject_class_group": "Contentious Politics Actors & Power Structures",
+      "object_class_label": "Protests, Strikes, and Political Dissent",
+      "object_class_group": "Political Collective Action and Contention",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "have used (past, not universal)",
+        "CausalHint": "to suppress",
+        "LogicalMarker": "to",
+        "OtherQualifier": "Means: force"
+      },
+      "confidence": 0.95,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_fc941e383544",
+      "relation_name": "silences",
+      "rel_desc": "Governments use force with the aim of silencing opposition.",
+      "rel_hint_type": "repression",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "governments",
+      "object_entity_name": "opposition",
+      "subject_class_label": "State Authorities",
+      "subject_class_group": "Contentious Politics Actors & Power Structures",
+      "object_class_label": "Pro-Democracy Actor Groups",
+      "object_class_group": "Contentious Politics Actors & Power Structures",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "have used (past, not universal)",
+        "CausalHint": "to ... silence",
+        "LogicalMarker": "and",
+        "OtherQualifier": "Means: force"
+      },
+      "confidence": 0.95,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_5fc88eed8980\",\n        \"RelR_fc941e383544\"\n      ],\n      \"canonical_rel_name\": \"represses\",\n      \"canonical_rel_desc\": \"The subject (typically a state or authority) uses coercive means to constrain, silence, or punish the political activities or expression of the object.\",\n      \"justification\": \"Both relations describe governments using force to suppress or silence political opponents or dissenting groups. This is a coercive, intentional action by a state actor against political actors, best normalized as a single predicate 'represses'.\",\n      \"remark\": null,\n      \"confidence\": 0.95\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_5fc88eed8980\",\n        \"RelR_fc941e383544\"\n      ],\n      \"rel_cls\": \"state_repression_relation\",\n      \"justification\": \"In both cases, governments deploy force against political challengers (dissent or opposition). These are classic instances of state repression, so they should be grouped into a relation class capturing coercive actions by the state against political actors.\",\n      \"remark\": null,\n      \"confidence\": 0.95\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_5fc88eed8980\",\n        \"RelR_fc941e383544\"\n      ],\n      \"rel_cls_group\": \"AGENCY\",\n      \"justification\": \"The primary semantic dimension is an intentional action by an agent (the government) acting upon another actor (dissent/opposition). While there is a causal aspect (using force to achieve repression), the core is an agentive relation: one actor exercising power over another.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_5fc88eed8980",
+          "RelR_fc941e383544"
+        ],
+        "canonical_rel_name": "represses",
+        "canonical_rel_desc": "The subject (typically a state or authority) uses coercive means to constrain, silence, or punish the political activities or expression of the object.",
+        "justification": "Both relations describe governments using force to suppress or silence political opponents or dissenting groups. This is a coercive, intentional action by a state actor against political actors, best normalized as a single predicate 'represses'.",
+        "remark": null,
+        "confidence": 0.95
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_5fc88eed8980",
+          "RelR_fc941e383544"
+        ],
+        "rel_cls": "state_repression_relation",
+        "justification": "In both cases, governments deploy force against political challengers (dissent or opposition). These are classic instances of state repression, so they should be grouped into a relation class capturing coercive actions by the state against political actors.",
+        "remark": null,
+        "confidence": 0.95
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_5fc88eed8980",
+          "RelR_fc941e383544"
+        ],
+        "rel_cls_group": "AGENCY",
+        "justification": "The primary semantic dimension is an intentional action by an agent (the government) acting upon another actor (dissent/opposition). While there is a causal aspect (using force to achieve repression), the core is an agentive relation: one actor exercising power over another.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_5fc88eed8980",
+        "RelR_fc941e383544"
+      ],
+      "canonical_rel_name": "represses",
+      "canonical_rel_desc": "The subject (typically a state or authority) uses coercive means to constrain, silence, or punish the political activities or expression of the object.",
+      "justification": "Both relations describe governments using force to suppress or silence political opponents or dissenting groups. This is a coercive, intentional action by a state actor against political actors, best normalized as a single predicate 'represses'.",
+      "remark": null,
+      "confidence": 0.95
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_5fc88eed8980",
+        "RelR_fc941e383544"
+      ],
+      "rel_cls": "state_repression_relation",
+      "justification": "In both cases, governments deploy force against political challengers (dissent or opposition). These are classic instances of state repression, so they should be grouped into a relation class capturing coercive actions by the state against political actors.",
+      "remark": null,
+      "confidence": 0.95
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_5fc88eed8980",
+        "RelR_fc941e383544"
+      ],
+      "rel_cls_group": "AGENCY",
+      "justification": "The primary semantic dimension is an intentional action by an agent (the government) acting upon another actor (dissent/opposition). While there is a causal aspect (using force to achieve repression), the core is an agentive relation: one actor exercising power over another.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  ],
+  "timestamp": "2026-01-06T13:20:42Z"
+}

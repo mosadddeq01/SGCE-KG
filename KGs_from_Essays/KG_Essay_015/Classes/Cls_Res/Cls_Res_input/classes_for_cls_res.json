@@ -1,0 +1,952 @@
+[
+  {
+    "class_label": "Funerary Participants",
+    "class_type_hint": "Social Role",
+    "class_description": "Human agents who participate in or organize funerary activities, including relatives of the deceased and hired mourning specialists.",
+    "confidence": 0.93,
+    "evidence_excerpt": "The deceased's family would often hire professional mourners to lead the funeral procession and perform rituals.",
+    "member_ids": [
+      "En_46040272",
+      "En_9f15953e"
+    ],
+    "members": [
+      {
+        "id": "En_46040272",
+        "entity_name": "deceased's family",
+        "entity_description": "Relatives of the deceased person who arrange funerary activities and hire mourners.",
+        "entity_type_hint": "Agent",
+        "confidence_score": 0.94,
+        "resolution_context": "The deceased's family would often hire professional mourners to lead the funeral procession and perform rituals to honor the deceased.",
+        "flag": "entity_raw",
+        "chunk_id": [
+          "Ch_000005"
+        ],
+        "node_properties": []
+      },
+      {
+        "id": "En_9f15953e",
+        "entity_name": "professional mourners",
+        "entity_description": "Hired specialists who publicly mourn, lead funeral processions, and perform funerary rituals.",
+        "entity_type_hint": "Agent",
+        "confidence_score": 0.97,
+        "resolution_context": "The deceased's family would often hire professional mourners to lead the funeral procession and perform rituals to honor the deceased.",
+        "flag": "entity_raw",
+        "chunk_id": [
+          "Ch_000005"
+        ],
+        "node_properties": []
+      }
+    ],
+    "candidate_ids": [
+      "ClsC_3e148dc8"
+    ],
+    "source_files": [
+      "data/Classes/Cls_Rec/classes_round_0.json"
+    ]
+  },
+  {
+    "class_label": "Funerary Practices",
+    "class_type_hint": "Ceremonial Process",
+    "class_description": "Ceremonial actions conducted as part of funerals, including the movement of the deceased and mourners and associated ritual performances.",
+    "confidence": 0.94,
+    "evidence_excerpt": "Professional mourners... lead the funeral procession and perform rituals to honor the deceased.",
+    "member_ids": [
+      "En_744a460f",
+      "En_09eee2f1"
+    ],
+    "members": [
+      {
+        "id": "En_744a460f",
+        "entity_name": "funeral procession",
+        "entity_description": "The ceremonial movement of mourners and the deceased's remains during the funeral.",
+        "entity_type_hint": "Process",
+        "confidence_score": 0.96,
+        "resolution_context": "The deceased's family would often hire professional mourners to lead the funeral procession and perform rituals to honor the deceased.",
+        "flag": "entity_raw",
+        "chunk_id": [
+          "Ch_000005"
+        ],
+        "node_properties": []
+      },
+      {
+        "id": "En_09eee2f1",
+        "entity_name": "funerary rituals",
+        "entity_description": "Ritual actions performed to honor the deceased as part of burial practices.",
+        "entity_type_hint": "Process",
+        "confidence_score": 0.95,
+        "resolution_context": "The deceased's family would often hire professional mourners to lead the funeral procession and perform rituals to honor the deceased.",
+        "flag": "entity_raw",
+        "chunk_id": [
+          "Ch_000005"
+        ],
+        "node_properties": []
+      }
+    ],
+    "candidate_ids": [
+      "ClsC_32ae0bfd"
+    ],
+    "source_files": [
+      "data/Classes/Cls_Rec/classes_round_0.json"
+    ]
+  },
+  {
+    "class_label": "Egyptian Funerary Texts",
+    "class_type_hint": "Text Genre",
+    "class_description": "Religious written works placed in ancient Egyptian burials, such as the Book of the Dead, intended to guide and protect the deceased in the afterlife.",
+    "confidence": 0.93,
+    "evidence_excerpt": "religious texts and prayers placed in tombs to aid the deceased in navigating the afterlife",
+    "member_ids": [
+      "Can_e8375c41",
+      "Can_b5ece7b4"
+    ],
+    "members": [
+      {
+        "id": "Can_e8375c41",
+        "entity_name": "Book of the Dead",
+        "entity_description": "Ancient Egyptian funerary text consisting of a collection of spells and prayers, often written on papyrus scrolls and placed in tombs to aid the deceased in navigating the afterlife.",
+        "entity_type_hint": "Document",
+        "confidence_score": 1.0,
+        "resolution_context": "The 'collection of spells and prayers' is explicitly described as the content of the Book of the Dead in the same context, so both mentions refer to the same textual work.",
+        "flag": "entity_raw",
+        "chunk_id": [
+          "Ch_000004"
+        ],
+        "node_properties": []
+      },
+      {
+        "id": "Can_b5ece7b4",
+        "entity_name": "religious texts in ancient Egyptian burials",
+        "entity_description": "Sacred written works placed in ancient Egyptian tombs or burial chambers to guide and aid the deceased in the afterlife.",
+        "entity_type_hint": "Text",
+        "confidence_score": 0.96,
+        "resolution_context": "Both mentions refer to the same concept of sacred written documents buried with the deceased to assist them in the afterlife, differing only in wording and type_hint granularity.",
+        "flag": "entity_raw",
+        "chunk_id": [
+          "Ch_000003",
+          "Ch_000006"
+        ],
+        "node_properties": []
+      }
+    ],
+    "candidate_ids": [
+      "ClsC_74b80b6d"
+    ],
+    "source_files": [
+      "data/Classes/Cls_Rec/classes_round_0.json"
+    ]
+  },
+  {
+    "class_label": "Egyptian Burial Deceased",
+    "class_type_hint": "Religious Person-Concept",
+    "class_description": "Concepts referring to the dead person as the subject of ancient Egyptian burial, mummification, and afterlife practices, including both the individual and their preserved body.",
+    "confidence": 0.86,
+    "evidence_excerpt": "Dead individual in ancient Egyptian burial practices... body of the dead person intended to be preserved and protected within the pyramid or tomb.",
+    "member_ids": [
+      "Can_0946a057",
+      "En_d6088eeb"
+    ],
+    "members": [
+      {
+        "id": "Can_0946a057",
+        "entity_name": "the deceased",
+        "entity_description": "Dead individual in ancient Egyptian burial practices, whose body is mummified, buried with goods and texts, and believed to journey through the afterlife.",
+        "entity_type_hint": "Person",
+        "confidence_score": 0.95,
+        "resolution_context": "All these mentions refer generically to the same concept: the dead person who is the subject of Egyptian burial, mummification, and afterlife beliefs.",
+        "flag": "entity_raw",
+        "chunk_id": [
+          "Ch_000002",
+          "Ch_000003",
+          "Ch_000004",
+          "Ch_000005",
+          "Ch_000006"
+        ],
+        "node_properties": []
+      },
+      {
+        "id": "En_d6088eeb",
+        "entity_name": "deceased's body",
+        "entity_description": "The physical body of the dead person intended to be preserved and protected within the pyramid or tomb in ancient Egyptian burial practices.",
+        "entity_type_hint": "Body",
+        "confidence_score": 0.92,
+        "resolution_context": "The pyramids were designed to protect the deceased's body and possessions and to serve as a gateway to the afterlife.",
+        "flag": "entity_raw",
+        "chunk_id": [
+          "Ch_000002"
+        ],
+        "node_properties": []
+      }
+    ],
+    "candidate_ids": [
+      "ClsC_33a156de"
+    ],
+    "source_files": [
+      "data/Classes/Cls_Rec/classes_round_0.json"
+    ]
+  },
+  {
+    "class_label": "Egyptian Mummification",
+    "class_type_hint": "Cultural Practice",
+    "class_description": "Interrelated concepts involved in the Ancient Egyptian mummification practice, including the core embalming process, treatment of internal organs, desiccation using salt, and wrapping with linen bandages.",
+    "confidence": 0.86,
+    "evidence_excerpt": "Egyptian body-preservation burial practice involving organ removal, drying out the body with salt, and wrapping it in linen bandages.",
+    "member_ids": [
+      "Can_ef2b25b5",
+      "En_7c99feba",
+      "En_6d708d1d",
+      "En_9acb30ab"
+    ],
+    "members": [
+      {
+        "id": "Can_ef2b25b5",
+        "entity_name": "mummification",
+        "entity_description": "Ancient Egyptian burial and embalming process of preserving a corpse to prevent decay and prepare it for the afterlife, involving body preservation through organ removal, desiccation, and wrapping.",
+        "entity_type_hint": "Process",
+        "confidence_score": 0.99,
+        "resolution_context": "Both refer to the same Egyptian body-preservation burial practice in this context, with 'body preservation' described specifically as the act within mummification rather than a separate concept.",
+        "flag": "entity_raw",
+        "chunk_id": [
+          "Ch_000002",
+          "Ch_000003",
+          "Ch_000006"
+        ],
+        "node_properties": []
+      },
+      {
+        "id": "En_7c99feba",
+        "entity_name": "internal organs",
+        "entity_description": "Soft organs inside the body that were removed during mummification.",
+        "entity_type_hint": "AnatomicalStructure",
+        "confidence_score": 0.96,
+        "resolution_context": "This process typically involved removing the internal organs and drying out the body with salt before wrapping it in linen bandages. The removal and separate treatment of internal organs were characteristic steps within Egyptian mummification practices aimed at long-term body preservation.",
+        "flag": "entity_raw",
+        "chunk_id": [
+          "Ch_000003"
+        ],
+        "node_properties": []
+      },
+      {
+        "id": "En_6d708d1d",
+        "entity_name": "salt drying",
+        "entity_description": "Use of salt to dry out a corpse as part of mummification.",
+        "entity_type_hint": "Process",
+        "confidence_score": 0.9,
+        "resolution_context": "This process typically involved removing the internal organs and drying out the body with salt before wrapping it in linen bandages. The use of salt to desiccate the body was a crucial stage in preventing decay and achieving effective preservation for the afterlife.",
+        "flag": "entity_raw",
+        "chunk_id": [
+          "Ch_000003"
+        ],
+        "node_properties": []
+      },
+      {
+        "id": "En_9acb30ab",
+        "entity_name": "linen bandages",
+        "entity_description": "Strips of linen cloth used to wrap the mummified body.",
+        "entity_type_hint": "Material",
+        "confidence_score": 0.98,
+        "resolution_context": "This process typically involved removing the internal organs and drying out the body with salt before wrapping it in linen bandages. The linen bandages formed the outer covering of the mummy, enclosing the preserved body for burial in the tomb or burial chamber.",
+        "flag": "entity_raw",
+        "chunk_id": [
+          "Ch_000003"
+        ],
+        "node_properties": []
+      }
+    ],
+    "candidate_ids": [
+      "ClsC_76fde4da"
+    ],
+    "source_files": [
+      "data/Classes/Cls_Rec/classes_round_0.json"
+    ]
+  },
+  {
+    "class_label": "Ancient Egyptian Afterlife Concepts",
+    "class_type_hint": "Religious Concept",
+    "class_description": "Interrelated beliefs, states, locations, and processes that constitute the ancient Egyptian conception of the afterlife, including the post-death realm, the soul’s journey, desired conditions, and the divine domain of the gods.",
+    "confidence": 0.9,
+    "evidence_excerpt": "All entities describe aspects of the ancient Egyptian afterlife: its realm, soul’s journey, goals like safe passage and eternal existence, and provisions for comfort and sustenance.",
+    "member_ids": [
+      "Can_a97f4be2",
+      "Can_4eaae6e6",
+      "En_7347f003",
+      "En_c166fa65",
+      "En_b47de356",
+      "En_4bac1a1a",
+      "En_ef4c7aec",
+      "En_0e8f2b25",
+      "En_6d6cccdb",
+      "En_ac203d2a"
+    ],
+    "members": [
+      {
+        "id": "Can_a97f4be2",
+        "entity_name": "ancient Egyptian afterlife beliefs",
+        "entity_description": "The ancient Egyptian religious conception of the afterlife, encompassing the post-death realm, the journey of the soul, associated deities, and the rituals and practices intended to ensure safe passage and eternal life.",
+        "entity_type_hint": "BeliefSystem",
+        "confidence_score": 0.99,
+        "resolution_context": "Both mentions are explicitly described as referring to the same ancient Egyptian concept of the afterlife, differing only in label granularity, so they should be unified into one belief-system entity covering the realm and its associated doctrines.",
+        "flag": "entity_raw",
+        "chunk_id": [
+          "Ch_000001",
+          "Ch_000005",
+          "Ch_000006",
+          "Ch_000004",
+          "Ch_000002",
+          "Ch_000003"
+        ],
+        "node_properties": []
+      },
+      {
+        "id": "Can_4eaae6e6",
+        "entity_name": "realm of the gods",
+        "entity_description": "Divine domain in ancient Egyptian belief where the gods dwell and where the deceased sought to exist eternally after successfully navigating the afterlife.",
+        "entity_type_hint": "MythologicalLocation",
+        "confidence_score": 0.92,
+        "resolution_context": "Both mentions share the same name and describe the same ancient Egyptian divine afterlife domain; the differing type hints are compatible and can be unified as a mythological location.",
+        "flag": "entity_raw",
+        "chunk_id": [
+          "Ch_000004",
+          "Ch_000006"
+        ],
+        "node_properties": []
+      },
+      {
+        "id": "En_7347f003",
+        "entity_name": "gateway to the afterlife",
+        "entity_description": "Concept of pyramids functioning as an entry point from the living world to the afterlife.",
+        "entity_type_hint": "Concept",
+        "confidence_score": 0.9,
+        "resolution_context": "The pyramids were designed to protect the deceased's body and possessions and to serve as a gateway to the afterlife.",
+        "flag": "entity_raw",
+        "chunk_id": [
+          "Ch_000002"
+        ],
+        "node_properties": []
+      },
+      {
+        "id": "En_c166fa65",
+        "entity_name": "comfort in the afterlife",
+        "entity_description": "State of ease and well-being intended for the deceased through burial items.",
+        "entity_type_hint": "Condition",
+        "confidence_score": 0.83,
+        "resolution_context": "The Egyptians believed that these items would be needed in the afterlife and were intended to provide comfort and sustenance to the deceased.",
+        "flag": "entity_raw",
+        "chunk_id": [
+          "Ch_000002"
+        ],
+        "node_properties": []
+      },
+      {
+        "id": "En_b47de356",
+        "entity_name": "sustenance in the afterlife",
+        "entity_description": "Provision of nourishment to the deceased through items buried with them.",
+        "entity_type_hint": "Condition",
+        "confidence_score": 0.83,
+        "resolution_context": "The Egyptians believed that these items would be needed in the afterlife and were intended to provide comfort and sustenance to the deceased.",
+        "flag": "entity_raw",
+        "chunk_id": [
+          "Ch_000002"
+        ],
+        "node_properties": []
+      },
+      {
+        "id": "En_4bac1a1a",
+        "entity_name": "soul",
+        "entity_description": "Spiritual component of a person believed to be reunited with the body in the afterlife.",
+        "entity_type_hint": "SpiritualEntity",
+        "confidence_score": 0.97,
+        "resolution_context": "The ancient Egyptians also believed in the existence of a soul that would need to be reunited with the body in the afterlife. This belief in the soul’s continued journey shaped burial practices, including mummification and the placement of religious texts and amulets in the burial chamber.",
+        "flag": "entity_raw",
+        "chunk_id": [
+          "Ch_000003"
+        ],
+        "node_properties": []
+      },
+      {
+        "id": "En_ef4c7aec",
+        "entity_name": "journey to the afterlife",
+        "entity_description": "Spiritual voyage the deceased was believed to undertake after death.",
+        "entity_type_hint": "Process",
+        "confidence_score": 0.9,
+        "resolution_context": "To ensure this reunion, the Egyptians included a variety of religious texts and amulets in the burial chamber to guide the deceased on their journey to the afterlife. This journey was conceptualized as a complex passage that required guidance and protection for the soul to reach its destination.",
+        "flag": "entity_raw",
+        "chunk_id": [
+          "Ch_000003"
+        ],
+        "node_properties": []
+      },
+      {
+        "id": "En_0e8f2b25",
+        "entity_name": "afterlife",
+        "entity_description": "Believed post-death existence for which Egyptians prepared the deceased with tombs and grave goods.",
+        "entity_type_hint": "Concept",
+        "confidence_score": 0.98,
+        "resolution_context": "While they may not have had the resources to build grand pyramids, ordinary Egyptians were still buried with items they would need in the afterlife, such as food, tools, and personal belongings.",
+        "flag": "entity_raw",
+        "chunk_id": [
+          "Ch_000005"
+        ],
+        "node_properties": []
+      },
+      {
+        "id": "En_6d6cccdb",
+        "entity_name": "safe passage into the afterlife",
+        "entity_description": "Desired successful journey of the deceased from death to the afterlife.",
+        "entity_type_hint": "GoalState",
+        "confidence_score": 0.9,
+        "resolution_context": "The elaborate tombs, mummification process, and inclusion of religious texts and amulets all serve to ensure the deceased's safe passage into the afterlife and their continued existence in the realm of the gods.",
+        "flag": "entity_raw",
+        "chunk_id": [
+          "Ch_000006"
+        ],
+        "node_properties": []
+      },
+      {
+        "id": "En_ac203d2a",
+        "entity_name": "eternal existence in the realm of the gods",
+        "entity_description": "Ongoing, unending life of the deceased among the gods.",
+        "entity_type_hint": "GoalState",
+        "confidence_score": 0.9,
+        "resolution_context": "Through the construction of elaborate tombs, the process of mummification, and the inclusion of religious texts and amulets, the ancient Egyptians sought to ensure the safe passage of the deceased into the afterlife and their eternal existence in the realm of the gods.",
+        "flag": "entity_raw",
+        "chunk_id": [
+          "Ch_000006"
+        ],
+        "node_properties": []
+      }
+    ],
+    "candidate_ids": [
+      "ClsC_541f6f5e"
+    ],
+    "source_files": [
+      "data/Classes/Cls_Rec/classes_round_0.json"
+    ]
+  },
+  {
+    "class_label": "Funerary Goods",
+    "class_type_hint": "Cultural Object Category",
+    "class_description": "Objects intentionally buried with the deceased for use or comfort in the afterlife, including both general assemblages of items and specific implements such as tools.",
+    "confidence": 0.9,
+    "evidence_excerpt": "items buried with the dead for use in the afterlife, such as food, tools, and personal belongings",
+    "member_ids": [
+      "Can_10cfe1bd",
+      "En_6b1deedb"
+    ],
+    "members": [
+      {
+        "id": "Can_10cfe1bd",
+        "entity_name": "grave goods",
+        "entity_description": "Collections of the deceased's personal belongings and other items, such as food, tools, jewelry, and clothing, placed in the tomb or grave for use and comfort in the afterlife.",
+        "entity_type_hint": "ObjectCollection",
+        "confidence_score": 0.93,
+        "resolution_context": "All three refer to the same concept of items buried with the dead for use in the afterlife, differing only in wording and minor scope emphasis.",
+        "flag": "entity_raw",
+        "chunk_id": [
+          "Ch_000002",
+          "Ch_000005"
+        ],
+        "node_properties": []
+      },
+      {
+        "id": "En_6b1deedb",
+        "entity_name": "tools",
+        "entity_description": "Implements buried with the deceased to be used in the afterlife.",
+        "entity_type_hint": "Object",
+        "confidence_score": 0.93,
+        "resolution_context": "ordinary Egyptians were still buried with items they would need in the afterlife, such as food, tools, and personal belongings.",
+        "flag": "entity_raw",
+        "chunk_id": [
+          "Ch_000005"
+        ],
+        "node_properties": []
+      }
+    ],
+    "candidate_ids": [
+      "ClsC_63400f0b"
+    ],
+    "source_files": [
+      "data/Classes/Cls_Rec/classes_round_0.json"
+    ]
+  },
+  {
+    "class_label": "Burial Offerings",
+    "class_type_hint": "Cultural Practice",
+    "class_description": "Grave goods intentionally buried with the deceased, including food, clothing, and jewelry meant for use or benefit in the afterlife.",
+    "confidence": 0.96,
+    "evidence_excerpt": "Items could include food, clothing, jewelry, and other personal belongings buried with the deceased.",
+    "member_ids": [
+      "Can_039da56d",
+      "En_89408067",
+      "En_60c8bd1b"
+    ],
+    "members": [
+      {
+        "id": "Can_039da56d",
+        "entity_name": "food offerings",
+        "entity_description": "Edible items placed in tombs or graves as provisions for the deceased in the afterlife.",
+        "entity_type_hint": "Component",
+        "confidence_score": 0.94,
+        "resolution_context": "Both entities describe food buried with the deceased as offerings for the afterlife; the difference is only wording and specificity.",
+        "flag": "entity_raw",
+        "chunk_id": [
+          "Ch_000002",
+          "Ch_000005"
+        ],
+        "node_properties": []
+      },
+      {
+        "id": "En_89408067",
+        "entity_name": "clothing offerings",
+        "entity_description": "Garments buried with the deceased to be used in the afterlife.",
+        "entity_type_hint": "Component",
+        "confidence_score": 0.93,
+        "resolution_context": "These items could include food, clothing, jewelry, and other personal belongings.",
+        "flag": "entity_raw",
+        "chunk_id": [
+          "Ch_000002"
+        ],
+        "node_properties": []
+      },
+      {
+        "id": "En_60c8bd1b",
+        "entity_name": "jewelry offerings",
+        "entity_description": "Jewelry placed in the tomb with the deceased as grave goods for the afterlife.",
+        "entity_type_hint": "Component",
+        "confidence_score": 0.93,
+        "resolution_context": "These items could include food, clothing, jewelry, and other personal belongings.",
+        "flag": "entity_raw",
+        "chunk_id": [
+          "Ch_000002"
+        ],
+        "node_properties": []
+      }
+    ],
+    "candidate_ids": [
+      "ClsC_1a039a30"
+    ],
+    "source_files": [
+      "data/Classes/Cls_Rec/classes_round_0.json"
+    ]
+  },
+  {
+    "class_label": "Ancient Egyptian Funerary Culture",
+    "class_type_hint": "Cultural Practice/Belief System",
+    "class_description": "Interrelated practices and value systems in ancient Egypt concerning death, burial, and honoring the dead, encompassing both ritual procedures and underlying moral-religious attitudes.",
+    "confidence": 0.93,
+    "evidence_excerpt": "Both entities concern how ancient Egyptians buried and honored the dead, including rituals and cultural values of reverence.",
+    "member_ids": [
+      "Can_f68c2fcf",
+      "Can_185bea15"
+    ],
+    "members": [
+      {
+        "id": "Can_f68c2fcf",
+        "entity_name": "ancient Egyptian burial practices",
+        "entity_description": "The complex customs, rituals, and methods used in ancient Egypt to prepare and inter the dead, involving priests, embalmers, and other specialists to ensure a proper transition to the afterlife and to honor the deceased.",
+        "entity_type_hint": "Process",
+        "confidence_score": 0.98,
+        "resolution_context": "Both refer to the same ritual and procedural process of burial in ancient Egypt, differing only in phrasing and level of detail.",
+        "flag": "entity_raw",
+        "chunk_id": [
+          "Ch_000001",
+          "Ch_000002",
+          "Ch_000005",
+          "Ch_000006",
+          "Ch_000004"
+        ],
+        "node_properties": []
+      },
+      {
+        "id": "Can_185bea15",
+        "entity_name": "reverence for the deceased in ancient Egypt",
+        "entity_description": "The cultural and moral value in ancient Egyptian society of showing honor, respect, and veneration to the dead, often expressed through funerary rites, memorial practices, and beliefs about the afterlife.",
+        "entity_type_hint": "ValueConcept",
+        "confidence_score": 0.95,
+        "resolution_context": "Both entities describe the same cultural attitude of respect and veneration for the dead in ancient Egypt, differing only in wording and type emphasis.",
+        "flag": "entity_raw",
+        "chunk_id": [
+          "Ch_000005",
+          "Ch_000006",
+          "Ch_000001"
+        ],
+        "node_properties": []
+      }
+    ],
+    "candidate_ids": [
+      "ClsC_d14cd953"
+    ],
+    "source_files": [
+      "data/Classes/Cls_Rec/classes_round_0.json"
+    ]
+  },
+  {
+    "class_label": "Ancient Egyptian Burial Specialists",
+    "class_type_hint": "Occupational Role",
+    "class_description": "Roles comprising the professional participants in ancient Egyptian burial practices, including religious officiants, body preparers, and other specialized contributors.",
+    "confidence": 0.93,
+    "evidence_excerpt": "The process of burial...required the expertise of priests, embalmers, and other skilled individuals.",
+    "member_ids": [
+      "En_9d94a699",
+      "En_60deba01",
+      "En_fd7f9e4c"
+    ],
+    "members": [
+      {
+        "id": "En_9d94a699",
+        "entity_name": "priests",
+        "entity_description": "Religious specialists involved in performing and overseeing ancient Egyptian burial rituals.",
+        "entity_type_hint": "Role",
+        "confidence_score": 0.96,
+        "resolution_context": "The process of burial in ancient Egypt was a complex and carefully orchestrated affair that required the expertise of priests, embalmers, and other skilled individuals.",
+        "flag": "entity_raw",
+        "chunk_id": [
+          "Ch_000004"
+        ],
+        "node_properties": []
+      },
+      {
+        "id": "En_60deba01",
+        "entity_name": "embalmers",
+        "entity_description": "Specialists responsible for preparing and preserving bodies during ancient Egyptian burials.",
+        "entity_type_hint": "Role",
+        "confidence_score": 0.96,
+        "resolution_context": "The process of burial in ancient Egypt was a complex and carefully orchestrated affair that required the expertise of priests, embalmers, and other skilled individuals.",
+        "flag": "entity_raw",
+        "chunk_id": [
+          "Ch_000004"
+        ],
+        "node_properties": []
+      },
+      {
+        "id": "En_fd7f9e4c",
+        "entity_name": "other skilled individuals",
+        "entity_description": "Additional unnamed specialists contributing expertise to the ancient Egyptian burial process.",
+        "entity_type_hint": "Role",
+        "confidence_score": 0.9,
+        "resolution_context": "The process of burial in ancient Egypt was a complex and carefully orchestrated affair that required the expertise of priests, embalmers, and other skilled individuals.",
+        "flag": "entity_raw",
+        "chunk_id": [
+          "Ch_000004"
+        ],
+        "node_properties": []
+      }
+    ],
+    "candidate_ids": [
+      "ClsC_b5356ace"
+    ],
+    "source_files": [
+      "data/Classes/Cls_Rec/classes_round_0.json"
+    ]
+  },
+  {
+    "class_label": "Ancient Egyptian Social Strata",
+    "class_type_hint": "Social Group",
+    "class_description": "Social groups within ancient Egyptian society distinguished by status and burial practices, including both elite and non-elite non-royal populations.",
+    "confidence": 0.93,
+    "evidence_excerpt": "High-status non-royal individuals... and common people in ancient Egypt, both described as social groups differentiated by status.",
+    "member_ids": [
+      "Can_170ea38e",
+      "Can_da508b5f"
+    ],
+    "members": [
+      {
+        "id": "Can_170ea38e",
+        "entity_name": "ancient Egyptian elite",
+        "entity_description": "High-status non-royal individuals in ancient Egyptian society who were granted elaborate tombs and burials.",
+        "entity_type_hint": "SocialGroup",
+        "confidence_score": 0.9,
+        "resolution_context": "Both refer to high-status non-royal individuals in ancient Egypt who received elaborate tombs, describing the same social group.",
+        "flag": "entity_raw",
+        "chunk_id": [
+          "Ch_000001",
+          "Ch_000005"
+        ],
+        "node_properties": []
+      },
+      {
+        "id": "Can_da508b5f",
+        "entity_name": "non-elite ancient Egyptians",
+        "entity_description": "Typical, non-elite members of ancient Egyptian society who, despite lacking the resources of the elite, were buried with care, respect, and items for use in the afterlife.",
+        "entity_type_hint": "SocialGroup",
+        "confidence_score": 0.96,
+        "resolution_context": "\"Common people in ancient Egypt\" and \"ordinary Egyptians\" are used interchangeably in the same context to describe the same non-elite social group.",
+        "flag": "entity_raw",
+        "chunk_id": [
+          "Ch_000005"
+        ],
+        "node_properties": []
+      }
+    ],
+    "candidate_ids": [
+      "ClsC_4c5a9c88"
+    ],
+    "source_files": [
+      "data/Classes/Cls_Rec/classes_round_0.json"
+    ]
+  },
+  {
+    "class_label": "Ancient Egyptian Tomb Structures",
+    "class_type_hint": "Cultural Heritage Structure",
+    "class_description": "Monumental tomb constructions in ancient Egypt, including pyramids and related burial complexes built to house the dead and support their afterlife.",
+    "confidence": 0.93,
+    "evidence_excerpt": "complex burial structures in ancient Egypt, including pyramids and monumental tombs such as the pyramids at Giza",
+    "member_ids": [
+      "Can_2309ffd7",
+      "Can_9da4d6ac",
+      "En_5da37af9"
+    ],
+    "members": [
+      {
+        "id": "Can_2309ffd7",
+        "entity_name": "ancient Egyptian tombs",
+        "entity_description": "Complex, carefully constructed burial structures and chambers in ancient Egypt, including pyramids and other monumental tombs, built to house the deceased and their funerary goods and to ensure their passage into the afterlife.",
+        "entity_type_hint": "Structure",
+        "confidence_score": 0.96,
+        "resolution_context": "All three mentions describe the same class of complex burial structures in ancient Egypt, differing only in wording and specificity, with identical function and historical context.",
+        "flag": "entity_raw",
+        "chunk_id": [
+          "Ch_000001",
+          "Ch_000006",
+          "Ch_000002",
+          "Ch_000004",
+          "Ch_000005"
+        ],
+        "node_properties": []
+      },
+      {
+        "id": "Can_9da4d6ac",
+        "entity_name": "Egyptian pyramids",
+        "entity_description": "Large monumental pyramid structures in ancient Egypt built as tombs to house and protect the deceased.",
+        "entity_type_hint": "Structure",
+        "confidence_score": 0.96,
+        "resolution_context": "Both mention large pyramid tombs in ancient Egypt in a general sense, with 'grand pyramids' being a descriptive variant of the same concept.",
+        "flag": "entity_raw",
+        "chunk_id": [
+          "Ch_000002",
+          "Ch_000005"
+        ],
+        "node_properties": []
+      },
+      {
+        "id": "En_5da37af9",
+        "entity_name": "pyramids at Giza",
+        "entity_description": "Famous pyramid complexes on the Giza Plateau built as monumental tombs for Egyptian rulers.",
+        "entity_type_hint": "Location",
+        "confidence_score": 0.96,
+        "resolution_context": "One of the most famous aspects of Egyptian burial practices is the construction of elaborate tombs, such as the pyramids at Giza.",
+        "flag": "entity_raw",
+        "chunk_id": [
+          "Ch_000001"
+        ],
+        "node_properties": []
+      }
+    ],
+    "candidate_ids": [
+      "ClsC_fffac7e8"
+    ],
+    "source_files": [
+      "data/Classes/Cls_Rec/classes_round_0.json"
+    ]
+  },
+  {
+    "class_label": "Ancient Egyptian Civilization",
+    "class_type_hint": "Sociocultural System",
+    "class_description": "Collective representations of ancient Egypt as a historical civilization, including its people, culture, and social structures.",
+    "confidence": 0.94,
+    "evidence_excerpt": "ancient Egyptian burial practices were a vital part of Egyptian culture and society... people of ancient Egypt... overall cultural system of ancient Egypt",
+    "member_ids": [
+      "Can_b9424bd9",
+      "Can_0a8d053d",
+      "Can_343049fe",
+      "En_1b376fd7"
+    ],
+    "members": [
+      {
+        "id": "Can_b9424bd9",
+        "entity_name": "ancient Egyptians",
+        "entity_description": "The people of ancient Egypt, responsible for developing and practicing the civilization's religious, social, and funerary customs, including mummification and tomb burials.",
+        "entity_type_hint": "Population",
+        "confidence_score": 0.92,
+        "resolution_context": "Both mentions describe the same collective group—people of ancient Egypt involved in the same burial beliefs and practices—differing only in phrasing and type label.",
+        "flag": "entity_raw",
+        "chunk_id": [
+          "Ch_000002",
+          "Ch_000006"
+        ],
+        "node_properties": []
+      },
+      {
+        "id": "Can_0a8d053d",
+        "entity_name": "Ancient Egypt",
+        "entity_description": "Historical civilization along the Nile River in northeastern Africa, known for its complex culture, elaborate burial practices, and monumental architecture.",
+        "entity_type_hint": "Civilization",
+        "confidence_score": 0.96,
+        "resolution_context": "Both mentions refer to the same historical civilization; differences in capitalization and type_hint (Location vs Culture) reflect perspective rather than distinct entities.",
+        "flag": "entity_raw",
+        "chunk_id": [
+          "Ch_000001",
+          "Ch_000004"
+        ],
+        "node_properties": []
+      },
+      {
+        "id": "Can_343049fe",
+        "entity_name": "Ancient Egyptian culture",
+        "entity_description": "The social, religious, artistic, and broader cultural traditions and practices that characterized the civilization of ancient Egypt.",
+        "entity_type_hint": "Culture",
+        "confidence_score": 0.9,
+        "resolution_context": "Both mentions refer to the same overall cultural system of ancient Egypt, differing only slightly in phrasing and type_hint but not in conceptual scope.",
+        "flag": "entity_raw",
+        "chunk_id": [
+          "Ch_000001",
+          "Ch_000006"
+        ],
+        "node_properties": []
+      },
+      {
+        "id": "En_1b376fd7",
+        "entity_name": "Ancient Egyptian society",
+        "entity_description": "The social structure, institutions, and communal life of ancient Egypt, including relationships between different social groups and classes.",
+        "entity_type_hint": "CulturalContext",
+        "confidence_score": 0.9,
+        "resolution_context": "In conclusion, ancient Egyptian burial practices were a vital part of Egyptian culture and society. These practices reflect the Egyptians' beliefs about the afterlife and their reverence for the deceased.",
+        "flag": "entity_raw",
+        "chunk_id": [
+          "Ch_000006"
+        ],
+        "node_properties": []
+      }
+    ],
+    "candidate_ids": [
+      "ClsC_5a9ca027"
+    ],
+    "source_files": [
+      "data/Classes/Cls_Rec/classes_round_0.json"
+    ]
+  },
+  {
+    "class_label": "Egyptian Burial Amulets",
+    "class_type_hint": "Cultural Artifact",
+    "class_description": "Protective or magical objects placed in ancient Egyptian burials to aid and protect the deceased in the afterlife.",
+    "confidence": 0.93,
+    "evidence_excerpt": "Protective ritual objects included in burials for afterlife protection.",
+    "member_ids": [
+      "Can_5133c009"
+    ],
+    "members": [
+      {
+        "id": "Can_5133c009",
+        "entity_name": "amulets",
+        "entity_description": "Protective or magical objects placed in ancient Egyptian burials to aid and protect the deceased in the afterlife.",
+        "entity_type_hint": "Object",
+        "confidence_score": 0.96,
+        "resolution_context": "Both entries describe the same concept of protective ritual objects included in burials for afterlife protection, differing only slightly in wording and type_hint granularity.",
+        "flag": "entity_raw",
+        "chunk_id": [
+          "Ch_000003",
+          "Ch_000006"
+        ],
+        "node_properties": []
+      }
+    ],
+    "candidate_ids": [
+      "ClsC_c72b3bea"
+    ],
+    "source_files": [
+      "data/Classes/Cls_Rec/classes_round_single.json"
+    ]
+  },
+  {
+    "class_label": "Ancient Egyptian Rulers",
+    "class_type_hint": "Historical Role",
+    "class_description": "Supreme monarchs who governed ancient Egypt and for whom monumental tombs, such as pyramids, were constructed as burial places.",
+    "confidence": 0.9,
+    "evidence_excerpt": "monumental structures were built to house the pharaohs and other important individuals in the afterlife",
+    "member_ids": [
+      "En_565cfcfe"
+    ],
+    "members": [
+      {
+        "id": "En_565cfcfe",
+        "entity_name": "pharaohs",
+        "entity_description": "Rulers of ancient Egypt for whom monumental tombs like pyramids were constructed.",
+        "entity_type_hint": "Role",
+        "confidence_score": 0.94,
+        "resolution_context": "These monumental structures were built to house the pharaohs and other important individuals in the afterlife.",
+        "flag": "entity_raw",
+        "chunk_id": [
+          "Ch_000001"
+        ],
+        "node_properties": []
+      }
+    ],
+    "candidate_ids": [
+      "ClsC_ee35b597"
+    ],
+    "source_files": [
+      "data/Classes/Cls_Rec/classes_round_single.json"
+    ]
+  },
+  {
+    "class_label": "Ancient Egyptian Burial Chambers",
+    "class_type_hint": "Archaeological Feature",
+    "class_description": "Rooms or enclosed spaces designed to house mummified bodies along with religious texts, amulets, and other provisions for the journey to the afterlife in ancient Egyptian mortuary contexts.",
+    "confidence": 0.86,
+    "evidence_excerpt": "Room or space in which the mummified deceased, texts, and amulets were placed.",
+    "member_ids": [
+      "En_ebe076ea"
+    ],
+    "members": [
+      {
+        "id": "En_ebe076ea",
+        "entity_name": "burial chamber",
+        "entity_description": "Room or space in which the mummified deceased, texts, and amulets were placed.",
+        "entity_type_hint": "Location",
+        "confidence_score": 0.94,
+        "resolution_context": "To ensure this reunion, the Egyptians included a variety of religious texts and amulets in the burial chamber to guide the deceased on their journey to the afterlife. The burial chamber housed the preserved body as well as the objects meant to support the soul’s passage beyond death.",
+        "flag": "entity_raw",
+        "chunk_id": [
+          "Ch_000003"
+        ],
+        "node_properties": []
+      }
+    ],
+    "candidate_ids": [
+      "ClsC_97fcc83a"
+    ],
+    "source_files": [
+      "data/Classes/Cls_Rec/classes_round_single.json"
+    ]
+  },
+  {
+    "class_label": "Papyrus Manuscripts",
+    "class_type_hint": "Artifact Type",
+    "class_description": "Papyrus-based scrolls or sheets used as writing supports, particularly for inscribing religious or funerary texts such as the Book of the Dead.",
+    "confidence": 0.86,
+    "evidence_excerpt": "The Book of the Dead was often inscribed on papyrus scrolls and placed in the tomb.",
+    "member_ids": [
+      "En_250878b6"
+    ],
+    "members": [
+      {
+        "id": "En_250878b6",
+        "entity_name": "papyrus scrolls",
+        "entity_description": "Papyrus-based writing material used to inscribe the Book of the Dead.",
+        "entity_type_hint": "Artifact",
+        "confidence_score": 0.96,
+        "resolution_context": "The Book of the Dead was often inscribed on papyrus scrolls and placed in the tomb with the deceased.",
+        "flag": "entity_raw",
+        "chunk_id": [
+          "Ch_000004"
+        ],
+        "node_properties": []
+      }
+    ],
+    "candidate_ids": [
+      "ClsC_90fa6ada"
+    ],
+    "source_files": [
+      "data/Classes/Cls_Rec/classes_round_single.json"
+    ]
+  }
+]

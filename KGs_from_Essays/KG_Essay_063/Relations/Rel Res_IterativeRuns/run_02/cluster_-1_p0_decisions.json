@@ -1,0 +1,97 @@
+{
+  "cluster_label": "-1_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_9beb6ea72b08",
+      "relation_name": "starts_in",
+      "rel_desc": "The Arab Spring started in the year 2010.",
+      "rel_hint_type": "temporal",
+      "canonical_rel_name": "starts_in_time",
+      "canonical_rel_desc": "Indicates the time point or time period when an event, process, or described history begins.",
+      "rel_cls": "event_onset_relation",
+      "rel_cls_group": "TEMPORALITY",
+      "subject_entity_name": "Arab Spring",
+      "object_entity_name": "2010",
+      "subject_class_label": "Arab Spring Core Events",
+      "subject_class_group": "Arab Spring and Its Context",
+      "object_class_label": "Arab Spring Onset Year 2010",
+      "object_class_group": "Arab Spring and Its Context",
+      "qualifiers": {
+        "TemporalQualifier": "2010",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "began",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 1.0,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_e86d02027ce8",
+      "relation_name": "contributes_to_creation_of",
+      "rel_desc": "The human spirit is described as having the power to create a better world.",
+      "rel_hint_type": "causal",
+      "canonical_rel_name": "contributes_to",
+      "canonical_rel_desc": "Indicates that the subject exerts a non-exclusive causal or enabling influence that helps bring about the object event, state, or outcome.",
+      "rel_cls": "causal_contribution_relation",
+      "rel_cls_group": "CAUSALITY",
+      "subject_entity_name": "human spirit",
+      "object_entity_name": "better world",
+      "subject_class_label": "Human Spirit in Social Struggle",
+      "subject_class_group": "Social Progress & Human Resilience Concepts",
+      "object_class_label": "Envisioned Just Future Society",
+      "object_class_group": "Social Progress & Human Resilience Concepts",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": "through sustained struggle against oppression",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "power ... to ... create",
+        "LogicalMarker": "and",
+        "OtherQualifier": "GoalOrientation: future-oriented social improvement"
+      },
+      "confidence": 0.88,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_rel_schema\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_9beb6ea72b08\"],\n      \"canonical_rel_name\": \"starts_at_time\",\n      \"canonical_rel_desc\": \"Indicates the specific time point or time period at which an event, process, or historical episode begins.\",\n      \"rel_cls\": \"event_onset_relation\",\n      \"rel_cls_group\": \"TEMPORALITY\",\n      \"justification\": \"Refines the canonical predicate from 'starts_in_time' to 'starts_at_time' for clearer, more standard temporal phrasing while preserving the same onset semantics; the existing class and group correctly capture an event-beginning temporal relation and are retained.\",\n      \"remark\": null,\n      \"confidence\": 0.93\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_rel_schema",
+      "args": {
+        "relation_ids": [
+          "RelR_9beb6ea72b08"
+        ],
+        "canonical_rel_name": "starts_at_time",
+        "canonical_rel_desc": "Indicates the specific time point or time period at which an event, process, or historical episode begins.",
+        "rel_cls": "event_onset_relation",
+        "rel_cls_group": "TEMPORALITY",
+        "justification": "Refines the canonical predicate from 'starts_in_time' to 'starts_at_time' for clearer, more standard temporal phrasing while preserving the same onset semantics; the existing class and group correctly capture an event-beginning temporal relation and are retained.",
+        "remark": null,
+        "confidence": 0.93
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_rel_schema",
+      "relation_ids": [
+        "RelR_9beb6ea72b08"
+      ],
+      "canonical_rel_name": "starts_at_time",
+      "canonical_rel_desc": "Indicates the specific time point or time period at which an event, process, or historical episode begins.",
+      "rel_cls": "event_onset_relation",
+      "rel_cls_group": "TEMPORALITY",
+      "new_relation_name": null,
+      "original_relation_name": null,
+      "justification": "Refines the canonical predicate from 'starts_in_time' to 'starts_at_time' for clearer, more standard temporal phrasing while preserving the same onset semantics; the existing class and group correctly capture an event-beginning temporal relation and are retained.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  ],
+  "timestamp": "2026-01-06T13:28:31Z"
+}

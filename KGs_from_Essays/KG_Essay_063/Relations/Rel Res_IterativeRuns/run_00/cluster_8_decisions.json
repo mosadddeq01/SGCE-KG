@@ -1,0 +1,182 @@
+{
+  "cluster_label": 8,
+  "cluster_classes": [
+    {
+      "candidate_id": "ClsC_13ecade3",
+      "class_label": "Anti-Colonial Ideals",
+      "class_description": "Normative political goals associated with resisting imperial domination, including the pursuit of freedom and political independence from colonial powers.",
+      "class_type_hint": "Political Concept",
+      "class_group": "TBD",
+      "confidence": 0.86,
+      "evidence_excerpt": "inspired people around the world to fight for their freedom and independence from colonial rule",
+      "member_ids": [
+        "En_4a0c884d",
+        "En_3fc9cac6"
+      ],
+      "members": [
+        {
+          "id": "En_4a0c884d",
+          "entity_name": "freedom",
+          "entity_description": "State of being free that people worldwide sought, influenced by the American Revolution.",
+          "entity_type_hint": "AbstractConcept"
+        },
+        {
+          "id": "En_3fc9cac6",
+          "entity_name": "independence from colonial rule",
+          "entity_description": "Political separation and self-governance sought by colonized peoples from imperial powers.",
+          "entity_type_hint": "Goal"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_14043dd1",
+      "class_label": "American Independence",
+      "class_description": "Key entities directly associated with the struggle for and achievement of U.S. independence from British colonial rule, including foundational documents and pivotal events.",
+      "class_type_hint": "Historical Topic",
+      "class_group": "TBD",
+      "confidence": 0.83,
+      "evidence_excerpt": "The Declaration of Independence ... and the American Revolution of 1776 marked a turning point ... to fight for their freedom and independence from colonial rule.",
+      "member_ids": [
+        "En_6deb9068",
+        "En_cc9ddaae"
+      ],
+      "members": [
+        {
+          "id": "En_6deb9068",
+          "entity_name": "Declaration of Independence",
+          "entity_description": "Foundational American document declaring independence and asserting equality and unalienable rights.",
+          "entity_type_hint": "Document"
+        },
+        {
+          "id": "En_cc9ddaae",
+          "entity_name": "American Revolution of 1776",
+          "entity_description": "Eighteenth-century colonial revolt in North America that led to U.S. independence from British rule.",
+          "entity_type_hint": "HistoricalEvent"
+        }
+      ],
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"split_class\",\n    \"args\": {\n      \"source_class_id\": \"ClsC_13ecade3\",\n      \"splits\": [\n        {\n          \"name\": \"Colonial Independence as Political Goal\",\n          \"description\": \"The specific political objective of achieving independence and self-governance from imperial or colonial powers.\",\n          \"class_type_hint\": \"Political Goal\",\n          \"member_ids\": [\"En_3fc9cac6\"],\n          \"provisional_id\": \"SPLIT(ClsC_13ecade3|IndependenceGoal)\"\n        }\n      ],\n      \"justification\": \"ClsC_13ecade3 currently mixes a broad normative value (freedom) with a more specific anti-colonial political goal (independence from colonial rule); splitting improves conceptual coherence between general ideals and concrete goals.\",\n      \"remark\": null,\n      \"confidence\": 0.84\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_13ecade3\",\n      \"new_name\": \"Freedom as Political Ideal\",\n      \"new_description\": \"The broad normative ideal of freedom as a political value, particularly as inspired by anti-colonial and revolutionary contexts such as the American Revolution.\",\n      \"new_class_type_hint\": \"Political Ideal\",\n      \"new_class_group\": \"Colonial Freedom and Independence (Ideals & Movements)\",\n      \"remark\": null,\n      \"justification\": \"After moving the specific independence goal into its own class, renaming and refining ClsC_13ecade3 clarifies that it now focuses on the general value of freedom while placing it within a shared colonial-independence class group.\",\n      \"confidence\": 0.86\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"SPLIT(ClsC_13ecade3|IndependenceGoal)\",\n      \"new_name\": \"Anti-Colonial Independence Goal\",\n      \"new_description\": \"The political goal of securing independence and self-rule from colonial or imperial domination, as pursued by colonized peoples.\",\n      \"new_class_type_hint\": \"Political Goal\",\n      \"new_class_group\": \"Colonial Freedom and Independence (Ideals & Movements)\",\n      \"remark\": null,\n      \"justification\": \"The new split class should be clearly labeled as the specific anti-colonial independence goal and aligned to the same broader colonial-freedom class group for semantic connectivity.\",\n      \"confidence\": 0.87\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_14043dd1\",\n      \"new_name\": \"American Independence (Revolution and Foundational Documents)\",\n      \"new_description\": \"Key events and documents associated with the struggle for and achievement of U.S. independence from British colonial rule, including the American Revolution of 1776 and the Declaration of Independence.\",\n      \"new_class_type_hint\": \"Historical Event & Document Cluster\",\n      \"new_class_group\": \"Colonial Freedom and Independence (Ideals & Movements)\",\n      \"remark\": null,\n      \"justification\": \"ClsC_14043dd1 is a concrete historical instantiation of the broader anti-colonial independence theme and should share a class group with the ideals/goal classes while having a clearer label and type hint.\",\n      \"confidence\": 0.88\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "split_class",
+      "args": {
+        "source_class_id": "ClsC_13ecade3",
+        "splits": [
+          {
+            "name": "Colonial Independence as Political Goal",
+            "description": "The specific political objective of achieving independence and self-governance from imperial or colonial powers.",
+            "class_type_hint": "Political Goal",
+            "member_ids": [
+              "En_3fc9cac6"
+            ],
+            "provisional_id": "SPLIT(ClsC_13ecade3|IndependenceGoal)"
+          }
+        ],
+        "justification": "ClsC_13ecade3 currently mixes a broad normative value (freedom) with a more specific anti-colonial political goal (independence from colonial rule); splitting improves conceptual coherence between general ideals and concrete goals.",
+        "remark": null,
+        "confidence": 0.84
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_13ecade3",
+        "new_name": "Freedom as Political Ideal",
+        "new_description": "The broad normative ideal of freedom as a political value, particularly as inspired by anti-colonial and revolutionary contexts such as the American Revolution.",
+        "new_class_type_hint": "Political Ideal",
+        "new_class_group": "Colonial Freedom and Independence (Ideals & Movements)",
+        "remark": null,
+        "justification": "After moving the specific independence goal into its own class, renaming and refining ClsC_13ecade3 clarifies that it now focuses on the general value of freedom while placing it within a shared colonial-independence class group.",
+        "confidence": 0.86
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "SPLIT(ClsC_13ecade3|IndependenceGoal)",
+        "new_name": "Anti-Colonial Independence Goal",
+        "new_description": "The political goal of securing independence and self-rule from colonial or imperial domination, as pursued by colonized peoples.",
+        "new_class_type_hint": "Political Goal",
+        "new_class_group": "Colonial Freedom and Independence (Ideals & Movements)",
+        "remark": null,
+        "justification": "The new split class should be clearly labeled as the specific anti-colonial independence goal and aligned to the same broader colonial-freedom class group for semantic connectivity.",
+        "confidence": 0.87
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_14043dd1",
+        "new_name": "American Independence (Revolution and Foundational Documents)",
+        "new_description": "Key events and documents associated with the struggle for and achievement of U.S. independence from British colonial rule, including the American Revolution of 1776 and the Declaration of Independence.",
+        "new_class_type_hint": "Historical Event & Document Cluster",
+        "new_class_group": "Colonial Freedom and Independence (Ideals & Movements)",
+        "remark": null,
+        "justification": "ClsC_14043dd1 is a concrete historical instantiation of the broader anti-colonial independence theme and should share a class group with the ideals/goal classes while having a clearer label and type hint.",
+        "confidence": 0.88
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "split_class",
+      "source_class_id": "ClsC_13ecade3",
+      "source_class_id_resolved": "ClsC_13ecade3",
+      "created_classes": [
+        {
+          "new_class_id": "ClsR_b305b4fa",
+          "provisional_id": "SPLIT(ClsC_13ecade3|IndependenceGoal)",
+          "member_ids": [
+            "En_3fc9cac6"
+          ]
+        }
+      ],
+      "justification": "ClsC_13ecade3 currently mixes a broad normative value (freedom) with a more specific anti-colonial political goal (independence from colonial rule); splitting improves conceptual coherence between general ideals and concrete goals.",
+      "remark": null,
+      "confidence": 0.84
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_13ecade3",
+      "class_id_resolved": "ClsC_13ecade3",
+      "new_name": "Freedom as Political Ideal",
+      "new_description": "The broad normative ideal of freedom as a political value, particularly as inspired by anti-colonial and revolutionary contexts such as the American Revolution.",
+      "new_class_type_hint": "Political Ideal",
+      "new_class_group": "Colonial Freedom and Independence (Ideals & Movements)",
+      "remark": null,
+      "justification": "After moving the specific independence goal into its own class, renaming and refining ClsC_13ecade3 clarifies that it now focuses on the general value of freedom while placing it within a shared colonial-independence class group.",
+      "confidence": 0.86
+    },
+    {
+      "action": "modify_class",
+      "class_id": "SPLIT(ClsC_13ecade3|IndependenceGoal)",
+      "class_id_resolved": "ClsR_b305b4fa",
+      "new_name": "Anti-Colonial Independence Goal",
+      "new_description": "The political goal of securing independence and self-rule from colonial or imperial domination, as pursued by colonized peoples.",
+      "new_class_type_hint": "Political Goal",
+      "new_class_group": "Colonial Freedom and Independence (Ideals & Movements)",
+      "remark": null,
+      "justification": "The new split class should be clearly labeled as the specific anti-colonial independence goal and aligned to the same broader colonial-freedom class group for semantic connectivity.",
+      "confidence": 0.87
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_14043dd1",
+      "class_id_resolved": "ClsC_14043dd1",
+      "new_name": "American Independence (Revolution and Foundational Documents)",
+      "new_description": "Key events and documents associated with the struggle for and achievement of U.S. independence from British colonial rule, including the American Revolution of 1776 and the Declaration of Independence.",
+      "new_class_type_hint": "Historical Event & Document Cluster",
+      "new_class_group": "Colonial Freedom and Independence (Ideals & Movements)",
+      "remark": null,
+      "justification": "ClsC_14043dd1 is a concrete historical instantiation of the broader anti-colonial independence theme and should share a class group with the ideals/goal classes while having a clearer label and type hint.",
+      "confidence": 0.88
+    }
+  ],
+  "provisional_to_real": {
+    "SPLIT(ClsC_13ecade3|IndependenceGoal)": "ClsR_b305b4fa"
+  },
+  "timestamp": "2026-01-06T13:04:44Z"
+}

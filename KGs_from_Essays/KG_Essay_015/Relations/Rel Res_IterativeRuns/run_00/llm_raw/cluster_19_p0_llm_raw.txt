@@ -1,0 +1,79 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_f4cc6dcf79f7",
+        "RelR_3d1f88edab3b"
+      ],
+      "canonical_rel_name": "is_based_on",
+      "canonical_rel_desc": "Subject practice or doctrine is conceptually grounded in or derived from the object belief system or set of concepts.",
+      "justification": "Both relations link ancient Egyptian burial practices (subject) to ancient Egyptian afterlife beliefs (object) as their doctrinal or conceptual basis (\"shaped by and expressed\"; \"grounded in\"), indicating a dependency where practices are based on beliefs rather than merely associated.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_a996538b321b"
+      ],
+      "canonical_rel_name": "supports_belief_system",
+      "canonical_rel_desc": "Subject text, practice, or artifact functionally supports, articulates, or operates within the object belief system.",
+      "justification": "This relation describes how the Book of the Dead functions within and supports ancient Egyptian afterlife beliefs by guiding the soul, which is a functional-support role toward the belief system rather than a dependency of the text on the beliefs.",
+      "remark": null,
+      "confidence": 0.88
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_f4cc6dcf79f7",
+        "RelR_3d1f88edab3b"
+      ],
+      "rel_cls": "belief_dependency_relation",
+      "justification": "Both relations capture that a religious or cultural practice (burial practices) depends conceptually on an underlying set of beliefs (afterlife beliefs), forming a coherent class of doctrinal or belief-based dependency relations.",
+      "remark": null,
+      "confidence": 0.88
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_a996538b321b"
+      ],
+      "rel_cls": "belief_support_relation",
+      "justification": "The Book of the Dead relation highlights a text that functionally supports and operates within a belief system, fitting a class of relations where artifacts or texts reinforce, implement, or guide adherents within that system.",
+      "remark": null,
+      "confidence": 0.86
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_f4cc6dcf79f7",
+        "RelR_3d1f88edab3b"
+      ],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "The semantics of \"is_based_on\" describe a conceptual/causal dependence where beliefs underpin and causally shape practices, fitting a causality-like group rather than mere association.",
+      "remark": null,
+      "confidence": 0.86
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_a996538b321b"
+      ],
+      "rel_cls_group": "FUNCTION",
+      "justification": "The Book of the Dead relation emphasizes the functional role of the text in guiding the soul and supporting the belief system, which is best grouped under functional/usage-oriented relations rather than strict causal or compositional ones.",
+      "remark": null,
+      "confidence": 0.84
+    }
+  }
+]

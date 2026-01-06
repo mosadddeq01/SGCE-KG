@@ -1,0 +1,51 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_05546e3f9cfb",
+        "RelR_e34ebac71d13",
+        "RelR_008c5b71f088",
+        "RelR_54b735899d34",
+        "RelR_466919d6f55e"
+      ],
+      "canonical_rel_name": "signals",
+      "canonical_rel_desc": "The subject acts as a nonverbal cue that signals or projects the psychological or relational state represented by the object.",
+      "justification": "In all instances, the subject is a form of body language or posture and the object is an inferred state (authority, confidence, attraction, intimacy). Semantically, each relation describes the same predicate: the nonverbal cue signals or projects the state. Uncertainty qualifiers (may/can) and contexts (professional, romantic) are better handled as qualifiers, while a single canonical predicate 'signals' captures the shared meaning.",
+      "remark": "Direction is consistently from nonverbal cue (subject) to inferred/relational state (object).",
+      "confidence": 0.97
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_05546e3f9cfb",
+        "RelR_e34ebac71d13",
+        "RelR_008c5b71f088",
+        "RelR_54b735899d34",
+        "RelR_466919d6f55e"
+      ],
+      "rel_cls": "nonverbal_signaling_relation",
+      "justification": "Each relation links a nonverbal behavior (body language, posture, romantic body language) to an inferred psychological or relational state it communicates. They all belong to the same family of relations where nonverbal cues function as signals conveying internal states or relationship qualities.",
+      "remark": null,
+      "confidence": 0.96
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_05546e3f9cfb",
+        "RelR_e34ebac71d13",
+        "RelR_008c5b71f088",
+        "RelR_54b735899d34",
+        "RelR_466919d6f55e"
+      ],
+      "rel_cls_group": "COMMUNICATION",
+      "justification": "These relations describe communicative signaling via body language—nonverbal behaviors communicating or projecting states like authority, confidence, attraction, and intimacy. This fits a broad communication-oriented grouping better than composition, causality, or identity.",
+      "remark": null,
+      "confidence": 0.95
+    }
+  }
+]

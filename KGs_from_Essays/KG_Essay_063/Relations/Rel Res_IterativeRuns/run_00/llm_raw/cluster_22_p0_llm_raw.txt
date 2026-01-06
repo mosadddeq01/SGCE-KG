@@ -1,0 +1,42 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_9de5c31b6572",
+        "RelR_faaac5db98bd"
+      ],
+      "canonical_rel_name": "provides_evidence_for",
+      "canonical_rel_desc": "Subject serves as evidence or testament supporting the existence, nature, or degree of the object (e.g., a historical record evidencing a human quality).",
+      "justification": "In both relations, the history of protests and revolutions is described as demonstrating or being a testament to human qualities (resilience, determination). This is an evidential link where the subject functions as supporting evidence for the object, not a direct causal or part-whole relation. A single predicate 'provides_evidence_for' cleanly captures this semantics for both instances.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_9de5c31b6572",
+        "RelR_faaac5db98bd"
+      ],
+      "rel_cls": "evidential_relation",
+      "justification": "Both relations connect a historical phenomenon to abstract human qualities specifically in terms of the former evidencing or illustrating the latter. Grouping them under an 'evidential_relation' class captures this family of links where one entity serves as evidence or illustration for another.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_9de5c31b6572",
+        "RelR_faaac5db98bd"
+      ],
+      "rel_cls_group": "EVIDENTIALITY",
+      "justification": "The primary semantic dimension here is evidential: the subject is cited as a testament to or evidence for the object. This is not straightforward causality or mere association but an epistemic/evidential link, so a broad group 'EVIDENTIALITY' best describes these relations.",
+      "remark": null,
+      "confidence": 0.88
+    }
+  }
+]

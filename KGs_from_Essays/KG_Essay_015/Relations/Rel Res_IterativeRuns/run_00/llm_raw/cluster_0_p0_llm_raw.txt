@@ -1,0 +1,115 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_63c22f1ae8a4"],
+      "canonical_rel_name": "serves_as",
+      "canonical_rel_desc": "Indicates that the subject functions in the role or capacity expressed by the object.",
+      "justification": "This relation connects the Egyptian pyramids to their conceptual role as a gateway to the afterlife; a generic functional predicate 'serves_as' accurately captures that the subject fulfills the role denoted by the object.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_850b47492250",
+        "RelR_edde6c8a28fe",
+        "RelR_c2eb67968e53"
+      ],
+      "canonical_rel_name": "provides_benefit",
+      "canonical_rel_desc": "Indicates that the subject provides, supplies, or contributes a beneficial outcome or resource expressed by the object.",
+      "justification": "In all three instances, funerary offerings (food, clothing, jewelry) are said to provide or contribute to specific benefits (sustenance or comfort) in the afterlife; a single predicate 'provides_benefit' captures this consistent functional provisioning semantics.",
+      "remark": "Temporal/afterlife conditions remain captured as qualifiers on each relation instance rather than in the canonical predicate.",
+      "confidence": 0.94
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_49b017594ad4",
+        "RelR_1c11022b4723"
+      ],
+      "canonical_rel_name": "guides",
+      "canonical_rel_desc": "Indicates that the subject provides guidance or direction to the object, especially in a ritual or journey context.",
+      "justification": "Both relations describe funerary items (texts, amulets) whose role is to guide the deceased on the journey to the afterlife; the same guidance semantics apply, so they should share a single canonical predicate 'guides'.",
+      "remark": null,
+      "confidence": 0.96
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_79af7a4cc01c"],
+      "canonical_rel_name": "employs_for_funerary_role",
+      "canonical_rel_desc": "Indicates that the subject engages or employs the object to fulfill a specific role within funerary activities.",
+      "justification": "This relation expresses that the deceased's family hires/engages professional mourners for funerary duties; a specialized predicate 'employs_for_funerary_role' captures both the employment and its funerary context.",
+      "remark": null,
+      "confidence": 0.92
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_cbdf5c7bc105"],
+      "canonical_rel_name": "leads",
+      "canonical_rel_desc": "Indicates that the subject leads, directs, or is at the head of the process or group expressed by the object.",
+      "justification": "Professional mourners are described as leading the funeral procession; a simple, reusable predicate 'leads' correctly represents this directional/leadership role.",
+      "remark": null,
+      "confidence": 0.96
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_70b4c5c9c466"],
+      "canonical_rel_name": "performs",
+      "canonical_rel_desc": "Indicates that the subject carries out, executes, or performs the activity or ritual expressed by the object.",
+      "justification": "The relation states that professional mourners carry out funerary rituals; the canonical predicate 'performs' succinctly captures this action semantics between agent and ritual.",
+      "remark": null,
+      "confidence": 0.97
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_63c22f1ae8a4",
+        "RelR_850b47492250",
+        "RelR_edde6c8a28fe",
+        "RelR_c2eb67968e53",
+        "RelR_49b017594ad4",
+        "RelR_1c11022b4723",
+        "RelR_79af7a4cc01c",
+        "RelR_cbdf5c7bc105",
+        "RelR_70b4c5c9c466"
+      ],
+      "rel_cls": "funerary_function_relation",
+      "justification": "All these relations describe the functional roles of people, objects, or structures within funerary or afterlife contexts: pyramids serving as gateways, offerings providing benefits, texts and amulets guiding, families employing mourners, and mourners leading or performing rituals. Grouping them under 'funerary_function_relation' captures this common semantic family of roles and functions in funerary practice.",
+      "remark": "This class intentionally spans both human and non-human agents, unified by their function in funerary/afterlife contexts rather than by ontological type.",
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_63c22f1ae8a4",
+        "RelR_850b47492250",
+        "RelR_edde6c8a28fe",
+        "RelR_c2eb67968e53",
+        "RelR_49b017594ad4",
+        "RelR_1c11022b4723",
+        "RelR_79af7a4cc01c",
+        "RelR_cbdf5c7bc105",
+        "RelR_70b4c5c9c466"
+      ],
+      "rel_cls_group": "USAGE",
+      "justification": "Each relation focuses on how an entity is used or functions within a ritual/afterlife scenario—providing benefits, guiding, being employed, leading, or performing. This aligns best with a broad functional/usage dimension rather than pure causality or identity.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  }
+]

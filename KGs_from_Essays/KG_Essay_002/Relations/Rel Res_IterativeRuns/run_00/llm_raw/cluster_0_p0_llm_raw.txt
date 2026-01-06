@@ -1,0 +1,78 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_d56a4bacbf85",
+        "RelR_0cba31ba724d",
+        "RelR_61ca01917f64",
+        "RelR_418c53340a45",
+        "RelR_a309af16a85c",
+        "RelR_d3d100c235cb"
+      ],
+      "canonical_rel_name": "is_theme_of",
+      "canonical_rel_desc": "Indicates that the subject is a central, recurring, or underlying theme, motif, or emotional focus within the object narrative, legend, or narrative genre.",
+      "justification": "In all these relations, the subject is a fear, threat, or motif (e.g., haunted houses, mysterious creatures, fear of the unknown, threat of danger) and the object is an urban legend or the urban legend genre. The semantics consistently describe the subject as a theme or underlying motif of the object, so they should share a single canonical predicate 'is_theme_of'.",
+      "remark": null,
+      "confidence": 0.96
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_3b7096430972",
+        "RelR_5209552873c9",
+        "RelR_c917c695824c",
+        "RelR_f4a633980a7b"
+      ],
+      "canonical_rel_name": "has_theme",
+      "canonical_rel_desc": "Indicates that the subject narrative, legend, or narrative genre commonly involves, features, or explores the object as one of its central themes.",
+      "justification": "In these relations, the subject is the narrative category 'urban legends' and the object is a thematic concept (supernatural, paranormal, the unknown). The descriptions emphasize that urban legends feature, center on, or explore these concepts, so a single canonical predicate 'has_theme' (narrative → theme) captures the shared direction and semantics.",
+      "remark": null,
+      "confidence": 0.96
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_d56a4bacbf85",
+        "RelR_0cba31ba724d",
+        "RelR_61ca01917f64",
+        "RelR_418c53340a45",
+        "RelR_a309af16a85c",
+        "RelR_d3d100c235cb",
+        "RelR_3b7096430972",
+        "RelR_5209552873c9",
+        "RelR_c917c695824c",
+        "RelR_f4a633980a7b"
+      ],
+      "rel_cls": "narrative_theme_relation",
+      "justification": "All listed relations connect narrative entities (specific urban legends or the urban legend genre) with abstract thematic elements (motifs, fears, supernatural/paranormal concepts). Regardless of direction ('is_theme_of' vs 'has_theme'), they belong to the same broader family of relations describing thematic structure of narratives.",
+      "remark": null,
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_d56a4bacbf85",
+        "RelR_0cba31ba724d",
+        "RelR_61ca01917f64",
+        "RelR_418c53340a45",
+        "RelR_a309af16a85c",
+        "RelR_d3d100c235cb",
+        "RelR_3b7096430972",
+        "RelR_5209552873c9",
+        "RelR_c917c695824c",
+        "RelR_f4a633980a7b"
+      ],
+      "rel_cls_group": "CONTENT",
+      "justification": "Each relation specifies what kind of content or thematic material a narrative contains or is characterized by (fears, threats, supernatural/paranormal elements, the unknown). This is best modeled as a broad CONTENT-oriented group rather than causality, identity, or spatial/temporal groups.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  }
+]

@@ -1,0 +1,65 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_da7f1fa1fed7"],
+      "canonical_rel_name": "is_appearance_of",
+      "canonical_rel_desc": "Links an outward or physical appearance to the character or entity whose appearance it is.",
+      "justification": "The subject is a specific outward form ('beastly exterior') and the object is the entity it visually represents (the cursed prince); this is best modeled as an appearance-to-bearer predicate.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_3dfc2b36a72e"],
+      "canonical_rel_name": "has_inner_nature",
+      "canonical_rel_desc": "Links a character or entity to their true or inner nature, distinct from outward appearance.",
+      "justification": "The Beast entity is linked to his 'true nature of the prince', which is an internal, enduring quality; a has_inner_nature predicate captures this direction and semantics.",
+      "remark": null,
+      "confidence": 0.92
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_91e37826672b"],
+      "canonical_rel_name": "inheres_in",
+      "canonical_rel_desc": "Relates a property or capacity to the practice or bearer in which it inheres.",
+      "justification": "The 'power of storytelling' is an abstract capacity that belongs to the practice 'storytelling'; in ontology practice this is typically modeled as a property that inheres in its bearer.",
+      "remark": null,
+      "confidence": 0.96
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": ["RelR_da7f1fa1fed7", "RelR_3dfc2b36a72e"],
+      "rel_cls": "character_attribute_relation",
+      "justification": "Both relations link a character (the Beast) to character-centric attributes (outward appearance and inner nature); grouping them under a shared character_attribute_relation class reflects this narrative-attribute focus.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": ["RelR_91e37826672b"],
+      "rel_cls": "property_bearer_relation",
+      "justification": "This relation connects an abstract property ('power of storytelling') to its bearer practice ('storytelling'); this fits a more general property_bearer_relation class rather than a narrow character-focused attribute class.",
+      "remark": null,
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": ["RelR_da7f1fa1fed7", "RelR_3dfc2b36a72e", "RelR_91e37826672b"],
+      "rel_cls_group": "ATTRIBUTE",
+      "justification": "All three predicates express attribute-like or property-bearing relations: appearance of a character, inner nature of a character, and a power that inheres in a practice; these are best grouped under a broad ATTRIBUTE dimension.",
+      "remark": null,
+      "confidence": 0.96
+    }
+  }
+]

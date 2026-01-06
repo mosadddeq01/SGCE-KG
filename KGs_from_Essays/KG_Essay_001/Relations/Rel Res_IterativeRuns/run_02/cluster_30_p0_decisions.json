@@ -1,0 +1,69 @@
+{
+  "cluster_label": "30_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_a52120e0dce4",
+      "relation_name": "acts_on",
+      "rel_desc": "Molting is the process that causes the caterpillar to shed its existing skin.",
+      "rel_hint_type": "process target",
+      "canonical_rel_name": "involves_participant",
+      "canonical_rel_desc": "Links a process or event to an entity that participates in or is acted upon within that process (e.g., structures, organisms, organs, flowers).",
+      "rel_cls": "process_participant_relation",
+      "rel_cls_group": "PARTICIPATION",
+      "subject_entity_name": "molting",
+      "object_entity_name": "caterpillar skin",
+      "subject_class_label": "Caterpillar Molting",
+      "subject_class_group": "Caterpillar Biology & Adaptations",
+      "object_class_label": "Caterpillar Molting",
+      "object_class_group": "Caterpillar Biology & Adaptations",
+      "qualifiers": {
+        "TemporalQualifier": "each time they molt",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "a process known as",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.93,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_200c41ba83c0",
+      "relation_name": "affects_state_of",
+      "rel_desc": "Metamorphosis involves the breakdown of the caterpillar's organs.",
+      "rel_hint_type": "process-participant",
+      "canonical_rel_name": "involves_participant",
+      "canonical_rel_desc": "Links a process or event to an entity that participates in or is acted upon within that process (e.g., structures, organisms, organs, flowers).",
+      "rel_cls": "process_participant_relation",
+      "rel_cls_group": "PARTICIPATION",
+      "subject_entity_name": "metamorphosis",
+      "object_entity_name": "organs",
+      "subject_class_label": "Butterfly Metamorphosis System",
+      "subject_class_group": "Butterfly Life Cycle & Wing Development",
+      "object_class_label": "Insect Body Structures",
+      "object_class_group": "Insect Metamorphosis Anatomy and States",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "inside the chrysalis",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "ProcessPhase: internal reorganization stage"
+      },
+      "confidence": 0.86,
+      "remarks": [
+        "Relation used to capture that organ dissolution is a component of metamorphosis.",
+        "Relation used to capture that organ dissolution is a component of metamorphosis.",
+        "Relation used to capture that organ dissolution is a component of metamorphosis."
+      ]
+    }
+  ],
+  "llm_raw": "[]",
+  "parsed_steps": [],
+  "executed_decisions": [],
+  "timestamp": "2026-01-06T07:39:14Z"
+}

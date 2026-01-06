@@ -1,0 +1,141 @@
+{
+  "cluster_label": "33_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_091ce644b434",
+      "relation_name": "overthrows",
+      "rel_desc": "The French Revolution of 1789 overthrew the French monarchy.",
+      "rel_hint_type": "causal",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "French Revolution of 1789",
+      "object_entity_name": "monarchy in France",
+      "subject_class_label": "French Revolution of 1789",
+      "subject_class_group": "Modern Political Revolutions",
+      "object_class_label": "French Political Regimes",
+      "object_class_group": "Modern Political Revolutions",
+      "qualifiers": {
+        "TemporalQualifier": "1789",
+        "SpatialQualifier": "France",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "overthrew",
+        "LogicalMarker": "which",
+        "OtherQualifier": null
+      },
+      "confidence": 0.98,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_0863e80c145b",
+      "relation_name": "overthrows",
+      "rel_desc": "The Russian Revolution of 1917 brought an end to the Romanov dynasty.",
+      "rel_hint_type": "causal",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "Russian Revolution of 1917",
+      "object_entity_name": "Romanov dynasty",
+      "subject_class_label": "Russian Revolution of 1917 (Event)",
+      "subject_class_group": "Modern Political Revolutions",
+      "object_class_label": "Russian Revolution of 1917 Context & Actors",
+      "object_class_group": "Modern Political Revolutions",
+      "qualifiers": {
+        "TemporalQualifier": "1917",
+        "SpatialQualifier": "Russia",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "brought an end to",
+        "LogicalMarker": "and",
+        "OtherQualifier": null
+      },
+      "confidence": 0.98,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_091ce644b434\",\n        \"RelR_0863e80c145b\"\n      ],\n      \"canonical_rel_name\": \"overthrows_regime\",\n      \"canonical_rel_desc\": \"A revolutionary or political upheaval that causes the removal or collapse of an existing ruling regime, monarchy, or dynasty.\",\n      \"justification\": \"Both relations describe a revolution causing the end or overthrow of an established ruling order (a monarchy or dynasty). They share the same directed predicate semantics: a revolutionary event that overthrows the existing regime.\",\n      \"remark\": null,\n      \"confidence\": 0.96\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_091ce644b434\",\n        \"RelR_0863e80c145b\"\n      ],\n      \"rel_cls\": \"political_regime_change_relation\",\n      \"justification\": \"These relations connect revolutionary events to the regimes they remove, fitting a class focused on changes or terminations of political regimes or ruling houses.\",\n      \"remark\": null,\n      \"confidence\": 0.95\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_091ce644b434\",\n        \"RelR_0863e80c145b\"\n      ],\n      \"rel_cls_group\": \"CAUSALITY\",\n      \"justification\": \"In both instances, the revolution is explicitly presented as the cause of the regime’s end or overthrow (with qualifiers like 'overthrew' and 'brought an end to'), so they belong in a causal relation group.\",\n      \"remark\": null,\n      \"confidence\": 0.97\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_091ce644b434",
+          "RelR_0863e80c145b"
+        ],
+        "canonical_rel_name": "overthrows_regime",
+        "canonical_rel_desc": "A revolutionary or political upheaval that causes the removal or collapse of an existing ruling regime, monarchy, or dynasty.",
+        "justification": "Both relations describe a revolution causing the end or overthrow of an established ruling order (a monarchy or dynasty). They share the same directed predicate semantics: a revolutionary event that overthrows the existing regime.",
+        "remark": null,
+        "confidence": 0.96
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_091ce644b434",
+          "RelR_0863e80c145b"
+        ],
+        "rel_cls": "political_regime_change_relation",
+        "justification": "These relations connect revolutionary events to the regimes they remove, fitting a class focused on changes or terminations of political regimes or ruling houses.",
+        "remark": null,
+        "confidence": 0.95
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_091ce644b434",
+          "RelR_0863e80c145b"
+        ],
+        "rel_cls_group": "CAUSALITY",
+        "justification": "In both instances, the revolution is explicitly presented as the cause of the regime's end or overthrow (with qualifiers like 'overthrew' and 'brought an end to'), so they belong in a causal relation group.",
+        "remark": null,
+        "confidence": 0.97
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_091ce644b434",
+        "RelR_0863e80c145b"
+      ],
+      "canonical_rel_name": "overthrows_regime",
+      "canonical_rel_desc": "A revolutionary or political upheaval that causes the removal or collapse of an existing ruling regime, monarchy, or dynasty.",
+      "justification": "Both relations describe a revolution causing the end or overthrow of an established ruling order (a monarchy or dynasty). They share the same directed predicate semantics: a revolutionary event that overthrows the existing regime.",
+      "remark": null,
+      "confidence": 0.96
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_091ce644b434",
+        "RelR_0863e80c145b"
+      ],
+      "rel_cls": "political_regime_change_relation",
+      "justification": "These relations connect revolutionary events to the regimes they remove, fitting a class focused on changes or terminations of political regimes or ruling houses.",
+      "remark": null,
+      "confidence": 0.95
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_091ce644b434",
+        "RelR_0863e80c145b"
+      ],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "In both instances, the revolution is explicitly presented as the cause of the regime's end or overthrow (with qualifiers like 'overthrew' and 'brought an end to'), so they belong in a causal relation group.",
+      "remark": null,
+      "confidence": 0.97
+    }
+  ],
+  "timestamp": "2026-01-06T13:21:17Z"
+}

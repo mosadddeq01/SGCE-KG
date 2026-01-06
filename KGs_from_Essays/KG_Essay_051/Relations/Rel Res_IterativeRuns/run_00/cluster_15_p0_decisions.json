@@ -1,0 +1,177 @@
+{
+  "cluster_label": "15_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_dc552feb359d",
+      "relation_name": "indicates",
+      "rel_desc": "A furrowed brow is said to indicate the state of confusion.",
+      "rel_hint_type": "signal",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "furrowed brow",
+      "object_entity_name": "confusion",
+      "subject_class_label": "Facial Expressions",
+      "subject_class_group": "Nonverbal Communication & Inferred States",
+      "object_class_label": "Negative Affective States",
+      "object_class_group": "Nonverbal Communication & Inferred States",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "on the face",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "may",
+        "CausalHint": "indicate",
+        "LogicalMarker": "or",
+        "OtherQualifier": null
+      },
+      "confidence": 0.97,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_926fb14c65b7",
+      "relation_name": "indicates",
+      "rel_desc": "A furrowed brow is also linked to the emotional state of concern.",
+      "rel_hint_type": "signal",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "furrowed brow",
+      "object_entity_name": "concern",
+      "subject_class_label": "Facial Expressions",
+      "subject_class_group": "Nonverbal Communication & Inferred States",
+      "object_class_label": "Negative Affective States",
+      "object_class_group": "Nonverbal Communication & Inferred States",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "on the face",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "may",
+        "CausalHint": "indicate",
+        "LogicalMarker": "or",
+        "OtherQualifier": null
+      },
+      "confidence": 0.96,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_c13dd589897b",
+      "relation_name": "signals",
+      "rel_desc": "Facial expressions are said to signal how a person is feeling, i.e., their emotions.",
+      "rel_hint_type": "signal",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "facial expressions",
+      "object_entity_name": "emotions",
+      "subject_class_label": "Facial Expressions",
+      "subject_class_group": "Nonverbal Communication & Inferred States",
+      "object_class_label": "Emotional States (General)",
+      "object_class_group": "Nonverbal Communication & Inferred States",
+      "qualifiers": {
+        "TemporalQualifier": "at any given moment",
+        "SpatialQualifier": "on the face",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "can",
+        "CausalHint": "signal",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.94,
+      "remarks": [
+        "Object mapped to general 'emotions' entity since 'how a person is feeling' denotes emotional states."
+      ]
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_dc552feb359d\",\n        \"RelR_926fb14c65b7\",\n        \"RelR_c13dd589897b\"\n      ],\n      \"canonical_rel_name\": \"signals_emotional_state\",\n      \"canonical_rel_desc\": \"A nonverbal facial expression functions as a signal that conveys or indicates a person's underlying emotional state.\",\n      \"justification\": \"All three relations describe facial expressions (general or specific, e.g., furrowed brow) serving as nonverbal signals that indicate internal emotional states (confusion, concern, emotions in general). The direction is consistently from expression to inferred emotional state, so a single predicate capturing signaling of emotional state is appropriate.\",\n      \"remark\": null,\n      \"confidence\": 0.93\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_dc552feb359d\",\n        \"RelR_926fb14c65b7\",\n        \"RelR_c13dd589897b\"\n      ],\n      \"rel_cls\": \"nonverbal_signal_relation\",\n      \"justification\": \"Each relation links a facial expression to an internal emotional state via a signaling/indication role, which falls under a common class of nonverbal signal mappings (expression-to-state interpretation).\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_dc552feb359d\",\n        \"RelR_926fb14c65b7\",\n        \"RelR_c13dd589897b\"\n      ],\n      \"rel_cls_group\": \"COMMUNICATION\",\n      \"justification\": \"These relations concern how facial expressions communicate or convey information about a person's emotional state to an observer, which fits a broad communication-oriented semantic group better than causality or pure association.\",\n      \"remark\": null,\n      \"confidence\": 0.88\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_dc552feb359d",
+          "RelR_926fb14c65b7",
+          "RelR_c13dd589897b"
+        ],
+        "canonical_rel_name": "signals_emotional_state",
+        "canonical_rel_desc": "A nonverbal facial expression functions as a signal that conveys or indicates a person's underlying emotional state.",
+        "justification": "All three relations describe facial expressions (general or specific, e.g., furrowed brow) serving as nonverbal signals that indicate internal emotional states (confusion, concern, emotions in general). The direction is consistently from expression to inferred emotional state, so a single predicate capturing signaling of emotional state is appropriate.",
+        "remark": null,
+        "confidence": 0.93
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_dc552feb359d",
+          "RelR_926fb14c65b7",
+          "RelR_c13dd589897b"
+        ],
+        "rel_cls": "nonverbal_signal_relation",
+        "justification": "Each relation links a facial expression to an internal emotional state via a signaling/indication role, which falls under a common class of nonverbal signal mappings (expression-to-state interpretation).",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_dc552feb359d",
+          "RelR_926fb14c65b7",
+          "RelR_c13dd589897b"
+        ],
+        "rel_cls_group": "COMMUNICATION",
+        "justification": "These relations concern how facial expressions communicate or convey information about a person's emotional state to an observer, which fits a broad communication-oriented semantic group better than causality or pure association.",
+        "remark": null,
+        "confidence": 0.88
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_dc552feb359d",
+        "RelR_926fb14c65b7",
+        "RelR_c13dd589897b"
+      ],
+      "canonical_rel_name": "signals_emotional_state",
+      "canonical_rel_desc": "A nonverbal facial expression functions as a signal that conveys or indicates a person's underlying emotional state.",
+      "justification": "All three relations describe facial expressions (general or specific, e.g., furrowed brow) serving as nonverbal signals that indicate internal emotional states (confusion, concern, emotions in general). The direction is consistently from expression to inferred emotional state, so a single predicate capturing signaling of emotional state is appropriate.",
+      "remark": null,
+      "confidence": 0.93
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_dc552feb359d",
+        "RelR_926fb14c65b7",
+        "RelR_c13dd589897b"
+      ],
+      "rel_cls": "nonverbal_signal_relation",
+      "justification": "Each relation links a facial expression to an internal emotional state via a signaling/indication role, which falls under a common class of nonverbal signal mappings (expression-to-state interpretation).",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_dc552feb359d",
+        "RelR_926fb14c65b7",
+        "RelR_c13dd589897b"
+      ],
+      "rel_cls_group": "COMMUNICATION",
+      "justification": "These relations concern how facial expressions communicate or convey information about a person's emotional state to an observer, which fits a broad communication-oriented semantic group better than causality or pure association.",
+      "remark": null,
+      "confidence": 0.88
+    }
+  ],
+  "timestamp": "2026-01-06T12:10:39Z"
+}

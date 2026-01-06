@@ -1,0 +1,51 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_873c22fde189",
+        "RelR_fc9fa99a8517",
+        "RelR_afafeb29e918",
+        "RelR_e8147f36fcae",
+        "RelR_5a7fd8511204"
+      ],
+      "canonical_rel_name": "facilitates",
+      "canonical_rel_desc": "Indicates that the subject behavior or communication pattern makes it easier to achieve or enhances the likelihood/quality of the interpersonal state or social outcome described by the object.",
+      "justification": "All relations describe a nonverbal behavior (mirroring posture, body language use/interpretation) making an interpersonal state or outcome (rapport, sense of connection, connecting with others, conflict resolution, stronger relationships) more likely or easier to achieve. This is a causal-enablement relation rather than mere association, so a single predicate 'facilitates' consistently captures the direction and semantics.",
+      "remark": "Causal strength and uncertainty (e.g., 'can help', 'can improve') remain handled via qualifiers, while the core edge semantics are generalized as facilitation.",
+      "confidence": 0.96
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_873c22fde189",
+        "RelR_fc9fa99a8517",
+        "RelR_afafeb29e918",
+        "RelR_e8147f36fcae",
+        "RelR_5a7fd8511204"
+      ],
+      "rel_cls": "social_outcome_enablement_relation",
+      "justification": "Each relation links a nonverbal communicative behavior to a desirable interpersonal or social outcome via an enabling/helps-achieve mechanism. Grouping them under 'social_outcome_enablement_relation' captures that these are all about behaviors that enable or improve social/interpersonal outcomes, independent of the specific body-language cue or specific outcome.",
+      "remark": null,
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_873c22fde189",
+        "RelR_fc9fa99a8517",
+        "RelR_afafeb29e918",
+        "RelR_e8147f36fcae",
+        "RelR_5a7fd8511204"
+      ],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "The semantics across all instances are explicitly causal/enablement-oriented (nonverbal behavior leads to or helps create a social outcome), rather than mere co-occurrence or similarity. Thus, the broad group CAUSALITY best reflects the intended relation family.",
+      "remark": null,
+      "confidence": 0.95
+    }
+  }
+]

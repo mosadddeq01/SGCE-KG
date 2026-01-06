@@ -1,0 +1,317 @@
+{
+  "cluster_label": "14_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_608c85d5eefe",
+      "relation_name": "triggers_emergence_of",
+      "rel_desc": "Police brutality is described as a key issue that prompted the emergence of the Black Lives Matter movement.",
+      "rel_hint_type": "causal",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "police brutality",
+      "object_entity_name": "Black Lives Matter movement",
+      "subject_class_label": "Police Brutality and Contemporary Racial Justice Movements",
+      "subject_class_group": "Civil Rights and Racial Justice Movements",
+      "object_class_label": "Police Brutality and Contemporary Racial Justice Movements",
+      "object_class_group": "Civil Rights and Racial Justice Movements",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "in the United States",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "in response to",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.94,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_f265e0c9ee4d",
+      "relation_name": "context_for_emergence",
+      "rel_desc": "The Black Lives Matter movement is described as emerging in the context of the United States.",
+      "rel_hint_type": "context",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "United States",
+      "object_entity_name": "Black Lives Matter movement",
+      "subject_class_label": "Sovereign Countries Mentioned",
+      "subject_class_group": "Geopolitical Entities (Countries)",
+      "object_class_label": "Police Brutality and Contemporary Racial Justice Movements",
+      "object_class_group": "Civil Rights and Racial Justice Movements",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "in the United States",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "GeographicContext: origin of movement"
+      },
+      "confidence": 0.86,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_e492b140ff7e",
+      "relation_name": "leads_to",
+      "rel_desc": "The Black Lives Matter movement is linked to the occurrence of widespread protests.",
+      "rel_hint_type": "causal",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "Black Lives Matter movement",
+      "object_entity_name": "public protest demonstrations",
+      "subject_class_label": "Police Brutality and Contemporary Racial Justice Movements",
+      "subject_class_group": "Civil Rights and Racial Justice Movements",
+      "object_class_label": "Protests, Strikes, and Political Dissent",
+      "object_class_group": "Political Collective Action and Contention",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "widespread (implying many locations)",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "leading to",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.9,
+      "remarks": [
+        "Direction chosen from movement to protests, absorbing intermediate conversation."
+      ]
+    },
+    {
+      "relation_id": "RelR_5406b3cd7dee",
+      "relation_name": "leads_to",
+      "rel_desc": "The Black Lives Matter movement contributed to generating calls for reform.",
+      "rel_hint_type": "causal",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "Black Lives Matter movement",
+      "object_entity_name": "calls for reform",
+      "subject_class_label": "Police Brutality and Contemporary Racial Justice Movements",
+      "subject_class_group": "Civil Rights and Racial Justice Movements",
+      "object_class_label": "Social Responses to Inequality",
+      "object_class_group": "Social Inequality and Justice",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "leading to",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.9,
+      "remarks": [
+        "Intermediate role of conversation not modeled separately here."
+      ]
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_608c85d5eefe\"],\n      \"canonical_rel_name\": \"prompts_emergence_of\",\n      \"canonical_rel_desc\": \"Indicates that the subject problem, event, or condition acts as a key prompting factor for the initial emergence of a movement, organization, or phenomenon.\",\n      \"justification\": \"This relation instance describes police brutality as a key issue that prompted the emergence of the Black Lives Matter movement, i.e., a causal trigger for the movement’s formation rather than a general ongoing influence. A dedicated predicate like 'prompts_emergence_of' captures the specific causal role in initiating a movement.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_f265e0c9ee4d\"],\n      \"canonical_rel_name\": \"is_origin_location_of\",\n      \"canonical_rel_desc\": \"Indicates that the subject geographic entity is the primary place where the movement, organization, or phenomenon originated or first emerged.\",\n      \"justification\": \"The instance states that the Black Lives Matter movement emerged in the context of the United States, with qualifiers explicitly noting geographic origin. A spatial-origin predicate 'is_origin_location_of' best represents that semantics with the country as subject and movement as object.\",\n      \"remark\": null,\n      \"confidence\": 0.88\n    }\n  },\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_e492b140ff7e\", \"RelR_5406b3cd7dee\"],\n      \"canonical_rel_name\": \"leads_to\",\n      \"canonical_rel_desc\": \"Indicates that the subject movement or process causally contributes to or brings about the occurrence of the object outcome, event, or response.\",\n      \"justification\": \"Both relations describe the Black Lives Matter movement causally resulting in downstream outcomes (public protests and calls for reform) with rel_hint_type='causal' and 'leading to' in the qualifiers. They share the same direction and semantics of a movement causing subsequent social or political responses, so a unified canonical predicate 'leads_to' is appropriate.\",\n      \"remark\": \"Intermediate conversational or discursive mechanisms are not modeled as separate nodes; the causal effect is captured directly from the movement to the outcomes.\",\n      \"confidence\": 0.92\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_608c85d5eefe\"],\n      \"rel_cls\": \"movement_emergence_causal_relation\",\n      \"justification\": \"This relation links a structural problem (police brutality) to the initial emergence of a social movement (Black Lives Matter) via a causal prompting role. It belongs to a class of relations where causes or grievances give rise to movements or organizations.\",\n      \"remark\": null,\n      \"confidence\": 0.87\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_f265e0c9ee4d\"],\n      \"rel_cls\": \"movement_origin_spatial_relation\",\n      \"justification\": \"The relation encodes the geographic origin of a movement (BLM) in a specific country (United States). This fits a class of relations that specify where movements or organizations originate or first emerge.\",\n      \"remark\": null,\n      \"confidence\": 0.86\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_e492b140ff7e\", \"RelR_5406b3cd7dee\"],\n      \"rel_cls\": \"movement_impact_relation\",\n      \"justification\": \"Both relations capture the downstream social and political impacts of a movement (BLM) on protests and reform demands. They naturally belong to a class describing how movements generate or shape collective actions and responses.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_608c85d5eefe\", \"RelR_e492b140ff7e\", \"RelR_5406b3cd7dee\"],\n      \"rel_cls_group\": \"CAUSALITY\",\n      \"justification\": \"All three relations describe causal links: police brutality prompting the emergence of BLM, and BLM leading to protests and calls for reform. They fit squarely within a broad causal group.\",\n      \"remark\": null,\n      \"confidence\": 0.93\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_f265e0c9ee4d\"],\n      \"rel_cls_group\": \"SPATIALITY\",\n      \"justification\": \"This relation expresses the geographic origin context of the movement, specifying that BLM emerged in the United States. This is fundamentally about spatial location rather than causation, so SPATIALITY is the appropriate broad group.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_608c85d5eefe"
+        ],
+        "canonical_rel_name": "prompts_emergence_of",
+        "canonical_rel_desc": "Indicates that the subject problem, event, or condition acts as a key prompting factor for the initial emergence of a movement, organization, or phenomenon.",
+        "justification": "This relation instance describes police brutality as a key issue that prompted the emergence of the Black Lives Matter movement, i.e., a causal trigger for the movement's formation rather than a general ongoing influence. A dedicated predicate like 'prompts_emergence_of' captures the specific causal role in initiating a movement.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_f265e0c9ee4d"
+        ],
+        "canonical_rel_name": "is_origin_location_of",
+        "canonical_rel_desc": "Indicates that the subject geographic entity is the primary place where the movement, organization, or phenomenon originated or first emerged.",
+        "justification": "The instance states that the Black Lives Matter movement emerged in the context of the United States, with qualifiers explicitly noting geographic origin. A spatial-origin predicate 'is_origin_location_of' best represents that semantics with the country as subject and movement as object.",
+        "remark": null,
+        "confidence": 0.88
+      }
+    },
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_e492b140ff7e",
+          "RelR_5406b3cd7dee"
+        ],
+        "canonical_rel_name": "leads_to",
+        "canonical_rel_desc": "Indicates that the subject movement or process causally contributes to or brings about the occurrence of the object outcome, event, or response.",
+        "justification": "Both relations describe the Black Lives Matter movement causally resulting in downstream outcomes (public protests and calls for reform) with rel_hint_type='causal' and 'leading to' in the qualifiers. They share the same direction and semantics of a movement causing subsequent social or political responses, so a unified canonical predicate 'leads_to' is appropriate.",
+        "remark": "Intermediate conversational or discursive mechanisms are not modeled as separate nodes; the causal effect is captured directly from the movement to the outcomes.",
+        "confidence": 0.92
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_608c85d5eefe"
+        ],
+        "rel_cls": "movement_emergence_causal_relation",
+        "justification": "This relation links a structural problem (police brutality) to the initial emergence of a social movement (Black Lives Matter) via a causal prompting role. It belongs to a class of relations where causes or grievances give rise to movements or organizations.",
+        "remark": null,
+        "confidence": 0.87
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_f265e0c9ee4d"
+        ],
+        "rel_cls": "movement_origin_spatial_relation",
+        "justification": "The relation encodes the geographic origin of a movement (BLM) in a specific country (United States). This fits a class of relations that specify where movements or organizations originate or first emerge.",
+        "remark": null,
+        "confidence": 0.86
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_e492b140ff7e",
+          "RelR_5406b3cd7dee"
+        ],
+        "rel_cls": "movement_impact_relation",
+        "justification": "Both relations capture the downstream social and political impacts of a movement (BLM) on protests and reform demands. They naturally belong to a class describing how movements generate or shape collective actions and responses.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_608c85d5eefe",
+          "RelR_e492b140ff7e",
+          "RelR_5406b3cd7dee"
+        ],
+        "rel_cls_group": "CAUSALITY",
+        "justification": "All three relations describe causal links: police brutality prompting the emergence of BLM, and BLM leading to protests and calls for reform. They fit squarely within a broad causal group.",
+        "remark": null,
+        "confidence": 0.93
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_f265e0c9ee4d"
+        ],
+        "rel_cls_group": "SPATIALITY",
+        "justification": "This relation expresses the geographic origin context of the movement, specifying that BLM emerged in the United States. This is fundamentally about spatial location rather than causation, so SPATIALITY is the appropriate broad group.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_608c85d5eefe"
+      ],
+      "canonical_rel_name": "prompts_emergence_of",
+      "canonical_rel_desc": "Indicates that the subject problem, event, or condition acts as a key prompting factor for the initial emergence of a movement, organization, or phenomenon.",
+      "justification": "This relation instance describes police brutality as a key issue that prompted the emergence of the Black Lives Matter movement, i.e., a causal trigger for the movement's formation rather than a general ongoing influence. A dedicated predicate like 'prompts_emergence_of' captures the specific causal role in initiating a movement.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_f265e0c9ee4d"
+      ],
+      "canonical_rel_name": "is_origin_location_of",
+      "canonical_rel_desc": "Indicates that the subject geographic entity is the primary place where the movement, organization, or phenomenon originated or first emerged.",
+      "justification": "The instance states that the Black Lives Matter movement emerged in the context of the United States, with qualifiers explicitly noting geographic origin. A spatial-origin predicate 'is_origin_location_of' best represents that semantics with the country as subject and movement as object.",
+      "remark": null,
+      "confidence": 0.88
+    },
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_e492b140ff7e",
+        "RelR_5406b3cd7dee"
+      ],
+      "canonical_rel_name": "leads_to",
+      "canonical_rel_desc": "Indicates that the subject movement or process causally contributes to or brings about the occurrence of the object outcome, event, or response.",
+      "justification": "Both relations describe the Black Lives Matter movement causally resulting in downstream outcomes (public protests and calls for reform) with rel_hint_type='causal' and 'leading to' in the qualifiers. They share the same direction and semantics of a movement causing subsequent social or political responses, so a unified canonical predicate 'leads_to' is appropriate.",
+      "remark": "Intermediate conversational or discursive mechanisms are not modeled as separate nodes; the causal effect is captured directly from the movement to the outcomes.",
+      "confidence": 0.92
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_608c85d5eefe"
+      ],
+      "rel_cls": "movement_emergence_causal_relation",
+      "justification": "This relation links a structural problem (police brutality) to the initial emergence of a social movement (Black Lives Matter) via a causal prompting role. It belongs to a class of relations where causes or grievances give rise to movements or organizations.",
+      "remark": null,
+      "confidence": 0.87
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_f265e0c9ee4d"
+      ],
+      "rel_cls": "movement_origin_spatial_relation",
+      "justification": "The relation encodes the geographic origin of a movement (BLM) in a specific country (United States). This fits a class of relations that specify where movements or organizations originate or first emerge.",
+      "remark": null,
+      "confidence": 0.86
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_e492b140ff7e",
+        "RelR_5406b3cd7dee"
+      ],
+      "rel_cls": "movement_impact_relation",
+      "justification": "Both relations capture the downstream social and political impacts of a movement (BLM) on protests and reform demands. They naturally belong to a class describing how movements generate or shape collective actions and responses.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_608c85d5eefe",
+        "RelR_e492b140ff7e",
+        "RelR_5406b3cd7dee"
+      ],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "All three relations describe causal links: police brutality prompting the emergence of BLM, and BLM leading to protests and calls for reform. They fit squarely within a broad causal group.",
+      "remark": null,
+      "confidence": 0.93
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_f265e0c9ee4d"
+      ],
+      "rel_cls_group": "SPATIALITY",
+      "justification": "This relation expresses the geographic origin context of the movement, specifying that BLM emerged in the United States. This is fundamentally about spatial location rather than causation, so SPATIALITY is the appropriate broad group.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  ],
+  "timestamp": "2026-01-06T13:16:55Z"
+}

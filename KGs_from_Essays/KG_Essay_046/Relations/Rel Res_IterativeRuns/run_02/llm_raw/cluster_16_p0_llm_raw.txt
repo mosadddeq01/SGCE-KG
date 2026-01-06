@@ -1,0 +1,15 @@
+[
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": ["RelR_9b8ced00079e"],
+      "canonical_rel_name": "acts_as_agent_of_process",
+      "canonical_rel_desc": "Indicates that the subject serves as an active biological agent that enables or carries out the object process (e.g., an animal acting as a pollination or plant reproduction agent).",
+      "rel_cls": "biological_agent_of_process_relation",
+      "rel_cls_group": "AGENCY",
+      "justification": "In this relation, 'bird pollinators' function as biological agents that carry out or enable the process 'reproduction of plants' via pollen transfer. This is semantically parallel to the first two relations (hummingbirds→pollination, sunbirds→pollination). Using a generic causal predicate 'facilitates' and class 'biological_process_causal_relation' with rel_cls_group 'CAUSALITY' under-specifies the agentive nature already captured by the other instances. To maintain a coherent schema, all three should share the same agent-of-process predicate, class, and group focusing on AGENCY rather than generic causality.",
+      "remark": "Aligned with other bird–reproduction relations so that all use a consistent agent-of-process schema.",
+      "confidence": 0.93
+    }
+  }
+]

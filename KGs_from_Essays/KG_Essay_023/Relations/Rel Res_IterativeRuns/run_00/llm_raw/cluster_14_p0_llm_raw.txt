@@ -1,0 +1,44 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_44a2aebf98c5"],
+      "canonical_rel_name": "transforms",
+      "canonical_rel_desc": "Indicates that the subject causes a fundamental change in the nature, structure, or mode of operation of the object.",
+      "justification": "The relation describes social media causally changing how human communication operates; 'transforms' is an appropriate, concise predicate capturing a strong causal change effect.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_d43a7d28c02b"],
+      "canonical_rel_name": "empowers",
+      "canonical_rel_desc": "Indicates that the subject provides the object with increased capability, agency, or power to act.",
+      "justification": "The relation states that democratization of information gives individuals more capability and agency; 'empowers' is a clear causal predicate for this enabling effect.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": ["RelR_44a2aebf98c5", "RelR_d43a7d28c02b"],
+      "rel_cls": "causal_effect_relation",
+      "justification": "Both relations express that the subject has a causal impact on the object (transforming communication, empowering individuals). Grouping them under a general causal_effect_relation class captures their shared semantics while allowing different specific predicates like 'transforms' and 'empowers'.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": ["RelR_44a2ebf98c5", "RelR_d43a7d28c02b"],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "In both cases the subject is explicitly framed as causing or enabling a change in the object (causal influence / effect), so they belong to the broad CAUSALITY group.",
+      "remark": null,
+      "confidence": 0.95
+    }
+  }
+]

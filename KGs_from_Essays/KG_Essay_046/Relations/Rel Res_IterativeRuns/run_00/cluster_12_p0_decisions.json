@@ -1,0 +1,233 @@
+{
+  "cluster_label": "12_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_28060d44593c",
+      "relation_name": "helps_maintain",
+      "rel_desc": "Birds help maintain overall biodiversity by supporting plant reproduction and dispersal.",
+      "rel_hint_type": "causal",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "birds",
+      "object_entity_name": "biodiversity",
+      "subject_class_label": "Bird Biotic Components",
+      "subject_class_group": "Birds as Environmental Indicators & Conservation",
+      "object_class_label": "Ecosystem State and Stability",
+      "object_class_group": "Ecosystem Condition, Function & Services",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "overall biodiversity",
+        "OperationalConstraint": null,
+        "ConditionExpression": "Without birds, biodiversity declines",
+        "UncertaintyQualifier": null,
+        "CausalHint": "leading to",
+        "LogicalMarker": "Without",
+        "OtherQualifier": "Pathway: via plant reproduction and colonization"
+      },
+      "confidence": 0.9,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_5f9b7c0d1408",
+      "relation_name": "alters",
+      "rel_desc": "Habitat loss represents a shift in environmental conditions that changes ecosystem condition.",
+      "rel_hint_type": "causal",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "habitat loss",
+      "object_entity_name": "ecosystem condition",
+      "subject_class_label": "Environmental Pressures",
+      "subject_class_group": "Birds as Environmental Indicators & Conservation",
+      "object_class_label": "Ecosystem State and Stability",
+      "object_class_group": "Ecosystem Condition, Function & Services",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "shifts in environmental conditions",
+        "LogicalMarker": "such as",
+        "OtherQualifier": "ExampleOf: environmental condition shift"
+      },
+      "confidence": 0.86,
+      "remarks": [
+        "Direction chosen from habitat loss to ecosystem condition as the pressure altering conditions."
+      ]
+    },
+    {
+      "relation_id": "RelR_f8badbb06e0a",
+      "relation_name": "alters",
+      "rel_desc": "Pollution is an environmental pressure that changes overall ecosystem condition.",
+      "rel_hint_type": "causal",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "pollution",
+      "object_entity_name": "ecosystem condition",
+      "subject_class_label": "Environmental Pressures",
+      "subject_class_group": "Birds as Environmental Indicators & Conservation",
+      "object_class_label": "Ecosystem State and Stability",
+      "object_class_group": "Ecosystem Condition, Function & Services",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "shifts in environmental conditions",
+        "LogicalMarker": "such as",
+        "OtherQualifier": "ExampleOf: environmental condition shift"
+      },
+      "confidence": 0.86,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_6a5ed8fe957b",
+      "relation_name": "alters",
+      "rel_desc": "Climate change acts as a large-scale driver altering environmental conditions and ecosystem condition.",
+      "rel_hint_type": "causal",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "climate change",
+      "object_entity_name": "ecosystem condition",
+      "subject_class_label": "Environmental Pressures",
+      "subject_class_group": "Birds as Environmental Indicators & Conservation",
+      "object_class_label": "Ecosystem State and Stability",
+      "object_class_group": "Ecosystem Condition, Function & Services",
+      "qualifiers": {
+        "TemporalQualifier": "long-term",
+        "SpatialQualifier": "broad spatial scales",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "shifts in environmental conditions",
+        "LogicalMarker": "such as",
+        "OtherQualifier": "ExampleOf: environmental condition shift"
+      },
+      "confidence": 0.86,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_28060d44593c\"],\n      \"canonical_rel_name\": \"supports_maintenance_of\",\n      \"canonical_rel_desc\": \"Indicates that the subject contributes to maintaining or sustaining the state or level of the object over time.\",\n      \"justification\": \"The relation describes birds contributing to maintaining overall biodiversity via ecological functions; this is best modeled as the subject supporting the maintenance of the ecosystem-level object rather than a generic causal or identity link.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_5f9b7c0d1408\",\n        \"RelR_f8badbb06e0a\",\n        \"RelR_6a5ed8fe957b\"\n      ],\n      \"canonical_rel_name\": \"alters_ecosystem_condition\",\n      \"canonical_rel_desc\": \"Indicates that the subject pressure or driver causes changes in the overall condition or state of an ecosystem.\",\n      \"justification\": \"All three relations link environmental pressures (habitat loss, pollution, climate change) to ecosystem condition, with descriptions explicitly stating they change or alter ecosystem condition; a shared, more precise predicate captures this causal alteration.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_28060d44593c\",\n        \"RelR_5f9b7c0d1408\",\n        \"RelR_f8badbb06e0a\",\n        \"RelR_6a5ed8fe957b\"\n      ],\n      \"rel_cls\": \"ecosystem_state_influence_relation\",\n      \"justification\": \"All relations describe entities (species or pressures) influencing high-level ecosystem properties (biodiversity or ecosystem condition), so they belong to a common class capturing influences on ecosystem state.\",\n      \"remark\": null,\n      \"confidence\": 0.88\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_28060d44593c\",\n        \"RelR_5f9b7c0d1408\",\n        \"RelR_f8badbb06e0a\",\n        \"RelR_6a5ed8fe957b\"\n      ],\n      \"rel_cls_group\": \"CAUSALITY\",\n      \"justification\": \"Each relation encodes a causal or quasi-causal effect: birds help maintain biodiversity, and environmental pressures (habitat loss, pollution, climate change) alter ecosystem condition; this squarely fits a causal grouping.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_28060d44593c"
+        ],
+        "canonical_rel_name": "supports_maintenance_of",
+        "canonical_rel_desc": "Indicates that the subject contributes to maintaining or sustaining the state or level of the object over time.",
+        "justification": "The relation describes birds contributing to maintaining overall biodiversity via ecological functions; this is best modeled as the subject supporting the maintenance of the ecosystem-level object rather than a generic causal or identity link.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_5f9b7c0d1408",
+          "RelR_f8badbb06e0a",
+          "RelR_6a5ed8fe957b"
+        ],
+        "canonical_rel_name": "alters_ecosystem_condition",
+        "canonical_rel_desc": "Indicates that the subject pressure or driver causes changes in the overall condition or state of an ecosystem.",
+        "justification": "All three relations link environmental pressures (habitat loss, pollution, climate change) to ecosystem condition, with descriptions explicitly stating they change or alter ecosystem condition; a shared, more precise predicate captures this causal alteration.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_28060d44593c",
+          "RelR_5f9b7c0d1408",
+          "RelR_f8badbb06e0a",
+          "RelR_6a5ed8fe957b"
+        ],
+        "rel_cls": "ecosystem_state_influence_relation",
+        "justification": "All relations describe entities (species or pressures) influencing high-level ecosystem properties (biodiversity or ecosystem condition), so they belong to a common class capturing influences on ecosystem state.",
+        "remark": null,
+        "confidence": 0.88
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_28060d44593c",
+          "RelR_5f9b7c0d1408",
+          "RelR_f8badbb06e0a",
+          "RelR_6a5ed8fe957b"
+        ],
+        "rel_cls_group": "CAUSALITY",
+        "justification": "Each relation encodes a causal or quasi-causal effect: birds help maintain biodiversity, and environmental pressures (habitat loss, pollution, climate change) alter ecosystem condition; this squarely fits a causal grouping.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_28060d44593c"
+      ],
+      "canonical_rel_name": "supports_maintenance_of",
+      "canonical_rel_desc": "Indicates that the subject contributes to maintaining or sustaining the state or level of the object over time.",
+      "justification": "The relation describes birds contributing to maintaining overall biodiversity via ecological functions; this is best modeled as the subject supporting the maintenance of the ecosystem-level object rather than a generic causal or identity link.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_5f9b7c0d1408",
+        "RelR_f8badbb06e0a",
+        "RelR_6a5ed8fe957b"
+      ],
+      "canonical_rel_name": "alters_ecosystem_condition",
+      "canonical_rel_desc": "Indicates that the subject pressure or driver causes changes in the overall condition or state of an ecosystem.",
+      "justification": "All three relations link environmental pressures (habitat loss, pollution, climate change) to ecosystem condition, with descriptions explicitly stating they change or alter ecosystem condition; a shared, more precise predicate captures this causal alteration.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_28060d44593c",
+        "RelR_5f9b7c0d1408",
+        "RelR_f8badbb06e0a",
+        "RelR_6a5ed8fe957b"
+      ],
+      "rel_cls": "ecosystem_state_influence_relation",
+      "justification": "All relations describe entities (species or pressures) influencing high-level ecosystem properties (biodiversity or ecosystem condition), so they belong to a common class capturing influences on ecosystem state.",
+      "remark": null,
+      "confidence": 0.88
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_28060d44593c",
+        "RelR_5f9b7c0d1408",
+        "RelR_f8badbb06e0a",
+        "RelR_6a5ed8fe957b"
+      ],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "Each relation encodes a causal or quasi-causal effect: birds help maintain biodiversity, and environmental pressures (habitat loss, pollution, climate change) alter ecosystem condition; this squarely fits a causal grouping.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  ],
+  "timestamp": "2026-01-06T11:29:45Z"
+}

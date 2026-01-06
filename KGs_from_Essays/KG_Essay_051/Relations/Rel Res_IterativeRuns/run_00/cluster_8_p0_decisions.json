@@ -1,0 +1,253 @@
+{
+  "cluster_label": "8_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_d4989ab17467",
+      "relation_name": "is_form_of",
+      "rel_desc": "Body language is described as a powerful form of communication.",
+      "rel_hint_type": "classification",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "body language",
+      "object_entity_name": "communication",
+      "subject_class_label": "Body Language as Nonverbal Communication",
+      "subject_class_group": "Nonverbal Communication & Body Language",
+      "object_class_label": "Communication Process",
+      "object_class_group": "Human Communication & Meaning",
+      "qualifiers": {
+        "TemporalQualifier": "on a daily basis",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "UsageFrequency: routine everyday use; ConsciousAwareness: often without realizing it"
+      },
+      "confidence": 0.98,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_9ddbd6dc7a90",
+      "relation_name": "categorizes",
+      "rel_desc": "The types of body language represent a categorization scheme applied to body language.",
+      "rel_hint_type": "classification",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "types of body language",
+      "object_entity_name": "body language",
+      "subject_class_label": "Body Language as Subject Matter",
+      "subject_class_group": "Body Language & Nonverbal Communication",
+      "object_class_label": "Body Language as Nonverbal Communication",
+      "object_class_group": "Nonverbal Communication & Body Language",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "that exist",
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "Scope: conceptual taxonomy of body language forms"
+      },
+      "confidence": 0.9,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_54eceb1b197f",
+      "relation_name": "is_instance_of",
+      "rel_desc": "Body language is categorized as a form of communication.",
+      "rel_hint_type": "classification",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "body language",
+      "object_entity_name": "form of communication",
+      "subject_class_label": "Body Language as Nonverbal Communication",
+      "subject_class_group": "Nonverbal Communication & Body Language",
+      "object_class_label": "Communication Modality",
+      "object_class_group": "Human Communication & Meaning",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": "used in a variety of ways",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "is",
+        "LogicalMarker": null,
+        "OtherQualifier": "Attributes: powerful and versatile"
+      },
+      "confidence": 0.99,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_542b659b8c6f",
+      "relation_name": "is_subtype_of",
+      "rel_desc": "A 'form of communication' is a subtype or modality within communication.",
+      "rel_hint_type": "classification",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "form of communication",
+      "object_entity_name": "communication",
+      "subject_class_label": "Communication Modality",
+      "subject_class_group": "Human Communication & Meaning",
+      "object_class_label": "Communication Process",
+      "object_class_group": "Human Communication & Meaning",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.86,
+      "remarks": [
+        "Somewhat generic; added to preserve hierarchy between modality and process."
+      ]
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_d4989ab17467\",\n        \"RelR_54eceb1b197f\",\n        \"RelR_542b659b8c6f\"\n      ],\n      \"canonical_rel_name\": \"is_subtype_of\",\n      \"canonical_rel_desc\": \"Indicates that the subject is a more specific type or modality within the broader class represented by the object.\",\n      \"justification\": \"All three relations express a taxonomic 'is-a' or subtype relationship within communication: body language as a form of communication, body language as a form of communication modality, and 'form of communication' as a subtype of 'communication'. Normalizing these to a single hierarchical predicate 'is_subtype_of' provides a consistent ontology-level ISA edge.\",\n      \"remark\": null,\n      \"confidence\": 0.93\n    }\n  },\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_9ddbd6dc7a90\"\n      ],\n      \"canonical_rel_name\": \"categorizes\",\n      \"canonical_rel_desc\": \"Indicates that the subject is a categorization scheme or set of types used to classify instances or subtypes of the object concept.\",\n      \"justification\": \"This relation connects 'types of body language' (a taxonomy) to 'body language' (the domain being classified). The semantics concern a classification scheme applied to a concept, which is best captured by a predicate like 'categorizes'.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_d4989ab17467\",\n        \"RelR_54eceb1b197f\",\n        \"RelR_542b659b8c6f\"\n      ],\n      \"rel_cls\": \"hierarchy_relation\",\n      \"justification\": \"These relations encode taxonomic hierarchy (modality or subtype within broader communication categories). Grouping them under 'hierarchy_relation' captures their shared role as ISA / subtype links in the concept hierarchy.\",\n      \"remark\": null,\n      \"confidence\": 0.92\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_9ddbd6dc7a90\"\n      ],\n      \"rel_cls\": \"classification_scheme_relation\",\n      \"justification\": \"The relation links a set of 'types of body language' to the general concept 'body language', reflecting a categorization framework rather than direct ISA between the two nodes. This fits a broader class of relations where a taxonomy or scheme classifies a domain.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_d4989ab17467\",\n        \"RelR_54eceb1b197f\",\n        \"RelR_542b659b8c6f\",\n        \"RelR_9ddbd6dc7a90\"\n      ],\n      \"rel_cls_group\": \"IDENTITY\",\n      \"justification\": \"Both the subtype (ISA) relations and the categorization-scheme relation concern how concepts are identified, typed, or classified relative to one another in a conceptual hierarchy. This fits best under a broad 'IDENTITY' group rather than COMPOSITION, CAUSALITY, etc.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_d4989ab17467",
+          "RelR_54eceb1b197f",
+          "RelR_542b659b8c6f"
+        ],
+        "canonical_rel_name": "is_subtype_of",
+        "canonical_rel_desc": "Indicates that the subject is a more specific type or modality within the broader class represented by the object.",
+        "justification": "All three relations express a taxonomic 'is-a' or subtype relationship within communication: body language as a form of communication, body language as a form of communication modality, and 'form of communication' as a subtype of 'communication'. Normalizing these to a single hierarchical predicate 'is_subtype_of' provides a consistent ontology-level ISA edge.",
+        "remark": null,
+        "confidence": 0.93
+      }
+    },
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_9ddbd6dc7a90"
+        ],
+        "canonical_rel_name": "categorizes",
+        "canonical_rel_desc": "Indicates that the subject is a categorization scheme or set of types used to classify instances or subtypes of the object concept.",
+        "justification": "This relation connects 'types of body language' (a taxonomy) to 'body language' (the domain being classified). The semantics concern a classification scheme applied to a concept, which is best captured by a predicate like 'categorizes'.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_d4989ab17467",
+          "RelR_54eceb1b197f",
+          "RelR_542b659b8c6f"
+        ],
+        "rel_cls": "hierarchy_relation",
+        "justification": "These relations encode taxonomic hierarchy (modality or subtype within broader communication categories). Grouping them under 'hierarchy_relation' captures their shared role as ISA / subtype links in the concept hierarchy.",
+        "remark": null,
+        "confidence": 0.92
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_9ddbd6dc7a90"
+        ],
+        "rel_cls": "classification_scheme_relation",
+        "justification": "The relation links a set of 'types of body language' to the general concept 'body language', reflecting a categorization framework rather than direct ISA between the two nodes. This fits a broader class of relations where a taxonomy or scheme classifies a domain.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_d4989ab17467",
+          "RelR_54eceb1b197f",
+          "RelR_542b659b8c6f",
+          "RelR_9ddbd6dc7a90"
+        ],
+        "rel_cls_group": "IDENTITY",
+        "justification": "Both the subtype (ISA) relations and the categorization-scheme relation concern how concepts are identified, typed, or classified relative to one another in a conceptual hierarchy. This fits best under a broad 'IDENTITY' group rather than COMPOSITION, CAUSALITY, etc.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_d4989ab17467",
+        "RelR_54eceb1b197f",
+        "RelR_542b659b8c6f"
+      ],
+      "canonical_rel_name": "is_subtype_of",
+      "canonical_rel_desc": "Indicates that the subject is a more specific type or modality within the broader class represented by the object.",
+      "justification": "All three relations express a taxonomic 'is-a' or subtype relationship within communication: body language as a form of communication, body language as a form of communication modality, and 'form of communication' as a subtype of 'communication'. Normalizing these to a single hierarchical predicate 'is_subtype_of' provides a consistent ontology-level ISA edge.",
+      "remark": null,
+      "confidence": 0.93
+    },
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_9ddbd6dc7a90"
+      ],
+      "canonical_rel_name": "categorizes",
+      "canonical_rel_desc": "Indicates that the subject is a categorization scheme or set of types used to classify instances or subtypes of the object concept.",
+      "justification": "This relation connects 'types of body language' (a taxonomy) to 'body language' (the domain being classified). The semantics concern a classification scheme applied to a concept, which is best captured by a predicate like 'categorizes'.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_d4989ab17467",
+        "RelR_54eceb1b197f",
+        "RelR_542b659b8c6f"
+      ],
+      "rel_cls": "hierarchy_relation",
+      "justification": "These relations encode taxonomic hierarchy (modality or subtype within broader communication categories). Grouping them under 'hierarchy_relation' captures their shared role as ISA / subtype links in the concept hierarchy.",
+      "remark": null,
+      "confidence": 0.92
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_9ddbd6dc7a90"
+      ],
+      "rel_cls": "classification_scheme_relation",
+      "justification": "The relation links a set of 'types of body language' to the general concept 'body language', reflecting a categorization framework rather than direct ISA between the two nodes. This fits a broader class of relations where a taxonomy or scheme classifies a domain.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_d4989ab17467",
+        "RelR_54eceb1b197f",
+        "RelR_542b659b8c6f",
+        "RelR_9ddbd6dc7a90"
+      ],
+      "rel_cls_group": "IDENTITY",
+      "justification": "Both the subtype (ISA) relations and the categorization-scheme relation concern how concepts are identified, typed, or classified relative to one another in a conceptual hierarchy. This fits best under a broad 'IDENTITY' group rather than COMPOSITION, CAUSALITY, etc.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  ],
+  "timestamp": "2026-01-06T12:09:17Z"
+}

@@ -1,0 +1,20 @@
+[
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": [
+        "RelR_c19673f388aa",
+        "RelR_1f8f212a2139",
+        "RelR_767b675fc10f",
+        "RelR_4679f87947ea"
+      ],
+      "canonical_rel_name": "supports_ecosystem_condition",
+      "canonical_rel_desc": "Indicates that the subject supports, maintains, or contributes positively to the health, resilience, or overall condition of ecosystems.",
+      "rel_cls": null,
+      "rel_cls_group": null,
+      "justification": "All four relations describe bird populations or habitats causally supporting or maintaining ecosystem health/resilience, and the original surface predicate is 'supports'. The previous canonical_rel_name 'enhances_ecosystem_condition' overemphasizes improvement rather than general support/maintenance. Normalizing to 'supports_ecosystem_condition' better matches the semantics and the upstream wording while keeping them within the same causal ecosystem-condition relation class and group.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  }
+]

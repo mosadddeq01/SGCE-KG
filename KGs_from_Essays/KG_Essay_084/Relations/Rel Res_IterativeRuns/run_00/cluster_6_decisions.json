@@ -1,0 +1,199 @@
+{
+  "cluster_label": 6,
+  "cluster_classes": [
+    {
+      "candidate_id": "ClsC_ffe4478e",
+      "class_label": "Crime Scene Handling",
+      "class_description": "Concepts related to the process and conditions of examining, documenting, and preserving a crime scene and its evidence.",
+      "class_type_hint": "Operational Process",
+      "class_group": "TBD",
+      "confidence": 0.86,
+      "evidence_excerpt": "documenting and preserving the integrity of the crime scene, as well as collecting and cataloging evidence",
+      "member_ids": [
+        "En_53107a37",
+        "En_b660dbfb"
+      ],
+      "members": [
+        {
+          "id": "En_53107a37",
+          "entity_name": "crime scene investigation",
+          "entity_description": "Process of examining crime scenes to document conditions and collect evidence.",
+          "entity_type_hint": "Process"
+        },
+        {
+          "id": "En_b660dbfb",
+          "entity_name": "crime scene integrity",
+          "entity_description": "Condition of a crime scene remaining uncontaminated and unchanged during investigation.",
+          "entity_type_hint": "State"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_fba314c4",
+      "class_label": "Physical Evidence Handling",
+      "class_description": "Processes in forensic science focused on obtaining and working with physical evidence, including its initial collection and subsequent analytical examination.",
+      "class_type_hint": "Forensic Process",
+      "class_group": "TBD",
+      "confidence": 0.96,
+      "evidence_excerpt": "One of the key aspects of forensic science is the collection and analysis of physical evidence.",
+      "member_ids": [
+        "En_70a019bd",
+        "En_6ed9a385"
+      ],
+      "members": [
+        {
+          "id": "En_70a019bd",
+          "entity_name": "collection of physical evidence",
+          "entity_description": "Process of gathering physical evidence, identified as a key aspect of forensic science.",
+          "entity_type_hint": "Process"
+        },
+        {
+          "id": "En_6ed9a385",
+          "entity_name": "analysis of physical evidence",
+          "entity_description": "Examination and evaluation of physical evidence to draw conclusions in forensic science.",
+          "entity_type_hint": "Process"
+        }
+      ],
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"split_class\",\n    \"args\": {\n      \"source_class_id\": \"ClsC_ffe4478e\",\n      \"splits\": [\n        {\n          \"name\": \"Crime Scene Investigation\",\n          \"description\": \"Processes involved in examining and documenting a crime scene to collect evidence.\",\n          \"class_type_hint\": \"Operational Process\",\n          \"member_ids\": [\"En_53107a37\"],\n          \"provisional_id\": \"SPLIT_ffe4478e_process\"\n        },\n        {\n          \"name\": \"Crime Scene Integrity\",\n          \"description\": \"Conditions and safeguards that keep a crime scene uncontaminated and unchanged during investigation.\",\n          \"class_type_hint\": \"State/Condition\",\n          \"member_ids\": [\"En_b660dbfb\"],\n          \"provisional_id\": \"SPLIT_ffe4478e_state\"\n        }\n      ],\n      \"justification\": \"The original 'Crime Scene Handling' class mixes a procedural concept (crime scene investigation) with a state/condition concept (crime scene integrity); splitting produces two semantically coherent classes aligned with process vs condition.\",\n      \"remark\": \"Source class ClsC_ffe4478e is left with no members after the split and can be reviewed for deprecation or repurposing.\",\n      \"confidence\": 0.86\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"SPLIT_ffe4478e_process\",\n      \"new_name\": \"Crime Scene Investigation\",\n      \"new_description\": \"Processes and procedures used to examine crime scenes, document conditions, and collect evidence while preserving the scene.\",\n      \"new_class_type_hint\": \"Operational Process\",\n      \"new_class_group\": \"Forensic Evidence & Crime Scene Procedures\",\n      \"remark\": null,\n      \"justification\": \"Aligns the new split class with its procedural focus and assigns a shared Class_Group that will connect it to other forensic evidence workflow classes.\",\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"SPLIT_ffe4478e_state\",\n      \"new_name\": \"Crime Scene Integrity\",\n      \"new_description\": \"Conditions, controls, and policies that ensure a crime scene remains uncontaminated and unchanged throughout investigation.\",\n      \"new_class_type_hint\": \"State/Condition\",\n      \"new_class_group\": \"Forensic Evidence & Crime Scene Procedures\",\n      \"remark\": null,\n      \"justification\": \"Clarifies the class as representing a state/condition concept and links it to the same overarching forensic procedures Class_Group.\",\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_fba314c4\",\n      \"new_name\": \"Physical Evidence Handling\",\n      \"new_description\": \"Processes in forensic science focused on obtaining, preserving, and analyzing physical evidence from collection through examination.\",\n      \"new_class_type_hint\": \"Forensic Process\",\n      \"new_class_group\": \"Forensic Evidence & Crime Scene Procedures\",\n      \"remark\": null,\n      \"justification\": \"Keeps the class focused on end-to-end handling of physical evidence and assigns it to the same Class_Group as related crime scene procedure classes to reflect their shared forensic workflow domain.\",\n      \"confidence\": 0.96\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "split_class",
+      "args": {
+        "source_class_id": "ClsC_ffe4478e",
+        "splits": [
+          {
+            "name": "Crime Scene Investigation",
+            "description": "Processes involved in examining and documenting a crime scene to collect evidence.",
+            "class_type_hint": "Operational Process",
+            "member_ids": [
+              "En_53107a37"
+            ],
+            "provisional_id": "SPLIT_ffe4478e_process"
+          },
+          {
+            "name": "Crime Scene Integrity",
+            "description": "Conditions and safeguards that keep a crime scene uncontaminated and unchanged during investigation.",
+            "class_type_hint": "State/Condition",
+            "member_ids": [
+              "En_b660dbfb"
+            ],
+            "provisional_id": "SPLIT_ffe4478e_state"
+          }
+        ],
+        "justification": "The original 'Crime Scene Handling' class mixes a procedural concept (crime scene investigation) with a state/condition concept (crime scene integrity); splitting produces two semantically coherent classes aligned with process vs condition.",
+        "remark": "Source class ClsC_ffe4478e is left with no members after the split and can be reviewed for deprecation or repurposing.",
+        "confidence": 0.86
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "SPLIT_ffe4478e_process",
+        "new_name": "Crime Scene Investigation",
+        "new_description": "Processes and procedures used to examine crime scenes, document conditions, and collect evidence while preserving the scene.",
+        "new_class_type_hint": "Operational Process",
+        "new_class_group": "Forensic Evidence & Crime Scene Procedures",
+        "remark": null,
+        "justification": "Aligns the new split class with its procedural focus and assigns a shared Class_Group that will connect it to other forensic evidence workflow classes.",
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "SPLIT_ffe4478e_state",
+        "new_name": "Crime Scene Integrity",
+        "new_description": "Conditions, controls, and policies that ensure a crime scene remains uncontaminated and unchanged throughout investigation.",
+        "new_class_type_hint": "State/Condition",
+        "new_class_group": "Forensic Evidence & Crime Scene Procedures",
+        "remark": null,
+        "justification": "Clarifies the class as representing a state/condition concept and links it to the same overarching forensic procedures Class_Group.",
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_fba314c4",
+        "new_name": "Physical Evidence Handling",
+        "new_description": "Processes in forensic science focused on obtaining, preserving, and analyzing physical evidence from collection through examination.",
+        "new_class_type_hint": "Forensic Process",
+        "new_class_group": "Forensic Evidence & Crime Scene Procedures",
+        "remark": null,
+        "justification": "Keeps the class focused on end-to-end handling of physical evidence and assigns it to the same Class_Group as related crime scene procedure classes to reflect their shared forensic workflow domain.",
+        "confidence": 0.96
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "split_class",
+      "source_class_id": "ClsC_ffe4478e",
+      "source_class_id_resolved": "ClsC_ffe4478e",
+      "created_classes": [
+        {
+          "new_class_id": "ClsR_c096d01b",
+          "provisional_id": "SPLIT_ffe4478e_process",
+          "member_ids": [
+            "En_53107a37"
+          ]
+        },
+        {
+          "new_class_id": "ClsR_daf28fe3",
+          "provisional_id": "SPLIT_ffe4478e_state",
+          "member_ids": [
+            "En_b660dbfb"
+          ]
+        }
+      ],
+      "justification": "The original 'Crime Scene Handling' class mixes a procedural concept (crime scene investigation) with a state/condition concept (crime scene integrity); splitting produces two semantically coherent classes aligned with process vs condition.",
+      "remark": "Source class ClsC_ffe4478e is left with no members after the split and can be reviewed for deprecation or repurposing.",
+      "confidence": 0.86
+    },
+    {
+      "action": "modify_class",
+      "class_id": "SPLIT_ffe4478e_process",
+      "class_id_resolved": "ClsR_c096d01b",
+      "new_name": "Crime Scene Investigation",
+      "new_description": "Processes and procedures used to examine crime scenes, document conditions, and collect evidence while preserving the scene.",
+      "new_class_type_hint": "Operational Process",
+      "new_class_group": "Forensic Evidence & Crime Scene Procedures",
+      "remark": null,
+      "justification": "Aligns the new split class with its procedural focus and assigns a shared Class_Group that will connect it to other forensic evidence workflow classes.",
+      "confidence": 0.9
+    },
+    {
+      "action": "modify_class",
+      "class_id": "SPLIT_ffe4478e_state",
+      "class_id_resolved": "ClsR_daf28fe3",
+      "new_name": "Crime Scene Integrity",
+      "new_description": "Conditions, controls, and policies that ensure a crime scene remains uncontaminated and unchanged throughout investigation.",
+      "new_class_type_hint": "State/Condition",
+      "new_class_group": "Forensic Evidence & Crime Scene Procedures",
+      "remark": null,
+      "justification": "Clarifies the class as representing a state/condition concept and links it to the same overarching forensic procedures Class_Group.",
+      "confidence": 0.9
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_fba314c4",
+      "class_id_resolved": "ClsC_fba314c4",
+      "new_name": "Physical Evidence Handling",
+      "new_description": "Processes in forensic science focused on obtaining, preserving, and analyzing physical evidence from collection through examination.",
+      "new_class_type_hint": "Forensic Process",
+      "new_class_group": "Forensic Evidence & Crime Scene Procedures",
+      "remark": null,
+      "justification": "Keeps the class focused on end-to-end handling of physical evidence and assigns it to the same Class_Group as related crime scene procedure classes to reflect their shared forensic workflow domain.",
+      "confidence": 0.96
+    }
+  ],
+  "provisional_to_real": {
+    "SPLIT_ffe4478e_process": "ClsR_c096d01b",
+    "SPLIT_ffe4478e_state": "ClsR_daf28fe3"
+  },
+  "timestamp": "2026-01-06T14:25:08Z"
+}

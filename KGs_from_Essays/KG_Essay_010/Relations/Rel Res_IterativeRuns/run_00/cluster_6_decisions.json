@@ -1,0 +1,120 @@
+{
+  "cluster_label": 6,
+  "cluster_classes": [
+    {
+      "candidate_id": "ClsC_8aa06b5c",
+      "class_label": "Black Hole Components",
+      "class_description": "Fundamental structural regions that constitute a black hole, specifically its event horizon boundary and its central singularity where classical physics breaks down.",
+      "class_type_hint": "Astrophysical Structure",
+      "class_group": "TBD",
+      "confidence": 0.84,
+      "evidence_excerpt": "The boundary surface around a black hole, known as the event horizon... The central region of a black hole... the singularity.",
+      "member_ids": [
+        "Can_585b2868",
+        "Can_e21ee374"
+      ],
+      "members": [
+        {
+          "id": "Can_585b2868",
+          "entity_name": "event horizon (black hole)",
+          "entity_description": "The boundary surface around a black hole, often described as the point of no return, beyond which nothing can escape the gravitational pull and near which quantum effects can produce Hawking radiation.",
+          "entity_type_hint": "AstrophysicalRegion"
+        },
+        {
+          "id": "Can_e21ee374",
+          "entity_name": "black hole singularity",
+          "entity_description": "The central region of a black hole where classical general relativity predicts a point of effectively infinite density and spacetime curvature, with zero volume, and where known laws of physics break down.",
+          "entity_type_hint": "PhysicalConcept"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_84f3008c",
+      "class_label": "Black Hole Objects",
+      "class_description": "Astrophysical black holes understood as compact objects with gravity so strong that not even light can escape, characterized by an event horizon and central singularity.",
+      "class_type_hint": "Astrophysical Object",
+      "class_group": "TBD",
+      "confidence": 0.96,
+      "evidence_excerpt": "Both are described as astrophysical objects with gravity so strong that light cannot escape, featuring an event horizon and singularity.",
+      "member_ids": [
+        "En_b3dc7e3f",
+        "Can_24050426"
+      ],
+      "members": [
+        {
+          "id": "En_b3dc7e3f",
+          "entity_name": "black hole",
+          "entity_description": "Astrophysical object formed from collapsed massive stars, containing a singularity and surrounded by an event horizon.",
+          "entity_type_hint": "AstrophysicalObject"
+        },
+        {
+          "id": "Can_24050426",
+          "entity_name": "black hole",
+          "entity_description": "An astrophysical object whose gravitational field is so strong that nothing, not even light, can escape from within a certain boundary called the event horizon.",
+          "entity_type_hint": "AstrophysicalObject"
+        }
+      ],
+      "remarks": [
+        "This class contains two entities both labeled generically as 'black hole' that appear to be duplicate representations of the same astrophysical concept; consider upstream entity-level deduplication."
+      ]
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_8aa06b5c\",\n      \"new_name\": \"Black Hole Structural Components\",\n      \"new_description\": \"Fundamental regions that constitute the internal structure of a black hole, including the event horizon (boundary of no return) and the central singularity where classical physics breaks down.\",\n      \"new_class_type_hint\": \"AstrophysicalStructure\",\n      \"new_class_group\": \"Black Holes\",\n      \"remark\": null,\n      \"justification\": \"This class cleanly represents internal regions of black holes rather than whole objects; updating the name/description and assigning the shared Class_Group ‘Black Holes’ clarifies its scope and connects it to the related black-hole-object class.\",\n      \"confidence\": 0.94\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_84f3008c\",\n      \"new_name\": \"Black Holes (Astrophysical Objects)\",\n      \"new_description\": \"Astrophysical compact objects with gravity so strong that nothing, not even light, can escape from within their event horizon, typically formed from the collapse of massive stars and characterized by an event horizon and central singularity.\",\n      \"new_class_type_hint\": \"AstrophysicalObject\",\n      \"new_class_group\": \"Black Holes\",\n      \"remark\": \"This class contains two entities both labeled generically as ‘black hole’ that appear to be duplicate representations of the same astrophysical concept; consider upstream entity-level deduplication.\",\n      \"justification\": \"This class represents whole black holes as objects, distinct from their internal regions; updating the name and description sharpens that distinction, assigning the shared Class_Group ‘Black Holes’ links it to the components class, and the remark flags likely duplicate black-hole entities for human review without changing membership.\",\n      \"confidence\": 0.93\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_8aa06b5c",
+        "new_name": "Black Hole Structural Components",
+        "new_description": "Fundamental regions that constitute the internal structure of a black hole, including the event horizon (boundary of no return) and the central singularity where classical physics breaks down.",
+        "new_class_type_hint": "AstrophysicalStructure",
+        "new_class_group": "Black Holes",
+        "remark": null,
+        "justification": "This class cleanly represents internal regions of black holes rather than whole objects; updating the name/description and assigning the shared Class_Group 'Black Holes' clarifies its scope and connects it to the related black-hole-object class.",
+        "confidence": 0.94
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_84f3008c",
+        "new_name": "Black Holes (Astrophysical Objects)",
+        "new_description": "Astrophysical compact objects with gravity so strong that nothing, not even light, can escape from within their event horizon, typically formed from the collapse of massive stars and characterized by an event horizon and central singularity.",
+        "new_class_type_hint": "AstrophysicalObject",
+        "new_class_group": "Black Holes",
+        "remark": "This class contains two entities both labeled generically as 'black hole' that appear to be duplicate representations of the same astrophysical concept; consider upstream entity-level deduplication.",
+        "justification": "This class represents whole black holes as objects, distinct from their internal regions; updating the name and description sharpens that distinction, assigning the shared Class_Group 'Black Holes' links it to the components class, and the remark flags likely duplicate black-hole entities for human review without changing membership.",
+        "confidence": 0.93
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_8aa06b5c",
+      "class_id_resolved": "ClsC_8aa06b5c",
+      "new_name": "Black Hole Structural Components",
+      "new_description": "Fundamental regions that constitute the internal structure of a black hole, including the event horizon (boundary of no return) and the central singularity where classical physics breaks down.",
+      "new_class_type_hint": "AstrophysicalStructure",
+      "new_class_group": "Black Holes",
+      "remark": null,
+      "justification": "This class cleanly represents internal regions of black holes rather than whole objects; updating the name/description and assigning the shared Class_Group 'Black Holes' clarifies its scope and connects it to the related black-hole-object class.",
+      "confidence": 0.94
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_84f3008c",
+      "class_id_resolved": "ClsC_84f3008c",
+      "new_name": "Black Holes (Astrophysical Objects)",
+      "new_description": "Astrophysical compact objects with gravity so strong that nothing, not even light, can escape from within their event horizon, typically formed from the collapse of massive stars and characterized by an event horizon and central singularity.",
+      "new_class_type_hint": "AstrophysicalObject",
+      "new_class_group": "Black Holes",
+      "remark": "This class contains two entities both labeled generically as 'black hole' that appear to be duplicate representations of the same astrophysical concept; consider upstream entity-level deduplication.",
+      "justification": "This class represents whole black holes as objects, distinct from their internal regions; updating the name and description sharpens that distinction, assigning the shared Class_Group 'Black Holes' links it to the components class, and the remark flags likely duplicate black-hole entities for human review without changing membership.",
+      "confidence": 0.93
+    }
+  ],
+  "provisional_to_real": {},
+  "timestamp": "2026-01-06T09:24:49Z"
+}

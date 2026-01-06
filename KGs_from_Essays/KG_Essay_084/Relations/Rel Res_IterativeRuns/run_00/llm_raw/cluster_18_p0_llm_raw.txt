@@ -1,0 +1,45 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_02e6e09428be",
+        "RelR_e9324d8002b6",
+        "RelR_8328d841030e"
+      ],
+      "canonical_rel_name": "communicates_findings_to",
+      "canonical_rel_desc": "Indicates that a forensic scientist conveys or reports forensic findings to a specified criminal justice participant or body.",
+      "justification": "All three relations describe the same directional predicate: forensic scientists conveying their forensic findings to different roles within the criminal justice system (law enforcement agencies, lawyers, judges). The variation is only in the recipient type and qualifiers, so they should share one canonical predicate.",
+      "remark": null,
+      "confidence": 0.97
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_02e6e09428be",
+        "RelR_e9324d8002b6",
+        "RelR_8328d841030e"
+      ],
+      "rel_cls": "forensic_findings_communication_relation",
+      "justification": "These relations are all about the communication of forensic findings from experts to various criminal justice participants, forming a clear family of domain-specific communication relations centered on forensic results.",
+      "remark": null,
+      "confidence": 0.96
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_02e6e09428be",
+        "RelR_e9324d8002b6",
+        "RelR_8328d841030e"
+      ],
+      "rel_cls_group": "COMMUNICATION",
+      "justification": "The core semantic dimension is the act of communicating information (forensic findings) from a source (forensic scientists) to recipients (criminal justice participants), which fits a broad COMMUNICATION group.",
+      "remark": null,
+      "confidence": 0.97
+    }
+  }
+]

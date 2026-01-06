@@ -1,0 +1,60 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_303d7f474208",
+        "RelR_d97b3bf976b6",
+        "RelR_4c73dab2ea16"
+      ],
+      "canonical_rel_name": "participates_in",
+      "canonical_rel_desc": "Indicates that an actor or group takes part in an event, activity, or form of collective action.",
+      "justification": "All three relations link human actors (workers or people) to actions/events (pyramid construction, public protest demonstrations, violent uprisings) where the semantics are that they take part or are engaged in those activities, not that they cause or control them.",
+      "remark": null,
+      "confidence": 0.94
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_cd1574a9ef6c"
+      ],
+      "canonical_rel_name": "initiated",
+      "canonical_rel_desc": "Indicates that an actor or group started or triggered an event or form of collective action.",
+      "justification": "This relation specifically states that the workers initiated the strike, which is stronger than mere participation and indicates a causal, starting role in the collective action.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_303d7f474208",
+        "RelR_cd1574a9ef6c",
+        "RelR_d97b3bf976b6",
+        "RelR_4c73dab2ea16"
+      ],
+      "rel_cls": "collective_action_actor_role_relation",
+      "justification": "All relations connect actors (workers or people) to forms of collective action (construction labor, strikes, protests, uprisings) and describe their role in these actions (participating or initiating). Grouping them under an actor-role-in-collective-action class captures this common semantics.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_303d7f474208",
+        "RelR_cd1574a9ef6c",
+        "RelR_d97b3bf976b6",
+        "RelR_4c73dab2ea16"
+      ],
+      "rel_cls_group": "AGENCY",
+      "justification": "Each relation expresses how agents (people or worker groups) act in relation to events or activities (participating in or initiating them), which falls under broad agency/actor–action semantics rather than composition, identity, or purely temporal/spatial relations.",
+      "remark": null,
+      "confidence": 0.92
+    }
+  }
+]

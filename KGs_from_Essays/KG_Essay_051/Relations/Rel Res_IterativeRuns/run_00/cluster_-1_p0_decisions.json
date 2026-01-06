@@ -1,0 +1,239 @@
+{
+  "cluster_label": "-1_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_5f6138fe0bc5",
+      "relation_name": "addresses",
+      "rel_desc": "The essay will discuss how body language affects relationships.",
+      "rel_hint_type": "aboutness",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "essay on body language",
+      "object_entity_name": "relationships",
+      "subject_class_label": "Body Language as Subject Matter",
+      "subject_class_group": "Body Language & Nonverbal Communication",
+      "object_class_label": "Interpersonal Bond States",
+      "object_class_group": "Interpersonal Relationship and Closeness States",
+      "qualifiers": {
+        "TemporalQualifier": "future discussion in the essay",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "can have; will explore",
+        "CausalHint": "impact",
+        "LogicalMarker": null,
+        "OtherQualifier": "Focus: long-term interpersonal bonds"
+      },
+      "confidence": 0.95,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_a42e1cb0b6e9",
+      "relation_name": "helps_with",
+      "rel_desc": "Understanding body language helps individuals navigate social situations more easily and effectively.",
+      "rel_hint_type": "pragmatic effect",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "body language",
+      "object_entity_name": "social situations",
+      "subject_class_label": "Body Language as Nonverbal Communication",
+      "subject_class_group": "Nonverbal Communication & Body Language",
+      "object_class_label": "Social Environments",
+      "object_class_group": "Social Environments and Interactions",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "in social situations",
+        "OperationalConstraint": null,
+        "ConditionExpression": "understanding these subtleties of body language",
+        "UncertaintyQualifier": "can",
+        "CausalHint": "help",
+        "LogicalMarker": null,
+        "OtherQualifier": "Outcome: greater ease and effectiveness"
+      },
+      "confidence": 0.95,
+      "remarks": [
+        "Assumes the understanding is of body language; subject kept as body language for simplicity."
+      ]
+    },
+    {
+      "relation_id": "RelR_20d93fb1cf84",
+      "relation_name": "used_to_facilitate",
+      "rel_desc": "Leaning in during conversations is a body movement that helps establish rapport.",
+      "rel_hint_type": "facilitation",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "leaning in during conversations",
+      "object_entity_name": "rapport",
+      "subject_class_label": "Nonverbal Engagement Cues",
+      "subject_class_group": "Nonverbal Communication & Body Language",
+      "object_class_label": "Interpersonal Bond States",
+      "object_class_group": "Interpersonal Relationship and Closeness States",
+      "qualifiers": {
+        "TemporalQualifier": "during conversations",
+        "SpatialQualifier": null,
+        "OperationalConstraint": "social settings",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "can",
+        "CausalHint": "help to",
+        "LogicalMarker": "such as",
+        "OtherQualifier": "Example of social body language"
+      },
+      "confidence": 0.95,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_5f6138fe0bc5\"],\n      \"canonical_rel_name\": \"is_about\",\n      \"canonical_rel_desc\": \"Indicates that the subject work or discourse primarily concerns or discusses the object topic or domain.\",\n      \"justification\": \"The relation describes an essay whose content will discuss how body language affects relationships, which is a standard subject–topic aboutness relation.\",\n      \"remark\": null,\n      \"confidence\": 0.96\n    }\n  },\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_a42e1cb0b6e9\", \"RelR_20d93fb1cf84\"],\n      \"canonical_rel_name\": \"facilitates\",\n      \"canonical_rel_desc\": \"Indicates that the subject factor or behavior makes it easier to achieve, experience, or improve the object outcome or state, without guaranteeing it.\",\n      \"justification\": \"Both relations describe a behavior or understanding (body language, leaning in) making a social outcome (navigating social situations, establishing rapport) easier, matching a generic facilitation predicate.\",\n      \"remark\": \"Specific nuances such as ‘navigate social situations’ or ‘establish rapport’ are captured in the descriptions and qualifiers rather than specializing the predicate name.\",\n      \"confidence\": 0.94\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_5f6138fe0bc5\"],\n      \"rel_cls\": \"subject_matter_relation\",\n      \"justification\": \"This is a classic work-to-topic link where an essay’s subject matter is specified, fitting a subject_matter_relation class.\",\n      \"remark\": null,\n      \"confidence\": 0.95\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_a42e1cb0b6e9\", \"RelR_20d93fb1cf84\"],\n      \"rel_cls\": \"social_effect_relation\",\n      \"justification\": \"Both edges capture how certain communicative behaviors or understandings affect social outcomes, so they belong to a shared class focused on social and interpersonal effects.\",\n      \"remark\": null,\n      \"confidence\": 0.93\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_5f6138fe0bc5\"],\n      \"rel_cls_group\": \"ABOUTNESS\",\n      \"justification\": \"The link encodes a content/aboutness relation between a document (essay) and its thematic domain (relationships).\",\n      \"remark\": null,\n      \"confidence\": 0.95\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_a42e1cb0b6e9\", \"RelR_20d93fb1cf84\"],\n      \"rel_cls_group\": \"CAUSALITY\",\n      \"justification\": \"In both cases the subject contributes causally to the ease or likelihood of a social outcome (navigation of situations, establishment of rapport), best modeled as a facilitative causal relation.\",\n      \"remark\": null,\n      \"confidence\": 0.93\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_5f6138fe0bc5"
+        ],
+        "canonical_rel_name": "is_about",
+        "canonical_rel_desc": "Indicates that the subject work or discourse primarily concerns or discusses the object topic or domain.",
+        "justification": "The relation describes an essay whose content will discuss how body language affects relationships, which is a standard subject–topic aboutness relation.",
+        "remark": null,
+        "confidence": 0.96
+      }
+    },
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_a42e1cb0b6e9",
+          "RelR_20d93fb1cf84"
+        ],
+        "canonical_rel_name": "facilitates",
+        "canonical_rel_desc": "Indicates that the subject factor or behavior makes it easier to achieve, experience, or improve the object outcome or state, without guaranteeing it.",
+        "justification": "Both relations describe a behavior or understanding (body language, leaning in) making a social outcome (navigating social situations, establishing rapport) easier, matching a generic facilitation predicate.",
+        "remark": "Specific nuances such as 'navigate social situations' or 'establish rapport' are captured in the descriptions and qualifiers rather than specializing the predicate name.",
+        "confidence": 0.94
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_5f6138fe0bc5"
+        ],
+        "rel_cls": "subject_matter_relation",
+        "justification": "This is a classic work-to-topic link where an essay's subject matter is specified, fitting a subject_matter_relation class.",
+        "remark": null,
+        "confidence": 0.95
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_a42e1cb0b6e9",
+          "RelR_20d93fb1cf84"
+        ],
+        "rel_cls": "social_effect_relation",
+        "justification": "Both edges capture how certain communicative behaviors or understandings affect social outcomes, so they belong to a shared class focused on social and interpersonal effects.",
+        "remark": null,
+        "confidence": 0.93
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_5f6138fe0bc5"
+        ],
+        "rel_cls_group": "ABOUTNESS",
+        "justification": "The link encodes a content/aboutness relation between a document (essay) and its thematic domain (relationships).",
+        "remark": null,
+        "confidence": 0.95
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_a42e1cb0b6e9",
+          "RelR_20d93fb1cf84"
+        ],
+        "rel_cls_group": "CAUSALITY",
+        "justification": "In both cases the subject contributes causally to the ease or likelihood of a social outcome (navigation of situations, establishment of rapport), best modeled as a facilitative causal relation.",
+        "remark": null,
+        "confidence": 0.93
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_5f6138fe0bc5"
+      ],
+      "canonical_rel_name": "is_about",
+      "canonical_rel_desc": "Indicates that the subject work or discourse primarily concerns or discusses the object topic or domain.",
+      "justification": "The relation describes an essay whose content will discuss how body language affects relationships, which is a standard subject–topic aboutness relation.",
+      "remark": null,
+      "confidence": 0.96
+    },
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_a42e1cb0b6e9",
+        "RelR_20d93fb1cf84"
+      ],
+      "canonical_rel_name": "facilitates",
+      "canonical_rel_desc": "Indicates that the subject factor or behavior makes it easier to achieve, experience, or improve the object outcome or state, without guaranteeing it.",
+      "justification": "Both relations describe a behavior or understanding (body language, leaning in) making a social outcome (navigating social situations, establishing rapport) easier, matching a generic facilitation predicate.",
+      "remark": "Specific nuances such as 'navigate social situations' or 'establish rapport' are captured in the descriptions and qualifiers rather than specializing the predicate name.",
+      "confidence": 0.94
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_5f6138fe0bc5"
+      ],
+      "rel_cls": "subject_matter_relation",
+      "justification": "This is a classic work-to-topic link where an essay's subject matter is specified, fitting a subject_matter_relation class.",
+      "remark": null,
+      "confidence": 0.95
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_a42e1cb0b6e9",
+        "RelR_20d93fb1cf84"
+      ],
+      "rel_cls": "social_effect_relation",
+      "justification": "Both edges capture how certain communicative behaviors or understandings affect social outcomes, so they belong to a shared class focused on social and interpersonal effects.",
+      "remark": null,
+      "confidence": 0.93
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_5f6138fe0bc5"
+      ],
+      "rel_cls_group": "ABOUTNESS",
+      "justification": "The link encodes a content/aboutness relation between a document (essay) and its thematic domain (relationships).",
+      "remark": null,
+      "confidence": 0.95
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_a42e1cb0b6e9",
+        "RelR_20d93fb1cf84"
+      ],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "In both cases the subject contributes causally to the ease or likelihood of a social outcome (navigation of situations, establishment of rapport), best modeled as a facilitative causal relation.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  ],
+  "timestamp": "2026-01-06T12:13:26Z"
+}

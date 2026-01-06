@@ -1,0 +1,48 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_986dc73784ad",
+        "RelR_076ee30fb36e",
+        "RelR_04f469abed46",
+        "RelR_7b4711d16d9e"
+      ],
+      "canonical_rel_name": "is_instance_of",
+      "canonical_rel_desc": "Indicates that the subject entity is a concrete instance or example of the object category or class.",
+      "justification": "In all four relations, a specific social media platform (Facebook, Twitter, Instagram, Snapchat) is described as an example or instance of the broader category 'social media'. This is a standard instance-to-class membership predicate, so they should share the same canonical edge label.",
+      "remark": null,
+      "confidence": 0.97
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_986dc73784ad",
+        "RelR_076ee30fb36e",
+        "RelR_04f469abed46",
+        "RelR_7b4711d16d9e"
+      ],
+      "rel_cls": "class_membership_relation",
+      "justification": "Each relation links an individual platform entity to a broader class/category ('social media'), expressing membership of that class. This fits a generic class_membership_relation family that covers instance-of semantics across domains.",
+      "remark": null,
+      "confidence": 0.96
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_986dc73784ad",
+        "RelR_076ee30fb36e",
+        "RelR_04f469abed46",
+        "RelR_7b4711d16d9e"
+      ],
+      "rel_cls_group": "IDENTITY",
+      "justification": "Instance-of relations express an ontological identity-type link between an entity and its defining class (what it is), rather than composition, causality, or usage. This aligns with an IDENTITY-oriented high-level group (or classification/typing semantics).",
+      "remark": null,
+      "confidence": 0.94
+    }
+  }
+]

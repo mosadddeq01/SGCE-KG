@@ -1,0 +1,45 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_9c9b8f06f7c3",
+        "RelR_318dd7e11fac",
+        "RelR_336e65c0d7bd"
+      ],
+      "canonical_rel_name": "occurs_in_civilization",
+      "canonical_rel_desc": "Indicates that a cultural practice, phenomenon, or cultural domain takes place within and is situated in the context of a given civilization.",
+      "justification": "All three relations link cultural phenomena (Ancient Egyptian culture, ancient Egyptian burial practices) to the encompassing entity 'Ancient Egypt' as their civilizational context, not as a simple location or time point. A single predicate 'occurs_in_civilization' captures this shared semantics more precisely than the generic 'occurs_in'.",
+      "remark": "Intended for cultural or social practices situated within a named civilization (spatio-temporal-cultural container), distinct from purely geographic or temporal occurrence relations.",
+      "confidence": 0.87
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_9c9b8f06f7c3",
+        "RelR_318dd7e11fac",
+        "RelR_336e65c0d7bd"
+      ],
+      "rel_cls": "cultural_context_relation",
+      "justification": "Each relation expresses that the subject is embedded in or defined by the cultural-historical context of a specific civilization, which is best modeled as a cultural context family of relations.",
+      "remark": "This class can cover other predicates linking practices, beliefs, and institutions to their parent civilization or culture.",
+      "confidence": 0.86
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_9c9b8f06f7c3",
+        "RelR_318dd7e11fac",
+        "RelR_336e65c0d7bd"
+      ],
+      "rel_cls_group": "SPATIALITY",
+      "justification": "The core semantics is that the practices or cultural domains take place 'within' the spatial-cultural bounds of Ancient Egypt; while there is a temporal aspect, the primary framing in the descriptions is a within-ness/embeddedness similar to spatial containment.",
+      "remark": "Could alternatively be seen as spatio-temporal context; for now grouped under SPATIALITY to align with the dominant 'within' formulation.",
+      "confidence": 0.78
+    }
+  }
+]

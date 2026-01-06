@@ -1,0 +1,42 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_2751dd5abd68",
+        "RelR_e13d6deec171"
+      ],
+      "canonical_rel_name": "supports_as_sports_fan",
+      "canonical_rel_desc": "Indicates that a fan supports, cheers for, and identifies with a specific sports team or athlete as part of sports fandom.",
+      "justification": "Both relations describe fans providing supportive, celebratory backing to their preferred athletes or teams in a fandom context. The subject is always a fan, the object is the supported entity (athlete/team), and the semantics are identical (sports fandom support), so a single canonical predicate can be used.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_2751dd5abd68",
+        "RelR_e13d6deec171"
+      ],
+      "rel_cls": "sports_fandom_affiliation_relation",
+      "justification": "These relations capture the affiliative link in sports fandom between fans and the teams/athletes they support. This is a specific family of social/identity relations centered on fandom affiliation rather than general social association.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_2751dd5abd68",
+        "RelR_e13d6deec171"
+      ],
+      "rel_cls_group": "ASSOCIATION",
+      "justification": "The relations describe a social/identity association (affiliation and emotional alignment) between fans and their favored sports entities, not composition, causality, or spatial/temporal relations. This fits best under a broad ASSOCIATION group.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  }
+]

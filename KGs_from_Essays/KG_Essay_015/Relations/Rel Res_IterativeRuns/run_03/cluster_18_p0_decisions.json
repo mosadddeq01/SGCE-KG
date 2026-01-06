@@ -1,0 +1,97 @@
+{
+  "cluster_label": "18_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_a4daf5e76391",
+      "relation_name": "involves",
+      "rel_desc": "Mummification includes the step of removing the internal organs.",
+      "rel_hint_type": "process-composition",
+      "canonical_rel_name": "involves_removal_of",
+      "canonical_rel_desc": "Indicates that a process or ritual includes the removal or extraction of a specified component, material, or body part as one of its procedural steps.",
+      "rel_cls": "process_decomposition_relation",
+      "rel_cls_group": "COMPOSITION",
+      "subject_entity_name": "mummification",
+      "object_entity_name": "internal organs",
+      "subject_class_label": "Ancient Egyptian Mummification Practices",
+      "subject_class_group": "Ancient Egyptian Funerary Religion and Culture",
+      "object_class_label": "Ancient Egyptian Mummification Practices",
+      "object_class_group": "Ancient Egyptian Funerary Religion and Culture",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "from the body during mummification",
+        "OperationalConstraint": null,
+        "ConditionExpression": "typically",
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "ProcessStepOrder: occurs before drying and wrapping"
+      },
+      "confidence": 0.97,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_81432a9cf36a",
+      "relation_name": "involves",
+      "rel_desc": "Mummification includes drying the body with salt as one of its steps.",
+      "rel_hint_type": "process-composition",
+      "canonical_rel_name": "includes_process_step",
+      "canonical_rel_desc": "Indicates that a complex process or ritual includes a specific subprocess, operation, or procedural step as part of its overall execution.",
+      "rel_cls": "process_decomposition_relation",
+      "rel_cls_group": "COMPOSITION",
+      "subject_entity_name": "mummification",
+      "object_entity_name": "salt drying",
+      "subject_class_label": "Ancient Egyptian Mummification Practices",
+      "subject_class_group": "Ancient Egyptian Funerary Religion and Culture",
+      "object_class_label": "Ancient Egyptian Mummification Practices",
+      "object_class_group": "Ancient Egyptian Funerary Religion and Culture",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "on the body",
+        "OperationalConstraint": null,
+        "ConditionExpression": "typically",
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": "and",
+        "OtherQualifier": "ProcessStepOrder: occurs after organ removal and before wrapping"
+      },
+      "confidence": 0.96,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_rel_schema\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_a4daf5e76391\"],\n      \"canonical_rel_name\": \"includes_removal_of\",\n      \"canonical_rel_desc\": \"Indicates that a process includes the removal or extraction of a specified component, material, or body part as one of its procedural steps.\",\n      \"rel_cls\": null,\n      \"rel_cls_group\": null,\n      \"justification\": \"Normalize the predicate wording for consistency with other 'includes_*' process-composition relations while preserving the specific semantics that the process comprises a removal step; existing class and group are already appropriate.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_rel_schema",
+      "args": {
+        "relation_ids": [
+          "RelR_a4daf5e76391"
+        ],
+        "canonical_rel_name": "includes_removal_of",
+        "canonical_rel_desc": "Indicates that a process includes the removal or extraction of a specified component, material, or body part as one of its procedural steps.",
+        "rel_cls": null,
+        "rel_cls_group": null,
+        "justification": "Normalize the predicate wording for consistency with other 'includes_*' process-composition relations while preserving the specific semantics that the process comprises a removal step; existing class and group are already appropriate.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_rel_schema",
+      "relation_ids": [
+        "RelR_a4daf5e76391"
+      ],
+      "canonical_rel_name": "includes_removal_of",
+      "canonical_rel_desc": "Indicates that a process includes the removal or extraction of a specified component, material, or body part as one of its procedural steps.",
+      "rel_cls": null,
+      "rel_cls_group": null,
+      "new_relation_name": null,
+      "original_relation_name": null,
+      "justification": "Normalize the predicate wording for consistency with other 'includes_*' process-composition relations while preserving the specific semantics that the process comprises a removal step; existing class and group are already appropriate.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  ],
+  "timestamp": "2026-01-06T10:37:13Z"
+}

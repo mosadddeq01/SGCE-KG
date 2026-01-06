@@ -1,0 +1,57 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_db0e1e1cfc79",
+        "RelR_fa229aa2c05b",
+        "RelR_5fc1212e51c7",
+        "RelR_9af7b0edf1b1",
+        "RelR_1e94977d5dc0",
+        "RelR_48aae3505777",
+        "RelR_981fe3f8255a"
+      ],
+      "canonical_rel_name": "is_subtype_of",
+      "canonical_rel_desc": "Indicates that the subject represents a more specific subtype or category within the broader class represented by the object.",
+      "justification": "All relations describe a taxonomic/class-inclusion link where the subject is a more specific category of the object (e.g., food offerings as a type of grave goods, Egyptian pyramids as a type of ancient Egyptian tomb). This is best modeled as a subtype relation with consistent predicate naming.",
+      "remark": null,
+      "confidence": 0.96
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_db0e1e1cfc79",
+        "RelR_fa229aa2c05b",
+        "RelR_5fc1212e51c7",
+        "RelR_9af7b0edf1b1",
+        "RelR_1e94977d5dc0",
+        "RelR_48aae3505777",
+        "RelR_981fe3f8255a"
+      ],
+      "rel_cls": "taxonomic_hierarchy_relation",
+      "justification": "Each relation encodes a taxonomic or categorical hierarchy (a more specific funerary/tomb category included within a broader one), so they belong to the same class of taxonomic hierarchy relations.",
+      "remark": null,
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_db0e1e1cfc79",
+        "RelR_fa229aa2c05b",
+        "RelR_5fc1212e51c7",
+        "RelR_9af7b0edf1b1",
+        "RelR_1e94977d5dc0",
+        "RelR_48aae3505777",
+        "RelR_981fe3f8255a"
+      ],
+      "rel_cls_group": "IDENTITY",
+      "justification": "Subtype/supertype (is-a) hierarchies are a form of identity/typing relation, linking a more specific identity to a more general one, so they fit best in an IDENTITY-oriented high-level group.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  }
+]

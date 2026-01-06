@@ -1,0 +1,366 @@
+{
+  "cluster_label": 11,
+  "cluster_classes": [
+    {
+      "candidate_id": "ClsC_3bdbce6c",
+      "class_label": "Political Stakeholders",
+      "class_description": "Social actors that participate in or are targeted by protests and uprisings, including both governing authorities and the people who challenge them.",
+      "class_type_hint": "Social Actor Category",
+      "class_group": "TBD",
+      "confidence": 0.79,
+      "evidence_excerpt": "people have sought to assert their rights and challenge authority",
+      "member_ids": [
+        "En_80337acc",
+        "En_fd3b40f4",
+        "En_f95f4cbd"
+      ],
+      "members": [
+        {
+          "id": "En_80337acc",
+          "entity_name": "people",
+          "entity_description": "Groups of individuals participating in protests and revolutions to assert rights and seek change.",
+          "entity_type_hint": "Actor"
+        },
+        {
+          "id": "En_fd3b40f4",
+          "entity_name": "authority",
+          "entity_description": "Established power or governing bodies that are challenged by protests and uprisings.",
+          "entity_type_hint": "AbstractConcept"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_e6f1aa8c",
+      "class_label": "Pro-Democracy Actor Groups",
+      "class_description": "Collective political or social actors that oppose those in power and advocate for democratic governance and freedoms.",
+      "class_type_hint": "Social Actor Group",
+      "class_group": "TBD",
+      "confidence": 0.86,
+      "evidence_excerpt": "pro-democracy protesters ... opposition ... resisting or criticizing those in power",
+      "member_ids": [
+        "En_4859a4e0",
+        "En_6dae5064"
+      ],
+      "members": [
+        {
+          "id": "En_4859a4e0",
+          "entity_name": "pro-democracy protesters",
+          "entity_description": "Demonstrators advocating for democratic governance and political freedoms.",
+          "entity_type_hint": "ActorGroup"
+        },
+        {
+          "id": "En_6dae5064",
+          "entity_name": "opposition",
+          "entity_description": "Political or social actors resisting or criticizing those in power.",
+          "entity_type_hint": "ActorGroup"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_7916e944",
+      "class_label": "Political Actors",
+      "class_description": "Collective sociopolitical entities that participate in or are targets of political struggle, including movements and governing regimes.",
+      "class_type_hint": "Socio-Political Entity",
+      "class_group": "TBD",
+      "confidence": 0.74,
+      "evidence_excerpt": "socialist movements and uprisings around the world ... to overthrow oppressive regimes",
+      "member_ids": [
+        "En_87efd12d",
+        "En_35bfc922"
+      ],
+      "members": [
+        {
+          "id": "En_87efd12d",
+          "entity_name": "socialist movements",
+          "entity_description": "Political movements inspired by socialism that emerged after the Russian Revolution.",
+          "entity_type_hint": "SocialMovement"
+        },
+        {
+          "id": "En_35bfc922",
+          "entity_name": "oppressive regimes",
+          "entity_description": "Authoritarian or unjust governments targeted by revolutionary and socialist movements.",
+          "entity_type_hint": "PoliticalInstitution"
+        }
+      ],
+      "remarks": [
+        "Note: The entity 'oppressive regimes' here appears semantically duplicate with 'oppressive regimes' in class ClsC_c8ded50b; this likely requires upstream entity-level deduplication review."
+      ]
+    },
+    {
+      "candidate_id": "ClsC_1eca03c9",
+      "class_label": "State Authorities",
+      "class_description": "State-level political actors and institutions that exercise governmental power and may use coercive force, especially in response to protests or dissent.",
+      "class_type_hint": "Political Actor",
+      "class_group": "TBD",
+      "confidence": 0.94,
+      "evidence_excerpt": "State or governmental actors and institutions using force to repress or suppress dissent.",
+      "member_ids": [
+        "En_5a57ef6d",
+        "En_133d76db"
+      ],
+      "members": [
+        {
+          "id": "En_5a57ef6d",
+          "entity_name": "authorities",
+          "entity_description": "State or governmental actors responsible for maintaining control and exercising power.",
+          "entity_type_hint": "Actor"
+        },
+        {
+          "id": "En_133d76db",
+          "entity_name": "governments",
+          "entity_description": "State institutions and authorities that exercise political power and may use force against protesters.",
+          "entity_type_hint": "ActorGroup"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_ffad843a",
+      "class_label": "Democratic Governance Elements",
+      "class_description": "Concepts and actors central to democratic governance, where non-elite citizens exercise power to demand responsibility from those in authority.",
+      "class_type_hint": "Socio-Political Concept",
+      "class_group": "TBD",
+      "confidence": 0.64,
+      "evidence_excerpt": "the power of ordinary people to challenge injustice, demand accountability, and shape the course of history",
+      "member_ids": [
+        "En_a6002d2d",
+        "En_f95f4cbd"
+      ],
+      "members": [
+        {
+          "id": "En_a6002d2d",
+          "entity_name": "accountability",
+          "entity_description": "Expectation that those in power are held responsible for their actions and decisions.",
+          "entity_type_hint": "NormativeConcept"
+        },
+        {
+          "id": "En_f95f4cbd",
+          "entity_name": "ordinary people",
+          "entity_description": "Non-elite individuals in general, whose collective actions can influence politics and society.",
+          "entity_type_hint": "Group"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_c8ded50b",
+      "class_label": "Authoritarian Power Structures",
+      "class_description": "Political systems and actors characterized by authoritarian or external control over populations, including oppressive regimes, long-entrenched dictators, and colonial rule.",
+      "class_type_hint": "Political Structure",
+      "class_group": "TBD",
+      "confidence": 0.81,
+      "evidence_excerpt": "oppressive regimes... long-standing dictators... independence from colonial rule",
+      "member_ids": [
+        "En_4c79ec59",
+        "En_b7fa0caf",
+        "En_69760310"
+      ],
+      "members": [
+        {
+          "id": "En_4c79ec59",
+          "entity_name": "oppressive regimes",
+          "entity_description": "Authoritarian or unjust governments targeted by protests and revolutions.",
+          "entity_type_hint": "PoliticalActor"
+        },
+        {
+          "id": "En_b7fa0caf",
+          "entity_name": "long-standing dictators",
+          "entity_description": "Authoritarian leaders who had held power for extended periods in affected countries.",
+          "entity_type_hint": "Role"
+        },
+        {
+          "id": "En_69760310",
+          "entity_name": "colonial rule",
+          "entity_description": "System of governance where a foreign colonial power controls a territory and its people.",
+          "entity_type_hint": "GovernanceSystem"
+        }
+      ],
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"reassign_entities\",\n    \"args\": {\n      \"entity_ids\": [\"En_f95f4cbd\"],\n      \"from_class_id\": \"ClsC_ffad843a\",\n      \"to_class_id\": \"ClsC_3bdbce6c\",\n      \"justification\": \"The entity 'ordinary people' is an actor group aligned with protesters and citizens challenging power, which matches the scope of 'Political Stakeholders' rather than a conceptual 'Democratic Governance Elements' class.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_ffad843a\",\n      \"new_name\": \"Democratic Accountability\",\n      \"new_description\": \"Normative concept of holding those in power responsible for their actions and decisions within democratic governance.\",\n      \"new_class_type_hint\": \"Normative Political Concept\",\n      \"new_class_group\": \"Democratic Governance & Accountability Concepts\",\n      \"remark\": null,\n      \"justification\": \"After moving the actor entity out, this class now only contains 'accountability', so it should be refocused and labeled as a single democratic governance concept rather than a mix of concepts and actors.\",\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_3bdbce6c\",\n      \"new_name\": \"Political Stakeholder Actors\",\n      \"new_description\": \"Social actors that participate in or are targeted by protests and uprisings, including ordinary people and the authorities they challenge.\",\n      \"new_class_type_hint\": \"Social Actor Category\",\n      \"new_class_group\": \"Contentious Politics Actors & Power Structures\",\n      \"remark\": null,\n      \"justification\": \"The class now contains both 'people' and 'ordinary people' plus 'authority', so the label and description should explicitly emphasize actors on both sides of contentious politics and be grouped with related political power structures.\",\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_e6f1aa8c\",\n      \"new_name\": \"Pro-Democracy Actor Groups\",\n      \"new_description\": null,\n      \"new_class_type_hint\": null,\n      \"new_class_group\": \"Contentious Politics Actors & Power Structures\",\n      \"remark\": null,\n      \"justification\": \"This class cleanly captures opposition and pro-democracy protesters as collective actors opposing those in power and should be linked via a shared Class_Group to other contentious politics actors and power holders.\",\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_7916e944\",\n      \"new_name\": \"Political Movements and Targeted Regimes\",\n      \"new_description\": \"Collective sociopolitical movements and the governing regimes they seek to overthrow or transform.\",\n      \"new_class_type_hint\": \"Socio-Political Entity\",\n      \"new_class_group\": \"Contentious Politics Actors & Power Structures\",\n      \"remark\": \"Note: The entity 'oppressive regimes' here appears semantically duplicate with 'oppressive regimes' in class ClsC_c8ded50b; this likely requires upstream entity-level deduplication review.\",\n      \"justification\": \"The class bundles revolutionary movements and the regimes they target, fitting the same contentious politics domain, and its label/description should more clearly reflect both sides while flagging the overlapping 'oppressive regimes' entity for human review.\",\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_1eca03c9\",\n      \"new_name\": \"State Authorities\",\n      \"new_description\": null,\n      \"new_class_type_hint\": null,\n      \"new_class_group\": \"Contentious Politics Actors & Power Structures\",\n      \"remark\": null,\n      \"justification\": \"This class already coherently represents governments and authorities using power and coercion; it should be connected via a shared Class_Group to other contentious politics actors and power structures.\",\n      \"confidence\": 0.95\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_c8ded50b\",\n      \"new_name\": \"Authoritarian and Colonial Power Structures\",\n      \"new_description\": \"Authoritarian political systems and external colonial control over populations, including oppressive regimes, long-entrenched dictators, and colonial rule.\",\n      \"new_class_type_hint\": \"Political Structure\",\n      \"new_class_group\": \"Contentious Politics Actors & Power Structures\",\n      \"remark\": null,\n      \"justification\": \"This class coherently groups authoritarian regimes, dictators, and colonial rule as power structures targeted by protests and revolutions and should share a Class_Group with other contentious politics actors and state authorities.\",\n      \"confidence\": 0.9\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "reassign_entities",
+      "args": {
+        "entity_ids": [
+          "En_f95f4cbd"
+        ],
+        "from_class_id": "ClsC_ffad843a",
+        "to_class_id": "ClsC_3bdbce6c",
+        "justification": "The entity 'ordinary people' is an actor group aligned with protesters and citizens challenging power, which matches the scope of 'Political Stakeholders' rather than a conceptual 'Democratic Governance Elements' class.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_ffad843a",
+        "new_name": "Democratic Accountability",
+        "new_description": "Normative concept of holding those in power responsible for their actions and decisions within democratic governance.",
+        "new_class_type_hint": "Normative Political Concept",
+        "new_class_group": "Democratic Governance & Accountability Concepts",
+        "remark": null,
+        "justification": "After moving the actor entity out, this class now only contains 'accountability', so it should be refocused and labeled as a single democratic governance concept rather than a mix of concepts and actors.",
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_3bdbce6c",
+        "new_name": "Political Stakeholder Actors",
+        "new_description": "Social actors that participate in or are targeted by protests and uprisings, including ordinary people and the authorities they challenge.",
+        "new_class_type_hint": "Social Actor Category",
+        "new_class_group": "Contentious Politics Actors & Power Structures",
+        "remark": null,
+        "justification": "The class now contains both 'people' and 'ordinary people' plus 'authority', so the label and description should explicitly emphasize actors on both sides of contentious politics and be grouped with related political power structures.",
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_e6f1aa8c",
+        "new_name": "Pro-Democracy Actor Groups",
+        "new_description": null,
+        "new_class_type_hint": null,
+        "new_class_group": "Contentious Politics Actors & Power Structures",
+        "remark": null,
+        "justification": "This class cleanly captures opposition and pro-democracy protesters as collective actors opposing those in power and should be linked via a shared Class_Group to other contentious politics actors and power holders.",
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_7916e944",
+        "new_name": "Political Movements and Targeted Regimes",
+        "new_description": "Collective sociopolitical movements and the governing regimes they seek to overthrow or transform.",
+        "new_class_type_hint": "Socio-Political Entity",
+        "new_class_group": "Contentious Politics Actors & Power Structures",
+        "remark": "Note: The entity 'oppressive regimes' here appears semantically duplicate with 'oppressive regimes' in class ClsC_c8ded50b; this likely requires upstream entity-level deduplication review.",
+        "justification": "The class bundles revolutionary movements and the regimes they target, fitting the same contentious politics domain, and its label/description should more clearly reflect both sides while flagging the overlapping 'oppressive regimes' entity for human review.",
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_1eca03c9",
+        "new_name": "State Authorities",
+        "new_description": null,
+        "new_class_type_hint": null,
+        "new_class_group": "Contentious Politics Actors & Power Structures",
+        "remark": null,
+        "justification": "This class already coherently represents governments and authorities using power and coercion; it should be connected via a shared Class_Group to other contentious politics actors and power structures.",
+        "confidence": 0.95
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_c8ded50b",
+        "new_name": "Authoritarian and Colonial Power Structures",
+        "new_description": "Authoritarian political systems and external colonial control over populations, including oppressive regimes, long-entrenched dictators, and colonial rule.",
+        "new_class_type_hint": "Political Structure",
+        "new_class_group": "Contentious Politics Actors & Power Structures",
+        "remark": null,
+        "justification": "This class coherently groups authoritarian regimes, dictators, and colonial rule as power structures targeted by protests and revolutions and should share a Class_Group with other contentious politics actors and state authorities.",
+        "confidence": 0.9
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "reassign_entities",
+      "entity_ids": [
+        "En_f95f4cbd"
+      ],
+      "from": "ClsC_ffad843a",
+      "from_resolved": "ClsC_ffad843a",
+      "to": "ClsC_3bdbce6c",
+      "to_resolved": "ClsC_3bdbce6c",
+      "justification": "The entity 'ordinary people' is an actor group aligned with protesters and citizens challenging power, which matches the scope of 'Political Stakeholders' rather than a conceptual 'Democratic Governance Elements' class.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_ffad843a",
+      "class_id_resolved": "ClsC_ffad843a",
+      "new_name": "Democratic Accountability",
+      "new_description": "Normative concept of holding those in power responsible for their actions and decisions within democratic governance.",
+      "new_class_type_hint": "Normative Political Concept",
+      "new_class_group": "Democratic Governance & Accountability Concepts",
+      "remark": null,
+      "justification": "After moving the actor entity out, this class now only contains 'accountability', so it should be refocused and labeled as a single democratic governance concept rather than a mix of concepts and actors.",
+      "confidence": 0.9
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_3bdbce6c",
+      "class_id_resolved": "ClsC_3bdbce6c",
+      "new_name": "Political Stakeholder Actors",
+      "new_description": "Social actors that participate in or are targeted by protests and uprisings, including ordinary people and the authorities they challenge.",
+      "new_class_type_hint": "Social Actor Category",
+      "new_class_group": "Contentious Politics Actors & Power Structures",
+      "remark": null,
+      "justification": "The class now contains both 'people' and 'ordinary people' plus 'authority', so the label and description should explicitly emphasize actors on both sides of contentious politics and be grouped with related political power structures.",
+      "confidence": 0.9
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_e6f1aa8c",
+      "class_id_resolved": "ClsC_e6f1aa8c",
+      "new_name": "Pro-Democracy Actor Groups",
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Contentious Politics Actors & Power Structures",
+      "remark": null,
+      "justification": "This class cleanly captures opposition and pro-democracy protesters as collective actors opposing those in power and should be linked via a shared Class_Group to other contentious politics actors and power holders.",
+      "confidence": 0.9
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_7916e944",
+      "class_id_resolved": "ClsC_7916e944",
+      "new_name": "Political Movements and Targeted Regimes",
+      "new_description": "Collective sociopolitical movements and the governing regimes they seek to overthrow or transform.",
+      "new_class_type_hint": "Socio-Political Entity",
+      "new_class_group": "Contentious Politics Actors & Power Structures",
+      "remark": "Note: The entity 'oppressive regimes' here appears semantically duplicate with 'oppressive regimes' in class ClsC_c8ded50b; this likely requires upstream entity-level deduplication review.",
+      "justification": "The class bundles revolutionary movements and the regimes they target, fitting the same contentious politics domain, and its label/description should more clearly reflect both sides while flagging the overlapping 'oppressive regimes' entity for human review.",
+      "confidence": 0.9
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_1eca03c9",
+      "class_id_resolved": "ClsC_1eca03c9",
+      "new_name": "State Authorities",
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Contentious Politics Actors & Power Structures",
+      "remark": null,
+      "justification": "This class already coherently represents governments and authorities using power and coercion; it should be connected via a shared Class_Group to other contentious politics actors and power structures.",
+      "confidence": 0.95
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_c8ded50b",
+      "class_id_resolved": "ClsC_c8ded50b",
+      "new_name": "Authoritarian and Colonial Power Structures",
+      "new_description": "Authoritarian political systems and external colonial control over populations, including oppressive regimes, long-entrenched dictators, and colonial rule.",
+      "new_class_type_hint": "Political Structure",
+      "new_class_group": "Contentious Politics Actors & Power Structures",
+      "remark": null,
+      "justification": "This class coherently groups authoritarian regimes, dictators, and colonial rule as power structures targeted by protests and revolutions and should share a Class_Group with other contentious politics actors and state authorities.",
+      "confidence": 0.9
+    }
+  ],
+  "provisional_to_real": {},
+  "timestamp": "2026-01-06T13:05:33Z"
+}

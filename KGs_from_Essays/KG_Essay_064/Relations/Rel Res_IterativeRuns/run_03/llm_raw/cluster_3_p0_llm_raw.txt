@@ -1,0 +1,21 @@
+[
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": [
+        "RelR_e0ed91e1fd3f",
+        "RelR_53e27020e620",
+        "RelR_8ef2bde9c212",
+        "RelR_3f6cbabae193",
+        "RelR_4b62c2f96a52"
+      ],
+      "canonical_rel_name": "typically_includes",
+      "canonical_rel_desc": "Indicates that a narrative genre, category, or story type characteristically or commonly includes the given motif, theme, character type, or other narrative element as part of its content.",
+      "rel_cls": null,
+      "rel_cls_group": null,
+      "justification": "The existing canonical_rel_name 'typically_features' is slightly awkward and tied to the surface word 'features'. All these relations represent the same underlying predicate: a narrative category commonly includes a given kind of content. Normalizing to 'typically_includes' makes the predicate clearer, verb-object oriented, and reusable across narrative contexts without changing the semantics.",
+      "remark": "Only the predicate label is being normalized from 'typically_features' to 'typically_includes'; semantics and class/group remain unchanged.",
+      "confidence": 0.86
+    }
+  }
+]

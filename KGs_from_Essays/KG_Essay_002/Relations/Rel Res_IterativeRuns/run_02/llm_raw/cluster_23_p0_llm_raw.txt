@@ -1,0 +1,17 @@
+[
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": [
+        "RelR_fc06f5f1cc02"
+      ],
+      "canonical_rel_name": "is_about",
+      "canonical_rel_desc": "Indicates that the subject entity (typically a text, concept, or discussion) has the object entity as its primary topic or focus.",
+      "rel_cls": "topical_aboutness_relation",
+      "rel_cls_group": "ASSOCIATION",
+      "justification": "All relations in this chunk share the same topical aboutness semantics and already use the canonical_rel_name 'is_about' and rel_cls 'topical_aboutness_relation'. However, RelR_fc06f5f1cc02 has a slightly different canonical_rel_desc wording from the others. Normalizing its description and repeating the same class and group ensures a single, consistent predicate definition across instances for the same canonical relation.",
+      "remark": null,
+      "confidence": 0.96
+    }
+  }
+]

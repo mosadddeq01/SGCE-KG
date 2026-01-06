@@ -1,0 +1,54 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_0c440fe61e43",
+        "RelR_f1d5f63411cb",
+        "RelR_41c85e915fa0",
+        "RelR_40c68c082f39",
+        "RelR_fb3c7d91d4c9",
+        "RelR_feddee49b585"
+      ],
+      "canonical_rel_name": "influences",
+      "canonical_rel_desc": "A causal or quasi-causal relation where the subject exerts a psychological or behavioral influence on the object, typically in consumer or branding contexts.",
+      "justification": "All relations describe color usage in branding (or warm colors in purchasing contexts) exerting a psychological or behavioral influence on consumer responses (impulse purchases, brand perceptions, behavior, personality, quality, value). They share the same directional, causal-influence semantics, so a unified canonical predicate 'influences' is appropriate.",
+      "remark": "Instance-level qualifiers (e.g., probabilistic, contextual conditions) remain on each relation; the canonical predicate captures the generic influence semantics.",
+      "confidence": 0.94
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_0c440fe61e43",
+        "RelR_f1d5f63411cb",
+        "RelR_41c85e915fa0",
+        "RelR_40c68c082f39",
+        "RelR_fb3c7d91d4c9",
+        "RelR_feddee49b585"
+      ],
+      "rel_cls": "consumer_psychological_effect_relation",
+      "justification": "Each relation links a branding/color stimulus to a consumer response (perception, evaluation, or behavior). This fits a common class of relations where marketing or design features cause or modulate consumer psychological and behavioral effects.",
+      "remark": "This class can generalize to other marketing stimuli → consumer response influence relations, not limited strictly to color.",
+      "confidence": 0.93
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_0c440fe61e43",
+        "RelR_f1d5f63411cb",
+        "RelR_41c85e915fa0",
+        "RelR_40c68c082f39",
+        "RelR_fb3c7d91d4c9",
+        "RelR_feddee49b585"
+      ],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "The relations explicitly describe that the subject (color usage) affects or encourages the object (consumer perceptions or behaviors), with qualifiers indicating causal or probabilistic influence, which belongs under a causal semantics group.",
+      "remark": null,
+      "confidence": 0.96
+    }
+  }
+]

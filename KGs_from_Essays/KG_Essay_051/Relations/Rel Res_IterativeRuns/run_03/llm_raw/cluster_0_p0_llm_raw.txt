@@ -1,0 +1,13 @@
+[
+  {
+    "function": "add_rel_remark",
+    "args": {
+      "relation_ids": [
+        "RelR_1bee97beffff"
+      ],
+      "remark": "This predicate 'has_example_instance' is the inverse of the more common 'is_instance_of' used elsewhere (e.g., example → category). If the global schema prefers a single direction for class membership, this edge may later be inverted to maintain consistency.",
+      "justification": "The other relations in this chunk use 'is_instance_of' (instance → class), while this one uses the inverse direction (class → instance). Adding a remark highlights this design choice for future schema normalization without changing any fields now.",
+      "confidence": 0.86
+    }
+  }
+]

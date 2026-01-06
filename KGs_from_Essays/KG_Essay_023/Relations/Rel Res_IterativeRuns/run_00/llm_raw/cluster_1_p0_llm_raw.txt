@@ -1,0 +1,48 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_c1a405c47e66",
+        "RelR_db7475ccdf07",
+        "RelR_81ca144d7a66",
+        "RelR_ad0abe33113e"
+      ],
+      "canonical_rel_name": "causes",
+      "canonical_rel_desc": "Indicates that the subject content can bring about or lead to the specified real-world consequences or impacts.",
+      "justification": "All four relations describe a causal link where a type of online information (misinformation, rumors, conspiracy theories, propaganda) can bring about serious real-world consequences. The semantics are identical (content → consequences), only the specific content type varies, so they should share a single canonical predicate.",
+      "remark": "The modal qualifier \"can\" is modeled via qualifiers; the canonical predicate is kept as the neutral causal verb \"causes\".",
+      "confidence": 0.93
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_c1a405c47e66",
+        "RelR_db7475ccdf07",
+        "RelR_81ca144d7a66",
+        "RelR_ad0abe33113e"
+      ],
+      "rel_cls": "information_consequence_relation",
+      "justification": "Each relation connects a form of online information or content to its offline consequences. Grouping them under an \"information_consequence_relation\" class captures this family of content → impact links while remaining broader than the specific predicate \"causes\".",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_c1a405c47e66",
+        "RelR_db7475ccdf07",
+        "RelR_81ca144d7a66",
+        "RelR_ad0abe33113e"
+      ],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "The rel_hint_type is \"causal\" and the descriptions all describe that the subject leads to or brings about the object (real-world consequences), which is a prototypical causal relation.",
+      "remark": null,
+      "confidence": 0.98
+    }
+  }
+]

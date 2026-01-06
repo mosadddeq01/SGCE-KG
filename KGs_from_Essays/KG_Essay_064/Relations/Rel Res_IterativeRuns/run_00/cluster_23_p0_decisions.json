@@ -1,0 +1,203 @@
+{
+  "cluster_label": "23_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_e98dcf88231a",
+      "relation_name": "creates",
+      "rel_desc": "Pygmalion is the sculptor who creates the statue Galatea.",
+      "rel_hint_type": "production",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "Pygmalion",
+      "object_entity_name": "Galatea (living statue created by Pygmalion)",
+      "subject_class_label": "Pygmalion and Galatea Characters",
+      "subject_class_group": "Pygmalion and Galatea Myth",
+      "object_class_label": "Pygmalion and Galatea Characters",
+      "object_class_group": "Pygmalion and Galatea Myth",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "StoryContext: myth of Pygmalion and Galatea"
+      },
+      "confidence": 0.9,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_aff500b56d1b",
+      "relation_name": "loves",
+      "rel_desc": "Pygmalion falls in love with his statue, Galatea.",
+      "rel_hint_type": "affective",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "Pygmalion",
+      "object_entity_name": "Galatea (living statue created by Pygmalion)",
+      "subject_class_label": "Pygmalion and Galatea Characters",
+      "subject_class_group": "Pygmalion and Galatea Myth",
+      "object_class_label": "Pygmalion and Galatea Characters",
+      "object_class_group": "Pygmalion and Galatea Myth",
+      "qualifiers": {
+        "TemporalQualifier": "before the statue comes to life",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "NarrativeStage: initial state of the myth"
+      },
+      "confidence": 0.98,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_e98dcf88231a\"],\n      \"canonical_rel_name\": \"creates\",\n      \"canonical_rel_desc\": \"Indicates that the subject brings the object into existence as a created work or artifact.\",\n      \"justification\": \"The relation instance describes Pygmalion as the sculptor who brings the statue Galatea into existence; this is a straightforward creator–creation predicate.\",\n      \"remark\": null,\n      \"confidence\": 0.95\n    }\n  },\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_aff500b56d1b\"],\n      \"canonical_rel_name\": \"loves\",\n      \"canonical_rel_desc\": \"Indicates that the subject has romantic or strong affectionate feelings toward the object.\",\n      \"justification\": \"The instance describes Pygmalion falling in love with Galatea, which is a clear emotional/affective predicate from subject to object.\",\n      \"remark\": null,\n      \"confidence\": 0.96\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_e98dcf88231a\"],\n      \"rel_cls\": \"artistic_creation_relation\",\n      \"justification\": \"The relation captures a sculptor–statue creation event, which fits a more specific class of artistic or creative production relations.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_aff500b56d1b\"],\n      \"rel_cls\": \"emotional_relation\",\n      \"justification\": \"The predicate models an affective state (love) from one character toward another, fitting an emotional/affective relation class.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_e98dcf88231a\"],\n      \"rel_cls_group\": \"AGENCY\",\n      \"justification\": \"Creation here involves an intentional agent (the sculptor) producing an artifact, which best aligns with an agency/actor-driven category.\",\n      \"remark\": null,\n      \"confidence\": 0.88\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_aff500b56d1b\"],\n      \"rel_cls_group\": \"ASSOCIATION\",\n      \"justification\": \"Love is an interpersonal, affective tie between entities and fits a broad group of social/relational associations.\",\n      \"remark\": null,\n      \"confidence\": 0.88\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_e98dcf88231a"
+        ],
+        "canonical_rel_name": "creates",
+        "canonical_rel_desc": "Indicates that the subject brings the object into existence as a created work or artifact.",
+        "justification": "The relation instance describes Pygmalion as the sculptor who brings the statue Galatea into existence; this is a straightforward creator–creation predicate.",
+        "remark": null,
+        "confidence": 0.95
+      }
+    },
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_aff500b56d1b"
+        ],
+        "canonical_rel_name": "loves",
+        "canonical_rel_desc": "Indicates that the subject has romantic or strong affectionate feelings toward the object.",
+        "justification": "The instance describes Pygmalion falling in love with Galatea, which is a clear emotional/affective predicate from subject to object.",
+        "remark": null,
+        "confidence": 0.96
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_e98dcf88231a"
+        ],
+        "rel_cls": "artistic_creation_relation",
+        "justification": "The relation captures a sculptor–statue creation event, which fits a more specific class of artistic or creative production relations.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_aff500b56d1b"
+        ],
+        "rel_cls": "emotional_relation",
+        "justification": "The predicate models an affective state (love) from one character toward another, fitting an emotional/affective relation class.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_e98dcf88231a"
+        ],
+        "rel_cls_group": "AGENCY",
+        "justification": "Creation here involves an intentional agent (the sculptor) producing an artifact, which best aligns with an agency/actor-driven category.",
+        "remark": null,
+        "confidence": 0.88
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_aff500b56d1b"
+        ],
+        "rel_cls_group": "ASSOCIATION",
+        "justification": "Love is an interpersonal, affective tie between entities and fits a broad group of social/relational associations.",
+        "remark": null,
+        "confidence": 0.88
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_e98dcf88231a"
+      ],
+      "canonical_rel_name": "creates",
+      "canonical_rel_desc": "Indicates that the subject brings the object into existence as a created work or artifact.",
+      "justification": "The relation instance describes Pygmalion as the sculptor who brings the statue Galatea into existence; this is a straightforward creator–creation predicate.",
+      "remark": null,
+      "confidence": 0.95
+    },
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_aff500b56d1b"
+      ],
+      "canonical_rel_name": "loves",
+      "canonical_rel_desc": "Indicates that the subject has romantic or strong affectionate feelings toward the object.",
+      "justification": "The instance describes Pygmalion falling in love with Galatea, which is a clear emotional/affective predicate from subject to object.",
+      "remark": null,
+      "confidence": 0.96
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_e98dcf88231a"
+      ],
+      "rel_cls": "artistic_creation_relation",
+      "justification": "The relation captures a sculptor–statue creation event, which fits a more specific class of artistic or creative production relations.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_aff500b56d1b"
+      ],
+      "rel_cls": "emotional_relation",
+      "justification": "The predicate models an affective state (love) from one character toward another, fitting an emotional/affective relation class.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_e98dcf88231a"
+      ],
+      "rel_cls_group": "AGENCY",
+      "justification": "Creation here involves an intentional agent (the sculptor) producing an artifact, which best aligns with an agency/actor-driven category.",
+      "remark": null,
+      "confidence": 0.88
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_aff500b56d1b"
+      ],
+      "rel_cls_group": "ASSOCIATION",
+      "justification": "Love is an interpersonal, affective tie between entities and fits a broad group of social/relational associations.",
+      "remark": null,
+      "confidence": 0.88
+    }
+  ],
+  "timestamp": "2026-01-06T14:04:37Z"
+}

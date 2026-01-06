@@ -1,0 +1,209 @@
+{
+  "cluster_label": "22_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_0eeca423118a",
+      "relation_name": "used_for",
+      "rel_desc": "Ancient Egyptian tombs aim to support the deceased's eternal existence in the realm of the gods.",
+      "rel_hint_type": "purpose",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "ancient Egyptian tombs",
+      "object_entity_name": "eternal existence in the realm of the gods",
+      "subject_class_label": "Ancient Egyptian Tomb Structures",
+      "subject_class_group": "Ancient Egypt: Society, Rulers, and Funerary Culture",
+      "object_class_label": "Ancient Egyptian Afterlife Beliefs and Concepts",
+      "object_class_group": "Ancient Egyptian Funerary Religion and Culture",
+      "qualifiers": {
+        "TemporalQualifier": "after death",
+        "SpatialQualifier": "relative to the realm of the gods",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "serve to ensure",
+        "LogicalMarker": null,
+        "OtherQualifier": "ReligiousGoal: eternal existence among gods"
+      },
+      "confidence": 0.94,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_0a2cd275dffc",
+      "relation_name": "used_for",
+      "rel_desc": "Mummification contributes to the deceased's intended eternal existence in the realm of the gods.",
+      "rel_hint_type": "purpose",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "mummification",
+      "object_entity_name": "eternal existence in the realm of the gods",
+      "subject_class_label": "Ancient Egyptian Mummification Practices",
+      "subject_class_group": "Ancient Egyptian Funerary Religion and Culture",
+      "object_class_label": "Ancient Egyptian Afterlife Beliefs and Concepts",
+      "object_class_group": "Ancient Egyptian Funerary Religion and Culture",
+      "qualifiers": {
+        "TemporalQualifier": "after successful journey through the afterlife",
+        "SpatialQualifier": "with respect to the realm of the gods",
+        "OperationalConstraint": "when performed according to funerary practice",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "serve to ensure",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.93,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_1b71d936b0c6",
+      "relation_name": "used_for",
+      "rel_desc": "Religious texts are also meant to support the deceased's eternal existence in the realm of the gods.",
+      "rel_hint_type": "purpose",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "religious texts in ancient Egyptian burials",
+      "object_entity_name": "eternal existence in the realm of the gods",
+      "subject_class_label": "Egyptian Funerary Texts",
+      "subject_class_group": "Ancient Egyptian Funerary Practices and Burials",
+      "object_class_label": "Ancient Egyptian Afterlife Beliefs and Concepts",
+      "object_class_group": "Ancient Egyptian Funerary Religion and Culture",
+      "qualifiers": {
+        "TemporalQualifier": "after successful passage",
+        "SpatialQualifier": "relative to the divine realm",
+        "OperationalConstraint": "as part of funerary equipment",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "serve to ensure",
+        "LogicalMarker": "and",
+        "OtherQualifier": null
+      },
+      "confidence": 0.93,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_9ca4b8551015",
+      "relation_name": "used_for",
+      "rel_desc": "Ancient Egyptian burial practices also aim at securing the deceased's eternal existence in the realm of the gods.",
+      "rel_hint_type": "purpose",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "ancient Egyptian burial practices",
+      "object_entity_name": "eternal existence in the realm of the gods",
+      "subject_class_label": "Ancient Egyptian Burial Practices (General)",
+      "subject_class_group": "Ancient Egyptian Funerary Religion and Culture",
+      "object_class_label": "Ancient Egyptian Afterlife Beliefs and Concepts",
+      "object_class_group": "Ancient Egyptian Funerary Religion and Culture",
+      "qualifiers": {
+        "TemporalQualifier": "eternal / post-judgment",
+        "SpatialQualifier": "in the realm of the gods",
+        "OperationalConstraint": "contingent on proper ritual performance",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "sought to ensure",
+        "CausalHint": "sought to ensure",
+        "LogicalMarker": "and",
+        "OtherQualifier": null
+      },
+      "confidence": 0.96,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_0eeca423118a\",\n        \"RelR_0a2cd275dffc\",\n        \"RelR_1b71d936b0c6\",\n        \"RelR_9ca4b8551015\"\n      ],\n      \"canonical_rel_name\": \"has_purpose\",\n      \"canonical_rel_desc\": \"Indicates that the subject practice, object, or action is intended or used to achieve the object as its purpose or goal.\",\n      \"justification\": \"All four relations describe funerary structures, practices, or texts whose intended goal is to secure the deceased's eternal existence in the realm of the gods. The semantics are teleological (purpose) with direction subject=means and object=goal, so a unified predicate 'has_purpose' is appropriate.\",\n      \"remark\": null,\n      \"confidence\": 0.96\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_0eeca423118a\",\n        \"RelR_0a2cd275dffc\",\n        \"RelR_1b71d936b0c6\",\n        \"RelR_9ca4b8551015\"\n      ],\n      \"rel_cls\": \"functional_purpose_relation\",\n      \"justification\": \"Each relation links a funerary practice or object to its intended function or goal in the religious system (ensuring eternal existence among the gods). This is best modeled as a functional purpose class rather than composition, identity, or hierarchy.\",\n      \"remark\": null,\n      \"confidence\": 0.95\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_0eeca423118a\",\n        \"RelR_0a2cd275dffc\",\n        \"RelR_1b71d936b0c6\",\n        \"RelR_9ca4b8551015\"\n      ],\n      \"rel_cls_group\": \"USAGE\",\n      \"justification\": \"The relations capture how funerary elements are used or intended to be used to achieve a religious goal, fitting the broad dimension of usage/purpose rather than strict causality or identity.\",\n      \"remark\": null,\n      \"confidence\": 0.93\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_0eeca423118a",
+          "RelR_0a2cd275dffc",
+          "RelR_1b71d936b0c6",
+          "RelR_9ca4b8551015"
+        ],
+        "canonical_rel_name": "has_purpose",
+        "canonical_rel_desc": "Indicates that the subject practice, object, or action is intended or used to achieve the object as its purpose or goal.",
+        "justification": "All four relations describe funerary structures, practices, or texts whose intended goal is to secure the deceased's eternal existence in the realm of the gods. The semantics are teleological (purpose) with direction subject=means and object=goal, so a unified predicate 'has_purpose' is appropriate.",
+        "remark": null,
+        "confidence": 0.96
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_0eeca423118a",
+          "RelR_0a2cd275dffc",
+          "RelR_1b71d936b0c6",
+          "RelR_9ca4b8551015"
+        ],
+        "rel_cls": "functional_purpose_relation",
+        "justification": "Each relation links a funerary practice or object to its intended function or goal in the religious system (ensuring eternal existence among the gods). This is best modeled as a functional purpose class rather than composition, identity, or hierarchy.",
+        "remark": null,
+        "confidence": 0.95
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_0eeca423118a",
+          "RelR_0a2cd275dffc",
+          "RelR_1b71d936b0c6",
+          "RelR_9ca4b8551015"
+        ],
+        "rel_cls_group": "USAGE",
+        "justification": "The relations capture how funerary elements are used or intended to be used to achieve a religious goal, fitting the broad dimension of usage/purpose rather than strict causality or identity.",
+        "remark": null,
+        "confidence": 0.93
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_0eeca423118a",
+        "RelR_0a2cd275dffc",
+        "RelR_1b71d936b0c6",
+        "RelR_9ca4b8551015"
+      ],
+      "canonical_rel_name": "has_purpose",
+      "canonical_rel_desc": "Indicates that the subject practice, object, or action is intended or used to achieve the object as its purpose or goal.",
+      "justification": "All four relations describe funerary structures, practices, or texts whose intended goal is to secure the deceased's eternal existence in the realm of the gods. The semantics are teleological (purpose) with direction subject=means and object=goal, so a unified predicate 'has_purpose' is appropriate.",
+      "remark": null,
+      "confidence": 0.96
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_0eeca423118a",
+        "RelR_0a2cd275dffc",
+        "RelR_1b71d936b0c6",
+        "RelR_9ca4b8551015"
+      ],
+      "rel_cls": "functional_purpose_relation",
+      "justification": "Each relation links a funerary practice or object to its intended function or goal in the religious system (ensuring eternal existence among the gods). This is best modeled as a functional purpose class rather than composition, identity, or hierarchy.",
+      "remark": null,
+      "confidence": 0.95
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_0eeca423118a",
+        "RelR_0a2cd275dffc",
+        "RelR_1b71d936b0c6",
+        "RelR_9ca4b8551015"
+      ],
+      "rel_cls_group": "USAGE",
+      "justification": "The relations capture how funerary elements are used or intended to be used to achieve a religious goal, fitting the broad dimension of usage/purpose rather than strict causality or identity.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  ],
+  "timestamp": "2026-01-06T10:25:53Z"
+}

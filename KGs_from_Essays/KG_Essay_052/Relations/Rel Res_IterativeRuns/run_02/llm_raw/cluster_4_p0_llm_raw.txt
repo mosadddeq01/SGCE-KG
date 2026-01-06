@@ -1,0 +1,15 @@
+[
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": ["RelR_1ea5b796708e"],
+      "canonical_rel_name": null,
+      "canonical_rel_desc": null,
+      "rel_cls": null,
+      "rel_cls_group": "ASSOCIATION",
+      "justification": "The relation describes sporting events uniting people, which is primarily a social association/connection phenomenon. Other closely related relations in this cluster with the same social-connection semantics are already grouped under rel_cls_group='ASSOCIATION'. Using 'CAUSALITY' here is inconsistent and less informative than aligning it with the ASSOCIATION group used for social connection/cohesion edges.",
+      "remark": "Aligned rel_cls_group with other social-connection relations to consistently treat social cohesion as an associative/relational dimension rather than a generic causal group.",
+      "confidence": 0.82
+    }
+  }
+]

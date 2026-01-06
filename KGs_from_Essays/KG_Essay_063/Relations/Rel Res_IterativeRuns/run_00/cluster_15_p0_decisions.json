@@ -1,0 +1,141 @@
+{
+  "cluster_label": "15_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_46b91085beef",
+      "relation_name": "triggers_emergence_of",
+      "rel_desc": "Systemic racism is also described as an issue that led to the emergence of the Black Lives Matter movement.",
+      "rel_hint_type": "causal",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "systemic racism",
+      "object_entity_name": "Black Lives Matter movement",
+      "subject_class_label": "Racial Inequality Concepts",
+      "subject_class_group": "Rights, Equality, and Social Justice",
+      "object_class_label": "Police Brutality and Contemporary Racial Justice Movements",
+      "object_class_group": "Civil Rights and Racial Justice Movements",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "in the United States",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "in response to",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.94,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_b06640dca9ba",
+      "relation_name": "initiates",
+      "rel_desc": "The Black Lives Matter movement initiated a national conversation on race and inequality.",
+      "rel_hint_type": "causal",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "Black Lives Matter movement",
+      "object_entity_name": "national conversation on race and inequality",
+      "subject_class_label": "Police Brutality and Contemporary Racial Justice Movements",
+      "subject_class_group": "Civil Rights and Racial Justice Movements",
+      "object_class_label": "Social Responses to Inequality",
+      "object_class_group": "Social Inequality and Justice",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "national",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "has sparked",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.96,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_46b91085beef\", \"RelR_b06640dca9ba\"],\n      \"canonical_rel_name\": \"initiates\",\n      \"canonical_rel_desc\": \"Indicates that the subject brings about or starts the existence, emergence, or occurrence of the object (typically a movement, process, or discourse).\",\n      \"justification\": \"Both relations describe the subject as the starting cause of the object: systemic racism leading to the emergence of the Black Lives Matter movement, and the Black Lives Matter movement starting a national conversation. Normalizing them under a single predicate 'initiates' captures this causal-start semantics consistently.\",\n      \"remark\": null,\n      \"confidence\": 0.86\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_46b91085beef\", \"RelR_b06640dca9ba\"],\n      \"rel_cls\": \"socio_political_causation_relation\",\n      \"justification\": \"Both relations involve socio-political phenomena where one social structure or movement causally brings about another movement or discourse. Grouping them under 'socio_political_causation_relation' distinguishes this from physical or purely temporal causation.\",\n      \"remark\": null,\n      \"confidence\": 0.84\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_46b91085beef\", \"RelR_b06640dca9ba\"],\n      \"rel_cls_group\": \"CAUSALITY\",\n      \"justification\": \"In both cases, the subject is explicitly described as causing or leading to the object (\\\"led to the emergence\\\", \\\"initiated\\\" / \\\"has sparked\\\"), which clearly places these relations in the broad causal category.\",\n      \"remark\": null,\n      \"confidence\": 0.95\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_46b91085beef",
+          "RelR_b06640dca9ba"
+        ],
+        "canonical_rel_name": "initiates",
+        "canonical_rel_desc": "Indicates that the subject brings about or starts the existence, emergence, or occurrence of the object (typically a movement, process, or discourse).",
+        "justification": "Both relations describe the subject as the starting cause of the object: systemic racism leading to the emergence of the Black Lives Matter movement, and the Black Lives Matter movement starting a national conversation. Normalizing them under a single predicate 'initiates' captures this causal-start semantics consistently.",
+        "remark": null,
+        "confidence": 0.86
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_46b91085beef",
+          "RelR_b06640dca9ba"
+        ],
+        "rel_cls": "socio_political_causation_relation",
+        "justification": "Both relations involve socio-political phenomena where one social structure or movement causally brings about another movement or discourse. Grouping them under 'socio_political_causation_relation' distinguishes this from physical or purely temporal causation.",
+        "remark": null,
+        "confidence": 0.84
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_46b91085beef",
+          "RelR_b06640dca9ba"
+        ],
+        "rel_cls_group": "CAUSALITY",
+        "justification": "In both cases, the subject is explicitly described as causing or leading to the object (\"led to the emergence\", \"initiated\" / \"has sparked\"), which clearly places these relations in the broad causal category.",
+        "remark": null,
+        "confidence": 0.95
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_46b91085beef",
+        "RelR_b06640dca9ba"
+      ],
+      "canonical_rel_name": "initiates",
+      "canonical_rel_desc": "Indicates that the subject brings about or starts the existence, emergence, or occurrence of the object (typically a movement, process, or discourse).",
+      "justification": "Both relations describe the subject as the starting cause of the object: systemic racism leading to the emergence of the Black Lives Matter movement, and the Black Lives Matter movement starting a national conversation. Normalizing them under a single predicate 'initiates' captures this causal-start semantics consistently.",
+      "remark": null,
+      "confidence": 0.86
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_46b91085beef",
+        "RelR_b06640dca9ba"
+      ],
+      "rel_cls": "socio_political_causation_relation",
+      "justification": "Both relations involve socio-political phenomena where one social structure or movement causally brings about another movement or discourse. Grouping them under 'socio_political_causation_relation' distinguishes this from physical or purely temporal causation.",
+      "remark": null,
+      "confidence": 0.84
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_46b91085beef",
+        "RelR_b06640dca9ba"
+      ],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "In both cases, the subject is explicitly described as causing or leading to the object (\"led to the emergence\", \"initiated\" / \"has sparked\"), which clearly places these relations in the broad causal category.",
+      "remark": null,
+      "confidence": 0.95
+    }
+  ],
+  "timestamp": "2026-01-06T13:17:03Z"
+}

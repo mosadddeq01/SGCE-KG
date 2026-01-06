@@ -1,0 +1,118 @@
+{
+  "cluster_label": 3,
+  "cluster_classes": [
+    {
+      "candidate_id": "ClsC_3bc44060",
+      "class_label": "Social Media Impact Domains",
+      "class_description": "High-level domains of human life that are shaped or influenced by social media, including relationships, behaviors, and perceptions of the world.",
+      "class_type_hint": "Psychosocial Construct",
+      "class_group": "TBD",
+      "confidence": 0.9,
+      "evidence_excerpt": "impacted the way we interact... shaping our relationships, behaviors, and even our perceptions of the world",
+      "member_ids": [
+        "En_b08d1fe4",
+        "En_d7a31a15",
+        "En_f3db2b2b"
+      ],
+      "members": [
+        {
+          "id": "En_b08d1fe4",
+          "entity_name": "relationships",
+          "entity_description": "Interpersonal connections and social bonds between individuals influenced by social media.",
+          "entity_type_hint": "Concept"
+        },
+        {
+          "id": "En_d7a31a15",
+          "entity_name": "behaviors",
+          "entity_description": "Patterns of human actions and conduct that are affected by social media use.",
+          "entity_type_hint": "Concept"
+        },
+        {
+          "id": "En_f3db2b2b",
+          "entity_name": "perceptions of the world",
+          "entity_description": "How individuals interpret and understand the world around them, influenced by social media.",
+          "entity_type_hint": "Concept"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_71c0816b",
+      "class_label": "Social Collective Entity",
+      "class_description": "Collective human groups or communities considered as a whole, such as societies that experience broad social or cultural effects.",
+      "class_type_hint": "Social Construct",
+      "class_group": "TBD",
+      "confidence": 0.86,
+      "evidence_excerpt": "the broader social structure and community that experiences the effects of social media",
+      "member_ids": [
+        "En_cc76067a"
+      ],
+      "members": [
+        {
+          "id": "En_cc76067a",
+          "entity_name": "our society",
+          "entity_description": "The broader social structure and community that experiences the effects of social media.",
+          "entity_type_hint": "CollectiveEntity"
+        }
+      ],
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_3bc44060\",\n      \"new_name\": null,\n      \"new_description\": null,\n      \"new_class_type_hint\": null,\n      \"new_class_group\": \"Social Media Societal Impact\",\n      \"remark\": null,\n      \"justification\": \"The class covers domains of human life (relationships, behaviors, worldviews) affected by social media and should be grouped under a broader societal-impact class_group shared with related social-structure classes.\",\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_71c0816b\",\n      \"new_name\": null,\n      \"new_description\": null,\n      \"new_class_type_hint\": null,\n      \"new_class_group\": \"Social Media Societal Impact\",\n      \"remark\": null,\n      \"justification\": \"This class captures society as a collective entity experiencing the effects of social media, which is semantically aligned with the broader social media societal impact domain and should share that class_group.\",\n      \"confidence\": 0.9\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_3bc44060",
+        "new_name": null,
+        "new_description": null,
+        "new_class_type_hint": null,
+        "new_class_group": "Social Media Societal Impact",
+        "remark": null,
+        "justification": "The class covers domains of human life (relationships, behaviors, worldviews) affected by social media and should be grouped under a broader societal-impact class_group shared with related social-structure classes.",
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_71c0816b",
+        "new_name": null,
+        "new_description": null,
+        "new_class_type_hint": null,
+        "new_class_group": "Social Media Societal Impact",
+        "remark": null,
+        "justification": "This class captures society as a collective entity experiencing the effects of social media, which is semantically aligned with the broader social media societal impact domain and should share that class_group.",
+        "confidence": 0.9
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_3bc44060",
+      "class_id_resolved": "ClsC_3bc44060",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Social Media Societal Impact",
+      "remark": null,
+      "justification": "The class covers domains of human life (relationships, behaviors, worldviews) affected by social media and should be grouped under a broader societal-impact class_group shared with related social-structure classes.",
+      "confidence": 0.9
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_71c0816b",
+      "class_id_resolved": "ClsC_71c0816b",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Social Media Societal Impact",
+      "remark": null,
+      "justification": "This class captures society as a collective entity experiencing the effects of social media, which is semantically aligned with the broader social media societal impact domain and should share that class_group.",
+      "confidence": 0.9
+    }
+  ],
+  "provisional_to_real": {},
+  "timestamp": "2026-01-06T10:53:32Z"
+}

@@ -1,0 +1,101 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_d84036948186",
+        "RelR_4e748f95590a",
+        "RelR_99e26e8b1e0a",
+        "RelR_0782a45f39e2",
+        "RelR_db170e327d47",
+        "RelR_ffb7e95f6d41"
+      ],
+      "canonical_rel_name": "occurs_during_time_period",
+      "canonical_rel_desc": "Indicates that an event or type of event occurs during a specified historical time period.",
+      "justification": "All these relations link a protest-related phenomenon (public protest demonstrations, strikes, revolutions) to a broad time period (ancient times, present day) and express that the phenomenon occurs during that period; they share identical temporal-scope semantics.",
+      "remark": null,
+      "confidence": 0.96
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_68e60de5417d",
+        "RelR_a9e0aecf0d4f"
+      ],
+      "canonical_rel_name": "time_period_includes_events",
+      "canonical_rel_desc": "Indicates that a historical time period includes occurrences of specified events or event types.",
+      "justification": "Both relations have a time period as subject and protests/revolutions as objects, describing that these events took place within that timeframe; the direction is from period to included events, distinct from event→period links.",
+      "remark": null,
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_9beb6ea72b08",
+        "RelR_1c063fbb34cf"
+      ],
+      "canonical_rel_name": "starts_in_time",
+      "canonical_rel_desc": "Indicates the time point or time period when an event, process, or described history begins.",
+      "justification": "Both relations express the temporal onset of an event or historical process (Arab Spring; history of protests and revolutions) with respect to a year or broad period; they share the same onset semantics despite slightly different raw relation names.",
+      "remark": null,
+      "confidence": 0.94
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_d84036948186",
+        "RelR_4e748f95590a",
+        "RelR_99e26e8b1e0a",
+        "RelR_0782a45f39e2",
+        "RelR_db170e327d47",
+        "RelR_ffb7e95f6d41",
+        "RelR_68e60de5417d",
+        "RelR_a9e0aecf0d4f"
+      ],
+      "rel_cls": "event_temporal_scope_relation",
+      "justification": "These relations all describe the temporal scope or coverage of events relative to time periods—either events occurring during periods or periods that include events—so they naturally belong to a shared class capturing event–timeframe scope.",
+      "remark": null,
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_9beb6ea72b08",
+        "RelR_1c063fbb34cf"
+      ],
+      "rel_cls": "event_onset_relation",
+      "justification": "These relations indicate when an event or historical process begins, which is a distinct temporal pattern from general temporal scope; grouping them under an onset-specific class improves schema clarity.",
+      "remark": null,
+      "confidence": 0.94
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_d84036948186",
+        "RelR_4e748f95590a",
+        "RelR_99e26e8b1e0a",
+        "RelR_0782a45f39e2",
+        "RelR_db170e327d47",
+        "RelR_ffb7e95f6d41",
+        "RelR_68e60de5417d",
+        "RelR_9beb6ea72b08",
+        "RelR_a9e0aecf0d4f",
+        "RelR_1c063fbb34cf"
+      ],
+      "rel_cls_group": "TEMPORALITY",
+      "justification": "All relations in this chunk encode temporal information—either when events occur, the periods that include them, or when they start—so they should consistently fall under the broad temporality group.",
+      "remark": null,
+      "confidence": 0.99
+    }
+  }
+]

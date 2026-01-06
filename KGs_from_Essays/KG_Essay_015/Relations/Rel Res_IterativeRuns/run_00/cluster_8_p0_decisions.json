@@ -1,0 +1,143 @@
+{
+  "cluster_label": "8_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_37f5c3e61c72",
+      "relation_name": "built_for",
+      "rel_desc": "Ancient Egyptian tombs were constructed to house pharaohs in the afterlife.",
+      "rel_hint_type": "purpose",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "ancient Egyptian tombs",
+      "object_entity_name": "pharaohs",
+      "subject_class_label": "Ancient Egyptian Tomb Structures",
+      "subject_class_group": "Ancient Egypt: Society, Rulers, and Funerary Culture",
+      "object_class_label": "Ancient Egyptian Rulers",
+      "object_class_group": "Ancient Egypt: Society, Rulers, and Funerary Culture",
+      "qualifiers": {
+        "TemporalQualifier": "after death",
+        "SpatialQualifier": "within the tombs",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "built to",
+        "LogicalMarker": null,
+        "OtherQualifier": "IntendedRealm: in the afterlife"
+      },
+      "confidence": 0.94,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_3ca81eea4690",
+      "relation_name": "built_for",
+      "rel_desc": "Ancient Egyptian tombs, including monumental ones, were also intended to house other important individuals, corresponding to the ancient Egyptian elite.",
+      "rel_hint_type": "purpose",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "ancient Egyptian tombs",
+      "object_entity_name": "ancient Egyptian elite",
+      "subject_class_label": "Ancient Egyptian Tomb Structures",
+      "subject_class_group": "Ancient Egypt: Society, Rulers, and Funerary Culture",
+      "object_class_label": "Ancient Egyptian Social Strata",
+      "object_class_group": "Ancient Egypt: Society, Rulers, and Funerary Culture",
+      "qualifiers": {
+        "TemporalQualifier": "after death",
+        "SpatialQualifier": "within the tombs",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "implicit mapping of group",
+        "CausalHint": "were built to",
+        "LogicalMarker": "and",
+        "OtherQualifier": "IntendedRealm: in the afterlife"
+      },
+      "confidence": 0.78,
+      "remarks": [
+        "Mapping \"other important individuals\" to the canonical entity ancient Egyptian elite is inferred but plausible."
+      ]
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_37f5c3e61c72\", \"RelR_3ca81eea4690\"],\n      \"canonical_rel_name\": \"serves_as_burial_place_for\",\n      \"canonical_rel_desc\": \"Indicates that a tomb or burial structure is intended to serve as the burial place for a specific person or social group, typically in the afterlife context.\",\n      \"justification\": \"Both relations describe the same core predicate: ancient Egyptian tombs are constructed with the purpose of housing particular persons (pharaohs or elite) after death. The direction (tomb → person/group) and semantics (intended burial place/purpose) are identical, so they should share a single canonical predicate capturing that these structures function as the burial place for the referenced individuals.\",\n      \"remark\": \"Qualifiers like 'after death' and 'in the afterlife' are instance-level temporal/intended-realm details and should remain as qualifiers, not be folded into the canonical predicate.\",\n      \"confidence\": 0.93\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_37f5c3e61c72\", \"RelR_3ca81eea4690\"],\n      \"rel_cls\": \"burial_purpose_relation\",\n      \"justification\": \"These relations connect tomb structures to the persons or social groups they are meant to house in death, reflecting the intended funerary/burial purpose of the structures. Grouping them under a more specific class 'burial_purpose_relation' (rather than a generic 'purpose_relation') better captures the consistent funerary semantics across such links.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_37f5c3e61c72\", \"RelR_3ca81eea4690\"],\n      \"rel_cls_group\": \"USAGE\",\n      \"justification\": \"The primary semantic dimension is that tombs are used/intended to be used as burial places for specific individuals or groups, which is a purpose/usage relationship rather than composition, identity, or causality. Therefore, these relations best fit under a broad USAGE group.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_37f5c3e61c72",
+          "RelR_3ca81eea4690"
+        ],
+        "canonical_rel_name": "serves_as_burial_place_for",
+        "canonical_rel_desc": "Indicates that a tomb or burial structure is intended to serve as the burial place for a specific person or social group, typically in the afterlife context.",
+        "justification": "Both relations describe the same core predicate: ancient Egyptian tombs are constructed with the purpose of housing particular persons (pharaohs or elite) after death. The direction (tomb → person/group) and semantics (intended burial place/purpose) are identical, so they should share a single canonical predicate capturing that these structures function as the burial place for the referenced individuals.",
+        "remark": "Qualifiers like 'after death' and 'in the afterlife' are instance-level temporal/intended-realm details and should remain as qualifiers, not be folded into the canonical predicate.",
+        "confidence": 0.93
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_37f5c3e61c72",
+          "RelR_3ca81eea4690"
+        ],
+        "rel_cls": "burial_purpose_relation",
+        "justification": "These relations connect tomb structures to the persons or social groups they are meant to house in death, reflecting the intended funerary/burial purpose of the structures. Grouping them under a more specific class 'burial_purpose_relation' (rather than a generic 'purpose_relation') better captures the consistent funerary semantics across such links.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_37f5c3e61c72",
+          "RelR_3ca81eea4690"
+        ],
+        "rel_cls_group": "USAGE",
+        "justification": "The primary semantic dimension is that tombs are used/intended to be used as burial places for specific individuals or groups, which is a purpose/usage relationship rather than composition, identity, or causality. Therefore, these relations best fit under a broad USAGE group.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_37f5c3e61c72",
+        "RelR_3ca81eea4690"
+      ],
+      "canonical_rel_name": "serves_as_burial_place_for",
+      "canonical_rel_desc": "Indicates that a tomb or burial structure is intended to serve as the burial place for a specific person or social group, typically in the afterlife context.",
+      "justification": "Both relations describe the same core predicate: ancient Egyptian tombs are constructed with the purpose of housing particular persons (pharaohs or elite) after death. The direction (tomb → person/group) and semantics (intended burial place/purpose) are identical, so they should share a single canonical predicate capturing that these structures function as the burial place for the referenced individuals.",
+      "remark": "Qualifiers like 'after death' and 'in the afterlife' are instance-level temporal/intended-realm details and should remain as qualifiers, not be folded into the canonical predicate.",
+      "confidence": 0.93
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_37f5c3e61c72",
+        "RelR_3ca81eea4690"
+      ],
+      "rel_cls": "burial_purpose_relation",
+      "justification": "These relations connect tomb structures to the persons or social groups they are meant to house in death, reflecting the intended funerary/burial purpose of the structures. Grouping them under a more specific class 'burial_purpose_relation' (rather than a generic 'purpose_relation') better captures the consistent funerary semantics across such links.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_37f5c3e61c72",
+        "RelR_3ca81eea4690"
+      ],
+      "rel_cls_group": "USAGE",
+      "justification": "The primary semantic dimension is that tombs are used/intended to be used as burial places for specific individuals or groups, which is a purpose/usage relationship rather than composition, identity, or causality. Therefore, these relations best fit under a broad USAGE group.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  ],
+  "timestamp": "2026-01-06T10:21:36Z"
+}

@@ -1,0 +1,64 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_1bee97beffff"],
+      "canonical_rel_name": "has_example_behavior",
+      "canonical_rel_desc": "Indicates that the subject behavioral category is illustrated or exemplified by the object behavior.",
+      "justification": "The relation describes body language being illustrated by an example behavior (eye contact) rather than a strict part-whole or subtype relation; a predicate focused on illustrative/example behavior captures this semantics best.",
+      "remark": "Use this predicate when a communication/behavior category is being exemplified by a specific behavior.",
+      "confidence": 0.83
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_273c3c0ce64a"],
+      "canonical_rel_name": "is_aspect_of",
+      "canonical_rel_desc": "Indicates that the subject is a specific aspect, feature, or component of the broader phenomenon described by the object.",
+      "justification": "The text and domain knowledge both support that posture is treated as a specific aspect or component of body language, so an aspect/part-style predicate is appropriate.",
+      "remark": "Apply this where a specific nonverbal cue is framed as an aspect of a broader communication construct.",
+      "confidence": 0.82
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": ["RelR_1bee97beffff"],
+      "rel_cls": "illustrative_instance_relation",
+      "justification": "This link connects a general behavior category (body language) to a specific behavior that serves as an illustrative example, which fits an illustrative/instance-style relation class.",
+      "remark": "Covers cases where entities are linked as example instances used for explanation rather than strict taxonomy.",
+      "confidence": 0.8
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": ["RelR_273c3c0ce64a"],
+      "rel_cls": "nonverbal_component_relation",
+      "justification": "The relation treats posture as a component/aspect of body language, which is a part-whole style relation specifically within nonverbal communication constructs.",
+      "remark": "Use this for relations where specific nonverbal cues (e.g., posture, gestures) are modeled as components of broader nonverbal categories.",
+      "confidence": 0.83
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": ["RelR_1bee97beffff"],
+      "rel_cls_group": "ASSOCIATION",
+      "justification": "The example relation associates a general category with an illustrative instance used in explanation; this is best captured as an associative/illustrative link rather than strict composition or identity.",
+      "remark": null,
+      "confidence": 0.78
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": ["RelR_273c3c0ce64a"],
+      "rel_cls_group": "COMPOSITION",
+      "justification": "Posture is modeled as a component/aspect of body language, which is a part-whole/structural relationship, fitting a broad COMPOSITION group.",
+      "remark": null,
+      "confidence": 0.85
+    }
+  }
+]

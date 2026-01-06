@@ -1,0 +1,45 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_ec396dcbbe95",
+        "RelR_0a626c6253d0",
+        "RelR_d4f1bf33576b"
+      ],
+      "canonical_rel_name": "originates_from",
+      "canonical_rel_desc": "Indicates that the historical origin or emergence of the subject arises from, or is grounded in, the object as its source context.",
+      "justification": "All three relations describe the historical origins of famous fairytales as being ‘rooted in’ specific cultural sources (oral traditions, folklore, cultural myths). Semantically this is a consistent origin/source predicate. Normalizing them to a single canonical predicate ‘originates_from’ captures this direction and meaning and can be reused across cultural-history contexts.",
+      "remark": null,
+      "confidence": 0.97
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_ec396dcbbe95",
+        "RelR_0a626c6253d0",
+        "RelR_d4f1bf33576b"
+      ],
+      "rel_cls": "cultural_origin_relation",
+      "justification": "Each relation links the origins of fairytales to underlying cultural or narrative sources. This is more specific than a generic source relation and groups similar predicates about where cultural artifacts or traditions historically originate.",
+      "remark": null,
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_ec396dcbbe95",
+        "RelR_0a626c6253d0",
+        "RelR_d4f1bf33576b"
+      ],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "The notion of being ‘rooted in’ implies that the object (oral traditions, folklore, cultural myths) is a causal or formative source for the subject’s origins. This fits a causal/source-of-origins dimension better than simple association.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  }
+]

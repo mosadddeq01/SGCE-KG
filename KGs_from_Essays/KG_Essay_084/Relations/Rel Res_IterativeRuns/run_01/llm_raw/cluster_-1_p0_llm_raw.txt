@@ -1,0 +1,15 @@
+[
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": ["RelR_7ef858ab930b"],
+      "canonical_rel_name": "is_presented_in_court",
+      "canonical_rel_desc": "Indicates that a piece of physical evidence is formally presented or introduced in a court or courtroom setting as part of legal proceedings.",
+      "rel_cls": "forensic_courtroom_context_relation",
+      "rel_cls_group": "SPATIALITY",
+      "justification": "The current canonical_rel_name 'takes_place_in' and description emphasize an event or testimony occurring in a courtroom, but the actual relation instance links 'physical evidence' to 'court' with the description 'Physical evidence may be presented in court'. A more precise predicate is needed that captures the presentation/introduction of evidence in court rather than a generic occurrence of an event. 'is_presented_in_court' accurately represents this evidentiary courtroom context while retaining the SPATIALITY-focused relation class.",
+      "remark": null,
+      "confidence": 0.87
+    }
+  }
+]

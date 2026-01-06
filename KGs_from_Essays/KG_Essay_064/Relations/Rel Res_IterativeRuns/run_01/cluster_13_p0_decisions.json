@@ -1,0 +1,103 @@
+{
+  "cluster_label": "13_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_fcd84ecfe3a2",
+      "relation_name": "derived_from",
+      "rel_desc": "Beauty and the Beast is derived from ancient myths and stories related to it.",
+      "rel_hint_type": "origin",
+      "canonical_rel_name": "is_derived_from",
+      "canonical_rel_desc": "Indicates that a narrative, text, or work is derived from or based on earlier narratives, myths, or source stories.",
+      "rel_cls": "narrative_origin_relation",
+      "rel_cls_group": "CAUSALITY",
+      "subject_entity_name": "Beauty and the Beast",
+      "object_entity_name": "ancient myths and stories related to Beauty and the Beast",
+      "subject_class_label": "Beauty and the Beast Storyworld",
+      "subject_class_group": "Beauty and the Beast Storyworld",
+      "object_class_label": "Beauty and the Beast Sources and Origins",
+      "object_class_group": "Beauty and the Beast Context and Origins",
+      "qualifiers": {
+        "TemporalQualifier": "traced back to ancient times",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "origins of this tale",
+        "LogicalMarker": null,
+        "OtherQualifier": "Transmission: retold in different forms throughout history"
+      },
+      "confidence": 0.93,
+      "remarks": [
+        "Ancient myths and stories entity represents these older narrative sources.",
+        "Ancient myths and stories entity represents these older narrative sources."
+      ]
+    },
+    {
+      "relation_id": "RelR_ad4cc3dd9038",
+      "relation_name": "is_source_of",
+      "rel_desc": "Ancient myths and stories related to Beauty and the Beast act as source material for the Beauty and the Beast fairytale.",
+      "rel_hint_type": "influence",
+      "canonical_rel_name": "is_narrative_source_of",
+      "canonical_rel_desc": "The subject narrative or myth functions as a source, precursor, or formative influence for the specified later narrative.",
+      "rel_cls": "narrative_origin_relation",
+      "rel_cls_group": "CAUSALITY",
+      "subject_entity_name": "ancient myths and stories related to Beauty and the Beast",
+      "object_entity_name": "Beauty and the Beast",
+      "subject_class_label": "Beauty and the Beast Sources and Origins",
+      "subject_class_group": "Beauty and the Beast Context and Origins",
+      "object_class_label": "Beauty and the Beast Storyworld",
+      "object_class_group": "Beauty and the Beast Storyworld",
+      "qualifiers": {
+        "TemporalQualifier": "ancient sources predating the literary fairytale",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "origins of this tale",
+        "LogicalMarker": null,
+        "OtherQualifier": "NarrativeRelation: earlier mythic narratives underpin later romantic fairytale"
+      },
+      "confidence": 0.9,
+      "remarks": [
+        "Both directions are kept to support different graph queries (source-of vs derived-from).",
+        "Both directions are kept to support different graph queries (source-of vs derived-from)."
+      ]
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_rel_schema\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_ad4cc3dd9038\"],\n      \"canonical_rel_name\": \"is_source_of\",\n      \"canonical_rel_desc\": \"Indicates that a narrative, myth, or story functions as a source, precursor, or formative influence for a later narrative, text, or work.\",\n      \"rel_cls\": null,\n      \"rel_cls_group\": null,\n      \"justification\": \"Normalize the predicate to a concise, direction-explicit form that pairs cleanly with `is_derived_from`. The existing `is_narrative_source_of` is semantically correct but adds unnecessary domain-specific wording, while the relation_name and rel_desc clearly indicate a generic source-of relation between narratives.\",\n      \"remark\": \"Inverse pair in this local schema: `is_source_of` (source → derived narrative) and `is_derived_from` (derived narrative → source).\",\n      \"confidence\": 0.9\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_rel_schema",
+      "args": {
+        "relation_ids": [
+          "RelR_ad4cc3dd9038"
+        ],
+        "canonical_rel_name": "is_source_of",
+        "canonical_rel_desc": "Indicates that a narrative, myth, or story functions as a source, precursor, or formative influence for a later narrative, text, or work.",
+        "rel_cls": null,
+        "rel_cls_group": null,
+        "justification": "Normalize the predicate to a concise, direction-explicit form that pairs cleanly with `is_derived_from`. The existing `is_narrative_source_of` is semantically correct but adds unnecessary domain-specific wording, while the relation_name and rel_desc clearly indicate a generic source-of relation between narratives.",
+        "remark": "Inverse pair in this local schema: `is_source_of` (source → derived narrative) and `is_derived_from` (derived narrative → source).",
+        "confidence": 0.9
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_rel_schema",
+      "relation_ids": [
+        "RelR_ad4cc3dd9038"
+      ],
+      "canonical_rel_name": "is_source_of",
+      "canonical_rel_desc": "Indicates that a narrative, myth, or story functions as a source, precursor, or formative influence for a later narrative, text, or work.",
+      "rel_cls": null,
+      "rel_cls_group": null,
+      "new_relation_name": null,
+      "original_relation_name": null,
+      "justification": "Normalize the predicate to a concise, direction-explicit form that pairs cleanly with `is_derived_from`. The existing `is_narrative_source_of` is semantically correct but adds unnecessary domain-specific wording, while the relation_name and rel_desc clearly indicate a generic source-of relation between narratives.",
+      "remark": "Inverse pair in this local schema: `is_source_of` (source → derived narrative) and `is_derived_from` (derived narrative → source).",
+      "confidence": 0.9
+    }
+  ],
+  "timestamp": "2026-01-06T14:08:26Z"
+}

@@ -1,0 +1,17 @@
+[
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": [
+        "RelR_726f81314b83"
+      ],
+      "canonical_rel_name": "is_characteristic_radius_of",
+      "canonical_rel_desc": "Indicates that the subject radius is the characteristic or defining boundary radius of the object, typically marking a limit beyond which a key physical property (such as escape) qualitatively changes.",
+      "rel_cls": "characteristic_boundary_relation",
+      "rel_cls_group": "CONSTRAINT",
+      "justification": "This relation instance focuses on the Schwarzschild radius as a defining boundary beyond which escape is impossible, i.e., a physical limit/threshold of the black hole rather than a generic measurement operation. Using rel_cls 'characteristic_boundary_relation' and rel_cls_group 'CONSTRAINT' better captures its role as a boundary/limit, instead of the previous 'measurement_relation' under 'MEASUREMENT'. The canonical name itself is already appropriate and is retained, but its description is refined to emphasize its boundary/limit semantics.",
+      "remark": null,
+      "confidence": 0.86
+    }
+  }
+]

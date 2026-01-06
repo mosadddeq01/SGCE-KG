@@ -1,0 +1,17 @@
+[
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": [
+        "RelR_30b15b0c2ed4"
+      ],
+      "canonical_rel_name": "leads_toward",
+      "canonical_rel_desc": "The subject is conceptualized as a path, process, or trajectory that is directionally oriented toward the object as a destination, goal, or aspirational state, without necessarily implying direct causation.",
+      "rel_cls": "progress_direction_relation",
+      "rel_cls_group": "DIRECTIONALITY",
+      "justification": "This relation encodes a metaphorical, teleological direction of progress (a journey toward a better world), not a clear causal mechanism. The existing rel_cls_group=CAUSALITY is misleading given rel_hint_type='directional' and the metaphorical qualifiers. Using rel_cls_group='DIRECTIONALITY' better captures that this predicate expresses movement or orientation toward a goal state. The refined description explicitly removes a strong causal reading while keeping the idea of a path toward an aspirational outcome.",
+      "remark": "Adjusted broad class from CAUSALITY to DIRECTIONALITY to reflect that this is a metaphorical progress-path relation rather than a concrete causal impact relation.",
+      "confidence": 0.79
+    }
+  }
+]

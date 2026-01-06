@@ -1,0 +1,58 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_e7221d14e6a4"],
+      "canonical_rel_name": "feeds_on",
+      "canonical_rel_desc": "Indicates that the subject organism consumes the object as a primary food source.",
+      "justification": "This relation instance describes a consumer-resource feeding interaction (caterpillars consuming leaves). The natural, directionally correct predicate is 'feeds_on' from consumer to food item.",
+      "remark": null,
+      "confidence": 0.97
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_03ad6dd0bcc3",
+        "RelR_4ce8341392f6",
+        "RelR_03dfc2103fb2"
+      ],
+      "canonical_rel_name": "is_prey_of",
+      "canonical_rel_desc": "Indicates that the subject organism is hunted or consumed as prey by the object organism.",
+      "justification": "All three instances describe butterflies serving as prey (food) for different predator groups (birds, reptiles, other insects) with the same direction: prey (subject) to predator (object). A single canonical predicate 'is_prey_of' consistently captures this.",
+      "remark": null,
+      "confidence": 0.97
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_e7221d14e6a4",
+        "RelR_03ad6dd0bcc3",
+        "RelR_4ce8341392f6",
+        "RelR_03dfc2103fb2"
+      ],
+      "rel_cls": "trophic_interaction_relation",
+      "justification": "All relations describe feeding or predator–prey (consumer–resource) interactions, which fall under the same broader class of trophic interactions, regardless of whether the direction is consumer→resource or prey→predator.",
+      "remark": null,
+      "confidence": 0.96
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_e7221d14e6a4",
+        "RelR_03ad6dd0bcc3",
+        "RelR_4ce8341392f6",
+        "RelR_03dfc2103fb2"
+      ],
+      "rel_cls_group": "INTERACTION",
+      "justification": "Each relation represents a biological interaction between organisms (feeding/predation), fitting the broad category of INTERACTION rather than composition, identity, or causality.",
+      "remark": null,
+      "confidence": 0.96
+    }
+  }
+]

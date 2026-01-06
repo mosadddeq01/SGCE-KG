@@ -1,0 +1,211 @@
+{
+  "cluster_label": "20_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_c19673f388aa",
+      "relation_name": "supports",
+      "rel_desc": "Protecting bird populations helps ensure the health of ecosystems.",
+      "rel_hint_type": "ecosystem condition",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "bird populations",
+      "object_entity_name": "health of ecosystems",
+      "subject_class_label": "Bird Biotic Components",
+      "subject_class_group": "Birds as Environmental Indicators & Conservation",
+      "object_class_label": "Ecosystem Condition Attributes",
+      "object_class_group": "Ecosystem Condition, Function & Services",
+      "qualifiers": {
+        "TemporalQualifier": "for future generations",
+        "SpatialQualifier": "ecosystems",
+        "OperationalConstraint": "when bird populations and habitats are protected",
+        "ConditionExpression": "if bird populations and their habitats are protected",
+        "UncertaintyQualifier": null,
+        "CausalHint": "is crucial for; ensuring",
+        "LogicalMarker": "for",
+        "OtherQualifier": null
+      },
+      "confidence": 0.9,
+      "remarks": [
+        "Protection aspect encoded as a condition on the relation."
+      ]
+    },
+    {
+      "relation_id": "RelR_1f8f212a2139",
+      "relation_name": "supports",
+      "rel_desc": "Protecting bird habitats supports the health of ecosystems.",
+      "rel_hint_type": "ecosystem condition",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "habitats",
+      "object_entity_name": "health of ecosystems",
+      "subject_class_label": "Bird Habitats",
+      "subject_class_group": "Birds as Environmental Indicators & Conservation",
+      "object_class_label": "Ecosystem Condition Attributes",
+      "object_class_group": "Ecosystem Condition, Function & Services",
+      "qualifiers": {
+        "TemporalQualifier": "for future generations",
+        "SpatialQualifier": "ecosystems",
+        "OperationalConstraint": "when habitats are protected (with bird populations)",
+        "ConditionExpression": "if bird populations and their habitats are protected",
+        "UncertaintyQualifier": null,
+        "CausalHint": "is crucial for; ensuring",
+        "LogicalMarker": "and; for",
+        "OtherQualifier": null
+      },
+      "confidence": 0.88,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_767b675fc10f",
+      "relation_name": "supports",
+      "rel_desc": "Protecting bird populations contributes to the resilience of ecosystems.",
+      "rel_hint_type": "ecosystem condition",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "bird populations",
+      "object_entity_name": "resilience of ecosystems",
+      "subject_class_label": "Bird Biotic Components",
+      "subject_class_group": "Birds as Environmental Indicators & Conservation",
+      "object_class_label": "Ecosystem Condition Attributes",
+      "object_class_group": "Ecosystem Condition, Function & Services",
+      "qualifiers": {
+        "TemporalQualifier": "for future generations",
+        "SpatialQualifier": "ecosystems",
+        "OperationalConstraint": "when bird populations and habitats are protected",
+        "ConditionExpression": "if bird populations and their habitats are protected",
+        "UncertaintyQualifier": null,
+        "CausalHint": "is crucial for; ensuring",
+        "LogicalMarker": "for",
+        "OtherQualifier": null
+      },
+      "confidence": 0.9,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_4679f87947ea",
+      "relation_name": "supports",
+      "rel_desc": "Protecting bird habitats contributes to ecosystem resilience.",
+      "rel_hint_type": "ecosystem condition",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "habitats",
+      "object_entity_name": "resilience of ecosystems",
+      "subject_class_label": "Bird Habitats",
+      "subject_class_group": "Birds as Environmental Indicators & Conservation",
+      "object_class_label": "Ecosystem Condition Attributes",
+      "object_class_group": "Ecosystem Condition, Function & Services",
+      "qualifiers": {
+        "TemporalQualifier": "for future generations",
+        "SpatialQualifier": "ecosystems",
+        "OperationalConstraint": "when habitats are protected (with bird populations)",
+        "ConditionExpression": "if bird populations and their habitats are protected",
+        "UncertaintyQualifier": null,
+        "CausalHint": "is crucial for; ensuring",
+        "LogicalMarker": "and; for",
+        "OtherQualifier": null
+      },
+      "confidence": 0.88,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_c19673f388aa\",\n        \"RelR_1f8f212a2139\",\n        \"RelR_767b675fc10f\",\n        \"RelR_4679f87947ea\"\n      ],\n      \"canonical_rel_name\": \"enhances_ecosystem_condition\",\n      \"canonical_rel_desc\": \"The subject contributes positively to the health, resilience, or overall condition of ecosystems.\",\n      \"justification\": \"All four relations describe how protecting bird populations or habitats has a positive, contributory effect on ecosystem health or resilience. A unified predicate capturing positive impact on ecosystem condition improves schema consistency while remaining faithful to the causal semantics indicated by the descriptions and qualifiers.\",\n      \"remark\": \"Chosen as a domain-specific but reusable predicate for positive impacts on ecosystem health/resilience.\",\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_c19673f388aa\",\n        \"RelR_1f8f212a2139\",\n        \"RelR_767b675fc10f\",\n        \"RelR_4679f87947ea\"\n      ],\n      \"rel_cls\": \"ecosystem_condition_relation\",\n      \"justification\": \"Each relation links a conservation-related subject (bird populations or habitats) to an ecosystem condition attribute (health or resilience), expressing how the subject affects ecosystem condition. Grouping them under an ecosystem_condition_relation class captures this shared thematic focus.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_c19673f388aa\",\n        \"RelR_1f8f212a2139\",\n        \"RelR_767b675fc10f\",\n        \"RelR_4679f87947ea\"\n      ],\n      \"rel_cls_group\": \"CAUSALITY\",\n      \"justification\": \"The descriptions and qualifiers (e.g., 'contributes to', 'is crucial for; ensuring') indicate that the subjects causally support or enhance the ecosystem attributes, not merely co-occur. This is best modeled as a causal impact relation rather than simple association.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_c19673f388aa",
+          "RelR_1f8f212a2139",
+          "RelR_767b675fc10f",
+          "RelR_4679f87947ea"
+        ],
+        "canonical_rel_name": "enhances_ecosystem_condition",
+        "canonical_rel_desc": "The subject contributes positively to the health, resilience, or overall condition of ecosystems.",
+        "justification": "All four relations describe how protecting bird populations or habitats has a positive, contributory effect on ecosystem health or resilience. A unified predicate capturing positive impact on ecosystem condition improves schema consistency while remaining faithful to the causal semantics indicated by the descriptions and qualifiers.",
+        "remark": "Chosen as a domain-specific but reusable predicate for positive impacts on ecosystem health/resilience.",
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_c19673f388aa",
+          "RelR_1f8f212a2139",
+          "RelR_767b675fc10f",
+          "RelR_4679f87947ea"
+        ],
+        "rel_cls": "ecosystem_condition_relation",
+        "justification": "Each relation links a conservation-related subject (bird populations or habitats) to an ecosystem condition attribute (health or resilience), expressing how the subject affects ecosystem condition. Grouping them under an ecosystem_condition_relation class captures this shared thematic focus.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_c19673f388aa",
+          "RelR_1f8f212a2139",
+          "RelR_767b675fc10f",
+          "RelR_4679f87947ea"
+        ],
+        "rel_cls_group": "CAUSALITY",
+        "justification": "The descriptions and qualifiers (e.g., 'contributes to', 'is crucial for; ensuring') indicate that the subjects causally support or enhance the ecosystem attributes, not merely co-occur. This is best modeled as a causal impact relation rather than simple association.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_c19673f388aa",
+        "RelR_1f8f212a2139",
+        "RelR_767b675fc10f",
+        "RelR_4679f87947ea"
+      ],
+      "canonical_rel_name": "enhances_ecosystem_condition",
+      "canonical_rel_desc": "The subject contributes positively to the health, resilience, or overall condition of ecosystems.",
+      "justification": "All four relations describe how protecting bird populations or habitats has a positive, contributory effect on ecosystem health or resilience. A unified predicate capturing positive impact on ecosystem condition improves schema consistency while remaining faithful to the causal semantics indicated by the descriptions and qualifiers.",
+      "remark": "Chosen as a domain-specific but reusable predicate for positive impacts on ecosystem health/resilience.",
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_c19673f388aa",
+        "RelR_1f8f212a2139",
+        "RelR_767b675fc10f",
+        "RelR_4679f87947ea"
+      ],
+      "rel_cls": "ecosystem_condition_relation",
+      "justification": "Each relation links a conservation-related subject (bird populations or habitats) to an ecosystem condition attribute (health or resilience), expressing how the subject affects ecosystem condition. Grouping them under an ecosystem_condition_relation class captures this shared thematic focus.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_c19673f388aa",
+        "RelR_1f8f212a2139",
+        "RelR_767b675fc10f",
+        "RelR_4679f87947ea"
+      ],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "The descriptions and qualifiers (e.g., 'contributes to', 'is crucial for; ensuring') indicate that the subjects causally support or enhance the ecosystem attributes, not merely co-occur. This is best modeled as a causal impact relation rather than simple association.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  ],
+  "timestamp": "2026-01-06T11:31:14Z"
+}

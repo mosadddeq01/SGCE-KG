@@ -1,0 +1,64 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_90038cce3f44"],
+      "canonical_rel_name": "is_part_of",
+      "canonical_rel_desc": "Indicates that the subject is a physical part, region, or component of the object.",
+      "justification": "The subject 'underside of leaves' is a specific surface region that physically belongs to and is contained within 'leaves', which is a standard mereological part-whole relation.",
+      "remark": null,
+      "confidence": 0.96
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": ["RelR_90038cce3f44"],
+      "rel_cls": "part_whole_relation",
+      "justification": "This relation links a physical sub-region (underside) to a larger structure (leaf) as a component of it, fitting the generic part-whole class.",
+      "remark": null,
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": ["RelR_90038cce3f44"],
+      "rel_cls_group": "COMPOSITION",
+      "justification": "Part-whole relations between physical structures are best grouped under COMPOSITION, as they describe how a whole is composed of parts.",
+      "remark": null,
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_a736a72f5e65"],
+      "canonical_rel_name": "has_life_cycle_stage",
+      "canonical_rel_desc": "Indicates that a life cycle or developmental process includes the given stage as one of its constituent phases.",
+      "justification": "The subject is a life cycle and the object is a specific phase within that cycle (the adult butterfly stage), so a predicate explicitly capturing inclusion of a life-cycle stage is appropriate.",
+      "remark": null,
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": ["RelR_a736a72f5e65"],
+      "rel_cls": "process_stage_relation",
+      "justification": "The link connects a multi-stage process (life cycle) to one of its stages, fitting a general class for relations between processes and their ordered stages.",
+      "remark": null,
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": ["RelR_a736a72f5e65"],
+      "rel_cls_group": "TEMPORALITY",
+      "justification": "Life cycle stages are temporally ordered phases, and the qualifier 'final stage' reinforces that this relation is fundamentally about temporal structure rather than static physical composition.",
+      "remark": null,
+      "confidence": 0.95
+    }
+  }
+]

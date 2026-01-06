@@ -1,0 +1,54 @@
+[
+  {
+    "function": "merge_classes",
+    "args": {
+      "class_ids": ["ClsC_11871d9b", "ClsC_a1debffc"],
+      "provisional_id": "MERGE(ClsC_11871d9b|ClsC_a1debffc)",
+      "new_name": "Social Media Communication Features",
+      "new_description": "Features of social media platforms that enable real-time user-to-user communication and broader social interaction, including instant messaging, video calls, and social networking functions.",
+      "new_class_type_hint": "Platform Feature Group",
+      "justification": "Both classes cover the same concrete features (instant messaging and video calls) on social media platforms, with one simply adding social networking features; they are semantically overlapping representations of social media communication features.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "MERGE(ClsC_11871d9b|ClsC_a1debffc)",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Social Media & Online Communication",
+      "remark": null,
+      "justification": "The merged class represents social-media-based communication mechanisms, which belong under a broader Social Media & Online Communication group shared with social media platform classes.",
+      "confidence": 0.94
+    }
+  },
+  {
+    "function": "merge_classes",
+    "args": {
+      "class_ids": ["ClsC_36e607d8", "ClsC_83cfabf2", "ClsC_7a54870e"],
+      "provisional_id": "MERGE(ClsC_36e607d8|ClsC_83cfabf2|ClsC_7a54870e)",
+      "new_name": "Social Media Platforms",
+      "new_description": "Online social networking and content-sharing platforms, and the overarching social media medium, that enable users to connect, communicate, and share user-generated content (e.g., Facebook, Twitter, Instagram, Snapchat).",
+      "new_class_type_hint": "Digital Platform",
+      "justification": "All three classes describe the same domain of social media platforms; they share the platform Twitter and differ only in emphasis (general use vs advocacy vs including the overarching category), so they should be unified into a single Social Media Platforms class.",
+      "remark": null,
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "MERGE(ClsC_36e607d8|ClsC_83cfabf2|ClsC_7a54870e)",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Social Media & Online Communication",
+      "remark": null,
+      "justification": "The merged class captures specific social media platforms and the overall social media medium, which naturally fits under the same Social Media & Online Communication group as social media communication feature classes.",
+      "confidence": 0.96
+    }
+  }
+]

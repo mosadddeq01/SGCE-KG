@@ -1,0 +1,145 @@
+{
+  "cluster_label": "9_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_5ab63769ae77",
+      "relation_name": "contributes_to",
+      "rel_desc": "The equality principle 'all men are created equal' forms part of the principles underpinning future protests and revolutions.",
+      "rel_hint_type": "ideological_component",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "all men are created equal",
+      "object_entity_name": "principles underpinning future protests and revolutions",
+      "subject_class_label": "Foundational Equality and Rights Principles",
+      "subject_class_group": "Rights, Equality, and Social Justice",
+      "object_class_label": "Foundational Equality and Rights Principles",
+      "object_class_group": "Rights, Equality, and Social Justice",
+      "qualifiers": {
+        "TemporalQualifier": "future protests and revolutions",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "would",
+        "CausalHint": "underpin",
+        "LogicalMarker": "that",
+        "OtherQualifier": null
+      },
+      "confidence": 0.78,
+      "remarks": [
+        "Principles are treated as a set; this relation links one member of that set to the whole."
+      ]
+    },
+    {
+      "relation_id": "RelR_dc0f4166e297",
+      "relation_name": "contributes_to",
+      "rel_desc": "The concept of unalienable rights is part of the principles underpinning future protests and revolutions.",
+      "rel_hint_type": "ideological_component",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "unalienable rights",
+      "object_entity_name": "principles underpinning future protests and revolutions",
+      "subject_class_label": "Foundational Equality and Rights Principles",
+      "subject_class_group": "Rights, Equality, and Social Justice",
+      "object_class_label": "Foundational Equality and Rights Principles",
+      "object_class_group": "Rights, Equality, and Social Justice",
+      "qualifiers": {
+        "TemporalQualifier": "future protests and revolutions",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "would",
+        "CausalHint": "underpin",
+        "LogicalMarker": "that",
+        "OtherQualifier": null
+      },
+      "confidence": 0.78,
+      "remarks": [
+        "As above, linking a specific right principle to the broader set."
+      ]
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_5ab63769ae77\",\n        \"RelR_dc0f4166e297\"\n      ],\n      \"canonical_rel_name\": \"is_component_of\",\n      \"canonical_rel_desc\": \"Indicates that the subject principle is an ideological or conceptual component of a broader set or framework of principles represented by the object.\",\n      \"justification\": \"In both relations, a specific foundational principle (equality, unalienable rights) is described as part of a broader set of principles underpinning future protests and revolutions. This is best modeled as a component-to-whole membership within an ideological framework, so a generic, directionally clear predicate 'is_component_of' fits both instances.\",\n      \"remark\": \"The causal flavor of 'underpinning' is captured at the level of the broader principles; this edge is specifically modeling membership of individual principles in that set.\",\n      \"confidence\": 0.87\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_5ab63769ae77\",\n        \"RelR_dc0f4166e297\"\n      ],\n      \"rel_cls\": \"ideological_component_relation\",\n      \"justification\": \"Both instances link an individual ideological principle to a larger framework of principles. This is a recurring pattern of component-to-whole relations within an ideology or rights framework, appropriately captured by the class 'ideological_component_relation'.\",\n      \"remark\": null,\n      \"confidence\": 0.86\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_5ab63769ae77\",\n        \"RelR_dc0f4166e297\"\n      ],\n      \"rel_cls_group\": \"COMPOSITION\",\n      \"justification\": \"Semantically, these relations express that specific principles are parts or components of a broader set of principles. This is fundamentally a compositional (part-of / membership) relation at the conceptual level, so the COMPOSITION group is most appropriate.\",\n      \"remark\": null,\n      \"confidence\": 0.84\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_5ab63769ae77",
+          "RelR_dc0f4166e297"
+        ],
+        "canonical_rel_name": "is_component_of",
+        "canonical_rel_desc": "Indicates that the subject principle is an ideological or conceptual component of a broader set or framework of principles represented by the object.",
+        "justification": "In both relations, a specific foundational principle (equality, unalienable rights) is described as part of a broader set of principles underpinning future protests and revolutions. This is best modeled as a component-to-whole membership within an ideological framework, so a generic, directionally clear predicate 'is_component_of' fits both instances.",
+        "remark": "The causal flavor of 'underpinning' is captured at the level of the broader principles; this edge is specifically modeling membership of individual principles in that set.",
+        "confidence": 0.87
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_5ab63769ae77",
+          "RelR_dc0f4166e297"
+        ],
+        "rel_cls": "ideological_component_relation",
+        "justification": "Both instances link an individual ideological principle to a larger framework of principles. This is a recurring pattern of component-to-whole relations within an ideology or rights framework, appropriately captured by the class 'ideological_component_relation'.",
+        "remark": null,
+        "confidence": 0.86
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_5ab63769ae77",
+          "RelR_dc0f4166e297"
+        ],
+        "rel_cls_group": "COMPOSITION",
+        "justification": "Semantically, these relations express that specific principles are parts or components of a broader set of principles. This is fundamentally a compositional (part-of / membership) relation at the conceptual level, so the COMPOSITION group is most appropriate.",
+        "remark": null,
+        "confidence": 0.84
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_5ab63769ae77",
+        "RelR_dc0f4166e297"
+      ],
+      "canonical_rel_name": "is_component_of",
+      "canonical_rel_desc": "Indicates that the subject principle is an ideological or conceptual component of a broader set or framework of principles represented by the object.",
+      "justification": "In both relations, a specific foundational principle (equality, unalienable rights) is described as part of a broader set of principles underpinning future protests and revolutions. This is best modeled as a component-to-whole membership within an ideological framework, so a generic, directionally clear predicate 'is_component_of' fits both instances.",
+      "remark": "The causal flavor of 'underpinning' is captured at the level of the broader principles; this edge is specifically modeling membership of individual principles in that set.",
+      "confidence": 0.87
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_5ab63769ae77",
+        "RelR_dc0f4166e297"
+      ],
+      "rel_cls": "ideological_component_relation",
+      "justification": "Both instances link an individual ideological principle to a larger framework of principles. This is a recurring pattern of component-to-whole relations within an ideology or rights framework, appropriately captured by the class 'ideological_component_relation'.",
+      "remark": null,
+      "confidence": 0.86
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_5ab63769ae77",
+        "RelR_dc0f4166e297"
+      ],
+      "rel_cls_group": "COMPOSITION",
+      "justification": "Semantically, these relations express that specific principles are parts or components of a broader set of principles. This is fundamentally a compositional (part-of / membership) relation at the conceptual level, so the COMPOSITION group is most appropriate.",
+      "remark": null,
+      "confidence": 0.84
+    }
+  ],
+  "timestamp": "2026-01-06T13:15:25Z"
+}

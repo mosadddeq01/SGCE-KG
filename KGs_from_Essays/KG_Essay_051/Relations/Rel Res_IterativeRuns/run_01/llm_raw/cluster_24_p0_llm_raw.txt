@@ -1,0 +1,21 @@
+[
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": [
+        "RelR_48deb4367049",
+        "RelR_8e97cd793400",
+        "RelR_6412a16d7a8b",
+        "RelR_f2197e96fc91",
+        "RelR_81054c5d0de9"
+      ],
+      "canonical_rel_name": "facilitates_interpersonal_bonding",
+      "canonical_rel_desc": "A nonverbal behavior or social action that helps initiate, build, or strengthen interpersonal rapport and social connections between people.",
+      "rel_cls": "social_bonding_effect_relation",
+      "rel_cls_group": "CAUSALITY",
+      "justification": "All relations link nonverbal behaviors (smiling, nodding, leaning in) to outcomes like rapport and interpersonal connections, with rel_hint_type='facilitation'. They share identical causal semantics: the behavior helps build or strengthen social bonds. Unifying them under a single canonical_rel_name and description improves schema consistency. The class label is normalized to 'social_bonding_effect_relation' to cover both 'rapport' and 'connections' while keeping the broad group as CAUSALITY.",
+      "remark": null,
+      "confidence": 0.96
+    }
+  }
+]

@@ -1,0 +1,596 @@
+
+You are a very proactive class-resolution assistant.
+You are given a set of candidate CLASSES that appear to belong, or may plausibly belong, to the same semantic cluster.
+Your job is to produce a clear, *actionable* ordered list of schema edits for the given cluster.
+Do NOT be passive. If the evidence supports structural change (merge / split / reassign / create), you MUST propose it.
+
+Only return [] if there is extremely strong evidence that NO change is needed (rare).
+
+The cluster grouping you are given is only *suggestive* and may be incorrect — your job is to resolve, correct, and produce a coherent schema from the evidence.
+
+This is an iterative process — act now with well-justified structural corrections (include a short justification), rather than deferring small but meaningful fixes.
+This step will be repeated in later iterations; reasonable but imperfect changes can be corrected later.
+It is worse to miss a necessary change than to propose a well-justified change that might be slightly adjusted later.
+
+Your CRUCIAL task is to refine the schema using this tentative grouping.
+
+========================
+SCHEMA STRUCTURE (CRITICAL)
+========================
+
+We are building a TWO-LAYER SCHEMA over entities:
+
+Level 0: Class_Group        (connects related classes)
+Level 1: Classes            (group entities)
+Level 2: Entities
+
+Structure:
+Class_Group
+  └── Class
+        └── Entity
+
+- Class_Group is the PRIMARY mechanism for connecting related classes.
+- Classes that share a Class_Group are considered semantically related.
+- This relationship propagates to their entities.
+
+========================
+IMPORTANT FIELD DISTINCTIONS
+========================
+
+- class_type_hint (existing field):
+  A local, descriptive hint assigned to each class in isolation.
+  It is often noisy, incomplete, and inconsistent across classes.
+  Do NOT assume it is globally correct or reusable.
+
+- class_label:
+  Existing class_label values are PROVISIONAL names.
+  You MAY revise them when entity evidence suggests a clearer or a better canonical label.
+
+- Class_Group (NEW, CRUCIAL):
+  A canonical upper-level grouping that emerges ONLY when multiple classes
+  are considered together.
+  It is used to connect related classes into a coherent schema.
+  Class_Group is broader, more stable, and more reusable than class_type_hint.
+
+- remarks (optional, internal):
+  Free-text notes attached to a class, used to flag important issues that are
+  outside the scope of structural changes (e.g., upstream entity resolution that you suspect is wrong, or entities that
+  look identical but should not be changed here), DO NOT try to fix them via merge or reassign.
+   Instead, attach a human-facing remark via modify_class (using the 'remark' field)
+   so that a human can review it later.
+
+Class_Group is NOT a synonym of class_type_hint.
+
+========================
+YOUR PRIMARY TASK
+========================
+
+Note: the provided cluster grouping is tentative and may be wrong — 
+you must correct it as needed to produce a coherent Class_Group → Class → Entity schema.
+
+For the given cluster of classes:
+
+1) Assess whether any structural changes are REQUIRED:
+   - merge duplicate or near-duplicate classes
+   - reassign clearly mis-assigned entities
+   - create a new class when necessary
+   - split an overloaded class into more coherent subclasses when justified
+   - modify class metadata when meaningfully incorrect
+
+2) ALWAYS assess and assign an appropriate Class_Group:
+   - If Class_Group is missing, null, or marked as TBD → you MUST assign it.
+   - If Class_Group exists but is incorrect, misleading, or too narrow/broad → you MAY modify it.
+   - If everything else is correct (which is not the case most of the time), assigning or confirming Class_Group ALONE is sufficient.
+
+3) If you notice important issues that are OUTSIDE the scope of these functions
+   (e.g., upstream entity resolution that you suspect is wrong, or entities that
+   look identical but should not be changed here), DO NOT try to fix them via merge or reassign.
+   Instead, attach a human-facing remark via modify_class (using the 'remark' field)
+   so that a human can review it later.
+
+========================
+SOME CONSERVATISM RULES (They should not make you passive)
+========================
+
+- Always try to attempt structural proposals (merge/split/reassign/create) unless the cluster truly is already optimal.
+- Do NOT perform cosmetic edits or unnecessary normalization.
+
+You MAY perform multiple structural actions in one cluster
+(e.g., merge + rename + reassign + split), when needed.
+
+========================
+MERGING & OVERLAP HEURISTICS
+========================
+
+- Entity overlap alone does not automatically require merging.
+- Merge when evidence indicates the SAME underlying concepts
+  (e.g., near-identical semantics, interchangeable usage, or redundant distinctions).
+- Reassignment is appropriate when overlap reveals mis-typed or mis-scoped entities,
+  even if classes should remain separate.
+
+Quick heuristic:
+- Same concept → merge.
+- Different concept, same domain → keep separate classes with the SAME Class_Group.
+- Different domain → different Class_Group.
+
+Avoid vague Class_Group names (e.g., "Misc", "General", "Other").
+Prefer domain-meaningful groupings that help connect related classes.
+
+If a class should be collapsed or weakened but has no clear merge partner, DO NOT use merge_classes;
+instead, reassign its entities to better classes and/or add a remark for human review.
+
+IMPORTANT:
+- You MUST NOT call merge_classes with only one class_id.
+- merge_classes is ONLY for merging TWO OR MORE existing classes into ONE new class.
+- If you only want to update or clarify a single class (for example, its label, description,
+  type hint, class_group, or remarks), use modify_class instead.
+- Do NOT use merge_classes to clean up or deduplicate entities inside one class.
+
+========================
+AVAILABLE FUNCTIONS
+========================
+
+Return ONLY a JSON ARRAY of ordered function calls.
+
+Each object must have:
+- "function": one of
+  ["merge_classes", "create_class", "reassign_entities", "modify_class", "split_class"]
+- "args": arguments as defined below.
+
+ID HANDLING RULES
+- You MUST NOT invent real class IDs.
+- You MUST use ONLY class_ids that appear in the input CLASSES (candidate_id values),
+  except when referring to newly merged/created/split classes.
+- When you need to refer to a newly merged/created/split class in later steps,
+  you MUST assign a provisional_id (any consistent string).
+- Use the same provisional_id whenever referencing that new class again.
+- After you merge classes into a new class, you should NOT continue to treat the original
+  class_ids as separate entities; refer to the new merged class via its provisional_id.
+
+Example (pattern, not required verbatim):
+
+{
+  "function": "merge_classes",
+  "args": {
+    "class_ids": ["ClsC_da991b68", "ClsC_e32f4a47"],
+    "provisional_id": "MERGE(ClsC_da991b68|ClsC_e32f4a47)",
+    "new_name": "...",
+    "new_description": "...",
+    "new_class_type_hint": "Standard",
+    "justification": "One-line reason citing entity overlap and semantic equivalence.",
+    "remark": null,
+    "confidence": 0.95
+  }
+}
+
+Later:
+
+{
+  "function": "reassign_entities",
+  "args": {
+    "entity_ids": ["En_xxx"],
+    "from_class_id": "ClsC_e32f4a47",
+    "to_class_id": "MERGE(ClsC_da991b68|ClsC_e32f4a47)",
+    "justification": "Why this entity fits better in the merged class.",
+    "remark": null,
+    "confidence": 0.9
+  }
+}
+
+We will internally map provisional_id → real class id.
+
+------------------------
+Function definitions
+------------------------
+
+JUSTIFICATION REQUIREMENT
+- Every function call MUST include:
+    "justification": "<one-line reason>"
+  explaining why the action is necessary.
+- This justification should cite concrete evidence (entity overlap, conflicting descriptions,
+  mis-scoped members, missing Class_Group, overloaded classes, etc.).
+- You MAY also include "confidence": <0.0–1.0> to indicate your belief in the action.
+- You MAY include "remark" to provide a short human-facing note.
+
+1) merge_classes
+args = {
+  "class_ids": [<existing_class_ids>],   # MUST contain at least 2 valid ids
+  "provisional_id": <string or null>,    # how you will refer to the new class later
+  "new_name": <string or null>,
+  "new_description": <string or null>,
+  "new_class_type_hint": <string or null>,
+  "justification": <string>,
+  "remark": <string or null>,            # optional: attach a human-facing remark/flag
+  "confidence": <number between 0 and 1, optional>
+}
+
+2) create_class
+args = {
+  "name": <string>,
+  "description": <string or null>,
+  "class_type_hint": <string or null>,
+  "member_ids": [<entity_ids>],          # optional, must be from provided entities
+  "provisional_id": <string or null>,    # how you will refer to this new class later
+  "justification": <string>,
+  "remark": <string or null>,            # optional: attach a human-facing remark/flag
+  "confidence": <number between 0 and 1, optional>
+}
+
+3) reassign_entities
+args = {
+  "entity_ids": [<entity_ids>],
+  "from_class_id": <existing_class_id or provisional_id or null>,
+  "to_class_id": <existing_class_id or provisional_id>,
+  "justification": <string>,
+  "remark": <string or null>,            # optional: attach a human-facing remark/flag
+  "confidence": <number between 0 and 1, optional>
+}
+
+4) modify_class
+args = {
+  "class_id": <existing_class_id or provisional_id>,
+  "new_name": <string or null>,
+  "new_description": <string or null>,
+  "new_class_type_hint": <string or null>,
+  "new_class_group": <string or null>,
+  "remark": <string or null>,            # optional: attach a human-facing remark/flag
+  "justification": <string>,
+  "confidence": <number between 0 and 1, optional>
+}
+
+- Use modify_class with 'remark' (and no structural change) when you want to flag
+  issues that are outside the scope of this step (e.g., suspected entity-level duplicates).
+
+5) split_class
+args = {
+  "source_class_id": <existing_class_id or provisional_id>,
+  "splits": [
+    {
+      "name": <string or null>,
+      "description": <string or null>,
+      "class_type_hint": <string or null>,
+      "member_ids": [<entity_ids>],      # must be from source_class member_ids
+      "provisional_id": <string or null> # how you will refer to this new split class
+    },
+    ...
+  ],
+  "justification": <string>,
+  "remark": <string or null>,            # optional: attach a human-facing remark/flag
+  "confidence": <number between 0 and 1, optional>
+}
+
+Semantics of split_class:
+- Use split_class when a single class is overloaded and should be divided into
+  narrower, more coherent classes.
+- Entities listed in splits[*].member_ids MUST come from the source_class's member_ids.
+- The specified entities are REMOVED from the source_class and grouped into new classes.
+- Any members not mentioned in any split remain in the source_class.
+
+NOTE:
+- Class_Group is normally set or updated via modify_class.
+- Assigning or confirming Class_Group is also REQUIRED for every cluster unless it is already clearly correct.
+
+========================
+VALIDATION RULES
+========================
+
+- Use ONLY provided entity_ids and class_ids (candidate_id values) for existing classes.
+- For new classes, use provisional_id handles and be consistent.
+- Order matters: later steps may depend on earlier ones.
+- merge_classes with fewer than 2 valid class_ids will be ignored.
+
+========================
+STRATEGY GUIDANCE
+========================
+
+- Prefer assigning/adjusting Class_Group over heavy structural changes when both are valid.
+- Merge classes ONLY when they are genuinely redundant (same concept).
+- Use split_class when a class clearly bundles multiple distinct concepts that should be separated.
+- If classes are related but distinct:
+  → keep them separate and connect them via the SAME Class_Group.
+- Think in terms of schema connectivity and meaningful structure, not cosmetic cleanup.
+- If in doubt about structural change but you see a potential issue, use modify_class with a 'remark'
+  rather than forcing an uncertain structural edit.
+
+========================
+INPUT CLASSES
+========================
+
+Each class includes:
+- candidate_id
+- class_label
+- class_description
+- class_type_hint
+- class_group (may be null or "TBD")
+- confidence
+- evidence_excerpt
+- member_ids
+- members (entity id, name, description, type)
+- remarks (optional list of prior remarks)
+
+[
+  {
+    "candidate_id": "ClsC_08f877d7",
+    "class_label": "Social Media Misinformation",
+    "class_description": "False or misleading information phenomena on social networking platforms, including misinformation, fake news, rumors, conspiracy theories, and propaganda.",
+    "class_type_hint": "Information Quality Issue",
+    "class_group": "TBD",
+    "confidence": 0.93,
+    "evidence_excerpt": "False or misleading information on social media, including misinformation, fake news, rumors, conspiracy theories, and propaganda.",
+    "member_ids": [
+      "Can_841e7aec",
+      "En_47c431f7",
+      "En_de26786f",
+      "En_ca31e620",
+      "En_2490fb58"
+    ],
+    "members": [
+      {
+        "id": "Can_841e7aec",
+        "entity_name": "misinformation",
+        "entity_description": "False or misleading information that is spread and circulated on social networking and social media platforms.",
+        "entity_type_hint": "InformationQualityIssue"
+      },
+      {
+        "id": "En_47c431f7",
+        "entity_name": "fake news",
+        "entity_description": "Deliberately fabricated or misleading news content circulating on social networking sites.",
+        "entity_type_hint": "InformationQualityIssue"
+      },
+      {
+        "id": "En_de26786f",
+        "entity_name": "rumors",
+        "entity_description": "Unverified pieces of information spreading rapidly through social media.",
+        "entity_type_hint": "Content"
+      },
+      {
+        "id": "En_ca31e620",
+        "entity_name": "conspiracy theories",
+        "entity_description": "Speculative or unfounded explanatory narratives that spread via social media.",
+        "entity_type_hint": "Content"
+      },
+      {
+        "id": "En_2490fb58",
+        "entity_name": "propaganda",
+        "entity_description": "Biased or manipulative information disseminated through social media to influence opinions.",
+        "entity_type_hint": "Content"
+      }
+    ],
+    "remarks": []
+  },
+  {
+    "candidate_id": "ClsC_5b2b842d",
+    "class_label": "Social Media Content Types",
+    "class_description": "Types of user-shared content on social networking platforms, including general information as well as specific narrative forms like rumors, conspiracy theories, and propaganda.",
+    "class_type_hint": "Content Type",
+    "class_group": "TBD",
+    "confidence": 0.86,
+    "evidence_excerpt": "Content and data shared by users, including rumors, conspiracy theories, and propaganda on social media.",
+    "member_ids": [
+      "En_6431d334",
+      "En_de26786f",
+      "En_ca31e620",
+      "En_2490fb58"
+    ],
+    "members": [
+      {
+        "id": "En_6431d334",
+        "entity_name": "information",
+        "entity_description": "Content and data shared by users on social networking platforms.",
+        "entity_type_hint": "Content"
+      },
+      {
+        "id": "En_de26786f",
+        "entity_name": "rumors",
+        "entity_description": "Unverified pieces of information spreading rapidly through social media.",
+        "entity_type_hint": "Content"
+      },
+      {
+        "id": "En_ca31e620",
+        "entity_name": "conspiracy theories",
+        "entity_description": "Speculative or unfounded explanatory narratives that spread via social media.",
+        "entity_type_hint": "Content"
+      },
+      {
+        "id": "En_2490fb58",
+        "entity_name": "propaganda",
+        "entity_description": "Biased or manipulative information disseminated through social media to influence opinions.",
+        "entity_type_hint": "Content"
+      }
+    ],
+    "remarks": []
+  },
+  {
+    "candidate_id": "ClsC_98d3a917",
+    "class_label": "Superficial Social Media Communication",
+    "class_description": "Communication patterns and interaction features on social platforms characterized by shallow engagement, such as likes, shares, and emojis, that prioritize quantity of interactions over their meaningfulness.",
+    "class_type_hint": "Communication Pattern",
+    "class_group": "TBD",
+    "confidence": 0.9,
+    "evidence_excerpt": "Shallow, surface-level communication on social media using likes, shares, and emojis that prioritize quantity over quality.",
+    "member_ids": [
+      "Can_8d8359fa",
+      "Can_13f0e2c5",
+      "En_12645b52",
+      "En_22faf1a6",
+      "En_57de7d35"
+    ],
+    "members": [
+      {
+        "id": "Can_8d8359fa",
+        "entity_name": "superficial communication on social media",
+        "entity_description": "Shallow or surface-level interaction styles on social media, often involving minimal engagement mechanisms such as likes, shares, and emojis instead of deeper exchanges.",
+        "entity_type_hint": "CommunicationPattern"
+      },
+      {
+        "id": "Can_13f0e2c5",
+        "entity_name": "likes",
+        "entity_description": "Positive engagement actions on social platforms that indicate user approval or support for content.",
+        "entity_type_hint": "PlatformFeature"
+      },
+      {
+        "id": "En_12645b52",
+        "entity_name": "shares",
+        "entity_description": "User actions that redistribute content to their own network on social platforms.",
+        "entity_type_hint": "InteractionFeature"
+      },
+      {
+        "id": "En_22faf1a6",
+        "entity_name": "emojis",
+        "entity_description": "Small digital icons used to express emotions or reactions in online communication.",
+        "entity_type_hint": "InteractionFeature"
+      },
+      {
+        "id": "En_57de7d35",
+        "entity_name": "quantity over quality",
+        "entity_description": "Preference for high volume of interactions rather than meaningful engagement on social media.",
+        "entity_type_hint": "ValuePreference"
+      }
+    ],
+    "remarks": []
+  },
+  {
+    "candidate_id": "ClsC_f515ea5c",
+    "class_label": "Social Media Posts",
+    "class_description": "Short personal content items, such as updates and reflections, shared by individuals on social platforms.",
+    "class_type_hint": "Content Type",
+    "class_group": "TBD",
+    "confidence": 0.9,
+    "evidence_excerpt": "individuals can share updates, photos, and thoughts in real-time",
+    "member_ids": [
+      "En_73d6e945",
+      "En_4f66a81b"
+    ],
+    "members": [
+      {
+        "id": "En_73d6e945",
+        "entity_name": "updates",
+        "entity_description": "Short textual or status posts shared by individuals on social media.",
+        "entity_type_hint": "ContentType"
+      },
+      {
+        "id": "En_4f66a81b",
+        "entity_name": "thoughts",
+        "entity_description": "Personal reflections or opinions shared as posts on social media.",
+        "entity_type_hint": "ContentType"
+      }
+    ],
+    "remarks": []
+  },
+  {
+    "candidate_id": "ClsC_26c284f9",
+    "class_label": "Social Media News Content",
+    "class_description": "Types of informational material that spread via social networking sites, including user-created posts and reports about recent events.",
+    "class_type_hint": "Information Type",
+    "class_group": "TBD",
+    "confidence": 0.84,
+    "evidence_excerpt": "user-generated content, news spreads rapidly through social networking sites",
+    "member_ids": [
+      "En_646e0929",
+      "En_5929471e"
+    ],
+    "members": [
+      {
+        "id": "En_646e0929",
+        "entity_name": "user-generated content",
+        "entity_description": "Content such as posts, images, and videos created and shared by platform users.",
+        "entity_type_hint": "ContentCategory"
+      },
+      {
+        "id": "En_5929471e",
+        "entity_name": "news",
+        "entity_description": "Information and reports about recent events that spread via social networking sites.",
+        "entity_type_hint": "InformationType"
+      }
+    ],
+    "remarks": []
+  },
+  {
+    "candidate_id": "ClsC_f053899b",
+    "class_label": "Traditional Mass Media",
+    "class_description": "Categories of legacy, large-scale news distribution channels such as television, radio, and newspapers that predate social media platforms.",
+    "class_type_hint": "Information Channel Type",
+    "class_group": "TBD",
+    "confidence": 0.93,
+    "evidence_excerpt": "legacy news distribution channels such as television, radio, and newspapers... mainstream media",
+    "member_ids": [
+      "En_97a0263c",
+      "En_4209c0db"
+    ],
+    "members": [
+      {
+        "id": "En_97a0263c",
+        "entity_name": "traditional media outlets",
+        "entity_description": "Legacy news distribution channels such as television, radio, and newspapers.",
+        "entity_type_hint": "OrganizationCategory"
+      },
+      {
+        "id": "En_4209c0db",
+        "entity_name": "mainstream media",
+        "entity_description": "Traditional mass media outlets that historically silenced or ignored some voices.",
+        "entity_type_hint": "OrganizationCategory"
+      }
+    ],
+    "remarks": []
+  },
+  {
+    "candidate_id": "ClsC_fbd08ee0",
+    "class_label": "Social Media Content",
+    "class_description": "User-generated artifacts shared on social platforms, such as textual reactions and visual media, that form the core of online interaction.",
+    "class_type_hint": "Digital Artifact",
+    "class_group": "TBD",
+    "confidence": 0.9,
+    "evidence_excerpt": "User-written responses to posts... Images shared by users on social media platforms as part of their content.",
+    "member_ids": [
+      "En_53e9d86a",
+      "En_b76b8d94"
+    ],
+    "members": [
+      {
+        "id": "En_53e9d86a",
+        "entity_name": "comments",
+        "entity_description": "User-written responses to posts or content on social media platforms.",
+        "entity_type_hint": "PlatformFeature"
+      },
+      {
+        "id": "En_b76b8d94",
+        "entity_name": "photos",
+        "entity_description": "Images shared by users on social media platforms as part of their content.",
+        "entity_type_hint": "ContentType"
+      }
+    ],
+    "remarks": []
+  },
+  {
+    "candidate_id": "ClsC_8b7d9f8c",
+    "class_label": "Citizen Journalism",
+    "class_description": "Practices where non-professionals gather, produce, and share news or information, typically via digital and social platforms.",
+    "class_type_hint": "Information Practice",
+    "class_group": "TBD",
+    "confidence": 0.86,
+    "evidence_excerpt": "News reporting and information sharing conducted by ordinary individuals rather than professional journalists.",
+    "member_ids": [
+      "En_a601c21d"
+    ],
+    "members": [
+      {
+        "id": "En_a601c21d",
+        "entity_name": "citizen journalism",
+        "entity_description": "News reporting and information sharing conducted by ordinary individuals rather than professional journalists.",
+        "entity_type_hint": "Process"
+      }
+    ],
+    "remarks": []
+  }
+]
+
+========================
+OUTPUT
+========================
+
+Return ONLY the JSON array of ordered function calls.
+Return [] only if you are highly confident (> very strong evidence) that no change is needed.
+If any ambiguous or conflicting evidence exists, return a concrete ordered action list
+(with justifications and, optionally, confidence scores).
+You are a very proactive class-resolution assistant. You are not called very proactive only by using modify_class for new_class_group. You must use other functions as well to be called a proactive class-resolution assistant.
+

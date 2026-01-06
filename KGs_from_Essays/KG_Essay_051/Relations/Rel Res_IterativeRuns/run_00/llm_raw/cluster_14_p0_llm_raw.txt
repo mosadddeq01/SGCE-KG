@@ -1,0 +1,66 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_cf05df44c90f",
+        "RelR_5f5b97317e70",
+        "RelR_e4a04cc0899c",
+        "RelR_aedf12b3354a",
+        "RelR_e2003edc2618",
+        "RelR_b64f75559821",
+        "RelR_afc3f66f396f",
+        "RelR_5a5b95e17ba7",
+        "RelR_7e99fa96c959",
+        "RelR_fc57a14ef37d"
+      ],
+      "canonical_rel_name": "indicates_state",
+      "canonical_rel_desc": "A nonverbal behavior (gesture, posture, or eye contact pattern) that serves as an indicator or cue of an internal or inferred psychological state.",
+      "justification": "All relations link a nonverbal behavior (gestures, posture, eye contact) to an inferred internal state (e.g., defensiveness, agreement, dishonesty). The wording varies between 'indicates', 'signals', and 'suggests', but the semantics are consistent: the behavior functions as an indicator of a state. A unified predicate 'indicates_state' captures this direction and meaning cleanly for the KG.",
+      "remark": null,
+      "confidence": 0.96
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_cf05df44c90f",
+        "RelR_5f5b97317e70",
+        "RelR_e4a04cc0899c",
+        "RelR_aedf12b3354a",
+        "RelR_e2003edc2618",
+        "RelR_b64f75559821",
+        "RelR_afc3f66f396f",
+        "RelR_5a5b95e17ba7",
+        "RelR_7e99fa96c959",
+        "RelR_fc57a14ef37d"
+      ],
+      "rel_cls": "nonverbal_indicator_relation",
+      "justification": "Each relation expresses that a nonverbal cue (gesture, posture, or eye behavior) functions as an indicator of an internal or inferred state. Grouping them into the class 'nonverbal_indicator_relation' captures this common family of semantics without being tied to a particular gesture type.",
+      "remark": null,
+      "confidence": 0.96
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_cf05df44c90f",
+        "RelR_5f5b97317e70",
+        "RelR_e4a04cc0899c",
+        "RelR_aedf12b3354a",
+        "RelR_e2003edc2618",
+        "RelR_b64f75559821",
+        "RelR_afc3f66f396f",
+        "RelR_5a5b95e17ba7",
+        "RelR_7e99fa96c959",
+        "RelR_fc57a14ef37d"
+      ],
+      "rel_cls_group": "ASSOCIATION",
+      "justification": "The relations describe statistical or interpretive associations between observable nonverbal behaviors and inferred states, not strict causality or composition. The language ('may indicate', 'can signal', 'may suggest') emphasizes correlation/interpretation, so the broad group 'ASSOCIATION' is most appropriate.",
+      "remark": null,
+      "confidence": 0.95
+    }
+  }
+]

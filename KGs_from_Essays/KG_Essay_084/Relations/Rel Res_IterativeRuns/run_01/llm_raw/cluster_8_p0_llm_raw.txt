@@ -1,0 +1,21 @@
+[
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": [
+        "RelR_10bbb760d3da",
+        "RelR_dbd10b178a72",
+        "RelR_d79e39f2d62e",
+        "RelR_fc06a3f31361",
+        "RelR_a165ea679681"
+      ],
+      "canonical_rel_name": null,
+      "canonical_rel_desc": null,
+      "rel_cls": "analytical_technique_application_relation",
+      "rel_cls_group": null,
+      "justification": "All five relations link specific forensic analytical techniques or instrumentation to the evidence they are used to analyze, which is semantically the same family as the existing rel_cls 'analytical_technique_application_relation' already used for mass spectrometry applied to a sample. Unifying them under this more specific class improves schema consistency and better reflects that these are analytical-technique applications, not generic method usage.",
+      "remark": "Normalized rel_cls from the more generic 'method_application_relation' to the more specific and already-used 'analytical_technique_application_relation' for consistency across all analytical technique → evidence/sample usage edges.",
+      "confidence": 0.93
+    }
+  }
+]

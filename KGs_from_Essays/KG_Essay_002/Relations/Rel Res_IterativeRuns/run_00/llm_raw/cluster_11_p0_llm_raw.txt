@@ -1,0 +1,42 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_6967aaff7826",
+        "RelR_6d100d76aeb6"
+      ],
+      "canonical_rel_name": "features_character",
+      "canonical_rel_desc": "Indicates that a narrative or legend includes a particular character as part of its cast (e.g., protagonist, antagonist).",
+      "justification": "In both relations, the subject is the Hook Man tale (a narrative) and the objects are specific characters (a young couple as protagonists, an escaped criminal as antagonist). The core predicate is that the story features or includes these characters, so a unified canonical predicate 'features_character' accurately captures this shared semantics.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_6967aaff7826",
+        "RelR_6d100d76aeb6"
+      ],
+      "rel_cls": "narrative_structure_relation",
+      "justification": "Both relations describe how specific characters participate in or are included within a narrative, which is part of the story’s structural elements (cast/roles). Grouping them under 'narrative_structure_relation' captures that these edges define components of the legend’s internal structure.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_6967aaff7826",
+        "RelR_6d100d76aeb6"
+      ],
+      "rel_cls_group": "COMPOSITION",
+      "justification": "The relations indicate that the Hook Man tale is composed, in part, of these characters; they are constituent elements of the narrative. This is best modeled as a COMPOSITION-type group (story composed of characters) rather than purely associative or causal.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  }
+]

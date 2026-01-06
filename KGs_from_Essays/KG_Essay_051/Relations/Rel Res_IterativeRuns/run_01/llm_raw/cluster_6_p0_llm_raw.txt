@@ -1,0 +1,17 @@
+[
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": [
+        "RelR_bca32e33bd5a"
+      ],
+      "canonical_rel_name": null,
+      "canonical_rel_desc": null,
+      "rel_cls": "hierarchical_taxonomy_relation",
+      "rel_cls_group": null,
+      "justification": "All relations in this chunk represent the same taxonomic subtype/supertype hierarchy between nonverbal behavior concepts. Five of six already use the class label 'hierarchical_taxonomy_relation', while this one uses the slightly different and redundant variant 'hierarchical_category_relation'. Normalizing to 'hierarchical_taxonomy_relation' ensures consistent schema for the same semantic family of is_subtype_of relations.",
+      "remark": null,
+      "confidence": 0.96
+    }
+  }
+]

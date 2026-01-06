@@ -1,0 +1,160 @@
+{
+  "cluster_label": "-1_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_931caa26e17b",
+      "relation_name": "uses",
+      "rel_desc": "Forensic scientists may use mass spectrometry as a technique in their work.",
+      "rel_hint_type": "usage",
+      "canonical_rel_name": "uses",
+      "canonical_rel_desc": "Subject uses or employs the object as a method, tool, technique, principle, or resource to conduct forensic work or analysis.",
+      "rel_cls": "method_tool_usage_relation",
+      "rel_cls_group": "USAGE",
+      "subject_entity_name": "forensic scientists",
+      "object_entity_name": "mass spectrometry",
+      "subject_class_label": "Forensic Scientists",
+      "subject_class_group": "Forensic Science Domain",
+      "object_class_label": "Forensic Analytical Techniques",
+      "object_class_group": "Forensic Analytical Science",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "may",
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "TaskContext: identify and quantify drugs or toxins"
+      },
+      "confidence": 0.97,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_748f4768019a",
+      "relation_name": "testifies_in",
+      "rel_desc": "Expert witnesses provide testimony in court.",
+      "rel_hint_type": "location",
+      "canonical_rel_name": "takes_place_in",
+      "canonical_rel_desc": "Indicates that a forensic event, communication, or testimony occurs within a specific courtroom or legal venue.",
+      "rel_cls": "forensic_courtroom_context_relation",
+      "rel_cls_group": "SPATIALITY",
+      "subject_entity_name": "expert witnesses",
+      "object_entity_name": "court",
+      "subject_class_label": "Criminal Justice Participants",
+      "subject_class_group": "Criminal Justice & Forensic Context",
+      "object_class_label": "Forensic Context Locations",
+      "object_class_group": "Forensic Context & Locations",
+      "qualifiers": {
+        "TemporalQualifier": "during trials or hearings",
+        "SpatialQualifier": "in court",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "often",
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.92,
+      "remarks": [
+        "The predicate 'takes_place_in' is applied here between an agent ('expert witnesses') and a location ('court'), implicitly referring to the event of their testimony occurring in court. In a more granular schema, this could be modeled via an intermediate testimony event node (e.g., 'expert testimony') that 'takes_place_in' the court and is 'given_by' the expert witnesses."
+      ]
+    },
+    {
+      "relation_id": "RelR_8dd61f85be6e",
+      "relation_name": "produces",
+      "rel_desc": "Forensic scientists produce analyses and conclusions that they later explain in court.",
+      "rel_hint_type": "production",
+      "canonical_rel_name": "produces",
+      "canonical_rel_desc": "Indicates that the subject (typically an agent) creates or generates the object (a product, result, or artifact).",
+      "rel_cls": "knowledge_artifact_creation_relation",
+      "rel_cls_group": "AGENCY",
+      "subject_entity_name": "forensic scientists",
+      "object_entity_name": "analysis and conclusions",
+      "subject_class_label": "Forensic Scientists",
+      "subject_class_group": "Forensic Science Domain",
+      "object_class_label": "Forensic Analytical Reasoning",
+      "object_class_group": "Forensic Reasoning and Case Analysis",
+      "qualifiers": {
+        "TemporalQualifier": "before testifying in court",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "inferred from context",
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "UsageContext: explained during expert witness testimony"
+      },
+      "confidence": 0.84,
+      "remarks": [
+        "Possessive reference used to infer production relationship.",
+        "Possessive reference used to infer production relationship.",
+        "Possessive reference used to infer production relationship.",
+        "Possessive reference used to infer production relationship."
+      ]
+    },
+    {
+      "relation_id": "RelR_8da670d00ce2",
+      "relation_name": "requires",
+      "rel_desc": "The art of forensic science requires technical expertise.",
+      "rel_hint_type": "dependency",
+      "canonical_rel_name": "requires_competence",
+      "canonical_rel_desc": "Indicates that an activity, role, or practice requires a specific competency or skill as a prerequisite for effective or proper performance.",
+      "rel_cls": "competency_requirement_relation",
+      "rel_cls_group": "REQUIREMENT",
+      "subject_entity_name": "art of forensic science",
+      "object_entity_name": "technical expertise",
+      "subject_class_label": "Forensic Practice Competence",
+      "subject_class_group": "Forensic Science Professional Competencies",
+      "object_class_label": "Forensic Practice Competence",
+      "object_class_group": "Forensic Science Professional Competencies",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "requires",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.98,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_rel_schema\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_748f4768019a\"\n      ],\n      \"canonical_rel_name\": \"testifies_in\",\n      \"canonical_rel_desc\": \"Indicates that an expert witness provides testimony within a specific court or legal venue.\",\n      \"rel_cls\": \"forensic_courtroom_context_relation\",\n      \"rel_cls_group\": \"SPATIALITY\",\n      \"justification\": \"The current canonical_rel_name 'takes_place_in' is event-centric and ambiguous for a direct edge between an agent (expert witnesses) and a location (court). The instance explicitly describes testimony given by expert witnesses in court; aligning the predicate to 'testifies_in' makes the agent-role and courtroom testimony semantics clear while retaining the spatial/legal context class.\",\n      \"remark\": \"If the KG later introduces explicit testimony event nodes, this edge could be refactored so that 'expert witnesses' PARTICIPATE_IN a 'testimony' event that TAKES_PLACE_IN the 'court'.\",\n      \"confidence\": 0.9\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_rel_schema",
+      "args": {
+        "relation_ids": [
+          "RelR_748f4768019a"
+        ],
+        "canonical_rel_name": "testifies_in",
+        "canonical_rel_desc": "Indicates that an expert witness provides testimony within a specific court or legal venue.",
+        "rel_cls": "forensic_courtroom_context_relation",
+        "rel_cls_group": "SPATIALITY",
+        "justification": "The current canonical_rel_name 'takes_place_in' is event-centric and ambiguous for a direct edge between an agent (expert witnesses) and a location (court). The instance explicitly describes testimony given by expert witnesses in court; aligning the predicate to 'testifies_in' makes the agent-role and courtroom testimony semantics clear while retaining the spatial/legal context class.",
+        "remark": "If the KG later introduces explicit testimony event nodes, this edge could be refactored so that 'expert witnesses' PARTICIPATE_IN a 'testimony' event that TAKES_PLACE_IN the 'court'.",
+        "confidence": 0.9
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_rel_schema",
+      "relation_ids": [
+        "RelR_748f4768019a"
+      ],
+      "canonical_rel_name": "testifies_in",
+      "canonical_rel_desc": "Indicates that an expert witness provides testimony within a specific court or legal venue.",
+      "rel_cls": "forensic_courtroom_context_relation",
+      "rel_cls_group": "SPATIALITY",
+      "new_relation_name": null,
+      "original_relation_name": null,
+      "justification": "The current canonical_rel_name 'takes_place_in' is event-centric and ambiguous for a direct edge between an agent (expert witnesses) and a location (court). The instance explicitly describes testimony given by expert witnesses in court; aligning the predicate to 'testifies_in' makes the agent-role and courtroom testimony semantics clear while retaining the spatial/legal context class.",
+      "remark": "If the KG later introduces explicit testimony event nodes, this edge could be refactored so that 'expert witnesses' PARTICIPATE_IN a 'testimony' event that TAKES_PLACE_IN the 'court'.",
+      "confidence": 0.9
+    }
+  ],
+  "timestamp": "2026-01-06T14:45:03Z"
+}

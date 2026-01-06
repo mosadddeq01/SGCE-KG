@@ -1,0 +1,42 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_82c7d5d59223",
+        "RelR_69a1b99c3a9c"
+      ],
+      "canonical_rel_name": "has_topic",
+      "canonical_rel_desc": "Indicates that a communicative act or discourse instance is thematically about or centered on a given topic or issue.",
+      "justification": "Both relations link forms of discourse (important conversations, debates on social issues) to the issues they are about, with rel_hint_type 'thematic'. This is a standard aboutness/topic predicate and can be normalized as 'has_topic' for discourse-to-topic edges.",
+      "remark": null,
+      "confidence": 0.97
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_82c7d5d59223",
+        "RelR_69a1b99c3a9c"
+      ],
+      "rel_cls": "topic_relation",
+      "justification": "Both instances represent a discourse element being associated with what it is about (its subject matter). This fits a broader class of topic/aboutness links between communicative acts and their subjects.",
+      "remark": null,
+      "confidence": 0.96
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_82c7d5d59223",
+        "RelR_69a1b99c3a9c"
+      ],
+      "rel_cls_group": "ASSOCIATION",
+      "justification": "The relation is not compositional, causal, or temporal; it expresses a thematic association (aboutness) between discourse and topics, which fits within a broad ASSOCIATION group.",
+      "remark": null,
+      "confidence": 0.95
+    }
+  }
+]

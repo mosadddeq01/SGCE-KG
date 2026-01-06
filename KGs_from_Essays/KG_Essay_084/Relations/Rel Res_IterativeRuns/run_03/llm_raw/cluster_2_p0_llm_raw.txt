@@ -1,0 +1,18 @@
+[
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": [
+        "RelR_6e4b7cac7564",
+        "RelR_d105471d0e87"
+      ],
+      "canonical_rel_name": "performs",
+      "canonical_rel_desc": "An agent or role carries out or executes an action, behavior, or process.",
+      "rel_cls": "agent_action_relation",
+      "rel_cls_group": null,
+      "justification": "Both relations link an agent (forensic scientists, guilty individuals) to actions or processes they execute. They already share the same canonical predicate name 'performs' but had slightly divergent descriptions and different, overlapping relation classes ('process_agent_relation' vs 'behavior_action_relation'). Normalizing them to a single class 'agent_action_relation' and a unified, general canonical description improves schema consistency while preserving the AGENCY semantics.",
+      "remark": "rel_cls_group remains AGENCY as already appropriate for both; only the intermediate class and shared description are standardized.",
+      "confidence": 0.92
+    }
+  }
+]

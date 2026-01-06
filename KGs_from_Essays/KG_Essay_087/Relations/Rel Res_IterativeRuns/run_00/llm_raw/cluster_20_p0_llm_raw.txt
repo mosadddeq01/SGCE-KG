@@ -1,0 +1,171 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_53480cac3683",
+        "RelR_d65338fe3187",
+        "RelR_50b5a6362bd5"
+      ],
+      "canonical_rel_name": "supports_creation_of",
+      "canonical_rel_desc": "Subject is a branding technique or design element that is used as a means to create or build the object (e.g., a brand visual identity).",
+      "justification": "All three relations describe color-related branding practices being used instrumentally to create or build brand visual identity, so a shared predicate expressing instrumental support for creation is appropriate.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_53480cac3683",
+        "RelR_d65338fe3187",
+        "RelR_50b5a6362bd5"
+      ],
+      "rel_cls": "brand_identity_construction_relation",
+      "justification": "These relations all concern how specific branding techniques (color psychology, color use) function in constructing or building brand identity assets, which fits a common class focused on brand identity construction.",
+      "remark": null,
+      "confidence": 0.88
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_53480cac3683",
+        "RelR_d65338fe3187",
+        "RelR_50b5a6362bd5"
+      ],
+      "rel_cls_group": "USAGE",
+      "justification": "Semantically these are about using a method or tool (color psychology/use of color) to achieve an outcome (brand visual identity), which is best captured as instrumental usage.",
+      "remark": null,
+      "confidence": 0.87
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_6b29e492a61d"
+      ],
+      "canonical_rel_name": "conveys",
+      "canonical_rel_desc": "Subject is a communication vehicle that expresses or transmits the object message or meaning to an audience.",
+      "justification": "The relation explicitly states that brand visual identity is used to convey the brand’s desired message, so a direct communication predicate ‘conveys’ is appropriate.",
+      "remark": null,
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_6b29e492a61d"
+      ],
+      "rel_cls": "brand_message_communication_relation",
+      "justification": "This link is about how brand visual identity communicates a desired message, fitting a class centered on communication of brand messages.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_6b29e492a61d"
+      ],
+      "rel_cls_group": "INTERACTION",
+      "justification": "Conveying a message is an act of communication between brand and audience, which is best modeled as an interaction-oriented relation.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_c9e37459d4f0"
+      ],
+      "canonical_rel_name": "is_used_by",
+      "canonical_rel_desc": "Subject is a resource, tool, or asset that is used by the object (typically an agent such as a business or brand).",
+      "justification": "Here the distinctive color scheme is the resource and businesses are the agents using it; the inverse usage predicate ‘is_used_by’ cleanly captures this direction.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_6b16e6c9456e"
+      ],
+      "canonical_rel_name": "uses",
+      "canonical_rel_desc": "Subject is an agent that makes use of the object as a resource, tool, or component in its branding or operations.",
+      "justification": "This relation states that businesses use color in branding and design; modeling the agent as subject and resource as object with the predicate ‘uses’ matches the described semantics.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_c9e37459d4f0",
+        "RelR_6b16e6c9456e"
+      ],
+      "rel_cls": "branding_resource_usage_relation",
+      "justification": "Both relations describe the use of branding resources (color schemes, color in design) by businesses; they differ only in direction, so they naturally belong to a shared class about usage of branding resources.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_c9e37459d4f0",
+        "RelR_6b16e6c9456e"
+      ],
+      "rel_cls_group": "USAGE",
+      "justification": "In both cases the core semantics are about agents using or being associated with resources they use, which fits the broad USAGE category.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_862f1d770bb7"
+      ],
+      "canonical_rel_name": "enhances_connection_with",
+      "canonical_rel_desc": "Subject improves the strength, quality, or effectiveness of connection or engagement with the object (typically an audience or stakeholder group).",
+      "justification": "The instance describes color psychology in branding helping brands connect more effectively with their target audience, which is well captured as enhancing connection with that audience.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_862f1d770bb7"
+      ],
+      "rel_cls": "brand_audience_impact_relation",
+      "justification": "This relation focuses on how a branding practice impacts the relationship with or perception by the target audience, so a class centered on brand–audience impact is appropriate.",
+      "remark": null,
+      "confidence": 0.88
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_862f1d770bb7"
+      ],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "Color psychology is described as causing an improvement in the brand’s connection with its target audience, which is a causal effect rather than mere association.",
+      "remark": null,
+      "confidence": 0.87
+    }
+  }
+]

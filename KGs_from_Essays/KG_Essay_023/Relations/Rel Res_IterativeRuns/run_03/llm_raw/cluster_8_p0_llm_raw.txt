@@ -1,0 +1,23 @@
+[
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": [
+        "RelR_44a2aebf98c5",
+        "RelR_7c8985bb4d69",
+        "RelR_cfb899503bce",
+        "RelR_5d3fe8f7f5e6",
+        "RelR_c8cfe53a9728",
+        "RelR_ac80d3f0a451",
+        "RelR_0e30e64a1011"
+      ],
+      "canonical_rel_name": "influences",
+      "canonical_rel_desc": "Indicates that the subject exerts a causal or shaping effect on the object (e.g., one factor influencing behaviors, perceptions, relationships, or communication patterns).",
+      "rel_cls": "social_media_impact_relation",
+      "rel_cls_group": null,
+      "justification": "All relations have the same subject (social media) and describe its causal or shaping impact on various human or societal domains (communication, relationships, behaviors, perceptions). They already share the canonical_rel_name 'influences'; however, there are two slightly different canonical_rel_desc variants and two different rel_cls values ('social_media_impact_relation' vs 'influence_relation'). Unifying the description and assigning a single specific class 'social_media_impact_relation' across these instances makes the schema consistent, while keeping rel_cls_group as CAUSALITY unchanged.",
+      "remark": "Standardized the influence predicate description and specialized the relation class to social_media_impact_relation for all social-media-impact edges in this cluster.",
+      "confidence": 0.93
+    }
+  }
+]

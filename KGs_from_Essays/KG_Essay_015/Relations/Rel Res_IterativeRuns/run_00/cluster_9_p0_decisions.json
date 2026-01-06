@@ -1,0 +1,203 @@
+{
+  "cluster_label": "9_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_65e709116d01",
+      "relation_name": "constructed_for",
+      "rel_desc": "Ancient Egyptian tombs, particularly elaborate ones, were built for members of the elite.",
+      "rel_hint_type": "allocation",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "ancient Egyptian tombs",
+      "object_entity_name": "ancient Egyptian elite",
+      "subject_class_label": "Ancient Egyptian Tomb Structures",
+      "subject_class_group": "Ancient Egypt: Society, Rulers, and Funerary Culture",
+      "object_class_label": "Ancient Egyptian Social Strata",
+      "object_class_group": "Ancient Egypt: Society, Rulers, and Funerary Culture",
+      "qualifiers": {
+        "TemporalQualifier": "in ancient Egypt",
+        "SpatialQualifier": "ancient Egypt",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "elaborate (degree qualifier)",
+        "CausalHint": null,
+        "LogicalMarker": "In addition to",
+        "OtherQualifier": null
+      },
+      "confidence": 0.97,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_5faf9dd0ce5e",
+      "relation_name": "lacks_resources_for",
+      "rel_desc": "Non-elite ancient Egyptians generally lacked the resources required to build pyramids.",
+      "rel_hint_type": "economic constraint",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "non-elite ancient Egyptians",
+      "object_entity_name": "Egyptian pyramids",
+      "subject_class_label": "Ancient Egyptian Social Strata",
+      "subject_class_group": "Ancient Egypt: Society, Rulers, and Funerary Culture",
+      "object_class_label": "Ancient Egyptian Tomb Structures",
+      "object_class_group": "Ancient Egypt: Society, Rulers, and Funerary Culture",
+      "qualifiers": {
+        "TemporalQualifier": "ancient Egypt",
+        "SpatialQualifier": null,
+        "OperationalConstraint": "limited economic resources",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "may not have had",
+        "CausalHint": null,
+        "LogicalMarker": "While (contrast)",
+        "OtherQualifier": null
+      },
+      "confidence": 0.93,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_65e709116d01\"],\n      \"canonical_rel_name\": \"was_built_for\",\n      \"canonical_rel_desc\": \"Indicates that a structure was constructed for the benefit, use, or commemoration of a particular person or social group.\",\n      \"justification\": \"The relation links tomb structures to the elite they were intended for; this is a beneficiary/intended-recipient relation, so a predicate like 'was_built_for' best captures that semantics.\",\n      \"remark\": null,\n      \"confidence\": 0.93\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_65e709116d01\"],\n      \"rel_cls\": \"beneficiary_relation\",\n      \"justification\": \"The tombs are constructed for a specific social group (elite), which is a typical beneficiary/intended-recipient pattern rather than composition or hierarchy.\",\n      \"remark\": null,\n      \"confidence\": 0.92\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_65e709116d01\"],\n      \"rel_cls_group\": \"USAGE\",\n      \"justification\": \"Building tombs for the elite encodes intended use/benefit by a target group; this fits a broad USAGE/beneficiary dimension more than causality or identity.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_5faf9dd0ce5e\"],\n      \"canonical_rel_name\": \"lacks_resources_to_build\",\n      \"canonical_rel_desc\": \"Indicates that an agent or group does not have sufficient resources (e.g., economic, material) to construct or create a specified type of structure or artifact.\",\n      \"justification\": \"The relation describes that non-elite Egyptians did not have the resources required to build pyramids; this is a lack-of-resources-to-perform-construction relation, so 'lacks_resources_to_build' captures the constraint.\",\n      \"remark\": null,\n      \"confidence\": 0.93\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_5faf9dd0ce5e\"],\n      \"rel_cls\": \"resource_constraint_relation\",\n      \"justification\": \"The core semantics is an economic/resource limitation preventing an action (building pyramids), which is best modeled as a resource constraint relation.\",\n      \"remark\": null,\n      \"confidence\": 0.93\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_5faf9dd0ce5e\"],\n      \"rel_cls_group\": \"REQUIREMENT\",\n      \"justification\": \"This relation expresses that necessary resource requirements for building pyramids are not met; this aligns with a broad REQUIREMENT/constraint dimension.\",\n      \"remark\": null,\n      \"confidence\": 0.93\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_65e709116d01"
+        ],
+        "canonical_rel_name": "was_built_for",
+        "canonical_rel_desc": "Indicates that a structure was constructed for the benefit, use, or commemoration of a particular person or social group.",
+        "justification": "The relation links tomb structures to the elite they were intended for; this is a beneficiary/intended-recipient relation, so a predicate like 'was_built_for' best captures that semantics.",
+        "remark": null,
+        "confidence": 0.93
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_65e709116d01"
+        ],
+        "rel_cls": "beneficiary_relation",
+        "justification": "The tombs are constructed for a specific social group (elite), which is a typical beneficiary/intended-recipient pattern rather than composition or hierarchy.",
+        "remark": null,
+        "confidence": 0.92
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_65e709116d01"
+        ],
+        "rel_cls_group": "USAGE",
+        "justification": "Building tombs for the elite encodes intended use/benefit by a target group; this fits a broad USAGE/beneficiary dimension more than causality or identity.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_5faf9dd0ce5e"
+        ],
+        "canonical_rel_name": "lacks_resources_to_build",
+        "canonical_rel_desc": "Indicates that an agent or group does not have sufficient resources (e.g., economic, material) to construct or create a specified type of structure or artifact.",
+        "justification": "The relation describes that non-elite Egyptians did not have the resources required to build pyramids; this is a lack-of-resources-to-perform-construction relation, so 'lacks_resources_to_build' captures the constraint.",
+        "remark": null,
+        "confidence": 0.93
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_5faf9dd0ce5e"
+        ],
+        "rel_cls": "resource_constraint_relation",
+        "justification": "The core semantics is an economic/resource limitation preventing an action (building pyramids), which is best modeled as a resource constraint relation.",
+        "remark": null,
+        "confidence": 0.93
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_5faf9dd0ce5e"
+        ],
+        "rel_cls_group": "REQUIREMENT",
+        "justification": "This relation expresses that necessary resource requirements for building pyramids are not met; this aligns with a broad REQUIREMENT/constraint dimension.",
+        "remark": null,
+        "confidence": 0.93
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_65e709116d01"
+      ],
+      "canonical_rel_name": "was_built_for",
+      "canonical_rel_desc": "Indicates that a structure was constructed for the benefit, use, or commemoration of a particular person or social group.",
+      "justification": "The relation links tomb structures to the elite they were intended for; this is a beneficiary/intended-recipient relation, so a predicate like 'was_built_for' best captures that semantics.",
+      "remark": null,
+      "confidence": 0.93
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_65e709116d01"
+      ],
+      "rel_cls": "beneficiary_relation",
+      "justification": "The tombs are constructed for a specific social group (elite), which is a typical beneficiary/intended-recipient pattern rather than composition or hierarchy.",
+      "remark": null,
+      "confidence": 0.92
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_65e709116d01"
+      ],
+      "rel_cls_group": "USAGE",
+      "justification": "Building tombs for the elite encodes intended use/benefit by a target group; this fits a broad USAGE/beneficiary dimension more than causality or identity.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_5faf9dd0ce5e"
+      ],
+      "canonical_rel_name": "lacks_resources_to_build",
+      "canonical_rel_desc": "Indicates that an agent or group does not have sufficient resources (e.g., economic, material) to construct or create a specified type of structure or artifact.",
+      "justification": "The relation describes that non-elite Egyptians did not have the resources required to build pyramids; this is a lack-of-resources-to-perform-construction relation, so 'lacks_resources_to_build' captures the constraint.",
+      "remark": null,
+      "confidence": 0.93
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_5faf9dd0ce5e"
+      ],
+      "rel_cls": "resource_constraint_relation",
+      "justification": "The core semantics is an economic/resource limitation preventing an action (building pyramids), which is best modeled as a resource constraint relation.",
+      "remark": null,
+      "confidence": 0.93
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_5faf9dd0ce5e"
+      ],
+      "rel_cls_group": "REQUIREMENT",
+      "justification": "This relation expresses that necessary resource requirements for building pyramids are not met; this aligns with a broad REQUIREMENT/constraint dimension.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  ],
+  "timestamp": "2026-01-06T10:21:49Z"
+}

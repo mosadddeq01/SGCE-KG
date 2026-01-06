@@ -1,0 +1,48 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_989b8999b30f",
+        "RelR_6e8abada3154",
+        "RelR_524f191ee68b",
+        "RelR_19b43275da64"
+      ],
+      "canonical_rel_name": "occurs_in",
+      "canonical_rel_desc": "Links an event or process to the geographic or political area where it takes place or is enacted.",
+      "justification": "All relations connect an event or process (civil rights legislation, civil rights movement, Tiananmen Square massacre, crackdown on protesters) to a country where it took place or was enacted. Despite minor surface variations in relation_name ('enacted_in', 'occurs_in', 'occurred_in'), the underlying predicate is the same: an event occurring within a spatial container. Normalizing to a single canonical predicate 'occurs_in' improves consistency of the KG schema.",
+      "remark": null,
+      "confidence": 0.97
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_989b8999b30f",
+        "RelR_6e8abada3154",
+        "RelR_524f191ee68b",
+        "RelR_19b43275da64"
+      ],
+      "rel_cls": "event_location_relation",
+      "justification": "Each relation represents a linkage between an event-like subject (social movement, repression event, legislative enactment) and the location (country) where it happened. Grouping them under 'event_location_relation' captures this shared semantics and distinguishes them from other spatial relations (e.g., containment of objects, administrative membership).",
+      "remark": null,
+      "confidence": 0.96
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_989b8999b30f",
+        "RelR_6e8abada3154",
+        "RelR_524f191ee68b",
+        "RelR_19b43275da64"
+      ],
+      "rel_cls_group": "SPATIALITY",
+      "justification": "All relations encode where an event or process takes place, which is a spatial dimension rather than temporal, causal, or compositional. Thus they belong under the broad semantic group SPATIALITY.",
+      "remark": null,
+      "confidence": 0.99
+    }
+  }
+]

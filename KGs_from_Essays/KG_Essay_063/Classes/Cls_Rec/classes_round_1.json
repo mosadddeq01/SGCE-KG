@@ -1,0 +1,79 @@
+{
+  "n_classes": 6,
+  "n_members_total": 13,
+  "classes": {
+    "ClsC_c42c2993": {
+      "class_label": "American Independence",
+      "class_description": "Key entities directly associated with the struggle for and achievement of U.S. independence from British colonial rule, including foundational documents and pivotal events.",
+      "class_type_hint": "Historical Topic",
+      "confidence": 0.83,
+      "evidence_excerpt": "The Declaration of Independence ... and the American Revolution of 1776 marked a turning point ... to fight for their freedom and independence from colonial rule.",
+      "source_cluster_id": {"recluster_round": 1, "subcluster": 1},
+      "members": [
+        {"id": "En_6deb9068","entity_name": "Declaration of Independence","entity_description": "Foundational American document declaring independence and asserting equality and unalienable rights.","entity_type_hint": "Document","confidence_score": 0.99,"resolution_context": "The Declaration of Independence, with its assertion that all men are created equal and endowed with certain unalienable rights, served as a powerful statement of the principles that would underpin many future protests and revolutions.","flag": "entity_raw","chunk_id": ["Ch_000002"],"node_properties": []},
+        {"id": "En_cc9ddaae","entity_name": "American Revolution of 1776","entity_description": "Eighteenth-century colonial revolt in North America that led to U.S. independence from British rule.","entity_type_hint": "HistoricalEvent","confidence_score": 0.98,"resolution_context": "The American Revolution of 1776 marked a turning point in the history of protests and revolutions, as it inspired people around the world to fight for their freedom and independence from colonial rule.","flag": "entity_raw","chunk_id": ["Ch_000002"],"node_properties": [{"prop_name": "year","prop_value": "1776","justification": "The event is explicitly identified as 'The American Revolution of 1776', making the year intrinsic to this instance."}]}
+      ]
+    },
+    "ClsC_6ffdfa2a": {
+      "class_label": "United States of America",
+      "class_description": "References to the same sovereign country in North America, officially known as the United States of America.",
+      "class_type_hint": "Geopolitical Entity",
+      "confidence": 0.98,
+      "evidence_excerpt": "Country in North America; context includes civil rights and Black Lives Matter movements in the United States.",
+      "source_cluster_id": {"recluster_round": 1, "subcluster": 3},
+      "members": [
+        {"id": "En_20e94756","entity_name": "United States","entity_description": "Country in which the civil rights movement described in the text took place.","entity_type_hint": "Location","confidence_score": 0.99,"resolution_context": "The civil rights movement in the United States, led by figures such as Martin Luther King Jr. and Rosa Parks, challenged racial segregation and discrimination.","flag": "entity_raw","chunk_id": ["Ch_000004"],"node_properties": []},
+        {"id": "En_510bbb9d","entity_name": "United States","entity_description": "A country in North America, officially known as the United States of America.","entity_type_hint": "Location","confidence_score": 0.99,"resolution_context": "The Black Lives Matter movement, which emerged in response to police brutality and systemic racism in the United States, has galvanized millions of people around the world to demand racial justice and equality.","flag": "entity_raw","chunk_id": ["Ch_000005"],"node_properties": []}
+      ]
+    },
+    "ClsC_54dab45b": {
+      "class_label": "Social Justice Concepts",
+      "class_description": "Normative social concepts related to fairness, rights, and the unequal treatment of groups, including conditions opposed (inequality, injustice) and principles upheld (human rights).",
+      "class_type_hint": "Social Concept",
+      "confidence": 0.89,
+      "evidence_excerpt": "The movement inspired people to stand up against injustice and fight for equality and human rights, sparking a conversation on race and inequality.",
+      "source_cluster_id": {"recluster_round": 1, "subcluster": 4},
+      "members": [
+        {"id": "En_1dbe39f3","entity_name": "inequality","entity_description": "Unequal distribution of rights, opportunities, or resources among different groups.","entity_type_hint": "Condition","confidence_score": 0.82,"resolution_context": "The movement has sparked a national conversation on race and inequality, leading to widespread protests and calls for reform.","flag": "entity_raw","chunk_id": ["Ch_000005"],"node_properties": []},
+        {"id": "En_08472b19","entity_name": "human rights","entity_description": "Fundamental rights and freedoms that people worldwide are encouraged to fight for.","entity_type_hint": "AbstractConcept","confidence_score": 0.95,"resolution_context": "The movement inspired people around the world to stand up against injustice and fight for equality and human rights.","flag": "entity_raw","chunk_id": ["Ch_000004"],"node_properties": []},
+        {"id": "En_169d1fad","entity_name": "injustice","entity_description": "Unfair social and political conditions that people are inspired to oppose.","entity_type_hint": "Condition","confidence_score": 0.9,"resolution_context": "The movement inspired people around the world to stand up against injustice and fight for equality and human rights.","flag": "entity_raw","chunk_id": ["Ch_000004"],"node_properties": []}
+      ]
+    },
+    "ClsC_1a040284": {
+      "class_label": "Collective Political Contention",
+      "class_description": "Forms of collective action that challenge political authority, including mass protests and more forceful, often armed uprisings.",
+      "class_type_hint": "Event Type",
+      "confidence": 0.87,
+      "evidence_excerpt": "protests have taken various forms, from peaceful demonstrations to violent uprisings",
+      "source_cluster_id": {"recluster_round": 1, "subcluster": 5},
+      "members": [
+        {"id": "En_d51f7be4","entity_name": "violent uprisings","entity_description": "Forceful, often armed, collective rebellions against authorities or regimes.","entity_type_hint": "Action","confidence_score": 0.96,"resolution_context": "Throughout the centuries, protests have taken various forms, from peaceful demonstrations to violent uprisings, as people have sought to assert their rights and challenge authority.","flag": "entity_raw","chunk_id": ["Ch_000002"],"node_properties": []},
+        {"id": "En_9b268487","entity_name": "protests and revolutions","entity_description": "Collective actions and uprisings that shape the political landscape of countries.","entity_type_hint": "CollectiveEventType","confidence_score": 0.92,"resolution_context": "In the late 20th and early 21st centuries, protests and revolutions have continued to shape the political landscape of many countries.","flag": "entity_raw","chunk_id": ["Ch_000004"],"node_properties": []}
+      ]
+    },
+    "ClsC_d5a47133": {
+      "class_label": "Global Sociopolitical Context",
+      "class_description": "Macro-level human collectivities and their global setting, encompassing the world as a whole and the societies within it that are shaped by protest and revolution.",
+      "class_type_hint": "Context Entity",
+      "confidence": 0.8,
+      "evidence_excerpt": "change and transformation in societies around the world",
+      "source_cluster_id": {"recluster_round": 1, "subcluster": 5},
+      "members": [
+        {"id": "En_2177cb05","entity_name": "the world","entity_description": "Global context in which protests inspire movements across different countries and societies.","entity_type_hint": "Location","confidence_score": 0.86,"resolution_context": "From ancient times to the present day, protests have served as a powerful force for change, inspiring movements for democracy, equality, and justice around the world.","flag": "entity_raw","chunk_id": ["Ch_000006"],"node_properties": []},
+        {"id": "En_8f233cbb","entity_name": "societies","entity_description": "Human communities and nations affected by protests and revolutions.","entity_type_hint": "CollectiveActor","confidence_score": 0.8,"resolution_context": "Protests and revolutions have played a significant role in shaping the course of history, serving as powerful catalysts for change and transformation in societies around the world.","flag": "entity_raw","chunk_id": ["Ch_000001"],"node_properties": []}
+      ]
+    },
+    "ClsC_0ba162bc": {
+      "class_label": "State Authorities",
+      "class_description": "State-level political actors and institutions that exercise governmental power and may use coercive force, especially in response to protests or dissent.",
+      "class_type_hint": "Political Actor",
+      "confidence": 0.94,
+      "evidence_excerpt": "State or governmental actors and institutions using force to repress or suppress dissent.",
+      "source_cluster_id": {"recluster_round": 1, "subcluster": 6},
+      "members": [
+        {"id": "En_5a57ef6d","entity_name": "authorities","entity_description": "State or governmental actors responsible for maintaining control and exercising power.","entity_type_hint": "Actor","confidence_score": 0.9,"resolution_context": "Protests and revolutions have often been met with repression and violence by authorities seeking to maintain their grip on power.","flag": "entity_raw","chunk_id": ["Ch_000005"],"node_properties": []},
+        {"id": "En_133d76db","entity_name": "governments","entity_description": "State institutions and authorities that exercise political power and may use force against protesters.","entity_type_hint": "ActorGroup","confidence_score": 0.9,"resolution_context": "From the Tiananmen Square massacre in China to the crackdown on pro-democracy protesters in Belarus, governments have used force to suppress dissent and silence opposition.","flag": "entity_raw","chunk_id": ["Ch_000005"],"node_properties": []}
+      ]
+    }
+  }
+}

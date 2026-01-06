@@ -1,0 +1,42 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_436182babbe8",
+        "RelR_8d4942082ed4"
+      ],
+      "canonical_rel_name": "is_about",
+      "canonical_rel_desc": "Indicates that a document or discourse is about, discusses, or focuses on a given topic or subject.",
+      "justification": "Both relations link the same subject entity (an essay on body language) to different topics it will discuss. The rel_hint_type is 'aboutness' and the rel_descs describe the content focus of the essay (various situations; social interactions). These are standard document-to-topic aboutness links and share identical predicate semantics, so they should use a unified canonical predicate 'is_about'.",
+      "remark": null,
+      "confidence": 0.96
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_436182babbe8",
+        "RelR_8d4942082ed4"
+      ],
+      "rel_cls": "document_subject_relation",
+      "justification": "Both relations connect a document-like entity (essay on body language) to conceptual topics it discusses (various situations; social interactions). This is a classic document-to-subject linkage, so grouping them under a relation class 'document_subject_relation' is appropriate.",
+      "remark": null,
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_436182babbe8",
+        "RelR_8d4942082ed4"
+      ],
+      "rel_cls_group": "ABOUTNESS",
+      "justification": "The rel_hint_type is explicitly 'aboutness', and the semantics clearly express what the essay is about. This fits a broad ABOUTNESS dimension rather than composition, causality, or spatiality.",
+      "remark": null,
+      "confidence": 0.96
+    }
+  }
+]

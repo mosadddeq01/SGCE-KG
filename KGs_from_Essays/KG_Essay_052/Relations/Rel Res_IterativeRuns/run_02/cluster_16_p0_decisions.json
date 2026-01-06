@@ -1,0 +1,73 @@
+{
+  "cluster_label": "16_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_db1d72364f85",
+      "relation_name": "participates_in",
+      "rel_desc": "Women participate in sports that have traditionally been male-dominated.",
+      "rel_hint_type": "participation",
+      "canonical_rel_name": "participates_in",
+      "canonical_rel_desc": "Indicates that an actor (person or group) takes part in, or actively engages in, a sport, event, or activity.",
+      "rel_cls": "participation_and_engagement_relation",
+      "rel_cls_group": "AGENCY",
+      "subject_entity_name": "women",
+      "object_entity_name": "male-dominated sports",
+      "subject_class_label": "Gender Integration in Sports",
+      "subject_class_group": "Sports, Social Issues, and Social Change",
+      "object_class_label": "Gender Integration in Sports",
+      "object_class_group": "Sports, Social Issues, and Social Change",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "in traditionally male-dominated sports",
+        "OperationalConstraint": null,
+        "ConditionExpression": "inclusion of women",
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.9,
+      "remarks": [
+        "Relation abstracted from the inclusion phrasing.",
+        "Relation abstracted from the inclusion phrasing.",
+        "Relation abstracted from the inclusion phrasing."
+      ]
+    },
+    {
+      "relation_id": "RelR_509450f03086",
+      "relation_name": "involves_participation_of",
+      "rel_desc": "Sports activities involve the participation of athletes.",
+      "rel_hint_type": "participation",
+      "canonical_rel_name": "has_participant",
+      "canonical_rel_desc": "Indicates that an event, activity, or domain (e.g., a sport) includes or involves certain participants.",
+      "rel_cls": "participation_and_engagement_relation",
+      "rel_cls_group": "AGENCY",
+      "subject_entity_name": "sports",
+      "object_entity_name": "athletes",
+      "subject_class_label": "Sports (Domain Concept)",
+      "subject_class_group": "Sports and Society",
+      "object_class_label": "Sports Participants",
+      "object_class_group": "Sports-Based Personal Development",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": "in the context of sports",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "implied",
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.82,
+      "remarks": [
+        "Not explicitly stated as 'athletes participate in sports', but strongly implied.",
+        "Not explicitly stated as 'athletes participate in sports', but strongly implied.",
+        "Not explicitly stated as 'athletes participate in sports', but strongly implied."
+      ]
+    }
+  ],
+  "llm_raw": "[]",
+  "parsed_steps": [],
+  "executed_decisions": [],
+  "timestamp": "2026-01-06T12:46:24Z"
+}

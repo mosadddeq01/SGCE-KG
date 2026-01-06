@@ -1,0 +1,39 @@
+[
+  {
+    "function": "reassign_entities",
+    "args": {
+      "entity_ids": ["En_ffc7e394"],
+      "from_class_id": "ClsC_95470c20",
+      "to_class_id": "ClsC_0a749427",
+      "justification": "The entity 'urban legends' is better grouped with 'modern folklore' in the Contemporary Folklore class, while the Urban Legend Concepts class focuses on analytical aspects such as origins and authenticity.",
+      "remark": null,
+      "confidence": 0.85
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_95470c20",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Urban Legends and Modern Folklore",
+      "remark": null,
+      "justification": "This class covers conceptual/analytical aspects of urban legends, which fits within a broader Urban Legends and Modern Folklore group shared with the Contemporary Folklore class.",
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_0a749427",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Urban Legends and Modern Folklore",
+      "remark": "This class now contains two entities representing the concept 'urban legends' (En_ffc7e394 and Can_d6b2734a); they appear to be duplicate or near-duplicate concept records and should be reviewed for possible upstream entity deduplication.",
+      "justification": "This class describes modern folklore, including urban legends, and should share a common group with related urban legend concept classes for coherent higher-level organization.",
+      "confidence": 0.9
+    }
+  }
+]

@@ -1,0 +1,48 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_5ae994c9599b",
+        "RelR_b69536e4ff98",
+        "RelR_1c8741e8b5ce",
+        "RelR_1d7090cd3487"
+      ],
+      "canonical_rel_name": "is_associated_with",
+      "canonical_rel_desc": "Indicates that a nonverbal cue or behavior is commonly associated with, or interpreted as signaling, a particular emotional or attitudinal state, without implying strict causality.",
+      "justification": "All four relations link a specific nonverbal behavior (facial expression or posture) to an inferred emotional or attitudinal state with qualifiers like 'often associated with', indicating a symmetric, non-causal association. They can share a single generic predicate 'is_associated_with' for consistent KG modeling.",
+      "remark": "Association is non-causal and probabilistic (often/typically), but this uncertainty should remain in qualifiers, not in the canonical predicate.",
+      "confidence": 0.97
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_5ae994c9599b",
+        "RelR_b69536e4ff98",
+        "RelR_1c8741e8b5ce",
+        "RelR_1d7090cd3487"
+      ],
+      "rel_cls": "nonverbal_signal_state_relation",
+      "justification": "Each relation connects a nonverbal signal (smile, upright posture) to an inferred internal state (happiness, friendliness, confidence, assertiveness). This is a coherent family of relations where observable nonverbal cues are associated with underlying psychological or attitudinal states.",
+      "remark": "This class groups nonverbal-behavior-to-inferred-state links; other association types (e.g., topic co-occurrence) should use different relation classes.",
+      "confidence": 0.96
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_5ae994c9599b",
+        "RelR_b69536e4ff98",
+        "RelR_1c8741e8b5ce",
+        "RelR_1d7090cd3487"
+      ],
+      "rel_cls_group": "ASSOCIATION",
+      "justification": "The descriptions explicitly use 'associated with' and include uncertainty qualifiers like 'often', indicating a correlational or interpretive association rather than causality, composition, or hierarchy. Thus they best fit an ASSOCIATION group.",
+      "remark": null,
+      "confidence": 0.97
+    }
+  }
+]

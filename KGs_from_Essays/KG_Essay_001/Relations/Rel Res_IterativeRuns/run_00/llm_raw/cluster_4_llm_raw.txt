@@ -1,0 +1,31 @@
+[
+  {
+    "function": "merge_classes",
+    "args": {
+      "class_ids": [
+        "ClsC_09db1590",
+        "ClsC_ecbf4a40"
+      ],
+      "provisional_id": "MERGE(ClsC_09db1590|ClsC_ecbf4a40)",
+      "new_name": "Ecology, Ecosystems, and Biodiversity",
+      "new_description": "Ecological systems and their overarching context, including ecosystems, the natural world, and ecosystem-level biodiversity and variability to which butterflies contribute.",
+      "new_class_type_hint": "Ecological Concept",
+      "justification": "Both classes represent high-level ecological system concepts (ecosystem, natural world, and ecosystem biodiversity) rather than distinct domains, so consolidating them into a single ecology/ecosystem context class removes unnecessary fragmentation.",
+      "remark": null,
+      "confidence": 0.86
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "MERGE(ClsC_09db1590|ClsC_ecbf4a40)",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Ecology & Ecosystem Concepts",
+      "remark": null,
+      "justification": "The merged class sits clearly in the ecological systems domain, so assigning a shared Class_Group clarifies its role and connects it to related ecological schema elements.",
+      "confidence": 0.9
+    }
+  }
+]

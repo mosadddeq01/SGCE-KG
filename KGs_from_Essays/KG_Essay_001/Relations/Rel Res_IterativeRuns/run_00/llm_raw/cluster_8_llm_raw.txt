@@ -1,0 +1,57 @@
+[
+  {
+    "function": "merge_classes",
+    "args": {
+      "class_ids": [
+        "ClsC_2d3f6ac9",
+        "ClsC_63adc92e"
+      ],
+      "provisional_id": "MERGE(ClsC_2d3f6ac9|ClsC_63adc92e)",
+      "new_name": "Butterfly Predators",
+      "new_description": "Animals and organism groups that prey on butterflies or their life stages (eggs, caterpillars, adults), forming the predator component of the butterfly food web.",
+      "new_class_type_hint": "OrganismGroup",
+      "justification": "Both classes describe animals that prey on butterflies or their life stages, differing only by life stage focus, so they represent the same ecological predator concept and should be unified.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "MERGE(ClsC_2d3f6ac9|ClsC_63adc92e)",
+      "new_name": "Butterfly Predators",
+      "new_description": "Animals and organism groups that prey on butterflies or their life stages (eggs, caterpillars, adults), forming the predator component of the butterfly food web.",
+      "new_class_type_hint": "OrganismGroup",
+      "new_class_group": "Butterfly Ecology and Interactions",
+      "remark": null,
+      "justification": "The merged predator class clearly belongs under a butterfly-focused ecological grouping that also unifies related interaction classes.",
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_6174cf81",
+      "new_name": "Butterflies",
+      "new_description": "Butterflies as organisms (order Lepidoptera), including general, adult, and female adult butterflies involved in reproduction and egg laying.",
+      "new_class_type_hint": "Organism",
+      "new_class_group": "Butterfly Ecology and Interactions",
+      "remark": null,
+      "justification": "This class is the focal organism around which predators and feeding components are defined, so it should share the same butterfly ecology class group; type hint normalized to the organism concept.",
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_afba24d7",
+      "new_name": "Butterfly Feeding Components",
+      "new_description": "Entities directly involved in how adult butterflies feed, including their specialized mouthparts and the floral food sources they consume.",
+      "new_class_type_hint": "EcologicalInteractionComponent",
+      "new_class_group": "Butterfly Ecology and Interactions",
+      "remark": null,
+      "justification": "Nectar and proboscis are components of butterfly feeding interactions and should be grouped under the same butterfly ecology umbrella as butterflies and their predators.",
+      "confidence": 0.86
+    }
+  }
+]

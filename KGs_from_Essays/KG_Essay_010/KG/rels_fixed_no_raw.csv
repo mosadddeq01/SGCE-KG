@@ -1,0 +1,1141 @@
+"relation_id","start_id","end_id","raw_relation_name","canonical_rel_name","canonical_rel_desc","rel_cls","rel_cls_group","rel_hint_type","confidence","resolution_context","justification","remark","evidence_excerpt","chunk_id","qualifiers","rel_desc"
+"RelR_3705c9cc3501","Can_0f4e7437","Can_29b82848","has_property","has_physical_property","Links a physical object or phenomenon to one of its physical properties or a set of such properties.","physical_property_relation","ATTRIBUTE","property","0.96","Treats the gravitational pull as a defining property of black holes.","The text explicitly states that black holes are characterized by their immense gravitational pull.","","These enigmatic cosmic entities, characterized by their immense gravitational pull that not even light can escape from…","Ch_000001","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": ""Strength: immense""
+}","Black holes are characterized by having an immense gravitational pull."
+"RelR_23f13c2ba078","Can_29b82848","Can_87fb5eaa","prevents_escape_of","prevents_escape_of","Indicates that the subject exerts an influence or constraint that prevents the object (or entities associated with it) from escaping a region or potential well.","escape_constraint_relation","CAUSALITY","constraint","0.97","Direction chosen from gravitational field to what it constrains (light).","The phrase explicitly links the gravitational pull with the inability of light to escape.","","…their immense gravitational pull that not even light can escape from…","Ch_000001","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": ""within or near the event horizon of the black hole"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""so ... that"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": null
+}","The gravitational pull of a black hole is strong enough to prevent light from escaping."
+"RelR_b43fdf299614","Can_0f4e7437","Can_87fb5eaa","traps","prevents_escape_of","Indicates that the subject confines the object such that it cannot escape (e.g., a gravitational field trapping light near a black hole).","escape_constraint_relation","CAUSALITY","causal","0.86","Alternative direct relation from black holes to light, abstracting over the mediating gravitational pull.","The description of black holes implies that light cannot escape from them due to their gravity.","Some semantic overlap with the pull→light relation; kept for direct object–effect representation.","…their immense gravitational pull that not even light can escape from…","Ch_000001","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": ""inside or near the black hole’s event horizon"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""due to immense gravitational pull"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": null
+}","Black holes trap light, preventing it from escaping once sufficiently close."
+"RelR_9fb2350ba068","Can_0f4e7437","Can_609e997f","has_aspect","has_aspect","Indicates that the subject topic includes the object as one of its aspects, dimensions, or subtopics of discussion.","topic_aspect_relation","PART_WHOLE","topic-aspect","0.93","‘Formation of black holes’ is modeled as an aspect or component topic of black holes.","The essay plans to explore black holes, including their formation.","","…we will explore the fascinating world of black holes, their formation, properties…","Ch_000001","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": ""DescriptiveScope: listed as one of several key aspects""
+}","The formation of black holes is one of the key aspects discussed about black holes."
+"RelR_f3a21a2463ab","Can_0f4e7437","Can_88546afc","has_property_set","has_physical_property","Links a physical object or phenomenon to one of its physical properties or a set of such properties.","physical_property_relation","ATTRIBUTE","property","0.9","Treats 'properties of black holes' as the collective attribute set of black holes.","The essay promises to explore the properties of black holes.","","…we will explore the fascinating world of black holes, their formation, properties…","Ch_000001","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": ""DescriptiveScope: part of the topics to be explored""
+}","Black holes have a set of characteristic physical properties that are being discussed."
+"RelR_0e921b17b1b3","Can_609e997f","Can_0f4e7437","results_in","results_in","The subject process or phenomenon leads to the existence or occurrence of the object entity or phenomenon.","physical_causation_relation","CAUSALITY","causal","0.8","Modeled as a process (formation) that yields black holes as outcomes.","By definition, the formation of black holes is the process through which black holes come into existence; the essay identifies this as an aspect of black holes.","Relation added to capture that the ‘formation’ concept is inherently about producing black holes, even though not spelled out causally.","…the processes through which black holes originate and come into existence in the universe.","Ch_000001","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": ""in the universe (cosmic context)"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""formation … of black holes"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": null
+}","The formation processes lead to the existence of black holes."
+"RelR_fbce12fe1da6","Can_88546afc","Can_0f4e7437","characterizes","describes","Subject provides a description, account, or characterization of the object (typically an entity, process, or phenomenon).","representation_relation","REPRESENTATION","descriptive","0.84","Direction chosen from the property set to the entity it describes.","‘Properties of black holes’ is clearly defined as the characteristic attributes that define black holes.","","…the characteristic physical attributes and behaviors that define black holes…","Ch_000001","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": ""Includes: formation-related features and observable effects""
+}","The properties of black holes characterize what black holes are like."
+"RelR_9e9f3f7ffe63","Can_a624c447","Can_0f4e7437","concerns","is_about","Indicates that the subject (e.g., question, mystery, study, document, or concept) is about, concerns, or focuses on the object topic or phenomenon.","topical_aboutness_relation","ABOUTNESS","aboutness","0.92","The 'mysteries' entity is conceptually defined with black holes as its subject.","Defined as unresolved questions and unknown aspects surrounding black holes.","","Unresolved questions and unknown aspects surrounding black holes…","Ch_000001","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": ""in the context of astrophysics and cosmology"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": ""Unresolved; open scientific problems"",
+ ""CausalHint"": null,
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": null
+}","The mysteries of black holes are unresolved questions specifically about black holes."
+"RelR_367bbf773213","Can_a624c447","Can_609e997f","concerns","is_about","Indicates that the subject (e.g., question, mystery, study, document, or concept) is about, concerns, or focuses on the object topic or phenomenon.","topical_aboutness_relation","ABOUTNESS","aboutness","0.8","Mysteries are said to include questions about formation, so linked as concern-target.","The mysteries are described as including open problems about black hole formation.","","…including currently open scientific problems about their formation, properties, and behavior.","Ch_000001","{
+ ""TemporalQualifier"": ""ongoing"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": ""currently open scientific problems"",
+ ""CausalHint"": null,
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": ""ProblemType: formation-related mysteries""
+}","Some of the mysteries of black holes are specifically about how they form."
+"RelR_e89df28eee2a","Can_a624c447","Can_88546afc","concerns","is_about","Indicates that the subject (e.g., question, mystery, study, document, or concept) is about, concerns, or focuses on the object topic or phenomenon.","topical_aboutness_relation","ABOUTNESS","aboutness","0.8","Properties are explicitly listed among the aspects about which mysteries exist.","Mysteries include open problems about the properties of black holes.","","…including currently open scientific problems about their formation, properties, and behavior.","Ch_000001","{
+ ""TemporalQualifier"": ""ongoing"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": ""currently open scientific questions"",
+ ""CausalHint"": null,
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": ""ProblemType: property-related mysteries""
+}","The mysteries of black holes also relate to their physical properties."
+"RelR_0d52825427f5","Can_ce20298d","Can_a624c447","aims_to_explain","has_research_goal","Indicates that an agent or research activity is directed toward a specific scientific objective, such as explaining or understanding a phenomenon or set of open questions.","research_goal_relation","AGENCY","goal","0.9","Maps 'quest to unravel their mysteries' onto the formal entity 'study of black holes'.","The essay mentions the ongoing quest to unravel black hole mysteries, which corresponds to scientific study efforts.","Relation created to capture that the core aim of this research field is explaining these mysteries.","…and the ongoing quest to unravel their mysteries.","Ch_000001","{
+ ""TemporalQualifier"": ""ongoing"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": ""Success not yet complete (mysteries unresolved)"",
+ ""CausalHint"": null,
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": null
+}","The study of black holes is presented as an ongoing quest to unravel the mysteries of black holes."
+"RelR_fb6f4fc7362b","Can_ce20298d","Can_0f4e7437","focuses_on","is_about","Indicates that the subject (e.g., question, mystery, study, document, or concept) is about, concerns, or focuses on the object topic or phenomenon.","topical_aboutness_relation","ABOUTNESS","aboutness","0.83","Definition of the 'study of black holes' entity already embeds black holes as its subject.","Described as research activity focused on understanding black holes and their properties.","","Scientific research activity focused on understanding black holes, their properties…","Ch_000001","{
+ ""TemporalQualifier"": ""ongoing"",
+ ""SpatialQualifier"": ""scientific research contexts (observatories, institutions)"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": ""Field exists to reduce uncertainty about black holes"",
+ ""CausalHint"": null,
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": null
+}","The study of black holes is a research activity focused on black holes themselves."
+"RelR_309b8a3ba017","Can_8f30d00d","Can_ce20298d","participates_in","conducts_research_in","The subject (typically a researcher or research community) conducts research within the field or domain represented by the object.","research_activity_relation","AGENCY","membership","0.82","Links the community of scientists to the research activity they perform.","Defined as researchers who study black holes, i.e., who carry out the study of black holes.","","The community of scientific researchers and scholars who study black holes…","Ch_000001","{
+ ""TemporalQualifier"": ""for decades (at least)"",
+ ""SpatialQualifier"": ""across the global scientific community"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": ""Role: researchers and scholars""
+}","Scientists studying black holes are the community engaged in the study of black holes."
+"RelR_87630e44a32e","Can_8f30d00d","Can_0f4e7437","studies","studies","The subject (typically a researcher or research community) engages in scientific study of the object as a research topic or target of investigation.","research_focus_relation","AGENCY","research-focus","0.9","Direction chosen from researchers to the object of their study.","The entity is explicitly defined as scientists who study black holes.","","The community of scientific researchers and scholars who study black holes…","Ch_000001","{
+ ""TemporalQualifier"": ""for decades"",
+ ""SpatialQualifier"": ""in scientific and academic settings"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": ""Study motivated by unresolved mysteries"",
+ ""CausalHint"": null,
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": null
+}","Scientists studying black holes direct their research toward black holes."
+"RelR_396d3bbf1961","En_e8d3e797","Can_0f4e7437","is_puzzled_by","is_puzzled_by","Indicates that the subject community currently lacks a clear or complete understanding of the object phenomenon and finds it conceptually challenging.","understanding_gap_relation","COGNITION","cognitive","0.94","Modeled from astronomers to black holes as the object that puzzles them.","The text explicitly states that black holes have puzzled astronomers.","","…have puzzled astronomers and physicists since their existence was theorized.","Ch_000001","{
+ ""TemporalQualifier"": ""for decades; since their existence was theorized"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": ""Indicates incomplete understanding"",
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""since"",
+ ""OtherQualifier"": null
+}","Astronomers have long been puzzled by black holes."
+"RelR_bb78699c797f","En_364167f8","Can_0f4e7437","is_puzzled_by","is_puzzled_by","Indicates that the subject community currently lacks a clear or complete understanding of the object phenomenon and finds it conceptually challenging.","understanding_gap_relation","COGNITION","cognitive","0.94","Parallel to the astronomers relation, representing black holes as an object of puzzlement.","Black holes are said to have puzzled physicists since their existence was theorized.","","…have puzzled astronomers and physicists since their existence was theorized.","Ch_000001","{
+ ""TemporalQualifier"": ""for decades; since their existence was theorized"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": ""Reflects significant theoretical challenges"",
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""since"",
+ ""OtherQualifier"": null
+}","Physicists have also been puzzled by black holes."
+"RelR_2881cc347146","En_76369230","Can_0f4e7437","is_fascinated_by","is_fascinated_by","Indicates that the subject experiences fascination or strong interest directed toward the object.","affective_attitude_relation","AFFECTIVE","affective","0.96","Direction chosen from public to black holes as the object of fascination.","The text explicitly states that black holes have captivated the imagination of the general public.","","Black holes have captivated the imagination of scientists and the general public alike for decades.","Ch_000001","{
+ ""TemporalQualifier"": ""for decades"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": ""EngagementType: imaginative fascination""
+}","The general public is fascinated and captivated by black holes."
+"RelR_a10633a1d56d","Can_8b4fa42e","Can_0f4e7437","discusses","is_about","Indicates that the subject (e.g., question, mystery, study, document, or concept) is about, concerns, or focuses on the object topic or phenomenon.","topical_aboutness_relation","ABOUTNESS","aboutness","0.95","Treats the essay as a document whose main topic is black holes.","The essay is introduced as exploring the world of black holes.","","In this essay, we will explore the fascinating world of black holes…","Ch_000001","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": ""Genre: essay; Scope: introductory exploration""
+}","The essay 'The Mystery of Black Holes' discusses black holes."
+"RelR_abd25aba1ff1","Can_8b4fa42e","Can_609e997f","discusses","is_about","Indicates that the subject (e.g., question, mystery, study, document, or concept) is about, concerns, or focuses on the object topic or phenomenon.","topical_aboutness_relation","ABOUTNESS","aboutness","0.94","One of several planned subtopics of the essay.","The essay explicitly states it will explore the formation of black holes.","","…we will explore the fascinating world of black holes, their formation, properties…","Ch_000001","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""and"",
+ ""OtherQualifier"": ""PlannedContent: formation section""
+}","The essay will discuss the formation of black holes."
+"RelR_8fcdd7198c43","Can_8b4fa42e","Can_88546afc","discusses","is_about","Indicates that the subject (e.g., question, mystery, study, document, or concept) is about, concerns, or focuses on the object topic or phenomenon.","topical_aboutness_relation","ABOUTNESS","aboutness","0.94","Another planned subtopic of the essay.","The text promises to explore the properties of black holes.","","…their formation, properties, and the ongoing quest to unravel their mysteries.","Ch_000001","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""and"",
+ ""OtherQualifier"": ""PlannedContent: properties section""
+}","The essay will also discuss the properties of black holes."
+"RelR_f4fdb773767f","Can_8b4fa42e","Can_a624c447","discusses","is_about","Indicates that the subject (e.g., question, mystery, study, document, or concept) is about, concerns, or focuses on the object topic or phenomenon.","topical_aboutness_relation","ABOUTNESS","aboutness","0.9","The essay topic explicitly includes the mysteries of black holes.","The essay mentions an ongoing quest to unravel the mysteries of black holes.","","…and the ongoing quest to unravel their mysteries.","Ch_000001","{
+ ""TemporalQualifier"": ""ongoing"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": ""Mysteries not yet fully resolved"",
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""and"",
+ ""OtherQualifier"": ""Framing: presented as a mystery""
+}","The essay will discuss the mysteries of black holes and efforts to unravel them."
+"RelR_524065bcf0bb","En_b1d81020","Can_0f4e7437","pertains_to","is_about","Indicates that the subject (e.g., question, mystery, study, document, or concept) is about, concerns, or focuses on the object topic or phenomenon.","topical_aboutness_relation","ABOUTNESS","aboutness","0.86","Modeled as a conceptual relation where the existence concept is about black holes.","Defined as the notion that black holes are real cosmic entities; the text mentions 'their existence was theorized'.","","…since their existence was theorized.","Ch_000001","{
+ ""TemporalQualifier"": ""since their existence was theorized"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": ""Initially theoretical, later accepted"",
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""since"",
+ ""OtherQualifier"": null
+}","The concept of the existence of black holes refers to black holes as real cosmic entities."
+"RelR_71e919950abb","En_8d64debe","En_6ec19b40","is_fuel_of","is_fuel_for","Indicates that the subject serves as the fuel or energy source for the object.","energy_usage_relation","USAGE","composition","0.84","Modeled as fuel belonging to/used by the star.","Phrase ""massive stars that have exhausted their nuclear fuel"" implies the fuel belongs to and is used by the massive star.","","massive stars that have exhausted their nuclear fuel","Ch_000002","{
+ ""TemporalQualifier"": ""during the star's life cycle"",
+ ""SpatialQualifier"": ""in the star’s core (implied)"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": null
+}","Nuclear fuel is the fusion fuel used by massive stars during their life cycle."
+"RelR_b72956ddf4f0","En_6ec19b40","En_8d64debe","consumes","consumes","Indicates that the subject uses up or expends the object as a consumable resource.","energy_usage_relation","USAGE","process","0.86","Direction chosen as star acting on fuel.","The text states that massive stars ""have exhausted their nuclear fuel"", indicating consumption of fuel.","","massive stars that have exhausted their nuclear fuel","Ch_000002","{
+ ""TemporalQualifier"": ""toward the end of the star's life cycle"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": ""at end of fuel supply"",
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""exhausted"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": null
+}","The massive star consumes its nuclear fuel until it is exhausted."
+"RelR_7ef295094ba8","En_6ec19b40","En_c498b854","undergoes","undergoes_event","Indicates that the subject experiences or is the primary participant in the occurrence of the object event.","event_participation_relation","PARTICIPATION","event_participation","0.93","Star is participant/patient of the supernova event.","The text explicitly says massive stars ""have ... undergone a supernova explosion.""","","massive stars that have exhausted their nuclear fuel and undergone a supernova explosion","Ch_000002","{
+ ""TemporalQualifier"": ""at the end of its life"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": ""after exhausting nuclear fuel"",
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""after"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": null
+}","The massive star undergoes a supernova explosion at the end of its life."
+"RelR_b6b32e66a3d7","En_c498b854","En_391ce2f8","produces","results_in","Indicates that the subject astrophysical object or event causally leads to the object as its evolutionary end state or remnant.","evolutionary_outcome_relation","CAUSALITY","causal","0.78","Remnants are the outcome of the supernova event.","Phrase ""remnants of massive stars that have ... undergone a supernova"" implies the supernova event results in a remnant.","Outcome is somewhat implicit but standard in stellar evolution.","remnants of massive stars that have exhausted their nuclear fuel and undergone a supernova explosion","Ch_000002","{
+ ""TemporalQualifier"": ""after the explosion"",
+ ""SpatialQualifier"": ""at the site of the exploded star (implied)"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": ""implied, not explicitly causal-worded"",
+ ""CausalHint"": null,
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": null
+}","The supernova explosion leaves behind a stellar remnant."
+"RelR_410072abaead","En_6ec19b40","En_391ce2f8","leaves_remnant","results_in","Indicates that the subject astrophysical object or event causally leads to the object as its evolutionary end state or remnant.","evolutionary_outcome_relation","CAUSALITY","result","0.86","Modeled as star giving rise to its remnant.","Use of ""remnants of massive stars"" indicates stellar remnants originate from massive stars.","","remnants of massive stars that have exhausted their nuclear fuel","Ch_000002","{
+ ""TemporalQualifier"": ""after star's death"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": ""after exhausting fuel and supernova explosion"",
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": null
+}","The massive star leaves behind a stellar remnant after its death."
+"RelR_8331c8d145cd","En_391ce2f8","En_b3dc7e3f","forms","results_in","Indicates that the subject astrophysical object or event causally leads to the object as its evolutionary end state or remnant.","evolutionary_outcome_relation","CAUSALITY","causal","0.94","Remnant is progenitor; black hole is outcome.","Direct statement: ""Black holes are born from the remnants of massive stars"" ties remnants to black hole formation.","","Black holes are born from the remnants of massive stars","Ch_000002","{
+ ""TemporalQualifier"": ""after the supernova event"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": ""for sufficiently massive remnants (implied)"",
+ ""UncertaintyQualifier"": ""condition on mass is implied but not stated"",
+ ""CausalHint"": ""are born from"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": null
+}","A stellar remnant collapses further to form a black hole."
+"RelR_015337c55f4e","En_b1d9a8a7","En_6ec19b40","describes_evolution_of","describes_evolution_of","Subject describes or represents the temporal evolution or life cycle of the object.","representation_relation","REPRESENTATION","descriptive","0.7","Generic 'star' in text mapped to massive star entity present in list.","Mention of ""a star"" and ""its life cycle"" in context of massive stars forming black holes suggests the life cycle pertains to such stars.","Star type is not explicitly restated; mapping to massive star is inferred.","When a star reaches the end of its life cycle","Ch_000002","{
+ ""TemporalQualifier"": ""from formation to end of life"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": ""star type (massive) is implicit"",
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""When"",
+ ""OtherQualifier"": null
+}","The star life cycle refers to the evolutionary progression of a massive star."
+"RelR_654f47ddd60e","En_b1d9a8a7","En_8c0a9a1c","ends_with","ends_with","Indicates that the subject process or sequence terminates in the object event or state.","process_temporal_sequence_relation","TEMPORALITY","temporal","0.82","Life cycle as process ending in collapse event.","""When a star reaches the end of its life cycle, it collapses"" links life-cycle end directly to collapse.","","When a star reaches the end of its life cycle, it collapses under its own gravity","Ch_000002","{
+ ""TemporalQualifier"": ""at the end of the life cycle"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": ""end-of-life stage"",
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""reaches the end ... it collapses"",
+ ""LogicalMarker"": ""When"",
+ ""OtherQualifier"": null
+}","The star life cycle culminates in stellar collapse for such stars."
+"RelR_63182b59f8fc","En_8c0a9a1c","En_e14aa358","is_caused_by","is_caused_by","Indicates that the subject event, phenomenon, or state occurs as a result of the object cause or driving factor.","physical_causation_relation","CAUSALITY","causal","0.95","Gravity is the causal agent; collapse is the process.","Explicit causal wording: the star ""collapses under its own gravity"".","","it collapses under its own gravity","Ch_000002","{
+ ""TemporalQualifier"": ""after fuel exhaustion/end of life"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": ""when pressure support is insufficient (implied)"",
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""under"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": null
+}","Stellar collapse is driven by the star’s own gravity."
+"RelR_ab875fd04a69","En_8c0a9a1c","Can_e21ee374","creates","creates","Indicates that the subject process brings the object entity into existence or produces it.","process_output_relation","CAUSALITY","causal","0.94","Collapse process is the immediate cause of the singularity’s formation.","Text: ""it collapses under its own gravity, creating a singularity"" directly links collapse to singularity creation.","","it collapses under its own gravity, creating a singularity","Ch_000002","{
+ ""TemporalQualifier"": ""during the collapse event"",
+ ""SpatialQualifier"": ""at the center of the forming black hole"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": ""after end of life and collapse onset"",
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""creating"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": null
+}","The stellar collapse creates the black hole singularity."
+"RelR_99b227ec0957","Can_e21ee374","En_b3dc7e3f","is_part_of","is_structural_component_of","Indicates that the subject is a structural part or boundary component of the object system or object.","structural_composition_relation","COMPOSITION","containment","0.96","Center of black hole implies part-whole relation.","""at the center of the black hole"" identifies the singularity as internal to the black hole.","","a singularity – a point of infinite density and zero volume at the center of the black hole","Ch_000002","{
+ ""TemporalQualifier"": ""once the black hole has formed"",
+ ""SpatialQualifier"": ""at the center of the black hole"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": ""PhysicalNature: point of effectively infinite density and zero volume""
+}","The black hole singularity lies at the center of and is a structural component of the black hole."
+"RelR_f27198d0ecc3","Can_585b2868","Can_e21ee374","surrounds","surrounds","Indicates that the subject spatially encloses or lies around the object.","spatial_enclosure_relation","SPATIALITY","spatial","0.97","Subject chosen as the boundary object surrounding the singularity.","Explicit statement: ""This singularity is surrounded by an event horizon.""","","This singularity is surrounded by an event horizon","Ch_000002","{
+ ""TemporalQualifier"": ""after black hole formation"",
+ ""SpatialQualifier"": ""around the singularity"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""surrounded by"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": ""Role: boundary/point of no return""
+}","The event horizon surrounds the black hole singularity."
+"RelR_3ca5329b7991","Can_585b2868","En_b3dc7e3f","is_part_of","is_structural_component_of","Indicates that the subject is a structural part or boundary component of the object system or object.","structural_composition_relation","COMPOSITION","containment","0.9","Event horizon defined relative to the black hole’s boundary.","Described as ""the point of no return"" in direct reference to the black hole, implying it is its boundary surface.","","an event horizon, the point of no return beyond which nothing can escape","Ch_000002","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": ""at the boundary of the black hole"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": ""beyond this boundary nothing can escape"",
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""beyond which"",
+ ""OtherQualifier"": null
+}","The event horizon is a structural boundary of the black hole."
+"RelR_31ee96116f84","Can_29b82848","En_b3dc7e3f","emanates_from","originates_from","Indicates that a physical effect, field, or radiation is produced, generated, or emitted by a source object or system.","physical_origin_relation","CAUSALITY","causal","0.9","Modeled as a field/phenomenon produced by the black hole.","The phrase explicitly attributes the gravitational pull to the black hole.","","the gravitational pull of the black hole","Ch_000002","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": ""surrounding the black hole"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": ""strong enough to prevent escape beyond the event horizon"",
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""of the black hole"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": null
+}","The gravitational pull is generated by the black hole."
+"RelR_f6212cca2ec8","Can_29b82848","Can_585b2868","prevents_escape_beyond","prevents_escape_of","Indicates that the subject (typically a force, field, or condition) prevents the object (or entities associated with it) from escaping or leaving a specified region or potential well, often once a critical boundary has been crossed.","escape_constraint_relation","CAUSALITY","constraint","0.95","Gravitational pull imposes a no-escape condition relative to the event horizon.","Text states that beyond the event horizon ""nothing can escape the gravitational pull of the black hole.""","[""The current object entity is the event horizon itself, while the description suggests the prevented escape primarily concerns matter and light that have crossed this boundary. This may reflect an upstream modeling choice (using the horizon as a proxy for the region beyond it) rather than the escaping entities themselves.""]","the point of no return beyond which nothing can escape the gravitational pull of the black hole","Ch_000002","{
+ ""TemporalQualifier"": ""for any time after crossing the horizon"",
+ ""SpatialQualifier"": ""beyond the event horizon"",
+ ""OperationalConstraint"": ""applies to all matter and light (implied)"",
+ ""ConditionExpression"": ""position > event horizon radius"",
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""beyond which"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": ""Effect: prevents escape from black hole""
+}","The black hole’s gravitational pull prevents anything from escaping once past the event horizon."
+"RelR_d940722bf120","Can_0f4e7437","Can_29b82848","has_property","has_physical_property","Links a physical object or phenomenon to one of its physical properties or a set of such properties.","physical_property_relation","ATTRIBUTE","attribute","0.96","Direction chosen as object is a property of the black hole.","The text explicitly describes the gravitational pull as a striking feature (property) of black holes.","","One of the most striking features of black holes is their gravitational pull, which is so strong...","Ch_000003","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": ""PropertyType: gravitational feature""
+}","Black holes have an extremely strong gravitational pull."
+"RelR_ef709731c2dd","Can_29b82848","Can_95b9f400","warps","warps_spacetime","Indicates that a gravitational source or black hole causes curvature or warping of spacetime in its vicinity.","gravitational_spacetime_interaction","CAUSALITY","causal","0.97","Gravitational pull acts on spacetime, so pull → spacetime.","The sentence directly states that the gravitational pull ""warps spacetime itself.""","","their gravitational pull, which is so strong that it warps spacetime itself.","Ch_000003","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": ""near a black hole"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""so strong that"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": null
+}","The gravitational pull of a black hole warps spacetime."
+"RelR_dea796f884b5","Can_0f4e7437","Can_95b9f400","warps","warps_spacetime","Indicates that a gravitational source or black hole causes curvature or warping of spacetime in its vicinity.","gravitational_spacetime_interaction","CAUSALITY","causal","0.86","Implied via the gravitational pull of black holes; modeled also as a direct relation.","The gravitational pull is explicitly tied to black holes as a feature and is said to warp spacetime, implying black holes warp spacetime.","Slightly indirect: mediated by gravitational pull, but commonly attributed to black holes themselves.","One of the most striking features of black holes is their gravitational pull, which is so strong that it warps spacetime itself.","Ch_000003","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": ""around the black hole"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""due to strong gravity"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": null
+}","Black holes warp spacetime via their intense gravity."
+"RelR_9dc2f34e252f","En_6636335c","En_2aee1e71","affects","slows","Indicates that the subject process or phenomenon reduces the rate or speed of the object process or quantity.","physical_causation_relation","CAUSALITY","causal","0.97","The phenomenon acts on the local time rate near the black hole.","The text defines gravitational time dilation as causing time to slow down near a black hole.","","This phenomenon, known as gravitational time dilation, causes time to slow down near a black hole...","Ch_000003","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": ""near a black hole"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""causes"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": null
+}","Gravitational time dilation slows the passage of time near a black hole."
+"RelR_79885daea465","En_6636335c","En_0522be34","compared_to","slows_time_relative_to","Indicates that a physical effect or phenomenon causes time to pass more slowly in the subject context relative to the object reference context.","causal_effect_comparison_relation","COMPARISON","comparative","0.95","Direction chosen as the phenomenon defines a comparison between two time rates.","The text states time slows down near a black hole relative to observers further away, which defines a comparison under gravitational time dilation.","","causes time to slow down near a black hole relative to observers further away.","Ch_000003","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": ""near vs further away from the black hole"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""causes"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": ""ComparisonAspect: rate of time passage""
+}","Gravitational time dilation makes time near the black hole slower relative to time experienced by distant observers."
+"RelR_062b2ae7ba86","En_2aee1e71","En_0522be34","slower_than","has_slower_rate_than","Indicates that the rate of a quantity (here, passage of time) at the subject is slower than the corresponding rate at the object.","quantitative_comparison_relation","COMPARISON","comparative","0.94","Subject is the slower time rate; object is the reference time rate.","The sentence explicitly contrasts time near a black hole with that of observers further away, implying slower time near the black hole.","","causes time to slow down near a black hole relative to observers further away.","Ch_000003","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": ""near vs further away from a black hole"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""due to gravitational time dilation"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": null
+}","The rate of time near a black hole is slower than the rate experienced by observers further away."
+"RelR_41cefd393f05","En_6636335c","Can_0f4e7437","occurs_near","occurs_near","Indicates that a phenomenon, event, or process occurs in the spatial vicinity of a specified entity or structural feature.","spatial_occurrence_relation","SPATIALITY","spatial","0.9","Phenomenon is tied to the region around black holes where gravity is strong.","Time slowing is described ""near a black hole"" and attributed to gravitational time dilation.","","gravitational time dilation, causes time to slow down near a black hole...","Ch_000003","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": ""near a black hole"",
+ ""OperationalConstraint"": ""strong gravitational field"",
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": null
+}","Gravitational time dilation occurs in the strong gravitational field near black holes."
+"RelR_822184ce3218","En_6636335c","Can_29b82848","results_from","results_from","Indicates that the subject phenomenon or state is an effect that arises due to, or is caused by, the object phenomenon or condition.","physical_causation_relation","CAUSALITY","causal","0.78","Causality is somewhat implicit: strong gravity warping spacetime creates time dilation.","The text links strong gravitational pull warping spacetime with the phenomenon of time slowing, labeled gravitational time dilation.","Causality between gravitational pull and time dilation is standard physics but only indirectly stated here.","their gravitational pull, which is so strong that it warps spacetime itself. This phenomenon, known as gravitational time dilation...","Ch_000003","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": ""in the region influenced by the black hole"",
+ ""OperationalConstraint"": ""very strong gravity"",
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""which is so strong that it warps spacetime; This phenomenon"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": null
+}","Gravitational time dilation results from the strong gravitational pull of a black hole that warps spacetime."
+"RelR_68cf60afc1d3","En_0e4acd42","Can_db70503d","measured_by","is_measured_by","Subject quantity is operationally measured or quantified using the object measure, scale, or parameter.","measurement_relation","MEASUREMENT","measurement","0.98","Size is the quantity; Schwarzschild radius is the measurement metric.","The sentence says the size of black holes ""is typically measured in terms of their Schwarzschild radius.""","","their size, which is typically measured in terms of their Schwarzschild radius...","Ch_000003","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": ""typically"",
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": ""MeasurementContext: black hole size characterization""
+}","The size of black holes is typically quantified using the Schwarzschild radius."
+"RelR_3f2a6bf245a7","Can_db70503d","En_427da809","defined_at_condition","is_defined_by","Subject concept is defined in terms of, or via, the object condition or defining relation.","definition_relation","IDENTITY","definition","0.93","Subject is a radius; object is the escape velocity at that radius.","The text explicitly defines the Schwarzschild radius as the radius at which the escape velocity equals the speed of light.","Condition further refined in next relation to specify equality with speed of light.","Schwarzschild radius – the radius at which the escape velocity equals the speed of light.","Ch_000003","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": ""at the Schwarzschild radius"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": ""escape velocity equals the speed of light"",
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""at which"",
+ ""OtherQualifier"": null
+}","The Schwarzschild radius is defined as the radius where the escape velocity has a specific value."
+"RelR_2089d031109a","En_427da809","En_5fab057e","equals","has_equal_value_to","Indicates that two physical quantities have equal numerical value or magnitude under the stated conditions.","quantitative_equivalence_relation","IDENTITY","constraint","0.99","Escape velocity value is constrained to match the speed of light.","The chunk directly states that the escape velocity equals the speed of light at the Schwarzschild radius.","","the radius at which the escape velocity equals the speed of light.","Ch_000003","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": ""at the Schwarzschild radius"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": ""v_escape = c"",
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""equals"",
+ ""OtherQualifier"": null
+}","At the Schwarzschild radius, the escape velocity is equal to the speed of light."
+"RelR_1009484586a5","Can_db70503d","Can_0f4e7437","associated_with","characteristic_of","Indicates that the subject is a defining or characteristic quantity, property, or feature of the object.","conceptual_association_relation","ASSOCIATION","association","0.96","Radius is conceptually defined around a black hole; direction radius → black hole as contextual association.","The entity description and the text both frame it as the characteristic radius around a black hole.","","Schwarzschild radius – the radius at which the escape velocity equals the speed of light.","Ch_000003","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": ""around a black hole"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": null
+}","The Schwarzschild radius is a characteristic radius associated with a black hole."
+"RelR_713a0ea35135","En_0e4acd42","Can_0f4e7437","is_property_of","is_property_of","Links a property, attribute, or quality node to the entity that bears this property.","entity_property_relation","ATTRIBUTE","attribute","0.9","Size is an attribute; direction attribute → object described.","The text refers to ""the size of black holes"" implying size as an attribute of black holes.","This is somewhat intrinsic but represented as a relation for context.","Another intriguing property of black holes is their size...","Ch_000003","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""of"",
+ ""OtherQualifier"": null
+}","The size of black holes is a property characterizing black holes."
+"RelR_726f81314b83","Can_db70503d","Can_24050426","characterizes","is_characteristic_radius_of","Indicates that the subject radius is the characteristic or defining boundary radius of the object, typically marking a limit beyond which a key physical property (such as escape) qualitatively changes.","characteristic_boundary_relation","CONSTRAINT","characterization","0.86","Standard in GR: Schwarzschild radius defines the black hole boundary where escape velocity equals light speed.","“Beyond this radius, the gravitational pull of the black hole becomes so intense that not even light can escape” refers to the standard Schwarzschild radius definition.","","Beyond this radius, the gravitational pull of the black hole becomes so intense that not even light can escape","Ch_000004","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": ""around the black hole"",
+ ""OperationalConstraint"": ""where escape velocity equals the speed of light"",
+ ""ConditionExpression"": ""beyond this radius"",
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": ""BoundaryType: effective outer boundary of the black hole""
+}","The Schwarzschild radius is the characteristic radius associated with a black hole beyond which escape is impossible."
+"RelR_a81535eb1c11","Can_29b82848","Can_24050426","emanates_from","originates_from","Indicates that a physical effect, field, or radiation is produced, generated, or emitted by a source object or system.","physical_origin_relation","CAUSALITY","source","0.9","Direction chosen as field (pull) arising from mass of black hole.","Phrase explicitly describes the ""gravitational pull of the black hole"".","","the gravitational pull of the black hole becomes so intense","Ch_000004","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": ""in the region surrounding the black hole"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""of"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": null
+}","The gravitational pull is generated by the black hole."
+"RelR_e80a2c08ea8f","Can_29b82848","Can_87fb5eaa","prevents_escape_of","prevents_escape_of","Indicates that the subject (typically a force, field, or condition) prevents the object (or entities associated with it) from escaping or leaving a specified region or potential well, often once a critical boundary has been crossed.","escape_constraint_relation","CAUSALITY","causal","0.94","Direction: gravitational pull as cause, light as affected object.","“the gravitational pull of the black hole becomes so intense that not even light can escape” directly links strong gravity to the inability of light to escape.","","the gravitational pull of the black hole becomes so intense that not even light can escape","Ch_000004","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": ""beyond this radius"",
+ ""OperationalConstraint"": ""extremely strong gravitational field"",
+ ""ConditionExpression"": ""beyond the characteristic radius"",
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""so intense that"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": null
+}","The intense gravitational pull prevents light from escaping beyond the radius."
+"RelR_cf6d029f79e8","Can_db70503d","Can_29b82848","delimits_effect_region_of","defines_threshold_for","Indicates that the subject specifies or marks the threshold or boundary at which a particular physical effect or condition (described by the object) becomes operative or qualitatively changes.","threshold_condition_relation","CONSTRAINT","constraint","0.78","Radius defines threshold where gravitational pull has qualitative change (no escape).","“Beyond this radius, the gravitational pull of the black hole becomes so intense that not even light can escape” indicates the radius sets the threshold for this gravitational behavior.","","Beyond this radius, the gravitational pull of the black hole becomes so intense","Ch_000004","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": ""at and beyond the radius"",
+ ""OperationalConstraint"": ""escape velocity reaches speed of light"",
+ ""ConditionExpression"": ""beyond this radius"",
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""Beyond"",
+ ""OtherQualifier"": null
+}","The Schwarzschild radius marks where the gravitational pull becomes strong enough to prevent escape."
+"RelR_f2ad8fffb834","En_3d79cf8c","En_2240b4c5","encoded_on","is_information_encoded_on","Indicates that informational content about a physical system is encoded on a specified boundary or surface.","information_encoding_location_relation","SPATIALITY","information-location","0.97","Direction: information as content, event horizon as encoding surface.","“all the information about the contents of a black hole is encoded on its event horizon” explicitly states this relation.","","all the information about the contents of a black hole is encoded on its event horizon","Ch_000004","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": ""on its event horizon"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": ""all the information about the contents"",
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": ""RepresentationType: boundary-surface encoding""
+}","The information about the contents of a black hole is encoded on the event horizon."
+"RelR_10de2ee90332","En_3a5ca776","En_3d79cf8c","makes_claim_about","is_about","Indicates that the subject (theory, principle, statement, problem, or conceptual construct) has the object as its main topic, focus, or subject matter.","aboutness_relation","ASSOCIATION","theoretical-assertion","0.95","Holographic principle as theory, information as subject of its claim.","“The holographic principle suggests that all the information about the contents of a black hole is encoded on its event horizon” ties the principle to this information.","","The holographic principle suggests that all the information about the contents of a black hole","Ch_000004","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": ""all the information about the contents of a black hole"",
+ ""UncertaintyQualifier"": ""suggests"",
+ ""CausalHint"": null,
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": null
+}","The holographic principle makes a specific claim about how black hole content information is represented."
+"RelR_c0241b89e0f1","En_3a5ca776","En_2240b4c5","assigns_encoding_surface","designates_information_encoding_surface","Indicates that a theoretical principle or framework designates a particular boundary or surface as the locus where information about a system is encoded.","information_encoding_location_relation","SPATIALITY","information-location","0.9","Theory → surface it designates as encoding location.","The statement about information “encoded on its event horizon” is presented as the content of the holographic principle.","Relation represents the principle’s prescription of where information resides.","The holographic principle suggests that all the information ... is encoded on its event horizon","Ch_000004","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": ""on the event horizon"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": ""suggests"",
+ ""CausalHint"": null,
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": ""Interpretation: event horizon as 2D encoding of 3D bulk""
+}","The holographic principle asserts that the event horizon serves as the encoding surface for black hole information."
+"RelR_d8831caae7df","En_3a5ca776","En_2510c23c","challenges","challenges_understanding_of","The subject poses a conceptual or epistemic challenge to the object, straining or questioning the adequacy of the object as an explanation or framework.","conceptual_tension_relation","EPISTEMIC","conceptual-contrast","0.98","Direction: new principle challenges prior understanding.","The clause directly states that the holographic principle is “challenging our traditional understanding of how information is stored in the universe.”","","challenging our traditional understanding of how information is stored in the universe","Ch_000004","{
+ ""TemporalQualifier"": ""in recent theoretical developments"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": ""Scope: in the universe""
+}","The holographic principle challenges the traditional understanding of how information is stored."
+"RelR_20eb616ff54e","En_2510c23c","Can_85507d5d","applies_to","has_scope","Indicates that a theory, understanding, or concept has the object as its domain of applicability or scope.","concept_scope_relation","SCOPE","scope","0.83","Understanding concerns storage of information specifically in the universe.","Phrase explicitly references “how information is stored in the universe,” linking the understanding to the universe.","","challenging our traditional understanding of how information is stored in the universe","Ch_000004","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": ""in the universe"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""how"",
+ ""OtherQualifier"": null
+}","The traditional understanding of information storage is about how information is stored in the universe."
+"RelR_90e96f7c2d56","Can_ce20298d","En_3a5ca776","led_to_development_of","causes","Indicates that the subject is a causal factor giving rise to the object (e.g., a phenomenon, process, or concept leading to another).","causal_influence_relation","CAUSALITY","causal","0.95","Research activity as cause, conceptual outcome as effect.","“The study of black holes has led to the development of important concepts in theoretical physics, such as the holographic principle…”","","The study of black holes has led to the development of important concepts in theoretical physics, such as the holographic principle","Ch_000004","{
+ ""TemporalQualifier"": ""in recent years"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": ""has led to"",
+ ""CausalHint"": ""has led to"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": ""Domain: theoretical physics concepts""
+}","The study of black holes led to the development of the holographic principle."
+"RelR_af3b225d5cab","Can_ce20298d","Can_20ad5c49","led_to_development_of","causes","Indicates that the subject is a causal factor giving rise to the object (e.g., a phenomenon, process, or concept leading to another).","causal_influence_relation","CAUSALITY","causal","0.93","Same pattern as with holographic principle; paradox listed as example concept.","The sentence lists “the information paradox” among concepts the study of black holes has led to.","","The study of black holes has led to the development of important concepts in theoretical physics, such as ... the information paradox.","Ch_000004","{
+ ""TemporalQualifier"": ""in recent years"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": ""has led to"",
+ ""CausalHint"": ""has led to"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": ""Domain: theoretical physics""
+}","The study of black holes led to the development of the black hole information paradox concept."
+"RelR_cbe57234df33","Can_ce20298d","Can_24050426","studies","has_research_subject","The subject (a research field or specific study) has the object as its primary subject matter or topic of investigation.","research_focus_relation","ASSOCIATION","topic","0.97","Field (study) points to its subject (black hole).","By definition and wording, “The study of black holes” is research directed at black holes.","","The study of black holes has led to the development of important concepts","Ch_000004","{
+ ""TemporalQualifier"": ""in recent years"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": ""Goal: understanding black hole properties and implications""
+}","The study of black holes is research activity focused on black holes."
+"RelR_eebaa2930e8f","Can_8f30d00d","Can_ce20298d","conducts","conducts_research_in","The subject (typically a researcher or research community) conducts research within the field or domain represented by the object.","research_activity_relation","AGENCY","agent-activity","0.8","Scientists are implied as agents behind the described study.","“scientists have made significant progress in understanding black holes… The study of black holes has led to…” implies scientists are performing this study.","Agent not explicit in the second sentence but strongly implied; relation added with moderate confidence.","scientists have made significant progress in understanding black holes in recent years. The study of black holes has led to","Ch_000004","{
+ ""TemporalQualifier"": ""in recent years"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": ""implied, not directly stated"",
+ ""CausalHint"": null,
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": ""Community: researchers in black hole physics""
+}","Scientists studying black holes conduct the study of black holes."
+"RelR_2623df401ab0","Can_8f30d00d","Can_24050426","seeks_to_understand","has_research_goal","Indicates that an agent or research activity is directed toward a specific scientific objective, such as explaining or understanding a phenomenon or set of open questions.","research_goal_relation","AGENCY","research-goal","0.92","Scientists as agents, black holes as research target.","“scientists have made significant progress in understanding black holes in recent years” clearly links the scientist community to black holes as an object of understanding.","","scientists have made significant progress in understanding black holes in recent years","Ch_000004","{
+ ""TemporalQualifier"": ""in recent years"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": ""ProgressDegree: significant progress""
+}","Scientists studying black holes aim to understand black holes and have made progress in doing so."
+"RelR_d1a52e43ac55","En_3a5ca776","En_9faf02ef","is_concept_in_field","is_concept_in_research_field","Indicates that a concept belongs to or is studied within a particular research field or discipline.","domain_concept_membership_relation","ASSOCIATION","membership","0.96","Concept belongs to the broader field of theoretical physics.","Described explicitly as one of the “important concepts in theoretical physics… such as the holographic principle.”","","important concepts in theoretical physics, such as the holographic principle","Ch_000004","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""such as"",
+ ""OtherQualifier"": ""Status: important concept""
+}","The holographic principle is an important concept within theoretical physics."
+"RelR_12c2244b1b9d","Can_20ad5c49","En_9faf02ef","is_concept_in_field","is_concept_in_research_field","Indicates that a concept belongs to or is studied within a particular research field or discipline.","domain_concept_membership_relation","ASSOCIATION","membership","0.9","Paradox listed alongside holographic principle as theoretical physics concept.","The information paradox is mentioned in the same list of “important concepts in theoretical physics.”","","important concepts in theoretical physics, such as the holographic principle and the information paradox.","Ch_000004","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""such as"",
+ ""OtherQualifier"": ""Status: important concept""
+}","The black hole information paradox is an important concept within theoretical physics."
+"RelR_54628051eddc","Can_20ad5c49","En_cec28fc1","concerns","is_about","Indicates that the subject (theory, principle, statement, problem, or conceptual construct) has the object as its main topic, focus, or subject matter.","aboutness_relation","ASSOCIATION","aboutness","0.96","Paradox is described as raising questions about information’s fate.","The text explicitly states that the information paradox raises questions about the fate of information.","","The information paradox, on the other hand, raises questions about the fate of information that falls into a black hole","Ch_000005","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": ""in the context of black holes"",
+ ""ConditionExpression"": ""information that falls into a black hole"",
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""whether"",
+ ""OtherQualifier"": ""QuestionType: fate and possible loss of information""
+}","The black hole information paradox is specifically about the fate of information."
+"RelR_bf07c71f41d6","En_cec28fc1","Can_24050426","interacts_with","enters_into","Indicates that an entity (e.g., information, matter, or radiation) transitions into and becomes contained within a black hole or similar system.","ingress_interaction_relation","INTERACTION","physical_interaction","0.78","Direction chosen as information being acted upon by the black hole environment.","Phrase explicitly connects information with the process of falling into a black hole.","Relation semantics approximate; main goal is to encode that the fate of information is tied to it entering a black hole.","the fate of information that falls into a black hole and whether it is truly lost forever","Ch_000005","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": ""into a black hole"",
+ ""OperationalConstraint"": ""during infall into the black hole"",
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": ""Process: infall of information into black hole""
+}","Information is described as falling into a black hole, linking the concept of information with the black hole system."
+"RelR_5f64b6c7141c","Can_ce20298d","Can_95b9f400","improves_understanding_of","advances_understanding_of","Indicates that the subject (typically a field of study or research activity) contributes to deeper or improved understanding of the object (a concept, domain, or phenomenon).","knowledge_impact_relation","EPISTEMIC","epistemic_influence","0.97","Study is the activity, spacetime is the subject of improved understanding.","The sentence says the study of black holes has shed light on the nature of spacetime.","","The study of black holes has also shed light on the nature of spacetime","Ch_000005","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": ""through theoretical and observational research"",
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""shed light on"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": ""KnowledgeDomain: nature of spacetime""
+}","The study of black holes enhances understanding of the nature of spacetime."
+"RelR_6ecdae9f43ef","Can_ce20298d","Can_fbca6faa","improves_understanding_of","advances_understanding_of","Indicates that the subject (typically a field of study or research activity) contributes to deeper or improved understanding of the object (a concept, domain, or phenomenon).","knowledge_impact_relation","EPISTEMIC","epistemic_influence","0.97","Same sentence links study of black holes to laws of physics.","The text states the study of black holes has shed light on the fundamental laws of physics.","","has also shed light on the nature of spacetime and the fundamental laws of physics.","Ch_000005","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": ""via black hole research"",
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""shed light on"",
+ ""LogicalMarker"": ""and"",
+ ""OtherQualifier"": ""KnowledgeDomain: fundamental laws of physics""
+}","Research on black holes contributes to understanding the fundamental laws of physics."
+"RelR_782e7ed6db8c","Can_24050426","En_2414474c","used_for_testing","used_to_test","Indicates that the subject is used as an experimental or observational tool to test, validate, or constrain the object (typically a theory, model, or hypothesis).","scientific_testing_relation","USAGE","usage","0.96","Subject is physical system; object is the theories being tested with it.","Text says black holes provide a unique testing ground for theories of gravity.","","Black holes provide a unique testing ground for theories of gravity, such as general relativity","Ch_000005","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": ""in strong-gravity regimes"",
+ ""OperationalConstraint"": ""under extreme gravitational conditions"",
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""for"",
+ ""OtherQualifier"": ""ExampleTheories: such as general relativity""
+}","Black holes serve as experimental or observational tests for gravitational theories."
+"RelR_520f5980d6d3","En_2414474c","Can_99ffc86d","includes","has_member","Indicates that the subject category or collection has the object as a member or example instance.","category_membership_relation","CLASSIFICATION","set_membership","0.93","Theories of gravity is the class; general relativity is a member theory.","Phrase explicitly presents general relativity as an example of theories of gravity.","","theories of gravity, such as general relativity, and have inspired new ideas","Ch_000005","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": ""in contexts such as black hole tests"",
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""such as"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": ""ExampleRelation: general relativity is one such theory""
+}","General relativity is cited as an example of a gravitational theory tested using black holes."
+"RelR_ef171bc8bf94","Can_24050426","Can_99ffc86d","used_for_testing","used_to_test","Indicates that the subject is used as an experimental or observational tool to test, validate, or constrain the object (typically a theory, model, or hypothesis).","scientific_testing_relation","USAGE","usage","0.9","Instance of the more general relation to gravitational theories.","General relativity is mentioned immediately as an example of theories of gravity for which black holes provide a testing ground.","","Black holes provide a unique testing ground for theories of gravity, such as general relativity","Ch_000005","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": ""in regimes near black holes"",
+ ""OperationalConstraint"": ""strong-field gravity tests"",
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""such as"",
+ ""OtherQualifier"": ""TestType: observational and theoretical consistency checks""
+}","Black holes are specifically used to test general relativity."
+"RelR_5f5b704dbd7e","Can_24050426","En_989d56c8","inspires_research_in","inspires_research_in","Indicates that the subject (typically a phenomenon or object) motivates or stimulates new ideas, theories, or lines of research in the object domain.","knowledge_impact_relation","EPISTEMIC","influence","0.95","Subject is phenomenon; object is theory influenced by its study.","The text says black holes have inspired new ideas in quantum mechanics.","","and have inspired new ideas in quantum mechanics and string theory.","Ch_000005","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": ""through theoretical investigation of black holes"",
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""have inspired"",
+ ""LogicalMarker"": ""and"",
+ ""OtherQualifier"": ""IdeaType: new ideas in quantum mechanics""
+}","Black holes have motivated new ideas and developments in quantum mechanics."
+"RelR_abe8d27db7a4","Can_24050426","En_5225fcc1","inspires_research_in","inspires_research_in","Indicates that the subject (typically a phenomenon or object) motivates or stimulates new ideas, theories, or lines of research in the object domain.","knowledge_impact_relation","EPISTEMIC","influence","0.95","Parallel construction with quantum mechanics in same sentence.","The sentence directly states black holes have inspired new ideas in string theory.","","have inspired new ideas in quantum mechanics and string theory.","Ch_000005","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": ""via black hole-related theoretical work"",
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""have inspired"",
+ ""LogicalMarker"": ""and"",
+ ""OtherQualifier"": ""IdeaType: new ideas in string theory""
+}","Black holes have stimulated new ideas in string theory."
+"RelR_2a80f32d9778","En_49e00085","En_45febaf9","produces","produces","The subject physical process or event brings about or generates the object phenomenon or signal.","process_output_relation","CAUSALITY","causal","0.98","Merger event is the cause; gravitational waves are the effect.","The discovery of gravitational waves is said to result from the merger of two black holes, implying the merger produced the waves.","","gravitational waves by the LIGO observatory in 2015, resulting from the merger of two black holes","Ch_000005","{
+ ""TemporalQualifier"": ""during the merger event"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": ""astrophysical black hole coalescence"",
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""resulting from"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": ""WaveType: gravitational waves emitted by coalescing black holes""
+}","The merger of two black holes generates gravitational waves."
+"RelR_072a13fca876","En_d6f174db","En_ba254175","performed","conducted","The subject agent (e.g., an observatory or experiment) carried out or executed the object activity or discovery event.","scientific_activity_execution_relation","AGENCY","agency","0.97","LIGO is the detecting instrument/observatory; discovery is the event.","The discovery of gravitational waves is described as being made by the LIGO observatory in 2015.","","The discovery of gravitational waves by the LIGO observatory in 2015","Ch_000005","{
+ ""TemporalQualifier"": ""in 2015"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": ""using laser interferometry"",
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""by"",
+ ""OtherQualifier"": ""Role: detector responsible for observation""
+}","The LIGO observatory carried out or made the 2015 discovery of gravitational waves."
+"RelR_d768d331c328","En_ba254175","En_45febaf9","is_observation_of","is_observation_of","The subject observation or discovery event is an observation of, and provides empirical evidence for, the object phenomenon or entity.","observation_target_relation","EPISTEMIC","observation","0.98","Discovery event specifically concerns gravitational waves.","The phrase names the event as the discovery of gravitational waves by LIGO.","","The discovery of gravitational waves by the LIGO observatory in 2015","Ch_000005","{
+ ""TemporalQualifier"": ""in 2015"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": ""first direct detection"",
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""of"",
+ ""OtherQualifier"": ""Significance: first observation of gravitational waves""
+}","The 2015 discovery event is the observation of gravitational waves."
+"RelR_3b3cfd2cd518","En_ba254175","En_49e00085","caused_by","is_caused_by","Indicates that the subject event, phenomenon, or state occurs as a result of the object cause or driving factor.","physical_causation_relation","CAUSALITY","causal","0.96","Event-level view: discovery traces back to that specific merger event.","The discovery of gravitational waves is qualified as resulting from the merger of two black holes.","","discovery of gravitational waves by the LIGO observatory in 2015, resulting from the merger of two black holes","Ch_000005","{
+ ""TemporalQualifier"": ""during the black hole merger event observed"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": ""binary black hole coalescence"",
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""resulting from"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": ""SourceEvent: merger of two black holes that produced the signal""
+}","The 2015 gravitational-wave discovery arose from the merger of two black holes."
+"RelR_9dba1e5dc56a","En_ba254175","En_7054b526","provides_evidence_for","provides_evidence_for","The subject observation or result serves as empirical or theoretical evidence supporting the object proposition, hypothesis, or phenomenon.","evidential_support_relation","EPISTEMIC","evidential","0.98","Discovery is epistemic support for belief in existence of black holes.","The text states this discovery provided further evidence of the existence of black holes.","","provided further evidence of the existence of black holes and opened up new possibilities","Ch_000005","{
+ ""TemporalQualifier"": ""after 2015 observation"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": ""via detection of black hole merger signal"",
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": ""further (strengthens but does not solely establish)"",
+ ""CausalHint"": ""provided"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": ""EvidenceType: observational gravitational-wave evidence""
+}","The 2015 gravitational-wave discovery strengthened empirical evidence that black holes exist."
+"RelR_9e796b78e1f4","En_ba254175","En_5caa2fcd","enables_study_of","enables_study_of","Indicates that an event, discovery, or method enables or makes possible the study or investigation of a given class of phenomena.","enabling_causal_relation","CAUSALITY","enabling","0.9","‘These cosmic phenomena’ refers to black holes and their gravitational-wave manifestations, generalized here to cosmic phenomena.","Text says the discovery opened up new possibilities for studying these cosmic phenomena.","Object chosen as the more general entity encapsulating black holes and related events.","provided further evidence of the existence of black holes and opened up new possibilities for studying these cosmic phenomena.","Ch_000005","{
+ ""TemporalQualifier"": ""following the 2015 discovery"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": ""using gravitational-wave astronomy"",
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""opened up new possibilities"",
+ ""LogicalMarker"": ""for"",
+ ""OtherQualifier"": ""StudyMode: via gravitational-wave observations""
+}","The 2015 gravitational-wave discovery enabled new ways to study cosmic phenomena like black holes and related events."
+"RelR_293a5bc4b41f","En_45febaf9","En_5caa2fcd","is_instance_of","is_instance_of","Indicates that the subject entity is an instance or illustrative example of the object category or type.","category_membership_relation","CLASSIFICATION","classification","0.78","‘These cosmic phenomena’ likely includes gravitational-wave events from black hole mergers.","Context discusses studying cosmic phenomena in relation to gravitational-wave discovery and black holes.","Slight ambiguity whether pronoun refers only to black holes or also their gravitational waves; relation added with moderate confidence.","opened up new possibilities for studying these cosmic phenomena.","Ch_000005","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": ""on cosmic scales"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": ""likely"",
+ ""CausalHint"": null,
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": ""Category: high-energy astrophysical phenomena""
+}","Gravitational waves are one of the cosmic phenomena being studied."
+"RelR_0e01d7045756","Can_24050426","En_5caa2fcd","is_instance_of","is_instance_of","Indicates that the subject entity is an instance or illustrative example of the object category or type.","category_membership_relation","CLASSIFICATION","classification","0.88","The surrounding context is about black holes; ‘these cosmic phenomena’ plausibly refers to them.","The paragraph centers on black holes, and later refers to studying these cosmic phenomena, likely including black holes.","Relation used to tie black holes to the broader cosmic phenomena category.","new possibilities for studying these cosmic phenomena.","Ch_000005","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": ""on cosmic scales"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": ""implied"",
+ ""CausalHint"": null,
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": ""Category: large-scale astrophysical objects and events""
+}","Black holes are an example of cosmic phenomena mentioned in the text."
+"RelR_adbdf5f35921","Can_0f4e7437","Can_e21ee374","contains","has_structural_component","Indicates that the subject system or object includes the object as one of its structural components.","structural_composition_relation","COMPOSITION","structural","0.96","Direction chosen as whole (black hole) → part (singularity).","The text explicitly mentions ""the singularity at the center of a black hole"", indicating a structural containment relationship.","","One of the biggest puzzles is the nature of the singularity at the center of a black hole.","Ch_000006","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": ""at the center of a black hole"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": null
+}","Black holes contain a central singularity located at their center."
+"RelR_8e69d78aaedd","Can_99ffc86d","Can_e21ee374","describes_as","describes","Subject provides a description, account, or characterization of the object (typically an entity, process, or phenomenon).","representation_relation","REPRESENTATION","definitional","0.97","Theory (general relativity) is modeled as describing the properties of the singularity.","Phrase ""According to classical general relativity, the singularity is a point of infinite density and curvature"" directly attributes the description to the theory.","","According to classical general relativity, the singularity is a point of infinite density and curvature","Ch_000006","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": ""at the singularity"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""According to"",
+ ""OtherQualifier"": ""DescriptionDetails: point of infinite density and curvature""
+}","Classical general relativity describes the black hole singularity as a point of infinite density and curvature."
+"RelR_55eafb144ed3","Can_e21ee374","Can_fbca6faa","causes_breakdown_of","causes","Indicates that the subject phenomenon, entity, or condition is a direct physical cause of the object effect or outcome.","physical_causation_relation","CAUSALITY","causal","0.9","Modeled as singularity → laws causal effect; alternative is laws → fail_at(singularity).","The text states the singularity is a place ""where the laws of physics break down"", implying the extreme conditions there cause failure of known laws.","","a point of infinite density and curvature, where the laws of physics break down.","Ch_000006","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": ""at the singularity"",
+ ""OperationalConstraint"": ""extreme density and curvature"",
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""where"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": null
+}","The black hole singularity is a region where the fundamental laws of physics break down."
+"RelR_d8824d8021b0","Can_0f4e7437","Can_e21ee374","has_open_question_on","has_open_question_about","Indicates that the subject is associated with an unresolved scientific or conceptual question concerning the object.","knowledge_gap_relation","EPISTEMIC","knowledge_gap","0.9","Black holes are said to have mysteries; singularity is specified as one such puzzle.","The passage links ""mysteries surrounding black holes"" with ""One of the biggest puzzles is the nature of the singularity"".","","many mysteries surrounding black holes remain unresolved. One of the biggest puzzles is the nature of the singularity","Ch_000006","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": ""regarding black holes"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": ""unresolved"",
+ ""CausalHint"": null,
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": ""PuzzleAspect: nature of the singularity""
+}","One of the biggest unresolved puzzles about black holes concerns the nature of their central singularity."
+"RelR_ab6c5b69cb8c","En_42fe5808","Can_0f4e7437","describes","describes","Subject provides a description, account, or characterization of the object (typically an entity, process, or phenomenon).","representation_relation","REPRESENTATION","definitional","0.75","Entity is explicitly the ""description of black holes""; modeled as description → described_object.","Phrase ""provide a more complete description of black holes"" indicates the target of the description is black holes.","This relation is somewhat intrinsic to the 'description of black holes' entity but kept to anchor later relations.","quantum gravity, which could provide a more complete description of black holes.","Ch_000006","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": ""CompletenessAspect: degree of completeness of description""
+}","The description of black holes is an account or model that characterizes black holes."
+"RelR_03cd67cffdbd","En_b4bac846","Can_99ffc86d","extends_beyond","extends_beyond_applicability_of","Indicates that the conceptual or theoretical scope of the subject framework extends beyond the domain of applicability of the object framework.","theoretical_scope_relation","COMPARISON","comparison","0.9","Direction chosen as newer theoretical framework → older baseline theory it goes beyond.","The text speaks of ""new physics beyond the realm of general relativity"", directly expressing that new physics extends past GR.","","new physics beyond the realm of general relativity, such as quantum gravity","Ch_000006","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": ""in regimes where GR breaks down (e.g., singularities)"",
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""beyond"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": null
+}","New physics is conceived as extending beyond the domain of applicability of general relativity."
+"RelR_83b291a63904","En_4379b01f","En_b4bac846","is_example_of","is_instance_of","Indicates that the subject entity is an instance or illustrative example of the object category or type.","category_membership_relation","CLASSIFICATION","class_membership","0.95","Pattern ""such as X"" indicates X is an example/instance of the preceding category (new physics).","""new physics ... such as quantum gravity"" clearly states that quantum gravity is a type of such new physics.","","new physics beyond the realm of general relativity, such as quantum gravity","Ch_000006","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""such as"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": null
+}","Quantum gravity is given as an example of the proposed new physics beyond general relativity."
+"RelR_d7c24a27c6f4","En_4379b01f","En_42fe5808","could_improve","improves_theoretical_description_of","Indicates that the subject theoretical framework provides a more complete or improved theoretical description or explanation of the object phenomenon, relative to existing theories.","theoretical_explanation_relation","CAUSALITY","potential_effect","0.94","Theory (quantum gravity) → its potential effect on descriptions of black holes.","The clause ""quantum gravity, which could provide a more complete description of black holes"" links quantum gravity to improving that description.","","such as quantum gravity, which could provide a more complete description of black holes.","Ch_000006","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": ""in regimes where general relativity fails (near singularities)"",
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": ""could"",
+ ""CausalHint"": null,
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": ""ImprovementAspect: more complete than classical general relativity""
+}","Quantum gravity is proposed as a framework that could provide a more complete description of black holes than currently available."
+"RelR_eed46e3075ef","En_b4bac846","En_42fe5808","could_improve","improves_theoretical_description_of","Indicates that the subject theoretical framework provides a more complete or improved theoretical description or explanation of the object phenomenon, relative to existing theories.","theoretical_explanation_relation","CAUSALITY","potential_effect","0.6","Although the relative pronoun ""which"" syntactically modifies quantum gravity, the intent plausibly generalizes to new physics as a whole.","The sentence links ""new physics beyond the realm of general relativity"" with a clause about providing a more complete description of black holes; context suggests broader applicability.","Relation added with lower confidence; primarily to capture that new physics is aimed at improving black hole descriptions.","new physics beyond the realm of general relativity, such as quantum gravity, which could provide a more complete description of black holes.","Ch_000006","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": ""where general relativity is inadequate (e.g., singularities)"",
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": ""speculative; could"",
+ ""CausalHint"": ""could provide"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": null
+}","New physics frameworks in general are suggested as potentially providing a more complete description of black holes."
+"RelR_b88bf7e5534f","En_e8e1c28f","Can_fc5448f6","proposed","predicts_existence_of","Subject (a scientist, theory, or related intellectual work) predicts or proposes the existence of the object phenomenon or entity, typically before direct empirical confirmation.","scientific_prediction_relation","AGENCY","authorship","0.99","Direction chosen as predictor/author → predicted phenomenon.","The chunk states that Hawking radiation was “predicted by physicist Stephen Hawking in 1974.”","","Hawking radiation, predicted by physicist Stephen Hawking in 1974.","Ch_000007","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": ""Role: physicist""
+}","Stephen Hawking is the physicist who predicted the phenomenon of Hawking radiation."
+"RelR_cef04980f418","En_e8e1c28f","En_f18775d0","associated_with_time","has_associated_year","Indicates that the subject (often an event, action, or person-in-context) is associated with the specified calendar year.","temporal_annotation_relation","TEMPORALITY","temporal","0.96","Direction as person → time-of-work.","The phrase links Stephen Hawking’s prediction to the year 1974.","","predicted by physicist Stephen Hawking in 1974.","Ch_000007","{
+ ""TemporalQualifier"": ""time of prediction"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": ""Event: prediction of Hawking radiation""
+}","Stephen Hawking made his prediction about Hawking radiation in the year 1974."
+"RelR_85c188d8829f","En_a7a8ffbe","Can_fc5448f6","theorizes","predicts_existence_of","Subject (a scientist, theory, or related intellectual work) predicts or proposes the existence of the object phenomenon or entity, typically before direct empirical confirmation.","scientific_prediction_relation","AGENCY","theoretical","0.93","Theory as subject that posits the phenomenon.","“According to Hawking's theory, black holes are not completely black but emit a faint glow of radiation…” referring to Hawking radiation.","Relation captures that the theory specifically introduces Hawking radiation.","According to Hawking's theory, black holes are not completely black but emit a faint glow of radiation","Ch_000007","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": ""near the event horizon"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""according to"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": ""Aspect: emission of Hawking radiation by black holes""
+}","Hawking's theory includes the prediction that black holes emit Hawking radiation."
+"RelR_8239975d7ac3","Can_fc5448f6","En_38fb83a5","emitted_by","originates_from","Indicates that a physical effect, field, or radiation is produced, generated, or emitted by a source object or system.","physical_origin_relation","CAUSALITY","emission","0.98","Phenomenon (radiation) as subject; source black holes as object.","The text states that black holes emit a faint glow of radiation, identified as Hawking radiation.","","black holes are not completely black but emit a faint glow of radiation due to quantum effects near the event horizon.","Ch_000007","{
+ ""TemporalQualifier"": ""over their lifetime"",
+ ""SpatialQualifier"": ""from near the event horizon"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""emit"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": ""Intensity: faint glow""
+}","Hawking radiation is emitted by black holes, meaning black holes are its source."
+"RelR_6d65eda99878","En_3f74c537","Can_fc5448f6","causes","causes","Indicates that the subject phenomenon, entity, or condition is a direct physical cause of the object effect or outcome.","physical_causation_relation","CAUSALITY","causal","0.99","Cause (quantum effects) → effect (Hawking radiation).","Phrase explicitly attributes the radiation to quantum effects near the event horizon.","","emit a faint glow of radiation due to quantum effects near the event horizon.","Ch_000007","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": ""near the event horizon"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""due to"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": null
+}","Quantum effects near the event horizon cause the emission of Hawking radiation."
+"RelR_23e6317b319d","En_3f74c537","Can_585b2868","occurs_near","occurs_near","Indicates that a phenomenon, event, or process occurs in the spatial vicinity of a specified entity or structural feature.","spatial_occurrence_relation","SPATIALITY","spatial","0.97","Process as subject; boundary region as location.","The phrase directly localizes the quantum effects to the region near the event horizon.","","quantum effects near the event horizon.","Ch_000007","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": ""near the event horizon"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": null
+}","The quantum effects that generate Hawking radiation occur near the black hole’s event horizon."
+"RelR_17ff77ddd498","Can_fc5448f6","En_a2ca9ce5","leads_to","causes","Indicates that the subject is a causal factor giving rise to the object (e.g., a phenomenon, process, or concept leading to another).","causal_influence_relation","CAUSALITY","causal","0.99","Cause (Hawking radiation) → resulting process (evaporation).","The text explicitly states that this radiation causes black holes to lose mass and eventually evaporate.","","This radiation causes black holes to slowly lose mass and eventually evaporate over time","Ch_000007","{
+ ""TemporalQualifier"": ""over time"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""causes"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": ""Rate: slowly""
+}","Hawking radiation causes the process of black hole evaporation by making black holes lose mass."
+"RelR_cdac8d5cf5d2","En_a2ca9ce5","En_38fb83a5","process_of","is_physical_process_of","Indicates that the subject is a physical process that occurs to or in the object entity.","process_entity_relation","ASSOCIATION","process-entity","0.94","Process as subject; entity that undergoes it as object.","Evaporation is described as what happens to black holes as they lose mass and eventually evaporate.","","causes black holes to slowly lose mass and eventually evaporate over time","Ch_000007","{
+ ""TemporalQualifier"": ""over time"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""as a result of radiation"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": null
+}","Black hole evaporation is the process undergone by black holes as they lose mass and disappear."
+"RelR_6c2acaab2fd3","En_a2ca9ce5","Can_20ad5c49","leads_to","causes","Indicates that the subject is a causal factor giving rise to the object (e.g., a phenomenon, process, or concept leading to another).","causal_influence_relation","CAUSALITY","causal","0.98","Physical process (evaporation) as cause; conceptual paradox as effect.","The phrase explicitly states that evaporation leads to the black hole information paradox.","","eventually evaporate over time, leading to the so-called black hole information paradox.","Ch_000007","{
+ ""TemporalQualifier"": ""as evaporation completes over time"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": ""so-called"",
+ ""CausalHint"": ""leading to"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": null
+}","The evaporation of black holes gives rise to the black hole information paradox."
+"RelR_2c40eb31fe0c","En_38fb83a5","Can_85507d5d","exists_in","exists_in","Indicates that the subject phenomenon or entity exists or occurs within the spatial or cosmological domain denoted by the object.","existence_location_relation","SPATIALITY","containment","0.9","Physical objects (black holes) contained in the larger whole (universe).","The conclusion refers to black holes as phenomena in the universe.","","black holes represent one of the most fascinating and enigmatic phenomena in the universe.","Ch_000007","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": ""in the universe"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": ""Characterization: fascinating and enigmatic""
+}","Black holes are phenomena that exist within the universe."
+"RelR_d5d6d676bef4","Can_585b2868","En_38fb83a5","boundary_of","is_structural_component_of","Indicates that the subject is a structural part or boundary component of the object system or object.","structural_composition_relation","COMPOSITION","structural","0.72","Event horizon as structural boundary of black holes; implied by phrase 'near the event horizon' of black holes.","While not explicitly defined here, the context of 'near the event horizon' in relation to black holes implies it is their boundary.","Uses domain knowledge slightly beyond explicit wording; kept with moderate confidence.","radiation due to quantum effects near the event horizon.","Ch_000007","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": ""around the black hole"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": ""implied, not stated explicitly"",
+ ""CausalHint"": null,
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": null
+}","The event horizon is the characteristic boundary surface of a black hole."
+"RelR_0da2ffdd6f47","Can_609e997f","Can_0f4e7437","aspect_of","is_aspect_of","Indicates that the subject is an aspect, dimension, or subtopic of the broader topic given by the object.","topic_aspect_relation","PART_WHOLE","part-whole","0.84","Formation is treated as one dimension or aspect of black holes.","Phrase ""From their formation to their properties"" lists formation as a characteristic dimension of black holes.","","From their formation to their properties and the ongoing quest to understand their mysteries","Ch_000008","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": ""Scope: dimension in which black holes are studied""
+}","The formation of black holes is presented as one aspect of black holes being discussed."
+"RelR_132528676c15","Can_88546afc","Can_0f4e7437","aspect_of","is_aspect_of","Indicates that the subject is an aspect, dimension, or subtopic of the broader topic given by the object.","topic_aspect_relation","PART_WHOLE","part-whole","0.9","Text enumerates properties as a dimension along which black holes are considered.","The phrase ""their properties"" refers to properties belonging to black holes.","","From their formation to their properties and the ongoing quest","Ch_000008","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": ""Scope: physical and conceptual attributes considered""
+}","The properties of black holes are treated as a key aspect of black holes."
+"RelR_28f185d047eb","Can_a624c447","Can_0f4e7437","aspect_of","is_about","Indicates that the subject concept, topic, or question concerns or is about the object.","conceptual_association_relation","ASSOCIATION","association","0.9","Possessive ""their mysteries"" refers back to black holes.","The text speaks of ""their mysteries"" immediately after mentioning black holes.","","the ongoing quest to understand their mysteries, black holes continue to challenge","Ch_000008","{
+ ""TemporalQualifier"": ""ongoing quest"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": ""Status: open scientific questions about black holes""
+}","The mysteries are unresolved aspects associated with black holes."
+"RelR_3914b029d297","Can_0f4e7437","Can_fbca6faa","challenges","challenges_understanding_of","The subject poses a conceptual or epistemic challenge to the object, straining or questioning the adequacy of the object as an explanation or framework.","conceptual_tension_relation","EPISTEMIC","conceptual-tension","0.93","Direction chosen as black holes → fundamental laws to reflect them testing the laws.","Text: ""black holes continue to challenge our understanding of ... the fundamental laws of physics.""","","black holes continue to challenge our understanding of the cosmos and the fundamental laws of physics.","Ch_000008","{
+ ""TemporalQualifier"": ""continue to"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": ""in contexts involving black holes"",
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""challenge"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": ""EpistemicContext: understanding of fundamental laws under extreme conditions""
+}","Black holes challenge or test the adequacy of our understanding of the fundamental laws of physics."
+"RelR_85649fb4aa0b","Can_0f4e7437","Can_85507d5d","challenges_understanding_of","challenges_understanding_of","The subject poses a conceptual or epistemic challenge to the object, straining or questioning the adequacy of the object as an explanation or framework.","conceptual_tension_relation","INTERACTION","conceptual-tension","0.9","Cosmos interpreted as the universe entity.","The cosmos is mentioned as what our understanding is being challenged about by black holes.","","black holes continue to challenge our understanding of the cosmos","Ch_000008","{
+ ""TemporalQualifier"": ""continue to"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": ""when considering black holes"",
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""challenge"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": ""EpistemicContext: human cosmological understanding""
+}","Black holes challenge our understanding of the cosmos or universe."
+"RelR_170f119dce37","Can_0f4e7437","En_fead3e9b","challenges","challenges_understanding_of","The subject poses a conceptual or epistemic challenge to the object, straining or questioning the adequacy of the object as an explanation or framework.","conceptual_tension_relation","INTERACTION","conceptual-tension","0.9","Generalized from ""our understanding"" to ""our knowledge"" entity.","The phrase ""challenge our understanding"" implies a tension with current knowledge.","","black holes continue to challenge our understanding of the cosmos and the fundamental laws of physics.","Ch_000008","{
+ ""TemporalQualifier"": ""continue to"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": ""in studying black holes and their implications"",
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""challenge"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": null
+}","Black holes challenge or strain our existing knowledge."
+"RelR_cc0b3d434de5","Can_8f30d00d","Can_0f4e7437","studies","studies","The subject (typically a researcher or research community) engages in scientific study of the object as a research topic or target of investigation.","research_focus_relation","AGENCY","research-activity","0.97","Direction chosen as scientists → black holes to represent research target.","""As scientists continue to study black holes"" explicitly states this relation.","","As scientists continue to study black holes and push the boundaries of our knowledge","Ch_000008","{
+ ""TemporalQualifier"": ""continue to"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": ""scientific research context"",
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""As"",
+ ""OtherQualifier"": ""Mode: observational, theoretical and computational study (implicit)""
+}","The scientific community actively studies black holes."
+"RelR_c30170621b10","Can_8f30d00d","En_fead3e9b","expands","expands_knowledge","Indicates that the subject (typically a community or research activity) increases or broadens the body of knowledge represented by the object.","knowledge_impact_relation","EPISTEMIC","knowledge-change","0.95","Knowledge as object whose boundaries are being extended.","The text says scientists ""push the boundaries of our knowledge"" in the context of studying black holes.","","scientists continue to study black holes and push the boundaries of our knowledge","Ch_000008","{
+ ""TemporalQualifier"": ""continue to"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": ""through study of black holes"",
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""push the boundaries of"",
+ ""LogicalMarker"": ""and"",
+ ""OtherQualifier"": null
+}","Scientists studying black holes expand the limits of our knowledge."
+"RelR_bd8abc7ed5bf","Can_8f30d00d","Can_a624c447","seeks_to_understand","has_research_goal","Indicates that an agent or research activity is directed toward a specific scientific objective, such as explaining or understanding a phenomenon or set of open questions.","research_goal_relation","AGENCY","research-goal","0.88","Quest is interpreted as scientists' research effort directed at mysteries.","The narrative context links scientists studying black holes with ""the ongoing quest to understand their mysteries.""","Relation direction chosen to represent scientists' goal toward the mysteries.","the ongoing quest to understand their mysteries, black holes continue to challenge","Ch_000008","{
+ ""TemporalQualifier"": ""ongoing quest"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": ""scientific investigation"",
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""quest to understand"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": ""Goal: explanation of unresolved questions about black holes""
+}","Scientists are engaged in an ongoing quest to understand the mysteries of black holes."
+"RelR_e0e7e3bf5fc3","En_20d40e80","Can_0f4e7437","quality_of","is_property_of","Links a property, attribute, or quality node to the entity that bears this property.","entity_property_relation","ATTRIBUTE","attribute","0.86","Complexity entity tied to black holes by descriptive phrase.","Phrase ""awe-inspiring complexity ... of these cosmic wonders"" refers to black holes' complexity.","","marvel at the awe-inspiring complexity and beauty of these cosmic wonders.","Ch_000008","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": ""as cosmic wonders in the universe"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": ""PerceptionContext: human aesthetic and conceptual response""
+}","Complexity is presented as an intrinsic quality of black holes."
+"RelR_09b0e21e1466","En_d105f1cf","Can_0f4e7437","quality_of","is_property_of","Links a property, attribute, or quality node to the entity that bears this property.","entity_property_relation","ATTRIBUTE","attribute","0.86","Beauty entity tied to black holes through ""these cosmic wonders"".","The text says ""awe-inspiring complexity and beauty of these cosmic wonders"" referring to black holes.","","marvel at the awe-inspiring complexity and beauty of these cosmic wonders.","Ch_000008","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": ""as perceived in the cosmos"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""and"",
+ ""OtherQualifier"": ""PerceptionContext: human aesthetic appreciation""
+}","Beauty is presented as an aesthetic quality of black holes."

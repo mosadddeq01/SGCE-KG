@@ -1,0 +1,34 @@
+[
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": [
+        "RelR_63182b59f8fc",
+      "RelR_3b3cfd2cd518"
+      ],
+      "canonical_rel_name": "is_caused_by",
+      "canonical_rel_desc": "Indicates that the subject event, phenomenon, or state occurs as a result of the object cause or driving factor.",
+      "rel_cls": "physical_causation_relation",
+      "rel_cls_group": "CAUSALITY",
+      "justification": "Both relations encode the same directional predicate (effect is caused by cause) in a physical context. They should share a single, consistent canonical description and be grouped under one specific class for physical causation instead of mixing 'causal_relation' and 'causal_origin_relation'.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  },
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": [
+        "RelR_55eafb144ed3",
+        "RelR_6d65eda99878"
+      ],
+      "canonical_rel_name": "causes",
+      "canonical_rel_desc": "Indicates that the subject phenomenon, entity, or condition is a direct physical cause of the object effect or outcome.",
+      "rel_cls": "physical_causation_relation",
+      "rel_cls_group": "CAUSALITY",
+      "justification": "Both relations express the same forward causal predicate (cause causes effect) in a physical setting. Their canonical descriptions should be harmonized, and they should use a single, specific relation class 'physical_causation_relation' rather than mixing it with the more generic 'causal_relation'.",
+      "remark": null,
+      "confidence": 0.92
+    }
+  }
+]

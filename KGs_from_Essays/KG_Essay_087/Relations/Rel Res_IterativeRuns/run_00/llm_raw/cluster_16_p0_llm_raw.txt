@@ -1,0 +1,95 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_f55f367baf99"],
+      "canonical_rel_name": "enhances_brand_visibility_in",
+      "canonical_rel_desc": "Indicates that a brand's visual element or color scheme increases its visual salience or ability to stand out within a specified market context.",
+      "justification": "This relation links a distinctive color scheme to a crowded marketplace with the semantics that the scheme helps the brand stand out; this is best modeled as enhancing brand visibility in a given context.",
+      "remark": null,
+      "confidence": 0.88
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_e4264f83fb67", "RelR_44d0b8066e64"],
+      "canonical_rel_name": "enhances_brand_recognition_of",
+      "canonical_rel_desc": "Indicates that a specific visual brand element (e.g., a color) increases the ease with which a particular brand is recognized.",
+      "justification": "Both relations connect a brand color (McDonald's yellow, Coca-Cola red) to the corresponding brand with the meaning that the color helps consumers recognize the brand more easily; they share identical predicate semantics.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_080cb71049ba", "RelR_07e2c3e6a6a4"],
+      "canonical_rel_name": "is_recognized_by",
+      "canonical_rel_desc": "Indicates that a visual brand element is readily recognized or identified by a specified audience or group of consumers.",
+      "justification": "Both relations link a brand color (McDonald's yellow, Coca-Cola red) to consumers with the semantics that these colors are instantly recognizable to that audience; this fits a consumer-side recognition predicate.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": ["RelR_f55f367baf99"],
+      "rel_cls": "brand_visibility_relation",
+      "justification": "The relation captures how a brand’s color scheme affects its ability to stand out in a marketplace, which is a visibility-focused aspect of brand perception rather than generic association or composition.",
+      "remark": null,
+      "confidence": 0.86
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": ["RelR_e4264f83fb67", "RelR_44d0b8066e64"],
+      "rel_cls": "brand_recognition_relation",
+      "justification": "These relations describe how specific brand colors improve recognition of the brand itself, fitting a class dedicated to recognition-focused brand perception effects.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": ["RelR_080cb71049ba", "RelR_07e2c3e6a6a4"],
+      "rel_cls": "consumer_perception_relation",
+      "justification": "These relations express that consumers recognize specific brand colors, which is a direct instance of consumer perception of brand stimuli rather than brand identity hierarchy or usage.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": ["RelR_f55f367baf99"],
+      "rel_cls_group": "PERCEPTION",
+      "justification": "The effect described is about how the brand is visually perceived (visibility/standing out) in a market context, aligning with a broad perceptual dimension.",
+      "remark": null,
+      "confidence": 0.86
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": ["RelR_e4264f83fb67", "RelR_44d0b8066e64"],
+      "rel_cls_group": "PERCEPTION",
+      "justification": "These relations concern improved recognition of brands driven by visual color cues, which is a perceptual (cognitive) effect rather than structural, temporal, or causal-only.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": ["RelR_080cb71049ba", "RelR_07e2c3e6a6a4"],
+      "rel_cls_group": "PERCEPTION",
+      "justification": "They describe that consumers recognize particular brand colors, directly reflecting a perception/recognition dimension.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  }
+]

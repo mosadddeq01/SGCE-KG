@@ -1,0 +1,106 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_48ca1e31f1a4"],
+      "canonical_rel_name": "active_during_time_period",
+      "canonical_rel_desc": "Indicates that an agent or entity carried out its characteristic activity during a specified time period.",
+      "justification": "This relation links the Brothers Grimm to the early 19th century as the period during which they were actively collecting and publishing tales; a temporal-activity predicate best captures this.",
+      "remark": null,
+      "confidence": 0.97
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_d97be165d7ef"],
+      "canonical_rel_name": "occurs_before_time_period",
+      "canonical_rel_desc": "Indicates that an event, practice, or state existed or occurred prior to a specified time period.",
+      "justification": "This relation encodes that the oral traditions existed for generations before the early 19th-century recording period, emphasizing temporal precedence relative to a period.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_60044182a043"],
+      "canonical_rel_name": "originates_in",
+      "canonical_rel_desc": "Indicates the spatiotemporal cultural context or region where a narrative, tradition, or entity first emerged.",
+      "justification": "The relation states that the Rhodopis Cinderella tale can be traced back to ancient Greece, which is a clear origin relation to a spatiotemporal cultural context.",
+      "remark": null,
+      "confidence": 0.98
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_400c07f3c106", "RelR_4d2527732fd2"],
+      "canonical_rel_name": "persists_over_time",
+      "canonical_rel_desc": "Indicates that a narrative, practice, or entity continues to exist or remain culturally relevant over an extended period of time.",
+      "justification": "Both relations describe the long-duration persistence of fairy tales across centuries or over time; normalizing to a single persistence-over-time predicate improves schema consistency.",
+      "remark": null,
+      "confidence": 0.96
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": ["RelR_48ca1e31f1a4"],
+      "rel_cls": "temporal_activity_relation",
+      "justification": "The relation connects an agent (Brothers Grimm) with the period during which they were active, fitting a class about activity scoped to a time period.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": ["RelR_d97be165d7ef"],
+      "rel_cls": "temporal_ordering_relation",
+      "justification": "This relation captures that oral traditions temporally precede a defined period; it is about ordering events/practices in time.",
+      "remark": null,
+      "confidence": 0.92
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": ["RelR_60044182a043"],
+      "rel_cls": "origin_context_relation",
+      "justification": "The predicate links a narrative to its cultural and spatiotemporal context of origin, which fits an origin-context class.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": ["RelR_400c07f3c106", "RelR_4d2527732fd2"],
+      "rel_cls": "temporal_persistence_relation",
+      "justification": "Both relations express long-term endurance or persistence of tales across time, naturally grouping into a temporal-persistence class.",
+      "remark": null,
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": ["RelR_48ca1e31f1a4", "RelR_d97be165d7ef", "RelR_400c07f3c106", "RelR_4d2527732fd2"],
+      "rel_cls_group": "TEMPORALITY",
+      "justification": "All four relations primarily encode time-based aspects: activity during a period, temporal precedence, and persistence across time.",
+      "remark": null,
+      "confidence": 0.97
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": ["RelR_60044182a043"],
+      "rel_cls_group": "SPATIALITY",
+      "justification": "The origin of the tale is anchored in a cultural-geographic context (ancient Greece); despite temporal nuance, the dominant dimension is where it originated.",
+      "remark": "Could also be modeled under a combined spatiotemporal or ORIGIN group in a richer schema; here mapped to SPATIALITY as the primary axis.",
+      "confidence": 0.85
+    }
+  }
+]

@@ -1,0 +1,127 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_d8342d63e92a"],
+      "canonical_rel_name": "influences",
+      "canonical_rel_desc": "Indicates that sociopolitical change exerts an influence on the development or trajectory of historical processes or narratives.",
+      "justification": "The description and causal hint show that social and political change is framed as shaping the course of history; a general causal-impact predicate like 'influences' best captures this without over-specifying mechanism.",
+      "remark": null,
+      "confidence": 0.89
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_f59642f5299d"],
+      "canonical_rel_name": "articulates",
+      "canonical_rel_desc": "Indicates that a document or actor formulates and expresses specific principles, ideas, or doctrines.",
+      "justification": "The subject is a founding document and the object is a set of principles; the text explicitly uses and supports the notion that the Declaration of Independence articulated those principles, so retaining 'articulates' as a normalized predicate is appropriate.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_f4966972609a"],
+      "canonical_rel_name": "is_based_on",
+      "canonical_rel_desc": "Indicates that an institutional or political entity is founded upon or derives its core principles or legitimacy from a specified set of ideas or values.",
+      "justification": "The relation explicitly states that the First French Republic is 'based on' the principles of liberty, equality, and fraternity; a normative-foundation predicate 'is_based_on' captures this clearly and reusably.",
+      "remark": null,
+      "confidence": 0.96
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_0354b40c0247"],
+      "canonical_rel_name": "inspires",
+      "canonical_rel_desc": "Indicates that a prior event, idea, or movement stimulates, motivates, or gives rise to subsequent movements or actions, especially in an ideological or mobilizational sense.",
+      "justification": "The Russian Revolution is said to have 'sparked' socialist movements worldwide, which is best modeled as an inspirational/ideological influence; 'inspires' is a standard, directionally clear predicate for this.",
+      "remark": null,
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_2dc7c184c6a6"],
+      "canonical_rel_name": "uses_as_tool",
+      "canonical_rel_desc": "Indicates that an actor employs a specific practice, method, or instrument as a tool or means to exercise power or achieve political or social goals.",
+      "justification": "The description explicitly frames public protest demonstrations as a means used by ordinary people to exercise power and pursue change; a usage predicate like 'uses_as_tool' captures the instrumental relationship.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": ["RelR_d8342d63e92a", "RelR_0354b40c0247"],
+      "rel_cls": "historical_influence_relation",
+      "justification": "Both relations describe how one sociopolitical phenomenon affects the trajectory of history or subsequent movements: social and political change influences the course of history, and the Russian Revolution inspires later socialist movements. They are instances of historical/ideological influence rather than mere co-occurrence.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": ["RelR_f4966972609a"],
+      "rel_cls": "ideological_foundation_relation",
+      "justification": "The First French Republic is explicitly described as being based on core principles; this is a normative foundational link between a political regime and its underlying ideas, fitting an ideological foundation class.",
+      "remark": null,
+      "confidence": 0.94
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": ["RelR_f59642f5299d"],
+      "rel_cls": "ideological_articulation_relation",
+      "justification": "The Declaration of Independence formulates and expresses principles that inform later movements; this is a classic case of articulating ideology or core principles, distinct from generic influence or foundation.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": ["RelR_2dc7c184c6a6"],
+      "rel_cls": "political_agency_relation",
+      "justification": "The relation encodes how ordinary people exercise agency by using protests as a tool; grouping such edges under a political agency class captures the actor–instrument dimension of contentious politics.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": ["RelR_d8342d63e92a", "RelR_f4966972609a", "RelR_0354b40c0247"],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "All three relations carry an explicit causal or basis-like reading: sociopolitical change influences history, the French Republic is based on core principles (normative cause/basis), and the Russian Revolution inspires later movements. They belong under a broad causal/basis semantic dimension.",
+      "remark": null,
+      "confidence": 0.91
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": ["RelR_f59642f5299d"],
+      "rel_cls_group": "INFORMATION",
+      "justification": "The relation is about a document articulating principles—an informational/ideational expression rather than direct material causation or usage—so an INFORMATION-oriented group best captures the semantic dimension.",
+      "remark": null,
+      "confidence": 0.86
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": ["RelR_2dc7c184c6a6"],
+      "rel_cls_group": "USAGE",
+      "justification": "The predicate encodes the instrumental use of protests by actors, which fits squarely under a broad USAGE dimension (actor employing an instrument or means).",
+      "remark": null,
+      "confidence": 0.9
+    }
+  }
+]

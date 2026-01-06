@@ -384,6 +384,347 @@ RETURN n, r, m
 
 
 
+#?######################### Start ##########################
+#region:#?   Analyze_costs
+
+
+import json
+import glob
+import sys
+from pathlib import Path
+from typing import Dict, Any, List, Tuple, Optional
+
+# Optional: import Trace_KG so we're sure we're in the right project
+import Trace_KG  # noqa: F401  # not used directly, just to ensure import works
+
+# ------------------------------------------------------------------------------------
+# Helpers
+# ------------------------------------------------------------------------------------
+
+def load_json(path: Path) -> Any:
+    with path.open("r", encoding="utf-8") as f:
+        return json.load(f)
+
+
+def load_jsonl(path: Path) -> List[Dict[str, Any]]:
+    rows = []
+    with path.open("r", encoding="utf-8") as f:
+        for ln in f:
+            ln = ln.strip()
+            if not ln:
+                continue
+            try:
+                rows.append(json.loads(ln))
+            except Exception as e:
+                print(f"[WARN] Failed to parse JSONL line in {path}: {e}", file=sys.stderr)
+    return rows
+
+
+def iter_usage_records(snapshot_data_root: Path, pattern: str) -> List[Dict[str, Any]]:
+    """
+    Find all JSON / JSONL files under snapshot_data_root matching pattern and return list of usage dicts.
+    """
+    usage_records: List[Dict[str, Any]] = []
+    full_pattern = str(snapshot_data_root / pattern)
+    matches = glob.glob(full_pattern, recursive=True)
+    for m in matches:
+        p = Path(m)
+        if not p.is_file():
+            continue
+        if p.suffix in (".jsonl", ".jl"):
+            usage_records.extend(load_jsonl(p))
+        elif p.suffix == ".json":
+            obj = load_json(p)
+            if isinstance(obj, list):
+                usage_records.extend(obj)
+            elif isinstance(obj, dict):
+                usage_records.append(obj)
+    return usage_records
+
+
+def get_int_field(d: Dict[str, Any], *keys: str) -> int:
+    for k in keys:
+        if k in d and d[k] is not None:
+            try:
+                return int(d[k])
+            except Exception:
+                try:
+                    return int(float(d[k]))
+                except Exception:
+                    continue
+    return 0
+
+
+def get_step_name(d: Dict[str, Any]) -> str:
+    for k in ("step", "phase", "component", "stage"):
+        if k in d and d[k]:
+            return str(d[k])
+    return "unknown"
+
+
+def group_usage_by_step(records: List[Dict[str, Any]]) -> Dict[str, Dict[str, int]]:
+    """
+    Returns:
+      {
+        step_name: {
+          "prompt_tokens": int,
+          "completion_tokens": int,
+          "total_tokens": int,
+          "n_calls": int,
+        },
+        ...
+      }
+    """
+    grouped: Dict[str, Dict[str, int]] = {}
+    for r in records:
+        step = get_step_name(r)
+        p = get_int_field(r, "prompt_tokens", "prompt", "input_tokens")
+        c = get_int_field(r, "completion_tokens", "completion", "output_tokens")
+        if p == 0 and c == 0:
+            continue
+        g = grouped.setdefault(step, {"prompt_tokens": 0, "completion_tokens": 0, "total_tokens": 0, "n_calls": 0})
+        g["prompt_tokens"] += p
+        g["completion_tokens"] += c
+        g["total_tokens"] += p + c
+        g["n_calls"] += 1
+    return grouped
+
+
+def load_per_essay_stats(snapshot_root: Path) -> Tuple[Dict[str, Any], Optional[Dict[str, Any]]]:
+    """
+    Loads the Trace_KG_per_essay_stats.json that lives in the snapshot root.
+
+    Returns:
+      (essay_stats_for_this_essay, raw_json)
+    """
+    stats_path = snapshot_root / "Trace_KG_per_essay_stats.json"
+    if not stats_path.exists():
+        print(f"[WARN] No per-essay stats at {stats_path}", file=sys.stderr)
+        return {}, None
+
+    raw = load_json(stats_path)
+    if not isinstance(raw, dict) or not raw:
+        return {}, raw
+
+    # Typically only one key, e.g. "1"
+    if len(raw) == 1:
+        essay_idx_str = next(iter(raw.keys()))
+        essay_stats = raw[essay_idx_str]
+        return essay_stats, raw
+    else:
+        # Fallback: pick the first numerically sorted essay index
+        essay_idx_str = sorted(raw.keys(), key=lambda x: int(x))[0]
+        return raw[essay_idx_str], raw
+
+
+# ------------------------------------------------------------------------------------
+# MAIN: configure and run for Essay 1
+# ------------------------------------------------------------------------------------
+
+# 1) CONFIGURE THESE PATHS / PRICES
+
+# Path to the snapshot for essay 1
+SNAPSHOT_ROOT = Path("KGs_from_Essays00/KG_Essay_001").resolve()
+# Glob pattern for token usage logs under SNAPSHOT_ROOT/data
+TOKEN_LOGS_GLOB = "data/**/llm_usage_*.jsonl"   # adjust if your filenames differ
+
+# Pricing assumptions (change to match your model/pricing)
+USD_PER_1K_PROMPT = 0.003
+USD_PER_1K_COMPLETION = 0.006
+
+# ------------------------------------------------------------------------------------
+# RUN ANALYSIS
+# ------------------------------------------------------------------------------------
+
+data_root = SNAPSHOT_ROOT / "KGs_from_Essays00/KG_Essay_001"
+if not data_root.exists():
+    raise FileNotFoundError(f"Snapshot data dir not found: {data_root}")
+
+print(f"[info] Snapshot root: {SNAPSHOT_ROOT}")
+print(f"[info] Data root:     {data_root}")
+
+# 1) Load per-essay timing stats
+essay_stats, raw_stats = load_per_essay_stats(SNAPSHOT_ROOT)
+total_time = essay_stats.get("seconds_total", None)
+
+# 2) Load usage records
+usage_records = iter_usage_records(data_root, TOKEN_LOGS_GLOB)
+print(f"[info] Found {len(usage_records)} raw usage records under pattern {TOKEN_LOGS_GLOB}")
+
+grouped = group_usage_by_step(usage_records)
+
+# 3) Aggregate totals
+total_prompt = sum(v["prompt_tokens"] for v in grouped.values())
+total_completion = sum(v["completion_tokens"] for v in grouped.values())
+total_tokens = total_prompt + total_completion
+
+# If total_time is missing, approximate by sum of step times
+if total_time is None and isinstance(essay_stats, dict):
+    steps = essay_stats.get("steps", {}) or {}
+    total_time = sum(s.get("seconds", 0.0) for s in steps.values())
+
+print()
+print("=== Token / Cost / Throughput Summary for this Essay ===")
+print(f"Total prompt tokens:     {total_prompt:,}")
+print(f"Total completion tokens: {total_completion:,}")
+print(f"Total tokens:            {total_tokens:,}")
+if total_time is not None:
+    print(f"Total time (s):          {total_time:.1f}")
+else:
+    print("Total time (s):          N/A")
+
+# Cost estimate
+cost_prompt = (total_prompt / 1000.0) * USD_PER_1K_PROMPT
+cost_completion = (total_completion / 1000.0) * USD_PER_1K_COMPLETION
+total_cost = cost_prompt + cost_completion
+
+print(f"Estimated cost ($):      {total_cost:.4f}")
+print(f"  prompt:                {cost_prompt:.4f}")
+print(f"  completion:            {cost_completion:.4f}")
+
+if total_time and total_time > 0:
+    throughput = total_tokens / total_time
+    print(f"Throughput (tokens/s):   {throughput:,.1f}")
+else:
+    print("Throughput (tokens/s):   N/A (no time available)")
+
+print()
+print("Per-step aggregates (from token logs):")
+print("{:<30} {:>12} {:>12} {:>12} {:>10}".format("Step", "Prompt", "Completion", "Total", "Calls"))
+print("-" * 80)
+for step, v in sorted(grouped.items(), key=lambda kv: kv[0]):
+    print(
+        "{:<30} {:>12} {:>12} {:>12} {:>10}".format(
+            step,
+            f"{v['prompt_tokens']:,}",
+            f"{v['completion_tokens']:,}",
+            f"{v['total_tokens']:,}",
+            v["n_calls"],
+        )
+    )
+
+print("\nDone.")
+
+#endregion#?  Analyze_costs
+#?#########################  End  ##########################
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#?######################### Start ##########################
+#region:#?   review the structure of /mine_evaluation_dataset.json
+
+
+import json
+from pathlib import Path
+from typing import Any, Dict
+
+DATASET_JSON_PATH = Path("Experiments/MYNE/QA_and_OthersAnswers/mine_evaluation_dataset.json")
+
+def summarize_value(v: Any, max_len: int = 120) -> str:
+    """Return a short, human-readable summary of a value."""
+    if isinstance(v, dict):
+        return f"<dict with keys: {list(v.keys())[:5]}{' ...' if len(v) > 5 else ''}>"
+    if isinstance(v, list):
+        return f"<list len={len(v)} first_item_type={type(v[0]).__name__ if v else 'None'}>"
+    s = str(v)
+    if len(s) > max_len:
+        s = s[:max_len] + "..."
+    return s
+
+def inspect_dataset(path: Path, show_items: int = 3) -> None:
+    print(f"Loading dataset from: {path}")
+    with path.open("r", encoding="utf-8") as f:
+        data = json.load(f)
+
+    print("\n=== Top-level structure ===")
+    print(f"type: {type(data).__name__}")
+
+    if isinstance(data, list):
+        print(f"length: {len(data)}")
+        items = data
+    elif isinstance(data, dict):
+        print(f"keys: {list(data.keys())}")
+        # If it’s a dict with a list under a key like 'data'/'items'/..., pick that
+        for key in ("data", "items", "essays", "documents"):
+            if key in data and isinstance(data[key], list):
+                items = data[key]
+                print(f"Using data[{key}] as items list (len={len(items)})")
+                break
+        else:
+            print("Top-level dict but no obvious list of items; showing the dict itself.")
+            items = [data]
+    else:
+        print("Unexpected top-level type; cannot inspect further.")
+        return
+
+    print("\n=== Keys present in first few items ===")
+    for i, item in enumerate(items[:show_items]):
+        print(f"\n--- Item {i} ---")
+        if not isinstance(item, dict):
+            print(f"type: {type(item).__name__}, value: {summarize_value(item)}")
+            continue
+        print("keys:", list(item.keys()))
+        for k, v in item.items():
+            print(f"  {k!r}: {summarize_value(v)}")
+
+    # Try to detect likely fields
+    print("\n=== Heuristic detection of important fields ===")
+    sample = items[0] if items else {}
+    if isinstance(sample, dict):
+        candidate_id_keys = [k for k in sample.keys() if k.lower() in ("id", "essay_id", "doc_id", "uid")]
+        candidate_query_keys = [k for k in sample.keys() if "query" in k.lower()]
+        candidate_answer_keys = [k for k in sample.keys() if "answer" in k.lower()]
+        candidate_kg_keys = [k for k in sample.keys() if "kg" in k.lower()]
+
+        print("Possible ID fields:      ", candidate_id_keys or "None found")
+        print("Possible query fields:   ", candidate_query_keys or "None found")
+        print("Possible answer fields:  ", candidate_answer_keys or "None found")
+        print("Possible KG fields:      ", candidate_kg_keys or "None found")
+
+        # Show example values for likely ID / query / answer fields
+        if candidate_id_keys:
+            k = candidate_id_keys[0]
+            print(f"\nExample ID values for key '{k}':")
+            for i, item in enumerate(items[:min(show_items, 5)]):
+                print(f"  item[{i}][{k!r}] = {summarize_value(item.get(k))}")
+
+        if candidate_query_keys:
+            k = candidate_query_keys[0]
+            print(f"\nExample QUERY values for key '{k}':")
+            for i, item in enumerate(items[:min(show_items, 5)]):
+                print(f"  item[{i}][{k!r}] = {summarize_value(item.get(k))}")
+
+        if candidate_answer_keys:
+            k = candidate_answer_keys[0]
+            print(f"\nExample ANSWER values for key '{k}':")
+            for i, item in enumerate(items[:min(show_items, 5)]):
+                print(f"  item[{i}][{k!r}] = {summarize_value(item.get(k))}")
+
+        if candidate_kg_keys:
+            k = candidate_kg_keys[0]
+            print(f"\nExample KG fields for key '{k}':")
+            for i, item in enumerate(items[:min(show_items, 5)]):
+                print(f"  item[{i}][{k!r}] = {summarize_value(item.get(k))}")
+    else:
+        print("First item is not a dict; cannot detect fields heuristically.")
+
+# Run the inspection
+inspect_dataset(DATASET_JSON_PATH)
+
+
+#endregion#? review the structure of /mine_evaluation_dataset.json
+#?#########################  End  ##########################

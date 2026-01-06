@@ -1,0 +1,44 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_6254cbcb7ce0"],
+      "canonical_rel_name": "promotes",
+      "canonical_rel_desc": "Indicates that the subject actively fosters, encourages, or enhances the existence or development of the object (typically an abstract value, norm, or quality).",
+      "justification": "This relation instance describes sports fostering or encouraging certain societal values. The predicate \"promotes\" is an appropriate, reusable causal-but-soft predicate for that meaning without overfitting to sports.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_3f9fe3cbde33"],
+      "canonical_rel_name": "drives",
+      "canonical_rel_desc": "Indicates that the subject is a primary driver or catalyst causing or propelling the object (typically a process or change) to occur or develop.",
+      "justification": "This instance presents sports as a driver of social change, which is a stronger, process-oriented causal relation than simply \"promotes\". Using the canonical predicate \"drives\" captures that the subject is a key catalyst for the object process.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": ["RelR_6254cbcb7ce0", "RelR_3f9fe3cbde33"],
+      "rel_cls": "social_impact_relation",
+      "justification": "Both relations describe how sports causally affect social-level outcomes (values, social change). Grouping them under a shared class \"social_impact_relation\" captures that they are about the societal impact of sports, regardless of whether the specific predicate is \"promotes\" or \"drives\".",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": ["RelR_6254cbcb7ce0", "RelR_3f9fe3cbde33"],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "Both instances explicitly indicate causal influence: sports promoting values and driving social change. The hints (\"causal\", \"driver\") and descriptions clearly place these edges in a causal semantic dimension.",
+      "remark": null,
+      "confidence": 0.96
+    }
+  }
+]

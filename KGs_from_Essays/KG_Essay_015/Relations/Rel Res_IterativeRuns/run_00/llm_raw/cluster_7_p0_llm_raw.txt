@@ -1,0 +1,42 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_e5c19495ea49",
+        "RelR_e8d331f82d54"
+      ],
+      "canonical_rel_name": "is_afterlife_outcome_for",
+      "canonical_rel_desc": "Links an afterlife condition, state, or benefit to the deceased individual who is intended to experience or receive it.",
+      "justification": "In both relations the subject is an afterlife state/benefit (safe passage; eternal existence in the realm of the gods) and the object is the deceased, marked as beneficiary/experiencer. A unified predicate capturing ‘afterlife outcome/benefit for the deceased’ fits both instances and normalizes minor wording differences in the noisy relation_name field.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_e5c19495ea49",
+        "RelR_e8d331f82d54"
+      ],
+      "rel_cls": "afterlife_benefit_relation",
+      "justification": "Both relations describe how specific afterlife conditions function as benefits or intended experiential states for the deceased individual, forming a coherent class of ‘afterlife benefit/experience’ relations.",
+      "remark": null,
+      "confidence": 0.88
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_e5c19495ea49",
+        "RelR_e8d331f82d54"
+      ],
+      "rel_cls_group": "AGENCY",
+      "justification": "The core semantics involve a participant role (the deceased) as the beneficiary/experiencer of an outcome, which fits a broad group concerned with participant roles and affected parties better than composition, identity, or simple association.",
+      "remark": null,
+      "confidence": 0.8
+    }
+  }
+]

@@ -1,0 +1,105 @@
+[
+  {
+    "function": "split_class",
+    "args": {
+      "source_class_id": "ClsC_78344c71",
+      "splits": [
+        {
+          "name": "Sports (Domain Concept)",
+          "description": "The general concept of sports as organized physical activities and games, including competitions and events with cultural, social, and economic impact.",
+          "class_type_hint": "Domain Concept",
+          "member_ids": ["Can_d0ba8cd1"],
+          "provisional_id": "SPLIT_ClsC_78344c71_SPORTS_DOMAIN"
+        },
+        {
+          "name": "Sports Participation Activities",
+          "description": "Activities involving individuals taking part in sports, emphasizing the act and process of participating.",
+          "class_type_hint": "Activity",
+          "member_ids": ["En_0fdbeb24"],
+          "provisional_id": "SPLIT_ClsC_78344c71_PARTICIPATION"
+        }
+      ],
+      "justification": "The original 'Sports Participation Concepts' class mixes the broad domain concept of 'sports' with the distinct activity of 'participation in sports'; splitting improves semantic coherence of each class.",
+      "remark": null,
+      "confidence": 0.86
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_f8cf8aa4",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Sports and Society",
+      "remark": null,
+      "justification": "Assigning a shared Class_Group 'Sports and Society' to connect sports-related value concepts with other sports domain classes in this cluster.",
+      "confidence": 0.92
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_1c844a2f",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Sports and Society",
+      "remark": null,
+      "justification": "Set Class_Group to 'Sports and Society' to align social units affected by sports with other sports-domain classes.",
+      "confidence": 0.92
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_55219845",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Sports and Society",
+      "remark": null,
+      "justification": "Sporting events are core structures within the sports domain and should share the 'Sports and Society' Class_Group with related classes.",
+      "confidence": 0.93
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_2805dec1",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Sports and Society",
+      "remark": null,
+      "justification": "Participation obstacles are challenges specific to engaging in sports and thus belong in the same 'Sports and Society' Class_Group.",
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "SPLIT_ClsC_78344c71_SPORTS_DOMAIN",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Sports and Society",
+      "remark": null,
+      "justification": "The split class representing the general concept of sports should be grouped with other sports-related social and conceptual classes under 'Sports and Society'.",
+      "confidence": 0.88
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "SPLIT_ClsC_78344c71_PARTICIPATION",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Sports and Society",
+      "remark": null,
+      "justification": "The split class for sports participation activities fits the same overarching domain and should share the 'Sports and Society' Class_Group.",
+      "confidence": 0.88
+    }
+  }
+]

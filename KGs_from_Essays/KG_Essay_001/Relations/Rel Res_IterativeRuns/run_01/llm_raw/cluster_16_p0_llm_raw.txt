@@ -1,0 +1,28 @@
+[
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": ["RelR_be3c581402bb"],
+      "canonical_rel_name": "transfers",
+      "canonical_rel_desc": "Indicates that the subject actively moves or carries the object (a material or entity) from one location or entity to another.",
+      "rel_cls": "material_transfer_relation",
+      "rel_cls_group": "INTERACTION",
+      "justification": "This relation describes butterflies actively moving pollen between flowers, which is a material transfer interaction. The existing canonical_rel_name already fits but the description is refined for clarity. rel_cls_group remains INTERACTION to emphasize the agent–material interaction rather than merely spatial positioning.",
+      "remark": null,
+      "confidence": 0.97
+    }
+  },
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": ["RelR_aa649e4aaa11"],
+      "canonical_rel_name": "is_transferred_between",
+      "canonical_rel_desc": "Indicates that the subject material is transported or moved between instances of the object entity category, typically by some agent.",
+      "rel_cls": "material_transfer_relation",
+      "rel_cls_group": "INTERACTION",
+      "justification": "This relation describes pollen being transported between flowers, which is the same underlying material transfer interaction as in RelR_be3c581402bb but expressed in passive form (material-centric). Unifying rel_cls to 'material_transfer_relation' improves schema coherence, and rel_cls_group is set to INTERACTION because the core meaning is a transfer process, not just spatial arrangement.",
+      "remark": null,
+      "confidence": 0.96
+    }
+  }
+]

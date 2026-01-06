@@ -1,0 +1,45 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_8da670d00ce2",
+        "RelR_37193f68e165",
+        "RelR_2126a4ed8fd8"
+      ],
+      "canonical_rel_name": "requires_competence",
+      "canonical_rel_desc": "Indicates that a given forensic practice or competence depends on another competence, skill, or capability as a prerequisite.",
+      "justification": "All three relations link 'art of forensic science' to specific skills or competences that are prerequisites, with identical causal/dependency semantics expressed as 'requires'. A single normalized predicate 'requires_competence' cleanly captures this prerequisite-competence relation in a domain-specific way.",
+      "remark": null,
+      "confidence": 0.97
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_8da670d00ce2",
+        "RelR_37193f68e165",
+        "RelR_2126a4ed8fd8"
+      ],
+      "rel_cls": "competency_dependency_relation",
+      "justification": "Each edge represents a dependency between professional competences (one competence requiring others). Grouping them under a broader class 'competency_dependency_relation' captures this family of prerequisite relationships beyond the specific canonical predicate.",
+      "remark": null,
+      "confidence": 0.96
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_8da670d00ce2",
+        "RelR_37193f68e165",
+        "RelR_2126a4ed8fd8"
+      ],
+      "rel_cls_group": "REQUIREMENT",
+      "justification": "Semantically these relations express that certain competences are required or must be present for the 'art of forensic science'; this fits best under a broad REQUIREMENT group rather than generic CAUSALITY or ASSOCIATION.",
+      "remark": null,
+      "confidence": 0.96
+    }
+  }
+]

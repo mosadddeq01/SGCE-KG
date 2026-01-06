@@ -1,0 +1,209 @@
+{
+  "cluster_label": "25_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_624ff749f807",
+      "relation_name": "challenges",
+      "rel_desc": "People challenge established authority through protests and uprisings.",
+      "rel_hint_type": "opposition",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "people",
+      "object_entity_name": "authority",
+      "subject_class_label": "Political Stakeholder Actors",
+      "subject_class_group": "Contentious Politics Actors & Power Structures",
+      "object_class_label": "Political Stakeholder Actors",
+      "object_class_group": "Contentious Politics Actors & Power Structures",
+      "qualifiers": {
+        "TemporalQualifier": "Throughout the centuries",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": "as",
+        "OtherQualifier": "Method: via protests, demonstrations, and uprisings"
+      },
+      "confidence": 0.9,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_3376520f4710",
+      "relation_name": "opposes",
+      "rel_desc": "Independence from colonial rule represents separation from and opposition to colonial rule.",
+      "rel_hint_type": "counter_relation",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "independence from colonial rule",
+      "object_entity_name": "colonial rule",
+      "subject_class_label": "Anti-Colonial Independence Goal",
+      "subject_class_group": "Colonial Freedom and Independence (Ideals & Movements)",
+      "object_class_label": "Authoritarian and Colonial Power Structures",
+      "object_class_group": "Contentious Politics Actors & Power Structures",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "from",
+        "LogicalMarker": null,
+        "OtherQualifier": "RelationTypeDetail: independence entails ending colonial rule"
+      },
+      "confidence": 0.88,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_2fa550918a0e",
+      "relation_name": "opposes",
+      "rel_desc": "The U.S. civil rights movement opposed racial segregation.",
+      "rel_hint_type": "conflict",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "civil rights movement in the United States",
+      "object_entity_name": "racial segregation",
+      "subject_class_label": "US Civil Rights Era Developments",
+      "subject_class_group": "US Civil Rights Movement & Era",
+      "object_class_label": "Racial Segregation and Discrimination (U.S. Civil Rights Era)",
+      "object_class_group": "Civil Rights and Racial Justice Movements",
+      "qualifiers": {
+        "TemporalQualifier": "primarily during the 1950s–1960s",
+        "SpatialQualifier": "United States",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "challenged",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.99,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_4bd8a381277c",
+      "relation_name": "opposes",
+      "rel_desc": "The U.S. civil rights movement opposed discrimination.",
+      "rel_hint_type": "conflict",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "civil rights movement in the United States",
+      "object_entity_name": "discrimination",
+      "subject_class_label": "US Civil Rights Era Developments",
+      "subject_class_group": "US Civil Rights Movement & Era",
+      "object_class_label": "Racial Segregation and Discrimination (U.S. Civil Rights Era)",
+      "object_class_group": "Civil Rights and Racial Justice Movements",
+      "qualifiers": {
+        "TemporalQualifier": "mid-20th century, especially 1960s",
+        "SpatialQualifier": "United States",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "challenged",
+        "LogicalMarker": "and",
+        "OtherQualifier": null
+      },
+      "confidence": 0.99,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_624ff749f807\",\n        \"RelR_3376520f4710\",\n        \"RelR_2fa550918a0e\",\n        \"RelR_4bd8a381277c\"\n      ],\n      \"canonical_rel_name\": \"opposes\",\n      \"canonical_rel_desc\": \"The subject is in active opposition to the object, challenging or seeking to end the authority, structure, rule, or discriminatory practice represented by the object.\",\n      \"justification\": \"All relations describe an active stance against an authority, system, or practice (challenging authority via protests, independence opposing colonial rule, the civil rights movement opposing segregation and discrimination). These are semantically equivalent forms of political or social opposition, so a single canonical predicate 'opposes' is appropriate.\",\n      \"remark\": null,\n      \"confidence\": 0.96\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_624ff749f807\",\n        \"RelR_3376520f4710\",\n        \"RelR_2fa550918a0e\",\n        \"RelR_4bd8a381277c\"\n      ],\n      \"rel_cls\": \"political_opposition_relation\",\n      \"justification\": \"Each relation captures a form of political or socio-political opposition (people vs authority, independence vs colonial rule, movements vs segregation/discrimination). Grouping them under a shared class for political opposition relations reflects this common semantics while allowing for other kinds of conflict relations elsewhere.\",\n      \"remark\": null,\n      \"confidence\": 0.95\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_624ff749f807\",\n        \"RelR_3376520f4710\",\n        \"RelR_2fa550918a0e\",\n        \"RelR_4bd8a381277c\"\n      ],\n      \"rel_cls_group\": \"CONFLICT\",\n      \"justification\": \"All relations encode contention or opposition between actors/ideals and existing systems of power or discrimination, which fits a broad conflict-oriented semantic group better than composition, identity, or other categories.\",\n      \"remark\": null,\n      \"confidence\": 0.95\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_624ff749f807",
+          "RelR_3376520f4710",
+          "RelR_2fa550918a0e",
+          "RelR_4bd8a381277c"
+        ],
+        "canonical_rel_name": "opposes",
+        "canonical_rel_desc": "The subject is in active opposition to the object, challenging or seeking to end the authority, structure, rule, or discriminatory practice represented by the object.",
+        "justification": "All relations describe an active stance against an authority, system, or practice (challenging authority via protests, independence opposing colonial rule, the civil rights movement opposing segregation and discrimination). These are semantically equivalent forms of political or social opposition, so a single canonical predicate 'opposes' is appropriate.",
+        "remark": null,
+        "confidence": 0.96
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_624ff749f807",
+          "RelR_3376520f4710",
+          "RelR_2fa550918a0e",
+          "RelR_4bd8a381277c"
+        ],
+        "rel_cls": "political_opposition_relation",
+        "justification": "Each relation captures a form of political or socio-political opposition (people vs authority, independence vs colonial rule, movements vs segregation/discrimination). Grouping them under a shared class for political opposition relations reflects this common semantics while allowing for other kinds of conflict relations elsewhere.",
+        "remark": null,
+        "confidence": 0.95
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_624ff749f807",
+          "RelR_3376520f4710",
+          "RelR_2fa550918a0e",
+          "RelR_4bd8a381277c"
+        ],
+        "rel_cls_group": "CONFLICT",
+        "justification": "All relations encode contention or opposition between actors/ideals and existing systems of power or discrimination, which fits a broad conflict-oriented semantic group better than composition, identity, or other categories.",
+        "remark": null,
+        "confidence": 0.95
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_624ff749f807",
+        "RelR_3376520f4710",
+        "RelR_2fa550918a0e",
+        "RelR_4bd8a381277c"
+      ],
+      "canonical_rel_name": "opposes",
+      "canonical_rel_desc": "The subject is in active opposition to the object, challenging or seeking to end the authority, structure, rule, or discriminatory practice represented by the object.",
+      "justification": "All relations describe an active stance against an authority, system, or practice (challenging authority via protests, independence opposing colonial rule, the civil rights movement opposing segregation and discrimination). These are semantically equivalent forms of political or social opposition, so a single canonical predicate 'opposes' is appropriate.",
+      "remark": null,
+      "confidence": 0.96
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_624ff749f807",
+        "RelR_3376520f4710",
+        "RelR_2fa550918a0e",
+        "RelR_4bd8a381277c"
+      ],
+      "rel_cls": "political_opposition_relation",
+      "justification": "Each relation captures a form of political or socio-political opposition (people vs authority, independence vs colonial rule, movements vs segregation/discrimination). Grouping them under a shared class for political opposition relations reflects this common semantics while allowing for other kinds of conflict relations elsewhere.",
+      "remark": null,
+      "confidence": 0.95
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_624ff749f807",
+        "RelR_3376520f4710",
+        "RelR_2fa550918a0e",
+        "RelR_4bd8a381277c"
+      ],
+      "rel_cls_group": "CONFLICT",
+      "justification": "All relations encode contention or opposition between actors/ideals and existing systems of power or discrimination, which fits a broad conflict-oriented semantic group better than composition, identity, or other categories.",
+      "remark": null,
+      "confidence": 0.95
+    }
+  ],
+  "timestamp": "2026-01-06T13:19:21Z"
+}

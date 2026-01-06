@@ -1,0 +1,45 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_e9b9b34860a8",
+        "RelR_8d05d4f13770",
+        "RelR_389008663e0f"
+      ],
+      "canonical_rel_name": "symbolically_associated_with",
+      "canonical_rel_desc": "Indicates that the subject is culturally or symbolically associated with the object (e.g., a color with an abstract concept) within a specified cultural context.",
+      "justification": "All three relations describe the same predicate: a symbolic/cultural association from the color white to an abstract concept (purity, cleanliness, mourning), distinguished only by cultural qualifiers. They should share a single canonical predicate focusing on symbolic association rather than generic association.",
+      "remark": "Direction is consistently from the color (white) to the symbolic concept; cultural context remains in qualifiers.",
+      "confidence": 0.98
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_e9b9b34860a8",
+        "RelR_8d05d4f13770",
+        "RelR_389008663e0f"
+      ],
+      "rel_cls": "cultural_symbolism_relation",
+      "justification": "These relations connect a color to meanings it carries in specific cultures, which fits a relation class about cultural/symbolic interpretations rather than general association or composition.",
+      "remark": "This class can generalize to other color–meaning or symbol–meaning edges across the KG.",
+      "confidence": 0.97
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_e9b9b34860a8",
+        "RelR_8d05d4f13770",
+        "RelR_389008663e0f"
+      ],
+      "rel_cls_group": "ASSOCIATION",
+      "justification": "The predicate indicates a non-causal, non-hierarchical linkage between entities based on shared symbolic meaning, which fits the broad ASSOCIATION group.",
+      "remark": null,
+      "confidence": 0.96
+    }
+  }
+]

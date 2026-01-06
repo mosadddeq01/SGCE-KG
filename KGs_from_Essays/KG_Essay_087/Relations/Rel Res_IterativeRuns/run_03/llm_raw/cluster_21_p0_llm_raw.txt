@@ -1,0 +1,15 @@
+[
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": ["RelR_aeba848b99c3"],
+      "canonical_rel_name": "contributes_to",
+      "canonical_rel_desc": "Subject contributes causally or enablingly to the achievement or strengthening of the object branding outcome (e.g., brand differentiation, recognition, or perception).",
+      "rel_cls": null,
+      "rel_cls_group": null,
+      "justification": "The current canonical_rel_name 'influences' is overly generic. The instance-level description and raw relation_name explicitly frame the effect as contributing to the creation of brand differentiation rather than a broad, unspecified influence. Normalizing this predicate to 'contributes_to' yields a more precise and reusable causal branding-outcome relation, while keeping the existing rel_cls and rel_cls_group, which already fit well.",
+      "remark": null,
+      "confidence": 0.83
+    }
+  }
+]

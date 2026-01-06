@@ -1,0 +1,143 @@
+{
+  "cluster_label": "6_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_d7c24a27c6f4",
+      "relation_name": "could_improve",
+      "rel_desc": "Quantum gravity is proposed as a framework that could provide a more complete description of black holes than currently available.",
+      "rel_hint_type": "potential_effect",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "quantum gravity",
+      "object_entity_name": "description of black holes",
+      "subject_class_label": "Quantum Gravity and Beyond-Relativity Frameworks",
+      "subject_class_group": "Gravity and Quantum Theory Frameworks",
+      "object_class_label": "Black Hole Concepts & Open Questions",
+      "object_class_group": "Astrophysics – Black Holes",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": "in regimes where general relativity fails (near singularities)",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "could",
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "ImprovementAspect: more complete than classical general relativity"
+      },
+      "confidence": 0.94,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_eed46e3075ef",
+      "relation_name": "could_improve",
+      "rel_desc": "New physics frameworks in general are suggested as potentially providing a more complete description of black holes.",
+      "rel_hint_type": "potential_effect",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "new physics",
+      "object_entity_name": "description of black holes",
+      "subject_class_label": "Quantum Gravity and Beyond-Relativity Frameworks",
+      "subject_class_group": "Gravity and Quantum Theory Frameworks",
+      "object_class_label": "Black Hole Concepts & Open Questions",
+      "object_class_group": "Astrophysics – Black Holes",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": "where general relativity is inadequate (e.g., singularities)",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "speculative; could",
+        "CausalHint": "could provide",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.6,
+      "remarks": [
+        "Relation added with lower confidence; primarily to capture that new physics is aimed at improving black hole descriptions."
+      ]
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_d7c24a27c6f4\",\n        \"RelR_eed46e3075ef\"\n      ],\n      \"canonical_rel_name\": \"could_improve_description_of\",\n      \"canonical_rel_desc\": \"Indicates that the subject theoretical framework or new physics could provide a more complete or improved description or explanation of the object phenomenon.\",\n      \"justification\": \"Both relations state that a theoretical framework (quantum gravity or new physics) is proposed as potentially providing a more complete description of black holes. This is a speculative, potential-improvement relation about explanatory adequacy, so a unified canonical predicate capturing ‘could improve the description of’ is appropriate for both.\",\n      \"remark\": \"The modal/uncertain nature (‘could’) is intentionally kept in the canonical name to distinguish this from a confirmed explanatory relation.\",\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_d7c24a27c6f4\",\n        \"RelR_eed46e3075ef\"\n      ],\n      \"rel_cls\": \"theoretical_explanation_improvement_relation\",\n      \"justification\": \"In both cases, the subject is a theoretical or beyond-standard framework that is suggested to yield a better, more complete theoretical description of black holes. This fits a class focused on improving or extending theoretical explanations of phenomena.\",\n      \"remark\": \"This class can also cover other predicates where a theory enhances, refines, or completes the explanation of a physical system or phenomenon.\",\n      \"confidence\": 0.86\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_d7c24a27c6f4\",\n        \"RelR_eed46e3075ef\"\n      ],\n      \"rel_cls_group\": \"CAUSALITY\",\n      \"justification\": \"Semantically, these relations assert a potential effect: if the new framework is correct or developed, it could cause an improvement in how black holes are described. This is best modeled as a causal/potential-effect dimension rather than simple association.\",\n      \"remark\": \"Although this has an epistemic/explanatory flavor, the core is a potential-effect relation (framework could cause improved description), which aligns best with CAUSALITY among the available broad groups.\",\n      \"confidence\": 0.8\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_d7c24a27c6f4",
+          "RelR_eed46e3075ef"
+        ],
+        "canonical_rel_name": "could_improve_description_of",
+        "canonical_rel_desc": "Indicates that the subject theoretical framework or new physics could provide a more complete or improved description or explanation of the object phenomenon.",
+        "justification": "Both relations state that a theoretical framework (quantum gravity or new physics) is proposed as potentially providing a more complete description of black holes. This is a speculative, potential-improvement relation about explanatory adequacy, so a unified canonical predicate capturing 'could improve the description of' is appropriate for both.",
+        "remark": "The modal/uncertain nature ('could') is intentionally kept in the canonical name to distinguish this from a confirmed explanatory relation.",
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_d7c24a27c6f4",
+          "RelR_eed46e3075ef"
+        ],
+        "rel_cls": "theoretical_explanation_improvement_relation",
+        "justification": "In both cases, the subject is a theoretical or beyond-standard framework that is suggested to yield a better, more complete theoretical description of black holes. This fits a class focused on improving or extending theoretical explanations of phenomena.",
+        "remark": "This class can also cover other predicates where a theory enhances, refines, or completes the explanation of a physical system or phenomenon.",
+        "confidence": 0.86
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_d7c24a27c6f4",
+          "RelR_eed46e3075ef"
+        ],
+        "rel_cls_group": "CAUSALITY",
+        "justification": "Semantically, these relations assert a potential effect: if the new framework is correct or developed, it could cause an improvement in how black holes are described. This is best modeled as a causal/potential-effect dimension rather than simple association.",
+        "remark": "Although this has an epistemic/explanatory flavor, the core is a potential-effect relation (framework could cause improved description), which aligns best with CAUSALITY among the available broad groups.",
+        "confidence": 0.8
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_d7c24a27c6f4",
+        "RelR_eed46e3075ef"
+      ],
+      "canonical_rel_name": "could_improve_description_of",
+      "canonical_rel_desc": "Indicates that the subject theoretical framework or new physics could provide a more complete or improved description or explanation of the object phenomenon.",
+      "justification": "Both relations state that a theoretical framework (quantum gravity or new physics) is proposed as potentially providing a more complete description of black holes. This is a speculative, potential-improvement relation about explanatory adequacy, so a unified canonical predicate capturing 'could improve the description of' is appropriate for both.",
+      "remark": "The modal/uncertain nature ('could') is intentionally kept in the canonical name to distinguish this from a confirmed explanatory relation.",
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_d7c24a27c6f4",
+        "RelR_eed46e3075ef"
+      ],
+      "rel_cls": "theoretical_explanation_improvement_relation",
+      "justification": "In both cases, the subject is a theoretical or beyond-standard framework that is suggested to yield a better, more complete theoretical description of black holes. This fits a class focused on improving or extending theoretical explanations of phenomena.",
+      "remark": "This class can also cover other predicates where a theory enhances, refines, or completes the explanation of a physical system or phenomenon.",
+      "confidence": 0.86
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_d7c24a27c6f4",
+        "RelR_eed46e3075ef"
+      ],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "Semantically, these relations assert a potential effect: if the new framework is correct or developed, it could cause an improvement in how black holes are described. This is best modeled as a causal/potential-effect dimension rather than simple association.",
+      "remark": "Although this has an epistemic/explanatory flavor, the core is a potential-effect relation (framework could cause improved description), which aligns best with CAUSALITY among the available broad groups.",
+      "confidence": 0.8
+    }
+  ],
+  "timestamp": "2026-01-06T09:39:59Z"
+}

@@ -1,0 +1,153 @@
+{
+  "cluster_label": "17_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_b6439ea4f202",
+      "relation_name": "contributes_to",
+      "rel_desc": "Forensic science plays a crucial role in the criminal justice system.",
+      "rel_hint_type": "functional_role",
+      "canonical_rel_name": "contributes_to",
+      "canonical_rel_desc": "The subject's work, function, or existence helps to bring about, support, or improve the object within a broader system or outcome.",
+      "rel_cls": "contribution_relation",
+      "rel_cls_group": "CAUSALITY",
+      "subject_entity_name": "forensic science",
+      "object_entity_name": "criminal justice system",
+      "subject_class_label": "Forensic Science",
+      "subject_class_group": "Forensic Science Domain",
+      "object_class_label": "Criminal Justice Processes",
+      "object_class_group": "Criminal Justice & Forensic Context",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "in the criminal justice system",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": "by",
+        "OtherQualifier": null
+      },
+      "confidence": 0.98,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_a2aa939b6a70",
+      "relation_name": "participates_in",
+      "rel_desc": "Forensic scientists play a crucial role in crime scene investigation.",
+      "rel_hint_type": "role",
+      "canonical_rel_name": "participates_in",
+      "canonical_rel_desc": "The subject takes part in or is involved in the object activity, process, or event.",
+      "rel_cls": "participation_relation",
+      "rel_cls_group": "AGENCY",
+      "subject_entity_name": "forensic scientists",
+      "object_entity_name": "crime scene investigation",
+      "subject_class_label": "Forensic Scientists",
+      "subject_class_group": "Forensic Science Domain",
+      "object_class_label": "Crime Scene Investigation",
+      "object_class_group": "Forensic Evidence & Crime Scene Procedures",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "in crime scene investigation",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "crucial (emphasized importance)",
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "RoleType: crucial role"
+      },
+      "confidence": 0.98,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_4a0ad14d0535",
+      "relation_name": "contributes_to",
+      "rel_desc": "The work of forensic scientists contributes to ensuring justice is achieved.",
+      "rel_hint_type": "contribution",
+      "canonical_rel_name": "contributes_to",
+      "canonical_rel_desc": "The subject's work, function, or existence helps to bring about, support, or improve the object within a broader system or outcome.",
+      "rel_cls": "contribution_relation",
+      "rel_cls_group": "CAUSALITY",
+      "subject_entity_name": "forensic scientists",
+      "object_entity_name": "justice",
+      "subject_class_label": "Forensic Scientists",
+      "subject_class_group": "Forensic Science Domain",
+      "object_class_label": "Justice Outcomes",
+      "object_class_group": "Criminal Justice & Forensic Context",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "plays a crucial role in ensuring",
+        "LogicalMarker": null,
+        "OtherQualifier": "NormativeStrength: crucial role"
+      },
+      "confidence": 0.96,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_f769df3cbe04",
+      "relation_name": "supports_accountability_of",
+      "rel_desc": "The work of forensic scientists helps ensure that guilty individuals are held accountable.",
+      "rel_hint_type": "accountability",
+      "canonical_rel_name": "contributes_to_accountability_of",
+      "canonical_rel_desc": "Indicates that the subject's work or actions play a role in ensuring that the referenced individuals are held accountable (e.g., within the justice system).",
+      "rel_cls": "justice_outcome_relation",
+      "rel_cls_group": "CAUSALITY",
+      "subject_entity_name": "forensic scientists",
+      "object_entity_name": "guilty individuals",
+      "subject_class_label": "Forensic Scientists",
+      "subject_class_group": "Forensic Science Domain",
+      "object_class_label": "Criminal Justice Participants",
+      "object_class_group": "Criminal Justice & Forensic Context",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "plays a crucial role in ensuring",
+        "LogicalMarker": "and that",
+        "OtherQualifier": null
+      },
+      "confidence": 0.94,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_rel_schema\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_4a0ad14d0535\"],\n      \"canonical_rel_name\": null,\n      \"canonical_rel_desc\": null,\n      \"rel_cls\": \"justice_outcome_relation\",\n      \"rel_cls_group\": null,\n      \"justification\": \"This relation describes the work of forensic scientists contributing specifically to justice being achieved, which aligns more closely with the existing class 'justice_outcome_relation' (already used for RelR_f769df3cbe04) than with the more generic 'contribution_relation'. Both relations concern causal contribution to justice-related outcomes, so they should share the same more specific relation class.\",\n      \"remark\": null,\n      \"confidence\": 0.88\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_rel_schema",
+      "args": {
+        "relation_ids": [
+          "RelR_4a0ad14d0535"
+        ],
+        "canonical_rel_name": null,
+        "canonical_rel_desc": null,
+        "rel_cls": "justice_outcome_relation",
+        "rel_cls_group": null,
+        "justification": "This relation describes the work of forensic scientists contributing specifically to justice being achieved, which aligns more closely with the existing class 'justice_outcome_relation' (already used for RelR_f769df3cbe04) than with the more generic 'contribution_relation'. Both relations concern causal contribution to justice-related outcomes, so they should share the same more specific relation class.",
+        "remark": null,
+        "confidence": 0.88
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_rel_schema",
+      "relation_ids": [
+        "RelR_4a0ad14d0535"
+      ],
+      "canonical_rel_name": null,
+      "canonical_rel_desc": null,
+      "rel_cls": "justice_outcome_relation",
+      "rel_cls_group": null,
+      "new_relation_name": null,
+      "original_relation_name": null,
+      "justification": "This relation describes the work of forensic scientists contributing specifically to justice being achieved, which aligns more closely with the existing class 'justice_outcome_relation' (already used for RelR_f769df3cbe04) than with the more generic 'contribution_relation'. Both relations concern causal contribution to justice-related outcomes, so they should share the same more specific relation class.",
+      "remark": null,
+      "confidence": 0.88
+    }
+  ],
+  "timestamp": "2026-01-06T14:37:59Z"
+}

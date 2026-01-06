@@ -1,0 +1,33 @@
+[
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": [
+        "RelR_f55f367baf99"
+      ],
+      "canonical_rel_name": "enhances_brand_visibility",
+      "canonical_rel_desc": "Indicates that a brand's visual element or color scheme increases its visual salience or ability to stand out within a specified market context.",
+      "rel_cls": null,
+      "rel_cls_group": null,
+      "justification": "The previous canonical_rel_name 'enhances_brand_visibility_in' includes an unnecessary trailing preposition and bakes the context into the predicate. The object and qualifiers already capture the marketplace context. Normalizing to 'enhances_brand_visibility' yields a cleaner, reusable predicate while preserving the same semantics.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": [
+        "RelR_e4264f83fb67",
+        "RelR_44d0b8066e64"
+      ],
+      "canonical_rel_name": "enhances_brand_recognition",
+      "canonical_rel_desc": "Indicates that a specific visual brand element (e.g., a color) increases the ease with which a particular brand is recognized by its audience.",
+      "rel_cls": null,
+      "rel_cls_group": null,
+      "justification": "The former canonical_rel_name 'enhances_brand_recognition_of' contains an unnecessary trailing preposition; the object node already specifies which brand is being recognized. Normalizing to 'enhances_brand_recognition' makes the predicate cleaner and more generally reusable without changing its meaning.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  }
+]

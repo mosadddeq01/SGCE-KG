@@ -1,0 +1,45 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_497705760e3d",
+        "RelR_043f4a5dd751",
+        "RelR_4828d0f11761"
+      ],
+      "canonical_rel_name": "promotes",
+      "canonical_rel_desc": "Indicates that the subject actively fosters, advances, or supports the realization or strengthening of the object (typically a social condition or value).",
+      "justification": "In all three instances, the subject is described as fostering or supporting a desirable social state (healthy society or gender equality). This is best captured by a single causal-promotional predicate 'promotes', which generalizes over both explicit 'promotes' and 'supports' wordings.",
+      "remark": null,
+      "confidence": 0.96
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_497705760e3d",
+        "RelR_043f4a5dd751",
+        "RelR_4828d0f11761"
+      ],
+      "rel_cls": "social_outcome_promotion_relation",
+      "justification": "Each relation connects an agent or condition (values, sports, inclusion of women in sports) to a positive social outcome (healthy society, gender equality) via a promotional or supportive effect. Grouping them under a class focused on promoting social outcomes provides a coherent mid-level abstraction.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_497705760e3d",
+        "RelR_043f4a5dd751",
+        "RelR_4828d0f11761"
+      ],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "The semantics in all cases are causal: the subject contributes to or helps bring about the object (promotion of a healthy society or gender equality). This is best captured under a causal relation group rather than mere association.",
+      "remark": null,
+      "confidence": 0.94
+    }
+  }
+]

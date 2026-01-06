@@ -1,0 +1,97 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_fa9d99df4a1f",
+        "RelR_837545d2c978",
+        "RelR_3afa9bec136f",
+        "RelR_c418c0f344c6",
+        "RelR_367e8179473e",
+        "RelR_39095aadef44",
+        "RelR_8f66fa9b1f43",
+        "RelR_8a8d35476578"
+      ],
+      "canonical_rel_name": "pursues_goal",
+      "canonical_rel_desc": "The subject intentionally strives for, advocates for, or is oriented toward achieving the object as a normative or aspirational goal.",
+      "justification": "All these relations link collective actions, movements, or justice concepts (protests, strikes, revolutions, socialist movements, uprisings, a movement, racial justice) to desired social outcomes (social justice, equality, human rights). Despite surface variations ('seeks', 'aims_at', 'promotes'), they all express an intentional orientation or pursuit of a normative goal, so a unified predicate 'pursues_goal' captures their shared teleological semantics.",
+      "remark": "This canonical predicate is intentionally broad to cover both direct striving (actions like protests) and advocacy/encouragement by movements toward the same kinds of social goals.",
+      "confidence": 0.91
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_fa9d99df4a1f",
+        "RelR_837545d2c978",
+        "RelR_3afa9bec136f",
+        "RelR_c418c0f344c6",
+        "RelR_367e8179473e",
+        "RelR_39095aadef44",
+        "RelR_8f66fa9b1f43",
+        "RelR_8a8d35476578"
+      ],
+      "rel_cls": "goal_orientation_relation",
+      "justification": "Each relation expresses a teleological or intentional orientation from an actor/action/ideal (e.g., protests, movements, racial justice) toward a desired end-state (e.g., social justice, equality, human rights). Grouping them under 'goal_orientation_relation' reflects that they are all about purposes or goals, independent of the specific canonical verb used.",
+      "remark": "This class can later be reused for other intentional or purposive relations where subjects strive for or advocate specific outcomes.",
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_fa9d99df4a1f",
+        "RelR_837545d2c978",
+        "RelR_3afa9bec136f",
+        "RelR_c418c0f344c6",
+        "RelR_367e8179473e",
+        "RelR_39095aadef44",
+        "RelR_8f66fa9b1f43",
+        "RelR_8a8d35476578"
+      ],
+      "rel_cls_group": "AGENCY",
+      "justification": "These links describe intentional actions, advocacy, or purposive orientation by collective agents or normative concepts toward certain social goals, which fits best under a broad AGENCY/intentionality dimension rather than pure causality or association.",
+      "remark": null,
+      "confidence": 0.88
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_30b15b0c2ed4"
+      ],
+      "canonical_rel_name": "leads_toward",
+      "canonical_rel_desc": "The subject is conceptualized as a path, process, or trajectory that directs or tends toward the object as an outcome or destination.",
+      "justification": "This instance explicitly frames the 'road to progress' as something that implies movement toward a 'better world'. The directional and quasi-teleological semantics are best captured by a predicate that encodes leading or tending toward a destination, hence 'leads_toward'.",
+      "remark": "The relation is metaphorical but preserves a directional/teleological structure useful for reasoning about progress trajectories.",
+      "confidence": 0.8
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_30b15b0c2ed4"
+      ],
+      "rel_cls": "progress_direction_relation",
+      "justification": "The relation connects a metaphorical progress-path concept to a desired future state, emphasizing directional movement along a trajectory of social progress. A dedicated class 'progress_direction_relation' captures this family of directional, progress-oriented links.",
+      "remark": null,
+      "confidence": 0.76
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_30b15b0c2ed4"
+      ],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "Although metaphorical, the phrase implies that following the 'road to progress' brings about or results in a 'better world', which is essentially a causal/teleological relation where the process is understood as leading to an outcome.",
+      "remark": "Could alternatively be viewed as a directional/teleological subgroup, but CAUSALITY is the closest broad category available.",
+      "confidence": 0.7
+    }
+  }
+]

@@ -1,0 +1,213 @@
+{
+  "cluster_label": "13_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_7c50423e0666",
+      "relation_name": "improves",
+      "rel_desc": "Forensic technological advancements improve the accuracy of forensic analysis.",
+      "rel_hint_type": "quality impact",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "forensic technology and technological advancements",
+      "object_entity_name": "accuracy of forensic analysis",
+      "subject_class_label": "Forensic Technology",
+      "subject_class_group": "Forensic Science Domain",
+      "object_class_label": "Forensic Analysis Quality Metrics",
+      "object_class_group": "Forensic Science & Analysis",
+      "qualifiers": {
+        "TemporalQualifier": "have greatly improved",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "improved",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.96,
+      "remarks": [
+        "Refers back to previously mentioned tools like SEM and mass spectrometry as part of advancements."
+      ]
+    },
+    {
+      "relation_id": "RelR_b0cc9b0b96a3",
+      "relation_name": "improves",
+      "rel_desc": "Forensic technological advancements improve the reliability of forensic analysis.",
+      "rel_hint_type": "quality impact",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "forensic technology and technological advancements",
+      "object_entity_name": "reliability of forensic analysis",
+      "subject_class_label": "Forensic Technology",
+      "subject_class_group": "Forensic Science Domain",
+      "object_class_label": "Forensic Analysis Quality Metrics",
+      "object_class_group": "Forensic Science & Analysis",
+      "qualifiers": {
+        "TemporalQualifier": "have greatly improved",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "improved",
+        "LogicalMarker": "and",
+        "OtherQualifier": null
+      },
+      "confidence": 0.96,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_32364d044769",
+      "relation_name": "enhances",
+      "rel_desc": "Advancing forensic technology enhances the sophistication and effectiveness of the art of forensic science.",
+      "rel_hint_type": "improvement",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "forensic technology and technological advancements",
+      "object_entity_name": "art of forensic science",
+      "subject_class_label": "Forensic Technology",
+      "subject_class_group": "Forensic Science Domain",
+      "object_class_label": "Forensic Practice Competence",
+      "object_class_group": "Forensic Science Professional Competencies",
+      "qualifiers": {
+        "TemporalQualifier": "in the years to come",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "will only become",
+        "CausalHint": "As technology continues to advance",
+        "LogicalMarker": "As",
+        "OtherQualifier": "ChangeType: more sophisticated and effective"
+      },
+      "confidence": 0.9,
+      "remarks": [
+        "Technology entity represents 'forensic technology and technological advancements' derived from 'As technology continues to advance'."
+      ]
+    },
+    {
+      "relation_id": "RelR_c89d77084325",
+      "relation_name": "enhances",
+      "rel_desc": "Development of new techniques improves the art of forensic science.",
+      "rel_hint_type": "improvement",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "new techniques",
+      "object_entity_name": "art of forensic science",
+      "subject_class_label": "Forensic Science Practice",
+      "subject_class_group": "Forensic Science Domain",
+      "object_class_label": "Forensic Practice Competence",
+      "object_class_group": "Forensic Science Professional Competencies",
+      "qualifiers": {
+        "TemporalQualifier": "in the years to come",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "will only become",
+        "CausalHint": null,
+        "LogicalMarker": "and",
+        "OtherQualifier": "ChangeType: more sophisticated and effective"
+      },
+      "confidence": 0.9,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_7c50423e0666\",\n        \"RelR_b0cc9b0b96a3\",\n        \"RelR_32364d044769\",\n        \"RelR_c89d77084325\"\n      ],\n      \"canonical_rel_name\": \"improves\",\n      \"canonical_rel_desc\": \"Indicates that the subject causes an increase in the quality, performance, or effectiveness of the object.\",\n      \"justification\": \"All four relations describe a causal positive impact where technological advances or new techniques make some aspect of forensic practice (accuracy, reliability, or overall art of forensic science) better. Despite wording differences like 'improves' vs 'enhances', the underlying predicate is the same: the subject improves the object.\",\n      \"remark\": null,\n      \"confidence\": 0.94\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_7c50423e0666\",\n        \"RelR_b0cc9b0b96a3\",\n        \"RelR_32364d044769\",\n        \"RelR_c89d77084325\"\n      ],\n      \"rel_cls\": \"quality_and_effectiveness_impact_relation\",\n      \"justification\": \"Each relation captures how a method or technology influences the quality or effectiveness of forensic analysis or practice (accuracy, reliability, sophistication, effectiveness). Grouping them under a shared class focused on quality/effectiveness impact provides a reusable family for similar predicates like improves/enhances.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_7c50423e0666\",\n        \"RelR_b0cc9b0b96a3\",\n        \"RelR_32364d044769\",\n        \"RelR_c89d77084325\"\n      ],\n      \"rel_cls_group\": \"CAUSALITY\",\n      \"justification\": \"In all instances, the subject is the cause of improved quality or effectiveness of the object (technological advances or techniques lead to better forensic outcomes). This is best modeled as a causal impact rather than mere association.\",\n      \"remark\": null,\n      \"confidence\": 0.93\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_7c50423e0666",
+          "RelR_b0cc9b0b96a3",
+          "RelR_32364d044769",
+          "RelR_c89d77084325"
+        ],
+        "canonical_rel_name": "improves",
+        "canonical_rel_desc": "Indicates that the subject causes an increase in the quality, performance, or effectiveness of the object.",
+        "justification": "All four relations describe a causal positive impact where technological advances or new techniques make some aspect of forensic practice (accuracy, reliability, or overall art of forensic science) better. Despite wording differences like 'improves' vs 'enhances', the underlying predicate is the same: the subject improves the object.",
+        "remark": null,
+        "confidence": 0.94
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_7c50423e0666",
+          "RelR_b0cc9b0b96a3",
+          "RelR_32364d044769",
+          "RelR_c89d77084325"
+        ],
+        "rel_cls": "quality_and_effectiveness_impact_relation",
+        "justification": "Each relation captures how a method or technology influences the quality or effectiveness of forensic analysis or practice (accuracy, reliability, sophistication, effectiveness). Grouping them under a shared class focused on quality/effectiveness impact provides a reusable family for similar predicates like improves/enhances.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_7c50423e0666",
+          "RelR_b0cc9b0b96a3",
+          "RelR_32364d044769",
+          "RelR_c89d77084325"
+        ],
+        "rel_cls_group": "CAUSALITY",
+        "justification": "In all instances, the subject is the cause of improved quality or effectiveness of the object (technological advances or techniques lead to better forensic outcomes). This is best modeled as a causal impact rather than mere association.",
+        "remark": null,
+        "confidence": 0.93
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_7c50423e0666",
+        "RelR_b0cc9b0b96a3",
+        "RelR_32364d044769",
+        "RelR_c89d77084325"
+      ],
+      "canonical_rel_name": "improves",
+      "canonical_rel_desc": "Indicates that the subject causes an increase in the quality, performance, or effectiveness of the object.",
+      "justification": "All four relations describe a causal positive impact where technological advances or new techniques make some aspect of forensic practice (accuracy, reliability, or overall art of forensic science) better. Despite wording differences like 'improves' vs 'enhances', the underlying predicate is the same: the subject improves the object.",
+      "remark": null,
+      "confidence": 0.94
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_7c50423e0666",
+        "RelR_b0cc9b0b96a3",
+        "RelR_32364d044769",
+        "RelR_c89d77084325"
+      ],
+      "rel_cls": "quality_and_effectiveness_impact_relation",
+      "justification": "Each relation captures how a method or technology influences the quality or effectiveness of forensic analysis or practice (accuracy, reliability, sophistication, effectiveness). Grouping them under a shared class focused on quality/effectiveness impact provides a reusable family for similar predicates like improves/enhances.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_7c50423e0666",
+        "RelR_b0cc9b0b96a3",
+        "RelR_32364d044769",
+        "RelR_c89d77084325"
+      ],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "In all instances, the subject is the cause of improved quality or effectiveness of the object (technological advances or techniques lead to better forensic outcomes). This is best modeled as a causal impact rather than mere association.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  ],
+  "timestamp": "2026-01-06T14:33:39Z"
+}

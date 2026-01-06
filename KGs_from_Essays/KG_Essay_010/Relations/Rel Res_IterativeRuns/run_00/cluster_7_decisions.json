@@ -1,0 +1,118 @@
+{
+  "cluster_label": 7,
+  "cluster_classes": [
+    {
+      "candidate_id": "ClsC_4526007b",
+      "class_label": "Black Hole Conceptual Questions",
+      "class_description": "Conceptual and theoretical issues surrounding black holes, including their existence, incomplete descriptions, and open mysteries about their properties and behavior.",
+      "class_type_hint": "Scientific Concept",
+      "class_group": "TBD",
+      "confidence": 0.9,
+      "evidence_excerpt": "They concern theorized existence, unresolved questions, and the need for a more complete description of black holes.",
+      "member_ids": [
+        "En_b1d81020",
+        "Can_a624c447",
+        "En_42fe5808"
+      ],
+      "members": [
+        {
+          "id": "En_b1d81020",
+          "entity_name": "existence of black holes",
+          "entity_description": "Theoretical and later accepted notion that black holes are real cosmic entities.",
+          "entity_type_hint": "ScientificConcept"
+        },
+        {
+          "id": "Can_a624c447",
+          "entity_name": "mysteries of black holes",
+          "entity_description": "Unresolved questions and unknown aspects surrounding black holes, including currently open scientific problems about their formation, properties, and behavior.",
+          "entity_type_hint": "ScientificConcept"
+        },
+        {
+          "id": "En_42fe5808",
+          "entity_name": "description of black holes",
+          "entity_description": "Theoretical account or model explaining black hole properties and internal structure.",
+          "entity_type_hint": "ScientificModel"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_9bb7caa9",
+      "class_label": "Black Hole Essay",
+      "class_description": "A written scientific essay focused on black holes, covering their formation, properties, and unresolved mysteries.",
+      "class_type_hint": "Document",
+      "class_group": "TBD",
+      "confidence": 0.92,
+      "evidence_excerpt": "An essay discussing black holes, their formation, properties, and associated scientific mysteries.",
+      "member_ids": [
+        "Can_8b4fa42e"
+      ],
+      "members": [
+        {
+          "id": "Can_8b4fa42e",
+          "entity_name": "The Mystery of Black Holes",
+          "entity_description": "An essay discussing black holes, their formation, properties, and associated scientific mysteries.",
+          "entity_type_hint": "Document"
+        }
+      ],
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_4526007b\",\n      \"new_name\": \"Black Hole Concepts & Open Questions\",\n      \"new_description\": \"Conceptual and theoretical issues surrounding black holes in astrophysics, including their existence, theoretical descriptions, and unresolved mysteries about their properties and behavior.\",\n      \"new_class_type_hint\": \"ScientificConcept\",\n      \"new_class_group\": \"Astrophysics – Black Holes\",\n      \"remark\": null,\n      \"justification\": \"The class clearly represents theoretical and conceptual aspects of black holes within astrophysics; updating the label and assigning a shared Astrophysics – Black Holes class group clarifies scope and connects it to related black hole content.\",\n      \"confidence\": 0.93\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_9bb7caa9\",\n      \"new_name\": \"Black Hole Scientific Essay\",\n      \"new_description\": \"A written scientific essay focused on black holes in astrophysics, covering their formation, properties, and unresolved mysteries.\",\n      \"new_class_type_hint\": \"Document\",\n      \"new_class_group\": \"Astrophysics – Black Holes\",\n      \"remark\": null,\n      \"justification\": \"This class is a document-type entity about black holes; refining the label and assigning the same Astrophysics – Black Holes class group aligns it with the related conceptual class while preserving the distinct document focus.\",\n      \"confidence\": 0.92\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_4526007b",
+        "new_name": "Black Hole Concepts & Open Questions",
+        "new_description": "Conceptual and theoretical issues surrounding black holes in astrophysics, including their existence, theoretical descriptions, and unresolved mysteries about their properties and behavior.",
+        "new_class_type_hint": "ScientificConcept",
+        "new_class_group": "Astrophysics – Black Holes",
+        "remark": null,
+        "justification": "The class clearly represents theoretical and conceptual aspects of black holes within astrophysics; updating the label and assigning a shared Astrophysics – Black Holes class group clarifies scope and connects it to related black hole content.",
+        "confidence": 0.93
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_9bb7caa9",
+        "new_name": "Black Hole Scientific Essay",
+        "new_description": "A written scientific essay focused on black holes in astrophysics, covering their formation, properties, and unresolved mysteries.",
+        "new_class_type_hint": "Document",
+        "new_class_group": "Astrophysics – Black Holes",
+        "remark": null,
+        "justification": "This class is a document-type entity about black holes; refining the label and assigning the same Astrophysics – Black Holes class group aligns it with the related conceptual class while preserving the distinct document focus.",
+        "confidence": 0.92
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_4526007b",
+      "class_id_resolved": "ClsC_4526007b",
+      "new_name": "Black Hole Concepts & Open Questions",
+      "new_description": "Conceptual and theoretical issues surrounding black holes in astrophysics, including their existence, theoretical descriptions, and unresolved mysteries about their properties and behavior.",
+      "new_class_type_hint": "ScientificConcept",
+      "new_class_group": "Astrophysics – Black Holes",
+      "remark": null,
+      "justification": "The class clearly represents theoretical and conceptual aspects of black holes within astrophysics; updating the label and assigning a shared Astrophysics – Black Holes class group clarifies scope and connects it to related black hole content.",
+      "confidence": 0.93
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_9bb7caa9",
+      "class_id_resolved": "ClsC_9bb7caa9",
+      "new_name": "Black Hole Scientific Essay",
+      "new_description": "A written scientific essay focused on black holes in astrophysics, covering their formation, properties, and unresolved mysteries.",
+      "new_class_type_hint": "Document",
+      "new_class_group": "Astrophysics – Black Holes",
+      "remark": null,
+      "justification": "This class is a document-type entity about black holes; refining the label and assigning the same Astrophysics – Black Holes class group aligns it with the related conceptual class while preserving the distinct document focus.",
+      "confidence": 0.92
+    }
+  ],
+  "provisional_to_real": {},
+  "timestamp": "2026-01-06T09:24:57Z"
+}

@@ -1,0 +1,234 @@
+{
+  "cluster_label": 12,
+  "cluster_classes": [
+    {
+      "candidate_id": "ClsC_d77d6ede",
+      "class_label": "Political Uprisings",
+      "class_description": "Collective rebellion events aimed at overthrowing existing regimes or authorities, including revolutions and globally distributed uprisings.",
+      "class_type_hint": "Political Event",
+      "class_group": "TBD",
+      "confidence": 0.9,
+      "evidence_excerpt": "Large-scale collective uprisings or upheavals that overthrow regimes; uprisings around the world influenced by the Russian Revolution.",
+      "member_ids": [
+        "Can_5aea2ac4",
+        "En_bc8a2032",
+        "En_d51f7be4"
+      ],
+      "members": [
+        {
+          "id": "Can_5aea2ac4",
+          "entity_name": "revolutions",
+          "entity_description": "Large-scale collective uprisings or upheavals that fundamentally transform political or social systems, often by overthrowing existing regimes.",
+          "entity_type_hint": "PoliticalEvent"
+        },
+        {
+          "id": "En_bc8a2032",
+          "entity_name": "uprisings around the world",
+          "entity_description": "Rebellion events in various countries influenced by the Russian Revolution.",
+          "entity_type_hint": "PoliticalEvent"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_a7055ec2",
+      "class_label": "Collective Political Contention",
+      "class_description": "Forms of collective action that challenge political authority, including mass protests and more forceful, often armed uprisings.",
+      "class_type_hint": "Event Type",
+      "class_group": "TBD",
+      "confidence": 0.87,
+      "evidence_excerpt": "protests have taken various forms, from peaceful demonstrations to violent uprisings",
+      "member_ids": [
+        "En_d51f7be4",
+        "En_9b268487"
+      ],
+      "members": [
+        {
+          "id": "En_d51f7be4",
+          "entity_name": "violent uprisings",
+          "entity_description": "Forceful, often armed, collective rebellions against authorities or regimes.",
+          "entity_type_hint": "Action"
+        },
+        {
+          "id": "En_9b268487",
+          "entity_name": "protests and revolutions",
+          "entity_description": "Collective actions and uprisings that shape the political landscape of countries.",
+          "entity_type_hint": "CollectiveEventType"
+        }
+      ],
+      "remarks": [
+        "This class was an overlapping umbrella across protests and uprisings; entities have been moved into more specific, coherent classes. Consider removing or ignoring this class in downstream use."
+      ]
+    },
+    {
+      "candidate_id": "ClsC_7a4ec6a1",
+      "class_label": "Political Dissent and Protest",
+      "class_description": "Forms and expressions of opposition to authorities or policies, including collective actions like strikes and public demonstrations, as well as general expressions of dissent.",
+      "class_type_hint": "Collective Action",
+      "class_group": "TBD",
+      "confidence": 0.84,
+      "evidence_excerpt": "organized strikes... taken to the streets... suppress dissent and silence opposition",
+      "member_ids": [
+        "En_db64f553",
+        "Can_4510a053",
+        "En_c15218bd",
+        "En_9b268487"
+      ],
+      "members": [
+        {
+          "id": "En_db64f553",
+          "entity_name": "strikes",
+          "entity_description": "Collective work stoppages used as a protest tactic.",
+          "entity_type_hint": "Action"
+        },
+        {
+          "id": "Can_4510a053",
+          "entity_name": "public protest demonstrations",
+          "entity_description": "Collective public actions such as taking to the streets, peaceful demonstrations, and similar gatherings used to express dissent, objection, or demands in public spaces.",
+          "entity_type_hint": "SocialMovement"
+        },
+        {
+          "id": "En_c15218bd",
+          "entity_name": "dissent",
+          "entity_description": "Expression of disagreement or opposition to prevailing policies or authorities.",
+          "entity_type_hint": "Condition"
+        }
+      ],
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"reassign_entities\",\n    \"args\": {\n      \"entity_ids\": [\"En_d51f7be4\"],\n      \"from_class_id\": \"ClsC_a7055ec2\",\n      \"to_class_id\": \"ClsC_d77d6ede\",\n      \"justification\": \"\\\"violent uprisings\\\" are forceful, often armed rebellions and align directly with the \\\"Political Uprisings\\\" class that already contains revolutions and uprisings.\",\n      \"remark\": null,\n      \"confidence\": 0.94\n    }\n  },\n  {\n    \"function\": \"reassign_entities\",\n    \"args\": {\n      \"entity_ids\": [\"En_9b268487\"],\n      \"from_class_id\": \"ClsC_a7055ec2\",\n      \"to_class_id\": \"ClsC_7a4ec6a1\",\n      \"justification\": \"\\\"protests and revolutions\\\" emphasizes protest as a form of collective political contention and conceptually overlaps more with the existing protest/strike/dissent class than with a pure uprisings class.\",\n      \"remark\": null,\n      \"confidence\": 0.86\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_d77d6ede\",\n      \"new_name\": \"Revolutions and Uprisings\",\n      \"new_description\": \"Collective rebellion events, including revolutions and violent uprisings, aimed at fundamentally transforming or overthrowing existing political or social regimes.\",\n      \"new_class_type_hint\": \"PoliticalEvent\",\n      \"new_class_group\": \"Political Collective Action and Contention\",\n      \"remark\": null,\n      \"justification\": \"Renaming and slightly broadening the description to explicitly cover both revolutions and violent uprisings (including the reassigned \\\"violent uprisings\\\" entity) clarifies scope within a shared group of political contention.\",\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_7a4ec6a1\",\n      \"new_name\": \"Protests, Strikes, and Political Dissent\",\n      \"new_description\": \"Non-insurrectionary forms and expressions of opposition to authorities or policies, including public protest demonstrations, strikes, and more general expressions of political dissent.\",\n      \"new_class_type_hint\": \"CollectiveAction\",\n      \"new_class_group\": \"Political Collective Action and Contention\",\n      \"remark\": null,\n      \"justification\": \"Renaming and refining the description makes the class clearly about non-insurrectionary protest and dissent, complementing the uprisings/revolutions class under the same political contention group.\",\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_a7055ec2\",\n      \"new_name\": \"Collective Political Contention (deprecated umbrella)\",\n      \"new_description\": \"Former umbrella class for protests and uprisings; its entities have been reassigned to more precise classes for protests/dissent and revolutions/uprisings.\",\n      \"new_class_type_hint\": \"MetaCategory\",\n      \"new_class_group\": \"Political Collective Action and Contention\",\n      \"remark\": \"This class was an overlapping umbrella across protests and uprisings; entities have been moved into more specific, coherent classes. Consider removing or ignoring this class in downstream use.\",\n      \"justification\": \"After reassigning its members to more specific protest and uprising classes, this umbrella class would be redundant; marking it as deprecated and aligning its group prevents confusion while preserving history.\",\n      \"confidence\": 0.88\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "reassign_entities",
+      "args": {
+        "entity_ids": [
+          "En_d51f7be4"
+        ],
+        "from_class_id": "ClsC_a7055ec2",
+        "to_class_id": "ClsC_d77d6ede",
+        "justification": "\"violent uprisings\" are forceful, often armed rebellions and align directly with the \"Political Uprisings\" class that already contains revolutions and uprisings.",
+        "remark": null,
+        "confidence": 0.94
+      }
+    },
+    {
+      "function": "reassign_entities",
+      "args": {
+        "entity_ids": [
+          "En_9b268487"
+        ],
+        "from_class_id": "ClsC_a7055ec2",
+        "to_class_id": "ClsC_7a4ec6a1",
+        "justification": "\"protests and revolutions\" emphasizes protest as a form of collective political contention and conceptually overlaps more with the existing protest/strike/dissent class than with a pure uprisings class.",
+        "remark": null,
+        "confidence": 0.86
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_d77d6ede",
+        "new_name": "Revolutions and Uprisings",
+        "new_description": "Collective rebellion events, including revolutions and violent uprisings, aimed at fundamentally transforming or overthrowing existing political or social regimes.",
+        "new_class_type_hint": "PoliticalEvent",
+        "new_class_group": "Political Collective Action and Contention",
+        "remark": null,
+        "justification": "Renaming and slightly broadening the description to explicitly cover both revolutions and violent uprisings (including the reassigned \"violent uprisings\" entity) clarifies scope within a shared group of political contention.",
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_7a4ec6a1",
+        "new_name": "Protests, Strikes, and Political Dissent",
+        "new_description": "Non-insurrectionary forms and expressions of opposition to authorities or policies, including public protest demonstrations, strikes, and more general expressions of political dissent.",
+        "new_class_type_hint": "CollectiveAction",
+        "new_class_group": "Political Collective Action and Contention",
+        "remark": null,
+        "justification": "Renaming and refining the description makes the class clearly about non-insurrectionary protest and dissent, complementing the uprisings/revolutions class under the same political contention group.",
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_a7055ec2",
+        "new_name": "Collective Political Contention (deprecated umbrella)",
+        "new_description": "Former umbrella class for protests and uprisings; its entities have been reassigned to more precise classes for protests/dissent and revolutions/uprisings.",
+        "new_class_type_hint": "MetaCategory",
+        "new_class_group": "Political Collective Action and Contention",
+        "remark": "This class was an overlapping umbrella across protests and uprisings; entities have been moved into more specific, coherent classes. Consider removing or ignoring this class in downstream use.",
+        "justification": "After reassigning its members to more specific protest and uprising classes, this umbrella class would be redundant; marking it as deprecated and aligning its group prevents confusion while preserving history.",
+        "confidence": 0.88
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "reassign_entities",
+      "entity_ids": [
+        "En_d51f7be4"
+      ],
+      "from": "ClsC_a7055ec2",
+      "from_resolved": "ClsC_a7055ec2",
+      "to": "ClsC_d77d6ede",
+      "to_resolved": "ClsC_d77d6ede",
+      "justification": "\"violent uprisings\" are forceful, often armed rebellions and align directly with the \"Political Uprisings\" class that already contains revolutions and uprisings.",
+      "remark": null,
+      "confidence": 0.94
+    },
+    {
+      "action": "reassign_entities",
+      "entity_ids": [
+        "En_9b268487"
+      ],
+      "from": "ClsC_a7055ec2",
+      "from_resolved": "ClsC_a7055ec2",
+      "to": "ClsC_7a4ec6a1",
+      "to_resolved": "ClsC_7a4ec6a1",
+      "justification": "\"protests and revolutions\" emphasizes protest as a form of collective political contention and conceptually overlaps more with the existing protest/strike/dissent class than with a pure uprisings class.",
+      "remark": null,
+      "confidence": 0.86
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_d77d6ede",
+      "class_id_resolved": "ClsC_d77d6ede",
+      "new_name": "Revolutions and Uprisings",
+      "new_description": "Collective rebellion events, including revolutions and violent uprisings, aimed at fundamentally transforming or overthrowing existing political or social regimes.",
+      "new_class_type_hint": "PoliticalEvent",
+      "new_class_group": "Political Collective Action and Contention",
+      "remark": null,
+      "justification": "Renaming and slightly broadening the description to explicitly cover both revolutions and violent uprisings (including the reassigned \"violent uprisings\" entity) clarifies scope within a shared group of political contention.",
+      "confidence": 0.9
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_7a4ec6a1",
+      "class_id_resolved": "ClsC_7a4ec6a1",
+      "new_name": "Protests, Strikes, and Political Dissent",
+      "new_description": "Non-insurrectionary forms and expressions of opposition to authorities or policies, including public protest demonstrations, strikes, and more general expressions of political dissent.",
+      "new_class_type_hint": "CollectiveAction",
+      "new_class_group": "Political Collective Action and Contention",
+      "remark": null,
+      "justification": "Renaming and refining the description makes the class clearly about non-insurrectionary protest and dissent, complementing the uprisings/revolutions class under the same political contention group.",
+      "confidence": 0.9
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_a7055ec2",
+      "class_id_resolved": "ClsC_a7055ec2",
+      "new_name": "Collective Political Contention (deprecated umbrella)",
+      "new_description": "Former umbrella class for protests and uprisings; its entities have been reassigned to more precise classes for protests/dissent and revolutions/uprisings.",
+      "new_class_type_hint": "MetaCategory",
+      "new_class_group": "Political Collective Action and Contention",
+      "remark": "This class was an overlapping umbrella across protests and uprisings; entities have been moved into more specific, coherent classes. Consider removing or ignoring this class in downstream use.",
+      "justification": "After reassigning its members to more specific protest and uprising classes, this umbrella class would be redundant; marking it as deprecated and aligning its group prevents confusion while preserving history.",
+      "confidence": 0.88
+    }
+  ],
+  "provisional_to_real": {},
+  "timestamp": "2026-01-06T13:05:51Z"
+}

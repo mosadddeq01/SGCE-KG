@@ -1,0 +1,158 @@
+{
+  "cluster_label": "-1_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_752a9d2117eb",
+      "relation_name": "contributed_to",
+      "rel_desc": "The U.S. civil rights movement contributed to the passage of landmark civil rights legislation in the 1960s.",
+      "rel_hint_type": "causal",
+      "canonical_rel_name": "contributes_to",
+      "canonical_rel_desc": "Indicates that the subject exerts a non-exclusive causal or enabling influence that helps bring about the object event, state, or outcome.",
+      "rel_cls": "causal_contribution_relation",
+      "rel_cls_group": "CAUSALITY",
+      "subject_entity_name": "civil rights movement in the United States",
+      "object_entity_name": "landmark civil rights legislation in the 1960s",
+      "subject_class_label": "US Civil Rights Era Developments",
+      "subject_class_group": "US Civil Rights Movement & Era",
+      "object_class_label": "US Civil Rights Era Developments",
+      "object_class_group": "US Civil Rights Movement & Era",
+      "qualifiers": {
+        "TemporalQualifier": "in the 1960s",
+        "SpatialQualifier": "United States",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "paving the way for",
+        "LogicalMarker": null,
+        "OtherQualifier": "OutcomeType: passage of legislation"
+      },
+      "confidence": 0.98,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_fa9a6059b936",
+      "relation_name": "challenges",
+      "rel_desc": "Public protest demonstrations are used by people to challenge injustice.",
+      "rel_hint_type": "causal",
+      "canonical_rel_name": "aims_to_achieve",
+      "canonical_rel_desc": "Indicates that a collective action (such as a protest or demonstration) is undertaken with the goal of achieving, securing, or affecting the object (e.g., challenging injustice, demanding accountability, securing rights and freedoms).",
+      "rel_cls": "collective_action_goal_relation",
+      "rel_cls_group": "AGENCY",
+      "subject_entity_name": "public protest demonstrations",
+      "object_entity_name": "injustice",
+      "subject_class_label": "Protests, Strikes, and Political Dissent",
+      "subject_class_group": "Political Collective Action and Contention",
+      "object_class_label": "Social Injustice Conditions",
+      "object_class_group": "Social Inequality and Justice",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": "to",
+        "OtherQualifier": null
+      },
+      "confidence": 0.95,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_2dc7c184c6a6",
+      "relation_name": "uses_as_tool",
+      "rel_desc": "Ordinary people use public protest demonstrations as a means to exercise their power and pursue change.",
+      "rel_hint_type": "agency",
+      "canonical_rel_name": "uses_as_tool",
+      "canonical_rel_desc": "Indicates that an actor employs a specific practice, method, or instrument as a tool or means to exercise power or achieve political or social goals.",
+      "rel_cls": "political_agency_relation",
+      "rel_cls_group": "USAGE",
+      "subject_entity_name": "ordinary people",
+      "object_entity_name": "public protest demonstrations",
+      "subject_class_label": "Political Stakeholder Actors",
+      "subject_class_group": "Contentious Politics Actors & Power Structures",
+      "object_class_label": "Protests, Strikes, and Political Dissent",
+      "object_class_group": "Political Collective Action and Contention",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": "despite the challenges and risks involved",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "power to",
+        "LogicalMarker": "to",
+        "OtherQualifier": null
+      },
+      "confidence": 0.87,
+      "remarks": [
+        "Relation abstracts that ordinary people utilize protests as a political tool.",
+        "Relation abstracts that ordinary people utilize protests as a political tool.",
+        "Relation abstracts that ordinary people utilize protests as a political tool.",
+        "Relation abstracts that ordinary people utilize protests as a political tool."
+      ]
+    },
+    {
+      "relation_id": "RelR_e86d02027ce8",
+      "relation_name": "contributes_to_creation_of",
+      "rel_desc": "The human spirit is described as having the power to create a better world.",
+      "rel_hint_type": "causal",
+      "canonical_rel_name": "contributes_to",
+      "canonical_rel_desc": "Indicates that the subject exerts a non-exclusive causal or enabling influence that helps bring about the object event, state, or outcome.",
+      "rel_cls": "causal_contribution_relation",
+      "rel_cls_group": "CAUSALITY",
+      "subject_entity_name": "human spirit",
+      "object_entity_name": "better world",
+      "subject_class_label": "Human Spirit in Social Struggle",
+      "subject_class_group": "Social Progress & Human Resilience Concepts",
+      "object_class_label": "Envisioned Just Future Society",
+      "object_class_group": "Social Progress & Human Resilience Concepts",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": "through sustained struggle against oppression",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "power ... to ... create",
+        "LogicalMarker": "and",
+        "OtherQualifier": "GoalOrientation: future-oriented social improvement"
+      },
+      "confidence": 0.88,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_rel_schema\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_fa9a6059b936\"\n      ],\n      \"canonical_rel_name\": \"challenges\",\n      \"canonical_rel_desc\": \"Indicates that a collective action (such as a protest or demonstration) is directed against a perceived injustice, condition, or state in order to contest, resist, or change it.\",\n      \"rel_cls\": \"collective_action_target_relation\",\n      \"rel_cls_group\": \"AGENCY\",\n      \"justification\": \"The current canonical_rel_name 'aims_to_achieve' is semantically inverted for this instance: public protest demonstrations do not aim to achieve injustice but to challenge or oppose it. The relation is better modeled as an action directed against a target condition. Updating the predicate to 'challenges', with a class 'collective_action_target_relation' under the broad group 'AGENCY', aligns the schema with the instance description and avoids misrepresenting the goal orientation.\",\n      \"remark\": null,\n      \"confidence\": 0.93\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_rel_schema",
+      "args": {
+        "relation_ids": [
+          "RelR_fa9a6059b936"
+        ],
+        "canonical_rel_name": "challenges",
+        "canonical_rel_desc": "Indicates that a collective action (such as a protest or demonstration) is directed against a perceived injustice, condition, or state in order to contest, resist, or change it.",
+        "rel_cls": "collective_action_target_relation",
+        "rel_cls_group": "AGENCY",
+        "justification": "The current canonical_rel_name 'aims_to_achieve' is semantically inverted for this instance: public protest demonstrations do not aim to achieve injustice but to challenge or oppose it. The relation is better modeled as an action directed against a target condition. Updating the predicate to 'challenges', with a class 'collective_action_target_relation' under the broad group 'AGENCY', aligns the schema with the instance description and avoids misrepresenting the goal orientation.",
+        "remark": null,
+        "confidence": 0.93
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_rel_schema",
+      "relation_ids": [
+        "RelR_fa9a6059b936"
+      ],
+      "canonical_rel_name": "challenges",
+      "canonical_rel_desc": "Indicates that a collective action (such as a protest or demonstration) is directed against a perceived injustice, condition, or state in order to contest, resist, or change it.",
+      "rel_cls": "collective_action_target_relation",
+      "rel_cls_group": "AGENCY",
+      "new_relation_name": null,
+      "original_relation_name": null,
+      "justification": "The current canonical_rel_name 'aims_to_achieve' is semantically inverted for this instance: public protest demonstrations do not aim to achieve injustice but to challenge or oppose it. The relation is better modeled as an action directed against a target condition. Updating the predicate to 'challenges', with a class 'collective_action_target_relation' under the broad group 'AGENCY', aligns the schema with the instance description and avoids misrepresenting the goal orientation.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  ],
+  "timestamp": "2026-01-06T13:31:37Z"
+}

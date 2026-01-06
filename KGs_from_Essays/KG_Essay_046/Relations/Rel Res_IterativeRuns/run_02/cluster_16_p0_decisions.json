@@ -1,0 +1,125 @@
+{
+  "cluster_label": "16_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_e9f5d25e876c",
+      "relation_name": "facilitates",
+      "rel_desc": "Hummingbirds are important agents that facilitate pollination.",
+      "rel_hint_type": "agent-of-process",
+      "canonical_rel_name": "acts_as_agent_of_process",
+      "canonical_rel_desc": "Indicates that the subject serves as an active biological agent that enables or carries out the object process (e.g., an animal acting as a pollination agent).",
+      "rel_cls": "biological_agent_of_process_relation",
+      "rel_cls_group": "AGENCY",
+      "subject_entity_name": "hummingbirds",
+      "object_entity_name": "pollination",
+      "subject_class_label": "Bird Pollinators",
+      "subject_class_group": "Bird-Mediated Plant Reproduction and Regeneration",
+      "object_class_label": "Plant Reproduction and Dispersal Processes",
+      "object_class_group": "Bird-Mediated Plant Reproduction and Regeneration",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "important (qualitative importance)",
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "Pollination mode: nectar-feeding visits to flowers"
+      },
+      "confidence": 0.95,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_6b6c9b05fd13",
+      "relation_name": "facilitates",
+      "rel_desc": "Sunbirds are important agents that facilitate pollination.",
+      "rel_hint_type": "agent-of-process",
+      "canonical_rel_name": "acts_as_agent_of_process",
+      "canonical_rel_desc": "Indicates that the subject serves as an active biological agent that enables or carries out the object process (e.g., an animal acting as a pollination agent).",
+      "rel_cls": "biological_agent_of_process_relation",
+      "rel_cls_group": "AGENCY",
+      "subject_entity_name": "sunbirds",
+      "object_entity_name": "pollination",
+      "subject_class_label": "Bird Pollinators",
+      "subject_class_group": "Bird-Mediated Plant Reproduction and Regeneration",
+      "object_class_label": "Plant Reproduction and Dispersal Processes",
+      "object_class_group": "Bird-Mediated Plant Reproduction and Regeneration",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "important (qualitative importance)",
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "Pollination mode: nectar-feeding visits to flowers"
+      },
+      "confidence": 0.95,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_9b8ced00079e",
+      "relation_name": "enables",
+      "rel_desc": "Bird pollinators enable or facilitate the reproduction of plants through nectar feeding and pollen transfer.",
+      "rel_hint_type": "causal",
+      "canonical_rel_name": "facilitates",
+      "canonical_rel_desc": "Indicates that the subject process or agent makes the object process more likely or effective, without being the sole direct cause.",
+      "rel_cls": "biological_process_causal_relation",
+      "rel_cls_group": "CAUSALITY",
+      "subject_entity_name": "bird pollinators",
+      "object_entity_name": "reproduction of plants",
+      "subject_class_label": "Bird Pollinators",
+      "subject_class_group": "Bird-Mediated Plant Reproduction and Regeneration",
+      "object_class_label": "Plant Reproduction and Dispersal Processes",
+      "object_class_group": "Bird-Mediated Plant Reproduction and Regeneration",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": "when feeding on nectar and transferring pollen from flower to flower",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "by feeding on nectar and transferring pollen",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.98,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_rel_schema\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_9b8ced00079e\"],\n      \"canonical_rel_name\": \"acts_as_agent_of_process\",\n      \"canonical_rel_desc\": \"Indicates that the subject serves as an active biological agent that enables or carries out the object process (e.g., an animal acting as a pollination or plant reproduction agent).\",\n      \"rel_cls\": \"biological_agent_of_process_relation\",\n      \"rel_cls_group\": \"AGENCY\",\n      \"justification\": \"In this relation, 'bird pollinators' function as biological agents that carry out or enable the process 'reproduction of plants' via pollen transfer. This is semantically parallel to the first two relations (hummingbirds→pollination, sunbirds→pollination). Using a generic causal predicate 'facilitates' and class 'biological_process_causal_relation' with rel_cls_group 'CAUSALITY' under-specifies the agentive nature already captured by the other instances. To maintain a coherent schema, all three should share the same agent-of-process predicate, class, and group focusing on AGENCY rather than generic causality.\",\n      \"remark\": \"Aligned with other bird–reproduction relations so that all use a consistent agent-of-process schema.\",\n      \"confidence\": 0.93\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_rel_schema",
+      "args": {
+        "relation_ids": [
+          "RelR_9b8ced00079e"
+        ],
+        "canonical_rel_name": "acts_as_agent_of_process",
+        "canonical_rel_desc": "Indicates that the subject serves as an active biological agent that enables or carries out the object process (e.g., an animal acting as a pollination or plant reproduction agent).",
+        "rel_cls": "biological_agent_of_process_relation",
+        "rel_cls_group": "AGENCY",
+        "justification": "In this relation, 'bird pollinators' function as biological agents that carry out or enable the process 'reproduction of plants' via pollen transfer. This is semantically parallel to the first two relations (hummingbirds→pollination, sunbirds→pollination). Using a generic causal predicate 'facilitates' and class 'biological_process_causal_relation' with rel_cls_group 'CAUSALITY' under-specifies the agentive nature already captured by the other instances. To maintain a coherent schema, all three should share the same agent-of-process predicate, class, and group focusing on AGENCY rather than generic causality.",
+        "remark": "Aligned with other bird–reproduction relations so that all use a consistent agent-of-process schema.",
+        "confidence": 0.93
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_rel_schema",
+      "relation_ids": [
+        "RelR_9b8ced00079e"
+      ],
+      "canonical_rel_name": "acts_as_agent_of_process",
+      "canonical_rel_desc": "Indicates that the subject serves as an active biological agent that enables or carries out the object process (e.g., an animal acting as a pollination or plant reproduction agent).",
+      "rel_cls": "biological_agent_of_process_relation",
+      "rel_cls_group": "AGENCY",
+      "new_relation_name": null,
+      "original_relation_name": null,
+      "justification": "In this relation, 'bird pollinators' function as biological agents that carry out or enable the process 'reproduction of plants' via pollen transfer. This is semantically parallel to the first two relations (hummingbirds→pollination, sunbirds→pollination). Using a generic causal predicate 'facilitates' and class 'biological_process_causal_relation' with rel_cls_group 'CAUSALITY' under-specifies the agentive nature already captured by the other instances. To maintain a coherent schema, all three should share the same agent-of-process predicate, class, and group focusing on AGENCY rather than generic causality.",
+      "remark": "Aligned with other bird–reproduction relations so that all use a consistent agent-of-process schema.",
+      "confidence": 0.93
+    }
+  ],
+  "timestamp": "2026-01-06T11:36:45Z"
+}

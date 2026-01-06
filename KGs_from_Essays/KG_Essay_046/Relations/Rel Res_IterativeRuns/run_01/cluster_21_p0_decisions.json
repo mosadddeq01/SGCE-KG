@@ -1,0 +1,71 @@
+{
+  "cluster_label": "21_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_b37eef765662",
+      "relation_name": "supports",
+      "rel_desc": "Healthy, protected bird populations support ecosystem services.",
+      "rel_hint_type": "ecosystem service",
+      "canonical_rel_name": "provides_ecosystem_service",
+      "canonical_rel_desc": "Indicates that the subject acts as a source or provider of one or more ecosystem services (including directly delivering a service or functionally supporting its delivery).",
+      "rel_cls": "ecosystem_service_provision_relation",
+      "rel_cls_group": "FUNCTION",
+      "subject_entity_name": "bird populations",
+      "object_entity_name": "ecosystem services",
+      "subject_class_label": "Bird Biotic Components",
+      "subject_class_group": "Birds as Environmental Indicators & Conservation",
+      "object_class_label": "General Ecosystem Services",
+      "object_class_group": "Ecosystem Condition, Function & Services",
+      "qualifiers": {
+        "TemporalQualifier": "for future generations (implicit across the list)",
+        "SpatialQualifier": "ecosystems; natural systems",
+        "OperationalConstraint": "under effective protection of bird populations and habitats",
+        "ConditionExpression": "if bird populations and their habitats are protected",
+        "UncertaintyQualifier": null,
+        "CausalHint": "is crucial for",
+        "LogicalMarker": "for",
+        "OtherQualifier": null
+      },
+      "confidence": 0.88,
+      "remarks": [
+        "Protection is modeled via qualifiers attached to the relation.",
+        "Protection is modeled via qualifiers attached to the relation."
+      ]
+    },
+    {
+      "relation_id": "RelR_71a8a02b5554",
+      "relation_name": "provides",
+      "rel_desc": "Ecosystem services are the benefits that ecosystems provide.",
+      "rel_hint_type": "provision",
+      "canonical_rel_name": "provides_ecosystem_service",
+      "canonical_rel_desc": "Indicates that the subject acts as a source or provider of one or more ecosystem services (including directly delivering a service or functionally supporting its delivery).",
+      "rel_cls": "ecosystem_service_provision_relation",
+      "rel_cls_group": "FUNCTION",
+      "subject_entity_name": "ecosystems",
+      "object_entity_name": "ecosystem services",
+      "subject_class_label": "Ecosystem State and Stability",
+      "subject_class_group": "Ecosystem Condition, Function & Services",
+      "object_class_label": "General Ecosystem Services",
+      "object_class_group": "Ecosystem Condition, Function & Services",
+      "qualifiers": {
+        "TemporalQualifier": "ongoing, for future generations",
+        "SpatialQualifier": "ecosystems",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "implicit relation; not verbatim in text",
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.5,
+      "remarks": [
+        "Relation included mainly to capture the implicit source of ecosystem services; semantics drawn partly from conventional usage.",
+        "Relation included mainly to capture the implicit source of ecosystem services; semantics drawn partly from conventional usage."
+      ]
+    }
+  ],
+  "llm_raw": "[]",
+  "parsed_steps": [],
+  "executed_decisions": [],
+  "timestamp": "2026-01-06T11:34:47Z"
+}

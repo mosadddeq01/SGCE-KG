@@ -1,0 +1,15 @@
+[
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": ["RelR_44a2aebf98c5"],
+      "canonical_rel_name": "influences",
+      "canonical_rel_desc": "Denotes that the subject exerts a causal or shaping effect on the object (e.g., social media influencing communication, relationships, behaviors, or perceptions).",
+      "rel_cls": null,
+      "rel_cls_group": null,
+      "justification": "Both relations describe the same phenomenon: social media exerting a shaping/causal effect on human communication. Using two different canonical predicates ('transforms' vs 'influences') for this symmetric pattern would fragment the schema unnecessarily. 'Influences' matches the broader, reusable description already defined for RelR_ac80d3f0a451 and is appropriate even when the effect is described as fundamental or transformative, so RelR_44a2aebf98c5 should be normalized to this predicate and description for consistency.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  }
+]

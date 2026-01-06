@@ -1,0 +1,71 @@
+{
+  "cluster_label": "10_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_4cf622ef6ba7",
+      "relation_name": "results_in",
+      "rel_desc": "Each molting event results in the appearance of a new, larger caterpillar skin.",
+      "rel_hint_type": "causal outcome",
+      "canonical_rel_name": "results_in",
+      "canonical_rel_desc": "Indicates that a process or sequence of events produces a specific outcome or end state.",
+      "rel_cls": "causal_process_relation",
+      "rel_cls_group": "CAUSALITY",
+      "subject_entity_name": "molting",
+      "object_entity_name": "caterpillar skin",
+      "subject_class_label": "Caterpillar Molting",
+      "subject_class_group": "Caterpillar Biology & Adaptations",
+      "object_class_label": "Caterpillar Molting",
+      "object_class_group": "Caterpillar Biology & Adaptations",
+      "qualifiers": {
+        "TemporalQualifier": "each time they molt",
+        "SpatialQualifier": "underneath",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "reveal",
+        "LogicalMarker": "each time",
+        "OtherQualifier": "ResultCharacteristic: new, larger skin"
+      },
+      "confidence": 0.86,
+      "remarks": [
+        "Same entity represents both old and new skin; relation focuses on outcome of molting.",
+        "Same entity represents both old and new skin; relation focuses on outcome of molting."
+      ]
+    },
+    {
+      "relation_id": "RelR_31b1735d998a",
+      "relation_name": "results_in",
+      "rel_desc": "The metamorphosis process leads to the organism developing into a butterfly.",
+      "rel_hint_type": "causal",
+      "canonical_rel_name": "results_in",
+      "canonical_rel_desc": "Indicates that a process or sequence of events produces a specific outcome or end state.",
+      "rel_cls": "causal_process_relation",
+      "rel_cls_group": "CAUSALITY",
+      "subject_entity_name": "metamorphosis",
+      "object_entity_name": "butterflies",
+      "subject_class_label": "Butterfly Metamorphosis System",
+      "subject_class_group": "Butterfly Life Cycle & Wing Development",
+      "object_class_label": "Butterflies",
+      "object_class_group": "Butterfly Ecology and Interactions",
+      "qualifiers": {
+        "TemporalQualifier": "during metamorphosis",
+        "SpatialQualifier": "inside the chrysalis",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "as it develops into",
+        "LogicalMarker": "as",
+        "OtherQualifier": null
+      },
+      "confidence": 0.9,
+      "remarks": [
+        "Subject is metamorphosis rather than the caterpillar to emphasize the process-result link.",
+        "Subject is metamorphosis rather than the caterpillar to emphasize the process-result link."
+      ]
+    }
+  ],
+  "llm_raw": "[]",
+  "parsed_steps": [],
+  "executed_decisions": [],
+  "timestamp": "2026-01-06T07:33:43Z"
+}

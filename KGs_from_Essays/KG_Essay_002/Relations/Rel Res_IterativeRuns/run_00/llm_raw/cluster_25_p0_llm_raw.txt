@@ -1,0 +1,54 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_a8c302701e53"],
+      "canonical_rel_name": "circulates_within",
+      "canonical_rel_desc": "Indicates that a narrative or information item is shared and transmitted within a particular social group or community.",
+      "justification": "The relation connects 'urban legends' to 'communities' with a focus on legends being shared and retold within those communities; a predicate like 'circulates_within' captures this dissemination-in-context semantics cleanly.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_cc090afe46bb"],
+      "canonical_rel_name": "facilitates_dissemination_of",
+      "canonical_rel_desc": "Indicates that the subject context or structure makes it easier for a narrative or information item to spread more widely.",
+      "justification": "The relation describes how 'interconnected societies' help 'urban legends' to spread across regions; the key semantics is enabling/boosting dissemination, best captured by 'facilitates_dissemination_of'.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": ["RelR_a8c302701e53", "RelR_cc090afe46bb"],
+      "rel_cls": "narrative_dissemination_relation",
+      "justification": "Both relations concern how urban legends spread: one describes where they circulate (within communities) and the other how social interconnectedness facilitates their spread; they are instances of a common narrative/information dissemination family.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": ["RelR_a8c302701e53"],
+      "rel_cls_group": "SPATIALITY",
+      "justification": "The first relation emphasizes urban legends circulating within specific social spaces (communities), which aligns best with a spatial/contextual containment perspective among the provided broad groups.",
+      "remark": null,
+      "confidence": 0.82
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": ["RelR_cc090afe46bb"],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "The second relation explicitly encodes that increasing interconnectedness of societies causes or facilitates greater spread of urban legends, making a causal group assignment appropriate.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  }
+]

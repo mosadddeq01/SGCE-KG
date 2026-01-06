@@ -1,0 +1,1041 @@
+"relation_id","start_id","end_id","raw_relation_name","canonical_rel_name","canonical_rel_desc","rel_cls","rel_cls_group","rel_hint_type","confidence","resolution_context","justification","remark","evidence_excerpt","chunk_id","qualifiers","rel_desc"
+"RelR_f9c619a8c66a","Can_bdfda4a6","Can_ce6366a6","undergoes_life_cycle","undergoes_biological_process","Links an organism or life stage to a biological process or life cycle it undergoes over time (e.g., life cycle, molting, life journey).","biological_process_participation_relation","BIOLOGICAL_PROCESS","process-membership","0.95","The text describes the life cycle as belonging to butterflies.","“Butterflies are fascinating creatures that undergo a remarkable transformation throughout their life cycle.”","","Butterflies are fascinating creatures that undergo a remarkable transformation throughout their life cycle.","Ch_000001","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""undergo"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": null
+}","Butterflies undergo the butterfly life cycle as their developmental sequence."
+"RelR_5cac4b7b5b1c","Can_ce6366a6","Can_c8ca5fed","has_stage","has_life_cycle_stage","Indicates that a life cycle concept includes a specific life-cycle stage as one of its constituent phases.","life_cycle_stage_relation","COMPOSITION","composition","0.97","Direction chosen as life cycle → stage (has_stage).","“The first stage of a butterfly's life cycle is the egg stage.”","Ordering captured in qualifier.","The first stage of a butterfly's life cycle is the egg stage.","Ch_000001","{
+ ""TemporalQualifier"": ""first stage"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": ""StageOrder: 1""
+}","The butterfly life cycle includes the butterfly egg stage as its first stage."
+"RelR_44dd2de1e93b","Can_ce6366a6","Can_2fd0c2d7","has_stage","has_life_cycle_stage","Indicates that a life cycle concept includes a specific life-cycle stage as one of its constituent phases.","life_cycle_stage_relation","COMPOSITION","composition","0.9","Direction life cycle → larval stage.","“From egg to larva to pupa to adult butterfly, this process is filled with wonder...”","Order relative to egg stage captured in separate relation.","From egg to larva to pupa to adult butterfly, this process is filled with wonder.","Ch_000001","{
+ ""TemporalQualifier"": ""follows egg stage"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""from ... to"",
+ ""OtherQualifier"": ""StageOrder: 2""
+}","The butterfly life cycle includes the larval (caterpillar) stage."
+"RelR_de57c4994296","Can_ce6366a6","Can_b3f789d8","has_stage","has_life_cycle_stage","Indicates that a life cycle concept includes a specific life-cycle stage as one of its constituent phases.","life_cycle_stage_relation","COMPOSITION","composition","0.9","Direction life cycle → pupal stage.","“From egg to larva to pupa to adult butterfly...”","Order relative to larval and adult stages captured separately.","From egg to larva to pupa to adult butterfly...","Ch_000001","{
+ ""TemporalQualifier"": ""after larval stage, before adult stage"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""to"",
+ ""OtherQualifier"": ""StageOrder: 3""
+}","The butterfly life cycle includes the pupal (chrysalis) stage."
+"RelR_8be4d555e098","Can_ce6366a6","Can_dd80a7cd","has_stage","has_life_cycle_stage","Indicates that a life cycle concept includes a specific life-cycle stage as one of its constituent phases.","life_cycle_stage_relation","COMPOSITION","composition","0.93","Direction life cycle → adult stage.","“From egg to larva to pupa to adult butterfly, this process is filled with wonder...”","Finality captured in qualifier.","From egg to larva to pupa to adult butterfly, this process is filled with wonder.","Ch_000001","{
+ ""TemporalQualifier"": ""final stage"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""to"",
+ ""OtherQualifier"": ""StageOrder: 4""
+}","The butterfly life cycle includes the adult butterfly stage as the final stage."
+"RelR_5f154296fbef","Can_c8ca5fed","Can_2fd0c2d7","precedes","precedes_in_life_cycle","The subject stage or process occurs earlier than the object stage within the butterfly life cycle or metamorphic sequence.","life_cycle_stage_sequence_relation","TEMPORALITY","temporal-order","0.96","Direction earlier stage → later stage.","“From egg to larva to pupa to adult butterfly...” implies egg stage comes before larval stage.","","From egg to larva to pupa to adult butterfly...","Ch_000001","{
+ ""TemporalQualifier"": ""earlier in life cycle"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""from ... to"",
+ ""OtherQualifier"": null
+}","The butterfly egg stage occurs before the larval (caterpillar) stage."
+"RelR_0ca09404b17e","Can_2fd0c2d7","Can_b3f789d8","precedes","precedes_in_life_cycle","The subject stage or process occurs earlier than the object stage within the butterfly life cycle or metamorphic sequence.","life_cycle_stage_sequence_relation","TEMPORALITY","temporal-order","0.96","Direction earlier stage → later stage.","“From egg to larva to pupa to adult butterfly...” places larva before pupa.","","From egg to larva to pupa to adult butterfly...","Ch_000001","{
+ ""TemporalQualifier"": ""earlier in life cycle"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""to"",
+ ""OtherQualifier"": null
+}","The larval (caterpillar) stage occurs before the pupal (chrysalis) stage."
+"RelR_6e77a6bd7252","Can_b3f789d8","Can_dd80a7cd","precedes","precedes_in_life_cycle","The subject stage or process occurs earlier than the object stage within the butterfly life cycle or metamorphic sequence.","life_cycle_stage_sequence_relation","TEMPORALITY","temporal-order","0.96","Direction earlier stage → later stage.","“From egg to larva to pupa to adult butterfly...” places pupa before adult.","","From egg to larva to pupa to adult butterfly...","Ch_000001","{
+ ""TemporalQualifier"": ""earlier in life cycle"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""to"",
+ ""OtherQualifier"": null
+}","The pupal (chrysalis) stage occurs before the adult butterfly stage."
+"RelR_e762eb0e3fbf","Can_35027170","Can_c8ca5fed","produces","initiates","Indicates that the subject action or entity starts or triggers the beginning of the object process, stage, or cycle.","causal_process_relation","CAUSALITY","reproductive","0.9","Direction parent (female butterflies) → offspring stage (egg stage).","“Female butterflies lay their eggs on specific host plants...”","Eggs correspond to butterfly egg stage in this context.","Female butterflies lay their eggs on specific host plants...","Ch_000001","{
+ ""TemporalQualifier"": ""at start of life cycle"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""lay"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": null
+}","Female butterflies lay eggs, initiating the butterfly egg stage."
+"RelR_070113d93c60","Can_35027170","Can_a7f14ebe","uses_for_oviposition","lays_eggs_on","Subject organism deposits its eggs on the object, which serves as the oviposition site (egg-laying substrate).","oviposition_behavior_relation","USAGE","usage","0.96","Direction females → host plants to represent oviposition behavior.","“Female butterflies lay their eggs on specific host plants...”","Relation name chosen to emphasize oviposition usage.","Female butterflies lay their eggs on specific host plants...","Ch_000001","{
+ ""TemporalQualifier"": ""during egg-laying"",
+ ""SpatialQualifier"": ""on host plants"",
+ ""OperationalConstraint"": ""specific host plants"",
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""that"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": null
+}","Female butterflies use specific host plants as sites to lay their eggs."
+"RelR_97a5feee3d70","Can_a7f14ebe","Can_2fd0c2d7","provides_food_for","is_food_source_for","Indicates that the subject serves as a primary or significant food resource for the object organism or life stage.","trophic_interaction_relation","INTERACTION","nutritional-support","0.98","Direction resource (host plants) → consumer (larval stage).","“host plants that will provide food for the emerging larvae.”","Larvae correspond to larval (caterpillar) stage.","host plants that will provide food for the emerging larvae.","Ch_000001","{
+ ""TemporalQualifier"": ""after larvae emerge"",
+ ""SpatialQualifier"": ""on or near host plants"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": ""will (future, but expected)"",
+ ""CausalHint"": ""provide"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": null
+}","Host plants provide food for the larvae that emerge from the eggs."
+"RelR_8c37f62f60bd","Can_c8ca5fed","Can_a7f14ebe","occurs_on","occurs_in_or_on_location","A biological stage, life stage, or process takes place within or on a specified physical location, substrate, or host organism.","biological_stage_or_process_location_relation","SPATIALITY","spatial-location","0.88","Direction stage → substrate/location.","“Female butterflies lay their eggs on specific host plants...” plus definition that eggs are laid on a host plant.","Stage-location relation inferred from combination of chunk and entity description.","Female butterflies lay their eggs on specific host plants that will provide food...","Ch_000001","{
+ ""TemporalQualifier"": ""during egg stage"",
+ ""SpatialQualifier"": ""on host plants"",
+ ""OperationalConstraint"": ""specific host plants suitable as hosts"",
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""on"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": null
+}","The butterfly egg stage occurs on host plants where eggs are laid."
+"RelR_d039e7c0dc9c","Can_c8ca5fed","En_79d63365","occurs_on_surface_of","occurs_in_or_on_location","A biological stage, life stage, or process takes place within or on a specified physical location, substrate, or host organism.","biological_stage_or_process_location_relation","SPATIALITY","spatial","0.96","Direction chosen from life stage (egg) to its deposition location.","Text states eggs are usually laid on the underside of leaves.","","The eggs are usually laid on the underside of leaves to protect them from predators.","Ch_000002","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": ""on the underside of leaves"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": ""usually laid there rather than elsewhere"",
+ ""UncertaintyQualifier"": ""usually"",
+ ""CausalHint"": null,
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": ""Purpose: protection from predators""
+}","Butterfly eggs in the egg stage are laid on the underside of leaves."
+"RelR_90038cce3f44","En_79d63365","En_572416ff","is_part_of","is_part_of","Indicates that the subject is a constituent element, region, component, or process within the broader whole denoted by the object.","part_whole_relation","COMPOSITION","part-whole","0.9","Underside modeled as a substructure of the leaf.","Phrase 'underside of leaves' implies the underside is a part of leaves.","","The eggs are usually laid on the underside of leaves","Ch_000002","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": ""on the lower surface of the leaf"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": null
+}","The underside of leaves is a specific surface region of leaves."
+"RelR_4c1dea8cfdd7","Can_c8ca5fed","En_3acaf8cb","avoids","protects_from","The subject trait, structure, or behavior reduces harm or risk posed by the threat entity given as the object (e.g., predators, parasites, environmental hazards).","protective_function_relation","CAUSALITY","protective","0.8","Egg stage related to predators via protective laying behavior.","Eggs are laid on underside of leaves to protect them from predators.","Relation primarily to capture the protective intent against predators.","laid on the underside of leaves to protect them from predators.","Ch_000002","{
+ ""TemporalQualifier"": ""while in the egg stage"",
+ ""SpatialQualifier"": ""when located on underside of leaves"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": ""eggs are on leaf undersides"",
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""to protect"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": ""Mechanism: concealed placement reduces predation risk""
+}","The egg stage is behaviorally positioned to avoid predators by being laid under leaves."
+"RelR_a4e8d959803a","Can_62e205b2","Can_c8ca5fed","determines_traits_of","determines_traits_of","Subject biological taxon determines specific phenotypic traits (e.g., size, shape, color) of the object life stage or structure.","biological_trait_dependency_relation","CAUSALITY","dependency","0.94","Species is causal factor for egg-stage morphological traits.","Size, shape, and color of butterfly eggs vary depending on the species.","","The size, shape, and color of butterfly eggs vary depending on the species.","Ch_000002","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": ""egg size, shape, and color depend on the species"",
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""depending on"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": ""Traits affected: size, shape, color of eggs""
+}","Butterfly species determine variation in the size, shape, and color of eggs."
+"RelR_a3d207123c06","Can_ce6366a6","Can_c8ca5fed","has_stage","has_life_cycle_stage","Indicates that a life cycle concept includes a specific life-cycle stage as one of its constituent phases.","life_cycle_stage_relation","COMPOSITION","composition","0.96","Life cycle as whole; egg as one of its stages.","Describes the egg as the initial life stage of a butterfly.","","The initial life stage of a butterfly, during which the organism exists as an egg","Ch_000002","{
+ ""TemporalQualifier"": ""initial stage"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": ""first in sequence before larval stage"",
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": ""StageOrder: 1""
+}","The butterfly life cycle includes an egg stage."
+"RelR_d2402ca4c4a9","Can_c8ca5fed","Can_2fd0c2d7","transitions_to","transitions_to_life_stage","The subject life stage directly transforms into the object life stage as the next step in the organism's development.","life_cycle_stage_sequence_relation","TEMPORALITY","temporal-sequence","0.97","From earlier egg stage to subsequent larval stage.","Describes that after some time, the egg hatches and a larva emerges, marking the next stage.","","After a few days or weeks, the egg hatches, and a tiny larva ... emerges.","Ch_000002","{
+ ""TemporalQualifier"": ""after a few days or weeks"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": ""after sufficient time for development in the egg"",
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""hatches"",
+ ""LogicalMarker"": ""after"",
+ ""OtherQualifier"": null
+}","The butterfly egg stage transitions into the larval (caterpillar) stage when the egg hatches."
+"RelR_d532bf1d82bb","Can_2fd0c2d7","Can_698b56b9","realized_as","has_organismal_form","Connects an organismal life‑stage concept to the characteristic organismal form that realizes that stage (e.g., larval stage ↔ caterpillar), typically modeled as a pair of inverse predicates (has_organismal_form / is_organismal_form_of).","life_stage_realization_relation","TEMPORALITY","classification","0.95","Stage (larval) linked to its organismal form (caterpillar).","Text explains that the tiny larva is known as a caterpillar.","","a tiny larva, known as a caterpillar, emerges.","Ch_000002","{
+ ""TemporalQualifier"": ""during the larval stage"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""known as"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": null
+}","The larval stage of a butterfly is realized as a caterpillar."
+"RelR_e7221d14e6a4","Can_698b56b9","En_572416ff","feeds_on","feeds_on","Indicates that the subject organism consumes the object as a primary food source.","trophic_interaction_relation","INTERACTION","trophic","0.98","Consumer-resource relation; caterpillar consumes leaves.","Caterpillars spend most of their time feeding on leaves.","","Caterpillars are voracious eaters and spend most of their time feeding on leaves","Ch_000002","{
+ ""TemporalQualifier"": ""during the larval (caterpillar) stage"",
+ ""SpatialQualifier"": ""on host plant leaves"",
+ ""OperationalConstraint"": ""most of their time is spent feeding"",
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""and"",
+ ""OtherQualifier"": ""Behavior: voracious eating; Effect: rapid growth""
+}","Caterpillars feed on leaves as their primary food source."
+"RelR_6300b6a656ef","Can_698b56b9","Can_2fd0c2d7","is_instance_of","is_organismal_form_of","Connects an organismal life‑stage concept to the characteristic organismal form that realizes that stage (e.g., larval stage ↔ caterpillar), typically modeled as a pair of inverse predicates (has_organismal_form / is_organismal_form_of).","life_stage_realization_relation","TEMPORALITY","classification","0.93","Individual/organism form (caterpillar) mapped to abstract stage (larval).","The text equates the larva with a caterpillar and later describes caterpillars’ behavior in that stage.","","a tiny larva, known as a caterpillar, emerges. The second stage ... is the larva stage.","Ch_000002","{
+ ""TemporalQualifier"": ""when the butterfly is in its second life stage"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": ""second stage of life cycle"",
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": null
+}","A caterpillar is the organismal form that constitutes the larval stage of a butterfly."
+"RelR_9f438429918d","En_ce80e6aa","En_dd588134","undergoes","undergoes_biological_process","Links an organism or life stage to a biological process or life cycle it undergoes over time (e.g., life cycle, molting, life journey).","biological_process_participation_relation","BIOLOGICAL_PROCESS","biological process","0.97","Direction chosen as organism → process it experiences.","The text explicitly states that caterpillars shed their skin as they grow and names this process molting.","","They shed their skin several times as they grow, a process known as molting.","Ch_000003","{
+ ""TemporalQualifier"": ""several times as they grow"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""as"",
+ ""OtherQualifier"": null
+}","Caterpillars shed their skin several times as they grow; this process is called molting, which caterpillars repeatedly undergo."
+"RelR_a52120e0dce4","En_dd588134","En_e03c4eb3","acts_on","involves_participant","Links a process or event to an entity that participates in or is acted upon within that process (e.g., structures, organisms, organs, flowers).","process_participant_relation","PARTICIPATION","process target","0.93","Process (molting) → structure (caterpillar skin) it affects.","Molting is defined in context as the act of shedding their skin.","","They shed their skin several times as they grow, a process known as molting.","Ch_000003","{
+ ""TemporalQualifier"": ""each time they molt"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""a process known as"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": null
+}","Molting is the process that causes the caterpillar to shed its existing skin."
+"RelR_4cf622ef6ba7","En_dd588134","En_e03c4eb3","results_in","results_in","Indicates that a process or sequence of events produces a specific outcome or end state.","causal_process_relation","CAUSALITY","causal outcome","0.86","Process → outcome structure; same skin entity used for old and new skin.","The text states that each time they molt, they reveal a new, larger skin underneath.","Same entity represents both old and new skin; relation focuses on outcome of molting.","Each time they molt, they reveal a new, larger skin underneath.","Ch_000003","{
+ ""TemporalQualifier"": ""each time they molt"",
+ ""SpatialQualifier"": ""underneath"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""reveal"",
+ ""LogicalMarker"": ""each time"",
+ ""OtherQualifier"": ""ResultCharacteristic: new, larger skin""
+}","Each molting event results in the appearance of a new, larger caterpillar skin."
+"RelR_ded9d413f38d","En_ce80e6aa","En_988d9ae7","exhibits","exhibits_morphological_variation","Indicates that a taxon or organism group shows variation in a specific morphological attribute or dimension (e.g., shape, size, color) across individuals or species.","morphological_attribute_relation","ATTRIBUTE","morphology","0.95","Organism → morphological trait it displays.","The text explicitly states caterpillars come in a variety of shapes.","","Caterpillars come in a variety of shapes, sizes, and colors, depending on the species.","Ch_000003","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": ""depending on the species"",
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": ""VariationExtent: variety""
+}","Caterpillars display a variety of body shapes."
+"RelR_a6858df6cbd5","En_ce80e6aa","En_e799b5a9","exhibits","exhibits_morphological_variation","Indicates that a taxon or organism group shows variation in a specific morphological attribute or dimension (e.g., shape, size, color) across individuals or species.","morphological_attribute_relation","ATTRIBUTE","morphology","0.95","Same construction as shapes and colors; organism → size range.","Sizes are listed among the varied attributes of caterpillars.","","Caterpillars come in a variety of shapes, sizes, and colors, depending on the species.","Ch_000003","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": ""depending on the species"",
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": ""VariationExtent: variety""
+}","Caterpillars display a range of body sizes."
+"RelR_a589619d8999","En_ce80e6aa","En_6716cfd7","exhibits","exhibits_morphological_variation","Indicates that a taxon or organism group shows variation in a specific morphological attribute or dimension (e.g., shape, size, color) across individuals or species.","morphological_attribute_relation","ATTRIBUTE","morphology","0.95","Organism → coloration trait.","Colors are directly mentioned as one of the varied caterpillar traits.","","Caterpillars come in a variety of shapes, sizes, and colors, depending on the species.","Ch_000003","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": ""depending on the species"",
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": ""VariationExtent: variety""
+}","Caterpillars display a variety of body colors."
+"RelR_4c230fe958db","En_ce80e6aa","En_8b40e98a","has_structure","has_anatomical_structure","Indicates that an organism or body part possesses a particular anatomical structure as one of its parts.","anatomical_structure_relation","PART_WHOLE","anatomical feature","0.96","Organism → defensive structure it has.","The text states some caterpillars have spines for protection.","","Some caterpillars have spines or hairs for protection","Ch_000003","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": ""some caterpillars"",
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""while"",
+ ""OtherQualifier"": ""Function: for protection""
+}","Some caterpillars possess spines on their bodies."
+"RelR_1f5dc5104f8c","En_ce80e6aa","En_6ec05a79","has_structure","has_anatomical_structure","Indicates that an organism or body part possesses a particular anatomical structure as one of its parts.","anatomical_structure_relation","PART_WHOLE","anatomical feature","0.96","Organism → defensive hair structures.","Hairs are explicitly described as being present on some caterpillars for protection.","","Some caterpillars have spines or hairs for protection","Ch_000003","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": ""some caterpillars"",
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""while"",
+ ""OtherQualifier"": ""Function: for protection""
+}","Some caterpillars possess hairs that serve as protective structures."
+"RelR_3df40419ea3b","En_8b40e98a","En_aebf4cd3","protects_from","protects_from","The subject trait, structure, or behavior reduces harm or risk posed by the threat entity given as the object (e.g., predators, parasites, environmental hazards).","protective_function_relation","CAUSALITY","defense","0.8","Defensive structure → threat it helps defend against.","Spines are stated to be for protection; predators are the implied threat to caterpillars.","Predators are not explicitly named in this sentence but are referenced later; relation inferred.","Some caterpillars have spines or hairs for protection","Ch_000003","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": ""implied target of protection"",
+ ""CausalHint"": null,
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": ""ProtectionTarget: caterpillars""
+}","Caterpillar spines function to protect caterpillars from their predators."
+"RelR_d1bdc662014c","En_6ec05a79","En_aebf4cd3","protects_from","protects_from","The subject trait, structure, or behavior reduces harm or risk posed by the threat entity given as the object (e.g., predators, parasites, environmental hazards).","protective_function_relation","CAUSALITY","defense","0.8","Defensive hair structures → predators as threats.","Hairs are also described as being for protection; predators of caterpillars are the natural threat.","As with spines, predators are implied rather than explicitly named in this clause.","Some caterpillars have spines or hairs for protection","Ch_000003","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": ""implied target of protection"",
+ ""CausalHint"": null,
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": ""ProtectionTarget: caterpillars""
+}","Caterpillar hairs serve as protective structures against predators."
+"RelR_ce8bf3619122","En_ce80e6aa","En_a66b7488","exhibits_behavior","exhibits_behavior","Indicates that an organism or life stage displays or performs a specific behavior or behavioral strategy (e.g., camouflage, mimicry).","behavior_expression_relation","AGENCY","camouflage","0.96","Organism → specific camouflage behavior (twig mimicry).","The text notes that some caterpillars mimic the appearance of twigs.","","while others mimic the appearance of twigs or leaves to camouflage themselves from predators.","Ch_000003","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": ""some caterpillars"",
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""while"",
+ ""OtherQualifier"": ""Purpose: to camouflage themselves from predators""
+}","Some caterpillars show twig mimicry as a behavior."
+"RelR_8d7d6743ddbd","En_ce80e6aa","En_37611e4b","exhibits_behavior","exhibits_behavior","Indicates that an organism or life stage displays or performs a specific behavior or behavioral strategy (e.g., camouflage, mimicry).","behavior_expression_relation","AGENCY","camouflage","0.96","Organism → specific camouflage behavior (leaf mimicry).","The passage states that some caterpillars mimic the appearance of leaves.","","while others mimic the appearance of twigs or leaves to camouflage themselves from predators.","Ch_000003","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": ""some caterpillars"",
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""while"",
+ ""OtherQualifier"": ""Purpose: to camouflage themselves from predators""
+}","Some caterpillars show leaf mimicry as a behavior."
+"RelR_496cc219f2a0","En_a66b7488","En_aebf4cd3","protects_from","protects_from","The subject trait, structure, or behavior reduces harm or risk posed by the threat entity given as the object (e.g., predators, parasites, environmental hazards).","protective_function_relation","CAUSALITY","camouflage defense","0.9","Camouflage behavior → predators it defends against.","The text states that mimicking twigs camouflages them from predators.","","others mimic the appearance of twigs or leaves to camouflage themselves from predators.","Ch_000003","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": ""appearance of twigs"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""to camouflage"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": ""Effect: avoid detection""
+}","Twig mimicry behavior helps caterpillars avoid detection by predators."
+"RelR_3b8e4973ae47","En_37611e4b","En_aebf4cd3","protects_from","protects_from","The subject trait, structure, or behavior reduces harm or risk posed by the threat entity given as the object (e.g., predators, parasites, environmental hazards).","protective_function_relation","CAUSALITY","camouflage defense","0.9","Camouflage behavior → predator threat it mitigates.","The same phrase applies to leaf mimicry, indicating camouflage from predators.","","others mimic the appearance of twigs or leaves to camouflage themselves from predators.","Ch_000003","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": ""appearance of leaves"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""to camouflage"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": ""Effect: avoid detection""
+}","Leaf mimicry behavior helps caterpillars hide from predators."
+"RelR_62814b69a356","En_ce80e6aa","Can_8c5b26a4","contributes_to","contributes_to","Subject has a causal or functional contribution to the state, quality, or outcome represented by the object (e.g., ecological processes, biodiversity levels, or population balance).","ecological_effect_relation","CAUSALITY","ecological role","0.96","Organism → ecological system it is essential to.","The text labels caterpillars as essential to the ecosystem.","","Despite their small size, caterpillars are essential to the ecosystem","Ch_000003","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": ""Despite their small size"",
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""as they play a crucial role in pollination and maintaining the balance of plant populations"",
+ ""LogicalMarker"": ""as"",
+ ""OtherQualifier"": null
+}","Caterpillars are described as essential components contributing to the ecosystem."
+"RelR_25b09a95ee8a","En_ce80e6aa","Can_24d53cb7","participates_in","acts_as_pollinator_in","Subject organism functions as a pollinator contributing to the pollination process of the object.","ecosystem_function_role_relation","AGENCY","functional role","0.9","Organism → biological process it contributes to.","The passage states caterpillars play a crucial role in pollination.","[""Biological plausibility check: Caterpillars are typically not primary pollinators; this instance may reflect a source statement or a mistaken upstream inference, not a general ecological fact.""]","they play a crucial role in pollination","Ch_000003","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""crucial role in"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": null
+}","Caterpillars take part in the biological process of pollination."
+"RelR_8d08fc66387d","En_ce80e6aa","En_52757a3b","helps_maintain","contributes_to","Subject has a causal or functional contribution to the state, quality, or outcome represented by the object (e.g., ecological processes, biodiversity levels, or population balance).","ecological_effect_relation","CAUSALITY","ecological effect","0.92","Organism → ecological balance aspect it influences.","The text attributes the maintenance of plant population balance to caterpillars.","","and maintaining the balance of plant populations.","Ch_000003","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""as they play a crucial role in"",
+ ""LogicalMarker"": ""and"",
+ ""OtherQualifier"": null
+}","Caterpillars help maintain the balance of plant populations."
+"RelR_208960b0eca2","Can_24d53cb7","En_52757a3b","contributes_to","contributes_to","Subject has a causal or functional contribution to the state, quality, or outcome represented by the object (e.g., ecological processes, biodiversity levels, or population balance).","ecological_effect_relation","CAUSALITY","ecological link","0.78","Process → ecological balance outcome; inferred from joint mention.","The sentence links pollination with maintaining plant population balance as key roles.","Causal direction inferred; text lists them together but does not explicitly state causality.","a crucial role in pollination and maintaining the balance of plant populations.","Ch_000003","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": ""inferred contribution"",
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""and"",
+ ""OtherQualifier"": null
+}","Pollination is one of the processes through which plant population balance is maintained."
+"RelR_1fe83aeb066e","Can_b3f789d8","Can_ce6366a6","is_stage_of","is_life_cycle_stage_of","Indicates that the subject is a distinct stage within the life cycle process represented by the object.","life_cycle_stage_relation","TEMPORALITY","hierarchical","0.97","Life cycle described as having a pupa stage that is explicitly called the third stage.","The text states that the pupa stage is the third stage of the butterfly's life cycle, directly linking the pupal stage to the overall life cycle.","","The third stage of the butterfly's life cycle is the pupa stage.","Ch_000004","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": ""third stage"",
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": null
+}","The pupal (chrysalis) stage is identified as a specific stage within the butterfly life cycle."
+"RelR_a25f48e3d562","Can_bdfda4a6","Can_ce6366a6","has_life_cycle","has_life_cycle","Links an organism or group of organisms to the overall life cycle structure that characterizes them.","organism_life_cycle_relation","TEMPORALITY","association","0.88","Possessive phrase ""butterfly's life cycle"" implies the life cycle is associated with butterflies.","The phrase ""butterfly's life cycle"" indicates that this particular life cycle belongs to butterflies.","","The third stage of the butterfly's life cycle is the pupa stage.","Ch_000004","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": ""LifeCycleType: complete metamorphosis implied by stages""
+}","Butterflies are described as having a life cycle that includes multiple stages."
+"RelR_d22d6eacc4f9","Can_698b56b9","Can_ce6366a6","is_stage_of","is_life_cycle_stage_of","Indicates that the subject is a distinct stage within the life cycle process represented by the object.","life_cycle_stage_relation","TEMPORALITY","hierarchical","0.78","Text says the caterpillar prepares for the next stage of its life cycle, implying the caterpillar is itself a prior life-cycle stage.","Reference to the caterpillar preparing for the next stage of its life cycle suggests the caterpillar is a distinct life-cycle stage within the butterfly life cycle.","Stage name for the caterpillar (larval stage) is not explicitly given in this chunk but is implied.","As the caterpillar grows, it eventually reaches a point where it stops eating and begins to prepare for the next stage of its life cycle.","Ch_000004","{
+ ""TemporalQualifier"": ""before the pupa stage"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": ""as the caterpillar grows"",
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""as"",
+ ""OtherQualifier"": null
+}","The caterpillar is framed as being in a stage of a broader life cycle that continues to the pupa stage."
+"RelR_493b2a137787","Can_698b56b9","Can_b3f789d8","precedes","precedes_in_life_cycle","The subject stage or process occurs earlier than the object stage within the butterfly life cycle or metamorphic sequence.","life_cycle_stage_sequence_relation","TEMPORALITY","sequence","0.75","Direction chosen as earlier (caterpillar) to later (pupa) stage in the life cycle.","The caterpillar prepares for the next stage, and the next described stage is the pupa stage, implying that the caterpillar stage precedes the pupal stage.","Sequence is slightly indirect but consistent with life cycle ordering.","it stops eating and begins to prepare for the next stage of its life cycle. The third stage of the butterfly's life cycle is the pupa stage.","Ch_000004","{
+ ""TemporalQualifier"": ""next stage"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": ""when the caterpillar stops eating"",
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""when"",
+ ""OtherQualifier"": null
+}","The caterpillar stage leads into the pupal (chrysalis) stage as the next life-cycle stage."
+"RelR_0215bd560e9a","Can_698b56b9","Can_94e4e67c","creates","forms_anatomical_structure","A developing organism or developmental process generates or forms a new anatomical or protective structure (e.g., a caterpillar forming a chrysalis, metamorphosis forming wings or antennae).","developmental_morphogenesis_relation","CAUSALITY","formation","0.97","Direction from organism (caterpillar) to structure (chrysalis) it forms.","The sentence explicitly states that the caterpillar forms a protective shell called a chrysalis around itself.","","The caterpillar attaches itself to a leaf or stem and forms a protective shell around itself called a chrysalis.","Ch_000004","{
+ ""TemporalQualifier"": ""during transition to pupa stage"",
+ ""SpatialQualifier"": ""around itself"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": ""when it stops eating and prepares for the next stage"",
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""when"",
+ ""OtherQualifier"": null
+}","The caterpillar forms the chrysalis, a protective shell around itself."
+"RelR_12db1e24e59d","Can_94e4e67c","Can_698b56b9","protects","protects","The subject provides physical or functional protection for the object over some period or context.","protective_function_relation","CAUSALITY","functional","0.94","The noun phrase ""protective shell"" describes the role of the chrysalis relative to the caterpillar.","The chrysalis is described as a ""protective shell"" formed around the caterpillar, indicating a protective function.","","forms a protective shell around itself called a chrysalis.","Ch_000004","{
+ ""TemporalQualifier"": ""throughout the pupa stage"",
+ ""SpatialQualifier"": ""around the caterpillar"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""protective"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": null
+}","The chrysalis functions as a protective shell surrounding the caterpillar."
+"RelR_77297636eaaa","Can_94e4e67c","Can_b3f789d8","is_physical_form_of","is_physical_form_of","Indicates that a concrete organismal form or physical casing is the characteristic realization of an abstract life‑cycle stage (e.g., chrysalis as the form of the pupal stage), aligning with the same life‑stage realization pattern as has_organismal_form / is_organismal_form_of.","life_stage_realization_relation","TEMPORALITY","representation","0.83","The stage is specifically called the ""pupal (chrysalis)"" stage, linking chrysalis to that stage.","The text names the stage as the pupa stage and immediately describes formation of a chrysalis, implying the chrysalis is the form taken during this stage.","Relation mainly to bind the physical casing (chrysalis) to the abstract life-cycle stage.","The third stage of the butterfly's life cycle is the pupa stage. The caterpillar... forms a protective shell... called a chrysalis.","Ch_000004","{
+ ""TemporalQualifier"": ""during the pupa stage"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""during"",
+ ""OtherQualifier"": null
+}","The chrysalis is the physical casing that characterizes the pupal (chrysalis) stage of a butterfly."
+"RelR_35969b55b12b","Can_698b56b9","En_a47f34c2","attaches_to","attaches_to_substrate","An organism or body part affixes itself to a physical substrate or support structure.","physical_attachment_relation","INTERACTION","spatial","0.97","Direction from animal to plant surface it uses for attachment.","The sentence explicitly states that the caterpillar attaches itself to a leaf.","","The caterpillar attaches itself to a leaf or stem and forms a protective shell around itself called a chrysalis.","Ch_000004","{
+ ""TemporalQualifier"": ""before forming the chrysalis"",
+ ""SpatialQualifier"": ""on the leaf"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""and"",
+ ""OtherQualifier"": null
+}","The caterpillar attaches its body to a leaf before forming the chrysalis."
+"RelR_f519e98f9a97","Can_698b56b9","En_4fad15a1","attaches_to","attaches_to_substrate","An organism or body part affixes itself to a physical substrate or support structure.","physical_attachment_relation","INTERACTION","spatial","0.97","Alternative attachment substrate to leaf; same verb applies.","The sentence explicitly includes stem as an alternative surface: ""a leaf or stem.""","","The caterpillar attaches itself to a leaf or stem and forms a protective shell around itself called a chrysalis.","Ch_000004","{
+ ""TemporalQualifier"": ""before forming the chrysalis"",
+ ""SpatialQualifier"": ""on the stem"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": ""leaf or stem (alternative options)"",
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""or"",
+ ""OtherQualifier"": null
+}","The caterpillar may attach its body to a plant stem before forming the chrysalis."
+"RelR_30349ebef018","Can_f13938e2","Can_94e4e67c","occurs_in","occurs_in_or_on_location","A biological stage, life stage, or process takes place within or on a specified physical location, substrate, or host organism.","biological_stage_or_process_location_relation","SPATIALITY","spatial","0.98","Prepositional phrase ""Inside the chrysalis"" modifies the transformation/metamorphosis.","The text explicitly locates the transformation known as metamorphosis inside the chrysalis.","","Inside the chrysalis, the caterpillar undergoes a remarkable transformation known as metamorphosis.","Ch_000004","{
+ ""TemporalQualifier"": ""during the pupa stage"",
+ ""SpatialQualifier"": ""inside the chrysalis"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""Inside"",
+ ""OtherQualifier"": null
+}","Metamorphosis is described as taking place inside the chrysalis casing."
+"RelR_2fd812085bd9","Can_f13938e2","Can_b3f789d8","occurs_during","occurs_during_life_stage","The subject process takes place within the temporal span of the object life stage.","life_cycle_process_timing_relation","TEMPORALITY","temporal","0.86","Pupa stage and chrysalis stage are co-referential; metamorphosis is said to occur inside the chrysalis.","The pupal stage is introduced, followed by a description of metamorphosis inside the chrysalis associated with that stage, indicating that metamorphosis happens during the pupal stage.","","The third stage of the butterfly's life cycle is the pupa stage... Inside the chrysalis, the caterpillar undergoes a remarkable transformation known as metamorphosis.","Ch_000004","{
+ ""TemporalQualifier"": ""during the pupa stage"",
+ ""SpatialQualifier"": ""within the chrysalis casing"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""during"",
+ ""OtherQualifier"": null
+}","Metamorphosis is the key process that occurs during the pupal (chrysalis) stage."
+"RelR_b446db2042f1","Can_f13938e2","Can_698b56b9","acts_on","involves_participant","Links a process or event to an entity that participates in or is acted upon within that process (e.g., structures, organisms, organs, flowers).","process_participant_relation","PARTICIPATION","process-participant","0.96","Metamorphosis is named and then the caterpillar's body is described as undergoing changes during it.","The phrase ""During metamorphosis, the caterpillar's body undergoes significant changes"" clearly links metamorphosis as the process affecting the caterpillar.","","During metamorphosis, the caterpillar's body undergoes significant changes as it develops into a butterfly.","Ch_000004","{
+ ""TemporalQualifier"": ""during metamorphosis"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""undergoes"",
+ ""LogicalMarker"": ""During"",
+ ""OtherQualifier"": null
+}","Metamorphosis is the process that causes significant changes in the caterpillar's body."
+"RelR_31b1735d998a","Can_f13938e2","Can_bdfda4a6","results_in","results_in","Indicates that a process or sequence of events produces a specific outcome or end state.","causal_process_relation","CAUSALITY","causal","0.9","The development ""into a butterfly"" is temporally and causally tied to metamorphosis.","The sentence ""During metamorphosis... as it develops into a butterfly"" indicates that the developmental outcome of metamorphosis is a butterfly.","Subject is metamorphosis rather than the caterpillar to emphasize the process-result link.","During metamorphosis, the caterpillar's body undergoes significant changes as it develops into a butterfly.","Ch_000004","{
+ ""TemporalQualifier"": ""during metamorphosis"",
+ ""SpatialQualifier"": ""inside the chrysalis"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""as it develops into"",
+ ""LogicalMarker"": ""as"",
+ ""OtherQualifier"": null
+}","The metamorphosis process leads to the organism developing into a butterfly."
+"RelR_44a3bbd764c0","Can_698b56b9","Can_bdfda4a6","transforms_into","transforms_into","Links an entity or material state to a new entity or state it becomes through a transformation process.","state_change_relation","MODIFICATION","conversion","0.95","Pronoun ""it"" refers back to the caterpillar; the endpoint is a butterfly.","The clause ""the caterpillar's body... as it develops into a butterfly"" describes the caterpillar becoming a butterfly.","Metamorphosis is the mediating process; captured separately in another relation.","the caterpillar's body undergoes significant changes as it develops into a butterfly.","Ch_000004","{
+ ""TemporalQualifier"": ""during metamorphosis"",
+ ""SpatialQualifier"": ""inside the chrysalis"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""develops into"",
+ ""LogicalMarker"": ""as"",
+ ""OtherQualifier"": null
+}","The caterpillar ultimately transforms into a butterfly through metamorphosis."
+"RelR_53da6e438474","En_d03912b1","En_c45e58d1","transforms_into","transforms_into","Links an entity or material state to a new entity or state it becomes through a transformation process.","state_change_relation","MODIFICATION","state_change","0.96","Direction chosen from original form (organs) to resulting form (soupy substance).","Text explicitly says its organs dissolve into a soupy substance, indicating a transformation of tissue state.","","Its organs dissolve into a soupy substance, and new tissues and structures … begin to form.","Ch_000005","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": ""during metamorphosis within the chrysalis"",
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""dissolve into"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": null
+}","The caterpillar's organs break down and become a soupy substance during metamorphosis."
+"RelR_200c41ba83c0","Can_f13938e2","En_d03912b1","affects_state_of","involves_participant","Links a process or event to an entity that participates in or is acted upon within that process (e.g., structures, organisms, organs, flowers).","process_participant_relation","PARTICIPATION","process-participant","0.86","Metamorphosis is the process; organs are the structures whose state changes in it.","Chunk describes organ dissolution as part of the metamorphic process.","Relation used to capture that organ dissolution is a component of metamorphosis.","Its organs dissolve into a soupy substance … new tissues and structures … begin to form.","Ch_000005","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": ""inside the chrysalis"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": ""ProcessPhase: internal reorganization stage""
+}","Metamorphosis involves the breakdown of the caterpillar's organs."
+"RelR_40e891e203cc","Can_f13938e2","Can_94e4e67c","occurs_in","occurs_in_or_on_location","A biological stage, life stage, or process takes place within or on a specified physical location, substrate, or host organism.","biological_stage_or_process_location_relation","SPATIALITY","spatial","0.9","Chrysalis is the pupa casing; metamorphosis is known to occur there.","Entity descriptions and chunk context (emergence from chrysalis after metamorphosis) indicate metamorphosis happens in the chrysalis.","Spatial context partly inferred from entity descriptions rather than explicit preposition in this exact snippet.","Finally, after the metamorphosis is complete, the adult butterfly emerges from the chrysalis.","Ch_000005","{
+ ""TemporalQualifier"": ""pupal stage"",
+ ""SpatialQualifier"": ""within the chrysalis casing"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": ""implied but not verbatim in this chunk"",
+ ""CausalHint"": null,
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": null
+}","Metamorphosis takes place within the chrysalis."
+"RelR_c09c08f71265","Can_f13938e2","Can_78ab2168","develops","forms_anatomical_structure","A developing organism or developmental process generates or forms a new anatomical or protective structure (e.g., a caterpillar forming a chrysalis, metamorphosis forming wings or antennae).","developmental_morphogenesis_relation","CAUSALITY","formation","0.95","Process (metamorphosis) as subject creating wings.","Text states that new tissues and structures such as wings begin to form during this process.","","new tissues and structures, such as wings and antennae, begin to form.","Ch_000005","{
+ ""TemporalQualifier"": ""during metamorphosis"",
+ ""SpatialQualifier"": ""inside the chrysalis"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""begin to form"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": null
+}","Butterfly wings are formed as new tissues during metamorphosis."
+"RelR_ae4c5b80621b","Can_f13938e2","En_8afea79f","develops","forms_anatomical_structure","A developing organism or developmental process generates or forms a new anatomical or protective structure (e.g., a caterpillar forming a chrysalis, metamorphosis forming wings or antennae).","developmental_morphogenesis_relation","CAUSALITY","formation","0.95","Same pattern as wings; process creates anatomical structures.","Text lists antennae explicitly among structures that begin to form in this process.","","new tissues and structures, such as wings and antennae, begin to form.","Ch_000005","{
+ ""TemporalQualifier"": ""during metamorphosis"",
+ ""SpatialQualifier"": ""inside the chrysalis"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""begin to form"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": null
+}","Antennae are among the new structures that form during metamorphosis."
+"RelR_8d3d2c5568c5","Can_f13938e2","Can_62e205b2","duration_depends_on","duration_depends_on","The temporal duration of the subject process varies as a function of the object factor (e.g., species).","biological_trait_dependency_relation","CAUSALITY","dependency","0.98","Direction from process to factor influencing its duration.","The process duration is said to vary 'depending on the species of butterfly'.","","This process can take anywhere from a few days to several weeks, depending on the species of butterfly.","Ch_000005","{
+ ""TemporalQualifier"": ""anywhere from a few days to several weeks"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": ""duration range: few days–several weeks"",
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""depending on"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": ""VariableAspect: duration""
+}","The time metamorphosis takes varies according to the butterfly species."
+"RelR_bd02be971f84","Can_f13938e2","Can_dd80a7cd","precedes","precedes_in_life_cycle","The subject stage or process occurs earlier than the object stage within the butterfly life cycle or metamorphic sequence.","life_cycle_stage_sequence_relation","TEMPORALITY","temporal","0.9","Process (metamorphosis) modeled as preceding the adult life stage.","Text states that after metamorphosis is complete the adult butterfly emerges, marking the adult stage.","","Finally, after the metamorphosis is complete, the adult butterfly emerges from the chrysalis.","Ch_000005","{
+ ""TemporalQualifier"": ""after metamorphosis is complete"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""after"",
+ ""LogicalMarker"": ""after"",
+ ""OtherQualifier"": null
+}","Completion of metamorphosis temporally precedes and leads into the adult butterfly stage."
+"RelR_f7472a36113e","Can_94e4e67c","Can_dd80a7cd","gives_rise_to","transitions_to_life_stage","A life-cycle structure or stage transitions into a subsequent life-cycle stage (e.g., chrysalis transitioning to the adult butterfly stage).","life_cycle_transition_relation","TEMPORALITY","origin","0.88","Chrysalis as origin location/container of the emerging adult stage.","Text explicitly describes the adult butterfly emerging from the chrysalis once metamorphosis is done.","Adult stage is represented via the adult butterfly stage entity.","Finally, after the metamorphosis is complete, the adult butterfly emerges from the chrysalis.","Ch_000005","{
+ ""TemporalQualifier"": ""after metamorphosis is complete"",
+ ""SpatialQualifier"": ""from the chrysalis"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""emerges from"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": null
+}","The chrysalis is the structure from which the adult butterfly (adult stage) emerges."
+"RelR_a737134aa14f","Can_dd80a7cd","Can_ce6366a6","is_stage_of","is_life_cycle_stage_of","Indicates that the subject is a distinct stage within the life cycle process represented by the object.","life_cycle_stage_relation","TEMPORALITY","part-whole","0.99","Stage as component of an overall life cycle.","Sentence directly defines the adult stage as a stage of the butterfly's life cycle.","","The fourth and final stage of the butterfly's life cycle is the adult stage.","Ch_000005","{
+ ""TemporalQualifier"": ""fourth and final stage"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": ""stage index: 4 (final)"",
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""is"",
+ ""OtherQualifier"": null
+}","The adult butterfly stage is the fourth and final stage in the butterfly life cycle."
+"RelR_b8d3b7677374","En_42f589c5","En_70ba8b87","has_state","has_physical_state","Indicates that an entity currently exhibits a specific physical/morphological state or condition.","morphological_state_relation","ATTRIBUTE","attribute","0.99","Organism as subject possessing a particular wing state.","Sentence clearly assigns soft, wrinkled wings to the newly emerged butterfly.","","The newly emerged butterfly has soft, wrinkled wings that it must pump full of fluid to expand and harden.","Ch_000005","{
+ ""TemporalQualifier"": ""immediately after emergence from chrysalis"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""has"",
+ ""OtherQualifier"": null
+}","Immediately after emergence, the butterfly's wings are in a soft, wrinkled condition."
+"RelR_e5de391a03cc","En_70ba8b87","Can_78ab2168","is_state_of","is_physical_state_of","Indicates that a described physical/morphological state belongs to or characterizes a given entity.","morphological_state_relation","ATTRIBUTE","state-description","0.93","State entity mapped to the underlying anatomical structure.","Description indicates this is the initial condition of the butterfly’s wings after emergence.","","The newly emerged butterfly has soft, wrinkled wings that it must pump full of fluid to expand and harden.","Ch_000005","{
+ ""TemporalQualifier"": ""immediately post-emergence"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": ""prior to full expansion and hardening"",
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": null
+}","Soft, wrinkled wings represent an early post-emergence state of the butterfly wings."
+"RelR_2c9389d821a1","En_bc0a06d2","Can_78ab2168","fills","fills_structure","A fluid or material occupies the internal volume of an anatomical structure or cavity, typically enabling its expansion, support, or functional development.","developmental_morphology_relation","MODIFICATION","functional","0.96","Fluid in wings as subject being pumped into the wings.","Text says the wings must be pumped full of fluid to expand and harden, indicating fluid fills the wings.","","it must pump full of fluid to expand and harden.","Ch_000005","{
+ ""TemporalQualifier"": ""shortly after emergence"",
+ ""SpatialQualifier"": ""inside the wings"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": ""required for expansion and hardening"",
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""to expand and harden"",
+ ""LogicalMarker"": ""to"",
+ ""OtherQualifier"": null
+}","Fluid is pumped into the butterfly wings to make them expand and harden."
+"RelR_56d0623bc96e","Can_78ab2168","En_0a2250c8","enables","enables","Indicates that the subject provides the necessary capability or condition for the object event or action to occur.","causal_process_relation","CAUSALITY","causal","0.89","Direction chosen as wings (structure) enabling the event of first flight.","The sentence directly links fully developed wings to readiness for first flight.","","Once its wings are fully developed, the butterfly is ready to take flight for the first time.","Ch_000006","{
+ ""TemporalQualifier"": ""once wings are fully developed"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": ""wings fully developed"",
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""Once"",
+ ""LogicalMarker"": ""once"",
+ ""OtherQualifier"": null
+}","Fully developed butterfly wings enable the butterfly's first flight."
+"RelR_571ffdfd8523","Can_d67c54ff","En_b71e6971","feeds_on","feeds_on","Indicates that the subject organism consumes the object as a food resource.","trophic_interaction_relation","INTERACTION","consumption","0.98","Feeding relation from consumer (adult butterflies) to resource (nectar).","“Adult butterflies feed on nectar from flowers”.","","Adult butterflies feed on nectar from flowers using their long, tubular mouthparts called proboscis.","Ch_000006","{
+ ""TemporalQualifier"": ""adult stage"",
+ ""SpatialQualifier"": ""at flowers"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": ""FeedingMode: using proboscis""
+}","Adult butterflies feed on nectar as a primary food source."
+"RelR_51eaff1ced07","En_b71e6971","En_5649f418","produced_by","is_produced_by","Subject substance is produced by the object organism or structure as its biological source.","biological_production_relation","CAUSALITY","source","0.9","Direction from substance to its biological source.","Phrase “nectar from flowers” indicates flowers as the source of nectar.","","Adult butterflies feed on nectar from flowers using their long, tubular mouthparts...","Ch_000006","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": ""in flowers"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""from"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": null
+}","Nectar is produced by or obtained from flowers."
+"RelR_928b3dfa8e13","Can_d67c54ff","En_5649f418","visits","visits_for_feeding","Subject organism visits the object (e.g., a flower) specifically to obtain food resources.","foraging_behavior_relation","INTERACTION","spatial/interaction","0.83","Interaction inferred from feeding on nectar located in flowers.","Feeding on nectar from flowers implies visiting or interacting with flowers.","Relation inferred; not stated with an explicit verb like 'visit'.","Adult butterflies feed on nectar from flowers...","Ch_000006","{
+ ""TemporalQualifier"": ""when feeding"",
+ ""SpatialQualifier"": ""at flowers"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": ""implied"",
+ ""CausalHint"": ""to obtain nectar"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": null
+}","Adult butterflies visit flowers to obtain nectar."
+"RelR_d4b4134aad17","Can_d67c54ff","En_ca84f646","uses_for_feeding","uses_feeding_structure","The animal actively uses a specific anatomical feeding structure as an instrument during feeding.","feeding_instrument_relation","USAGE","instrument","0.98","Subject is the organism; object is the feeding instrument.","Text explicitly states they feed on nectar using the proboscis.","","Adult butterflies feed on nectar from flowers using their long, tubular mouthparts called proboscis.","Ch_000006","{
+ ""TemporalQualifier"": ""during feeding"",
+ ""SpatialQualifier"": ""at flowers"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""using"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": null
+}","Adult butterflies use the proboscis to feed."
+"RelR_f466bd7311b2","En_ca84f646","En_b71e6971","used_to_consume","is_used_to_consume","The subject is a structure or tool that is used to consume or ingest the object (food or fluid).","feeding_instrument_relation","USAGE","instrument","0.93","From tool (proboscis) to consumed substance (nectar).","Proboscis is named while describing feeding on nectar.","","feed on nectar from flowers using their long, tubular mouthparts called proboscis.","Ch_000006","{
+ ""TemporalQualifier"": ""during feeding"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""using"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": null
+}","The proboscis is used to consume nectar."
+"RelR_641c9bf3fa5f","Can_bdfda4a6","Can_24d53cb7","contributes_to","acts_as_pollinator_in","Subject organism functions as a pollinator contributing to the pollination process of the object.","ecosystem_function_role_relation","AGENCY","functional_role","0.99","Butterflies as agents contributing to pollination.","Text explicitly states they play a crucial role in pollination.","","They play a crucial role in pollination by transferring pollen from one flower to another...","Ch_000006","{
+ ""TemporalQualifier"": ""during visits to flowers"",
+ ""SpatialQualifier"": ""between flowers"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": ""crucial role (strength of effect emphasized)"",
+ ""CausalHint"": ""by transferring pollen"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": null
+}","Butterflies play a crucial role in the process of pollination."
+"RelR_be3c581402bb","Can_bdfda4a6","En_b1fba1f0","transfers","transfers","Indicates that the subject actively moves or carries the object (a material or entity) from one location or entity to another.","material_transfer_relation","INTERACTION","causal/transport","0.98","Agent (butterflies) moving material (pollen).","Pollination role is specified as “by transferring pollen”.","","by transferring pollen from one flower to another","Ch_000006","{
+ ""TemporalQualifier"": ""during pollination"",
+ ""SpatialQualifier"": ""from one flower to another"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""by"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": null
+}","Butterflies transfer pollen as they move between flowers."
+"RelR_aa649e4aaa11","En_b1fba1f0","En_5649f418","moves_between","is_transferred","Indicates that the subject material is transported or moved between instances of the object entity category, typically by some agent.","material_transfer_relation","INTERACTION","spatial/transport","0.95","Pollen as transported material between flower structures.","Phrase explicitly states pollen is transferred from one flower to another.","","transferring pollen from one flower to another","Ch_000006","{
+ ""TemporalQualifier"": ""during pollination"",
+ ""SpatialQualifier"": ""between flowers"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""from ... to"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": null
+}","Pollen is moved between flowers during pollination."
+"RelR_dd99a6afa295","Can_24d53cb7","En_6ac7295d","enables_reproduction_of","facilitates_reproduction_of","Indicates that the subject process or agent helps or supports the reproductive success of the object organism or group, without guaranteeing it.","reproductive_support_relation","CAUSALITY","causal","0.99","Pollination process enabling reproduction of plants.","Pollination is described as “helping plants reproduce”.","","helping plants reproduce.","Ch_000006","{
+ ""TemporalQualifier"": ""when pollination occurs"",
+ ""SpatialQualifier"": ""in flowering plants"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": ""helps (facilitates rather than guarantees)"",
+ ""CausalHint"": ""helping"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": null
+}","Pollination helps plants reproduce."
+"RelR_e22e8fe78162","Can_24d53cb7","En_5649f418","involves","involves_participant","Links a process or event to an entity that participates in or is acted upon within that process (e.g., structures, organisms, organs, flowers).","process_participant_relation","PARTICIPATION","process-component","0.94","Process (pollination) involving plant structures (flowers).","Pollination is defined via pollen transfer between flowers.","","pollination by transferring pollen from one flower to another","Ch_000006","{
+ ""TemporalQualifier"": ""during pollination"",
+ ""SpatialQualifier"": ""between flowers"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""by transferring"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": null
+}","Pollination involves flowers as the structures between which pollen is transferred."
+"RelR_52ce2462426d","Can_bdfda4a6","En_6ac7295d","helps_reproduce","facilitates_reproduction_of","Indicates that the subject process or agent helps or supports the reproductive success of the object organism or group, without guaranteeing it.","reproductive_support_relation","CAUSALITY","causal","0.9","Butterflies as ecological agents facilitating plant reproduction.","Their pollination role is directly linked to helping plants reproduce.","","They play a crucial role in pollination ... helping plants reproduce.","Ch_000006","{
+ ""TemporalQualifier"": ""while acting as pollinators"",
+ ""SpatialQualifier"": ""in plant communities with flowers"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": ""helps (supporting role)"",
+ ""CausalHint"": ""helping"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": null
+}","Butterflies help plants reproduce through their pollination activities."
+"RelR_03ad6dd0bcc3","Can_bdfda4a6","En_b36024a4","is_prey_of","is_prey_of","Indicates that the subject organism is hunted or consumed as prey by the object organism.","trophic_interaction_relation","INTERACTION","trophic","0.98","Direction chosen as prey (butterflies) pointing to predator (birds).","Text: “Butterflies also serve as a food source for birds”.","","Butterflies also serve as a food source for birds...","Ch_000006","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": ""within their ecosystem"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""serve as a food source for"",
+ ""LogicalMarker"": ""also"",
+ ""OtherQualifier"": null
+}","Butterflies are prey for birds, serving as a food source."
+"RelR_4ce8341392f6","Can_bdfda4a6","En_367865dd","is_prey_of","is_prey_of","Indicates that the subject organism is hunted or consumed as prey by the object organism.","trophic_interaction_relation","INTERACTION","trophic","0.97","Same trophic relation pattern as with birds.","Reptiles are listed among animals for which butterflies serve as a food source.","","Butterflies also serve as a food source for birds, reptiles, and other insects...","Ch_000006","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": ""within their ecosystem"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""serve as a food source for"",
+ ""LogicalMarker"": ""also"",
+ ""OtherQualifier"": null
+}","Butterflies serve as prey for reptiles."
+"RelR_03dfc2103fb2","Can_bdfda4a6","En_2a1a02c3","is_prey_of","is_prey_of","Indicates that the subject organism is hunted or consumed as prey by the object organism.","trophic_interaction_relation","INTERACTION","trophic","0.96","Prey (butterflies) to predators (other insects).","Other insects are included among consumers of butterflies.","","Butterflies also serve as a food source for birds, reptiles, and other insects...","Ch_000006","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": ""within their ecosystem"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""serve as a food source for"",
+ ""LogicalMarker"": ""also"",
+ ""OtherQualifier"": null
+}","Butterflies serve as prey for other insects."
+"RelR_d500b29de696","Can_bdfda4a6","En_ff81b685","contributes_to","contributes_to","Subject has a causal or functional contribution to the state, quality, or outcome represented by the object (e.g., ecological processes, biodiversity levels, or population balance).","ecological_effect_relation","CAUSALITY","ecological_effect","0.97","Butterflies as one of many species shaping biodiversity.","They are described as contributing to the overall biodiversity.","","contributing to the overall biodiversity of their ecosystem.","Ch_000006","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": ""of their ecosystem"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": ""overall (aggregate effect)"",
+ ""CausalHint"": ""contributing to"",
+ ""LogicalMarker"": ""also"",
+ ""OtherQualifier"": null
+}","Butterflies contribute to biodiversity."
+"RelR_d16922f1dacf","En_ff81b685","Can_8c5b26a4","characterizes","characterizes","Indicates that a property or feature characterizes or is a defining attribute of a system or entity (e.g., biodiversity characterizes an ecosystem).","system_property_relation","ATTRIBUTE","property","0.88","Property (biodiversity) associated with system (ecosystem).","Phrase “biodiversity of their ecosystem” links biodiversity to ecosystem.","","contributing to the overall biodiversity of their ecosystem.","Ch_000006","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": ""of the ecosystem"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""of"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": null
+}","Biodiversity characterizes the ecosystem as a whole."
+"RelR_a6587bf51248","Can_bdfda4a6","Can_8c5b26a4","inhabits","inhabits","Subject lives in, occupies, or is resident within the spatial or ecological environment represented by the object.","habitat_relation","SPATIALITY","spatial/ecological","0.8","Ecosystem is implied as the context containing butterflies.","Reference to “their ecosystem” while describing butterflies' roles.","Habitat relation is somewhat implicit but standard in ecological framing.","contributing to the overall biodiversity of their ecosystem.","Ch_000006","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": ""within their ecosystem"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": ""implied"",
+ ""CausalHint"": null,
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": ""EcologicalRole: pollinator and prey""
+}","Butterflies live within and interact as part of an ecosystem."
+"RelR_519e7aa97b76","Can_bdfda4a6","Can_dd80a7cd","has_life_stage","has_life_stage","Links an organism or group of organisms to a specific developmental or life stage within its life cycle.","organism_life_cycle_relation","TEMPORALITY","life_cycle","0.9","Butterflies (organism) related to the adult stage mentioned as 'their adult stage'.","“Throughout their adult stage, butterflies...” links butterflies to a defined adult stage.","","Throughout their adult stage, butterflies focus on finding a mate and reproducing...","Ch_000006","{
+ ""TemporalQualifier"": ""adult stage"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""throughout"",
+ ""OtherQualifier"": null
+}","Butterflies have an adult butterfly stage in their life cycle."
+"RelR_d624b3f10cf5","Can_dd80a7cd","Can_ce6366a6","is_stage_of","is_life_cycle_stage_of","Indicates that the subject is a distinct stage within the life cycle process represented by the object.","life_cycle_stage_relation","TEMPORALITY","life_cycle","0.95","Stage-to-life-cycle relation.","Adult stage is explicitly referenced as part of continuing the life cycle.","","Throughout their adult stage, butterflies ... to continue the life cycle.","Ch_000006","{
+ ""TemporalQualifier"": ""fourth and final stage (per entity descriptions)"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""to continue the life cycle"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": null
+}","The adult butterfly stage is a stage within the butterfly life cycle."
+"RelR_9f21823542ac","Can_bdfda4a6","En_b0a72f1a","seeks","seeks_mate","Subject actively searches for or attempts to find a reproductive partner (mate).","reproductive_behavior_relation","AGENCY","behavioral","0.98","Behavioral action from organism to target partner.","Phrase explicitly states butterflies focus on finding a mate.","","Throughout their adult stage, butterflies focus on finding a mate...","Ch_000006","{
+ ""TemporalQualifier"": ""throughout their adult stage"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""focus on"",
+ ""LogicalMarker"": ""and (paired with reproducing)"",
+ ""OtherQualifier"": null
+}","During the adult stage, butterflies focus on finding a mate."
+"RelR_9efa9b3b1f54","Can_bdfda4a6","En_4c61b264","engages_in","engages_in_reproduction","Subject participates in or performs reproductive activities or processes.","reproductive_behavior_relation","AGENCY","behavioral","0.97","Reproduction is an activity butterflies carry out.","They are said to focus on reproducing to continue the life cycle.","","butterflies focus on finding a mate and reproducing to continue the life cycle.","Ch_000006","{
+ ""TemporalQualifier"": ""throughout their adult stage"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""to continue the life cycle"",
+ ""LogicalMarker"": ""and"",
+ ""OtherQualifier"": null
+}","Butterflies engage in reproduction during the adult stage."
+"RelR_807cf6b4cf2c","En_4c61b264","Can_ce6366a6","continues","supports_continuation_of","Indicates that the subject action or process helps maintain or continue the existence or progression of the object process or cycle.","causal_process_relation","CAUSALITY","causal","0.96","Reproduction is the mechanism for continuation of the life cycle.","The phrase “reproducing to continue the life cycle” explicitly indicates causality.","","reproducing to continue the life cycle.","Ch_000006","{
+ ""TemporalQualifier"": ""during adult stage"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": ""to continue (purpose relation)"",
+ ""CausalHint"": ""to"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": null
+}","Reproducing by butterflies continues the butterfly life cycle."
+"RelR_3321a8fa4e2e","Can_d67c54ff","Can_bdfda4a6","is_life_stage_of","is_life_stage_of_taxon","Links organisms in a specific life stage to the broader taxon or species whose members they represent at that life stage (e.g., adult butterflies are the adult life stage of butterflies).","life_stage_relation","TEMPORALITY","taxonomic","0.86","Adult butterflies are a subset/phase of butterflies.","“Adult butterflies” and later “their adult stage” for butterflies imply a stage relation.","More of a conceptual mapping between the class 'adult butterflies' and the broader 'butterflies'.","Adult butterflies feed on nectar from flowers...","Ch_000006","{
+ ""TemporalQualifier"": ""adult stage"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": ""inferred"",
+ ""CausalHint"": null,
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": null
+}","Adult butterflies represent the adult life stage of butterflies."
+"RelR_f96f9714f10d","Can_35027170","Can_a7f14ebe","lays_eggs_on","lays_eggs_on","Subject organism deposits its eggs on the object, which serves as the oviposition site (egg-laying substrate).","oviposition_behavior_relation","USAGE","reproductive_behavior","0.98","Direction chosen as females performing oviposition onto host plants.","The text states that female butterflies lay their eggs on host plants, indicating an oviposition relationship.","","Female butterflies lay their eggs on host plants, starting the cycle anew.","Ch_000007","{
+ ""TemporalQualifier"": ""at the beginning of a new life cycle"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""starting the cycle anew"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": null
+}","Female butterflies lay their eggs on specific host plants."
+"RelR_607352c3c8ba","Can_35027170","Can_ce6366a6","initiates","initiates","Indicates that the subject action or entity starts or triggers the beginning of the object process or cycle.","causal_process_relation","CAUSALITY","causal","0.9","Modelled as females initiating the life cycle by oviposition.","The phrase ""starting the cycle anew"" links female egg laying to the initiation of the butterfly life cycle.","","Female butterflies lay their eggs on host plants, starting the cycle anew.","Ch_000007","{
+ ""TemporalQualifier"": ""at the time of egg-laying"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""starting the cycle anew"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": null
+}","Egg-laying by female butterflies initiates a new butterfly life cycle."
+"RelR_85d7956fe295","Can_ce6366a6","Can_c8ca5fed","includes_stage","includes_life_cycle_stage","Indicates that a life cycle or developmental process includes the given stage as one of its distinct component phases.","life_cycle_stage_relation","COMPOSITION","composition","0.96","Life cycle as whole; egg stage as component stage.","The text enumerates egg as the first phase of the butterfly life cycle.","","From egg to larva to pupa to adult butterfly, each phase plays a vital role...","Ch_000007","{
+ ""TemporalQualifier"": ""initial stage"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""From"",
+ ""OtherQualifier"": null
+}","The butterfly life cycle includes the egg stage as its initial phase."
+"RelR_7f474ee30ae7","Can_ce6366a6","Can_2fd0c2d7","includes_stage","includes_life_cycle_stage","Indicates that a life cycle or developmental process includes the given stage as one of its distinct component phases.","life_cycle_stage_relation","COMPOSITION","composition","0.96","Larval stage listed as one of the sequential phases.","The sequence explicitly mentions larva as a phase in the life cycle.","","From egg to larva to pupa to adult butterfly, each phase plays a vital role...","Ch_000007","{
+ ""TemporalQualifier"": ""second stage (after egg)"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""to"",
+ ""OtherQualifier"": null
+}","The butterfly life cycle includes the larval (caterpillar) stage."
+"RelR_c460038e6b2b","Can_ce6366a6","Can_b3f789d8","includes_stage","includes_life_cycle_stage","Indicates that a life cycle or developmental process includes the given stage as one of its distinct component phases.","life_cycle_stage_relation","COMPOSITION","composition","0.96","Pupal stage listed as one of the sequential phases.","The sequence explicitly mentions pupa as a phase in the life cycle.","","From egg to larva to pupa to adult butterfly, each phase plays a vital role...","Ch_000007","{
+ ""TemporalQualifier"": ""third stage (after larva)"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""to"",
+ ""OtherQualifier"": null
+}","The butterfly life cycle includes the pupal (chrysalis) stage."
+"RelR_a736a72f5e65","Can_ce6366a6","Can_dd80a7cd","includes_stage","includes_life_cycle_stage","Indicates that a life cycle or developmental process includes the given stage as one of its distinct component phases.","life_cycle_stage_relation","COMPOSITION","composition","0.96","Adult butterfly stage is final in the enumerated sequence.","The sequence ends with adult butterfly, indicating it is a phase of the life cycle.","","From egg to larva to pupa to adult butterfly, each phase plays a vital role...","Ch_000007","{
+ ""TemporalQualifier"": ""final stage"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""to"",
+ ""OtherQualifier"": null
+}","The butterfly life cycle includes the adult butterfly stage as its final phase."
+"RelR_3eaf498316ea","Can_c8ca5fed","Can_2fd0c2d7","precedes","precedes_in_life_cycle","The subject stage or process occurs earlier than the object stage within the butterfly life cycle or metamorphic sequence.","life_cycle_stage_sequence_relation","TEMPORALITY","temporal_order","0.94","Ordered list implies egg comes before larva.","The ordered phrase ""From egg to larva"" indicates that the egg stage occurs before the larval stage.","","From egg to larva to pupa to adult butterfly...","Ch_000007","{
+ ""TemporalQualifier"": ""early life stages"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""From"",
+ ""OtherQualifier"": null
+}","The butterfly egg stage temporally precedes the larval (caterpillar) stage."
+"RelR_3831b42aa98d","Can_2fd0c2d7","Can_b3f789d8","precedes","precedes_in_life_cycle","The subject stage or process occurs earlier than the object stage within the butterfly life cycle or metamorphic sequence.","life_cycle_stage_sequence_relation","TEMPORALITY","temporal_order","0.94","Sequence given as larva then pupa.","The text orders larva before pupa in the life cycle description.","","From egg to larva to pupa to adult butterfly...","Ch_000007","{
+ ""TemporalQualifier"": ""mid-development stages"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""to"",
+ ""OtherQualifier"": null
+}","The larval (caterpillar) stage temporally precedes the pupal (chrysalis) stage."
+"RelR_cdb8920c7b70","Can_b3f789d8","Can_dd80a7cd","precedes","precedes_in_life_cycle","The subject stage or process occurs earlier than the object stage within the butterfly life cycle or metamorphic sequence.","life_cycle_stage_sequence_relation","TEMPORALITY","temporal_order","0.94","Sequence given as pupa then adult butterfly.","The text orders pupa before adult butterfly in the developmental sequence.","","From egg to larva to pupa to adult butterfly...","Ch_000007","{
+ ""TemporalQualifier"": ""transition to final stage"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""to"",
+ ""OtherQualifier"": null
+}","The pupal (chrysalis) stage temporally precedes the adult butterfly stage."
+"RelR_d62e35ad7822","Can_d67c54ff","Can_dd80a7cd","instance_of_stage","is_in_life_stage","Indicates that an organism or group of organisms is in a particular life stage (e.g., adult butterflies are in the adult butterfly stage).","life_stage_relation","TEMPORALITY","classification","0.7","Adult butterflies (organisms) are the living form corresponding to the adult butterfly stage.","The passage discusses adult butterflies in the context of the adult phase of the life cycle, aligning them with the adult butterfly stage entity.","Relation added to connect the organism-level term with its life-stage abstraction.","Adult butterflies have a relatively short lifespan, ranging from a few days to a few weeks...","Ch_000007","{
+ ""TemporalQualifier"": ""fourth and final life stage"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": ""implicit, not explicitly labeled as a stage in the text"",
+ ""CausalHint"": null,
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": ""LifespanContext: lifespan ranges from a few days to a few weeks depending on species""
+}","Adult butterflies represent organisms in the adult butterfly life stage."
+"RelR_edf14a53570e","Can_bdfda4a6","Can_ce6366a6","undergoes_life_cycle","undergoes_biological_process","Links an organism or life stage to a biological process or life cycle it undergoes over time (e.g., life cycle, molting, life journey).","biological_process_participation_relation","BIOLOGICAL_PROCESS","biological_process","0.93","Butterfly as organism; life cycle as its developmental process.","The phrase ""the life cycle of a butterfly"" links the organism butterflies with the described life cycle.","","the life cycle of a butterfly is a wondrous journey filled with intricate stages...","Ch_000007","{
+ ""TemporalQualifier"": ""from egg to adult butterfly"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""filled with intricate stages and astonishing transformations"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": null
+}","Butterflies undergo the butterfly life cycle described (egg, larva, pupa, adult)."
+"RelR_f2e00c1667c1","Can_ce6366a6","En_c148a70e","part_of","is_part_of","Indicates that the subject is a constituent element, region, component, or process within the broader whole denoted by the object.","part_whole_relation","COMPOSITION","composition","0.85","Life cycle treated as a natural process within the broader natural world.","The text connects understanding the butterfly life cycle with appreciating processes that make up the natural world, implying inclusion.","Relation used to encode that the life cycle is considered one of the natural world's processes.","processes that make up the natural world.","Ch_000007","{
+ ""TemporalQualifier"": null,
+ ""SpatialQualifier"": ""within ecosystems of the natural world"",
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": ""implicit inclusion; not enumerated explicitly"",
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""that"",
+ ""OtherQualifier"": ""EducationalContext: understanding this life cycle deepens appreciation of the natural world""
+}","The butterfly life cycle is one of the intricate processes that make up the natural world."
+"RelR_18fa9999033c","Can_bdfda4a6","En_53b4f480","undergoes","undergoes_biological_process","Links an organism or life stage to a biological process or life cycle it undergoes over time (e.g., life cycle, molting, life journey).","biological_process_participation_relation","BIOLOGICAL_PROCESS","process-participation","0.93","Direction chosen as organism (butterfly) → process (life journey).","The text frames the butterfly as having taken an incredible journey, implying the butterfly undergoes its life journey.","","marvel at the incredible journey it has taken to reach that moment","Ch_000008","{
+ ""TemporalQualifier"": ""before the observed moment of beauty and grace"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": ""AffectiveContext: prompting the observer to marvel at this journey""
+}","The butterfly undergoes an incredible life journey before the observed moment."
+"RelR_cfd9f307e15e","En_53b4f480","En_165e1636","leads_to","results_in","Indicates that a process or sequence of events produces a specific outcome or end state.","causal_process_relation","CAUSALITY","causal","0.9","Journey (process) is modeled as leading to the state/experience (moment of beauty and grace).","Phrase ""journey it has taken to reach that moment"" implies the journey results in the moment of beauty and grace.","","the incredible journey it has taken to reach that moment of beauty and grace","Ch_000008","{
+ ""TemporalQualifier"": ""end of the life journey"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": ""to reach"",
+ ""LogicalMarker"": null,
+ ""OtherQualifier"": null
+}","The butterfly's life journey leads to the eventual moment of beauty and grace."
+"RelR_a5586dc3ebed","Can_bdfda4a6","En_165e1636","associated_with","associated_with_experience","Links an entity to a subjective or experiential state (such as a moment of beauty or grace) that observers commonly associate with it.","perception_appreciation_relation","ASSOCIATION","association","0.86","Moment is an experiential state tied to observing the butterfly.","The sentence connects seeing a butterfly fluttering by with ""that moment of beauty and grace,"" making the butterfly the source of that moment.","","Next time you see a butterfly fluttering by, take a moment ... to reach that moment of beauty and grace.","Ch_000008","{
+ ""TemporalQualifier"": ""when you see a butterfly fluttering by"",
+ ""SpatialQualifier"": null,
+ ""OperationalConstraint"": null,
+ ""ConditionExpression"": null,
+ ""UncertaintyQualifier"": null,
+ ""CausalHint"": null,
+ ""LogicalMarker"": ""when"",
+ ""OtherQualifier"": ""ObserverContext: human observer taking a moment to marvel""
+}","The observed butterfly is associated with a moment characterized by beauty and grace."

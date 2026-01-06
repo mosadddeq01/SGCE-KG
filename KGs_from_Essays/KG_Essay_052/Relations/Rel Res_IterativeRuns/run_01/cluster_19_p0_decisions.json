@@ -1,0 +1,102 @@
+{
+  "cluster_label": "19_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_cf8227716342",
+      "relation_name": "engages_audience",
+      "rel_desc": "The World Cup engages fans, contributing to emotional experiences among them.",
+      "rel_hint_type": "participation",
+      "canonical_rel_name": "engages_audience",
+      "canonical_rel_desc": "Indicates that an event or activity attracts and involves an audience or fans emotionally or attentively.",
+      "rel_cls": "participation_and_engagement_relation",
+      "rel_cls_group": "AGENCY",
+      "subject_entity_name": "World Cup",
+      "object_entity_name": "fans",
+      "subject_class_label": "Global Sporting Events",
+      "subject_class_group": "Global Sporting Events & Impacts",
+      "object_class_label": "Sports Fandom Actors",
+      "object_class_group": "Sport, Community & Social Experience",
+      "qualifiers": {
+        "TemporalQualifier": "during and around the event",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "create",
+        "LogicalMarker": null,
+        "OtherQualifier": "Mode: celebrations and gatherings"
+      },
+      "confidence": 0.8,
+      "remarks": [
+        "Relation chosen to capture fans’ involvement; could also be seen as causing emotions directly.",
+        "Relation chosen to capture fans’ involvement; could also be seen as causing emotions directly."
+      ]
+    },
+    {
+      "relation_id": "RelR_2ceb6a1f36d9",
+      "relation_name": "engages_audience",
+      "rel_desc": "The Olympics engage fans, contributing to emotional experiences among them.",
+      "rel_hint_type": "participation",
+      "canonical_rel_name": "engages_audience",
+      "canonical_rel_desc": "Indicates that an event or activity attracts and involves an audience or fans emotionally or attentively.",
+      "rel_cls": "participation_and_engagement_relation",
+      "rel_cls_group": "AGENCY",
+      "subject_entity_name": "Olympics",
+      "object_entity_name": "fans",
+      "subject_class_label": "Global Sporting Events",
+      "subject_class_group": "Global Sporting Events & Impacts",
+      "object_class_label": "Sports Fandom Actors",
+      "object_class_group": "Sport, Community & Social Experience",
+      "qualifiers": {
+        "TemporalQualifier": "during and around the event",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "create",
+        "LogicalMarker": null,
+        "OtherQualifier": "Mode: celebrations and gatherings"
+      },
+      "confidence": 0.8,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_rel_schema\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_cf8227716342\",\n        \"RelR_2ceb6a1f36d9\"\n      ],\n      \"canonical_rel_name\": null,\n      \"canonical_rel_desc\": null,\n      \"rel_cls\": \"audience_engagement_relation\",\n      \"rel_cls_group\": \"INTERACTION\",\n      \"justification\": \"Both relations describe large sporting events attracting and involving fans emotionally and attentively. This is best modeled as an interaction between event and audience rather than a generic 'AGENCY' pattern. Renaming the class to 'audience_engagement_relation' makes its scope clearer than the broader 'participation_and_engagement_relation', and aligning the group to 'INTERACTION' better reflects the bidirectional engagement semantics.\",\n      \"remark\": null,\n      \"confidence\": 0.86\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_rel_schema",
+      "args": {
+        "relation_ids": [
+          "RelR_cf8227716342",
+          "RelR_2ceb6a1f36d9"
+        ],
+        "canonical_rel_name": null,
+        "canonical_rel_desc": null,
+        "rel_cls": "audience_engagement_relation",
+        "rel_cls_group": "INTERACTION",
+        "justification": "Both relations describe large sporting events attracting and involving fans emotionally and attentively. This is best modeled as an interaction between event and audience rather than a generic 'AGENCY' pattern. Renaming the class to 'audience_engagement_relation' makes its scope clearer than the broader 'participation_and_engagement_relation', and aligning the group to 'INTERACTION' better reflects the bidirectional engagement semantics.",
+        "remark": null,
+        "confidence": 0.86
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_rel_schema",
+      "relation_ids": [
+        "RelR_cf8227716342",
+        "RelR_2ceb6a1f36d9"
+      ],
+      "canonical_rel_name": null,
+      "canonical_rel_desc": null,
+      "rel_cls": "audience_engagement_relation",
+      "rel_cls_group": "INTERACTION",
+      "new_relation_name": null,
+      "original_relation_name": null,
+      "justification": "Both relations describe large sporting events attracting and involving fans emotionally and attentively. This is best modeled as an interaction between event and audience rather than a generic 'AGENCY' pattern. Renaming the class to 'audience_engagement_relation' makes its scope clearer than the broader 'participation_and_engagement_relation', and aligning the group to 'INTERACTION' better reflects the bidirectional engagement semantics.",
+      "remark": null,
+      "confidence": 0.86
+    }
+  ],
+  "timestamp": "2026-01-06T12:44:48Z"
+}

@@ -1,0 +1,167 @@
+{
+  "cluster_label": "25_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_5b3a1e2b3930",
+      "relation_name": "is_instance_of",
+      "rel_desc": "Cinderella is presented as an individual fairytale belonging to the broader category of fairytales.",
+      "rel_hint_type": "classification",
+      "canonical_rel_name": "is_instance_of",
+      "canonical_rel_desc": "Indicates that the subject is a specific instance or individual example of the object class or category.",
+      "rel_cls": "genre_and_category_relation",
+      "rel_cls_group": "IDENTITY",
+      "subject_entity_name": "Cinderella (fairytale)",
+      "object_entity_name": "fairytales",
+      "subject_class_label": "Cinderella Narratives",
+      "subject_class_group": "Cinderella Narrative Tradition",
+      "object_class_label": "Fairytale Concepts",
+      "object_class_group": "Fairytales: Genre, Narratives, and Motifs",
+      "qualifiers": {
+        "TemporalQualifier": "classic (enduring status)",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": "well-known, classic",
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": "such as",
+        "OtherQualifier": null
+      },
+      "confidence": 0.88,
+      "remarks": [
+        "Modeled as instance-of to capture that Cinderella is a member of the fairytale genre.",
+        "Modeled as instance-of to capture that Cinderella is a member of the fairytale genre.",
+        "Modeled as instance-of to capture that Cinderella is a member of the fairytale genre."
+      ]
+    },
+    {
+      "relation_id": "RelR_8a5226ec9007",
+      "relation_name": "is_instance_of",
+      "rel_desc": "Snow White is treated as an individual instance of a fairytale.",
+      "rel_hint_type": "classification",
+      "canonical_rel_name": "is_instance_of",
+      "canonical_rel_desc": "Indicates that the subject is a specific instance or individual example of the object class or category.",
+      "rel_cls": "genre_and_category_relation",
+      "rel_cls_group": "IDENTITY",
+      "subject_entity_name": "Snow White",
+      "object_entity_name": "fairytales",
+      "subject_class_label": "Individual Fairy Tales",
+      "subject_class_group": "Fairy Tales and Their Audiences",
+      "object_class_label": "Fairytale Concepts",
+      "object_class_group": "Fairytales: Genre, Narratives, and Motifs",
+      "qualifiers": {
+        "TemporalQualifier": "classic (enduring status)",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": "well-known, classic",
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": "such as",
+        "OtherQualifier": null
+      },
+      "confidence": 0.88,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_abad49984afa",
+      "relation_name": "is_instance_of",
+      "rel_desc": "Hansel and Gretel is treated as an individual fairytale.",
+      "rel_hint_type": "classification",
+      "canonical_rel_name": "is_instance_of",
+      "canonical_rel_desc": "Indicates that the subject is a specific instance or individual example of the object class or category.",
+      "rel_cls": "genre_and_category_relation",
+      "rel_cls_group": "IDENTITY",
+      "subject_entity_name": "Hansel and Gretel",
+      "object_entity_name": "fairytales",
+      "subject_class_label": "Grimm Fairy-Tale Works",
+      "subject_class_group": "Grimm Fairy Tales",
+      "object_class_label": "Fairytale Concepts",
+      "object_class_group": "Fairytales: Genre, Narratives, and Motifs",
+      "qualifiers": {
+        "TemporalQualifier": "classic (enduring status)",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": "well-known, classic",
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": "such as",
+        "OtherQualifier": null
+      },
+      "confidence": 0.9,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_6050475fbe81",
+      "relation_name": "is_subset_of",
+      "rel_desc": "\"These tales\" refers to the specific named stories, which are a subset of the broader category of fairytales.",
+      "rel_hint_type": "subset",
+      "canonical_rel_name": "is_subset_of",
+      "canonical_rel_desc": "Indicates that the subject collection or group is a subset of, or fully contained within, the object collection or category.",
+      "rel_cls": "genre_and_category_relation",
+      "rel_cls_group": "IDENTITY",
+      "subject_entity_name": "these tales",
+      "object_entity_name": "fairytales",
+      "subject_class_label": "Fairy Tale Categories and Collections",
+      "subject_class_group": "Fairy Tales and Their Audiences",
+      "object_class_label": "Fairytale Concepts",
+      "object_class_group": "Fairytales: Genre, Narratives, and Motifs",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "ReferentScope: Brothers Grimm collection and the listed classic stories"
+      },
+      "confidence": 0.92,
+      "remarks": [
+        "Relation created to anchor the anaphoric group 'these tales' within the fairytale genre.",
+        "Relation created to anchor the anaphoric group 'these tales' within the fairytale genre.",
+        "Relation created to anchor the anaphoric group 'these tales' within the fairytale genre."
+      ]
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_rel_schema\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_5b3a1e2b3930\",\n        \"RelR_8a5226ec9007\",\n        \"RelR_abad49984afa\",\n        \"RelR_6050475fbe81\"\n      ],\n      \"canonical_rel_name\": null,\n      \"canonical_rel_desc\": null,\n      \"rel_cls\": \"classification_hierarchy_relation\",\n      \"rel_cls_group\": \"HIERARCHY\",\n      \"justification\": \"All four relations (three is_instance_of and one is_subset_of) encode taxonomic / set-theoretic inclusion between specific tales or tale-collections and the broader category 'fairytales'. This is better modeled as a classification hierarchy rather than pure IDENTITY. The existing canonical_rel_name values are already appropriate and need no change, but rel_cls should emphasize classification hierarchy, and rel_cls_group should reflect hierarchical inclusion rather than identity.\",\n      \"remark\": \"Retains distinct predicates is_instance_of vs is_subset_of while aligning them under a common classification_hierarchy_relation class and broad HIERARCHY group.\",\n      \"confidence\": 0.9\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_rel_schema",
+      "args": {
+        "relation_ids": [
+          "RelR_5b3a1e2b3930",
+          "RelR_8a5226ec9007",
+          "RelR_abad49984afa",
+          "RelR_6050475fbe81"
+        ],
+        "canonical_rel_name": null,
+        "canonical_rel_desc": null,
+        "rel_cls": "classification_hierarchy_relation",
+        "rel_cls_group": "HIERARCHY",
+        "justification": "All four relations (three is_instance_of and one is_subset_of) encode taxonomic / set-theoretic inclusion between specific tales or tale-collections and the broader category 'fairytales'. This is better modeled as a classification hierarchy rather than pure IDENTITY. The existing canonical_rel_name values are already appropriate and need no change, but rel_cls should emphasize classification hierarchy, and rel_cls_group should reflect hierarchical inclusion rather than identity.",
+        "remark": "Retains distinct predicates is_instance_of vs is_subset_of while aligning them under a common classification_hierarchy_relation class and broad HIERARCHY group.",
+        "confidence": 0.9
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_rel_schema",
+      "relation_ids": [
+        "RelR_5b3a1e2b3930",
+        "RelR_8a5226ec9007",
+        "RelR_abad49984afa",
+        "RelR_6050475fbe81"
+      ],
+      "canonical_rel_name": null,
+      "canonical_rel_desc": null,
+      "rel_cls": "classification_hierarchy_relation",
+      "rel_cls_group": "HIERARCHY",
+      "new_relation_name": null,
+      "original_relation_name": null,
+      "justification": "All four relations (three is_instance_of and one is_subset_of) encode taxonomic / set-theoretic inclusion between specific tales or tale-collections and the broader category 'fairytales'. This is better modeled as a classification hierarchy rather than pure IDENTITY. The existing canonical_rel_name values are already appropriate and need no change, but rel_cls should emphasize classification hierarchy, and rel_cls_group should reflect hierarchical inclusion rather than identity.",
+      "remark": "Retains distinct predicates is_instance_of vs is_subset_of while aligning them under a common classification_hierarchy_relation class and broad HIERARCHY group.",
+      "confidence": 0.9
+    }
+  ],
+  "timestamp": "2026-01-06T14:12:16Z"
+}

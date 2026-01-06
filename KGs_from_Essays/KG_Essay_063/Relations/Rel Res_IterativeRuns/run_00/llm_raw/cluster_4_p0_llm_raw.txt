@@ -1,0 +1,63 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_8538c3eb3b94"],
+      "canonical_rel_name": "was_initiated_by",
+      "canonical_rel_desc": "Indicates that a historical process or movement began as a direct result of, or was first triggered by, a specific prior event or action.",
+      "justification": "This relation connects the overall Arab Spring (a broader movement) to the specific protests in Tunisia that triggered its onset, so a directional predicate emphasizing initiation rather than a generic cause is most precise.",
+      "remark": null,
+      "confidence": 0.96
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_052b2c72cb5c"],
+      "canonical_rel_name": "caused",
+      "canonical_rel_desc": "Indicates that one event or process brought about another event or outcome as a consequence.",
+      "justification": "The description explicitly states that the Arab Spring caused the overthrow of long-standing dictators, which is a classic direct cause–effect relation best captured with a straightforward causal predicate.",
+      "remark": null,
+      "confidence": 0.98
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_c8f9c4c657cf"],
+      "canonical_rel_name": "sparked_expectation_of",
+      "canonical_rel_desc": "Indicates that an event or process generated hopes, expectations, or anticipations about a potential outcome, without implying that the outcome was realized.",
+      "justification": "The relation emphasizes that the Arab Spring generated hopes for democratic change rather than guaranteeing or directly causing that change, so a predicate focusing on sparking expectations is more accurate than a generic cause label.",
+      "remark": "Chosen to distinguish expectation-based effects from realized outcomes in the causal graph.",
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_8538c3eb3b94",
+        "RelR_052b2c72cb5c",
+        "RelR_c8f9c4c657cf"
+      ],
+      "rel_cls": "historical_event_causal_relation",
+      "justification": "All three relations represent causal or quasi-causal links between historical events/processes and their triggers, consequences, or expectation-type effects within the Arab Spring context; grouping them under a common causal relation class for historical events provides a coherent mid-level abstraction.",
+      "remark": null,
+      "confidence": 0.97
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_8538c3eb3b94",
+        "RelR_052b2c72cb5c",
+        "RelR_c8f9c4c657cf"
+      ],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "Each relation connects an initiating event/process (Arab Spring or Tunisian protests) with an outcome, trigger, or expected effect, aligning them with the broad semantic dimension of causality.",
+      "remark": null,
+      "confidence": 0.99
+    }
+  }
+]

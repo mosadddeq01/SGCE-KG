@@ -1,0 +1,209 @@
+{
+  "cluster_label": "10_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_a1263ca9df79",
+      "relation_name": "characterized_by",
+      "rel_desc": "Superficial communication on social media is characterized by the use of likes.",
+      "rel_hint_type": "composition",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "superficial communication on social media",
+      "object_entity_name": "likes",
+      "subject_class_label": "Superficial Social Media Communication",
+      "subject_class_group": "Social Media Interaction & Engagement",
+      "object_class_label": "Superficial Social Media Communication",
+      "object_class_group": "Social Media Interaction & Engagement",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "on social media",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": "such as",
+        "OtherQualifier": null
+      },
+      "confidence": 0.94,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_af51a3b3b431",
+      "relation_name": "characterized_by",
+      "rel_desc": "Superficial communication on social media is characterized by the use of shares.",
+      "rel_hint_type": "composition",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "superficial communication on social media",
+      "object_entity_name": "shares",
+      "subject_class_label": "Superficial Social Media Communication",
+      "subject_class_group": "Social Media Interaction & Engagement",
+      "object_class_label": "Superficial Social Media Communication",
+      "object_class_group": "Social Media Interaction & Engagement",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "on social media",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": "such as",
+        "OtherQualifier": null
+      },
+      "confidence": 0.94,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_2818c515ddaf",
+      "relation_name": "characterized_by",
+      "rel_desc": "Superficial communication on social media is characterized by the use of emojis.",
+      "rel_hint_type": "composition",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "superficial communication on social media",
+      "object_entity_name": "emojis",
+      "subject_class_label": "Superficial Social Media Communication",
+      "subject_class_group": "Social Media Interaction & Engagement",
+      "object_class_label": "Superficial Social Media Communication",
+      "object_class_group": "Social Media Interaction & Engagement",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "on social media",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": "such as",
+        "OtherQualifier": null
+      },
+      "confidence": 0.94,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_6187da6b7e45",
+      "relation_name": "has_attribute",
+      "rel_desc": "Social media is characterized as having an ever-evolving landscape.",
+      "rel_hint_type": "characterization",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "social media",
+      "object_entity_name": "ever-evolving landscape of social media",
+      "subject_class_label": "Social Media Platforms",
+      "subject_class_group": "Social Media & Online Communication",
+      "object_class_label": "Social Media Concepts",
+      "object_class_group": "Social Media and Online Social Interaction",
+      "qualifiers": {
+        "TemporalQualifier": "ongoing (ever-evolving)",
+        "SpatialQualifier": "within social media platforms",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "ChangeRate: continuously changing"
+      },
+      "confidence": 0.78,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_a1263ca9df79\",\n        \"RelR_af51a3b3b431\",\n        \"RelR_2818c515ddaf\",\n        \"RelR_6187da6b7e45\"\n      ],\n      \"canonical_rel_name\": \"is_characterized_by\",\n      \"canonical_rel_desc\": \"Indicates that the subject is defined, typified, or distinguished by the presence or use of the object (a feature, behavior, or property).\",\n      \"justification\": \"All four relations express that a communication phenomenon or platform is typified or defined by a particular feature (likes, shares, emojis, or an ever-evolving landscape). Using a unified predicate 'is_characterized_by' captures this descriptive/definitional link consistently across these instances.\",\n      \"remark\": null,\n      \"confidence\": 0.93\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_a1263ca9df79\",\n        \"RelR_af51a3b3b431\",\n        \"RelR_2818c515ddaf\",\n        \"RelR_6187da6b7e45\"\n      ],\n      \"rel_cls\": \"characterization_relation\",\n      \"justification\": \"Each relation links a social media phenomenon to a feature that characterizes or typifies it rather than to a part, location, or causal factor. Grouping them under 'characterization_relation' reflects that they all describe defining characteristics or hallmarks of the subject.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_a1263ca9df79\",\n        \"RelR_af51a3b3b431\",\n        \"RelR_2818c515ddaf\",\n        \"RelR_6187da6b7e45\"\n      ],\n      \"rel_cls_group\": \"ATTRIBUTE\",\n      \"justification\": \"The semantics are about descriptive attributes or hallmark features of the subject entities (what they are like), not about composition, causality, or spatial/temporal context. Thus they best fit a broad ATTRIBUTE group.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_a1263ca9df79",
+          "RelR_af51a3b3b431",
+          "RelR_2818c515ddaf",
+          "RelR_6187da6b7e45"
+        ],
+        "canonical_rel_name": "is_characterized_by",
+        "canonical_rel_desc": "Indicates that the subject is defined, typified, or distinguished by the presence or use of the object (a feature, behavior, or property).",
+        "justification": "All four relations express that a communication phenomenon or platform is typified or defined by a particular feature (likes, shares, emojis, or an ever-evolving landscape). Using a unified predicate 'is_characterized_by' captures this descriptive/definitional link consistently across these instances.",
+        "remark": null,
+        "confidence": 0.93
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_a1263ca9df79",
+          "RelR_af51a3b3b431",
+          "RelR_2818c515ddaf",
+          "RelR_6187da6b7e45"
+        ],
+        "rel_cls": "characterization_relation",
+        "justification": "Each relation links a social media phenomenon to a feature that characterizes or typifies it rather than to a part, location, or causal factor. Grouping them under 'characterization_relation' reflects that they all describe defining characteristics or hallmarks of the subject.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_a1263ca9df79",
+          "RelR_af51a3b3b431",
+          "RelR_2818c515ddaf",
+          "RelR_6187da6b7e45"
+        ],
+        "rel_cls_group": "ATTRIBUTE",
+        "justification": "The semantics are about descriptive attributes or hallmark features of the subject entities (what they are like), not about composition, causality, or spatial/temporal context. Thus they best fit a broad ATTRIBUTE group.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_a1263ca9df79",
+        "RelR_af51a3b3b431",
+        "RelR_2818c515ddaf",
+        "RelR_6187da6b7e45"
+      ],
+      "canonical_rel_name": "is_characterized_by",
+      "canonical_rel_desc": "Indicates that the subject is defined, typified, or distinguished by the presence or use of the object (a feature, behavior, or property).",
+      "justification": "All four relations express that a communication phenomenon or platform is typified or defined by a particular feature (likes, shares, emojis, or an ever-evolving landscape). Using a unified predicate 'is_characterized_by' captures this descriptive/definitional link consistently across these instances.",
+      "remark": null,
+      "confidence": 0.93
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_a1263ca9df79",
+        "RelR_af51a3b3b431",
+        "RelR_2818c515ddaf",
+        "RelR_6187da6b7e45"
+      ],
+      "rel_cls": "characterization_relation",
+      "justification": "Each relation links a social media phenomenon to a feature that characterizes or typifies it rather than to a part, location, or causal factor. Grouping them under 'characterization_relation' reflects that they all describe defining characteristics or hallmarks of the subject.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_a1263ca9df79",
+        "RelR_af51a3b3b431",
+        "RelR_2818c515ddaf",
+        "RelR_6187da6b7e45"
+      ],
+      "rel_cls_group": "ATTRIBUTE",
+      "justification": "The semantics are about descriptive attributes or hallmark features of the subject entities (what they are like), not about composition, causality, or spatial/temporal context. Thus they best fit a broad ATTRIBUTE group.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  ],
+  "timestamp": "2026-01-06T11:04:32Z"
+}

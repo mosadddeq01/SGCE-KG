@@ -1,0 +1,51 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_99ccecb69b07",
+        "RelR_090018185abf",
+        "RelR_981f8cb17b99",
+        "RelR_fe2f181771a8",
+        "RelR_5d7b1143fa49"
+      ],
+      "canonical_rel_name": "challenges_or_overcomes",
+      "canonical_rel_desc": "Subject challenges, reduces, or overcomes the hindering or constraining effects of the object (e.g., obstacles, barriers, stereotypes, norms, boundaries), typically leading to greater access, inclusion, or freedom.",
+      "justification": "All five relations describe a common semantic pattern: the subject (athletes, sports, inclusion of women) counters, reduces, or overcomes social or practical constraints represented by the object (obstacles, barriers, stereotypes, gender norms, boundaries). Using a unified predicate 'challenges_or_overcomes' captures both the literal and metaphorical reduction of hindrances in a consistent way.",
+      "remark": "Predicate intentionally broad to cover both literal obstacles (participation obstacles) and metaphorical social barriers (stereotypes, gender norms, social and cultural boundaries).",
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_99ccecb69b07",
+        "RelR_090018185abf",
+        "RelR_981f8cb17b99",
+        "RelR_fe2f181771a8",
+        "RelR_5d7b1143fa49"
+      ],
+      "rel_cls": "barrier_and_constraint_relation",
+      "justification": "Each relation links an agent or mechanism (athletes, sports, gender inclusion in sports) with some form of hindrance (obstacles, social/cultural barriers, stereotypes, gender norms, boundaries). Grouping them under 'barrier_and_constraint_relation' captures this shared focus on how subjects relate to and counter constraints.",
+      "remark": "This class is designed to encompass social, cultural, and practical barriers/constraints that are challenged, reduced, or overcome.",
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_99ccecb69b07",
+        "RelR_090018185abf",
+        "RelR_981f8cb17b99",
+        "RelR_fe2f181771a8",
+        "RelR_5d7b1143fa49"
+      ],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "The relations describe causal or quasi-causal influence: participation in sports or inclusion of women in sports leads to the challenging or overcoming of barriers, stereotypes, norms, or boundaries. The subject acts as a cause or mechanism that changes the state or strength of the constraint.",
+      "remark": "Could also be viewed as a type of social MODIFICATION, but CAUSALITY is chosen to emphasize the directional effect of sports on barriers and constraints.",
+      "confidence": 0.86
+    }
+  }
+]

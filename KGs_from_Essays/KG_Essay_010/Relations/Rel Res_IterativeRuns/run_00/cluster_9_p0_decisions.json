@@ -1,0 +1,239 @@
+{
+  "cluster_label": "9_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_41cefd393f05",
+      "relation_name": "occurs_near",
+      "rel_desc": "Gravitational time dilation occurs in the strong gravitational field near black holes.",
+      "rel_hint_type": "spatial",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "gravitational time dilation",
+      "object_entity_name": "black holes",
+      "subject_class_label": "Gravitational Time Dilation",
+      "subject_class_group": "Gravitation and General Relativity",
+      "object_class_label": "Black Hole Phenomena",
+      "object_class_group": "Astrophysics",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "near a black hole",
+        "OperationalConstraint": "strong gravitational field",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.9,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_bf07c71f41d6",
+      "relation_name": "interacts_with",
+      "rel_desc": "Information is described as falling into a black hole, linking the concept of information with the black hole system.",
+      "rel_hint_type": "physical_interaction",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "information",
+      "object_entity_name": "black hole",
+      "subject_class_label": "Black Hole Information & Paradox Concepts",
+      "subject_class_group": "Black Hole Information & Holography",
+      "object_class_label": "Black Holes (Astrophysical Objects)",
+      "object_class_group": "Black Holes",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "into a black hole",
+        "OperationalConstraint": "during infall into the black hole",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "Process: infall of information into black hole"
+      },
+      "confidence": 0.78,
+      "remarks": [
+        "Relation semantics approximate; main goal is to encode that the fate of information is tied to it entering a black hole."
+      ]
+    },
+    {
+      "relation_id": "RelR_23e6317b319d",
+      "relation_name": "occurs_near",
+      "rel_desc": "The quantum effects that generate Hawking radiation occur near the black hole’s event horizon.",
+      "rel_hint_type": "spatial",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "quantum effects near the event horizon",
+      "object_entity_name": "event horizon (black hole)",
+      "subject_class_label": "Hawking Radiation and Black Hole Evaporation (Phenomena)",
+      "subject_class_group": "Black Hole Physics",
+      "object_class_label": "Black Hole Structural Components",
+      "object_class_group": "Black Holes",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "near the event horizon",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.97,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_41cefd393f05\", \"RelR_23e6317b319d\"],\n      \"canonical_rel_name\": \"occurs_near\",\n      \"canonical_rel_desc\": \"Indicates that a physical phenomenon or process occurs in the spatial vicinity of a specified astrophysical object or structural feature (e.g., near a black hole or event horizon).\",\n      \"justification\": \"Both relations describe phenomena (gravitational time dilation; quantum effects producing Hawking radiation) that take place in the spatial vicinity of a black hole or its event horizon, with qualifiers explicitly saying 'near' these objects. They share the same spatial-occurrence semantics, so a unified predicate 'occurs_near' is appropriate.\",\n      \"remark\": null,\n      \"confidence\": 0.93\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_41cefd393f05\", \"RelR_23e6317b319d\"],\n      \"rel_cls\": \"spatial_occurrence_relation\",\n      \"justification\": \"These relations express where phenomena occur relative to astrophysical objects (near a black hole / near the event horizon), which is a specific family of spatial relations about the location of an occurrence rather than mere containment or part-whole structure.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_41cefd393f05\", \"RelR_23e6317b319d\"],\n      \"rel_cls_group\": \"SPATIALITY\",\n      \"justification\": \"The primary semantics involve spatial localization of phenomena relative to objects (occurring near them), fitting the broad spatial dimension.\",\n      \"remark\": null,\n      \"confidence\": 0.96\n    }\n  },\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_bf07c71f41d6\"],\n      \"canonical_rel_name\": \"enters_into\",\n      \"canonical_rel_desc\": \"Indicates that an entity (e.g., information, matter, or radiation) transitions into and becomes contained within a black hole or similar system.\",\n      \"justification\": \"The description and qualifiers emphasize information 'falling into' and being tied to its entry into the black hole, which is more precisely a transition/ingress relation than a generic 'interacts_with'. The predicate 'enters_into' captures the directed process of information going into the black hole.\",\n      \"remark\": null,\n      \"confidence\": 0.86\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_bf07c71f41d6\"],\n      \"rel_cls\": \"ingress_interaction_relation\",\n      \"justification\": \"The relation represents a specific type of interaction: ingress of an entity into a black hole (entry/absorption), which is more specific than generic physical interaction but still part of the broader interaction family.\",\n      \"remark\": null,\n      \"confidence\": 0.82\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_bf07c71f41d6\"],\n      \"rel_cls_group\": \"INTERACTION\",\n      \"justification\": \"While there is a spatial component (into the black hole), the core semantics relate to the dynamic interaction between information and the black hole—specifically the process of infall—so it best fits the broad interaction group.\",\n      \"remark\": null,\n      \"confidence\": 0.8\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_41cefd393f05",
+          "RelR_23e6317b319d"
+        ],
+        "canonical_rel_name": "occurs_near",
+        "canonical_rel_desc": "Indicates that a physical phenomenon or process occurs in the spatial vicinity of a specified astrophysical object or structural feature (e.g., near a black hole or event horizon).",
+        "justification": "Both relations describe phenomena (gravitational time dilation; quantum effects producing Hawking radiation) that take place in the spatial vicinity of a black hole or its event horizon, with qualifiers explicitly saying 'near' these objects. They share the same spatial-occurrence semantics, so a unified predicate 'occurs_near' is appropriate.",
+        "remark": null,
+        "confidence": 0.93
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_41cefd393f05",
+          "RelR_23e6317b319d"
+        ],
+        "rel_cls": "spatial_occurrence_relation",
+        "justification": "These relations express where phenomena occur relative to astrophysical objects (near a black hole / near the event horizon), which is a specific family of spatial relations about the location of an occurrence rather than mere containment or part-whole structure.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_41cefd393f05",
+          "RelR_23e6317b319d"
+        ],
+        "rel_cls_group": "SPATIALITY",
+        "justification": "The primary semantics involve spatial localization of phenomena relative to objects (occurring near them), fitting the broad spatial dimension.",
+        "remark": null,
+        "confidence": 0.96
+      }
+    },
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_bf07c71f41d6"
+        ],
+        "canonical_rel_name": "enters_into",
+        "canonical_rel_desc": "Indicates that an entity (e.g., information, matter, or radiation) transitions into and becomes contained within a black hole or similar system.",
+        "justification": "The description and qualifiers emphasize information 'falling into' and being tied to its entry into the black hole, which is more precisely a transition/ingress relation than a generic 'interacts_with'. The predicate 'enters_into' captures the directed process of information going into the black hole.",
+        "remark": null,
+        "confidence": 0.86
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_bf07c71f41d6"
+        ],
+        "rel_cls": "ingress_interaction_relation",
+        "justification": "The relation represents a specific type of interaction: ingress of an entity into a black hole (entry/absorption), which is more specific than generic physical interaction but still part of the broader interaction family.",
+        "remark": null,
+        "confidence": 0.82
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_bf07c71f41d6"
+        ],
+        "rel_cls_group": "INTERACTION",
+        "justification": "While there is a spatial component (into the black hole), the core semantics relate to the dynamic interaction between information and the black hole—specifically the process of infall—so it best fits the broad interaction group.",
+        "remark": null,
+        "confidence": 0.8
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_41cefd393f05",
+        "RelR_23e6317b319d"
+      ],
+      "canonical_rel_name": "occurs_near",
+      "canonical_rel_desc": "Indicates that a physical phenomenon or process occurs in the spatial vicinity of a specified astrophysical object or structural feature (e.g., near a black hole or event horizon).",
+      "justification": "Both relations describe phenomena (gravitational time dilation; quantum effects producing Hawking radiation) that take place in the spatial vicinity of a black hole or its event horizon, with qualifiers explicitly saying 'near' these objects. They share the same spatial-occurrence semantics, so a unified predicate 'occurs_near' is appropriate.",
+      "remark": null,
+      "confidence": 0.93
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_41cefd393f05",
+        "RelR_23e6317b319d"
+      ],
+      "rel_cls": "spatial_occurrence_relation",
+      "justification": "These relations express where phenomena occur relative to astrophysical objects (near a black hole / near the event horizon), which is a specific family of spatial relations about the location of an occurrence rather than mere containment or part-whole structure.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_41cefd393f05",
+        "RelR_23e6317b319d"
+      ],
+      "rel_cls_group": "SPATIALITY",
+      "justification": "The primary semantics involve spatial localization of phenomena relative to objects (occurring near them), fitting the broad spatial dimension.",
+      "remark": null,
+      "confidence": 0.96
+    },
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_bf07c71f41d6"
+      ],
+      "canonical_rel_name": "enters_into",
+      "canonical_rel_desc": "Indicates that an entity (e.g., information, matter, or radiation) transitions into and becomes contained within a black hole or similar system.",
+      "justification": "The description and qualifiers emphasize information 'falling into' and being tied to its entry into the black hole, which is more precisely a transition/ingress relation than a generic 'interacts_with'. The predicate 'enters_into' captures the directed process of information going into the black hole.",
+      "remark": null,
+      "confidence": 0.86
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_bf07c71f41d6"
+      ],
+      "rel_cls": "ingress_interaction_relation",
+      "justification": "The relation represents a specific type of interaction: ingress of an entity into a black hole (entry/absorption), which is more specific than generic physical interaction but still part of the broader interaction family.",
+      "remark": null,
+      "confidence": 0.82
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_bf07c71f41d6"
+      ],
+      "rel_cls_group": "INTERACTION",
+      "justification": "While there is a spatial component (into the black hole), the core semantics relate to the dynamic interaction between information and the black hole—specifically the process of infall—so it best fits the broad interaction group.",
+      "remark": null,
+      "confidence": 0.8
+    }
+  ],
+  "timestamp": "2026-01-06T09:41:28Z"
+}

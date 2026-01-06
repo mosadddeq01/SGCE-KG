@@ -1,0 +1,175 @@
+{
+  "cluster_label": "2_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_4124cf30863b",
+      "relation_name": "is_variation_of",
+      "rel_desc": "German Snow White folklore traditions are described as variations of the Snow White story.",
+      "rel_hint_type": "versioning",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "German Snow White folklore traditions",
+      "object_entity_name": "Snow White",
+      "subject_class_label": "Snow White Folklore Traditions",
+      "subject_class_group": "Folklore and Mythic Narratives",
+      "object_class_label": "Individual Fairy Tales",
+      "object_class_group": "Fairy Tales and Their Audiences",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "German folklore traditions",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": "including",
+        "OtherQualifier": "CulturalScope: German"
+      },
+      "confidence": 0.93,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_a6e3421eb0c3",
+      "relation_name": "is_variation_of",
+      "rel_desc": "Italian Snow White folklore traditions represent Italian variations of the Snow White tale.",
+      "rel_hint_type": "versioning",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "Italian Snow White folklore traditions",
+      "object_entity_name": "Snow White",
+      "subject_class_label": "Snow White Folklore Traditions",
+      "subject_class_group": "Folklore and Mythic Narratives",
+      "object_class_label": "Individual Fairy Tales",
+      "object_class_group": "Fairy Tales and Their Audiences",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "Italian folklore traditions",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": "including",
+        "OtherQualifier": "CulturalScope: Italian"
+      },
+      "confidence": 0.93,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_dd76c029da3c",
+      "relation_name": "is_variation_of",
+      "rel_desc": "Slavic Snow White folklore traditions are Slavic variants of the Snow White story.",
+      "rel_hint_type": "versioning",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "Slavic Snow White folklore traditions",
+      "object_entity_name": "Snow White",
+      "subject_class_label": "Snow White Folklore Traditions",
+      "subject_class_group": "Folklore and Mythic Narratives",
+      "object_class_label": "Individual Fairy Tales",
+      "object_class_group": "Fairy Tales and Their Audiences",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "Slavic folklore traditions",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": "including",
+        "OtherQualifier": "CulturalScope: Slavic"
+      },
+      "confidence": 0.93,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_4124cf30863b\",\n        \"RelR_a6e3421eb0c3\",\n        \"RelR_dd76c029da3c\"\n      ],\n      \"canonical_rel_name\": \"is_variant_of\",\n      \"canonical_rel_desc\": \"Indicates that the subject narrative is a cultural or regional variant of the object narrative, sharing core plot identity with localized differences.\",\n      \"justification\": \"All three relations describe culturally localized Snow White folklore traditions as variations of the core Snow White story. They share identical directionality (local tradition → base tale) and semantics of narrative versioning, so they should use one normalized predicate `is_variant_of`.\",\n      \"remark\": \"Use this predicate for narrative/version relationships where the subject is a culturally or regionally adapted version of the base tale.\",\n      \"confidence\": 0.96\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_4124cf30863b\",\n        \"RelR_a6e3421eb0c3\",\n        \"RelR_dd76c029da3c\"\n      ],\n      \"rel_cls\": \"narrative_version_relation\",\n      \"justification\": \"Each relation links a localized folklore tradition to a canonical tale via a versioning/variation relationship. Grouping them under `narrative_version_relation` captures this family of predicates (variants, adaptations, retellings) at the class level.\",\n      \"remark\": null,\n      \"confidence\": 0.94\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_4124cf30863b\",\n        \"RelR_a6e3421eb0c3\",\n        \"RelR_dd76c029da3c\"\n      ],\n      \"rel_cls_group\": \"IDENTITY\",\n      \"justification\": \"Variant relationships express altered forms of essentially the same narrative identity (same core tale, different cultural realization). This is best modeled under a broad identity/versioning dimension rather than causality, composition, or spatiality.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_4124cf30863b",
+          "RelR_a6e3421eb0c3",
+          "RelR_dd76c029da3c"
+        ],
+        "canonical_rel_name": "is_variant_of",
+        "canonical_rel_desc": "Indicates that the subject narrative is a cultural or regional variant of the object narrative, sharing core plot identity with localized differences.",
+        "justification": "All three relations describe culturally localized Snow White folklore traditions as variations of the core Snow White story. They share identical directionality (local tradition → base tale) and semantics of narrative versioning, so they should use one normalized predicate `is_variant_of`.",
+        "remark": "Use this predicate for narrative/version relationships where the subject is a culturally or regionally adapted version of the base tale.",
+        "confidence": 0.96
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_4124cf30863b",
+          "RelR_a6e3421eb0c3",
+          "RelR_dd76c029da3c"
+        ],
+        "rel_cls": "narrative_version_relation",
+        "justification": "Each relation links a localized folklore tradition to a canonical tale via a versioning/variation relationship. Grouping them under `narrative_version_relation` captures this family of predicates (variants, adaptations, retellings) at the class level.",
+        "remark": null,
+        "confidence": 0.94
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_4124cf30863b",
+          "RelR_a6e3421eb0c3",
+          "RelR_dd76c029da3c"
+        ],
+        "rel_cls_group": "IDENTITY",
+        "justification": "Variant relationships express altered forms of essentially the same narrative identity (same core tale, different cultural realization). This is best modeled under a broad identity/versioning dimension rather than causality, composition, or spatiality.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_4124cf30863b",
+        "RelR_a6e3421eb0c3",
+        "RelR_dd76c029da3c"
+      ],
+      "canonical_rel_name": "is_variant_of",
+      "canonical_rel_desc": "Indicates that the subject narrative is a cultural or regional variant of the object narrative, sharing core plot identity with localized differences.",
+      "justification": "All three relations describe culturally localized Snow White folklore traditions as variations of the core Snow White story. They share identical directionality (local tradition → base tale) and semantics of narrative versioning, so they should use one normalized predicate `is_variant_of`.",
+      "remark": "Use this predicate for narrative/version relationships where the subject is a culturally or regionally adapted version of the base tale.",
+      "confidence": 0.96
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_4124cf30863b",
+        "RelR_a6e3421eb0c3",
+        "RelR_dd76c029da3c"
+      ],
+      "rel_cls": "narrative_version_relation",
+      "justification": "Each relation links a localized folklore tradition to a canonical tale via a versioning/variation relationship. Grouping them under `narrative_version_relation` captures this family of predicates (variants, adaptations, retellings) at the class level.",
+      "remark": null,
+      "confidence": 0.94
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_4124cf30863b",
+        "RelR_a6e3421eb0c3",
+        "RelR_dd76c029da3c"
+      ],
+      "rel_cls_group": "IDENTITY",
+      "justification": "Variant relationships express altered forms of essentially the same narrative identity (same core tale, different cultural realization). This is best modeled under a broad identity/versioning dimension rather than causality, composition, or spatiality.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  ],
+  "timestamp": "2026-01-06T13:58:48Z"
+}

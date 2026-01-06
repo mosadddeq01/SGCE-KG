@@ -1,0 +1,99 @@
+{
+  "cluster_label": "1_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_b42ef263dac7",
+      "relation_name": "targets",
+      "rel_desc": "Monitoring bird populations is an activity focused on observing and measuring bird populations.",
+      "rel_hint_type": "usage",
+      "canonical_rel_name": "monitors",
+      "canonical_rel_desc": "An activity that systematically observes and measures a target biotic or abiotic component.",
+      "rel_cls": "monitoring_target_relation",
+      "rel_cls_group": "AGENCY",
+      "subject_entity_name": "monitoring bird populations",
+      "object_entity_name": "bird populations",
+      "subject_class_label": "Biodiversity Conservation Activities",
+      "subject_class_group": "Birds as Environmental Indicators & Conservation",
+      "object_class_label": "Bird Biotic Components",
+      "object_class_group": "Birds as Environmental Indicators & Conservation",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": "systematic observation and measurement",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "MonitoringType: observation of numbers and trends"
+      },
+      "confidence": 0.9,
+      "remarks": [
+        "Relation created to link the conservation activity to the biotic component it observes.",
+        "Relation created to link the conservation activity to the biotic component it observes."
+      ]
+    },
+    {
+      "relation_id": "RelR_0eecdecc4712",
+      "relation_name": "provides_insight_into",
+      "rel_desc": "Monitoring bird populations provides information about ecosystem condition.",
+      "rel_hint_type": "informational",
+      "canonical_rel_name": "provides_information_about",
+      "canonical_rel_desc": "A monitoring or observation activity generates information or insight about a system property or condition.",
+      "rel_cls": "monitoring_information_relation",
+      "rel_cls_group": "INFORMATION",
+      "subject_entity_name": "monitoring bird populations",
+      "object_entity_name": "ecosystem condition",
+      "subject_class_label": "Biodiversity Conservation Activities",
+      "subject_class_group": "Birds as Environmental Indicators & Conservation",
+      "object_class_label": "Ecosystem State and Stability",
+      "object_class_group": "Ecosystem Condition, Function & Services",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": "when bird populations are monitored",
+        "UncertaintyQualifier": "can provide (modal)",
+        "CausalHint": "provide valuable insights into",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.96,
+      "remarks": [
+        "State of ecosystems mapped to ecosystem condition construct.",
+        "State of ecosystems mapped to ecosystem condition construct."
+      ]
+    },
+    {
+      "relation_id": "RelR_ccaaf105d60d",
+      "relation_name": "informs",
+      "rel_desc": "Monitoring bird populations informs and guides conservation efforts.",
+      "rel_hint_type": "dependency",
+      "canonical_rel_name": "informs",
+      "canonical_rel_desc": "Information from one activity or process is used to guide or support decisions or actions in another activity or process.",
+      "rel_cls": "monitoring_information_relation",
+      "rel_cls_group": "INFORMATION",
+      "subject_entity_name": "monitoring bird populations",
+      "object_entity_name": "conservation efforts",
+      "subject_class_label": "Biodiversity Conservation Activities",
+      "subject_class_group": "Birds as Environmental Indicators & Conservation",
+      "object_class_label": "Biodiversity Conservation Activities",
+      "object_class_group": "Birds as Environmental Indicators & Conservation",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": "when insights from monitoring are used in management",
+        "UncertaintyQualifier": "can help",
+        "CausalHint": "help guide",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.95,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[]",
+  "parsed_steps": [],
+  "executed_decisions": [],
+  "timestamp": "2026-01-06T11:32:32Z"
+}

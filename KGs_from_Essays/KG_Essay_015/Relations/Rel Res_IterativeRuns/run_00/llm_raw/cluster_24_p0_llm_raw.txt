@@ -1,0 +1,42 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_eb0d67c3ae79",
+        "RelR_00e7baf3a4b0"
+      ],
+      "canonical_rel_name": "expresses_cultural_belief_or_value",
+      "canonical_rel_desc": "Links a cultural practice or custom to the underlying cultural belief, value, or attitude that it expresses or manifests.",
+      "justification": "Both relations connect ancient Egyptian burial practices to underlying cultural beliefs/values (afterlife beliefs; reverence for the deceased). Despite slightly different surface verbs ('reflects', 'embodies'), the core semantics are that the practice expresses or manifests a cultural belief/value, so they should share one canonical predicate.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_eb0d67c3ae79",
+        "RelR_00e7baf3a4b0"
+      ],
+      "rel_cls": "cultural_expression_relation",
+      "justification": "These relations describe how social or ritual practices function as expressions of underlying cultural ideas. Grouping them under a class for cultural expression/manifestation captures this shared semantic family and can apply to many similar practice–belief links.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_eb0d67c3ae79",
+        "RelR_00e7baf3a4b0"
+      ],
+      "rel_cls_group": "IDENTITY",
+      "justification": "The relations express that burial practices are manifestations of, and are partly defined by, underlying beliefs/values (a representational or identity-like link between practices and cultural ideas), which fits best under a broad IDENTITY-style group rather than causality or composition.",
+      "remark": null,
+      "confidence": 0.8
+    }
+  }
+]

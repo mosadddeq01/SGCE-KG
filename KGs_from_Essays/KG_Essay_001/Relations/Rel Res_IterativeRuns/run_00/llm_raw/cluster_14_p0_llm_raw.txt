@@ -1,0 +1,107 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_d532bf1d82bb"],
+      "canonical_rel_name": "has_organismal_form",
+      "canonical_rel_desc": "Links a life stage concept to the characteristic organismal form that realizes that stage (e.g., the larval stage has organismal form caterpillar).",
+      "justification": "The subject is an abstract life stage (‘larval (caterpillar) stage of a butterfly’) and the object is the organismal form (‘caterpillar’) that realizes that stage; this is best modeled as a life-stage-to-form mapping rather than a generic realization or classification relation.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_6300b6a656ef"],
+      "canonical_rel_name": "is_organismal_form_of",
+      "canonical_rel_desc": "Links an organismal form to the life stage concept that it realizes (inverse of has_organismal_form).",
+      "justification": "Here the subject is the organismal form (‘caterpillar’) and the object is the life stage abstraction (‘larval (caterpillar) stage of a butterfly’); this is the inverse direction of the life-stage/organismal-form mapping and should be explicitly labeled as such.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_d16922f1dacf"],
+      "canonical_rel_name": "characterizes",
+      "canonical_rel_desc": "Indicates that a property or feature characterizes or is a defining attribute of a system or entity (e.g., biodiversity characterizes an ecosystem).",
+      "justification": "The description states that biodiversity ‘characterizes’ the ecosystem, i.e., it is a defining property of the ecosystem; using a property-to-system predicate ‘characterizes’ captures this semantics more precisely than a generic association.",
+      "remark": null,
+      "confidence": 0.85
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_3321a8fa4e2e"],
+      "canonical_rel_name": "is_life_stage_population_of",
+      "canonical_rel_desc": "Links a group of organisms in a specific life stage to the broader taxon or species whose members they are (e.g., adult butterflies are the adult life-stage population of butterflies).",
+      "justification": "The subject is ‘adult butterflies’ (a group in a specific life stage) and the object is ‘butterflies’ (the broader taxon); this is not just generic membership but specifically identifies that this population corresponds to a particular life stage of that taxon.",
+      "remark": null,
+      "confidence": 0.82
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_d62e35ad7822"],
+      "canonical_rel_name": "is_in_life_stage",
+      "canonical_rel_desc": "Indicates that an organism or group of organisms is in a particular life stage (e.g., adult butterflies are in the adult butterfly stage).",
+      "justification": "The subject is a group of organisms (‘adult butterflies’) and the object is a life stage abstraction (‘adult butterfly stage’); this is best modeled as stage membership (‘is in life stage’) rather than a generic instance-of relation.",
+      "remark": null,
+      "confidence": 0.8
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_d532bf1d82bb",
+        "RelR_6300b6a656ef",
+        "RelR_3321a8fa4e2e",
+        "RelR_d62e35ad7822"
+      ],
+      "rel_cls": "life_stage_relation",
+      "justification": "All four relations connect organisms, populations, or organismal forms to life stages or represent mappings between life stage abstractions and their realizations; grouping them under a common ‘life_stage_relation’ class captures this shared semantic family.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": ["RelR_d16922f1dacf"],
+      "rel_cls": "system_property_relation",
+      "justification": "The relation links ‘biodiversity’ (a property) to ‘ecosystem’ (a system) in a way that expresses a defining attribute; this fits a class of relations where properties or qualities are attributed to systems or entities.",
+      "remark": null,
+      "confidence": 0.85
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_d532bf1d82bb",
+        "RelR_6300b6a656ef",
+        "RelR_3321a8fa4e2e",
+        "RelR_d62e35ad7822"
+      ],
+      "rel_cls_group": "TEMPORALITY",
+      "justification": "Life stages represent temporal phases in an organism’s life cycle; relations specifying life-stage membership or mapping between a stage and its organismal form fundamentally concern temporal phases and therefore belong in the TEMPORALITY group.",
+      "remark": null,
+      "confidence": 0.88
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": ["RelR_d16922f1dacf"],
+      "rel_cls_group": "ATTRIBUTE",
+      "justification": "The relation expresses that biodiversity is an attribute that characterizes an ecosystem; this is most naturally grouped as an ATTRIBUTE-type relation rather than composition or causality.",
+      "remark": null,
+      "confidence": 0.85
+    }
+  }
+]

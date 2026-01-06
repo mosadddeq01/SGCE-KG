@@ -1,0 +1,129 @@
+{
+  "cluster_label": "29_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_2a47e3df766b",
+      "relation_name": "used_to_facilitate",
+      "rel_desc": "Body language facilitates the establishment of rapport between people.",
+      "rel_hint_type": "facilitation",
+      "canonical_rel_name": "facilitates",
+      "canonical_rel_desc": "Indicates that the subject contributes causally to the development or strengthening of the object (e.g., a social or interpersonal state).",
+      "rel_cls": "interpersonal_connection_facilitation_relation",
+      "rel_cls_group": "CAUSALITY",
+      "subject_entity_name": "body language",
+      "object_entity_name": "rapport",
+      "subject_class_label": "Body Language as Nonverbal Communication",
+      "subject_class_group": "Nonverbal Communication & Body Language",
+      "object_class_label": "Interpersonal Bond States",
+      "object_class_group": "Interpersonal Relationship and Closeness States",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": "social settings",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "can",
+        "CausalHint": "help to",
+        "LogicalMarker": null,
+        "OtherQualifier": "Directionality: from one person toward others"
+      },
+      "confidence": 0.98,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_daa89a9ee1a2",
+      "relation_name": "used_to_facilitate",
+      "rel_desc": "Body language is used to build interpersonal connections.",
+      "rel_hint_type": "facilitation",
+      "canonical_rel_name": "facilitates",
+      "canonical_rel_desc": "Indicates that the subject contributes causally to the development or strengthening of the object (e.g., a social or interpersonal state).",
+      "rel_cls": "interpersonal_connection_facilitation_relation",
+      "rel_cls_group": "CAUSALITY",
+      "subject_entity_name": "body language",
+      "object_entity_name": "connections",
+      "subject_class_label": "Body Language as Nonverbal Communication",
+      "subject_class_group": "Nonverbal Communication & Body Language",
+      "object_class_label": "Interpersonal Bond States",
+      "object_class_group": "Interpersonal Relationship and Closeness States",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": "social settings",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "can",
+        "CausalHint": "help to",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.97,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_20d93fb1cf84",
+      "relation_name": "used_to_facilitate",
+      "rel_desc": "Leaning in during conversations is a body movement that helps establish rapport.",
+      "rel_hint_type": "facilitation",
+      "canonical_rel_name": "facilitates",
+      "canonical_rel_desc": "Indicates that the subject factor or behavior makes it easier to achieve, experience, or improve the object outcome or state, without guaranteeing it.",
+      "rel_cls": "social_effect_relation",
+      "rel_cls_group": "CAUSALITY",
+      "subject_entity_name": "leaning in during conversations",
+      "object_entity_name": "rapport",
+      "subject_class_label": "Nonverbal Engagement Cues",
+      "subject_class_group": "Nonverbal Communication & Body Language",
+      "object_class_label": "Interpersonal Bond States",
+      "object_class_group": "Interpersonal Relationship and Closeness States",
+      "qualifiers": {
+        "TemporalQualifier": "during conversations",
+        "SpatialQualifier": null,
+        "OperationalConstraint": "social settings",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "can",
+        "CausalHint": "help to",
+        "LogicalMarker": "such as",
+        "OtherQualifier": "Example of social body language"
+      },
+      "confidence": 0.95,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_rel_schema\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_2a47e3df766b\",\n        \"RelR_daa89a9ee1a2\",\n        \"RelR_20d93fb1cf84\"\n      ],\n      \"canonical_rel_name\": \"facilitates\",\n      \"canonical_rel_desc\": \"Indicates that the subject factor or behavior makes it easier to achieve, experience, or improve the object outcome or state, without guaranteeing it.\",\n      \"rel_cls\": \"interpersonal_connection_facilitation_relation\",\n      \"rel_cls_group\": \"CAUSALITY\",\n      \"justification\": \"All three relations describe nonverbal behaviors (body language, leaning in) that help create or strengthen interpersonal states (rapport, connections). They share the same causal-facilitative semantics, so they should use a unified canonical predicate 'facilitates' with a general facilitation-oriented description. The relation class is normalized to 'interpersonal_connection_facilitation_relation' for all, since each instance concerns facilitation of interpersonal connection/rapport specifically rather than generic social effects. The broad group remains CAUSALITY.\",\n      \"remark\": null,\n      \"confidence\": 0.96\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_rel_schema",
+      "args": {
+        "relation_ids": [
+          "RelR_2a47e3df766b",
+          "RelR_daa89a9ee1a2",
+          "RelR_20d93fb1cf84"
+        ],
+        "canonical_rel_name": "facilitates",
+        "canonical_rel_desc": "Indicates that the subject factor or behavior makes it easier to achieve, experience, or improve the object outcome or state, without guaranteeing it.",
+        "rel_cls": "interpersonal_connection_facilitation_relation",
+        "rel_cls_group": "CAUSALITY",
+        "justification": "All three relations describe nonverbal behaviors (body language, leaning in) that help create or strengthen interpersonal states (rapport, connections). They share the same causal-facilitative semantics, so they should use a unified canonical predicate 'facilitates' with a general facilitation-oriented description. The relation class is normalized to 'interpersonal_connection_facilitation_relation' for all, since each instance concerns facilitation of interpersonal connection/rapport specifically rather than generic social effects. The broad group remains CAUSALITY.",
+        "remark": null,
+        "confidence": 0.96
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_rel_schema",
+      "relation_ids": [
+        "RelR_2a47e3df766b",
+        "RelR_daa89a9ee1a2",
+        "RelR_20d93fb1cf84"
+      ],
+      "canonical_rel_name": "facilitates",
+      "canonical_rel_desc": "Indicates that the subject factor or behavior makes it easier to achieve, experience, or improve the object outcome or state, without guaranteeing it.",
+      "rel_cls": "interpersonal_connection_facilitation_relation",
+      "rel_cls_group": "CAUSALITY",
+      "new_relation_name": null,
+      "original_relation_name": null,
+      "justification": "All three relations describe nonverbal behaviors (body language, leaning in) that help create or strengthen interpersonal states (rapport, connections). They share the same causal-facilitative semantics, so they should use a unified canonical predicate 'facilitates' with a general facilitation-oriented description. The relation class is normalized to 'interpersonal_connection_facilitation_relation' for all, since each instance concerns facilitation of interpersonal connection/rapport specifically rather than generic social effects. The broad group remains CAUSALITY.",
+      "remark": null,
+      "confidence": 0.96
+    }
+  ],
+  "timestamp": "2026-01-06T12:15:46Z"
+}

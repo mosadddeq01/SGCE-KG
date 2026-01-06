@@ -1,0 +1,742 @@
+[
+  {
+    "canonical_rel_name": "influences",
+    "canonical_rel_desc": "The subject has a significant causal or transformative impact on the state, development, or trajectory of the object (e.g., shaping history, societies, political landscapes, or specific actors).",
+    "rel_cls": [
+      "historical_influence_relation",
+      "sociopolitical_impact_relation"
+    ],
+    "rel_cls_group": [
+      "CAUSALITY"
+    ],
+    "instance_count": 8,
+    "example_relation_ids": [
+      "RelR_ad78ea36b674",
+      "RelR_dc0b5970eee1",
+      "RelR_511bd7423a36",
+      "RelR_8eccb0f68183",
+      "RelR_d8342d63e92a",
+      "RelR_29f438dd72bc",
+      "RelR_44f7d921545e",
+      "RelR_8fa0e3cbbd6b"
+    ]
+  },
+  {
+    "canonical_rel_name": "drives_sociopolitical_change",
+    "canonical_rel_desc": "The subject (typically a form of collective action, upheaval, or movement) drives or brings about sociopolitical change in the object society or political system.",
+    "rel_cls": [
+      "sociopolitical_change_causation"
+    ],
+    "rel_cls_group": [
+      "CAUSALITY"
+    ],
+    "instance_count": 5,
+    "example_relation_ids": [
+      "RelR_fb7f15d1c908",
+      "RelR_1971209344b2",
+      "RelR_2a438a379556",
+      "RelR_e93647350300",
+      "RelR_0deb632a4242"
+    ]
+  },
+  {
+    "canonical_rel_name": "occurs_in",
+    "canonical_rel_desc": "Links an event or process to the geographic or political area where it takes place or is enacted.",
+    "rel_cls": [
+      "event_or_process_location_relation"
+    ],
+    "rel_cls_group": [
+      "SPATIALITY"
+    ],
+    "instance_count": 11,
+    "example_relation_ids": [
+      "RelR_6131678e67af",
+      "RelR_e6222803654a",
+      "RelR_989b8999b30f",
+      "RelR_6e8abada3154",
+      "RelR_7830c458d504",
+      "RelR_8993b154525b",
+      "RelR_766a969e0e97",
+      "RelR_3b803a98cd80",
+      "RelR_524f191ee68b",
+      "RelR_19b43275da64"
+    ]
+  },
+  {
+    "canonical_rel_name": "occurs_during_time_period",
+    "canonical_rel_desc": "Indicates that an event or type of event occurs during a specified historical time period.",
+    "rel_cls": [
+      "event_temporal_scope_relation"
+    ],
+    "rel_cls_group": [
+      "TEMPORALITY"
+    ],
+    "instance_count": 6,
+    "example_relation_ids": [
+      "RelR_d84036948186",
+      "RelR_4e748f95590a",
+      "RelR_99e26e8b1e0a",
+      "RelR_0782a45f39e2",
+      "RelR_db170e327d47",
+      "RelR_ffb7e95f6d41"
+    ]
+  },
+  {
+    "canonical_rel_name": "aims_to_achieve",
+    "canonical_rel_desc": "Indicates that a collective action (such as a protest or demonstration) is undertaken with the goal of achieving, securing, or affecting the object (e.g., challenging injustice, demanding accountability, securing rights and freedoms).",
+    "rel_cls": [
+      "collective_action_goal_relation",
+      "political_struggle_goal_relation"
+    ],
+    "rel_cls_group": [
+      "AGENCY"
+    ],
+    "instance_count": 6,
+    "example_relation_ids": [
+      "RelR_0462b608f57d",
+      "RelR_687bd47f5af2",
+      "RelR_c999c255c6fd",
+      "RelR_fa9a6059b936",
+      "RelR_a06448d1fe2a",
+      "RelR_53a271b2887c"
+    ]
+  },
+  {
+    "canonical_rel_name": "seeks_to_obtain",
+    "canonical_rel_desc": "The subject collective action is undertaken with the explicit goal of obtaining or securing the object (e.g., rights, benefits, or improved conditions).",
+    "rel_cls": [
+      "collective_action_goal_relation"
+    ],
+    "rel_cls_group": [
+      "AGENCY"
+    ],
+    "instance_count": 5,
+    "example_relation_ids": [
+      "RelR_160996972ca4",
+      "RelR_806bcbe64b66",
+      "RelR_f48e524116d2",
+      "RelR_efe5dedb77aa",
+      "RelR_09cf6e9d012b"
+    ]
+  },
+  {
+    "canonical_rel_name": "pursues_goal",
+    "canonical_rel_desc": "The subject intentionally strives for, advocates for, or is oriented toward achieving the object as a normative or aspirational goal.",
+    "rel_cls": [
+      "goal_orientation_relation"
+    ],
+    "rel_cls_group": [
+      "AGENCY"
+    ],
+    "instance_count": 8,
+    "example_relation_ids": [
+      "RelR_fa9d99df4a1f",
+      "RelR_837545d2c978",
+      "RelR_3afa9bec136f",
+      "RelR_c418c0f344c6",
+      "RelR_367e8179473e",
+      "RelR_39095aadef44",
+      "RelR_8f66fa9b1f43",
+      "RelR_8a8d35476578"
+    ]
+  },
+  {
+    "canonical_rel_name": "contains",
+    "canonical_rel_desc": "Indicates that a place or region includes or contains a physical site, structure, or object within its boundaries.",
+    "rel_cls": [
+      "spatial_containment_relation"
+    ],
+    "rel_cls_group": [
+      "SPATIALITY"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_4c1e78b7fcb1"
+    ]
+  },
+  {
+    "canonical_rel_name": "participates_in",
+    "canonical_rel_desc": "Indicates that an actor or group takes part in an event, activity, or form of collective action.",
+    "rel_cls": [
+      "collective_action_actor_role_relation"
+    ],
+    "rel_cls_group": [
+      "AGENCY"
+    ],
+    "instance_count": 3,
+    "example_relation_ids": [
+      "RelR_303d7f474208",
+      "RelR_d97b3bf976b6",
+      "RelR_4c73dab2ea16"
+    ]
+  },
+  {
+    "canonical_rel_name": "initiates",
+    "canonical_rel_desc": "Indicates that the subject brings about or starts the existence, emergence, or occurrence of the object (typically a movement, process, or discourse).",
+    "rel_cls": [
+      "collective_action_actor_role_relation",
+      "socio_political_causation_relation"
+    ],
+    "rel_cls_group": [
+      "AGENCY",
+      "CAUSALITY"
+    ],
+    "instance_count": 2,
+    "example_relation_ids": [
+      "RelR_cd1574a9ef6c",
+      "RelR_b06640dca9ba"
+    ]
+  },
+  {
+    "canonical_rel_name": "is_instance_of",
+    "canonical_rel_desc": "Connects a specific event or case to the more general class or category it instantiates.",
+    "rel_cls": [
+      "taxonomic_hierarchy_relation"
+    ],
+    "rel_cls_group": [
+      "IDENTITY"
+    ],
+    "instance_count": 2,
+    "example_relation_ids": [
+      "RelR_89ce5115862c",
+      "RelR_541d4ee745dc"
+    ]
+  },
+  {
+    "canonical_rel_name": "strives_for",
+    "canonical_rel_desc": "Subject actively pursues, struggles for, or seeks to secure the object (typically rights, freedoms, or other political or social goals).",
+    "rel_cls": [
+      "political_goal_pursuit_relation"
+    ],
+    "rel_cls_group": [
+      "AGENCY"
+    ],
+    "instance_count": 2,
+    "example_relation_ids": [
+      "RelR_d757aba1b414",
+      "RelR_faeb5b9922c1"
+    ]
+  },
+  {
+    "canonical_rel_name": "opposes",
+    "canonical_rel_desc": "The subject is in active opposition to the object, challenging or seeking to end the authority, structure, rule, or discriminatory practice represented by the object.",
+    "rel_cls": [
+      "political_opposition_relation"
+    ],
+    "rel_cls_group": [
+      "CONFLICT"
+    ],
+    "instance_count": 4,
+    "example_relation_ids": [
+      "RelR_624ff749f807",
+      "RelR_3376520f4710",
+      "RelR_2fa550918a0e",
+      "RelR_4bd8a381277c"
+    ]
+  },
+  {
+    "canonical_rel_name": "is_subtype_of",
+    "canonical_rel_desc": "Connects a more specific subclass or subtype to a more general class within a taxonomy or classification.",
+    "rel_cls": [
+      "taxonomic_hierarchy_relation"
+    ],
+    "rel_cls_group": [
+      "IDENTITY"
+    ],
+    "instance_count": 2,
+    "example_relation_ids": [
+      "RelR_543c8d7998e1",
+      "RelR_d43058359de7"
+    ]
+  },
+  {
+    "canonical_rel_name": "inspires",
+    "canonical_rel_desc": "X inspires Y: X exerts a motivational or ideological influence that helps initiate, shape, or strengthen Y (such as subsequent movements, uprisings, struggles, or pursuit of political ideals).",
+    "rel_cls": [
+      "ideological_influence_relation"
+    ],
+    "rel_cls_group": [
+      "CAUSALITY"
+    ],
+    "instance_count": 9,
+    "example_relation_ids": [
+      "RelR_f897e7d1818e",
+      "RelR_73e5d739209b",
+      "RelR_14fc7b869f4d",
+      "RelR_164be1c62406",
+      "RelR_0354b40c0247",
+      "RelR_748c7f334867",
+      "RelR_d0af2386821c",
+      "RelR_77bc20081fe6",
+      "RelR_2c5e0acb549a"
+    ]
+  },
+  {
+    "canonical_rel_name": "asserts",
+    "canonical_rel_desc": "Indicates that a document or declarative source explicitly asserts, states, or proclaims the associated principle, right, or proposition as part of its content.",
+    "rel_cls": [
+      "statement_content_relation"
+    ],
+    "rel_cls_group": [
+      "ASSOCIATION"
+    ],
+    "instance_count": 2,
+    "example_relation_ids": [
+      "RelR_fccd2a661d02",
+      "RelR_f0380c65b414"
+    ]
+  },
+  {
+    "canonical_rel_name": "articulates",
+    "canonical_rel_desc": "Indicates that a document or actor formulates and expresses specific principles, ideas, or doctrines.",
+    "rel_cls": [
+      "ideological_articulation_relation"
+    ],
+    "rel_cls_group": [
+      "INFORMATION"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_f59642f5299d"
+    ]
+  },
+  {
+    "canonical_rel_name": "is_component_of",
+    "canonical_rel_desc": "Indicates that the subject principle is an ideological or conceptual component of a broader set or framework of principles represented by the object.",
+    "rel_cls": [
+      "ideological_component_relation"
+    ],
+    "rel_cls_group": [
+      "COMPOSITION"
+    ],
+    "instance_count": 2,
+    "example_relation_ids": [
+      "RelR_5ab63769ae77",
+      "RelR_dc0f4166e297"
+    ]
+  },
+  {
+    "canonical_rel_name": "time_period_includes_events",
+    "canonical_rel_desc": "Indicates that a historical time period includes occurrences of specified events or event types.",
+    "rel_cls": [
+      "event_temporal_scope_relation"
+    ],
+    "rel_cls_group": [
+      "TEMPORALITY"
+    ],
+    "instance_count": 2,
+    "example_relation_ids": [
+      "RelR_68e60de5417d",
+      "RelR_a9e0aecf0d4f"
+    ]
+  },
+  {
+    "canonical_rel_name": "overthrows_regime",
+    "canonical_rel_desc": "A revolutionary or political upheaval that causes the removal or collapse of an existing ruling regime, monarchy, or dynasty.",
+    "rel_cls": [
+      "political_regime_change_relation"
+    ],
+    "rel_cls_group": [
+      "CAUSALITY"
+    ],
+    "instance_count": 2,
+    "example_relation_ids": [
+      "RelR_091ce644b434",
+      "RelR_0863e80c145b"
+    ]
+  },
+  {
+    "canonical_rel_name": "establishes_political_regime",
+    "canonical_rel_desc": "A revolutionary or political event that causally results in the creation or formal establishment of a new political regime or state.",
+    "rel_cls": [
+      "founding_political_order_relation"
+    ],
+    "rel_cls_group": [
+      "CAUSALITY"
+    ],
+    "instance_count": 2,
+    "example_relation_ids": [
+      "RelR_0e30746707ad",
+      "RelR_a89853952b7f"
+    ]
+  },
+  {
+    "canonical_rel_name": "is_based_on",
+    "canonical_rel_desc": "Indicates that an institutional or political entity is founded upon or derives its core principles or legitimacy from a specified set of ideas or values.",
+    "rel_cls": [
+      "ideological_foundation_relation"
+    ],
+    "rel_cls_group": [
+      "CAUSALITY"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_f4966972609a"
+    ]
+  },
+  {
+    "canonical_rel_name": "is_led_by",
+    "canonical_rel_desc": "Indicates that the subject collective entity (event, movement, or organization) is under the leadership or guidance of the object entity (organization, faction, or person). Direction: subject is the led entity; object is the leader.",
+    "rel_cls": [
+      "leadership_relation"
+    ],
+    "rel_cls_group": [
+      "AGENCY"
+    ],
+    "instance_count": 4,
+    "example_relation_ids": [
+      "RelR_74443d9ec055",
+      "RelR_3325d81421f7",
+      "RelR_720721070fd8",
+      "RelR_63c59d34efd4"
+    ]
+  },
+  {
+    "canonical_rel_name": "seeks_to_overthrow",
+    "canonical_rel_desc": "Actor (e.g., movement or uprising) aims to overthrow or remove the target regime or power structure.",
+    "rel_cls": [
+      "regime_change_target_relation"
+    ],
+    "rel_cls_group": [
+      "AGENCY"
+    ],
+    "instance_count": 2,
+    "example_relation_ids": [
+      "RelR_10bedaf8ee3d",
+      "RelR_39458f5ce628"
+    ]
+  },
+  {
+    "canonical_rel_name": "contributes_to",
+    "canonical_rel_desc": "Indicates that the subject exerts a non-exclusive causal or enabling influence that helps bring about the object event, state, or outcome.",
+    "rel_cls": [
+      "causal_contribution_relation"
+    ],
+    "rel_cls_group": [
+      "CAUSALITY"
+    ],
+    "instance_count": 2,
+    "example_relation_ids": [
+      "RelR_752a9d2117eb",
+      "RelR_e86d02027ce8"
+    ]
+  },
+  {
+    "canonical_rel_name": "refers_to",
+    "canonical_rel_desc": "Indicates that the subject expression is a linguistic reference or mention that denotes the same real-world entity as the object.",
+    "rel_cls": [
+      "coreference_relation"
+    ],
+    "rel_cls_group": [
+      "IDENTITY"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_81b7be813a1a"
+    ]
+  },
+  {
+    "canonical_rel_name": "inspires_opposition_to",
+    "canonical_rel_desc": "Indicates that the subject inspires or motivates others to actively oppose the object (typically an injustice or oppressive condition).",
+    "rel_cls": [
+      "social_change_causal_relation"
+    ],
+    "rel_cls_group": [
+      "CAUSALITY"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_9a02e1e78eb2"
+    ]
+  },
+  {
+    "canonical_rel_name": "is_initiated_by",
+    "canonical_rel_desc": "Indicates that a historical process or movement begins as a direct result of, or is first triggered by, a specific prior event or action.",
+    "rel_cls": [
+      "historical_event_causal_relation"
+    ],
+    "rel_cls_group": [
+      "CAUSALITY"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_8538c3eb3b94"
+    ]
+  },
+  {
+    "canonical_rel_name": "starts_in_time",
+    "canonical_rel_desc": "Indicates the time point or time period when an event, process, or described history begins.",
+    "rel_cls": [
+      "event_onset_relation"
+    ],
+    "rel_cls_group": [
+      "TEMPORALITY"
+    ],
+    "instance_count": 2,
+    "example_relation_ids": [
+      "RelR_9beb6ea72b08",
+      "RelR_1c063fbb34cf"
+    ]
+  },
+  {
+    "canonical_rel_name": "causes",
+    "canonical_rel_desc": "Indicates that one event or process brings about another event or outcome as a consequence.",
+    "rel_cls": [
+      "historical_event_causal_relation"
+    ],
+    "rel_cls_group": [
+      "CAUSALITY"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_052b2c72cb5c"
+    ]
+  },
+  {
+    "canonical_rel_name": "sparks_expectation_of",
+    "canonical_rel_desc": "Indicates that an event or process generates hopes, expectations, or anticipations about a potential outcome, without implying that the outcome is realized.",
+    "rel_cls": [
+      "historical_event_causal_relation"
+    ],
+    "rel_cls_group": [
+      "CAUSALITY"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_c8f9c4c657cf"
+    ]
+  },
+  {
+    "canonical_rel_name": "triggers_emergence_of",
+    "canonical_rel_desc": "Indicates that the subject issue, condition, or event is a key causal factor that leads to the initial emergence of the movement, organization, or phenomenon represented by the object.",
+    "rel_cls": [
+      "movement_emergence_causal_relation"
+    ],
+    "rel_cls_group": [
+      "CAUSALITY"
+    ],
+    "instance_count": 2,
+    "example_relation_ids": [
+      "RelR_608c85d5eefe",
+      "RelR_46b91085beef"
+    ]
+  },
+  {
+    "canonical_rel_name": "is_origin_location_of",
+    "canonical_rel_desc": "Indicates that the subject geographic entity is the primary place where the movement, organization, or phenomenon originated or first emerged.",
+    "rel_cls": [
+      "movement_origin_spatial_relation"
+    ],
+    "rel_cls_group": [
+      "SPATIALITY"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_f265e0c9ee4d"
+    ]
+  },
+  {
+    "canonical_rel_name": "motivates_demand_for",
+    "canonical_rel_desc": "Indicates that an actor or movement motivates or galvanizes people to demand a particular right, value, or social outcome.",
+    "rel_cls": [
+      "social_mobilization_relation"
+    ],
+    "rel_cls_group": [
+      "CAUSALITY"
+    ],
+    "instance_count": 2,
+    "example_relation_ids": [
+      "RelR_78a3376538b1",
+      "RelR_f7585cf95b9e"
+    ]
+  },
+  {
+    "canonical_rel_name": "leads_to",
+    "canonical_rel_desc": "Indicates that the subject movement or process causally contributes to or brings about the occurrence of the object outcome, event, or response.",
+    "rel_cls": [
+      "movement_impact_relation"
+    ],
+    "rel_cls_group": [
+      "CAUSALITY"
+    ],
+    "instance_count": 2,
+    "example_relation_ids": [
+      "RelR_e492b140ff7e",
+      "RelR_5406b3cd7dee"
+    ]
+  },
+  {
+    "canonical_rel_name": "has_topic",
+    "canonical_rel_desc": "Indicates that a discourse, conversation, or text is about a given subject or theme.",
+    "rel_cls": [
+      "discourse_topic_relation"
+    ],
+    "rel_cls_group": [
+      "ABOUTNESS"
+    ],
+    "instance_count": 2,
+    "example_relation_ids": [
+      "RelR_38a9023a9e1d",
+      "RelR_d15e67a8cb18"
+    ]
+  },
+  {
+    "canonical_rel_name": "grouped_with",
+    "canonical_rel_desc": "Indicates that two concepts or entities are treated together as parallel or related items without implying hierarchy or causality.",
+    "rel_cls": [
+      "conceptual_association_relation"
+    ],
+    "rel_cls_group": [
+      "ASSOCIATION"
+    ],
+    "instance_count": 2,
+    "example_relation_ids": [
+      "RelR_412482cbbe11",
+      "RelR_b4357ff83721"
+    ]
+  },
+  {
+    "canonical_rel_name": "uses_coercive_measure",
+    "canonical_rel_desc": "Actor employs or uses a coercive or repressive measure as a method of control.",
+    "rel_cls": [
+      "state_coercion_method_relation"
+    ],
+    "rel_cls_group": [
+      "USAGE"
+    ],
+    "instance_count": 2,
+    "example_relation_ids": [
+      "RelR_e2d918964ffa",
+      "RelR_8846b4030342"
+    ]
+  },
+  {
+    "canonical_rel_name": "represses",
+    "canonical_rel_desc": "The subject (typically a state or authority) uses coercive means to constrain, silence, or punish the political activities or expression of the object.",
+    "rel_cls": [
+      "state_repression_relation"
+    ],
+    "rel_cls_group": [
+      "AGENCY"
+    ],
+    "instance_count": 2,
+    "example_relation_ids": [
+      "RelR_5fc88eed8980",
+      "RelR_fc941e383544"
+    ]
+  },
+  {
+    "canonical_rel_name": "targets",
+    "canonical_rel_desc": "A repressive or coercive action or campaign is directed against a specific group or actor as its target.",
+    "rel_cls": [
+      "repression_target_relation"
+    ],
+    "rel_cls_group": [
+      "AGENCY"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_371ae0744b09"
+    ]
+  },
+  {
+    "canonical_rel_name": "uses_as_tool",
+    "canonical_rel_desc": "Indicates that an actor employs a specific practice, method, or instrument as a tool or means to exercise power or achieve political or social goals.",
+    "rel_cls": [
+      "political_agency_relation"
+    ],
+    "rel_cls_group": [
+      "USAGE"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_2dc7c184c6a6"
+    ]
+  },
+  {
+    "canonical_rel_name": "provides_evidence_for",
+    "canonical_rel_desc": "Subject serves as evidence or testament supporting the existence, nature, or degree of the object (e.g., a historical record evidencing a human quality).",
+    "rel_cls": [
+      "evidential_relation"
+    ],
+    "rel_cls_group": [
+      "EVIDENTIALITY"
+    ],
+    "instance_count": 2,
+    "example_relation_ids": [
+      "RelR_9de5c31b6572",
+      "RelR_faaac5db98bd"
+    ]
+  },
+  {
+    "canonical_rel_name": "extends_until",
+    "canonical_rel_desc": "Indicates that a described process, state, or historical span continues up to a specified end time or period.",
+    "rel_cls": [
+      "temporal_extent_relation"
+    ],
+    "rel_cls_group": [
+      "TEMPORALITY"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_cafeff568b04"
+    ]
+  },
+  {
+    "canonical_rel_name": "symbolizes",
+    "canonical_rel_desc": "Subject stands as a symbol, illustration, or reminder of the nature, qualities, or enduring power of the object.",
+    "rel_cls": [
+      "symbolic_representational_relation"
+    ],
+    "rel_cls_group": [
+      "ASSOCIATION"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_327a4019ebe2"
+    ]
+  },
+  {
+    "canonical_rel_name": "overcomes",
+    "canonical_rel_desc": "Indicates that the subject has the power or capacity to overcome, defeat, or prevail over the object (typically an oppressive or unjust condition).",
+    "rel_cls": [
+      "social_change_causal_relation"
+    ],
+    "rel_cls_group": [
+      "CAUSALITY"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_769ce3f680d3"
+    ]
+  },
+  {
+    "canonical_rel_name": "derives_from",
+    "canonical_rel_desc": "Indicates that the subject (a legacy, outcome, or state) originates from or is produced by the object (events, actions, or processes).",
+    "rel_cls": [
+      "historical_origin_relation"
+    ],
+    "rel_cls_group": [
+      "CAUSALITY"
+    ],
+    "instance_count": 2,
+    "example_relation_ids": [
+      "RelR_6cb6bf0e081f",
+      "RelR_5aaf517a13d0"
+    ]
+  },
+  {
+    "canonical_rel_name": "leads_toward",
+    "canonical_rel_desc": "The subject is conceptualized as a path, process, or trajectory that is directionally oriented toward the object as a destination, goal, or aspirational state, without necessarily implying direct causation.",
+    "rel_cls": [
+      "progress_direction_relation"
+    ],
+    "rel_cls_group": [
+      "DIRECTIONALITY"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_30b15b0c2ed4"
+    ]
+  }
+]

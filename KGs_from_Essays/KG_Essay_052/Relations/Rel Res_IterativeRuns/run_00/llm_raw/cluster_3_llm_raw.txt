@@ -1,0 +1,87 @@
+[
+  {
+    "function": "reassign_entities",
+    "args": {
+      "entity_ids": ["En_c56043a5"],
+      "from_class_id": "ClsC_6128c1d6",
+      "to_class_id": "ClsC_b0c4a879",
+      "justification": "The entity 'healthy society' is a social system influenced by sports and fits better with other society/culture entities in 'Sport-Influenced Societies' than with abstract interaction concepts.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "reassign_entities",
+    "args": {
+      "entity_ids": ["En_9006437c"],
+      "from_class_id": "ClsC_6128c1d6",
+      "to_class_id": "ClsC_b0c4a879",
+      "justification": "The entity 'societies' describes human communities where sports affect stereotypes, aligning with the social systems in 'Sport-Influenced Societies' rather than with abstract concepts.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "reassign_entities",
+    "args": {
+      "entity_ids": ["En_fcacd997"],
+      "from_class_id": "ClsC_6128c1d6",
+      "to_class_id": "ClsC_592fca7e",
+      "justification": "The entity 'role of sports in our culture' is an abstract concept about how sports shape culture and aligns with the value-focused abstract concepts in 'Social Values'.",
+      "remark": null,
+      "confidence": 0.88
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_b0c4a879",
+      "new_name": "Sport-Influenced Societies",
+      "new_description": "Human cultures, civilizations, and societies, historical and contemporary, whose structures, norms, and identities are shaped or influenced by sports.",
+      "new_class_type_hint": "SocialSystem",
+      "new_class_group": "Sports, Culture, and Society",
+      "remark": null,
+      "justification": "After adding 'healthy society' and 'societies' from a mixed abstract class, this class consistently represents social systems influenced by sports and should be grouped under a broader sports–culture–society theme.",
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_592fca7e",
+      "new_name": "Sports-Promoted Social Values",
+      "new_description": "Ethical and social values that sports help promote, supporting cohesion, fairness, and the functioning of a healthy society.",
+      "new_class_type_hint": "AbstractConcept",
+      "new_class_group": "Sports, Culture, and Society",
+      "remark": null,
+      "justification": "This class now groups abstract notions such as 'values essential for a healthy society', 'important values', and the 'role of sports in our culture', warranting a clearer label and alignment under the sports–culture–society group.",
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_6128c1d6",
+      "new_name": "Sports and Society Concepts",
+      "new_description": "A placeholder class that previously mixed abstract concepts and social systems; its entities have been reassigned to more coherent classes.",
+      "new_class_type_hint": "AbstractTheme",
+      "new_class_group": "Sports, Culture, and Society",
+      "remark": "All current members have been reassigned to better-scoped classes, so this class is effectively empty and may be deprecated or removed in a future cleanup pass.",
+      "justification": "After reassigning its mixed entities to more coherent classes, this class no longer has a clear independent role and should be marked as a cleaned-up, placeholder class under the same topical group.",
+      "confidence": 0.86
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_94e10136",
+      "new_name": "Essay Document",
+      "new_description": "A standalone written composition in prose that explores a topic such as the impacts of sports on culture and society.",
+      "new_class_type_hint": "Document Type",
+      "new_class_group": "Document Types",
+      "remark": null,
+      "justification": "This class represents a document genre ('this essay') rather than a social or cultural concept, so it should be grouped under a generic document-type class group.",
+      "confidence": 0.9
+    }
+  }
+]

@@ -1,0 +1,175 @@
+{
+  "cluster_label": "16_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_07b24de19070",
+      "relation_name": "introduces_narrative_element",
+      "rel_desc": "Perrault's version of Cinderella introduced the fairy godmother as a key story element.",
+      "rel_hint_type": "composition",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "Perrault's version of Cinderella",
+      "object_entity_name": "fairy godmother",
+      "subject_class_label": "Cinderella Author–Work Pair",
+      "subject_class_group": "Cinderella Narrative Tradition",
+      "object_class_label": "Cinderella Story Elements",
+      "object_class_group": "Cinderella Narrative Tradition",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "introduced",
+        "LogicalMarker": null,
+        "OtherQualifier": "ElementStatus: iconic"
+      },
+      "confidence": 0.97,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_9802cba716e3",
+      "relation_name": "introduces_narrative_element",
+      "rel_desc": "Perrault's Cinderella version introduced the glass slipper as a central object.",
+      "rel_hint_type": "composition",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "Perrault's version of Cinderella",
+      "object_entity_name": "glass slipper",
+      "subject_class_label": "Cinderella Author–Work Pair",
+      "subject_class_group": "Cinderella Narrative Tradition",
+      "object_class_label": "Cinderella Story Elements",
+      "object_class_group": "Cinderella Narrative Tradition",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "introduced",
+        "LogicalMarker": null,
+        "OtherQualifier": "ElementStatus: iconic"
+      },
+      "confidence": 0.97,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_bd5f360b25ef",
+      "relation_name": "introduces_narrative_element",
+      "rel_desc": "Perrault's Cinderella version established the stroke of midnight as a key temporal constraint in the story.",
+      "rel_hint_type": "composition",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "Perrault's version of Cinderella",
+      "object_entity_name": "stroke of midnight",
+      "subject_class_label": "Cinderella Author–Work Pair",
+      "subject_class_group": "Cinderella Narrative Tradition",
+      "object_class_label": "Cinderella Story Elements",
+      "object_class_group": "Cinderella Narrative Tradition",
+      "qualifiers": {
+        "TemporalQualifier": "stroke of midnight (within story world)",
+        "SpatialQualifier": null,
+        "OperationalConstraint": "Marks end of magical transformation in narrative",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "introduced",
+        "LogicalMarker": null,
+        "OtherQualifier": "ElementStatus: iconic"
+      },
+      "confidence": 0.97,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_07b24de19070\",\n        \"RelR_9802cba716e3\",\n        \"RelR_bd5f360b25ef\"\n      ],\n      \"canonical_rel_name\": \"introduces_story_element\",\n      \"canonical_rel_desc\": \"Indicates that a specific version or retelling of a story is responsible for introducing a particular narrative element (character, object, or constraint) into the Cinderella tradition.\",\n      \"justification\": \"All three relations link the same subject (Perrault's version of Cinderella) to different story elements (fairy godmother, glass slipper, stroke of midnight) with the shared semantics that this version first introduces or establishes these elements as iconic parts of the narrative. A single predicate 'introduces_story_element' consistently captures this innovation-role across instances.\",\n      \"remark\": \"Chose a predicate focused on introduction/innovation rather than mere part-of composition, to reflect Perrault’s causal role in establishing these elements in the tradition.\",\n      \"confidence\": 0.94\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_07b24de19070\",\n        \"RelR_9802cba716e3\",\n        \"RelR_bd5f360b25ef\"\n      ],\n      \"rel_cls\": \"narrative_element_innovation_relation\",\n      \"justification\": \"These relations describe how a particular authored version innovates by adding or establishing new narrative elements in the Cinderella story-world. This is more specific than generic composition or authorship, so a class focused on innovation/introduction of narrative elements is appropriate.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_07b24de19070\",\n        \"RelR_9802cba716e3\",\n        \"RelR_bd5f360b25ef\"\n      ],\n      \"rel_cls_group\": \"CAUSALITY\",\n      \"justification\": \"The semantic focus is that Perrault’s version causally brings these elements into the Cinderella tradition (they exist in the tradition because of this version), which is best modeled as a causal/innovation relation rather than simple part-of composition.\",\n      \"remark\": \"Upstream rel_hint_type='composition' is interpreted here as structural relation within the narrative, but the more informative dimension for schema grouping is the causal introduction of these elements.\",\n      \"confidence\": 0.86\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_07b24de19070",
+          "RelR_9802cba716e3",
+          "RelR_bd5f360b25ef"
+        ],
+        "canonical_rel_name": "introduces_story_element",
+        "canonical_rel_desc": "Indicates that a specific version or retelling of a story is responsible for introducing a particular narrative element (character, object, or constraint) into the Cinderella tradition.",
+        "justification": "All three relations link the same subject (Perrault's version of Cinderella) to different story elements (fairy godmother, glass slipper, stroke of midnight) with the shared semantics that this version first introduces or establishes these elements as iconic parts of the narrative. A single predicate 'introduces_story_element' consistently captures this innovation-role across instances.",
+        "remark": "Chose a predicate focused on introduction/innovation rather than mere part-of composition, to reflect Perrault's causal role in establishing these elements in the tradition.",
+        "confidence": 0.94
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_07b24de19070",
+          "RelR_9802cba716e3",
+          "RelR_bd5f360b25ef"
+        ],
+        "rel_cls": "narrative_element_innovation_relation",
+        "justification": "These relations describe how a particular authored version innovates by adding or establishing new narrative elements in the Cinderella story-world. This is more specific than generic composition or authorship, so a class focused on innovation/introduction of narrative elements is appropriate.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_07b24de19070",
+          "RelR_9802cba716e3",
+          "RelR_bd5f360b25ef"
+        ],
+        "rel_cls_group": "CAUSALITY",
+        "justification": "The semantic focus is that Perrault's version causally brings these elements into the Cinderella tradition (they exist in the tradition because of this version), which is best modeled as a causal/innovation relation rather than simple part-of composition.",
+        "remark": "Upstream rel_hint_type='composition' is interpreted here as structural relation within the narrative, but the more informative dimension for schema grouping is the causal introduction of these elements.",
+        "confidence": 0.86
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_07b24de19070",
+        "RelR_9802cba716e3",
+        "RelR_bd5f360b25ef"
+      ],
+      "canonical_rel_name": "introduces_story_element",
+      "canonical_rel_desc": "Indicates that a specific version or retelling of a story is responsible for introducing a particular narrative element (character, object, or constraint) into the Cinderella tradition.",
+      "justification": "All three relations link the same subject (Perrault's version of Cinderella) to different story elements (fairy godmother, glass slipper, stroke of midnight) with the shared semantics that this version first introduces or establishes these elements as iconic parts of the narrative. A single predicate 'introduces_story_element' consistently captures this innovation-role across instances.",
+      "remark": "Chose a predicate focused on introduction/innovation rather than mere part-of composition, to reflect Perrault's causal role in establishing these elements in the tradition.",
+      "confidence": 0.94
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_07b24de19070",
+        "RelR_9802cba716e3",
+        "RelR_bd5f360b25ef"
+      ],
+      "rel_cls": "narrative_element_innovation_relation",
+      "justification": "These relations describe how a particular authored version innovates by adding or establishing new narrative elements in the Cinderella story-world. This is more specific than generic composition or authorship, so a class focused on innovation/introduction of narrative elements is appropriate.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_07b24de19070",
+        "RelR_9802cba716e3",
+        "RelR_bd5f360b25ef"
+      ],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "The semantic focus is that Perrault's version causally brings these elements into the Cinderella tradition (they exist in the tradition because of this version), which is best modeled as a causal/innovation relation rather than simple part-of composition.",
+      "remark": "Upstream rel_hint_type='composition' is interpreted here as structural relation within the narrative, but the more informative dimension for schema grouping is the causal introduction of these elements.",
+      "confidence": 0.86
+    }
+  ],
+  "timestamp": "2026-01-06T14:03:13Z"
+}

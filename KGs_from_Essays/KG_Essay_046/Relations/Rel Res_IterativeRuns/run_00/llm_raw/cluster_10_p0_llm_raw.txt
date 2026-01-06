@@ -1,0 +1,51 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_dad93aa38d75",
+        "RelR_4e1813f829af",
+        "RelR_695d36d3ab76",
+        "RelR_f9a27fa5758d",
+        "RelR_5c9b7eec5bbc"
+      ],
+      "canonical_rel_name": "indicates_state_of",
+      "canonical_rel_desc": "Subject serves as an indicator or proxy for the state or condition of the object (e.g., bird metrics indicating ecosystem condition).",
+      "justification": "All relations describe various bird-related features (birds, bird populations, behaviors, distributions) serving as indicators of ecosystem condition or environmental state. They share the same predicate semantics: the subject is used to infer or indicate the condition of the object.",
+      "remark": null,
+      "confidence": 0.96
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_dad93aa38d75",
+        "RelR_4e1813f829af",
+        "RelR_695d36d3ab76",
+        "RelR_f9a27fa5758d",
+        "RelR_5c9b7eec5bbc"
+      ],
+      "rel_cls": "environmental_indicator_relation",
+      "justification": "Each relation connects an environmental indicator (bird-related attribute) to an underlying environmental or ecosystem state. Grouping them under an 'environmental_indicator_relation' class captures their shared role as indicators or proxies of environmental condition.",
+      "remark": null,
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_dad93aa38d75",
+        "RelR_4e1813f829af",
+        "RelR_695d36d3ab76",
+        "RelR_f9a27fa5758d",
+        "RelR_5c9b7eec5bbc"
+      ],
+      "rel_cls_group": "ASSOCIATION",
+      "justification": "Indicator relations associate observable bird-related variables with ecosystem condition without asserting direct causality; they are correlational/associative links used for inference rather than mechanistic cause-effect.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  }
+]

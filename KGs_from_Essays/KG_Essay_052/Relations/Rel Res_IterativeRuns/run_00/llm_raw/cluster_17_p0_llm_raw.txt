@@ -1,0 +1,48 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_2fc27201aa8e",
+        "RelR_7fcef736a3b2",
+        "RelR_4a5f21456f5b",
+        "RelR_cf79cd028986"
+      ],
+      "canonical_rel_name": "influences",
+      "canonical_rel_desc": "Indicates that the subject exerts a causal influence on the state, structure, or evolution of the object (e.g., sports influencing culture, society, or social change).",
+      "justification": "All four relations describe sports having a causal effect on socio-cultural constructs (culture, cultures, society, social change). Wording such as 'impacts', 'influences', and 'promotes' are variants of the same high-level causal influence from sports to societal or cultural phenomena, so they should share a single normalized predicate.",
+      "remark": null,
+      "confidence": 0.96
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_2fc27201aa8e",
+        "RelR_7fcef736a3b2",
+        "RelR_4a5f21456f5b",
+        "RelR_cf79cd028986"
+      ],
+      "rel_cls": "socio_cultural_impact_relation",
+      "justification": "Each relation connects sports to cultural, societal, or social-change outcomes via a causal or shaping role. Grouping them under a socio_cultural_impact_relation class captures this family of predicates where sports impact social or cultural structures and processes.",
+      "remark": null,
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_2fc27201aa8e",
+        "RelR_7fcef736a3b2",
+        "RelR_4a5f21456f5b",
+        "RelR_cf79cd028986"
+      ],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "The rel_hint_type and descriptions (e.g., 'playing a significant role in shaping', 'impacting', 'tool that can promote') all indicate a causal or influence-based relationship from sports to social or cultural outcomes, which fits the CAUSALITY group.",
+      "remark": null,
+      "confidence": 0.97
+    }
+  }
+]

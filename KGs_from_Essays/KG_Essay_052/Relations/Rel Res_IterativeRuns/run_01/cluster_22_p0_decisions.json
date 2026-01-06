@@ -1,0 +1,130 @@
+{
+  "cluster_label": "22_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_c00fe8a23b0c",
+      "relation_name": "shared_by",
+      "rel_desc": "The common passion is shared among people from different backgrounds and beliefs.",
+      "rel_hint_type": "participation",
+      "canonical_rel_name": "is_shared_by",
+      "canonical_rel_desc": "Indicates that an experience, feeling, or passion is jointly held or experienced by a group of people.",
+      "rel_cls": "collective_experience_relation",
+      "rel_cls_group": "ASSOCIATION",
+      "subject_entity_name": "common passion",
+      "object_entity_name": "people from different backgrounds and beliefs",
+      "subject_class_label": "Sport-Driven Social Cohesion",
+      "subject_class_group": "Sport, Community & Social Experience",
+      "object_class_label": "Human Participants in Sport",
+      "object_class_group": "Sport, Community & Social Experience",
+      "qualifiers": {
+        "TemporalQualifier": "during sporting events",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "unite ... in",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.78,
+      "remarks": [
+        "Relation semantics approximate a many-to-many sharing relation.",
+        "Relation semantics approximate a many-to-many sharing relation."
+      ]
+    },
+    {
+      "relation_id": "RelR_ed46e00d35c1",
+      "relation_name": "experienced_by",
+      "rel_desc": "The sense of belonging is an emotional state experienced by fans.",
+      "rel_hint_type": "experience",
+      "canonical_rel_name": "experienced_by",
+      "canonical_rel_desc": "Indicates that an emotional or mental state is subjectively experienced by a particular group of people or agents.",
+      "rel_cls": "emotional_experience_relation",
+      "rel_cls_group": "AGENCY",
+      "subject_entity_name": "sense of belonging",
+      "object_entity_name": "fans",
+      "subject_class_label": "Sports-Related Emotional Experiences",
+      "subject_class_group": "Sport, Community & Social Experience",
+      "object_class_label": "Sports Fandom Actors",
+      "object_class_group": "Sport, Community & Social Experience",
+      "qualifiers": {
+        "TemporalQualifier": "in the context of major sports events",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.9,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_397bb27d53a3",
+      "relation_name": "experienced_by",
+      "rel_desc": "Pride is an emotional state experienced by fans.",
+      "rel_hint_type": "experience",
+      "canonical_rel_name": "experienced_by",
+      "canonical_rel_desc": "Indicates that an emotional or mental state is subjectively experienced by a particular group of people or agents.",
+      "rel_cls": "emotional_experience_relation",
+      "rel_cls_group": "AGENCY",
+      "subject_entity_name": "pride among fans",
+      "object_entity_name": "fans",
+      "subject_class_label": "Sports-Related Emotional Experiences",
+      "subject_class_group": "Sport, Community & Social Experience",
+      "object_class_label": "Sports Fandom Actors",
+      "object_class_group": "Sport, Community & Social Experience",
+      "qualifiers": {
+        "TemporalQualifier": "in connection with achievements of teams and athletes",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "celebrate",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.9,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_rel_schema\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_ed46e00d35c1\",\n        \"RelR_397bb27d53a3\"\n      ],\n      \"canonical_rel_name\": null,\n      \"canonical_rel_desc\": null,\n      \"rel_cls\": null,\n      \"rel_cls_group\": \"EXPERIENCE\",\n      \"justification\": \"These relations link emotional states (sense of belonging, pride) to the agents who feel them. This is better captured as an EXPERIENCE-oriented group rather than AGENCY, which typically implies active causal agency rather than subjective experience.\",\n      \"remark\": \"Relabeled rel_cls_group from AGENCY to EXPERIENCE to more accurately reflect that the predicate models who subjectively experiences an emotional state, not who acts as an agent causing effects.\",\n      \"confidence\": 0.86\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_rel_schema",
+      "args": {
+        "relation_ids": [
+          "RelR_ed46e00d35c1",
+          "RelR_397bb27d53a3"
+        ],
+        "canonical_rel_name": null,
+        "canonical_rel_desc": null,
+        "rel_cls": null,
+        "rel_cls_group": "EXPERIENCE",
+        "justification": "These relations link emotional states (sense of belonging, pride) to the agents who feel them. This is better captured as an EXPERIENCE-oriented group rather than AGENCY, which typically implies active causal agency rather than subjective experience.",
+        "remark": "Relabeled rel_cls_group from AGENCY to EXPERIENCE to more accurately reflect that the predicate models who subjectively experiences an emotional state, not who acts as an agent causing effects.",
+        "confidence": 0.86
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_rel_schema",
+      "relation_ids": [
+        "RelR_ed46e00d35c1",
+        "RelR_397bb27d53a3"
+      ],
+      "canonical_rel_name": null,
+      "canonical_rel_desc": null,
+      "rel_cls": null,
+      "rel_cls_group": "EXPERIENCE",
+      "new_relation_name": null,
+      "original_relation_name": null,
+      "justification": "These relations link emotional states (sense of belonging, pride) to the agents who feel them. This is better captured as an EXPERIENCE-oriented group rather than AGENCY, which typically implies active causal agency rather than subjective experience.",
+      "remark": "Relabeled rel_cls_group from AGENCY to EXPERIENCE to more accurately reflect that the predicate models who subjectively experiences an emotional state, not who acts as an agent causing effects.",
+      "confidence": 0.86
+    }
+  ],
+  "timestamp": "2026-01-06T12:45:07Z"
+}

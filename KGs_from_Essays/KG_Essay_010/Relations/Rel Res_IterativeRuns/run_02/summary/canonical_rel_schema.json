@@ -1,0 +1,938 @@
+[
+  {
+    "canonical_rel_name": "has_physical_property",
+    "canonical_rel_desc": "Links a physical object or phenomenon to one of its physical properties or a set of such properties.",
+    "rel_cls": [
+      "physical_property_relation"
+    ],
+    "rel_cls_group": [
+      "ATTRIBUTE"
+    ],
+    "instance_count": 3,
+    "example_relation_ids": [
+      "RelR_3705c9cc3501",
+      "RelR_f3a21a2463ab",
+      "RelR_d940722bf120"
+    ]
+  },
+  {
+    "canonical_rel_name": "prevents_escape_of",
+    "canonical_rel_desc": "Indicates that the subject (typically a force, field, or condition) prevents the object (or entities associated with it) from escaping or leaving a specified region or potential well, often once a critical boundary has been crossed.",
+    "rel_cls": [
+      "escape_constraint_relation"
+    ],
+    "rel_cls_group": [
+      "CAUSALITY"
+    ],
+    "instance_count": 4,
+    "example_relation_ids": [
+      "RelR_23f13c2ba078",
+      "RelR_b43fdf299614",
+      "RelR_f6212cca2ec8",
+      "RelR_e80a2c08ea8f"
+    ]
+  },
+  {
+    "canonical_rel_name": "has_aspect",
+    "canonical_rel_desc": "Indicates that the subject topic includes the object as one of its aspects, dimensions, or subtopics of discussion.",
+    "rel_cls": [
+      "topic_aspect_relation"
+    ],
+    "rel_cls_group": [
+      "PART_WHOLE"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_9fb2350ba068"
+    ]
+  },
+  {
+    "canonical_rel_name": "results_in",
+    "canonical_rel_desc": "The subject process or phenomenon leads to the existence or occurrence of the object entity or phenomenon.",
+    "rel_cls": [
+      "evolutionary_outcome_relation",
+      "physical_causation_relation"
+    ],
+    "rel_cls_group": [
+      "CAUSALITY"
+    ],
+    "instance_count": 4,
+    "example_relation_ids": [
+      "RelR_0e921b17b1b3",
+      "RelR_b6b32e66a3d7",
+      "RelR_410072abaead",
+      "RelR_8331c8d145cd"
+    ]
+  },
+  {
+    "canonical_rel_name": "describes",
+    "canonical_rel_desc": "Subject (typically a theory, model, or description) provides an account or characterization of the object and/or its properties.",
+    "rel_cls": [
+      "representation_relation"
+    ],
+    "rel_cls_group": [
+      "REPRESENTATION"
+    ],
+    "instance_count": 3,
+    "example_relation_ids": [
+      "RelR_fbce12fe1da6",
+      "RelR_8e69d78aaedd",
+      "RelR_ab6c5b69cb8c"
+    ]
+  },
+  {
+    "canonical_rel_name": "is_about",
+    "canonical_rel_desc": "Indicates that the subject concept, topic, or question concerns or is about the object.",
+    "rel_cls": [
+      "aboutness_relation",
+      "conceptual_association_relation",
+      "topical_aboutness_relation"
+    ],
+    "rel_cls_group": [
+      "ABOUTNESS",
+      "ASSOCIATION"
+    ],
+    "instance_count": 12,
+    "example_relation_ids": [
+      "RelR_9e9f3f7ffe63",
+      "RelR_367bbf773213",
+      "RelR_e89df28eee2a",
+      "RelR_fb6f4fc7362b",
+      "RelR_a10633a1d56d",
+      "RelR_abd25aba1ff1",
+      "RelR_8fcdd7198c43",
+      "RelR_f4fdb773767f",
+      "RelR_524065bcf0bb",
+      "RelR_10de2ee90332"
+    ]
+  },
+  {
+    "canonical_rel_name": "has_research_goal",
+    "canonical_rel_desc": "Indicates that an agent or research activity is directed toward a specific scientific objective, such as explaining or understanding a phenomenon or set of open questions.",
+    "rel_cls": [
+      "research_goal_relation"
+    ],
+    "rel_cls_group": [
+      "AGENCY"
+    ],
+    "instance_count": 3,
+    "example_relation_ids": [
+      "RelR_0d52825427f5",
+      "RelR_2623df401ab0",
+      "RelR_bd8abc7ed5bf"
+    ]
+  },
+  {
+    "canonical_rel_name": "participates_in_research_field",
+    "canonical_rel_desc": "Indicates that a community or group of researchers is actively engaged in work within a particular research field.",
+    "rel_cls": [
+      "research_community_participation_relation"
+    ],
+    "rel_cls_group": [
+      "AGENCY"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_309b8a3ba017"
+    ]
+  },
+  {
+    "canonical_rel_name": "studies",
+    "canonical_rel_desc": "The subject (typically a researcher or research community) engages in scientific study of the object as a research topic or target of investigation.",
+    "rel_cls": [
+      "research_focus_relation"
+    ],
+    "rel_cls_group": [
+      "AGENCY"
+    ],
+    "instance_count": 2,
+    "example_relation_ids": [
+      "RelR_87630e44a32e",
+      "RelR_cc0b3d434de5"
+    ]
+  },
+  {
+    "canonical_rel_name": "is_puzzled_by",
+    "canonical_rel_desc": "Indicates that the subject community currently lacks a clear or complete understanding of the object phenomenon and finds it conceptually challenging.",
+    "rel_cls": [
+      "understanding_gap_relation"
+    ],
+    "rel_cls_group": [
+      "COGNITION"
+    ],
+    "instance_count": 2,
+    "example_relation_ids": [
+      "RelR_396d3bbf1961",
+      "RelR_bb78699c797f"
+    ]
+  },
+  {
+    "canonical_rel_name": "is_fascinated_by",
+    "canonical_rel_desc": "Indicates that the subject experiences fascination or strong interest directed toward the object.",
+    "rel_cls": [
+      "affective_attitude_relation"
+    ],
+    "rel_cls_group": [
+      "AFFECTIVE"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_2881cc347146"
+    ]
+  },
+  {
+    "canonical_rel_name": "is_fuel_for",
+    "canonical_rel_desc": "Indicates that the subject serves as the fuel or energy source for the object.",
+    "rel_cls": [
+      "energy_usage_relation"
+    ],
+    "rel_cls_group": [
+      "USAGE"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_71e919950abb"
+    ]
+  },
+  {
+    "canonical_rel_name": "consumes",
+    "canonical_rel_desc": "Indicates that the subject uses up or expends the object as a consumable resource.",
+    "rel_cls": [
+      "energy_usage_relation"
+    ],
+    "rel_cls_group": [
+      "USAGE"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_b72956ddf4f0"
+    ]
+  },
+  {
+    "canonical_rel_name": "undergoes_event",
+    "canonical_rel_desc": "Indicates that the subject experiences or is the primary participant in the occurrence of the object event.",
+    "rel_cls": [
+      "event_participation_relation"
+    ],
+    "rel_cls_group": [
+      "PARTICIPATION"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_7ef295094ba8"
+    ]
+  },
+  {
+    "canonical_rel_name": "describes_evolution_of",
+    "canonical_rel_desc": "Subject describes or represents the temporal evolution or life cycle of the object.",
+    "rel_cls": [
+      "representation_relation"
+    ],
+    "rel_cls_group": [
+      "REPRESENTATION"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_015337c55f4e"
+    ]
+  },
+  {
+    "canonical_rel_name": "ends_with",
+    "canonical_rel_desc": "Indicates that the subject process or sequence terminates in the object event or state.",
+    "rel_cls": [
+      "process_temporal_sequence_relation"
+    ],
+    "rel_cls_group": [
+      "TEMPORALITY"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_654f47ddd60e"
+    ]
+  },
+  {
+    "canonical_rel_name": "is_caused_by",
+    "canonical_rel_desc": "Indicates that the subject event, phenomenon, or state occurs as a result of the object cause or driving factor.",
+    "rel_cls": [
+      "physical_causation_relation"
+    ],
+    "rel_cls_group": [
+      "CAUSALITY"
+    ],
+    "instance_count": 2,
+    "example_relation_ids": [
+      "RelR_63182b59f8fc",
+      "RelR_3b3cfd2cd518"
+    ]
+  },
+  {
+    "canonical_rel_name": "creates",
+    "canonical_rel_desc": "Indicates that the subject process brings the object entity into existence or produces it.",
+    "rel_cls": [
+      "process_output_relation"
+    ],
+    "rel_cls_group": [
+      "CAUSALITY"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_ab875fd04a69"
+    ]
+  },
+  {
+    "canonical_rel_name": "is_structural_component_of",
+    "canonical_rel_desc": "Indicates that the subject is a structural part or boundary component of the object system or object.",
+    "rel_cls": [
+      "structural_composition_relation"
+    ],
+    "rel_cls_group": [
+      "COMPOSITION"
+    ],
+    "instance_count": 3,
+    "example_relation_ids": [
+      "RelR_99b227ec0957",
+      "RelR_3ca5329b7991",
+      "RelR_d5d6d676bef4"
+    ]
+  },
+  {
+    "canonical_rel_name": "surrounds",
+    "canonical_rel_desc": "Indicates that the subject spatially encloses or lies around the object.",
+    "rel_cls": [
+      "spatial_enclosure_relation"
+    ],
+    "rel_cls_group": [
+      "SPATIALITY"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_f27198d0ecc3"
+    ]
+  },
+  {
+    "canonical_rel_name": "originates_from",
+    "canonical_rel_desc": "Indicates that a physical effect, field, or radiation is produced, generated, or emitted by a source object or system.",
+    "rel_cls": [
+      "physical_origin_relation"
+    ],
+    "rel_cls_group": [
+      "CAUSALITY"
+    ],
+    "instance_count": 3,
+    "example_relation_ids": [
+      "RelR_31ee96116f84",
+      "RelR_a81535eb1c11",
+      "RelR_8239975d7ac3"
+    ]
+  },
+  {
+    "canonical_rel_name": "warps_spacetime",
+    "canonical_rel_desc": "Indicates that a gravitational source or black hole causes curvature or warping of spacetime in its vicinity.",
+    "rel_cls": [
+      "gravitational_spacetime_interaction"
+    ],
+    "rel_cls_group": [
+      "CAUSALITY"
+    ],
+    "instance_count": 2,
+    "example_relation_ids": [
+      "RelR_ef709731c2dd",
+      "RelR_dea796f884b5"
+    ]
+  },
+  {
+    "canonical_rel_name": "slows",
+    "canonical_rel_desc": "Indicates that the subject process or phenomenon reduces the rate or speed of the object process or quantity.",
+    "rel_cls": [
+      "physical_causation_relation"
+    ],
+    "rel_cls_group": [
+      "CAUSALITY"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_9dc2f34e252f"
+    ]
+  },
+  {
+    "canonical_rel_name": "slows_time_relative_to",
+    "canonical_rel_desc": "Indicates that a physical effect or phenomenon causes time to pass more slowly in the subject context relative to the object reference context.",
+    "rel_cls": [
+      "causal_effect_comparison_relation"
+    ],
+    "rel_cls_group": [
+      "CAUSALITY"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_79885daea465"
+    ]
+  },
+  {
+    "canonical_rel_name": "has_slower_rate_than",
+    "canonical_rel_desc": "Indicates that the rate of a quantity (here, passage of time) at the subject is slower than the corresponding rate at the object.",
+    "rel_cls": [
+      "quantitative_comparison_relation"
+    ],
+    "rel_cls_group": [
+      "COMPARISON"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_062b2ae7ba86"
+    ]
+  },
+  {
+    "canonical_rel_name": "occurs_near",
+    "canonical_rel_desc": "Indicates that a physical phenomenon or process occurs in the spatial vicinity of a specified astrophysical object or structural feature (e.g., near a black hole or event horizon).",
+    "rel_cls": [
+      "spatial_occurrence_relation"
+    ],
+    "rel_cls_group": [
+      "SPATIALITY"
+    ],
+    "instance_count": 2,
+    "example_relation_ids": [
+      "RelR_41cefd393f05",
+      "RelR_23e6317b319d"
+    ]
+  },
+  {
+    "canonical_rel_name": "results_from",
+    "canonical_rel_desc": "Indicates that the subject phenomenon or state is an effect that arises due to, or is caused by, the object phenomenon or condition.",
+    "rel_cls": [
+      "physical_causation_relation"
+    ],
+    "rel_cls_group": [
+      "CAUSALITY"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_822184ce3218"
+    ]
+  },
+  {
+    "canonical_rel_name": "is_measured_by",
+    "canonical_rel_desc": "Subject quantity is operationally measured or quantified using the object measure, scale, or parameter.",
+    "rel_cls": [
+      "measurement_relation"
+    ],
+    "rel_cls_group": [
+      "MEASUREMENT"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_68cf60afc1d3"
+    ]
+  },
+  {
+    "canonical_rel_name": "is_defined_by",
+    "canonical_rel_desc": "Subject concept is defined in terms of, or via, the object condition or defining relation.",
+    "rel_cls": [
+      "definition_relation"
+    ],
+    "rel_cls_group": [
+      "IDENTITY"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_3f2a6bf245a7"
+    ]
+  },
+  {
+    "canonical_rel_name": "has_equal_value_as",
+    "canonical_rel_desc": "Indicates that two physical quantities have equal numerical value or magnitude under the stated conditions.",
+    "rel_cls": [
+      "quantitative_equivalence_relation"
+    ],
+    "rel_cls_group": [
+      "IDENTITY"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_2089d031109a"
+    ]
+  },
+  {
+    "canonical_rel_name": "characteristic_of",
+    "canonical_rel_desc": "Indicates that the subject is a defining or characteristic quantity, property, or feature of the object.",
+    "rel_cls": [
+      "conceptual_association_relation"
+    ],
+    "rel_cls_group": [
+      "ASSOCIATION"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_1009484586a5"
+    ]
+  },
+  {
+    "canonical_rel_name": "is_property_of",
+    "canonical_rel_desc": "Links a property, attribute, or quality node to the entity that bears this property.",
+    "rel_cls": [
+      "entity_property_relation"
+    ],
+    "rel_cls_group": [
+      "ATTRIBUTE"
+    ],
+    "instance_count": 3,
+    "example_relation_ids": [
+      "RelR_713a0ea35135",
+      "RelR_e0e7e3bf5fc3",
+      "RelR_09b0e21e1466"
+    ]
+  },
+  {
+    "canonical_rel_name": "is_characteristic_radius_of",
+    "canonical_rel_desc": "Indicates that the subject radius is the characteristic or defining boundary radius of the object, typically marking a limit beyond which a key physical property (such as escape) qualitatively changes.",
+    "rel_cls": [
+      "characteristic_boundary_relation"
+    ],
+    "rel_cls_group": [
+      "CONSTRAINT"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_726f81314b83"
+    ]
+  },
+  {
+    "canonical_rel_name": "defines_threshold_for",
+    "canonical_rel_desc": "Indicates that the subject specifies or marks the threshold or boundary at which a particular physical effect or condition (described by the object) becomes operative or qualitatively changes.",
+    "rel_cls": [
+      "threshold_condition_relation"
+    ],
+    "rel_cls_group": [
+      "CONSTRAINT"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_cf6d029f79e8"
+    ]
+  },
+  {
+    "canonical_rel_name": "is_information_encoded_on",
+    "canonical_rel_desc": "Indicates that informational content about a physical system is encoded on a specified boundary or surface.",
+    "rel_cls": [
+      "information_encoding_location_relation"
+    ],
+    "rel_cls_group": [
+      "SPATIALITY"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_f2ad8fffb834"
+    ]
+  },
+  {
+    "canonical_rel_name": "designates_information_encoding_surface",
+    "canonical_rel_desc": "Indicates that a theoretical principle or framework designates a particular boundary or surface as the locus where information about a system is encoded.",
+    "rel_cls": [
+      "information_encoding_location_relation"
+    ],
+    "rel_cls_group": [
+      "SPATIALITY"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_c0241b89e0f1"
+    ]
+  },
+  {
+    "canonical_rel_name": "challenges_understanding_of",
+    "canonical_rel_desc": "The subject poses a conceptual or epistemic challenge to the object, straining or questioning the adequacy of the object as an explanation or framework.",
+    "rel_cls": [
+      "conceptual_tension_relation"
+    ],
+    "rel_cls_group": [
+      "CAUSALITY"
+    ],
+    "instance_count": 4,
+    "example_relation_ids": [
+      "RelR_d8831caae7df",
+      "RelR_3914b029d297",
+      "RelR_85649fb4aa0b",
+      "RelR_170f119dce37"
+    ]
+  },
+  {
+    "canonical_rel_name": "has_scope",
+    "canonical_rel_desc": "Indicates that a theory, understanding, or concept has the object as its domain of applicability or scope.",
+    "rel_cls": [
+      "concept_scope_relation"
+    ],
+    "rel_cls_group": [
+      "SCOPE"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_20eb616ff54e"
+    ]
+  },
+  {
+    "canonical_rel_name": "causes",
+    "canonical_rel_desc": "Indicates that the subject phenomenon, entity, or condition is a direct physical cause of the object effect or outcome.",
+    "rel_cls": [
+      "causal_influence_relation",
+      "physical_causation_relation"
+    ],
+    "rel_cls_group": [
+      "CAUSALITY"
+    ],
+    "instance_count": 6,
+    "example_relation_ids": [
+      "RelR_90e96f7c2d56",
+      "RelR_af3b225d5cab",
+      "RelR_55eafb144ed3",
+      "RelR_6d65eda99878",
+      "RelR_17ff77ddd498",
+      "RelR_6c2acaab2fd3"
+    ]
+  },
+  {
+    "canonical_rel_name": "has_research_subject",
+    "canonical_rel_desc": "The subject (a research field or specific study) has the object as its primary subject matter or topic of investigation.",
+    "rel_cls": [
+      "research_focus_relation"
+    ],
+    "rel_cls_group": [
+      "AGENCY"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_cbe57234df33"
+    ]
+  },
+  {
+    "canonical_rel_name": "conducts_research_in",
+    "canonical_rel_desc": "The subject (researchers or a community) carries out research activity within the domain or field represented by the object.",
+    "rel_cls": [
+      "research_activity_relation"
+    ],
+    "rel_cls_group": [
+      "AGENCY"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_eebaa2930e8f"
+    ]
+  },
+  {
+    "canonical_rel_name": "is_concept_in_research_field",
+    "canonical_rel_desc": "Indicates that a concept belongs to or is studied within a particular research field or discipline.",
+    "rel_cls": [
+      "domain_concept_membership_relation"
+    ],
+    "rel_cls_group": [
+      "ASSOCIATION"
+    ],
+    "instance_count": 2,
+    "example_relation_ids": [
+      "RelR_d1a52e43ac55",
+      "RelR_12c2244b1b9d"
+    ]
+  },
+  {
+    "canonical_rel_name": "enters_into",
+    "canonical_rel_desc": "Indicates that an entity (e.g., information, matter, or radiation) transitions into and becomes contained within a black hole or similar system.",
+    "rel_cls": [
+      "ingress_interaction_relation"
+    ],
+    "rel_cls_group": [
+      "INTERACTION"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_bf07c71f41d6"
+    ]
+  },
+  {
+    "canonical_rel_name": "advances_understanding_of",
+    "canonical_rel_desc": "Indicates that the subject (typically a field of study or research activity) contributes to deeper or improved understanding of the object (a concept, domain, or phenomenon).",
+    "rel_cls": [
+      "knowledge_impact_relation"
+    ],
+    "rel_cls_group": [
+      "EPISTEMIC"
+    ],
+    "instance_count": 2,
+    "example_relation_ids": [
+      "RelR_5f64b6c7141c",
+      "RelR_6ecdae9f43ef"
+    ]
+  },
+  {
+    "canonical_rel_name": "used_to_test",
+    "canonical_rel_desc": "Indicates that the subject is used as an experimental or observational tool to test, validate, or constrain the object (typically a theory, model, or hypothesis).",
+    "rel_cls": [
+      "scientific_testing_relation"
+    ],
+    "rel_cls_group": [
+      "USAGE"
+    ],
+    "instance_count": 2,
+    "example_relation_ids": [
+      "RelR_782e7ed6db8c",
+      "RelR_ef171bc8bf94"
+    ]
+  },
+  {
+    "canonical_rel_name": "has_member",
+    "canonical_rel_desc": "Indicates that the subject category or collection has the object as a member or example instance.",
+    "rel_cls": [
+      "category_membership_relation"
+    ],
+    "rel_cls_group": [
+      "IDENTITY"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_520f5980d6d3"
+    ]
+  },
+  {
+    "canonical_rel_name": "inspires_research_in",
+    "canonical_rel_desc": "Indicates that the subject (typically a phenomenon or object) motivates or stimulates new ideas, theories, or lines of research in the object domain.",
+    "rel_cls": [
+      "knowledge_impact_relation"
+    ],
+    "rel_cls_group": [
+      "EPISTEMIC"
+    ],
+    "instance_count": 2,
+    "example_relation_ids": [
+      "RelR_5f5b704dbd7e",
+      "RelR_abe8d27db7a4"
+    ]
+  },
+  {
+    "canonical_rel_name": "produces",
+    "canonical_rel_desc": "The subject physical process or event brings about or generates the object phenomenon or signal.",
+    "rel_cls": [
+      "process_output_relation"
+    ],
+    "rel_cls_group": [
+      "CAUSALITY"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_2a80f32d9778"
+    ]
+  },
+  {
+    "canonical_rel_name": "conducted",
+    "canonical_rel_desc": "The subject agent (e.g., an observatory or experiment) carried out or executed the object activity or discovery event.",
+    "rel_cls": [
+      "scientific_activity_execution_relation"
+    ],
+    "rel_cls_group": [
+      "AGENCY"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_072a13fca876"
+    ]
+  },
+  {
+    "canonical_rel_name": "observes",
+    "canonical_rel_desc": "The subject observation or discovery event is an observation of, or provides empirical evidence for, the object phenomenon or entity.",
+    "rel_cls": [
+      "observation_target_relation"
+    ],
+    "rel_cls_group": [
+      "INTERACTION"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_d768d331c328"
+    ]
+  },
+  {
+    "canonical_rel_name": "provides_evidence_for",
+    "canonical_rel_desc": "The subject observation or result serves as empirical or theoretical evidence supporting the object proposition, hypothesis, or phenomenon.",
+    "rel_cls": [
+      "evidential_support_relation"
+    ],
+    "rel_cls_group": [
+      "EPISTEMIC"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_9dba1e5dc56a"
+    ]
+  },
+  {
+    "canonical_rel_name": "enables_study_of",
+    "canonical_rel_desc": "Indicates that an event, discovery, or method enables or makes possible the study or investigation of a given class of phenomena.",
+    "rel_cls": [
+      "enabling_causal_relation"
+    ],
+    "rel_cls_group": [
+      "CAUSALITY"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_9e796b78e1f4"
+    ]
+  },
+  {
+    "canonical_rel_name": "is_instance_of",
+    "canonical_rel_desc": "Indicates that the subject entity is an instance or illustrative example of the object category or type.",
+    "rel_cls": [
+      "category_membership_relation"
+    ],
+    "rel_cls_group": [
+      "IDENTITY"
+    ],
+    "instance_count": 3,
+    "example_relation_ids": [
+      "RelR_293a5bc4b41f",
+      "RelR_0e01d7045756",
+      "RelR_83b291a63904"
+    ]
+  },
+  {
+    "canonical_rel_name": "has_structural_component",
+    "canonical_rel_desc": "Indicates that the subject system or object includes the object as one of its structural components.",
+    "rel_cls": [
+      "structural_composition_relation"
+    ],
+    "rel_cls_group": [
+      "COMPOSITION"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_adbdf5f35921"
+    ]
+  },
+  {
+    "canonical_rel_name": "has_open_question_about",
+    "canonical_rel_desc": "Indicates that the subject is associated with an unresolved scientific or conceptual question concerning the object.",
+    "rel_cls": [
+      "knowledge_gap_relation"
+    ],
+    "rel_cls_group": [
+      "EPISTEMIC"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_d8824d8021b0"
+    ]
+  },
+  {
+    "canonical_rel_name": "extends_beyond_applicability_of",
+    "canonical_rel_desc": "Indicates that the conceptual or theoretical scope of the subject framework extends beyond the domain of applicability of the object framework.",
+    "rel_cls": [
+      "theoretical_scope_relation"
+    ],
+    "rel_cls_group": [
+      "COMPARISON"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_03cd67cffdbd"
+    ]
+  },
+  {
+    "canonical_rel_name": "improves_theoretical_description_of",
+    "canonical_rel_desc": "Indicates that the subject theoretical framework provides a more complete or improved theoretical description or explanation of the object phenomenon, relative to existing theories.",
+    "rel_cls": [
+      "theoretical_explanation_relation"
+    ],
+    "rel_cls_group": [
+      "CAUSALITY"
+    ],
+    "instance_count": 2,
+    "example_relation_ids": [
+      "RelR_d7c24a27c6f4",
+      "RelR_eed46e3075ef"
+    ]
+  },
+  {
+    "canonical_rel_name": "predicts_existence_of",
+    "canonical_rel_desc": "Subject (a scientist, theory, or related intellectual work) predicts or proposes the existence of the object phenomenon or entity, typically before direct empirical confirmation.",
+    "rel_cls": [
+      "scientific_prediction_relation"
+    ],
+    "rel_cls_group": [
+      "AGENCY"
+    ],
+    "instance_count": 2,
+    "example_relation_ids": [
+      "RelR_b88bf7e5534f",
+      "RelR_85c188d8829f"
+    ]
+  },
+  {
+    "canonical_rel_name": "has_associated_year",
+    "canonical_rel_desc": "Indicates that the subject (often an event, action, or person-in-context) is associated with the specified calendar year.",
+    "rel_cls": [
+      "temporal_annotation_relation"
+    ],
+    "rel_cls_group": [
+      "TEMPORALITY"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_cef04980f418"
+    ]
+  },
+  {
+    "canonical_rel_name": "is_physical_process_of",
+    "canonical_rel_desc": "Indicates that the subject is a physical process that occurs to or in the object entity.",
+    "rel_cls": [
+      "process_entity_relation"
+    ],
+    "rel_cls_group": [
+      "ASSOCIATION"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_cdac8d5cf5d2"
+    ]
+  },
+  {
+    "canonical_rel_name": "exists_in",
+    "canonical_rel_desc": "Indicates that the subject phenomenon or entity exists or occurs within the spatial or cosmological domain denoted by the object.",
+    "rel_cls": [
+      "existence_location_relation"
+    ],
+    "rel_cls_group": [
+      "SPATIALITY"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_2c40eb31fe0c"
+    ]
+  },
+  {
+    "canonical_rel_name": "is_aspect_of",
+    "canonical_rel_desc": "Indicates that the subject is an aspect, dimension, or subtopic of the broader topic given by the object.",
+    "rel_cls": [
+      "topic_aspect_relation"
+    ],
+    "rel_cls_group": [
+      "PART_WHOLE"
+    ],
+    "instance_count": 2,
+    "example_relation_ids": [
+      "RelR_0da2ffdd6f47",
+      "RelR_132528676c15"
+    ]
+  },
+  {
+    "canonical_rel_name": "expands_knowledge",
+    "canonical_rel_desc": "Indicates that the subject (typically a community or research activity) increases or broadens the body of knowledge represented by the object.",
+    "rel_cls": [
+      "knowledge_impact_relation"
+    ],
+    "rel_cls_group": [
+      "EPISTEMIC"
+    ],
+    "instance_count": 1,
+    "example_relation_ids": [
+      "RelR_c30170621b10"
+    ]
+  }
+]

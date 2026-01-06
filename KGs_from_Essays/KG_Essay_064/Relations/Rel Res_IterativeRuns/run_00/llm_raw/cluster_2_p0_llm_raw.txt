@@ -1,0 +1,45 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_4124cf30863b",
+        "RelR_a6e3421eb0c3",
+        "RelR_dd76c029da3c"
+      ],
+      "canonical_rel_name": "is_variant_of",
+      "canonical_rel_desc": "Indicates that the subject narrative is a cultural or regional variant of the object narrative, sharing core plot identity with localized differences.",
+      "justification": "All three relations describe culturally localized Snow White folklore traditions as variations of the core Snow White story. They share identical directionality (local tradition → base tale) and semantics of narrative versioning, so they should use one normalized predicate `is_variant_of`.",
+      "remark": "Use this predicate for narrative/version relationships where the subject is a culturally or regionally adapted version of the base tale.",
+      "confidence": 0.96
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_4124cf30863b",
+        "RelR_a6e3421eb0c3",
+        "RelR_dd76c029da3c"
+      ],
+      "rel_cls": "narrative_version_relation",
+      "justification": "Each relation links a localized folklore tradition to a canonical tale via a versioning/variation relationship. Grouping them under `narrative_version_relation` captures this family of predicates (variants, adaptations, retellings) at the class level.",
+      "remark": null,
+      "confidence": 0.94
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_4124cf30863b",
+        "RelR_a6e3421eb0c3",
+        "RelR_dd76c029da3c"
+      ],
+      "rel_cls_group": "IDENTITY",
+      "justification": "Variant relationships express altered forms of essentially the same narrative identity (same core tale, different cultural realization). This is best modeled under a broad identity/versioning dimension rather than causality, composition, or spatiality.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  }
+]

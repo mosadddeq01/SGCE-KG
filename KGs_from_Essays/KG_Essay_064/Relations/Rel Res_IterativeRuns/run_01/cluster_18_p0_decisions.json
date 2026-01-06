@@ -1,0 +1,159 @@
+{
+  "cluster_label": "18_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_60044182a043",
+      "relation_name": "originates_in",
+      "rel_desc": "The Rhodopis Cinderella tale originates in ancient Greece.",
+      "rel_hint_type": "spatial-temporal",
+      "canonical_rel_name": "originates_in",
+      "canonical_rel_desc": "Indicates the spatiotemporal cultural context or region where a narrative, tradition, or entity first emerged.",
+      "rel_cls": "origin_context_relation",
+      "rel_cls_group": "SPATIALITY",
+      "subject_entity_name": "Rhodopis Cinderella tale",
+      "object_entity_name": "ancient Greece",
+      "subject_class_label": "Rhodopis Tale Elements",
+      "subject_class_group": "Cinderella Narrative Tradition",
+      "object_class_label": "Rhodopis Tale Elements",
+      "object_class_group": "Cinderella Narrative Tradition",
+      "qualifiers": {
+        "TemporalQualifier": "ancient period of Greek civilization",
+        "SpatialQualifier": "ancient Greece",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "phrased as \"can be traced back\"",
+        "CausalHint": "can be traced back to",
+        "LogicalMarker": "where",
+        "OtherQualifier": null
+      },
+      "confidence": 0.99,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_cca6af7d5b7b",
+      "relation_name": "originates_from",
+      "rel_desc": "The Hansel and Gretel story is believed to originate from European folklore.",
+      "rel_hint_type": "origin",
+      "canonical_rel_name": "originates_from",
+      "canonical_rel_desc": "Indicates the cultural, folkloric, or geographic tradition from which a narrative or story is generally considered to originate.",
+      "rel_cls": "narrative_origin_relation",
+      "rel_cls_group": "CAUSALITY",
+      "subject_entity_name": "Hansel and Gretel",
+      "object_entity_name": "European folklore",
+      "subject_class_label": "Individual Fairy Tales",
+      "subject_class_group": "Fairy Tales and Their Audiences",
+      "object_class_label": "European Folklore Traditions",
+      "object_class_group": "Folklore and Mythic Narratives",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "within European cultural traditions",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "believed to have",
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "ScholarlyView: folkloric origin hypothesis"
+      },
+      "confidence": 0.96,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_0a626c6253d0",
+      "relation_name": "rooted_in",
+      "rel_desc": "The origins of famous fairytales are rooted in folklore.",
+      "rel_hint_type": "source",
+      "canonical_rel_name": "originates_from",
+      "canonical_rel_desc": "Indicates that the historical origin or emergence of the subject arises from, or is grounded in, the object as its source context.",
+      "rel_cls": "cultural_origin_relation",
+      "rel_cls_group": "CAUSALITY",
+      "subject_entity_name": "origins of famous fairytales",
+      "object_entity_name": "folklore",
+      "subject_class_label": "Folklore and Fairy-Tale Origins",
+      "subject_class_group": "Folklore and Fairy-Tale Traditions",
+      "object_class_label": "Folklore and Fairy-Tale Origins",
+      "object_class_group": "Folklore and Fairy-Tale Traditions",
+      "qualifiers": {
+        "TemporalQualifier": "historically",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "rooted in",
+        "LogicalMarker": "and",
+        "OtherQualifier": null
+      },
+      "confidence": 0.99,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_d4f1bf33576b",
+      "relation_name": "rooted_in",
+      "rel_desc": "The origins of famous fairytales are rooted in cultural myths.",
+      "rel_hint_type": "source",
+      "canonical_rel_name": "originates_from",
+      "canonical_rel_desc": "Indicates that the historical origin or emergence of the subject arises from, or is grounded in, the object as its source context.",
+      "rel_cls": "cultural_origin_relation",
+      "rel_cls_group": "CAUSALITY",
+      "subject_entity_name": "origins of famous fairytales",
+      "object_entity_name": "cultural myths",
+      "subject_class_label": "Folklore and Fairy-Tale Origins",
+      "subject_class_group": "Folklore and Fairy-Tale Traditions",
+      "object_class_label": "Cultural Myths",
+      "object_class_group": "Folklore and Mythic Narratives",
+      "qualifiers": {
+        "TemporalQualifier": "historically",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "rooted in",
+        "LogicalMarker": "and",
+        "OtherQualifier": null
+      },
+      "confidence": 0.99,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_rel_schema\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_60044182a043\",\n        \"RelR_cca6af7d5b7b\",\n        \"RelR_0a626c6253d0\",\n        \"RelR_d4f1bf33576b\"\n      ],\n      \"canonical_rel_name\": \"originates_from\",\n      \"canonical_rel_desc\": \"Indicates that the subject (e.g., a narrative, tradition, or concept) historically originates from, or is grounded in, the object as its source cultural, folkloric, or geographic context.\",\n      \"rel_cls\": \"narrative_origin_relation\",\n      \"rel_cls_group\": \"CAUSALITY\",\n      \"justification\": \"All four relations describe the historical or cultural source from which a tale or group of fairytales originates (e.g., ancient Greece, European folklore, folklore, cultural myths). They share the same direction and semantics, so they should use a single normalized predicate 'originates_from'. The relation class can be unified as 'narrative_origin_relation' since each subject is a story or its origins, and the broad group is better modeled as CAUSALITY (source/origin) rather than SPATIALITY. This also removes unnecessary variation between 'origin_context_relation' and 'cultural_origin_relation' while keeping a clear, reusable schema.\",\n      \"remark\": null,\n      \"confidence\": 0.93\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_rel_schema",
+      "args": {
+        "relation_ids": [
+          "RelR_60044182a043",
+          "RelR_cca6af7d5b7b",
+          "RelR_0a626c6253d0",
+          "RelR_d4f1bf33576b"
+        ],
+        "canonical_rel_name": "originates_from",
+        "canonical_rel_desc": "Indicates that the subject (e.g., a narrative, tradition, or concept) historically originates from, or is grounded in, the object as its source cultural, folkloric, or geographic context.",
+        "rel_cls": "narrative_origin_relation",
+        "rel_cls_group": "CAUSALITY",
+        "justification": "All four relations describe the historical or cultural source from which a tale or group of fairytales originates (e.g., ancient Greece, European folklore, folklore, cultural myths). They share the same direction and semantics, so they should use a single normalized predicate 'originates_from'. The relation class can be unified as 'narrative_origin_relation' since each subject is a story or its origins, and the broad group is better modeled as CAUSALITY (source/origin) rather than SPATIALITY. This also removes unnecessary variation between 'origin_context_relation' and 'cultural_origin_relation' while keeping a clear, reusable schema.",
+        "remark": null,
+        "confidence": 0.93
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_rel_schema",
+      "relation_ids": [
+        "RelR_60044182a043",
+        "RelR_cca6af7d5b7b",
+        "RelR_0a626c6253d0",
+        "RelR_d4f1bf33576b"
+      ],
+      "canonical_rel_name": "originates_from",
+      "canonical_rel_desc": "Indicates that the subject (e.g., a narrative, tradition, or concept) historically originates from, or is grounded in, the object as its source cultural, folkloric, or geographic context.",
+      "rel_cls": "narrative_origin_relation",
+      "rel_cls_group": "CAUSALITY",
+      "new_relation_name": null,
+      "original_relation_name": null,
+      "justification": "All four relations describe the historical or cultural source from which a tale or group of fairytales originates (e.g., ancient Greece, European folklore, folklore, cultural myths). They share the same direction and semantics, so they should use a single normalized predicate 'originates_from'. The relation class can be unified as 'narrative_origin_relation' since each subject is a story or its origins, and the broad group is better modeled as CAUSALITY (source/origin) rather than SPATIALITY. This also removes unnecessary variation between 'origin_context_relation' and 'cultural_origin_relation' while keeping a clear, reusable schema.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  ],
+  "timestamp": "2026-01-06T14:08:55Z"
+}

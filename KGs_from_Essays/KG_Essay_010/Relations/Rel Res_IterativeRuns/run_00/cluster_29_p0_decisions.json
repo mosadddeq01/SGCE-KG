@@ -1,0 +1,177 @@
+{
+  "cluster_label": "29_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_b6b32e66a3d7",
+      "relation_name": "produces",
+      "rel_desc": "The supernova explosion leaves behind a stellar remnant.",
+      "rel_hint_type": "causal",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "supernova explosion",
+      "object_entity_name": "stellar remnant",
+      "subject_class_label": "Massive Star End-of-Life Components",
+      "subject_class_group": "Stellar Evolution and End States",
+      "object_class_label": "Massive Star End-of-Life Components",
+      "object_class_group": "Stellar Evolution and End States",
+      "qualifiers": {
+        "TemporalQualifier": "after the explosion",
+        "SpatialQualifier": "at the site of the exploded star (implied)",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "implied, not explicitly causal-worded",
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.78,
+      "remarks": [
+        "Outcome is somewhat implicit but standard in stellar evolution."
+      ]
+    },
+    {
+      "relation_id": "RelR_410072abaead",
+      "relation_name": "leaves_remnant",
+      "rel_desc": "The massive star leaves behind a stellar remnant after its death.",
+      "rel_hint_type": "result",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "massive star",
+      "object_entity_name": "stellar remnant",
+      "subject_class_label": "Massive Star End-of-Life Components",
+      "subject_class_group": "Stellar Evolution and End States",
+      "object_class_label": "Massive Star End-of-Life Components",
+      "object_class_group": "Stellar Evolution and End States",
+      "qualifiers": {
+        "TemporalQualifier": "after star's death",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": "after exhausting fuel and supernova explosion",
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.86,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_8331c8d145cd",
+      "relation_name": "forms",
+      "rel_desc": "A stellar remnant collapses further to form a black hole.",
+      "rel_hint_type": "causal",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "stellar remnant",
+      "object_entity_name": "black hole",
+      "subject_class_label": "Massive Star End-of-Life Components",
+      "subject_class_group": "Stellar Evolution and End States",
+      "object_class_label": "Black Holes (Astrophysical Objects)",
+      "object_class_group": "Black Holes",
+      "qualifiers": {
+        "TemporalQualifier": "after the supernova event",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": "for sufficiently massive remnants (implied)",
+        "UncertaintyQualifier": "condition on mass is implied but not stated",
+        "CausalHint": "are born from",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.94,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_b6b32e66a3d7\",\n        \"RelR_410072abaead\",\n        \"RelR_8331c8d145cd\"\n      ],\n      \"canonical_rel_name\": \"results_in\",\n      \"canonical_rel_desc\": \"Indicates that the subject astrophysical object or event causally leads to or leaves behind the object as its evolutionary outcome or remnant.\",\n      \"justification\": \"All three relations describe a causal evolutionary outcome where one astrophysical entity or event (supernova explosion, massive star, stellar remnant) produces or transforms into another entity (stellar remnant, black hole). The direction is consistently from precursor to outcome, so a single predicate 'results_in' appropriately captures this outcome/production relation across these instances.\",\n      \"remark\": \"Specific mechanisms (e.g., collapse, explosion) and conditions (e.g., sufficiently massive remnant) should remain as qualifiers rather than being embedded in the predicate name.\",\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_b6b32e66a3d7\",\n        \"RelR_410072abaead\",\n        \"RelR_8331c8d145cd\"\n      ],\n      \"rel_cls\": \"evolutionary_outcome_relation\",\n      \"justification\": \"Each relation links a prior astrophysical state or event to a subsequent state (stellar remnant or black hole) as part of stellar evolution and end-of-life processes. Grouping them under 'evolutionary_outcome_relation' captures that these are outcome/remnant links rather than generic causality.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_b6b32e66a3d7\",\n        \"RelR_410072abaead\",\n        \"RelR_8331c8d145cd\"\n      ],\n      \"rel_cls_group\": \"CAUSALITY\",\n      \"justification\": \"All three instances encode that the subject brings about or leads to the object (explosion leading to remnant, star leaving remnant, remnant forming black hole), which is fundamentally causal/transformational in nature.\",\n      \"remark\": null,\n      \"confidence\": 0.95\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_b6b32e66a3d7",
+          "RelR_410072abaead",
+          "RelR_8331c8d145cd"
+        ],
+        "canonical_rel_name": "results_in",
+        "canonical_rel_desc": "Indicates that the subject astrophysical object or event causally leads to or leaves behind the object as its evolutionary outcome or remnant.",
+        "justification": "All three relations describe a causal evolutionary outcome where one astrophysical entity or event (supernova explosion, massive star, stellar remnant) produces or transforms into another entity (stellar remnant, black hole). The direction is consistently from precursor to outcome, so a single predicate 'results_in' appropriately captures this outcome/production relation across these instances.",
+        "remark": "Specific mechanisms (e.g., collapse, explosion) and conditions (e.g., sufficiently massive remnant) should remain as qualifiers rather than being embedded in the predicate name.",
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_b6b32e66a3d7",
+          "RelR_410072abaead",
+          "RelR_8331c8d145cd"
+        ],
+        "rel_cls": "evolutionary_outcome_relation",
+        "justification": "Each relation links a prior astrophysical state or event to a subsequent state (stellar remnant or black hole) as part of stellar evolution and end-of-life processes. Grouping them under 'evolutionary_outcome_relation' captures that these are outcome/remnant links rather than generic causality.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_b6b32e66a3d7",
+          "RelR_410072abaead",
+          "RelR_8331c8d145cd"
+        ],
+        "rel_cls_group": "CAUSALITY",
+        "justification": "All three instances encode that the subject brings about or leads to the object (explosion leading to remnant, star leaving remnant, remnant forming black hole), which is fundamentally causal/transformational in nature.",
+        "remark": null,
+        "confidence": 0.95
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_b6b32e66a3d7",
+        "RelR_410072abaead",
+        "RelR_8331c8d145cd"
+      ],
+      "canonical_rel_name": "results_in",
+      "canonical_rel_desc": "Indicates that the subject astrophysical object or event causally leads to or leaves behind the object as its evolutionary outcome or remnant.",
+      "justification": "All three relations describe a causal evolutionary outcome where one astrophysical entity or event (supernova explosion, massive star, stellar remnant) produces or transforms into another entity (stellar remnant, black hole). The direction is consistently from precursor to outcome, so a single predicate 'results_in' appropriately captures this outcome/production relation across these instances.",
+      "remark": "Specific mechanisms (e.g., collapse, explosion) and conditions (e.g., sufficiently massive remnant) should remain as qualifiers rather than being embedded in the predicate name.",
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_b6b32e66a3d7",
+        "RelR_410072abaead",
+        "RelR_8331c8d145cd"
+      ],
+      "rel_cls": "evolutionary_outcome_relation",
+      "justification": "Each relation links a prior astrophysical state or event to a subsequent state (stellar remnant or black hole) as part of stellar evolution and end-of-life processes. Grouping them under 'evolutionary_outcome_relation' captures that these are outcome/remnant links rather than generic causality.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_b6b32e66a3d7",
+        "RelR_410072abaead",
+        "RelR_8331c8d145cd"
+      ],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "All three instances encode that the subject brings about or leads to the object (explosion leading to remnant, star leaving remnant, remnant forming black hole), which is fundamentally causal/transformational in nature.",
+      "remark": null,
+      "confidence": 0.95
+    }
+  ],
+  "timestamp": "2026-01-06T09:47:04Z"
+}

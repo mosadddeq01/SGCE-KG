@@ -1,0 +1,102 @@
+{
+  "cluster_label": "6_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_9fa266fae137",
+      "relation_name": "conveys",
+      "rel_desc": "Fairytales convey moral lessons within their narratives.",
+      "rel_hint_type": "didactic",
+      "canonical_rel_name": "conveys_moral_lessons",
+      "canonical_rel_desc": "Narrative works that communicate or teach moral lessons through their content.",
+      "rel_cls": "narrative_effect_relation",
+      "rel_cls_group": "EFFECT",
+      "subject_entity_name": "fairytales",
+      "object_entity_name": "moral lessons",
+      "subject_class_label": "Fairytale Concepts",
+      "subject_class_group": "Fairytales: Genre, Narratives, and Motifs",
+      "object_class_label": "Fairytale Concepts",
+      "object_class_group": "Fairytales: Genre, Narratives, and Motifs",
+      "qualifiers": {
+        "TemporalQualifier": "passed down through generations",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": "often",
+        "UncertaintyQualifier": null,
+        "CausalHint": "feature",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.93,
+      "remarks": [
+        "Relation name chosen to emphasize didactic function rather than mere inclusion.",
+        "Relation name chosen to emphasize didactic function rather than mere inclusion."
+      ]
+    },
+    {
+      "relation_id": "RelR_4e9ee9e94ee8",
+      "relation_name": "conveys",
+      "rel_desc": "Timeless stories convey moral lessons.",
+      "rel_hint_type": "didactic_effect",
+      "canonical_rel_name": "conveys_moral_lessons",
+      "canonical_rel_desc": "Narrative works that communicate or teach moral lessons through their content.",
+      "rel_cls": "narrative_effect_relation",
+      "rel_cls_group": "EFFECT",
+      "subject_entity_name": "timeless stories",
+      "object_entity_name": "moral lessons",
+      "subject_class_label": "Fairy Tale Categories and Collections",
+      "subject_class_group": "Fairy Tales and Their Audiences",
+      "object_class_label": "Fairytale Concepts",
+      "object_class_group": "Fairytales: Genre, Narratives, and Motifs",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "through their narratives",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": "and",
+        "OtherQualifier": "Function: ethical instruction"
+      },
+      "confidence": 0.98,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_rel_schema\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_9fa266fae137\", \"RelR_4e9ee9e94ee8\"],\n      \"canonical_rel_name\": \"conveys_moral_lesson\",\n      \"canonical_rel_desc\": \"Narrative works that convey a moral or ethical lesson to the audience through their content.\",\n      \"rel_cls\": \"didactic_function_relation\",\n      \"rel_cls_group\": \"EFFECT\",\n      \"justification\": \"Both relations link narrative works (fairytales, timeless stories) to moral lessons with a clear didactic function. Normalizing the predicate to the singular form 'conveys_moral_lesson' improves consistency and avoids unnecessary plurality variation. The previous rel_cls 'narrative_effect_relation' was vague; 'didactic_function_relation' more precisely captures that this is about the didactic function or effect of the narrative, while retaining the broad rel_cls_group 'EFFECT' to indicate the outcome/impact of the narrative content.\",\n      \"remark\": null,\n      \"confidence\": 0.92\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_rel_schema",
+      "args": {
+        "relation_ids": [
+          "RelR_9fa266fae137",
+          "RelR_4e9ee9e94ee8"
+        ],
+        "canonical_rel_name": "conveys_moral_lesson",
+        "canonical_rel_desc": "Narrative works that convey a moral or ethical lesson to the audience through their content.",
+        "rel_cls": "didactic_function_relation",
+        "rel_cls_group": "EFFECT",
+        "justification": "Both relations link narrative works (fairytales, timeless stories) to moral lessons with a clear didactic function. Normalizing the predicate to the singular form 'conveys_moral_lesson' improves consistency and avoids unnecessary plurality variation. The previous rel_cls 'narrative_effect_relation' was vague; 'didactic_function_relation' more precisely captures that this is about the didactic function or effect of the narrative, while retaining the broad rel_cls_group 'EFFECT' to indicate the outcome/impact of the narrative content.",
+        "remark": null,
+        "confidence": 0.92
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_rel_schema",
+      "relation_ids": [
+        "RelR_9fa266fae137",
+        "RelR_4e9ee9e94ee8"
+      ],
+      "canonical_rel_name": "conveys_moral_lesson",
+      "canonical_rel_desc": "Narrative works that convey a moral or ethical lesson to the audience through their content.",
+      "rel_cls": "didactic_function_relation",
+      "rel_cls_group": "EFFECT",
+      "new_relation_name": null,
+      "original_relation_name": null,
+      "justification": "Both relations link narrative works (fairytales, timeless stories) to moral lessons with a clear didactic function. Normalizing the predicate to the singular form 'conveys_moral_lesson' improves consistency and avoids unnecessary plurality variation. The previous rel_cls 'narrative_effect_relation' was vague; 'didactic_function_relation' more precisely captures that this is about the didactic function or effect of the narrative, while retaining the broad rel_cls_group 'EFFECT' to indicate the outcome/impact of the narrative content.",
+      "remark": null,
+      "confidence": 0.92
+    }
+  ],
+  "timestamp": "2026-01-06T14:07:32Z"
+}

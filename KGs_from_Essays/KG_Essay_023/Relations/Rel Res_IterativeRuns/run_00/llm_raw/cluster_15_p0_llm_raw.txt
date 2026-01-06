@@ -1,0 +1,65 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_88a10b384da7", "RelR_e0820b014179"],
+      "canonical_rel_name": "amplifies_voice_of",
+      "canonical_rel_desc": "Subject increases the audibility, visibility, or reach of the object’s voice or perspectives in public discourse.",
+      "justification": "Both relations describe the subject leading to stronger, more audible or visible expression of the object’s voices in public/online discourse. Using a single predicate 'amplifies_voice_of' normalizes these semantically equivalent empowerment/amplification effects.",
+      "remark": null,
+      "confidence": 0.87
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_82329e60d9e3"],
+      "canonical_rel_name": "suppresses_voice_of",
+      "canonical_rel_desc": "Subject diminishes, silences, or neglects the object’s voice or perspectives in public discourse.",
+      "justification": "The relation explicitly states that mainstream media has historically silenced or ignored marginalized groups; this is best captured as the subject suppressing the voice of the object.",
+      "remark": null,
+      "confidence": 0.86
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_0feef890977f"],
+      "canonical_rel_name": "enables",
+      "canonical_rel_desc": "Subject makes it possible or easier for the object (a state, process, or outcome) to occur.",
+      "justification": "The relation describes social media making possible the empowerment of marginalized voices. A general causal-enabling predicate 'enables' fits well and is reusable for similar cause-effect enablement relations.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_88a10b384da7",
+        "RelR_82329e60d9e3",
+        "RelR_0feef890977f",
+        "RelR_e0820b014179"
+      ],
+      "rel_cls": "voice_representation_relation",
+      "justification": "All four relations concern how media-related subjects affect whether and how marginalized or diverse groups’ voices are expressed, empowered, amplified, or silenced in discourse. Grouping them under 'voice_representation_relation' captures this common family of effects.",
+      "remark": null,
+      "confidence": 0.88
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_88a10b384da7",
+        "RelR_82329e60d9e3",
+        "RelR_0feef890977f",
+        "RelR_e0820b014179"
+      ],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "Each relation encodes a causal effect: social media causing empowerment or voice amplification, empowerment causing amplification, and mainstream media causing suppression or exclusion. This fits the broad CAUSALITY dimension.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  }
+]

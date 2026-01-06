@@ -1,0 +1,79 @@
+{
+  "cluster_label": -1,
+  "cluster_classes": [
+    {
+      "candidate_id": "ClsC_8f697d4f",
+      "class_label": "Social and Political Movements",
+      "class_description": "Collective efforts aimed at advancing civil rights, democracy, equality, and justice, often inspired by protests and struggles against injustice.",
+      "class_type_hint": "Social Movement Category",
+      "class_group": "TBD",
+      "confidence": 0.9,
+      "evidence_excerpt": "Protests have served as a powerful force for change, inspiring movements for democracy, equality, and justice around the world.",
+      "member_ids": [
+        "En_192ed55e",
+        "En_74fe80ef",
+        "En_2bc42b40",
+        "En_a858e918"
+      ],
+      "members": [
+        {
+          "id": "En_192ed55e",
+          "entity_name": "the movement",
+          "entity_description": "Reference to the U.S. civil rights movement that inspired global actions for equality and rights.",
+          "entity_type_hint": "Movement"
+        },
+        {
+          "id": "En_74fe80ef",
+          "entity_name": "movements for democracy",
+          "entity_description": "Organized efforts seeking democratic governance, often inspired by protests.",
+          "entity_type_hint": "Movement"
+        },
+        {
+          "id": "En_2bc42b40",
+          "entity_name": "movements for equality",
+          "entity_description": "Organized campaigns aiming to reduce or eliminate social and political inequality.",
+          "entity_type_hint": "Movement"
+        },
+        {
+          "id": "En_a858e918",
+          "entity_name": "movements for justice",
+          "entity_description": "Collective efforts focused on achieving fairness and rectifying wrongs in society.",
+          "entity_type_hint": "Movement"
+        }
+      ],
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_8f697d4f\",\n      \"new_name\": null,\n      \"new_description\": null,\n      \"new_class_type_hint\": null,\n      \"new_class_group\": \"Social and Political Movements\",\n      \"remark\": null,\n      \"justification\": \"The class clearly groups social and political movements (civil rights, democracy, equality, justice), so assigning the stable Class_Group 'Social and Political Movements' connects it appropriately at the schema level.\",\n      \"confidence\": 0.96\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_8f697d4f",
+        "new_name": null,
+        "new_description": null,
+        "new_class_type_hint": null,
+        "new_class_group": "Social and Political Movements",
+        "remark": null,
+        "justification": "The class clearly groups social and political movements (civil rights, democracy, equality, justice), so assigning the stable Class_Group 'Social and Political Movements' connects it appropriately at the schema level.",
+        "confidence": 0.96
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_8f697d4f",
+      "class_id_resolved": "ClsC_8f697d4f",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Social and Political Movements",
+      "remark": null,
+      "justification": "The class clearly groups social and political movements (civil rights, democracy, equality, justice), so assigning the stable Class_Group 'Social and Political Movements' connects it appropriately at the schema level.",
+      "confidence": 0.96
+    }
+  ],
+  "provisional_to_real": {},
+  "timestamp": "2026-01-06T13:06:07Z"
+}

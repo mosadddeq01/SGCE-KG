@@ -1,0 +1,141 @@
+{
+  "cluster_label": "24_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_f50abc1014e0",
+      "relation_name": "leads_to",
+      "rel_desc": "Democratization of information sparks important conversations.",
+      "rel_hint_type": "causal",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "democratization of information",
+      "object_entity_name": "important conversations",
+      "subject_class_label": "Information Engagement Concepts",
+      "subject_class_group": "Digital Information & Communication in Contemporary Society",
+      "object_class_label": "Online Public Discourse",
+      "object_class_group": "Social Media & Societal Issues Discourse",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "sparking",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.9,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_6adffaeb29e4",
+      "relation_name": "leads_to",
+      "rel_desc": "Democratization of information leads to debates on social issues.",
+      "rel_hint_type": "causal",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "democratization of information",
+      "object_entity_name": "debates on social issues",
+      "subject_class_label": "Information Engagement Concepts",
+      "subject_class_group": "Digital Information & Communication in Contemporary Society",
+      "object_class_label": "Online Public Discourse",
+      "object_class_group": "Social Media & Societal Issues Discourse",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "sparking",
+        "LogicalMarker": null,
+        "OtherQualifier": "Scope: various social issues"
+      },
+      "confidence": 0.88,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_f50abc1014e0\",\n        \"RelR_6adffaeb29e4\"\n      ],\n      \"canonical_rel_name\": \"causes\",\n      \"canonical_rel_desc\": \"Indicates that the subject is a causal factor that brings about or gives rise to the object.\",\n      \"justification\": \"Both relations describe democratization of information bringing about downstream outcomes (important conversations, debates on social issues). This is a direct causal predicate from subject to object, so a normalized, directionally clear canonical name 'causes' fits both instances.\",\n      \"remark\": null,\n      \"confidence\": 0.93\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_f50abc1014e0\",\n        \"RelR_6adffaeb29e4\"\n      ],\n      \"rel_cls\": \"causal_effect_relation\",\n      \"justification\": \"These relations represent a general family where one phenomenon produces or shapes another (democratization of information leading to discourse outcomes). Grouping them under a broader class 'causal_effect_relation' captures this family beyond the specific canonical predicate.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_f50abc1014e0\",\n        \"RelR_6adffaeb29e4\"\n      ],\n      \"rel_cls_group\": \"CAUSALITY\",\n      \"justification\": \"The hint type and descriptions explicitly state a cause–effect relationship (democratization of information leads to/sparks conversations and debates), which falls squarely under a broad CAUSALITY group.\",\n      \"remark\": null,\n      \"confidence\": 0.96\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_f50abc1014e0",
+          "RelR_6adffaeb29e4"
+        ],
+        "canonical_rel_name": "causes",
+        "canonical_rel_desc": "Indicates that the subject is a causal factor that brings about or gives rise to the object.",
+        "justification": "Both relations describe democratization of information bringing about downstream outcomes (important conversations, debates on social issues). This is a direct causal predicate from subject to object, so a normalized, directionally clear canonical name 'causes' fits both instances.",
+        "remark": null,
+        "confidence": 0.93
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_f50abc1014e0",
+          "RelR_6adffaeb29e4"
+        ],
+        "rel_cls": "causal_effect_relation",
+        "justification": "These relations represent a general family where one phenomenon produces or shapes another (democratization of information leading to discourse outcomes). Grouping them under a broader class 'causal_effect_relation' captures this family beyond the specific canonical predicate.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_f50abc1014e0",
+          "RelR_6adffaeb29e4"
+        ],
+        "rel_cls_group": "CAUSALITY",
+        "justification": "The hint type and descriptions explicitly state a cause–effect relationship (democratization of information leads to/sparks conversations and debates), which falls squarely under a broad CAUSALITY group.",
+        "remark": null,
+        "confidence": 0.96
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_f50abc1014e0",
+        "RelR_6adffaeb29e4"
+      ],
+      "canonical_rel_name": "causes",
+      "canonical_rel_desc": "Indicates that the subject is a causal factor that brings about or gives rise to the object.",
+      "justification": "Both relations describe democratization of information bringing about downstream outcomes (important conversations, debates on social issues). This is a direct causal predicate from subject to object, so a normalized, directionally clear canonical name 'causes' fits both instances.",
+      "remark": null,
+      "confidence": 0.93
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_f50abc1014e0",
+        "RelR_6adffaeb29e4"
+      ],
+      "rel_cls": "causal_effect_relation",
+      "justification": "These relations represent a general family where one phenomenon produces or shapes another (democratization of information leading to discourse outcomes). Grouping them under a broader class 'causal_effect_relation' captures this family beyond the specific canonical predicate.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_f50abc1014e0",
+        "RelR_6adffaeb29e4"
+      ],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "The hint type and descriptions explicitly state a cause–effect relationship (democratization of information leads to/sparks conversations and debates), which falls squarely under a broad CAUSALITY group.",
+      "remark": null,
+      "confidence": 0.96
+    }
+  ],
+  "timestamp": "2026-01-06T11:09:07Z"
+}

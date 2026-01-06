@@ -1,0 +1,68 @@
+{
+  "cluster_label": "8_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_eaed17fdc1c9",
+      "relation_name": "contains",
+      "rel_desc": "Fruits contain seeds that are later dispersed.",
+      "rel_hint_type": "component-of",
+      "canonical_rel_name": "contains",
+      "canonical_rel_desc": "Indicates that the subject physically contains the object as a component or part within its boundaries.",
+      "rel_cls": "physical_component_relation",
+      "rel_cls_group": "COMPOSITION",
+      "subject_entity_name": "fruits",
+      "object_entity_name": "seeds",
+      "subject_class_label": "Bird-Dispersed Plant Propagules",
+      "subject_class_group": "Bird-Mediated Plant Reproduction and Regeneration",
+      "object_class_label": "Bird-Dispersed Plant Propagules",
+      "object_class_group": "Bird-Mediated Plant Reproduction and Regeneration",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "inside fruits",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "then spread seeds after fruit consumption",
+        "LogicalMarker": "then",
+        "OtherQualifier": null
+      },
+      "confidence": 0.9,
+      "remarks": [
+        "Relation supported by process description plus entity definitions, not an explicit 'contain' clause in the prose.",
+        "Relation supported by process description plus entity definitions, not an explicit 'contain' clause in the prose."
+      ]
+    },
+    {
+      "relation_id": "RelR_099719430ec9",
+      "relation_name": "disperses",
+      "rel_desc": "Birds disperse seeds by flying and excreting them in different locations.",
+      "rel_hint_type": "dispersal",
+      "canonical_rel_name": "disperses",
+      "canonical_rel_desc": "Indicates that the subject acts to spread or transport the object from one location to others, typically as part of a dispersal process.",
+      "rel_cls": "dispersal_relation",
+      "rel_cls_group": "AGENCY",
+      "subject_entity_name": "birds",
+      "object_entity_name": "seeds",
+      "subject_class_label": "Bird Biotic Components",
+      "subject_class_group": "Birds as Environmental Indicators & Conservation",
+      "object_class_label": "Bird-Dispersed Plant Propagules",
+      "object_class_group": "Bird-Mediated Plant Reproduction and Regeneration",
+      "qualifiers": {
+        "TemporalQualifier": "after consuming fruits",
+        "SpatialQualifier": "far and wide in different locations",
+        "OperationalConstraint": "during flight",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "consume fruits and then spread seeds",
+        "LogicalMarker": "then",
+        "OtherQualifier": null
+      },
+      "confidence": 0.98,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[]",
+  "parsed_steps": [],
+  "executed_decisions": [],
+  "timestamp": "2026-01-06T11:33:05Z"
+}

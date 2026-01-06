@@ -1,0 +1,61 @@
+[
+  {
+    "function": "split_class",
+    "args": {
+      "source_class_id": "ClsC_12077b56",
+      "splits": [
+        {
+          "name": "Nonverbal Communication Research Findings",
+          "description": "Empirical findings and quantitative estimates about the proportion and impact of nonverbal cues (e.g., body language) in overall communication.",
+          "class_type_hint": "ResearchFinding",
+          "member_ids": [
+            "En_3d4be219"
+          ],
+          "provisional_id": "SPLIT(ClsC_12077b56|Findings)"
+        }
+      ],
+      "justification": "ClsC_12077b56 currently bundles research activities (conducting studies) with specific empirical findings; splitting out findings creates two cleaner research-related classes aligned with activity vs result.",
+      "remark": null,
+      "confidence": 0.87
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_fe66bbc0",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Nonverbal Communication",
+      "remark": null,
+      "justification": "ClsC_fe66bbc0 covers the general concept and signals of nonverbal communication and should be grouped with related research classes under a shared Nonverbal Communication class_group.",
+      "confidence": 0.96
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_12077b56",
+      "new_name": "Nonverbal Communication Research Activities",
+      "new_description": "Empirical research activities that investigate the role and proportion of nonverbal cues, such as body language, in overall communication.",
+      "new_class_type_hint": "ResearchActivity",
+      "new_class_group": "Nonverbal Communication",
+      "remark": null,
+      "justification": "After splitting out findings, ClsC_12077b56 is effectively focused on research activities (studies on nonverbal communication), so its name, type hint, and class_group should be updated to reflect this narrower scope and to align it with the overall Nonverbal Communication domain.",
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "SPLIT(ClsC_12077b56|Findings)",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Nonverbal Communication",
+      "remark": null,
+      "justification": "The new findings-focused class created from ClsC_12077b56 studies nonverbal communication and should share the same Nonverbal Communication class_group as the related concept and research activity classes.",
+      "confidence": 0.9
+    }
+  }
+]

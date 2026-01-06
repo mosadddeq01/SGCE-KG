@@ -1,0 +1,187 @@
+{
+  "cluster_label": "23_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_63182b59f8fc",
+      "relation_name": "is_caused_by",
+      "rel_desc": "Stellar collapse is driven by the star’s own gravity.",
+      "rel_hint_type": "causal",
+      "canonical_rel_name": "is_caused_by",
+      "canonical_rel_desc": "Indicates that the subject phenomenon or event occurs as a result of the object cause or driving factor.",
+      "rel_cls": "causal_relation",
+      "rel_cls_group": "CAUSALITY",
+      "subject_entity_name": "stellar collapse",
+      "object_entity_name": "gravity",
+      "subject_class_label": "Stellar End-of-Life Processes",
+      "subject_class_group": "Stellar Evolution and End States",
+      "object_class_label": "Gravitational Phenomena",
+      "object_class_group": "Gravitation and General Relativity",
+      "qualifiers": {
+        "TemporalQualifier": "after fuel exhaustion/end of life",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": "when pressure support is insufficient (implied)",
+        "UncertaintyQualifier": null,
+        "CausalHint": "under",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.95,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_3b3cfd2cd518",
+      "relation_name": "caused_by",
+      "rel_desc": "The 2015 gravitational-wave discovery arose from the merger of two black holes.",
+      "rel_hint_type": "causal",
+      "canonical_rel_name": "is_caused_by",
+      "canonical_rel_desc": "The subject event or outcome arises from or is caused by the object event or process.",
+      "rel_cls": "causal_origin_relation",
+      "rel_cls_group": "CAUSALITY",
+      "subject_entity_name": "discovery of gravitational waves in 2015",
+      "object_entity_name": "merger of two black holes",
+      "subject_class_label": "Gravitational-Wave Observation Context",
+      "subject_class_group": "Gravitation and General Relativity",
+      "object_class_label": "Compact-Object Mergers Emitting Gravitational Waves",
+      "object_class_group": "Gravitation and General Relativity",
+      "qualifiers": {
+        "TemporalQualifier": "during the black hole merger event observed",
+        "SpatialQualifier": null,
+        "OperationalConstraint": "binary black hole coalescence",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "resulting from",
+        "LogicalMarker": null,
+        "OtherQualifier": "SourceEvent: merger of two black holes that produced the signal"
+      },
+      "confidence": 0.96,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_55eafb144ed3",
+      "relation_name": "causes_breakdown_of",
+      "rel_desc": "The black hole singularity is a region where the fundamental laws of physics break down.",
+      "rel_hint_type": "causal",
+      "canonical_rel_name": "causes",
+      "canonical_rel_desc": "Indicates that the subject entity or condition brings about or produces the object effect or outcome.",
+      "rel_cls": "causal_relation",
+      "rel_cls_group": "CAUSALITY",
+      "subject_entity_name": "black hole singularity",
+      "object_entity_name": "fundamental laws of physics",
+      "subject_class_label": "Black Hole Structural Components",
+      "subject_class_group": "Black Holes",
+      "object_class_label": "Fundamental Laws of Physics",
+      "object_class_group": "Cosmology and Fundamental Physics",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "at the singularity",
+        "OperationalConstraint": "extreme density and curvature",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "where",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.9,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_6d65eda99878",
+      "relation_name": "causes",
+      "rel_desc": "Quantum effects near the event horizon cause the emission of Hawking radiation.",
+      "rel_hint_type": "causal",
+      "canonical_rel_name": "causes",
+      "canonical_rel_desc": "The subject phenomenon is a direct physical cause of the object phenomenon.",
+      "rel_cls": "physical_causation_relation",
+      "rel_cls_group": "CAUSALITY",
+      "subject_entity_name": "quantum effects near the event horizon",
+      "object_entity_name": "Hawking radiation",
+      "subject_class_label": "Hawking Radiation and Black Hole Evaporation (Phenomena)",
+      "subject_class_group": "Black Hole Physics",
+      "object_class_label": "Hawking Radiation and Black Hole Evaporation (Phenomena)",
+      "object_class_group": "Black Hole Physics",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "near the event horizon",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "due to",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.99,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_rel_schema\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_63182b59f8fc\",\n      \"RelR_3b3cfd2cd518\"\n      ],\n      \"canonical_rel_name\": \"is_caused_by\",\n      \"canonical_rel_desc\": \"Indicates that the subject event, phenomenon, or state occurs as a result of the object cause or driving factor.\",\n      \"rel_cls\": \"physical_causation_relation\",\n      \"rel_cls_group\": \"CAUSALITY\",\n      \"justification\": \"Both relations encode the same directional predicate (effect is caused by cause) in a physical context. They should share a single, consistent canonical description and be grouped under one specific class for physical causation instead of mixing 'causal_relation' and 'causal_origin_relation'.\",\n      \"remark\": null,\n      \"confidence\": 0.93\n    }\n  },\n  {\n    \"function\": \"modify_rel_schema\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_55eafb144ed3\",\n        \"RelR_6d65eda99878\"\n      ],\n      \"canonical_rel_name\": \"causes\",\n      \"canonical_rel_desc\": \"Indicates that the subject phenomenon, entity, or condition is a direct physical cause of the object effect or outcome.\",\n      \"rel_cls\": \"physical_causation_relation\",\n      \"rel_cls_group\": \"CAUSALITY\",\n      \"justification\": \"Both relations express the same forward causal predicate (cause causes effect) in a physical setting. Their canonical descriptions should be harmonized, and they should use a single, specific relation class 'physical_causation_relation' rather than mixing it with the more generic 'causal_relation'.\",\n      \"remark\": null,\n      \"confidence\": 0.92\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_rel_schema",
+      "args": {
+        "relation_ids": [
+          "RelR_63182b59f8fc",
+          "RelR_3b3cfd2cd518"
+        ],
+        "canonical_rel_name": "is_caused_by",
+        "canonical_rel_desc": "Indicates that the subject event, phenomenon, or state occurs as a result of the object cause or driving factor.",
+        "rel_cls": "physical_causation_relation",
+        "rel_cls_group": "CAUSALITY",
+        "justification": "Both relations encode the same directional predicate (effect is caused by cause) in a physical context. They should share a single, consistent canonical description and be grouped under one specific class for physical causation instead of mixing 'causal_relation' and 'causal_origin_relation'.",
+        "remark": null,
+        "confidence": 0.93
+      }
+    },
+    {
+      "function": "modify_rel_schema",
+      "args": {
+        "relation_ids": [
+          "RelR_55eafb144ed3",
+          "RelR_6d65eda99878"
+        ],
+        "canonical_rel_name": "causes",
+        "canonical_rel_desc": "Indicates that the subject phenomenon, entity, or condition is a direct physical cause of the object effect or outcome.",
+        "rel_cls": "physical_causation_relation",
+        "rel_cls_group": "CAUSALITY",
+        "justification": "Both relations express the same forward causal predicate (cause causes effect) in a physical setting. Their canonical descriptions should be harmonized, and they should use a single, specific relation class 'physical_causation_relation' rather than mixing it with the more generic 'causal_relation'.",
+        "remark": null,
+        "confidence": 0.92
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_rel_schema",
+      "relation_ids": [
+        "RelR_63182b59f8fc",
+        "RelR_3b3cfd2cd518"
+      ],
+      "canonical_rel_name": "is_caused_by",
+      "canonical_rel_desc": "Indicates that the subject event, phenomenon, or state occurs as a result of the object cause or driving factor.",
+      "rel_cls": "physical_causation_relation",
+      "rel_cls_group": "CAUSALITY",
+      "new_relation_name": null,
+      "original_relation_name": null,
+      "justification": "Both relations encode the same directional predicate (effect is caused by cause) in a physical context. They should share a single, consistent canonical description and be grouped under one specific class for physical causation instead of mixing 'causal_relation' and 'causal_origin_relation'.",
+      "remark": null,
+      "confidence": 0.93
+    },
+    {
+      "action": "modify_rel_schema",
+      "relation_ids": [
+        "RelR_55eafb144ed3",
+        "RelR_6d65eda99878"
+      ],
+      "canonical_rel_name": "causes",
+      "canonical_rel_desc": "Indicates that the subject phenomenon, entity, or condition is a direct physical cause of the object effect or outcome.",
+      "rel_cls": "physical_causation_relation",
+      "rel_cls_group": "CAUSALITY",
+      "new_relation_name": null,
+      "original_relation_name": null,
+      "justification": "Both relations express the same forward causal predicate (cause causes effect) in a physical setting. Their canonical descriptions should be harmonized, and they should use a single, specific relation class 'physical_causation_relation' rather than mixing it with the more generic 'causal_relation'.",
+      "remark": null,
+      "confidence": 0.92
+    }
+  ],
+  "timestamp": "2026-01-06T09:51:49Z"
+}

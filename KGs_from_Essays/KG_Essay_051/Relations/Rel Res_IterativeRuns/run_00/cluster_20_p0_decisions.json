@@ -1,0 +1,141 @@
+{
+  "cluster_label": "20_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_71810f19fcac",
+      "relation_name": "used_to_signal",
+      "rel_desc": "Body language is used to signal or project confidence.",
+      "rel_hint_type": "signaling",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "body language",
+      "object_entity_name": "confidence",
+      "subject_class_label": "Body Language as Nonverbal Communication",
+      "subject_class_group": "Nonverbal Communication & Body Language",
+      "object_class_label": "Confidence-Related States",
+      "object_class_group": "Nonverbal Communication & Inferred States",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": "professional settings",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "may",
+        "CausalHint": "to project",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.98,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_5aec879cda20",
+      "relation_name": "used_to_signal",
+      "rel_desc": "Direct eye contact is used as a cue to project or signal confidence.",
+      "rel_hint_type": "signaling",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "eye contact",
+      "object_entity_name": "confidence",
+      "subject_class_label": "Eye Contact Behaviors",
+      "subject_class_group": "Nonverbal Communication & Inferred States",
+      "object_class_label": "Confidence-Related States",
+      "object_class_group": "Nonverbal Communication & Inferred States",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": "professional settings",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "to project",
+        "LogicalMarker": "such as",
+        "OtherQualifier": "Example of professional body language"
+      },
+      "confidence": 0.96,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_71810f19fcac\", \"RelR_5aec879cda20\"],\n      \"canonical_rel_name\": \"signals\",\n      \"canonical_rel_desc\": \"Nonverbal behavior that is used to communicate or project a psychological or social state (e.g., confidence) to others.\",\n      \"justification\": \"Both relations describe nonverbal behaviors (body language, eye contact) being used specifically to signal or project confidence, so a shared predicate 'signals' captures this communicative function without embedding context like 'professional settings' into the predicate.\",\n      \"remark\": null,\n      \"confidence\": 0.93\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_71810f19fcac\", \"RelR_5aec879cda20\"],\n      \"rel_cls\": \"nonverbal_signal_relation\",\n      \"justification\": \"These links connect nonverbal behaviors to the psychological state they are used to signal, which naturally groups them under a class for nonverbal signaling or cue relations.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_71810f19fcac\", \"RelR_5aec879cda20\"],\n      \"rel_cls_group\": \"INTERACTION\",\n      \"justification\": \"The semantics involve communicative interaction, where one agent’s nonverbal behavior is interpreted by others as indicating confidence; this fits a broad interaction/communication dimension rather than composition, causality, or identity.\",\n      \"remark\": null,\n      \"confidence\": 0.86\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_71810f19fcac",
+          "RelR_5aec879cda20"
+        ],
+        "canonical_rel_name": "signals",
+        "canonical_rel_desc": "Nonverbal behavior that is used to communicate or project a psychological or social state (e.g., confidence) to others.",
+        "justification": "Both relations describe nonverbal behaviors (body language, eye contact) being used specifically to signal or project confidence, so a shared predicate 'signals' captures this communicative function without embedding context like 'professional settings' into the predicate.",
+        "remark": null,
+        "confidence": 0.93
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_71810f19fcac",
+          "RelR_5aec879cda20"
+        ],
+        "rel_cls": "nonverbal_signal_relation",
+        "justification": "These links connect nonverbal behaviors to the psychological state they are used to signal, which naturally groups them under a class for nonverbal signaling or cue relations.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_71810f19fcac",
+          "RelR_5aec879cda20"
+        ],
+        "rel_cls_group": "INTERACTION",
+        "justification": "The semantics involve communicative interaction, where one agent's nonverbal behavior is interpreted by others as indicating confidence; this fits a broad interaction/communication dimension rather than composition, causality, or identity.",
+        "remark": null,
+        "confidence": 0.86
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_71810f19fcac",
+        "RelR_5aec879cda20"
+      ],
+      "canonical_rel_name": "signals",
+      "canonical_rel_desc": "Nonverbal behavior that is used to communicate or project a psychological or social state (e.g., confidence) to others.",
+      "justification": "Both relations describe nonverbal behaviors (body language, eye contact) being used specifically to signal or project confidence, so a shared predicate 'signals' captures this communicative function without embedding context like 'professional settings' into the predicate.",
+      "remark": null,
+      "confidence": 0.93
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_71810f19fcac",
+        "RelR_5aec879cda20"
+      ],
+      "rel_cls": "nonverbal_signal_relation",
+      "justification": "These links connect nonverbal behaviors to the psychological state they are used to signal, which naturally groups them under a class for nonverbal signaling or cue relations.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_71810f19fcac",
+        "RelR_5aec879cda20"
+      ],
+      "rel_cls_group": "INTERACTION",
+      "justification": "The semantics involve communicative interaction, where one agent's nonverbal behavior is interpreted by others as indicating confidence; this fits a broad interaction/communication dimension rather than composition, causality, or identity.",
+      "remark": null,
+      "confidence": 0.86
+    }
+  ],
+  "timestamp": "2026-01-06T12:11:35Z"
+}

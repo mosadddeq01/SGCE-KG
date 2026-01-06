@@ -1,0 +1,75 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_3d89d1402b84",
+        "RelR_6818dd2134bd",
+        "RelR_d6a06dc819ab",
+        "RelR_025a379931ae",
+        "RelR_4cabd516505e",
+        "RelR_e8de4a39c6f4",
+        "RelR_4e7ea3d8ddc1"
+      ],
+      "canonical_rel_name": "includes_item",
+      "canonical_rel_desc": "Indicates that a collection, corpus, or set includes the referenced item or work as one of its members.",
+      "justification": "All these relations link the collection 'Grimm's Fairy Tales' (subject) to individual tales (objects) and describe set/collection membership in the same direction (collection → contained work). Normalizing to a single predicate 'includes_item' avoids minor wording variants like 'includes' vs 'includes_story' while capturing the same semantics.",
+      "remark": null,
+      "confidence": 0.97
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_13f58f6870f0",
+        "RelR_32d514ccc87d"
+      ],
+      "canonical_rel_name": "is_member_of",
+      "canonical_rel_desc": "Indicates that an individual or entity is a member or constituent of a group, organization, or collective.",
+      "justification": "These relations link individual persons (Jacob Grimm, Wilhelm Grimm) to the collective entity 'Brothers Grimm' and explicitly describe group membership with the individual as subject and group as object. This is distinct from collection→item containment and is best captured with the canonical predicate 'is_member_of'.",
+      "remark": null,
+      "confidence": 0.97
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_3d89d1402b84",
+        "RelR_6818dd2134bd",
+        "RelR_d6a06dc819ab",
+        "RelR_025a379931ae",
+        "RelR_4cabd516505e",
+        "RelR_e8de4a39c6f4",
+        "RelR_4e7ea3d8ddc1",
+        "RelR_13f58f6870f0",
+        "RelR_32d514ccc87d"
+      ],
+      "rel_cls": "membership_relation",
+      "justification": "All these edges encode a membership-style relation: either (a) items being members of a collection/corpus, or (b) individuals being members of a group. They are variations of the same broader conceptual family of membership/part-of-a-collective relations, so they can share the relation class 'membership_relation' even though they use two distinct canonical predicates.",
+      "remark": null,
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_3d89d1402b84",
+        "RelR_6818dd2134bd",
+        "RelR_d6a06dc819ab",
+        "RelR_025a379931ae",
+        "RelR_4cabd516505e",
+        "RelR_e8de4a39c6f4",
+        "RelR_4e7ea3d8ddc1",
+        "RelR_13f58f6870f0",
+        "RelR_32d514ccc87d"
+      ],
+      "rel_cls_group": "ASSOCIATION",
+      "justification": "Both collection-item inclusion and person-group membership represent associative links between entities rather than composition of substance, spatial location, or strict identity. They are best grouped under a broad 'ASSOCIATION' dimension for schema organization.",
+      "remark": null,
+      "confidence": 0.94
+    }
+  }
+]

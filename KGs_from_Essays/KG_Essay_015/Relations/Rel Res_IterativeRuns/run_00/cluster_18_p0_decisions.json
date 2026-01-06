@@ -1,0 +1,299 @@
+{
+  "cluster_label": "18_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_43070455d1d0",
+      "relation_name": "holds_belief",
+      "rel_desc": "Ancient Egyptians hold specific afterlife beliefs about the necessity of grave goods.",
+      "rel_hint_type": "belief",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "ancient Egyptians",
+      "object_entity_name": "ancient Egyptian afterlife beliefs",
+      "subject_class_label": "Ancient Egyptian Civilization",
+      "subject_class_group": "Ancient Egypt: Society, Rulers, and Funerary Culture",
+      "object_class_label": "Ancient Egyptian Afterlife Beliefs and Concepts",
+      "object_class_group": "Ancient Egyptian Funerary Religion and Culture",
+      "qualifiers": {
+        "TemporalQualifier": "during ancient Egyptian period",
+        "SpatialQualifier": "in ancient Egypt",
+        "OperationalConstraint": null,
+        "ConditionExpression": "that these items would be needed in the afterlife",
+        "UncertaintyQualifier": null,
+        "CausalHint": "believed that",
+        "LogicalMarker": "that",
+        "OtherQualifier": "BeliefContent: need for items in afterlife"
+      },
+      "confidence": 0.97,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_044089d8b6a8",
+      "relation_name": "supports",
+      "rel_desc": "Mummification supports and is motivated by ancient Egyptian beliefs about the afterlife.",
+      "rel_hint_type": "belief-motivation",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "mummification",
+      "object_entity_name": "ancient Egyptian afterlife beliefs",
+      "subject_class_label": "Ancient Egyptian Mummification Practices",
+      "subject_class_group": "Ancient Egyptian Funerary Religion and Culture",
+      "object_class_label": "Ancient Egyptian Afterlife Beliefs and Concepts",
+      "object_class_group": "Ancient Egyptian Funerary Religion and Culture",
+      "qualifiers": {
+        "TemporalQualifier": "after death",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": "for the afterlife",
+        "UncertaintyQualifier": null,
+        "CausalHint": "to prevent decay and ensure preservation",
+        "LogicalMarker": "to",
+        "OtherQualifier": null
+      },
+      "confidence": 0.63,
+      "remarks": [
+        "Relation mainly to capture that the stated purpose of mummification is tied to afterlife expectations."
+      ]
+    },
+    {
+      "relation_id": "RelR_3f39c187d1aa",
+      "relation_name": "motivates_use_of",
+      "rel_desc": "Ancient Egyptian afterlife beliefs about soul-body reunion motivate placing religious texts in burials.",
+      "rel_hint_type": "belief-motivation",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "ancient Egyptian afterlife beliefs",
+      "object_entity_name": "religious texts in ancient Egyptian burials",
+      "subject_class_label": "Ancient Egyptian Afterlife Beliefs and Concepts",
+      "subject_class_group": "Ancient Egyptian Funerary Religion and Culture",
+      "object_class_label": "Egyptian Funerary Texts",
+      "object_class_group": "Ancient Egyptian Funerary Practices and Burials",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "in the burial chamber",
+        "OperationalConstraint": null,
+        "ConditionExpression": "To ensure this reunion",
+        "UncertaintyQualifier": null,
+        "CausalHint": "To ensure this reunion",
+        "LogicalMarker": "To",
+        "OtherQualifier": null
+      },
+      "confidence": 0.68,
+      "remarks": [
+        "Created primarily so that the stated purpose clause is captured as motivation."
+      ]
+    },
+    {
+      "relation_id": "RelR_4e9a286d4c8e",
+      "relation_name": "motivates_use_of",
+      "rel_desc": "Afterlife beliefs about reunion also motivate the inclusion of amulets in the burial chamber.",
+      "rel_hint_type": "belief-motivation",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "ancient Egyptian afterlife beliefs",
+      "object_entity_name": "amulets",
+      "subject_class_label": "Ancient Egyptian Afterlife Beliefs and Concepts",
+      "subject_class_group": "Ancient Egyptian Funerary Religion and Culture",
+      "object_class_label": "Egyptian Burial Amulets",
+      "object_class_group": "Ancient Egyptian Funerary Practices and Burials",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "in the burial chamber",
+        "OperationalConstraint": null,
+        "ConditionExpression": "To ensure this reunion",
+        "UncertaintyQualifier": null,
+        "CausalHint": "To ensure this reunion",
+        "LogicalMarker": "To",
+        "OtherQualifier": null
+      },
+      "confidence": 0.68,
+      "remarks": [
+        "Parallel to the religious texts relation; kept separate for clarity."
+      ]
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_43070455d1d0\"],\n      \"canonical_rel_name\": \"has_belief_about\",\n      \"canonical_rel_desc\": \"Subject (an individual or group) holds or maintains a belief concerning the object concept, proposition, or doctrine.\",\n      \"justification\": \"This relation links a population (ancient Egyptians) to a set of afterlife beliefs they hold. A generic cognitive-attitude predicate like 'has_belief_about' best captures that the subject is the believer and the object is the belief content.\",\n      \"remark\": null,\n      \"confidence\": 0.92\n    }\n  },\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_044089d8b6a8\"],\n      \"canonical_rel_name\": \"is_motivated_by\",\n      \"canonical_rel_desc\": \"Subject practice or action is performed or maintained because it is motivated or justified by the object belief, goal, or reason.\",\n      \"justification\": \"The description states that mummification is supported and motivated by afterlife beliefs, with the practice as subject and belief as cause. A predicate in the passive-causal direction, 'is_motivated_by', correctly reflects that the subject practice stems from the object belief.\",\n      \"remark\": \"Direction kept as in the data model: practice (mummification) as effect, beliefs as motivating cause.\",\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_3f39c187d1aa\", \"RelR_4e9a286d4c8e\"],\n      \"canonical_rel_name\": \"motivates_use_of\",\n      \"canonical_rel_desc\": \"Subject belief, goal, or rationale provides the motivation for including or using the object item or practice in a ritual, burial, or other context.\",\n      \"justification\": \"Both relations explicitly describe afterlife beliefs as motivating the inclusion/use of specific burial items (religious texts and amulets). They share identical causal semantics (belief as cause, item usage as effect), so they should use a single canonical predicate 'motivates_use_of'.\",\n      \"remark\": null,\n      \"confidence\": 0.93\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_43070455d1d0\"],\n      \"rel_cls\": \"belief_attribution_relation\",\n      \"justification\": \"This relation family covers links where a cognitive agent or group is attributed specific beliefs, doctrines, or mental attitudes toward concepts or propositions, matching the semantics of 'has_belief_about'.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_044089d8b6a8\", \"RelR_3f39c187d1aa\", \"RelR_4e9a286d4c8e\"],\n      \"rel_cls\": \"motivational_causality_relation\",\n      \"justification\": \"All three relations represent a motivational causal link: beliefs motivate or underlie practices or inclusions (or a practice is motivated by beliefs). Grouping them under 'motivational_causality_relation' captures this shared pattern of reasons or beliefs causing actions.\",\n      \"remark\": null,\n      \"confidence\": 0.93\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_43070455d1d0\"],\n      \"rel_cls_group\": \"MENTAL_STATE\",\n      \"justification\": \"The core semantic dimension is a cognitive/mental attitude (a group holding certain beliefs). This fits a broad mental-state category rather than general causality or composition.\",\n      \"remark\": null,\n      \"confidence\": 0.88\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_044089d8b6a8\", \"RelR_3f39c187d1aa\", \"RelR_4e9a286d4c8e\"],\n      \"rel_cls_group\": \"CAUSALITY\",\n      \"justification\": \"Each relation encodes that certain beliefs cause, motivate, or underlie specific practices or the inclusion of items in burials, which is best modeled under a broad causal/motivational dimension.\",\n      \"remark\": null,\n      \"confidence\": 0.95\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_43070455d1d0"
+        ],
+        "canonical_rel_name": "has_belief_about",
+        "canonical_rel_desc": "Subject (an individual or group) holds or maintains a belief concerning the object concept, proposition, or doctrine.",
+        "justification": "This relation links a population (ancient Egyptians) to a set of afterlife beliefs they hold. A generic cognitive-attitude predicate like 'has_belief_about' best captures that the subject is the believer and the object is the belief content.",
+        "remark": null,
+        "confidence": 0.92
+      }
+    },
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_044089d8b6a8"
+        ],
+        "canonical_rel_name": "is_motivated_by",
+        "canonical_rel_desc": "Subject practice or action is performed or maintained because it is motivated or justified by the object belief, goal, or reason.",
+        "justification": "The description states that mummification is supported and motivated by afterlife beliefs, with the practice as subject and belief as cause. A predicate in the passive-causal direction, 'is_motivated_by', correctly reflects that the subject practice stems from the object belief.",
+        "remark": "Direction kept as in the data model: practice (mummification) as effect, beliefs as motivating cause.",
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_3f39c187d1aa",
+          "RelR_4e9a286d4c8e"
+        ],
+        "canonical_rel_name": "motivates_use_of",
+        "canonical_rel_desc": "Subject belief, goal, or rationale provides the motivation for including or using the object item or practice in a ritual, burial, or other context.",
+        "justification": "Both relations explicitly describe afterlife beliefs as motivating the inclusion/use of specific burial items (religious texts and amulets). They share identical causal semantics (belief as cause, item usage as effect), so they should use a single canonical predicate 'motivates_use_of'.",
+        "remark": null,
+        "confidence": 0.93
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_43070455d1d0"
+        ],
+        "rel_cls": "belief_attribution_relation",
+        "justification": "This relation family covers links where a cognitive agent or group is attributed specific beliefs, doctrines, or mental attitudes toward concepts or propositions, matching the semantics of 'has_belief_about'.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_044089d8b6a8",
+          "RelR_3f39c187d1aa",
+          "RelR_4e9a286d4c8e"
+        ],
+        "rel_cls": "motivational_causality_relation",
+        "justification": "All three relations represent a motivational causal link: beliefs motivate or underlie practices or inclusions (or a practice is motivated by beliefs). Grouping them under 'motivational_causality_relation' captures this shared pattern of reasons or beliefs causing actions.",
+        "remark": null,
+        "confidence": 0.93
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_43070455d1d0"
+        ],
+        "rel_cls_group": "MENTAL_STATE",
+        "justification": "The core semantic dimension is a cognitive/mental attitude (a group holding certain beliefs). This fits a broad mental-state category rather than general causality or composition.",
+        "remark": null,
+        "confidence": 0.88
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_044089d8b6a8",
+          "RelR_3f39c187d1aa",
+          "RelR_4e9a286d4c8e"
+        ],
+        "rel_cls_group": "CAUSALITY",
+        "justification": "Each relation encodes that certain beliefs cause, motivate, or underlie specific practices or the inclusion of items in burials, which is best modeled under a broad causal/motivational dimension.",
+        "remark": null,
+        "confidence": 0.95
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_43070455d1d0"
+      ],
+      "canonical_rel_name": "has_belief_about",
+      "canonical_rel_desc": "Subject (an individual or group) holds or maintains a belief concerning the object concept, proposition, or doctrine.",
+      "justification": "This relation links a population (ancient Egyptians) to a set of afterlife beliefs they hold. A generic cognitive-attitude predicate like 'has_belief_about' best captures that the subject is the believer and the object is the belief content.",
+      "remark": null,
+      "confidence": 0.92
+    },
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_044089d8b6a8"
+      ],
+      "canonical_rel_name": "is_motivated_by",
+      "canonical_rel_desc": "Subject practice or action is performed or maintained because it is motivated or justified by the object belief, goal, or reason.",
+      "justification": "The description states that mummification is supported and motivated by afterlife beliefs, with the practice as subject and belief as cause. A predicate in the passive-causal direction, 'is_motivated_by', correctly reflects that the subject practice stems from the object belief.",
+      "remark": "Direction kept as in the data model: practice (mummification) as effect, beliefs as motivating cause.",
+      "confidence": 0.9
+    },
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_3f39c187d1aa",
+        "RelR_4e9a286d4c8e"
+      ],
+      "canonical_rel_name": "motivates_use_of",
+      "canonical_rel_desc": "Subject belief, goal, or rationale provides the motivation for including or using the object item or practice in a ritual, burial, or other context.",
+      "justification": "Both relations explicitly describe afterlife beliefs as motivating the inclusion/use of specific burial items (religious texts and amulets). They share identical causal semantics (belief as cause, item usage as effect), so they should use a single canonical predicate 'motivates_use_of'.",
+      "remark": null,
+      "confidence": 0.93
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_43070455d1d0"
+      ],
+      "rel_cls": "belief_attribution_relation",
+      "justification": "This relation family covers links where a cognitive agent or group is attributed specific beliefs, doctrines, or mental attitudes toward concepts or propositions, matching the semantics of 'has_belief_about'.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_044089d8b6a8",
+        "RelR_3f39c187d1aa",
+        "RelR_4e9a286d4c8e"
+      ],
+      "rel_cls": "motivational_causality_relation",
+      "justification": "All three relations represent a motivational causal link: beliefs motivate or underlie practices or inclusions (or a practice is motivated by beliefs). Grouping them under 'motivational_causality_relation' captures this shared pattern of reasons or beliefs causing actions.",
+      "remark": null,
+      "confidence": 0.93
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_43070455d1d0"
+      ],
+      "rel_cls_group": "MENTAL_STATE",
+      "justification": "The core semantic dimension is a cognitive/mental attitude (a group holding certain beliefs). This fits a broad mental-state category rather than general causality or composition.",
+      "remark": null,
+      "confidence": 0.88
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_044089d8b6a8",
+        "RelR_3f39c187d1aa",
+        "RelR_4e9a286d4c8e"
+      ],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "Each relation encodes that certain beliefs cause, motivate, or underlie specific practices or the inclusion of items in burials, which is best modeled under a broad causal/motivational dimension.",
+      "remark": null,
+      "confidence": 0.95
+    }
+  ],
+  "timestamp": "2026-01-06T10:24:43Z"
+}

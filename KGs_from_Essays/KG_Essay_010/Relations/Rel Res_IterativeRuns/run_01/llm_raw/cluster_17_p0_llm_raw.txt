@@ -1,0 +1,44 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_1009484586a5"],
+      "canonical_rel_name": "characteristic_of",
+      "canonical_rel_desc": "Indicates that the subject is a defining or characteristic quantity, property, or feature of the object.",
+      "justification": "The Schwarzschild radius is described as a characteristic radius associated with a black hole, i.e., a defining property of black holes rather than a generic loose association; 'characteristic_of' captures this predicate precisely.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_28f185d047eb"],
+      "canonical_rel_name": "is_about",
+      "canonical_rel_desc": "Indicates that the subject concept, topic, or question concerns or is about the object.",
+      "justification": "The 'mysteries of black holes' are conceptual questions whose topic is black holes; the most accurate predicate is that these mysteries are about black holes, not that they are a defining characteristic of black holes.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": ["RelR_1009484586a5", "RelR_28f185d047eb"],
+      "rel_cls": "conceptual_association_relation",
+      "justification": "Both relations connect conceptual entities (a characteristic radius; conceptual mysteries/questions) with black holes in a non-material, non-temporal way, fitting a shared class for conceptual/topic-based associations.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": ["RelR_1009484586a5", "RelR_28f185d047eb"],
+      "rel_cls_group": "ASSOCIATION",
+      "justification": "Neither relation is compositional, causal, or spatial in a strict sense; both express that the subject is conceptually tied to or concerns the object, which falls under a broad ASSOCIATION group.",
+      "remark": null,
+      "confidence": 0.95
+    }
+  }
+]

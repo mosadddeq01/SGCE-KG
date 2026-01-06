@@ -1,0 +1,91 @@
+[
+  {
+    "function": "reassign_entities",
+    "args": {
+      "entity_ids": ["En_b0c08135"],
+      "from_class_id": "ClsC_8caba5b7",
+      "to_class_id": "ClsC_7a2d35c7",
+      "justification": "The entity 'analysis and conclusions' describes the cognitive/interpretive outcome of evidence analysis and fits better exclusively in 'Forensic Analytical Reasoning' rather than in 'Forensic Findings Communication', which should focus on the act of presenting results.",
+      "remark": null,
+      "confidence": 0.86
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_7d3800f0",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Forensic Reasoning and Case Analysis",
+      "remark": null,
+      "justification": "This class covers investigative problems and evidentiary indicators that are part of the broader forensic reasoning and case analysis workflow, so it should share a Class_Group with related reasoning, determination, and case-context classes.",
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_b4988c0e",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Forensic Reasoning and Case Analysis",
+      "remark": null,
+      "justification": "This class represents forensic cases, legal issues, and the search for truth, which are the core contexts in which forensic reasoning and analysis are applied, so it belongs in the same Class_Group as other reasoning and outcome classes.",
+      "confidence": 0.92
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_7a2d35c7",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Forensic Reasoning and Case Analysis",
+      "remark": null,
+      "justification": "This class explicitly models the analytical reasoning processes and conclusions drawn from forensic evidence, forming the central cognitive component of forensic case analysis, so it should be grouped under 'Forensic Reasoning and Case Analysis'.",
+      "confidence": 0.96
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_8caba5b7",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Forensic Reasoning and Case Analysis",
+      "remark": null,
+      "justification": "Although focused on communication acts, this class deals specifically with explaining and presenting forensic analytical results within cases, making it part of the broader forensic reasoning and case analysis pipeline.",
+      "confidence": 0.88
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_d0efec71",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Forensic Reasoning and Case Analysis",
+      "remark": null,
+      "justification": "This class captures high-level determinations (identity, cause of death, substance presence) that are direct outcomes of forensic reasoning about evidence in a case, so it naturally fits in the 'Forensic Reasoning and Case Analysis' Class_Group.",
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "modify_class",
+    "args": {
+      "class_id": "ClsC_5ea50982",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Forensic Reasoning and Case Analysis",
+      "remark": null,
+      "justification": "This class describes complex data that forensic scientists analyze when reasoning about cases, making it part of the same forensic reasoning and case analysis domain as the other classes in this cluster.",
+      "confidence": 0.9
+    }
+  }
+]

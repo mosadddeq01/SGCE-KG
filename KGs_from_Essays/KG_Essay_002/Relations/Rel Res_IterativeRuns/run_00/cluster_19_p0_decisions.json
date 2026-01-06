@@ -1,0 +1,219 @@
+{
+  "cluster_label": "19_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_62c2a3400e5f",
+      "relation_name": "located_in",
+      "rel_desc": "The young couple is parked in a remote, secluded area in the story.",
+      "rel_hint_type": "spatial",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "young couple",
+      "object_entity_name": "secluded area",
+      "subject_class_label": "Urban Legend Narrative Scenario Elements",
+      "subject_class_group": "Urban Legends",
+      "object_class_label": "Urban Legend Narrative Scenario Elements",
+      "object_class_group": "Urban Legends",
+      "qualifiers": {
+        "TemporalQualifier": "when they hear a news report",
+        "SpatialQualifier": "in a secluded area",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "typically",
+        "CausalHint": null,
+        "LogicalMarker": "when",
+        "OtherQualifier": null
+      },
+      "confidence": 0.99,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_52600ffcc198",
+      "relation_name": "occurs_on",
+      "rel_desc": "The ominous scratching sound is heard on the car door.",
+      "rel_hint_type": "spatial",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "scratching sound",
+      "object_entity_name": "car door",
+      "subject_class_label": "Urban Legend Threat Cues",
+      "subject_class_group": "Urban Legend Narrative Elements",
+      "object_class_label": "Vehicle Door Components (Urban Legend Scene)",
+      "object_class_group": "Urban Legend Narrative Elements",
+      "qualifiers": {
+        "TemporalQualifier": "as the story unfolds",
+        "SpatialQualifier": "on the car door",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "on",
+        "LogicalMarker": "as",
+        "OtherQualifier": null
+      },
+      "confidence": 0.99,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_b4016d65bcdd",
+      "relation_name": "attached_to",
+      "rel_desc": "The bloody hook is found hanging from the car door handle.",
+      "rel_hint_type": "spatial",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "bloody hook",
+      "object_entity_name": "car door handle",
+      "subject_class_label": "Urban Legend Threat Cues",
+      "subject_class_group": "Urban Legend Narrative Elements",
+      "object_class_label": "Vehicle Door Components (Urban Legend Scene)",
+      "object_class_group": "Urban Legend Narrative Elements",
+      "qualifiers": {
+        "TemporalQualifier": "upon discovery",
+        "SpatialQualifier": "from the car door handle",
+        "OperationalConstraint": null,
+        "ConditionExpression": "only to discover a bloody hook",
+        "UncertaintyQualifier": null,
+        "CausalHint": "from",
+        "LogicalMarker": "only to",
+        "OtherQualifier": null
+      },
+      "confidence": 0.99,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_62c2a3400e5f\"],\n      \"canonical_rel_name\": \"located_in\",\n      \"canonical_rel_desc\": \"Indicates that an entity is situated within or at a broader location or area.\",\n      \"justification\": \"This relation expresses that the young couple is situated in a remote, secluded area, a classic container/location relation.\",\n      \"remark\": null,\n      \"confidence\": 0.97\n    }\n  },\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_52600ffcc198\"],\n      \"canonical_rel_name\": \"occurs_at_location\",\n      \"canonical_rel_desc\": \"Indicates that an event, sound, or phenomenon occurs at or on a specific location or object.\",\n      \"justification\": \"The scratching sound is an event/phenomenon that happens at the car door surface; a generic occurrence-at-location predicate fits better than a strict containment relation.\",\n      \"remark\": null,\n      \"confidence\": 0.96\n    }\n  },\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_b4016d65bcdd\"],\n      \"canonical_rel_name\": \"attached_to\",\n      \"canonical_rel_desc\": \"Indicates that a physical object is fastened, hanging from, or otherwise physically connected to another object.\",\n      \"justification\": \"The bloody hook is physically hanging from the car door handle, which is a prototypical attachment relation.\",\n      \"remark\": null,\n      \"confidence\": 0.98\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_62c2a3400e5f\",\n        \"RelR_52600ffcc198\",\n        \"RelR_b4016d65bcdd\"\n      ],\n      \"rel_cls\": \"spatial_configuration_relation\",\n      \"justification\": \"All three relations describe how entities or events are spatially arranged relative to locations or objects (being in an area, occurring at a door, being attached to a handle). Grouping them under a common spatial configuration class is appropriate.\",\n      \"remark\": null,\n      \"confidence\": 0.96\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_62c2a3400e5f\",\n        \"RelR_52600ffcc198\",\n        \"RelR_b4016d65bcdd\"\n      ],\n      \"rel_cls_group\": \"SPATIALITY\",\n      \"justification\": \"Each relation is fundamentally about spatial relations (location, occurrence at a place, physical attachment in space), so they all belong in the SPATIALITY group.\",\n      \"remark\": null,\n      \"confidence\": 0.99\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_62c2a3400e5f"
+        ],
+        "canonical_rel_name": "located_in",
+        "canonical_rel_desc": "Indicates that an entity is situated within or at a broader location or area.",
+        "justification": "This relation expresses that the young couple is situated in a remote, secluded area, a classic container/location relation.",
+        "remark": null,
+        "confidence": 0.97
+      }
+    },
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_52600ffcc198"
+        ],
+        "canonical_rel_name": "occurs_at_location",
+        "canonical_rel_desc": "Indicates that an event, sound, or phenomenon occurs at or on a specific location or object.",
+        "justification": "The scratching sound is an event/phenomenon that happens at the car door surface; a generic occurrence-at-location predicate fits better than a strict containment relation.",
+        "remark": null,
+        "confidence": 0.96
+      }
+    },
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_b4016d65bcdd"
+        ],
+        "canonical_rel_name": "attached_to",
+        "canonical_rel_desc": "Indicates that a physical object is fastened, hanging from, or otherwise physically connected to another object.",
+        "justification": "The bloody hook is physically hanging from the car door handle, which is a prototypical attachment relation.",
+        "remark": null,
+        "confidence": 0.98
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_62c2a3400e5f",
+          "RelR_52600ffcc198",
+          "RelR_b4016d65bcdd"
+        ],
+        "rel_cls": "spatial_configuration_relation",
+        "justification": "All three relations describe how entities or events are spatially arranged relative to locations or objects (being in an area, occurring at a door, being attached to a handle). Grouping them under a common spatial configuration class is appropriate.",
+        "remark": null,
+        "confidence": 0.96
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_62c2a3400e5f",
+          "RelR_52600ffcc198",
+          "RelR_b4016d65bcdd"
+        ],
+        "rel_cls_group": "SPATIALITY",
+        "justification": "Each relation is fundamentally about spatial relations (location, occurrence at a place, physical attachment in space), so they all belong in the SPATIALITY group.",
+        "remark": null,
+        "confidence": 0.99
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_62c2a3400e5f"
+      ],
+      "canonical_rel_name": "located_in",
+      "canonical_rel_desc": "Indicates that an entity is situated within or at a broader location or area.",
+      "justification": "This relation expresses that the young couple is situated in a remote, secluded area, a classic container/location relation.",
+      "remark": null,
+      "confidence": 0.97
+    },
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_52600ffcc198"
+      ],
+      "canonical_rel_name": "occurs_at_location",
+      "canonical_rel_desc": "Indicates that an event, sound, or phenomenon occurs at or on a specific location or object.",
+      "justification": "The scratching sound is an event/phenomenon that happens at the car door surface; a generic occurrence-at-location predicate fits better than a strict containment relation.",
+      "remark": null,
+      "confidence": 0.96
+    },
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_b4016d65bcdd"
+      ],
+      "canonical_rel_name": "attached_to",
+      "canonical_rel_desc": "Indicates that a physical object is fastened, hanging from, or otherwise physically connected to another object.",
+      "justification": "The bloody hook is physically hanging from the car door handle, which is a prototypical attachment relation.",
+      "remark": null,
+      "confidence": 0.98
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_62c2a3400e5f",
+        "RelR_52600ffcc198",
+        "RelR_b4016d65bcdd"
+      ],
+      "rel_cls": "spatial_configuration_relation",
+      "justification": "All three relations describe how entities or events are spatially arranged relative to locations or objects (being in an area, occurring at a door, being attached to a handle). Grouping them under a common spatial configuration class is appropriate.",
+      "remark": null,
+      "confidence": 0.96
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_62c2a3400e5f",
+        "RelR_52600ffcc198",
+        "RelR_b4016d65bcdd"
+      ],
+      "rel_cls_group": "SPATIALITY",
+      "justification": "Each relation is fundamentally about spatial relations (location, occurrence at a place, physical attachment in space), so they all belong in the SPATIALITY group.",
+      "remark": null,
+      "confidence": 0.99
+    }
+  ],
+  "timestamp": "2026-01-06T08:32:14Z"
+}

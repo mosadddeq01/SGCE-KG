@@ -1,0 +1,141 @@
+{
+  "cluster_label": "4_p1",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_10de2ee90332",
+      "relation_name": "makes_claim_about",
+      "rel_desc": "The holographic principle makes a specific claim about how black hole content information is represented.",
+      "rel_hint_type": "theoretical-assertion",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "holographic principle",
+      "object_entity_name": "information about the contents of a black hole",
+      "subject_class_label": "Black Hole Holographic Principle",
+      "subject_class_group": "Black Hole Information & Holography",
+      "object_class_label": "Black Hole Holographic Principle",
+      "object_class_group": "Black Hole Information & Holography",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": "all the information about the contents of a black hole",
+        "UncertaintyQualifier": "suggests",
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.95,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_54628051eddc",
+      "relation_name": "concerns",
+      "rel_desc": "The black hole information paradox is specifically about the fate of information.",
+      "rel_hint_type": "aboutness",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "black hole information paradox",
+      "object_entity_name": "information",
+      "subject_class_label": "Black Hole Information & Paradox Concepts",
+      "subject_class_group": "Black Hole Information & Holography",
+      "object_class_label": "Black Hole Information & Paradox Concepts",
+      "object_class_group": "Black Hole Information & Holography",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": "in the context of black holes",
+        "ConditionExpression": "information that falls into a black hole",
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": "whether",
+        "OtherQualifier": "QuestionType: fate and possible loss of information"
+      },
+      "confidence": 0.96,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_10de2ee90332\",\n        \"RelR_54628051eddc\"\n      ],\n      \"canonical_rel_name\": \"is_about\",\n      \"canonical_rel_desc\": \"Indicates that the subject theory, principle, or conceptual construct is about or makes claims regarding the object concept or entity.\",\n      \"justification\": \"Both relations express a topic/aboutness link: the holographic principle is about the information content of black holes, and the black hole information paradox is about the fate of information. A unified predicate 'is_about' captures this conceptual aboutness without overfitting to one formulation like 'makes_claim_about' or 'concerns'.\",\n      \"remark\": null,\n      \"confidence\": 0.93\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_10de2ee90332\",\n        \"RelR_54628051eddc\"\n      ],\n      \"rel_cls\": \"aboutness_relation\",\n      \"justification\": \"Both edges link abstract theoretical constructs (principle/paradox) to the concepts they address, which is a classic aboutness/topic relation. Grouping them under 'aboutness_relation' distinguishes them from causal, compositional, or hierarchical links.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_10de2ee90332\",\n        \"RelR_54628051eddc\"\n      ],\n      \"rel_cls_group\": \"ASSOCIATION\",\n      \"justification\": \"The subject and object are conceptually associated via topic/aboutness, not via part-whole, causation, or temporal relations. This fits best under a broad ASSOCIATION group for semantic/topic links.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_10de2ee90332",
+          "RelR_54628051eddc"
+        ],
+        "canonical_rel_name": "is_about",
+        "canonical_rel_desc": "Indicates that the subject theory, principle, or conceptual construct is about or makes claims regarding the object concept or entity.",
+        "justification": "Both relations express a topic/aboutness link: the holographic principle is about the information content of black holes, and the black hole information paradox is about the fate of information. A unified predicate 'is_about' captures this conceptual aboutness without overfitting to one formulation like 'makes_claim_about' or 'concerns'.",
+        "remark": null,
+        "confidence": 0.93
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_10de2ee90332",
+          "RelR_54628051eddc"
+        ],
+        "rel_cls": "aboutness_relation",
+        "justification": "Both edges link abstract theoretical constructs (principle/paradox) to the concepts they address, which is a classic aboutness/topic relation. Grouping them under 'aboutness_relation' distinguishes them from causal, compositional, or hierarchical links.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_10de2ee90332",
+          "RelR_54628051eddc"
+        ],
+        "rel_cls_group": "ASSOCIATION",
+        "justification": "The subject and object are conceptually associated via topic/aboutness, not via part-whole, causation, or temporal relations. This fits best under a broad ASSOCIATION group for semantic/topic links.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_10de2ee90332",
+        "RelR_54628051eddc"
+      ],
+      "canonical_rel_name": "is_about",
+      "canonical_rel_desc": "Indicates that the subject theory, principle, or conceptual construct is about or makes claims regarding the object concept or entity.",
+      "justification": "Both relations express a topic/aboutness link: the holographic principle is about the information content of black holes, and the black hole information paradox is about the fate of information. A unified predicate 'is_about' captures this conceptual aboutness without overfitting to one formulation like 'makes_claim_about' or 'concerns'.",
+      "remark": null,
+      "confidence": 0.93
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_10de2ee90332",
+        "RelR_54628051eddc"
+      ],
+      "rel_cls": "aboutness_relation",
+      "justification": "Both edges link abstract theoretical constructs (principle/paradox) to the concepts they address, which is a classic aboutness/topic relation. Grouping them under 'aboutness_relation' distinguishes them from causal, compositional, or hierarchical links.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_10de2ee90332",
+        "RelR_54628051eddc"
+      ],
+      "rel_cls_group": "ASSOCIATION",
+      "justification": "The subject and object are conceptually associated via topic/aboutness, not via part-whole, causation, or temporal relations. This fits best under a broad ASSOCIATION group for semantic/topic links.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  ],
+  "timestamp": "2026-01-06T09:39:20Z"
+}

@@ -1,0 +1,159 @@
+{
+  "cluster_label": "15_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_890e06ce1528",
+      "relation_name": "contributes_to",
+      "rel_desc": "Seabirds contribute to nutrient cycling via their nutrient deposition activities.",
+      "rel_hint_type": "functional role",
+      "canonical_rel_name": "contributes_to",
+      "canonical_rel_desc": "Indicates that the subject provides a functional or causal contribution to the functioning, maintenance, or cycling processes of the object within an ecosystem context.",
+      "rel_cls": "ecosystem_function_contribution_relation",
+      "rel_cls_group": "CAUSALITY",
+      "subject_entity_name": "seabirds",
+      "object_entity_name": "nutrient cycling",
+      "subject_class_label": "Seabird Nutrient Vectors",
+      "subject_class_group": "Bird-Mediated Nutrient Cycling & Habitats",
+      "object_class_label": "Ecosystem Processes and Functions",
+      "object_class_group": "Ecosystem Condition, Function & Services",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "between marine environments and land",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "through their activities",
+        "LogicalMarker": null,
+        "OtherQualifier": "Mechanism: depositing marine-derived nutrients via guano"
+      },
+      "confidence": 0.9,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_90e9aa11e9d3",
+      "relation_name": "contributes_to",
+      "rel_desc": "Bird droppings redistribute nutrients and thus support nutrient cycling.",
+      "rel_hint_type": "functional role",
+      "canonical_rel_name": "contributes_to",
+      "canonical_rel_desc": "Indicates that the subject provides a functional or causal contribution to the functioning, maintenance, or cycling processes of the object within an ecosystem context.",
+      "rel_cls": "ecosystem_function_contribution_relation",
+      "rel_cls_group": "CAUSALITY",
+      "subject_entity_name": "bird droppings",
+      "object_entity_name": "nutrient cycling",
+      "subject_class_label": "Ecosystem Nutrient Cycling Elements",
+      "subject_class_group": "Bird-Mediated Nutrient Cycling & Habitats",
+      "object_class_label": "Ecosystem Processes and Functions",
+      "object_class_group": "Ecosystem Condition, Function & Services",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "within forests",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "by redistributing them",
+        "LogicalMarker": "by",
+        "OtherQualifier": "Mechanism: redistribution of nutrients via excreta"
+      },
+      "confidence": 0.95,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_0c05474d2b77",
+      "relation_name": "contributes_to",
+      "rel_desc": "Birds contribute essentially to the functioning and stability of ecosystems.",
+      "rel_hint_type": "functional contribution",
+      "canonical_rel_name": "contributes_to",
+      "canonical_rel_desc": "Indicates that the subject provides a functional or causal contribution to the functioning, maintenance, or cycling processes of the object within an ecosystem context.",
+      "rel_cls": "ecosystem_function_contribution_relation",
+      "rel_cls_group": "CAUSALITY",
+      "subject_entity_name": "birds",
+      "object_entity_name": "ecosystems",
+      "subject_class_label": "Bird Biotic Components",
+      "subject_class_group": "Birds as Environmental Indicators & Conservation",
+      "object_class_label": "Ecosystem State and Stability",
+      "object_class_group": "Ecosystem Condition, Function & Services",
+      "qualifiers": {
+        "TemporalQualifier": "around the world; general ongoing context",
+        "SpatialQualifier": "ecosystems around the world; natural systems",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "contribute to",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.96,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_64bdd9a551dd",
+      "relation_name": "contributes_to",
+      "rel_desc": "Birds contribute to nutrient cycling in ecosystems.",
+      "rel_hint_type": "functional role",
+      "canonical_rel_name": "contributes_to_ecosystem_process",
+      "canonical_rel_desc": "Links an organism or taxonomic group to an ecosystem process or function that it helps to maintain or drive.",
+      "rel_cls": "ecosystem_function_relation",
+      "rel_cls_group": "FUNCTIONALITY",
+      "subject_entity_name": "birds",
+      "object_entity_name": "nutrient cycling",
+      "subject_class_label": "Bird Biotic Components",
+      "subject_class_group": "Birds as Environmental Indicators & Conservation",
+      "object_class_label": "Ecosystem Processes and Functions",
+      "object_class_group": "Ecosystem Condition, Function & Services",
+      "qualifiers": {
+        "TemporalQualifier": "ongoing ecosystem processes",
+        "SpatialQualifier": "ecosystems around the world",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "contribute in numerous ways",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.93,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_rel_schema\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_890e06ce1528\",\n        \"RelR_90e9aa11e9d3\",\n        \"RelR_0c05474d2b77\",\n        \"RelR_64bdd9a551dd\"\n      ],\n      \"canonical_rel_name\": \"contributes_to_ecosystem_function\",\n      \"canonical_rel_desc\": \"Indicates that the subject plays a functional and causal role in driving, maintaining, or supporting an ecosystem process or function (such as nutrient cycling or overall ecosystem stability).\",\n      \"rel_cls\": \"ecosystem_function_contribution_relation\",\n      \"rel_cls_group\": \"CAUSALITY\",\n      \"justification\": \"All four relations describe organisms or their byproducts contributing functionally and causally to ecosystem processes (nutrient cycling, ecosystem functioning). Normalizing to a single predicate 'contributes_to_ecosystem_function' with a shared description and class 'ecosystem_function_contribution_relation' ensures consistent schema. The previous variant 'contributes_to_ecosystem_process' and the differing rel_cls_group 'FUNCTIONALITY' on RelR_64bdd9a551dd are semantically equivalent but introduce unnecessary inconsistency; grouping them under CAUSALITY better reflects the contributory (cause–effect) aspect.\",\n      \"remark\": \"Cluster normalized so that all bird-related contributions to ecosystem processes share a single causal ecosystem-function predicate.\",\n      \"confidence\": 0.93\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_rel_schema",
+      "args": {
+        "relation_ids": [
+          "RelR_890e06ce1528",
+          "RelR_90e9aa11e9d3",
+          "RelR_0c05474d2b77",
+          "RelR_64bdd9a551dd"
+        ],
+        "canonical_rel_name": "contributes_to_ecosystem_function",
+        "canonical_rel_desc": "Indicates that the subject plays a functional and causal role in driving, maintaining, or supporting an ecosystem process or function (such as nutrient cycling or overall ecosystem stability).",
+        "rel_cls": "ecosystem_function_contribution_relation",
+        "rel_cls_group": "CAUSALITY",
+        "justification": "All four relations describe organisms or their byproducts contributing functionally and causally to ecosystem processes (nutrient cycling, ecosystem functioning). Normalizing to a single predicate 'contributes_to_ecosystem_function' with a shared description and class 'ecosystem_function_contribution_relation' ensures consistent schema. The previous variant 'contributes_to_ecosystem_process' and the differing rel_cls_group 'FUNCTIONALITY' on RelR_64bdd9a551dd are semantically equivalent but introduce unnecessary inconsistency; grouping them under CAUSALITY better reflects the contributory (cause–effect) aspect.",
+        "remark": "Cluster normalized so that all bird-related contributions to ecosystem processes share a single causal ecosystem-function predicate.",
+        "confidence": 0.93
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_rel_schema",
+      "relation_ids": [
+        "RelR_890e06ce1528",
+        "RelR_90e9aa11e9d3",
+        "RelR_0c05474d2b77",
+        "RelR_64bdd9a551dd"
+      ],
+      "canonical_rel_name": "contributes_to_ecosystem_function",
+      "canonical_rel_desc": "Indicates that the subject plays a functional and causal role in driving, maintaining, or supporting an ecosystem process or function (such as nutrient cycling or overall ecosystem stability).",
+      "rel_cls": "ecosystem_function_contribution_relation",
+      "rel_cls_group": "CAUSALITY",
+      "new_relation_name": null,
+      "original_relation_name": null,
+      "justification": "All four relations describe organisms or their byproducts contributing functionally and causally to ecosystem processes (nutrient cycling, ecosystem functioning). Normalizing to a single predicate 'contributes_to_ecosystem_function' with a shared description and class 'ecosystem_function_contribution_relation' ensures consistent schema. The previous variant 'contributes_to_ecosystem_process' and the differing rel_cls_group 'FUNCTIONALITY' on RelR_64bdd9a551dd are semantically equivalent but introduce unnecessary inconsistency; grouping them under CAUSALITY better reflects the contributory (cause–effect) aspect.",
+      "remark": "Cluster normalized so that all bird-related contributions to ecosystem processes share a single causal ecosystem-function predicate.",
+      "confidence": 0.93
+    }
+  ],
+  "timestamp": "2026-01-06T11:34:05Z"
+}

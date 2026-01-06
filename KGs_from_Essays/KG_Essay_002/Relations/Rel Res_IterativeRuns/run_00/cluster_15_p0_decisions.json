@@ -1,0 +1,177 @@
+{
+  "cluster_label": "15_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_3df4c2f3648a",
+      "relation_name": "influences",
+      "rel_desc": "Urban legends influence people within communities by capturing their imagination and curiosity.",
+      "rel_hint_type": "influence",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "urban legends",
+      "object_entity_name": "communities",
+      "subject_class_label": "Contemporary Folklore",
+      "subject_class_group": "Urban Legends and Modern Folklore",
+      "object_class_label": "Urban Legend Dissemination Contexts",
+      "object_class_group": "Urban Legend Contexts (Social, Spatial, Temporal)",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "around the world",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "capture",
+        "LogicalMarker": null,
+        "OtherQualifier": "AffectiveImpact: imagination and curiosity"
+      },
+      "confidence": 0.74,
+      "remarks": [
+        "Slight abstraction: using 'communities' to stand in for globally distributed people."
+      ]
+    },
+    {
+      "relation_id": "RelR_b3fc753a54ae",
+      "relation_name": "influences",
+      "rel_desc": "Different cultures influence how tales evolve over time.",
+      "rel_hint_type": "influence",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "cultures",
+      "object_entity_name": "evolution of tales over time",
+      "subject_class_label": "Community Social Groups in Urban Legends",
+      "subject_class_group": "Urban Legend Contexts (Social, Spatial, Temporal)",
+      "object_class_label": "Story Transmission Processes",
+      "object_class_group": "Story Dissemination & Transmission Mechanisms",
+      "qualifiers": {
+        "TemporalQualifier": "as tales are retold over time",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": "to suit the interests and fears of different cultures",
+        "UncertaintyQualifier": null,
+        "CausalHint": "to suit",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.9,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_5535503da4dc",
+      "relation_name": "influences",
+      "rel_desc": "Urban legends are described as having an impact on popular culture.",
+      "rel_hint_type": "influence",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "urban legends",
+      "object_entity_name": "popular culture",
+      "subject_class_label": "Contemporary Folklore",
+      "subject_class_group": "Urban Legends and Modern Folklore",
+      "object_class_label": "Urban Legend Dissemination Contexts",
+      "object_class_group": "Urban Legend Contexts (Social, Spatial, Temporal)",
+      "qualifiers": {
+        "TemporalQualifier": "enduring",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "undeniable (high certainty expressed)",
+        "CausalHint": null,
+        "LogicalMarker": "while",
+        "OtherQualifier": "ImpactType: cultural influence and popularity"
+      },
+      "confidence": 0.97,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_3df4c2f3648a\",\n        \"RelR_b3fc753a54ae\",\n        \"RelR_5535503da4dc\"\n      ],\n      \"canonical_rel_name\": \"influences\",\n      \"canonical_rel_desc\": \"Indicates that the subject exerts an influence or impact on the properties, behavior, or development of the object.\",\n      \"justification\": \"All three relations describe a directional influence or impact (urban legends on communities, cultures on tale evolution, urban legends on popular culture). They share the same causal-impact semantics with consistent directionality, so a single canonical predicate 'influences' can be applied.\",\n      \"remark\": null,\n      \"confidence\": 0.93\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_3df4c2f3648a\",\n        \"RelR_b3fc753a54ae\",\n        \"RelR_5535503da4dc\"\n      ],\n      \"rel_cls\": \"influence_relation\",\n      \"justification\": \"Each relation expresses that one entity influences or shapes another (social groups, communities, cultural domains, or narrative evolution). Grouping them under the broader class 'influence_relation' captures this shared impact-oriented semantics across different subject/object types.\",\n      \"remark\": null,\n      \"confidence\": 0.92\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_3df4c2f3648a\",\n        \"RelR_b3fc753a54ae\",\n        \"RelR_5535503da4dc\"\n      ],\n      \"rel_cls_group\": \"CAUSALITY\",\n      \"justification\": \"Influence here denotes that the subject contributes causally to changes or characteristics of the object (e.g., cultures causing tales to evolve, urban legends shaping communities and popular culture). This fits best under a broad causal/impact category.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_3df4c2f3648a",
+          "RelR_b3fc753a54ae",
+          "RelR_5535503da4dc"
+        ],
+        "canonical_rel_name": "influences",
+        "canonical_rel_desc": "Indicates that the subject exerts an influence or impact on the properties, behavior, or development of the object.",
+        "justification": "All three relations describe a directional influence or impact (urban legends on communities, cultures on tale evolution, urban legends on popular culture). They share the same causal-impact semantics with consistent directionality, so a single canonical predicate 'influences' can be applied.",
+        "remark": null,
+        "confidence": 0.93
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_3df4c2f3648a",
+          "RelR_b3fc753a54ae",
+          "RelR_5535503da4dc"
+        ],
+        "rel_cls": "influence_relation",
+        "justification": "Each relation expresses that one entity influences or shapes another (social groups, communities, cultural domains, or narrative evolution). Grouping them under the broader class 'influence_relation' captures this shared impact-oriented semantics across different subject/object types.",
+        "remark": null,
+        "confidence": 0.92
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_3df4c2f3648a",
+          "RelR_b3fc753a54ae",
+          "RelR_5535503da4dc"
+        ],
+        "rel_cls_group": "CAUSALITY",
+        "justification": "Influence here denotes that the subject contributes causally to changes or characteristics of the object (e.g., cultures causing tales to evolve, urban legends shaping communities and popular culture). This fits best under a broad causal/impact category.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_3df4c2f3648a",
+        "RelR_b3fc753a54ae",
+        "RelR_5535503da4dc"
+      ],
+      "canonical_rel_name": "influences",
+      "canonical_rel_desc": "Indicates that the subject exerts an influence or impact on the properties, behavior, or development of the object.",
+      "justification": "All three relations describe a directional influence or impact (urban legends on communities, cultures on tale evolution, urban legends on popular culture). They share the same causal-impact semantics with consistent directionality, so a single canonical predicate 'influences' can be applied.",
+      "remark": null,
+      "confidence": 0.93
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_3df4c2f3648a",
+        "RelR_b3fc753a54ae",
+        "RelR_5535503da4dc"
+      ],
+      "rel_cls": "influence_relation",
+      "justification": "Each relation expresses that one entity influences or shapes another (social groups, communities, cultural domains, or narrative evolution). Grouping them under the broader class 'influence_relation' captures this shared impact-oriented semantics across different subject/object types.",
+      "remark": null,
+      "confidence": 0.92
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_3df4c2f3648a",
+        "RelR_b3fc753a54ae",
+        "RelR_5535503da4dc"
+      ],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "Influence here denotes that the subject contributes causally to changes or characteristics of the object (e.g., cultures causing tales to evolve, urban legends shaping communities and popular culture). This fits best under a broad causal/impact category.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  ],
+  "timestamp": "2026-01-06T08:31:01Z"
+}

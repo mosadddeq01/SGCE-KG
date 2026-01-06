@@ -1,0 +1,44 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_52fd6e3c271d"],
+      "canonical_rel_name": "enables_voice_amplification_of",
+      "canonical_rel_desc": "Indicates that the subject provides the affordances or functionality that allow the object's voices to be amplified or more widely expressed.",
+      "justification": "This relation describes a capability/affordance where social media allows or makes possible the amplification of individuals' voices; a predicate emphasizing enabling voice amplification best captures this semantics.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_c5fc18e1c819"],
+      "canonical_rel_name": "increases_visibility_of",
+      "canonical_rel_desc": "Indicates that the subject raises the visibility, exposure, or public prominence of the object.",
+      "justification": "This relation explicitly states that social media raises the visibility of marginalized groups; a predicate focused on increasing visibility directly matches the described exposure effect.",
+      "remark": null,
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": ["RelR_52fd6e3c271d", "RelR_c5fc18e1c819"],
+      "rel_cls": "communication_impact_relation",
+      "justification": "Both relations describe how social media, as a communication medium, affects the reach, expression, or visibility of voices and groups; they fit into a common class capturing communicative impact on audiences and representation.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": ["RelR_52fd6e3c271d", "RelR_c5fc18e1c819"],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "In both cases, social media is the cause or driver of a change (more amplified voices, increased visibility); this is best modeled under a causal/impact-oriented relation group rather than, for example, mere association.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  }
+]

@@ -1,0 +1,15 @@
+[
+  {
+    "function": "modify_rel_schema",
+    "args": {
+      "relation_ids": ["RelR_9ddbd6dc7a90"],
+      "canonical_rel_name": "is_classification_scheme_for",
+      "canonical_rel_desc": "Indicates that the subject is a set of types or a classification scheme specifically used to categorize instances or subtypes of the object concept.",
+      "rel_cls": "classification_scheme_relation",
+      "rel_cls_group": "HIERARCHY",
+      "justification": "The relation links 'types of body language' (a set of categories) to 'body language' (the overall concept). The existing canonical_rel_name 'categorizes' is vague about direction, whereas 'is_classification_scheme_for' clearly encodes that the subject is the scheme and the object is the conceptual domain being classified. The existing rel_cls and rel_cls_group appropriately capture that this is a hierarchical taxonomy-style relation, so only the predicate label and its description are refined for clarity and directionality.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  }
+]

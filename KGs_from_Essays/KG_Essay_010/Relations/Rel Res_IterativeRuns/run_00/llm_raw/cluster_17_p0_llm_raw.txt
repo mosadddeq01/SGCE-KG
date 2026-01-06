@@ -1,0 +1,44 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_9dc2f34e252f"],
+      "canonical_rel_name": "slows",
+      "canonical_rel_desc": "Indicates that the subject process or phenomenon reduces the rate or speed of the object process or quantity.",
+      "justification": "The instance explicitly states that gravitational time dilation slows the passage of time near a black hole; this is a directional causal influence on the rate of time, so a specific predicate 'slows' is clearer and more informative than a generic 'affects'.",
+      "remark": null,
+      "confidence": 0.87
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_822184ce3218"],
+      "canonical_rel_name": "results_from",
+      "canonical_rel_desc": "Indicates that the subject phenomenon or state is an effect that arises due to, or is caused by, the object phenomenon or condition.",
+      "justification": "The description states that gravitational time dilation results from the strong gravitational pull of a black hole; this is a standard effect-from-cause pattern, so 'results_from' accurately captures the effect–cause direction with the subject as the effect and the object as the cause.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": ["RelR_9dc2f34e252f", "RelR_822184ce3218"],
+      "rel_cls": "physical_causation_relation",
+      "justification": "Both relations describe physical cause–effect interactions: one where a phenomenon slows the passage of time, and one where a phenomenon (time dilation) arises from a gravitational field. Grouping them under 'physical_causation_relation' captures that they are instances of causal links in physical systems.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": ["RelR_9dc2f34e252f", "RelR_822184ce3218"],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "In both cases, the relation expresses a cause–effect dependency between physical phenomena, which fits squarely under a broad CAUSALITY category.",
+      "remark": null,
+      "confidence": 0.98
+    }
+  }
+]

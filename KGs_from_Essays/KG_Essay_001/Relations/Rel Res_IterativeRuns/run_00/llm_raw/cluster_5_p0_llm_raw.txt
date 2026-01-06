@@ -1,0 +1,145 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_4cf622ef6ba7",
+        "RelR_31b1735d998a",
+        "RelR_cfd9f307e15e"
+      ],
+      "canonical_rel_name": "results_in",
+      "canonical_rel_desc": "Indicates that a process or sequence of events produces a specific outcome or end state.",
+      "justification": "All three relations describe a process leading to a concrete end result (molting producing a new skin, metamorphosis producing a butterfly, and the life journey producing a final moment of beauty and grace). The direction and semantics are consistent with an outcome/result relation.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_56d0623bc96e"
+      ],
+      "canonical_rel_name": "enables",
+      "canonical_rel_desc": "Indicates that the subject provides the necessary capability or condition for the object event or action to occur.",
+      "justification": "The relation states that fully developed wings enable the butterfly's first flight. This is a capability/condition relation rather than a direct outcome, so a distinct canonical predicate 'enables' is appropriate.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_be3c581402bb"
+      ],
+      "canonical_rel_name": "transfers",
+      "canonical_rel_desc": "Indicates that the subject moves or carries the object substance or entity from one location to another.",
+      "justification": "The relation explicitly describes butterflies moving pollen between flowers. This is a transport/transfer semantics distinct from generic causality and should be captured with a dedicated 'transfers' predicate.",
+      "remark": null,
+      "confidence": 0.96
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_dd99a6afa295",
+        "RelR_52ce2462426d"
+      ],
+      "canonical_rel_name": "facilitates_reproduction_of",
+      "canonical_rel_desc": "Indicates that the subject process or agent helps or supports the reproductive success of the object organism or group, without guaranteeing it.",
+      "justification": "Both relations describe helping plants reproduce: one via pollination itself and the other via butterflies acting as pollinators. They share the same directed meaning: the subject supports or enables the reproduction of the plant object. Normalizing to 'facilitates_reproduction_of' captures the nuance of help/facilitation (not strict determinism).",
+      "remark": null,
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_807cf6b4cf2c"
+      ],
+      "canonical_rel_name": "supports_continuation_of",
+      "canonical_rel_desc": "Indicates that the subject action or process helps maintain or continue the existence or progression of the object process or cycle.",
+      "justification": "The relation states that reproducing by butterflies continues the butterfly life cycle. This is best modeled as the reproductive process supporting the continuation of the life cycle, which is more specific than generic causality but distinct from initiation or simple outcome.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_607352c3c8ba"
+      ],
+      "canonical_rel_name": "initiates",
+      "canonical_rel_desc": "Indicates that the subject action or entity starts or triggers the beginning of the object process or cycle.",
+      "justification": "Egg-laying by female butterflies is described as starting a new butterfly life cycle. This is a clear initiation/trigger semantics distinct from generic outcome or maintenance, so 'initiates' is the appropriate canonical predicate.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_4cf622ef6ba7",
+        "RelR_31b1735d998a",
+        "RelR_56d0623bc96e",
+        "RelR_dd99a6afa295",
+        "RelR_52ce2462426d",
+        "RelR_807cf6b4cf2c",
+        "RelR_607352c3c8ba",
+        "RelR_cfd9f307e15e"
+      ],
+      "rel_cls": "causal_process_relation",
+      "justification": "All these relations connect biological processes, states, or actions to their effects on organisms or life-cycle stages (results_in, enables, facilitates reproduction, supports continuation, initiates). They are unified by process-level causality and thus fit within a common class 'causal_process_relation'.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_be3c581402bb"
+      ],
+      "rel_cls": "material_transfer_relation",
+      "justification": "This relation involves butterflies moving pollen between flowers, which is a transport/transfer of material rather than a generic process-effect relation. A dedicated class 'material_transfer_relation' captures this interaction pattern more precisely.",
+      "remark": null,
+      "confidence": 0.95
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_4cf622ef6ba7",
+        "RelR_31b1735d998a",
+        "RelR_56d0623bc96e",
+        "RelR_dd99a6afa295",
+        "RelR_52ce2462426d",
+        "RelR_807cf6b4cf2c",
+        "RelR_607352c3c8ba",
+        "RelR_cfd9f307e15e"
+      ],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "Each of these relations expresses a cause–effect or condition–outcome dependency between biological processes or states (e.g., molting causing new skin, metamorphosis causing a butterfly, wings enabling flight, reproduction continuing the life cycle). They are best grouped under the broad causal dimension.",
+      "remark": null,
+      "confidence": 0.96
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_be3c581402bb"
+      ],
+      "rel_cls_group": "INTERACTION",
+      "justification": "The relation describes butterflies physically interacting with pollen and moving it between flowers, which is fundamentally an interaction/transport phenomenon rather than a pure abstract causal dependency. Grouping it under 'INTERACTION' reflects its role as a material transfer between biological entities.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  }
+]

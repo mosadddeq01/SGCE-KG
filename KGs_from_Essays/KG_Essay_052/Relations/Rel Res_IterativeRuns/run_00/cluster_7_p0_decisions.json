@@ -1,0 +1,175 @@
+{
+  "cluster_label": "7_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_6b687c94b7fb",
+      "relation_name": "discusses",
+      "rel_desc": "The essay is about sports and their impacts.",
+      "rel_hint_type": "aboutness",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "this essay",
+      "object_entity_name": "sports",
+      "subject_class_label": "Essay Document",
+      "subject_class_group": "Document Types",
+      "object_class_label": "Sports (Domain Concept)",
+      "object_class_group": "Sports and Society",
+      "qualifiers": {
+        "TemporalQualifier": "future scope within essay",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": "various ways",
+        "UncertaintyQualifier": null,
+        "CausalHint": "impact",
+        "LogicalMarker": "will",
+        "OtherQualifier": "DocumentScope: thematic focus"
+      },
+      "confidence": 0.93,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_c973ebae3e08",
+      "relation_name": "discusses",
+      "rel_desc": "The essay will discuss how sports impact culture.",
+      "rel_hint_type": "aboutness",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "this essay",
+      "object_entity_name": "culture",
+      "subject_class_label": "Essay Document",
+      "subject_class_group": "Document Types",
+      "object_class_label": "Sport-Influenced Societies",
+      "object_class_group": "Sports, Culture, and Society",
+      "qualifiers": {
+        "TemporalQualifier": "throughout the essay",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": "ways in which sports impact culture",
+        "UncertaintyQualifier": null,
+        "CausalHint": "impact",
+        "LogicalMarker": "and",
+        "OtherQualifier": null
+      },
+      "confidence": 0.9,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_5240c4767388",
+      "relation_name": "discusses",
+      "rel_desc": "The essay will discuss how sports impact society.",
+      "rel_hint_type": "aboutness",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "this essay",
+      "object_entity_name": "society",
+      "subject_class_label": "Essay Document",
+      "subject_class_group": "Document Types",
+      "object_class_label": "Sport-Influenced Societies",
+      "object_class_group": "Sports, Culture, and Society",
+      "qualifiers": {
+        "TemporalQualifier": "throughout the essay",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": "ways in which sports impact society",
+        "UncertaintyQualifier": null,
+        "CausalHint": "impact",
+        "LogicalMarker": "and",
+        "OtherQualifier": null
+      },
+      "confidence": 0.9,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_6b687c94b7fb\",\n        \"RelR_c973ebae3e08\",\n        \"RelR_5240c4767388\"\n      ],\n      \"canonical_rel_name\": \"is_about\",\n      \"canonical_rel_desc\": \"Indicates that a document's main content or thematic focus concerns the given topic or concept.\",\n      \"justification\": \"All three relations link the same subject type (an essay document) to abstract concepts (sports, culture, society) with rel_hint_type 'aboutness' and descriptions stating that the essay discusses or is about these topics. This is a standard document–topic predicate and can be normalized to a single canonical relation 'is_about'.\",\n      \"remark\": null,\n      \"confidence\": 0.96\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_6b687c94b7fb\",\n        \"RelR_c973ebae3e08\",\n        \"RelR_5240c4767388\"\n      ],\n      \"rel_cls\": \"document_thematic_relation\",\n      \"justification\": \"Each relation expresses the thematic focus of a document on a topic (sports, culture, society). This is a classic document–theme/topic family of relations, which can be grouped under a relation class 'document_thematic_relation'.\",\n      \"remark\": null,\n      \"confidence\": 0.95\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_6b687c94b7fb\",\n        \"RelR_c973ebae3e08\",\n        \"RelR_5240c4767388\"\n      ],\n      \"rel_cls_group\": \"ABOUTNESS\",\n      \"justification\": \"The primary semantics is that the essay is about certain topics, not composition, causality, or spatial/temporal location. A broad group label 'ABOUTNESS' best captures document–topic relations of this kind.\",\n      \"remark\": null,\n      \"confidence\": 0.94\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_6b687c94b7fb",
+          "RelR_c973ebae3e08",
+          "RelR_5240c4767388"
+        ],
+        "canonical_rel_name": "is_about",
+        "canonical_rel_desc": "Indicates that a document's main content or thematic focus concerns the given topic or concept.",
+        "justification": "All three relations link the same subject type (an essay document) to abstract concepts (sports, culture, society) with rel_hint_type 'aboutness' and descriptions stating that the essay discusses or is about these topics. This is a standard document–topic predicate and can be normalized to a single canonical relation 'is_about'.",
+        "remark": null,
+        "confidence": 0.96
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_6b687c94b7fb",
+          "RelR_c973ebae3e08",
+          "RelR_5240c4767388"
+        ],
+        "rel_cls": "document_thematic_relation",
+        "justification": "Each relation expresses the thematic focus of a document on a topic (sports, culture, society). This is a classic document–theme/topic family of relations, which can be grouped under a relation class 'document_thematic_relation'.",
+        "remark": null,
+        "confidence": 0.95
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_6b687c94b7fb",
+          "RelR_c973ebae3e08",
+          "RelR_5240c4767388"
+        ],
+        "rel_cls_group": "ABOUTNESS",
+        "justification": "The primary semantics is that the essay is about certain topics, not composition, causality, or spatial/temporal location. A broad group label 'ABOUTNESS' best captures document–topic relations of this kind.",
+        "remark": null,
+        "confidence": 0.94
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_6b687c94b7fb",
+        "RelR_c973ebae3e08",
+        "RelR_5240c4767388"
+      ],
+      "canonical_rel_name": "is_about",
+      "canonical_rel_desc": "Indicates that a document's main content or thematic focus concerns the given topic or concept.",
+      "justification": "All three relations link the same subject type (an essay document) to abstract concepts (sports, culture, society) with rel_hint_type 'aboutness' and descriptions stating that the essay discusses or is about these topics. This is a standard document–topic predicate and can be normalized to a single canonical relation 'is_about'.",
+      "remark": null,
+      "confidence": 0.96
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_6b687c94b7fb",
+        "RelR_c973ebae3e08",
+        "RelR_5240c4767388"
+      ],
+      "rel_cls": "document_thematic_relation",
+      "justification": "Each relation expresses the thematic focus of a document on a topic (sports, culture, society). This is a classic document–theme/topic family of relations, which can be grouped under a relation class 'document_thematic_relation'.",
+      "remark": null,
+      "confidence": 0.95
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_6b687c94b7fb",
+        "RelR_c973ebae3e08",
+        "RelR_5240c4767388"
+      ],
+      "rel_cls_group": "ABOUTNESS",
+      "justification": "The primary semantics is that the essay is about certain topics, not composition, causality, or spatial/temporal location. A broad group label 'ABOUTNESS' best captures document–topic relations of this kind.",
+      "remark": null,
+      "confidence": 0.94
+    }
+  ],
+  "timestamp": "2026-01-06T12:38:11Z"
+}

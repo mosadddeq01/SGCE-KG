@@ -1,0 +1,118 @@
+{
+  "cluster_label": 8,
+  "cluster_classes": [
+    {
+      "candidate_id": "ClsC_6eb80b48",
+      "class_label": "Body Language Subject Matter",
+      "class_description": "Entities that pertain to the study and explanation of body language, including conceptual categorizations and written works focused on this topic.",
+      "class_type_hint": "Subject Area",
+      "class_group": "TBD",
+      "confidence": 0.78,
+      "evidence_excerpt": "This essay will explore how people use body language... the different types of body language that exist...",
+      "member_ids": [
+        "En_2f419eca",
+        "En_d5275999"
+      ],
+      "members": [
+        {
+          "id": "En_2f419eca",
+          "entity_name": "essay on body language",
+          "entity_description": "The written work that will explore uses, types, and impacts of body language.",
+          "entity_type_hint": "Document"
+        },
+        {
+          "id": "En_d5275999",
+          "entity_name": "types of body language",
+          "entity_description": "Different forms or categories of body language behaviors, such as expressions, gestures, and posture.",
+          "entity_type_hint": "Concept"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_e4c4c7dd",
+      "class_label": "Body Language Communication",
+      "class_description": "Nonverbal interpersonal communication using body movements and expressions, including both the signals themselves and the learned skill of using and interpreting them.",
+      "class_type_hint": "Communication Modality",
+      "class_group": "TBD",
+      "confidence": 0.94,
+      "evidence_excerpt": "Signals they are sending and receiving through body language; mastering the art of body language.",
+      "member_ids": [
+        "En_7891e787",
+        "En_f174827d"
+      ],
+      "members": [
+        {
+          "id": "En_7891e787",
+          "entity_name": "signals sent through body language",
+          "entity_description": "Nonverbal signals individuals send using their body during interactions.",
+          "entity_type_hint": "SignalType"
+        },
+        {
+          "id": "En_f174827d",
+          "entity_name": "art of body language",
+          "entity_description": "The skillful use and interpretation of body language as a learned art.",
+          "entity_type_hint": "Skill"
+        }
+      ],
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_6eb80b48\",\n      \"new_name\": \"Body Language as Subject Matter\",\n      \"new_description\": \"Entities related to body language as a topic of study, including written works about body language and conceptual categorizations such as types or forms of body language.\",\n      \"new_class_type_hint\": \"Subject Area\",\n      \"new_class_group\": \"Body Language & Nonverbal Communication\",\n      \"remark\": null,\n      \"justification\": \"This class consistently groups body-language-related documents and conceptual categorizations, which are semantically distinct from the practice of using body language but belong in the same broader domain; updating the label/description clarifies scope and assigning a shared Class_Group connects it to other body-language classes.\",\n      \"confidence\": 0.93\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_e4c4c7dd\",\n      \"new_name\": \"Body Language as Communication\",\n      \"new_description\": \"Entities related to body language as a nonverbal communication modality, including the signals themselves and the skill of using and interpreting them.\",\n      \"new_class_type_hint\": \"Communication Modality\",\n      \"new_class_group\": \"Body Language & Nonverbal Communication\",\n      \"remark\": null,\n      \"justification\": \"This class groups body-language signals and the skill of their use/interpretation; it is distinct from body language as a study subject but belongs in the same overarching domain, so clarifying the label/description and assigning the same Class_Group provides a coherent two-layer schema.\",\n      \"confidence\": 0.94\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_6eb80b48",
+        "new_name": "Body Language as Subject Matter",
+        "new_description": "Entities related to body language as a topic of study, including written works about body language and conceptual categorizations such as types or forms of body language.",
+        "new_class_type_hint": "Subject Area",
+        "new_class_group": "Body Language & Nonverbal Communication",
+        "remark": null,
+        "justification": "This class consistently groups body-language-related documents and conceptual categorizations, which are semantically distinct from the practice of using body language but belong in the same broader domain; updating the label/description clarifies scope and assigning a shared Class_Group connects it to other body-language classes.",
+        "confidence": 0.93
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_e4c4c7dd",
+        "new_name": "Body Language as Communication",
+        "new_description": "Entities related to body language as a nonverbal communication modality, including the signals themselves and the skill of using and interpreting them.",
+        "new_class_type_hint": "Communication Modality",
+        "new_class_group": "Body Language & Nonverbal Communication",
+        "remark": null,
+        "justification": "This class groups body-language signals and the skill of their use/interpretation; it is distinct from body language as a study subject but belongs in the same overarching domain, so clarifying the label/description and assigning the same Class_Group provides a coherent two-layer schema.",
+        "confidence": 0.94
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_6eb80b48",
+      "class_id_resolved": "ClsC_6eb80b48",
+      "new_name": "Body Language as Subject Matter",
+      "new_description": "Entities related to body language as a topic of study, including written works about body language and conceptual categorizations such as types or forms of body language.",
+      "new_class_type_hint": "Subject Area",
+      "new_class_group": "Body Language & Nonverbal Communication",
+      "remark": null,
+      "justification": "This class consistently groups body-language-related documents and conceptual categorizations, which are semantically distinct from the practice of using body language but belong in the same broader domain; updating the label/description clarifies scope and assigning a shared Class_Group connects it to other body-language classes.",
+      "confidence": 0.93
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_e4c4c7dd",
+      "class_id_resolved": "ClsC_e4c4c7dd",
+      "new_name": "Body Language as Communication",
+      "new_description": "Entities related to body language as a nonverbal communication modality, including the signals themselves and the skill of using and interpreting them.",
+      "new_class_type_hint": "Communication Modality",
+      "new_class_group": "Body Language & Nonverbal Communication",
+      "remark": null,
+      "justification": "This class groups body-language signals and the skill of their use/interpretation; it is distinct from body language as a study subject but belongs in the same overarching domain, so clarifying the label/description and assigning the same Class_Group provides a coherent two-layer schema.",
+      "confidence": 0.94
+    }
+  ],
+  "provisional_to_real": {},
+  "timestamp": "2026-01-06T11:56:54Z"
+}

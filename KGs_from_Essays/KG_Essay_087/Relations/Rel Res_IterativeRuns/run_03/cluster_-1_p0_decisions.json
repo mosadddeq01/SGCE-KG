@@ -1,0 +1,130 @@
+{
+  "cluster_label": "-1_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_e9b9b34860a8",
+      "relation_name": "associated_with",
+      "rel_desc": "The color white is symbolically associated with purity.",
+      "rel_hint_type": "symbolic association",
+      "canonical_rel_name": "symbolically_associated_with",
+      "canonical_rel_desc": "Indicates that the subject is culturally or symbolically associated with the object (e.g., a color with an abstract concept) within a specified cultural context.",
+      "rel_cls": "cultural_symbolism_relation",
+      "rel_cls_group": "ASSOCIATION",
+      "subject_entity_name": "white",
+      "object_entity_name": "purity",
+      "subject_class_label": "Cultural Color Symbolism of White",
+      "subject_class_group": "Color Symbolism and Cultural Interpretation",
+      "object_class_label": "Symbolic Associations of White",
+      "object_class_group": "Color Symbolism and Cultural Interpretation",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "in Western cultures",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "CulturalContext: Western cultures"
+      },
+      "confidence": 0.99,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_ffe27dfae03e",
+      "relation_name": "critical_for",
+      "rel_desc": "Color psychology in branding is said to play a crucial role in branding and marketing strategies.",
+      "rel_hint_type": "dependency",
+      "canonical_rel_name": "is_critical_for",
+      "canonical_rel_desc": "Indicates that the subject plays a crucial or essential role in enabling or shaping the object.",
+      "rel_cls": "strategic_dependency_relation",
+      "rel_cls_group": "CAUSALITY",
+      "subject_entity_name": "color psychology in branding",
+      "object_entity_name": "branding and marketing strategies",
+      "subject_class_label": "Brand Communication Concepts",
+      "subject_class_group": "Branding, Positioning & Market Context",
+      "object_class_label": "Brand Communication Concepts",
+      "object_class_group": "Branding, Positioning & Market Context",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "crucial (strong necessity implication)",
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.95,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_a4f4d7aeebd6",
+      "relation_name": "contributes_to",
+      "rel_desc": "A strong and impactful brand visual identity contributes to having a successful and memorable brand.",
+      "rel_hint_type": "causal",
+      "canonical_rel_name": "influences",
+      "canonical_rel_desc": "Indicates that the subject branding-related construct exerts a causal or enabling effect on the object (such as brands, businesses, consumer responses, brand perceptions, or branding outcomes).",
+      "rel_cls": "branding_impact_relation",
+      "rel_cls_group": "CAUSALITY",
+      "subject_entity_name": "brand visual identity",
+      "object_entity_name": "successful and memorable brand",
+      "subject_class_label": "Branding Concepts",
+      "subject_class_group": "Branding, Positioning & Market Context",
+      "object_class_label": "Brand Outcome: Successful and Memorable Brand",
+      "object_class_group": "Brands and Branding Outcomes",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": "when based on effective use of color psychology",
+        "ConditionExpression": "if the identity resonates with the target audience",
+        "UncertaintyQualifier": "can (implied possibility)",
+        "CausalHint": "so that (implied)",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.78,
+      "remarks": [
+        "Not explicitly causal but strongly implied as part of the pathway to brand success.",
+        "Not explicitly causal but strongly implied as part of the pathway to brand success.",
+        "Not explicitly causal but strongly implied as part of the pathway to brand success.",
+        "Not explicitly causal but strongly implied as part of the pathway to brand success."
+      ]
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_rel_schema\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_a4f4d7aeebd6\"\n      ],\n      \"canonical_rel_name\": \"contributes_to\",\n      \"canonical_rel_desc\": \"Indicates that the subject branding-related construct makes a positive, partial causal contribution to the success or outcome represented by the object (e.g., brand performance, memorability, or perceived success).\",\n      \"rel_cls\": null,\n      \"rel_cls_group\": null,\n      \"justification\": \"The instance explicitly describes a positive, contributory causal role (\\\"contributes to having a successful and memorable brand\\\"), which is better captured by the predicate name \\\"contributes_to\\\" than the more generic \\\"influences\\\". Updating the canonical_rel_name and refining the description clarifies that this is a partial, enabling contribution to brand outcomes, while keeping the existing relation class and group (branding_impact_relation under CAUSALITY) intact.\",\n      \"remark\": null,\n      \"confidence\": 0.88\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_rel_schema",
+      "args": {
+        "relation_ids": [
+          "RelR_a4f4d7aeebd6"
+        ],
+        "canonical_rel_name": "contributes_to",
+        "canonical_rel_desc": "Indicates that the subject branding-related construct makes a positive, partial causal contribution to the success or outcome represented by the object (e.g., brand performance, memorability, or perceived success).",
+        "rel_cls": null,
+        "rel_cls_group": null,
+        "justification": "The instance explicitly describes a positive, contributory causal role (\"contributes to having a successful and memorable brand\"), which is better captured by the predicate name \"contributes_to\" than the more generic \"influences\". Updating the canonical_rel_name and refining the description clarifies that this is a partial, enabling contribution to brand outcomes, while keeping the existing relation class and group (branding_impact_relation under CAUSALITY) intact.",
+        "remark": null,
+        "confidence": 0.88
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_rel_schema",
+      "relation_ids": [
+        "RelR_a4f4d7aeebd6"
+      ],
+      "canonical_rel_name": "contributes_to",
+      "canonical_rel_desc": "Indicates that the subject branding-related construct makes a positive, partial causal contribution to the success or outcome represented by the object (e.g., brand performance, memorability, or perceived success).",
+      "rel_cls": null,
+      "rel_cls_group": null,
+      "new_relation_name": null,
+      "original_relation_name": null,
+      "justification": "The instance explicitly describes a positive, contributory causal role (\"contributes to having a successful and memorable brand\"), which is better captured by the predicate name \"contributes_to\" than the more generic \"influences\". Updating the canonical_rel_name and refining the description clarifies that this is a partial, enabling contribution to brand outcomes, while keeping the existing relation class and group (branding_impact_relation under CAUSALITY) intact.",
+      "remark": null,
+      "confidence": 0.88
+    }
+  ],
+  "timestamp": "2026-01-06T15:09:57Z"
+}

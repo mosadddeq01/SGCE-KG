@@ -1,0 +1,82 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_c0eeb0777e21",
+        "RelR_3c76eaed2ec2",
+        "RelR_b64ecead6b09"
+      ],
+      "canonical_rel_name": "warns_about",
+      "canonical_rel_desc": "Indicates that the subject (typically a story, motif, or entity within a narrative) functions as a warning about potential dangers, threats, or risks represented by the object.",
+      "justification": "In all three relations the subject (stories, haunted houses as a motif, cursed objects as a motif) is described as serving a cautionary or warning function about generalized dangers captured by the object node. The semantics match a single predicate 'warns_about'.",
+      "remark": null,
+      "confidence": 0.91
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_c0eeb0777e21",
+        "RelR_3c76eaed2ec2",
+        "RelR_b64ecead6b09"
+      ],
+      "rel_cls": "warning_or_caution_relation",
+      "justification": "These relations describe the narrative or functional role of motifs/stories as warnings or cautionary signals about dangers, which is naturally grouped as a warning/caution relation class.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_c0eeb0777e21",
+        "RelR_3c76eaed2ec2",
+        "RelR_b64ecead6b09"
+      ],
+      "rel_cls_group": "AGENCY",
+      "justification": "The predicate 'warns_about' encodes an intentional or functional act (warning/caution) attributed to the subject, which fits best under a broad agency/act dimension rather than mere association or composition.",
+      "remark": null,
+      "confidence": 0.82
+    }
+  },
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_096076d4cbb9"
+      ],
+      "canonical_rel_name": "poses_risk_to",
+      "canonical_rel_desc": "Indicates that the subject represents or constitutes a potential threat, harm, or danger to the object.",
+      "justification": "This relation links an urban legend motif of strangers luring children with candy to the vulnerable targets (children) and is explicitly framed as a threat or risk, which is well captured by the predicate 'poses_risk_to'.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_096076d4cbb9"
+      ],
+      "rel_cls": "risk_or_threat_relation",
+      "justification": "The semantics focus on the subject being a source of possible harm to the object, which is a canonical example of a risk/threat relation class.",
+      "remark": null,
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_096076d4cbb9"
+      ],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "A motif that poses a risk to children encodes a potential causal pathway to harm; this aligns best with a broad causal/risk dimension rather than mere association.",
+      "remark": null,
+      "confidence": 0.86
+    }
+  }
+]

@@ -1,0 +1,159 @@
+{
+  "cluster_label": "16_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_0aeef4568200",
+      "relation_name": "contributes_to",
+      "rel_desc": "The status of many plant species contributes to overall biodiversity.",
+      "rel_hint_type": "compositional",
+      "canonical_rel_name": "contributes_to",
+      "canonical_rel_desc": "Indicates that the subject exerts a positive causal or functional influence on the state, process, or property represented by the object, without implying sole responsibility or strict determinism.",
+      "rel_cls": "ecosystem_function_contribution_relation",
+      "rel_cls_group": "CAUSALITY",
+      "subject_entity_name": "plant species",
+      "object_entity_name": "biodiversity",
+      "subject_class_label": "Pollination-Dependent Plant Species",
+      "subject_class_group": "Bird-Mediated Plant Reproduction and Regeneration",
+      "object_class_label": "Ecosystem State and Stability",
+      "object_class_group": "Ecosystem Condition, Function & Services",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "overall",
+        "OperationalConstraint": null,
+        "ConditionExpression": "When plant species struggle to reproduce and colonize",
+        "UncertaintyQualifier": null,
+        "CausalHint": "leading to",
+        "LogicalMarker": "When",
+        "OtherQualifier": null
+      },
+      "confidence": 0.83,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_f5cb372d1e29",
+      "relation_name": "contributes_to",
+      "rel_desc": "Birds contribute to the ecological process of seed dispersal.",
+      "rel_hint_type": "functional role",
+      "canonical_rel_name": "contributes_to",
+      "canonical_rel_desc": "Indicates that the subject exerts a positive causal or functional influence on the state, process, or property represented by the object, without implying sole responsibility or strict determinism.",
+      "rel_cls": "ecosystem_function_contribution_relation",
+      "rel_cls_group": "CAUSALITY",
+      "subject_entity_name": "birds",
+      "object_entity_name": "seed dispersal",
+      "subject_class_label": "Bird Biotic Components",
+      "subject_class_group": "Birds as Environmental Indicators & Conservation",
+      "object_class_label": "Plant Reproduction and Dispersal Processes",
+      "object_class_group": "Bird-Mediated Plant Reproduction and Regeneration",
+      "qualifiers": {
+        "TemporalQualifier": "general ongoing ecological context",
+        "SpatialQualifier": "ecosystems around the world",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "contribute in numerous ways",
+        "LogicalMarker": null,
+        "OtherQualifier": "EcosystemServiceContext: ecological process benefiting ecosystems"
+      },
+      "confidence": 0.95,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_3158eff143b7",
+      "relation_name": "contributes_to",
+      "rel_desc": "Birds contribute to pollination as an ecological process.",
+      "rel_hint_type": "functional role",
+      "canonical_rel_name": "contributes_to",
+      "canonical_rel_desc": "Indicates that the subject exerts a positive causal or functional influence on the state, process, or property represented by the object, without implying sole responsibility or strict determinism.",
+      "rel_cls": "ecosystem_function_contribution_relation",
+      "rel_cls_group": "CAUSALITY",
+      "subject_entity_name": "birds",
+      "object_entity_name": "pollination",
+      "subject_class_label": "Bird Biotic Components",
+      "subject_class_group": "Birds as Environmental Indicators & Conservation",
+      "object_class_label": "Plant Reproduction and Dispersal Processes",
+      "object_class_group": "Bird-Mediated Plant Reproduction and Regeneration",
+      "qualifiers": {
+        "TemporalQualifier": "general ongoing ecological context",
+        "SpatialQualifier": "ecosystems around the world",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "contribute in numerous ways",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.93,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_180a86a4777c",
+      "relation_name": "contributes_to",
+      "rel_desc": "Birds are used for environmental monitoring, serving as indicators of ecosystem health.",
+      "rel_hint_type": "indicator role",
+      "canonical_rel_name": "contributes_to",
+      "canonical_rel_desc": "A process or entity provides a positive functional contribution to another process, activity, or state.",
+      "rel_cls": "functional_contribution_relation",
+      "rel_cls_group": "CAUSALITY",
+      "subject_entity_name": "birds",
+      "object_entity_name": "environmental monitoring",
+      "subject_class_label": "Bird Biotic Components",
+      "subject_class_group": "Birds as Environmental Indicators & Conservation",
+      "object_class_label": "Biodiversity Conservation Activities",
+      "object_class_group": "Birds as Environmental Indicators & Conservation",
+      "qualifiers": {
+        "TemporalQualifier": "ongoing observation of ecosystems",
+        "SpatialQualifier": "natural systems",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "contribute in numerous ways",
+        "LogicalMarker": null,
+        "OtherQualifier": "MonitoringContext: using birds as environmental indicators"
+      },
+      "confidence": 0.9,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_rel_schema\",\n    \"args\": {\n      \"relation_ids\": [\n        \"RelR_0aeef4568200\",\n        \"RelR_f5cb372d1e29\",\n        \"RelR_3158eff143b7\",\n        \"RelR_180a86a4777c\"\n      ],\n      \"canonical_rel_name\": null,\n      \"canonical_rel_desc\": \"Indicates that the subject exerts a positive causal or functional influence on the state, process, or property represented by the object, without implying sole responsibility or strict determinism.\",\n      \"rel_cls\": \"functional_contribution_relation\",\n      \"rel_cls_group\": null,\n      \"justification\": \"All four relations use the same canonical predicate 'contributes_to' and express the same semantic pattern: the subject provides a positive functional or causal contribution to an ecological process, state, or activity. Unifying them under a single broader relation class 'functional_contribution_relation' avoids unnecessary proliferation of nearly identical classes (e.g., 'ecosystem_function_contribution_relation') while keeping rel_cls_group=CAUSALITY intact. The more precise, general canonical_rel_desc from the first three instances is applied to all four for consistency.\",\n      \"remark\": null,\n      \"confidence\": 0.93\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_rel_schema",
+      "args": {
+        "relation_ids": [
+          "RelR_0aeef4568200",
+          "RelR_f5cb372d1e29",
+          "RelR_3158eff143b7",
+          "RelR_180a86a4777c"
+        ],
+        "canonical_rel_name": null,
+        "canonical_rel_desc": "Indicates that the subject exerts a positive causal or functional influence on the state, process, or property represented by the object, without implying sole responsibility or strict determinism.",
+        "rel_cls": "functional_contribution_relation",
+        "rel_cls_group": null,
+        "justification": "All four relations use the same canonical predicate 'contributes_to' and express the same semantic pattern: the subject provides a positive functional or causal contribution to an ecological process, state, or activity. Unifying them under a single broader relation class 'functional_contribution_relation' avoids unnecessary proliferation of nearly identical classes (e.g., 'ecosystem_function_contribution_relation') while keeping rel_cls_group=CAUSALITY intact. The more precise, general canonical_rel_desc from the first three instances is applied to all four for consistency.",
+        "remark": null,
+        "confidence": 0.93
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_rel_schema",
+      "relation_ids": [
+        "RelR_0aeef4568200",
+        "RelR_f5cb372d1e29",
+        "RelR_3158eff143b7",
+        "RelR_180a86a4777c"
+      ],
+      "canonical_rel_name": null,
+      "canonical_rel_desc": "Indicates that the subject exerts a positive causal or functional influence on the state, process, or property represented by the object, without implying sole responsibility or strict determinism.",
+      "rel_cls": "functional_contribution_relation",
+      "rel_cls_group": null,
+      "new_relation_name": null,
+      "original_relation_name": null,
+      "justification": "All four relations use the same canonical predicate 'contributes_to' and express the same semantic pattern: the subject provides a positive functional or causal contribution to an ecological process, state, or activity. Unifying them under a single broader relation class 'functional_contribution_relation' avoids unnecessary proliferation of nearly identical classes (e.g., 'ecosystem_function_contribution_relation') while keeping rel_cls_group=CAUSALITY intact. The more precise, general canonical_rel_desc from the first three instances is applied to all four for consistency.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  ],
+  "timestamp": "2026-01-06T11:34:15Z"
+}

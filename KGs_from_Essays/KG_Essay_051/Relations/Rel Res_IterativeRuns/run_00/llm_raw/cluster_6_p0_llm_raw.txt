@@ -1,0 +1,33 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": ["RelR_e16fcd0008c6", "RelR_73c6366941df"],
+      "canonical_rel_name": "is_about",
+      "canonical_rel_desc": "Indicates that a document, text, or discourse takes the object as its main topic or subject matter.",
+      "justification": "Both relations link an essay to the topic it covers, with rel_hint_type='aboutness' and descriptions indicating topical focus. They share identical aboutness semantics, so a single canonical predicate 'is_about' is appropriate.",
+      "remark": "Use this predicate for document/topic or discourse/topic relationships.",
+      "confidence": 0.97
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": ["RelR_e16fcd0008c6", "RelR_73c6366941df"],
+      "rel_cls": "aboutness_relation",
+      "justification": "Both relations represent a topical linkage where a text is about a concept (body language, types of body language). This fits a general aboutness_relation class that can cover various canonical predicates like is_about, discusses, or covers.",
+      "remark": null,
+      "confidence": 0.96
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": ["RelR_e16fcd0008c6", "RelR_73c6366941df"],
+      "rel_cls_group": "ASSOCIATION",
+      "justification": "Aboutness expresses a semantic association between a document and its topic rather than composition, causality, or hierarchy. The broad category 'ASSOCIATION' best captures this topical linkage.",
+      "remark": null,
+      "confidence": 0.95
+    }
+  }
+]

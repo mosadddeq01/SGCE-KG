@@ -1,0 +1,259 @@
+{
+  "cluster_label": "12_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_a25f48e3d562",
+      "relation_name": "has_life_cycle",
+      "rel_desc": "Butterflies are described as having a life cycle that includes multiple stages.",
+      "rel_hint_type": "association",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "butterflies",
+      "object_entity_name": "butterfly life cycle",
+      "subject_class_label": "Butterflies",
+      "subject_class_group": "Butterfly Ecology and Interactions",
+      "object_class_label": "Butterfly Life Cycle and Stages",
+      "object_class_group": "Butterfly Life Cycle and Appreciation",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "LifeCycleType: complete metamorphosis implied by stages"
+      },
+      "confidence": 0.88,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_519e7aa97b76",
+      "relation_name": "has_life_stage",
+      "rel_desc": "Butterflies have an adult butterfly stage in their life cycle.",
+      "rel_hint_type": "life_cycle",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "butterflies",
+      "object_entity_name": "adult butterfly stage",
+      "subject_class_label": "Butterflies",
+      "subject_class_group": "Butterfly Ecology and Interactions",
+      "object_class_label": "Butterfly Life Cycle and Stages",
+      "object_class_group": "Butterfly Life Cycle and Appreciation",
+      "qualifiers": {
+        "TemporalQualifier": "adult stage",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": "throughout",
+        "OtherQualifier": null
+      },
+      "confidence": 0.9,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_a5586dc3ebed",
+      "relation_name": "associated_with",
+      "rel_desc": "The observed butterfly is associated with a moment characterized by beauty and grace.",
+      "rel_hint_type": "association",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "butterflies",
+      "object_entity_name": "moment of beauty and grace",
+      "subject_class_label": "Butterflies",
+      "subject_class_group": "Butterfly Ecology and Interactions",
+      "object_class_label": "Butterfly Appreciation",
+      "object_class_group": "Butterfly Life Cycle and Appreciation",
+      "qualifiers": {
+        "TemporalQualifier": "when you see a butterfly fluttering by",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": "when",
+        "OtherQualifier": "ObserverContext: human observer taking a moment to marvel"
+      },
+      "confidence": 0.86,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_a25f48e3d562\"],\n      \"canonical_rel_name\": \"has_life_cycle\",\n      \"canonical_rel_desc\": \"Links an organism or group of organisms to the overall life cycle structure that characterizes them.\",\n      \"justification\": \"This relation connects butterflies to their characteristic life cycle as a whole, so a predicate emphasizing that the organism has a particular life cycle is appropriate.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_519e7aa97b76\"],\n      \"canonical_rel_name\": \"has_life_stage\",\n      \"canonical_rel_desc\": \"Links an organism or group of organisms to a specific developmental or life stage within its life cycle.\",\n      \"justification\": \"This relation connects butterflies to a specific stage (adult butterfly stage) within their life cycle, so a predicate focused on membership of that stage is appropriate.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_a5586dc3ebed\"],\n      \"canonical_rel_name\": \"associated_with_experience\",\n      \"canonical_rel_desc\": \"Links an entity to a subjective or experiential state (such as a moment of beauty or grace) that observers commonly associate with it.\",\n      \"justification\": \"The relation describes butterflies being associated with a human-perceived moment of beauty and grace, which is best modeled as association with an experiential state rather than a biological or structural relation.\",\n      \"remark\": null,\n      \"confidence\": 0.86\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_a25f48e3d562\", \"RelR_519e7aa97b76\"],\n      \"rel_cls\": \"organism_life_cycle_relation\",\n      \"justification\": \"Both relations connect butterflies to aspects of their life cycle (overall cycle, specific life stage), so they belong in the same broader class of organism life cycle relations.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_a25f48e3d562\", \"RelR_519e7aa97b76\"],\n      \"rel_cls_group\": \"TEMPORALITY\",\n      \"justification\": \"Life cycles and life stages are inherently temporal constructs that describe how an organism changes over time, so these relations fall under a temporality-focused group.\",\n      \"remark\": null,\n      \"confidence\": 0.88\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_a5586dc3ebed\"],\n      \"rel_cls\": \"perception_appreciation_relation\",\n      \"justification\": \"This relation encodes how butterflies are tied to human perception and appreciation (aesthetic experience), distinct from biological or ecological relations.\",\n      \"remark\": null,\n      \"confidence\": 0.86\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_a5586dc3ebed\"],\n      \"rel_cls_group\": \"ASSOCIATION\",\n      \"justification\": \"The link is a loose, conceptual association between butterflies and a subjective moment of beauty and grace, fitting an association-oriented group rather than causal or compositional ones.\",\n      \"remark\": null,\n      \"confidence\": 0.86\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_a25f48e3d562"
+        ],
+        "canonical_rel_name": "has_life_cycle",
+        "canonical_rel_desc": "Links an organism or group of organisms to the overall life cycle structure that characterizes them.",
+        "justification": "This relation connects butterflies to their characteristic life cycle as a whole, so a predicate emphasizing that the organism has a particular life cycle is appropriate.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_519e7aa97b76"
+        ],
+        "canonical_rel_name": "has_life_stage",
+        "canonical_rel_desc": "Links an organism or group of organisms to a specific developmental or life stage within its life cycle.",
+        "justification": "This relation connects butterflies to a specific stage (adult butterfly stage) within their life cycle, so a predicate focused on membership of that stage is appropriate.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_a5586dc3ebed"
+        ],
+        "canonical_rel_name": "associated_with_experience",
+        "canonical_rel_desc": "Links an entity to a subjective or experiential state (such as a moment of beauty or grace) that observers commonly associate with it.",
+        "justification": "The relation describes butterflies being associated with a human-perceived moment of beauty and grace, which is best modeled as association with an experiential state rather than a biological or structural relation.",
+        "remark": null,
+        "confidence": 0.86
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_a25f48e3d562",
+          "RelR_519e7aa97b76"
+        ],
+        "rel_cls": "organism_life_cycle_relation",
+        "justification": "Both relations connect butterflies to aspects of their life cycle (overall cycle, specific life stage), so they belong in the same broader class of organism life cycle relations.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_a25f48e3d562",
+          "RelR_519e7aa97b76"
+        ],
+        "rel_cls_group": "TEMPORALITY",
+        "justification": "Life cycles and life stages are inherently temporal constructs that describe how an organism changes over time, so these relations fall under a temporality-focused group.",
+        "remark": null,
+        "confidence": 0.88
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_a5586dc3ebed"
+        ],
+        "rel_cls": "perception_appreciation_relation",
+        "justification": "This relation encodes how butterflies are tied to human perception and appreciation (aesthetic experience), distinct from biological or ecological relations.",
+        "remark": null,
+        "confidence": 0.86
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_a5586dc3ebed"
+        ],
+        "rel_cls_group": "ASSOCIATION",
+        "justification": "The link is a loose, conceptual association between butterflies and a subjective moment of beauty and grace, fitting an association-oriented group rather than causal or compositional ones.",
+        "remark": null,
+        "confidence": 0.86
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_a25f48e3d562"
+      ],
+      "canonical_rel_name": "has_life_cycle",
+      "canonical_rel_desc": "Links an organism or group of organisms to the overall life cycle structure that characterizes them.",
+      "justification": "This relation connects butterflies to their characteristic life cycle as a whole, so a predicate emphasizing that the organism has a particular life cycle is appropriate.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_519e7aa97b76"
+      ],
+      "canonical_rel_name": "has_life_stage",
+      "canonical_rel_desc": "Links an organism or group of organisms to a specific developmental or life stage within its life cycle.",
+      "justification": "This relation connects butterflies to a specific stage (adult butterfly stage) within their life cycle, so a predicate focused on membership of that stage is appropriate.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_a5586dc3ebed"
+      ],
+      "canonical_rel_name": "associated_with_experience",
+      "canonical_rel_desc": "Links an entity to a subjective or experiential state (such as a moment of beauty or grace) that observers commonly associate with it.",
+      "justification": "The relation describes butterflies being associated with a human-perceived moment of beauty and grace, which is best modeled as association with an experiential state rather than a biological or structural relation.",
+      "remark": null,
+      "confidence": 0.86
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_a25f48e3d562",
+        "RelR_519e7aa97b76"
+      ],
+      "rel_cls": "organism_life_cycle_relation",
+      "justification": "Both relations connect butterflies to aspects of their life cycle (overall cycle, specific life stage), so they belong in the same broader class of organism life cycle relations.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_a25f48e3d562",
+        "RelR_519e7aa97b76"
+      ],
+      "rel_cls_group": "TEMPORALITY",
+      "justification": "Life cycles and life stages are inherently temporal constructs that describe how an organism changes over time, so these relations fall under a temporality-focused group.",
+      "remark": null,
+      "confidence": 0.88
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_a5586dc3ebed"
+      ],
+      "rel_cls": "perception_appreciation_relation",
+      "justification": "This relation encodes how butterflies are tied to human perception and appreciation (aesthetic experience), distinct from biological or ecological relations.",
+      "remark": null,
+      "confidence": 0.86
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_a5586dc3ebed"
+      ],
+      "rel_cls_group": "ASSOCIATION",
+      "justification": "The link is a loose, conceptual association between butterflies and a subjective moment of beauty and grace, fitting an association-oriented group rather than causal or compositional ones.",
+      "remark": null,
+      "confidence": 0.86
+    }
+  ],
+  "timestamp": "2026-01-06T07:29:00Z"
+}

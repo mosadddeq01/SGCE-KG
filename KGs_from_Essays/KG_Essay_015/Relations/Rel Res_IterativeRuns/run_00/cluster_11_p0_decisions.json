@@ -1,0 +1,339 @@
+{
+  "cluster_label": "11_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_2d23901db161",
+      "relation_name": "motivated_by",
+      "rel_desc": "Ancient Egyptian burial practices are motivated by their afterlife beliefs.",
+      "rel_hint_type": "causal",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "ancient Egyptian burial practices",
+      "object_entity_name": "ancient Egyptian afterlife beliefs",
+      "subject_class_label": "Ancient Egyptian Burial Practices (General)",
+      "subject_class_group": "Ancient Egyptian Funerary Religion and Culture",
+      "object_class_label": "Ancient Egyptian Afterlife Beliefs and Concepts",
+      "object_class_group": "Ancient Egyptian Funerary Religion and Culture",
+      "qualifiers": {
+        "TemporalQualifier": "during funerary preparation and burial",
+        "SpatialQualifier": "tombs and pyramids",
+        "OperationalConstraint": null,
+        "ConditionExpression": "items needed in the afterlife",
+        "UncertaintyQualifier": null,
+        "CausalHint": "believed that",
+        "LogicalMarker": "that",
+        "OtherQualifier": "Aspect: inclusion of grave goods"
+      },
+      "confidence": 0.9,
+      "remarks": [
+        "Uses the described item-burial practice as representative of broader burial practices."
+      ]
+    },
+    {
+      "relation_id": "RelR_3180a27fe018",
+      "relation_name": "centers_on",
+      "rel_desc": "The funeral procession is organized around and for the deceased.",
+      "rel_hint_type": "thematic",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "funeral procession",
+      "object_entity_name": "the deceased",
+      "subject_class_label": "Funerary Practices and Rituals",
+      "subject_class_group": "Funerary Roles and Ritual Practices",
+      "object_class_label": "Ancient Egyptian Deceased Individual (Burial Subject)",
+      "object_class_group": "Ancient Egyptian Funerary Religion and Culture",
+      "qualifiers": {
+        "TemporalQualifier": "at time of burial",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "implied rather than explicit",
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "Context: movement of remains"
+      },
+      "confidence": 0.74,
+      "remarks": [
+        "Relation inferred from general meaning of 'funeral procession'; not literally spelled out."
+      ]
+    },
+    {
+      "relation_id": "RelR_9bfc63ae9548",
+      "relation_name": "directed_toward",
+      "rel_desc": "Reverence for the deceased in ancient Egypt is directed toward the dead individual.",
+      "rel_hint_type": "attitudinal",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "reverence for the deceased in ancient Egypt",
+      "object_entity_name": "the deceased",
+      "subject_class_label": "Reverence for the Deceased in Ancient Egypt",
+      "subject_class_group": "Ancient Egyptian Funerary Religion and Culture",
+      "object_class_label": "Ancient Egyptian Deceased Individual (Burial Subject)",
+      "object_class_group": "Ancient Egyptian Funerary Religion and Culture",
+      "qualifiers": {
+        "TemporalQualifier": "post-death",
+        "SpatialQualifier": null,
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.9,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_9f59f0b71de6",
+      "relation_name": "concerns",
+      "rel_desc": "Ancient Egyptian afterlife beliefs are specifically about the afterlife realm and post-death existence.",
+      "rel_hint_type": "thematic",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "ancient Egyptian afterlife beliefs",
+      "object_entity_name": "afterlife",
+      "subject_class_label": "Ancient Egyptian Afterlife Beliefs and Concepts",
+      "subject_class_group": "Ancient Egyptian Funerary Religion and Culture",
+      "object_class_label": "Ancient Egyptian Afterlife Beliefs and Concepts",
+      "object_class_group": "Ancient Egyptian Funerary Religion and Culture",
+      "qualifiers": {
+        "TemporalQualifier": "post-death context",
+        "SpatialQualifier": "afterlife realm",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "belief-based",
+        "CausalHint": null,
+        "LogicalMarker": "about",
+        "OtherQualifier": null
+      },
+      "confidence": 0.98,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_2d23901db161\"],\n      \"canonical_rel_name\": \"is_motivated_by\",\n      \"canonical_rel_desc\": \"Indicates that a practice or action is motivated or driven by a belief, goal, or underlying reason.\",\n      \"justification\": \"The subject is a set of burial practices and the object is the underlying afterlife beliefs that drive those practices; a causal motivational predicate from subject to object is best captured as 'is_motivated_by'.\",\n      \"remark\": null,\n      \"confidence\": 0.93\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_2d23901db161\"],\n      \"rel_cls\": \"motivational_relation\",\n      \"justification\": \"This relation links an observable practice to the beliefs that motivate it, which is a specific type of causal relation focused on motivation rather than generic cause.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_2d23901db161\"],\n      \"rel_cls_group\": \"CAUSALITY\",\n      \"justification\": \"The burial practices are presented as arising from or being driven by afterlife beliefs, which fits a causal/motivational dimension.\",\n      \"remark\": null,\n      \"confidence\": 0.95\n    }\n  },\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_3180a27fe018\"],\n      \"canonical_rel_name\": \"is_centered_on\",\n      \"canonical_rel_desc\": \"Indicates that an event, process, or activity is organized around or primarily focused on a particular participant or theme.\",\n      \"justification\": \"The funeral procession is organized around the deceased as its primary focus; a directional predicate from event to its main subject is best captured as 'is_centered_on'.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_9bfc63ae9548\"],\n      \"canonical_rel_name\": \"is_directed_toward\",\n      \"canonical_rel_desc\": \"Indicates that an attitude, emotion, or orientation is directed toward a particular target or object.\",\n      \"justification\": \"The subject is reverence (an attitude) and the object is the deceased individual; the natural predicate is an attitude being directed toward its target, expressed as 'is_directed_toward'.\",\n      \"remark\": null,\n      \"confidence\": 0.94\n    }\n  },\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_9f59f0b71de6\"],\n      \"canonical_rel_name\": \"is_about\",\n      \"canonical_rel_desc\": \"Indicates that a belief, concept, text, or discourse has a particular topic or subject matter.\",\n      \"justification\": \"The relation connects afterlife beliefs to the afterlife itself as their topic; an aboutness predicate like 'is_about' captures this thematic connection more clearly than the raw label.\",\n      \"remark\": null,\n      \"confidence\": 0.97\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_3180a27fe018\", \"RelR_9f59f0b71de6\"],\n      \"rel_cls\": \"thematic_focus_relation\",\n      \"justification\": \"Both relations connect an activity or belief (funeral procession, afterlife beliefs) to what they are organized around or about (the deceased, the afterlife), which is a common thematic-focus/subject-matter pattern.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_9bfc63ae9548\"],\n      \"rel_cls\": \"attitude_target_relation\",\n      \"justification\": \"This relation links an attitude (reverence) to the entity it is directed toward (the deceased), which is best captured as an attitude-to-target family of predicates.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_3180a27fe018\", \"RelR_9bfc63ae9548\", \"RelR_9f59f0b71de6\"],\n      \"rel_cls_group\": \"ASSOCIATION\",\n      \"justification\": \"All three relations express non-compositional, non-causal links based on focus, aboutness, or attitudinal direction, which fall under a broad associative/thematic dimension.\",\n      \"remark\": null,\n      \"confidence\": 0.93\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_2d23901db161"
+        ],
+        "canonical_rel_name": "is_motivated_by",
+        "canonical_rel_desc": "Indicates that a practice or action is motivated or driven by a belief, goal, or underlying reason.",
+        "justification": "The subject is a set of burial practices and the object is the underlying afterlife beliefs that drive those practices; a causal motivational predicate from subject to object is best captured as 'is_motivated_by'.",
+        "remark": null,
+        "confidence": 0.93
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_2d23901db161"
+        ],
+        "rel_cls": "motivational_relation",
+        "justification": "This relation links an observable practice to the beliefs that motivate it, which is a specific type of causal relation focused on motivation rather than generic cause.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_2d23901db161"
+        ],
+        "rel_cls_group": "CAUSALITY",
+        "justification": "The burial practices are presented as arising from or being driven by afterlife beliefs, which fits a causal/motivational dimension.",
+        "remark": null,
+        "confidence": 0.95
+      }
+    },
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_3180a27fe018"
+        ],
+        "canonical_rel_name": "is_centered_on",
+        "canonical_rel_desc": "Indicates that an event, process, or activity is organized around or primarily focused on a particular participant or theme.",
+        "justification": "The funeral procession is organized around the deceased as its primary focus; a directional predicate from event to its main subject is best captured as 'is_centered_on'.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_9bfc63ae9548"
+        ],
+        "canonical_rel_name": "is_directed_toward",
+        "canonical_rel_desc": "Indicates that an attitude, emotion, or orientation is directed toward a particular target or object.",
+        "justification": "The subject is reverence (an attitude) and the object is the deceased individual; the natural predicate is an attitude being directed toward its target, expressed as 'is_directed_toward'.",
+        "remark": null,
+        "confidence": 0.94
+      }
+    },
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_9f59f0b71de6"
+        ],
+        "canonical_rel_name": "is_about",
+        "canonical_rel_desc": "Indicates that a belief, concept, text, or discourse has a particular topic or subject matter.",
+        "justification": "The relation connects afterlife beliefs to the afterlife itself as their topic; an aboutness predicate like 'is_about' captures this thematic connection more clearly than the raw label.",
+        "remark": null,
+        "confidence": 0.97
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_3180a27fe018",
+          "RelR_9f59f0b71de6"
+        ],
+        "rel_cls": "thematic_focus_relation",
+        "justification": "Both relations connect an activity or belief (funeral procession, afterlife beliefs) to what they are organized around or about (the deceased, the afterlife), which is a common thematic-focus/subject-matter pattern.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_9bfc63ae9548"
+        ],
+        "rel_cls": "attitude_target_relation",
+        "justification": "This relation links an attitude (reverence) to the entity it is directed toward (the deceased), which is best captured as an attitude-to-target family of predicates.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_3180a27fe018",
+          "RelR_9bfc63ae9548",
+          "RelR_9f59f0b71de6"
+        ],
+        "rel_cls_group": "ASSOCIATION",
+        "justification": "All three relations express non-compositional, non-causal links based on focus, aboutness, or attitudinal direction, which fall under a broad associative/thematic dimension.",
+        "remark": null,
+        "confidence": 0.93
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_2d23901db161"
+      ],
+      "canonical_rel_name": "is_motivated_by",
+      "canonical_rel_desc": "Indicates that a practice or action is motivated or driven by a belief, goal, or underlying reason.",
+      "justification": "The subject is a set of burial practices and the object is the underlying afterlife beliefs that drive those practices; a causal motivational predicate from subject to object is best captured as 'is_motivated_by'.",
+      "remark": null,
+      "confidence": 0.93
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_2d23901db161"
+      ],
+      "rel_cls": "motivational_relation",
+      "justification": "This relation links an observable practice to the beliefs that motivate it, which is a specific type of causal relation focused on motivation rather than generic cause.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_2d23901db161"
+      ],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "The burial practices are presented as arising from or being driven by afterlife beliefs, which fits a causal/motivational dimension.",
+      "remark": null,
+      "confidence": 0.95
+    },
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_3180a27fe018"
+      ],
+      "canonical_rel_name": "is_centered_on",
+      "canonical_rel_desc": "Indicates that an event, process, or activity is organized around or primarily focused on a particular participant or theme.",
+      "justification": "The funeral procession is organized around the deceased as its primary focus; a directional predicate from event to its main subject is best captured as 'is_centered_on'.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_9bfc63ae9548"
+      ],
+      "canonical_rel_name": "is_directed_toward",
+      "canonical_rel_desc": "Indicates that an attitude, emotion, or orientation is directed toward a particular target or object.",
+      "justification": "The subject is reverence (an attitude) and the object is the deceased individual; the natural predicate is an attitude being directed toward its target, expressed as 'is_directed_toward'.",
+      "remark": null,
+      "confidence": 0.94
+    },
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_9f59f0b71de6"
+      ],
+      "canonical_rel_name": "is_about",
+      "canonical_rel_desc": "Indicates that a belief, concept, text, or discourse has a particular topic or subject matter.",
+      "justification": "The relation connects afterlife beliefs to the afterlife itself as their topic; an aboutness predicate like 'is_about' captures this thematic connection more clearly than the raw label.",
+      "remark": null,
+      "confidence": 0.97
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_3180a27fe018",
+        "RelR_9f59f0b71de6"
+      ],
+      "rel_cls": "thematic_focus_relation",
+      "justification": "Both relations connect an activity or belief (funeral procession, afterlife beliefs) to what they are organized around or about (the deceased, the afterlife), which is a common thematic-focus/subject-matter pattern.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_9bfc63ae9548"
+      ],
+      "rel_cls": "attitude_target_relation",
+      "justification": "This relation links an attitude (reverence) to the entity it is directed toward (the deceased), which is best captured as an attitude-to-target family of predicates.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_3180a27fe018",
+        "RelR_9bfc63ae9548",
+        "RelR_9f59f0b71de6"
+      ],
+      "rel_cls_group": "ASSOCIATION",
+      "justification": "All three relations express non-compositional, non-causal links based on focus, aboutness, or attitudinal direction, which fall under a broad associative/thematic dimension.",
+      "remark": null,
+      "confidence": 0.93
+    }
+  ],
+  "timestamp": "2026-01-06T10:22:54Z"
+}
