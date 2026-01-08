@@ -80,7 +80,7 @@ print("TRACE_KG loaded from:", inspect.getfile(sentence_chunks_token_driven))
 REPO_ROOT = Path(".").resolve()
 
 PLAIN_TEXT_JSON = REPO_ROOT / "data/pdf_to_json/Plain_Text.json"
-ESSAYS_JSON = REPO_ROOT / "Experiments/MYNE/QA_and_OthersAnswers/Plain_Text_100_Essays.json"
+ESSAYS_JSON = REPO_ROOT / "data/In_Plain_Text.json"
 DATA_DIR = REPO_ROOT / "data"
 KG_OUT_ROOT = REPO_ROOT / "KGs_from_Essays"
 
@@ -341,6 +341,9 @@ def main():
         (i + 1, essays[i]) for i in range(total)
         if (i + 1) in requested
     ]
+
+
+
 
     print(f"Found {total} essays in source JSON.")
     print(f"Requested essay IDs: {requested}")
