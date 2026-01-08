@@ -1,8 +1,883 @@
 
 
+#!############################################# Start Chapter ##################################################
+#region:#!    Utilities + Config
 
 
 
+#*######################### Start ##########################
+#region:#?    LLM Model   - V1
+
+
+
+# from dataclasses import dataclass
+# from typing import Optional, Dict
+
+# # DSPy is optional at this point; we will introduce it gradually.
+# try:
+#     import dspy  # type: ignore
+# except ImportError:  # pragma: no cover - optional dependency
+#     dspy = None
+
+
+# # ------------------------------------------------------------------------------------
+# # CENTRAL LLM CONFIG FOR TRACE KG
+# # ------------------------------------------------------------------------------------
+
+# @dataclass
+# class TraceKGLLMConfig:
+#     """
+#     Central configuration for all LLM usage in TRACE KG.
+
+#     Levels of control:
+#       - default_model: used if nothing more specific is set.
+#       - rec_model: shared model for all *recognition* steps
+#           (entity_rec, class_rec, rel_rec) unless overridden per-step.
+#       - res_model: shared model for all *resolution* steps
+#           (entity_res, class_res, rel_res) unless overridden per-step.
+#       - Per-step overrides: if set, they win over rec_model/res_model.
+#     """
+
+#     # Global default for all steps (matches current hard-coded default)
+#     default_model: str = "gpt-5.1"
+
+#     # Coarse-grained overrides
+#     rec_model: Optional[str] = None   # EntityRec, ClassRec, RelRec
+#     res_model: Optional[str] = None   # EntityRes, ClassRes, RelRes
+
+#     # Fine-grained overrides (each step can have its own model)
+#     entity_rec_model: Optional[str] = None
+#     entity_res_model: Optional[str] = None
+#     class_rec_model: Optional[str] = None
+#     class_res_model: Optional[str] = None
+#     rel_rec_model: Optional[str] = None
+#     rel_res_model: Optional[str] = None
+
+#     # Common LLM runtime parameters
+#     temperature: float = 0.0
+#     max_tokens: int = 16000          # good default for gpt-5 family, can be changed
+#     api_key: Optional[str] = None
+#     api_base: Optional[str] = None
+
+#     # Whether to disable DSPy cache
+#     disable_cache: bool = False
+
+#     # If you want special handling for gpt-5 family (similar to KGGen)
+#     enforce_gpt5_constraints: bool = True
+
+#     def validate(self) -> None:
+#         """
+#         Optional safety checks, similar to KGGen.validate_temperature / validate_max_tokens.
+#         Currently only enforces a minimum max_tokens for gpt-5.* if enabled.
+#         """
+#         effective_model = self.default_model
+#         if "gpt-5" in effective_model and self.enforce_gpt5_constraints:
+#             if self.max_tokens < 16000:
+#                 raise ValueError("max_tokens must be >= 16000 for gpt-5 family models")
+#         # We deliberately do NOT hard-fail on temperature here to avoid surprising users.
+#         # You can tighten this later if you want.
+
+
+# def get_model_name_for_step(cfg: TraceKGLLMConfig, step: str) -> str:
+#     """
+#     Return the model name to use for a given logical step.
+
+#     step is one of:
+#       - "entity_rec"
+#       - "entity_res"
+#       - "class_rec"
+#       - "class_res"
+#       - "rel_rec"
+#       - "rel_res"
+#     """
+#     # Fine-grained overrides first
+#     if step == "entity_rec" and cfg.entity_rec_model:
+#         return cfg.entity_rec_model
+#     if step == "entity_res" and cfg.entity_res_model:
+#         return cfg.entity_res_model
+#     if step == "class_rec" and cfg.class_rec_model:
+#         return cfg.class_rec_model
+#     if step == "class_res" and cfg.class_res_model:
+#         return cfg.class_res_model
+#     if step == "rel_rec" and cfg.rel_rec_model:
+#         return cfg.rel_rec_model
+#     if step == "rel_res" and cfg.rel_res_model:
+#         return cfg.rel_res_model
+
+#     # Coarse-grained overrides
+#     if step in ("entity_rec", "class_rec", "rel_rec") and cfg.rec_model:
+#         return cfg.rec_model
+#     if step in ("entity_res", "class_res", "rel_res") and cfg.res_model:
+#         return cfg.res_model
+
+#     # Fallback to default
+#     return cfg.default_model
+
+
+# def make_lm_for_step(cfg: TraceKGLLMConfig, step: str):
+#     """
+#     Construct a DSPy LM object for the given step.
+#     This is a helper for when we migrate internals to DSPy.
+
+#     NOTE: For now, nothing in TRACE KG *requires* DSPy.
+#     If dspy is not installed and this is called, we raise a clear error.
+#     """
+#     if dspy is None:
+#         raise RuntimeError(
+#             "DSPy is not installed, but make_lm_for_step was called. "
+#             "Install dspy or avoid using DSPy-dependent paths."
+#         )
+
+#     model_name = get_model_name_for_step(cfg, step)
+#     cfg.validate()
+
+#     # Decide model_type based on naming convention, similar to KGGen
+#     # If you use OpenAI via responses API, you might prefix with 'openai/'.
+#     if model_name.startswith("openai/"):
+#         model_type = "responses"
+#     else:
+#         # For now treat non-openai as 'chat'; you can refine this later.
+#         model_type = "chat"
+
+#     # Instantiate the DSPy LM, respecting api_key/api_base + caching choice
+#     lm_kwargs: Dict[str, object] = dict(
+#         model=model_name,
+#         temperature=cfg.temperature,
+#         max_tokens=cfg.max_tokens,
+#         api_base=cfg.api_base,
+#         cache=not cfg.disable_cache,
+#         model_type=model_type,
+#     )
+#     if cfg.api_key:
+#         lm_kwargs["api_key"] = cfg.api_key
+
+#     return dspy.LM(**lm_kwargs)
+
+
+#endregion#?  LLM Model  - V1
+#*#########################  End  ##########################
+
+
+#*######################### Start ##########################
+#region:#?    LLM Model - V2
+
+
+
+# from dataclasses import dataclass
+# from typing import Optional, Dict, Tuple
+
+# # DSPy is required for the new flexible model handling.
+# # If you truly want to keep it optional, you can wrap this in try/except,
+# # but for the full objective (multi-provider, DSPy-based) it is better
+# # to fail fast if DSPy is missing.
+# try:
+#     import dspy  # type: ignore
+# except ImportError as e:  # pragma: no cover
+#     raise ImportError(
+#         "DSPy is required for TRACE KG LLM configuration but is not installed. "
+#         "Install it with `pip install dspy-ai`."
+#     ) from e
+
+
+# # ------------------------------------------------------------------------------------
+# # CENTRAL LLM CONFIG FOR TRACE KG
+# # ------------------------------------------------------------------------------------
+
+# @dataclass
+# class TraceKGLLMConfig:
+#     """
+#     Central configuration for all LLM usage in TRACE KG.
+
+#     Levels of control:
+#       - default_model: used if nothing more specific is set.
+#       - rec_model: shared model for all *recognition* steps
+#           (entity_rec, class_rec, rel_rec) unless overridden per-step.
+#       - res_model: shared model for all *resolution* steps
+#           (entity_res, class_res, rel_res) unless overridden per-step.
+#       - Per-step overrides: if set, they win over rec_model/res_model.
+
+#     Model naming conventions:
+#       - Plain names: "gpt-5.1", "gpt-4.1-mini", "gemini-1.5-pro"
+#       - Provider-prefixed: "openai/gpt-4o-mini", "google/gemini-1.5-pro"
+
+#     The provider prefix is optional and is interpreted by parse_model_name().
+#     """
+
+#     # Global default for all steps (matches current hard-coded default)
+#     default_model: str = "gpt-5.1"
+
+#     # Coarse-grained overrides
+#     rec_model: Optional[str] = None   # EntityRec, ClassRec, RelRec
+#     res_model: Optional[str] = None   # EntityRes, ClassRes, RelRes
+
+#     # Fine-grained overrides (each step can have its own model)
+#     entity_rec_model: Optional[str] = None
+#     entity_res_model: Optional[str] = None
+#     class_rec_model: Optional[str] = None
+#     class_res_model: Optional[str] = None
+#     rel_rec_model: Optional[str] = None
+#     rel_res_model: Optional[str] = None
+
+#     # Common LLM runtime parameters
+#     temperature: float = 0.0
+#     max_tokens: int = 16000          # good default for gpt-5 family, can be changed
+#     api_key: Optional[str] = None
+#     api_base: Optional[str] = None
+
+#     # Whether to disable DSPy cache
+#     disable_cache: bool = False
+
+#     # If you want special handling for gpt-5 family (similar to KGGen)
+#     enforce_gpt5_constraints: bool = True
+
+#     def validate(self) -> None:
+#         """
+#         Optional safety checks, similar to KGGen.validate_temperature / validate_max_tokens.
+#         Currently only enforces a minimum max_tokens for gpt-5.* if enabled.
+#         """
+#         # We validate against the default_model; you could also
+#         # inspect rec_model/res_model, but that is often overkill.
+#         effective = self.default_model
+#         if "gpt-5" in effective and self.enforce_gpt5_constraints:
+#             if self.max_tokens < 16000:
+#                 raise ValueError("max_tokens must be >= 16000 for gpt-5 family models")
+#         # We deliberately do NOT hard-fail on temperature here to avoid surprising users.
+#         # You can tighten this later if you want.
+
+
+# def get_model_name_for_step(cfg: TraceKGLLMConfig, step: str) -> str:
+#     """
+#     Return the (possibly provider-prefixed) model name to use for a given logical step.
+
+#     step is one of:
+#       - "entity_rec"
+#       - "entity_res"
+#       - "class_rec"
+#       - "class_res"
+#       - "rel_rec"
+#       - "rel_res"
+#     """
+#     # Fine-grained overrides first
+#     if step == "entity_rec" and cfg.entity_rec_model:
+#         return cfg.entity_rec_model
+#     if step == "entity_res" and cfg.entity_res_model:
+#         return cfg.entity_res_model
+#     if step == "class_rec" and cfg.class_rec_model:
+#         return cfg.class_rec_model
+#     if step == "class_res" and cfg.class_res_model:
+#         return cfg.class_res_model
+#     if step == "rel_rec" and cfg.rel_rec_model:
+#         return cfg.rel_rec_model
+#     if step == "rel_res" and cfg.rel_res_model:
+#         return cfg.rel_res_model
+
+#     # Coarse-grained overrides
+#     if step in ("entity_rec", "class_rec", "rel_rec") and cfg.rec_model:
+#         return cfg.rec_model
+#     if step in ("entity_res", "class_res", "rel_res") and cfg.res_model:
+#         return cfg.res_model
+
+#     # Fallback to default
+#     return cfg.default_model
+
+
+# def parse_model_name(raw: str) -> Tuple[Optional[str], str]:
+#     """
+#     Parse a raw model name into (provider, model).
+
+#     Examples:
+#       "gpt-4.1-mini"          -> (None, "gpt-4.1-mini")
+#       "openai/gpt-4o-mini"    -> ("openai", "gpt-4o-mini")
+#       "google/gemini-1.5-pro" -> ("google", "gemini-1.5-pro")
+
+#     The provider is advisory; we mainly use it to decide DSPy model_type and, for
+#     some providers, whether to treat the model as "responses" vs "chat".
+#     """
+#     if "/" in raw:
+#         prov, m = raw.split("/", 1)
+#         prov = prov.strip() or None
+#         m = m.strip()
+#         return prov, m
+#     return None, raw.strip()
+
+
+# def make_lm_for_step(cfg: TraceKGLLMConfig, step: str) -> dspy.LM:
+#     """
+#     Construct a DSPy LM object for the given step.
+
+#     This is the central gateway for all TRACE KG LLM calls.
+#     Steps should call this (via their llm_config) and then use dspy.context(lm=...).
+
+#     It supports:
+#       - Plain model names     e.g. "gpt-4.1-mini"
+#       - Prefixed model names  e.g. "openai/gpt-4o-mini", "google/gemini-1.5-pro"
+#     """
+#     model_name_raw = get_model_name_for_step(cfg, step)
+#     cfg.validate()
+
+#     provider, model_name = parse_model_name(model_name_raw)
+
+#     # Decide model_type based on provider / naming convention.
+#     # For OpenAI, you likely want "responses" to match the Responses API style.
+#     if provider == "openai":
+#         model_type = "responses"
+#     else:
+#         # For others (Gemini, local models, etc.), treat as "chat" for now.
+#         # You can refine this as you add more backends.
+#         model_type = "chat"
+
+#     lm_kwargs: Dict[str, object] = dict(
+#         model=model_name_raw,   # keep the full string for DSPy; it often accepts provider-prefixed
+#         temperature=cfg.temperature,
+#         max_tokens=cfg.max_tokens,
+#         api_base=cfg.api_base,
+#         cache=not cfg.disable_cache,
+#         model_type=model_type,
+#     )
+#     if cfg.api_key:
+#         lm_kwargs["api_key"] = cfg.api_key
+
+#     return dspy.LM(**lm_kwargs)
+
+
+#endregion#?  LLM Model - V2
+#*#########################  End  ##########################
+
+
+#*######################### Start ##########################
+#region:#?    LLM Model - V3  (DSPy‑centric)
+
+
+# from dataclasses import dataclass
+# from typing import Optional, Dict, Tuple
+# import re
+
+# # DSPy is required for the new flexible model handling.
+# try:
+#     import dspy  # type: ignore
+# except ImportError as e:  # pragma: no cover
+#     raise ImportError(
+#         "DSPy is required for TRACE KG LLM configuration but is not installed. "
+#         "Install it with `pip install dspy-ai`."
+#     ) from e
+
+
+# # ------------------------------------------------------------------------------------
+# # CENTRAL LLM CONFIG FOR TRACE KG
+# # ------------------------------------------------------------------------------------
+
+# @dataclass
+# class TraceKGLLMConfig:
+#     """
+#     Central configuration for all LLM usage in TRACE KG.
+
+#     Levels of control:
+#       - default_model: used if nothing more specific is set.
+#       - rec_model: shared model for all *recognition* steps
+#           (entity_rec, class_rec, rel_rec) unless overridden per-step.
+#       - res_model: shared model for all *resolution* steps
+#           (entity_res, class_res, rel_res) unless overridden per-step.
+#       - Per-step overrides: if set, they win over rec_model/res_model.
+
+#     Model naming conventions (both are fine; DSPy infers provider):
+#       - Plain names: "gpt-5.1", "gpt-4.1-mini"
+#       - Provider-prefixed: "openai/gpt-4o-mini", "google/gemini-1.5-pro"
+#     """
+
+#     # Global default for all steps
+#     # (you can override when calling generate_trace_kgs)
+#     default_model: str = "gpt-5.1"
+
+#     # Coarse-grained overrides
+#     rec_model: Optional[str] = None   # EntityRec, ClassRec, RelRec
+#     res_model: Optional[str] = None   # EntityRes, ClassRes, RelRes
+
+#     # Fine-grained overrides (each step can have its own model)
+#     entity_rec_model: Optional[str] = None
+#     entity_res_model: Optional[str] = None
+#     class_rec_model: Optional[str] = None
+#     class_res_model: Optional[str] = None
+#     rel_rec_model: Optional[str] = None
+#     rel_res_model: Optional[str] = None
+
+#     # Common LLM runtime parameters.
+#     #
+#     # IMPORTANT for GPT‑5.* reasoning models:
+#     #   DSPy enforces: temperature must be 1.0 or None, and max_tokens >= 16000.
+#     #   Using None lets the provider choose its default (recommended).
+#     temperature: Optional[float] = None
+#     max_tokens: int = 16000
+
+#     # Optional explicit auth / routing (otherwise taken from env + provider defaults)
+#     api_key: Optional[str] = None          # e.g. OPENAI_API_KEY
+#     api_base: Optional[str] = None         # e.g. custom proxy; mapped to base_url for DSPy
+
+#     # Whether to disable DSPy cache
+#     disable_cache: bool = False
+
+#     # Keep this flag to optionally enforce extra checks on our side
+#     enforce_gpt5_constraints: bool = True
+    
+#     reasoning_effort: Optional[str] = None   # e.g. "low", "medium", "high"
+#     verbosity: Optional[str] = None          # e.g. "low", "medium", "high"
+
+#     def validate(self) -> None:
+#         """
+#         Optional safety checks on top of DSPy's own constraints.
+
+#         Currently we only ensure that if the *default* model looks like a GPT‑5
+#         reasoning model and enforce_gpt5_constraints is True, then max_tokens
+#         is at least 16000 (matching DSPy's internal check).
+#         """
+#         if not self.enforce_gpt5_constraints:
+#             return
+
+#         family = self.default_model.split("/")[-1].lower()
+#         # Roughly align with DSPy's own reasoning detection for gpt‑5.*
+#         if family.startswith("gpt-5") and self.max_tokens < 16000:
+#             raise ValueError("max_tokens must be >= 16000 for gpt-5 family models")
+
+
+# def get_model_name_for_step(cfg: TraceKGLLMConfig, step: str) -> str:
+#     """
+#     Return the model name to use for a given logical step.
+
+#     step is one of:
+#       - "entity_rec"
+#       - "entity_res"
+#       - "class_rec"
+#       - "class_res"
+#       - "rel_rec"
+#       - "rel_res"
+#     """
+#     # Fine-grained overrides first
+#     if step == "entity_rec" and cfg.entity_rec_model:
+#         return cfg.entity_rec_model
+#     if step == "entity_res" and cfg.entity_res_model:
+#         return cfg.entity_res_model
+#     if step == "class_rec" and cfg.class_rec_model:
+#         return cfg.class_rec_model
+#     if step == "class_res" and cfg.class_res_model:
+#         return cfg.class_res_model
+#     if step == "rel_rec" and cfg.rel_rec_model:
+#         return cfg.rel_rec_model
+#     if step == "rel_res" and cfg.rel_res_model:
+#         return cfg.rel_res_model
+
+#     # Coarse-grained overrides
+#     if step in ("entity_rec", "class_rec", "rel_rec") and cfg.rec_model:
+#         return cfg.rec_model
+#     if step in ("entity_res", "class_res", "rel_res") and cfg.res_model:
+#         return cfg.res_model
+
+#     # Fallback to global default
+#     return cfg.default_model
+
+
+# def parse_model_name(raw: str) -> Tuple[Optional[str], str]:
+#     """
+#     Parse a raw model name into (provider, model).
+
+#     Examples:
+#       "gpt-4.1-mini"          -> (None, "gpt-4.1-mini")
+#       "openai/gpt-4o-mini"    -> ("openai", "gpt-4o-mini")
+#       "google/gemini-1.5-pro" -> ("google", "gemini-1.5-pro")
+
+#     This is mostly advisory. DSPy will also infer provider from the full string.
+#     """
+#     if "/" in raw:
+#         prov, m = raw.split("/", 1)
+#         prov = prov.strip() or None
+#         m = m.strip()
+#         return prov, m
+#     return None, raw.strip()
+
+
+# def _infer_model_type(model: str) -> str:
+#     """
+#     Decide DSPy's model_type ("chat" vs "responses") from the model name.
+
+#     - OpenAI reasoning models (o1/o3/o4*, gpt‑5.* except gpt‑5‑chat variants)
+#       -> use the Responses API format: model_type="responses".
+#     - Everything else -> "chat" (standard chat/completions style).
+
+#     This mirrors DSPy's own reasoning detection regex.
+#     """
+#     family = model.split("/")[-1].lower()
+
+#     reasoning_pattern = re.match(
+#         r"^(?:o[1345](?:-(?:mini|nano|pro))?(?:-\d{4}-\d{2}-\d{2})?"
+#         r"|gpt-5(?!-chat)(?:-.*)?)$",
+#         family,
+#     )
+#     if reasoning_pattern:
+#         return "responses"
+
+#     # Default: treat as normal chat model
+#     return "chat"
+
+
+# def make_lm_for_step(cfg: TraceKGLLMConfig, step: str) -> "dspy.LM":
+#     """
+#     Construct a DSPy LM object for the given step.
+
+#     This is the central gateway for all TRACE KG LLM calls.
+#     Steps should call this (via their llm_config) and then either:
+
+#         lm = make_lm_for_step(cfg, "entity_rec")
+#         outputs = lm(prompt=my_prompt)
+
+#     or use `dspy.context(lm=...)` with DSPy modules.
+#     """
+#     model_name_raw = get_model_name_for_step(cfg, step)
+#     cfg.validate()
+
+#     # Let DSPy infer provider; we only need model_type.
+#     model_type = _infer_model_type(model_name_raw)
+
+#     # lm_kwargs: Dict[str, object] = dict(
+#     #     model=model_name_raw,
+#     #     model_type=model_type,
+#     #     temperature=cfg.temperature,
+#     #     max_tokens=cfg.max_tokens,
+#     #     cache=not cfg.disable_cache,
+#     # )
+    
+#     lm_kwargs: Dict[str, object] = dict(
+#         model=model_name_raw,
+#         max_tokens=cfg.max_tokens,
+#         api_base=cfg.api_base,
+#         cache=not cfg.disable_cache,
+#         model_type=model_type,
+#     )
+
+#     # GPT-5 family does NOT support temperature
+#     if "gpt-5" not in model_name:
+#         lm_kwargs["temperature"] = cfg.temperature
+
+
+#     # Optional provider-specific overrides (OpenAI / custom proxies, etc.)
+#     if cfg.api_key:
+#         lm_kwargs["api_key"] = cfg.api_key
+#     if cfg.api_base:
+#         # DSPy / LiteLLM expect `base_url` for OpenAI-compatible endpoints
+#         lm_kwargs["base_url"] = cfg.api_base
+
+#     return dspy.LM(**lm_kwargs)
+
+
+#endregion#?  LLM Model - V3
+#*#########################  End  ##########################
+
+
+
+#?######################### Start ##########################
+#region:#?    LLM Model - V4  (DSPy‑centric, reasoning‑aware)
+
+from dataclasses import dataclass
+from typing import Optional, Dict, Tuple
+import re
+
+# DSPy is required for the new flexible model handling.
+try:
+    import dspy  # type: ignore
+except ImportError as e:  # pragma: no cover
+    raise ImportError(
+        "DSPy is required for TRACE KG LLM configuration but is not installed. "
+        "Install it with `pip install dspy-ai`."
+    ) from e
+
+
+# ------------------------------------------------------------------------------------
+# Helper
+# ------------------------------------------------------------------------------------
+
+def coerce_llm_text(raw) -> str:
+    """Return a reasonable string for a variety of LLM response shapes."""
+    if raw is None:
+        return ""
+    # already a string
+    if isinstance(raw, str):
+        return raw
+
+    # dict-like
+    if isinstance(raw, dict):
+        # common keys returned by various clients
+        for k in ("output_text", "text", "content", "message", "output"):
+            v = raw.get(k)
+            if isinstance(v, str):
+                return v
+            if isinstance(v, dict):
+                # nested message-like: {"content": "..."}
+                if "content" in v and isinstance(v["content"], str):
+                    return v["content"]
+            if isinstance(v, list):
+                # join list-of-msgs
+                parts = [coerce_llm_text(x) for x in v]
+                return " ".join(p for p in parts if p)
+        # fallback: try to dump some fields
+        for k in ("choices", "outputs", "messages"):
+            v = raw.get(k)
+            if v:
+                try:
+                    return json.dumps(v, ensure_ascii=False)
+                except Exception:
+                    return str(v)
+        return str(raw)
+
+    # list-like (e.g., [Message(...)])
+    if isinstance(raw, (list, tuple)):
+        parts = [coerce_llm_text(x) for x in raw]
+        return " ".join(p for p in parts if p)
+
+    # objects: try common attributes used by wrappers
+    for attr in ("output_text", "text", "content", "message"):
+        if hasattr(raw, attr):
+            val = getattr(raw, attr)
+            if isinstance(val, str):
+                return val
+            # if object with nested fields
+            try:
+                return str(val)
+            except Exception:
+                pass
+
+    # last fallback
+    try:
+        return str(raw)
+    except Exception:
+        return ""
+
+
+
+
+# ------------------------------------------------------------------------------------
+# CENTRAL LLM CONFIG FOR TRACE KG
+# ------------------------------------------------------------------------------------
+
+@dataclass
+class TraceKGLLMConfig:
+    """
+    Central configuration for all LLM usage in TRACE KG.
+
+    Levels of control:
+      - default_model: used if nothing more specific is set.
+      - rec_model: shared model for all *recognition* steps
+          (entity_rec, class_rec, rel_rec) unless overridden per-step.
+      - res_model: shared model for all *resolution* steps
+          (entity_res, class_res, rel_res) unless overridden per-step.
+      - Per-step overrides: if set, they win over rec_model/res_model.
+
+    Model naming conventions (both are fine; DSPy infers provider):
+      - Plain names: "gpt-5.1", "gpt-4.1-mini"
+      - Provider-prefixed: "openai/gpt-4o-mini", "google/gemini-1.5-pro"
+    """
+
+    # Global default for all steps
+    default_model: str = "gpt-5.1"
+
+    # Coarse-grained overrides
+    rec_model: Optional[str] = None   # EntityRec, ClassRec, RelRec
+    res_model: Optional[str] = None   # EntityRes, ClassRes, RelRes
+
+    # Fine-grained overrides (each step can have its own model)
+    entity_rec_model: Optional[str] = None
+    entity_res_model: Optional[str] = None
+    class_rec_model: Optional[str] = None
+    class_res_model: Optional[str] = None
+    rel_rec_model: Optional[str] = None
+    rel_res_model: Optional[str] = None
+
+    # Common LLM runtime parameters.
+    #
+    # For GPT‑5 reasoning models (gpt-5.*, gpt-5-nano, etc.) the Responses API
+    # often *does not* support `temperature`. Using None lets the provider
+    # choose its default.
+    temperature: Optional[float] = None
+    max_tokens: int = 16000
+
+    # Optional explicit auth / routing (otherwise taken from env + provider defaults)
+    api_key: Optional[str] = None          # e.g. OPENAI_API_KEY
+    api_base: Optional[str] = None         # e.g. custom proxy; mapped to base_url for DSPy/LiteLLM
+
+    # Whether to disable DSPy cache
+    disable_cache: bool = False
+
+    # Optional safety check on our side for GPT‑5 family max_tokens etc.
+    enforce_gpt5_constraints: bool = True
+
+    # Responses‑style knobs (for reasoning models etc.)
+    reasoning_effort: Optional[str] = None   # e.g. "low", "medium", "high"
+    verbosity: Optional[str] = None          # e.g. "low", "medium", "high"
+
+    def validate(self) -> None:
+        """
+        Optional safety checks on top of DSPy's own constraints.
+
+        Currently we only ensure that if the *default* model looks like a GPT‑5
+        reasoning model and enforce_gpt5_constraints is True, then max_tokens
+        is at least 16000 (matching DSPy's internal check).
+        """
+        if not self.enforce_gpt5_constraints:
+            return
+
+        family = self.default_model.split("/")[-1].lower()
+        # Roughly align with GPT‑5 reasoning family
+        if family.startswith("gpt-5") and self.max_tokens < 16000:
+            raise ValueError("max_tokens must be >= 16000 for gpt-5 family models")
+
+
+def get_model_name_for_step(cfg: TraceKGLLMConfig, step: str) -> str:
+    """
+    Return the model name to use for a given logical step.
+
+    step is one of:
+      - "entity_rec"
+      - "entity_res"
+      - "class_rec"
+      - "class_res"
+      - "rel_rec"
+      - "rel_res"
+    """
+    # Fine-grained overrides first
+    if step == "entity_rec" and cfg.entity_rec_model:
+        return cfg.entity_rec_model
+    if step == "entity_res" and cfg.entity_res_model:
+        return cfg.entity_res_model
+    if step == "class_rec" and cfg.class_rec_model:
+        return cfg.class_rec_model
+    if step == "class_res" and cfg.class_res_model:
+        return cfg.class_res_model
+    if step == "rel_rec" and cfg.rel_rec_model:
+        return cfg.rel_rec_model
+    if step == "rel_res" and cfg.rel_res_model:
+        return cfg.rel_res_model
+
+    # Coarse-grained overrides
+    if step in ("entity_rec", "class_rec", "rel_rec") and cfg.rec_model:
+        return cfg.rec_model
+    if step in ("entity_res", "class_res", "rel_res") and cfg.res_model:
+        return cfg.res_model
+
+    # Fallback to global default
+    return cfg.default_model
+
+
+def parse_model_name(raw: str) -> Tuple[Optional[str], str]:
+    """
+    Parse a raw model name into (provider, model).
+
+    Examples:
+      "gpt-4.1-mini"          -> (None, "gpt-4.1-mini")
+      "openai/gpt-4o-mini"    -> ("openai", "gpt-4o-mini")
+      "google/gemini-1.5-pro" -> ("google", "gemini-1.5-pro")
+
+    This is mostly advisory. DSPy will also infer provider from the full string.
+    """
+    if "/" in raw:
+        prov, m = raw.split("/", 1)
+        prov = prov.strip() or None
+        m = m.strip()
+        return prov, m
+    return None, raw.strip()
+
+
+def _infer_model_type(model: str) -> str:
+    """
+    Decide DSPy's model_type ("chat" vs "responses") from the model name.
+
+    - OpenAI reasoning models (o1/o3/o4*), and gpt‑5.* (except gpt‑5‑chat variants)
+      -> use the Responses API format: model_type="responses".
+    - Everything else -> "chat" (standard chat/completions style).
+    """
+    family = model.split("/")[-1].lower()
+
+    reasoning_pattern = re.match(
+        r"^(?:o[1345](?:-(?:mini|nano|pro))?(?:-\d{4}-\d{2}-\d{2})?"
+        r"|gpt-5(?!-chat)(?:-.*)?)$",
+        family,
+    )
+    if reasoning_pattern:
+        return "responses"
+
+    # Default: treat as normal chat model
+    return "chat"
+
+
+def _supports_temperature(model: str, model_type: str) -> bool:
+    """
+    Heuristic: when should we send `temperature`?
+
+    - For OpenAI reasoning / GPT‑5 models (Responses API), temperature is often
+      not supported (e.g. gpt-5-nano, gpt-5.1, o1/o3). We skip it there.
+    - For classic chat/completion models (gpt-4.1, gpt-4o-mini, etc.) it's fine.
+    """
+    base = model.split("/")[-1].lower()
+
+    if model_type == "responses":
+        # treat all gpt-5.* and o* reasoning models as "no temperature"
+        if base.startswith("gpt-5"):
+            return False
+        if base.startswith("o1") or base.startswith("o2") or base.startswith("o3") or base.startswith("o4"):
+            return False
+
+    return True
+
+
+def make_lm_for_step(cfg: TraceKGLLMConfig, step: str) -> "dspy.LM":
+    """
+    Construct a DSPy LM object for the given step.
+
+    This is the central gateway for all TRACE KG LLM calls.
+    Steps should call this (via their llm_config) and then either:
+
+        lm = make_lm_for_step(cfg, "entity_rec")
+        outputs = lm(prompt=my_prompt)
+
+    or use `dspy.context(lm=...)` with DSPy modules.
+    """
+    model_name_raw = get_model_name_for_step(cfg, step)
+    cfg.validate()
+
+    model_type = _infer_model_type(model_name_raw)
+
+    lm_kwargs: Dict[str, object] = dict(
+        model=model_name_raw,
+        max_tokens=cfg.max_tokens,
+        cache=not cfg.disable_cache,
+        model_type=model_type,
+    )
+
+    # Provider / routing options
+    if cfg.api_key:
+        lm_kwargs["api_key"] = cfg.api_key
+    if cfg.api_base:
+        # DSPy / LiteLLM expect `base_url` for OpenAI-compatible endpoints
+        lm_kwargs["base_url"] = cfg.api_base
+
+    # Temperature: only include when it is supported and explicitly set
+    if cfg.temperature is not None and _supports_temperature(model_name_raw, model_type):
+        lm_kwargs["temperature"] = cfg.temperature
+
+    # Responses‑style extras (for reasoning / Responses models)
+    if model_type == "responses":
+        if cfg.reasoning_effort:
+            # OpenAI Responses uses: reasoning={"effort": "low"|"medium"|"high"}
+            lm_kwargs["reasoning"] = {"effort": cfg.reasoning_effort}
+        if cfg.verbosity:
+            # Newer models accept verbosity; others will just ignore it.
+            lm_kwargs["verbosity"] = cfg.verbosity
+
+    return dspy.LM(**lm_kwargs)
+
+
+#endregion#?  LLM Model - V4
+#?#########################  End  ##########################
+
+
+
+#endregion#!  Utilities + Config
+#!#############################################  End Chapter  ##################################################
 
 
 
@@ -441,54 +1316,1183 @@ def embed_and_index_chunks(
 
 
 
-#?######################### Start ##########################
-#region:#?   Entity Recognition v8 - Intrinsic properties added (Responses + gpt-5.1)
 
-import os
+
+
+#*######################### Start ##########################
+#region:#?   Entity Recognition v8
+
+
+
+
+# import os
+# import json
+# import uuid
+# from pathlib import Path
+# from typing import List, Dict, Optional
+# from openai import OpenAI
+# from datetime import datetime
+
+# # ---------- CONFIG: paths ----------
+# # CHUNKS_JSONL =      "data/Chunks/chunks_sentence.jsonl"
+# CHUNKS_JSONL =      "data/Chunks/chunks_sentence.jsonl"
+# ENTITIES_OUT =      "data/Entities/Ent_Raw_0/entities_raw.jsonl"
+# DEFAULT_DEBUG_DIR = "data/Entities/Ent_Raw_0/entity_raw_debug_prompts_outputs"
+
+# # ---------- OPENAI client (load key from env or fallback file path) ----------
+# def _load_openai_key(
+#     envvar: str = "OPENAI_API_KEY",
+#     fallback_path: str = ".env"
+# ) -> str:
+#     """
+#     Load OpenAI key from:
+#       1) Environment variable OPENAI_API_KEY
+#       2) Or, if not set, from a file at fallback_path (file content is the key).
+#     """
+#     key = os.getenv(envvar)
+#     if key:
+#         return key
+
+#     # If env var not set, try reading key directly from fallback_path file
+#     p = Path(fallback_path)
+#     if p.exists():
+#         try:
+#             txt = p.read_text(encoding="utf-8").strip()
+#             if txt:
+#                 return txt
+#         except Exception:
+#             pass
+
+#     return ""
+
+# OPENAI_KEY = _load_openai_key()
+# if not OPENAI_KEY or not isinstance(OPENAI_KEY, str) or len(OPENAI_KEY) < 10:
+#     print("⚠️  OPENAI API key not found or seems invalid. "
+#           "Set OPENAI_API_KEY env or place key text in the fallback file path.")
+# client = OpenAI(api_key=OPENAI_KEY)
+
+# # ---------- Utility: load chunks ----------
+# def load_chunks(chunks_jsonl_path: str = CHUNKS_JSONL) -> List[Dict]:
+#     p = Path(chunks_jsonl_path)
+#     if not p.exists():
+#         # don't assert at import time; raise only when the function is actually called
+#         raise FileNotFoundError(
+#             f"Chunks file not found: {p}\n"
+#             f"Please run your chunking step first to create this file, e.g. sentence_chunks_token_driven(...)\n"
+#             f"Expected path: {chunks_jsonl_path}"
+#         )
+#     with open(p, "r", encoding="utf-8") as fh:
+#         return [json.loads(l) for l in fh]
+
+# # ---------- Save helper (append-safe) ----------
+# def save_entities(entities: List[Dict], out_path: str = ENTITIES_OUT):
+#     if not entities:
+#         print("save_entities: nothing to save.")
+#         return
+#     outp = Path(out_path)
+#     outp.parent.mkdir(parents=True, exist_ok=True)
+#     with open(outp, "a", encoding="utf-8") as fh:
+#         for e in entities:
+#             fh.write(json.dumps(e, ensure_ascii=False) + "\n")
+#     print(f"Saved {len(entities)} entities to {out_path}")
+
+# # ---------- Small helper to find a chunk by id ----------
+# def get_chunk_by_id(chunk_id: str, chunks: List[Dict]) -> Dict:
+#     for c in chunks:
+#         if c.get("id") == chunk_id:
+#             return c
+#     raise ValueError(f"chunk_id {chunk_id} not found")
+
+# # ---------- Helper: get previous chunks from same section ----------
+# def get_previous_chunks(chunk: Dict, chunks: List[Dict], prev_n: int = 1) -> List[Dict]:
+#     """
+#     Return up to prev_n previous chunks from the same ref_index (by chunk_index_in_section order).
+#     Preserves chronological order (oldest -> nearest previous).
+#     """
+#     if prev_n <= 0:
+#         return []
+#     ref_index = chunk.get("ref_index")
+#     idx_in_section = chunk.get("chunk_index_in_section", 0)
+#     same_sec = [c for c in chunks if c.get("ref_index") == ref_index]
+#     same_sec_sorted = sorted(same_sec, key=lambda x: x.get("chunk_index_in_section", 0))
+#     prevs = []
+#     for c in same_sec_sorted:
+#         if c.get("chunk_index_in_section", 0) < idx_in_section:
+#             prevs.append(c)
+#     # take at most prev_n from the end (nearest previous), then return in chronological order
+#     prevs = prevs[-prev_n:] if prevs else []
+#     return prevs
+
+# # ---------- Prompt builder (chunk + optional prev_chunks) ----------
+# def build_entity_prompt_with_context(chunk: Dict, prev_chunks: Optional[List[Dict]] = None) -> str:
+    
+#     """
+#     Build a prompt that includes the focus chunk and n previous chunk(s) as explicit context.
+#     Previous chunks are concatenated as plain text (no IDs) to form CONTEXT text.
+#     The LLM's task: extract entities from the FOCUS chunk only. Previous chunks are provided
+#     as context for disambiguation. The prompt encourages adding low-confidence new entities if
+#     uncertain (they will be resolved later).
+
+#     Notes:
+#     - The suggested type hints are *recommendations* only. The model is explicitly allowed
+#       to propose any other, more specific, or domain-appropriate type strings.
+#     - This version enforces: do NOT extract relation-level qualifiers here (postpone to Rel Rec).
+#     - The only allowed "properties" now are truly intrinsic node properties — very rare.
+#     """
+#     focus_text = chunk.get("text", "") or ""
+
+#     # Suggested (preferred) type hints — not exhaustive and NOT binding.
+#     suggested_types = [
+#         "Component",
+#         "Material",
+#         "DamageMechanism",
+#         "FailureEvent",
+#         "Symptom",
+#         "Action",
+#         "FunctionalUnit",
+#         "OperatingCondition",
+#         "Environment",
+#         "InspectionMethod",
+#         "MitigationAction",
+#         "Location",
+#         "ProcessUnit",
+#         "YOU MAY USE ANY OTHER TYPE THAT FITS BETTER"]
+
+#     parts = [
+#         "GOAL: We are creating a context-enriched knowledge graph (KG) from textual documents.",
+#         "YOUR TASK (THIS STEP ONLY): Extract entity mentions from the FOCUS chunk ONLY. Relation-level qualifiers, conditions, and other contextual information will be extracted later in the RELATION EXTRACTION step (Rel Rec).",
+#         "",
+#         "PRINCIPLES (read carefully):",
+#         "- Extract broadly: prefer recall (extract candidate mentions). Do NOT be conservative. When in doubt, include the candidate mention. Later stages will cluster, canonicalize, and resolve.",
+#         "- Ground every output in the FOCUS chunk. You may CONSULT CONTEXT (previous chunks concatenated) only for disambiguation/pronoun resolution.",
+#         "- DO NOT output relation-level qualifiers, situational context, or evidential/epistemic markers in this step. The ONLY exception is truly intrinsic node properties (see 'INTRINSIC NODE PROPERTIES' below).",
+#         "- The suggested type hints below are guidance — you may propose more specific domain-appropriate types.",
+#         "",
+#         "CORE INSTRUCTION FOR CONCEPTUAL ENTITIES (ENTITY-LEVEL, NOT CLASSES):",
+#         "- For recurring concepts (phenomena, processes, failure modes, behaviors, conditions, states, methods), extract a SHORT, STABLE, REUSABLE entity-level label as `entity_name`.",
+#         "- `entity_name` is a canonical mention-level surface form (normalized for this mention). It is NOT an ontology or Schema class label. If you think a class is relevant, place it in `entity_type_hint`.",
+#         "- If the text describes the concept indirectly (e.g., 'this type of …', 'loss of … under conditions'), infer the best short label (e.g., 'graphitization') and put evidence in `entity_description` and `resolution_context`.",
+#         "- If unsure of the label, still propose it and lower the `confidence_score` (e.g., 0.5–0.7). We prefer 'extract first, judge later'.",
+#         "",
+#         "INTRINSIC NODE PROPERTIES:",
+#         "- You MUST include `node_properties` when the property is identity-defining for the entity (removing it would change what the entity fundamentally is) and they are MANDATORY when present in FOCUS chunk.",
+#         "- Intrinsic property means ANY stable attributes that define identity no mather what (removing it would change what the entity fundamentally is) e.g material_grade='304', e.g., chemical formula, etc.",
+#         "- Expectation: IF the property is defined in relation to other entities, that is not intrinsic, therefore we postpone them to Rel Rec.",
+#         "",
+#         "CONFIDENCE GUIDELINES:",
+#         "- 0.90 - 1.00 : Certain — explicit mention in FOCUS chunk, clear support.",
+#         "- 0.70 - 0.89 : Likely — supported by FOCUS or resolved by CONTEXT.",
+#         "- 0.40 - 0.69 : Possible — plausible inference; partial support.",
+#         "- 0.00 - 0.39 : Speculative — weakly supported; include only if likely useful.",
+#         "",
+#         "SUGGESTED TYPE HINTS (Just to give you an idea! You may propose any other type):",
+#         f"- {', '.join(suggested_types)}",
+#         "",
+#         "OUTPUT FORMAT INSTRUCTIONS (REVISED — REQUIRED):",
+#         "- Return ONLY a single JSON array (no extra commentary, no markdown fences).",
+#         "- Each element must be an object with the following keys (exact names):",
+#         "   * entity_name (string) — short canonical surface label for the mention (mention-level, NOT class).",
+#         "   * entity_description (string) — 10–25 word description derived from the FOCUS chunk (and CONTEXT if needed).",
+#         "   * entity_type_hint (string) — suggested type (from list or a better string).",
+#         "   * context_phrase (string) — short (3–10 word) excerpt from the FOCUS chunk that PROVES the mention provenance (required when possible).",
+#         "   * resolution_context (string) — minimal 20–120 word excerpt that best explains WHY this mention maps to `entity_name`. Prefer the sentence containing the mention and at most one neighbor sentence; if CONTEXT was required, include up to one supporting sentence from CONTEXT. This is used for clustering/resolution — make it disambiguating (co-mentions, verbs, numerics).",
+#         "   * confidence_score (float) — 0.0–1.0.",
+#         "   * node_properties (array of objects, Include ONLY if an intrinsic property is present in the focus chunk) — Include for any clearly stated attribute. Each: { 'prop_name': str, 'prop_value': str|num, 'justification': str }."
+#         "",
+#         "IMPORTANT:",
+#         "- DO NOT list entities that appear only in CONTEXT. Only extract mentions present in the FOCUS chunk.",
+#         "- DO NOT output relation qualifiers, situational context, causal hints, or uncertainty markers here. Postpone them to Rel Rec.",
+#         "- Do not output ontology-level class names as `entity_name`. If relevant, place such information in `entity_type_hint` and keep `entity_name` a mention-level label.",
+#         "- For conceptual entities that are described indirectly, prefer a short canonical mention and keep the descriptive evidence in `entity_description` and `resolution_context`.",
+#         "",
+#         "EMBEDDING WEIGHT NOTE (for clustering later):",
+#         "WEIGHTS = {\"name\": 0.45, \"desc\": 0.25, \"resolution_context\": 0.25, \"type\": 0.05}",
+#         "Build resolution_context precisely — it is the second-most important signal after name and description.",
+#         "",
+#         "EXAMPLES (follow JSON shape exactly):"
+#     ]
+
+#     # include previous context if provided
+#     if prev_chunks:
+#         ctx_texts = [pc.get("text", "").strip() for pc in prev_chunks if pc.get("text", "").strip()]
+#         if ctx_texts:
+#             parts.append("=== CONTEXT (previous chunks concatenated for disambiguation) ===\n")
+#             parts.append("\n\n".join(ctx_texts))
+#         else:
+#             parts.append("NO PREVIOUS CONTEXT PROVIDED.\n---")
+#     else:
+#         parts.append("NO PREVIOUS CONTEXT PROVIDED.\n---")
+
+#     parts.append("")
+#     parts.append("=== FOCUS CHUNK (extract from here) ===")
+#     parts.append(f"FOCUS_CHUNK_ID: {chunk.get('id')}")
+#     parts.append(focus_text)
+#     parts.append("")
+#     parts.append("EXAMPLE OUTPUT (three diverse examples — strictly follow JSON shape):")
+
+#     examples = [
+#       {
+#         "entity_name": "graphitization",
+#         "entity_description": "Formation of graphite in steel that reduces ductility and increases brittleness near weld regions.",
+#         "entity_type_hint": "DamageMechanism",
+#         "context_phrase": "this type of graphitization",
+#         "resolution_context": "this type of graphitization observed in low-alloy steels near welds, indicating localized graphite formation associated with embrittlement and loss of toughness.",
+#         "confidence_score": 0.85
+#       },
+#       {
+#         "entity_name": "authentication failure",
+#         "entity_description": "A software event where credentials are rejected repeatedly, often producing error 401 in logs.",
+#         "entity_type_hint": "SoftwareEvent",
+#         "context_phrase": "repeated authentication failure",
+#         "resolution_context": "repeated authentication failure for user 'svc_backup' recorded in the log with multiple 401 entries, indicating failed credential validation.",
+#         "confidence_score": 0.88
+#       },
+#       {
+#         "entity_name": "austenitic stainless steel",
+#         "entity_description": "A stainless steel family with austenitic crystal structure, commonly designated by grades like 304 or 316.",
+#         "entity_type_hint": "Material",
+#         "context_phrase": "austenitic stainless steel (304)",
+#         "resolution_context": "austenitic stainless steel (304) explicitly mentioned in FOCUS, parenthetical grade '304' identifies the material grade.",
+#         "confidence_score": 0.95,
+#         "node_properties": [
+#           {
+#             "prop_name": "material_grade",
+#             "prop_value": "304",
+#             "justification": "explicit explanation of inclusion in the FOCUS chunk"
+#           }
+#         ]
+#       }
+#     ]
+#     parts.append(json.dumps(examples, ensure_ascii=False, indent=2))
+
+#     # final join
+#     return "\n\n".join(parts)
+
+# # ---------- OpenAI call (wrapper) ----------
+# def call_openai(
+#     prompt: str,
+#     model: str = "gpt-5.1",
+#     max_tokens: int = 2000,
+#     # temperature: float = 0.0,
+#     reasoning_effort: str = "low"
+# ) -> str:
+#     """
+#     Wrapper using the Responses API (works with gpt-5.1 and others).
+
+#     - For gpt-5.x models, we pass `reasoning={'effort': reasoning_effort}`.
+#     - `max_tokens` is mapped to Responses' `max_output_tokens`.
+#     """
+#     try:
+#         # print(
+#         #     f"[call_openai] model={model} "
+#         #     f"max_output_tokens={max_tokens} "
+#         #     # f"temperature={temperature} "
+#         #     f"reasoning_effort={reasoning_effort}"
+#         # )
+
+#         kwargs: Dict[str, object] = {
+#             "model": model,
+#             "input": [
+#                 {
+#                     "role": "user",
+#                     "content": prompt,
+#                 }
+#             ],
+#             # "temperature": temperature,
+#         }
+
+#         if max_tokens is not None:
+#             kwargs["max_output_tokens"] = max_tokens
+
+#         # Only attach reasoning config for gpt-5.x models
+#         if reasoning_effort and isinstance(reasoning_effort, str) and model.startswith("gpt-5"):
+#             kwargs["reasoning"] = {"effort": reasoning_effort}
+
+#         response = client.responses.create(**kwargs)
+
+#         # Convenient helper property (joined assistant text)
+#         txt = response.output_text or ""
+#         print(
+#             f"[call_openai] received response (len={len(txt)} chars) "
+#             f"status={getattr(response, 'status', None)}"
+#         )
+
+#         # Optional: warn if response is incomplete due to max_output_tokens
+#         if getattr(response, "status", None) == "incomplete":
+#             incomplete_details = getattr(response, "incomplete_details", None)
+#             print(f"[call_openai] WARNING: response incomplete: {incomplete_details}")
+
+#         return txt
+#     except Exception as e:
+#         print("OpenAI call error:", e)
+#         return ""
+
+# # ---------- Debug file writer (single clean implementation) ----------
+# def write_debug_file(
+#     debug_dir: str,
+#     chunk: Dict,
+#     prev_ctx: List[Dict],
+#     prompt: str,
+#     llm_output: str,
+#     parsed_entities: Optional[List[Dict]] = None,
+#     error: Optional[str] = None
+# ) -> str:
+#     """
+#     Write a JSON file containing:
+#       - explicit focus_chunk (full chunk dict with id, ref_index, chunk_index_in_section, ref_title, text),
+#       - explicit context_chunks (list of {id, ref_index, chunk_index_in_section, ref_title, text}),
+#       - prompt_full (string),
+#       - llm_output_full (string),
+#       - parsed_entities (list),
+#       - error (string or None), metadata.
+#     Returns the path to the file created.
+#     """
+#     debug_dir_path = Path(debug_dir)
+#     debug_dir_path.mkdir(parents=True, exist_ok=True)
+
+#     run_id = uuid.uuid4().hex
+#     ts = datetime.utcnow().isoformat() + "Z"
+#     fname = f"{chunk.get('id','unknown')}_{ts.replace(':','-').replace('.','-')}_{run_id[:8]}.json"
+#     out_path = debug_dir_path / fname
+
+#     # prepare context chunks minimal view (id + text) to avoid huge nested objects
+#     context_min = []
+#     for pc in (prev_ctx or []):
+#         context_min.append({
+#             "id": pc.get("id"),
+#             "ref_index": pc.get("ref_index"),
+#             "chunk_index_in_section": pc.get("chunk_index_in_section"),
+#             "ref_title": pc.get("ref_title"),
+#             "text": pc.get("text")
+#         })
+
+#     payload = {
+#         "run_id": run_id,
+#         "timestamp_utc": ts,
+#         "chunk_id": chunk.get("id"),
+#         "focus_chunk": {
+#             "id": chunk.get("id"),
+#             "ref_index": chunk.get("ref_index"),
+#             "chunk_index_in_section": chunk.get("chunk_index_in_section"),
+#             "ref_title": chunk.get("ref_title"),
+#             "text": chunk.get("text")
+#         },
+#         "context_chunks": context_min,
+#         "prompt_full": prompt,
+#         "llm_output_full": llm_output,
+#         "parsed_entities": parsed_entities or [],
+#         "error": error
+#     }
+
+#     with open(out_path, "w", encoding="utf-8") as fh:
+#         json.dump(payload, fh, ensure_ascii=False, indent=2)
+
+#     return str(out_path)
+
+# # ---------- Main: extract_entities_from_chunk (with optional prev context + debug saving) ----------
+# def extract_entities_from_chunk(
+#     chunk_id: str,
+#     chunks_path: str = CHUNKS_JSONL,
+#     prev_chunks: int = 2,       # how many previous chunks to include as CONTEXT (default 1). Set 0 to disable.
+#     model: str = "gpt-5.1",
+#     max_tokens: int = 16000,
+#     save_debug: bool = False,   # if True, write full prompt+output+parsed to a debug JSON file
+#     debug_dir: str = DEFAULT_DEBUG_DIR
+# ) -> List[Dict]:
+#     """
+#     Extract entities from the specified focus chunk, optionally including up to `prev_chunks`
+#     previous chunks from the same section as disambiguating CONTEXT.
+
+#     Uses the Responses API (via call_openai) and supports gpt-5.1 reasoning models.
+
+#     If save_debug=True, a structured JSON file containing the full prompt and full LLM output
+#     (and the focus/context text) will be written to `debug_dir` for later inspection.
+#     """
+#     chunks = load_chunks(chunks_path)
+#     try:
+#         chunk = get_chunk_by_id(chunk_id, chunks)
+#     except ValueError as e:
+#         print(e)
+#         return []
+
+#     prev_ctx = get_previous_chunks(chunk, chunks, prev_n=prev_chunks)
+
+#     prompt = build_entity_prompt_with_context(chunk, prev_ctx)
+
+#     # debug: show short prompt preview in console (we keep this to avoid huge console dumps)
+#     p_shown = prompt if len(prompt) <= 2000 else prompt[:2000] + "\n\n...[TRUNCATED PROMPT]"
+#     # print(f"\n--- ENTITY EXTRACTION PROMPT for {chunk_id} (prev_ctx={len(prev_ctx)}) ---\n{p_shown}\n{'-'*80}")
+
+#     raw = call_openai(prompt, model=model, max_tokens=max_tokens, reasoning_effort="low")
+#     if not raw:
+#         print("Empty LLM response.")
+#         # optionally save debug with empty llm_output
+#         if save_debug:
+#             dbg_path = write_debug_file(debug_dir, chunk, prev_ctx, prompt, "", [], error="Empty LLM response")
+#             print(f"Debug file written to: {dbg_path}")
+#         return []
+
+#     txt = raw.strip()
+#     # unwrap markdown fences if present (be liberal)
+#     if txt.startswith("```") and txt.endswith("```"):
+#         # Strip surrounding backticks and optional 'json' language tag
+#         txt = txt.strip("`")
+#         if txt.lower().startswith("json"):
+#             txt = txt[4:].strip()
+
+#     # console preview of LLM output (short)
+#     preview = txt if len(txt) <= 4000 else txt[:4000] + "\n\n...[TRUNCATED OUTPUT]"
+#     # print(f"[LLM raw output preview]\n{preview}\n{'-'*80}")
+
+#     parsed = []
+#     error_msg = None
+#     try:
+#         parsed = json.loads(txt)
+#         if not isinstance(parsed, list):
+#             raise ValueError("Parsed JSON is not a list/array")
+#         print(f"Parsed JSON array with {len(parsed)} items")
+#     except Exception as e:
+#         error_msg = str(e)
+#         print("Failed to parse JSON from model output:", e)
+#         print("Model raw output (truncated):", txt[:2000])
+#         # if debug saving enabled, still save the raw output and error (including focus/context)
+#         if save_debug:
+#             dbg_path = write_debug_file(debug_dir, chunk, prev_ctx, prompt, txt, [], error=error_msg)
+#             print(f"Debug file written to: {dbg_path}")
+#         return []
+
+#     results = []
+#     for e in parsed:
+#         # robust field extraction with fallbacks
+#         name = e.get("entity_name") or e.get("name") or e.get("label")
+#         if not name:
+#             continue
+
+#         # required fields mapping
+#         entity_description = e.get("entity_description") or e.get("description") or ""
+#         entity_type_hint = e.get("entity_type_hint") or e.get("type") or "Other"
+#         context_phrase = e.get("context_phrase") or ""
+#         resolution_context = e.get("resolution_context") or e.get("used_context_excerpt") or ""
+#         confidence_raw = e.get("confidence_score") if e.get("confidence_score") is not None else e.get("confidence")
+#         try:
+#             confidence_score = float(confidence_raw) if confidence_raw is not None else None
+#         except Exception:
+#             confidence_score = None
+
+#         node_props_raw = e.get("node_properties") or []
+#         # normalize node_properties if present
+#         node_properties = []
+#         if isinstance(node_props_raw, list):
+#             for np in node_props_raw:
+#                 if isinstance(np, dict):
+#                     node_properties.append({
+#                         "prop_name": np.get("prop_name") or np.get("name"),
+#                         "prop_value": np.get("prop_value") or np.get("value"),
+#                         "justification": np.get("justification", ""),
+#                         # "confidence": float(np.get("confidence")) if np.get("confidence") is not None else None
+#                     })
+
+#         ent = {
+#             "id": f"En_{uuid.uuid4().hex[:8]}",
+#             "flag": "entity_raw",
+#             "chunk_id": chunk_id,
+#             "ref_index": chunk.get("ref_index"),
+#             "chunk_index_in_section": chunk.get("chunk_index_in_section"),
+#             "ref_title": chunk.get("ref_title"),
+#             "text_span": context_phrase,
+#             "entity_name": name,
+#             "entity_description": entity_description,
+#             "entity_type_hint": entity_type_hint,
+#             "confidence_score": confidence_score,
+#             "resolution_context": resolution_context,
+#             "node_properties": node_properties
+#         }
+#         results.append(ent)
+
+#     print(f"extract_entities_from_chunk: extracted {len(results)} canonical entity records (will be saved).")
+
+#     # SAVE results into canonical NDJSON file (append-safe)
+#     save_entities(results, out_path=ENTITIES_OUT)
+
+#     # If debug saving is requested, write the full prompt + output + parsed entities to file (including focus+context)
+#     if save_debug:
+#         dbg_path = write_debug_file(debug_dir, chunk, prev_ctx, prompt, txt, parsed, error=None)
+#         print(f"Debug file written to: {dbg_path}")
+
+#     return results
+
+# # ---------- Driver example ----------
+# # chunk_ids = ["Ch_000120"]  # modify as needed
+# # chunk_ids = [f"Ch_{i:06d}" for i in range(0, 224)]
+
+# # ---------- Driver: run on all chunks in the chunks file ----------
+# # chunks = load_chunks(CHUNKS_JSONL)
+# # chunk_ids = [c["id"] for c in chunks]
+
+# # chunk_ids = [
+# #     "Ch_000001"]
+# # ]
+# # "Ch_000001", "Ch_000002", "Ch_000003", "Ch_000004", "Ch_000005", "Ch_000006",
+# # "Ch_000007", "Ch_000008", "Ch_000009", "Ch_000010",
+# # "Ch_000011", "Ch_000012", "Ch_000013", "Ch_000014", "Ch_000015", "Ch_000016",
+# # "Ch_000017", "Ch_000018", "Ch_000119", "Ch_000020", "Ch_000021"
+# # # "Ch_000138", "Ch_000139", "Ch_000140", "Ch_000141", "Ch_000142", "Ch_000143",
+
+
+# def run_entity_extraction_on_chunks(
+#     chunk_ids: List[str] = None,
+#     prev_chunks: int = 3,
+#     save_debug: bool = False,
+#     debug_dir: str = DEFAULT_DEBUG_DIR,
+#     model: str = "gpt-5.1",
+#     max_tokens: int = 16000
+# ):
+#     """
+#     Convenience driver to run entity extraction over a list of chunk_ids
+#     using gpt-5.1 + Responses API.
+#     If chunk_ids is None or empty, derive them from CHUNKS_JSONL.
+#     """
+#     # load all chunks into a list (materialize generator if needed)
+#     chunks = list(load_chunks(CHUNKS_JSONL))
+
+#     # if caller didn't pass chunk_ids, derive from chunks
+#     if not chunk_ids:
+#         chunk_ids = [c["id"] for c in chunks]
+
+#     all_results: List[Dict] = []
+#     for cid in chunk_ids:
+#         res = extract_entities_from_chunk(
+#             cid,
+#             chunks_path=CHUNKS_JSONL,
+#             prev_chunks=prev_chunks,
+#             model=model,
+#             max_tokens=max_tokens,
+#             save_debug=save_debug,
+#             debug_dir=debug_dir
+#         )
+#         if res:
+#             all_results.extend(res)
+#     return all_results
+
+
+
+# # # -----------------------
+# # # Entity Recognition  - Run statement
+# # # -----------------------
+
+# # # Example run:
+# # if __name__ == "__main__":
+# #     # set save_debug=True to persist full prompt+llm output (and focus/context text)
+# #     # to files in DEFAULT_DEBUG_DIR
+# #     run_entity_extraction_on_chunks(
+# #         chunk_ids,
+# #         prev_chunks=5,
+# #         save_debug=False,
+# #         model="gpt-5.1",
+# #         max_tokens=8000
+# #     )
+
+#endregion#? Entity Recognition v8
+#*#########################  End  ##########################
+
+
+#*######################### Start ##########################
+#region:#?   Entity Recognition v8 - Centralized LLM Config
+
+# import os
+# import json
+# import uuid
+# from pathlib import Path
+# from typing import List, Dict, Optional
+# from openai import OpenAI
+# from datetime import datetime
+
+# # ---------- CONFIG: paths ----------
+# CHUNKS_JSONL =      "data/Chunks/chunks_sentence.jsonl"
+# ENTITIES_OUT =      "data/Entities/Ent_Raw_0/entities_raw.jsonl"
+# DEFAULT_DEBUG_DIR = "data/Entities/Ent_Raw_0/entity_raw_debug_prompts_outputs"
+
+# # ---------- OPENAI client (load key from env or fallback file path) ----------
+# def _load_openai_key(
+#     envvar: str = "OPENAI_API_KEY",
+#     fallback_path: str = ".env"
+# ) -> str:
+#     """
+#     Load OpenAI key from:
+#       1) Environment variable OPENAI_API_KEY
+#       2) Or, if not set, from a file at fallback_path (file content is the key).
+#     """
+#     key = os.getenv(envvar)
+#     if key:
+#         return key
+
+#     # If env var not set, try reading key directly from fallback_path file
+#     p = Path(fallback_path)
+#     if p.exists():
+#         try:
+#             txt = p.read_text(encoding="utf-8").strip()
+#             if txt:
+#                 return txt
+#         except Exception:
+#             pass
+
+#     return ""
+
+# OPENAI_KEY = _load_openai_key()
+# if not OPENAI_KEY or not isinstance(OPENAI_KEY, str) or len(OPENAI_KEY) < 10:
+#     print(
+#         "⚠️  OPENAI API key not found or seems invalid. "
+#         "Set OPENAI_API_KEY env or place key text in the fallback file path."
+#     )
+# client = OpenAI(api_key=OPENAI_KEY)
+
+# # ---------- Utility: load chunks ----------
+# def load_chunks(chunks_jsonl_path: str = CHUNKS_JSONL) -> List[Dict]:
+#     p = Path(chunks_jsonl_path)
+#     if not p.exists():
+#         # don't assert at import time; raise only when the function is actually called
+#         raise FileNotFoundError(
+#             f"Chunks file not found: {p}\n"
+#             f"Please run your chunking step first to create this file, e.g. sentence_chunks_token_driven(...)\n"
+#             f"Expected path: {chunks_jsonl_path}"
+#         )
+#     with open(p, "r", encoding="utf-8") as fh:
+#         return [json.loads(l) for l in fh]
+
+# # ---------- Save helper (append-safe) ----------
+# def save_entities(entities: List[Dict], out_path: str = ENTITIES_OUT):
+#     if not entities:
+#         print("save_entities: nothing to save.")
+#         return
+#     outp = Path(out_path)
+#     outp.parent.mkdir(parents=True, exist_ok=True)
+#     with open(outp, "a", encoding="utf-8") as fh:
+#         for e in entities:
+#             fh.write(json.dumps(e, ensure_ascii=False) + "\n")
+#     print(f"Saved {len(entities)} entities to {out_path}")
+
+# # ---------- Small helper to find a chunk by id ----------
+# def get_chunk_by_id(chunk_id: str, chunks: List[Dict]) -> Dict:
+#     for c in chunks:
+#         if c.get("id") == chunk_id:
+#             return c
+#     raise ValueError(f"chunk_id {chunk_id} not found")
+
+# # ---------- Helper: get previous chunks from same section ----------
+# def get_previous_chunks(chunk: Dict, chunks: List[Dict], prev_n: int = 1) -> List[Dict]:
+#     """
+#     Return up to prev_n previous chunks from the same ref_index (by chunk_index_in_section order).
+#     Preserves chronological order (oldest -> nearest previous).
+#     """
+#     if prev_n <= 0:
+#         return []
+#     ref_index = chunk.get("ref_index")
+#     idx_in_section = chunk.get("chunk_index_in_section", 0)
+#     same_sec = [c for c in chunks if c.get("ref_index") == ref_index]
+#     same_sec_sorted = sorted(same_sec, key=lambda x: x.get("chunk_index_in_section", 0))
+#     prevs = []
+#     for c in same_sec_sorted:
+#         if c.get("chunk_index_in_section", 0) < idx_in_section:
+#             prevs.append(c)
+#     # take at most prev_n from the end (nearest previous), then return in chronological order
+#     prevs = prevs[-prev_n:] if prevs else []
+#     return prevs
+
+# # ---------- Prompt builder (chunk + optional prev_chunks) ----------
+# def build_entity_prompt_with_context(chunk: Dict, prev_chunks: Optional[List[Dict]] = None) -> str:
+#     """
+#     Build a prompt that includes the focus chunk and n previous chunk(s) as explicit context.
+#     Previous chunks are concatenated as plain text (no IDs) to form CONTEXT text.
+#     The LLM's task: extract entities from the FOCUS chunk only. Previous chunks are provided
+#     as context for disambiguation. The prompt encourages adding low-confidence new entities if
+#     uncertain (they will be resolved later).
+
+#     Notes:
+#     - The suggested type hints are *recommendations* only. The model is explicitly allowed
+#       to propose any other, more specific, or domain-appropriate type strings.
+#     - This version enforces: do NOT extract relation-level qualifiers here (postpone to Rel Rec).
+#     - The only allowed "properties" now are truly intrinsic node properties — very rare.
+#     """
+#     focus_text = chunk.get("text", "") or ""
+
+#     # Suggested (preferred) type hints — not exhaustive and NOT binding.
+#     suggested_types = [
+#         "Component",
+#         "Material",
+#         "DamageMechanism",
+#         "FailureEvent",
+#         "Symptom",
+#         "Action",
+#         "FunctionalUnit",
+#         "OperatingCondition",
+#         "Environment",
+#         "InspectionMethod",
+#         "MitigationAction",
+#         "Location",
+#         "ProcessUnit",
+#         "YOU MAY USE ANY OTHER TYPE THAT FITS BETTER"
+#     ]
+
+#     parts = [
+#         "GOAL: We are creating a context-enriched knowledge graph (KG) from textual documents.",
+#         "YOUR TASK (THIS STEP ONLY): Extract entity mentions from the FOCUS chunk ONLY. Relation-level qualifiers, conditions, and other contextual information will be extracted later in the RELATION EXTRACTION step (Rel Rec).",
+#         "",
+#         "PRINCIPLES (read carefully):",
+#         "- Extract broadly: prefer recall (extract candidate mentions). Do NOT be conservative. When in doubt, include the candidate mention. Later stages will cluster, canonicalize, and resolve.",
+#         "- Ground every output in the FOCUS chunk. You may CONSULT CONTEXT (previous chunks concatenated) only for disambiguation/pronoun resolution.",
+#         "- DO NOT output relation-level qualifiers, situational context, or evidential/epistemic markers in this step. The ONLY exception is truly intrinsic node properties (see 'INTRINSIC NODE PROPERTIES' below).",
+#         "- The suggested type hints below are guidance — you may propose more specific domain-appropriate types.",
+#         "",
+#         "CORE INSTRUCTION FOR CONCEPTUAL ENTITIES (ENTITY-LEVEL, NOT CLASSES):",
+#         "- For recurring concepts (phenomena, processes, failure modes, behaviors, conditions, states, methods), extract a SHORT, STABLE, REUSABLE entity-level label as `entity_name`.",
+#         "- `entity_name` is a canonical mention-level surface form (normalized for this mention). It is NOT an ontology or Schema class label. If you think a class is relevant, place it in `entity_type_hint`.",
+#         "- If the text describes the concept indirectly (e.g., 'this type of …', 'loss of … under conditions'), infer the best short label (e.g., 'graphitization') and put evidence in `entity_description` and `resolution_context`.",
+#         "- If unsure of the label, still propose it and lower the `confidence_score` (e.g., 0.5–0.7). We prefer 'extract first, judge later'.",
+#         "",
+#         "INTRINSIC NODE PROPERTIES:",
+#         "- You MUST include `node_properties` when the property is identity-defining for the entity (removing it would change what the entity fundamentally is) and they are MANDATORY when present in FOCUS chunk.",
+#         "- Intrinsic property means ANY stable attributes that define identity no mather what (removing it would change what the entity fundamentally is) e.g material_grade='304', e.g., chemical formula, etc.",
+#         "- Expectation: IF the property is defined in relation to other entities, that is not intrinsic, therefore we postpone them to Rel Rec.",
+#         "",
+#         "CONFIDENCE GUIDELINES:",
+#         "- 0.90 - 1.00 : Certain — explicit mention in FOCUS chunk, clear support.",
+#         "- 0.70 - 0.89 : Likely — supported by FOCUS or resolved by CONTEXT.",
+#         "- 0.40 - 0.69 : Possible — plausible inference; partial support.",
+#         "- 0.00 - 0.39 : Speculative — weakly supported; include only if likely useful.",
+#         "",
+#         "SUGGESTED TYPE HINTS (Just to give you an idea! You may propose any other type):",
+#         f"- {', '.join(suggested_types)}",
+#         "",
+#         "OUTPUT FORMAT INSTRUCTIONS (REVISED — REQUIRED):",
+#         "- Return ONLY a single JSON array (no extra commentary, no markdown fences).",
+#         "- Each element must be an object with the following keys (exact names):",
+#         "   * entity_name (string) — short canonical surface label for the mention (mention-level, NOT class).",
+#         "   * entity_description (string) — 10–25 word description derived from the FOCUS chunk (and CONTEXT if needed).",
+#         "   * entity_type_hint (string) — suggested type (from list or a better string).",
+#         "   * context_phrase (string) — short (3–10 word) excerpt from the FOCUS chunk that PROVES the mention provenance (required when possible).",
+#         "   * resolution_context (string) — minimal 20–120 word excerpt that best explains WHY this mention maps to `entity_name`. Prefer the sentence containing the mention and at most one neighbor sentence; if CONTEXT was required, include up to one supporting sentence from CONTEXT. This is used for clustering/resolution — make it disambiguating (co-mentions, verbs, numerics).",
+#         "   * confidence_score (float) — 0.0–1.0.",
+#         "   * node_properties (array of objects, Include ONLY if an intrinsic property is present in the focus chunk) — Include for any clearly stated attribute. Each: { 'prop_name': str, 'prop_value': str|num, 'justification': str }.",
+#         "",
+#         "IMPORTANT:",
+#         "- DO NOT list entities that appear only in CONTEXT. Only extract mentions present in the FOCUS chunk.",
+#         "- DO NOT output relation qualifiers, situational context, causal hints, or uncertainty markers here. Postpone them to Rel Rec.",
+#         "- Do not output ontology-level class names as `entity_name`. If relevant, place such information in `entity_type_hint` and keep `entity_name` a mention-level label.",
+#         "- For conceptual entities that are described indirectly, prefer a short canonical mention and keep the descriptive evidence in `entity_description` and `resolution_context`.",
+#         "",
+#         "EMBEDDING WEIGHT NOTE (for clustering later):",
+#         "WEIGHTS = {\"name\": 0.45, \"desc\": 0.25, \"resolution_context\": 0.25, \"type\": 0.05}",
+#         "Build resolution_context precisely — it is the second-most important signal after name and description.",
+#         "",
+#         "EXAMPLES (follow JSON shape exactly):"
+#     ]
+
+#     # include previous context if provided
+#     if prev_chunks:
+#         ctx_texts = [pc.get("text", "").strip() for pc in prev_chunks if pc.get("text", "").strip()]
+#         if ctx_texts:
+#             parts.append("=== CONTEXT (previous chunks concatenated for disambiguation) ===\n")
+#             parts.append("\n\n".join(ctx_texts))
+#         else:
+#             parts.append("NO PREVIOUS CONTEXT PROVIDED.\n---")
+#     else:
+#         parts.append("NO PREVIOUS CONTEXT PROVIDED.\n---")
+
+#     parts.append("")
+#     parts.append("=== FOCUS CHUNK (extract from here) ===")
+#     parts.append(f"FOCUS_CHUNK_ID: {chunk.get('id')}")
+#     parts.append(focus_text)
+#     parts.append("")
+#     parts.append("EXAMPLE OUTPUT (three diverse examples — strictly follow JSON shape):")
+
+#     examples = [
+#       {
+#         "entity_name": "graphitization",
+#         "entity_description": "Formation of graphite in steel that reduces ductility and increases brittleness near weld regions.",
+#         "entity_type_hint": "DamageMechanism",
+#         "context_phrase": "this type of graphitization",
+#         "resolution_context": "this type of graphitization observed in low-alloy steels near welds, indicating localized graphite formation associated with embrittlement and loss of toughness.",
+#         "confidence_score": 0.85
+#       },
+#       {
+#         "entity_name": "authentication failure",
+#         "entity_description": "A software event where credentials are rejected repeatedly, often producing error 401 in logs.",
+#         "entity_type_hint": "SoftwareEvent",
+#         "context_phrase": "repeated authentication failure",
+#         "resolution_context": "repeated authentication failure for user 'svc_backup' recorded in the log with multiple 401 entries, indicating failed credential validation.",
+#         "confidence_score": 0.88
+#       },
+#       {
+#         "entity_name": "austenitic stainless steel",
+#         "entity_description": "A stainless steel family with austenitic crystal structure, commonly designated by grades like 304 or 316.",
+#         "entity_type_hint": "Material",
+#         "context_phrase": "austenitic stainless steel (304)",
+#         "resolution_context": "austenitic stainless steel (304) explicitly mentioned in FOCUS, parenthetical grade '304' identifies the material grade.",
+#         "confidence_score": 0.95,
+#         "node_properties": [
+#           {
+#             "prop_name": "material_grade",
+#             "prop_value": "304",
+#             "justification": "explicit explanation of inclusion in the FOCUS chunk"
+#           }
+#         ]
+#       }
+#     ]
+#     parts.append(json.dumps(examples, ensure_ascii=False, indent=2))
+
+#     # final join
+#     return "\n\n".join(parts)
+
+# # ---------- OpenAI call (wrapper) ----------
+# def call_openai(
+#     prompt: str,
+#     model: str = "gpt-5.1",
+#     max_tokens: int = 2000,
+#     # temperature: float = 0.0,
+#     reasoning_effort: str = "low"
+# ) -> str:
+#     """
+#     Wrapper using the Responses API (works with gpt-5.1 and others).
+
+#     - For gpt-5.x models, we pass `reasoning={'effort': reasoning_effort}`.
+#     - `max_tokens` is mapped to Responses' `max_output_tokens`.
+#     """
+#     try:
+#         kwargs: Dict[str, object] = {
+#             "model": model,
+#             "input": [
+#                 {
+#                     "role": "user",
+#                     "content": prompt,
+#                 }
+#             ],
+#             # "temperature": temperature,
+#         }
+
+#         if max_tokens is not None:
+#             kwargs["max_output_tokens"] = max_tokens
+
+#         # Only attach reasoning config for gpt-5.x models
+#         if reasoning_effort and isinstance(reasoning_effort, str) and model.startswith("gpt-5"):
+#             kwargs["reasoning"] = {"effort": reasoning_effort}
+
+#         response = client.responses.create(**kwargs)
+
+#         # Convenient helper property (joined assistant text)
+#         txt = response.output_text or ""
+#         print(
+#             f"[call_openai] received response (len={len(txt)} chars) "
+#             f"status={getattr(response, 'status', None)}"
+#         )
+
+#         # Optional: warn if response is incomplete due to max_output_tokens
+#         if getattr(response, "status", None) == "incomplete":
+#             incomplete_details = getattr(response, "incomplete_details", None)
+#             print(f"[call_openai] WARNING: response incomplete: {incomplete_details}")
+
+#         return txt
+#     except Exception as e:
+#         print("OpenAI call error:", e)
+#         return ""
+
+# # ---------- Debug file writer (single clean implementation) ----------
+# def write_debug_file(
+#     debug_dir: str,
+#     chunk: Dict,
+#     prev_ctx: List[Dict],
+#     prompt: str,
+#     llm_output: str,
+#     parsed_entities: Optional[List[Dict]] = None,
+#     error: Optional[str] = None
+# ) -> str:
+#     """
+#     Write a JSON file containing:
+#       - explicit focus_chunk (full chunk dict with id, ref_index, chunk_index_in_section, ref_title, text),
+#       - explicit context_chunks (list of {id, ref_index, chunk_index_in_section, ref_title, text}),
+#       - prompt_full (string),
+#       - llm_output_full (string),
+#       - parsed_entities (list),
+#       - error (string or None), metadata.
+#     Returns the path to the file created.
+#     """
+#     debug_dir_path = Path(debug_dir)
+#     debug_dir_path.mkdir(parents=True, exist_ok=True)
+
+#     run_id = uuid.uuid4().hex
+#     ts = datetime.utcnow().isoformat() + "Z"
+#     fname = f"{chunk.get('id','unknown')}_{ts.replace(':','-').replace('.','-')}_{run_id[:8]}.json"
+#     out_path = debug_dir_path / fname
+
+#     # prepare context chunks minimal view (id + text) to avoid huge nested objects
+#     context_min = []
+#     for pc in (prev_ctx or []):
+#         context_min.append({
+#             "id": pc.get("id"),
+#             "ref_index": pc.get("ref_index"),
+#             "chunk_index_in_section": pc.get("chunk_index_in_section"),
+#             "ref_title": pc.get("ref_title"),
+#             "text": pc.get("text")
+#         })
+
+#     payload = {
+#         "run_id": run_id,
+#         "timestamp_utc": ts,
+#         "chunk_id": chunk.get("id"),
+#         "focus_chunk": {
+#             "id": chunk.get("id"),
+#             "ref_index": chunk.get("ref_index"),
+#             "chunk_index_in_section": chunk.get("chunk_index_in_section"),
+#             "ref_title": chunk.get("ref_title"),
+#             "text": chunk.get("text")
+#         },
+#         "context_chunks": context_min,
+#         "prompt_full": prompt,
+#         "llm_output_full": llm_output,
+#         "parsed_entities": parsed_entities or [],
+#         "error": error
+#     }
+
+#     with open(out_path, "w", encoding="utf-8") as fh:
+#         json.dump(payload, fh, ensure_ascii=False, indent=2)
+
+#     return str(out_path)
+
+# # ---------- Main: extract_entities_from_chunk (with optional prev context + debug saving) ----------
+# def extract_entities_from_chunk(
+#     chunk_id: str,
+#     chunks_path: str = CHUNKS_JSONL,
+#     prev_chunks: int = 2,       # how many previous chunks to include as CONTEXT (default 1). Set 0 to disable.
+#     model: str = "gpt-5.1",
+#     max_tokens: int = 16000,
+#     save_debug: bool = False,   # if True, write full prompt+output+parsed to a debug JSON file
+#     debug_dir: str = DEFAULT_DEBUG_DIR,
+#     llm_config: Optional["TraceKGLLMConfig"] = None,
+# ) -> List[Dict]:
+#     """
+#     Extract entities from the specified focus chunk, optionally including up to `prev_chunks`
+#     previous chunks from the same section as disambiguating CONTEXT.
+
+#     Uses the Responses API (via call_openai) and supports gpt-5.1 reasoning models.
+
+#     If save_debug=True, a structured JSON file containing the full prompt and full LLM output
+#     (and the focus/context text) will be written to `debug_dir` for later inspection.
+
+#     If llm_config is provided, the final model name is taken from:
+#       get_model_name_for_step(llm_config, "entity_rec"),
+#     with the explicit `model` argument as a fallback.
+#     """
+#     # Resolve effective model name:
+#     effective_model = model
+#     if llm_config is not None:
+#         try:
+#             effective_model = get_model_name_for_step(llm_config, "entity_rec")
+#         except Exception as e:
+#             print(f"[extract_entities_from_chunk] WARNING: get_model_name_for_step failed: {e}. Falling back to model={model!r}")
+
+#     chunks = load_chunks(chunks_path)
+#     try:
+#         chunk = get_chunk_by_id(chunk_id, chunks)
+#     except ValueError as e:
+#         print(e)
+#         return []
+
+#     prev_ctx = get_previous_chunks(chunk, chunks, prev_n=prev_chunks)
+
+#     prompt = build_entity_prompt_with_context(chunk, prev_ctx)
+
+#     raw = call_openai(prompt, model=effective_model, max_tokens=max_tokens, reasoning_effort="low")
+#     if not raw:
+#         print("Empty LLM response.")
+#         # optionally save debug with empty llm_output
+#         if save_debug:
+#             dbg_path = write_debug_file(debug_dir, chunk, prev_ctx, prompt, "", [], error="Empty LLM response")
+#             print(f"Debug file written to: {dbg_path}")
+#         return []
+
+#     txt = raw.strip()
+#     # unwrap markdown fences if present (be liberal)
+#     if txt.startswith("```") and txt.endswith("```"):
+#         # Strip surrounding backticks and optional 'json' language tag
+#         txt = txt.strip("`")
+#         if txt.lower().startswith("json"):
+#             txt = txt[4:].strip()
+
+#     parsed = []
+#     error_msg = None
+#     try:
+#         parsed = json.loads(txt)
+#         if not isinstance(parsed, list):
+#             raise ValueError("Parsed JSON is not a list/array")
+#         print(f"Parsed JSON array with {len(parsed)} items")
+#     except Exception as e:
+#         error_msg = str(e)
+#         print("Failed to parse JSON from model output:", e)
+#         print("Model raw output (truncated):", txt[:2000])
+#         # if debug saving enabled, still save the raw output and error (including focus/context)
+#         if save_debug:
+#             dbg_path = write_debug_file(debug_dir, chunk, prev_ctx, prompt, txt, [], error=error_msg)
+#             print(f"Debug file written to: {dbg_path}")
+#         return []
+
+#     results = []
+#     for e in parsed:
+#         # robust field extraction with fallbacks
+#         name = e.get("entity_name") or e.get("name") or e.get("label")
+#         if not name:
+#             continue
+
+#         # required fields mapping
+#         entity_description = e.get("entity_description") or e.get("description") or ""
+#         entity_type_hint = e.get("entity_type_hint") or e.get("type") or "Other"
+#         context_phrase = e.get("context_phrase") or ""
+#         resolution_context = e.get("resolution_context") or e.get("used_context_excerpt") or ""
+#         confidence_raw = e.get("confidence_score") if e.get("confidence_score") is not None else e.get("confidence")
+#         try:
+#             confidence_score = float(confidence_raw) if confidence_raw is not None else None
+#         except Exception:
+#             confidence_score = None
+
+#         node_props_raw = e.get("node_properties") or []
+#         # normalize node_properties if present
+#         node_properties = []
+#         if isinstance(node_props_raw, list):
+#             for np in node_props_raw:
+#                 if isinstance(np, dict):
+#                     node_properties.append({
+#                         "prop_name": np.get("prop_name") or np.get("name"),
+#                         "prop_value": np.get("prop_value") or np.get("value"),
+#                         "justification": np.get("justification", ""),
+#                     })
+
+#         ent = {
+#             "id": f"En_{uuid.uuid4().hex[:8]}",
+#             "flag": "entity_raw",
+#             "chunk_id": chunk_id,
+#             "ref_index": chunk.get("ref_index"),
+#             "chunk_index_in_section": chunk.get("chunk_index_in_section"),
+#             "ref_title": chunk.get("ref_title"),
+#             "text_span": context_phrase,
+#             "entity_name": name,
+#             "entity_description": entity_description,
+#             "entity_type_hint": entity_type_hint,
+#             "confidence_score": confidence_score,
+#             "resolution_context": resolution_context,
+#             "node_properties": node_properties
+#         }
+#         results.append(ent)
+
+#     print(f"extract_entities_from_chunk: extracted {len(results)} canonical entity records (will be saved).")
+
+#     # SAVE results into canonical NDJSON file (append-safe)
+#     save_entities(results, out_path=ENTITIES_OUT)
+
+#     # If debug saving is requested, write the full prompt + output + parsed entities to file (including focus+context)
+#     if save_debug:
+#         dbg_path = write_debug_file(debug_dir, chunk, prev_ctx, prompt, txt, parsed, error=None)
+#         print(f"Debug file written to: {dbg_path}")
+
+#     return results
+
+
+# # ---------- Driver example ----------
+# # chunk_ids = ["Ch_000120"]  # modify as needed
+# # chunk_ids = [f"Ch_{i:06d}" for i in range(0, 224)]
+
+# # ---------- Driver: run on all chunks in the chunks file ----------
+# # chunks = load_chunks(CHUNKS_JSONL)
+# # chunk_ids = [c["id"] for c in chunks]
+
+# # chunk_ids = [
+# #     "Ch_000001"]
+# # ]
+# # "Ch_000001", "Ch_000002", "Ch_000003", "Ch_000004", "Ch_000005", "Ch_000006",
+# # "Ch_000007", "Ch_000008", "Ch_000009", "Ch_000010",
+# # "Ch_000011", "Ch_000012", "Ch_000013", "Ch_000014", "Ch_000015", "Ch_000016",
+# # "Ch_000017", "Ch_000018", "Ch_000119", "Ch_000020", "Ch_000021"
+# # # "Ch_000138", "Ch_000139", "Ch_000140", "Ch_000141", "Ch_000142", "Ch_000143",
+
+
+# def run_entity_extraction_on_chunks(
+#     chunk_ids: List[str] = None,
+#     prev_chunks: int = 3,
+#     save_debug: bool = False,
+#     debug_dir: str = DEFAULT_DEBUG_DIR,
+#     model: str = "gpt-5.1",
+#     max_tokens: int = 16000,
+#     llm_config: Optional["TraceKGLLMConfig"] = None,
+# ):
+#     """
+#     Convenience driver to run entity extraction over a list of chunk_ids
+#     using (by default) gpt-5.1 + Responses API.
+
+#     If chunk_ids is None or empty, derive them from CHUNKS_JSONL.
+
+#     If llm_config is provided, the effective model for each chunk is
+#       get_model_name_for_step(llm_config, "entity_rec"),
+#     with the explicit `model` argument as a fallback.
+#     """
+#     # load all chunks into a list (materialize generator if needed)
+#     chunks = list(load_chunks(CHUNKS_JSONL))
+
+#     # if caller didn't pass chunk_ids, derive from chunks
+#     if not chunk_ids:
+#         chunk_ids = [c["id"] for c in chunks]
+
+#     all_results: List[Dict] = []
+#     for cid in chunk_ids:
+#         res = extract_entities_from_chunk(
+#             cid,
+#             chunks_path=CHUNKS_JSONL,
+#             prev_chunks=prev_chunks,
+#             model=model,
+#             max_tokens=max_tokens,
+#             save_debug=save_debug,
+#             debug_dir=debug_dir,
+#             llm_config=llm_config,
+#         )
+#         if res:
+#             all_results.extend(res)
+#     return all_results
+
+# # # -----------------------
+# # # Entity Recognition  - Run statement
+# # # -----------------------
+
+# # # Example run:
+# # if __name__ == "__main__":
+# #     # set save_debug=True to persist full prompt+llm output (and focus/context text)
+# #     # to files in DEFAULT_DEBUG_DIR
+# #     run_entity_extraction_on_chunks(
+# #         chunk_ids,
+# #         prev_chunks=5,
+# #         save_debug=False,
+# #         model="gpt-5.1",
+# #         max_tokens=8000
+# #     )
+
+#endregion#? Entity Recognition v8 - Centralized LLM Config
+#*#########################  End  ##########################
+
+
+#?######################### Start ##########################
+#region:#?   Entity Recognition v10 - DSPy LLM Config
+
 import json
 import uuid
 from pathlib import Path
 from typing import List, Dict, Optional
-from openai import OpenAI
 from datetime import datetime
 
+# NOTE:
+# - This block depends on the DSPy-centric LLM config defined earlier:
+#     TraceKGLLMConfig, get_model_name_for_step, make_lm_for_step
+#   in the "LLM Model - V3" region of this file.
+
 # ---------- CONFIG: paths ----------
-# CHUNKS_JSONL =      "data/Chunks/chunks_sentence.jsonl"
 CHUNKS_JSONL =      "data/Chunks/chunks_sentence.jsonl"
 ENTITIES_OUT =      "data/Entities/Ent_Raw_0/entities_raw.jsonl"
 DEFAULT_DEBUG_DIR = "data/Entities/Ent_Raw_0/entity_raw_debug_prompts_outputs"
 
-# ---------- OPENAI client (load key from env or fallback file path) ----------
-def _load_openai_key(
-    envvar: str = "OPENAI_API_KEY",
-    fallback_path: str = ".env"
-) -> str:
-    """
-    Load OpenAI key from:
-      1) Environment variable OPENAI_API_KEY
-      2) Or, if not set, from a file at fallback_path (file content is the key).
-    """
-    key = os.getenv(envvar)
-    if key:
-        return key
-
-    # If env var not set, try reading key directly from fallback_path file
-    p = Path(fallback_path)
-    if p.exists():
-        try:
-            txt = p.read_text(encoding="utf-8").strip()
-            if txt:
-                return txt
-        except Exception:
-            pass
-
-    return ""
-
-OPENAI_KEY = _load_openai_key()
-if not OPENAI_KEY or not isinstance(OPENAI_KEY, str) or len(OPENAI_KEY) < 10:
-    print("⚠️  OPENAI API key not found or seems invalid. "
-          "Set OPENAI_API_KEY env or place key text in the fallback file path.")
-client = OpenAI(api_key=OPENAI_KEY)
 
 # ---------- Utility: load chunks ----------
 def load_chunks(chunks_jsonl_path: str = CHUNKS_JSONL) -> List[Dict]:
@@ -503,6 +2507,7 @@ def load_chunks(chunks_jsonl_path: str = CHUNKS_JSONL) -> List[Dict]:
     with open(p, "r", encoding="utf-8") as fh:
         return [json.loads(l) for l in fh]
 
+
 # ---------- Save helper (append-safe) ----------
 def save_entities(entities: List[Dict], out_path: str = ENTITIES_OUT):
     if not entities:
@@ -515,12 +2520,14 @@ def save_entities(entities: List[Dict], out_path: str = ENTITIES_OUT):
             fh.write(json.dumps(e, ensure_ascii=False) + "\n")
     print(f"Saved {len(entities)} entities to {out_path}")
 
+
 # ---------- Small helper to find a chunk by id ----------
 def get_chunk_by_id(chunk_id: str, chunks: List[Dict]) -> Dict:
     for c in chunks:
         if c.get("id") == chunk_id:
             return c
     raise ValueError(f"chunk_id {chunk_id} not found")
+
 
 # ---------- Helper: get previous chunks from same section ----------
 def get_previous_chunks(chunk: Dict, chunks: List[Dict], prev_n: int = 1) -> List[Dict]:
@@ -542,21 +2549,14 @@ def get_previous_chunks(chunk: Dict, chunks: List[Dict], prev_n: int = 1) -> Lis
     prevs = prevs[-prev_n:] if prevs else []
     return prevs
 
+
 # ---------- Prompt builder (chunk + optional prev_chunks) ----------
 def build_entity_prompt_with_context(chunk: Dict, prev_chunks: Optional[List[Dict]] = None) -> str:
-    
     """
     Build a prompt that includes the focus chunk and n previous chunk(s) as explicit context.
     Previous chunks are concatenated as plain text (no IDs) to form CONTEXT text.
     The LLM's task: extract entities from the FOCUS chunk only. Previous chunks are provided
-    as context for disambiguation. The prompt encourages adding low-confidence new entities if
-    uncertain (they will be resolved later).
-
-    Notes:
-    - The suggested type hints are *recommendations* only. The model is explicitly allowed
-      to propose any other, more specific, or domain-appropriate type strings.
-    - This version enforces: do NOT extract relation-level qualifiers here (postpone to Rel Rec).
-    - The only allowed "properties" now are truly intrinsic node properties — very rare.
+    as context for disambiguation.
     """
     focus_text = chunk.get("text", "") or ""
 
@@ -575,7 +2575,8 @@ def build_entity_prompt_with_context(chunk: Dict, prev_chunks: Optional[List[Dic
         "MitigationAction",
         "Location",
         "ProcessUnit",
-        "YOU MAY USE ANY OTHER TYPE THAT FITS BETTER"]
+        "YOU MAY USE ANY OTHER TYPE THAT FITS BETTER"
+    ]
 
     parts = [
         "GOAL: We are creating a context-enriched knowledge graph (KG) from textual documents.",
@@ -595,7 +2596,7 @@ def build_entity_prompt_with_context(chunk: Dict, prev_chunks: Optional[List[Dic
         "",
         "INTRINSIC NODE PROPERTIES:",
         "- You MUST include `node_properties` when the property is identity-defining for the entity (removing it would change what the entity fundamentally is) and they are MANDATORY when present in FOCUS chunk.",
-        "- Intrinsic property means ANY stable attributes that define identity no mather what (removing it would change what the entity fundamentally is) e.g material_grade='304', e.g., chemical formula, etc.",
+        "- Intrinsic property means ANY stable attributes that define identity no matter what (removing it would change what the entity fundamentally is) e.g material_grade='304', e.g., chemical formula, etc.",
         "- Expectation: IF the property is defined in relation to other entities, that is not intrinsic, therefore we postpone them to Rel Rec.",
         "",
         "CONFIDENCE GUIDELINES:",
@@ -614,9 +2615,9 @@ def build_entity_prompt_with_context(chunk: Dict, prev_chunks: Optional[List[Dic
         "   * entity_description (string) — 10–25 word description derived from the FOCUS chunk (and CONTEXT if needed).",
         "   * entity_type_hint (string) — suggested type (from list or a better string).",
         "   * context_phrase (string) — short (3–10 word) excerpt from the FOCUS chunk that PROVES the mention provenance (required when possible).",
-        "   * resolution_context (string) — minimal 20–120 word excerpt that best explains WHY this mention maps to `entity_name`. Prefer the sentence containing the mention and at most one neighbor sentence; if CONTEXT was required, include up to one supporting sentence from CONTEXT. This is used for clustering/resolution — make it disambiguating (co-mentions, verbs, numerics).",
+        "   * resolution_context (string) — minimal 20–120 word excerpt that best explains WHY this mention maps to `entity_name`. Prefer the sentence containing the mention and at most one neighbor sentence; if CONTEXT was required, include up to one supporting sentence from CONTEXT.",
         "   * confidence_score (float) — 0.0–1.0.",
-        "   * node_properties (array of objects, Include ONLY if an intrinsic property is present in the focus chunk) — Include for any clearly stated attribute. Each: { 'prop_name': str, 'prop_value': str|num, 'justification': str }."
+        "   * node_properties (array of objects, Include ONLY if an intrinsic property is present in the focus chunk) — Each: { 'prop_name': str, 'prop_value': str|num, 'justification': str }.",
         "",
         "IMPORTANT:",
         "- DO NOT list entities that appear only in CONTEXT. Only extract mentions present in the FOCUS chunk.",
@@ -687,64 +2688,6 @@ def build_entity_prompt_with_context(chunk: Dict, prev_chunks: Optional[List[Dic
     # final join
     return "\n\n".join(parts)
 
-# ---------- OpenAI call (wrapper) ----------
-def call_openai(
-    prompt: str,
-    model: str = "gpt-5.1",
-    max_tokens: int = 2000,
-    # temperature: float = 0.0,
-    reasoning_effort: str = "low"
-) -> str:
-    """
-    Wrapper using the Responses API (works with gpt-5.1 and others).
-
-    - For gpt-5.x models, we pass `reasoning={'effort': reasoning_effort}`.
-    - `max_tokens` is mapped to Responses' `max_output_tokens`.
-    """
-    try:
-        # print(
-        #     f"[call_openai] model={model} "
-        #     f"max_output_tokens={max_tokens} "
-        #     # f"temperature={temperature} "
-        #     f"reasoning_effort={reasoning_effort}"
-        # )
-
-        kwargs: Dict[str, object] = {
-            "model": model,
-            "input": [
-                {
-                    "role": "user",
-                    "content": prompt,
-                }
-            ],
-            # "temperature": temperature,
-        }
-
-        if max_tokens is not None:
-            kwargs["max_output_tokens"] = max_tokens
-
-        # Only attach reasoning config for gpt-5.x models
-        if reasoning_effort and isinstance(reasoning_effort, str) and model.startswith("gpt-5"):
-            kwargs["reasoning"] = {"effort": reasoning_effort}
-
-        response = client.responses.create(**kwargs)
-
-        # Convenient helper property (joined assistant text)
-        txt = response.output_text or ""
-        print(
-            f"[call_openai] received response (len={len(txt)} chars) "
-            f"status={getattr(response, 'status', None)}"
-        )
-
-        # Optional: warn if response is incomplete due to max_output_tokens
-        if getattr(response, "status", None) == "incomplete":
-            incomplete_details = getattr(response, "incomplete_details", None)
-            print(f"[call_openai] WARNING: response incomplete: {incomplete_details}")
-
-        return txt
-    except Exception as e:
-        print("OpenAI call error:", e)
-        return ""
 
 # ---------- Debug file writer (single clean implementation) ----------
 def write_debug_file(
@@ -808,25 +2751,61 @@ def write_debug_file(
 
     return str(out_path)
 
+
+# ---------- Internal helper: get LM for Entity Rec via DSPy ----------
+def _get_lm_for_entity_rec(
+    llm_config: Optional["TraceKGLLMConfig"],
+    model: str,
+    max_tokens: int,
+):
+    """
+    Resolve a DSPy LM for the Entity Recognition step:
+
+      - If llm_config is provided, use it directly (with per-step overrides).
+      - Otherwise, build a minimal TraceKGLLMConfig using the function args
+        for backward compatibility.
+    """
+    if llm_config is not None:
+        cfg = llm_config
+    else:
+        # Backward-compatible default: one model everywhere, with given max_tokens.
+        cfg = TraceKGLLMConfig(default_model=model, max_tokens=max_tokens)
+
+    try:
+        cfg.validate()
+    except Exception as e:
+        print(f"[EntityRec] WARNING: llm_config.validate() failed: {e}")
+
+    # Centralized LM construction (provider, model_type, cache, api_base, etc.)
+    lm = make_lm_for_step(cfg, "entity_rec")
+    return lm
+
+
 # ---------- Main: extract_entities_from_chunk (with optional prev context + debug saving) ----------
 def extract_entities_from_chunk(
     chunk_id: str,
     chunks_path: str = CHUNKS_JSONL,
-    prev_chunks: int = 2,       # how many previous chunks to include as CONTEXT (default 1). Set 0 to disable.
+    prev_chunks: int = 2,       # how many previous chunks to include as CONTEXT. Set 0 to disable.
     model: str = "gpt-5.1",
     max_tokens: int = 16000,
     save_debug: bool = False,   # if True, write full prompt+output+parsed to a debug JSON file
-    debug_dir: str = DEFAULT_DEBUG_DIR
+    debug_dir: str = DEFAULT_DEBUG_DIR,
+    llm_config: Optional["TraceKGLLMConfig"] = None,
 ) -> List[Dict]:
     """
     Extract entities from the specified focus chunk, optionally including up to `prev_chunks`
     previous chunks from the same section as disambiguating CONTEXT.
 
-    Uses the Responses API (via call_openai) and supports gpt-5.1 reasoning models.
+    This version uses DSPy exclusively:
 
-    If save_debug=True, a structured JSON file containing the full prompt and full LLM output
-    (and the focus/context text) will be written to `debug_dir` for later inspection.
+      - Resolve a dspy.LM via TraceKGLLMConfig + make_lm_for_step(cfg, "entity_rec").
+      - Call lm(prompt) directly; DSPy handles provider, responses vs chat, caching, etc.
+
+    If llm_config is provided, all LLM behavior (model, temperature, tokens, api_base, etc.)
+    is governed by that config. If not, a default TraceKGLLMConfig is built from `model`
+    and `max_tokens` (backward compatibility).
     """
+    # Load and locate the focus chunk
     chunks = load_chunks(chunks_path)
     try:
         chunk = get_chunk_by_id(chunk_id, chunks)
@@ -838,30 +2817,42 @@ def extract_entities_from_chunk(
 
     prompt = build_entity_prompt_with_context(chunk, prev_ctx)
 
-    # debug: show short prompt preview in console (we keep this to avoid huge console dumps)
-    p_shown = prompt if len(prompt) <= 2000 else prompt[:2000] + "\n\n...[TRUNCATED PROMPT]"
-    # print(f"\n--- ENTITY EXTRACTION PROMPT for {chunk_id} (prev_ctx={len(prev_ctx)}) ---\n{p_shown}\n{'-'*80}")
+    # Resolve LM via central DSPy config
+    lm = _get_lm_for_entity_rec(llm_config=llm_config, model=model, max_tokens=max_tokens)
 
-    raw = call_openai(prompt, model=model, max_tokens=max_tokens, reasoning_effort="low")
+    # Call the LM via DSPy
+    try:
+        lm_outputs = lm(prompt)
+    except Exception as e:
+        print(f"[EntityRec] LM call error for chunk {chunk_id}: {e}")
+        if save_debug:
+            dbg_path = write_debug_file(debug_dir, chunk, prev_ctx, prompt, "", [], error=str(e))
+            print(f"Debug file written to: {dbg_path}")
+        return []
+
+    # DSPy returns a list of strings for bare calls: lm("...") -> ['...']
+    if isinstance(lm_outputs, list):
+        raw = lm_outputs[0] if lm_outputs else ""
+    else:
+        raw = str(lm_outputs or "")
+
     if not raw:
         print("Empty LLM response.")
-        # optionally save debug with empty llm_output
         if save_debug:
             dbg_path = write_debug_file(debug_dir, chunk, prev_ctx, prompt, "", [], error="Empty LLM response")
             print(f"Debug file written to: {dbg_path}")
         return []
 
-    txt = raw.strip()
+    # txt = raw.strip() #INJAM
+    # from llm_utils import coerce_llm_text   # add once near top of file (or above this function)
+    txt = coerce_llm_text(raw).strip()
+
     # unwrap markdown fences if present (be liberal)
     if txt.startswith("```") and txt.endswith("```"):
         # Strip surrounding backticks and optional 'json' language tag
         txt = txt.strip("`")
         if txt.lower().startswith("json"):
             txt = txt[4:].strip()
-
-    # console preview of LLM output (short)
-    preview = txt if len(txt) <= 4000 else txt[:4000] + "\n\n...[TRUNCATED OUTPUT]"
-    # print(f"[LLM raw output preview]\n{preview}\n{'-'*80}")
 
     parsed = []
     error_msg = None
@@ -908,7 +2899,6 @@ def extract_entities_from_chunk(
                         "prop_name": np.get("prop_name") or np.get("name"),
                         "prop_value": np.get("prop_value") or np.get("value"),
                         "justification": np.get("justification", ""),
-                        # "confidence": float(np.get("confidence")) if np.get("confidence") is not None else None
                     })
 
         ent = {
@@ -940,36 +2930,30 @@ def extract_entities_from_chunk(
 
     return results
 
-# ---------- Driver example ----------
-# chunk_ids = ["Ch_000120"]  # modify as needed
-# chunk_ids = [f"Ch_{i:06d}" for i in range(0, 224)]
 
 # ---------- Driver: run on all chunks in the chunks file ----------
-# chunks = load_chunks(CHUNKS_JSONL)
-# chunk_ids = [c["id"] for c in chunks]
-
-# chunk_ids = [
-#     "Ch_000001"]
-# ]
-# "Ch_000001", "Ch_000002", "Ch_000003", "Ch_000004", "Ch_000005", "Ch_000006",
-# "Ch_000007", "Ch_000008", "Ch_000009", "Ch_000010",
-# "Ch_000011", "Ch_000012", "Ch_000013", "Ch_000014", "Ch_000015", "Ch_000016",
-# "Ch_000017", "Ch_000018", "Ch_000119", "Ch_000020", "Ch_000021"
-# # "Ch_000138", "Ch_000139", "Ch_000140", "Ch_000141", "Ch_000142", "Ch_000143",
-
-
 def run_entity_extraction_on_chunks(
     chunk_ids: List[str] = None,
     prev_chunks: int = 3,
     save_debug: bool = False,
     debug_dir: str = DEFAULT_DEBUG_DIR,
     model: str = "gpt-5.1",
-    max_tokens: int = 16000
+    max_tokens: int = 16000,
+    llm_config: Optional["TraceKGLLMConfig"] = None,
 ):
     """
-    Convenience driver to run entity extraction over a list of chunk_ids
-    using gpt-5.1 + Responses API.
-    If chunk_ids is None or empty, derive them from CHUNKS_JSONL.
+    Convenience driver to run entity extraction over a list of chunk_ids.
+
+    If llm_config is provided, a single TraceKGLLMConfig object controls all LLM
+    behavior (models, tokens, temperature, api_base, etc.) for this step:
+
+        - default_model
+        - rec_model / entity_rec_model
+        - temperature, max_tokens, api_key, api_base, disable_cache
+
+    If llm_config is None, `model` and `max_tokens` are used to build a
+    minimal TraceKGLLMConfig, preserving backward compatibility with
+    older scripts that passed only a model name.
     """
     # load all chunks into a list (materialize generator if needed)
     chunks = list(load_chunks(CHUNKS_JSONL))
@@ -987,32 +2971,17 @@ def run_entity_extraction_on_chunks(
             model=model,
             max_tokens=max_tokens,
             save_debug=save_debug,
-            debug_dir=debug_dir
+            debug_dir=debug_dir,
+            llm_config=llm_config,
         )
         if res:
             all_results.extend(res)
     return all_results
 
-
-
-# # -----------------------
-# # Entity Recognition  - Run statement
-# # -----------------------
-
-# # Example run:
-# if __name__ == "__main__":
-#     # set save_debug=True to persist full prompt+llm output (and focus/context text)
-#     # to files in DEFAULT_DEBUG_DIR
-#     run_entity_extraction_on_chunks(
-#         chunk_ids,
-#         prev_chunks=5,
-#         save_debug=False,
-#         model="gpt-5.1",
-#         max_tokens=8000
-#     )
-
-#endregion#? Entity Recognition v8 - Intrinsic properties added (Responses + gpt-5.1)
+#endregion#? Entity Recognition v10 - DSPy LLM Config
 #?#########################  End  ##########################
+
+
 
 
 
@@ -1448,35 +3417,769 @@ def main_cli(args):
 
 
 
-#?######################### Start ##########################
+#*######################### Start ##########################
 #region:#?   Final Ent Res - (aligned with EntityRec v7 & gpt-5.1 Responses, embedding pipeline With SubCluster json)
 
-# orchestrator_with_chunk_texts_v101_gpt5.py
-"""
-Entity resolution orchestrator aligned with Entity Recognition v7 and the updated embedding
-pipeline (name/desc/ctx). Performs local sub-clustering, chunk-text inclusion, token safety guard,
-and tqdm progress bars.
+# # orchestrator_with_chunk_texts_v101_gpt5.py
+# """
+# Entity resolution orchestrator aligned with Entity Recognition v7 and the updated embedding
+# pipeline (name/desc/ctx). Performs local sub-clustering, chunk-text inclusion, token safety guard,
+# and tqdm progress bars.
 
-Changes (Dec 2025):
+# Changes (Dec 2025):
+#  - stricter input validation (requires _cluster_id + context fields)
+#  - saves local-subcluster summaries per coarse cluster for debugging
+#  - fallback to "no local sub-clustering" when fragmentation is excessive (keeps members together)
+#  - more robust min_cluster_size handling and explanatory logging
+
+# Updated (Jan 2026):
+#  - switch LLM backend from Chat Completions (gpt-4o) to Responses API with gpt-5.1
+#  - use `max_output_tokens` instead of `max_tokens`
+#  - no `temperature` parameter (not supported by gpt-5.1)
+#  - optional reasoning config for gpt-5.x models
+# """
+# import os
+# import json
+# import uuid
+# import time
+# import math
+# from pathlib import Path
+# from collections import defaultdict
+# from typing import List, Dict
+
+# import numpy as np
+# from tqdm import tqdm
+
+# # transformers embedder
+# import torch
+# from transformers import AutoTokenizer, AutoModel
+# from sklearn.preprocessing import normalize
+
+# # clustering
+# try:
+#     import hdbscan
+# except Exception:
+#     raise RuntimeError("hdbscan is required. Install with `pip install hdbscan`")
+# try:
+#     import umap
+#     UMAP_AVAILABLE = True
+# except Exception:
+#     UMAP_AVAILABLE = False
+
+# # OpenAI client loader (reuses your pattern)
+# from openai import OpenAI
+
+# def _load_openai_key(envvar: str = "OPENAI_API_KEY", fallback_path: str = ".env") -> str:
+#     key = os.getenv(envvar, fallback_path)
+#     if isinstance(key, str) and Path(key).exists():
+#         try:
+#             txt = Path(key).read_text(encoding="utf-8").strip()
+#             if txt:
+#                 return txt
+#         except Exception:
+#             pass
+#     return key
+
+# OPENAI_KEY = _load_openai_key()
+# if not OPENAI_KEY or not isinstance(OPENAI_KEY, str) or len(OPENAI_KEY) < 10:
+#     print("⚠️  OPENAI API key not found or seems invalid. Set OPENAI_API_KEY env or place key in fallback file path.")
+# client = OpenAI(api_key=OPENAI_KEY)
+
+# # ---------------- Paths & config ----------------
+# CLUSTERED_IN = Path("data/Entities/Ent_1st/Ent_Clustering_1st/entities_clustered.jsonl")   # input (from previous clustering)
+# CHUNKS_JSONL = Path("data/Chunks/chunks_sentence.jsonl")
+
+# ENT_OUT = Path("data/Entities/Ent_1st/Ent_Resolved_1st/entities_resolved.jsonl")
+# CANON_OUT = Path("data/Entities/Ent_1st/Ent_Resolved_1st/canonical_entities.jsonl")
+# LOG_OUT = Path("data/Entities/Ent_1st/Ent_Resolved_1st/resolution_log.jsonl")
+
+# # NOTE: weights changed to match embed_and_cluster V3 (name, desc, ctx) — type is folded into ctx.
+# WEIGHTS = {"name": 0.40, "desc": 0.25, "ctx": 0.35}
+# EMBED_MODEL = "BAAI/bge-large-en-v1.5"
+# BATCH_SIZE = 32
+# DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
+
+# # local HDBSCAN
+# LOCAL_HDBSCAN_MIN_CLUSTER_SIZE = 2
+# LOCAL_HDBSCAN_MIN_SAMPLES = 1
+# LOCAL_HDBSCAN_METRIC = "euclidean"
+
+# # UMAP options
+# LOCAL_USE_UMAP = False   # default OFF for robustness; enable via CLI --use_umap
+# UMAP_DIMS = 32
+# UMAP_NEIGHBORS = 10
+# UMAP_MIN_DIST = 0.0
+# UMAP_MIN_SAMPLES_TO_RUN = 25  # only run UMAP when cluster size >= this
+
+# # LLM / prompt (now via Responses API + gpt-5.1)
+# MODEL = "gpt-5.1"
+# MAX_TOKENS = 16000               # mapped to max_output_tokens
+# REASONING_EFFORT = "low"       # for gpt-5.x models
+
+# # orchestration thresholds (as requested)
+# MAX_CLUSTER_PROMPT = 11       # coarse cluster size threshold to trigger local sub-clustering
+# MAX_MEMBERS_PER_PROMPT = 10    # <= 10 entities per LLM call
+# TRUNC_CHUNK_CHARS = 1000
+# INCLUDE_PREV_CHUNKS = 0
+
+# # token safety
+# PROMPT_TOKEN_LIMIT = 8000  # rough char/4 estimate threshold
+
+# # fallback fragmentation rule (tunable)
+# # if local sub-clustering produces more than len(members)/FALLBACK_FRAG_THRESHOLD_FACTOR non-noise subclusters,
+# # we will FALLBACK to _not_ using local_subcluster and instead chunk the original coarse cluster directly.
+# FALLBACK_FRAG_THRESHOLD_FACTOR = 2   # e.g., if > len(members)/2 non-noise subclusters -> fallback
+
+# # ---------------- Utility functions ----------------
+# def load_chunks(chunks_jsonl_path: Path) -> List[Dict]:
+#     assert chunks_jsonl_path.exists(), f"Chunks file not found: {chunks_jsonl_path}"
+#     chunks = []
+#     with open(chunks_jsonl_path, "r", encoding="utf-8") as fh:
+#         for line in fh:
+#             if line.strip():
+#                 chunks.append(json.loads(line))
+#     return chunks
+
+# def safe_text(e: Dict, key: str) -> str:
+#     v = e.get(key)
+#     if v is None:
+#         return ""
+#     if isinstance(v, (list, dict)):
+#         return json.dumps(v, ensure_ascii=False)
+#     return str(v)
+
+# # ---------------- HF embedder ----------------
+# def mean_pool(token_embeddings: torch.Tensor, attention_mask: torch.Tensor):
+#     input_mask_expanded = attention_mask.unsqueeze(-1).expand(token_embeddings.size()).float()
+#     sum_embeddings = torch.sum(token_embeddings * input_mask_expanded, 1)
+#     sum_mask = torch.clamp(input_mask_expanded.sum(1), min=1e-9)
+#     return sum_embeddings / sum_mask
+
+# class HFEmbedder:
+#     def __init__(self, model_name: str = EMBED_MODEL, device: str = DEVICE):
+#         print(f"[Embedder] loading model {model_name} on {device} ...")
+#         self.device = device
+#         self.tokenizer = AutoTokenizer.from_pretrained(model_name, use_fast=True)
+#         self.model = AutoModel.from_pretrained(model_name)
+#         self.model.to(device)
+#         self.model.eval()
+#         for p in self.model.parameters():
+#             p.requires_grad = False
+
+#     @torch.no_grad()
+#     def encode_batch(self, texts: List[str], batch_size: int = BATCH_SIZE) -> np.ndarray:
+#         # return shape (N, D) where D = model hidden size
+#         if len(texts) == 0:
+#             # fallback: use model.config.hidden_size if available
+#             D = getattr(self.model.config, "hidden_size", 1024)
+#             return np.zeros((0, D))
+#         embs = []
+#         for i in range(0, len(texts), batch_size):
+#             batch = texts[i:i+batch_size]
+#             enc = self.tokenizer(batch, padding=True, truncation=True, return_tensors="pt", max_length=1024)
+#             input_ids = enc["input_ids"].to(self.device)
+#             attention_mask = enc["attention_mask"].to(self.device)
+#             out = self.model(input_ids=input_ids, attention_mask=attention_mask, return_dict=True)
+#             token_embeds = out.last_hidden_state
+#             pooled = mean_pool(token_embeds, attention_mask)
+#             pooled = pooled.cpu().numpy()
+#             embs.append(pooled)
+#         embs = np.vstack(embs)
+#         embs = normalize(embs, axis=1)
+#         return embs
+
+# # ---------------- field builder aligned with EntityRec v7 ----------------
+# def build_field_texts(entities: List[Dict]):
+#     """
+#     Build text lists for fields:
+#       - name: entity_name (preferred)
+#       - desc: entity_description
+#       - ctx: [TYPE:<entity_type_hint>] + resolution_context (preferred) + serialized node_properties (if present)
+#     This matches the embedding pipeline in embed_and_cluster V3.
+#     """
+#     names, descs, ctxs = [], [], []
+#     for e in entities:
+#         names.append(safe_text(e, "entity_name") or safe_text(e, "entity_name_original") or "")
+#         descs.append(safe_text(e, "entity_description") or "")
+
+#         # resolution_context preferred (new schema) — fallback chain below
+#         resolution = safe_text(e, "resolution_context") or safe_text(e, "text_span") or safe_text(e, "context_phrase") or safe_text(e, "used_context_excerpt") or ""
+
+#         # fold type and node_properties into ctx (as text hints)
+#         etype = safe_text(e, "entity_type_hint") or safe_text(e, "entity_type") or ""
+#         node_props = e.get("node_properties") or []
+#         node_props_text = ""
+#         if isinstance(node_props, list) and node_props:
+#             pieces = []
+#             for np in node_props:
+#                 if isinstance(np, dict):
+#                     pname = np.get("prop_name") or np.get("name") or ""
+#                     pval = np.get("prop_value") or np.get("value") or ""
+#                     if pname and pval:
+#                         pieces.append(f"{pname}:{pval}")
+#                     elif pname:
+#                         pieces.append(pname)
+#                     elif pval:
+#                         pieces.append(str(pval))
+#             if pieces:
+#                 node_props_text = " | ".join(pieces)
+
+#         ctx_parts = []
+#         if etype:
+#             ctx_parts.append(f"[TYPE:{etype}]")
+#         if resolution:
+#             ctx_parts.append(resolution)
+#         if node_props_text:
+#             ctx_parts.append(node_props_text)
+
+#         combined_ctx = " ; ".join([p for p in ctx_parts if p])
+#         ctxs.append(combined_ctx)
+#     return names, descs, ctxs
+
+# def compute_combined_embeddings(embedder: HFEmbedder, entities: List[Dict], weights=WEIGHTS) -> np.ndarray:
+#     """
+#     Compute combined normalized embeddings from name, desc, ctx only.
+#     """
+#     names, descs, ctxs = build_field_texts(entities)
+#     emb_name = embedder.encode_batch(names) if any(t.strip() for t in names) else None
+#     emb_desc = embedder.encode_batch(descs) if any(t.strip() for t in descs) else None
+#     emb_ctx  = embedder.encode_batch(ctxs)  if any(t.strip() for t in ctxs) else None
+
+#     D = None
+#     for arr in (emb_name, emb_desc, emb_ctx):
+#         if arr is not None and arr.shape[0] > 0:
+#             D = arr.shape[1]
+#             break
+#     if D is None:
+#         raise ValueError("No textual field produced embeddings; check your entity fields")
+
+#     def _ensure(arr):
+#         if arr is None:
+#             return np.zeros((len(entities), D))
+#         if arr.shape[1] != D:
+#             raise ValueError("embedding dim mismatch")
+#         return arr
+
+#     emb_name = _ensure(emb_name)
+#     emb_desc = _ensure(emb_desc)
+#     emb_ctx  = _ensure(emb_ctx)
+
+#     w_name = weights.get("name", 0.0)
+#     w_desc = weights.get("desc", 0.0)
+#     w_ctx  = weights.get("ctx", 0.0)
+#     Wsum = w_name + w_desc + w_ctx
+#     if Wsum <= 0:
+#         raise ValueError("invalid weights")
+#     w_name /= Wsum; w_desc /= Wsum; w_ctx /= Wsum
+
+#     combined = (w_name * emb_name) + (w_desc * emb_desc) + (w_ctx * emb_ctx)
+#     combined = normalize(combined, axis=1)
+#     return combined
+
+# # ---------------- robust local_subcluster ----------------
+# def local_subcluster(cluster_entities: List[Dict],
+#                      entity_id_to_index: Dict[str, int],
+#                      all_embeddings: np.ndarray,
+#                      min_cluster_size: int = LOCAL_HDBSCAN_MIN_CLUSTER_SIZE,
+#                      min_samples: int = LOCAL_HDBSCAN_MIN_SAMPLES,
+#                      use_umap: bool = LOCAL_USE_UMAP,
+#                      umap_dims: int = UMAP_DIMS):
+#     """
+#     Returns: dict[label] -> list[entity_dict]
+#     Notes:
+#       - min_cluster_size is treated as a true minimum (HDBSCAN may still mark small noise).
+#       - We protect against trivial inputs and return fallback single cluster if hdbscan fails.
+#     """
+#     from collections import defaultdict
+#     from sklearn.preprocessing import normalize as _normalize
+
+#     idxs = [entity_id_to_index[e["id"]] for e in cluster_entities]
+#     X = all_embeddings[idxs]
+#     X = _normalize(X, axis=1)
+#     n = X.shape[0]
+
+#     if n <= 1:
+#         return {0: list(cluster_entities)} if n == 1 else {-1: []}
+
+#     # ensure min_cluster_size is sensible (it is a minimum)
+#     min_cluster_size = max(2, int(min_cluster_size))
+#     min_cluster_size = min(min_cluster_size, max(2, n))  # cannot be larger than cluster size
+
+#     if min_samples is None:
+#         min_samples = max(1, int(min_cluster_size * 0.1))
+#     else:
+#         min_samples = max(1, int(min_samples))
+
+#     X_sub = X
+#     if use_umap and UMAP_AVAILABLE and n >= UMAP_MIN_SAMPLES_TO_RUN:
+#         n_components = min(umap_dims, max(2, n - 4))  # keep k <= n-4 for stability
+#         try:
+#             reducer = umap.UMAP(n_components=n_components,
+#                                 n_neighbors=min(UMAP_NEIGHBORS, max(2, n-1)),
+#                                 min_dist=UMAP_MIN_DIST,
+#                                 metric='cosine',
+#                                 random_state=42)
+#             X_sub = reducer.fit_transform(X)
+#         except Exception as e:
+#             print(f"[local_subcluster] UMAP failed for n={n}, n_components={n_components} -> fallback without UMAP. Err: {e}")
+#             X_sub = X
+#     else:
+#         if use_umap and UMAP_AVAILABLE and n < UMAP_MIN_SAMPLES_TO_RUN:
+#             print(f"[local_subcluster] skipping UMAP for n={n} (threshold {UMAP_MIN_SAMPLES_TO_RUN})")
+
+#     try:
+#         clusterer = hdbscan.HDBSCAN(min_cluster_size=min_cluster_size,
+#                                     min_samples=min_samples,
+#                                     metric=LOCAL_HDBSCAN_METRIC,
+#                                     cluster_selection_method='eom')
+#         labels = clusterer.fit_predict(X_sub)
+#     except Exception as e:
+#         print(f"[local_subcluster] HDBSCAN failed for n={n} -> fallback single cluster. Err: {e}")
+#         return {0: list(cluster_entities)}
+
+#     groups = defaultdict(list)
+#     for ent, lab in zip(cluster_entities, labels):
+#         groups[int(lab)].append(ent)
+#     return groups
+
+# # ------------------ LLM helpers (Responses API + gpt-5.1) ------------------
+# def call_llm_with_prompt(
+#     prompt: str,
+#     model: str = MODEL,
+#     max_tokens: int = MAX_TOKENS,
+#     reasoning_effort: str = REASONING_EFFORT
+# ) -> str:
+#     """
+#     Call the LLM using the Responses API (compatible with gpt-5.1).
+
+#     - Uses `max_output_tokens` instead of `max_tokens`.
+#     - Does NOT send `temperature` (unsupported by gpt-5.1).
+#     - Adds `reasoning={'effort': reasoning_effort}` for gpt-5.x models.
+#     """
+#     try:
+#         print(f"[call_llm_with_prompt] model={model} max_output_tokens={max_tokens} reasoning_effort={reasoning_effort}")
+#         kwargs: Dict[str, object] = {
+#             "model": model,
+#             "input": [
+#                 {
+#                     "role": "user",
+#                     "content": prompt,
+#                 }
+#             ],
+#         }
+
+#         if max_tokens is not None:
+#             kwargs["max_output_tokens"] = max_tokens
+
+#         if model.startswith("gpt-5") and reasoning_effort:
+#             kwargs["reasoning"] = {"effort": reasoning_effort}
+
+#         response = client.responses.create(**kwargs)
+#         txt = response.output_text or ""
+
+#         status = getattr(response, "status", None)
+#         if status == "incomplete":
+#             incomplete_details = getattr(response, "incomplete_details", None)
+#             print(f"[call_llm_with_prompt] WARNING: response incomplete: {incomplete_details}")
+
+#         print(f"[call_llm_with_prompt] received response (len={len(txt)} chars, status={status})")
+#         return txt
+#     except Exception as e:
+#         print("LLM call error:", e)
+#         return ""
+
+# def extract_json_array(text: str):
+#     if not text:
+#         return None
+#     text = text.strip()
+#     start = text.find('[')
+#     end = text.rfind(']')
+#     if start != -1 and end != -1 and end > start:
+#         candidate = text[start:end+1]
+#         try:
+#             return json.loads(candidate)
+#         except Exception:
+#             pass
+#     try:
+#         return json.loads(text)
+#     except Exception:
+#         return None
+
+# # ---------------- Prompt building ----------------
+# PROMPT_TEMPLATE = """You are a careful knowledge-graph resolver.
+# Given the following small cohesive group of candidate entity mentions, decide which ones to MERGE into a single canonical entity, which to MODIFY, and which to KEEP.
+
+# Return ONLY a JSON ARRAY. Each element must be one of:
+# - MergeEntities: {{ "action":"MergeEntities", "entity_ids":[...], "canonical_name":"...", "canonical_description":"...", "canonical_type":"...", "rationale":"..." }}
+# - ModifyEntity: {{ "action":"ModifyEntity", "entity_id":"...", "new_name":"...", "new_description":"...", "new_type_hint":"...", "rationale":"..." }}
+# - KeepEntity: {{ "action":"KeepEntity", "entity_id":"...", "rationale":"..." }}
+
+# Rules:
+# - Use ONLY the provided information (name/desc/type_hint/confidence/resolution_context/text_span/chunk_text).
+# - Be conservative: if unsure, KEEP rather than MERGE.
+# - If merging, ensure merged items truly refer to the same concept.
+# - Provide short rationale for each action (1-2 sentences).
+
+# Group members (id | name | type_hint | confidence | desc | text_span | chunk_text [truncated]):
+# {members_json}
+
+# Return JSON array only (no commentary).
+# """
+
+# def build_member_with_chunk(m: Dict, chunks_index: Dict[str, Dict]) -> Dict:
+#     """
+#     Build the member record included in the LLM prompt.
+#     Uses resolution_context (preferred) as part of text_span fallback and includes truncated chunk_text if available.
+#     """
+#     chunk_text = ""
+#     chunk_id = m.get("chunk_id")
+#     if chunk_id:
+#         ch = chunks_index.get(chunk_id)
+#         if ch:
+#             ct = ch.get("text","")
+#             # optionally include previous chunks? currently disabled (INCLUDE_PREV_CHUNKS)
+#             chunk_text = " ".join(ct.split())
+#             if len(chunk_text) > TRUNC_CHUNK_CHARS:
+#                 chunk_text = chunk_text[:TRUNC_CHUNK_CHARS].rsplit(" ",1)[0] + "..."
+#     # text_span should show the precise mention proof; prefer context_phrase then resolution_context
+#     text_span = m.get("context_phrase") or m.get("resolution_context") or m.get("text_span") or ""
+#     return {
+#         "id": m.get("id"),
+#         "name": m.get("entity_name"),
+#         "type_hint": m.get("entity_type_hint"),
+#         "confidence": m.get("confidence_score"),
+#         "desc": m.get("entity_description"),
+#         "text_span": text_span,
+#         "chunk_text": chunk_text
+#     }
+
+# # ------------------ apply actions ----------------
+# def apply_actions(members: List[Dict], actions: List[Dict], entities_by_id: Dict[str, Dict],
+#                   canonical_store: List[Dict], log_entries: List[Dict]):
+#     ts = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+#     for act in (actions or []):
+#         typ = act.get("action")
+#         if typ == "MergeEntities":
+#             ids = act.get("entity_ids", [])
+#             canonical_name = act.get("canonical_name")
+#             canonical_desc = act.get("canonical_description", "")
+#             canonical_type = act.get("canonical_type", "")
+#             rationale = act.get("rationale", "")
+#             can_id = "Can_" + uuid.uuid4().hex[:8]
+#             canonical = {
+#                 "canonical_id": can_id,
+#                 "canonical_name": canonical_name,
+#                 "canonical_description": canonical_desc,
+#                 "canonical_type": canonical_type,
+#                 "source": "LLM_resolution_v101_gpt5",
+#                 "rationale": rationale,
+#                 "timestamp": ts
+#             }
+#             canonical_store.append(canonical)
+#             for eid in ids:
+#                 ent = entities_by_id.get(eid)
+#                 if ent:
+#                     ent["canonical_id"] = can_id
+#                     ent["resolved_action"] = "merged"
+#                     ent["resolution_rationale"] = rationale
+#                     ent["resolved_time"] = ts
+#             log_entries.append({"time": ts, "action": "merge", "canonical_id": can_id, "merged_ids": ids, "rationale": rationale})
+#         elif typ == "ModifyEntity":
+#             eid = act.get("entity_id")
+#             ent = entities_by_id.get(eid)
+#             if ent:
+#                 new_name = act.get("new_name")
+#                 new_desc = act.get("new_description")
+#                 new_type = act.get("new_type_hint")
+#                 rationale = act.get("rationale","")
+#                 if new_name:
+#                     ent["entity_name"] = new_name
+#                 if new_desc:
+#                     ent["entity_description"] = new_desc
+#                 if new_type:
+#                     ent["entity_type_hint"] = new_type
+#                 ent["resolved_action"] = "modified"
+#                 ent["resolution_rationale"] = rationale
+#                 ent["resolved_time"] = ts
+#                 log_entries.append({"time": ts, "action": "modify", "entity_id": eid, "rationale": rationale})
+#         elif typ == "KeepEntity":
+#             eid = act.get("entity_id")
+#             ent = entities_by_id.get(eid)
+#             rationale = act.get("rationale","")
+#             if ent:
+#                 ent["resolved_action"] = "kept"
+#                 ent["resolution_rationale"] = rationale
+#                 ent["resolved_time"] = ts
+#                 log_entries.append({"time": ts, "action": "keep", "entity_id": eid, "rationale": rationale})
+#         else:
+#             log_entries.append({"time": ts, "action": "unknown", "payload": act})
+
+# # ------------------ Orchestration main ----------------
+# def validate_entities_schema(entities: List[Dict]):
+#     """
+#     Ensure every entity has the minimum required fields expected by the new pipeline.
+#     Raise ValueError with a helpful message listing offending entries if not.
+#     """
+#     required = ["id", "entity_name", "_cluster_id"]  # require cluster id for grouping
+#     problems = []
+#     for i, e in enumerate(entities):
+#         missing = [k for k in required if k not in e]
+#         # validate that at least one context field exists (resolution_context | context_phrase | text_span | used_context_excerpt)
+#         context_present = any(k in e and e.get(k) not in (None, "") for k in ("resolution_context","context_phrase","text_span","used_context_excerpt"))
+#         if missing or not context_present:
+#             problems.append({"index": i, "id": e.get("id"), "missing_keys": missing, "has_context": context_present, "sample": {k: e.get(k) for k in ["entity_name","entity_type_hint","resolution_context","context_phrase","text_span","_cluster_id"]}})
+#         # ensure confidence_score exists (may be None but field should be present to avoid KeyError later)
+#         if "confidence_score" not in e:
+#             e["confidence_score"] = None
+
+#     if problems:
+#         msg_lines = ["Entities schema validation failed — some entries are missing required keys or have no context field:"]
+#         for p in problems[:20]:
+#             msg_lines.append(f" - idx={p['index']} id={p['id']} missing={p['missing_keys']} has_context={p['has_context']} sample={p['sample']}")
+#         if len(problems) > 20:
+#             msg_lines.append(f" - ... and {len(problems)-20} more problematic entries")
+#         raise ValueError("\n".join(msg_lines))
+
+# def write_local_subcluster_summary(out_dir: Path, cid: int, subgroups: Dict[int, List[Dict]]):
+#     """
+#     Save a compact summary JSON of local subclusters for debugging.
+#     Format:
+#       { "cluster_id": cid, "n_entities": N, "n_subclusters": K, "clusters": {"0": [ {id,name,type_hint,desc}, ...], "-1": [...] } }
+#     """
+#     out_dir.mkdir(parents=True, exist_ok=True)
+#     summary = {"cluster_id": cid, "n_entities": sum(len(v) for v in subgroups.values()), "n_subclusters": len(subgroups)}
+#     clusters = {}
+#     for lab, members in sorted(subgroups.items(), key=lambda x: x[0]):
+#         clusters[str(lab)] = [{"id": m.get("id"), "entity_name": m.get("entity_name"), "entity_type_hint": m.get("entity_type_hint"), "entity_description": (m.get("entity_description") or "")[:200]} for m in members]
+#     summary["clusters"] = clusters
+#     path = out_dir / f"cluster_{cid}_subclusters.json"
+#     with open(path, "w", encoding="utf-8") as fh:
+#         json.dump(summary, fh, ensure_ascii=False, indent=2)
+#     return path
+
+# def orchestrate():
+#     print("Loading clustered entities from:", CLUSTERED_IN)
+#     entities = []
+#     with open(CLUSTERED_IN, "r", encoding="utf-8") as fh:
+#         for line in fh:
+#             if line.strip():
+#                 entities.append(json.loads(line))
+#     n_entities = len(entities)
+#     print("Loaded entities:", n_entities)
+
+#     # validate schema early and loudly
+#     validate_entities_schema(entities)
+
+#     print("Loading chunks from:", CHUNKS_JSONL)
+#     chunks = load_chunks(CHUNKS_JSONL) if CHUNKS_JSONL.exists() else []
+#     chunks_index = {c.get("id"): c for c in chunks}
+#     print("Loaded chunks:", len(chunks))
+
+#     # ensure ids are unique
+#     ids = [e.get("id") for e in entities]
+#     if len(set(ids)) != len(ids):
+#         raise ValueError("Duplicate entity ids found in clustered input — ids must be unique.")
+
+#     entities_by_id = {e["id"]: e for e in entities}
+#     entity_id_to_index = {e["id"]: i for i, e in enumerate(entities)}
+
+#     # embedder + combined embeddings (name/desc/ctx)
+#     embedder = HFEmbedder(model_name=EMBED_MODEL, device=DEVICE)
+#     combined_embeddings = compute_combined_embeddings(embedder, entities, weights=WEIGHTS)
+#     print("Combined embeddings shape:", combined_embeddings.shape)
+
+#     # group by coarse cluster
+#     by_cluster = defaultdict(list)
+#     for e in entities:
+#         by_cluster[e.get("_cluster_id")].append(e)
+
+#     canonical_store = []
+#     log_entries = []
+
+#     cluster_ids = sorted([k for k in by_cluster.keys() if k != -1])
+#     noise_count = len(by_cluster.get(-1, []))
+#     print("Clusters to resolve (excluding noise):", len(cluster_ids), "noise_count:", noise_count)
+
+#     local_subclusters_dir = ENT_OUT.parent / "local_subclusters"
+#     local_subclusters_dir.mkdir(parents=True, exist_ok=True)
+
+#     # outer progress bar over clusters
+#     with tqdm(cluster_ids, desc="Clusters", unit="cluster") as pbar_clusters:
+#         for cid in pbar_clusters:
+#             members = by_cluster[cid]
+#             size = len(members)
+#             pbar_clusters.set_postfix(cluster=cid, size=size)
+
+#             # decide path: direct prompt chunks OR local sub-cluster
+#             if size <= MAX_CLUSTER_PROMPT:
+#                 # number of prompts for this coarse cluster
+#                 n_prompts = math.ceil(size / MAX_MEMBERS_PER_PROMPT)
+#                 with tqdm(range(n_prompts), desc=f"Cluster {cid} prompts", leave=False, unit="prompt") as pbar_prompts:
+#                     for i in pbar_prompts:
+#                         s = i * MAX_MEMBERS_PER_PROMPT
+#                         chunk = members[s:s+MAX_MEMBERS_PER_PROMPT]
+#                         payload = [build_member_with_chunk(m, chunks_index) for m in chunk]
+#                         members_json = json.dumps(payload, ensure_ascii=False, indent=2)
+#                         prompt = PROMPT_TEMPLATE.format(members_json=members_json)
+#                         est_tokens = max(1, int(len(prompt) / 4))
+#                         pbar_prompts.set_postfix(est_tokens=est_tokens, chunk_size=len(chunk))
+#                         if est_tokens > PROMPT_TOKEN_LIMIT:
+#                             # skip LLM call, conservative
+#                             for m in chunk:
+#                                 log_entries.append({"time": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+#                                                     "action":"skip_large_prompt_keep", "entity_id": m["id"],
+#                                                     "reason": f"est_tokens {est_tokens} > limit {PROMPT_TOKEN_LIMIT}"})
+#                                 m["resolved_action"] = "kept_skipped_prompt"
+#                                 m["resolution_rationale"] = f"Prompt too large (est_tokens={est_tokens})"
+#                             continue
+#                         llm_out = call_llm_with_prompt(prompt)
+#                         actions = extract_json_array(llm_out)
+#                         if actions is None:
+#                             actions = [{"action":"KeepEntity","entity_id": m["id"], "rationale":"LLM parse failed; conservatively kept"} for m in chunk]
+#                         apply_actions(chunk, actions, entities_by_id, canonical_store, log_entries)
+#             else:
+#                 # large cluster -> local sub-cluster
+#                 subgroups = local_subcluster(members, entity_id_to_index, combined_embeddings,
+#                                             min_cluster_size=LOCAL_HDBSCAN_MIN_CLUSTER_SIZE,
+#                                             min_samples=LOCAL_HDBSCAN_MIN_SAMPLES,
+#                                             use_umap=LOCAL_USE_UMAP, umap_dims=UMAP_DIMS)
+
+#                 # ALWAYS persist subcluster summary for inspection (even if we fallback)
+#                 subcluster_summary_path = write_local_subcluster_summary(local_subclusters_dir, cid, subgroups)
+#                 print(f"[info] wrote local subcluster summary: {subcluster_summary_path}")
+
+#                 # compute fragmentation statistic: number of non-noise subclusters
+#                 nonnoise_clusters = [lab for lab in subgroups.keys() if lab != -1]
+#                 num_nonnoise = len(nonnoise_clusters)
+#                 # fallback condition: too fragmented -> prefer sequential chunking of original coarse cluster
+#                 fallback_threshold = max(1, int(len(members) / FALLBACK_FRAG_THRESHOLD_FACTOR))
+#                 fallback = num_nonnoise > fallback_threshold
+
+#                 if fallback:
+#                     # FALLBACK: do not use subgroups; process original members sequentially (keeps original local ordering)
+#                     print(f"[fallback] cluster {cid} had {num_nonnoise} non-noise subclusters for {len(members)} members; falling back to sequential chunking (preserves grouping).")
+#                     log_entries.append({"time": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+#                                         "action":"fallback_no_subcluster", "cluster": cid, "n_members": len(members), "n_nonnoise_subclusters": num_nonnoise})
+#                     # chunk original members iteratively
+#                     n_prompts = math.ceil(len(members) / MAX_MEMBERS_PER_PROMPT)
+#                     with tqdm(range(n_prompts), desc=f"Cluster {cid} fallback prompts", leave=False, unit="prompt") as pbar_prompts:
+#                         for i in pbar_prompts:
+#                             s = i * MAX_MEMBERS_PER_PROMPT
+#                             chunk = members[s:s+MAX_MEMBERS_PER_PROMPT]
+#                             payload = [build_member_with_chunk(m, chunks_index) for m in chunk]
+#                             members_json = json.dumps(payload, ensure_ascii=False, indent=2)
+#                             prompt = PROMPT_TEMPLATE.format(members_json=members_json)
+#                             est_tokens = max(1, int(len(prompt) / 4))
+#                             pbar_prompts.set_postfix(est_tokens=est_tokens, chunk_size=len(chunk))
+#                             if est_tokens > PROMPT_TOKEN_LIMIT:
+#                                 for m in chunk:
+#                                     log_entries.append({"time": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+#                                                         "action":"skip_large_prompt_keep", "entity_id": m["id"],
+#                                                         "reason": f"est_tokens {est_tokens} > limit {PROMPT_TOKEN_LIMIT}"})
+#                                     m["resolved_action"] = "kept_skipped_prompt"
+#                                     m["resolution_rationale"] = f"Prompt too large (est_tokens={est_tokens})"
+#                                 continue
+#                             llm_out = call_llm_with_prompt(prompt)
+#                             actions = extract_json_array(llm_out)
+#                             if actions is None:
+#                                 actions = [{"action":"KeepEntity","entity_id": m["id"], "rationale":"LLM parse failed; conservatively kept"} for m in chunk]
+#                             apply_actions(chunk, actions, entities_by_id, canonical_store, log_entries)
+#                 else:
+#                     # proceed with subgroups as planned
+#                     sub_items = sorted(subgroups.items(), key=lambda x: -len(x[1]))
+#                     with tqdm(sub_items, desc=f"Cluster {cid} subclusters", leave=False, unit="sub") as pbar_subs:
+#                         for sublab, submembers in pbar_subs:
+#                             subsize = len(submembers)
+#                             pbar_subs.set_postfix(sublab=sublab, subsize=subsize)
+#                             if sublab == -1:
+#                                 for m in submembers:
+#                                     m["resolved_action"] = "kept_noise_local"
+#                                     m["resolution_rationale"] = "Local-subcluster noise preserved"
+#                                     log_entries.append({"time": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+#                                                         "action":"keep_noise_local", "entity_id": m["id"], "cluster": cid})
+#                                 continue
+#                             # prompts for this subcluster
+#                             n_prompts = math.ceil(subsize / MAX_MEMBERS_PER_PROMPT)
+#                             with tqdm(range(n_prompts), desc=f"Sub {sublab} prompts", leave=False, unit="prompt") as pbar_sub_prompts:
+#                                 for i in pbar_sub_prompts:
+#                                     s = i * MAX_MEMBERS_PER_PROMPT
+#                                     chunk = submembers[s:s+MAX_MEMBERS_PER_PROMPT]
+#                                     payload = [build_member_with_chunk(m, chunks_index) for m in chunk]
+#                                     members_json = json.dumps(payload, ensure_ascii=False, indent=2)
+#                                     prompt = PROMPT_TEMPLATE.format(members_json=members_json)
+#                                     est_tokens = max(1, int(len(prompt) / 4))
+#                                     pbar_sub_prompts.set_postfix(est_tokens=est_tokens, chunk_size=len(chunk))
+#                                     if est_tokens > PROMPT_TOKEN_LIMIT:
+#                                         for m in chunk:
+#                                             log_entries.append({"time": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+#                                                                 "action":"skip_large_prompt_keep", "entity_id": m["id"],
+#                                                                 "reason": f"est_tokens {est_tokens} > limit {PROMPT_TOKEN_LIMIT}"})
+#                                             m["resolved_action"] = "kept_skipped_prompt"
+#                                             m["resolution_rationale"] = f"Prompt too large (est_tokens={est_tokens})"
+#                                         continue
+#                                     llm_out = call_llm_with_prompt(prompt)
+#                                     actions = extract_json_array(llm_out)
+#                                     if actions is None:
+#                                         actions = [{"action":"KeepEntity","entity_id": m["id"], "rationale":"LLM parse failed; conservatively kept"} for m in chunk]
+#                                     apply_actions(chunk, actions, entities_by_id, canonical_store, log_entries)
+
+#     # global noise handling
+#     for nent in by_cluster.get(-1, []):
+#         ent = entities_by_id[nent["id"]]
+#         ent["resolved_action"] = "kept_noise_global"
+#         ent["resolution_rationale"] = "Global noise preserved for manual review"
+#         log_entries.append({"time": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()), "action":"keep_noise_global", "entity_id": ent["id"]})
+
+#     # write outputs
+#     final_entities = list(entities_by_id.values())
+#     ENT_OUT.parent.mkdir(parents=True, exist_ok=True)
+#     with open(ENT_OUT, "w", encoding="utf-8") as fh:
+#         for e in final_entities:
+#             fh.write(json.dumps(e, ensure_ascii=False) + "\n")
+#     with open(CANON_OUT, "w", encoding="utf-8") as fh:
+#         for c in canonical_store:
+#             fh.write(json.dumps(c, ensure_ascii=False) + "\n")
+#     with open(LOG_OUT, "a", encoding="utf-8") as fh:
+#         for lg in log_entries:
+#             fh.write(json.dumps(lg, ensure_ascii=False) + "\n")
+
+#     print("\nResolution finished. Wrote:", ENT_OUT, CANON_OUT, LOG_OUT)
+#     print(f"[info] local subcluster summaries (if any) are under: {local_subclusters_dir}")
+
+
+
+
+#endregion#? Final Ent Res - (aligned with EntityRec v7 & gpt-5.1 Responses, embedding pipeline With SubCluster json)
+#*#########################  End  ##########################
+
+
+#?######################### Start ##########################
+#region:#?   Final Ent Res v10 - DSPy LLM Config (aligned with EntityRec v10 & LLM Model V3)
+
+"""
+Entity resolution orchestrator aligned with Entity Recognition prompt and the updated
+embedding pipeline (name/desc/ctx). Performs local sub-clustering, chunk-text inclusion,
+token safety guard, and tqdm progress bars.
+
+Original design:
  - stricter input validation (requires _cluster_id + context fields)
  - saves local-subcluster summaries per coarse cluster for debugging
  - fallback to "no local sub-clustering" when fragmentation is excessive (keeps members together)
- - more robust min_cluster_size handling and explanatory logging
+ - robust min_cluster_size handling and explanatory logging
 
-Updated (Jan 2026):
- - switch LLM backend from Chat Completions (gpt-4o) to Responses API with gpt-5.1
- - use `max_output_tokens` instead of `max_tokens`
- - no `temperature` parameter (not supported by gpt-5.1)
- - optional reasoning config for gpt-5.x models
+Updated (Jan 2026, v10):
+ - switch LLM backend from OpenAI Responses client (gpt-5.1) to DSPy + TraceKGLLMConfig (LLM Model V3)
+ - each LLM call uses a dspy.LM created via make_lm_for_step(cfg, "entity_res")
+ - one central config can control all steps; optional per-step model overrides still supported
 """
-import os
+
 import json
 import uuid
 import time
 import math
 from pathlib import Path
 from collections import defaultdict
-from typing import List, Dict
+from typing import List, Dict, Optional
 
 import numpy as np
 from tqdm import tqdm
@@ -1497,24 +4200,6 @@ try:
 except Exception:
     UMAP_AVAILABLE = False
 
-# OpenAI client loader (reuses your pattern)
-from openai import OpenAI
-
-def _load_openai_key(envvar: str = "OPENAI_API_KEY", fallback_path: str = ".env") -> str:
-    key = os.getenv(envvar, fallback_path)
-    if isinstance(key, str) and Path(key).exists():
-        try:
-            txt = Path(key).read_text(encoding="utf-8").strip()
-            if txt:
-                return txt
-        except Exception:
-            pass
-    return key
-
-OPENAI_KEY = _load_openai_key()
-if not OPENAI_KEY or not isinstance(OPENAI_KEY, str) or len(OPENAI_KEY) < 10:
-    print("⚠️  OPENAI API key not found or seems invalid. Set OPENAI_API_KEY env or place key in fallback file path.")
-client = OpenAI(api_key=OPENAI_KEY)
 
 # ---------------- Paths & config ----------------
 CLUSTERED_IN = Path("data/Entities/Ent_1st/Ent_Clustering_1st/entities_clustered.jsonl")   # input (from previous clustering)
@@ -1536,22 +4221,21 @@ LOCAL_HDBSCAN_MIN_SAMPLES = 1
 LOCAL_HDBSCAN_METRIC = "euclidean"
 
 # UMAP options
-LOCAL_USE_UMAP = False   # default OFF for robustness; enable via CLI --use_umap
+LOCAL_USE_UMAP = False   # default OFF for robustness; enable via CLI / config if desired
 UMAP_DIMS = 32
 UMAP_NEIGHBORS = 10
 UMAP_MIN_DIST = 0.0
 UMAP_MIN_SAMPLES_TO_RUN = 25  # only run UMAP when cluster size >= this
 
-# LLM / prompt (now via Responses API + gpt-5.1)
+# LLM defaults (used only when llm_config is None – for backward compatibility)
 MODEL = "gpt-5.1"
-MAX_TOKENS = 16000               # mapped to max_output_tokens
-REASONING_EFFORT = "low"       # for gpt-5.x models
+MAX_TOKENS = 16000
 
-# orchestration thresholds (as requested)
-MAX_CLUSTER_PROMPT = 11       # coarse cluster size threshold to trigger local sub-clustering
+# orchestration thresholds
+MAX_CLUSTER_PROMPT = 11        # coarse cluster size threshold to trigger local sub-clustering
 MAX_MEMBERS_PER_PROMPT = 10    # <= 10 entities per LLM call
 TRUNC_CHUNK_CHARS = 1000
-INCLUDE_PREV_CHUNKS = 0
+INCLUDE_PREV_CHUNKS = 0        # currently not used (only focus-chunk text included)
 
 # token safety
 PROMPT_TOKEN_LIMIT = 8000  # rough char/4 estimate threshold
@@ -1560,6 +4244,7 @@ PROMPT_TOKEN_LIMIT = 8000  # rough char/4 estimate threshold
 # if local sub-clustering produces more than len(members)/FALLBACK_FRAG_THRESHOLD_FACTOR non-noise subclusters,
 # we will FALLBACK to _not_ using local_subcluster and instead chunk the original coarse cluster directly.
 FALLBACK_FRAG_THRESHOLD_FACTOR = 2   # e.g., if > len(members)/2 non-noise subclusters -> fallback
+
 
 # ---------------- Utility functions ----------------
 def load_chunks(chunks_jsonl_path: Path) -> List[Dict]:
@@ -1571,6 +4256,7 @@ def load_chunks(chunks_jsonl_path: Path) -> List[Dict]:
                 chunks.append(json.loads(line))
     return chunks
 
+
 def safe_text(e: Dict, key: str) -> str:
     v = e.get(key)
     if v is None:
@@ -1579,12 +4265,14 @@ def safe_text(e: Dict, key: str) -> str:
         return json.dumps(v, ensure_ascii=False)
     return str(v)
 
+
 # ---------------- HF embedder ----------------
 def mean_pool(token_embeddings: torch.Tensor, attention_mask: torch.Tensor):
     input_mask_expanded = attention_mask.unsqueeze(-1).expand(token_embeddings.size()).float()
     sum_embeddings = torch.sum(token_embeddings * input_mask_expanded, 1)
     sum_mask = torch.clamp(input_mask_expanded.sum(1), min=1e-9)
     return sum_embeddings / sum_mask
+
 
 class HFEmbedder:
     def __init__(self, model_name: str = EMBED_MODEL, device: str = DEVICE):
@@ -1619,7 +4307,8 @@ class HFEmbedder:
         embs = normalize(embs, axis=1)
         return embs
 
-# ---------------- field builder aligned with EntityRec v7 ----------------
+
+# ---------------- field builder aligned with EntityRec ----------------
 def build_field_texts(entities: List[Dict]):
     """
     Build text lists for fields:
@@ -1634,7 +4323,13 @@ def build_field_texts(entities: List[Dict]):
         descs.append(safe_text(e, "entity_description") or "")
 
         # resolution_context preferred (new schema) — fallback chain below
-        resolution = safe_text(e, "resolution_context") or safe_text(e, "text_span") or safe_text(e, "context_phrase") or safe_text(e, "used_context_excerpt") or ""
+        resolution = (
+            safe_text(e, "resolution_context")
+            or safe_text(e, "text_span")
+            or safe_text(e, "context_phrase")
+            or safe_text(e, "used_context_excerpt")
+            or ""
+        )
 
         # fold type and node_properties into ctx (as text hints)
         etype = safe_text(e, "entity_type_hint") or safe_text(e, "entity_type") or ""
@@ -1642,10 +4337,10 @@ def build_field_texts(entities: List[Dict]):
         node_props_text = ""
         if isinstance(node_props, list) and node_props:
             pieces = []
-            for np in node_props:
-                if isinstance(np, dict):
-                    pname = np.get("prop_name") or np.get("name") or ""
-                    pval = np.get("prop_value") or np.get("value") or ""
+            for np_ in node_props:
+                if isinstance(np_, dict):
+                    pname = np_.get("prop_name") or np_.get("name") or ""
+                    pval = np_.get("prop_value") or np_.get("value") or ""
                     if pname and pval:
                         pieces.append(f"{pname}:{pval}")
                     elif pname:
@@ -1666,6 +4361,7 @@ def build_field_texts(entities: List[Dict]):
         combined_ctx = " ; ".join([p for p in ctx_parts if p])
         ctxs.append(combined_ctx)
     return names, descs, ctxs
+
 
 def compute_combined_embeddings(embedder: HFEmbedder, entities: List[Dict], weights=WEIGHTS) -> np.ndarray:
     """
@@ -1707,21 +4403,24 @@ def compute_combined_embeddings(embedder: HFEmbedder, entities: List[Dict], weig
     combined = normalize(combined, axis=1)
     return combined
 
+
 # ---------------- robust local_subcluster ----------------
-def local_subcluster(cluster_entities: List[Dict],
-                     entity_id_to_index: Dict[str, int],
-                     all_embeddings: np.ndarray,
-                     min_cluster_size: int = LOCAL_HDBSCAN_MIN_CLUSTER_SIZE,
-                     min_samples: int = LOCAL_HDBSCAN_MIN_SAMPLES,
-                     use_umap: bool = LOCAL_USE_UMAP,
-                     umap_dims: int = UMAP_DIMS):
+def local_subcluster(
+    cluster_entities: List[Dict],
+    entity_id_to_index: Dict[str, int],
+    all_embeddings: np.ndarray,
+    min_cluster_size: int = LOCAL_HDBSCAN_MIN_CLUSTER_SIZE,
+    min_samples: int = LOCAL_HDBSCAN_MIN_SAMPLES,
+    use_umap: bool = LOCAL_USE_UMAP,
+    umap_dims: int = UMAP_DIMS,
+):
     """
     Returns: dict[label] -> list[entity_dict]
     Notes:
       - min_cluster_size is treated as a true minimum (HDBSCAN may still mark small noise).
       - We protect against trivial inputs and return fallback single cluster if hdbscan fails.
     """
-    from collections import defaultdict
+    from collections import defaultdict as _dd
     from sklearn.preprocessing import normalize as _normalize
 
     idxs = [entity_id_to_index[e["id"]] for e in cluster_entities]
@@ -1745,11 +4444,13 @@ def local_subcluster(cluster_entities: List[Dict],
     if use_umap and UMAP_AVAILABLE and n >= UMAP_MIN_SAMPLES_TO_RUN:
         n_components = min(umap_dims, max(2, n - 4))  # keep k <= n-4 for stability
         try:
-            reducer = umap.UMAP(n_components=n_components,
-                                n_neighbors=min(UMAP_NEIGHBORS, max(2, n-1)),
-                                min_dist=UMAP_MIN_DIST,
-                                metric='cosine',
-                                random_state=42)
+            reducer = umap.UMAP(
+                n_components=n_components,
+                n_neighbors=min(UMAP_NEIGHBORS, max(2, n - 1)),
+                min_dist=UMAP_MIN_DIST,
+                metric="cosine",
+                random_state=42,
+            )
             X_sub = reducer.fit_transform(X)
         except Exception as e:
             print(f"[local_subcluster] UMAP failed for n={n}, n_components={n_components} -> fallback without UMAP. Err: {e}")
@@ -1759,74 +4460,33 @@ def local_subcluster(cluster_entities: List[Dict],
             print(f"[local_subcluster] skipping UMAP for n={n} (threshold {UMAP_MIN_SAMPLES_TO_RUN})")
 
     try:
-        clusterer = hdbscan.HDBSCAN(min_cluster_size=min_cluster_size,
-                                    min_samples=min_samples,
-                                    metric=LOCAL_HDBSCAN_METRIC,
-                                    cluster_selection_method='eom')
+        clusterer = hdbscan.HDBSCAN(
+            min_cluster_size=min_cluster_size,
+            min_samples=min_samples,
+            metric=LOCAL_HDBSCAN_METRIC,
+            cluster_selection_method="eom",
+        )
         labels = clusterer.fit_predict(X_sub)
     except Exception as e:
         print(f"[local_subcluster] HDBSCAN failed for n={n} -> fallback single cluster. Err: {e}")
         return {0: list(cluster_entities)}
 
-    groups = defaultdict(list)
+    groups = _dd(list)
     for ent, lab in zip(cluster_entities, labels):
         groups[int(lab)].append(ent)
     return groups
 
-# ------------------ LLM helpers (Responses API + gpt-5.1) ------------------
-def call_llm_with_prompt(
-    prompt: str,
-    model: str = MODEL,
-    max_tokens: int = MAX_TOKENS,
-    reasoning_effort: str = REASONING_EFFORT
-) -> str:
-    """
-    Call the LLM using the Responses API (compatible with gpt-5.1).
 
-    - Uses `max_output_tokens` instead of `max_tokens`.
-    - Does NOT send `temperature` (unsupported by gpt-5.1).
-    - Adds `reasoning={'effort': reasoning_effort}` for gpt-5.x models.
-    """
-    try:
-        print(f"[call_llm_with_prompt] model={model} max_output_tokens={max_tokens} reasoning_effort={reasoning_effort}")
-        kwargs: Dict[str, object] = {
-            "model": model,
-            "input": [
-                {
-                    "role": "user",
-                    "content": prompt,
-                }
-            ],
-        }
-
-        if max_tokens is not None:
-            kwargs["max_output_tokens"] = max_tokens
-
-        if model.startswith("gpt-5") and reasoning_effort:
-            kwargs["reasoning"] = {"effort": reasoning_effort}
-
-        response = client.responses.create(**kwargs)
-        txt = response.output_text or ""
-
-        status = getattr(response, "status", None)
-        if status == "incomplete":
-            incomplete_details = getattr(response, "incomplete_details", None)
-            print(f"[call_llm_with_prompt] WARNING: response incomplete: {incomplete_details}")
-
-        print(f"[call_llm_with_prompt] received response (len={len(txt)} chars, status={status})")
-        return txt
-    except Exception as e:
-        print("LLM call error:", e)
-        return ""
+# ------------------ LLM helpers via DSPy + TraceKGLLMConfig ------------------
 
 def extract_json_array(text: str):
     if not text:
         return None
     text = text.strip()
-    start = text.find('[')
-    end = text.rfind(']')
+    start = text.find("[")
+    end = text.rfind("]")
     if start != -1 and end != -1 and end > start:
-        candidate = text[start:end+1]
+        candidate = text[start : end + 1]
         try:
             return json.loads(candidate)
         except Exception:
@@ -1836,7 +4496,8 @@ def extract_json_array(text: str):
     except Exception:
         return None
 
-# ---------------- Prompt building ----------------
+
+# PROMPT TEMPLATE (unchanged; only the backend changed)
 PROMPT_TEMPLATE = """You are a careful knowledge-graph resolver.
 Given the following small cohesive group of candidate entity mentions, decide which ones to MERGE into a single canonical entity, which to MODIFY, and which to KEEP.
 
@@ -1857,6 +4518,7 @@ Group members (id | name | type_hint | confidence | desc | text_span | chunk_tex
 Return JSON array only (no commentary).
 """
 
+
 def build_member_with_chunk(m: Dict, chunks_index: Dict[str, Dict]) -> Dict:
     """
     Build the member record included in the LLM prompt.
@@ -1867,11 +4529,11 @@ def build_member_with_chunk(m: Dict, chunks_index: Dict[str, Dict]) -> Dict:
     if chunk_id:
         ch = chunks_index.get(chunk_id)
         if ch:
-            ct = ch.get("text","")
-            # optionally include previous chunks? currently disabled (INCLUDE_PREV_CHUNKS)
+            ct = ch.get("text", "")
+            # (INCLUDE_PREV_CHUNKS is currently 0 / unused)
             chunk_text = " ".join(ct.split())
             if len(chunk_text) > TRUNC_CHUNK_CHARS:
-                chunk_text = chunk_text[:TRUNC_CHUNK_CHARS].rsplit(" ",1)[0] + "..."
+                chunk_text = chunk_text[:TRUNC_CHUNK_CHARS].rsplit(" ", 1)[0] + "..."
     # text_span should show the precise mention proof; prefer context_phrase then resolution_context
     text_span = m.get("context_phrase") or m.get("resolution_context") or m.get("text_span") or ""
     return {
@@ -1881,12 +4543,64 @@ def build_member_with_chunk(m: Dict, chunks_index: Dict[str, Dict]) -> Dict:
         "confidence": m.get("confidence_score"),
         "desc": m.get("entity_description"),
         "text_span": text_span,
-        "chunk_text": chunk_text
+        "chunk_text": chunk_text,
     }
 
+
+# --------- DSPy integration: LM for Entity Resolution step ---------
+
+def _get_lm_for_entity_res(
+    llm_config: Optional["TraceKGLLMConfig"],
+    model: str,
+    max_tokens: int,
+):
+    """
+    Resolve a DSPy LM for the Entity Resolution step:
+
+      - If llm_config is provided, use it directly (with per-step overrides for 'entity_res').
+      - Otherwise, build a minimal TraceKGLLMConfig using the function args
+        for backward compatibility (single model everywhere).
+    """
+    if llm_config is not None:
+        cfg = llm_config
+    else:
+        # Backward-compatible default: one model everywhere, with given max_tokens.
+        cfg = TraceKGLLMConfig(default_model=model, max_tokens=max_tokens)
+
+    try:
+        cfg.validate()
+    except Exception as e:
+        print(f"[EntityRes] WARNING: llm_config.validate() failed: {e}")
+
+    # Centralized LM construction (provider, model_type, cache, api_base, etc.)
+    lm = make_lm_for_step(cfg, "entity_res")
+    return lm
+
+
+def _call_entity_res_lm(lm, prompt: str) -> str:
+    """
+    Small helper to call the DSPy LM and normalize the output to a plain string.
+    """
+    try:
+        outputs = lm(prompt)
+    except Exception as e:
+        print(f"[EntityRes] LM call error: {e}")
+        return ""
+
+    # DSPy often returns a list of strings for bare calls: lm("...") -> ['...']
+    if isinstance(outputs, list):
+        return outputs[0] if outputs else ""
+    return str(outputs or "")
+
+
 # ------------------ apply actions ----------------
-def apply_actions(members: List[Dict], actions: List[Dict], entities_by_id: Dict[str, Dict],
-                  canonical_store: List[Dict], log_entries: List[Dict]):
+def apply_actions(
+    members: List[Dict],
+    actions: List[Dict],
+    entities_by_id: Dict[str, Dict],
+    canonical_store: List[Dict],
+    log_entries: List[Dict],
+):
     ts = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
     for act in (actions or []):
         typ = act.get("action")
@@ -1902,9 +4616,9 @@ def apply_actions(members: List[Dict], actions: List[Dict], entities_by_id: Dict
                 "canonical_name": canonical_name,
                 "canonical_description": canonical_desc,
                 "canonical_type": canonical_type,
-                "source": "LLM_resolution_v101_gpt5",
+                "source": "LLM_resolution_v10_dspy",
                 "rationale": rationale,
-                "timestamp": ts
+                "timestamp": ts,
             }
             canonical_store.append(canonical)
             for eid in ids:
@@ -1914,7 +4628,15 @@ def apply_actions(members: List[Dict], actions: List[Dict], entities_by_id: Dict
                     ent["resolved_action"] = "merged"
                     ent["resolution_rationale"] = rationale
                     ent["resolved_time"] = ts
-            log_entries.append({"time": ts, "action": "merge", "canonical_id": can_id, "merged_ids": ids, "rationale": rationale})
+            log_entries.append(
+                {
+                    "time": ts,
+                    "action": "merge",
+                    "canonical_id": can_id,
+                    "merged_ids": ids,
+                    "rationale": rationale,
+                }
+            )
         elif typ == "ModifyEntity":
             eid = act.get("entity_id")
             ent = entities_by_id.get(eid)
@@ -1922,7 +4644,7 @@ def apply_actions(members: List[Dict], actions: List[Dict], entities_by_id: Dict
                 new_name = act.get("new_name")
                 new_desc = act.get("new_description")
                 new_type = act.get("new_type_hint")
-                rationale = act.get("rationale","")
+                rationale = act.get("rationale", "")
                 if new_name:
                     ent["entity_name"] = new_name
                 if new_desc:
@@ -1932,18 +4654,33 @@ def apply_actions(members: List[Dict], actions: List[Dict], entities_by_id: Dict
                 ent["resolved_action"] = "modified"
                 ent["resolution_rationale"] = rationale
                 ent["resolved_time"] = ts
-                log_entries.append({"time": ts, "action": "modify", "entity_id": eid, "rationale": rationale})
+                log_entries.append(
+                    {
+                        "time": ts,
+                        "action": "modify",
+                        "entity_id": eid,
+                        "rationale": rationale,
+                    }
+                )
         elif typ == "KeepEntity":
             eid = act.get("entity_id")
             ent = entities_by_id.get(eid)
-            rationale = act.get("rationale","")
+            rationale = act.get("rationale", "")
             if ent:
                 ent["resolved_action"] = "kept"
                 ent["resolution_rationale"] = rationale
                 ent["resolved_time"] = ts
-                log_entries.append({"time": ts, "action": "keep", "entity_id": eid, "rationale": rationale})
+                log_entries.append(
+                    {
+                        "time": ts,
+                        "action": "keep",
+                        "entity_id": eid,
+                        "rationale": rationale,
+                    }
+                )
         else:
             log_entries.append({"time": ts, "action": "unknown", "payload": act})
+
 
 # ------------------ Orchestration main ----------------
 def validate_entities_schema(entities: List[Dict]):
@@ -1956,39 +4693,97 @@ def validate_entities_schema(entities: List[Dict]):
     for i, e in enumerate(entities):
         missing = [k for k in required if k not in e]
         # validate that at least one context field exists (resolution_context | context_phrase | text_span | used_context_excerpt)
-        context_present = any(k in e and e.get(k) not in (None, "") for k in ("resolution_context","context_phrase","text_span","used_context_excerpt"))
+        context_present = any(
+            k in e and e.get(k) not in (None, "")
+            for k in ("resolution_context", "context_phrase", "text_span", "used_context_excerpt")
+        )
         if missing or not context_present:
-            problems.append({"index": i, "id": e.get("id"), "missing_keys": missing, "has_context": context_present, "sample": {k: e.get(k) for k in ["entity_name","entity_type_hint","resolution_context","context_phrase","text_span","_cluster_id"]}})
+            problems.append(
+                {
+                    "index": i,
+                    "id": e.get("id"),
+                    "missing_keys": missing,
+                    "has_context": context_present,
+                    "sample": {
+                        k: e.get(k)
+                        for k in [
+                            "entity_name",
+                            "entity_type_hint",
+                            "resolution_context",
+                            "context_phrase",
+                            "text_span",
+                            "_cluster_id",
+                        ]
+                    },
+                }
+            )
         # ensure confidence_score exists (may be None but field should be present to avoid KeyError later)
         if "confidence_score" not in e:
             e["confidence_score"] = None
 
     if problems:
-        msg_lines = ["Entities schema validation failed — some entries are missing required keys or have no context field:"]
+        msg_lines = [
+            "Entities schema validation failed — some entries are missing required keys or have no context field:"
+        ]
         for p in problems[:20]:
-            msg_lines.append(f" - idx={p['index']} id={p['id']} missing={p['missing_keys']} has_context={p['has_context']} sample={p['sample']}")
+            msg_lines.append(
+                f" - idx={p['index']} id={p['id']} missing={p['missing_keys']} "
+                f"has_context={p['has_context']} sample={p['sample']}"
+            )
         if len(problems) > 20:
             msg_lines.append(f" - ... and {len(problems)-20} more problematic entries")
         raise ValueError("\n".join(msg_lines))
+
 
 def write_local_subcluster_summary(out_dir: Path, cid: int, subgroups: Dict[int, List[Dict]]):
     """
     Save a compact summary JSON of local subclusters for debugging.
     Format:
-      { "cluster_id": cid, "n_entities": N, "n_subclusters": K, "clusters": {"0": [ {id,name,type_hint,desc}, ...], "-1": [...] } }
+      { "cluster_id": cid, "n_entities": N, "n_subclusters": K,
+        "clusters": {"0": [ {id,name,type_hint,desc}, ...], "-1": [...] } }
     """
     out_dir.mkdir(parents=True, exist_ok=True)
-    summary = {"cluster_id": cid, "n_entities": sum(len(v) for v in subgroups.values()), "n_subclusters": len(subgroups)}
+    summary = {
+        "cluster_id": cid,
+        "n_entities": sum(len(v) for v in subgroups.values()),
+        "n_subclusters": len(subgroups),
+    }
     clusters = {}
     for lab, members in sorted(subgroups.items(), key=lambda x: x[0]):
-        clusters[str(lab)] = [{"id": m.get("id"), "entity_name": m.get("entity_name"), "entity_type_hint": m.get("entity_type_hint"), "entity_description": (m.get("entity_description") or "")[:200]} for m in members]
+        clusters[str(lab)] = [
+            {
+                "id": m.get("id"),
+                "entity_name": m.get("entity_name"),
+                "entity_type_hint": m.get("entity_type_hint"),
+                "entity_description": (m.get("entity_description") or "")[:200],
+            }
+            for m in members
+        ]
     summary["clusters"] = clusters
     path = out_dir / f"cluster_{cid}_subclusters.json"
     with open(path, "w", encoding="utf-8") as fh:
         json.dump(summary, fh, ensure_ascii=False, indent=2)
     return path
 
-def orchestrate():
+
+def orchestrate(
+    model: str = MODEL,
+    max_tokens: int = MAX_TOKENS,
+    llm_config: Optional["TraceKGLLMConfig"] = None,
+):
+    """
+    Main entry point for Entity Resolution (Final Ent Res).
+
+    LLM behavior:
+      - If llm_config is provided, a single TraceKGLLMConfig object controls all LLM
+        behavior for this step (models, tokens, temperature, api_base, etc.). The
+        'entity_res_model' / 'res_model' / 'default_model' fields are used via
+        make_lm_for_step(cfg, "entity_res").
+      - If llm_config is None, this function falls back to `model` and `max_tokens`
+        by constructing a minimal TraceKGLLMConfig(default_model=model, max_tokens=max_tokens).
+
+    All LLM calls use a single dspy.LM created once and reused.
+    """
     print("Loading clustered entities from:", CLUSTERED_IN)
     entities = []
     with open(CLUSTERED_IN, "r", encoding="utf-8") as fh:
@@ -2034,6 +4829,9 @@ def orchestrate():
     local_subclusters_dir = ENT_OUT.parent / "local_subclusters"
     local_subclusters_dir.mkdir(parents=True, exist_ok=True)
 
+    # Resolve LM for this entire run (reused for all prompts)
+    lm = _get_lm_for_entity_res(llm_config=llm_config, model=model, max_tokens=max_tokens)
+
     # outer progress bar over clusters
     with tqdm(cluster_ids, desc="Clusters", unit="cluster") as pbar_clusters:
         for cid in pbar_clusters:
@@ -2048,7 +4846,7 @@ def orchestrate():
                 with tqdm(range(n_prompts), desc=f"Cluster {cid} prompts", leave=False, unit="prompt") as pbar_prompts:
                     for i in pbar_prompts:
                         s = i * MAX_MEMBERS_PER_PROMPT
-                        chunk = members[s:s+MAX_MEMBERS_PER_PROMPT]
+                        chunk = members[s : s + MAX_MEMBERS_PER_PROMPT]
                         payload = [build_member_with_chunk(m, chunks_index) for m in chunk]
                         members_json = json.dumps(payload, ensure_ascii=False, indent=2)
                         prompt = PROMPT_TEMPLATE.format(members_json=members_json)
@@ -2057,23 +4855,40 @@ def orchestrate():
                         if est_tokens > PROMPT_TOKEN_LIMIT:
                             # skip LLM call, conservative
                             for m in chunk:
-                                log_entries.append({"time": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
-                                                    "action":"skip_large_prompt_keep", "entity_id": m["id"],
-                                                    "reason": f"est_tokens {est_tokens} > limit {PROMPT_TOKEN_LIMIT}"})
+                                log_entries.append(
+                                    {
+                                        "time": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+                                        "action": "skip_large_prompt_keep",
+                                        "entity_id": m["id"],
+                                        "reason": f"est_tokens {est_tokens} > limit {PROMPT_TOKEN_LIMIT}",
+                                    }
+                                )
                                 m["resolved_action"] = "kept_skipped_prompt"
                                 m["resolution_rationale"] = f"Prompt too large (est_tokens={est_tokens})"
                             continue
-                        llm_out = call_llm_with_prompt(prompt)
+                        llm_out = _call_entity_res_lm(lm, prompt)
                         actions = extract_json_array(llm_out)
                         if actions is None:
-                            actions = [{"action":"KeepEntity","entity_id": m["id"], "rationale":"LLM parse failed; conservatively kept"} for m in chunk]
+                            actions = [
+                                {
+                                    "action": "KeepEntity",
+                                    "entity_id": m["id"],
+                                    "rationale": "LLM parse failed; conservatively kept",
+                                }
+                                for m in chunk
+                            ]
                         apply_actions(chunk, actions, entities_by_id, canonical_store, log_entries)
             else:
                 # large cluster -> local sub-cluster
-                subgroups = local_subcluster(members, entity_id_to_index, combined_embeddings,
-                                            min_cluster_size=LOCAL_HDBSCAN_MIN_CLUSTER_SIZE,
-                                            min_samples=LOCAL_HDBSCAN_MIN_SAMPLES,
-                                            use_umap=LOCAL_USE_UMAP, umap_dims=UMAP_DIMS)
+                subgroups = local_subcluster(
+                    members,
+                    entity_id_to_index,
+                    combined_embeddings,
+                    min_cluster_size=LOCAL_HDBSCAN_MIN_CLUSTER_SIZE,
+                    min_samples=LOCAL_HDBSCAN_MIN_SAMPLES,
+                    use_umap=LOCAL_USE_UMAP,
+                    umap_dims=UMAP_DIMS,
+                )
 
                 # ALWAYS persist subcluster summary for inspection (even if we fallback)
                 subcluster_summary_path = write_local_subcluster_summary(local_subclusters_dir, cid, subgroups)
@@ -2088,15 +4903,30 @@ def orchestrate():
 
                 if fallback:
                     # FALLBACK: do not use subgroups; process original members sequentially (keeps original local ordering)
-                    print(f"[fallback] cluster {cid} had {num_nonnoise} non-noise subclusters for {len(members)} members; falling back to sequential chunking (preserves grouping).")
-                    log_entries.append({"time": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
-                                        "action":"fallback_no_subcluster", "cluster": cid, "n_members": len(members), "n_nonnoise_subclusters": num_nonnoise})
+                    print(
+                        f"[fallback] cluster {cid} had {num_nonnoise} non-noise subclusters for {len(members)} members; "
+                        f"falling back to sequential chunking (preserves grouping)."
+                    )
+                    log_entries.append(
+                        {
+                            "time": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+                            "action": "fallback_no_subcluster",
+                            "cluster": cid,
+                            "n_members": len(members),
+                            "n_nonnoise_subclusters": num_nonnoise,
+                        }
+                    )
                     # chunk original members iteratively
                     n_prompts = math.ceil(len(members) / MAX_MEMBERS_PER_PROMPT)
-                    with tqdm(range(n_prompts), desc=f"Cluster {cid} fallback prompts", leave=False, unit="prompt") as pbar_prompts:
+                    with tqdm(
+                        range(n_prompts),
+                        desc=f"Cluster {cid} fallback prompts",
+                        leave=False,
+                        unit="prompt",
+                    ) as pbar_prompts:
                         for i in pbar_prompts:
                             s = i * MAX_MEMBERS_PER_PROMPT
-                            chunk = members[s:s+MAX_MEMBERS_PER_PROMPT]
+                            chunk = members[s : s + MAX_MEMBERS_PER_PROMPT]
                             payload = [build_member_with_chunk(m, chunks_index) for m in chunk]
                             members_json = json.dumps(payload, ensure_ascii=False, indent=2)
                             prompt = PROMPT_TEMPLATE.format(members_json=members_json)
@@ -2104,21 +4934,37 @@ def orchestrate():
                             pbar_prompts.set_postfix(est_tokens=est_tokens, chunk_size=len(chunk))
                             if est_tokens > PROMPT_TOKEN_LIMIT:
                                 for m in chunk:
-                                    log_entries.append({"time": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
-                                                        "action":"skip_large_prompt_keep", "entity_id": m["id"],
-                                                        "reason": f"est_tokens {est_tokens} > limit {PROMPT_TOKEN_LIMIT}"})
+                                    log_entries.append(
+                                        {
+                                            "time": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+                                            "action": "skip_large_prompt_keep",
+                                            "entity_id": m["id"],
+                                            "reason": f"est_tokens {est_tokens} > limit {PROMPT_TOKEN_LIMIT}",
+                                        }
+                                    )
                                     m["resolved_action"] = "kept_skipped_prompt"
-                                    m["resolution_rationale"] = f"Prompt too large (est_tokens={est_tokens})"
+                                    m["resolution_rationale"] = (
+                                        f"Prompt too large (est_tokens={est_tokens})"
+                                    )
                                 continue
-                            llm_out = call_llm_with_prompt(prompt)
+                            llm_out = _call_entity_res_lm(lm, prompt)
                             actions = extract_json_array(llm_out)
                             if actions is None:
-                                actions = [{"action":"KeepEntity","entity_id": m["id"], "rationale":"LLM parse failed; conservatively kept"} for m in chunk]
+                                actions = [
+                                    {
+                                        "action": "KeepEntity",
+                                        "entity_id": m["id"],
+                                        "rationale": "LLM parse failed; conservatively kept",
+                                    }
+                                    for m in chunk
+                                ]
                             apply_actions(chunk, actions, entities_by_id, canonical_store, log_entries)
                 else:
                     # proceed with subgroups as planned
                     sub_items = sorted(subgroups.items(), key=lambda x: -len(x[1]))
-                    with tqdm(sub_items, desc=f"Cluster {cid} subclusters", leave=False, unit="sub") as pbar_subs:
+                    with tqdm(
+                        sub_items, desc=f"Cluster {cid} subclusters", leave=False, unit="sub"
+                    ) as pbar_subs:
                         for sublab, submembers in pbar_subs:
                             subsize = len(submembers)
                             pbar_subs.set_postfix(sublab=sublab, subsize=subsize)
@@ -2126,32 +4972,59 @@ def orchestrate():
                                 for m in submembers:
                                     m["resolved_action"] = "kept_noise_local"
                                     m["resolution_rationale"] = "Local-subcluster noise preserved"
-                                    log_entries.append({"time": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
-                                                        "action":"keep_noise_local", "entity_id": m["id"], "cluster": cid})
+                                    log_entries.append(
+                                        {
+                                            "time": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+                                            "action": "keep_noise_local",
+                                            "entity_id": m["id"],
+                                            "cluster": cid,
+                                        }
+                                    )
                                 continue
                             # prompts for this subcluster
                             n_prompts = math.ceil(subsize / MAX_MEMBERS_PER_PROMPT)
-                            with tqdm(range(n_prompts), desc=f"Sub {sublab} prompts", leave=False, unit="prompt") as pbar_sub_prompts:
+                            with tqdm(
+                                range(n_prompts),
+                                desc=f"Sub {sublab} prompts",
+                                leave=False,
+                                unit="prompt",
+                            ) as pbar_sub_prompts:
                                 for i in pbar_sub_prompts:
                                     s = i * MAX_MEMBERS_PER_PROMPT
-                                    chunk = submembers[s:s+MAX_MEMBERS_PER_PROMPT]
+                                    chunk = submembers[s : s + MAX_MEMBERS_PER_PROMPT]
                                     payload = [build_member_with_chunk(m, chunks_index) for m in chunk]
                                     members_json = json.dumps(payload, ensure_ascii=False, indent=2)
                                     prompt = PROMPT_TEMPLATE.format(members_json=members_json)
                                     est_tokens = max(1, int(len(prompt) / 4))
-                                    pbar_sub_prompts.set_postfix(est_tokens=est_tokens, chunk_size=len(chunk))
+                                    pbar_sub_prompts.set_postfix(
+                                        est_tokens=est_tokens, chunk_size=len(chunk)
+                                    )
                                     if est_tokens > PROMPT_TOKEN_LIMIT:
                                         for m in chunk:
-                                            log_entries.append({"time": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
-                                                                "action":"skip_large_prompt_keep", "entity_id": m["id"],
-                                                                "reason": f"est_tokens {est_tokens} > limit {PROMPT_TOKEN_LIMIT}"})
+                                            log_entries.append(
+                                                {
+                                                    "time": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+                                                    "action": "skip_large_prompt_keep",
+                                                    "entity_id": m["id"],
+                                                    "reason": f"est_tokens {est_tokens} > limit {PROMPT_TOKEN_LIMIT}",
+                                                }
+                                            )
                                             m["resolved_action"] = "kept_skipped_prompt"
-                                            m["resolution_rationale"] = f"Prompt too large (est_tokens={est_tokens})"
+                                            m["resolution_rationale"] = (
+                                                f"Prompt too large (est_tokens={est_tokens})"
+                                            )
                                         continue
-                                    llm_out = call_llm_with_prompt(prompt)
+                                    llm_out = _call_entity_res_lm(lm, prompt)
                                     actions = extract_json_array(llm_out)
                                     if actions is None:
-                                        actions = [{"action":"KeepEntity","entity_id": m["id"], "rationale":"LLM parse failed; conservatively kept"} for m in chunk]
+                                        actions = [
+                                            {
+                                                "action": "KeepEntity",
+                                                "entity_id": m["id"],
+                                                "rationale": "LLM parse failed; conservatively kept",
+                                            }
+                                            for m in chunk
+                                        ]
                                     apply_actions(chunk, actions, entities_by_id, canonical_store, log_entries)
 
     # global noise handling
@@ -2159,7 +5032,13 @@ def orchestrate():
         ent = entities_by_id[nent["id"]]
         ent["resolved_action"] = "kept_noise_global"
         ent["resolution_rationale"] = "Global noise preserved for manual review"
-        log_entries.append({"time": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()), "action":"keep_noise_global", "entity_id": ent["id"]})
+        log_entries.append(
+            {
+                "time": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+                "action": "keep_noise_global",
+                "entity_id": ent["id"],
+            }
+        )
 
     # write outputs
     final_entities = list(entities_by_id.values())
@@ -2178,10 +5057,14 @@ def orchestrate():
     print(f"[info] local subcluster summaries (if any) are under: {local_subclusters_dir}")
 
 
-
-
-#endregion#? Final Ent Res - (aligned with EntityRec v7 & gpt-5.1 Responses, embedding pipeline With SubCluster json)
+#endregion#? Final Ent Res v10 - DSPy LLM Config
 #?#########################  End  ##########################
+
+
+
+
+
+
 
 
 
@@ -2821,8 +5704,6 @@ def produce_clean_jsonl(inp: Optional[Path] = None, outp: Optional[Path] = None)
 
 
 
-
-
 #!############################################# Start Chapter ##################################################
 #region:#!   Class Identification
 
@@ -2830,22 +5711,745 @@ def produce_clean_jsonl(inp: Optional[Path] = None, outp: Optional[Path] = None)
 
 
 
+#*######################### Start ##########################
+#region:#?   Cls Rec V4 - Class hint type included  - Gpt 5.1 fix
 
+
+# #!/usr/bin/env python3
+# """
+# classrec_iterative_v4.py
+
+# Iterative Class Recognition (ClassRec) with per-iteration class outputs
+# matching the cluster-file visual/JSON format and including class metadata
+# (label/desc/confidence/evidence + source cluster id + class_type_hint).
+
+# This is a fix for KeyError caused by unescaped braces in the prompt template.
+# All literal braces in the prompt are escaped ({{ and }}), except {members_block}.
+# """
+
+# import json
+# import os
+# import time
+# import uuid
+# from pathlib import Path
+# from typing import List, Dict, Tuple, Optional
+
+# import numpy as np
+# import torch
+# from transformers import AutoTokenizer, AutoModel
+# from sklearn.preprocessing import normalize
+
+# # clustering libs
+# try:
+#     import hdbscan
+# except Exception:
+#     raise RuntimeError("hdbscan required: pip install hdbscan")
+# try:
+#     import umap
+#     UMAP_AVAILABLE = True
+# except Exception:
+#     UMAP_AVAILABLE = False
+
+# # OpenAI client
+# from openai import OpenAI
+
+# # ----------------------------- CONFIG -----------------------------
+# INPUT_PATH = Path("data/Classes/Cls_Input/cls_input_entities.jsonl")
+# # OUT_DIR = Path("data/Classes/Cls_Rec")
+# OUT_DIR = Path("data/Classes/Cls_Rec")
+# OUT_DIR.mkdir(parents=True, exist_ok=True)
+
+# CLASS_CANDIDATES_OUT = OUT_DIR / "class_candidates.jsonl"
+# INITIAL_CLUSTER_OUT = OUT_DIR / "initial_cluster_entities.json"
+# RECLUSTER_PREFIX = OUT_DIR / "recluster_round_"
+# CLASSES_PREFIX = OUT_DIR / "classes_round_"
+# REMAINING_OUT = OUT_DIR / "remaining_entities.jsonl"
+
+# # embedder / model
+# EMBED_MODEL = "BAAI/bge-large-en-v1.5"
+# DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
+# BATCH_SIZE = 32
+# WEIGHTS = {"name": 0.40, "desc": 0.25, "ctx": 0.35}
+
+# # HDBSCAN + UMAP
+# HDBSCAN_MIN_CLUSTER_SIZE = 2
+# HDBSCAN_MIN_SAMPLES = 1
+# HDBSCAN_METRIC = "euclidean"
+# USE_UMAP = True
+# UMAP_N_COMPONENTS = 64
+# UMAP_N_NEIGHBORS = 8
+# UMAP_MIN_DIST = 0.0
+
+# # local subcluster
+# MAX_CLUSTER_SIZE_FOR_LOCAL = 30
+# LOCAL_HDBSCAN_MIN_CLUSTER_SIZE = 2
+# LOCAL_HDBSCAN_MIN_SAMPLES = 1
+
+# # prompt and LLM / limits
+# OPENAI_MODEL = "gpt-5.1"
+# OPENAI_TEMPERATURE = 0.0
+# LLM_MAX_TOKENS = 8000
+# MAX_MEMBERS_PER_PROMPT = 10
+# PROMPT_CHAR_PER_TOKEN = 4          # crude estimate
+# MAX_PROMPT_TOKENS_EST = 8000
+
+# # iteration control
+# MAX_RECLUSTER_ROUNDS = 12  # safety cap
+# VERBOSE = False
+
+# # ------------------------ OpenAI client loader -----------------------
+# def _load_openai_key(envvar: str = "OPENAI_API_KEY", fallback_path: str = ".env"):
+#     key = os.getenv(envvar, fallback_path)
+#     if isinstance(key, str) and Path(key).exists():
+#         try:
+#             txt = Path(key).read_text(encoding="utf-8").strip()
+#             if txt:
+#                 return txt
+#         except Exception:
+#             pass
+#     return key
+
+# OPENAI_KEY = _load_openai_key()
+# if not OPENAI_KEY or not isinstance(OPENAI_KEY, str) or len(OPENAI_KEY) < 10:
+#     print("⚠️ OPENAI key missing or short. Set OPENAI_API_KEY or put key in fallback file.")
+# client = OpenAI(api_key=OPENAI_KEY)
+
+# def call_llm(prompt: str, model: str = OPENAI_MODEL, temperature: float = OPENAI_TEMPERATURE, max_completion_tokens: int = LLM_MAX_TOKENS) -> str:
+#     try:
+#         resp = client.chat.completions.create(
+#             model=model,
+#             messages=[{"role": "user", "content": prompt}],
+#             temperature=temperature,
+#             max_completion_tokens=LLM_MAX_TOKENS
+#         )
+#         return resp.choices[0].message.content
+#     except Exception as e:
+#         print("LLM call error:", e)
+#         return ""
+
+# # ------------------------- HF Embedder ------------------------------
+# def mean_pool(token_embeddings: torch.Tensor, attention_mask: torch.Tensor):
+#     input_mask_expanded = attention_mask.unsqueeze(-1).expand(token_embeddings.size()).float()
+#     sum_embeddings = torch.sum(token_embeddings * input_mask_expanded, 1)
+#     sum_mask = torch.clamp(input_mask_expanded.sum(1), min=1e-9)
+#     return sum_embeddings / sum_mask
+
+# class HFEmbedder:
+#     def __init__(self, model_name=EMBED_MODEL, device=DEVICE):
+#         if VERBOSE: print(f"[embedder] loading {model_name} on {device}")
+#         self.device = device
+#         self.tokenizer = AutoTokenizer.from_pretrained(model_name, use_fast=True)
+#         self.model = AutoModel.from_pretrained(model_name)
+#         self.model.to(device)
+#         self.model.eval()
+#         for p in self.model.parameters():
+#             p.requires_grad = False
+
+#     @torch.no_grad()
+#     def encode_batch(self, texts: List[str], batch_size: int = BATCH_SIZE) -> np.ndarray:
+#         if len(texts) == 0:
+#             D = getattr(self.model.config, "hidden_size", 1024)
+#             return np.zeros((0, D))
+#         embs = []
+#         for i in range(0, len(texts), batch_size):
+#             batch = texts[i:i+batch_size]
+#             enc = self.tokenizer(batch, padding=True, truncation=True, return_tensors="pt", max_length=1024)
+#             input_ids = enc["input_ids"].to(self.device)
+#             attention_mask = enc["attention_mask"].to(self.device)
+#             out = self.model(input_ids=input_ids, attention_mask=attention_mask, return_dict=True)
+#             token_embeds = out.last_hidden_state
+#             pooled = mean_pool(token_embeds, attention_mask)
+#             embs.append(pooled.cpu().numpy())
+#         embs = np.vstack(embs)
+#         embs = normalize(embs, axis=1)
+#         return embs
+
+# # ---------------------- IO helpers ----------------------------------
+# def load_entities(path: Path) -> List[Dict]:
+#     assert path.exists(), f"Input not found: {path}"
+#     ents = []
+#     with open(path, "r", encoding="utf-8") as fh:
+#         for line in fh:
+#             if line.strip():
+#                 ents.append(json.loads(line))
+#     return ents
+
+# def safe_text(e: Dict, k: str) -> str:
+#     v = e.get(k)
+#     if v is None:
+#         return ""
+#     if isinstance(v, (list, dict)):
+#         return json.dumps(v, ensure_ascii=False)
+#     return str(v)
+
+# def build_field_texts(entities: List[Dict]) -> Tuple[List[str], List[str], List[str]]:
+#     names, descs, ctxs = [], [], []
+#     for e in entities:
+#         names.append(safe_text(e, "entity_name") or "")
+#         descs.append(safe_text(e, "entity_description") or "")
+#         resolution = safe_text(e, "resolution_context") or safe_text(e, "text_span") or safe_text(e, "context_phrase") or ""
+#         et = safe_text(e, "entity_type_hint") or ""
+#         node_props = e.get("node_properties") or []
+#         node_props_text = ""
+#         if isinstance(node_props, list) and node_props:
+#             pieces = []
+#             for np in node_props:
+#                 if isinstance(np, dict):
+#                     pname = np.get("prop_name") or np.get("name") or ""
+#                     pval = np.get("prop_value") or np.get("value") or ""
+#                     if pname and pval:
+#                         pieces.append(f"{pname}:{pval}")
+#                     elif pname:
+#                         pieces.append(pname)
+#             if pieces:
+#                 node_props_text = " | ".join(pieces)
+#         parts = []
+#         if et:
+#             parts.append(f"[TYPE:{et}]")
+#         if resolution:
+#             parts.append(resolution)
+#         if node_props_text:
+#             parts.append(node_props_text)
+#         ctxs.append(" ; ".join(parts))
+#     return names, descs, ctxs
+
+# def compute_combined_embeddings(embedder: HFEmbedder, entities: List[Dict], weights=WEIGHTS) -> np.ndarray:
+#     names, descs, ctxs = build_field_texts(entities)
+#     emb_name = embedder.encode_batch(names) if any(t.strip() for t in names) else None
+#     emb_desc = embedder.encode_batch(descs) if any(t.strip() for t in descs) else None
+#     emb_ctx  = embedder.encode_batch(ctxs)  if any(t.strip() for t in ctxs) else None
+
+#     D = None
+#     for arr in (emb_name, emb_desc, emb_ctx):
+#         if arr is not None and arr.shape[0] > 0:
+#             D = arr.shape[1]; break
+#     if D is None:
+#         raise ValueError("No textual field produced embeddings")
+
+#     def _ensure(arr):
+#         if arr is None:
+#             return np.zeros((len(entities), D))
+#         if arr.shape[1] != D:
+#             raise ValueError("embedding dim mismatch")
+#         return arr
+
+#     emb_name = _ensure(emb_name); emb_desc = _ensure(emb_desc); emb_ctx = _ensure(emb_ctx)
+#     w_name = weights.get("name", 0.0); w_desc = weights.get("desc", 0.0); w_ctx = weights.get("ctx", 0.0)
+#     Wsum = w_name + w_desc + w_ctx
+#     if Wsum <= 0: raise ValueError("invalid weights")
+#     w_name /= Wsum; w_desc /= Wsum; w_ctx /= Wsum
+
+#     combined = (w_name * emb_name) + (w_desc * emb_desc) + (w_ctx * emb_ctx)
+#     combined = normalize(combined, axis=1)
+#     return combined
+
+# def run_hdbscan(embeddings: np.ndarray, min_cluster_size=HDBSCAN_MIN_CLUSTER_SIZE, min_samples=HDBSCAN_MIN_SAMPLES,
+#                 metric=HDBSCAN_METRIC, use_umap=USE_UMAP) -> Tuple[np.ndarray, object]:
+#     X = embeddings
+#     if use_umap and UMAP_AVAILABLE and X.shape[0] >= 5:
+#         reducer = umap.UMAP(n_components=min(UMAP_N_COMPONENTS, max(2, X.shape[0]-1)),
+#                             n_neighbors=min(UMAP_N_NEIGHBORS, max(2, X.shape[0]-1)),
+#                             min_dist=UMAP_MIN_DIST,
+#                             metric='cosine', random_state=42)
+#         X = reducer.fit_transform(X)
+#     clusterer = hdbscan.HDBSCAN(min_cluster_size=min_cluster_size, min_samples=min_samples, metric=metric, cluster_selection_method='eom')
+#     labels = clusterer.fit_predict(X)
+#     return labels, clusterer
+
+
+# # ------------------ Prompt (REVISED to be MUST) -----------------------
+# # NOTE: all literal braces are escaped ({{ and }}) except {members_block}
+# CLASS_PROMPT_TEMPLATE = """
+# You are a careful schema / ontology suggester.
+# Your job is to induce a meaningful, reusable schema from entity-level evidence.
+# Be conservative, precise, and resist over-generalization.
+
+# =====================
+# INPUT YOU ARE GIVEN
+# =====================
+
+# Each entity you see is already a resolved entity from a previous pipeline stage.
+# For each entity, you are given the following fields:
+
+# - entity_id: (string) unique id for the entity.
+# - entity_name: (string) short canonical entity-level name.
+# - entity_description: (string) concise explanation of the entity.
+# - resolution_context: (string) a 20–120 word excerpt explaining why this entity was named this way;
+#   this is the PRIMARY semantic evidence.
+# - entity_type_hint: (string) a weak, local hint about entity role (e.g., Material, Component, FailureMechanism).
+#   This is a suggestion only and may be incorrect.
+# - node_properties: (optional) small list/dict of intrinsic properties (e.g., grade:304).
+
+# =====================
+# YOUR TASK
+# =====================
+
+# Given a small group of entities, suggest ZERO or more classes that group entities
+# which genuinely belong together in a practical, reusable way.
+
+# Important rules (ENFORCED):
+# - If the input contains MULTIPLE entities:
+#   -> You MUST ONLY create classes that contain TWO OR MORE members.
+#   -> You MUST NOT create a single-member class when multiple entities are present.
+# - The ONLY situation where a single-member class is allowed:
+#   -> When the input contains EXACTLY ONE entity (single-entity mode).
+
+# Do NOT force entities into classes by broadening or renaming a class to "fit" them.
+# If an entity does not clearly belong, omit it — it will be revisited later.
+
+# SINGLE-ENTITY MODE (IMPORTANT)
+# - You are receiving EXACTLY ONE entity in this prompt. In this case you SHOULD produce exactly one class that contains that entity (a single-member class). 
+# - The single-member class must include: class_label, class_description, class_type_hint (if possible), member_ids (use the provided entity_id), and a confidence value.  
+# - Do NOT invent other entity_ids; use the entity_id exactly as provided. If you judge that no sensible class exists, still return a short single-member class using a conservative label like "Misc: <entity_name>" with low confidence (e.g., 0.10) rather than returning an empty array. This helps downstream experiments while keeping the class low-weight.
+
+
+# =====================
+# TWO-LEVEL SCHEMA
+# =====================
+
+# We are building a TWO-LEVEL schema:
+
+# Level 1 (Classes): groups of entities (e.g., "High-Temperature Corrosion")
+# Level 2 (Class_Type_Hint): an upper-level connector that groups classes (e.g., "Failure Mechanism")
+
+# - Class_Type_Hint is NOT the same as entity_type_hint.
+# - Infer Class_Type_Hint from the class members; do NOT blindly copy entity_type_hint.
+
+# =====================
+# OUTPUT FORMAT (REQUIRED)
+# =====================
+
+# Return ONLY a JSON ARRAY.
+
+# Each element must have:
+# - class_label (string): short canonical name (1-3 words)
+# - class_description (string): 1–2 sentences explaining membership & distinction
+# - class_type_hint (string): upper-level family (e.g., "Failure Mechanism")
+# - member_ids (array[string]): entity_ids from the input that belong to this class
+# - confidence (float): 0.0–1.0 confidence estimate
+# - evidence_excerpt (string, optional): brief excerpt (5–30 words) that supports the grouping
+
+# HARD OUTPUT RULES:
+# - Use ONLY provided entity_ids.
+# - member_ids MUST be from the input.
+# - Prefer non-overlapping classes; small overlap allowed only if justified.
+# - If no sensible class, return [].
+
+# =====================
+# EXAMPLES
+# =====================
+
+# GOOD:
+# Input entities:
+# - graphitization (En_1)
+# - sulfidation    (En_2)
+
+# Output:
+# [
+#   {{
+#     "class_label": "High-Temperature Degradation",
+#     "class_description": "Material degradation mechanisms at elevated temperatures (graphitization, sulfidation).",
+#     "class_type_hint": "Failure Mechanism",
+#     "member_ids": ["En_1","En_2"],
+#     "confidence": 0.87
+#   }}
+# ]
+
+# BAD (DO NOT DO):
+# Entities: graphitization, pressure gauge
+# -> Do NOT output a broad "Equipment Issue" that forces both into one class. Prefer [].
+
+# =====================
+# ENTITIES
+# =====================
+
+# Each entity below is provided as:
+# - entity_id
+# - entity_name
+# - entity_description
+# - resolution_context
+# - entity_type_hint
+# - node_properties
+
+# Entities:
+# {members_block}
+
+# Return JSON array only.
+# """
+
+# def build_members_block(members: List[Dict]) -> str:
+#     rows = []
+#     for m in members:
+#         eid = m.get("id", "")
+#         name = (m.get("entity_name") or "")[:120].replace("\n", " ")
+#         desc = (m.get("entity_description") or "")[:300].replace("\n", " ")
+#         res = (m.get("resolution_context") or m.get("context_phrase") or "")[:400].replace("\n", " ")
+#         et = (m.get("entity_type_hint") or "")[:80].replace("\n", " ")
+#         node_props = m.get("node_properties") or []
+#         np_txt = json.dumps(node_props, ensure_ascii=False) if node_props else ""
+#         rows.append(f"{eid} | {name} | {desc} | {res} | {et} | {np_txt}")
+#     return "\n".join(rows)
+
+# def parse_json_array_from_text(txt: str):
+#     if not txt:
+#         return None
+#     s = txt.strip()
+#     if s.startswith("```"):
+#         s = s.strip("`")
+#     start = s.find('[')
+#     end = s.rfind(']')
+#     if start != -1 and end != -1 and end > start:
+#         cand = s[start:end+1]
+#         try:
+#             return json.loads(cand)
+#         except Exception:
+#             pass
+#     try:
+#         return json.loads(s)
+#     except Exception:
+#         return None
+
+# # ------------------- Worker: process a chunk of members --------------------
+# def process_member_chunk_llm(members: List[Dict], single_entity_mode: bool = False) -> List[Dict]:
+#     members_block = build_members_block(members)
+#     prompt = CLASS_PROMPT_TEMPLATE.format(members_block=members_block)
+#     est_tokens = max(1, int(len(prompt) / PROMPT_CHAR_PER_TOKEN))
+#     if est_tokens > MAX_PROMPT_TOKENS_EST:
+#         if VERBOSE: print(f"[warning] prompt too large (est_tokens={est_tokens}) -> skipping chunk of size {len(members)}")
+#         return []
+#     llm_out = call_llm(prompt)
+#     arr = parse_json_array_from_text(llm_out)
+#     if not arr:
+#         return []
+#     candidates = []
+#     provided_ids = {m.get("id") for m in members}
+#     for c in arr:
+#         label = c.get("class_label") or c.get("label") or c.get("name")
+#         if not label:
+#             continue
+#         member_ids = c.get("member_ids") or c.get("members") or []
+#         member_ids = [mid for mid in member_ids if mid in provided_ids]
+#         if not member_ids:
+#             continue
+#         if not single_entity_mode and len(members) > 1 and len(member_ids) < 2:
+#             continue
+#         confidence = float(c.get("confidence", 0.0)) if c.get("confidence") is not None else 0.0
+#         desc = c.get("class_description") or c.get("description") or ""
+#         ev = c.get("evidence_excerpt") or ""
+#         class_type = c.get("class_type_hint") or c.get("class_type") or ""
+#         candidate = {
+#             "candidate_id": "ClsC_" + uuid.uuid4().hex[:8],
+#             "class_label": label,
+#             "class_description": desc,
+#             "class_type_hint": class_type,
+#             "member_ids": member_ids,
+#             "confidence": confidence,
+#             "evidence_excerpt": ev,
+#             "timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+#         }
+#         candidates.append(candidate)
+#     return candidates
+
+# # -------------------- Utility: write cluster files (full entity objects) -----------
+# def write_cluster_summary(path: Path, cluster_map: Dict[int, List[int]], entities: List[Dict]):
+#     """
+#     Write initial cluster summary: full entity objects grouped by cluster label.
+
+#     path: output JSON file path, e.g. data/Classes/Cls_Rec/initial_cluster_entities.json
+#     """
+#     # Ensure parent directory exists (fixes FileNotFoundError when writing)
+#     path.parent.mkdir(parents=True, exist_ok=True)
+
+#     n_entities = len(entities)
+#     clusters = {}
+#     for k, idxs in sorted(cluster_map.items(), key=lambda x: x[0]):
+#         arr = []
+#         for i in idxs:
+#             ent = entities[i]
+#             arr.append(ent)
+#         clusters[str(k)] = arr
+#     meta = {"n_entities": n_entities, "n_clusters": len(clusters)}
+
+#     with open(path, "w", encoding="utf-8") as fh:
+#         fh.write('{\n')
+#         fh.write(f'  "n_entities": {meta["n_entities"]},\n')
+#         fh.write(f'  "n_clusters": {meta["n_clusters"]},\n')
+#         fh.write('  "clusters": {\n')
+
+#         cluster_items = list(clusters.items())
+#         for ci, (k, ents) in enumerate(cluster_items):
+#             fh.write(f'    "{k}": [\n')
+#             for ei, ent in enumerate(ents):
+#                 ent_json = json.dumps(ent, ensure_ascii=False, separators=(",", ": "))
+#                 fh.write(f'      {ent_json}')
+#                 if ei < len(ents) - 1:
+#                     fh.write(',\n')
+#                 else:
+#                     fh.write('\n')
+#             fh.write('    ]')
+#             if ci < len(cluster_items) - 1:
+#                 fh.write(',\n')
+#             else:
+#                 fh.write('\n')
+#         fh.write('  }\n')
+#         fh.write('}\n')
+
+# def write_classes_round(path: Path, candidates: List[Dict], entities: List[Dict], id_to_index: Dict[str,int]):
+#     classes_map = {}
+#     total_members = 0
+#     for c in candidates:
+#         cid = c.get("candidate_id") or ("ClsC_" + uuid.uuid4().hex[:8])
+#         mids = c.get("member_ids", [])
+#         member_objs = []
+#         for mid in mids:
+#             if mid in id_to_index:
+#                 member_objs.append(entities[id_to_index[mid]])
+#         if not member_objs:
+#             continue
+#         meta = {
+#             "class_label": c.get("class_label", ""),
+#             "class_description": c.get("class_description", ""),
+#             "class_type_hint": c.get("class_type_hint", ""),
+#             "confidence": float(c.get("confidence", 0.0)),
+#             "evidence_excerpt": c.get("evidence_excerpt", ""),
+#             "source_cluster_id": c.get("source_cluster_id", None),
+#             "members": member_objs
+#         }
+#         classes_map[cid] = meta
+#         total_members += len(member_objs)
+#     meta = {"n_classes": len(classes_map), "n_members_total": total_members, "classes": classes_map}
+#     with open(path, "w", encoding="utf-8") as fh:
+#         fh.write('{\n')
+#         fh.write(f'  "n_classes": {meta["n_classes"]},\n')
+#         fh.write(f'  "n_members_total": {meta["n_members_total"]},\n')
+#         fh.write('  "classes": {\n')
+#         items = list(classes_map.items())
+#         for ci, (k, cls_meta) in enumerate(items):
+#             fh.write(f'    "{k}": {{\n')
+#             fh.write(f'      "class_label": {json.dumps(cls_meta["class_label"], ensure_ascii=False)},\n')
+#             fh.write(f'      "class_description": {json.dumps(cls_meta["class_description"], ensure_ascii=False)},\n')
+#             fh.write(f'      "class_type_hint": {json.dumps(cls_meta["class_type_hint"], ensure_ascii=False)},\n')
+#             fh.write(f'      "confidence": {json.dumps(cls_meta["confidence"], ensure_ascii=False)},\n')
+#             fh.write(f'      "evidence_excerpt": {json.dumps(cls_meta["evidence_excerpt"], ensure_ascii=False)},\n')
+#             fh.write(f'      "source_cluster_id": {json.dumps(cls_meta["source_cluster_id"], ensure_ascii=False)},\n')
+#             fh.write(f'      "members": [\n')
+#             for ei, ent in enumerate(cls_meta["members"]):
+#                 ent_json = json.dumps(ent, ensure_ascii=False, separators=(",", ": "))
+#                 fh.write(f'        {ent_json}')
+#                 if ei < len(cls_meta["members"]) - 1:
+#                     fh.write(',\n')
+#                 else:
+#                     fh.write('\n')
+#             fh.write('      ]\n')
+#             fh.write('    }')
+#             if ci < len(items) - 1:
+#                 fh.write(',\n')
+#             else:
+#                 fh.write('\n')
+#         fh.write('  }\n')
+#         fh.write('}\n')
+
+# # -------------------- Main iterative orchestration -----------------------
+# def classrec_iterative_main():
+#     entities = load_entities(INPUT_PATH)
+#     print(f"[start] loaded {len(entities)} entities from {INPUT_PATH}")
+    
+#     # Ensure the output directory exists before we try to write initial_cluster_entities.json
+#     OUT_DIR.mkdir(parents=True, exist_ok=True)
+
+#     for e in entities:
+#         if "id" not in e:
+#             e["id"] = "En_" + uuid.uuid4().hex[:8]
+
+#     id_to_index = {e["id"]: i for i, e in enumerate(entities)}
+
+#     embedder = HFEmbedder(model_name=EMBED_MODEL, device=DEVICE)
+#     combined_emb = compute_combined_embeddings(embedder, entities, weights=WEIGHTS)
+#     print("[info] embeddings computed, shape:", combined_emb.shape)
+
+#     labels, _ = run_hdbscan(combined_emb, min_cluster_size=HDBSCAN_MIN_CLUSTER_SIZE, min_samples=HDBSCAN_MIN_SAMPLES, use_umap=USE_UMAP)
+#     print("[info] initial clustering done. unique labels:", len(set(labels)))
+
+#     cluster_to_indices = {}
+#     for idx, lab in enumerate(labels):
+#         cluster_to_indices.setdefault(int(lab), []).append(idx)
+
+#     write_cluster_summary(INITIAL_CLUSTER_OUT, cluster_to_indices, entities)
+#     if VERBOSE: print(f"[write] initial cluster file -> {INITIAL_CLUSTER_OUT}")
+
+#     seen_by_llm = set()
+#     assigned_entity_ids = set()
+#     all_candidates = []
+
+#     def call_and_record(members_indices: List[int], source_cluster: Optional[object]=None, single_entity_mode: bool=False) -> List[Dict]:
+#         nonlocal seen_by_llm, assigned_entity_ids, all_candidates
+#         if not members_indices:
+#             return []
+#         members = [entities[i] for i in members_indices]
+#         results = []
+#         for i in range(0, len(members), MAX_MEMBERS_PER_PROMPT):
+#             chunk = members[i:i+MAX_MEMBERS_PER_PROMPT]
+#             for m in chunk:
+#                 if m.get("id"):
+#                     seen_by_llm.add(m["id"])
+#             candidates = process_member_chunk_llm(chunk, single_entity_mode=single_entity_mode)
+#             for c in candidates:
+#                 mids = c.get("member_ids", [])
+#                 member_entities = [entities[id_to_index[mid]] for mid in mids if mid in id_to_index]
+#                 if not member_entities:
+#                     continue
+#                 c["member_entities"] = member_entities
+#                 c["source_cluster_id"] = source_cluster
+#                 all_candidates.append(c)
+#                 for mid in mids:
+#                     assigned_entity_ids.add(mid)
+#                 results.append(c)
+#         return results
+
+#     round0_candidates = []
+#     if VERBOSE: print("[round0] processing coarse non-noise clusters")
+#     for lab, idxs in sorted(cluster_to_indices.items(), key=lambda x: x[0]):
+#         if lab == -1:
+#             continue
+#         if VERBOSE: print(f"[round0] cluster {lab} size={len(idxs)}")
+#         if len(idxs) > MAX_CLUSTER_SIZE_FOR_LOCAL:
+#             try:
+#                 sub_emb = combined_emb[idxs]
+#                 local_clusterer = hdbscan.HDBSCAN(min_cluster_size=max(2, LOCAL_HDBSCAN_MIN_CLUSTER_SIZE),
+#                                                   min_samples=LOCAL_HDBSCAN_MIN_SAMPLES, metric='euclidean', cluster_selection_method='eom')
+#                 local_labels = local_clusterer.fit_predict(sub_emb)
+#             except Exception:
+#                 local_labels = np.zeros(len(idxs), dtype=int)
+#             local_map = {}
+#             for i_local, lab_local in enumerate(local_labels):
+#                 global_idx = idxs[i_local]
+#                 local_map.setdefault(int(lab_local), []).append(global_idx)
+#             for sublab, subidxs in local_map.items():
+#                 if sublab == -1:
+#                     continue
+#                 source_id = {"coarse_cluster": int(lab), "local_subcluster": int(sublab)}
+#                 cand = call_and_record(subidxs, source_cluster=source_id, single_entity_mode=(len(subidxs) == 1))
+#                 round0_candidates.extend(cand)
+#         else:
+#             source_id = {"coarse_cluster": int(lab), "local_subcluster": None}
+#             cand = call_and_record(idxs, source_cluster=source_id, single_entity_mode=(len(idxs) == 1))
+#             round0_candidates.extend(cand)
+
+#     classes_round0_path = Path(f"{CLASSES_PREFIX}0.json")
+#     write_classes_round(classes_round0_path, round0_candidates, entities, id_to_index)
+#     if VERBOSE: print(f"[write] classes round 0 -> {classes_round0_path}")
+
+#     original_noise_indices = cluster_to_indices.get(-1, [])
+#     round_num = 0
+#     while round_num < MAX_RECLUSTER_ROUNDS:
+#         round_num += 1
+#         seen_but_unassigned = list(seen_by_llm - assigned_entity_ids)
+#         pool_ids = {entities[i]["id"] for i in original_noise_indices}
+#         pool_ids.update(seen_but_unassigned)
+#         pool_ids = [pid for pid in pool_ids if pid not in assigned_entity_ids]
+#         if not pool_ids:
+#             if VERBOSE: print(f"[reclust {round_num}] pool empty -> stopping")
+#             break
+#         pool_indices = [id_to_index[pid] for pid in pool_ids if pid in id_to_index]
+#         if not pool_indices:
+#             if VERBOSE: print(f"[reclust {round_num}] no valid pool indices -> stopping")
+#             break
+
+#         if VERBOSE: print(f"[reclust {round_num}] reclustering pool size={len(pool_indices)}")
+#         try:
+#             sub_emb = combined_emb[pool_indices]
+#             labels_sub, _ = run_hdbscan(sub_emb, min_cluster_size=2, min_samples=1, use_umap=False)
+#         except Exception:
+#             labels_sub = np.zeros(len(pool_indices), dtype=int)
+
+#         sub_cluster_map = {}
+#         for local_i, lab_sub in enumerate(labels_sub):
+#             global_idx = pool_indices[local_i]
+#             sub_cluster_map.setdefault(int(lab_sub), []).append(global_idx)
+
+#         recluster_path = Path(f"{RECLUSTER_PREFIX}{round_num}.json")
+#         write_cluster_summary(recluster_path, sub_cluster_map, entities)
+#         if VERBOSE: print(f"[write] recluster round {round_num} -> {recluster_path}")
+
+#         round_candidates = []
+#         new_classes_count = 0
+#         for lab_sub, gidxs in sorted(sub_cluster_map.items(), key=lambda x: (x[0]==-1, x[0])):
+#             if lab_sub == -1:
+#                 continue
+#             if VERBOSE: print(f"[reclust {round_num}] processing subcluster {lab_sub} size={len(gidxs)}")
+#             source_id = {"recluster_round": int(round_num), "subcluster": int(lab_sub)}
+#             cand = call_and_record(gidxs, source_cluster=source_id, single_entity_mode=(len(gidxs) == 1))
+#             round_candidates.extend(cand)
+#             new_classes_count += len(cand)
+
+#         classes_round_path = Path(f"{CLASSES_PREFIX}{round_num}.json")
+#         write_classes_round(classes_round_path, round_candidates, entities, id_to_index)
+#         if VERBOSE: print(f"[write] classes round {round_num} -> {classes_round_path}  (new_classes={new_classes_count})")
+
+#         if new_classes_count == 0:
+#             if VERBOSE: print(f"[reclust {round_num}] no new classes -> stopping recluster loop")
+#             break
+
+#     remaining_after_reclustering = [e for e in entities if e["id"] not in assigned_entity_ids]
+#     if VERBOSE: print(f"[single pass] remaining entities (before single-entity pass): {len(remaining_after_reclustering)}")
+
+#     single_candidates = []
+#     for e in remaining_after_reclustering:
+#         source_id = {"single_pass": True}
+#         cand = call_and_record([id_to_index[e["id"]]], source_cluster=source_id, single_entity_mode=True)
+#         single_candidates.extend(cand)
+
+#     classes_single_path = Path(f"{CLASSES_PREFIX}single.json")
+#     write_classes_round(classes_single_path, single_candidates, entities, id_to_index)
+#     if VERBOSE: print(f"[write] classes round single -> {classes_single_path}")
+
+#     with open(CLASS_CANDIDATES_OUT, "w", encoding="utf-8") as fh:
+#         for c in all_candidates:
+#             fh.write(json.dumps(c, ensure_ascii=False) + "\n")
+#     if VERBOSE: print(f"[write] cumulative class_candidates -> {CLASS_CANDIDATES_OUT} (count={len(all_candidates)})")
+
+#     final_remaining = [e for e in entities if e["id"] not in assigned_entity_ids]
+#     with open(REMAINING_OUT, "w", encoding="utf-8") as fh:
+#         for e in final_remaining:
+#             fh.write(json.dumps(e, ensure_ascii=False) + "\n")
+#     if VERBOSE: print(f"[write] final remaining entities -> {REMAINING_OUT} (count={len(final_remaining)})")
+
+#     print("[done] ClassRec iterative v4 finished.")
+
+
+
+# # -----------------------
+# # Cls Recognition  - Run statement
+# # -----------------------
+
+
+
+# # if __name__ == "__main__":
+# #     classrec_iterative_main()
+
+
+#endregion#? Cls Rec V4 - Class hint type included
+#*#########################  End  ##########################
 
 
 
 #?######################### Start ##########################
-#region:#?   Cls Rec V4 - Class hint type included  - Gpt 5.1 fix
+#region:#?   Cls Rec V10 - DSPy LLM Config (Class hint type included)
 
 #!/usr/bin/env python3
 """
-classrec_iterative_v4.py
-
 Iterative Class Recognition (ClassRec) with per-iteration class outputs
 matching the cluster-file visual/JSON format and including class metadata
 (label/desc/confidence/evidence + source cluster id + class_type_hint).
 
-This is a fix for KeyError caused by unescaped braces in the prompt template.
+This version:
+
+- Keeps the same clustering + prompt logic as v4.
+- Replaces the raw OpenAI client with DSPy + TraceKGLLMConfig (LLM Model V3).
+- Uses make_lm_for_step(cfg, "class_rec") to obtain a dspy.LM.
+- Allows a single global config (default_model etc.) and optional per-step overrides
+  (class_rec_model / rec_model / default_model) via TraceKGLLMConfig.
+
 All literal braces in the prompt are escaped ({{ and }}), except {members_block}.
 """
 
@@ -2872,12 +6476,9 @@ try:
 except Exception:
     UMAP_AVAILABLE = False
 
-# OpenAI client
-from openai import OpenAI
 
 # ----------------------------- CONFIG -----------------------------
 INPUT_PATH = Path("data/Classes/Cls_Input/cls_input_entities.jsonl")
-# OUT_DIR = Path("data/Classes/Cls_Rec")
 OUT_DIR = Path("data/Classes/Cls_Rec")
 OUT_DIR.mkdir(parents=True, exist_ok=True)
 
@@ -2907,9 +6508,8 @@ MAX_CLUSTER_SIZE_FOR_LOCAL = 30
 LOCAL_HDBSCAN_MIN_CLUSTER_SIZE = 2
 LOCAL_HDBSCAN_MIN_SAMPLES = 1
 
-# prompt and LLM / limits
-OPENAI_MODEL = "gpt-5.1"
-OPENAI_TEMPERATURE = 0.0
+# prompt and LLM / limits (defaults used if llm_config is None)
+CLASSREC_MODEL = "gpt-5.1"
 LLM_MAX_TOKENS = 8000
 MAX_MEMBERS_PER_PROMPT = 10
 PROMPT_CHAR_PER_TOKEN = 4          # crude estimate
@@ -2919,35 +6519,6 @@ MAX_PROMPT_TOKENS_EST = 8000
 MAX_RECLUSTER_ROUNDS = 12  # safety cap
 VERBOSE = False
 
-# ------------------------ OpenAI client loader -----------------------
-def _load_openai_key(envvar: str = "OPENAI_API_KEY", fallback_path: str = ".env"):
-    key = os.getenv(envvar, fallback_path)
-    if isinstance(key, str) and Path(key).exists():
-        try:
-            txt = Path(key).read_text(encoding="utf-8").strip()
-            if txt:
-                return txt
-        except Exception:
-            pass
-    return key
-
-OPENAI_KEY = _load_openai_key()
-if not OPENAI_KEY or not isinstance(OPENAI_KEY, str) or len(OPENAI_KEY) < 10:
-    print("⚠️ OPENAI key missing or short. Set OPENAI_API_KEY or put key in fallback file.")
-client = OpenAI(api_key=OPENAI_KEY)
-
-def call_llm(prompt: str, model: str = OPENAI_MODEL, temperature: float = OPENAI_TEMPERATURE, max_completion_tokens: int = LLM_MAX_TOKENS) -> str:
-    try:
-        resp = client.chat.completions.create(
-            model=model,
-            messages=[{"role": "user", "content": prompt}],
-            temperature=temperature,
-            max_completion_tokens=LLM_MAX_TOKENS
-        )
-        return resp.choices[0].message.content
-    except Exception as e:
-        print("LLM call error:", e)
-        return ""
 
 # ------------------------- HF Embedder ------------------------------
 def mean_pool(token_embeddings: torch.Tensor, attention_mask: torch.Tensor):
@@ -2956,9 +6527,11 @@ def mean_pool(token_embeddings: torch.Tensor, attention_mask: torch.Tensor):
     sum_mask = torch.clamp(input_mask_expanded.sum(1), min=1e-9)
     return sum_embeddings / sum_mask
 
+
 class HFEmbedder:
     def __init__(self, model_name=EMBED_MODEL, device=DEVICE):
-        if VERBOSE: print(f"[embedder] loading {model_name} on {device}")
+        if VERBOSE:
+            print(f"[embedder] loading {model_name} on {device}")
         self.device = device
         self.tokenizer = AutoTokenizer.from_pretrained(model_name, use_fast=True)
         self.model = AutoModel.from_pretrained(model_name)
@@ -2974,17 +6547,28 @@ class HFEmbedder:
             return np.zeros((0, D))
         embs = []
         for i in range(0, len(texts), batch_size):
-            batch = texts[i:i+batch_size]
-            enc = self.tokenizer(batch, padding=True, truncation=True, return_tensors="pt", max_length=1024)
+            batch = texts[i : i + batch_size]
+            enc = self.tokenizer(
+                batch,
+                padding=True,
+                truncation=True,
+                return_tensors="pt",
+                max_length=1024,
+            )
             input_ids = enc["input_ids"].to(self.device)
             attention_mask = enc["attention_mask"].to(self.device)
-            out = self.model(input_ids=input_ids, attention_mask=attention_mask, return_dict=True)
+            out = self.model(
+                input_ids=input_ids,
+                attention_mask=attention_mask,
+                return_dict=True,
+            )
             token_embeds = out.last_hidden_state
             pooled = mean_pool(token_embeds, attention_mask)
             embs.append(pooled.cpu().numpy())
         embs = np.vstack(embs)
         embs = normalize(embs, axis=1)
         return embs
+
 
 # ---------------------- IO helpers ----------------------------------
 def load_entities(path: Path) -> List[Dict]:
@@ -2996,6 +6580,7 @@ def load_entities(path: Path) -> List[Dict]:
                 ents.append(json.loads(line))
     return ents
 
+
 def safe_text(e: Dict, k: str) -> str:
     v = e.get(k)
     if v is None:
@@ -3004,21 +6589,27 @@ def safe_text(e: Dict, k: str) -> str:
         return json.dumps(v, ensure_ascii=False)
     return str(v)
 
+
 def build_field_texts(entities: List[Dict]) -> Tuple[List[str], List[str], List[str]]:
     names, descs, ctxs = [], [], []
     for e in entities:
         names.append(safe_text(e, "entity_name") or "")
         descs.append(safe_text(e, "entity_description") or "")
-        resolution = safe_text(e, "resolution_context") or safe_text(e, "text_span") or safe_text(e, "context_phrase") or ""
+        resolution = (
+            safe_text(e, "resolution_context")
+            or safe_text(e, "text_span")
+            or safe_text(e, "context_phrase")
+            or ""
+        )
         et = safe_text(e, "entity_type_hint") or ""
         node_props = e.get("node_properties") or []
         node_props_text = ""
         if isinstance(node_props, list) and node_props:
             pieces = []
-            for np in node_props:
-                if isinstance(np, dict):
-                    pname = np.get("prop_name") or np.get("name") or ""
-                    pval = np.get("prop_value") or np.get("value") or ""
+            for np_ in node_props:
+                if isinstance(np_, dict):
+                    pname = np_.get("prop_name") or np_.get("name") or ""
+                    pval = np_.get("prop_value") or np_.get("value") or ""
                     if pname and pval:
                         pieces.append(f"{pname}:{pval}")
                     elif pname:
@@ -3035,16 +6626,18 @@ def build_field_texts(entities: List[Dict]) -> Tuple[List[str], List[str], List[
         ctxs.append(" ; ".join(parts))
     return names, descs, ctxs
 
+
 def compute_combined_embeddings(embedder: HFEmbedder, entities: List[Dict], weights=WEIGHTS) -> np.ndarray:
     names, descs, ctxs = build_field_texts(entities)
     emb_name = embedder.encode_batch(names) if any(t.strip() for t in names) else None
     emb_desc = embedder.encode_batch(descs) if any(t.strip() for t in descs) else None
-    emb_ctx  = embedder.encode_batch(ctxs)  if any(t.strip() for t in ctxs) else None
+    emb_ctx = embedder.encode_batch(ctxs) if any(t.strip() for t in ctxs) else None
 
     D = None
     for arr in (emb_name, emb_desc, emb_ctx):
         if arr is not None and arr.shape[0] > 0:
-            D = arr.shape[1]; break
+            D = arr.shape[1]
+            break
     if D is None:
         raise ValueError("No textual field produced embeddings")
 
@@ -3055,26 +6648,47 @@ def compute_combined_embeddings(embedder: HFEmbedder, entities: List[Dict], weig
             raise ValueError("embedding dim mismatch")
         return arr
 
-    emb_name = _ensure(emb_name); emb_desc = _ensure(emb_desc); emb_ctx = _ensure(emb_ctx)
-    w_name = weights.get("name", 0.0); w_desc = weights.get("desc", 0.0); w_ctx = weights.get("ctx", 0.0)
+    emb_name = _ensure(emb_name)
+    emb_desc = _ensure(emb_desc)
+    emb_ctx = _ensure(emb_ctx)
+    w_name = weights.get("name", 0.0)
+    w_desc = weights.get("desc", 0.0)
+    w_ctx = weights.get("ctx", 0.0)
     Wsum = w_name + w_desc + w_ctx
-    if Wsum <= 0: raise ValueError("invalid weights")
-    w_name /= Wsum; w_desc /= Wsum; w_ctx /= Wsum
+    if Wsum <= 0:
+        raise ValueError("invalid weights")
+    w_name /= Wsum
+    w_desc /= Wsum
+    w_ctx /= Wsum
 
     combined = (w_name * emb_name) + (w_desc * emb_desc) + (w_ctx * emb_ctx)
     combined = normalize(combined, axis=1)
     return combined
 
-def run_hdbscan(embeddings: np.ndarray, min_cluster_size=HDBSCAN_MIN_CLUSTER_SIZE, min_samples=HDBSCAN_MIN_SAMPLES,
-                metric=HDBSCAN_METRIC, use_umap=USE_UMAP) -> Tuple[np.ndarray, object]:
+
+def run_hdbscan(
+    embeddings: np.ndarray,
+    min_cluster_size=HDBSCAN_MIN_CLUSTER_SIZE,
+    min_samples=HDBSCAN_MIN_SAMPLES,
+    metric=HDBSCAN_METRIC,
+    use_umap=USE_UMAP,
+) -> Tuple[np.ndarray, object]:
     X = embeddings
     if use_umap and UMAP_AVAILABLE and X.shape[0] >= 5:
-        reducer = umap.UMAP(n_components=min(UMAP_N_COMPONENTS, max(2, X.shape[0]-1)),
-                            n_neighbors=min(UMAP_N_NEIGHBORS, max(2, X.shape[0]-1)),
-                            min_dist=UMAP_MIN_DIST,
-                            metric='cosine', random_state=42)
+        reducer = umap.UMAP(
+            n_components=min(UMAP_N_COMPONENTS, max(2, X.shape[0] - 1)),
+            n_neighbors=min(UMAP_N_NEIGHBORS, max(2, X.shape[0] - 1)),
+            min_dist=UMAP_MIN_DIST,
+            metric="cosine",
+            random_state=42,
+        )
         X = reducer.fit_transform(X)
-    clusterer = hdbscan.HDBSCAN(min_cluster_size=min_cluster_size, min_samples=min_samples, metric=metric, cluster_selection_method='eom')
+    clusterer = hdbscan.HDBSCAN(
+        min_cluster_size=min_cluster_size,
+        min_samples=min_samples,
+        metric=metric,
+        cluster_selection_method="eom",
+    )
     labels = clusterer.fit_predict(X)
     return labels, clusterer
 
@@ -3199,29 +6813,36 @@ Entities:
 Return JSON array only.
 """
 
+
 def build_members_block(members: List[Dict]) -> str:
     rows = []
     for m in members:
         eid = m.get("id", "")
         name = (m.get("entity_name") or "")[:120].replace("\n", " ")
         desc = (m.get("entity_description") or "")[:300].replace("\n", " ")
-        res = (m.get("resolution_context") or m.get("context_phrase") or "")[:400].replace("\n", " ")
+        res = (
+            (m.get("resolution_context") or m.get("context_phrase") or "")
+            [:400]
+            .replace("\n", " ")
+        )
         et = (m.get("entity_type_hint") or "")[:80].replace("\n", " ")
         node_props = m.get("node_properties") or []
         np_txt = json.dumps(node_props, ensure_ascii=False) if node_props else ""
         rows.append(f"{eid} | {name} | {desc} | {res} | {et} | {np_txt}")
     return "\n".join(rows)
 
+
 def parse_json_array_from_text(txt: str):
     if not txt:
         return None
-    s = txt.strip()
+    # s = txt.strip() #Injam
+    s = coerce_llm_text(txt).strip()
     if s.startswith("```"):
         s = s.strip("`")
-    start = s.find('[')
-    end = s.rfind(']')
+    start = s.find("[")
+    end = s.rfind("]")
     if start != -1 and end != -1 and end > start:
-        cand = s[start:end+1]
+        cand = s[start : end + 1]
         try:
             return json.loads(cand)
         except Exception:
@@ -3231,18 +6852,71 @@ def parse_json_array_from_text(txt: str):
     except Exception:
         return None
 
+
+# ------------------- DSPy integration helpers ------------------------
+def _get_lm_for_class_rec(
+    llm_config: Optional["TraceKGLLMConfig"],
+    model: str,
+    max_tokens: int,
+):
+    """
+    Resolve a DSPy LM for the Class Recognition step:
+
+      - If llm_config is provided, use it directly (with per-step overrides for 'class_rec').
+      - Otherwise, build a minimal TraceKGLLMConfig using the function args
+        for backward compatibility (single model everywhere).
+    """
+    if llm_config is not None:
+        cfg = llm_config
+    else:
+        # Backward-compatible default: one model everywhere, with given max_tokens.
+        cfg = TraceKGLLMConfig(default_model=model, max_tokens=max_tokens)
+
+    try:
+        cfg.validate()
+    except Exception as e:
+        print(f"[ClassRec] WARNING: llm_config.validate() failed: {e}")
+
+    lm = make_lm_for_step(cfg, "class_rec")
+    return lm
+
+
+def _call_class_rec_lm(lm, prompt: str) -> str:
+    """
+    Small helper to call the DSPy LM and normalize the output to a plain string.
+    """
+    try:
+        outputs = lm(prompt)
+    except Exception as e:
+        print(f"[ClassRec] LM call error: {e}")
+        return ""
+
+    if isinstance(outputs, list):
+        return outputs[0] if outputs else ""
+    return str(outputs or "")
+
+
 # ------------------- Worker: process a chunk of members --------------------
-def process_member_chunk_llm(members: List[Dict], single_entity_mode: bool = False) -> List[Dict]:
+def process_member_chunk_llm(
+    members: List[Dict],
+    lm,
+    single_entity_mode: bool = False,
+) -> List[Dict]:
     members_block = build_members_block(members)
     prompt = CLASS_PROMPT_TEMPLATE.format(members_block=members_block)
     est_tokens = max(1, int(len(prompt) / PROMPT_CHAR_PER_TOKEN))
     if est_tokens > MAX_PROMPT_TOKENS_EST:
-        if VERBOSE: print(f"[warning] prompt too large (est_tokens={est_tokens}) -> skipping chunk of size {len(members)}")
+        if VERBOSE:
+            print(
+                f"[warning] prompt too large (est_tokens={est_tokens}) -> skipping chunk of size {len(members)}"
+            )
         return []
-    llm_out = call_llm(prompt)
+
+    llm_out = _call_class_rec_lm(lm, prompt)
     arr = parse_json_array_from_text(llm_out)
     if not arr:
         return []
+
     candidates = []
     provided_ids = {m.get("id") for m in members}
     for c in arr:
@@ -3253,9 +6927,12 @@ def process_member_chunk_llm(members: List[Dict], single_entity_mode: bool = Fal
         member_ids = [mid for mid in member_ids if mid in provided_ids]
         if not member_ids:
             continue
+        # enforce multi-member rule when multiple entities are present
         if not single_entity_mode and len(members) > 1 and len(member_ids) < 2:
             continue
-        confidence = float(c.get("confidence", 0.0)) if c.get("confidence") is not None else 0.0
+        confidence = (
+            float(c.get("confidence", 0.0)) if c.get("confidence") is not None else 0.0
+        )
         desc = c.get("class_description") or c.get("description") or ""
         ev = c.get("evidence_excerpt") or ""
         class_type = c.get("class_type_hint") or c.get("class_type") or ""
@@ -3267,10 +6944,11 @@ def process_member_chunk_llm(members: List[Dict], single_entity_mode: bool = Fal
             "member_ids": member_ids,
             "confidence": confidence,
             "evidence_excerpt": ev,
-            "timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+            "timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
         }
         candidates.append(candidate)
     return candidates
+
 
 # -------------------- Utility: write cluster files (full entity objects) -----------
 def write_cluster_summary(path: Path, cluster_map: Dict[int, List[int]], entities: List[Dict]):
@@ -3279,7 +6957,6 @@ def write_cluster_summary(path: Path, cluster_map: Dict[int, List[int]], entitie
 
     path: output JSON file path, e.g. data/Classes/Cls_Rec/initial_cluster_entities.json
     """
-    # Ensure parent directory exists (fixes FileNotFoundError when writing)
     path.parent.mkdir(parents=True, exist_ok=True)
 
     n_entities = len(entities)
@@ -3293,7 +6970,7 @@ def write_cluster_summary(path: Path, cluster_map: Dict[int, List[int]], entitie
     meta = {"n_entities": n_entities, "n_clusters": len(clusters)}
 
     with open(path, "w", encoding="utf-8") as fh:
-        fh.write('{\n')
+        fh.write("{\n")
         fh.write(f'  "n_entities": {meta["n_entities"]},\n')
         fh.write(f'  "n_clusters": {meta["n_clusters"]},\n')
         fh.write('  "clusters": {\n')
@@ -3303,20 +6980,23 @@ def write_cluster_summary(path: Path, cluster_map: Dict[int, List[int]], entitie
             fh.write(f'    "{k}": [\n')
             for ei, ent in enumerate(ents):
                 ent_json = json.dumps(ent, ensure_ascii=False, separators=(",", ": "))
-                fh.write(f'      {ent_json}')
+                fh.write(f"      {ent_json}")
                 if ei < len(ents) - 1:
-                    fh.write(',\n')
+                    fh.write(",\n")
                 else:
-                    fh.write('\n')
-            fh.write('    ]')
+                    fh.write("\n")
+            fh.write("    ]")
             if ci < len(cluster_items) - 1:
-                fh.write(',\n')
+                fh.write(",\n")
             else:
-                fh.write('\n')
-        fh.write('  }\n')
-        fh.write('}\n')
+                fh.write("\n")
+        fh.write("  }\n")
+        fh.write("}\n")
 
-def write_classes_round(path: Path, candidates: List[Dict], entities: List[Dict], id_to_index: Dict[str,int]):
+
+def write_classes_round(
+    path: Path, candidates: List[Dict], entities: List[Dict], id_to_index: Dict[str, int]
+):
     classes_map = {}
     total_members = 0
     for c in candidates:
@@ -3335,47 +7015,81 @@ def write_classes_round(path: Path, candidates: List[Dict], entities: List[Dict]
             "confidence": float(c.get("confidence", 0.0)),
             "evidence_excerpt": c.get("evidence_excerpt", ""),
             "source_cluster_id": c.get("source_cluster_id", None),
-            "members": member_objs
+            "members": member_objs,
         }
         classes_map[cid] = meta
         total_members += len(member_objs)
-    meta = {"n_classes": len(classes_map), "n_members_total": total_members, "classes": classes_map}
+    meta = {
+        "n_classes": len(classes_map),
+        "n_members_total": total_members,
+        "classes": classes_map,
+    }
     with open(path, "w", encoding="utf-8") as fh:
-        fh.write('{\n')
+        fh.write("{\n")
         fh.write(f'  "n_classes": {meta["n_classes"]},\n')
         fh.write(f'  "n_members_total": {meta["n_members_total"]},\n')
         fh.write('  "classes": {\n')
         items = list(classes_map.items())
         for ci, (k, cls_meta) in enumerate(items):
             fh.write(f'    "{k}": {{\n')
-            fh.write(f'      "class_label": {json.dumps(cls_meta["class_label"], ensure_ascii=False)},\n')
-            fh.write(f'      "class_description": {json.dumps(cls_meta["class_description"], ensure_ascii=False)},\n')
-            fh.write(f'      "class_type_hint": {json.dumps(cls_meta["class_type_hint"], ensure_ascii=False)},\n')
-            fh.write(f'      "confidence": {json.dumps(cls_meta["confidence"], ensure_ascii=False)},\n')
-            fh.write(f'      "evidence_excerpt": {json.dumps(cls_meta["evidence_excerpt"], ensure_ascii=False)},\n')
-            fh.write(f'      "source_cluster_id": {json.dumps(cls_meta["source_cluster_id"], ensure_ascii=False)},\n')
-            fh.write(f'      "members": [\n')
+            fh.write(
+                f'      "class_label": {json.dumps(cls_meta["class_label"], ensure_ascii=False)},\n'
+            )
+            fh.write(
+                f'      "class_description": {json.dumps(cls_meta["class_description"], ensure_ascii=False)},\n'
+            )
+            fh.write(
+                f'      "class_type_hint": {json.dumps(cls_meta["class_type_hint"], ensure_ascii=False)},\n'
+            )
+            fh.write(
+                f'      "confidence": {json.dumps(cls_meta["confidence"], ensure_ascii=False)},\n'
+            )
+            fh.write(
+                f'      "evidence_excerpt": {json.dumps(cls_meta["evidence_excerpt"], ensure_ascii=False)},\n'
+            )
+            fh.write(
+                f'      "source_cluster_id": {json.dumps(cls_meta["source_cluster_id"], ensure_ascii=False)},\n'
+            )
+            fh.write('      "members": [\n')
             for ei, ent in enumerate(cls_meta["members"]):
                 ent_json = json.dumps(ent, ensure_ascii=False, separators=(",", ": "))
-                fh.write(f'        {ent_json}')
+                fh.write(f"        {ent_json}")
                 if ei < len(cls_meta["members"]) - 1:
-                    fh.write(',\n')
+                    fh.write(",\n")
                 else:
-                    fh.write('\n')
-            fh.write('      ]\n')
-            fh.write('    }')
+                    fh.write("\n")
+            fh.write("      ]\n")
+            fh.write("    }")
             if ci < len(items) - 1:
-                fh.write(',\n')
+                fh.write(",\n")
             else:
-                fh.write('\n')
-        fh.write('  }\n')
-        fh.write('}\n')
+                fh.write("\n")
+        fh.write("  }\n")
+        fh.write("}\n")
+
 
 # -------------------- Main iterative orchestration -----------------------
-def classrec_iterative_main():
+def classrec_iterative_main(
+    model: str = CLASSREC_MODEL,
+    max_tokens: int = LLM_MAX_TOKENS,
+    llm_config: Optional["TraceKGLLMConfig"] = None,
+):
+    """
+    Main entry point for Class Recognition (ClassRec).
+
+    LLM behavior:
+      - If llm_config is provided, a single TraceKGLLMConfig object controls all LLM
+        behavior for this step (models, tokens, temperature, api_base, etc.). The
+        'class_rec_model' / 'rec_model' / 'default_model' fields are used via
+        make_lm_for_step(cfg, "class_rec").
+      - If llm_config is None, this function falls back to `model` and `max_tokens`
+        by constructing a minimal TraceKGLLMConfig(default_model=model, max_tokens=max_tokens).
+
+    All LLM calls use a single dspy.LM created once and reused.
+    """
     entities = load_entities(INPUT_PATH)
     print(f"[start] loaded {len(entities)} entities from {INPUT_PATH}")
-    
+
     # Ensure the output directory exists before we try to write initial_cluster_entities.json
     OUT_DIR.mkdir(parents=True, exist_ok=True)
 
@@ -3389,35 +7103,52 @@ def classrec_iterative_main():
     combined_emb = compute_combined_embeddings(embedder, entities, weights=WEIGHTS)
     print("[info] embeddings computed, shape:", combined_emb.shape)
 
-    labels, _ = run_hdbscan(combined_emb, min_cluster_size=HDBSCAN_MIN_CLUSTER_SIZE, min_samples=HDBSCAN_MIN_SAMPLES, use_umap=USE_UMAP)
+    labels, _ = run_hdbscan(
+        combined_emb,
+        min_cluster_size=HDBSCAN_MIN_CLUSTER_SIZE,
+        min_samples=HDBSCAN_MIN_SAMPLES,
+        use_umap=USE_UMAP,
+    )
     print("[info] initial clustering done. unique labels:", len(set(labels)))
 
-    cluster_to_indices = {}
+    cluster_to_indices: Dict[int, List[int]] = {}
     for idx, lab in enumerate(labels):
         cluster_to_indices.setdefault(int(lab), []).append(idx)
 
     write_cluster_summary(INITIAL_CLUSTER_OUT, cluster_to_indices, entities)
-    if VERBOSE: print(f"[write] initial cluster file -> {INITIAL_CLUSTER_OUT}")
+    if VERBOSE:
+        print(f"[write] initial cluster file -> {INITIAL_CLUSTER_OUT}")
 
     seen_by_llm = set()
     assigned_entity_ids = set()
-    all_candidates = []
+    all_candidates: List[Dict] = []
 
-    def call_and_record(members_indices: List[int], source_cluster: Optional[object]=None, single_entity_mode: bool=False) -> List[Dict]:
+    # Resolve LM once for this whole run
+    lm = _get_lm_for_class_rec(llm_config=llm_config, model=model, max_tokens=max_tokens)
+
+    def call_and_record(
+        members_indices: List[int],
+        source_cluster: Optional[object] = None,
+        single_entity_mode: bool = False,
+    ) -> List[Dict]:
         nonlocal seen_by_llm, assigned_entity_ids, all_candidates
         if not members_indices:
             return []
         members = [entities[i] for i in members_indices]
-        results = []
+        results: List[Dict] = []
         for i in range(0, len(members), MAX_MEMBERS_PER_PROMPT):
-            chunk = members[i:i+MAX_MEMBERS_PER_PROMPT]
+            chunk = members[i : i + MAX_MEMBERS_PER_PROMPT]
             for m in chunk:
                 if m.get("id"):
                     seen_by_llm.add(m["id"])
-            candidates = process_member_chunk_llm(chunk, single_entity_mode=single_entity_mode)
+            candidates = process_member_chunk_llm(
+                chunk, lm=lm, single_entity_mode=single_entity_mode
+            )
             for c in candidates:
                 mids = c.get("member_ids", [])
-                member_entities = [entities[id_to_index[mid]] for mid in mids if mid in id_to_index]
+                member_entities = [
+                    entities[id_to_index[mid]] for mid in mids if mid in id_to_index
+                ]
                 if not member_entities:
                     continue
                 c["member_entities"] = member_entities
@@ -3428,21 +7159,28 @@ def classrec_iterative_main():
                 results.append(c)
         return results
 
-    round0_candidates = []
-    if VERBOSE: print("[round0] processing coarse non-noise clusters")
+    # ---------- Round 0: coarse clusters (with optional local subclusters) ----------
+    round0_candidates: List[Dict] = []
+    if VERBOSE:
+        print("[round0] processing coarse non-noise clusters")
     for lab, idxs in sorted(cluster_to_indices.items(), key=lambda x: x[0]):
         if lab == -1:
             continue
-        if VERBOSE: print(f"[round0] cluster {lab} size={len(idxs)}")
+        if VERBOSE:
+            print(f"[round0] cluster {lab} size={len(idxs)}")
         if len(idxs) > MAX_CLUSTER_SIZE_FOR_LOCAL:
             try:
                 sub_emb = combined_emb[idxs]
-                local_clusterer = hdbscan.HDBSCAN(min_cluster_size=max(2, LOCAL_HDBSCAN_MIN_CLUSTER_SIZE),
-                                                  min_samples=LOCAL_HDBSCAN_MIN_SAMPLES, metric='euclidean', cluster_selection_method='eom')
+                local_clusterer = hdbscan.HDBSCAN(
+                    min_cluster_size=max(2, LOCAL_HDBSCAN_MIN_CLUSTER_SIZE),
+                    min_samples=LOCAL_HDBSCAN_MIN_SAMPLES,
+                    metric="euclidean",
+                    cluster_selection_method="eom",
+                )
                 local_labels = local_clusterer.fit_predict(sub_emb)
             except Exception:
                 local_labels = np.zeros(len(idxs), dtype=int)
-            local_map = {}
+            local_map: Dict[int, List[int]] = {}
             for i_local, lab_local in enumerate(local_labels):
                 global_idx = idxs[i_local]
                 local_map.setdefault(int(lab_local), []).append(global_idx)
@@ -3450,17 +7188,27 @@ def classrec_iterative_main():
                 if sublab == -1:
                     continue
                 source_id = {"coarse_cluster": int(lab), "local_subcluster": int(sublab)}
-                cand = call_and_record(subidxs, source_cluster=source_id, single_entity_mode=(len(subidxs) == 1))
+                cand = call_and_record(
+                    subidxs,
+                    source_cluster=source_id,
+                    single_entity_mode=(len(subidxs) == 1),
+                )
                 round0_candidates.extend(cand)
         else:
             source_id = {"coarse_cluster": int(lab), "local_subcluster": None}
-            cand = call_and_record(idxs, source_cluster=source_id, single_entity_mode=(len(idxs) == 1))
+            cand = call_and_record(
+                idxs,
+                source_cluster=source_id,
+                single_entity_mode=(len(idxs) == 1),
+            )
             round0_candidates.extend(cand)
 
     classes_round0_path = Path(f"{CLASSES_PREFIX}0.json")
     write_classes_round(classes_round0_path, round0_candidates, entities, id_to_index)
-    if VERBOSE: print(f"[write] classes round 0 -> {classes_round0_path}")
+    if VERBOSE:
+        print(f"[write] classes round 0 -> {classes_round0_path}")
 
+    # ---------- Recluster rounds over noise + unassigned ----------
     original_noise_indices = cluster_to_indices.get(-1, [])
     round_num = 0
     while round_num < MAX_RECLUSTER_ROUNDS:
@@ -3470,90 +7218,126 @@ def classrec_iterative_main():
         pool_ids.update(seen_but_unassigned)
         pool_ids = [pid for pid in pool_ids if pid not in assigned_entity_ids]
         if not pool_ids:
-            if VERBOSE: print(f"[reclust {round_num}] pool empty -> stopping")
+            if VERBOSE:
+                print(f"[reclust {round_num}] pool empty -> stopping")
             break
         pool_indices = [id_to_index[pid] for pid in pool_ids if pid in id_to_index]
         if not pool_indices:
-            if VERBOSE: print(f"[reclust {round_num}] no valid pool indices -> stopping")
+            if VERBOSE:
+                print(f"[reclust {round_num}] no valid pool indices -> stopping")
             break
 
-        if VERBOSE: print(f"[reclust {round_num}] reclustering pool size={len(pool_indices)}")
+        if VERBOSE:
+            print(f"[reclust {round_num}] reclustering pool size={len(pool_indices)}")
         try:
             sub_emb = combined_emb[pool_indices]
-            labels_sub, _ = run_hdbscan(sub_emb, min_cluster_size=2, min_samples=1, use_umap=False)
+            labels_sub, _ = run_hdbscan(
+                sub_emb,
+                min_cluster_size=2,
+                min_samples=1,
+                use_umap=False,
+            )
         except Exception:
             labels_sub = np.zeros(len(pool_indices), dtype=int)
 
-        sub_cluster_map = {}
+        sub_cluster_map: Dict[int, List[int]] = {}
         for local_i, lab_sub in enumerate(labels_sub):
             global_idx = pool_indices[local_i]
             sub_cluster_map.setdefault(int(lab_sub), []).append(global_idx)
 
         recluster_path = Path(f"{RECLUSTER_PREFIX}{round_num}.json")
         write_cluster_summary(recluster_path, sub_cluster_map, entities)
-        if VERBOSE: print(f"[write] recluster round {round_num} -> {recluster_path}")
+        if VERBOSE:
+            print(f"[write] recluster round {round_num} -> {recluster_path}")
 
-        round_candidates = []
+        round_candidates: List[Dict] = []
         new_classes_count = 0
-        for lab_sub, gidxs in sorted(sub_cluster_map.items(), key=lambda x: (x[0]==-1, x[0])):
+        for lab_sub, gidxs in sorted(
+            sub_cluster_map.items(), key=lambda x: (x[0] == -1, x[0])
+        ):
             if lab_sub == -1:
                 continue
-            if VERBOSE: print(f"[reclust {round_num}] processing subcluster {lab_sub} size={len(gidxs)}")
+            if VERBOSE:
+                print(
+                    f"[reclust {round_num}] processing subcluster {lab_sub} size={len(gidxs)}"
+                )
             source_id = {"recluster_round": int(round_num), "subcluster": int(lab_sub)}
-            cand = call_and_record(gidxs, source_cluster=source_id, single_entity_mode=(len(gidxs) == 1))
+            cand = call_and_record(
+                gidxs,
+                source_cluster=source_id,
+                single_entity_mode=(len(gidxs) == 1),
+            )
             round_candidates.extend(cand)
             new_classes_count += len(cand)
 
         classes_round_path = Path(f"{CLASSES_PREFIX}{round_num}.json")
         write_classes_round(classes_round_path, round_candidates, entities, id_to_index)
-        if VERBOSE: print(f"[write] classes round {round_num} -> {classes_round_path}  (new_classes={new_classes_count})")
+        if VERBOSE:
+            print(
+                f"[write] classes round {round_num} -> {classes_round_path}  (new_classes={new_classes_count})"
+            )
 
         if new_classes_count == 0:
-            if VERBOSE: print(f"[reclust {round_num}] no new classes -> stopping recluster loop")
+            if VERBOSE:
+                print(
+                    f"[reclust {round_num}] no new classes -> stopping recluster loop"
+                )
             break
 
-    remaining_after_reclustering = [e for e in entities if e["id"] not in assigned_entity_ids]
-    if VERBOSE: print(f"[single pass] remaining entities (before single-entity pass): {len(remaining_after_reclustering)}")
+    # ---------- Single-entity pass for leftovers ----------
+    remaining_after_reclustering = [
+        e for e in entities if e["id"] not in assigned_entity_ids
+    ]
+    if VERBOSE:
+        print(
+            f"[single pass] remaining entities (before single-entity pass): {len(remaining_after_reclustering)}"
+        )
 
-    single_candidates = []
+    single_candidates: List[Dict] = []
     for e in remaining_after_reclustering:
         source_id = {"single_pass": True}
-        cand = call_and_record([id_to_index[e["id"]]], source_cluster=source_id, single_entity_mode=True)
+        cand = call_and_record(
+            [id_to_index[e["id"]]],
+            source_cluster=source_id,
+            single_entity_mode=True,
+        )
         single_candidates.extend(cand)
 
     classes_single_path = Path(f"{CLASSES_PREFIX}single.json")
     write_classes_round(classes_single_path, single_candidates, entities, id_to_index)
-    if VERBOSE: print(f"[write] classes round single -> {classes_single_path}")
+    if VERBOSE:
+        print(f"[write] classes round single -> {classes_single_path}")
 
+    # ---------- Summary outputs ----------
     with open(CLASS_CANDIDATES_OUT, "w", encoding="utf-8") as fh:
         for c in all_candidates:
             fh.write(json.dumps(c, ensure_ascii=False) + "\n")
-    if VERBOSE: print(f"[write] cumulative class_candidates -> {CLASS_CANDIDATES_OUT} (count={len(all_candidates)})")
+    if VERBOSE:
+        print(
+            f"[write] cumulative class_candidates -> {CLASS_CANDIDATES_OUT} (count={len(all_candidates)})"
+        )
 
     final_remaining = [e for e in entities if e["id"] not in assigned_entity_ids]
     with open(REMAINING_OUT, "w", encoding="utf-8") as fh:
         for e in final_remaining:
             fh.write(json.dumps(e, ensure_ascii=False) + "\n")
-    if VERBOSE: print(f"[write] final remaining entities -> {REMAINING_OUT} (count={len(final_remaining)})")
+    if VERBOSE:
+        print(
+            f"[write] final remaining entities -> {REMAINING_OUT} (count={len(final_remaining)})"
+        )
 
-    print("[done] ClassRec iterative v4 finished.")
-
+    print("[done] ClassRec iterative v10 (DSPy) finished.")
 
 
 # -----------------------
 # Cls Recognition  - Run statement
 # -----------------------
 
-
-
 # if __name__ == "__main__":
 #     classrec_iterative_main()
 
-
-#endregion#? Cls Rec V4 - Class hint type included
+#endregion#? Cls Rec V10 - DSPy LLM Config
 #?#########################  End  ##########################
-
-
 
 
 
@@ -3751,17 +7535,1370 @@ def main_input_for_cls_res():
 
 
 
+#*######################### Start ##########################
+#region:#?   Cls Res V8  - Split + Remark + Summary (gpt-5.1 Responses)
+
+# #!/usr/bin/env python3
+# """
+# classres_iterative_v8_gpt5.py
+
+# Class Resolution (Cls Res) — cluster class candidates, ask LLM to
+# order a sequence of functions (merge/create/reassign/modify/split) for each cluster,
+# then execute those functions locally and produce final resolved classes.
+
+# Key features:
+# - TWO-LAYER SCHEMA: Class_Group -> Classes -> Entities
+# - class_label treated as provisional; may be revised if evidence suggests a clearer name.
+# - LLM orders structural + schema actions using a small function vocabulary.
+# - Provisional IDs for newly created/merged/split classes so later steps can refer to them.
+# - 'remarks' channel so the LLM can flag out-of-scope or higher-level concerns without
+#   misusing structural functions.
+# - Conservative behavior with strong validation and logging.
+# - Summary folder with aggregated decisions and useful statistics.
+
+# Input:
+#   data/Classes/Cls_Rec/classes_for_cls_res.json
+
+# Output (written under OUT_DIR):
+#   - per-cluster decisions: cluster_<N>_decisions.json
+#   - per-cluster raw llm output: llm_raw/cluster_<N>_llm_raw.txt
+#   - per-cluster prompts: llm_raw/cluster_<N>_prompt.txt
+#   - cumulative action log: cls_res_action_log.jsonl
+#   - final resolved classes: final_classes_resolved.json and .jsonl
+#   - summary/all_clusters_decisions.json (aggregated decisions)
+#   - summary/stats_summary.json (aggregate statistics)
+
+# Updated for gpt-5.1:
+# - Uses OpenAI Responses API (client.responses.create) instead of Chat Completions.
+# - Uses max_output_tokens instead of max_tokens.
+# - Does not send temperature (unsupported by gpt-5.1).
+# - Optional reasoning={'effort': 'low'} for gpt-5.x models.
+# """
+
+# import json
+# import os
+# import re
+# import time
+# import uuid
+# from pathlib import Path
+# from typing import List, Dict, Any, Optional, Tuple
+
+# import numpy as np
+# import torch
+# from sklearn.preprocessing import normalize
+
+# # clustering libs
+# try:
+#     import hdbscan
+# except Exception:
+#     raise RuntimeError("hdbscan required: pip install hdbscan")
+# try:
+#     import umap
+#     UMAP_AVAILABLE = True
+# except Exception:
+#     UMAP_AVAILABLE = False
+
+# # transformers embedder (reuse same embedder pattern as ClassRec)
+# from transformers import AutoTokenizer, AutoModel
+
+# # OpenAI client (same style as your previous script)
+# try:
+#     from openai import OpenAI
+# except Exception:
+#     OpenAI = None
+
+# # ----------------------------- CONFIG -----------------------------
+# INPUT_CLASSES =     Path("data/Classes/Cls_Res/Cls_Res_input/classes_for_cls_res.json")
+# #INPUT_CLASSES = Path("data/Classes/Cls_Rec/classes_for_cls_res-Wrong.json")
+# SRC_ENTITIES_PATH = Path("data/Classes/Cls_Input/cls_input_entities.jsonl")
+# OUT_DIR = Path("data/Classes/Cls_Res")
+# OUT_DIR.mkdir(parents=True, exist_ok=True)
+# RAW_LLM_DIR = OUT_DIR / "llm_raw"
+# RAW_LLM_DIR.mkdir(exist_ok=True)
+
+# # Embedding model (changeable)
+# EMBED_MODEL = "BAAI/bge-large-en-v1.5"
+# DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
+# BATCH_SIZE = 32
+
+# # Weights for fields used to build class text for embeddings
+# CLASS_EMB_WEIGHTS = {
+#     "label": 0.30,
+#     "desc": 0.25,
+#     "type_hint": 0.10,
+#     "evidence": 0.05,
+#     "members": 0.30
+# }
+
+# # clustering params
+# USE_UMAP = True
+# UMAP_N_COMPONENTS = 64
+# UMAP_N_NEIGHBORS = 8
+# UMAP_MIN_DIST = 0.0
+# HDBSCAN_MIN_CLUSTER_SIZE = 2
+# HDBSCAN_MIN_SAMPLES = 1
+# HDBSCAN_METRIC = "euclidean"
+
+# # LLM / OpenAI (updated for gpt-5.1 + Responses)
+# OPENAI_MODEL = "gpt-5.1"          # updated to gpt-5.1
+# OPENAI_TEMPERATURE = 0.0          # kept for signature compatibility; NOT sent to API
+# LLM_MAX_TOKENS = 16000             # mapped to max_output_tokens
+# OPENAI_API_KEY_ENV = "OPENAI_API_KEY"
+# REASONING_EFFORT = "low"          # for gpt-5.x models
+
+# # behavioral flags
+# VERBOSE = False
+# WRITE_INTERMEDIATE = True
+
+# # ---------------------- Helpers: OpenAI key loader ---------------------
+# def _load_openai_key(envvar: str = OPENAI_API_KEY_ENV, fallback_path: str = ".env"):
+#     key = os.getenv(envvar, None)
+#     if key:
+#         return key
+#     # fallback: try file
+#     if Path(fallback_path).exists():
+#         txt = Path(fallback_path).read_text(encoding="utf-8").strip()
+#         if txt:
+#             return txt
+#     return None
+
+# OPENAI_KEY = _load_openai_key()
+# if OpenAI is not None and OPENAI_KEY:
+#     client = OpenAI(api_key=OPENAI_KEY)
+# else:
+#     client = None
+#     if VERBOSE:
+#         print("⚠️ OpenAI client not initialized (missing package or API key). LLM calls will fail unless OpenAI client is available.")
+
+# def call_llm(
+#     prompt: str,
+#     model: str = OPENAI_MODEL,
+#     temperature: float = OPENAI_TEMPERATURE,  # unused for gpt-5.1; kept for compatibility
+#     max_tokens: int = LLM_MAX_TOKENS,
+#     reasoning_effort: str = REASONING_EFFORT,
+# ) -> str:
+#     """
+#     Call the LLM using the Responses API (compatible with gpt-5.1).
+
+#     - Uses `max_output_tokens` instead of `max_tokens`.
+#     - Does NOT send `temperature` (unsupported by gpt-5.1).
+#     - Adds `reasoning={'effort': reasoning_effort}` for gpt-5.x models.
+#     """
+#     if client is None:
+#         raise RuntimeError("OpenAI client not available. Set OPENAI_API_KEY and install openai package.")
+#     try:
+#         if VERBOSE:
+#             print(f"[call_llm] model={model} max_output_tokens={max_tokens} reasoning_effort={reasoning_effort}")
+#         kwargs: Dict[str, Any] = {
+#             "model": model,
+#             "input": [
+#                 {"role": "user", "content": prompt}
+#             ],
+#         }
+#         if max_tokens is not None:
+#             kwargs["max_output_tokens"] = max_tokens
+#         if model.startswith("gpt-5") and reasoning_effort:
+#             kwargs["reasoning"] = {"effort": reasoning_effort}
+
+#         resp = client.responses.create(**kwargs)
+#         txt = resp.output_text or ""
+#         status = getattr(resp, "status", None)
+#         if status == "incomplete":
+#             incomplete_details = getattr(resp, "incomplete_details", None)
+#             print(f"[call_llm] WARNING: response incomplete: {incomplete_details}")
+#         return txt
+#     except Exception as e:
+#         print("LLM call error:", e)
+#         return ""
+
+# # ---------------------- HF Embedder (same style as ClassRec) -------------
+# def mean_pool(token_embeddings: torch.Tensor, attention_mask: torch.Tensor):
+#     input_mask_expanded = attention_mask.unsqueeze(-1).expand(token_embeddings.size()).float()
+#     sum_embeddings = torch.sum(token_embeddings * input_mask_expanded, 1)
+#     sum_mask = torch.clamp(input_mask_expanded.sum(1), min=1e-9)
+#     return sum_embeddings / sum_mask
+
+# class HFEmbedder:
+#     def __init__(self, model_name=EMBED_MODEL, device=DEVICE):
+#         if VERBOSE:
+#             print(f"[embedder] loading {model_name} on {device}")
+#         self.device = device
+#         self.tokenizer = AutoTokenizer.from_pretrained(model_name, use_fast=True)
+#         self.model = AutoModel.from_pretrained(model_name)
+#         self.model.to(device)
+#         self.model.eval()
+#         for p in self.model.parameters():
+#             p.requires_grad = False
+
+#     @torch.no_grad()
+#     def encode_batch(self, texts: List[str], batch_size: int = BATCH_SIZE) -> np.ndarray:
+#         if len(texts) == 0:
+#             D = getattr(self.model.config, "hidden_size", 1024)
+#             return np.zeros((0, D))
+#         embs = []
+#         for i in range(0, len(texts), batch_size):
+#             batch = texts[i:i + batch_size]
+#             enc = self.tokenizer(batch, padding=True, truncation=True,
+#                                  return_tensors="pt", max_length=1024)
+#             input_ids = enc["input_ids"].to(self.device)
+#             attention_mask = enc["attention_mask"].to(self.device)
+#             out = self.model(input_ids=input_ids, attention_mask=attention_mask, return_dict=True)
+#             token_embeds = out.last_hidden_state
+#             pooled = mean_pool(token_embeds, attention_mask)
+#             embs.append(pooled.cpu().numpy())
+#         embs = np.vstack(embs)
+#         embs = normalize(embs, axis=1)
+#         return embs
+
+# # ---------------------- IO helpers -------------------------------------
+# def load_json(path: Path):
+#     return json.loads(path.read_text(encoding="utf-8"))
+
+# def safe_str(s: Optional[str]) -> str:
+#     if not s:
+#         return ""
+#     return str(s).replace("\n", " ").strip()
+
+# def compact_member_info(member: Dict) -> Dict:
+#     # Only pass id, name, desc, entity_type_hint to LLM prompt
+#     return {
+#         "id": member.get("id"),
+#         "entity_name": safe_str(member.get("entity_name", ""))[:180],
+#         "entity_description": safe_str(member.get("entity_description", ""))[:400],
+#         "entity_type_hint": safe_str(member.get("entity_type_hint", ""))[:80]
+#     }
+
+# # ---------------------- Build class texts & embeddings ------------------
+# def build_class_texts(classes: List[Dict]) -> Tuple[List[str], List[str], List[str], List[str], List[str]]:
+#     labels, descs, types, evids, members_agg = [], [], [], [], []
+#     for c in classes:
+#         labels.append(safe_str(c.get("class_label", ""))[:120])
+#         descs.append(safe_str(c.get("class_description", ""))[:300])
+#         types.append(safe_str(c.get("class_type_hint", ""))[:80])
+#         evids.append(safe_str(c.get("evidence_excerpt", ""))[:200])
+#         mems = c.get("members", []) or []
+#         mem_texts = []
+#         for m in mems:
+#             name = safe_str(m.get("entity_name", ""))
+#             desc = safe_str(m.get("entity_description", ""))
+#             etype = safe_str(m.get("entity_type_hint", ""))
+#             mem_texts.append(f"{name} ({etype}) - {desc[:120]}")
+#         members_agg.append(" ; ".join(mem_texts)[:1000])
+#     return labels, descs, types, evids, members_agg
+
+# def compute_class_embeddings(embedder: HFEmbedder, classes: List[Dict], weights: Dict[str, float]) -> np.ndarray:
+#     labels, descs, types, evids, members_agg = build_class_texts(classes)
+#     emb_label = embedder.encode_batch(labels) if any(t.strip() for t in labels) else None
+#     emb_desc = embedder.encode_batch(descs) if any(t.strip() for t in descs) else None
+#     emb_type = embedder.encode_batch(types) if any(t.strip() for t in types) else None
+#     emb_evid = embedder.encode_batch(evids) if any(t.strip() for t in evids) else None
+#     emb_mem = embedder.encode_batch(members_agg) if any(t.strip() for t in members_agg) else None
+
+#     # determine D
+#     D = None
+#     for arr in (emb_label, emb_desc, emb_type, emb_evid, emb_mem):
+#         if arr is not None and arr.shape[0] > 0:
+#             D = arr.shape[1]
+#             break
+#     if D is None:
+#         raise ValueError("No textual fields produced embeddings for classes")
+
+#     def ensure(arr):
+#         if arr is None:
+#             return np.zeros((len(classes), D))
+#         if arr.shape[1] != D:
+#             raise ValueError("embedding dim mismatch")
+#         return arr
+
+#     emb_label = ensure(emb_label)
+#     emb_desc = ensure(emb_desc)
+#     emb_type = ensure(emb_type)
+#     emb_evid = ensure(emb_evid)
+#     emb_mem = ensure(emb_mem)
+
+#     w_label = weights.get("label", 0.0)
+#     w_desc = weights.get("desc", 0.0)
+#     w_type = weights.get("type_hint", 0.0)
+#     w_evid = weights.get("evidence", 0.0)
+#     w_mem = weights.get("members", 0.0)
+#     W = w_label + w_desc + w_type + w_evid + w_mem
+#     if W <= 0:
+#         raise ValueError("invalid class emb weights")
+#     w_label /= W
+#     w_desc /= W
+#     w_type /= W
+#     w_evid /= W
+#     w_mem /= W
+
+#     combined = (
+#         w_label * emb_label
+#         + w_desc * emb_desc
+#         + w_type * emb_type
+#         + w_evid * emb_evid
+#         + w_mem * emb_mem
+#     )
+#     combined = normalize(combined, axis=1)
+#     return combined
+
+# # ---------------------- clustering -------------------------------------
+# def run_hdbscan(
+#     embeddings: np.ndarray,
+#     min_cluster_size: int = HDBSCAN_MIN_CLUSTER_SIZE,
+#     min_samples: int = HDBSCAN_MIN_SAMPLES,
+#     metric: str = HDBSCAN_METRIC,
+#     use_umap: bool = USE_UMAP
+# ) -> Tuple[np.ndarray, object]:
+#     X = embeddings
+#     N = X.shape[0]
+#     # Decide whether to attempt UMAP
+#     if use_umap and UMAP_AVAILABLE and N >= 6:
+#         safe_n_components = min(UMAP_N_COMPONENTS, max(2, N - 2))
+#         safe_n_neighbors = min(UMAP_N_NEIGHBORS, max(2, N - 1))
+#         try:
+#             reducer = umap.UMAP(
+#                 n_components=safe_n_components,
+#                 n_neighbors=safe_n_neighbors,
+#                 min_dist=UMAP_MIN_DIST,
+#                 metric="cosine",
+#                 random_state=42
+#             )
+#             X_reduced = reducer.fit_transform(X)
+#             if X_reduced is not None and X_reduced.shape[0] == N:
+#                 X = X_reduced
+#             else:
+#                 if VERBOSE:
+#                     print(f"[warn] UMAP returned invalid shape {None if X_reduced is None else X_reduced.shape}; skipping UMAP")
+#         except Exception as e:
+#             if VERBOSE:
+#                 print(f"[warn] UMAP failed (N={N}, n_comp={safe_n_components}, n_nei={safe_n_neighbors}): {e}. Proceeding without UMAP.")
+#             X = embeddings
+#     else:
+#         if use_umap and UMAP_AVAILABLE and VERBOSE:
+#             print(f"[info] Skipping UMAP (N={N} < 6) to avoid unstable spectral computations.")
+#     clusterer = hdbscan.HDBSCAN(
+#         min_cluster_size=min_cluster_size,
+#         min_samples=min_samples,
+#         metric=metric,
+#         cluster_selection_method="eom"
+#     )
+#     labels = clusterer.fit_predict(X)
+#     return labels, clusterer
+
+
+# # ---------------------- LLM prompt template (extended) ------------------
+# CLSRES_PROMPT_TEMPLATE = """
+# You are a very proactive class-resolution assistant.
+# You are given a set of candidate CLASSES that appear to belong, or may plausibly belong, to the same semantic cluster.
+# Your job is to produce a clear, *actionable* ordered list of schema edits for the given cluster.
+# Do NOT be passive. If the evidence supports structural change (merge / split / reassign / create), you MUST propose it.
+
+# Only return [] if there is extremely strong evidence that NO change is needed (rare).
+
+# The cluster grouping you are given is only *suggestive* and may be incorrect — your job is to resolve, correct, and produce a coherent schema from the evidence.
+
+# This is an iterative process — act now with well-justified structural corrections (include a short justification), rather than deferring small but meaningful fixes.
+# This step will be repeated in later iterations; reasonable but imperfect changes can be corrected later.
+# It is worse to miss a necessary change than to propose a well-justified change that might be slightly adjusted later.
+
+# Your CRUCIAL task is to refine the schema using this tentative grouping.
+
+# ========================
+# SCHEMA STRUCTURE (CRITICAL)
+# ========================
+
+# We are building a TWO-LAYER SCHEMA over entities:
+
+# Level 0: Class_Group        (connects related classes)
+# Level 1: Classes            (group entities)
+# Level 2: Entities
+
+# Structure:
+# Class_Group
+#   └── Class
+#         └── Entity
+
+# - Class_Group is the PRIMARY mechanism for connecting related classes.
+# - Classes that share a Class_Group are considered semantically related.
+# - This relationship propagates to their entities.
+
+# ========================
+# IMPORTANT FIELD DISTINCTIONS
+# ========================
+
+# - class_type_hint (existing field):
+#   A local, descriptive hint assigned to each class in isolation.
+#   It is often noisy, incomplete, and inconsistent across classes.
+#   Do NOT assume it is globally correct or reusable.
+
+# - class_label:
+#   Existing class_label values are PROVISIONAL names.
+#   You MAY revise them when entity evidence suggests a clearer or a better canonical label.
+
+# - Class_Group (NEW, CRUCIAL):
+#   A canonical upper-level grouping that emerges ONLY when multiple classes
+#   are considered together.
+#   It is used to connect related classes into a coherent schema.
+#   Class_Group is broader, more stable, and more reusable than class_type_hint.
+
+# - remarks (optional, internal):
+#   Free-text notes attached to a class, used to flag important issues that are
+#   outside the scope of structural changes (e.g., upstream entity resolution that you suspect is wrong, or entities that
+#   look identical but should not be changed here), DO NOT try to fix them via merge or reassign.
+#    Instead, attach a human-facing remark via modify_class (using the 'remark' field)
+#    so that a human can review it later.
+
+# Class_Group is NOT a synonym of class_type_hint.
+
+# ========================
+# YOUR PRIMARY TASK
+# ========================
+
+# Note: the provided cluster grouping is tentative and may be wrong — 
+# you must correct it as needed to produce a coherent Class_Group → Class → Entity schema.
+
+# For the given cluster of classes:
+
+# 1) Assess whether any structural changes are REQUIRED:
+#    - merge duplicate or near-duplicate classes
+#    - reassign clearly mis-assigned entities
+#    - create a new class when necessary
+#    - split an overloaded class into more coherent subclasses when justified
+#    - modify class metadata when meaningfully incorrect
+
+# 2) ALWAYS assess and assign an appropriate Class_Group:
+#    - If Class_Group is missing, null, or marked as TBD → you MUST assign it.
+#    - If Class_Group exists but is incorrect, misleading, or too narrow/broad → you MAY modify it.
+#    - If everything else is correct (which is not the case most of the time), assigning or confirming Class_Group ALONE is sufficient.
+
+# 3) If you notice important issues that are OUTSIDE the scope of these functions
+#    (e.g., upstream entity resolution that you suspect is wrong, or entities that
+#    look identical but should not be changed here), DO NOT try to fix them via merge or reassign.
+#    Instead, attach a human-facing remark via modify_class (using the 'remark' field)
+#    so that a human can review it later.
+
+# ========================
+# SOME CONSERVATISM RULES (They should not make you passive)
+# ========================
+
+# - Always try to attempt structural proposals (merge/split/reassign/create) unless the cluster truly is already optimal.
+# - Do NOT perform cosmetic edits or unnecessary normalization.
+
+# You MAY perform multiple structural actions in one cluster
+# (e.g., merge + rename + reassign + split), when needed.
+
+# ========================
+# MERGING & OVERLAP HEURISTICS
+# ========================
+
+# - Entity overlap alone does not automatically require merging.
+# - Merge when evidence indicates the SAME underlying concepts
+#   (e.g., near-identical semantics, interchangeable usage, or redundant distinctions).
+# - Reassignment is appropriate when overlap reveals mis-typed or mis-scoped entities,
+#   even if classes should remain separate.
+
+# Quick heuristic:
+# - Same concept → merge.
+# - Different concept, same domain → keep separate classes with the SAME Class_Group.
+# - Different domain → different Class_Group.
+
+# Avoid vague Class_Group names (e.g., "Misc", "General", "Other").
+# Prefer domain-meaningful groupings that help connect related classes.
+
+# If a class should be collapsed or weakened but has no clear merge partner, DO NOT use merge_classes;
+# instead, reassign its entities to better classes and/or add a remark for human review.
+
+# IMPORTANT:
+# - You MUST NOT call merge_classes with only one class_id.
+# - merge_classes is ONLY for merging TWO OR MORE existing classes into ONE new class.
+# - If you only want to update or clarify a single class (for example, its label, description,
+#   type hint, class_group, or remarks), use modify_class instead.
+# - Do NOT use merge_classes to clean up or deduplicate entities inside one class.
+
+# ========================
+# AVAILABLE FUNCTIONS
+# ========================
+
+# Return ONLY a JSON ARRAY of ordered function calls.
+
+# Each object must have:
+# - "function": one of
+#   ["merge_classes", "create_class", "reassign_entities", "modify_class", "split_class"]
+# - "args": arguments as defined below.
+
+# ID HANDLING RULES
+# - You MUST NOT invent real class IDs.
+# - You MUST use ONLY class_ids that appear in the input CLASSES (candidate_id values),
+#   except when referring to newly merged/created/split classes.
+# - When you need to refer to a newly merged/created/split class in later steps,
+#   you MUST assign a provisional_id (any consistent string).
+# - Use the same provisional_id whenever referencing that new class again.
+# - After you merge classes into a new class, you should NOT continue to treat the original
+#   class_ids as separate entities; refer to the new merged class via its provisional_id.
+
+# Example (pattern, not required verbatim):
+
+# {
+#   "function": "merge_classes",
+#   "args": {
+#     "class_ids": ["ClsC_da991b68", "ClsC_e32f4a47"],
+#     "provisional_id": "MERGE(ClsC_da991b68|ClsC_e32f4a47)",
+#     "new_name": "...",
+#     "new_description": "...",
+#     "new_class_type_hint": "Standard",
+#     "justification": "One-line reason citing entity overlap and semantic equivalence.",
+#     "remark": null,
+#     "confidence": 0.95
+#   }
+# }
+
+# Later:
+
+# {
+#   "function": "reassign_entities",
+#   "args": {
+#     "entity_ids": ["En_xxx"],
+#     "from_class_id": "ClsC_e32f4a47",
+#     "to_class_id": "MERGE(ClsC_da991b68|ClsC_e32f4a47)",
+#     "justification": "Why this entity fits better in the merged class.",
+#     "remark": null,
+#     "confidence": 0.9
+#   }
+# }
+
+# We will internally map provisional_id → real class id.
+
+# ------------------------
+# Function definitions
+# ------------------------
+
+# JUSTIFICATION REQUIREMENT
+# - Every function call MUST include:
+#     "justification": "<one-line reason>"
+#   explaining why the action is necessary.
+# - This justification should cite concrete evidence (entity overlap, conflicting descriptions,
+#   mis-scoped members, missing Class_Group, overloaded classes, etc.).
+# - You MAY also include "confidence": <0.0–1.0> to indicate your belief in the action.
+# - You MAY include "remark" to provide a short human-facing note.
+
+# 1) merge_classes
+# args = {
+#   "class_ids": [<existing_class_ids>],   # MUST contain at least 2 valid ids
+#   "provisional_id": <string or null>,    # how you will refer to the new class later
+#   "new_name": <string or null>,
+#   "new_description": <string or null>,
+#   "new_class_type_hint": <string or null>,
+#   "justification": <string>,
+#   "remark": <string or null>,            # optional: attach a human-facing remark/flag
+#   "confidence": <number between 0 and 1, optional>
+# }
+
+# 2) create_class
+# args = {
+#   "name": <string>,
+#   "description": <string or null>,
+#   "class_type_hint": <string or null>,
+#   "member_ids": [<entity_ids>],          # optional, must be from provided entities
+#   "provisional_id": <string or null>,    # how you will refer to this new class later
+#   "justification": <string>,
+#   "remark": <string or null>,            # optional: attach a human-facing remark/flag
+#   "confidence": <number between 0 and 1, optional>
+# }
+
+# 3) reassign_entities
+# args = {
+#   "entity_ids": [<entity_ids>],
+#   "from_class_id": <existing_class_id or provisional_id or null>,
+#   "to_class_id": <existing_class_id or provisional_id>,
+#   "justification": <string>,
+#   "remark": <string or null>,            # optional: attach a human-facing remark/flag
+#   "confidence": <number between 0 and 1, optional>
+# }
+
+# 4) modify_class
+# args = {
+#   "class_id": <existing_class_id or provisional_id>,
+#   "new_name": <string or null>,
+#   "new_description": <string or null>,
+#   "new_class_type_hint": <string or null>,
+#   "new_class_group": <string or null>,
+#   "remark": <string or null>,            # optional: attach a human-facing remark/flag
+#   "justification": <string>,
+#   "confidence": <number between 0 and 1, optional>
+# }
+
+# - Use modify_class with 'remark' (and no structural change) when you want to flag
+#   issues that are outside the scope of this step (e.g., suspected entity-level duplicates).
+
+# 5) split_class
+# args = {
+#   "source_class_id": <existing_class_id or provisional_id>,
+#   "splits": [
+#     {
+#       "name": <string or null>,
+#       "description": <string or null>,
+#       "class_type_hint": <string or null>,
+#       "member_ids": [<entity_ids>],      # must be from source_class member_ids
+#       "provisional_id": <string or null> # how you will refer to this new split class
+#     },
+#     ...
+#   ],
+#   "justification": <string>,
+#   "remark": <string or null>,            # optional: attach a human-facing remark/flag
+#   "confidence": <number between 0 and 1, optional>
+# }
+
+# Semantics of split_class:
+# - Use split_class when a single class is overloaded and should be divided into
+#   narrower, more coherent classes.
+# - Entities listed in splits[*].member_ids MUST come from the source_class's member_ids.
+# - The specified entities are REMOVED from the source_class and grouped into new classes.
+# - Any members not mentioned in any split remain in the source_class.
+
+# NOTE:
+# - Class_Group is normally set or updated via modify_class.
+# - Assigning or confirming Class_Group is also REQUIRED for every cluster unless it is already clearly correct.
+
+# ========================
+# VALIDATION RULES
+# ========================
+
+# - Use ONLY provided entity_ids and class_ids (candidate_id values) for existing classes.
+# - For new classes, use provisional_id handles and be consistent.
+# - Order matters: later steps may depend on earlier ones.
+# - merge_classes with fewer than 2 valid class_ids will be ignored.
+
+# ========================
+# STRATEGY GUIDANCE
+# ========================
+
+# - Prefer assigning/adjusting Class_Group over heavy structural changes when both are valid.
+# - Merge classes ONLY when they are genuinely redundant (same concept).
+# - Use split_class when a class clearly bundles multiple distinct concepts that should be separated.
+# - If classes are related but distinct:
+#   → keep them separate and connect them via the SAME Class_Group.
+# - Think in terms of schema connectivity and meaningful structure, not cosmetic cleanup.
+# - If in doubt about structural change but you see a potential issue, use modify_class with a 'remark'
+#   rather than forcing an uncertain structural edit.
+
+# ========================
+# INPUT CLASSES
+# ========================
+
+# Each class includes:
+# - candidate_id
+# - class_label
+# - class_description
+# - class_type_hint
+# - class_group (may be null or "TBD")
+# - confidence
+# - evidence_excerpt
+# - member_ids
+# - members (entity id, name, description, type)
+# - remarks (optional list of prior remarks)
+
+# {cluster_block}
+
+# ========================
+# OUTPUT
+# ========================
+
+# Return ONLY the JSON array of ordered function calls.
+# Return [] only if you are highly confident (> very strong evidence) that no change is needed.
+# If any ambiguous or conflicting evidence exists, return a concrete ordered action list
+# (with justifications and, optionally, confidence scores).
+# You are a very proactive class-resolution assistant. You are not called very proactive only by using modify_class for new_class_group. You must use other functions as well to be called a proactive class-resolution assistant.
+
+# """
+
+# def sanitize_json_like(text: str) -> Optional[Any]:
+#     # crude sanitizer: extract first [...] region and try loads. Fix common trailing commas and smart quotes.
+#     if not text or not text.strip():
+#         return None
+#     s = text.strip()
+#     # replace smart quotes
+#     s = s.replace("“", '"').replace("”", '"').replace("‘", "'").replace("’", "'")
+#     # find first [ ... ] block
+#     start = s.find("[")
+#     end = s.rfind("]")
+#     cand = s
+#     if start != -1 and end != -1 and end > start:
+#         cand = s[start:end + 1]
+#     # remove trailing commas before closing braces/brackets
+#     cand = re.sub(r",\s*([\]}])", r"\1", cand)
+#     try:
+#         return json.loads(cand)
+#     except Exception:
+#         return None
+
+# # ---------------------- Action executors --------------------------------
+# def execute_merge_classes(
+#     all_classes: Dict[str, Dict],
+#     class_ids: List[str],
+#     new_name: Optional[str],
+#     new_desc: Optional[str],
+#     new_type: Optional[str]
+# ) -> str:
+#     # validate class ids
+#     class_ids = [cid for cid in class_ids if cid in all_classes]
+#     if len(class_ids) < 2:
+#         raise ValueError("merge_classes: need at least 2 valid class_ids")
+#     new_cid = "ClsR_" + uuid.uuid4().hex[:8]
+#     members_map: Dict[str, Dict] = {}
+#     confidence = 0.0
+#     evidence = ""
+#     desc_choice = None
+#     type_choice = new_type or ""
+#     class_group_choice = None
+
+#     for cid in class_ids:
+#         c = all_classes[cid]
+#         confidence = max(confidence, float(c.get("confidence", 0.0)))
+#         if c.get("evidence_excerpt") and not evidence:
+#             evidence = c.get("evidence_excerpt")
+#         if c.get("class_description") and desc_choice is None:
+#             desc_choice = c.get("class_description")
+#         cg = c.get("class_group")
+#         if cg and cg not in ("", "TBD", None):
+#             if class_group_choice is None:
+#                 class_group_choice = cg
+#             elif class_group_choice != cg:
+#                 # conflicting groups -> keep first; fixable later by modify_class
+#                 class_group_choice = class_group_choice
+#         for m in c.get("members", []):
+#             members_map[m["id"]] = m
+
+#     if new_desc:
+#         desc_choice = new_desc
+#     new_label = new_name or all_classes[class_ids[0]].get("class_label", "MergedClass")
+#     if not new_type:
+#         for cid in class_ids:
+#             if all_classes[cid].get("class_type_hint"):
+#                 type_choice = all_classes[cid].get("class_type_hint")
+#                 break
+
+#     merged_obj = {
+#         "candidate_id": new_cid,
+#         "class_label": new_label,
+#         "class_description": desc_choice or "",
+#         "class_type_hint": type_choice or "",
+#         "class_group": class_group_choice or "TBD",
+#         "confidence": float(confidence),
+#         "evidence_excerpt": evidence or "",
+#         "member_ids": list(members_map.keys()),
+#         "members": list(members_map.values()),
+#         "candidate_ids": class_ids,
+#         "merged_from": class_ids,
+#         "remarks": [],
+#         "_merged_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+#     }
+#     for cid in class_ids:
+#         all_classes.pop(cid, None)
+#     all_classes[new_cid] = merged_obj
+#     return new_cid
+
+# def execute_create_class(
+#     all_classes: Dict[str, Dict],
+#     name: str,
+#     description: Optional[str],
+#     class_type_hint: Optional[str],
+#     member_ids: Optional[List[str]],
+#     id_to_entity: Dict[str, Dict]
+# ) -> str:
+#     if not name:
+#         raise ValueError("create_class: 'name' is required")
+#     new_cid = "ClsR_" + uuid.uuid4().hex[:8]
+#     members = []
+#     mids = member_ids or []
+#     for mid in mids:
+#         ent = id_to_entity.get(mid)
+#         if ent:
+#             members.append(ent)
+#     obj = {
+#         "candidate_id": new_cid,
+#         "class_label": name,
+#         "class_description": description or "",
+#         "class_type_hint": class_type_hint or "",
+#         "class_group": "TBD",
+#         "confidence": 0.5,
+#         "evidence_excerpt": "",
+#         "member_ids": [m["id"] for m in members],
+#         "members": members,
+#         "candidate_ids": [],
+#         "remarks": [],
+#         "_created_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+#     }
+#     all_classes[new_cid] = obj
+#     return new_cid
+
+# def execute_reassign_entities(
+#     all_classes: Dict[str, Dict],
+#     entity_ids: List[str],
+#     from_class_id: Optional[str],
+#     to_class_id: str,
+#     id_to_entity: Dict[str, Dict]
+# ):
+#     # remove from source(s)
+#     for cid, c in list(all_classes.items()):
+#         if from_class_id and cid != from_class_id:
+#             continue
+#         new_members = [m for m in c.get("members", []) if m["id"] not in set(entity_ids)]
+#         new_member_ids = [m["id"] for m in new_members]
+#         c["members"] = new_members
+#         c["member_ids"] = new_member_ids
+#         all_classes[cid] = c
+#     # add to destination
+#     if to_class_id not in all_classes:
+#         raise ValueError(f"reassign_entities: to_class_id {to_class_id} not found")
+#     dest = all_classes[to_class_id]
+#     existing = {m["id"] for m in dest.get("members", [])}
+#     for eid in entity_ids:
+#         if eid in existing:
+#             continue
+#         ent = id_to_entity.get(eid)
+#         if ent:
+#             dest.setdefault("members", []).append(ent)
+#             dest.setdefault("member_ids", []).append(eid)
+#     dest["confidence"] = max(dest.get("confidence", 0.0), 0.4)
+#     all_classes[to_class_id] = dest
+
+# def execute_modify_class(
+#     all_classes: Dict[str, Dict],
+#     class_id: str,
+#     new_name: Optional[str],
+#     new_desc: Optional[str],
+#     new_type: Optional[str],
+#     new_class_group: Optional[str],
+#     new_remark: Optional[str]
+# ):
+#     if class_id not in all_classes:
+#         raise ValueError(f"modify_class: class_id {class_id} not found")
+#     c = all_classes[class_id]
+#     if new_name:
+#         c["class_label"] = new_name
+#     if new_desc:
+#         c["class_description"] = new_desc
+#     if new_type:
+#         c["class_type_hint"] = new_type
+#     if new_class_group:
+#         c["class_group"] = new_class_group
+#     if new_remark:
+#         existing = c.get("remarks")
+#         if existing is None:
+#             existing = []
+#         elif not isinstance(existing, list):
+#             existing = [str(existing)]
+#         existing.append(str(new_remark))
+#         c["remarks"] = existing
+#     all_classes[class_id] = c
+
+# def execute_split_class(
+#     all_classes: Dict[str, Dict],
+#     source_class_id: str,
+#     splits_specs: List[Dict[str, Any]]
+# ) -> List[Tuple[str, Optional[str], List[str]]]:
+#     """
+#     Split a source class into several new classes.
+#     Returns list of (new_class_id, provisional_id, member_ids_used) for each created class.
+#     """
+#     if source_class_id not in all_classes:
+#         raise ValueError(f"split_class: source_class_id {source_class_id} not found")
+#     src = all_classes[source_class_id]
+#     src_members = src.get("members", []) or []
+#     src_member_map = {m["id"]: m for m in src_members if isinstance(m, dict) and m.get("id")}
+#     used_ids: set = set()
+#     created: List[Tuple[str, Optional[str], List[str]]] = []
+
+#     for spec in splits_specs:
+#         if not isinstance(spec, dict):
+#             continue
+#         name = spec.get("name")
+#         desc = spec.get("description")
+#         th = spec.get("class_type_hint") or src.get("class_type_hint", "")
+#         mids_raw = spec.get("member_ids", []) or []
+#         prov_id = spec.get("provisional_id")
+#         # use only members that belong to source and are not already used
+#         valid_mids = []
+#         for mid in mids_raw:
+#             if mid in src_member_map and mid not in used_ids:
+#                 valid_mids.append(mid)
+#         if not valid_mids:
+#             continue
+#         members = [src_member_map[mid] for mid in valid_mids]
+#         new_cid = "ClsR_" + uuid.uuid4().hex[:8]
+#         obj = {
+#             "candidate_id": new_cid,
+#             "class_label": name or src.get("class_label", "SplitClass"),
+#             "class_description": desc or src.get("class_description", ""),
+#             "class_type_hint": th or src.get("class_type_hint", ""),
+#             "class_group": src.get("class_group", "TBD"),
+#             "confidence": src.get("confidence", 0.5),
+#             "evidence_excerpt": src.get("evidence_excerpt", ""),
+#             "member_ids": valid_mids,
+#             "members": members,
+#             "candidate_ids": [],
+#             "remarks": [],
+#             "_split_from": source_class_id,
+#             "_created_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+#         }
+#         all_classes[new_cid] = obj
+#         used_ids.update(valid_mids)
+#         created.append((new_cid, prov_id, valid_mids))
+
+#     if used_ids:
+#         remaining_members = [m for m in src_members if m["id"] not in used_ids]
+#         src["members"] = remaining_members
+#         src["member_ids"] = [m["id"] for m in remaining_members]
+#         all_classes[source_class_id] = src
+
+#     return created
+
+# # helper to resolve real class ID (handles provisional IDs and retired IDs)
+# def resolve_class_id(
+#     raw_id: Optional[str],
+#     all_classes: Dict[str, Dict],
+#     provisional_to_real: Dict[str, str],
+#     allow_missing: bool = False
+# ) -> Optional[str]:
+#     if raw_id is None:
+#         return None
+#     real = provisional_to_real.get(raw_id, raw_id)
+#     if real not in all_classes and not allow_missing:
+#         raise ValueError(f"resolve_class_id: {raw_id} (resolved to {real}) not found in all_classes")
+#     return real
+
+# # ---------------------- Main orchestration ------------------------------
+# def classres_main():
+#     # load classes
+#     if not INPUT_CLASSES.exists():
+#         raise FileNotFoundError(f"Input classes file not found: {INPUT_CLASSES}")
+#     classes_list = load_json(INPUT_CLASSES)
+#     print(f"[start] loaded {len(classes_list)} merged candidate classes from {INPUT_CLASSES}")
+
+#     # build id->entity map (from members)
+#     id_to_entity: Dict[str, Dict] = {}
+#     for c in classes_list:
+#         for m in c.get("members", []):
+#             if isinstance(m, dict) and m.get("id"):
+#                 id_to_entity[m["id"]] = m
+
+#     # ensure classes have candidate_id keys, class_group field, and remarks field
+#     all_classes: Dict[str, Dict] = {}
+#     for c in classes_list:
+#         cid = c.get("candidate_id") or ("ClsC_" + uuid.uuid4().hex[:8])
+#         members = c.get("members", []) or []
+#         mids = [m["id"] for m in members if isinstance(m, dict) and m.get("id")]
+#         c["member_ids"] = mids
+#         c["members"] = members
+#         if "class_group" not in c or c.get("class_group") in (None, ""):
+#             c["class_group"] = "TBD"
+#         # normalize remarks
+#         if "remarks" not in c or c["remarks"] is None:
+#             c["remarks"] = []
+#         elif not isinstance(c["remarks"], list):
+#             c["remarks"] = [str(c["remarks"])]
+#         c["candidate_id"] = cid
+#         all_classes[cid] = c
+
+#     # embedder
+#     embedder = HFEmbedder(model_name=EMBED_MODEL, device=DEVICE)
+#     class_objs = list(all_classes.values())
+#     class_ids_order = list(all_classes.keys())
+#     combined_emb = compute_class_embeddings(embedder, class_objs, CLASS_EMB_WEIGHTS)
+#     print("[info] class embeddings computed shape:", combined_emb.shape)
+
+#     # clustering
+#     labels, clusterer = run_hdbscan(
+#         combined_emb,
+#         min_cluster_size=HDBSCAN_MIN_CLUSTER_SIZE,
+#         min_samples=HDBSCAN_MIN_SAMPLES,
+#         use_umap=USE_UMAP
+#     )
+#     print("[info] clustering done. unique labels:", set(labels))
+
+#     # map cluster -> class ids
+#     cluster_to_classids: Dict[int, List[str]] = {}
+#     for idx, lab in enumerate(labels):
+#         cid = class_ids_order[idx]
+#         cluster_to_classids.setdefault(int(lab), []).append(cid)
+
+#     # prepare action log
+#     action_log_path = OUT_DIR / "cls_res_action_log.jsonl"
+#     if action_log_path.exists():
+#         action_log_path.unlink()
+
+#     # iterate clusters (skip -1 initially)
+#     cluster_keys = sorted([k for k in cluster_to_classids.keys() if k != -1])
+#     cluster_keys += [-1]  # append noise at end
+
+#     for cluster_label in cluster_keys:
+#         class_ids = cluster_to_classids.get(cluster_label, [])
+#         if not class_ids:
+#             continue
+#         print(f"[cluster] {cluster_label} -> {len(class_ids)} classes")
+
+#         # build cluster block to pass to LLM
+#         cluster_classes = []
+#         for cid in class_ids:
+#             c = all_classes.get(cid)
+#             if not c:
+#                 continue
+#             members_compact = [compact_member_info(m) for m in c.get("members", [])]
+#             cluster_classes.append({
+#                 "candidate_id": cid,
+#                 "class_label": c.get("class_label", ""),
+#                 "class_description": c.get("class_description", ""),
+#                 "class_type_hint": c.get("class_type_hint", ""),
+#                 "class_group": c.get("class_group", "TBD"),
+#                 "confidence": float(c.get("confidence", 0.0)),
+#                 "evidence_excerpt": c.get("evidence_excerpt", ""),
+#                 "member_ids": c.get("member_ids", []),
+#                 "members": members_compact,
+#                 "remarks": c.get("remarks", [])
+#             })
+
+#         cluster_block = json.dumps(cluster_classes, ensure_ascii=False, indent=2)
+#         prompt = CLSRES_PROMPT_TEMPLATE.replace("{cluster_block}", cluster_block)
+
+#         # log prompt
+#         prompt_path = RAW_LLM_DIR / f"cluster_{cluster_label}_prompt.txt"
+#         prompt_path.write_text(prompt, encoding="utf-8")
+
+#         # call LLM
+#         raw_out = ""
+#         try:
+#             raw_out = call_llm(prompt)
+#         except Exception as e:
+#             print(f"[warning] LLM call failed for cluster {cluster_label}: {e}")
+#             raw_out = ""
+
+#         # write raw output
+#         raw_path = RAW_LLM_DIR / f"cluster_{cluster_label}_llm_raw.txt"
+#         raw_path.write_text(raw_out, encoding="utf-8")
+
+#         # try parse/sanitize
+#         parsed = sanitize_json_like(raw_out)
+#         if parsed is None:
+#             print(f"[warn] failed to parse LLM output for cluster {cluster_label}; skipping automated actions for this cluster.")
+#             dec_path = OUT_DIR / f"cluster_{cluster_label}_decisions.json"
+#             dec_path.write_text(
+#                 json.dumps({"cluster_label": cluster_label, "raw_llm": raw_out}, ensure_ascii=False, indent=2),
+#                 encoding="utf-8"
+#             )
+#             continue
+
+#         # mapping from provisional_id (and retired ids) -> real class id (per cluster)
+#         provisional_to_real: Dict[str, str] = {}
+#         decisions: List[Dict[str, Any]] = []
+
+#         # execute parsed function list in order
+#         for step in parsed:
+#             if not isinstance(step, dict):
+#                 continue
+#             fn = step.get("function")
+#             args = step.get("args", {}) or {}
+
+#             justification = args.get("justification")
+#             confidence_val = args.get("confidence", None)
+#             remark_val = args.get("remark")
+
+#             try:
+#                 if fn == "merge_classes":
+#                     cids_raw = args.get("class_ids", []) or []
+#                     new_name = args.get("new_name")
+#                     new_desc = args.get("new_description")
+#                     new_type = args.get("new_class_type_hint")
+#                     prov_id = args.get("provisional_id")
+
+#                     # resolve any potential provisional IDs in class_ids
+#                     cids_real = [provisional_to_real.get(cid, cid) for cid in cids_raw]
+#                     valid_cids = [cid for cid in cids_real if cid in all_classes]
+
+#                     if len(valid_cids) < 2:
+#                         decisions.append({
+#                             "action": "merge_skip_too_few",
+#                             "requested_class_ids": cids_raw,
+#                             "valid_class_ids": valid_cids,
+#                             "justification": justification,
+#                             "remark": remark_val,
+#                             "confidence": confidence_val
+#                         })
+#                         continue
+
+#                     new_cid = execute_merge_classes(all_classes, valid_cids, new_name, new_desc, new_type)
+
+#                     # map provisional id -> new class id
+#                     if prov_id:
+#                         provisional_to_real[prov_id] = new_cid
+#                     # also map old real ids -> new id so later references can still resolve
+#                     for old in valid_cids:
+#                         provisional_to_real.setdefault(old, new_cid)
+
+#                     decisions.append({
+#                         "action": "merge_classes",
+#                         "input_class_ids": valid_cids,
+#                         "result_class_id": new_cid,
+#                         "provisional_id": prov_id,
+#                         "justification": justification,
+#                         "remark": remark_val,
+#                         "confidence": confidence_val
+#                     })
+
+#                 elif fn == "create_class":
+#                     name = args.get("name")
+#                     desc = args.get("description")
+#                     t = args.get("class_type_hint")
+#                     mids = args.get("member_ids", []) or []
+#                     prov_id = args.get("provisional_id")
+
+#                     mids_valid = [m for m in mids if m in id_to_entity]
+#                     new_cid = execute_create_class(all_classes, name, desc, t, mids_valid, id_to_entity)
+
+#                     if prov_id:
+#                         provisional_to_real[prov_id] = new_cid
+
+#                     decisions.append({
+#                         "action": "create_class",
+#                         "result_class_id": new_cid,
+#                         "provisional_id": prov_id,
+#                         "member_ids_added": mids_valid,
+#                         "justification": justification,
+#                         "remark": remark_val,
+#                         "confidence": confidence_val
+#                     })
+
+#                 elif fn == "reassign_entities":
+#                     eids = args.get("entity_ids", []) or []
+#                     from_c_raw = args.get("from_class_id")
+#                     to_c_raw = args.get("to_class_id")
+
+#                     eids_valid = [e for e in eids if e in id_to_entity]
+
+#                     from_c = resolve_class_id(from_c_raw, all_classes, provisional_to_real, allow_missing=True)
+#                     to_c = resolve_class_id(to_c_raw, all_classes, provisional_to_real, allow_missing=False)
+
+#                     execute_reassign_entities(all_classes, eids_valid, from_c, to_c, id_to_entity)
+
+#                     decisions.append({
+#                         "action": "reassign_entities",
+#                         "entity_ids": eids_valid,
+#                         "from": from_c_raw,
+#                         "from_resolved": from_c,
+#                         "to": to_c_raw,
+#                         "to_resolved": to_c,
+#                         "justification": justification,
+#                         "remark": remark_val,
+#                         "confidence": confidence_val
+#                     })
+
+#                 elif fn == "modify_class":
+#                     cid_raw = args.get("class_id")
+#                     new_name = args.get("new_name")
+#                     new_desc = args.get("new_description")
+#                     new_type = args.get("new_class_type_hint")
+#                     new_group = args.get("new_class_group")
+#                     new_remark = args.get("remark")
+
+#                     cid_real = resolve_class_id(cid_raw, all_classes, provisional_to_real, allow_missing=False)
+#                     execute_modify_class(all_classes, cid_real, new_name, new_desc, new_type, new_group, new_remark)
+
+#                     decisions.append({
+#                         "action": "modify_class",
+#                         "class_id": cid_raw,
+#                         "class_id_resolved": cid_real,
+#                         "new_name": new_name,
+#                         "new_description": new_desc,
+#                         "new_class_type_hint": new_type,
+#                         "new_class_group": new_group,
+#                         "remark": new_remark,
+#                         "justification": justification,
+#                         "confidence": confidence_val
+#                     })
+
+#                 elif fn == "split_class":
+#                     source_raw = args.get("source_class_id")
+#                     splits_specs = args.get("splits", []) or []
+
+#                     source_real = resolve_class_id(source_raw, all_classes, provisional_to_real, allow_missing=False)
+#                     created = execute_split_class(all_classes, source_real, splits_specs)
+
+#                     created_summary = []
+#                     for new_cid, prov_id, mids_used in created:
+#                         if prov_id:
+#                             provisional_to_real[prov_id] = new_cid
+#                         created_summary.append({
+#                             "new_class_id": new_cid,
+#                             "provisional_id": prov_id,
+#                             "member_ids": mids_used
+#                         })
+
+#                     decisions.append({
+#                         "action": "split_class",
+#                         "source_class_id": source_raw,
+#                         "source_class_id_resolved": source_real,
+#                         "created_classes": created_summary,
+#                         "justification": justification,
+#                         "remark": remark_val,
+#                         "confidence": confidence_val
+#                     })
+
+#                 else:
+#                     decisions.append({
+#                         "action": "skip_unknown_function",
+#                         "raw": step,
+#                         "justification": justification,
+#                         "remark": remark_val,
+#                         "confidence": confidence_val
+#                     })
+
+#             except Exception as e:
+#                 decisions.append({
+#                     "action": "error_executing",
+#                     "function": fn,
+#                     "error": str(e),
+#                     "input": step,
+#                     "justification": justification,
+#                     "remark": remark_val,
+#                     "confidence": confidence_val
+#                 })
+
+#         # write decisions file for this cluster
+#         dec_path = OUT_DIR / f"cluster_{cluster_label}_decisions.json"
+#         dec_obj = {
+#             "cluster_label": cluster_label,
+#             "cluster_classes": cluster_classes,
+#             "llm_raw": raw_out,
+#             "parsed_steps": parsed,
+#             "executed_decisions": decisions,
+#             "provisional_to_real": provisional_to_real,
+#             "timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+#         }
+#         dec_path.write_text(json.dumps(dec_obj, ensure_ascii=False, indent=2), encoding="utf-8")
+
+#         # append to action log
+#         with open(action_log_path, "a", encoding="utf-8") as fh:
+#             fh.write(json.dumps(dec_obj, ensure_ascii=False) + "\n")
+
+#     # After all clusters processed: write final classes output
+#     final_classes = list(all_classes.values())
+#     out_json = OUT_DIR / "final_classes_resolved.json"
+#     out_jsonl = OUT_DIR / "final_classes_resolved.jsonl"
+#     out_json.write_text(json.dumps(final_classes, ensure_ascii=False, indent=2), encoding="utf-8")
+#     with open(out_jsonl, "w", encoding="utf-8") as fh:
+#         for c in final_classes:
+#             fh.write(json.dumps(c, ensure_ascii=False) + "\n")
+
+#     print(f"[done] wrote final resolved classes -> {out_json}  (count={len(final_classes)})")
+#     print(f"[done] action log -> {action_log_path}")
+
+#     # ---------------------- SUMMARY AGGREGATION -------------------------
+#     summary_dir = OUT_DIR / "summary"
+#     summary_dir.mkdir(exist_ok=True)
+
+#     # Aggregate all per-cluster decision files
+#     cluster_decisions: List[Dict[str, Any]] = []
+#     for path in sorted(OUT_DIR.glob("cluster_*_decisions.json")):
+#         try:
+#             obj = json.loads(path.read_text(encoding="utf-8"))
+#             cluster_decisions.append(obj)
+#         except Exception as e:
+#             print(f"[warn] failed to read {path}: {e}")
+
+#     # Write aggregated decisions (same per-cluster structure, just as a list)
+#     all_clusters_decisions_path = summary_dir / "all_clusters_decisions.json"
+#     all_clusters_decisions_path.write_text(
+#         json.dumps(cluster_decisions, ensure_ascii=False, indent=2),
+#         encoding="utf-8"
+#     )
+
+#     # Compute statistics
+#     total_clusters = len(cluster_decisions)
+#     actions_by_type: Dict[str, int] = {}
+#     total_remarks = 0
+#     clusters_with_any_decisions = 0
+#     clusters_with_structural = 0
+#     clusters_only_classgroup = 0
+
+#     structural_actions = {"merge_classes", "create_class", "reassign_entities", "split_class"}
+
+#     for cd in cluster_decisions:
+#         decs = cd.get("executed_decisions", [])
+#         if not decs:
+#             continue
+#         clusters_with_any_decisions += 1
+#         has_structural = False
+#         only_classgroup = True
+
+#         for d in decs:
+#             act = d.get("action")
+#             actions_by_type[act] = actions_by_type.get(act, 0) + 1
+
+#             # count remarks if present
+#             rem = d.get("remark")
+#             if rem:
+#                 total_remarks += 1
+
+#             if act in structural_actions:
+#                 has_structural = True
+#                 only_classgroup = False
+#             elif act == "modify_class":
+#                 new_group = d.get("new_class_group")
+#                 new_name = d.get("new_name")
+#                 new_desc = d.get("new_description")
+#                 new_type = d.get("new_class_type_hint")
+#                 # "only class group" means the only change is class_group (no name/desc/type/remark change)
+#                 # remark alone is allowed
+#                 if not new_group or new_name or new_desc or new_type:
+#                     only_classgroup = False
+#             else:
+#                 # merge_skip_too_few, error_executing, skip_unknown_function, etc.
+#                 only_classgroup = False
+
+#         if has_structural:
+#             clusters_with_structural += 1
+#         if only_classgroup:
+#             clusters_only_classgroup += 1
+
+#     total_structural_actions = sum(
+#         count for act, count in actions_by_type.items() if act in structural_actions
+#     )
+#     total_errors = actions_by_type.get("error_executing", 0)
+
+#     stats = {
+#         "total_clusters": total_clusters,
+#         "total_clusters_with_any_decisions": clusters_with_any_decisions,
+#         "total_clusters_with_structural_changes": clusters_with_structural,
+#         "total_clusters_only_class_group_updates": clusters_only_classgroup,
+#         "total_actions_by_type": actions_by_type,
+#         "total_structural_actions": total_structural_actions,
+#         "total_errors": total_errors,
+#         "total_remarks_logged": total_remarks,
+#         "generated_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+#     }
+
+#     stats_path = summary_dir / "stats_summary.json"
+#     stats_path.write_text(json.dumps(stats, ensure_ascii=False, indent=2), encoding="utf-8")
+
+#     print(f"[done] summary decisions -> {all_clusters_decisions_path}")
+#     print(f"[done] summary stats -> {stats_path}")
 
 
 
+
+# # -----------------------
+# # Cls Res  - Run statement
+# # -----------------------
+
+# if __name__ == "__main__":
+#     classres_main()
+
+#endregion#? Cls Res V8  - Split + Remark + Summary (gpt-5.1 Responses)
+#*#########################  End  ##########################
 
 #?######################### Start ##########################
-#region:#?   Cls Res V8  - Split + Remark + Summary (gpt-5.1 Responses)
+#region:#?   Cls Res V10  - Split + Remark + Summary (DSPy LLM Config)
 
 #!/usr/bin/env python3
 """
-classres_iterative_v8_gpt5.py
-
 Class Resolution (Cls Res) — cluster class candidates, ask LLM to
 order a sequence of functions (merge/create/reassign/modify/split) for each cluster,
 then execute those functions locally and produce final resolved classes.
@@ -3777,7 +8914,7 @@ Key features:
 - Summary folder with aggregated decisions and useful statistics.
 
 Input:
-  data/Classes/Cls_Rec/classes_for_cls_res.json
+  data/Classes/Cls_Res/Cls_Res_input/classes_for_cls_res.json
 
 Output (written under OUT_DIR):
   - per-cluster decisions: cluster_<N>_decisions.json
@@ -3788,11 +8925,11 @@ Output (written under OUT_DIR):
   - summary/all_clusters_decisions.json (aggregated decisions)
   - summary/stats_summary.json (aggregate statistics)
 
-Updated for gpt-5.1:
-- Uses OpenAI Responses API (client.responses.create) instead of Chat Completions.
-- Uses max_output_tokens instead of max_tokens.
-- Does not send temperature (unsupported by gpt-5.1).
-- Optional reasoning={'effort': 'low'} for gpt-5.x models.
+V10 (DSPy):
+- Removes direct OpenAI client usage.
+- All LLM calls go through TraceKGLLMConfig + make_lm_for_step(cfg, "class_res").
+- One central config can drive the entire TRACE KG pipeline, with optional
+  per-step overrides (class_res_model / res_model / default_model).
 """
 
 import json
@@ -3821,14 +8958,8 @@ except Exception:
 # transformers embedder (reuse same embedder pattern as ClassRec)
 from transformers import AutoTokenizer, AutoModel
 
-# OpenAI client (same style as your previous script)
-try:
-    from openai import OpenAI
-except Exception:
-    OpenAI = None
-
 # ----------------------------- CONFIG -----------------------------
-INPUT_CLASSES =     Path("data/Classes/Cls_Res/Cls_Res_input/classes_for_cls_res.json")
+INPUT_CLASSES = Path("data/Classes/Cls_Res/Cls_Res_input/classes_for_cls_res.json")
 #INPUT_CLASSES = Path("data/Classes/Cls_Rec/classes_for_cls_res-Wrong.json")
 SRC_ENTITIES_PATH = Path("data/Classes/Cls_Input/cls_input_entities.jsonl")
 OUT_DIR = Path("data/Classes/Cls_Res")
@@ -3847,7 +8978,7 @@ CLASS_EMB_WEIGHTS = {
     "desc": 0.25,
     "type_hint": 0.10,
     "evidence": 0.05,
-    "members": 0.30
+    "members": 0.30,
 }
 
 # clustering params
@@ -3859,77 +8990,14 @@ HDBSCAN_MIN_CLUSTER_SIZE = 2
 HDBSCAN_MIN_SAMPLES = 1
 HDBSCAN_METRIC = "euclidean"
 
-# LLM / OpenAI (updated for gpt-5.1 + Responses)
-OPENAI_MODEL = "gpt-5.1"          # updated to gpt-5.1
-OPENAI_TEMPERATURE = 0.0          # kept for signature compatibility; NOT sent to API
-LLM_MAX_TOKENS = 16000             # mapped to max_output_tokens
-OPENAI_API_KEY_ENV = "OPENAI_API_KEY"
-REASONING_EFFORT = "low"          # for gpt-5.x models
+# LLM defaults (only used if llm_config is None)
+CLSRES_MODEL = "gpt-5.1"
+LLM_MAX_TOKENS = 16000  # mapped into TraceKGLLMConfig.max_tokens
 
 # behavioral flags
 VERBOSE = False
 WRITE_INTERMEDIATE = True
 
-# ---------------------- Helpers: OpenAI key loader ---------------------
-def _load_openai_key(envvar: str = OPENAI_API_KEY_ENV, fallback_path: str = ".env"):
-    key = os.getenv(envvar, None)
-    if key:
-        return key
-    # fallback: try file
-    if Path(fallback_path).exists():
-        txt = Path(fallback_path).read_text(encoding="utf-8").strip()
-        if txt:
-            return txt
-    return None
-
-OPENAI_KEY = _load_openai_key()
-if OpenAI is not None and OPENAI_KEY:
-    client = OpenAI(api_key=OPENAI_KEY)
-else:
-    client = None
-    if VERBOSE:
-        print("⚠️ OpenAI client not initialized (missing package or API key). LLM calls will fail unless OpenAI client is available.")
-
-def call_llm(
-    prompt: str,
-    model: str = OPENAI_MODEL,
-    temperature: float = OPENAI_TEMPERATURE,  # unused for gpt-5.1; kept for compatibility
-    max_tokens: int = LLM_MAX_TOKENS,
-    reasoning_effort: str = REASONING_EFFORT,
-) -> str:
-    """
-    Call the LLM using the Responses API (compatible with gpt-5.1).
-
-    - Uses `max_output_tokens` instead of `max_tokens`.
-    - Does NOT send `temperature` (unsupported by gpt-5.1).
-    - Adds `reasoning={'effort': reasoning_effort}` for gpt-5.x models.
-    """
-    if client is None:
-        raise RuntimeError("OpenAI client not available. Set OPENAI_API_KEY and install openai package.")
-    try:
-        if VERBOSE:
-            print(f"[call_llm] model={model} max_output_tokens={max_tokens} reasoning_effort={reasoning_effort}")
-        kwargs: Dict[str, Any] = {
-            "model": model,
-            "input": [
-                {"role": "user", "content": prompt}
-            ],
-        }
-        if max_tokens is not None:
-            kwargs["max_output_tokens"] = max_tokens
-        if model.startswith("gpt-5") and reasoning_effort:
-            kwargs["reasoning"] = {"effort": reasoning_effort}
-
-        resp = client.responses.create(**kwargs)
-        txt = resp.output_text or ""
-        status = getattr(resp, "status", None)
-        if status == "incomplete":
-            incomplete_details = getattr(resp, "incomplete_details", None)
-            print(f"[call_llm] WARNING: response incomplete: {incomplete_details}")
-        return txt
-    except Exception as e:
-        print("LLM call error:", e)
-        return ""
 
 # ---------------------- HF Embedder (same style as ClassRec) -------------
 def mean_pool(token_embeddings: torch.Tensor, attention_mask: torch.Tensor):
@@ -3937,6 +9005,7 @@ def mean_pool(token_embeddings: torch.Tensor, attention_mask: torch.Tensor):
     sum_embeddings = torch.sum(token_embeddings * input_mask_expanded, 1)
     sum_mask = torch.clamp(input_mask_expanded.sum(1), min=1e-9)
     return sum_embeddings / sum_mask
+
 
 class HFEmbedder:
     def __init__(self, model_name=EMBED_MODEL, device=DEVICE):
@@ -3957,12 +9026,21 @@ class HFEmbedder:
             return np.zeros((0, D))
         embs = []
         for i in range(0, len(texts), batch_size):
-            batch = texts[i:i + batch_size]
-            enc = self.tokenizer(batch, padding=True, truncation=True,
-                                 return_tensors="pt", max_length=1024)
+            batch = texts[i : i + batch_size]
+            enc = self.tokenizer(
+                batch,
+                padding=True,
+                truncation=True,
+                return_tensors="pt",
+                max_length=1024,
+            )
             input_ids = enc["input_ids"].to(self.device)
             attention_mask = enc["attention_mask"].to(self.device)
-            out = self.model(input_ids=input_ids, attention_mask=attention_mask, return_dict=True)
+            out = self.model(
+                input_ids=input_ids,
+                attention_mask=attention_mask,
+                return_dict=True,
+            )
             token_embeds = out.last_hidden_state
             pooled = mean_pool(token_embeds, attention_mask)
             embs.append(pooled.cpu().numpy())
@@ -3970,14 +9048,17 @@ class HFEmbedder:
         embs = normalize(embs, axis=1)
         return embs
 
+
 # ---------------------- IO helpers -------------------------------------
 def load_json(path: Path):
     return json.loads(path.read_text(encoding="utf-8"))
+
 
 def safe_str(s: Optional[str]) -> str:
     if not s:
         return ""
     return str(s).replace("\n", " ").strip()
+
 
 def compact_member_info(member: Dict) -> Dict:
     # Only pass id, name, desc, entity_type_hint to LLM prompt
@@ -3985,11 +9066,14 @@ def compact_member_info(member: Dict) -> Dict:
         "id": member.get("id"),
         "entity_name": safe_str(member.get("entity_name", ""))[:180],
         "entity_description": safe_str(member.get("entity_description", ""))[:400],
-        "entity_type_hint": safe_str(member.get("entity_type_hint", ""))[:80]
+        "entity_type_hint": safe_str(member.get("entity_type_hint", ""))[:80],
     }
 
+
 # ---------------------- Build class texts & embeddings ------------------
-def build_class_texts(classes: List[Dict]) -> Tuple[List[str], List[str], List[str], List[str], List[str]]:
+def build_class_texts(
+    classes: List[Dict],
+) -> Tuple[List[str], List[str], List[str], List[str], List[str]]:
     labels, descs, types, evids, members_agg = [], [], [], [], []
     for c in classes:
         labels.append(safe_str(c.get("class_label", ""))[:120])
@@ -4006,7 +9090,10 @@ def build_class_texts(classes: List[Dict]) -> Tuple[List[str], List[str], List[s
         members_agg.append(" ; ".join(mem_texts)[:1000])
     return labels, descs, types, evids, members_agg
 
-def compute_class_embeddings(embedder: HFEmbedder, classes: List[Dict], weights: Dict[str, float]) -> np.ndarray:
+
+def compute_class_embeddings(
+    embedder: HFEmbedder, classes: List[Dict], weights: Dict[str, float]
+) -> np.ndarray:
     labels, descs, types, evids, members_agg = build_class_texts(classes)
     emb_label = embedder.encode_batch(labels) if any(t.strip() for t in labels) else None
     emb_desc = embedder.encode_batch(descs) if any(t.strip() for t in descs) else None
@@ -4060,13 +9147,14 @@ def compute_class_embeddings(embedder: HFEmbedder, classes: List[Dict], weights:
     combined = normalize(combined, axis=1)
     return combined
 
+
 # ---------------------- clustering -------------------------------------
 def run_hdbscan(
     embeddings: np.ndarray,
     min_cluster_size: int = HDBSCAN_MIN_CLUSTER_SIZE,
     min_samples: int = HDBSCAN_MIN_SAMPLES,
     metric: str = HDBSCAN_METRIC,
-    use_umap: bool = USE_UMAP
+    use_umap: bool = USE_UMAP,
 ) -> Tuple[np.ndarray, object]:
     X = embeddings
     N = X.shape[0]
@@ -4080,26 +9168,34 @@ def run_hdbscan(
                 n_neighbors=safe_n_neighbors,
                 min_dist=UMAP_MIN_DIST,
                 metric="cosine",
-                random_state=42
+                random_state=42,
             )
             X_reduced = reducer.fit_transform(X)
             if X_reduced is not None and X_reduced.shape[0] == N:
                 X = X_reduced
             else:
                 if VERBOSE:
-                    print(f"[warn] UMAP returned invalid shape {None if X_reduced is None else X_reduced.shape}; skipping UMAP")
+                    print(
+                        f"[warn] UMAP returned invalid shape "
+                        f"{None if X_reduced is None else X_reduced.shape}; skipping UMAP"
+                    )
         except Exception as e:
             if VERBOSE:
-                print(f"[warn] UMAP failed (N={N}, n_comp={safe_n_components}, n_nei={safe_n_neighbors}): {e}. Proceeding without UMAP.")
+                print(
+                    f"[warn] UMAP failed (N={N}, n_comp={safe_n_components}, "
+                    f"n_nei={safe_n_neighbors}): {e}. Proceeding without UMAP."
+                )
             X = embeddings
     else:
         if use_umap and UMAP_AVAILABLE and VERBOSE:
-            print(f"[info] Skipping UMAP (N={N} < 6) to avoid unstable spectral computations.")
+            print(
+                f"[info] Skipping UMAP (N={N} < 6) to avoid unstable spectral computations."
+            )
     clusterer = hdbscan.HDBSCAN(
         min_cluster_size=min_cluster_size,
         min_samples=min_samples,
         metric=metric,
-        cluster_selection_method="eom"
+        cluster_selection_method="eom",
     )
     labels = clusterer.fit_predict(X)
     return labels, clusterer
@@ -4430,19 +9526,26 @@ You are a very proactive class-resolution assistant. You are not called very pro
 
 """
 
+
 def sanitize_json_like(text: str) -> Optional[Any]:
     # crude sanitizer: extract first [...] region and try loads. Fix common trailing commas and smart quotes.
     if not text or not text.strip():
         return None
-    s = text.strip()
+    # s = text.strip()  #Injam
+    s = coerce_llm_text(text).strip()
     # replace smart quotes
-    s = s.replace("“", '"').replace("”", '"').replace("‘", "'").replace("’", "'")
+    s = (
+        s.replace("“", '"')
+        .replace("”", '"')
+        .replace("‘", "'")
+        .replace("’", "'")
+    )
     # find first [ ... ] block
     start = s.find("[")
     end = s.rfind("]")
     cand = s
     if start != -1 and end != -1 and end > start:
-        cand = s[start:end + 1]
+        cand = s[start : end + 1]
     # remove trailing commas before closing braces/brackets
     cand = re.sub(r",\s*([\]}])", r"\1", cand)
     try:
@@ -4450,13 +9553,14 @@ def sanitize_json_like(text: str) -> Optional[Any]:
     except Exception:
         return None
 
+
 # ---------------------- Action executors --------------------------------
 def execute_merge_classes(
     all_classes: Dict[str, Dict],
     class_ids: List[str],
     new_name: Optional[str],
     new_desc: Optional[str],
-    new_type: Optional[str]
+    new_type: Optional[str],
 ) -> str:
     # validate class ids
     class_ids = [cid for cid in class_ids if cid in all_classes]
@@ -4509,12 +9613,13 @@ def execute_merge_classes(
         "candidate_ids": class_ids,
         "merged_from": class_ids,
         "remarks": [],
-        "_merged_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+        "_merged_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
     }
     for cid in class_ids:
         all_classes.pop(cid, None)
     all_classes[new_cid] = merged_obj
     return new_cid
+
 
 def execute_create_class(
     all_classes: Dict[str, Dict],
@@ -4522,7 +9627,7 @@ def execute_create_class(
     description: Optional[str],
     class_type_hint: Optional[str],
     member_ids: Optional[List[str]],
-    id_to_entity: Dict[str, Dict]
+    id_to_entity: Dict[str, Dict],
 ) -> str:
     if not name:
         raise ValueError("create_class: 'name' is required")
@@ -4545,23 +9650,26 @@ def execute_create_class(
         "members": members,
         "candidate_ids": [],
         "remarks": [],
-        "_created_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+        "_created_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
     }
     all_classes[new_cid] = obj
     return new_cid
+
 
 def execute_reassign_entities(
     all_classes: Dict[str, Dict],
     entity_ids: List[str],
     from_class_id: Optional[str],
     to_class_id: str,
-    id_to_entity: Dict[str, Dict]
+    id_to_entity: Dict[str, Dict],
 ):
     # remove from source(s)
     for cid, c in list(all_classes.items()):
         if from_class_id and cid != from_class_id:
             continue
-        new_members = [m for m in c.get("members", []) if m["id"] not in set(entity_ids)]
+        new_members = [
+            m for m in c.get("members", []) if m["id"] not in set(entity_ids)
+        ]
         new_member_ids = [m["id"] for m in new_members]
         c["members"] = new_members
         c["member_ids"] = new_member_ids
@@ -4581,6 +9689,7 @@ def execute_reassign_entities(
     dest["confidence"] = max(dest.get("confidence", 0.0), 0.4)
     all_classes[to_class_id] = dest
 
+
 def execute_modify_class(
     all_classes: Dict[str, Dict],
     class_id: str,
@@ -4588,7 +9697,7 @@ def execute_modify_class(
     new_desc: Optional[str],
     new_type: Optional[str],
     new_class_group: Optional[str],
-    new_remark: Optional[str]
+    new_remark: Optional[str],
 ):
     if class_id not in all_classes:
         raise ValueError(f"modify_class: class_id {class_id} not found")
@@ -4611,10 +9720,11 @@ def execute_modify_class(
         c["remarks"] = existing
     all_classes[class_id] = c
 
+
 def execute_split_class(
     all_classes: Dict[str, Dict],
     source_class_id: str,
-    splits_specs: List[Dict[str, Any]]
+    splits_specs: List[Dict[str, Any]],
 ) -> List[Tuple[str, Optional[str], List[str]]]:
     """
     Split a source class into several new classes.
@@ -4624,7 +9734,9 @@ def execute_split_class(
         raise ValueError(f"split_class: source_class_id {source_class_id} not found")
     src = all_classes[source_class_id]
     src_members = src.get("members", []) or []
-    src_member_map = {m["id"]: m for m in src_members if isinstance(m, dict) and m.get("id")}
+    src_member_map = {
+        m["id"]: m for m in src_members if isinstance(m, dict) and m.get("id")
+    }
     used_ids: set = set()
     created: List[Tuple[str, Optional[str], List[str]]] = []
 
@@ -4658,7 +9770,7 @@ def execute_split_class(
             "candidate_ids": [],
             "remarks": [],
             "_split_from": source_class_id,
-            "_created_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+            "_created_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
         }
         all_classes[new_cid] = obj
         used_ids.update(valid_mids)
@@ -4672,27 +9784,92 @@ def execute_split_class(
 
     return created
 
+
 # helper to resolve real class ID (handles provisional IDs and retired IDs)
 def resolve_class_id(
     raw_id: Optional[str],
     all_classes: Dict[str, Dict],
     provisional_to_real: Dict[str, str],
-    allow_missing: bool = False
+    allow_missing: bool = False,
 ) -> Optional[str]:
     if raw_id is None:
         return None
     real = provisional_to_real.get(raw_id, raw_id)
     if real not in all_classes and not allow_missing:
-        raise ValueError(f"resolve_class_id: {raw_id} (resolved to {real}) not found in all_classes")
+        raise ValueError(
+            f"resolve_class_id: {raw_id} (resolved to {real}) not found in all_classes"
+        )
     return real
 
+
+# ---------------------- DSPy integration helpers ------------------------
+def _get_lm_for_class_res(
+    llm_config: Optional["TraceKGLLMConfig"],
+    model: str,
+    max_tokens: int,
+):
+    """
+    Resolve a DSPy LM for the Class Resolution step:
+
+      - If llm_config is provided, use it directly (with per-step overrides for 'class_res').
+      - Otherwise, build a minimal TraceKGLLMConfig using the function args
+        for backward compatibility (single model everywhere).
+    """
+    if llm_config is not None:
+        cfg = llm_config
+    else:
+        cfg = TraceKGLLMConfig(default_model=model, max_tokens=max_tokens)
+
+    try:
+        cfg.validate()
+    except Exception as e:
+        print(f"[ClassRes] WARNING: llm_config.validate() failed: {e}")
+
+    lm = make_lm_for_step(cfg, "class_res")
+    return lm
+
+
+def _call_class_res_lm(lm, prompt: str) -> str:
+    """
+    Small helper to call the DSPy LM and normalize the output to a plain string.
+    """
+    try:
+        outputs = lm(prompt)
+    except Exception as e:
+        print(f"[ClassRes] LM call error: {e}")
+        return ""
+
+    if isinstance(outputs, list):
+        return outputs[0] if outputs else ""
+    return str(outputs or "")
+
+
 # ---------------------- Main orchestration ------------------------------
-def classres_main():
+def classres_main(
+    model: str = CLSRES_MODEL,
+    max_tokens: int = LLM_MAX_TOKENS,
+    llm_config: Optional["TraceKGLLMConfig"] = None,
+):
+    """
+    Main entry point for Class Resolution (Cls Res).
+
+    LLM behavior:
+      - If llm_config is provided, a single TraceKGLLMConfig object controls all LLM
+        behavior for this step (models, tokens, api_base, etc.). The
+        'class_res_model' / 'res_model' / 'default_model' fields are used via
+        make_lm_for_step(cfg, "class_res").
+      - If llm_config is None, this function falls back to `model` and `max_tokens`
+        by constructing a minimal TraceKGLLMConfig(default_model=model, max_tokens=max_tokens).
+
+    All LLM calls use a single dspy.LM created once and reused across clusters.
+    """
     # load classes
     if not INPUT_CLASSES.exists():
         raise FileNotFoundError(f"Input classes file not found: {INPUT_CLASSES}")
     classes_list = load_json(INPUT_CLASSES)
-    print(f"[start] loaded {len(classes_list)} merged candidate classes from {INPUT_CLASSES}")
+    print(
+        f"[start] loaded {len(classes_list)} merged candidate classes from {INPUT_CLASSES}"
+    )
 
     # build id->entity map (from members)
     id_to_entity: Dict[str, Dict] = {}
@@ -4706,7 +9883,11 @@ def classres_main():
     for c in classes_list:
         cid = c.get("candidate_id") or ("ClsC_" + uuid.uuid4().hex[:8])
         members = c.get("members", []) or []
-        mids = [m["id"] for m in members if isinstance(m, dict) and m.get("id")]
+        mids = [
+            m["id"]
+            for m in members
+            if isinstance(m, dict) and m.get("id")
+        ]
         c["member_ids"] = mids
         c["members"] = members
         if "class_group" not in c or c.get("class_group") in (None, ""):
@@ -4731,7 +9912,7 @@ def classres_main():
         combined_emb,
         min_cluster_size=HDBSCAN_MIN_CLUSTER_SIZE,
         min_samples=HDBSCAN_MIN_SAMPLES,
-        use_umap=USE_UMAP
+        use_umap=USE_UMAP,
     )
     print("[info] clustering done. unique labels:", set(labels))
 
@@ -4745,6 +9926,9 @@ def classres_main():
     action_log_path = OUT_DIR / "cls_res_action_log.jsonl"
     if action_log_path.exists():
         action_log_path.unlink()
+
+    # Resolve LM once for this whole run
+    lm = _get_lm_for_class_res(llm_config=llm_config, model=model, max_tokens=max_tokens)
 
     # iterate clusters (skip -1 initially)
     cluster_keys = sorted([k for k in cluster_to_classids.keys() if k != -1])
@@ -4763,18 +9947,20 @@ def classres_main():
             if not c:
                 continue
             members_compact = [compact_member_info(m) for m in c.get("members", [])]
-            cluster_classes.append({
-                "candidate_id": cid,
-                "class_label": c.get("class_label", ""),
-                "class_description": c.get("class_description", ""),
-                "class_type_hint": c.get("class_type_hint", ""),
-                "class_group": c.get("class_group", "TBD"),
-                "confidence": float(c.get("confidence", 0.0)),
-                "evidence_excerpt": c.get("evidence_excerpt", ""),
-                "member_ids": c.get("member_ids", []),
-                "members": members_compact,
-                "remarks": c.get("remarks", [])
-            })
+            cluster_classes.append(
+                {
+                    "candidate_id": cid,
+                    "class_label": c.get("class_label", ""),
+                    "class_description": c.get("class_description", ""),
+                    "class_type_hint": c.get("class_type_hint", ""),
+                    "class_group": c.get("class_group", "TBD"),
+                    "confidence": float(c.get("confidence", 0.0)),
+                    "evidence_excerpt": c.get("evidence_excerpt", ""),
+                    "member_ids": c.get("member_ids", []),
+                    "members": members_compact,
+                    "remarks": c.get("remarks", []),
+                }
+            )
 
         cluster_block = json.dumps(cluster_classes, ensure_ascii=False, indent=2)
         prompt = CLSRES_PROMPT_TEMPLATE.replace("{cluster_block}", cluster_block)
@@ -4783,13 +9969,8 @@ def classres_main():
         prompt_path = RAW_LLM_DIR / f"cluster_{cluster_label}_prompt.txt"
         prompt_path.write_text(prompt, encoding="utf-8")
 
-        # call LLM
-        raw_out = ""
-        try:
-            raw_out = call_llm(prompt)
-        except Exception as e:
-            print(f"[warning] LLM call failed for cluster {cluster_label}: {e}")
-            raw_out = ""
+        # call LLM via DSPy
+        raw_out = _call_class_res_lm(lm, prompt)
 
         # write raw output
         raw_path = RAW_LLM_DIR / f"cluster_{cluster_label}_llm_raw.txt"
@@ -4798,11 +9979,18 @@ def classres_main():
         # try parse/sanitize
         parsed = sanitize_json_like(raw_out)
         if parsed is None:
-            print(f"[warn] failed to parse LLM output for cluster {cluster_label}; skipping automated actions for this cluster.")
+            print(
+                f"[warn] failed to parse LLM output for cluster {cluster_label}; "
+                f"skipping automated actions for this cluster."
+            )
             dec_path = OUT_DIR / f"cluster_{cluster_label}_decisions.json"
             dec_path.write_text(
-                json.dumps({"cluster_label": cluster_label, "raw_llm": raw_out}, ensure_ascii=False, indent=2),
-                encoding="utf-8"
+                json.dumps(
+                    {"cluster_label": cluster_label, "raw_llm": raw_out},
+                    ensure_ascii=False,
+                    indent=2,
+                ),
+                encoding="utf-8",
             )
             continue
 
@@ -4834,17 +10022,21 @@ def classres_main():
                     valid_cids = [cid for cid in cids_real if cid in all_classes]
 
                     if len(valid_cids) < 2:
-                        decisions.append({
-                            "action": "merge_skip_too_few",
-                            "requested_class_ids": cids_raw,
-                            "valid_class_ids": valid_cids,
-                            "justification": justification,
-                            "remark": remark_val,
-                            "confidence": confidence_val
-                        })
+                        decisions.append(
+                            {
+                                "action": "merge_skip_too_few",
+                                "requested_class_ids": cids_raw,
+                                "valid_class_ids": valid_cids,
+                                "justification": justification,
+                                "remark": remark_val,
+                                "confidence": confidence_val,
+                            }
+                        )
                         continue
 
-                    new_cid = execute_merge_classes(all_classes, valid_cids, new_name, new_desc, new_type)
+                    new_cid = execute_merge_classes(
+                        all_classes, valid_cids, new_name, new_desc, new_type
+                    )
 
                     # map provisional id -> new class id
                     if prov_id:
@@ -4853,15 +10045,17 @@ def classres_main():
                     for old in valid_cids:
                         provisional_to_real.setdefault(old, new_cid)
 
-                    decisions.append({
-                        "action": "merge_classes",
-                        "input_class_ids": valid_cids,
-                        "result_class_id": new_cid,
-                        "provisional_id": prov_id,
-                        "justification": justification,
-                        "remark": remark_val,
-                        "confidence": confidence_val
-                    })
+                    decisions.append(
+                        {
+                            "action": "merge_classes",
+                            "input_class_ids": valid_cids,
+                            "result_class_id": new_cid,
+                            "provisional_id": prov_id,
+                            "justification": justification,
+                            "remark": remark_val,
+                            "confidence": confidence_val,
+                        }
+                    )
 
                 elif fn == "create_class":
                     name = args.get("name")
@@ -4871,20 +10065,24 @@ def classres_main():
                     prov_id = args.get("provisional_id")
 
                     mids_valid = [m for m in mids if m in id_to_entity]
-                    new_cid = execute_create_class(all_classes, name, desc, t, mids_valid, id_to_entity)
+                    new_cid = execute_create_class(
+                        all_classes, name, desc, t, mids_valid, id_to_entity
+                    )
 
                     if prov_id:
                         provisional_to_real[prov_id] = new_cid
 
-                    decisions.append({
-                        "action": "create_class",
-                        "result_class_id": new_cid,
-                        "provisional_id": prov_id,
-                        "member_ids_added": mids_valid,
-                        "justification": justification,
-                        "remark": remark_val,
-                        "confidence": confidence_val
-                    })
+                    decisions.append(
+                        {
+                            "action": "create_class",
+                            "result_class_id": new_cid,
+                            "provisional_id": prov_id,
+                            "member_ids_added": mids_valid,
+                            "justification": justification,
+                            "remark": remark_val,
+                            "confidence": confidence_val,
+                        }
+                    )
 
                 elif fn == "reassign_entities":
                     eids = args.get("entity_ids", []) or []
@@ -4893,22 +10091,30 @@ def classres_main():
 
                     eids_valid = [e for e in eids if e in id_to_entity]
 
-                    from_c = resolve_class_id(from_c_raw, all_classes, provisional_to_real, allow_missing=True)
-                    to_c = resolve_class_id(to_c_raw, all_classes, provisional_to_real, allow_missing=False)
+                    from_c = resolve_class_id(
+                        from_c_raw, all_classes, provisional_to_real, allow_missing=True
+                    )
+                    to_c = resolve_class_id(
+                        to_c_raw, all_classes, provisional_to_real, allow_missing=False
+                    )
 
-                    execute_reassign_entities(all_classes, eids_valid, from_c, to_c, id_to_entity)
+                    execute_reassign_entities(
+                        all_classes, eids_valid, from_c, to_c, id_to_entity
+                    )
 
-                    decisions.append({
-                        "action": "reassign_entities",
-                        "entity_ids": eids_valid,
-                        "from": from_c_raw,
-                        "from_resolved": from_c,
-                        "to": to_c_raw,
-                        "to_resolved": to_c,
-                        "justification": justification,
-                        "remark": remark_val,
-                        "confidence": confidence_val
-                    })
+                    decisions.append(
+                        {
+                            "action": "reassign_entities",
+                            "entity_ids": eids_valid,
+                            "from": from_c_raw,
+                            "from_resolved": from_c,
+                            "to": to_c_raw,
+                            "to_resolved": to_c,
+                            "justification": justification,
+                            "remark": remark_val,
+                            "confidence": confidence_val,
+                        }
+                    )
 
                 elif fn == "modify_class":
                     cid_raw = args.get("class_id")
@@ -4918,68 +10124,92 @@ def classres_main():
                     new_group = args.get("new_class_group")
                     new_remark = args.get("remark")
 
-                    cid_real = resolve_class_id(cid_raw, all_classes, provisional_to_real, allow_missing=False)
-                    execute_modify_class(all_classes, cid_real, new_name, new_desc, new_type, new_group, new_remark)
+                    cid_real = resolve_class_id(
+                        cid_raw, all_classes, provisional_to_real, allow_missing=False
+                    )
+                    execute_modify_class(
+                        all_classes,
+                        cid_real,
+                        new_name,
+                        new_desc,
+                        new_type,
+                        new_group,
+                        new_remark,
+                    )
 
-                    decisions.append({
-                        "action": "modify_class",
-                        "class_id": cid_raw,
-                        "class_id_resolved": cid_real,
-                        "new_name": new_name,
-                        "new_description": new_desc,
-                        "new_class_type_hint": new_type,
-                        "new_class_group": new_group,
-                        "remark": new_remark,
-                        "justification": justification,
-                        "confidence": confidence_val
-                    })
+                    decisions.append(
+                        {
+                            "action": "modify_class",
+                            "class_id": cid_raw,
+                            "class_id_resolved": cid_real,
+                            "new_name": new_name,
+                            "new_description": new_desc,
+                            "new_class_type_hint": new_type,
+                            "new_class_group": new_group,
+                            "remark": new_remark,
+                            "justification": justification,
+                            "confidence": confidence_val,
+                        }
+                    )
 
                 elif fn == "split_class":
                     source_raw = args.get("source_class_id")
                     splits_specs = args.get("splits", []) or []
 
-                    source_real = resolve_class_id(source_raw, all_classes, provisional_to_real, allow_missing=False)
-                    created = execute_split_class(all_classes, source_real, splits_specs)
+                    source_real = resolve_class_id(
+                        source_raw, all_classes, provisional_to_real, allow_missing=False
+                    )
+                    created = execute_split_class(
+                        all_classes, source_real, splits_specs
+                    )
 
                     created_summary = []
                     for new_cid, prov_id, mids_used in created:
                         if prov_id:
                             provisional_to_real[prov_id] = new_cid
-                        created_summary.append({
-                            "new_class_id": new_cid,
-                            "provisional_id": prov_id,
-                            "member_ids": mids_used
-                        })
+                        created_summary.append(
+                            {
+                                "new_class_id": new_cid,
+                                "provisional_id": prov_id,
+                                "member_ids": mids_used,
+                            }
+                        )
 
-                    decisions.append({
-                        "action": "split_class",
-                        "source_class_id": source_raw,
-                        "source_class_id_resolved": source_real,
-                        "created_classes": created_summary,
-                        "justification": justification,
-                        "remark": remark_val,
-                        "confidence": confidence_val
-                    })
+                    decisions.append(
+                        {
+                            "action": "split_class",
+                            "source_class_id": source_raw,
+                            "source_class_id_resolved": source_real,
+                            "created_classes": created_summary,
+                            "justification": justification,
+                            "remark": remark_val,
+                            "confidence": confidence_val,
+                        }
+                    )
 
                 else:
-                    decisions.append({
-                        "action": "skip_unknown_function",
-                        "raw": step,
-                        "justification": justification,
-                        "remark": remark_val,
-                        "confidence": confidence_val
-                    })
+                    decisions.append(
+                        {
+                            "action": "skip_unknown_function",
+                            "raw": step,
+                            "justification": justification,
+                            "remark": remark_val,
+                            "confidence": confidence_val,
+                        }
+                    )
 
             except Exception as e:
-                decisions.append({
-                    "action": "error_executing",
-                    "function": fn,
-                    "error": str(e),
-                    "input": step,
-                    "justification": justification,
-                    "remark": remark_val,
-                    "confidence": confidence_val
-                })
+                decisions.append(
+                    {
+                        "action": "error_executing",
+                        "function": fn,
+                        "error": str(e),
+                        "input": step,
+                        "justification": justification,
+                        "remark": remark_val,
+                        "confidence": confidence_val,
+                    }
+                )
 
         # write decisions file for this cluster
         dec_path = OUT_DIR / f"cluster_{cluster_label}_decisions.json"
@@ -4990,9 +10220,11 @@ def classres_main():
             "parsed_steps": parsed,
             "executed_decisions": decisions,
             "provisional_to_real": provisional_to_real,
-            "timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+            "timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
         }
-        dec_path.write_text(json.dumps(dec_obj, ensure_ascii=False, indent=2), encoding="utf-8")
+        dec_path.write_text(
+            json.dumps(dec_obj, ensure_ascii=False, indent=2), encoding="utf-8"
+        )
 
         # append to action log
         with open(action_log_path, "a", encoding="utf-8") as fh:
@@ -5002,12 +10234,16 @@ def classres_main():
     final_classes = list(all_classes.values())
     out_json = OUT_DIR / "final_classes_resolved.json"
     out_jsonl = OUT_DIR / "final_classes_resolved.jsonl"
-    out_json.write_text(json.dumps(final_classes, ensure_ascii=False, indent=2), encoding="utf-8")
+    out_json.write_text(
+        json.dumps(final_classes, ensure_ascii=False, indent=2), encoding="utf-8"
+    )
     with open(out_jsonl, "w", encoding="utf-8") as fh:
         for c in final_classes:
             fh.write(json.dumps(c, ensure_ascii=False) + "\n")
 
-    print(f"[done] wrote final resolved classes -> {out_json}  (count={len(final_classes)})")
+    print(
+        f"[done] wrote final resolved classes -> {out_json}  (count={len(final_classes)})"
+    )
     print(f"[done] action log -> {action_log_path}")
 
     # ---------------------- SUMMARY AGGREGATION -------------------------
@@ -5027,7 +10263,7 @@ def classres_main():
     all_clusters_decisions_path = summary_dir / "all_clusters_decisions.json"
     all_clusters_decisions_path.write_text(
         json.dumps(cluster_decisions, ensure_ascii=False, indent=2),
-        encoding="utf-8"
+        encoding="utf-8",
     )
 
     # Compute statistics
@@ -5038,7 +10274,12 @@ def classres_main():
     clusters_with_structural = 0
     clusters_only_classgroup = 0
 
-    structural_actions = {"merge_classes", "create_class", "reassign_entities", "split_class"}
+    structural_actions = {
+        "merge_classes",
+        "create_class",
+        "reassign_entities",
+        "split_class",
+    }
 
     for cd in cluster_decisions:
         decs = cd.get("executed_decisions", [])
@@ -5092,16 +10333,16 @@ def classres_main():
         "total_structural_actions": total_structural_actions,
         "total_errors": total_errors,
         "total_remarks_logged": total_remarks,
-        "generated_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+        "generated_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
     }
 
     stats_path = summary_dir / "stats_summary.json"
-    stats_path.write_text(json.dumps(stats, ensure_ascii=False, indent=2), encoding="utf-8")
+    stats_path.write_text(
+        json.dumps(stats, ensure_ascii=False, indent=2), encoding="utf-8"
+    )
 
     print(f"[done] summary decisions -> {all_clusters_decisions_path}")
     print(f"[done] summary stats -> {stats_path}")
-
-
 
 
 # # -----------------------
@@ -5111,11 +10352,8 @@ def classres_main():
 # if __name__ == "__main__":
 #     classres_main()
 
-#endregion#? Cls Res V8  - Split + Remark + Summary (gpt-5.1 Responses)
+#endregion#? Cls Res V10  - Split + Remark + Summary (DSPy LLM Config)
 #?#########################  End  ##########################
-
-
-
 
 
 
@@ -5474,8 +10712,6 @@ def run_pipeline_iteratively():
 
 
 
-
-
 #!############################################# Start Chapter ##################################################
 #region:#!   Relation Identification
 
@@ -5483,8 +10719,606 @@ def run_pipeline_iteratively():
 
 
 
-#?######################### Start ##########################
+#*######################### Start ##########################
 #region:#?   Rel Rec v4 - Prompt change (Better Rel Naming)
+
+
+# #!/usr/bin/env python3
+# """
+# Relation Recognition (Rel Rec) — Context-Enriched KG
+
+# - Reads:
+#     - entities_with_class.jsonl
+#     - chunks_sentence.jsonl
+# - For each chunk, finds entities that occur in that chunk.
+# - Calls an LLM (OpenAI Responses API) to extract directed relations between those entities.
+# - Writes:
+#     - relations_raw.jsonl  (one JSON object per relation instance)
+
+# Key design:
+# - Entities are ALREADY resolved and guaranteed to belong to their chunks.
+# - This is the LAST time we look at the raw chunk text.
+# - We aim for HIGH RECALL and rich QUALIFIERS (context-enriched KG).
+# - Intrinsic node properties were already handled in entity stages; here we treat
+#   almost everything else as relation-level context.
+
+# Requirements:
+#     pip install openai
+
+# Environment:
+#     export OPENAI_API_KEY="sk-..."
+
+# Adjust paths & MODEL_NAME as needed.
+# """
+
+# import argparse
+# import json
+# import logging
+# import uuid
+# from collections import defaultdict
+# from typing import Any, Dict, Iterable, List, Tuple
+
+# from openai import OpenAI
+
+# # -----------------------------------------------------------------------------
+# # Config
+# # -----------------------------------------------------------------------------
+
+# MODEL_NAME = "gpt-5.1"   # or any other model you use
+
+# logging.basicConfig(
+#     level=logging.INFO,
+#     format="%(asctime)s [%(levelname)s] %(message)s",
+# )
+# logger = logging.getLogger(__name__)
+
+
+# # -----------------------------------------------------------------------------
+# # Data loading
+# # -----------------------------------------------------------------------------
+
+# def load_entities_by_chunk(
+#     entities_path: str,
+# ) -> Tuple[Dict[str, List[Dict[str, Any]]], Dict[str, Dict[str, Any]]]:
+#     """
+#     Load entities_with_class.jsonl and build:
+
+#     - entities_by_chunk:  chunk_id -> list of entity dicts (for that chunk)
+#     - entities_by_id:     entity_id -> entity dict (global)
+
+#     Each entity dict contains:
+#         entity_id, entity_name, entity_description, 
+#         class_id, class_label, class_group, chunk_ids, node_properties
+#     """
+#     entities_by_chunk: Dict[str, List[Dict[str, Any]]] = defaultdict(list)
+#     entities_by_id: Dict[str, Dict[str, Any]] = {}
+
+#     logger.info("Loading entities from %s", entities_path)
+#     with open(entities_path, "r", encoding="utf-8") as f:
+#         for line in f:
+#             line = line.strip()
+#             if not line:
+#                 continue
+#             rec = json.loads(line)
+
+#             entity_id = rec["entity_id"]
+#             ent = rec["entity"]
+
+#             entity_record = {
+#                 "entity_id": entity_id,
+#                 "entity_name": ent.get("entity_name"),
+#                 "entity_description": ent.get("entity_description"),
+#                 # "entity_type_hint": ent.get("entity_type_hint"),
+#                 "class_id": rec.get("class_id"),
+#                 "class_label": rec.get("class_label"),
+#                 "class_group": rec.get("class_group"),
+#                 "chunk_ids": ent.get("chunk_id", []),
+#                 "node_properties": ent.get("node_properties", []),
+#             }
+
+#             entities_by_id[entity_id] = entity_record
+
+#             for ch_id in entity_record["chunk_ids"]:
+#                 entities_by_chunk[ch_id].append(entity_record)
+
+#     logger.info(
+#         "Loaded %d entities, mapped to %d chunks",
+#         len(entities_by_id),
+#         len(entities_by_chunk),
+#     )
+#     return entities_by_chunk, entities_by_id
+
+
+# def iter_chunks(chunks_path: str) -> Iterable[Dict[str, Any]]:
+#     """
+#     Yield chunks from chunks_sentence.jsonl.
+
+#     Expected fields include (example):
+#         {
+#           "id": "Ch_000001",
+#           "ref_index": 0,
+#           "ref_title": "2.1 Standards",
+#           "text": "...",
+#           ...
+#         }
+#     """
+#     logger.info("Streaming chunks from %s", chunks_path)
+#     with open(chunks_path, "r", encoding="utf-8") as f:
+#         for line in f:
+#             line = line.strip()
+#             if not line:
+#                 continue
+#             yield json.loads(line)
+
+
+# # -----------------------------------------------------------------------------
+# # LLM Prompt & Call
+# # -----------------------------------------------------------------------------
+
+# REL_REC_INSTRUCTIONS = """
+# You are an expert relation extractor for a CONTEXT-ENRICHED knowledge graph.
+
+# High-level setting:
+# - The entities you see are ALREADY resolved and guaranteed to belong to this chunk.
+#   They may not always appear with exactly the same surface form in the text,
+#   but you must **trust** that they are conceptually present in this chunk.
+# - This is the FINAL stage that has direct access to the raw chunk text.
+#   After this, we will NOT revisit the chunk for more information.
+# - Our goal is to capture as MUCH context as possible:
+#   relations PLUS rich qualifiers (conditions, constraints, uncertainty, etc.).
+
+# Your inputs:
+# - A single text chunk from a technical document.
+# - A list of resolved entities that appear in that chunk.
+# - Each entity has: entity_id, entity_name, entity_description, class_label, class_group.
+
+# Your main task:
+# - Identify ZERO or MORE **directed** relations between the entities in this chunk.
+# - A relation is a meaningful, text-supported connection between a HEAD (subject) entity
+#   and a TAIL (object) entity.
+# - The graph is DIRECTED. You must choose subject_entity_id and object_entity_id
+#   based on how the text expresses the relationship.
+#   Note: Some relations may be conceptually symmetric or bidirectional; in such cases,
+#   choose a reasonable subject → object direction for representation purposes,
+#   and explain any ambiguity in justification or remark.
+
+
+# Very important principles:
+
+# 1) TRUST THE ENTITIES (we performed entity resolution)
+#    - We have already run entity recognition & resolution upstream; the provided entities are canonical / resolved mentions derived from the document.
+#    - Do NOT question whether an entity belongs to this chunk. The exact surface string may not appear verbatim in the chunk because:
+#        * the entity was canonicalized (normalized) during entity resolution,
+#        * the chunk uses synonyms, abbreviations, pronouns, or implicit references,
+#        * the entity was merged from multiple mentions across the section.
+#    - Use the provided entity_name, entity_description,
+#      class_label, and class_group to recognize mentions and evidence even when the exact surface form is absent.
+#    - You may create relations between any pair of provided entities if the chunk text supports the relation conceptually — prefer recall over rejecting a plausible relation solely because the surface token doesn't match exactly.
+
+# 2) HIGH RECALL & COVERAGE (discover first, refine later)
+#    - Assume that almost all informational content in the chunk should end up in the KG
+#      either as a relation or as qualifiers on relations.
+#    - Do NOT limit discovery based on naming concerns.
+#    - It is BETTER to propose a relation with lower confidence (and explain your doubts)
+#      than to miss a real relation or important qualifier.
+#    - If you are unsure, still output the relation with lower `confidence` and explain
+#      your uncertainty in `justification` and/or `remark`.
+
+# 3) QUALIFIERS LIVE ON RELATIONS
+#    - Intrinsic node properties were (mostly) already captured during entity recognition/resolution.
+#    - Here, we treat almost all remaining contextual information as relation-level qualifiers.
+#    - Do NOT try to create or modify entity properties.
+#    - If you spot something that looks like a missing intrinsic property,
+#      mention it in `remark` instead of modeling it as a property.
+
+# 4) CAPTURE QUALIFIERS EVEN IF THE RELATION IS UNCERTAIN
+#    - If you clearly see a contextual piece (condition, constraint, etc.) that SHOULD be attached
+#      to some relation but you struggle to identify the exact relation semantics:
+#        * Make a best-effort guess for the relation_name between the most relevant entities.
+#        * Set a lower `confidence`.
+#        * In `remark`, clearly state that this relation was primarily created to capture that qualifier
+#          and describe the issue (e.g., "relation semantics unclear", "heuristic relation choice").
+#    - This ensures we do not lose important context even when relation semantics are fuzzy.
+
+# 5) DO NOT BE OVERLY BIASED BY EXAMPLES
+#    - Any examples of relation names, relation types, or qualifier values in this prompt are
+#      **illustrative, not exhaustive**.
+#    - You are free to discover ANY relation that is supported by the text.
+#    - Guidance below affects how relations should be *expressed*, not which relations you should find.
+
+
+# -------------------------------------------
+# Relation naming (VERY IMPORTANT):
+# -------------------------------------------
+# - relation_name:
+#     - A short, normalized phrase describing the CORE semantic relation between subject and object.
+#     - The goal is NOT to restrict which relations you discover,
+#       but to express discovered relations in a reusable, abstract form.
+#     - relation_name SHOULD be something that could reasonably apply to many different
+#       entity pairs across the corpus, even if the surface wording differs.
+#     - If the relation meaning is specific to this instance,
+#       capture that specificity in rel_desc, qualifiers, or remark — not in relation_name.
+#     - Examples (NOT exhaustive): "causes", "occurs_in", "is_part_of", "used_for",
+#       "located_in", "prevents", "requires", "correlates_with", "associated_with".
+#     - Do NOT include qualifiers like "at high temperature", "during startup", "may"
+#       in relation_name.
+
+# - relation_surface:
+#     - The exact phrase or minimal text span from the chunk that expresses the relation.
+#     - This MAY be instance-specific and does NOT need to be reusable.
+#     - Examples (NOT exhaustive): "leads to", "results in", "is part of",
+#       "used for controlling", "associated with".
+
+
+# -------------------------------------------
+# Relation hint type (rel_hint_type):
+# -------------------------------------------
+# - A short free-form hint describing the nature of the relation
+#   (e.g., causal, dependency, containment, usage, constraint, correlation, requirement, etc.).
+# - This is ONLY a hint to help later relation resolution and grouping.
+# - There is NO fixed list; choose whatever best fits the relation.
+# - If unsure, still provide your best guess and explain uncertainty in justification.
+# - It must be a short phrase (1–3 words), not a sentence.
+
+
+# -------------------------------------------
+# Qualifiers:
+# -------------------------------------------
+# For each relation, fill this dict (values are strings or null):
+
+#   "qualifiers": {
+#     "TemporalQualifier": "... or null",
+#     "SpatialQualifier": "... or null",
+#     "OperationalConstraint": "... or null",
+#     "ConditionExpression": "... or null",
+#     "UncertaintyQualifier": "... or null",
+#     "CausalHint": "... or null",
+#     "LogicalMarker": "... or null",
+#     "OtherQualifier": "expectedType: value or null"
+#   }
+
+# Meanings (examples are illustrative, NOT exhaustive):
+# - TemporalQualifier:
+#     when something holds (e.g., "during heating", "after 1000h", "at 25°C").
+# - SpatialQualifier:
+#     where something holds (e.g., "near weld", "in heat-affected zone").
+# - OperationalConstraint:
+#     operating or environmental conditions (e.g., "elevated temperature", "high load").
+# - ConditionExpression:
+#     explicit conditional or threshold clauses (e.g., "temperature > 450°C").
+# - UncertaintyQualifier:
+#     modality or hedging (e.g., "may", "likely", "suspected").
+# - CausalHint:
+#     lexical causal cues beyond the main verb (e.g., "due to", "caused by").
+# - LogicalMarker:
+#     discourse or logic markers (e.g., "if", "when", "unless").
+# - OtherQualifier:
+#     use when a qualifier does not fit the above categories
+#     (encode both expected type and value, e.g., "MeasurementContext: laboratory test").
+
+# If there are multiple "other" qualifiers, you may combine them in a single string.
+
+
+# -------------------------------------------
+# Other fields (and how to use them):
+# -------------------------------------------
+# - confidence:
+#     - float between 0 and 1 (your estimated confidence that this relation is correctly captured).
+#     - When in doubt, still output the relation but with a lower confidence (e.g., 0.2–0.4).
+
+# - rel_desc:
+#     - A brief instance-level explanation of how the subject and object are related here.
+#     - This is evidence-oriented and may mention the specific entities involved.
+
+# - resolution_context:
+#     - Short text intended to help later relation resolution / canonicalization
+#       (e.g., why a certain direction was chosen, or how this phrasing compares to others).
+
+# - justification:
+#     - Explanation of how the chunk text supports this relation.
+#     - Also state doubts here if semantics are ambiguous.
+
+# - remark:
+#     - Free-text notes for meta-issues or edge cases:
+#         * "relation created mainly to capture qualifier X"
+#         * "may reflect document organization rather than domain semantics"
+#         * "possible intrinsic property not captured upstream"
+
+
+# -------------------------------------------
+# Output format:
+# -------------------------------------------
+# - You MUST output a single JSON object with exactly one top-level key "relations":
+#   { "relations": [ ... ] }
+
+# - Each relation object MUST have this exact shape (all keys present, use null if not applicable):
+
+#   {
+#     "subject_entity_id": "En_...",
+#     "object_entity_id": "En_...",
+#     "relation_surface": "string",
+#     "relation_name": "string",
+#     "rel_desc": "string",
+#     "rel_hint_type": "string",
+#     "confidence": 0.0,
+#     "resolution_context": "string or null",
+#     "justification": "string or null",
+#     "remark": "string or null",
+#     "qualifiers": {
+#       "TemporalQualifier": "string or null",
+#       "SpatialQualifier": "string or null",
+#       "OperationalConstraint": "string or null",
+#       "ConditionExpression": "string or null",
+#       "UncertaintyQualifier": "string or null",
+#       "CausalHint": "string or null",
+#       "LogicalMarker": "string or null",
+#       "OtherQualifier": "string or null"
+#     },
+#     "evidence_excerpt": "short excerpt from the chunk text (<= 40 words)"
+#   }
+
+# - subject_entity_id and object_entity_id MUST be chosen from the provided entities.
+# - You may propose relations between ANY pair of provided entities if the chunk supports it.
+# - If there are no relations at all, return: { "relations": [] }
+# - rel_hint_type must be a short phrase (1–3 words), not a sentence.
+
+# Coverage:
+# - Try to cover ALL meaningful connections and contextual information that can be attached
+#   to those connections, even if it means producing low-confidence relations with detailed remarks.
+
+# Return ONLY valid JSON. No extra commentary.
+# """
+
+
+
+
+# def call_llm_extract_relations_for_chunk(
+#     client: OpenAI,
+#     model: str,
+#     chunk: Dict[str, Any],
+#     entities: List[Dict[str, Any]],
+# ) -> List[Dict[str, Any]]:
+#     """
+#     Call the LLM using the Responses API to extract relations for a single chunk.
+
+#     Returns a list of relation dicts (without relation_id, chunk_id, or class info added yet).
+#     """
+#     if not entities or len(entities) < 2:
+#         return []
+
+#     payload = {
+#         "chunk_id": chunk["id"],
+#         "chunk_text": chunk.get("text", ""),
+#         "entities": [
+#             {
+#                 "entity_id": e["entity_id"],
+#                 "entity_name": e["entity_name"],
+#                 "entity_description": e["entity_description"],
+#                 "class_label": e["class_label"],
+#                 "class_group": e["class_group"],
+#                 "node_properties": e.get("node_properties", []),
+#             }
+#             for e in entities
+#         ],
+#     }
+
+#     try:
+#         response = client.responses.create(
+#             model=model,
+#             reasoning={"effort": "low"},
+#             input=[
+#                 {
+#                     "role": "developer",
+#                     "content": REL_REC_INSTRUCTIONS,
+#                 },
+#                 {
+#                     "role": "user",
+#                     "content": json.dumps(payload, ensure_ascii=False),
+#                 },
+#             ],
+#         )
+#     except Exception as e:
+#         logger.error("LLM call failed for chunk %s: %s", chunk["id"], e)
+#         return []
+
+#     raw_text = response.output_text
+#     if not raw_text:
+#         logger.warning("Empty response for chunk %s", chunk["id"])
+#         return []
+
+#     try:
+#         parsed = json.loads(raw_text)
+#     except json.JSONDecodeError:
+#         logger.error(
+#             "Failed to parse JSON for chunk %s. Raw response:\n%s",
+#             chunk["id"],
+#             raw_text,
+#         )
+#         return []
+
+#     relations = parsed.get("relations", [])
+#     if not isinstance(relations, list):
+#         logger.error(
+#             "Expected 'relations' to be a list for chunk %s. Got: %r",
+#             chunk["id"],
+#             type(relations),
+#         )
+#         return []
+
+#     return relations
+
+
+# # -----------------------------------------------------------------------------
+# # Main pipeline
+# # -----------------------------------------------------------------------------
+
+# def run_rel_rec(
+#     entities_path: str,
+#     chunks_path: str,
+#     output_path: str,
+#     model: str = MODEL_NAME,
+# ) -> None:
+#     """
+#     Full Relation Recognition pipeline:
+
+#     - load entities_by_chunk, entities_by_id
+#     - iterate over chunks
+#     - for each chunk, call LLM to extract relations
+#     - enrich relations with relation_id, chunk_id, subject/object class info
+#     - write to relations_raw.jsonl (streaming, flushed after each chunk)
+#     """
+#     entities_by_chunk, entities_by_id = load_entities_by_chunk(entities_path)
+#     client = OpenAI()
+
+#     n_chunks = 0
+#     n_chunks_called = 0
+#     n_relations = 0
+
+#     # Ensure the output directory exists (fixes FileNotFoundError when opening)
+#     out_path = Path(output_path)
+#     out_path.parent.mkdir(parents=True, exist_ok=True)
+
+#     logger.info("Writing relations to %s", output_path)
+#     with open(out_path, "w", encoding="utf-8") as out_f:
+#         for chunk in iter_chunks(chunks_path):
+#             n_chunks += 1
+#             chunk_id = chunk["id"]
+#             chunk_entities = entities_by_chunk.get(chunk_id, [])
+
+#             if len(chunk_entities) < 2:
+#                 continue  # cannot form relations
+
+#             n_chunks_called += 1
+#             logger.info(
+#                 "Chunk %s: %d entities -> calling LLM", chunk_id, len(chunk_entities)
+#             )
+
+#             relations = call_llm_extract_relations_for_chunk(
+#                 client=client,
+#                 model=model,
+#                 chunk=chunk,
+#                 entities=chunk_entities,
+#             )
+
+#             for rel in relations:
+#                 # Basic validation of required LLM fields
+#                 subj_id = rel.get("subject_entity_id")
+#                 obj_id = rel.get("object_entity_id")
+#                 if subj_id not in entities_by_id or obj_id not in entities_by_id:
+#                     logger.warning(
+#                         "Skipping relation with unknown entity ids in chunk %s: %s",
+#                         chunk_id,
+#                         rel,
+#                     )
+#                     continue
+
+#                 # Normalize qualifiers structure to always have all keys
+#                 expected_qual_keys = [
+#                     "TemporalQualifier",
+#                     "SpatialQualifier",
+#                     "OperationalConstraint",
+#                     "ConditionExpression",
+#                     "UncertaintyQualifier",
+#                     "CausalHint",
+#                     "LogicalMarker",
+#                     "OtherQualifier",
+#                 ]
+#                 q = rel.get("qualifiers") or {}
+#                 if not isinstance(q, dict):
+#                     q = {}
+#                 for k in expected_qual_keys:
+#                     q.setdefault(k, None)
+#                 rel["qualifiers"] = q
+
+#                 # Enrich with KG-level metadata
+#                 rel["relation_id"] = f"RelR_{uuid.uuid4().hex[:12]}"
+#                 rel["chunk_id"] = chunk_id
+
+#                 subj = entities_by_id[subj_id]
+#                 obj = entities_by_id[obj_id]
+
+#                 # Add class/group metadata
+#                 rel.setdefault("subject_class_group", subj.get("class_group"))
+#                 rel.setdefault("subject_class_label", subj.get("class_label"))
+#                 rel.setdefault("object_class_group", obj.get("class_group"))
+#                 rel.setdefault("object_class_label", obj.get("class_label"))
+
+#                 # Add entity names for convenience in relations_raw.jsonl
+#                 rel.setdefault("subject_entity_name", subj.get("entity_name"))
+#                 rel.setdefault("object_entity_name", obj.get("entity_name"))
+
+#                 out_f.write(json.dumps(rel, ensure_ascii=False) + "\n")
+#                 n_relations += 1
+
+#             # flush after each chunk so data is written incrementally
+#             # out_f.flush()
+
+#     logger.info(
+#         "Rel Rec done. Chunks: %d, chunks_with_LLM: %d, relations: %d",
+#         n_chunks,
+#         n_chunks_called,
+#         n_relations,
+#     )
+
+# # -----------------------------------------------------------------------------
+# # CLI (optional for terminal use; in notebooks call run_rel_rec(...) directly)
+# # -----------------------------------------------------------------------------
+
+# def parse_args() -> argparse.Namespace:
+#     p = argparse.ArgumentParser(description="Relation Recognition (Rel Rec)")
+#     p.add_argument(
+#         "--entities",
+#         required=True,
+#         help="Path to entities_with_class.jsonl",
+#     )
+#     p.add_argument(
+#         "--chunks",
+#         required=True,
+#         help="Path to chunks_sentence.jsonl",
+#     )
+#     p.add_argument(
+#         "--output",
+#         required=True,
+#         help="Path to output relations_raw.jsonl",
+#     )
+#     p.add_argument(
+#         "--model",
+#         default=MODEL_NAME,
+#         help=f"Model name (default: {MODEL_NAME})",
+#     )
+#     return p.parse_args()
+
+# #make output path directory if it doesn't exist
+# # output_dir = "data/Relations/Rel Rec"
+# output_dir = "data/Relations/Rel Rec"
+# import os
+# if not os.path.exists(output_dir):
+#     os.makedirs(output_dir) 
+
+
+
+# -----------------------
+# Relation Rec - Run statement
+# -----------------------
+
+
+# run_rel_rec(
+#     entities_path="data/Classes/Cls_Res/Cls_Res_IterativeRuns/overall_summary/entities_with_class.jsonl",
+#     chunks_path="data/Chunks/chunks_sentence.jsonl",
+#     output_path="data/Relations/Rel Rec/relations_raw.jsonl",
+#     model="gpt-5.1"
+# )
+
+
+
+
+#endregion#? Rel Rec v4 - Prompt change (Better Rel Naming)
+#*#########################  End  ##########################
+
+
+
+#?######################### Start ##########################
+#region:#?   Rel Rec V10 - DSPy LLM Config (Better Rel Naming)
 
 #!/usr/bin/env python3
 """
@@ -5494,7 +11328,7 @@ Relation Recognition (Rel Rec) — Context-Enriched KG
     - entities_with_class.jsonl
     - chunks_sentence.jsonl
 - For each chunk, finds entities that occur in that chunk.
-- Calls an LLM (OpenAI Responses API) to extract directed relations between those entities.
+- Calls an LLM (via DSPy + TraceKGLLMConfig) to extract directed relations between those entities.
 - Writes:
     - relations_raw.jsonl  (one JSON object per relation instance)
 
@@ -5505,13 +11339,12 @@ Key design:
 - Intrinsic node properties were already handled in entity stages; here we treat
   almost everything else as relation-level context.
 
-Requirements:
-    pip install openai
-
-Environment:
-    export OPENAI_API_KEY="sk-..."
-
-Adjust paths & MODEL_NAME as needed.
+LLM usage:
+- All LLM calls go through a single DSPy LM obtained from TraceKGLLMConfig
+  via make_lm_for_step(cfg, "rel_rec").
+- If no llm_config is provided, run_rel_rec builds a minimal TraceKGLLMConfig
+  using the `model` and `max_tokens` arguments, so existing code that just
+  passes a model string still works.
 """
 
 import argparse
@@ -5519,21 +11352,21 @@ import json
 import logging
 import uuid
 from collections import defaultdict
-from typing import Any, Dict, Iterable, List, Tuple
-
-from openai import OpenAI
-
-# -----------------------------------------------------------------------------
-# Config
-# -----------------------------------------------------------------------------
-
-MODEL_NAME = "gpt-5.1"   # or any other model you use
+from pathlib import Path
+from typing import Any, Dict, Iterable, List, Tuple, Optional
 
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s [%(levelname)s] %(message)s",
 )
 logger = logging.getLogger(__name__)
+
+# -----------------------------------------------------------------------------
+# Config
+# -----------------------------------------------------------------------------
+
+MODEL_NAME = "gpt-5.1"   # default if no llm_config is provided
+LLM_MAX_TOKENS_DEFAULT = 16000  # used when we synthesize a TraceKGLLMConfig
 
 
 # -----------------------------------------------------------------------------
@@ -5615,7 +11448,7 @@ def iter_chunks(chunks_path: str) -> Iterable[Dict[str, Any]]:
 
 
 # -----------------------------------------------------------------------------
-# LLM Prompt & Call
+# LLM Prompt (unchanged semantics)
 # -----------------------------------------------------------------------------
 
 REL_REC_INSTRUCTIONS = """
@@ -5833,16 +11666,59 @@ Return ONLY valid JSON. No extra commentary.
 """
 
 
+# -----------------------------------------------------------------------------
+# DSPy / LLM helpers
+# -----------------------------------------------------------------------------
 
-
-def call_llm_extract_relations_for_chunk(
-    client: OpenAI,
+def _get_lm_for_rel_rec(
+    llm_config: Optional["TraceKGLLMConfig"],
     model: str,
+    max_tokens: int,
+):
+    """
+    Resolve a DSPy LM for the Relation Recognition step.
+
+    - If llm_config is provided, we use it directly (per-step override: 'rel_rec').
+    - Otherwise, we synthesize a minimal TraceKGLLMConfig using (model, max_tokens)
+      so that existing code can still call run_rel_rec(..., model="...").
+    """
+    if llm_config is not None:
+        cfg = llm_config
+    else:
+        cfg = TraceKGLLMConfig(default_model=model, max_tokens=max_tokens)
+
+    try:
+        cfg.validate()
+    except Exception as e:
+        logger.warning("[RelRec] llm_config.validate() failed: %s", e)
+
+    lm = make_lm_for_step(cfg, "rel_rec")
+    return lm
+
+
+def _call_rel_rec_lm(lm, prompt: str) -> str:
+    """
+    Call the DSPy LM and normalize the output into a plain string.
+    """
+    try:
+        outputs = lm(prompt)
+    except Exception as e:
+        logger.error("[RelRec] LM call error: %s", e)
+        return ""
+
+    # dspy.LM may return a string or list[str]; be tolerant.
+    if isinstance(outputs, list):
+        return outputs[0] if outputs else ""
+    return str(outputs or "")
+
+
+def call_lm_extract_relations_for_chunk(
+    lm: Any,
     chunk: Dict[str, Any],
     entities: List[Dict[str, Any]],
 ) -> List[Dict[str, Any]]:
     """
-    Call the LLM using the Responses API to extract relations for a single chunk.
+    Call the LLM (via DSPy LM) to extract relations for a single chunk.
 
     Returns a list of relation dicts (without relation_id, chunk_id, or class info added yet).
     """
@@ -5865,37 +11741,30 @@ def call_llm_extract_relations_for_chunk(
         ],
     }
 
-    try:
-        response = client.responses.create(
-            model=model,
-            reasoning={"effort": "low"},
-            input=[
-                {
-                    "role": "developer",
-                    "content": REL_REC_INSTRUCTIONS,
-                },
-                {
-                    "role": "user",
-                    "content": json.dumps(payload, ensure_ascii=False),
-                },
-            ],
-        )
-    except Exception as e:
-        logger.error("LLM call failed for chunk %s: %s", chunk["id"], e)
-        return []
+    # Single prompt string = instructions + JSON payload
+    prompt = (
+        REL_REC_INSTRUCTIONS
+        + "\n\n---\n\n"
+        + "Below is a JSON object describing the FOCUS CHUNK and its resolved entities.\n"
+        + "Follow ALL instructions above and return ONLY a single JSON object with key 'relations'.\n\n"
+        + json.dumps(payload, ensure_ascii=False, indent=2)
+    )
 
-    raw_text = response.output_text
+    raw_text = _call_rel_rec_lm(lm, prompt)
     if not raw_text:
         logger.warning("Empty response for chunk %s", chunk["id"])
         return []
 
+    raw_text = coerce_llm_text(raw_text).strip() #Injam
+    
     try:
         parsed = json.loads(raw_text)
+
     except json.JSONDecodeError:
         logger.error(
-            "Failed to parse JSON for chunk %s. Raw response:\n%s",
+            "Failed to parse JSON for chunk %s. Raw response (truncated):\n%s",
             chunk["id"],
-            raw_text,
+            raw_text[:2000],
         )
         return []
 
@@ -5920,26 +11789,36 @@ def run_rel_rec(
     chunks_path: str,
     output_path: str,
     model: str = MODEL_NAME,
+    max_tokens: int = LLM_MAX_TOKENS_DEFAULT,
+    llm_config: Optional["TraceKGLLMConfig"] = None,
 ) -> None:
     """
     Full Relation Recognition pipeline:
 
     - load entities_by_chunk, entities_by_id
+    - create a single DSPy LM for rel_rec (shared across all chunks)
     - iterate over chunks
     - for each chunk, call LLM to extract relations
     - enrich relations with relation_id, chunk_id, subject/object class info
     - write to relations_raw.jsonl (streaming, flushed after each chunk)
+
+    LLM behavior:
+      * If llm_config is provided, we use it to create the LM via make_lm_for_step(cfg, "rel_rec").
+      * If llm_config is None, we build a minimal TraceKGLLMConfig(default_model=model,
+        max_tokens=max_tokens) so existing code that passes just `model` continues to work.
     """
     entities_by_chunk, entities_by_id = load_entities_by_chunk(entities_path)
-    client = OpenAI()
+
+    # Prepare output file
+    out_path = Path(output_path)
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+
+    # Single LM instance for the whole run
+    lm = _get_lm_for_rel_rec(llm_config=llm_config, model=model, max_tokens=max_tokens)
 
     n_chunks = 0
     n_chunks_called = 0
     n_relations = 0
-
-    # Ensure the output directory exists (fixes FileNotFoundError when opening)
-    out_path = Path(output_path)
-    out_path.parent.mkdir(parents=True, exist_ok=True)
 
     logger.info("Writing relations to %s", output_path)
     with open(out_path, "w", encoding="utf-8") as out_f:
@@ -5956,9 +11835,8 @@ def run_rel_rec(
                 "Chunk %s: %d entities -> calling LLM", chunk_id, len(chunk_entities)
             )
 
-            relations = call_llm_extract_relations_for_chunk(
-                client=client,
-                model=model,
+            relations = call_lm_extract_relations_for_chunk(
+                lm=lm,
                 chunk=chunk,
                 entities=chunk_entities,
             )
@@ -6013,15 +11891,13 @@ def run_rel_rec(
                 out_f.write(json.dumps(rel, ensure_ascii=False) + "\n")
                 n_relations += 1
 
-            # flush after each chunk so data is written incrementally
-            # out_f.flush()
-
     logger.info(
         "Rel Rec done. Chunks: %d, chunks_with_LLM: %d, relations: %d",
         n_chunks,
         n_chunks_called,
         n_relations,
     )
+
 
 # -----------------------------------------------------------------------------
 # CLI (optional for terminal use; in notebooks call run_rel_rec(...) directly)
@@ -6051,31 +11927,42 @@ def parse_args() -> argparse.Namespace:
     )
     return p.parse_args()
 
-#make output path directory if it doesn't exist
-# output_dir = "data/Relations/Rel Rec"
+
+# make output path directory if it doesn't exist
 output_dir = "data/Relations/Rel Rec"
 import os
 if not os.path.exists(output_dir):
-    os.makedirs(output_dir) 
-
+    os.makedirs(output_dir)
 
 
 # -----------------------
 # Relation Rec - Run statement
 # -----------------------
 
-
+# Example direct run (without centralized llm_config):
 # run_rel_rec(
 #     entities_path="data/Classes/Cls_Res/Cls_Res_IterativeRuns/overall_summary/entities_with_class.jsonl",
 #     chunks_path="data/Chunks/chunks_sentence.jsonl",
 #     output_path="data/Relations/Rel Rec/relations_raw.jsonl",
-#     model="gpt-5.1"
+#     model="gpt-5.1",
 # )
 
+# If you want to use a shared TraceKGLLMConfig:
+#
+# cfg = TraceKGLLMConfig(
+#     default_model="gpt-5.1",
+#     rec_model=None,
+#     res_model=None,
+#     rel_rec_model="gpt-5.1",  # optional override
+# )
+# run_rel_rec(
+#     entities_path="...",
+#     chunks_path="...",
+#     output_path="...",
+#     llm_config=cfg,
+# )
 
-
-
-#endregion#? Rel Rec v4 - Prompt change (Better Rel Naming)
+#endregion#? Rel Rec V10 - DSPy LLM Config (Better Rel Naming)
 #?#########################  End  ##########################
 
 
@@ -6083,12 +11970,1403 @@ if not os.path.exists(output_dir):
 
 
 
-#?######################### Start ##########################
+#*######################### Start ##########################
 #region:#?   Rel Res V4  - Canonical + RelCls + RelClsGroup + Schema + LocalSubcluster
+
+
+# #!/usr/bin/env python3
+# """
+# relres_iterative_v4.py
+
+# Relation Resolution (Rel Res) — cluster relation instances, ask LLM to
+# assign/normalize:
+
+#   - canonical_rel_name    (normalized predicate used on KG edges)
+#   - canonical_rel_desc    (reusable description of that predicate)
+#   - rel_cls               (relation class, groups canonical_rel_names)
+#   - rel_cls_group         (broad group like COMPOSITION, CAUSALITY, ...)
+
+# while preserving:
+
+#   - relation_name         (raw name from Rel Rec)
+#   - rel_desc              (instance-level description)
+#   - qualifiers, head/tail, etc.
+
+# Key properties:
+# - We NEVER remove relation instances; we only enrich them with schema.
+# - canonical_rel_name is what will be used as edge label in the KG.
+# - rel_cls / rel_cls_group give you a 2-layer schema for relations.
+# - Multi-run friendly: TBD fields can be filled in the first run, refined later.
+# - Uses global HDBSCAN + optional local subclustering + MAX_MEMBERS_PER_PROMPT
+#   so LLM chunks stay reasonably small.
+
+# Input:
+#   data/Relations/Rel Rec/relations_raw.jsonl
+
+# Output (under OUT_DIR):
+#   - per-(cluster,local,part) decisions: cluster_<ID>_decisions.json
+#   - per-(cluster,local,part) raw llm output: llm_raw/cluster_<ID>_llm_raw.txt
+#   - per-(cluster,local,part) prompts: llm_raw/cluster_<ID>_prompt.txt
+#   - cumulative action log: rel_res_action_log.jsonl
+#   - final resolved relations: relations_resolved.json and .jsonl
+#   - summary/all_clusters_decisions.json
+#   - summary/stats_summary.json
+#   - summary/canonical_rel_schema.json
+#   - summary/rel_cls_schema.json
+#   - summary/rel_cls_group_schema.json
+# """
+
+# import json
+# import os
+# import re
+# import time
+# import uuid
+# from pathlib import Path
+# from typing import List, Dict, Any, Optional, Tuple
+
+# import numpy as np
+# import torch
+# from sklearn.preprocessing import normalize
+
+# # clustering libs
+# try:
+#     import hdbscan
+# except Exception:
+#     raise RuntimeError("hdbscan required: pip install hdbscan")
+# try:
+#     import umap
+#     UMAP_AVAILABLE = True
+# except Exception:
+#     UMAP_AVAILABLE = False
+
+# # transformers embedder
+# from transformers import AutoTokenizer, AutoModel
+
+# # OpenAI client (Responses API)
+# try:
+#     from openai import OpenAI
+# except Exception:
+#     OpenAI = None
+
+# # ----------------------------- CONFIG -----------------------------
+
+# INPUT_RELATIONS = Path("data/Relations/Rel Rec/relations_raw.jsonl")
+# OUT_DIR = Path("data/Relations/Rel Res")
+# OUT_DIR.mkdir(parents=True, exist_ok=True)
+# RAW_LLM_DIR = OUT_DIR / "llm_raw"
+# RAW_LLM_DIR.mkdir(exist_ok=True)
+
+# # Embedding model
+# EMBED_MODEL = "BAAI/bge-large-en-v1.5"
+# DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
+# BATCH_SIZE = 32
+
+# # Weights for buckets used to build relation embeddings
+# # Buckets:
+# #   name            = relation_name
+# #   desc            = rel_desc
+# #   head_tail       = subject/object names + class info
+# #   hint_canonical  = rel_hint_type + canonical_rel_name + canonical_rel_desc + rel_cls
+# REL_EMB_WEIGHTS = {
+#     "name": 0.25,
+#     "desc": 0.15,
+#     "head_tail": 0.20,
+#     "hint_canonical": 0.40,
+# }
+
+# # Global clustering params
+# USE_UMAP = True
+# UMAP_N_COMPONENTS = 64
+# UMAP_N_NEIGHBORS = 8
+# UMAP_MIN_DIST = 0.0
+# HDBSCAN_MIN_CLUSTER_SIZE = 2
+# HDBSCAN_MIN_SAMPLES = 1
+# HDBSCAN_METRIC = "euclidean"
+
+# # Local subcluster params (when a cluster is very large)
+# MAX_CLUSTER_SIZE_FOR_LOCAL = 30
+# LOCAL_HDBSCAN_MIN_CLUSTER_SIZE = 2
+# LOCAL_HDBSCAN_MIN_SAMPLES = 1
+
+# # LLM prompt chunking
+# MAX_MEMBERS_PER_PROMPT = 10  # max relation instances per LLM call
+
+# # LLM / OpenAI
+# OPENAI_MODEL = "gpt-5.1"
+# OPENAI_TEMPERATURE = 0.0
+# LLM_MAX_OUTPUT_TOKENS = 16000
+# OPENAI_API_KEY_ENV = "OPENAI_API_KEY"
+
+# VERBOSE = False
+
+# # ---------------------- Helpers: OpenAI client ---------------------
+
+# def _load_openai_key(envvar: str = OPENAI_API_KEY_ENV, fallback_path: str = ".env"):
+#     key = os.getenv(envvar, None)
+#     if key:
+#         return key
+#     if Path(fallback_path).exists():
+#         txt = Path(fallback_path).read_text(encoding="utf-8").strip()
+#         if txt:
+#             return txt
+#     return None
+
+# OPENAI_KEY = _load_openai_key()
+# if OpenAI is not None and OPENAI_KEY:
+#     client = OpenAI(api_key=OPENAI_KEY)
+# else:
+#     client = None
+#     if VERBOSE:
+#         print("⚠️ OpenAI client not initialized (missing package or API key). LLM calls will fail unless OpenAI client is available.")
+
+# def call_llm(prompt: str, model: str = OPENAI_MODEL, temperature: float = OPENAI_TEMPERATURE, max_output_tokens: int = LLM_MAX_OUTPUT_TOKENS) -> str:
+#     """
+#     Use OpenAI Responses API with a single developer prompt and a small user nudge.
+#     """
+#     if client is None:
+#         raise RuntimeError("OpenAI client not available. Set OPENAI_API_KEY and install openai package.")
+#     try:
+#         resp = client.responses.create(
+#             model=model,
+#             reasoning={"effort": "low"},
+#             max_output_tokens=max_output_tokens,
+#             input=[
+#                 {"role": "developer", "content": prompt},
+#                 {"role": "user", "content": "Return ONLY the JSON array of function calls now."},
+#             ],
+#         )
+#         return resp.output_text or ""
+#     except Exception as e:
+#         print("LLM call error:", e)
+#         return ""
+
+# # ---------------------- HF Embedder --------------------------------
+
+# def mean_pool(token_embeddings: torch.Tensor, attention_mask: torch.Tensor):
+#     input_mask_expanded = attention_mask.unsqueeze(-1).expand(token_embeddings.size()).float()
+#     sum_embeddings = torch.sum(token_embeddings * input_mask_expanded, 1)
+#     sum_mask = torch.clamp(input_mask_expanded.sum(1), min=1e-9)
+#     return sum_embeddings / sum_mask
+
+# class HFEmbedder:
+#     def __init__(self, model_name=EMBED_MODEL, device=DEVICE):
+#         if VERBOSE:
+#             print(f"[embedder] loading {model_name} on {device}")
+#         self.device = device
+#         self.tokenizer = AutoTokenizer.from_pretrained(model_name, use_fast=True)
+#         self.model = AutoModel.from_pretrained(model_name)
+#         self.model.to(device)
+#         self.model.eval()
+#         for p in self.model.parameters():
+#             p.requires_grad = False
+
+#     @property
+#     def dim(self) -> int:
+#         return getattr(self.model.config, "hidden_size", 1024)
+
+#     @torch.no_grad()
+#     def encode_batch(self, texts: List[str], batch_size: int = BATCH_SIZE) -> np.ndarray:
+#         """
+#         Encode a list of texts into L2-normalized embeddings.
+#         """
+#         if len(texts) == 0:
+#             D = self.dim
+#             return np.zeros((0, D))
+#         embs = []
+#         for i in range(0, len(texts), batch_size):
+#             batch = texts[i:i + batch_size]
+#             enc = self.tokenizer(
+#                 batch,
+#                 padding=True,
+#                 truncation=True,
+#                 return_tensors="pt",
+#                 max_length=512,
+#             )
+#             input_ids = enc["input_ids"].to(self.device)
+#             attention_mask = enc["attention_mask"].to(self.device)
+#             out = self.model(input_ids=input_ids, attention_mask=attention_mask, return_dict=True)
+#             token_embeds = out.last_hidden_state
+#             pooled = mean_pool(token_embeds, attention_mask)
+#             embs.append(pooled.cpu().numpy())
+#         embs = np.vstack(embs)
+#         embs = normalize(embs, axis=1)
+#         return embs
+
+# # ---------------------- IO helpers ---------------------------------
+
+# def load_relations(path: Path) -> List[Dict[str, Any]]:
+#     """
+#     Load relations_raw.jsonl and ensure schema-related fields exist:
+
+#       - canonical_rel_name (default "TBD")
+#       - canonical_rel_desc (default "")
+#       - rel_cls (default "TBD")
+#       - rel_cls_group (default "TBD")
+#       - remarks (list of strings)
+#     """
+#     rels: List[Dict[str, Any]] = []
+#     if not path.exists():
+#         raise FileNotFoundError(f"Relations file not found: {path}")
+#     with path.open("r", encoding="utf-8") as f:
+#         for line in f:
+#             line = line.strip()
+#             if not line:
+#                 continue
+#             obj = json.loads(line)
+#             # ensure relation_id exists
+#             rid = obj.get("relation_id") or ("RelR_" + uuid.uuid4().hex[:8])
+#             obj["relation_id"] = rid
+
+#             # ensure schema fields
+#             if "canonical_rel_name" not in obj or str(obj.get("canonical_rel_name", "")).strip() == "":
+#                 obj["canonical_rel_name"] = "TBD"
+#             if "canonical_rel_desc" not in obj or obj.get("canonical_rel_desc") is None:
+#                 obj["canonical_rel_desc"] = ""
+#             if "rel_cls" not in obj or str(obj.get("rel_cls", "")).strip() == "":
+#                 obj["rel_cls"] = "TBD"
+#             if "rel_cls_group" not in obj or str(obj.get("rel_cls_group", "")).strip() == "":
+#                 obj["rel_cls_group"] = "TBD"
+
+#             # normalize remarks: merge original remark + remarks list into a 'remarks' list
+#             initial_remark = obj.get("remark")
+#             remarks = obj.get("remarks")
+#             norm_remarks: List[str] = []
+#             if isinstance(remarks, list):
+#                 norm_remarks.extend([str(r) for r in remarks if r])
+#             elif isinstance(remarks, str) and remarks.strip():
+#                 norm_remarks.append(remarks.strip())
+#             if isinstance(initial_remark, str) and initial_remark.strip():
+#                 norm_remarks.append(initial_remark.strip())
+#             obj["remarks"] = norm_remarks
+
+#             rels.append(obj)
+#     if VERBOSE:
+#         print(f"[start] loaded {len(rels)} relations from {path}")
+#     return rels
+
+# def safe_str(s: Optional[str]) -> str:
+#     if not s:
+#         return ""
+#     return str(s).replace("\n", " ").strip()
+
+# # ---------------------- Build relation texts & embeddings ----------
+
+# def build_relation_texts(
+#     relations: List[Dict[str, Any]]
+# ) -> Tuple[List[str], List[str], List[str], List[str]]:
+#     """
+#     Build four text buckets for each relation:
+
+#     - name_texts:       relation_name
+#     - desc_texts:       rel_desc
+#     - head_tail_texts:  head/tail entity + class info
+#     - hint_texts:       rel_hint_type + canonical_rel_name + canonical_rel_desc + rel_cls
+#     """
+#     name_texts, desc_texts, head_tail_texts, hint_texts = [], [], [], []
+
+#     for r in relations:
+#         # name
+#         rname = safe_str(r.get("relation_name", ""))
+#         name_texts.append(rname[:256])
+
+#         # desc
+#         rdesc = safe_str(r.get("rel_desc", ""))
+#         desc_texts.append(rdesc[:512])
+
+#         # head_tail
+#         subj_name = safe_str(r.get("subject_entity_name", ""))
+#         subj_cl = safe_str(r.get("subject_class_label", ""))
+#         subj_cg = safe_str(r.get("subject_class_group", ""))
+#         obj_name = safe_str(r.get("object_entity_name", ""))
+#         obj_cl = safe_str(r.get("object_class_label", ""))
+#         obj_cg = safe_str(r.get("object_class_group", ""))
+
+#         head_tail = f"{subj_name} ({subj_cl}, {subj_cg}) -> {obj_name} ({obj_cl}, {obj_cg})"
+#         head_tail_texts.append(head_tail[:512])
+
+#         # hint_canonical
+#         hint_parts = []
+#         for key in ["rel_hint_type", "canonical_rel_name", "canonical_rel_desc", "rel_cls"]:
+#             val = safe_str(r.get(key, ""))
+#             if val and val.upper() != "TBD":
+#                 hint_parts.append(val)
+#         hint_text = " ; ".join(hint_parts)
+#         hint_texts.append(hint_text[:512])
+
+#     return name_texts, desc_texts, head_tail_texts, hint_texts
+
+# def any_nonempty(lst: List[str]) -> bool:
+#     return any(safe_str(t) for t in lst)
+
+# def compute_relation_embeddings(
+#     embedder: HFEmbedder,
+#     relations: List[Dict[str, Any]],
+#     weights: Dict[str, float]
+# ) -> np.ndarray:
+#     """
+#     Compute combined embeddings for relations using four buckets with fixed weights.
+#     """
+#     N = len(relations)
+#     if N == 0:
+#         raise ValueError("No relations to embed")
+
+#     name_texts, desc_texts, head_tail_texts, hint_texts = build_relation_texts(relations)
+
+#     emb_name = embedder.encode_batch(name_texts) if any_nonempty(name_texts) else None
+#     emb_desc = embedder.encode_batch(desc_texts) if any_nonempty(desc_texts) else None
+#     emb_ht = embedder.encode_batch(head_tail_texts) if any_nonempty(head_tail_texts) else None
+#     emb_hint = embedder.encode_batch(hint_texts) if any_nonempty(hint_texts) else None
+
+#     D = embedder.dim
+#     combined = np.zeros((N, D), dtype=np.float32)
+
+#     def add_bucket(emb: Optional[np.ndarray], weight: float):
+#         nonlocal combined
+#         if emb is None:
+#             return
+#         if emb.shape[0] != N:
+#             raise ValueError("embedding row mismatch")
+#         combined += weight * emb  # emb already row-normalized
+
+#     add_bucket(emb_name, weights.get("name", 0.0))
+#     add_bucket(emb_desc, weights.get("desc", 0.0))
+#     add_bucket(emb_ht, weights.get("head_tail", 0.0))
+#     add_bucket(emb_hint, weights.get("hint_canonical", 0.0))
+
+#     combined = normalize(combined, axis=1)
+#     return combined
+
+# # ---------------------- clustering ---------------------------------
+
+# def run_hdbscan(
+#     embeddings: np.ndarray,
+#     min_cluster_size: int = HDBSCAN_MIN_CLUSTER_SIZE,
+#     min_samples: int = HDBSCAN_MIN_SAMPLES,
+#     metric: str = HDBSCAN_METRIC,
+#     use_umap: bool = USE_UMAP
+# ) -> Tuple[np.ndarray, object]:
+#     X = embeddings
+#     N = X.shape[0]
+#     if use_umap and UMAP_AVAILABLE and N >= 6:
+#         safe_n_components = min(UMAP_N_COMPONENTS, max(2, N - 2))
+#         safe_n_neighbors = min(UMAP_N_NEIGHBORS, max(2, N - 1))
+#         try:
+#             reducer = umap.UMAP(
+#                 n_components=safe_n_components,
+#                 n_neighbors=safe_n_neighbors,
+#                 min_dist=UMAP_MIN_DIST,
+#                 metric="cosine",
+#                 random_state=42
+#             )
+#             X_reduced = reducer.fit_transform(X)
+#             if X_reduced is not None and X_reduced.shape[0] == N:
+#                 X = X_reduced
+#             else:
+#                 if VERBOSE:
+#                     print(f"[warn] UMAP returned invalid shape; skipping UMAP")
+#         except Exception as e:
+#             if VERBOSE:
+#                 print(f"[warn] UMAP failed (N={N}): {e}. Proceeding without UMAP.")
+#             X = embeddings
+#     clusterer = hdbscan.HDBSCAN(
+#         min_cluster_size=min_cluster_size,
+#         min_samples=min_samples,
+#         metric=metric,
+#         cluster_selection_method="eom"
+#     )
+#     labels = clusterer.fit_predict(X)
+#     return labels, clusterer
+
+# # ---------------------- LLM prompt template ------------------------
+
+# RELRES_PROMPT_TEMPLATE = """
+# You are a very proactive RELATION-RESOLUTION assistant, and an expert in knowledge graphs (KGs) and schema (ontology) design.
+
+# You are given a CLUSTER of relation INSTANCES from a context-enriched technical KG.
+# Each relation instance already connects specific subject and object entities, and has:
+
+# - relation_id
+# - relation_name        (raw, from Relation Recognition; may be noisy)
+# - rel_desc             (instance-level description; may be verbose)
+# - rel_hint_type        (short free-form hint; may be noisy)
+# - canonical_rel_name   (often "TBD" initially)
+# - canonical_rel_desc   (often empty initially)
+# - rel_cls              (often "TBD" initially)
+# - rel_cls_group        (often "TBD" initially)
+# - subject_entity_name, object_entity_name
+# - subject_class_label, subject_class_group
+# - object_class_label, object_class_group
+# - qualifiers (temporal, spatial, etc.)
+# - confidence, remarks, etc.
+
+# IMPORTANT CONTEXT ABOUT THE PIPELINE
+# ------------------------------------
+# - ALL these fields (especially relation_name, rel_desc, and rel_hint_type) were
+#   generated by previous LLM stages. They are **approximate** and may be:
+#     - awkward in wording,
+#     - too specific,
+#     - too generic,
+#     - or slightly wrong.
+# - This step follows a "generate first, refine later" philosophy.
+#   Your job is to **refine, disambiguate, normalize, and improve human readability as a KG expert**, not to copy the wording blindly.
+# - Use upstream fields (especially relation_name, rel_desc, and rel_hint_type) as **semantic hints**, not as final label candidates AT ALL!
+
+# MULTI-RUN / REFINEMENT INSTRUCTIONS (READ ONLY WHEN THE FOLLOWING FIELDS ARE ALREADY FILLED: canonical_rel_name, canonical_rel_desc, rel_cls, rel_cls_group)
+# - Only read/apply the following guidance when at least one of the fields above is NOT "TBD" for relations in this chunk. It means we are in a refinement run.
+# - Do NOT be passive: if any pre-filled value is inconsistent, ambiguous, or improvable, you MUST propose a correction (use modify_rel_schema) with a concise justification.
+# - Only return [] if there is extremely strong evidence that no change is required (this is rare).
+# - This is an iterative process — act now with well-justified corrections using modify_rel_schema (include a short justification), rather than deferring small but meaningful fixes.
+# - This step will be repeated in later iterations; reasonable but imperfect changes can be corrected later. It is worse to miss a necessary change than to propose a well-justified change that might be slightly adjusted later.
+
+
+# ABOUT CLUSTERS (CRITICAL)
+# -------------------------
+# - The cluster you see is produced automatically from embeddings.
+# - The cluster is **only suggestive**, NOT a hard class:
+#     - It may contain multiple different canonical relations.
+#     - It may contain multiple different relation classes.
+#     - It may contain multiple different relation class groups.
+# - Your task is **NOT**:
+#     - "Find ONE canonical_rel_name that covers (almost) all relations in the cluster."
+#     - "Force all relations in the cluster into the same rel_cls or rel_cls_group."
+# - Your task **IS**:
+#     - For EACH relation instance, decide what canonical_rel_name, rel_cls,
+#       and rel_cls_group are appropriate (especially from the lens of a KG and Schema expert).
+#     - If some instances do NOT naturally share semantics, assign them different
+#       canonical_rel_name / rel_cls / rel_cls_group, even though they are
+#       in the same cluster.
+#     - If some other instances in the cluster naturally share exactly the same
+#       semantics, group them together in the same function call.
+
+# CRUCIAL DISTINCTION (SCOPE)
+# ---------------------------
+# We use a 3-layer abstraction for relations:
+
+# 1) canonical_rel_name
+#    - Fine-grained, predicate-level.
+#    - Groups relations that use essentially the SAME predicate meaning and direction.
+#    - This is the predicate that will be used as the edge label in the KG.
+#    - Examples: "occurs_in", "resists", "provides_resistance_to", "is_subtype_of",
+#      "has_metallurgical_structure", "grouped_with".
+
+# 2) rel_cls
+#    - A broader relation CLASS that may cover multiple canonical_rel_name values.
+#    - Think of this as a family of similar predicates.
+#    - Examples (illustrative): "alloying_element_relation", "microstructure_relation",
+#      "hierarchy_relation", "corrosion_resistance_relation", "document_series_relation".
+#    - IMPORTANT: rel_cls should be more specific than broad groups, but more general
+#      than a single canonical_rel_name.
+
+# 3) rel_cls_group
+#    - Very broad semantic DIMENSIONS:
+#        COMPOSITION, CAUSALITY, IDENTITY, TEMPORALITY, SPATIALITY, AGENCY,
+#        ASSOCIATION, MODIFICATION, USAGE, REQUIREMENT, etc.
+#    - This list is illustrative, NOT exhaustive.
+#    - Example:
+#        canonical_rel_name: "contains_alloying_element"
+#        rel_cls:            "alloying_element_relation"
+#        rel_cls_group:      "COMPOSITION"
+
+# RELATION-BY-RELATION THINKING (SUPER IMPORTANT)
+# -----------------------------------------------
+# For every relation instance in the cluster, conceptually ask:
+
+# 1) What is the **best canonical predicate** (canonical_rel_name) for THIS instance,
+#    ignoring awkward wording in relation_name / rel_hint_type?
+# 2) Which broader **relation class** (rel_cls) best describes this connection?
+# 3) Which **rel_cls_group** (COMPOSITION, CAUSALITY, etc.) does it belong to?
+
+# Then:
+# - If you see other instances in the cluster with the **same semantics**, you may
+#   include them in the same function call (same canonical_rel_name / rel_cls / rel_cls_group).
+# - Do NOT try to find one label that covers ALL instances in the cluster.
+
+# NOISY HINTS AND HOW TO USE THEM
+# -------------------------------
+# - relation_name, rel_desc, rel_hint_type are hints, not perfect labels.
+# - Examples of bad patterns that you should NOT copy directly:
+#     - rel_hint_type = "co-classification" → this is awkward wording; interpret it
+#       as "these things are grouped together as co-equal categories" and choose
+#       a better canonical name / class (e.g., "grouped_with" with rel_cls
+#       "coequal_category_relation", rel_cls_group "ASSOCIATION" or "IDENTITY").
+#     - rel_hint_type = "causal" → this suggests rel_cls_group "CAUSALITY",
+#       but is NOT a good canonical_rel_name or rel_cls by itself.
+# - Also avoid redundant patterns like:
+#     - rel_cls = "composition_relation" when rel_cls_group = "COMPOSITION".
+#       In that case, choose a more specific rel_cls label, e.g.,
+#       "alloying_element_relation" or "microstructure_relation".
+
+# DEDUPLICATION & NORMALIZATION
+# -----------------------------
+# - Within a cluster, if you see multiple predicate variants that are semantically
+#   the same (e.g., "has_subtype", "is_subtype_of"), you MUST normalize them
+#   to **one** canonical_rel_name and apply it consistently:
+#     - For hierarchical relations, prefer a single consistent style, e.g., "is_subtype_of".
+# - Avoid creating trivial variants that only differ in small wording:
+#     - Do NOT keep both "provides_resistance_to" and "improves_resistance_to"
+#       if they are used identically for the same semantic link; pick one.
+# - Avoid rel_cls that simply repeats rel_cls_group with "_relation" added
+#   (e.g., "composition_relation" when rel_cls_group is "COMPOSITION").
+
+# WHAT YOU NEVER CHANGE
+# ----------------------
+# - SUBJECT and OBJECT entities are fixed; you MUST NOT change them.
+# - You NEVER delete relation instances.
+# - You NEVER move qualifiers from relations onto nodes; qualifiers stay on the
+#   relation instance.
+
+# YOUR FUNCTION VOCABULARY
+# ------------------------
+# You must return an ordered JSON ARRAY of function calls using ONLY:
+
+# 1) set_canonical_rel
+# 2) set_rel_cls
+# 3) set_rel_cls_group
+# 4) modify_rel_schema
+# 5) add_rel_remark
+
+# Think RELATION-BY-RELATION first, and only group multiple relation_ids into the
+# same function call when you are genuinely sure they share the same semantics.
+
+# --------------------------------
+# FUNCTION DEFINITIONS
+# --------------------------------
+
+# 1) set_canonical_rel
+#    Use this when you want to SET or ALIGN canonical_rel_name / canonical_rel_desc
+#    for one or more relation instances (especially when values are "TBD").
+
+#    args = {
+#      "relation_ids": [<relation_id>...],        # REQUIRED, at least 1
+#      "canonical_rel_name": <string>,           # REQUIRED, normalized predicate for KG edge
+#      "canonical_rel_desc": <string or null>,   # OPTIONAL, reusable description of this predicate
+#      "justification": <string>,                # REQUIRED: why these instances share this canonical predicate
+#      "remark": <string or null>,               # optional human-facing notes
+#      "confidence": <number between 0 and 1, optional>
+#    }
+
+#    Notes:
+#    - canonical_rel_name should be a short predicate-style phrase, e.g. "occurs_in",
+#      "resists", "provides_resistance_to", "is_subtype_of", "has_metallurgical_structure".
+#    - Do NOT include qualifiers (e.g., "at high temperature") here.
+#    - Use this on relatively TIGHT groups of semantically equivalent predicates.
+#    - It is perfectly fine to call set_canonical_rel with a **single** relation_id
+#      when others in the cluster do not share the semantics.
+
+
+# 2) set_rel_cls
+#    Use this when you want to SET or ALIGN rel_cls for one or more instances,
+#    grouping them into a broader relation class (family).
+
+#    args = {
+#      "relation_ids": [<relation_id>...],        # REQUIRED, at least 1
+#      "rel_cls": <string>,                      # REQUIRED: class name (e.g., "structure_relation")
+#      "justification": <string>,                # REQUIRED: why these instances belong to this class
+#      "remark": <string or null>,               # optional notes
+#      "confidence": <number between 0 and 1, optional>
+#    }
+
+#    Notes:
+#    - A rel_cls usually covers MULTIPLE canonical_rel_name values, not just one.
+#    - Think of rel_cls as a conceptual family: e.g. "alloying_element_relation",
+#      "microstructure_relation", "document_series_relation".
+#    - Do NOT simply repeat rel_cls_group (e.g. avoid "composition_relation" when
+#      rel_cls_group is "COMPOSITION") unless there is truly no more specific
+#      and meaningful class you can provide.
+
+
+# 3) set_rel_cls_group
+#    Use this when you want to SET or ALIGN rel_cls_group for one or more instances
+#    (or their classes), using a very broad semantic category.
+
+#    args = {
+#      "relation_ids": [<relation_id>...],        # REQUIRED, at least 1
+#      "rel_cls_group": <string>,                # REQUIRED: broad group (e.g., "COMPOSITION")
+#      "justification": <string>,                # REQUIRED: why this group fits
+#      "remark": <string or null>,               # optional notes
+#      "confidence": <number between 0 and 1, optional>
+#    }
+
+#    Notes:
+#    - rel_cls_group is broad and somewhat orthogonal.
+#    - Typical groups: COMPOSITION, CAUSALITY, IDENTITY, TEMPORALITY, SPATIALITY,
+#      AGENCY, INTERACTION, ASSOCIATION, MODIFICATION, USAGE, REQUIREMENT, etc.
+#    - General hints like rel_hint_type="causal" are better mapped to rel_cls_group
+#      (CAUSALITY) than to canonical_rel_name.
+
+
+# 4) modify_rel_schema
+#    Use this to REFINE or CORRECT existing schema fields for one or more relations
+#    (canonical_rel_name / canonical_rel_desc / rel_cls / rel_cls_group).
+
+#    args = {
+#      "relation_ids": [<relation_id>...],            # REQUIRED, at least 1
+#      "canonical_rel_name": <string or null>,        # OPTIONAL: new canonical name
+#      "canonical_rel_desc": <string or null>,        # OPTIONAL: new canonical description
+#      "rel_cls": <string or null>,                   # OPTIONAL: new relation class
+#      "rel_cls_group": <string or null>,             # OPTIONAL: new broad group
+#      "justification": <string>,                     # REQUIRED: why this modification is needed
+#      "remark": <string or null>,                    # optional notes / flags
+#      "confidence": <number between 0 and 1, optional>
+#    }
+
+#    Notes:
+#    - Do NOT be passive: if any pre-filled value is inconsistent, ambiguous, or improvable, you MUST propose a correction using modify_rel_schema.
+#    - This is iterative: make well-justified corrections now (include a short justification); later runs may further refine them. 
+#    - It is worse to miss a necessary change than to propose a justified change that might be slightly adjusted later.
+#    - You MUST NOT try to change (poor) relation_names. As long as the canonical_rel_name, rel_cls, and rel_cls_group are fine, we are good. 
+#      But if they need correction, YOU MUST use modify_rel_schema to correct them. We will not use raw relation name in the KG. 
+#    - You MAY use this to normalize even minor variants (e.g., consolidate "has_subtype"
+#    and "is_subtype_of" to "is_subtype_of") when needed. We want consistent schema.
+   
+
+
+# 5) add_rel_remark
+#    Use this when you ONLY want to attach a human-facing remark / caveat / TODO
+#    without changing any schema fields.
+
+#    args = {
+#      "relation_ids": [<relation_id>...],        # REQUIRED, at least 1
+#      "remark": <string>,                        # REQUIRED: the remark text
+#      "justification": <string>,                # REQUIRED: why this remark is useful
+#      "confidence": <number between 0 and 1, optional>
+#    }
+
+#    Notes:
+#    - Use this for issues outside scope (e.g., upstream entity resolution suspicion), or
+#      to flag ambiguous or borderline cases for later human review.
+
+# --------------------------------
+# INPUT RELATIONS (THIS CHUNK)
+# --------------------------------
+
+# Below is the JSON array of relation instances in THIS PART of a cluster
+# (we split very large clusters into smaller chunks just to keep the prompt size manageable):
+
+# {cluster_block}
+
+# --------------------------------
+# OUTPUT
+# --------------------------------
+
+# Return ONLY the JSON ARRAY of function calls, e.g.:
+
+# [
+#   {
+#     "function": "set_canonical_rel",
+#     "args": { ... }
+#   },
+#   {
+#     "function": "set_rel_cls",
+#     "args": { ... }
+#   },
+#   ...
+# ]
+
+# - If this chunk is already perfect (rare), you MAY return [].
+# - Every call MUST include a "justification".
+# - Use "remark" (or add_rel_remark) to flag issues or uncertainties that are outside
+#   the scope of these functions.
+# """
+
+# def sanitize_json_array(text: str) -> Optional[Any]:
+#     """
+#     Extract and parse the first JSON array from the text.
+#     Grab [ ... ] block, fix simple trailing commas, and json.loads.
+#     """
+#     if not text or not text.strip():
+#         return None
+#     s = text.strip()
+#     # replace smart quotes
+#     s = s.replace("“", '"').replace("”", '"').replace("‘", "'").replace("’", "'")
+#     start = s.find("[")
+#     end = s.rfind("]")
+#     if start == -1 or end == -1 or end <= start:
+#         return None
+#     cand = s[start:end + 1]
+#     # remove trailing commas before closing braces/brackets
+#     cand = re.sub(r",\s*([\]}])", r"\1", cand)
+#     try:
+#         return json.loads(cand)
+#     except Exception:
+#         return None
+
+# # ---------------------- Action executors ----------------------------
+
+# def execute_set_canonical_rel(
+#     rel_by_id: Dict[str, Dict[str, Any]],
+#     relation_ids: List[str],
+#     canonical_rel_name: Optional[str],
+#     canonical_rel_desc: Optional[str],
+# ):
+#     if canonical_rel_name is None:
+#         return
+#     canon_name = canonical_rel_name.strip()
+#     if not canon_name:
+#         return
+#     for rid in relation_ids:
+#         if rid not in rel_by_id:
+#             continue
+#         r = rel_by_id[rid]
+#         r["canonical_rel_name"] = canon_name
+#         if canonical_rel_desc is not None:
+#             r["canonical_rel_desc"] = canonical_rel_desc.strip()
+#         rel_by_id[rid] = r
+
+# def execute_set_rel_cls(
+#     rel_by_id: Dict[str, Dict[str, Any]],
+#     relation_ids: List[str],
+#     rel_cls: Optional[str],
+# ):
+#     if rel_cls is None:
+#         return
+#     cls_name = rel_cls.strip()
+#     if not cls_name:
+#         return
+#     for rid in relation_ids:
+#         if rid not in rel_by_id:
+#             continue
+#         r = rel_by_id[rid]
+#         r["rel_cls"] = cls_name
+#         rel_by_id[rid] = r
+
+# def execute_set_rel_cls_group(
+#     rel_by_id: Dict[str, Dict[str, Any]],
+#     relation_ids: List[str],
+#     rel_cls_group: Optional[str],
+# ):
+#     if rel_cls_group is None:
+#         return
+#     grp_name = rel_cls_group.strip()
+#     if not grp_name:
+#         return
+#     for rid in relation_ids:
+#         if rid not in rel_by_id:
+#             continue
+#         r = rel_by_id[rid]
+#         r["rel_cls_group"] = grp_name
+#         rel_by_id[rid] = r
+
+# def execute_modify_rel_schema(
+#     rel_by_id: Dict[str, Dict[str, Any]],
+#     relation_ids: List[str],
+#     canonical_rel_name: Optional[str],
+#     canonical_rel_desc: Optional[str],
+#     rel_cls: Optional[str],
+#     rel_cls_group: Optional[str],
+#     new_relation_name: Optional[str],
+#     original_relation_name: Optional[str],
+# ):
+#     for rid in relation_ids:
+#         if rid not in rel_by_id:
+#             continue
+#         r = rel_by_id[rid]
+
+#         if canonical_rel_name is not None and canonical_rel_name.strip():
+#             r["canonical_rel_name"] = canonical_rel_name.strip()
+#         if canonical_rel_desc is not None:
+#             r["canonical_rel_desc"] = canonical_rel_desc.strip()
+#         if rel_cls is not None and rel_cls.strip():
+#             r["rel_cls"] = rel_cls.strip()
+#         if rel_cls_group is not None and rel_cls_group.strip():
+#             r["rel_cls_group"] = rel_cls_group.strip()
+
+#         if new_relation_name is not None and new_relation_name.strip():
+#             if "original_relation_name" not in r:
+#                 if original_relation_name:
+#                     r["original_relation_name"] = original_relation_name
+#                 else:
+#                     r["original_relation_name"] = r.get("relation_name", "")
+#             r["relation_name"] = new_relation_name.strip()
+
+#         rel_by_id[rid] = r
+
+# def execute_add_rel_remark(
+#     rel_by_id: Dict[str, Dict[str, Any]],
+#     relation_ids: List[str],
+#     remark: Optional[str],
+# ):
+#     if remark is None:
+#         return
+#     txt = remark.strip()
+#     if not txt:
+#         return
+#     for rid in relation_ids:
+#         if rid not in rel_by_id:
+#             continue
+#         r = rel_by_id[rid]
+#         existing = r.get("remarks")
+#         if existing is None:
+#             existing = []
+#         elif not isinstance(existing, list):
+#             existing = [str(existing)]
+#         existing.append(txt)
+#         r["remarks"] = existing
+#         rel_by_id[rid] = r
+
+# # ---------------------- Main orchestration -------------------------
+
+# def relres_main():
+#     # load relations
+#     relations = load_relations(INPUT_RELATIONS)
+#     rel_by_id: Dict[str, Dict[str, Any]] = {r["relation_id"]: r for r in relations}
+
+#     # embedder
+#     embedder = HFEmbedder(model_name=EMBED_MODEL, device=DEVICE)
+#     rel_ids_order = [r["relation_id"] for r in relations]
+#     rel_id_to_index = {rid: i for i, rid in enumerate(rel_ids_order)}
+#     combined_emb = compute_relation_embeddings(embedder, relations, REL_EMB_WEIGHTS)
+#     print("[info] relation embeddings computed shape:", combined_emb.shape)
+
+#     # global clustering
+#     labels, clusterer = run_hdbscan(
+#         combined_emb,
+#         min_cluster_size=HDBSCAN_MIN_CLUSTER_SIZE,
+#         min_samples=HDBSCAN_MIN_SAMPLES,
+#         use_umap=USE_UMAP
+#     )
+#     unique_labels = sorted(set(labels))
+#     print("[info] global clustering done. unique labels:", unique_labels)
+
+#     # map cluster -> relation ids
+#     cluster_to_relids: Dict[int, List[str]] = {}
+#     for idx, lab in enumerate(labels):
+#         rid = rel_ids_order[idx]
+#         cluster_to_relids.setdefault(int(lab), []).append(rid)
+
+#     # action log
+#     action_log_path = OUT_DIR / "rel_res_action_log.jsonl"
+#     if action_log_path.exists():
+#         action_log_path.unlink()
+
+#     # helper to process a subset of relation ids with LLM (one prompt)
+#     def run_llm_on_subset(sub_rel_ids: List[str], cluster_label_str: str):
+#         if not sub_rel_ids:
+#             return
+
+#         # build compact representation for this chunk
+#         cluster_relations = []
+#         for rid in sub_rel_ids:
+#             r = rel_by_id.get(rid)
+#             if not r:
+#                 continue
+#             cluster_relations.append({
+#                 "relation_id": r["relation_id"],
+#                 "relation_name": safe_str(r.get("relation_name", "")),
+#                 "rel_desc": safe_str(r.get("rel_desc", "")),
+#                 "rel_hint_type": safe_str(r.get("rel_hint_type", "")),
+#                 "canonical_rel_name": safe_str(r.get("canonical_rel_name", "")),
+#                 "canonical_rel_desc": safe_str(r.get("canonical_rel_desc", "")),
+#                 "rel_cls": safe_str(r.get("rel_cls", "")),
+#                 "rel_cls_group": safe_str(r.get("rel_cls_group", "")),
+#                 "subject_entity_name": safe_str(r.get("subject_entity_name", "")),
+#                 "object_entity_name": safe_str(r.get("object_entity_name", "")),
+#                 "subject_class_label": safe_str(r.get("subject_class_label", "")),
+#                 "subject_class_group": safe_str(r.get("subject_class_group", "")),
+#                 "object_class_label": safe_str(r.get("object_class_label", "")),
+#                 "object_class_group": safe_str(r.get("object_class_group", "")),
+#                 "qualifiers": r.get("qualifiers", {}),
+#                 "confidence": float(r.get("confidence", 0.0)),
+#                 "remarks": r.get("remarks", [])
+#             })
+
+#         if not cluster_relations:
+#             return
+
+#         cluster_block = json.dumps(cluster_relations, ensure_ascii=False, indent=2)
+#         prompt = RELRES_PROMPT_TEMPLATE.replace("{cluster_block}", cluster_block)
+
+#         # log prompt
+#         prompt_path = RAW_LLM_DIR / f"cluster_{cluster_label_str}_prompt.txt"
+#         prompt_path.write_text(prompt, encoding="utf-8")
+
+#         # call LLM
+#         raw_out = ""
+#         try:
+#             raw_out = call_llm(prompt)
+#         except Exception as e:
+#             print(f"[warning] LLM call failed for {cluster_label_str}: {e}")
+#             raw_out = ""
+
+#         # write raw output
+#         raw_path = RAW_LLM_DIR / f"cluster_{cluster_label_str}_llm_raw.txt"
+#         raw_path.write_text(raw_out, encoding="utf-8")
+
+#         parsed = sanitize_json_array(raw_out)
+#         if parsed is None:
+#             print(f"[warn] failed to parse LLM output for chunk {cluster_label_str}; skipping automated actions for this chunk.")
+#             dec_path = OUT_DIR / f"cluster_{cluster_label_str}_decisions.json"
+#             dec_path.write_text(
+#                 json.dumps({"cluster_label": cluster_label_str, "raw_llm": raw_out}, ensure_ascii=False, indent=2),
+#                 encoding="utf-8"
+#             )
+#             return
+
+#         decisions: List[Dict[str, Any]] = []
+
+#         # execute parsed function list in order
+#         for step in parsed:
+#             if not isinstance(step, dict):
+#                 continue
+#             fn = step.get("function")
+#             args = step.get("args", {}) or {}
+#             justification = args.get("justification")
+#             confidence_val = args.get("confidence", None)
+#             remark_val = args.get("remark")
+
+#             try:
+#                 if fn == "set_canonical_rel":
+#                     rel_ids_raw = args.get("relation_ids", []) or []
+#                     canon_name = args.get("canonical_rel_name")
+#                     canon_desc = args.get("canonical_rel_desc")
+#                     rel_ids_valid = [rid for rid in rel_ids_raw if rid in rel_by_id]
+
+#                     if not rel_ids_valid or canon_name is None:
+#                         decisions.append({
+#                             "action": "set_canonical_rel_skip",
+#                             "requested_relation_ids": rel_ids_raw,
+#                             "canonical_rel_name": canon_name,
+#                             "justification": justification,
+#                             "remark": remark_val,
+#                             "confidence": confidence_val
+#                         })
+#                         continue
+
+#                     execute_set_canonical_rel(rel_by_id, rel_ids_valid, canon_name, canon_desc)
+
+#                     decisions.append({
+#                         "action": "set_canonical_rel",
+#                         "relation_ids": rel_ids_valid,
+#                         "canonical_rel_name": canon_name,
+#                         "canonical_rel_desc": canon_desc,
+#                         "justification": justification,
+#                         "remark": remark_val,
+#                         "confidence": confidence_val
+#                     })
+
+#                 elif fn == "set_rel_cls":
+#                     rel_ids_raw = args.get("relation_ids", []) or []
+#                     rel_cls = args.get("rel_cls")
+#                     rel_ids_valid = [rid for rid in rel_ids_raw if rid in rel_by_id]
+
+#                     if not rel_ids_valid or rel_cls is None:
+#                         decisions.append({
+#                             "action": "set_rel_cls_skip",
+#                             "requested_relation_ids": rel_ids_raw,
+#                             "rel_cls": rel_cls,
+#                             "justification": justification,
+#                             "remark": remark_val,
+#                             "confidence": confidence_val
+#                         })
+#                         continue
+
+#                     execute_set_rel_cls(rel_by_id, rel_ids_valid, rel_cls)
+
+#                     decisions.append({
+#                         "action": "set_rel_cls",
+#                         "relation_ids": rel_ids_valid,
+#                         "rel_cls": rel_cls,
+#                         "justification": justification,
+#                         "remark": remark_val,
+#                         "confidence": confidence_val
+#                     })
+
+#                 elif fn == "set_rel_cls_group":
+#                     rel_ids_raw = args.get("relation_ids", []) or []
+#                     rel_cls_group = args.get("rel_cls_group")
+#                     rel_ids_valid = [rid for rid in rel_ids_raw if rid in rel_by_id]
+
+#                     if not rel_ids_valid or rel_cls_group is None:
+#                         decisions.append({
+#                             "action": "set_rel_cls_group_skip",
+#                             "requested_relation_ids": rel_ids_raw,
+#                             "rel_cls_group": rel_cls_group,
+#                             "justification": justification,
+#                             "remark": remark_val,
+#                             "confidence": confidence_val
+#                         })
+#                         continue
+
+#                     execute_set_rel_cls_group(rel_by_id, rel_ids_valid, rel_cls_group)
+
+#                     decisions.append({
+#                         "action": "set_rel_cls_group",
+#                         "relation_ids": rel_ids_valid,
+#                         "rel_cls_group": rel_cls_group,
+#                         "justification": justification,
+#                         "remark": remark_val,
+#                         "confidence": confidence_val
+#                     })
+
+#                 elif fn == "modify_rel_schema":
+#                     rel_ids_raw = args.get("relation_ids", []) or []
+#                     canon_name = args.get("canonical_rel_name")
+#                     canon_desc = args.get("canonical_rel_desc")
+#                     rel_cls = args.get("rel_cls")
+#                     rel_cls_group = args.get("rel_cls_group")
+#                     new_rel_name = args.get("new_relation_name")
+#                     orig_rel_name = args.get("original_relation_name")
+
+#                     rel_ids_valid = [rid for rid in rel_ids_raw if rid in rel_by_id]
+#                     if not rel_ids_valid:
+#                         decisions.append({
+#                             "action": "modify_rel_schema_skip_no_valid_relations",
+#                             "requested_relation_ids": rel_ids_raw,
+#                             "justification": justification,
+#                             "remark": remark_val,
+#                             "confidence": confidence_val
+#                         })
+#                         continue
+
+#                     execute_modify_rel_schema(
+#                         rel_by_id,
+#                         rel_ids_valid,
+#                         canon_name,
+#                         canon_desc,
+#                         rel_cls,
+#                         rel_cls_group,
+#                         new_rel_name,
+#                         orig_rel_name
+#                     )
+
+#                     decisions.append({
+#                         "action": "modify_rel_schema",
+#                         "relation_ids": rel_ids_valid,
+#                         "canonical_rel_name": canon_name,
+#                         "canonical_rel_desc": canon_desc,
+#                         "rel_cls": rel_cls,
+#                         "rel_cls_group": rel_cls_group,
+#                         "new_relation_name": new_rel_name,
+#                         "original_relation_name": orig_rel_name,
+#                         "justification": justification,
+#                         "remark": remark_val,
+#                         "confidence": confidence_val
+#                     })
+
+#                 elif fn == "add_rel_remark":
+#                     rel_ids_raw = args.get("relation_ids", []) or []
+#                     rel_ids_valid = [rid for rid in rel_ids_raw if rid in rel_by_id]
+#                     remark_text = args.get("remark")
+
+#                     if not rel_ids_valid or not remark_text:
+#                         decisions.append({
+#                             "action": "add_rel_remark_skip",
+#                             "requested_relation_ids": rel_ids_raw,
+#                             "remark": remark_text,
+#                             "justification": justification,
+#                             "confidence": confidence_val
+#                         })
+#                         continue
+
+#                     execute_add_rel_remark(rel_by_id, rel_ids_valid, remark_text)
+
+#                     decisions.append({
+#                         "action": "add_rel_remark",
+#                         "relation_ids": rel_ids_valid,
+#                         "remark": remark_text,
+#                         "justification": justification,
+#                         "confidence": confidence_val
+#                     })
+
+#                 else:
+#                     decisions.append({
+#                         "action": "skip_unknown_function",
+#                         "function": fn,
+#                         "raw": step,
+#                         "justification": justification,
+#                         "remark": remark_val,
+#                         "confidence": confidence_val
+#                     })
+
+#             except Exception as e:
+#                 decisions.append({
+#                     "action": "error_executing",
+#                     "function": fn,
+#                     "error": str(e),
+#                     "input": step,
+#                     "justification": justification,
+#                     "remark": remark_val,
+#                     "confidence": confidence_val
+#                 })
+
+#         # write decisions file for this chunk
+#         dec_path = OUT_DIR / f"cluster_{cluster_label_str}_decisions.json"
+#         dec_obj = {
+#             "cluster_label": cluster_label_str,
+#             "cluster_relations": cluster_relations,
+#             "llm_raw": raw_out,
+#             "parsed_steps": parsed,
+#             "executed_decisions": decisions,
+#             "timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+#         }
+#         dec_path.write_text(json.dumps(dec_obj, ensure_ascii=False, indent=2), encoding="utf-8")
+
+#         # append to global action log
+#         with action_log_path.open("a", encoding="utf-8") as fh:
+#             fh.write(json.dumps(dec_obj, ensure_ascii=False) + "\n")
+
+#     # iterate clusters (skip noise -1 first, then noise)
+#     cluster_keys = [k for k in cluster_to_relids.keys() if k != -1]
+#     cluster_keys = sorted(cluster_keys)
+#     if -1 in cluster_to_relids:
+#         cluster_keys.append(-1)
+
+#     for cluster_label in cluster_keys:
+#         rel_ids_global = cluster_to_relids.get(cluster_label, [])
+#         if not rel_ids_global:
+#             continue
+#         print(f"[cluster] {cluster_label} -> {len(rel_ids_global)} relations")
+
+#         # local subclustering for large clusters
+#         if len(rel_ids_global) > MAX_CLUSTER_SIZE_FOR_LOCAL:
+#             print(f"[cluster] {cluster_label}: size {len(rel_ids_global)} > {MAX_CLUSTER_SIZE_FOR_LOCAL}, running local HDBSCAN")
+#             idxs = [rel_id_to_index[rid] for rid in rel_ids_global]
+#             try:
+#                 sub_emb = combined_emb[idxs]
+#                 local_clusterer = hdbscan.HDBSCAN(
+#                     min_cluster_size=max(2, LOCAL_HDBSCAN_MIN_CLUSTER_SIZE),
+#                     min_samples=LOCAL_HDBSCAN_MIN_SAMPLES,
+#                     metric="euclidean",
+#                     cluster_selection_method="eom"
+#                 )
+#                 local_labels = local_clusterer.fit_predict(sub_emb)
+#             except Exception as e:
+#                 print(f"[warn] local HDBSCAN failed for cluster {cluster_label}: {e}. Treating as single group.")
+#                 local_labels = np.zeros(len(idxs), dtype=int)
+
+#             local_map: Dict[int, List[str]] = {}
+#             for i_local, lab_local in enumerate(local_labels):
+#                 rid = rel_ids_global[i_local]
+#                 local_map.setdefault(int(lab_local), []).append(rid)
+
+#             for lab_local, local_rel_ids in sorted(local_map.items(), key=lambda x: x[0]):
+#                 label_prefix = f"{cluster_label}_loc{lab_local}"
+#                 # split into chunks for LLM
+#                 for part_idx in range(0, len(local_rel_ids), MAX_MEMBERS_PER_PROMPT):
+#                     part_rel_ids = local_rel_ids[part_idx:part_idx + MAX_MEMBERS_PER_PROMPT]
+#                     chunk_label = f"{label_prefix}_p{part_idx//MAX_MEMBERS_PER_PROMPT}"
+#                     print(f"[cluster] {chunk_label}: processing {len(part_rel_ids)} relations")
+#                     run_llm_on_subset(part_rel_ids, chunk_label)
+
+#         else:
+#             label_prefix = str(cluster_label)
+#             for part_idx in range(0, len(rel_ids_global), MAX_MEMBERS_PER_PROMPT):
+#                 part_rel_ids = rel_ids_global[part_idx:part_idx + MAX_MEMBERS_PER_PROMPT]
+#                 chunk_label = f"{label_prefix}_p{part_idx//MAX_MEMBERS_PER_PROMPT}"
+#                 print(f"[cluster] {chunk_label}: processing {len(part_rel_ids)} relations")
+#                 run_llm_on_subset(part_rel_ids, chunk_label)
+
+#     # After all chunks processed: write final relations output
+#     final_relations = list(rel_by_id.values())
+#     out_json = OUT_DIR / "relations_resolved.json"
+#     out_jsonl = OUT_DIR / "relations_resolved.jsonl"
+#     out_json.write_text(json.dumps(final_relations, ensure_ascii=False, indent=2), encoding="utf-8")
+#     with out_jsonl.open("w", encoding="utf-8") as fh:
+#         for r in final_relations:
+#             fh.write(json.dumps(r, ensure_ascii=False) + "\n")
+
+#     print(f"[done] wrote final resolved relations -> {out_json}  (count={len(final_relations)})")
+#     print(f"[done] action log -> {action_log_path}")
+
+#     # ---------------------- SUMMARY AGGREGATION ---------------------
+
+#     summary_dir = OUT_DIR / "summary"
+#     summary_dir.mkdir(exist_ok=True)
+
+#     # Aggregate per-chunk decision files
+#     cluster_decisions: List[Dict[str, Any]] = []
+#     for path in sorted(OUT_DIR.glob("cluster_*_decisions.json")):
+#         try:
+#             obj = json.loads(path.read_text(encoding="utf-8"))
+#             cluster_decisions.append(obj)
+#         except Exception as e:
+#             print(f"[warn] failed to read {path}: {e}")
+
+#     all_clusters_decisions_path = summary_dir / "all_clusters_decisions.json"
+#     all_clusters_decisions_path.write_text(
+#         json.dumps(cluster_decisions, ensure_ascii=False, indent=2),
+#         encoding="utf-8"
+#     )
+
+#     total_clusters = len(cluster_decisions)  # here "cluster" means one LLM chunk
+#     actions_by_type: Dict[str, int] = {}
+#     total_remarks = 0
+#     clusters_with_any_decisions = 0
+
+#     for cd in cluster_decisions:
+#         decs = cd.get("executed_decisions", [])
+#         if not decs:
+#             continue
+#         clusters_with_any_decisions += 1
+#         for d in decs:
+#             act = d.get("action")
+#             actions_by_type[act] = actions_by_type.get(act, 0) + 1
+#             rem = d.get("remark")
+#             if rem:
+#                 total_remarks += 1
+
+#     total_errors = actions_by_type.get("error_executing", 0)
+
+#     stats = {
+#         "total_chunks": total_clusters,
+#         "total_chunks_with_any_decisions": clusters_with_any_decisions,
+#         "total_actions_by_type": actions_by_type,
+#         "total_errors": total_errors,
+#         "total_remarks_logged": total_remarks,
+#         "generated_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+#     }
+
+#     stats_path = summary_dir / "stats_summary.json"
+#     stats_path.write_text(json.dumps(stats, ensure_ascii=False, indent=2), encoding="utf-8")
+
+#     print(f"[done] summary decisions -> {all_clusters_decisions_path}")
+#     print(f"[done] summary stats -> {stats_path}")
+
+#     # ---------------------- SCHEMA AGGREGATION ----------------------
+
+#     # 1) Canonical relation schema
+#     canonical_map: Dict[str, Dict[str, Any]] = {}
+#     for r in final_relations:
+#         cname = safe_str(r.get("canonical_rel_name", ""))
+#         if not cname or cname.upper() == "TBD":
+#             continue
+#         cdesc = safe_str(r.get("canonical_rel_desc", ""))
+#         rel_cls = safe_str(r.get("rel_cls", ""))
+#         rel_grp = safe_str(r.get("rel_cls_group", ""))
+#         rid = r.get("relation_id")
+
+#         entry = canonical_map.setdefault(cname, {
+#             "canonical_rel_name": cname,
+#             "canonical_rel_desc_candidates": set(),
+#             "rel_cls_set": set(),
+#             "rel_cls_group_set": set(),
+#             "relation_ids": []
+#         })
+#         if cdesc:
+#             entry["canonical_rel_desc_candidates"].add(cdesc)
+#         if rel_cls and rel_cls.upper() != "TBD":
+#             entry["rel_cls_set"].add(rel_cls)
+#         if rel_grp and rel_grp.upper() != "TBD":
+#             entry["rel_cls_group_set"].add(rel_grp)
+#         if rid:
+#             entry["relation_ids"].append(rid)
+
+#     canonical_schema = []
+#     for cname, info in canonical_map.items():
+#         desc_candidates = list(info["canonical_rel_desc_candidates"])
+#         chosen_desc = desc_candidates[0] if desc_candidates else ""
+#         canonical_schema.append({
+#             "canonical_rel_name": cname,
+#             "canonical_rel_desc": chosen_desc,
+#             "rel_cls": sorted(info["rel_cls_set"]),
+#             "rel_cls_group": sorted(info["rel_cls_group_set"]),
+#             "instance_count": len(info["relation_ids"]),
+#             "example_relation_ids": info["relation_ids"][:10]
+#         })
+
+#     canonical_schema_path = summary_dir / "canonical_rel_schema.json"
+#     canonical_schema_path.write_text(
+#         json.dumps(canonical_schema, ensure_ascii=False, indent=2),
+#         encoding="utf-8"
+#     )
+
+#     # 2) Relation class schema
+#     cls_map: Dict[str, Dict[str, Any]] = {}
+#     for r in final_relations:
+#         cls_name = safe_str(r.get("rel_cls", ""))
+#         if not cls_name or cls_name.upper() == "TBD":
+#             continue
+#         grp_name = safe_str(r.get("rel_cls_group", ""))
+#         cname = safe_str(r.get("canonical_rel_name", ""))
+#         rid = r.get("relation_id")
+
+#         entry = cls_map.setdefault(cls_name, {
+#             "rel_cls": cls_name,
+#             "rel_cls_group_set": set(),
+#             "canonical_rel_names": set(),
+#             "relation_ids": []
+#         })
+#         if grp_name and grp_name.upper() != "TBD":
+#             entry["rel_cls_group_set"].add(grp_name)
+#         if cname and cname.upper() != "TBD":
+#             entry["canonical_rel_names"].add(cname)
+#         if rid:
+#             entry["relation_ids"].append(rid)
+
+#     cls_schema = []
+#     for cls_name, info in cls_map.items():
+#         cls_schema.append({
+#             "rel_cls": cls_name,
+#             "rel_cls_group": sorted(info["rel_cls_group_set"]),
+#             "canonical_rel_names": sorted(info["canonical_rel_names"]),
+#             "instance_count": len(info["relation_ids"]),
+#             "example_relation_ids": info["relation_ids"][:10]
+#         })
+
+#     cls_schema_path = summary_dir / "rel_cls_schema.json"
+#     cls_schema_path.write_text(
+#         json.dumps(cls_schema, ensure_ascii=False, indent=2),
+#         encoding="utf-8"
+#     )
+
+#     # 3) Relation class group schema
+#     grp_map: Dict[str, Dict[str, Any]] = {}
+#     for r in final_relations:
+#         grp_name = safe_str(r.get("rel_cls_group", ""))
+#         if not grp_name or grp_name.upper() == "TBD":
+#             continue
+#         cls_name = safe_str(r.get("rel_cls", ""))
+#         cname = safe_str(r.get("canonical_rel_name", ""))
+#         rid = r.get("relation_id")
+
+#         entry = grp_map.setdefault(grp_name, {
+#             "rel_cls_group": grp_name,
+#             "rel_cls_set": set(),
+#             "canonical_rel_names": set(),
+#             "relation_ids": []
+#         })
+#         if cls_name and cls_name.upper() != "TBD":
+#             entry["rel_cls_set"].add(cls_name)
+#         if cname and cname.upper() != "TBD":
+#             entry["canonical_rel_names"].add(cname)
+#         if rid:
+#             entry["relation_ids"].append(rid)
+
+#     grp_schema = []
+#     for grp_name, info in grp_map.items():
+#         grp_schema.append({
+#             "rel_cls_group": grp_name,
+#             "rel_cls": sorted(info["rel_cls_set"]),
+#             "canonical_rel_names": sorted(info["canonical_rel_names"]),
+#             "instance_count": len(info["relation_ids"]),
+#             "example_relation_ids": info["relation_ids"][:10]
+#         })
+
+#     grp_schema_path = summary_dir / "rel_cls_group_schema.json"
+#     grp_schema_path.write_text(
+#         json.dumps(grp_schema, ensure_ascii=False, indent=2),
+#         encoding="utf-8"
+#     )
+
+#     print(f"[done] canonical relation schema -> {canonical_schema_path}")
+#     print(f"[done] relation class schema -> {cls_schema_path}")
+#     print(f"[done] relation class group schema -> {grp_schema_path}")
+
+# # if __name__ == "__main__":
+# #     relres_main()
+
+#endregion#?   Rel Res V4  - Canonical + RelCls + RelClsGroup + Schema + LocalSubcluster
+#*#########################  End  ##########################
+
+
+
+
+#?######################### Start ##########################
+#region:#?   Rel Res V10  - DSPy LLM Config + Canonical + RelCls + RelClsGroup + Schema + LocalSubcluster
 
 #!/usr/bin/env python3
 """
-relres_iterative_v4.py
+relres_iterative_v10_dspy.py
 
 Relation Resolution (Rel Res) — cluster relation instances, ask LLM to
 assign/normalize:
@@ -6126,6 +13404,13 @@ Output (under OUT_DIR):
   - summary/canonical_rel_schema.json
   - summary/rel_cls_schema.json
   - summary/rel_cls_group_schema.json
+
+LLM usage:
+- All LLM calls go through a single DSPy LM obtained from TraceKGLLMConfig
+  via make_lm_for_step(cfg, "rel_res").
+- If no llm_config is provided, relres_main builds a minimal TraceKGLLMConfig
+  using the `model` and `max_tokens` arguments, so existing code that just
+  calls relres_main() (or passes a model string) still works.
 """
 
 import json
@@ -6154,11 +13439,11 @@ except Exception:
 # transformers embedder
 from transformers import AutoTokenizer, AutoModel
 
-# OpenAI client (Responses API)
-try:
-    from openai import OpenAI
-except Exception:
-    OpenAI = None
+# NOTE: We now use DSPy + TraceKGLLMConfig / make_lm_for_step for all LLM calls.
+# These are defined in your LLM Model V3 region:
+#   - class TraceKGLLMConfig
+#   - def make_lm_for_step(cfg: TraceKGLLMConfig, step: str) -> dspy.LM
+# We reference them here (they must be importable or defined in the same module).
 
 # ----------------------------- CONFIG -----------------------------
 
@@ -6203,54 +13488,11 @@ LOCAL_HDBSCAN_MIN_SAMPLES = 1
 # LLM prompt chunking
 MAX_MEMBERS_PER_PROMPT = 10  # max relation instances per LLM call
 
-# LLM / OpenAI
-OPENAI_MODEL = "gpt-5.1"
-OPENAI_TEMPERATURE = 0.0
-LLM_MAX_OUTPUT_TOKENS = 16000
-OPENAI_API_KEY_ENV = "OPENAI_API_KEY"
+# LLM (DSPy / central config)
+MODEL_NAME = "gpt-5.1"
+LLM_MAX_TOKENS_DEFAULT = 16000
 
 VERBOSE = False
-
-# ---------------------- Helpers: OpenAI client ---------------------
-
-def _load_openai_key(envvar: str = OPENAI_API_KEY_ENV, fallback_path: str = ".env"):
-    key = os.getenv(envvar, None)
-    if key:
-        return key
-    if Path(fallback_path).exists():
-        txt = Path(fallback_path).read_text(encoding="utf-8").strip()
-        if txt:
-            return txt
-    return None
-
-OPENAI_KEY = _load_openai_key()
-if OpenAI is not None and OPENAI_KEY:
-    client = OpenAI(api_key=OPENAI_KEY)
-else:
-    client = None
-    if VERBOSE:
-        print("⚠️ OpenAI client not initialized (missing package or API key). LLM calls will fail unless OpenAI client is available.")
-
-def call_llm(prompt: str, model: str = OPENAI_MODEL, temperature: float = OPENAI_TEMPERATURE, max_output_tokens: int = LLM_MAX_OUTPUT_TOKENS) -> str:
-    """
-    Use OpenAI Responses API with a single developer prompt and a small user nudge.
-    """
-    if client is None:
-        raise RuntimeError("OpenAI client not available. Set OPENAI_API_KEY and install openai package.")
-    try:
-        resp = client.responses.create(
-            model=model,
-            reasoning={"effort": "low"},
-            max_output_tokens=max_output_tokens,
-            input=[
-                {"role": "developer", "content": prompt},
-                {"role": "user", "content": "Return ONLY the JSON array of function calls now."},
-            ],
-        )
-        return resp.output_text or ""
-    except Exception as e:
-        print("LLM call error:", e)
-        return ""
 
 # ---------------------- HF Embedder --------------------------------
 
@@ -6788,7 +14030,8 @@ def sanitize_json_array(text: str) -> Optional[Any]:
     """
     if not text or not text.strip():
         return None
-    s = text.strip()
+    # s = text.strip() #Injam
+    s = coerce_llm_text(text).strip()
     # replace smart quotes
     s = s.replace("“", '"').replace("”", '"').replace("‘", "'").replace("’", "'")
     start = s.find("[")
@@ -6802,6 +14045,48 @@ def sanitize_json_array(text: str) -> Optional[Any]:
         return json.loads(cand)
     except Exception:
         return None
+
+# ---------------------- DSPy / LLM helpers -------------------------
+
+def _get_lm_for_rel_res(
+    llm_config: Optional["TraceKGLLMConfig"],
+    model: str,
+    max_tokens: int,
+):
+    """
+    Resolve a DSPy LM for the Relation Resolution step.
+
+    - If llm_config is provided, we use it directly (per-step override: 'rel_res').
+    - Otherwise, we synthesize a minimal TraceKGLLMConfig using (model, max_tokens)
+      so existing code can still call relres_main(model="...").
+    """
+    if llm_config is not None:
+        cfg = llm_config
+    else:
+        cfg = TraceKGLLMConfig(default_model=model, max_tokens=max_tokens)
+
+    try:
+        cfg.validate()
+    except Exception as e:
+        if VERBOSE:
+            print(f"[RelRes] llm_config.validate() failed: {e}")
+
+    lm = make_lm_for_step(cfg, "rel_res")
+    return lm
+
+def _call_rel_res_lm(lm, prompt: str) -> str:
+    """
+    Call the DSPy LM and normalize the output into a plain string.
+    """
+    try:
+        outputs = lm(prompt)
+    except Exception as e:
+        print("[RelRes] LM call error:", e)
+        return ""
+
+    if isinstance(outputs, list):
+        return outputs[0] if outputs else ""
+    return str(outputs or "")
 
 # ---------------------- Action executors ----------------------------
 
@@ -6918,9 +14203,23 @@ def execute_add_rel_remark(
 
 # ---------------------- Main orchestration -------------------------
 
-def relres_main():
+def relres_main(
+    model: str = MODEL_NAME,
+    max_tokens: int = LLM_MAX_TOKENS_DEFAULT,
+    llm_config: Optional["TraceKGLLMConfig"] = None,
+    input_relations_path: Path = INPUT_RELATIONS,
+) -> None:
+    """
+    Run Relation Resolution end-to-end.
+
+    LLM behavior:
+      * If llm_config is provided, it is used via make_lm_for_step(cfg, "rel_res").
+      * If llm_config is None, a minimal TraceKGLLMConfig(default_model=model,
+        max_tokens=max_tokens) is synthesized so existing code that calls
+        relres_main() or relres_main(model="...") still works.
+    """
     # load relations
-    relations = load_relations(INPUT_RELATIONS)
+    relations = load_relations(input_relations_path)
     rel_by_id: Dict[str, Dict[str, Any]] = {r["relation_id"]: r for r in relations}
 
     # embedder
@@ -6950,6 +14249,9 @@ def relres_main():
     action_log_path = OUT_DIR / "rel_res_action_log.jsonl"
     if action_log_path.exists():
         action_log_path.unlink()
+
+    # build LM once
+    lm = _get_lm_for_rel_res(llm_config=llm_config, model=model, max_tokens=max_tokens)
 
     # helper to process a subset of relation ids with LLM (one prompt)
     def run_llm_on_subset(sub_rel_ids: List[str], cluster_label_str: str):
@@ -6992,10 +14294,10 @@ def relres_main():
         prompt_path = RAW_LLM_DIR / f"cluster_{cluster_label_str}_prompt.txt"
         prompt_path.write_text(prompt, encoding="utf-8")
 
-        # call LLM
+        # call LLM via DSPy
         raw_out = ""
         try:
-            raw_out = call_llm(prompt)
+            raw_out = _call_rel_res_lm(lm, prompt)
         except Exception as e:
             print(f"[warning] LLM call failed for {cluster_label_str}: {e}")
             raw_out = ""
@@ -7464,12 +14766,12 @@ def relres_main():
     print(f"[done] relation class schema -> {cls_schema_path}")
     print(f"[done] relation class group schema -> {grp_schema_path}")
 
+
 # if __name__ == "__main__":
 #     relres_main()
 
-#endregion#?   Rel Res V4  - Canonical + RelCls + RelClsGroup + Schema + LocalSubcluster
+#endregion#?   Rel Res V10  - DSPy LLM Config + Canonical + RelCls + RelClsGroup + Schema + LocalSubcluster
 #?#########################  End  ##########################
-
 
 
 
@@ -7801,9 +15103,6 @@ def run_relres_iteratively():
 
 #endregion#! Relation Identification
 #!#############################################  End Chapter  ##################################################
-
-
-
 
 
 
@@ -8693,111 +15992,66 @@ def export_relations_and_nodes_to_csv():
 #region:#?   Run statements
 
 
-# -----------------------
-# Chunking - Run statement
-# -----------------------
 
-if __name__ == "__main__":
-    sentence_chunks_token_driven(
-        "data/pdf_to_json/Plain_Text.json",
-        "data/Chunks/chunks_sentence.jsonl",
-        max_tokens_per_chunk=200,   # preferred upper bound (None to disable)
-        min_tokens_per_chunk=100,   # expand small chunks to reach this minimum (None to disable)
-        sentence_per_line=True,
-        keep_ref_text=False,
-        strip_leading_headings=True,
-        force=True,
-        debug=False
-    )
+# # -----------------------
+# # Chunking - Run statement
+# # -----------------------
 
-
-# -----------------------
-# embed_and_index_chunks  - Run statement
-# -----------------------
-
-if __name__ == "__main__":
-    embed_and_index_chunks(
-        "data/Chunks/chunks_sentence.jsonl",
-        "data/Chunks/chunks_emb",
-        "BAAI/bge-large-en-v1.5",
-        "BAAI/bge-small-en-v1.5",
-        False,   # use_small_model_for_dev
-        32,     # batch_size
-        None,   # device -> auto
-        True,   # save_index
-        True)  # force
+# if __name__ == "__main__":
+#     sentence_chunks_token_driven(
+#         "data/pdf_to_json/Plain_Text.json",
+#         "data/Chunks/chunks_sentence.jsonl",
+#         max_tokens_per_chunk=200,   # preferred upper bound (None to disable)
+#         min_tokens_per_chunk=100,   # expand small chunks to reach this minimum (None to disable)
+#         sentence_per_line=True,
+#         keep_ref_text=False,
+#         strip_leading_headings=True,
+#         force=True,
+#         debug=False
+#     )
 
 
+# # -----------------------
+# # embed_and_index_chunks  - Run statement
+# # -----------------------
 
-# -----------------------
-# Entity Recognition  - Run statement
-# -----------------------
-
-if __name__ == "__main__":
-    run_entity_extraction_on_chunks(
-        chunk_ids,
-        prev_chunks=5,
-        save_debug=False,
-        model="gpt-5.1",
-        max_tokens=8000
-    )
+# if __name__ == "__main__":
+#     embed_and_index_chunks(
+#         "data/Chunks/chunks_sentence.jsonl",
+#         "data/Chunks/chunks_emb",
+#         "BAAI/bge-large-en-v1.5",
+#         "BAAI/bge-small-en-v1.5",
+#         False,   # use_small_model_for_dev
+#         32,     # batch_size
+#         None,   # device -> auto
+#         True,   # save_index
+#         True)  # force
 
 
 
+# # -----------------------
+# # Entity Recognition  - Run statement
+# # -----------------------
 
-
-# -----------------------
-# Ent Resolution (Multi Run)  - Run statement
-# -----------------------
-
-if __name__ == "__main__":
-    iterative_resolution()
+# if __name__ == "__main__":
+#     run_entity_extraction_on_chunks(
+#         chunk_ids,
+#         prev_chunks=5,
+#         save_debug=False,
+#         model="gpt-5.1",
+#         max_tokens=8000
+#     )
 
 
 
 
 
+# # -----------------------
+# # Ent Resolution (Multi Run)  - Run statement
+# # -----------------------
 
-# -----------------------
-# Cls Rec input producer - Run statement
-# -----------------------
-
-if __name__ == "__main__":
-    produce_clean_jsonl(input_path, out_file)
-
-
-
-
-# -----------------------
-# Cls Recognition  - Run statement
-# -----------------------
-
-
-
-if __name__ == "__main__":
-    classrec_iterative_main()
-
-
-
-# -----------------------
-# Create input for Cls Res  - Run statement
-# -----------------------
-
-if __name__ == "__main__":
-    main_input_for_cls_res()
-
-
-
-
-
-# -----------------------
-# Cls Res Multi Run - Run statement
-# -----------------------
-if __name__ == "__main__":
-    run_pipeline_iteratively() 
-
-
-
+# if __name__ == "__main__":
+#     iterative_resolution()
 
 
 
@@ -8805,26 +16059,72 @@ if __name__ == "__main__":
 
 
 # # -----------------------
-# Relation Res Multi Run - Run statement
-# -----------------------
-if __name__ == "__main__":
-    run_relres_iteratively() 
+# # Cls Rec input producer - Run statement
+# # -----------------------
 
-
-
-# -----------------------
-# Export KG to CSVs  - Run statement
-# -----------------------
-
-if __name__ == "__main__":
-    export_relations_and_nodes_to_csv()
+# if __name__ == "__main__":
+#     produce_clean_jsonl(input_path, out_file)
 
 
 
 
-# -----------------------
-# XXXXXXXX  - Run statement
-# -----------------------
+# # -----------------------
+# # Cls Recognition  - Run statement
+# # -----------------------
+
+
+
+# if __name__ == "__main__":
+#     classrec_iterative_main()
+
+
+
+# # -----------------------
+# # Create input for Cls Res  - Run statement
+# # -----------------------
+
+# if __name__ == "__main__":
+#     main_input_for_cls_res()
+
+
+
+
+
+# # -----------------------
+# # Cls Res Multi Run - Run statement
+# # -----------------------
+# if __name__ == "__main__":
+#     run_pipeline_iteratively() 
+
+
+
+
+
+
+
+
+
+# # # -----------------------
+# # Relation Res Multi Run - Run statement
+# # -----------------------
+# if __name__ == "__main__":
+#     run_relres_iteratively() 
+
+
+
+# # -----------------------
+# # Export KG to CSVs  - Run statement
+# # -----------------------
+
+# if __name__ == "__main__":
+#     export_relations_and_nodes_to_csv()
+
+
+
+
+# # -----------------------
+# # XXXXXXXX  - Run statement
+# # -----------------------
 
 
 

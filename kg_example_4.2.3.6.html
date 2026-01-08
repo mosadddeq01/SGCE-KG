@@ -491,89 +491,299 @@
 {
   "nodes": [
     {
-      "id": "cracking",
-      "label": "cracking",
+      "id": "100 and 15",
+      "label": "100 and 15",
       "cluster": null,
-      "color": "#3beeec",
-      "degree": 5,
-      "indegree": 1,
-      "outdegree": 4,
-      "isRepresentative": false,
-      "radius": 28,
-      "neighbors": [
-        "Damage",
-        "differential expansion",
-        "metallic component",
-        "relative movement",
-        "thermal cycling"
-      ],
-      "edgeIds": {
-        "incoming": [
-          "e1"
-        ],
-        "outgoing": [
-          "e3",
-          "e4",
-          "e5",
-          "e6"
-        ]
-      }
-    },
-    {
-      "id": "cyclic stresses",
-      "label": "cyclic stresses",
-      "cluster": null,
-      "color": "#c99022",
-      "degree": 2,
-      "indegree": 1,
-      "outdegree": 1,
-      "isRepresentative": false,
-      "radius": 22,
-      "neighbors": [
-        "Thermal fatigue",
-        "variations in temperature"
-      ],
-      "edgeIds": {
-        "incoming": [
-          "e2"
-        ],
-        "outgoing": [
-          "e0"
-        ]
-      }
-    },
-    {
-      "id": "Damage",
-      "label": "Damage",
-      "cluster": null,
-      "color": "#822ac5",
-      "degree": 1,
-      "indegree": 0,
-      "outdegree": 1,
-      "isRepresentative": false,
-      "radius": 20,
-      "neighbors": [
-        "cracking"
-      ],
-      "edgeIds": {
-        "incoming": [],
-        "outgoing": [
-          "e1"
-        ]
-      }
-    },
-    {
-      "id": "differential expansion",
-      "label": "differential expansion",
-      "cluster": null,
-      "color": "#1c48d7",
+      "color": "#c530d3",
       "degree": 1,
       "indegree": 1,
       "outdegree": 0,
       "isRepresentative": false,
       "radius": 20,
       "neighbors": [
-        "cracking"
+        "2.25 Cr steel"
+      ],
+      "edgeIds": {
+        "incoming": [
+          "e21"
+        ],
+        "outgoing": []
+      }
+    },
+    {
+      "id": "2.25 Cr steel",
+      "label": "2.25 Cr steel",
+      "cluster": null,
+      "color": "#336cb2",
+      "degree": 1,
+      "indegree": 0,
+      "outdegree": 1,
+      "isRepresentative": false,
+      "radius": 20,
+      "neighbors": [
+        "100 and 15"
+      ],
+      "edgeIds": {
+        "incoming": [],
+        "outgoing": [
+          "e21"
+        ]
+      }
+    },
+    {
+      "id": "American Petroleum Institute",
+      "label": "American Petroleum Institute",
+      "cluster": null,
+      "color": "#4f3cd9",
+      "degree": 2,
+      "indegree": 2,
+      "outdegree": 0,
+      "isRepresentative": false,
+      "radius": 22,
+      "neighbors": [
+        "API Recommended Practice 571",
+        "API Recommended Practice 934"
+      ],
+      "edgeIds": {
+        "incoming": [
+          "e16",
+          "e17"
+        ],
+        "outgoing": []
+      }
+    },
+    {
+      "id": "antimony",
+      "label": "antimony",
+      "cluster": null,
+      "color": "#d51493",
+      "degree": 1,
+      "indegree": 1,
+      "outdegree": 0,
+      "isRepresentative": false,
+      "radius": 20,
+      "neighbors": [
+        "temper embrittlement"
+      ],
+      "edgeIds": {
+        "incoming": [
+          "e9"
+        ],
+        "outgoing": []
+      }
+    },
+    {
+      "id": "API Recommended Practice 571",
+      "label": "API Recommended Practice 571",
+      "cluster": null,
+      "color": "#6a20cf",
+      "degree": 1,
+      "indegree": 0,
+      "outdegree": 1,
+      "isRepresentative": false,
+      "radius": 20,
+      "neighbors": [
+        "American Petroleum Institute"
+      ],
+      "edgeIds": {
+        "incoming": [],
+        "outgoing": [
+          "e16"
+        ]
+      }
+    },
+    {
+      "id": "API Recommended Practice 934",
+      "label": "API Recommended Practice 934",
+      "cluster": null,
+      "color": "#b8da50",
+      "degree": 1,
+      "indegree": 0,
+      "outdegree": 1,
+      "isRepresentative": false,
+      "radius": 20,
+      "neighbors": [
+        "American Petroleum Institute"
+      ],
+      "edgeIds": {
+        "incoming": [],
+        "outgoing": [
+          "e17"
+        ]
+      }
+    },
+    {
+      "id": "arsenic",
+      "label": "arsenic",
+      "cluster": null,
+      "color": "#834aea",
+      "degree": 1,
+      "indegree": 1,
+      "outdegree": 0,
+      "isRepresentative": false,
+      "radius": 20,
+      "neighbors": [
+        "temper embrittlement"
+      ],
+      "edgeIds": {
+        "incoming": [
+          "e10"
+        ],
+        "outgoing": []
+      }
+    },
+    {
+      "id": "brittle fracture",
+      "label": "brittle fracture",
+      "cluster": null,
+      "color": "#b26aea",
+      "degree": 1,
+      "indegree": 1,
+      "outdegree": 0,
+      "isRepresentative": false,
+      "radius": 20,
+      "neighbors": [
+        "pressurization sequence"
+      ],
+      "edgeIds": {
+        "incoming": [
+          "e23"
+        ],
+        "outgoing": []
+      }
+    },
+    {
+      "id": "creep range",
+      "label": "creep range",
+      "cluster": null,
+      "color": "#bddb6b",
+      "degree": 1,
+      "indegree": 1,
+      "outdegree": 0,
+      "isRepresentative": false,
+      "radius": 20,
+      "neighbors": [
+        "low alloy steel"
+      ],
+      "edgeIds": {
+        "incoming": [
+          "e15"
+        ],
+        "outgoing": []
+      }
+    },
+    {
+      "id": "CVN toughness",
+      "label": "CVN toughness",
+      "cluster": null,
+      "color": "#b869d5",
+      "degree": 1,
+      "indegree": 0,
+      "outdegree": 1,
+      "isRepresentative": false,
+      "radius": 20,
+      "neighbors": [
+        "temperature"
+      ],
+      "edgeIds": {
+        "incoming": [],
+        "outgoing": [
+          "e18"
+        ]
+      }
+    },
+    {
+      "id": "Damage Mechanisms and Life Assessment of High Temperature Components",
+      "label": "Damage Mechanisms and Life Assessment of High Temperature Components",
+      "cluster": null,
+      "color": "#2c30cc",
+      "degree": 1,
+      "indegree": 1,
+      "outdegree": 0,
+      "isRepresentative": false,
+      "radius": 20,
+      "neighbors": [
+        "R. Viswanathan"
+      ],
+      "edgeIds": {
+        "incoming": [
+          "e0"
+        ],
+        "outgoing": []
+      }
+    },
+    {
+      "id": "de-embrittled",
+      "label": "de-embrittled",
+      "cluster": null,
+      "color": "#9ee374",
+      "degree": 1,
+      "indegree": 1,
+      "outdegree": 0,
+      "isRepresentative": false,
+      "radius": 20,
+      "neighbors": [
+        "weld repairs"
+      ],
+      "edgeIds": {
+        "incoming": [
+          "e6"
+        ],
+        "outgoing": []
+      }
+    },
+    {
+      "id": "E.F. Ehmke",
+      "label": "E.F. Ehmke",
+      "cluster": null,
+      "color": "#57df64",
+      "degree": 1,
+      "indegree": 0,
+      "outdegree": 1,
+      "isRepresentative": false,
+      "radius": 20,
+      "neighbors": [
+        "Materials Selection for Refineries and Associated Facilities"
+      ],
+      "edgeIds": {
+        "incoming": [],
+        "outgoing": [
+          "e3"
+        ]
+      }
+    },
+    {
+      "id": "embrittling impurity elements",
+      "label": "embrittling impurity elements",
+      "cluster": null,
+      "color": "#c03368",
+      "degree": 1,
+      "indegree": 1,
+      "outdegree": 0,
+      "isRepresentative": false,
+      "radius": 20,
+      "neighbors": [
+        "temper embrittlement"
+      ],
+      "edgeIds": {
+        "incoming": [
+          "e2"
+        ],
+        "outgoing": []
+      }
+    },
+    {
+      "id": "hydrogen embrittlement",
+      "label": "hydrogen embrittlement",
+      "cluster": null,
+      "color": "#6c7ee7",
+      "degree": 1,
+      "indegree": 1,
+      "outdegree": 0,
+      "isRepresentative": false,
+      "radius": 20,
+      "neighbors": [
+        "temper embrittlement"
       ],
       "edgeIds": {
         "incoming": [
@@ -583,101 +793,410 @@
       }
     },
     {
-      "id": "metallic component",
-      "label": "metallic component",
+      "id": "impact testing",
+      "label": "impact testing",
       "cluster": null,
-      "color": "#d5a74e",
-      "degree": 1,
-      "indegree": 1,
-      "outdegree": 0,
-      "isRepresentative": false,
-      "radius": 20,
-      "neighbors": [
-        "cracking"
-      ],
-      "edgeIds": {
-        "incoming": [
-          "e3"
-        ],
-        "outgoing": []
-      }
-    },
-    {
-      "id": "relative movement",
-      "label": "relative movement",
-      "cluster": null,
-      "color": "#da4440",
-      "degree": 1,
-      "indegree": 1,
-      "outdegree": 0,
-      "isRepresentative": false,
-      "radius": 20,
-      "neighbors": [
-        "cracking"
-      ],
-      "edgeIds": {
-        "incoming": [
-          "e6"
-        ],
-        "outgoing": []
-      }
-    },
-    {
-      "id": "thermal cycling",
-      "label": "thermal cycling",
-      "cluster": null,
-      "color": "#eb7c19",
-      "degree": 1,
-      "indegree": 1,
-      "outdegree": 0,
-      "isRepresentative": false,
-      "radius": 20,
-      "neighbors": [
-        "cracking"
-      ],
-      "edgeIds": {
-        "incoming": [
-          "e4"
-        ],
-        "outgoing": []
-      }
-    },
-    {
-      "id": "Thermal fatigue",
-      "label": "Thermal fatigue",
-      "cluster": null,
-      "color": "#6cced7",
+      "color": "#8476da",
       "degree": 1,
       "indegree": 0,
       "outdegree": 1,
       "isRepresentative": false,
       "radius": 20,
       "neighbors": [
-        "cyclic stresses"
+        "temper embrittlement"
       ],
       "edgeIds": {
         "incoming": [],
         "outgoing": [
-          "e2"
+          "e22"
         ]
       }
     },
     {
-      "id": "variations in temperature",
-      "label": "variations in temperature",
+      "id": "J* Factor",
+      "label": "J* Factor",
       "cluster": null,
-      "color": "#5df1cd",
+      "color": "#8bd877",
       "degree": 1,
       "indegree": 1,
       "outdegree": 0,
       "isRepresentative": false,
       "radius": 20,
       "neighbors": [
-        "cyclic stresses"
+        "temper embrittlement"
       ],
       "edgeIds": {
         "incoming": [
+          "e7"
+        ],
+        "outgoing": []
+      }
+    },
+    {
+      "id": "low alloy steel",
+      "label": "low alloy steel",
+      "cluster": null,
+      "color": "#d633aa",
+      "degree": 2,
+      "indegree": 1,
+      "outdegree": 1,
+      "isRepresentative": false,
+      "radius": 22,
+      "neighbors": [
+        "creep range",
+        "metallurgical advice"
+      ],
+      "edgeIds": {
+        "incoming": [
+          "e20"
+        ],
+        "outgoing": [
+          "e15"
+        ]
+      }
+    },
+    {
+      "id": "manganese",
+      "label": "manganese",
+      "cluster": null,
+      "color": "#42d152",
+      "degree": 1,
+      "indegree": 1,
+      "outdegree": 0,
+      "isRepresentative": false,
+      "radius": 20,
+      "neighbors": [
+        "temper embrittlement"
+      ],
+      "edgeIds": {
+        "incoming": [
+          "e11"
+        ],
+        "outgoing": []
+      }
+    },
+    {
+      "id": "Materials Selection for Refineries and Associated Facilities",
+      "label": "Materials Selection for Refineries and Associated Facilities",
+      "cluster": null,
+      "color": "#59ee3c",
+      "degree": 2,
+      "indegree": 2,
+      "outdegree": 0,
+      "isRepresentative": false,
+      "radius": 22,
+      "neighbors": [
+        "E.F. Ehmke",
+        "R.A. White"
+      ],
+      "edgeIds": {
+        "incoming": [
+          "e3",
+          "e4"
+        ],
+        "outgoing": []
+      }
+    },
+    {
+      "id": "metallurgical advice",
+      "label": "metallurgical advice",
+      "cluster": null,
+      "color": "#bc7ade",
+      "degree": 1,
+      "indegree": 0,
+      "outdegree": 1,
+      "isRepresentative": false,
+      "radius": 20,
+      "neighbors": [
+        "low alloy steel"
+      ],
+      "edgeIds": {
+        "incoming": [],
+        "outgoing": [
+          "e20"
+        ]
+      }
+    },
+    {
+      "id": "Minimum Pressurization Temperature (MPT)",
+      "label": "Minimum Pressurization Temperature (MPT)",
+      "cluster": null,
+      "color": "#18e66f",
+      "degree": 1,
+      "indegree": 0,
+      "outdegree": 1,
+      "isRepresentative": false,
+      "radius": 20,
+      "neighbors": [
+        "pressurization sequence"
+      ],
+      "edgeIds": {
+        "incoming": [],
+        "outgoing": [
+          "e19"
+        ]
+      }
+    },
+    {
+      "id": "phosphorus",
+      "label": "phosphorus",
+      "cluster": null,
+      "color": "#d65bc6",
+      "degree": 1,
+      "indegree": 1,
+      "outdegree": 0,
+      "isRepresentative": false,
+      "radius": 20,
+      "neighbors": [
+        "temper embrittlement"
+      ],
+      "edgeIds": {
+        "incoming": [
+          "e12"
+        ],
+        "outgoing": []
+      }
+    },
+    {
+      "id": "pressurization sequence",
+      "label": "pressurization sequence",
+      "cluster": null,
+      "color": "#61d666",
+      "degree": 2,
+      "indegree": 1,
+      "outdegree": 1,
+      "isRepresentative": false,
+      "radius": 22,
+      "neighbors": [
+        "brittle fracture",
+        "Minimum Pressurization Temperature (MPT)"
+      ],
+      "edgeIds": {
+        "incoming": [
+          "e19"
+        ],
+        "outgoing": [
+          "e23"
+        ]
+      }
+    },
+    {
+      "id": "R. Viswanathan",
+      "label": "R. Viswanathan",
+      "cluster": null,
+      "color": "#a27ddb",
+      "degree": 1,
+      "indegree": 0,
+      "outdegree": 1,
+      "isRepresentative": false,
+      "radius": 20,
+      "neighbors": [
+        "Damage Mechanisms and Life Assessment of High Temperature Components"
+      ],
+      "edgeIds": {
+        "incoming": [],
+        "outgoing": [
           "e0"
+        ]
+      }
+    },
+    {
+      "id": "R.A. Swift",
+      "label": "R.A. Swift",
+      "cluster": null,
+      "color": "#656ee8",
+      "degree": 1,
+      "indegree": 0,
+      "outdegree": 1,
+      "isRepresentative": false,
+      "radius": 20,
+      "neighbors": [
+        "Temper Embrittlement in Low Alloy Ferritic Steels"
+      ],
+      "edgeIds": {
+        "incoming": [],
+        "outgoing": [
+          "e1"
+        ]
+      }
+    },
+    {
+      "id": "R.A. White",
+      "label": "R.A. White",
+      "cluster": null,
+      "color": "#e7e179",
+      "degree": 1,
+      "indegree": 0,
+      "outdegree": 1,
+      "isRepresentative": false,
+      "radius": 20,
+      "neighbors": [
+        "Materials Selection for Refineries and Associated Facilities"
+      ],
+      "edgeIds": {
+        "incoming": [],
+        "outgoing": [
+          "e4"
+        ]
+      }
+    },
+    {
+      "id": "silicon",
+      "label": "silicon",
+      "cluster": null,
+      "color": "#ecd152",
+      "degree": 1,
+      "indegree": 1,
+      "outdegree": 0,
+      "isRepresentative": false,
+      "radius": 20,
+      "neighbors": [
+        "temper embrittlement"
+      ],
+      "edgeIds": {
+        "incoming": [
+          "e13"
+        ],
+        "outgoing": []
+      }
+    },
+    {
+      "id": "temper embrittlement",
+      "label": "temper embrittlement",
+      "cluster": null,
+      "color": "#f28563",
+      "degree": 11,
+      "indegree": 1,
+      "outdegree": 10,
+      "isRepresentative": false,
+      "radius": 34,
+      "neighbors": [
+        "antimony",
+        "arsenic",
+        "embrittling impurity elements",
+        "hydrogen embrittlement",
+        "impact testing",
+        "J* Factor",
+        "manganese",
+        "phosphorus",
+        "silicon",
+        "tin",
+        "X Factor"
+      ],
+      "edgeIds": {
+        "incoming": [
+          "e22"
+        ],
+        "outgoing": [
+          "e2",
+          "e5",
+          "e7",
+          "e8",
+          "e9",
+          "e10",
+          "e11",
+          "e12",
+          "e13",
+          "e14"
+        ]
+      }
+    },
+    {
+      "id": "Temper Embrittlement in Low Alloy Ferritic Steels",
+      "label": "Temper Embrittlement in Low Alloy Ferritic Steels",
+      "cluster": null,
+      "color": "#386cc3",
+      "degree": 1,
+      "indegree": 1,
+      "outdegree": 0,
+      "isRepresentative": false,
+      "radius": 20,
+      "neighbors": [
+        "R.A. Swift"
+      ],
+      "edgeIds": {
+        "incoming": [
+          "e1"
+        ],
+        "outgoing": []
+      }
+    },
+    {
+      "id": "temperature",
+      "label": "temperature",
+      "cluster": null,
+      "color": "#66d979",
+      "degree": 1,
+      "indegree": 1,
+      "outdegree": 0,
+      "isRepresentative": false,
+      "radius": 20,
+      "neighbors": [
+        "CVN toughness"
+      ],
+      "edgeIds": {
+        "incoming": [
+          "e18"
+        ],
+        "outgoing": []
+      }
+    },
+    {
+      "id": "tin",
+      "label": "tin",
+      "cluster": null,
+      "color": "#6ea7e7",
+      "degree": 1,
+      "indegree": 1,
+      "outdegree": 0,
+      "isRepresentative": false,
+      "radius": 20,
+      "neighbors": [
+        "temper embrittlement"
+      ],
+      "edgeIds": {
+        "incoming": [
+          "e14"
+        ],
+        "outgoing": []
+      }
+    },
+    {
+      "id": "weld repairs",
+      "label": "weld repairs",
+      "cluster": null,
+      "color": "#6619e5",
+      "degree": 1,
+      "indegree": 0,
+      "outdegree": 1,
+      "isRepresentative": false,
+      "radius": 20,
+      "neighbors": [
+        "de-embrittled"
+      ],
+      "edgeIds": {
+        "incoming": [],
+        "outgoing": [
+          "e6"
+        ]
+      }
+    },
+    {
+      "id": "X Factor",
+      "label": "X Factor",
+      "cluster": null,
+      "color": "#ce4640",
+      "degree": 1,
+      "indegree": 1,
+      "outdegree": 0,
+      "isRepresentative": false,
+      "radius": 20,
+      "neighbors": [
+        "temper embrittlement"
+      ],
+      "edgeIds": {
+        "incoming": [
+          "e8"
         ],
         "outgoing": []
       }
@@ -686,255 +1205,623 @@
   "edges": [
     {
       "id": "e0",
-      "source": "cyclic stresses",
-      "target": "variations in temperature",
-      "predicate": "are caused by",
+      "source": "R. Viswanathan",
+      "target": "Damage Mechanisms and Life Assessment of High Temperature Components",
+      "predicate": "author of",
       "cluster": null,
-      "color": "#ec52c6",
-      "tooltip": "cyclic stresses —are caused by→ variations in temperature"
+      "color": "#b3e922",
+      "tooltip": "R. Viswanathan —author of→ Damage Mechanisms and Life Assessment of High Temperature Components"
     },
     {
       "id": "e1",
-      "source": "Damage",
-      "target": "cracking",
-      "predicate": "is in form of",
+      "source": "R.A. Swift",
+      "target": "Temper Embrittlement in Low Alloy Ferritic Steels",
+      "predicate": "author of",
       "cluster": null,
-      "color": "#dfe628",
-      "tooltip": "Damage —is in form of→ cracking"
+      "color": "#b3e922",
+      "tooltip": "R.A. Swift —author of→ Temper Embrittlement in Low Alloy Ferritic Steels"
     },
     {
       "id": "e2",
-      "source": "Thermal fatigue",
-      "target": "cyclic stresses",
-      "predicate": "is result of",
+      "source": "temper embrittlement",
+      "target": "embrittling impurity elements",
+      "predicate": "cannot be prevented if material contains",
       "cluster": null,
-      "color": "#c2dc32",
-      "tooltip": "Thermal fatigue —is result of→ cyclic stresses"
+      "color": "#d9694f",
+      "tooltip": "temper embrittlement —cannot be prevented if material contains→ embrittling impurity elements"
     },
     {
       "id": "e3",
-      "source": "cracking",
-      "target": "metallic component",
-      "predicate": "may occur in",
+      "source": "E.F. Ehmke",
+      "target": "Materials Selection for Refineries and Associated Facilities",
+      "predicate": "co-author of",
       "cluster": null,
-      "color": "#45cc58",
-      "tooltip": "cracking —may occur in→ metallic component"
+      "color": "#314ee0",
+      "tooltip": "E.F. Ehmke —co-author of→ Materials Selection for Refineries and Associated Facilities"
     },
     {
       "id": "e4",
-      "source": "cracking",
-      "target": "thermal cycling",
-      "predicate": "occurs under",
+      "source": "R.A. White",
+      "target": "Materials Selection for Refineries and Associated Facilities",
+      "predicate": "co-author of",
       "cluster": null,
-      "color": "#db6b8d",
-      "tooltip": "cracking —occurs under→ thermal cycling"
+      "color": "#314ee0",
+      "tooltip": "R.A. White —co-author of→ Materials Selection for Refineries and Associated Facilities"
     },
     {
       "id": "e5",
-      "source": "cracking",
-      "target": "differential expansion",
-      "predicate": "occurs where",
+      "source": "temper embrittlement",
+      "target": "hydrogen embrittlement",
+      "predicate": "effects minimized by",
       "cluster": null,
-      "color": "#d5d156",
-      "tooltip": "cracking —occurs where→ differential expansion"
+      "color": "#d6517a",
+      "tooltip": "temper embrittlement —effects minimized by→ hydrogen embrittlement"
     },
     {
       "id": "e6",
-      "source": "cracking",
-      "target": "relative movement",
-      "predicate": "occurs where",
+      "source": "weld repairs",
+      "target": "de-embrittled",
+      "predicate": "effects reversed by",
       "cluster": null,
-      "color": "#d5d156",
-      "tooltip": "cracking —occurs where→ relative movement"
+      "color": "#8851ed",
+      "tooltip": "weld repairs —effects reversed by→ de-embrittled"
+    },
+    {
+      "id": "e7",
+      "source": "temper embrittlement",
+      "target": "J* Factor",
+      "predicate": "minimized by controlling",
+      "cluster": null,
+      "color": "#84a9e0",
+      "tooltip": "temper embrittlement —minimized by controlling→ J* Factor"
+    },
+    {
+      "id": "e8",
+      "source": "temper embrittlement",
+      "target": "X Factor",
+      "predicate": "minimized by controlling",
+      "cluster": null,
+      "color": "#84a9e0",
+      "tooltip": "temper embrittlement —minimized by controlling→ X Factor"
+    },
+    {
+      "id": "e9",
+      "source": "temper embrittlement",
+      "target": "antimony",
+      "predicate": "minimized by limiting",
+      "cluster": null,
+      "color": "#da3f9a",
+      "tooltip": "temper embrittlement —minimized by limiting→ antimony"
+    },
+    {
+      "id": "e10",
+      "source": "temper embrittlement",
+      "target": "arsenic",
+      "predicate": "minimized by limiting",
+      "cluster": null,
+      "color": "#da3f9a",
+      "tooltip": "temper embrittlement —minimized by limiting→ arsenic"
+    },
+    {
+      "id": "e11",
+      "source": "temper embrittlement",
+      "target": "manganese",
+      "predicate": "minimized by limiting",
+      "cluster": null,
+      "color": "#da3f9a",
+      "tooltip": "temper embrittlement —minimized by limiting→ manganese"
+    },
+    {
+      "id": "e12",
+      "source": "temper embrittlement",
+      "target": "phosphorus",
+      "predicate": "minimized by limiting",
+      "cluster": null,
+      "color": "#da3f9a",
+      "tooltip": "temper embrittlement —minimized by limiting→ phosphorus"
+    },
+    {
+      "id": "e13",
+      "source": "temper embrittlement",
+      "target": "silicon",
+      "predicate": "minimized by limiting",
+      "cluster": null,
+      "color": "#da3f9a",
+      "tooltip": "temper embrittlement —minimized by limiting→ silicon"
+    },
+    {
+      "id": "e14",
+      "source": "temper embrittlement",
+      "target": "tin",
+      "predicate": "minimized by limiting",
+      "cluster": null,
+      "color": "#da3f9a",
+      "tooltip": "temper embrittlement —minimized by limiting→ tin"
+    },
+    {
+      "id": "e15",
+      "source": "low alloy steel",
+      "target": "creep range",
+      "predicate": "operates in",
+      "cluster": null,
+      "color": "#e2a55c",
+      "tooltip": "low alloy steel —operates in→ creep range"
+    },
+    {
+      "id": "e16",
+      "source": "API Recommended Practice 571",
+      "target": "American Petroleum Institute",
+      "predicate": "published by",
+      "cluster": null,
+      "color": "#c8359d",
+      "tooltip": "API Recommended Practice 571 —published by→ American Petroleum Institute"
+    },
+    {
+      "id": "e17",
+      "source": "API Recommended Practice 934",
+      "target": "American Petroleum Institute",
+      "predicate": "published by",
+      "cluster": null,
+      "color": "#c8359d",
+      "tooltip": "API Recommended Practice 934 —published by→ American Petroleum Institute"
+    },
+    {
+      "id": "e18",
+      "source": "CVN toughness",
+      "target": "temperature",
+      "predicate": "related to",
+      "cluster": null,
+      "color": "#c954e6",
+      "tooltip": "CVN toughness —related to→ temperature"
+    },
+    {
+      "id": "e19",
+      "source": "Minimum Pressurization Temperature (MPT)",
+      "target": "pressurization sequence",
+      "predicate": "related to",
+      "cluster": null,
+      "color": "#c954e6",
+      "tooltip": "Minimum Pressurization Temperature (MPT) —related to→ pressurization sequence"
+    },
+    {
+      "id": "e20",
+      "source": "metallurgical advice",
+      "target": "low alloy steel",
+      "predicate": "should be solicited for",
+      "cluster": null,
+      "color": "#dfd31b",
+      "tooltip": "metallurgical advice —should be solicited for→ low alloy steel"
+    },
+    {
+      "id": "e21",
+      "source": "2.25 Cr steel",
+      "target": "100 and 15",
+      "predicate": "typical J* and X factors are",
+      "cluster": null,
+      "color": "#6749e8",
+      "tooltip": "2.25 Cr steel —typical J* and X factors are→ 100 and 15"
+    },
+    {
+      "id": "e22",
+      "source": "impact testing",
+      "target": "temper embrittlement",
+      "predicate": "used for monitoring",
+      "cluster": null,
+      "color": "#7229bd",
+      "tooltip": "impact testing —used for monitoring→ temper embrittlement"
+    },
+    {
+      "id": "e23",
+      "source": "pressurization sequence",
+      "target": "brittle fracture",
+      "predicate": "used to minimize",
+      "cluster": null,
+      "color": "#40ef44",
+      "tooltip": "pressurization sequence —used to minimize→ brittle fracture"
     }
   ],
   "clusters": [],
   "edgeClusters": [],
   "topEntities": [
     {
-      "label": "cracking",
-      "degree": 5,
+      "label": "temper embrittlement",
+      "degree": 11,
       "indegree": 1,
-      "outdegree": 4,
+      "outdegree": 10,
       "cluster": null
     },
     {
-      "label": "cyclic stresses",
+      "label": "American Petroleum Institute",
+      "degree": 2,
+      "indegree": 2,
+      "outdegree": 0,
+      "cluster": null
+    },
+    {
+      "label": "low alloy steel",
       "degree": 2,
       "indegree": 1,
       "outdegree": 1,
       "cluster": null
     },
     {
-      "label": "Damage",
+      "label": "Materials Selection for Refineries and Associated Facilities",
+      "degree": 2,
+      "indegree": 2,
+      "outdegree": 0,
+      "cluster": null
+    },
+    {
+      "label": "pressurization sequence",
+      "degree": 2,
+      "indegree": 1,
+      "outdegree": 1,
+      "cluster": null
+    },
+    {
+      "label": "100 and 15",
+      "degree": 1,
+      "indegree": 1,
+      "outdegree": 0,
+      "cluster": null
+    },
+    {
+      "label": "2.25 Cr steel",
       "degree": 1,
       "indegree": 0,
       "outdegree": 1,
       "cluster": null
     },
     {
-      "label": "differential expansion",
+      "label": "antimony",
       "degree": 1,
       "indegree": 1,
       "outdegree": 0,
       "cluster": null
     },
     {
-      "label": "metallic component",
-      "degree": 1,
-      "indegree": 1,
-      "outdegree": 0,
-      "cluster": null
-    },
-    {
-      "label": "relative movement",
-      "degree": 1,
-      "indegree": 1,
-      "outdegree": 0,
-      "cluster": null
-    },
-    {
-      "label": "thermal cycling",
-      "degree": 1,
-      "indegree": 1,
-      "outdegree": 0,
-      "cluster": null
-    },
-    {
-      "label": "Thermal fatigue",
+      "label": "API Recommended Practice 571",
       "degree": 1,
       "indegree": 0,
       "outdegree": 1,
       "cluster": null
     },
     {
-      "label": "variations in temperature",
+      "label": "API Recommended Practice 934",
       "degree": 1,
-      "indegree": 1,
-      "outdegree": 0,
+      "indegree": 0,
+      "outdegree": 1,
       "cluster": null
     }
   ],
   "topRelations": [
     {
-      "predicate": "occurs where",
+      "predicate": "minimized by limiting",
+      "count": 6,
+      "cluster": null,
+      "color": "#da3f9a"
+    },
+    {
+      "predicate": "author of",
       "count": 2,
       "cluster": null,
-      "color": "#d5d156"
+      "color": "#b3e922"
     },
     {
-      "predicate": "are caused by",
-      "count": 1,
+      "predicate": "co-author of",
+      "count": 2,
       "cluster": null,
-      "color": "#ec52c6"
+      "color": "#314ee0"
     },
     {
-      "predicate": "is in form of",
-      "count": 1,
+      "predicate": "minimized by controlling",
+      "count": 2,
       "cluster": null,
-      "color": "#dfe628"
+      "color": "#84a9e0"
     },
     {
-      "predicate": "is result of",
-      "count": 1,
+      "predicate": "published by",
+      "count": 2,
       "cluster": null,
-      "color": "#c2dc32"
+      "color": "#c8359d"
     },
     {
-      "predicate": "may occur in",
-      "count": 1,
+      "predicate": "related to",
+      "count": 2,
       "cluster": null,
-      "color": "#45cc58"
+      "color": "#c954e6"
     },
     {
-      "predicate": "occurs under",
+      "predicate": "cannot be prevented if material contains",
       "count": 1,
       "cluster": null,
-      "color": "#db6b8d"
+      "color": "#d9694f"
+    },
+    {
+      "predicate": "effects minimized by",
+      "count": 1,
+      "cluster": null,
+      "color": "#d6517a"
+    },
+    {
+      "predicate": "effects reversed by",
+      "count": 1,
+      "cluster": null,
+      "color": "#8851ed"
+    },
+    {
+      "predicate": "operates in",
+      "count": 1,
+      "cluster": null,
+      "color": "#e2a55c"
     }
   ],
   "stats": {
-    "entities": 9,
-    "relations": 7,
-    "relationTypes": 6,
+    "entities": 34,
+    "relations": 24,
+    "relationTypes": 14,
     "entityClusters": 0,
     "edgeClusters": 0,
     "isolatedEntities": 0,
-    "components": 2,
-    "averageDegree": 1.56,
-    "density": 0.097
+    "components": 10,
+    "averageDegree": 1.41,
+    "density": 0.021
   },
   "isolatedEntities": [],
   "components": [
     {
-      "size": 6,
+      "size": 12,
       "members": [
-        "cracking",
-        "Damage",
-        "differential expansion",
-        "metallic component",
-        "relative movement",
-        "thermal cycling"
+        "antimony",
+        "arsenic",
+        "embrittling impurity elements",
+        "hydrogen embrittlement",
+        "impact testing",
+        "J* Factor",
+        "manganese",
+        "phosphorus",
+        "silicon",
+        "temper embrittlement",
+        "tin",
+        "X Factor"
       ]
     },
     {
       "size": 3,
       "members": [
-        "cyclic stresses",
-        "Thermal fatigue",
-        "variations in temperature"
+        "American Petroleum Institute",
+        "API Recommended Practice 571",
+        "API Recommended Practice 934"
+      ]
+    },
+    {
+      "size": 3,
+      "members": [
+        "E.F. Ehmke",
+        "Materials Selection for Refineries and Associated Facilities",
+        "R.A. White"
+      ]
+    },
+    {
+      "size": 3,
+      "members": [
+        "brittle fracture",
+        "Minimum Pressurization Temperature (MPT)",
+        "pressurization sequence"
+      ]
+    },
+    {
+      "size": 3,
+      "members": [
+        "creep range",
+        "low alloy steel",
+        "metallurgical advice"
+      ]
+    },
+    {
+      "size": 2,
+      "members": [
+        "100 and 15",
+        "2.25 Cr steel"
+      ]
+    },
+    {
+      "size": 2,
+      "members": [
+        "CVN toughness",
+        "temperature"
+      ]
+    },
+    {
+      "size": 2,
+      "members": [
+        "Damage Mechanisms and Life Assessment of High Temperature Components",
+        "R. Viswanathan"
+      ]
+    },
+    {
+      "size": 2,
+      "members": [
+        "R.A. Swift",
+        "Temper Embrittlement in Low Alloy Ferritic Steels"
+      ]
+    },
+    {
+      "size": 2,
+      "members": [
+        "de-embrittled",
+        "weld repairs"
       ]
     }
   ],
   "relations": [
     {
-      "source": "cyclic stresses",
-      "predicate": "are caused by",
-      "target": "variations in temperature",
+      "source": "R. Viswanathan",
+      "predicate": "author of",
+      "target": "Damage Mechanisms and Life Assessment of High Temperature Components",
       "edgeId": "e0",
-      "color": "#ec52c6"
+      "color": "#b3e922"
     },
     {
-      "source": "Damage",
-      "predicate": "is in form of",
-      "target": "cracking",
+      "source": "R.A. Swift",
+      "predicate": "author of",
+      "target": "Temper Embrittlement in Low Alloy Ferritic Steels",
       "edgeId": "e1",
-      "color": "#dfe628"
+      "color": "#b3e922"
     },
     {
-      "source": "Thermal fatigue",
-      "predicate": "is result of",
-      "target": "cyclic stresses",
+      "source": "temper embrittlement",
+      "predicate": "cannot be prevented if material contains",
+      "target": "embrittling impurity elements",
       "edgeId": "e2",
-      "color": "#c2dc32"
+      "color": "#d9694f"
     },
     {
-      "source": "cracking",
-      "predicate": "may occur in",
-      "target": "metallic component",
+      "source": "E.F. Ehmke",
+      "predicate": "co-author of",
+      "target": "Materials Selection for Refineries and Associated Facilities",
       "edgeId": "e3",
-      "color": "#45cc58"
+      "color": "#314ee0"
     },
     {
-      "source": "cracking",
-      "predicate": "occurs under",
-      "target": "thermal cycling",
+      "source": "R.A. White",
+      "predicate": "co-author of",
+      "target": "Materials Selection for Refineries and Associated Facilities",
       "edgeId": "e4",
-      "color": "#db6b8d"
+      "color": "#314ee0"
     },
     {
-      "source": "cracking",
-      "predicate": "occurs where",
-      "target": "differential expansion",
+      "source": "temper embrittlement",
+      "predicate": "effects minimized by",
+      "target": "hydrogen embrittlement",
       "edgeId": "e5",
-      "color": "#d5d156"
+      "color": "#d6517a"
     },
     {
-      "source": "cracking",
-      "predicate": "occurs where",
-      "target": "relative movement",
+      "source": "weld repairs",
+      "predicate": "effects reversed by",
+      "target": "de-embrittled",
       "edgeId": "e6",
-      "color": "#d5d156"
+      "color": "#8851ed"
+    },
+    {
+      "source": "temper embrittlement",
+      "predicate": "minimized by controlling",
+      "target": "J* Factor",
+      "edgeId": "e7",
+      "color": "#84a9e0"
+    },
+    {
+      "source": "temper embrittlement",
+      "predicate": "minimized by controlling",
+      "target": "X Factor",
+      "edgeId": "e8",
+      "color": "#84a9e0"
+    },
+    {
+      "source": "temper embrittlement",
+      "predicate": "minimized by limiting",
+      "target": "antimony",
+      "edgeId": "e9",
+      "color": "#da3f9a"
+    },
+    {
+      "source": "temper embrittlement",
+      "predicate": "minimized by limiting",
+      "target": "arsenic",
+      "edgeId": "e10",
+      "color": "#da3f9a"
+    },
+    {
+      "source": "temper embrittlement",
+      "predicate": "minimized by limiting",
+      "target": "manganese",
+      "edgeId": "e11",
+      "color": "#da3f9a"
+    },
+    {
+      "source": "temper embrittlement",
+      "predicate": "minimized by limiting",
+      "target": "phosphorus",
+      "edgeId": "e12",
+      "color": "#da3f9a"
+    },
+    {
+      "source": "temper embrittlement",
+      "predicate": "minimized by limiting",
+      "target": "silicon",
+      "edgeId": "e13",
+      "color": "#da3f9a"
+    },
+    {
+      "source": "temper embrittlement",
+      "predicate": "minimized by limiting",
+      "target": "tin",
+      "edgeId": "e14",
+      "color": "#da3f9a"
+    },
+    {
+      "source": "low alloy steel",
+      "predicate": "operates in",
+      "target": "creep range",
+      "edgeId": "e15",
+      "color": "#e2a55c"
+    },
+    {
+      "source": "API Recommended Practice 571",
+      "predicate": "published by",
+      "target": "American Petroleum Institute",
+      "edgeId": "e16",
+      "color": "#c8359d"
+    },
+    {
+      "source": "API Recommended Practice 934",
+      "predicate": "published by",
+      "target": "American Petroleum Institute",
+      "edgeId": "e17",
+      "color": "#c8359d"
+    },
+    {
+      "source": "CVN toughness",
+      "predicate": "related to",
+      "target": "temperature",
+      "edgeId": "e18",
+      "color": "#c954e6"
+    },
+    {
+      "source": "Minimum Pressurization Temperature (MPT)",
+      "predicate": "related to",
+      "target": "pressurization sequence",
+      "edgeId": "e19",
+      "color": "#c954e6"
+    },
+    {
+      "source": "metallurgical advice",
+      "predicate": "should be solicited for",
+      "target": "low alloy steel",
+      "edgeId": "e20",
+      "color": "#dfd31b"
+    },
+    {
+      "source": "2.25 Cr steel",
+      "predicate": "typical J* and X factors are",
+      "target": "100 and 15",
+      "edgeId": "e21",
+      "color": "#6749e8"
+    },
+    {
+      "source": "impact testing",
+      "predicate": "used for monitoring",
+      "target": "temper embrittlement",
+      "edgeId": "e22",
+      "color": "#7229bd"
+    },
+    {
+      "source": "pressurization sequence",
+      "predicate": "used to minimize",
+      "target": "brittle fracture",
+      "edgeId": "e23",
+      "color": "#40ef44"
     }
   ]
 }
