@@ -94,7 +94,7 @@ DATA_SUBDIRS_TO_CLEAR = [
 
 # Instead of ESSAY_START / ESSAY_END, specify exactly which essays to run (1‑based indices).
 # Example: run essays 2 and 5 only:
-ESSAY_IDS: List[int] = [87, 63, 23, 64, 46, 52, 84, 10, 51, 15]   # <--- edit this list as needed
+ESSAY_IDS: List[int] = [87, 123, 23, 64, 46, 52, 84, 10, 51, 15]   # <--- edit this list as needed
 
 
 # ------------------------------------------------------------------------------------
@@ -333,13 +333,41 @@ def main():
             json.dump({"_fatal_error": repr(e)}, f, ensure_ascii=False, indent=2)
         return
 
+    # total = len(essays)
+
+    # # Filter essays by explicit ESSAY_IDS (1-based indices)
+    # requested = sorted(set(ESSAY_IDS))
+    # indexed: List[Tuple[int, Dict[str, Any]]] = [
+    #     (i + 1, essays[i]) for i in range(total)
+    #     if (i + 1) in requested
+    # ]
+        
     total = len(essays)
 
-    # Filter essays by explicit ESSAY_IDS (1-based indices)
+    # Map from explicit essay ID -> essay dict.
+    # We require that each essay has a unique integer "id".
+    id_to_essay: Dict[int, Dict[str, Any]] = {}
+    for e in essays:
+        if "id" not in e:
+            raise ValueError(
+                f'Essay is missing required "id" field: {e.get("title") or e}'
+            )
+        try:
+            eid = int(e["id"])
+        except Exception:
+            raise ValueError(f'Essay has non-integer "id": {e["id"]!r}')
+
+        if eid in id_to_essay:
+            raise ValueError(f"Duplicate essay id {eid} in In_Plain_Text.json")
+        id_to_essay[eid] = e
+
+    # Filter essays by explicit ESSAY_IDS (explicit IDs, not positions)
     requested = sorted(set(ESSAY_IDS))
+
     indexed: List[Tuple[int, Dict[str, Any]]] = [
-        (i + 1, essays[i]) for i in range(total)
-        if (i + 1) in requested
+        (eid, id_to_essay[eid])
+        for eid in requested
+        if eid in id_to_essay
     ]
 
 

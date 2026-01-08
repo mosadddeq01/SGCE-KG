@@ -1,0 +1,207 @@
+{
+  "cluster_label": "3_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_b503a554537b",
+      "relation_name": "promotes",
+      "rel_desc": "Repeated thermal cycling particularly promotes or aggravates cracking due to thermal fatigue.",
+      "rel_hint_type": "causal-condition",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "repeated thermal cycling",
+      "object_entity_name": "cracking",
+      "subject_class_label": "Thermal Fatigue Loading Conditions",
+      "subject_class_group": "Thermal Fatigue in Metallic Components",
+      "object_class_label": "Thermal Fatigue Cracking",
+      "object_class_group": "Thermal Fatigue in Metallic Components",
+      "qualifiers": {
+        "TemporalQualifier": "under repeated thermal cycling",
+        "SpatialQualifier": "in a metallic component",
+        "OperationalConstraint": "repeated thermal cycling",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "particularly",
+        "CausalHint": "under",
+        "LogicalMarker": null,
+        "OtherQualifier": "SeverityContext: repeated cycling increases likelihood/severity of cracking"
+      },
+      "confidence": 0.82,
+      "remarks": [
+        "Direction chosen from loading condition (repeated thermal cycling) to damage (cracking)."
+      ]
+    },
+    {
+      "relation_id": "RelR_4f2404649635",
+      "relation_name": "involves",
+      "rel_desc": "Repeated thermal cycling inherently involves variations in temperature over time.",
+      "rel_hint_type": "process-composition",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "repeated thermal cycling",
+      "object_entity_name": "variations in temperature",
+      "subject_class_label": "Thermal Fatigue Loading Conditions",
+      "subject_class_group": "Thermal Fatigue in Metallic Components",
+      "object_class_label": "Thermal Fatigue Loading Conditions",
+      "object_class_group": "Thermal Fatigue in Metallic Components",
+      "qualifiers": {
+        "TemporalQualifier": "repeated cycles",
+        "SpatialQualifier": null,
+        "OperationalConstraint": "thermal cycling operation",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": "implied, not explicit",
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "ConceptualLink: thermal cycling consists of successive temperature variations"
+      },
+      "confidence": 0.55,
+      "remarks": [
+        "Relation added with lower confidence; primarily to connect the cycling process to the underlying temperature variations."
+      ]
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_b503a554537b\"],\n      \"canonical_rel_name\": \"causes_or_aggravates\",\n      \"canonical_rel_desc\": \"Indicates that the subject condition or process causes, initiates, or worsens the occurrence or severity of the damage or phenomenon represented by the object.\",\n      \"justification\": \"The description states that repeated thermal cycling particularly promotes or aggravates cracking due to thermal fatigue, which is a causal link from loading condition to damage; a general predicate 'causes_or_aggravates' captures both initiation and worsening without being tied only to cracking.\",\n      \"remark\": null,\n      \"confidence\": 0.84\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_b503a554537b\"],\n      \"rel_cls\": \"damage_initiation_relation\",\n      \"justification\": \"This relation connects a loading condition (repeated thermal cycling) to a resulting damage state (cracking), representing the initiation or aggravation of damage due to service conditions.\",\n      \"remark\": null,\n      \"confidence\": 0.82\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_b503a554537b\"],\n      \"rel_cls_group\": \"CAUSALITY\",\n      \"justification\": \"The link is explicitly causal: the loading condition promotes or aggravates cracking, fitting a causality-oriented group.\",\n      \"remark\": null,\n      \"confidence\": 0.9\n    }\n  },\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_4f2404649635\"],\n      \"canonical_rel_name\": \"involves\",\n      \"canonical_rel_desc\": \"Indicates that the subject process or condition inherently includes the object phenomenon or sub-process as part of its behavior or composition.\",\n      \"justification\": \"The text states that repeated thermal cycling inherently involves variations in temperature over time, which is a compositional or constitutive relation between a process and its underlying phenomenon; 'involves' captures this generic inclusion.\",\n      \"remark\": null,\n      \"confidence\": 0.78\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_4f2404649635\"],\n      \"rel_cls\": \"process_composition_relation\",\n      \"justification\": \"The relation connects a complex loading condition (repeated thermal cycling) to one of its inherent constituent phenomena (temperature variations), which is best modeled as a composition/part-of relation within process structure.\",\n      \"remark\": null,\n      \"confidence\": 0.8\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_4f2404649635\"],\n      \"rel_cls_group\": \"COMPOSITION\",\n      \"justification\": \"The semantic focus is that thermal cycling consists of, or is made up of, successive temperature variations, aligning with a compositional grouping rather than purely associative or causal.\",\n      \"remark\": null,\n      \"confidence\": 0.86\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_b503a554537b"
+        ],
+        "canonical_rel_name": "causes_or_aggravates",
+        "canonical_rel_desc": "Indicates that the subject condition or process causes, initiates, or worsens the occurrence or severity of the damage or phenomenon represented by the object.",
+        "justification": "The description states that repeated thermal cycling particularly promotes or aggravates cracking due to thermal fatigue, which is a causal link from loading condition to damage; a general predicate 'causes_or_aggravates' captures both initiation and worsening without being tied only to cracking.",
+        "remark": null,
+        "confidence": 0.84
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_b503a554537b"
+        ],
+        "rel_cls": "damage_initiation_relation",
+        "justification": "This relation connects a loading condition (repeated thermal cycling) to a resulting damage state (cracking), representing the initiation or aggravation of damage due to service conditions.",
+        "remark": null,
+        "confidence": 0.82
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_b503a554537b"
+        ],
+        "rel_cls_group": "CAUSALITY",
+        "justification": "The link is explicitly causal: the loading condition promotes or aggravates cracking, fitting a causality-oriented group.",
+        "remark": null,
+        "confidence": 0.9
+      }
+    },
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_4f2404649635"
+        ],
+        "canonical_rel_name": "involves",
+        "canonical_rel_desc": "Indicates that the subject process or condition inherently includes the object phenomenon or sub-process as part of its behavior or composition.",
+        "justification": "The text states that repeated thermal cycling inherently involves variations in temperature over time, which is a compositional or constitutive relation between a process and its underlying phenomenon; 'involves' captures this generic inclusion.",
+        "remark": null,
+        "confidence": 0.78
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_4f2404649635"
+        ],
+        "rel_cls": "process_composition_relation",
+        "justification": "The relation connects a complex loading condition (repeated thermal cycling) to one of its inherent constituent phenomena (temperature variations), which is best modeled as a composition/part-of relation within process structure.",
+        "remark": null,
+        "confidence": 0.8
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_4f2404649635"
+        ],
+        "rel_cls_group": "COMPOSITION",
+        "justification": "The semantic focus is that thermal cycling consists of, or is made up of, successive temperature variations, aligning with a compositional grouping rather than purely associative or causal.",
+        "remark": null,
+        "confidence": 0.86
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_b503a554537b"
+      ],
+      "canonical_rel_name": "causes_or_aggravates",
+      "canonical_rel_desc": "Indicates that the subject condition or process causes, initiates, or worsens the occurrence or severity of the damage or phenomenon represented by the object.",
+      "justification": "The description states that repeated thermal cycling particularly promotes or aggravates cracking due to thermal fatigue, which is a causal link from loading condition to damage; a general predicate 'causes_or_aggravates' captures both initiation and worsening without being tied only to cracking.",
+      "remark": null,
+      "confidence": 0.84
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_b503a554537b"
+      ],
+      "rel_cls": "damage_initiation_relation",
+      "justification": "This relation connects a loading condition (repeated thermal cycling) to a resulting damage state (cracking), representing the initiation or aggravation of damage due to service conditions.",
+      "remark": null,
+      "confidence": 0.82
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_b503a554537b"
+      ],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "The link is explicitly causal: the loading condition promotes or aggravates cracking, fitting a causality-oriented group.",
+      "remark": null,
+      "confidence": 0.9
+    },
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_4f2404649635"
+      ],
+      "canonical_rel_name": "involves",
+      "canonical_rel_desc": "Indicates that the subject process or condition inherently includes the object phenomenon or sub-process as part of its behavior or composition.",
+      "justification": "The text states that repeated thermal cycling inherently involves variations in temperature over time, which is a compositional or constitutive relation between a process and its underlying phenomenon; 'involves' captures this generic inclusion.",
+      "remark": null,
+      "confidence": 0.78
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_4f2404649635"
+      ],
+      "rel_cls": "process_composition_relation",
+      "justification": "The relation connects a complex loading condition (repeated thermal cycling) to one of its inherent constituent phenomena (temperature variations), which is best modeled as a composition/part-of relation within process structure.",
+      "remark": null,
+      "confidence": 0.8
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_4f2404649635"
+      ],
+      "rel_cls_group": "COMPOSITION",
+      "justification": "The semantic focus is that thermal cycling consists of, or is made up of, successive temperature variations, aligning with a compositional grouping rather than purely associative or causal.",
+      "remark": null,
+      "confidence": 0.86
+    }
+  ],
+  "timestamp": "2026-01-08T04:22:56Z"
+}

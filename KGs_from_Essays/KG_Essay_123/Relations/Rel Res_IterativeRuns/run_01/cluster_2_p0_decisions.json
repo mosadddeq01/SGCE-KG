@@ -1,0 +1,65 @@
+{
+  "cluster_label": "2_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_b91c57dd4129",
+      "relation_name": "causes",
+      "rel_desc": "Variations in temperature cause cyclic stresses in metallic components.",
+      "rel_hint_type": "causal",
+      "canonical_rel_name": "causes",
+      "canonical_rel_desc": "Indicates that the subject is a direct cause or primary driver of the object within the context of thermal fatigue phenomena.",
+      "rel_cls": "fatigue_causality_relation",
+      "rel_cls_group": "CAUSALITY",
+      "subject_entity_name": "variations in temperature",
+      "object_entity_name": "cyclic stresses",
+      "subject_class_label": "Thermal Fatigue Loading Conditions",
+      "subject_class_group": "Thermal Fatigue in Metallic Components",
+      "object_class_label": "Thermal Fatigue Loading Conditions",
+      "object_class_group": "Thermal Fatigue in Metallic Components",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": "thermal loading conditions",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "caused by",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.97,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_3caeffe3918a",
+      "relation_name": "causes",
+      "rel_desc": "Cyclic stresses lead to the damage mechanism known as thermal fatigue.",
+      "rel_hint_type": "causal",
+      "canonical_rel_name": "causes",
+      "canonical_rel_desc": "Indicates that the subject is a direct cause or primary driver of the object within the context of thermal fatigue phenomena.",
+      "rel_cls": "fatigue_causality_relation",
+      "rel_cls_group": "CAUSALITY",
+      "subject_entity_name": "cyclic stresses",
+      "object_entity_name": "thermal fatigue",
+      "subject_class_label": "Thermal Fatigue Loading Conditions",
+      "subject_class_group": "Thermal Fatigue in Metallic Components",
+      "object_class_label": "Thermal Fatigue Damage",
+      "object_class_group": "Thermal Fatigue in Metallic Components",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": "under cyclic thermal loading",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "is the result of",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.97,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[]",
+  "parsed_steps": [],
+  "executed_decisions": [],
+  "timestamp": "2026-01-08T04:23:07Z"
+}

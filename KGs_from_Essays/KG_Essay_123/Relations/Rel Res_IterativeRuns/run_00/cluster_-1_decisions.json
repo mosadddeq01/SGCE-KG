@@ -1,0 +1,263 @@
+{
+  "cluster_label": -1,
+  "cluster_classes": [
+    {
+      "candidate_id": "ClsC_f7e40310",
+      "class_label": "Thermal Fatigue Loading Conditions",
+      "class_description": "Operating and loading conditions that drive thermal fatigue in metallic components, including cyclic stresses arising from temperature changes and repeated thermal cycling.",
+      "class_type_hint": "Operating Condition",
+      "class_group": "TBD",
+      "confidence": 0.9,
+      "evidence_excerpt": "Thermal fatigue is the result of cyclic stresses caused by variations in temperature... particularly under repeated thermal cycling.",
+      "member_ids": [
+        "En_27d251fa",
+        "En_45f49b75",
+        "En_c28faf1f"
+      ],
+      "members": [
+        {
+          "id": "En_27d251fa",
+          "entity_name": "cyclic stresses",
+          "entity_description": "Repeatedly varying mechanical stresses that arise due to changing temperatures in components.",
+          "entity_type_hint": "OperatingCondition"
+        },
+        {
+          "id": "En_45f49b75",
+          "entity_name": "variations in temperature",
+          "entity_description": "Changes in temperature over time that induce cyclic stresses in metallic components.",
+          "entity_type_hint": "OperatingCondition"
+        },
+        {
+          "id": "En_c28faf1f",
+          "entity_name": "repeated thermal cycling",
+          "entity_description": "Repeated heating and cooling cycles that subject components to alternating thermal stresses.",
+          "entity_type_hint": "OperatingCondition"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_bf34f1ce",
+      "class_label": "Constrained Thermal Deformation",
+      "class_description": "Physical phenomena involving constrained mechanical or thermal deformation between regions or parts of a component (such as relative movement or differential expansion) that can lead to cracking, especially under repeated thermal cycling.",
+      "class_type_hint": "Physical Phenomenon",
+      "class_group": "TBD",
+      "confidence": 0.9,
+      "evidence_excerpt": "Cracking may occur where relative movement or differential expansion is constrained, particularly under repeated thermal cycling.",
+      "member_ids": [
+        "En_d0874103",
+        "En_e28353ba"
+      ],
+      "members": [
+        {
+          "id": "En_d0874103",
+          "entity_name": "relative movement",
+          "entity_description": "Mechanical motion between different parts or regions of a component that may be constrained.",
+          "entity_type_hint": "PhysicalPhenomenon"
+        },
+        {
+          "id": "En_e28353ba",
+          "entity_name": "differential expansion",
+          "entity_description": "Non-uniform thermal expansion between different regions of a component that can be constrained.",
+          "entity_type_hint": "PhysicalPhenomenon"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_56af5e69",
+      "class_label": "Thermal Fatigue Damage",
+      "class_description": "Damage mechanism in metallic components caused by cyclic thermal stresses leading to cracking under constrained conditions.",
+      "class_type_hint": "Failure Mechanism",
+      "class_group": "TBD",
+      "confidence": 0.95,
+      "evidence_excerpt": "Thermal fatigue is the result of cyclic stresses caused by variations in temperature… damage is in the form of cracking.",
+      "member_ids": [
+        "En_f0639f97"
+      ],
+      "members": [
+        {
+          "id": "En_f0639f97",
+          "entity_name": "thermal fatigue",
+          "entity_description": "Damage mechanism in metals caused by cyclic thermal stresses leading to cracking under constrained conditions.",
+          "entity_type_hint": "DamageMechanism"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_d287346e",
+      "class_label": "Thermal Fatigue Cracking",
+      "class_description": "Fracture-type damage in metallic components caused by constrained differential expansion under repeated thermal cycling.",
+      "class_type_hint": "Damage Morphology",
+      "class_group": "TBD",
+      "confidence": 0.86,
+      "evidence_excerpt": "Fracture-type damage forming in metallic components as a manifestation of thermal fatigue.",
+      "member_ids": [
+        "En_0546bda7"
+      ],
+      "members": [
+        {
+          "id": "En_0546bda7",
+          "entity_name": "cracking",
+          "entity_description": "Fracture-type damage forming in metallic components as a manifestation of thermal fatigue.",
+          "entity_type_hint": "DamageMorphology"
+        }
+      ],
+      "remarks": []
+    },
+    {
+      "candidate_id": "ClsC_83a8d831",
+      "class_label": "Metallic Component",
+      "class_description": "Metal structural or mechanical part that can experience constrained movement or differential expansion, making it susceptible to thermal fatigue cracking under repeated thermal cycling.",
+      "class_type_hint": "Component",
+      "class_group": "TBD",
+      "confidence": 0.82,
+      "evidence_excerpt": "Any metal structural or mechanical part susceptible to thermal fatigue cracking where relative movement or differential expansion is constrained.",
+      "member_ids": [
+        "En_aa5ac740"
+      ],
+      "members": [
+        {
+          "id": "En_aa5ac740",
+          "entity_name": "metallic component",
+          "entity_description": "Any metal structural or mechanical part susceptible to thermal fatigue cracking.",
+          "entity_type_hint": "Component"
+        }
+      ],
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_f7e40310\",\n      \"new_name\": null,\n      \"new_description\": null,\n      \"new_class_type_hint\": null,\n      \"new_class_group\": \"Thermal Fatigue in Metallic Components\",\n      \"remark\": null,\n      \"justification\": \"This class describes operating/loading conditions (cyclic stresses from temperature changes and thermal cycling) that specifically drive thermal fatigue in metallic components, so it should be grouped under a domain-level Class_Group for thermal fatigue in metals.\",\n      \"confidence\": 0.96\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_bf34f1ce\",\n      \"new_name\": null,\n      \"new_description\": null,\n      \"new_class_type_hint\": null,\n      \"new_class_group\": \"Thermal Fatigue in Metallic Components\",\n      \"remark\": null,\n      \"justification\": \"This class captures constrained thermal/mechanical deformation phenomena (relative movement, differential expansion) that cause cracking under repeated thermal cycling in metallic components, fitting the same overarching thermal fatigue in metals domain.\",\n      \"confidence\": 0.96\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_56af5e69\",\n      \"new_name\": null,\n      \"new_description\": null,\n      \"new_class_type_hint\": null,\n      \"new_class_group\": \"Thermal Fatigue in Metallic Components\",\n      \"remark\": null,\n      \"justification\": \"This class explicitly represents the thermal fatigue damage mechanism in metallic components, making the shared Class_Group ‘Thermal Fatigue in Metallic Components’ appropriate.\",\n      \"confidence\": 0.97\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_d287346e\",\n      \"new_name\": null,\n      \"new_description\": null,\n      \"new_class_type_hint\": null,\n      \"new_class_group\": \"Thermal Fatigue in Metallic Components\",\n      \"remark\": null,\n      \"justification\": \"This class represents the cracking morphology that manifests from thermal fatigue in metallic components, and should share the same higher-level Class_Group with the associated mechanism and conditions.\",\n      \"confidence\": 0.96\n    }\n  },\n  {\n    \"function\": \"modify_class\",\n    \"args\": {\n      \"class_id\": \"ClsC_83a8d831\",\n      \"new_name\": null,\n      \"new_description\": null,\n      \"new_class_type_hint\": null,\n      \"new_class_group\": \"Thermal Fatigue in Metallic Components\",\n      \"remark\": null,\n      \"justification\": \"This class defines the metallic components that are susceptible to thermal fatigue cracking under the described conditions and phenomena, so it belongs in the same thermal fatigue in metallic components Class_Group.\",\n      \"confidence\": 0.95\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_f7e40310",
+        "new_name": null,
+        "new_description": null,
+        "new_class_type_hint": null,
+        "new_class_group": "Thermal Fatigue in Metallic Components",
+        "remark": null,
+        "justification": "This class describes operating/loading conditions (cyclic stresses from temperature changes and thermal cycling) that specifically drive thermal fatigue in metallic components, so it should be grouped under a domain-level Class_Group for thermal fatigue in metals.",
+        "confidence": 0.96
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_bf34f1ce",
+        "new_name": null,
+        "new_description": null,
+        "new_class_type_hint": null,
+        "new_class_group": "Thermal Fatigue in Metallic Components",
+        "remark": null,
+        "justification": "This class captures constrained thermal/mechanical deformation phenomena (relative movement, differential expansion) that cause cracking under repeated thermal cycling in metallic components, fitting the same overarching thermal fatigue in metals domain.",
+        "confidence": 0.96
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_56af5e69",
+        "new_name": null,
+        "new_description": null,
+        "new_class_type_hint": null,
+        "new_class_group": "Thermal Fatigue in Metallic Components",
+        "remark": null,
+        "justification": "This class explicitly represents the thermal fatigue damage mechanism in metallic components, making the shared Class_Group 'Thermal Fatigue in Metallic Components' appropriate.",
+        "confidence": 0.97
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_d287346e",
+        "new_name": null,
+        "new_description": null,
+        "new_class_type_hint": null,
+        "new_class_group": "Thermal Fatigue in Metallic Components",
+        "remark": null,
+        "justification": "This class represents the cracking morphology that manifests from thermal fatigue in metallic components, and should share the same higher-level Class_Group with the associated mechanism and conditions.",
+        "confidence": 0.96
+      }
+    },
+    {
+      "function": "modify_class",
+      "args": {
+        "class_id": "ClsC_83a8d831",
+        "new_name": null,
+        "new_description": null,
+        "new_class_type_hint": null,
+        "new_class_group": "Thermal Fatigue in Metallic Components",
+        "remark": null,
+        "justification": "This class defines the metallic components that are susceptible to thermal fatigue cracking under the described conditions and phenomena, so it belongs in the same thermal fatigue in metallic components Class_Group.",
+        "confidence": 0.95
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_f7e40310",
+      "class_id_resolved": "ClsC_f7e40310",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Thermal Fatigue in Metallic Components",
+      "remark": null,
+      "justification": "This class describes operating/loading conditions (cyclic stresses from temperature changes and thermal cycling) that specifically drive thermal fatigue in metallic components, so it should be grouped under a domain-level Class_Group for thermal fatigue in metals.",
+      "confidence": 0.96
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_bf34f1ce",
+      "class_id_resolved": "ClsC_bf34f1ce",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Thermal Fatigue in Metallic Components",
+      "remark": null,
+      "justification": "This class captures constrained thermal/mechanical deformation phenomena (relative movement, differential expansion) that cause cracking under repeated thermal cycling in metallic components, fitting the same overarching thermal fatigue in metals domain.",
+      "confidence": 0.96
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_56af5e69",
+      "class_id_resolved": "ClsC_56af5e69",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Thermal Fatigue in Metallic Components",
+      "remark": null,
+      "justification": "This class explicitly represents the thermal fatigue damage mechanism in metallic components, making the shared Class_Group 'Thermal Fatigue in Metallic Components' appropriate.",
+      "confidence": 0.97
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_d287346e",
+      "class_id_resolved": "ClsC_d287346e",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Thermal Fatigue in Metallic Components",
+      "remark": null,
+      "justification": "This class represents the cracking morphology that manifests from thermal fatigue in metallic components, and should share the same higher-level Class_Group with the associated mechanism and conditions.",
+      "confidence": 0.96
+    },
+    {
+      "action": "modify_class",
+      "class_id": "ClsC_83a8d831",
+      "class_id_resolved": "ClsC_83a8d831",
+      "new_name": null,
+      "new_description": null,
+      "new_class_type_hint": null,
+      "new_class_group": "Thermal Fatigue in Metallic Components",
+      "remark": null,
+      "justification": "This class defines the metallic components that are susceptible to thermal fatigue cracking under the described conditions and phenomena, so it belongs in the same thermal fatigue in metallic components Class_Group.",
+      "confidence": 0.95
+    }
+  ],
+  "provisional_to_real": {},
+  "timestamp": "2026-01-08T04:21:35Z"
+}

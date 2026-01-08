@@ -1,0 +1,42 @@
+[
+  {
+    "function": "set_canonical_rel",
+    "args": {
+      "relation_ids": [
+        "RelR_8a1c1583d3c0",
+        "RelR_1c532d74c1cd"
+      ],
+      "canonical_rel_name": "contributes_to_occurrence_of",
+      "canonical_rel_desc": "Indicates that the subject condition or mechanism promotes or contributes causally to the occurrence of the object failure mode, without implying strict sufficiency or necessity.",
+      "justification": "Both relations describe constrained thermal deformation mechanisms (relative movement or differential expansion) promoting or enabling the occurrence of cracking as a failure mode. The semantics are causal but not strictly deterministic, so a predicate like 'contributes_to_occurrence_of' accurately captures a conditional, risk-increasing causal contribution rather than a guaranteed cause.",
+      "remark": "Normalized from raw 'contributes_to' to a more explicit failure-occurrence predicate; both instances share identical causal-condition semantics.",
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls",
+    "args": {
+      "relation_ids": [
+        "RelR_8a1c1583d3c0",
+        "RelR_1c532d74c1cd"
+      ],
+      "rel_cls": "damage_causation_relation",
+      "justification": "In both cases the subject is a deformation mechanism/condition and the object is a damage/failure mode (cracking). This is a specific pattern of causal linkage where loading or deformation conditions lead to material damage, fitting a dedicated class for damage causation relations.",
+      "remark": "This class can be reused for other mechanisms (e.g., stress, corrosion, wear) causing or promoting damage modes.",
+      "confidence": 0.9
+    }
+  },
+  {
+    "function": "set_rel_cls_group",
+    "args": {
+      "relation_ids": [
+        "RelR_8a1c1583d3c0",
+        "RelR_1c532d74c1cd"
+      ],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "Both relations encode that a specific constrained deformation condition promotes or contributes to the occurrence of cracking, which is inherently a causal dependence between mechanism and failure.",
+      "remark": null,
+      "confidence": 0.95
+    }
+  }
+]

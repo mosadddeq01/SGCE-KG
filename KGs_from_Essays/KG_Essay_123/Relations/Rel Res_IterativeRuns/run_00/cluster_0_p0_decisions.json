@@ -1,0 +1,141 @@
+{
+  "cluster_label": "0_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_b91c57dd4129",
+      "relation_name": "causes",
+      "rel_desc": "Variations in temperature cause cyclic stresses in metallic components.",
+      "rel_hint_type": "causal",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "variations in temperature",
+      "object_entity_name": "cyclic stresses",
+      "subject_class_label": "Thermal Fatigue Loading Conditions",
+      "subject_class_group": "Thermal Fatigue in Metallic Components",
+      "object_class_label": "Thermal Fatigue Loading Conditions",
+      "object_class_group": "Thermal Fatigue in Metallic Components",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": "thermal loading conditions",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "caused by",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.97,
+      "remarks": []
+    },
+    {
+      "relation_id": "RelR_3caeffe3918a",
+      "relation_name": "causes",
+      "rel_desc": "Cyclic stresses lead to the damage mechanism known as thermal fatigue.",
+      "rel_hint_type": "causal",
+      "canonical_rel_name": "TBD",
+      "canonical_rel_desc": "",
+      "rel_cls": "TBD",
+      "rel_cls_group": "TBD",
+      "subject_entity_name": "cyclic stresses",
+      "object_entity_name": "thermal fatigue",
+      "subject_class_label": "Thermal Fatigue Loading Conditions",
+      "subject_class_group": "Thermal Fatigue in Metallic Components",
+      "object_class_label": "Thermal Fatigue Damage",
+      "object_class_group": "Thermal Fatigue in Metallic Components",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": null,
+        "OperationalConstraint": "under cyclic thermal loading",
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": "is the result of",
+        "LogicalMarker": null,
+        "OtherQualifier": null
+      },
+      "confidence": 0.97,
+      "remarks": []
+    }
+  ],
+  "llm_raw": "[\n  {\n    \"function\": \"set_canonical_rel\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_b91c57dd4129\", \"RelR_3caeffe3918a\"],\n      \"canonical_rel_name\": \"causes\",\n      \"canonical_rel_desc\": \"Indicates that the subject is a direct cause or primary driver of the object within the context of thermal fatigue phenomena.\",\n      \"justification\": \"Both relations describe a direct causal relationship: variations in temperature causing cyclic stresses, and cyclic stresses causing thermal fatigue. They share the same direction and predicate semantics, so they can be normalized under a single causal predicate 'causes'.\",\n      \"remark\": null,\n      \"confidence\": 0.96\n    }\n  },\n  {\n    \"function\": \"set_rel_cls\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_b91c57dd4129\", \"RelR_3caeffe3918a\"],\n      \"rel_cls\": \"fatigue_causality_relation\",\n      \"justification\": \"Both relations capture causal chains specific to thermal fatigue phenomena in metallic components (loading conditions leading to stresses and stresses leading to damage). A dedicated class 'fatigue_causality_relation' groups such cause-effect links in fatigue context.\",\n      \"remark\": null,\n      \"confidence\": 0.94\n    }\n  },\n  {\n    \"function\": \"set_rel_cls_group\",\n    \"args\": {\n      \"relation_ids\": [\"RelR_b91c57dd4129\", \"RelR_3caeffe3918a\"],\n      \"rel_cls_group\": \"CAUSALITY\",\n      \"justification\": \"The rel_hint_type is explicitly causal and the descriptions clearly state that the subject leads to or results in the object; these are classic cause-effect relations and belong in the CAUSALITY group.\",\n      \"remark\": null,\n      \"confidence\": 0.99\n    }\n  }\n]",
+  "parsed_steps": [
+    {
+      "function": "set_canonical_rel",
+      "args": {
+        "relation_ids": [
+          "RelR_b91c57dd4129",
+          "RelR_3caeffe3918a"
+        ],
+        "canonical_rel_name": "causes",
+        "canonical_rel_desc": "Indicates that the subject is a direct cause or primary driver of the object within the context of thermal fatigue phenomena.",
+        "justification": "Both relations describe a direct causal relationship: variations in temperature causing cyclic stresses, and cyclic stresses causing thermal fatigue. They share the same direction and predicate semantics, so they can be normalized under a single causal predicate 'causes'.",
+        "remark": null,
+        "confidence": 0.96
+      }
+    },
+    {
+      "function": "set_rel_cls",
+      "args": {
+        "relation_ids": [
+          "RelR_b91c57dd4129",
+          "RelR_3caeffe3918a"
+        ],
+        "rel_cls": "fatigue_causality_relation",
+        "justification": "Both relations capture causal chains specific to thermal fatigue phenomena in metallic components (loading conditions leading to stresses and stresses leading to damage). A dedicated class 'fatigue_causality_relation' groups such cause-effect links in fatigue context.",
+        "remark": null,
+        "confidence": 0.94
+      }
+    },
+    {
+      "function": "set_rel_cls_group",
+      "args": {
+        "relation_ids": [
+          "RelR_b91c57dd4129",
+          "RelR_3caeffe3918a"
+        ],
+        "rel_cls_group": "CAUSALITY",
+        "justification": "The rel_hint_type is explicitly causal and the descriptions clearly state that the subject leads to or results in the object; these are classic cause-effect relations and belong in the CAUSALITY group.",
+        "remark": null,
+        "confidence": 0.99
+      }
+    }
+  ],
+  "executed_decisions": [
+    {
+      "action": "set_canonical_rel",
+      "relation_ids": [
+        "RelR_b91c57dd4129",
+        "RelR_3caeffe3918a"
+      ],
+      "canonical_rel_name": "causes",
+      "canonical_rel_desc": "Indicates that the subject is a direct cause or primary driver of the object within the context of thermal fatigue phenomena.",
+      "justification": "Both relations describe a direct causal relationship: variations in temperature causing cyclic stresses, and cyclic stresses causing thermal fatigue. They share the same direction and predicate semantics, so they can be normalized under a single causal predicate 'causes'.",
+      "remark": null,
+      "confidence": 0.96
+    },
+    {
+      "action": "set_rel_cls",
+      "relation_ids": [
+        "RelR_b91c57dd4129",
+        "RelR_3caeffe3918a"
+      ],
+      "rel_cls": "fatigue_causality_relation",
+      "justification": "Both relations capture causal chains specific to thermal fatigue phenomena in metallic components (loading conditions leading to stresses and stresses leading to damage). A dedicated class 'fatigue_causality_relation' groups such cause-effect links in fatigue context.",
+      "remark": null,
+      "confidence": 0.94
+    },
+    {
+      "action": "set_rel_cls_group",
+      "relation_ids": [
+        "RelR_b91c57dd4129",
+        "RelR_3caeffe3918a"
+      ],
+      "rel_cls_group": "CAUSALITY",
+      "justification": "The rel_hint_type is explicitly causal and the descriptions clearly state that the subject leads to or results in the object; these are classic cause-effect relations and belong in the CAUSALITY group.",
+      "remark": null,
+      "confidence": 0.99
+    }
+  ],
+  "timestamp": "2026-01-08T04:22:15Z"
+}

@@ -1,0 +1,71 @@
+{
+  "cluster_label": "1_p0",
+  "cluster_relations": [
+    {
+      "relation_id": "RelR_8a1c1583d3c0",
+      "relation_name": "contributes_to",
+      "rel_desc": "Constrained relative movement within a metallic component contributes to the occurrence of cracking.",
+      "rel_hint_type": "causal-condition",
+      "canonical_rel_name": "contributes_to_occurrence_of",
+      "canonical_rel_desc": "Indicates that the subject condition or mechanism promotes or contributes causally to the occurrence of the object failure mode, without implying strict sufficiency or necessity.",
+      "rel_cls": "damage_causation_relation",
+      "rel_cls_group": "CAUSALITY",
+      "subject_entity_name": "relative movement",
+      "object_entity_name": "cracking",
+      "subject_class_label": "Constrained Thermal Deformation",
+      "subject_class_group": "Thermal Fatigue in Metallic Components",
+      "object_class_label": "Thermal Fatigue Cracking",
+      "object_class_group": "Thermal Fatigue in Metallic Components",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "anywhere in a metallic component",
+        "OperationalConstraint": "mechanical constraint of relative movement",
+        "ConditionExpression": "where relative movement is constrained",
+        "UncertaintyQualifier": "may",
+        "CausalHint": "under",
+        "LogicalMarker": "where",
+        "OtherQualifier": "FailureContext: thermal fatigue cracking sites are associated with constrained relative movement"
+      },
+      "confidence": 0.86,
+      "remarks": [
+        "Relation chosen to capture that constrained relative movement is a condition promoting cracking.",
+        "Relation chosen to capture that constrained relative movement is a condition promoting cracking."
+      ]
+    },
+    {
+      "relation_id": "RelR_1c532d74c1cd",
+      "relation_name": "contributes_to",
+      "rel_desc": "Constrained differential expansion in a metallic component promotes the occurrence of cracking.",
+      "rel_hint_type": "causal-condition",
+      "canonical_rel_name": "contributes_to_occurrence_of",
+      "canonical_rel_desc": "Indicates that the subject condition or mechanism promotes or contributes causally to the occurrence of the object failure mode, without implying strict sufficiency or necessity.",
+      "rel_cls": "damage_causation_relation",
+      "rel_cls_group": "CAUSALITY",
+      "subject_entity_name": "differential expansion",
+      "object_entity_name": "cracking",
+      "subject_class_label": "Constrained Thermal Deformation",
+      "subject_class_group": "Thermal Fatigue in Metallic Components",
+      "object_class_label": "Thermal Fatigue Cracking",
+      "object_class_group": "Thermal Fatigue in Metallic Components",
+      "qualifiers": {
+        "TemporalQualifier": null,
+        "SpatialQualifier": "anywhere in a metallic component",
+        "OperationalConstraint": "constraint of differential thermal expansion",
+        "ConditionExpression": "where differential expansion is constrained",
+        "UncertaintyQualifier": "may",
+        "CausalHint": "under",
+        "LogicalMarker": "where",
+        "OtherQualifier": "MechanismContext: constrained differential expansion generates local stresses leading to cracking"
+      },
+      "confidence": 0.86,
+      "remarks": [
+        "Relation primarily introduced to encode constrained differential expansion as a cracking condition.",
+        "Relation primarily introduced to encode constrained differential expansion as a cracking condition."
+      ]
+    }
+  ],
+  "llm_raw": "[]",
+  "parsed_steps": [],
+  "executed_decisions": [],
+  "timestamp": "2026-01-08T04:23:05Z"
+}
