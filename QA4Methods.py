@@ -929,8 +929,11 @@
 #*#########################  End  ##########################
 
 
+
+
 #?######################### Start ##########################
 #region:#?   QA4Methods - V10   (TRACE KG per-snapshot evaluation, id-matched, weighted embeddings)
+
 
 import os
 import json
@@ -1856,23 +1859,18 @@ def main():
 
 if __name__ == "__main__":
     main()
+    
+    
 
 #endregion#?   QA4Methods - V10   (TRACE KG per-snapshot evaluation, id-matched, weighted embeddings)
 #?#########################  End  ##########################
 
 
 
-
-
-
-
-
-
-
-
 #?######################### Start ##########################
-#region:#?   Results for 12 randomly selected essays
+#region:#?   Results for 52 randomly selected essays
 
+#first 12 results
 
 # === Per-Snapshot Accuracy (all methods) ===
 #   Snapshot | DatasetID |       tracekg        |  Reponses mentioned in baselines by mistake     |     KgGen     |                        GraphRAG                   |     OpenIE 
@@ -1891,13 +1889,14 @@ if __name__ == "__main__":
 #        091 |        91 |      100.00% (15/15) |  Response accuracy for essay ID 92:             {'kggen_accuracy': 0.9333,             'graphrag_accuracy': 0.5333, 'openie_accuracy': 0.5333}
 
 
+
 # === Method Comparison (Mean Accuracy across evaluated snapshots) ===
 # Method     | Mean Acc |   Essays
 # ------------------------------------
-# tracekg    |    98.33% |      12
-# KGGen      |    66.67% |      11
-# GraphRAG   |    53.31% |      11
-# OpenIE     |    36.36% |      11
+# tracekg    |    98.33% |      52
+# KGGen      |    66.67% |      52
+# GraphRAG   |    53.31% |      52
+# OpenIE     |    36.36% |      52
 
 
 
