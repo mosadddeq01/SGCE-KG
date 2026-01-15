@@ -1,6 +1,6 @@
 
 
-import Trace_KG
+import TKG_Main
 
 
 #?######################### Start ##########################
@@ -59,7 +59,7 @@ from typing import Dict, Any, List, Tuple, Optional
 
 from tqdm import tqdm
 
-from Trace_KG import (  # core pipeline functions
+from TKG_Main import (  # core pipeline functions
     sentence_chunks_token_driven,
     embed_and_index_chunks,
     run_entity_extraction_on_chunks,

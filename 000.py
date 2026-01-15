@@ -395,7 +395,7 @@ from pathlib import Path
 from typing import Dict, Any, List, Tuple, Optional
 
 # Optional: import Trace_KG so we're sure we're in the right project
-import Trace_KG  # noqa: F401  # not used directly, just to ensure import works
+import TKG_Main  # noqa: F401  # not used directly, just to ensure import works
 
 # ------------------------------------------------------------------------------------
 # Helpers
