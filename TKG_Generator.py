@@ -548,13 +548,13 @@ def generate_trace_kgs(
 #     default_model="openai/gpt-5-nano",
 # )
 
-# # from Trace_KG import TraceKGLLMConfig, main
+# from Trace_KG import TraceKGLLMConfig, main
 
 
-# generate_trace_kgs(
-#     essay_ids=[123],
-#     default_model="openai/gpt-4.1-nano",
-# )
+generate_trace_kgs(
+    essay_ids=[123],
+    default_model="openai/gpt-4.1-nano",
+)
 
 
 # cfg = TraceKGLLMConfig(
