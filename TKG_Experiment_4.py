@@ -337,7 +337,6 @@ if __name__ == "__main__":
 
 import TKG_Main
 
-
 #?######################### Start ##########################
 #region:#?   Pipeline for producing KG - V11 (signature-aware DSPy LLM Config)
 
@@ -895,8 +894,8 @@ def generate_trace_kgs(
 # Run on all essays in In_Plain_Text.json
 generate_trace_kgs(
     essay_ids=None,          # or a list of specific ids
-    # default_model= "gpt-5-nano" #"gpt-5.1", # or another model name
-    temperature=0.0,
+    default_model= "openai/gpt-4.1-nano", #"gpt-5-nano" #"gpt-5.1", # or another model name,
+    # temperature=0.0,
     max_tokens=16000,
 )
 
@@ -1302,8 +1301,8 @@ def generate_trace_kgs(
 if __name__ == "__main__":
     # Run the single, pre-chunked pipeline once using default LLM config
     generate_trace_kgs(
-        default_model="gpt-5-nano",
-        temperature=0.0,
+        default_model="openai/gpt-4.1-nano", #"gpt-5-nano",
+        # temperature=0.0,
         max_tokens=16000,
     )
 
