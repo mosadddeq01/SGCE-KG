@@ -906,7 +906,7 @@ generate_trace_kgs(
 
 
 
-
+import TKG_Main
 
 
 #?######################### Start ##########################
@@ -971,7 +971,7 @@ REPO_ROOT = Path(".").resolve()
 DATA_DIR = REPO_ROOT / "data"
 CHUNKS_PATH = DATA_DIR / "Chunks" / "chunks_sentence.jsonl"
 CHUNKS_EMB_DIR = DATA_DIR / "Chunks" / "chunks_emb"
-KG_OUT_ROOT = REPO_ROOT / "KGs_from_Essays"
+KG_OUT_ROOT = REPO_ROOT / "Experiments/MYNE/Ex4_T2KGBench/KGs_from_Essays"
 STATS_OUT = KG_OUT_ROOT / "Trace_KG_run_stats.json"
 
 # Subdirectories that the pipeline may create and which we clear between runs
@@ -1294,27 +1294,29 @@ def generate_trace_kgs(
     main(llm_config=cfg)
 
 
-# ------------------------------------------------------------------------------------
-# ENTRYPOINT
-# ------------------------------------------------------------------------------------
-
-if __name__ == "__main__":
-    # Run the single, pre-chunked pipeline once using default LLM config
-    generate_trace_kgs(
-        default_model="openai/gpt-4.1-nano", #"gpt-5-nano",
-        # temperature=0.0,
-        max_tokens=16000,
-    )
-
-
 #endregion#?      Create KG from Text2KGBench Reverse Chunks
 #?#########################  End  ##########################
 
 
+# ------------------------------------------------------------------------------------
+# ENTRYPOINT
+# ------------------------------------------------------------------------------------
+
+
+if __name__ == "__main__":
+    # Run the single, pre-chunked pipeline once using default LLM config
+    generate_trace_kgs(
+        default_model= "gpt-5.1", #"gpt-5-mini", #"gpt-5-nano", #"openai/gpt-4.1-nano", #"gpt-5-nano",,
+        # temperature=0.0,
+        # reasoning_effort="low",
+        max_tokens=16000,
+    )
+
+
   
 
-#endregion#! Experiments 4 - Text2KGBench Reverse
-#!############################################# End Chapter ##################################################
+# #endregion#! Experiments 4 - Text2KGBench Reverse
+# #!############################################# End Chapter ##################################################
   
   
   
@@ -1322,9 +1324,499 @@ if __name__ == "__main__":
 
 
 #?######################### Start ##########################
-#region:#?   
+#region:#?    Schema Extraction from produced KG
 
-#endregion#? 
+
+
+#!/usr/bin/env python3
+from __future__ import annotations
+
+import argparse
+import csv
+import json
+from collections import defaultdict, Counter
+from dataclasses import dataclass
+from pathlib import Path
+from typing import Any, Dict, Iterable, List, Optional, Tuple
+
+
+# -------------------------
+# Small IO helpers
+# -------------------------
+
+def _read_jsonl(path: Path) -> List[Dict[str, Any]]:
+    items: List[Dict[str, Any]] = []
+    with path.open("r", encoding="utf-8") as f:
+        for line in f:
+            line = line.strip()
+            if not line:
+                continue
+            try:
+                items.append(json.loads(line))
+            except Exception:
+                # tolerate occasional corrupt lines
+                continue
+    return items
+
+
+def _safe_json_loads(s: Any, default: Any) -> Any:
+    if s is None:
+        return default
+    if isinstance(s, (dict, list)):
+        return s
+    if not isinstance(s, str):
+        s = str(s)
+    s = s.strip()
+    if not s:
+        return default
+    try:
+        return json.loads(s)
+    except Exception:
+        return default
+
+
+def _first_existing(root: Path, candidates: List[str]) -> Optional[Path]:
+    for rel in candidates:
+        p = (root / rel).resolve()
+        if p.exists():
+            return p
+    return None
+
+
+def _write_text(path: Path, text: str) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(text, encoding="utf-8")
+
+
+def _write_json(path: Path, obj: Any) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(obj, ensure_ascii=False, indent=2), encoding="utf-8")
+
+
+# -------------------------
+# Normalization helpers
+# -------------------------
+
+def _norm(s: Any, fallback: str = "") -> str:
+    if s is None:
+        return fallback
+    s = str(s).strip()
+    return s if s else fallback
+
+
+def _norm_upper(s: Any, fallback: str = "") -> str:
+    return _norm(s, fallback=fallback).upper()
+
+
+@dataclass
+class EntityRec:
+    entity_id: str
+    entity_name: str
+    entity_description: str
+    entity_type_hint: str
+    class_label: str
+    class_group: str
+    node_properties: List[Dict[str, Any]]
+
+
+@dataclass
+class RelRec:
+    relation_id: str
+    subject_entity_id: str
+    object_entity_id: str
+    canonical_rel_name: str
+    canonical_rel_desc: str
+    rel_cls: str
+    rel_cls_group: str
+    qualifiers: Dict[str, Any]
+
+
+# -------------------------
+# Loaders
+# -------------------------
+
+def load_entities(path: Path) -> Tuple[List[EntityRec], Dict[str, EntityRec]]:
+    entities: List[EntityRec] = []
+
+    if path.suffix.lower() == ".jsonl":
+        raw = _read_jsonl(path)
+        for r in raw:
+            eid = _norm(r.get("entity_id") or r.get("id"))
+            if not eid:
+                continue
+            node_props = r.get("node_properties") or []
+            if not isinstance(node_props, list):
+                node_props = []
+            entities.append(
+                EntityRec(
+                    entity_id=eid,
+                    entity_name=_norm(r.get("entity_name")),
+                    entity_description=_norm(r.get("entity_description")),
+                    entity_type_hint=_norm(r.get("entity_type_hint")),
+                    class_label=_norm(r.get("class_label"), fallback="TBD"),
+                    class_group=_norm(r.get("class_group"), fallback="TBD"),
+                    node_properties=node_props,
+                )
+            )
+
+    elif path.suffix.lower() == ".csv":
+        with path.open("r", encoding="utf-8", newline="") as f:
+            reader = csv.DictReader(f)
+            for row in reader:
+                eid = _norm(row.get("entity_id"))
+                if not eid:
+                    continue
+                node_props = _safe_json_loads(row.get("node_properties"), default=[])
+                if not isinstance(node_props, list):
+                    node_props = []
+                entities.append(
+                    EntityRec(
+                        entity_id=eid,
+                        entity_name=_norm(row.get("entity_name")),
+                        entity_description=_norm(row.get("entity_description")),
+                        entity_type_hint=_norm(row.get("entity_type_hint")),
+                        class_label=_norm(row.get("class_label"), fallback="TBD"),
+                        class_group=_norm(row.get("class_group"), fallback="TBD"),
+                        node_properties=node_props,
+                    )
+                )
+    else:
+        raise ValueError(f"Unsupported entities file: {path}")
+
+    by_id = {e.entity_id: e for e in entities}
+    return entities, by_id
+
+
+def load_relations(path: Path) -> List[RelRec]:
+    rels: List[RelRec] = []
+
+    if path.suffix.lower() == ".jsonl":
+        raw = _read_jsonl(path)
+        for r in raw:
+            rid = _norm(r.get("relation_id") or r.get("id") or r.get("rid"))
+            sid = _norm(r.get("subject_entity_id") or r.get("start_id"))
+            oid = _norm(r.get("object_entity_id") or r.get("end_id"))
+            if not (rid and sid and oid):
+                continue
+            rels.append(
+                RelRec(
+                    relation_id=rid,
+                    subject_entity_id=sid,
+                    object_entity_id=oid,
+                    canonical_rel_name=_norm(r.get("canonical_rel_name"), fallback=_norm(r.get("relation_name"), fallback="TBD")),
+                    canonical_rel_desc=_norm(r.get("canonical_rel_desc")),
+                    rel_cls=_norm(r.get("rel_cls"), fallback="TBD"),
+                    rel_cls_group=_norm_upper(r.get("rel_cls_group"), fallback=_norm_upper(r.get("rel_hint_type"), fallback="TBD")),
+                    qualifiers=(r.get("qualifiers") if isinstance(r.get("qualifiers"), dict) else {}),
+                )
+            )
+
+    elif path.suffix.lower() == ".csv":
+        with path.open("r", encoding="utf-8", newline="") as f:
+            reader = csv.DictReader(f)
+            for row in reader:
+                rid = _norm(row.get("relation_id"))
+                sid = _norm(row.get("start_id"))
+                oid = _norm(row.get("end_id"))
+                if not (rid and sid and oid):
+                    continue
+                qualifiers = _safe_json_loads(row.get("qualifiers"), default={})
+                if not isinstance(qualifiers, dict):
+                    qualifiers = {}
+                rels.append(
+                    RelRec(
+                        relation_id=rid,
+                        subject_entity_id=sid,
+                        object_entity_id=oid,
+                        canonical_rel_name=_norm(row.get("canonical_rel_name"), fallback="TBD"),
+                        canonical_rel_desc=_norm(row.get("canonical_rel_desc")),
+                        rel_cls=_norm(row.get("rel_cls"), fallback="TBD"),
+                        rel_cls_group=_norm_upper(row.get("rel_cls_group"), fallback="TBD"),
+                        qualifiers=qualifiers,
+                    )
+                )
+    else:
+        raise ValueError(f"Unsupported relations file: {path}")
+
+    return rels
+
+
+# -------------------------
+# Schema builders
+# -------------------------
+
+def build_entity_tree(entities: List[EntityRec]) -> Dict[str, Dict[str, List[str]]]:
+    tree: Dict[str, Dict[str, List[str]]] = defaultdict(lambda: defaultdict(list))
+    for e in entities:
+        tree[e.class_group][e.class_label].append(e.entity_id)
+    return tree
+
+
+def build_relation_tree(rels: List[RelRec]) -> Dict[str, Dict[str, Dict[str, int]]]:
+    # rel_cls_group -> rel_cls -> canonical_rel_name -> count
+    tree: Dict[str, Dict[str, Dict[str, int]]] = defaultdict(lambda: defaultdict(lambda: defaultdict(int)))
+    for r in rels:
+        tree[r.rel_cls_group][r.rel_cls][r.canonical_rel_name] += 1
+    return tree
+
+
+def compute_domain_range(
+    rels: List[RelRec],
+    ent_by_id: Dict[str, EntityRec],
+) -> Dict[str, Dict[str, Any]]:
+    """
+    Domain/range for canonical_rel_name based on endpoint entity classes.
+    """
+    out: Dict[str, Dict[str, Any]] = {}
+
+    for r in rels:
+        pred = r.canonical_rel_name or "TBD"
+        subj = ent_by_id.get(r.subject_entity_id)
+        obj = ent_by_id.get(r.object_entity_id)
+
+        subj_cls = subj.class_label if subj else "TBD"
+        subj_grp = subj.class_group if subj else "TBD"
+        obj_cls = obj.class_label if obj else "TBD"
+        obj_grp = obj.class_group if obj else "TBD"
+
+        rec = out.setdefault(pred, {
+            "canonical_rel_name": pred,
+            "rel_cls_groups": set(),
+            "rel_classes": set(),
+            "domain_class_groups": set(),
+            "domain_classes": set(),
+            "range_class_groups": set(),
+            "range_classes": set(),
+            "count": 0,
+            "example_pairs": set(),  # (domain_class, range_class)
+        })
+
+        rec["rel_cls_groups"].add(r.rel_cls_group or "TBD")
+        rec["rel_classes"].add(r.rel_cls or "TBD")
+        rec["domain_class_groups"].add(subj_grp)
+        rec["domain_classes"].add(subj_cls)
+        rec["range_class_groups"].add(obj_grp)
+        rec["range_classes"].add(obj_cls)
+        rec["count"] += 1
+        rec["example_pairs"].add((subj_cls, obj_cls))
+
+    # convert sets -> sorted lists
+    for pred, rec in out.items():
+        rec["rel_cls_groups"] = sorted(rec["rel_cls_groups"])
+        rec["rel_classes"] = sorted(rec["rel_classes"])
+        rec["domain_class_groups"] = sorted(rec["domain_class_groups"])
+        rec["domain_classes"] = sorted(rec["domain_classes"])
+        rec["range_class_groups"] = sorted(rec["range_class_groups"])
+        rec["range_classes"] = sorted(rec["range_classes"])
+        rec["example_pairs"] = sorted(list(rec["example_pairs"]))[:25]
+
+    return out
+
+
+def extract_data_properties(entities: List[EntityRec]) -> Dict[str, Any]:
+    """
+    Treat node_properties as datatype-property evidence.
+    Returns:
+      - global property frequencies
+      - per-class property frequencies
+    """
+    global_counts = Counter()
+    per_class_counts: Dict[Tuple[str, str], Counter] = defaultdict(Counter)  # (group,label) -> Counter(prop_name)
+
+    for e in entities:
+        for p in (e.node_properties or []):
+            if not isinstance(p, dict):
+                continue
+            name = _norm(p.get("prop_name"))
+            if not name:
+                continue
+            global_counts[name] += 1
+            per_class_counts[(e.class_group, e.class_label)][name] += 1
+
+    return {
+        "global_property_counts": dict(global_counts.most_common()),
+        "per_class_property_counts": {
+            f"{grp} :: {lbl}": dict(cnt.most_common())
+            for (grp, lbl), cnt in per_class_counts.items()
+        }
+    }
+
+
+def find_duplicate_edges(rels: List[RelRec]) -> List[Dict[str, Any]]:
+    """
+    Duplicate object-property assertions:
+    (subject_entity_id, object_entity_id, canonical_rel_name) repeats.
+    """
+    key_counts = Counter((r.subject_entity_id, r.object_entity_id, r.canonical_rel_name) for r in rels)
+    dups = []
+    for (sid, oid, pred), c in key_counts.items():
+        if c > 1:
+            dups.append({
+                "subject_entity_id": sid,
+                "object_entity_id": oid,
+                "canonical_rel_name": pred,
+                "count": c,
+            })
+    # sort biggest first
+    dups.sort(key=lambda x: x["count"], reverse=True)
+    return dups
+
+
+# -------------------------
+# Pretty printing (ASCII trees)
+# -------------------------
+
+def render_entity_tree(tree: Dict[str, Dict[str, List[str]]]) -> str:
+    lines: List[str] = []
+    groups = sorted(tree.keys(), key=lambda g: (-sum(len(v) for v in tree[g].values()), g.lower()))
+    for g in groups:
+        classes = tree[g]
+        total = sum(len(ids) for ids in classes.values())
+        lines.append(f"{g}  ({total} entities)")
+        class_items = sorted(classes.items(), key=lambda kv: (-len(kv[1]), kv[0].lower()))
+        for i, (cls, ids) in enumerate(class_items):
+            branch = "└─" if i == len(class_items) - 1 else "├─"
+            lines.append(f"  {branch} {cls}  ({len(ids)})")
+        lines.append("")
+    return "\n".join(lines).strip() + "\n"
+
+
+def render_relation_tree(tree: Dict[str, Dict[str, Dict[str, int]]]) -> str:
+    lines: List[str] = []
+    groups = sorted(tree.keys(), key=lambda g: g.lower())
+    for g in groups:
+        # total edges under group
+        total = sum(cnt for cls in tree[g].values() for cnt in cls.values())
+        lines.append(f"{g}  ({total} relations)")
+        rel_classes = tree[g]
+        cls_items = sorted(
+            rel_classes.items(),
+            key=lambda kv: (-sum(kv[1].values()), kv[0].lower())
+        )
+        for ci, (cls, preds) in enumerate(cls_items):
+            cls_total = sum(preds.values())
+            cls_branch = "└─" if ci == len(cls_items) - 1 else "├─"
+            lines.append(f"  {cls_branch} {cls}  ({cls_total})")
+            pred_items = sorted(preds.items(), key=lambda kv: (-kv[1], kv[0].lower()))
+            for pi, (pred, cnt) in enumerate(pred_items):
+                pred_branch = "└─" if pi == len(pred_items) - 1 else "├─"
+                lines.append(f"      {pred_branch} {pred}  ({cnt})")
+        lines.append("")
+    return "\n".join(lines).strip() + "\n"
+
+
+# -------------------------
+# Main
+# -------------------------
+
+def main() -> None:
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--root", default=".", help="Project root (where data/ exists).")
+    ap.add_argument("--out", default="data/Schema", help="Output directory for schema artifacts.")
+    args = ap.parse_args()
+
+    root = Path(args.root).resolve()
+    out_dir = (root / args.out).resolve()
+    out_dir.mkdir(parents=True, exist_ok=True)
+
+    # Candidate paths based on your pipeline/export logic
+    ent_path = _first_existing(root, [
+        "data/Classes/Cls_Res/Cls_Res_IterativeRuns/overall_summary/entities_with_class.jsonl",
+        "data/Relations/Rel Res_IterativeRuns/overall_summary/entities_with_class.jsonl",
+        "data/KG/nodes.csv",
+    ])
+    rel_path = _first_existing(root, [
+        "data/Relations/Rel Res_IterativeRuns/overall_summary/relations_resolved.jsonl",
+        "data/KG/rels_fixed_no_raw.csv",
+    ])
+
+    if ent_path is None:
+        raise FileNotFoundError("Could not find entities input (entities_with_class.jsonl or nodes.csv).")
+    if rel_path is None:
+        raise FileNotFoundError("Could not find relations input (relations_resolved.jsonl or rels_fixed_no_raw.csv).")
+
+    print("[schema] Using entities:", ent_path)
+    print("[schema] Using relations:", rel_path)
+
+    entities, ent_by_id = load_entities(ent_path)
+    rels = load_relations(rel_path)
+
+    ent_tree = build_entity_tree(entities)
+    rel_tree = build_relation_tree(rels)
+
+    domain_range = compute_domain_range(rels, ent_by_id)
+    data_props = extract_data_properties(entities)
+    dup_edges = find_duplicate_edges(rels)
+
+    # --- Write trees
+    ent_tree_txt = render_entity_tree(ent_tree)
+    rel_tree_txt = render_relation_tree(rel_tree)
+
+    _write_text(out_dir / "entity_schema_tree.txt", ent_tree_txt)
+    _write_text(out_dir / "relation_schema_tree.txt", rel_tree_txt)
+
+    # --- Write schema JSON
+    _write_json(out_dir / "domain_range_by_canonical_rel.json", domain_range)
+    _write_json(out_dir / "data_properties_schema.json", data_props)
+    _write_json(out_dir / "duplicate_edges_report.json", dup_edges)
+
+    # --- Also write a compact CSV for domain/range
+    dr_csv = out_dir / "domain_range_by_canonical_rel.csv"
+    with dr_csv.open("w", encoding="utf-8", newline="") as f:
+        fieldnames = [
+            "canonical_rel_name",
+            "count",
+            "rel_cls_groups",
+            "rel_classes",
+            "domain_class_groups",
+            "domain_classes",
+            "range_class_groups",
+            "range_classes",
+            "example_pairs",
+        ]
+        w = csv.DictWriter(f, fieldnames=fieldnames, quoting=csv.QUOTE_ALL)
+        w.writeheader()
+        for pred, rec in sorted(domain_range.items(), key=lambda kv: (-kv[1]["count"], kv[0].lower())):
+            w.writerow({
+                "canonical_rel_name": pred,
+                "count": rec["count"],
+                "rel_cls_groups": json.dumps(rec["rel_cls_groups"], ensure_ascii=False),
+                "rel_classes": json.dumps(rec["rel_classes"], ensure_ascii=False),
+                "domain_class_groups": json.dumps(rec["domain_class_groups"], ensure_ascii=False),
+                "domain_classes": json.dumps(rec["domain_classes"], ensure_ascii=False),
+                "range_class_groups": json.dumps(rec["range_class_groups"], ensure_ascii=False),
+                "range_classes": json.dumps(rec["range_classes"], ensure_ascii=False),
+                "example_pairs": json.dumps(rec["example_pairs"], ensure_ascii=False),
+            })
+
+    # --- Console summary
+    n_groups = len(ent_tree)
+    n_classes = sum(len(v) for v in ent_tree.values())
+    n_preds = len(domain_range)
+
+    print("\n[schema] Entity schema:")
+    print(f"  class_groups: {n_groups}")
+    print(f"  classes:      {n_classes}")
+    print(f"  entities:     {len(entities)}")
+    print("\n[schema] Relation schema:")
+    print(f"  relation_instances: {len(rels)}")
+    print(f"  canonical_rel_name: {n_preds}")
+    print(f"  duplicate edges (same subj,obj,pred): {len(dup_edges)}")
+    if dup_edges:
+        print("  Top duplicates:")
+        for d in dup_edges[:10]:
+            print(f"    {d['count']}x  ({d['subject_entity_id']}, {d['canonical_rel_name']}, {d['object_entity_id']})")
+
+    print(f"\n[schema] Wrote outputs to: {out_dir}")
+
+
+if __name__ == "__main__":
+    main()
+
+
+
+
+#endregion#?  Schema Extraction from produced KG
 #?#########################  End  ##########################
 
 
