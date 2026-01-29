@@ -1302,18 +1302,22 @@
 # # ENTRYPOINT
 # # ------------------------------------------------------------------------------------
 
+
 # if __name__ == "__main__":
 #     # Run the single, pre-chunked pipeline once using default LLM config
 #     generate_trace_kgs(
-#         default_model="openai/gpt-4.1-nano", #"gpt-5-nano",
+#         default_model= "gpt-5.1", #"gpt-5-mini", #"gpt-5-nano", #"openai/gpt-4.1-nano", #"gpt-5-nano",,
 #         # temperature=0.0,
+#         # reasoning_effort="low",
 #         max_tokens=16000,
 #     )
 
 
   
 
-# #endregion#! Experiments 4 - Text2KGBench Reverse
-# #!############################################# End Chapter ##################################################
+# # #endregion#! Experiments 4 - Text2KGBench Reverse
+# # #!############################################# End Chapter ##################################################
+  
+  
   
   

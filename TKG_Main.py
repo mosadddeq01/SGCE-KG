@@ -3255,7 +3255,9 @@ def process_member_chunk_llm(
     single_entity_mode: bool = False,
 ) -> List[Dict]:
     members_block = build_members_block(members)
-    prompt = CLASS_PROMPT_TEMPLATE.format(members_block=members_block)
+    # prompt = CLASS_PROMPT_TEMPLATE.format(members_block=members_block)
+    prompt = CLASS_PROMPT_TEMPLATE.replace("{members_block}", members_block)
+
     est_tokens = max(1, int(len(prompt) / PROMPT_CHAR_PER_TOKEN))
     if est_tokens > MAX_PROMPT_TOKENS_EST:
         if VERBOSE:
@@ -3884,6 +3886,7 @@ def main_input_for_cls_res():
 
 #endregion#? Create input for Cls Res from per-round classes
 #?#########################  End  ##########################
+
 
 
 #?######################### Start ##########################
@@ -5031,12 +5034,351 @@ def classres_main(
 
 
 
-#?######################### Start ##########################
+#*######################### Start ##########################
 #region:#?   Multi Run Cls Res
+
+# # =========================
+# # Iterative runner for ClassRes (UPDATED final-summary exports)
+# # Paste this into the same file after V7 (replaces prior runner's final summary block)
+# # =========================
+
+# import json
+# import time
+# from pathlib import Path
+# from typing import Any, Dict, List, Optional
+
+# # -----------------------
+# # CONFIG - reuse or override
+# # -----------------------
+# BASE_INPUT_CLASSES = Path("data/Classes/Cls_Res/Cls_Res_input/classes_for_cls_res.json")
+# EXPERIMENT_ROOT = Path("data/Classes/Cls_Res/Cls_Res_IterativeRuns")
+
+# MAX_RUNS: int = 4
+# STRUCTURAL_CHANGE_THRESHOLD: Optional[int] = 0
+# TOTAL_ACTIONS_THRESHOLD: Optional[int] = None
+# MAX_NO_CHANGE_RUNS: Optional[int] = 2
+
+# FINAL_CLASSES_FILENAME = "final_classes_resolved.json"
+# ACTION_LOG_FILENAME = "cls_res_action_log.jsonl"
+
+# # -----------------------
+# # Helpers (same as before)
+# # -----------------------
+# def _write_json(path: Path, obj: Any) -> None:
+#     path.parent.mkdir(parents=True, exist_ok=True)
+#     path.write_text(json.dumps(obj, ensure_ascii=False, indent=2), encoding="utf-8")
+
+# def _load_json(path: Path) -> Any:
+#     return json.loads(path.read_text(encoding="utf-8"))
+
+# def _safe_json_load_line(line: str) -> Optional[Dict]:
+#     line = line.strip()
+#     if not line:
+#         return None
+#     try:
+#         return json.loads(line)
+#     except Exception:
+#         return None
+
+# def compute_run_summary_from_action_log(action_log_path: Path) -> Dict[str, Any]:
+#     summary = {
+#         "total_clusters": 0,
+#         "total_clusters_with_any_decisions": 0,
+#         "total_clusters_with_structural_changes": 0,
+#         "total_clusters_only_class_group_updates": 0,
+#         "total_actions_by_type": {},
+#         "total_structural_actions": 0,
+#         "total_errors": 0,
+#         "total_remarks_logged": 0,
+#         "generated_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+#     }
+#     if not action_log_path.exists():
+#         return summary
+
+#     with action_log_path.open("r", encoding="utf-8") as fh:
+#         for line in fh:
+#             obj = _safe_json_load_line(line)
+#             if not obj:
+#                 continue
+#             summary["total_clusters"] += 1
+#             executed = obj.get("executed_decisions", []) or []
+#             if executed:
+#                 summary["total_clusters_with_any_decisions"] += 1
+
+#             structural_here = 0
+#             only_class_group_updates = True
+#             remarks_here = 0
+
+#             for entry in executed:
+#                 action = entry.get("action")
+#                 summary["total_actions_by_type"].setdefault(action, 0)
+#                 summary["total_actions_by_type"][action] += 1
+
+#                 if action in ("merge_classes", "create_class", "reassign_entities", "split_class"):
+#                     structural_here += 1
+#                     only_class_group_updates = False
+#                 elif action == "modify_class":
+#                     new_name = entry.get("new_name")
+#                     new_desc = entry.get("new_description")
+#                     new_type = entry.get("new_class_type_hint")
+#                     new_group = entry.get("new_class_group")
+#                     remark = entry.get("remark") or None
+#                     if remark:
+#                         remarks_here += 1
+#                     if any([new_name, new_desc, new_type]):
+#                         only_class_group_updates = False
+#                 elif action == "error_executing":
+#                     summary["total_errors"] += 1
+#                     only_class_group_updates = False
+#                 # count explicit remark fields
+#                 if isinstance(entry, dict) and entry.get("remark"):
+#                     remarks_here += 1
+
+#             summary["total_structural_actions"] += structural_here
+#             if structural_here > 0:
+#                 summary["total_clusters_with_structural_changes"] += 1
+#             if only_class_group_updates and executed:
+#                 summary["total_clusters_only_class_group_updates"] += 1
+#             summary["total_remarks_logged"] += remarks_here
+
+#     return summary
+
+# # -----------------------
+# # New: overall export helpers
+# # -----------------------
+# def _build_entity_lookup_from_input(input_path: Path) -> Dict[str, Dict]:
+#     """
+#     Build map entity_id -> full entity object from the original input classes file.
+#     This lets us recover fields like chunk_id, resolution_context when final classes may
+#     only contain compact member info.
+#     """
+#     entity_map: Dict[str, Dict] = {}
+#     if not input_path.exists():
+#         return entity_map
+#     try:
+#         arr = _load_json(input_path)
+#         for c in arr:
+#             for m in c.get("members", []) or []:
+#                 if isinstance(m, dict) and m.get("id"):
+#                     entity_map[m["id"]] = m
+#     except Exception:
+#         # best-effort: ignore on error
+#         pass
+#     return entity_map
+
+# def _aggregate_final_classes_and_entities(final_classes_path: Path, base_input_path: Path) -> Dict[str, Any]:
+#     """
+#     Return dict with:
+#       - classes: final classes array (as in final_classes_resolved.json)
+#       - entities_map: map entity_id -> merged full entity info (pull fields from classes and original input)
+#     """
+#     classes = []
+#     entities_map: Dict[str, Dict] = {}
+#     if final_classes_path.exists():
+#         try:
+#             classes = _load_json(final_classes_path)
+#         except Exception:
+#             classes = []
+
+#     # build lookup from original input to backfill entity fields
+#     input_entity_lookup = _build_entity_lookup_from_input(base_input_path)
+
+#     # iterate classes and collect members, merge any available entity fields
+#     for c in classes:
+#         members = c.get("members", []) or []
+#         for m in members:
+#             mid = m.get("id") if isinstance(m, dict) else None
+#             if not mid:
+#                 continue
+#             # start with the member object from final classes (may be compact)
+#             merged = dict(m) if isinstance(m, dict) else {"id": mid}
+#             # if original input had richer info, copy missing fields
+#             original = input_entity_lookup.get(mid)
+#             if original:
+#                 for k, v in original.items():
+#                     if k not in merged or merged.get(k) in (None, "", []):
+#                         merged[k] = v
+#             # attach class pointers (class id, label, class_group)
+#             merged["_class_id"] = c.get("candidate_id") or c.get("candidate_id") or None
+#             merged["_class_label"] = c.get("class_label")
+#             merged["_class_group"] = c.get("class_group")
+#             entities_map[mid] = merged
+
+#     # also include any entities that were in the input but not present in final classes
+#     for mid, original in input_entity_lookup.items():
+#         if mid not in entities_map:
+#             merged = dict(original)
+#             merged["_class_id"] = None
+#             merged["_class_label"] = None
+#             merged["_class_group"] = None
+#             entities_map[mid] = merged
+
+#     return {"classes": classes, "entities_map": entities_map}
+
+# def _write_entities_with_class_jsonl(entities_map: Dict[str, Dict], out_path: Path) -> None:
+#     out_path.parent.mkdir(parents=True, exist_ok=True)
+#     with out_path.open("w", encoding="utf-8") as fh:
+#         for eid, ent in entities_map.items():
+#             rec = {
+#                 "entity_id": eid,
+#                 "entity": ent,
+#                 "class_id": ent.get("_class_id"),
+#                 "class_label": ent.get("_class_label"),
+#                 "class_group": ent.get("_class_group")
+#             }
+#             fh.write(json.dumps(rec, ensure_ascii=False) + "\n")
+
+# # -----------------------
+# # Main runner (same loop as before, but calls enhanced final exporter)
+# # -----------------------
+# def run_pipeline_iteratively():
+#     EXPERIMENT_ROOT.mkdir(parents=True, exist_ok=True)
+#     overall_runs: List[Dict[str, Any]] = []
+#     no_change_streak = 0
+#     current_input_path = BASE_INPUT_CLASSES
+
+#     for run_idx in range(MAX_RUNS):
+#         print("\n" + "=" * 36)
+#         print(f"=== RUN {run_idx:02d} ===")
+#         print("=" * 36)
+
+#         run_dir = EXPERIMENT_ROOT / f"run_{run_idx:02d}"
+#         run_dir.mkdir(parents=True, exist_ok=True)
+
+#         # set globals used by your pipeline
+#         globals()["INPUT_CLASSES"] = current_input_path
+#         globals()["OUT_DIR"] = run_dir
+#         globals()["RAW_LLM_DIR"] = run_dir / "llm_raw"
+#         globals()["RAW_LLM_DIR"].mkdir(parents=True, exist_ok=True)
+
+#         # call the pipeline's main function (assumes classres_main defined already)
+#         print(f"[run {run_idx}] calling classres_main() with INPUT_CLASSES={current_input_path} OUT_DIR={run_dir}")
+#         classres_main()
+
+#         final_classes_path = run_dir / FINAL_CLASSES_FILENAME
+#         action_log_path = run_dir / ACTION_LOG_FILENAME
+
+#         run_summary = compute_run_summary_from_action_log(action_log_path)
+#         run_summary["run_index"] = run_idx
+#         run_summary["run_path"] = str(run_dir)
+#         run_summary["final_classes_path"] = str(final_classes_path) if final_classes_path.exists() else None
+
+#         summary_dir = run_dir / "summary"
+#         summary_dir.mkdir(parents=True, exist_ok=True)
+#         run_summary_path = summary_dir / "cls_res_summary.json"
+#         _write_json(run_summary_path, run_summary)
+
+#         overall_runs.append({"run_index": run_idx, "run_dir": str(run_dir), "summary_path": str(run_summary_path)})
+
+#         total_structural = int(run_summary.get("total_structural_actions", 0))
+#         total_actions = int(sum(run_summary.get("total_actions_by_type", {}).values() or []))
+
+#         print(f"[run {run_idx}] total_structural_actions = {total_structural}")
+#         print(f"[run {run_idx}] total_actions = {total_actions}")
+
+#         is_no_change = False
+#         if STRUCTURAL_CHANGE_THRESHOLD is not None and total_structural <= STRUCTURAL_CHANGE_THRESHOLD:
+#             is_no_change = True
+#         if TOTAL_ACTIONS_THRESHOLD is not None and total_actions <= TOTAL_ACTIONS_THRESHOLD:
+#             is_no_change = True
+
+#         if MAX_NO_CHANGE_RUNS is not None:
+#             if is_no_change:
+#                 no_change_streak += 1
+#             else:
+#                 no_change_streak = 0
+
+#             print(f"[run {run_idx}] no_change_streak = {no_change_streak} (threshold {MAX_NO_CHANGE_RUNS})")
+#             if no_change_streak >= MAX_NO_CHANGE_RUNS:
+#                 print(f"[stop] Convergence achieved after run {run_idx} (no_change_streak={no_change_streak}).")
+#                 current_input_path = final_classes_path if final_classes_path.exists() else current_input_path
+#                 break
+
+#         if final_classes_path.exists():
+#             current_input_path = final_classes_path
+#         else:
+#             print(f"[warn] final classes file not found for run {run_idx}. Stopping iterative runs.")
+#             break
+
+
+#     # -----------------------
+#     # ENHANCED FINAL EXPORTS
+#     # -----------------------
+#     overall_dir = EXPERIMENT_ROOT / "overall_summary"
+#     overall_dir.mkdir(parents=True, exist_ok=True)
+
+#     # collect per-run summaries (read the run summary JSON files)
+#     per_run_stats: List[Dict[str, Any]] = []
+#     for r in overall_runs:
+#         sp = Path(r["summary_path"])
+#         if sp.exists():
+#             try:
+#                 per_run_stats.append(_load_json(sp))
+#             except Exception:
+#                 per_run_stats.append({"run_index": r["run_index"], "error": "failed to load summary"})
+
+
+#     # aggregate overall stats (summing counts)
+#     aggregated = {
+#         "total_runs_executed": len(per_run_stats),
+#         "sum_total_clusters": sum([p.get("total_clusters", 0) for p in per_run_stats]),
+#         "sum_structural_actions": sum([p.get("total_structural_actions", 0) for p in per_run_stats]),
+#         "sum_errors": sum([p.get("total_errors", 0) for p in per_run_stats]),
+#         "sum_remarks": sum([p.get("total_remarks_logged", 0) for p in per_run_stats]),
+#         "by_run": per_run_stats,
+#         "generated_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+#     }
+
+#     stats_path = overall_dir / "stats.json"
+#     _write_json(stats_path, aggregated)
+
+#     # Build classes + entities bundle for downstream relation stage
+#     final_classes = []
+#     if current_input_path.exists():
+#         try:
+#             final_classes = _load_json(current_input_path)
+#         except Exception:
+#             final_classes = []
+
+#     classes_and_entities = _aggregate_final_classes_and_entities(current_input_path, BASE_INPUT_CLASSES)
+#     classes_and_entities_path = overall_dir / "classes_and_entities.json"
+#     _write_json(classes_and_entities_path, classes_and_entities)
+
+#     # write entities+class mapping as jsonl for downstream tools
+#     entities_with_class_path = overall_dir / "entities_with_class.jsonl"
+#     _write_entities_with_class_jsonl(classes_and_entities.get("entities_map", {}), entities_with_class_path)
+
+#     # also write the final_classes array alone for convenience
+#     final_classes_path_out = overall_dir / "final_classes_resolved.json"
+#     _write_json(final_classes_path_out, final_classes)
+
+#     print(f"\n[done] Overall stats written to: {stats_path}")
+#     print(f"[done] Classes+entities bundle written to: {classes_and_entities_path}")
+#     print(f"[done] Entities jsonl (entity + class info) written to: {entities_with_class_path}")
+#     print(f"[done] Final classes (copy) written to: {final_classes_path_out}")
+
+
+
+# # # -----------------------
+# # # Cls Res Multi Run - Run statement
+# # # -----------------------
+# # if __name__ == "__main__":
+# #     run_pipeline_iteratively() 
+
+
+
+
+#endregion#? Multi Run Cls Res
+#*#########################  End  ##########################
+
+
+
+
+#?######################### Start ##########################
+#region:#?   Multi Run Cls Res (FIXED: path isolation + llm_config pass-through)
 
 # =========================
 # Iterative runner for ClassRes (UPDATED final-summary exports)
-# Paste this into the same file after V7 (replaces prior runner's final summary block)
 # =========================
 
 import json
@@ -5045,21 +5387,21 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 # -----------------------
-# CONFIG - reuse or override
+# CONFIG (namespaced to avoid collisions with RelRes runner)
 # -----------------------
-BASE_INPUT_CLASSES = Path("data/Classes/Cls_Res/Cls_Res_input/classes_for_cls_res.json")
-EXPERIMENT_ROOT = Path("data/Classes/Cls_Res/Cls_Res_IterativeRuns")
+CLSRES_BASE_INPUT_CLASSES = Path("data/Classes/Cls_Res/Cls_Res_input/classes_for_cls_res.json")
+CLSRES_EXPERIMENT_ROOT    = Path("data/Classes/Cls_Res/Cls_Res_IterativeRuns")
 
-MAX_RUNS: int = 4
-STRUCTURAL_CHANGE_THRESHOLD: Optional[int] = 0
-TOTAL_ACTIONS_THRESHOLD: Optional[int] = None
-MAX_NO_CHANGE_RUNS: Optional[int] = 2
+CLSRES_MAX_RUNS: int = 4
+CLSRES_STRUCTURAL_CHANGE_THRESHOLD: Optional[int] = 0
+CLSRES_TOTAL_ACTIONS_THRESHOLD: Optional[int] = None
+CLSRES_MAX_NO_CHANGE_RUNS: Optional[int] = 3
 
-FINAL_CLASSES_FILENAME = "final_classes_resolved.json"
-ACTION_LOG_FILENAME = "cls_res_action_log.jsonl"
+CLSRES_FINAL_CLASSES_FILENAME = "final_classes_resolved.json"
+CLSRES_ACTION_LOG_FILENAME    = "cls_res_action_log.jsonl"
 
 # -----------------------
-# Helpers (same as before)
+# Helpers
 # -----------------------
 def _write_json(path: Path, obj: Any) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -5097,6 +5439,7 @@ def compute_run_summary_from_action_log(action_log_path: Path) -> Dict[str, Any]
             obj = _safe_json_load_line(line)
             if not obj:
                 continue
+
             summary["total_clusters"] += 1
             executed = obj.get("executed_decisions", []) or []
             if executed:
@@ -5111,6 +5454,10 @@ def compute_run_summary_from_action_log(action_log_path: Path) -> Dict[str, Any]
                 summary["total_actions_by_type"].setdefault(action, 0)
                 summary["total_actions_by_type"][action] += 1
 
+                # count remark once per entry
+                if isinstance(entry, dict) and entry.get("remark"):
+                    remarks_here += 1
+
                 if action in ("merge_classes", "create_class", "reassign_entities", "split_class"):
                     structural_here += 1
                     only_class_group_updates = False
@@ -5119,17 +5466,21 @@ def compute_run_summary_from_action_log(action_log_path: Path) -> Dict[str, Any]
                     new_desc = entry.get("new_description")
                     new_type = entry.get("new_class_type_hint")
                     new_group = entry.get("new_class_group")
-                    remark = entry.get("remark") or None
-                    if remark:
-                        remarks_here += 1
-                    if any([new_name, new_desc, new_type]):
+
+                    # "only class group updates" means: modify_class that only sets class_group
+                    # (remarks are allowed and do not invalidate this)
+                    if (new_name or new_desc or new_type):
                         only_class_group_updates = False
+                    if new_group is None:
+                        # modify_class that doesn't set class_group is not a "class_group update"
+                        only_class_group_updates = False
+
                 elif action == "error_executing":
                     summary["total_errors"] += 1
                     only_class_group_updates = False
-                # count explicit remark fields
-                if isinstance(entry, dict) and entry.get("remark"):
-                    remarks_here += 1
+                else:
+                    # merge_skip_too_few, skip_unknown_function, etc.
+                    only_class_group_updates = False
 
             summary["total_structural_actions"] += structural_here
             if structural_here > 0:
@@ -5140,15 +5491,11 @@ def compute_run_summary_from_action_log(action_log_path: Path) -> Dict[str, Any]
 
     return summary
 
+
 # -----------------------
-# New: overall export helpers
+# Export helpers
 # -----------------------
 def _build_entity_lookup_from_input(input_path: Path) -> Dict[str, Dict]:
-    """
-    Build map entity_id -> full entity object from the original input classes file.
-    This lets us recover fields like chunk_id, resolution_context when final classes may
-    only contain compact member info.
-    """
     entity_map: Dict[str, Dict] = {}
     if not input_path.exists():
         return entity_map
@@ -5159,16 +5506,10 @@ def _build_entity_lookup_from_input(input_path: Path) -> Dict[str, Dict]:
                 if isinstance(m, dict) and m.get("id"):
                     entity_map[m["id"]] = m
     except Exception:
-        # best-effort: ignore on error
         pass
     return entity_map
 
 def _aggregate_final_classes_and_entities(final_classes_path: Path, base_input_path: Path) -> Dict[str, Any]:
-    """
-    Return dict with:
-      - classes: final classes array (as in final_classes_resolved.json)
-      - entities_map: map entity_id -> merged full entity info (pull fields from classes and original input)
-    """
     classes = []
     entities_map: Dict[str, Dict] = {}
     if final_classes_path.exists():
@@ -5177,31 +5518,25 @@ def _aggregate_final_classes_and_entities(final_classes_path: Path, base_input_p
         except Exception:
             classes = []
 
-    # build lookup from original input to backfill entity fields
     input_entity_lookup = _build_entity_lookup_from_input(base_input_path)
 
-    # iterate classes and collect members, merge any available entity fields
     for c in classes:
         members = c.get("members", []) or []
         for m in members:
             mid = m.get("id") if isinstance(m, dict) else None
             if not mid:
                 continue
-            # start with the member object from final classes (may be compact)
             merged = dict(m) if isinstance(m, dict) else {"id": mid}
-            # if original input had richer info, copy missing fields
             original = input_entity_lookup.get(mid)
             if original:
                 for k, v in original.items():
                     if k not in merged or merged.get(k) in (None, "", []):
                         merged[k] = v
-            # attach class pointers (class id, label, class_group)
-            merged["_class_id"] = c.get("candidate_id") or c.get("candidate_id") or None
+            merged["_class_id"] = c.get("candidate_id") or None
             merged["_class_label"] = c.get("class_label")
             merged["_class_group"] = c.get("class_group")
             entities_map[mid] = merged
 
-    # also include any entities that were in the input but not present in final classes
     for mid, original in input_entity_lookup.items():
         if mid not in entities_map:
             merged = dict(original)
@@ -5225,35 +5560,76 @@ def _write_entities_with_class_jsonl(entities_map: Dict[str, Dict], out_path: Pa
             }
             fh.write(json.dumps(rec, ensure_ascii=False) + "\n")
 
+
 # -----------------------
-# Main runner (same loop as before, but calls enhanced final exporter)
+# Main runner (FIXED)
 # -----------------------
-def run_pipeline_iteratively():
-    EXPERIMENT_ROOT.mkdir(parents=True, exist_ok=True)
+def run_pipeline_iteratively(
+    llm_config=None,
+    base_input_classes: Path = Path("data/Classes/Cls_Res/Cls_Res_input/classes_for_cls_res.json"),
+    experiment_root: Path = Path("data/Classes/Cls_Res/Cls_Res_IterativeRuns"),
+    max_runs: int = CLSRES_MAX_RUNS,
+    structural_change_threshold: Optional[int] = CLSRES_STRUCTURAL_CHANGE_THRESHOLD,
+    total_actions_threshold: Optional[int] = CLSRES_TOTAL_ACTIONS_THRESHOLD,
+    max_no_change_runs: Optional[int] = CLSRES_MAX_NO_CHANGE_RUNS,
+    final_classes_filename: str = CLSRES_FINAL_CLASSES_FILENAME,
+    action_log_filename: str = CLSRES_ACTION_LOG_FILENAME,
+    model: Optional[str] = None,
+    max_tokens: Optional[int] = None,
+):
+    """
+    IMPORTANT FIXES:
+    - Uses local `experiment_root` and `base_input_classes` args (not module globals),
+      so RelRes code cannot clobber our output path by overwriting EXPERIMENT_ROOT.
+    - Accepts llm_config and forwards it to classres_main().
+    """
+
+    # Freeze paths locally (protect against global variable clobbering elsewhere)
+    base_input_classes = Path(base_input_classes)
+    experiment_root = Path(experiment_root)
+
+    if "Relations" in str(experiment_root):
+        print(f"[ClassRes runner] WARNING: experiment_root points into Relations: {experiment_root}")
+
+    experiment_root.mkdir(parents=True, exist_ok=True)
+
     overall_runs: List[Dict[str, Any]] = []
     no_change_streak = 0
-    current_input_path = BASE_INPUT_CLASSES
+    original_base_input_path = base_input_classes
+    current_input_path = base_input_classes
 
-    for run_idx in range(MAX_RUNS):
+    print(f"[ClassRes runner] Using experiment_root = {experiment_root}")
+    print(f"[ClassRes runner] Using base_input_classes = {base_input_classes}")
+
+    for run_idx in range(max_runs):
         print("\n" + "=" * 36)
         print(f"=== RUN {run_idx:02d} ===")
         print("=" * 36)
 
-        run_dir = EXPERIMENT_ROOT / f"run_{run_idx:02d}"
+        run_dir = experiment_root / f"run_{run_idx:02d}"
         run_dir.mkdir(parents=True, exist_ok=True)
 
-        # set globals used by your pipeline
+        # Set globals used by classres_main() for IO
         globals()["INPUT_CLASSES"] = current_input_path
         globals()["OUT_DIR"] = run_dir
         globals()["RAW_LLM_DIR"] = run_dir / "llm_raw"
         globals()["RAW_LLM_DIR"].mkdir(parents=True, exist_ok=True)
 
-        # call the pipeline's main function (assumes classres_main defined already)
+        # Call the pipeline's main function (assumes classres_main defined already)
         print(f"[run {run_idx}] calling classres_main() with INPUT_CLASSES={current_input_path} OUT_DIR={run_dir}")
-        classres_main()
 
-        final_classes_path = run_dir / FINAL_CLASSES_FILENAME
-        action_log_path = run_dir / ACTION_LOG_FILENAME
+        kwargs = {}
+        if llm_config is not None:
+            kwargs["llm_config"] = llm_config
+        if model is not None:
+            kwargs["model"] = model
+        if max_tokens is not None:
+            kwargs["max_tokens"] = max_tokens
+
+        classres_main(**kwargs)
+
+        final_classes_path = run_dir / final_classes_filename
+        action_log_path = run_dir / action_log_filename
 
         run_summary = compute_run_summary_from_action_log(action_log_path)
         run_summary["run_index"] = run_idx
@@ -5274,21 +5650,22 @@ def run_pipeline_iteratively():
         print(f"[run {run_idx}] total_actions = {total_actions}")
 
         is_no_change = False
-        if STRUCTURAL_CHANGE_THRESHOLD is not None and total_structural <= STRUCTURAL_CHANGE_THRESHOLD:
+        if structural_change_threshold is not None and total_structural <= structural_change_threshold:
             is_no_change = True
-        if TOTAL_ACTIONS_THRESHOLD is not None and total_actions <= TOTAL_ACTIONS_THRESHOLD:
+        if total_actions_threshold is not None and total_actions <= total_actions_threshold:
             is_no_change = True
 
-        if MAX_NO_CHANGE_RUNS is not None:
+        if max_no_change_runs is not None:
             if is_no_change:
                 no_change_streak += 1
             else:
                 no_change_streak = 0
 
-            print(f"[run {run_idx}] no_change_streak = {no_change_streak} (threshold {MAX_NO_CHANGE_RUNS})")
-            if no_change_streak >= MAX_NO_CHANGE_RUNS:
+            print(f"[run {run_idx}] no_change_streak = {no_change_streak} (threshold {max_no_change_runs})")
+            if no_change_streak >= max_no_change_runs:
                 print(f"[stop] Convergence achieved after run {run_idx} (no_change_streak={no_change_streak}).")
-                current_input_path = final_classes_path if final_classes_path.exists() else current_input_path
+                if final_classes_path.exists():
+                    current_input_path = final_classes_path
                 break
 
         if final_classes_path.exists():
@@ -5300,10 +5677,9 @@ def run_pipeline_iteratively():
     # -----------------------
     # ENHANCED FINAL EXPORTS
     # -----------------------
-    overall_dir = EXPERIMENT_ROOT / "overall_summary"
+    overall_dir = experiment_root / "overall_summary"
     overall_dir.mkdir(parents=True, exist_ok=True)
 
-    # collect per-run summaries (read the run summary JSON files)
     per_run_stats: List[Dict[str, Any]] = []
     for r in overall_runs:
         sp = Path(r["summary_path"])
@@ -5313,8 +5689,6 @@ def run_pipeline_iteratively():
             except Exception:
                 per_run_stats.append({"run_index": r["run_index"], "error": "failed to load summary"})
 
-
-    # aggregate overall stats (summing counts)
     aggregated = {
         "total_runs_executed": len(per_run_stats),
         "sum_total_clusters": sum([p.get("total_clusters", 0) for p in per_run_stats]),
@@ -5328,7 +5702,6 @@ def run_pipeline_iteratively():
     stats_path = overall_dir / "stats.json"
     _write_json(stats_path, aggregated)
 
-    # Build classes + entities bundle for downstream relation stage
     final_classes = []
     if current_input_path.exists():
         try:
@@ -5336,15 +5709,13 @@ def run_pipeline_iteratively():
         except Exception:
             final_classes = []
 
-    classes_and_entities = _aggregate_final_classes_and_entities(current_input_path, BASE_INPUT_CLASSES)
+    classes_and_entities = _aggregate_final_classes_and_entities(current_input_path, original_base_input_path)
     classes_and_entities_path = overall_dir / "classes_and_entities.json"
     _write_json(classes_and_entities_path, classes_and_entities)
 
-    # write entities+class mapping as jsonl for downstream tools
     entities_with_class_path = overall_dir / "entities_with_class.jsonl"
     _write_entities_with_class_jsonl(classes_and_entities.get("entities_map", {}), entities_with_class_path)
 
-    # also write the final_classes array alone for convenience
     final_classes_path_out = overall_dir / "final_classes_resolved.json"
     _write_json(final_classes_path_out, final_classes)
 
@@ -5354,22 +5725,8 @@ def run_pipeline_iteratively():
     print(f"[done] Final classes (copy) written to: {final_classes_path_out}")
 
 
-
-
-
-# # -----------------------
-# # Cls Res Multi Run - Run statement
-# # -----------------------
-# if __name__ == "__main__":
-#     run_pipeline_iteratively() 
-
-
-
-
 #endregion#? Multi Run Cls Res
 #?#########################  End  ##########################
-
-
 
 
 
@@ -5834,1134 +6191,2717 @@ if not os.path.exists(output_dir):
 #*######################### Start ##########################
 #region:#?   Rel Res V10  - DSPy LLM Config + Canonical + RelCls + RelClsGroup + Schema + LocalSubcluster
 
-#!/usr/bin/env python3
-"""
-relres_iterative_v10_dspy.py
-
-Relation Resolution (Rel Res) — cluster relation instances, ask LLM to
-assign/normalize:
-
-  - canonical_rel_name    (normalized predicate used on KG edges)
-  - canonical_rel_desc    (reusable description of that predicate)
-  - rel_cls               (relation class, groups canonical_rel_names)
-  - rel_cls_group         (broad group like COMPOSITION, CAUSALITY, ...)
-
-while preserving:
-
-  - relation_name         (raw name from Rel Rec)
-  - rel_desc              (instance-level description)
-  - qualifiers, head/tail, etc.
-
-Key properties:
-- We NEVER remove relation instances; we only enrich them with schema.
-- canonical_rel_name is what will be used as edge label in the KG.
-- rel_cls / rel_cls_group give you a 2-layer schema for relations.
-- Multi-run friendly: TBD fields can be filled in the first run, refined later.
-- Uses global HDBSCAN + optional local subclustering + MAX_MEMBERS_PER_PROMPT
-  so LLM chunks stay reasonably small.
-
-Input:
-  data/Relations/Rel Rec/relations_raw.jsonl
-
-Output (under OUT_DIR):
-  - per-(cluster,local,part) decisions: cluster_<ID>_decisions.json
-  - per-(cluster,local,part) raw llm output: llm_raw/cluster_<ID>_llm_raw.txt
-  - per-(cluster,local,part) prompts: llm_raw/cluster_<ID>_prompt.txt
-  - cumulative action log: rel_res_action_log.jsonl
-  - final resolved relations: relations_resolved.json and .jsonl
-  - summary/all_clusters_decisions.json
-  - summary/stats_summary.json
-  - summary/canonical_rel_schema.json
-  - summary/rel_cls_schema.json
-  - summary/rel_cls_group_schema.json
-
-LLM usage:
-- All LLM calls go through a single DSPy LM obtained from TraceKGLLMConfig
-  via make_lm_for_step(cfg, "rel_res").
-- If no llm_config is provided, relres_main builds a minimal TraceKGLLMConfig
-  using the `model` and `max_tokens` arguments, so existing code that just
-  calls relres_main() (or passes a model string) still works.
-"""
-
-import json
-import os
-import re
-import time
-import uuid
-from pathlib import Path
-from typing import List, Dict, Any, Optional, Tuple
-
-import numpy as np
-import torch
-from sklearn.preprocessing import normalize
-
-# clustering libs
-try:
-    import hdbscan
-except Exception:
-    raise RuntimeError("hdbscan required: pip install hdbscan")
-try:
-    import umap
-    UMAP_AVAILABLE = True
-except Exception:
-    UMAP_AVAILABLE = False
-
-# transformers embedder
-from transformers import AutoTokenizer, AutoModel
-
-# NOTE: We now use DSPy + TraceKGLLMConfig / make_lm_for_step for all LLM calls.
-# These are defined in your LLM Model V3 region:
-#   - class TraceKGLLMConfig
-#   - def make_lm_for_step(cfg: TraceKGLLMConfig, step: str) -> dspy.LM
-# We reference them here (they must be importable or defined in the same module).
-
-# ----------------------------- CONFIG -----------------------------
-
-INPUT_RELATIONS = Path("data/Relations/Rel Rec/relations_raw.jsonl")
-OUT_DIR = Path("data/Relations/Rel Res")
-OUT_DIR.mkdir(parents=True, exist_ok=True)
-RAW_LLM_DIR = OUT_DIR / "llm_raw"
-RAW_LLM_DIR.mkdir(exist_ok=True)
-
-# Embedding model
-EMBED_MODEL = "BAAI/bge-large-en-v1.5"
-DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
-BATCH_SIZE = 32
-
-# Weights for buckets used to build relation embeddings
-# Buckets:
-#   name            = relation_name
-#   desc            = rel_desc
-#   head_tail       = subject/object names + class info
-#   hint_canonical  = rel_hint_type + canonical_rel_name + canonical_rel_desc + rel_cls
-REL_EMB_WEIGHTS = {
-    "name": 0.25,
-    "desc": 0.15,
-    "head_tail": 0.20,
-    "hint_canonical": 0.40,
-}
-
-# Global clustering params
-USE_UMAP = True
-UMAP_N_COMPONENTS = 64
-UMAP_N_NEIGHBORS = 8
-UMAP_MIN_DIST = 0.0
-HDBSCAN_MIN_CLUSTER_SIZE = 2
-HDBSCAN_MIN_SAMPLES = 1
-HDBSCAN_METRIC = "euclidean"
-
-# Local subcluster params (when a cluster is very large)
-MAX_CLUSTER_SIZE_FOR_LOCAL = 30
-LOCAL_HDBSCAN_MIN_CLUSTER_SIZE = 2
-LOCAL_HDBSCAN_MIN_SAMPLES = 1
-
-# LLM prompt chunking
-MAX_MEMBERS_PER_PROMPT = 10  # max relation instances per LLM call
-
-# LLM (DSPy / central config)
-MODEL_NAME = "gpt-5.1"
-LLM_MAX_TOKENS_DEFAULT = 16000
-
-VERBOSE = False
-
-# ---------------------- HF Embedder --------------------------------
-
-def mean_pool(token_embeddings: torch.Tensor, attention_mask: torch.Tensor):
-    input_mask_expanded = attention_mask.unsqueeze(-1).expand(token_embeddings.size()).float()
-    sum_embeddings = torch.sum(token_embeddings * input_mask_expanded, 1)
-    sum_mask = torch.clamp(input_mask_expanded.sum(1), min=1e-9)
-    return sum_embeddings / sum_mask
-
-class HFEmbedder:
-    def __init__(self, model_name=EMBED_MODEL, device=DEVICE):
-        if VERBOSE:
-            print(f"[embedder] loading {model_name} on {device}")
-        self.device = device
-        self.tokenizer = AutoTokenizer.from_pretrained(model_name, use_fast=True)
-        self.model = AutoModel.from_pretrained(model_name)
-        self.model.to(device)
-        self.model.eval()
-        for p in self.model.parameters():
-            p.requires_grad = False
-
-    @property
-    def dim(self) -> int:
-        return getattr(self.model.config, "hidden_size", 1024)
-
-    @torch.no_grad()
-    def encode_batch(self, texts: List[str], batch_size: int = BATCH_SIZE) -> np.ndarray:
-        """
-        Encode a list of texts into L2-normalized embeddings.
-        """
-        if len(texts) == 0:
-            D = self.dim
-            return np.zeros((0, D))
-        embs = []
-        for i in range(0, len(texts), batch_size):
-            batch = texts[i:i + batch_size]
-            enc = self.tokenizer(
-                batch,
-                padding=True,
-                truncation=True,
-                return_tensors="pt",
-                max_length=512,
-            )
-            input_ids = enc["input_ids"].to(self.device)
-            attention_mask = enc["attention_mask"].to(self.device)
-            out = self.model(input_ids=input_ids, attention_mask=attention_mask, return_dict=True)
-            token_embeds = out.last_hidden_state
-            pooled = mean_pool(token_embeds, attention_mask)
-            embs.append(pooled.cpu().numpy())
-        embs = np.vstack(embs)
-        embs = normalize(embs, axis=1)
-        return embs
-
-# ---------------------- IO helpers ---------------------------------
-
-def load_relations(path: Path) -> List[Dict[str, Any]]:
-    """
-    Load relations_raw.jsonl and ensure schema-related fields exist:
-
-      - canonical_rel_name (default "TBD")
-      - canonical_rel_desc (default "")
-      - rel_cls (default "TBD")
-      - rel_cls_group (default "TBD")
-      - remarks (list of strings)
-    """
-    rels: List[Dict[str, Any]] = []
-    if not path.exists():
-        raise FileNotFoundError(f"Relations file not found: {path}")
-    with path.open("r", encoding="utf-8") as f:
-        for line in f:
-            line = line.strip()
-            if not line:
-                continue
-            obj = json.loads(line)
-            # ensure relation_id exists
-            rid = obj.get("relation_id") or ("RelR_" + uuid.uuid4().hex[:8])
-            obj["relation_id"] = rid
-
-            # ensure schema fields
-            if "canonical_rel_name" not in obj or str(obj.get("canonical_rel_name", "")).strip() == "":
-                obj["canonical_rel_name"] = "TBD"
-            if "canonical_rel_desc" not in obj or obj.get("canonical_rel_desc") is None:
-                obj["canonical_rel_desc"] = ""
-            if "rel_cls" not in obj or str(obj.get("rel_cls", "")).strip() == "":
-                obj["rel_cls"] = "TBD"
-            if "rel_cls_group" not in obj or str(obj.get("rel_cls_group", "")).strip() == "":
-                obj["rel_cls_group"] = "TBD"
-
-            # normalize remarks: merge original remark + remarks list into a 'remarks' list
-            initial_remark = obj.get("remark")
-            remarks = obj.get("remarks")
-            norm_remarks: List[str] = []
-            if isinstance(remarks, list):
-                norm_remarks.extend([str(r) for r in remarks if r])
-            elif isinstance(remarks, str) and remarks.strip():
-                norm_remarks.append(remarks.strip())
-            if isinstance(initial_remark, str) and initial_remark.strip():
-                norm_remarks.append(initial_remark.strip())
-            obj["remarks"] = norm_remarks
-
-            rels.append(obj)
-    if VERBOSE:
-        print(f"[start] loaded {len(rels)} relations from {path}")
-    return rels
-
-def safe_str(s: Optional[str]) -> str:
-    if not s:
-        return ""
-    return str(s).replace("\n", " ").strip()
-
-# ---------------------- Build relation texts & embeddings ----------
-
-def build_relation_texts(
-    relations: List[Dict[str, Any]]
-) -> Tuple[List[str], List[str], List[str], List[str]]:
-    """
-    Build four text buckets for each relation:
-
-    - name_texts:       relation_name
-    - desc_texts:       rel_desc
-    - head_tail_texts:  head/tail entity + class info
-    - hint_texts:       rel_hint_type + canonical_rel_name + canonical_rel_desc + rel_cls
-    """
-    name_texts, desc_texts, head_tail_texts, hint_texts = [], [], [], []
-
-    for r in relations:
-        # name
-        rname = safe_str(r.get("relation_name", ""))
-        name_texts.append(rname[:256])
-
-        # desc
-        rdesc = safe_str(r.get("rel_desc", ""))
-        desc_texts.append(rdesc[:512])
-
-        # head_tail
-        subj_name = safe_str(r.get("subject_entity_name", ""))
-        subj_cl = safe_str(r.get("subject_class_label", ""))
-        subj_cg = safe_str(r.get("subject_class_group", ""))
-        obj_name = safe_str(r.get("object_entity_name", ""))
-        obj_cl = safe_str(r.get("object_class_label", ""))
-        obj_cg = safe_str(r.get("object_class_group", ""))
-
-        head_tail = f"{subj_name} ({subj_cl}, {subj_cg}) -> {obj_name} ({obj_cl}, {obj_cg})"
-        head_tail_texts.append(head_tail[:512])
-
-        # hint_canonical
-        hint_parts = []
-        for key in ["rel_hint_type", "canonical_rel_name", "canonical_rel_desc", "rel_cls"]:
-            val = safe_str(r.get(key, ""))
-            if val and val.upper() != "TBD":
-                hint_parts.append(val)
-        hint_text = " ; ".join(hint_parts)
-        hint_texts.append(hint_text[:512])
-
-    return name_texts, desc_texts, head_tail_texts, hint_texts
-
-def any_nonempty(lst: List[str]) -> bool:
-    return any(safe_str(t) for t in lst)
-
-def compute_relation_embeddings(
-    embedder: HFEmbedder,
-    relations: List[Dict[str, Any]],
-    weights: Dict[str, float]
-) -> np.ndarray:
-    """
-    Compute combined embeddings for relations using four buckets with fixed weights.
-    """
-    N = len(relations)
-    if N == 0:
-        raise ValueError("No relations to embed")
-
-    name_texts, desc_texts, head_tail_texts, hint_texts = build_relation_texts(relations)
-
-    emb_name = embedder.encode_batch(name_texts) if any_nonempty(name_texts) else None
-    emb_desc = embedder.encode_batch(desc_texts) if any_nonempty(desc_texts) else None
-    emb_ht = embedder.encode_batch(head_tail_texts) if any_nonempty(head_tail_texts) else None
-    emb_hint = embedder.encode_batch(hint_texts) if any_nonempty(hint_texts) else None
-
-    D = embedder.dim
-    combined = np.zeros((N, D), dtype=np.float32)
-
-    def add_bucket(emb: Optional[np.ndarray], weight: float):
-        nonlocal combined
-        if emb is None:
-            return
-        if emb.shape[0] != N:
-            raise ValueError("embedding row mismatch")
-        combined += weight * emb  # emb already row-normalized
-
-    add_bucket(emb_name, weights.get("name", 0.0))
-    add_bucket(emb_desc, weights.get("desc", 0.0))
-    add_bucket(emb_ht, weights.get("head_tail", 0.0))
-    add_bucket(emb_hint, weights.get("hint_canonical", 0.0))
-
-    combined = normalize(combined, axis=1)
-    return combined
-
-# ---------------------- clustering ---------------------------------
-
-def run_hdbscan(
-    embeddings: np.ndarray,
-    min_cluster_size: int = HDBSCAN_MIN_CLUSTER_SIZE,
-    min_samples: int = HDBSCAN_MIN_SAMPLES,
-    metric: str = HDBSCAN_METRIC,
-    use_umap: bool = USE_UMAP
-) -> Tuple[np.ndarray, object]:
-    X = embeddings
-    N = X.shape[0]
-    if use_umap and UMAP_AVAILABLE and N >= 6:
-        safe_n_components = min(UMAP_N_COMPONENTS, max(2, N - 2))
-        safe_n_neighbors = min(UMAP_N_NEIGHBORS, max(2, N - 1))
-        try:
-            reducer = umap.UMAP(
-                n_components=safe_n_components,
-                n_neighbors=safe_n_neighbors,
-                min_dist=UMAP_MIN_DIST,
-                metric="cosine",
-                random_state=42
-            )
-            X_reduced = reducer.fit_transform(X)
-            if X_reduced is not None and X_reduced.shape[0] == N:
-                X = X_reduced
-            else:
-                if VERBOSE:
-                    print(f"[warn] UMAP returned invalid shape; skipping UMAP")
-        except Exception as e:
-            if VERBOSE:
-                print(f"[warn] UMAP failed (N={N}): {e}. Proceeding without UMAP.")
-            X = embeddings
-    clusterer = hdbscan.HDBSCAN(
-        min_cluster_size=min_cluster_size,
-        min_samples=min_samples,
-        metric=metric,
-        cluster_selection_method="eom"
-    )
-    labels = clusterer.fit_predict(X)
-    return labels, clusterer
-
-# ---------------------- LLM prompt template ------------------------
-from TKG_Prompts import REL_RES_PROMPT_TEMPLATE
-RELRES_PROMPT_TEMPLATE = REL_RES_PROMPT_TEMPLATE
-
-def sanitize_json_array(text: str) -> Optional[Any]:
-    """
-    Extract and parse the first JSON array from the text.
-    Grab [ ... ] block, fix simple trailing commas, and json.loads.
-    """
-    if not text or not text.strip():
-        return None
-    # s = text.strip() #Injam
-    s = coerce_llm_text(text).strip()
-    # replace smart quotes
-    s = s.replace("“", '"').replace("”", '"').replace("‘", "'").replace("’", "'")
-    start = s.find("[")
-    end = s.rfind("]")
-    if start == -1 or end == -1 or end <= start:
-        return None
-    cand = s[start:end + 1]
-    # remove trailing commas before closing braces/brackets
-    cand = re.sub(r",\s*([\]}])", r"\1", cand)
-    try:
-        return json.loads(cand)
-    except Exception:
-        return None
-
-# ---------------------- DSPy / LLM helpers -------------------------
-
-def _get_lm_for_rel_res(
-    llm_config: Optional["TraceKGLLMConfig"],
-    model: str,
-    max_tokens: int,
-):
-    """
-    Resolve a DSPy LM for the Relation Resolution step.
-
-    - If llm_config is provided, we use it directly (per-step override: 'rel_res').
-    - Otherwise, we synthesize a minimal TraceKGLLMConfig using (model, max_tokens)
-      so existing code can still call relres_main(model="...").
-    """
-    if llm_config is not None:
-        cfg = llm_config
-    else:
-        cfg = TraceKGLLMConfig(default_model=model, max_tokens=max_tokens)
-
-    try:
-        cfg.validate()
-    except Exception as e:
-        if VERBOSE:
-            print(f"[RelRes] llm_config.validate() failed: {e}")
-
-    lm = make_lm_for_step(cfg, "rel_res")
-    return lm
-
-def _call_rel_res_lm(lm, prompt: str) -> str:
-    """
-    Call the DSPy LM and normalize the output into a plain string.
-    """
-    try:
-        outputs = lm(prompt)
-    except Exception as e:
-        print("[RelRes] LM call error:", e)
-        return ""
-
-    if isinstance(outputs, list):
-        return outputs[0] if outputs else ""
-    return str(outputs or "")
-
-# ---------------------- Action executors ----------------------------
-
-def execute_set_canonical_rel(
-    rel_by_id: Dict[str, Dict[str, Any]],
-    relation_ids: List[str],
-    canonical_rel_name: Optional[str],
-    canonical_rel_desc: Optional[str],
-):
-    if canonical_rel_name is None:
-        return
-    canon_name = canonical_rel_name.strip()
-    if not canon_name:
-        return
-    for rid in relation_ids:
-        if rid not in rel_by_id:
-            continue
-        r = rel_by_id[rid]
-        r["canonical_rel_name"] = canon_name
-        if canonical_rel_desc is not None:
-            r["canonical_rel_desc"] = canonical_rel_desc.strip()
-        rel_by_id[rid] = r
-
-def execute_set_rel_cls(
-    rel_by_id: Dict[str, Dict[str, Any]],
-    relation_ids: List[str],
-    rel_cls: Optional[str],
-):
-    if rel_cls is None:
-        return
-    cls_name = rel_cls.strip()
-    if not cls_name:
-        return
-    for rid in relation_ids:
-        if rid not in rel_by_id:
-            continue
-        r = rel_by_id[rid]
-        r["rel_cls"] = cls_name
-        rel_by_id[rid] = r
-
-def execute_set_rel_cls_group(
-    rel_by_id: Dict[str, Dict[str, Any]],
-    relation_ids: List[str],
-    rel_cls_group: Optional[str],
-):
-    if rel_cls_group is None:
-        return
-    grp_name = rel_cls_group.strip()
-    if not grp_name:
-        return
-    for rid in relation_ids:
-        if rid not in rel_by_id:
-            continue
-        r = rel_by_id[rid]
-        r["rel_cls_group"] = grp_name
-        rel_by_id[rid] = r
-
-def execute_modify_rel_schema(
-    rel_by_id: Dict[str, Dict[str, Any]],
-    relation_ids: List[str],
-    canonical_rel_name: Optional[str],
-    canonical_rel_desc: Optional[str],
-    rel_cls: Optional[str],
-    rel_cls_group: Optional[str],
-    new_relation_name: Optional[str],
-    original_relation_name: Optional[str],
-):
-    for rid in relation_ids:
-        if rid not in rel_by_id:
-            continue
-        r = rel_by_id[rid]
-
-        if canonical_rel_name is not None and canonical_rel_name.strip():
-            r["canonical_rel_name"] = canonical_rel_name.strip()
-        if canonical_rel_desc is not None:
-            r["canonical_rel_desc"] = canonical_rel_desc.strip()
-        if rel_cls is not None and rel_cls.strip():
-            r["rel_cls"] = rel_cls.strip()
-        if rel_cls_group is not None and rel_cls_group.strip():
-            r["rel_cls_group"] = rel_cls_group.strip()
-
-        if new_relation_name is not None and new_relation_name.strip():
-            if "original_relation_name" not in r:
-                if original_relation_name:
-                    r["original_relation_name"] = original_relation_name
-                else:
-                    r["original_relation_name"] = r.get("relation_name", "")
-            r["relation_name"] = new_relation_name.strip()
-
-        rel_by_id[rid] = r
-
-def execute_add_rel_remark(
-    rel_by_id: Dict[str, Dict[str, Any]],
-    relation_ids: List[str],
-    remark: Optional[str],
-):
-    if remark is None:
-        return
-    txt = remark.strip()
-    if not txt:
-        return
-    for rid in relation_ids:
-        if rid not in rel_by_id:
-            continue
-        r = rel_by_id[rid]
-        existing = r.get("remarks")
-        if existing is None:
-            existing = []
-        elif not isinstance(existing, list):
-            existing = [str(existing)]
-        existing.append(txt)
-        r["remarks"] = existing
-        rel_by_id[rid] = r
-
-# ---------------------- Main orchestration -------------------------
-
-def relres_main(
-    model: str = MODEL_NAME,
-    max_tokens: int = LLM_MAX_TOKENS_DEFAULT,
-    llm_config: Optional["TraceKGLLMConfig"] = None,
-    input_relations_path: Path = INPUT_RELATIONS,
-) -> None:
-    """
-    Run Relation Resolution end-to-end.
-
-    LLM behavior:
-      * If llm_config is provided, it is used via make_lm_for_step(cfg, "rel_res").
-      * If llm_config is None, a minimal TraceKGLLMConfig(default_model=model,
-        max_tokens=max_tokens) is synthesized so existing code that calls
-        relres_main() or relres_main(model="...") still works.
-    """
-    # load relations
-    relations = load_relations(input_relations_path)
-    rel_by_id: Dict[str, Dict[str, Any]] = {r["relation_id"]: r for r in relations}
-
-    # embedder
-    embedder = HFEmbedder(model_name=EMBED_MODEL, device=DEVICE)
-    rel_ids_order = [r["relation_id"] for r in relations]
-    rel_id_to_index = {rid: i for i, rid in enumerate(rel_ids_order)}
-    combined_emb = compute_relation_embeddings(embedder, relations, REL_EMB_WEIGHTS)
-    print("[info] relation embeddings computed shape:", combined_emb.shape)
-
-    # global clustering
-    labels, clusterer = run_hdbscan(
-        combined_emb,
-        min_cluster_size=HDBSCAN_MIN_CLUSTER_SIZE,
-        min_samples=HDBSCAN_MIN_SAMPLES,
-        use_umap=USE_UMAP
-    )
-    unique_labels = sorted(set(labels))
-    print("[info] global clustering done. unique labels:", unique_labels)
-
-    # map cluster -> relation ids
-    cluster_to_relids: Dict[int, List[str]] = {}
-    for idx, lab in enumerate(labels):
-        rid = rel_ids_order[idx]
-        cluster_to_relids.setdefault(int(lab), []).append(rid)
-
-    # action log
-    action_log_path = OUT_DIR / "rel_res_action_log.jsonl"
-    if action_log_path.exists():
-        action_log_path.unlink()
-
-    # build LM once
-    lm = _get_lm_for_rel_res(llm_config=llm_config, model=model, max_tokens=max_tokens)
-
-    # helper to process a subset of relation ids with LLM (one prompt)
-    def run_llm_on_subset(sub_rel_ids: List[str], cluster_label_str: str):
-        if not sub_rel_ids:
-            return
-
-        # build compact representation for this chunk
-        cluster_relations = []
-        for rid in sub_rel_ids:
-            r = rel_by_id.get(rid)
-            if not r:
-                continue
-            cluster_relations.append({
-                "relation_id": r["relation_id"],
-                "relation_name": safe_str(r.get("relation_name", "")),
-                "rel_desc": safe_str(r.get("rel_desc", "")),
-                "rel_hint_type": safe_str(r.get("rel_hint_type", "")),
-                "canonical_rel_name": safe_str(r.get("canonical_rel_name", "")),
-                "canonical_rel_desc": safe_str(r.get("canonical_rel_desc", "")),
-                "rel_cls": safe_str(r.get("rel_cls", "")),
-                "rel_cls_group": safe_str(r.get("rel_cls_group", "")),
-                "subject_entity_name": safe_str(r.get("subject_entity_name", "")),
-                "object_entity_name": safe_str(r.get("object_entity_name", "")),
-                "subject_class_label": safe_str(r.get("subject_class_label", "")),
-                "subject_class_group": safe_str(r.get("subject_class_group", "")),
-                "object_class_label": safe_str(r.get("object_class_label", "")),
-                "object_class_group": safe_str(r.get("object_class_group", "")),
-                "qualifiers": r.get("qualifiers", {}),
-                "confidence": float(r.get("confidence", 0.0)),
-                "remarks": r.get("remarks", [])
-            })
-
-        if not cluster_relations:
-            return
-
-        cluster_block = json.dumps(cluster_relations, ensure_ascii=False, indent=2)
-        prompt = RELRES_PROMPT_TEMPLATE.replace("{cluster_block}", cluster_block)
-
-        # log prompt
-        prompt_path = RAW_LLM_DIR / f"cluster_{cluster_label_str}_prompt.txt"
-        prompt_path.write_text(prompt, encoding="utf-8")
-
-        # call LLM via DSPy
-        raw_out = ""
-        try:
-            raw_out = _call_rel_res_lm(lm, prompt)
-        except Exception as e:
-            print(f"[warning] LLM call failed for {cluster_label_str}: {e}")
-            raw_out = ""
-
-        # write raw output
-        raw_path = RAW_LLM_DIR / f"cluster_{cluster_label_str}_llm_raw.txt"
-        raw_path.write_text(raw_out, encoding="utf-8")
-
-        parsed = sanitize_json_array(raw_out)
-        if parsed is None:
-            print(f"[warn] failed to parse LLM output for chunk {cluster_label_str}; skipping automated actions for this chunk.")
-            dec_path = OUT_DIR / f"cluster_{cluster_label_str}_decisions.json"
-            dec_path.write_text(
-                json.dumps({"cluster_label": cluster_label_str, "raw_llm": raw_out}, ensure_ascii=False, indent=2),
-                encoding="utf-8"
-            )
-            return
-
-        decisions: List[Dict[str, Any]] = []
-
-        # execute parsed function list in order
-        for step in parsed:
-            if not isinstance(step, dict):
-                continue
-            fn = step.get("function")
-            args = step.get("args", {}) or {}
-            justification = args.get("justification")
-            confidence_val = args.get("confidence", None)
-            remark_val = args.get("remark")
-
-            try:
-                if fn == "set_canonical_rel":
-                    rel_ids_raw = args.get("relation_ids", []) or []
-                    canon_name = args.get("canonical_rel_name")
-                    canon_desc = args.get("canonical_rel_desc")
-                    rel_ids_valid = [rid for rid in rel_ids_raw if rid in rel_by_id]
-
-                    if not rel_ids_valid or canon_name is None:
-                        decisions.append({
-                            "action": "set_canonical_rel_skip",
-                            "requested_relation_ids": rel_ids_raw,
-                            "canonical_rel_name": canon_name,
-                            "justification": justification,
-                            "remark": remark_val,
-                            "confidence": confidence_val
-                        })
-                        continue
-
-                    execute_set_canonical_rel(rel_by_id, rel_ids_valid, canon_name, canon_desc)
-
-                    decisions.append({
-                        "action": "set_canonical_rel",
-                        "relation_ids": rel_ids_valid,
-                        "canonical_rel_name": canon_name,
-                        "canonical_rel_desc": canon_desc,
-                        "justification": justification,
-                        "remark": remark_val,
-                        "confidence": confidence_val
-                    })
-
-                elif fn == "set_rel_cls":
-                    rel_ids_raw = args.get("relation_ids", []) or []
-                    rel_cls = args.get("rel_cls")
-                    rel_ids_valid = [rid for rid in rel_ids_raw if rid in rel_by_id]
-
-                    if not rel_ids_valid or rel_cls is None:
-                        decisions.append({
-                            "action": "set_rel_cls_skip",
-                            "requested_relation_ids": rel_ids_raw,
-                            "rel_cls": rel_cls,
-                            "justification": justification,
-                            "remark": remark_val,
-                            "confidence": confidence_val
-                        })
-                        continue
-
-                    execute_set_rel_cls(rel_by_id, rel_ids_valid, rel_cls)
-
-                    decisions.append({
-                        "action": "set_rel_cls",
-                        "relation_ids": rel_ids_valid,
-                        "rel_cls": rel_cls,
-                        "justification": justification,
-                        "remark": remark_val,
-                        "confidence": confidence_val
-                    })
-
-                elif fn == "set_rel_cls_group":
-                    rel_ids_raw = args.get("relation_ids", []) or []
-                    rel_cls_group = args.get("rel_cls_group")
-                    rel_ids_valid = [rid for rid in rel_ids_raw if rid in rel_by_id]
-
-                    if not rel_ids_valid or rel_cls_group is None:
-                        decisions.append({
-                            "action": "set_rel_cls_group_skip",
-                            "requested_relation_ids": rel_ids_raw,
-                            "rel_cls_group": rel_cls_group,
-                            "justification": justification,
-                            "remark": remark_val,
-                            "confidence": confidence_val
-                        })
-                        continue
-
-                    execute_set_rel_cls_group(rel_by_id, rel_ids_valid, rel_cls_group)
-
-                    decisions.append({
-                        "action": "set_rel_cls_group",
-                        "relation_ids": rel_ids_valid,
-                        "rel_cls_group": rel_cls_group,
-                        "justification": justification,
-                        "remark": remark_val,
-                        "confidence": confidence_val
-                    })
-
-                elif fn == "modify_rel_schema":
-                    rel_ids_raw = args.get("relation_ids", []) or []
-                    canon_name = args.get("canonical_rel_name")
-                    canon_desc = args.get("canonical_rel_desc")
-                    rel_cls = args.get("rel_cls")
-                    rel_cls_group = args.get("rel_cls_group")
-                    new_rel_name = args.get("new_relation_name")
-                    orig_rel_name = args.get("original_relation_name")
-
-                    rel_ids_valid = [rid for rid in rel_ids_raw if rid in rel_by_id]
-                    if not rel_ids_valid:
-                        decisions.append({
-                            "action": "modify_rel_schema_skip_no_valid_relations",
-                            "requested_relation_ids": rel_ids_raw,
-                            "justification": justification,
-                            "remark": remark_val,
-                            "confidence": confidence_val
-                        })
-                        continue
-
-                    execute_modify_rel_schema(
-                        rel_by_id,
-                        rel_ids_valid,
-                        canon_name,
-                        canon_desc,
-                        rel_cls,
-                        rel_cls_group,
-                        new_rel_name,
-                        orig_rel_name
-                    )
-
-                    decisions.append({
-                        "action": "modify_rel_schema",
-                        "relation_ids": rel_ids_valid,
-                        "canonical_rel_name": canon_name,
-                        "canonical_rel_desc": canon_desc,
-                        "rel_cls": rel_cls,
-                        "rel_cls_group": rel_cls_group,
-                        "new_relation_name": new_rel_name,
-                        "original_relation_name": orig_rel_name,
-                        "justification": justification,
-                        "remark": remark_val,
-                        "confidence": confidence_val
-                    })
-
-                elif fn == "add_rel_remark":
-                    rel_ids_raw = args.get("relation_ids", []) or []
-                    rel_ids_valid = [rid for rid in rel_ids_raw if rid in rel_by_id]
-                    remark_text = args.get("remark")
-
-                    if not rel_ids_valid or not remark_text:
-                        decisions.append({
-                            "action": "add_rel_remark_skip",
-                            "requested_relation_ids": rel_ids_raw,
-                            "remark": remark_text,
-                            "justification": justification,
-                            "confidence": confidence_val
-                        })
-                        continue
-
-                    execute_add_rel_remark(rel_by_id, rel_ids_valid, remark_text)
-
-                    decisions.append({
-                        "action": "add_rel_remark",
-                        "relation_ids": rel_ids_valid,
-                        "remark": remark_text,
-                        "justification": justification,
-                        "confidence": confidence_val
-                    })
-
-                else:
-                    decisions.append({
-                        "action": "skip_unknown_function",
-                        "function": fn,
-                        "raw": step,
-                        "justification": justification,
-                        "remark": remark_val,
-                        "confidence": confidence_val
-                    })
-
-            except Exception as e:
-                decisions.append({
-                    "action": "error_executing",
-                    "function": fn,
-                    "error": str(e),
-                    "input": step,
-                    "justification": justification,
-                    "remark": remark_val,
-                    "confidence": confidence_val
-                })
-
-        # write decisions file for this chunk
-        dec_path = OUT_DIR / f"cluster_{cluster_label_str}_decisions.json"
-        dec_obj = {
-            "cluster_label": cluster_label_str,
-            "cluster_relations": cluster_relations,
-            "llm_raw": raw_out,
-            "parsed_steps": parsed,
-            "executed_decisions": decisions,
-            "timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
-        }
-        dec_path.write_text(json.dumps(dec_obj, ensure_ascii=False, indent=2), encoding="utf-8")
-
-        # append to global action log
-        with action_log_path.open("a", encoding="utf-8") as fh:
-            fh.write(json.dumps(dec_obj, ensure_ascii=False) + "\n")
-
-    # iterate clusters (skip noise -1 first, then noise)
-    cluster_keys = [k for k in cluster_to_relids.keys() if k != -1]
-    cluster_keys = sorted(cluster_keys)
-    if -1 in cluster_to_relids:
-        cluster_keys.append(-1)
-
-    for cluster_label in cluster_keys:
-        rel_ids_global = cluster_to_relids.get(cluster_label, [])
-        if not rel_ids_global:
-            continue
-        print(f"[cluster] {cluster_label} -> {len(rel_ids_global)} relations")
-
-        # local subclustering for large clusters
-        if len(rel_ids_global) > MAX_CLUSTER_SIZE_FOR_LOCAL:
-            print(f"[cluster] {cluster_label}: size {len(rel_ids_global)} > {MAX_CLUSTER_SIZE_FOR_LOCAL}, running local HDBSCAN")
-            idxs = [rel_id_to_index[rid] for rid in rel_ids_global]
-            try:
-                sub_emb = combined_emb[idxs]
-                local_clusterer = hdbscan.HDBSCAN(
-                    min_cluster_size=max(2, LOCAL_HDBSCAN_MIN_CLUSTER_SIZE),
-                    min_samples=LOCAL_HDBSCAN_MIN_SAMPLES,
-                    metric="euclidean",
-                    cluster_selection_method="eom"
-                )
-                local_labels = local_clusterer.fit_predict(sub_emb)
-            except Exception as e:
-                print(f"[warn] local HDBSCAN failed for cluster {cluster_label}: {e}. Treating as single group.")
-                local_labels = np.zeros(len(idxs), dtype=int)
-
-            local_map: Dict[int, List[str]] = {}
-            for i_local, lab_local in enumerate(local_labels):
-                rid = rel_ids_global[i_local]
-                local_map.setdefault(int(lab_local), []).append(rid)
-
-            for lab_local, local_rel_ids in sorted(local_map.items(), key=lambda x: x[0]):
-                label_prefix = f"{cluster_label}_loc{lab_local}"
-                # split into chunks for LLM
-                for part_idx in range(0, len(local_rel_ids), MAX_MEMBERS_PER_PROMPT):
-                    part_rel_ids = local_rel_ids[part_idx:part_idx + MAX_MEMBERS_PER_PROMPT]
-                    chunk_label = f"{label_prefix}_p{part_idx//MAX_MEMBERS_PER_PROMPT}"
-                    print(f"[cluster] {chunk_label}: processing {len(part_rel_ids)} relations")
-                    run_llm_on_subset(part_rel_ids, chunk_label)
-
-        else:
-            label_prefix = str(cluster_label)
-            for part_idx in range(0, len(rel_ids_global), MAX_MEMBERS_PER_PROMPT):
-                part_rel_ids = rel_ids_global[part_idx:part_idx + MAX_MEMBERS_PER_PROMPT]
-                chunk_label = f"{label_prefix}_p{part_idx//MAX_MEMBERS_PER_PROMPT}"
-                print(f"[cluster] {chunk_label}: processing {len(part_rel_ids)} relations")
-                run_llm_on_subset(part_rel_ids, chunk_label)
-
-    # After all chunks processed: write final relations output
-    final_relations = list(rel_by_id.values())
-    out_json = OUT_DIR / "relations_resolved.json"
-    out_jsonl = OUT_DIR / "relations_resolved.jsonl"
-    out_json.write_text(json.dumps(final_relations, ensure_ascii=False, indent=2), encoding="utf-8")
-    with out_jsonl.open("w", encoding="utf-8") as fh:
-        for r in final_relations:
-            fh.write(json.dumps(r, ensure_ascii=False) + "\n")
-
-    print(f"[done] wrote final resolved relations -> {out_json}  (count={len(final_relations)})")
-    print(f"[done] action log -> {action_log_path}")
-
-    # ---------------------- SUMMARY AGGREGATION ---------------------
-
-    summary_dir = OUT_DIR / "summary"
-    summary_dir.mkdir(exist_ok=True)
-
-    # Aggregate per-chunk decision files
-    cluster_decisions: List[Dict[str, Any]] = []
-    for path in sorted(OUT_DIR.glob("cluster_*_decisions.json")):
-        try:
-            obj = json.loads(path.read_text(encoding="utf-8"))
-            cluster_decisions.append(obj)
-        except Exception as e:
-            print(f"[warn] failed to read {path}: {e}")
-
-    all_clusters_decisions_path = summary_dir / "all_clusters_decisions.json"
-    all_clusters_decisions_path.write_text(
-        json.dumps(cluster_decisions, ensure_ascii=False, indent=2),
-        encoding="utf-8"
-    )
-
-    total_clusters = len(cluster_decisions)  # here "cluster" means one LLM chunk
-    actions_by_type: Dict[str, int] = {}
-    total_remarks = 0
-    clusters_with_any_decisions = 0
-
-    for cd in cluster_decisions:
-        decs = cd.get("executed_decisions", [])
-        if not decs:
-            continue
-        clusters_with_any_decisions += 1
-        for d in decs:
-            act = d.get("action")
-            actions_by_type[act] = actions_by_type.get(act, 0) + 1
-            rem = d.get("remark")
-            if rem:
-                total_remarks += 1
-
-    total_errors = actions_by_type.get("error_executing", 0)
-
-    stats = {
-        "total_chunks": total_clusters,
-        "total_chunks_with_any_decisions": clusters_with_any_decisions,
-        "total_actions_by_type": actions_by_type,
-        "total_errors": total_errors,
-        "total_remarks_logged": total_remarks,
-        "generated_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
-    }
-
-    stats_path = summary_dir / "stats_summary.json"
-    stats_path.write_text(json.dumps(stats, ensure_ascii=False, indent=2), encoding="utf-8")
-
-    print(f"[done] summary decisions -> {all_clusters_decisions_path}")
-    print(f"[done] summary stats -> {stats_path}")
-
-    # ---------------------- SCHEMA AGGREGATION ----------------------
-
-    # 1) Canonical relation schema
-    canonical_map: Dict[str, Dict[str, Any]] = {}
-    for r in final_relations:
-        cname = safe_str(r.get("canonical_rel_name", ""))
-        if not cname or cname.upper() == "TBD":
-            continue
-        cdesc = safe_str(r.get("canonical_rel_desc", ""))
-        rel_cls = safe_str(r.get("rel_cls", ""))
-        rel_grp = safe_str(r.get("rel_cls_group", ""))
-        rid = r.get("relation_id")
-
-        entry = canonical_map.setdefault(cname, {
-            "canonical_rel_name": cname,
-            "canonical_rel_desc_candidates": set(),
-            "rel_cls_set": set(),
-            "rel_cls_group_set": set(),
-            "relation_ids": []
-        })
-        if cdesc:
-            entry["canonical_rel_desc_candidates"].add(cdesc)
-        if rel_cls and rel_cls.upper() != "TBD":
-            entry["rel_cls_set"].add(rel_cls)
-        if rel_grp and rel_grp.upper() != "TBD":
-            entry["rel_cls_group_set"].add(rel_grp)
-        if rid:
-            entry["relation_ids"].append(rid)
-
-    canonical_schema = []
-    for cname, info in canonical_map.items():
-        desc_candidates = list(info["canonical_rel_desc_candidates"])
-        chosen_desc = desc_candidates[0] if desc_candidates else ""
-        canonical_schema.append({
-            "canonical_rel_name": cname,
-            "canonical_rel_desc": chosen_desc,
-            "rel_cls": sorted(info["rel_cls_set"]),
-            "rel_cls_group": sorted(info["rel_cls_group_set"]),
-            "instance_count": len(info["relation_ids"]),
-            "example_relation_ids": info["relation_ids"][:10]
-        })
-
-    canonical_schema_path = summary_dir / "canonical_rel_schema.json"
-    canonical_schema_path.write_text(
-        json.dumps(canonical_schema, ensure_ascii=False, indent=2),
-        encoding="utf-8"
-    )
-
-    # 2) Relation class schema
-    cls_map: Dict[str, Dict[str, Any]] = {}
-    for r in final_relations:
-        cls_name = safe_str(r.get("rel_cls", ""))
-        if not cls_name or cls_name.upper() == "TBD":
-            continue
-        grp_name = safe_str(r.get("rel_cls_group", ""))
-        cname = safe_str(r.get("canonical_rel_name", ""))
-        rid = r.get("relation_id")
-
-        entry = cls_map.setdefault(cls_name, {
-            "rel_cls": cls_name,
-            "rel_cls_group_set": set(),
-            "canonical_rel_names": set(),
-            "relation_ids": []
-        })
-        if grp_name and grp_name.upper() != "TBD":
-            entry["rel_cls_group_set"].add(grp_name)
-        if cname and cname.upper() != "TBD":
-            entry["canonical_rel_names"].add(cname)
-        if rid:
-            entry["relation_ids"].append(rid)
-
-    cls_schema = []
-    for cls_name, info in cls_map.items():
-        cls_schema.append({
-            "rel_cls": cls_name,
-            "rel_cls_group": sorted(info["rel_cls_group_set"]),
-            "canonical_rel_names": sorted(info["canonical_rel_names"]),
-            "instance_count": len(info["relation_ids"]),
-            "example_relation_ids": info["relation_ids"][:10]
-        })
-
-    cls_schema_path = summary_dir / "rel_cls_schema.json"
-    cls_schema_path.write_text(
-        json.dumps(cls_schema, ensure_ascii=False, indent=2),
-        encoding="utf-8"
-    )
-
-    # 3) Relation class group schema
-    grp_map: Dict[str, Dict[str, Any]] = {}
-    for r in final_relations:
-        grp_name = safe_str(r.get("rel_cls_group", ""))
-        if not grp_name or grp_name.upper() == "TBD":
-            continue
-        cls_name = safe_str(r.get("rel_cls", ""))
-        cname = safe_str(r.get("canonical_rel_name", ""))
-        rid = r.get("relation_id")
-
-        entry = grp_map.setdefault(grp_name, {
-            "rel_cls_group": grp_name,
-            "rel_cls_set": set(),
-            "canonical_rel_names": set(),
-            "relation_ids": []
-        })
-        if cls_name and cls_name.upper() != "TBD":
-            entry["rel_cls_set"].add(cls_name)
-        if cname and cname.upper() != "TBD":
-            entry["canonical_rel_names"].add(cname)
-        if rid:
-            entry["relation_ids"].append(rid)
-
-    grp_schema = []
-    for grp_name, info in grp_map.items():
-        grp_schema.append({
-            "rel_cls_group": grp_name,
-            "rel_cls": sorted(info["rel_cls_set"]),
-            "canonical_rel_names": sorted(info["canonical_rel_names"]),
-            "instance_count": len(info["relation_ids"]),
-            "example_relation_ids": info["relation_ids"][:10]
-        })
-
-    grp_schema_path = summary_dir / "rel_cls_group_schema.json"
-    grp_schema_path.write_text(
-        json.dumps(grp_schema, ensure_ascii=False, indent=2),
-        encoding="utf-8"
-    )
-
-    print(f"[done] canonical relation schema -> {canonical_schema_path}")
-    print(f"[done] relation class schema -> {cls_schema_path}")
-    print(f"[done] relation class group schema -> {grp_schema_path}")
-
-
-# if __name__ == "__main__":
-#     relres_main()
+
+
+# #!/usr/bin/env python3
+# """
+# relres_iterative_v10_dspy.py
+
+# Relation Resolution (Rel Res) — cluster relation instances, ask LLM to
+# assign/normalize:
+
+#   - canonical_rel_name    (normalized predicate used on KG edges)
+#   - canonical_rel_desc    (reusable description of that predicate)
+#   - rel_cls               (relation class, groups canonical_rel_names)
+#   - rel_cls_group         (broad group like COMPOSITION, CAUSALITY, ...)
+
+# while preserving:
+
+#   - relation_name         (raw name from Rel Rec)
+#   - rel_desc              (instance-level description)
+#   - qualifiers, head/tail, etc.
+
+# Key properties:
+# - We NEVER remove relation instances; we only enrich them with schema.
+# - canonical_rel_name is what will be used as edge label in the KG.
+# - rel_cls / rel_cls_group give you a 2-layer schema for relations.
+# - Multi-run friendly: TBD fields can be filled in the first run, refined later.
+# - Uses global HDBSCAN + optional local subclustering + MAX_MEMBERS_PER_PROMPT
+#   so LLM chunks stay reasonably small.
+
+# Input:
+#   data/Relations/Rel Rec/relations_raw.jsonl
+
+# Output (under OUT_DIR):
+#   - per-(cluster,local,part) decisions: cluster_<ID>_decisions.json
+#   - per-(cluster,local,part) raw llm output: llm_raw/cluster_<ID>_llm_raw.txt
+#   - per-(cluster,local,part) prompts: llm_raw/cluster_<ID>_prompt.txt
+#   - cumulative action log: rel_res_action_log.jsonl
+#   - final resolved relations: relations_resolved.json and .jsonl
+#   - summary/all_clusters_decisions.json
+#   - summary/stats_summary.json
+#   - summary/canonical_rel_schema.json
+#   - summary/rel_cls_schema.json
+#   - summary/rel_cls_group_schema.json
+
+# LLM usage:
+# - All LLM calls go through a single DSPy LM obtained from TraceKGLLMConfig
+#   via make_lm_for_step(cfg, "rel_res").
+# - If no llm_config is provided, relres_main builds a minimal TraceKGLLMConfig
+#   using the `model` and `max_tokens` arguments, so existing code that just
+#   calls relres_main() (or passes a model string) still works.
+# """
+
+# import json
+# import os
+# import re
+# import time
+# import uuid
+# from pathlib import Path
+# from typing import List, Dict, Any, Optional, Tuple
+
+# import numpy as np
+# import torch
+# from sklearn.preprocessing import normalize
+
+# # clustering libs
+# try:
+#     import hdbscan
+# except Exception:
+#     raise RuntimeError("hdbscan required: pip install hdbscan")
+# try:
+#     import umap
+#     UMAP_AVAILABLE = True
+# except Exception:
+#     UMAP_AVAILABLE = False
+
+# # transformers embedder
+# from transformers import AutoTokenizer, AutoModel
+
+# # NOTE: We now use DSPy + TraceKGLLMConfig / make_lm_for_step for all LLM calls.
+# # These are defined in your LLM Model V3 region:
+# #   - class TraceKGLLMConfig
+# #   - def make_lm_for_step(cfg: TraceKGLLMConfig, step: str) -> dspy.LM
+# # We reference them here (they must be importable or defined in the same module).
+
+# # ----------------------------- CONFIG -----------------------------
+
+# INPUT_RELATIONS = Path("data/Relations/Rel Rec/relations_raw.jsonl")
+# OUT_DIR = Path("data/Relations/Rel Res")
+# OUT_DIR.mkdir(parents=True, exist_ok=True)
+# RAW_LLM_DIR = OUT_DIR / "llm_raw"
+# RAW_LLM_DIR.mkdir(exist_ok=True)
+
+# # Embedding model
+# EMBED_MODEL = "BAAI/bge-large-en-v1.5"
+# DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
+# BATCH_SIZE = 32
+
+# # Weights for buckets used to build relation embeddings
+# # Buckets:
+# #   name            = relation_name
+# #   desc            = rel_desc
+# #   head_tail       = subject/object names + class info
+# #   hint_canonical  = rel_hint_type + canonical_rel_name + canonical_rel_desc + rel_cls
+# REL_EMB_WEIGHTS = {
+#     "name": 0.25,
+#     "desc": 0.15,
+#     "head_tail": 0.20,
+#     "hint_canonical": 0.40,
+# }
+
+# # Global clustering params
+# USE_UMAP = True
+# UMAP_N_COMPONENTS = 64
+# UMAP_N_NEIGHBORS = 8
+# UMAP_MIN_DIST = 0.0
+# HDBSCAN_MIN_CLUSTER_SIZE = 2
+# HDBSCAN_MIN_SAMPLES = 1
+# HDBSCAN_METRIC = "euclidean"
+
+# # Local subcluster params (when a cluster is very large)
+# MAX_CLUSTER_SIZE_FOR_LOCAL = 30
+# LOCAL_HDBSCAN_MIN_CLUSTER_SIZE = 2
+# LOCAL_HDBSCAN_MIN_SAMPLES = 1
+
+# # LLM prompt chunking
+# MAX_MEMBERS_PER_PROMPT = 10  # max relation instances per LLM call
+
+# # LLM (DSPy / central config)
+# MODEL_NAME = "gpt-5.1"
+# LLM_MAX_TOKENS_DEFAULT = 16000
+
+# VERBOSE = False
+
+# # ---------------------- HF Embedder --------------------------------
+
+# def mean_pool(token_embeddings: torch.Tensor, attention_mask: torch.Tensor):
+#     input_mask_expanded = attention_mask.unsqueeze(-1).expand(token_embeddings.size()).float()
+#     sum_embeddings = torch.sum(token_embeddings * input_mask_expanded, 1)
+#     sum_mask = torch.clamp(input_mask_expanded.sum(1), min=1e-9)
+#     return sum_embeddings / sum_mask
+
+# class HFEmbedder:
+#     def __init__(self, model_name=EMBED_MODEL, device=DEVICE):
+#         if VERBOSE:
+#             print(f"[embedder] loading {model_name} on {device}")
+#         self.device = device
+#         self.tokenizer = AutoTokenizer.from_pretrained(model_name, use_fast=True)
+#         self.model = AutoModel.from_pretrained(model_name)
+#         self.model.to(device)
+#         self.model.eval()
+#         for p in self.model.parameters():
+#             p.requires_grad = False
+
+#     @property
+#     def dim(self) -> int:
+#         return getattr(self.model.config, "hidden_size", 1024)
+
+#     @torch.no_grad()
+#     def encode_batch(self, texts: List[str], batch_size: int = BATCH_SIZE) -> np.ndarray:
+#         """
+#         Encode a list of texts into L2-normalized embeddings.
+#         """
+#         if len(texts) == 0:
+#             D = self.dim
+#             return np.zeros((0, D))
+#         embs = []
+#         for i in range(0, len(texts), batch_size):
+#             batch = texts[i:i + batch_size]
+#             enc = self.tokenizer(
+#                 batch,
+#                 padding=True,
+#                 truncation=True,
+#                 return_tensors="pt",
+#                 max_length=512,
+#             )
+#             input_ids = enc["input_ids"].to(self.device)
+#             attention_mask = enc["attention_mask"].to(self.device)
+#             out = self.model(input_ids=input_ids, attention_mask=attention_mask, return_dict=True)
+#             token_embeds = out.last_hidden_state
+#             pooled = mean_pool(token_embeds, attention_mask)
+#             embs.append(pooled.cpu().numpy())
+#         embs = np.vstack(embs)
+#         embs = normalize(embs, axis=1)
+#         return embs
+
+# # ---------------------- IO helpers ---------------------------------
+
+# def load_relations(path: Path) -> List[Dict[str, Any]]:
+#     """
+#     Load relations_raw.jsonl and ensure schema-related fields exist:
+
+#       - canonical_rel_name (default "TBD")
+#       - canonical_rel_desc (default "")
+#       - rel_cls (default "TBD")
+#       - rel_cls_group (default "TBD")
+#       - remarks (list of strings)
+#     """
+#     rels: List[Dict[str, Any]] = []
+#     if not path.exists():
+#         raise FileNotFoundError(f"Relations file not found: {path}")
+#     with path.open("r", encoding="utf-8") as f:
+#         for line in f:
+#             line = line.strip()
+#             if not line:
+#                 continue
+#             obj = json.loads(line)
+#             # ensure relation_id exists
+#             rid = obj.get("relation_id") or ("RelR_" + uuid.uuid4().hex[:8])
+#             obj["relation_id"] = rid
+
+#             # ensure schema fields
+#             if "canonical_rel_name" not in obj or str(obj.get("canonical_rel_name", "")).strip() == "":
+#                 obj["canonical_rel_name"] = "TBD"
+#             if "canonical_rel_desc" not in obj or obj.get("canonical_rel_desc") is None:
+#                 obj["canonical_rel_desc"] = ""
+#             if "rel_cls" not in obj or str(obj.get("rel_cls", "")).strip() == "":
+#                 obj["rel_cls"] = "TBD"
+#             if "rel_cls_group" not in obj or str(obj.get("rel_cls_group", "")).strip() == "":
+#                 obj["rel_cls_group"] = "TBD"
+
+#             # normalize remarks: merge original remark + remarks list into a 'remarks' list
+#             initial_remark = obj.get("remark")
+#             remarks = obj.get("remarks")
+#             norm_remarks: List[str] = []
+#             if isinstance(remarks, list):
+#                 norm_remarks.extend([str(r) for r in remarks if r])
+#             elif isinstance(remarks, str) and remarks.strip():
+#                 norm_remarks.append(remarks.strip())
+#             if isinstance(initial_remark, str) and initial_remark.strip():
+#                 norm_remarks.append(initial_remark.strip())
+#             obj["remarks"] = norm_remarks
+
+#             rels.append(obj)
+#     if VERBOSE:
+#         print(f"[start] loaded {len(rels)} relations from {path}")
+#     return rels
+
+# def safe_str(s: Optional[str]) -> str:
+#     if not s:
+#         return ""
+#     return str(s).replace("\n", " ").strip()
+
+# # ---------------------- Build relation texts & embeddings ----------
+
+# def build_relation_texts(
+#     relations: List[Dict[str, Any]]
+# ) -> Tuple[List[str], List[str], List[str], List[str]]:
+#     """
+#     Build four text buckets for each relation:
+
+#     - name_texts:       relation_name
+#     - desc_texts:       rel_desc
+#     - head_tail_texts:  head/tail entity + class info
+#     - hint_texts:       rel_hint_type + canonical_rel_name + canonical_rel_desc + rel_cls
+#     """
+#     name_texts, desc_texts, head_tail_texts, hint_texts = [], [], [], []
+
+#     for r in relations:
+#         # name
+#         rname = safe_str(r.get("relation_name", ""))
+#         name_texts.append(rname[:256])
+
+#         # desc
+#         rdesc = safe_str(r.get("rel_desc", ""))
+#         desc_texts.append(rdesc[:512])
+
+#         # head_tail
+#         subj_name = safe_str(r.get("subject_entity_name", ""))
+#         subj_cl = safe_str(r.get("subject_class_label", ""))
+#         subj_cg = safe_str(r.get("subject_class_group", ""))
+#         obj_name = safe_str(r.get("object_entity_name", ""))
+#         obj_cl = safe_str(r.get("object_class_label", ""))
+#         obj_cg = safe_str(r.get("object_class_group", ""))
+
+#         head_tail = f"{subj_name} ({subj_cl}, {subj_cg}) -> {obj_name} ({obj_cl}, {obj_cg})"
+#         head_tail_texts.append(head_tail[:512])
+
+#         # hint_canonical
+#         hint_parts = []
+#         for key in ["rel_hint_type", "canonical_rel_name", "canonical_rel_desc", "rel_cls"]:
+#             val = safe_str(r.get(key, ""))
+#             if val and val.upper() != "TBD":
+#                 hint_parts.append(val)
+#         hint_text = " ; ".join(hint_parts)
+#         hint_texts.append(hint_text[:512])
+
+#     return name_texts, desc_texts, head_tail_texts, hint_texts
+
+# def any_nonempty(lst: List[str]) -> bool:
+#     return any(safe_str(t) for t in lst)
+
+# def compute_relation_embeddings(
+#     embedder: HFEmbedder,
+#     relations: List[Dict[str, Any]],
+#     weights: Dict[str, float]
+# ) -> np.ndarray:
+#     """
+#     Compute combined embeddings for relations using four buckets with fixed weights.
+#     """
+#     N = len(relations)
+#     if N == 0:
+#         raise ValueError("No relations to embed")
+
+#     name_texts, desc_texts, head_tail_texts, hint_texts = build_relation_texts(relations)
+
+#     emb_name = embedder.encode_batch(name_texts) if any_nonempty(name_texts) else None
+#     emb_desc = embedder.encode_batch(desc_texts) if any_nonempty(desc_texts) else None
+#     emb_ht = embedder.encode_batch(head_tail_texts) if any_nonempty(head_tail_texts) else None
+#     emb_hint = embedder.encode_batch(hint_texts) if any_nonempty(hint_texts) else None
+
+#     D = embedder.dim
+#     combined = np.zeros((N, D), dtype=np.float32)
+
+#     def add_bucket(emb: Optional[np.ndarray], weight: float):
+#         nonlocal combined
+#         if emb is None:
+#             return
+#         if emb.shape[0] != N:
+#             raise ValueError("embedding row mismatch")
+#         combined += weight * emb  # emb already row-normalized
+
+#     add_bucket(emb_name, weights.get("name", 0.0))
+#     add_bucket(emb_desc, weights.get("desc", 0.0))
+#     add_bucket(emb_ht, weights.get("head_tail", 0.0))
+#     add_bucket(emb_hint, weights.get("hint_canonical", 0.0))
+
+#     combined = normalize(combined, axis=1)
+#     return combined
+
+# # ---------------------- clustering ---------------------------------
+
+# def run_hdbscan(
+#     embeddings: np.ndarray,
+#     min_cluster_size: int = HDBSCAN_MIN_CLUSTER_SIZE,
+#     min_samples: int = HDBSCAN_MIN_SAMPLES,
+#     metric: str = HDBSCAN_METRIC,
+#     use_umap: bool = USE_UMAP
+# ) -> Tuple[np.ndarray, object]:
+#     X = embeddings
+#     N = X.shape[0]
+#     if use_umap and UMAP_AVAILABLE and N >= 6:
+#         safe_n_components = min(UMAP_N_COMPONENTS, max(2, N - 2))
+#         safe_n_neighbors = min(UMAP_N_NEIGHBORS, max(2, N - 1))
+#         try:
+#             reducer = umap.UMAP(
+#                 n_components=safe_n_components,
+#                 n_neighbors=safe_n_neighbors,
+#                 min_dist=UMAP_MIN_DIST,
+#                 metric="cosine",
+#                 random_state=42
+#             )
+#             X_reduced = reducer.fit_transform(X)
+#             if X_reduced is not None and X_reduced.shape[0] == N:
+#                 X = X_reduced
+#             else:
+#                 if VERBOSE:
+#                     print(f"[warn] UMAP returned invalid shape; skipping UMAP")
+#         except Exception as e:
+#             if VERBOSE:
+#                 print(f"[warn] UMAP failed (N={N}): {e}. Proceeding without UMAP.")
+#             X = embeddings
+#     clusterer = hdbscan.HDBSCAN(
+#         min_cluster_size=min_cluster_size,
+#         min_samples=min_samples,
+#         metric=metric,
+#         cluster_selection_method="eom"
+#     )
+#     labels = clusterer.fit_predict(X)
+#     return labels, clusterer
+
+# # ---------------------- LLM prompt template ------------------------
+# from TKG_Prompts import REL_RES_PROMPT_TEMPLATE
+# RELRES_PROMPT_TEMPLATE = REL_RES_PROMPT_TEMPLATE
+
+# def sanitize_json_array(text: str) -> Optional[Any]:
+#     """
+#     Extract and parse the first JSON array from the text.
+#     Grab [ ... ] block, fix simple trailing commas, and json.loads.
+#     """
+#     if not text or not text.strip():
+#         return None
+#     # s = text.strip() #Injam
+#     s = coerce_llm_text(text).strip()
+#     # replace smart quotes
+#     s = s.replace("“", '"').replace("”", '"').replace("‘", "'").replace("’", "'")
+#     start = s.find("[")
+#     end = s.rfind("]")
+#     if start == -1 or end == -1 or end <= start:
+#         return None
+#     cand = s[start:end + 1]
+#     # remove trailing commas before closing braces/brackets
+#     cand = re.sub(r",\s*([\]}])", r"\1", cand)
+#     try:
+#         return json.loads(cand)
+#     except Exception:
+#         return None
+
+# # ---------------------- DSPy / LLM helpers -------------------------
+
+# def _get_lm_for_rel_res(
+#     llm_config: Optional["TraceKGLLMConfig"],
+#     model: str,
+#     max_tokens: int,
+# ):
+#     """
+#     Resolve a DSPy LM for the Relation Resolution step.
+
+#     - If llm_config is provided, we use it directly (per-step override: 'rel_res').
+#     - Otherwise, we synthesize a minimal TraceKGLLMConfig using (model, max_tokens)
+#       so existing code can still call relres_main(model="...").
+#     """
+#     if llm_config is not None:
+#         cfg = llm_config
+#     else:
+#         cfg = TraceKGLLMConfig(default_model=model, max_tokens=max_tokens)
+
+#     try:
+#         cfg.validate()
+#     except Exception as e:
+#         if VERBOSE:
+#             print(f"[RelRes] llm_config.validate() failed: {e}")
+
+#     lm = make_lm_for_step(cfg, "rel_res")
+#     return lm
+
+# def _call_rel_res_lm(lm, prompt: str) -> str:
+#     """
+#     Call the DSPy LM and normalize the output into a plain string.
+#     """
+#     try:
+#         outputs = lm(prompt)
+#     except Exception as e:
+#         print("[RelRes] LM call error:", e)
+#         return ""
+
+#     if isinstance(outputs, list):
+#         return outputs[0] if outputs else ""
+#     return str(outputs or "")
+
+# # ---------------------- Action executors ----------------------------
+
+# def execute_set_canonical_rel(
+#     rel_by_id: Dict[str, Dict[str, Any]],
+#     relation_ids: List[str],
+#     canonical_rel_name: Optional[str],
+#     canonical_rel_desc: Optional[str],
+# ):
+#     if canonical_rel_name is None:
+#         return
+#     canon_name = canonical_rel_name.strip()
+#     if not canon_name:
+#         return
+#     for rid in relation_ids:
+#         if rid not in rel_by_id:
+#             continue
+#         r = rel_by_id[rid]
+#         r["canonical_rel_name"] = canon_name
+#         if canonical_rel_desc is not None:
+#             r["canonical_rel_desc"] = canonical_rel_desc.strip()
+#         rel_by_id[rid] = r
+
+# def execute_set_rel_cls(
+#     rel_by_id: Dict[str, Dict[str, Any]],
+#     relation_ids: List[str],
+#     rel_cls: Optional[str],
+# ):
+#     if rel_cls is None:
+#         return
+#     cls_name = rel_cls.strip()
+#     if not cls_name:
+#         return
+#     for rid in relation_ids:
+#         if rid not in rel_by_id:
+#             continue
+#         r = rel_by_id[rid]
+#         r["rel_cls"] = cls_name
+#         rel_by_id[rid] = r
+
+# def execute_set_rel_cls_group(
+#     rel_by_id: Dict[str, Dict[str, Any]],
+#     relation_ids: List[str],
+#     rel_cls_group: Optional[str],
+# ):
+#     if rel_cls_group is None:
+#         return
+#     grp_name = rel_cls_group.strip()
+#     if not grp_name:
+#         return
+#     for rid in relation_ids:
+#         if rid not in rel_by_id:
+#             continue
+#         r = rel_by_id[rid]
+#         r["rel_cls_group"] = grp_name
+#         rel_by_id[rid] = r
+
+# def execute_modify_rel_schema(
+#     rel_by_id: Dict[str, Dict[str, Any]],
+#     relation_ids: List[str],
+#     canonical_rel_name: Optional[str],
+#     canonical_rel_desc: Optional[str],
+#     rel_cls: Optional[str],
+#     rel_cls_group: Optional[str],
+#     new_relation_name: Optional[str],
+#     original_relation_name: Optional[str],
+# ):
+#     for rid in relation_ids:
+#         if rid not in rel_by_id:
+#             continue
+#         r = rel_by_id[rid]
+
+#         if canonical_rel_name is not None and canonical_rel_name.strip():
+#             r["canonical_rel_name"] = canonical_rel_name.strip()
+#         if canonical_rel_desc is not None:
+#             r["canonical_rel_desc"] = canonical_rel_desc.strip()
+#         if rel_cls is not None and rel_cls.strip():
+#             r["rel_cls"] = rel_cls.strip()
+#         if rel_cls_group is not None and rel_cls_group.strip():
+#             r["rel_cls_group"] = rel_cls_group.strip()
+
+#         if new_relation_name is not None and new_relation_name.strip():
+#             if "original_relation_name" not in r:
+#                 if original_relation_name:
+#                     r["original_relation_name"] = original_relation_name
+#                 else:
+#                     r["original_relation_name"] = r.get("relation_name", "")
+#             r["relation_name"] = new_relation_name.strip()
+
+#         rel_by_id[rid] = r
+
+# def execute_add_rel_remark(
+#     rel_by_id: Dict[str, Dict[str, Any]],
+#     relation_ids: List[str],
+#     remark: Optional[str],
+# ):
+#     if remark is None:
+#         return
+#     txt = remark.strip()
+#     if not txt:
+#         return
+#     for rid in relation_ids:
+#         if rid not in rel_by_id:
+#             continue
+#         r = rel_by_id[rid]
+#         existing = r.get("remarks")
+#         if existing is None:
+#             existing = []
+#         elif not isinstance(existing, list):
+#             existing = [str(existing)]
+#         existing.append(txt)
+#         r["remarks"] = existing
+#         rel_by_id[rid] = r
+
+# # ---------------------- Main orchestration -------------------------
+
+# # def relres_main(
+# #     model: str = MODEL_NAME,
+# #     max_tokens: int = LLM_MAX_TOKENS_DEFAULT,
+# #     llm_config: Optional["TraceKGLLMConfig"] = None,
+# #     input_relations_path: Path = INPUT_RELATIONS,
+# # ) -> None:
+    
+# #     if input_relations_path is None:
+# #         input_relations_path = INPUT_RELATIONS
+
+# def relres_main(
+#     model: str = MODEL_NAME,
+#     max_tokens: int = LLM_MAX_TOKENS_DEFAULT,
+#     llm_config: Optional["TraceKGLLMConfig"] = None,
+#     input_relations_path: Optional[Path] = None,
+# ) -> None:
+#     if input_relations_path is None:
+#         input_relations_path = INPUT_RELATIONS
+
+
+#     """
+#     Run Relation Resolution end-to-end.
+
+#     LLM behavior:
+#       * If llm_config is provided, it is used via make_lm_for_step(cfg, "rel_res").
+#       * If llm_config is None, a minimal TraceKGLLMConfig(default_model=model,
+#         max_tokens=max_tokens) is synthesized so existing code that calls
+#         relres_main() or relres_main(model="...") still works.
+#     """
+#     # load relations
+#     relations = load_relations(input_relations_path)
+#     rel_by_id: Dict[str, Dict[str, Any]] = {r["relation_id"]: r for r in relations}
+
+#     # embedder
+#     embedder = HFEmbedder(model_name=EMBED_MODEL, device=DEVICE)
+#     rel_ids_order = [r["relation_id"] for r in relations]
+#     rel_id_to_index = {rid: i for i, rid in enumerate(rel_ids_order)}
+#     combined_emb = compute_relation_embeddings(embedder, relations, REL_EMB_WEIGHTS)
+#     print("[info] relation embeddings computed shape:", combined_emb.shape)
+
+#     # global clustering
+#     labels, clusterer = run_hdbscan(
+#         combined_emb,
+#         min_cluster_size=HDBSCAN_MIN_CLUSTER_SIZE,
+#         min_samples=HDBSCAN_MIN_SAMPLES,
+#         use_umap=USE_UMAP
+#     )
+#     unique_labels = sorted(set(labels))
+#     print("[info] global clustering done. unique labels:", unique_labels)
+
+#     # map cluster -> relation ids
+#     cluster_to_relids: Dict[int, List[str]] = {}
+#     for idx, lab in enumerate(labels):
+#         rid = rel_ids_order[idx]
+#         cluster_to_relids.setdefault(int(lab), []).append(rid)
+
+#     # action log
+#     action_log_path = OUT_DIR / "rel_res_action_log.jsonl"
+#     if action_log_path.exists():
+#         action_log_path.unlink()
+
+#     # build LM once
+#     lm = _get_lm_for_rel_res(llm_config=llm_config, model=model, max_tokens=max_tokens)
+
+#     # helper to process a subset of relation ids with LLM (one prompt)
+#     def run_llm_on_subset(sub_rel_ids: List[str], cluster_label_str: str):
+#         if not sub_rel_ids:
+#             return
+
+#         # build compact representation for this chunk
+#         cluster_relations = []
+#         for rid in sub_rel_ids:
+#             r = rel_by_id.get(rid)
+#             if not r:
+#                 continue
+#             cluster_relations.append({
+#                 "relation_id": r["relation_id"],
+#                 "relation_name": safe_str(r.get("relation_name", "")),
+#                 "rel_desc": safe_str(r.get("rel_desc", "")),
+#                 "rel_hint_type": safe_str(r.get("rel_hint_type", "")),
+#                 "canonical_rel_name": safe_str(r.get("canonical_rel_name", "")),
+#                 "canonical_rel_desc": safe_str(r.get("canonical_rel_desc", "")),
+#                 "rel_cls": safe_str(r.get("rel_cls", "")),
+#                 "rel_cls_group": safe_str(r.get("rel_cls_group", "")),
+#                 "subject_entity_name": safe_str(r.get("subject_entity_name", "")),
+#                 "object_entity_name": safe_str(r.get("object_entity_name", "")),
+#                 "subject_class_label": safe_str(r.get("subject_class_label", "")),
+#                 "subject_class_group": safe_str(r.get("subject_class_group", "")),
+#                 "object_class_label": safe_str(r.get("object_class_label", "")),
+#                 "object_class_group": safe_str(r.get("object_class_group", "")),
+#                 "qualifiers": r.get("qualifiers", {}),
+#                 "confidence": float(r.get("confidence", 0.0)),
+#                 "remarks": r.get("remarks", [])
+#             })
+
+#         if not cluster_relations:
+#             return
+
+#         cluster_block = json.dumps(cluster_relations, ensure_ascii=False, indent=2)
+#         prompt = RELRES_PROMPT_TEMPLATE.replace("{cluster_block}", cluster_block)
+
+#         # log prompt
+#         prompt_path = RAW_LLM_DIR / f"cluster_{cluster_label_str}_prompt.txt"
+#         prompt_path.write_text(prompt, encoding="utf-8")
+
+#         # call LLM via DSPy
+#         raw_out = ""
+#         try:
+#             raw_out = _call_rel_res_lm(lm, prompt)
+#         except Exception as e:
+#             print(f"[warning] LLM call failed for {cluster_label_str}: {e}")
+#             raw_out = ""
+
+#         # write raw output
+#         raw_path = RAW_LLM_DIR / f"cluster_{cluster_label_str}_llm_raw.txt"
+#         raw_path.write_text(raw_out, encoding="utf-8")
+
+#         parsed = sanitize_json_array(raw_out)
+#         if parsed is None:
+#             print(f"[warn] failed to parse LLM output for chunk {cluster_label_str}; skipping automated actions for this chunk.")
+#             dec_path = OUT_DIR / f"cluster_{cluster_label_str}_decisions.json"
+#             dec_path.write_text(
+#                 json.dumps({"cluster_label": cluster_label_str, "raw_llm": raw_out}, ensure_ascii=False, indent=2),
+#                 encoding="utf-8"
+#             )
+#             return
+
+#         decisions: List[Dict[str, Any]] = []
+
+#         # execute parsed function list in order
+#         for step in parsed:
+#             if not isinstance(step, dict):
+#                 continue
+#             fn = step.get("function")
+#             args = step.get("args", {}) or {}
+#             justification = args.get("justification")
+#             confidence_val = args.get("confidence", None)
+#             remark_val = args.get("remark")
+
+#             try:
+#                 if fn == "set_canonical_rel":
+#                     rel_ids_raw = args.get("relation_ids", []) or []
+#                     canon_name = args.get("canonical_rel_name")
+#                     canon_desc = args.get("canonical_rel_desc")
+#                     rel_ids_valid = [rid for rid in rel_ids_raw if rid in rel_by_id]
+
+#                     if not rel_ids_valid or canon_name is None:
+#                         decisions.append({
+#                             "action": "set_canonical_rel_skip",
+#                             "requested_relation_ids": rel_ids_raw,
+#                             "canonical_rel_name": canon_name,
+#                             "justification": justification,
+#                             "remark": remark_val,
+#                             "confidence": confidence_val
+#                         })
+#                         continue
+
+#                     execute_set_canonical_rel(rel_by_id, rel_ids_valid, canon_name, canon_desc)
+
+#                     decisions.append({
+#                         "action": "set_canonical_rel",
+#                         "relation_ids": rel_ids_valid,
+#                         "canonical_rel_name": canon_name,
+#                         "canonical_rel_desc": canon_desc,
+#                         "justification": justification,
+#                         "remark": remark_val,
+#                         "confidence": confidence_val
+#                     })
+
+#                 elif fn == "set_rel_cls":
+#                     rel_ids_raw = args.get("relation_ids", []) or []
+#                     rel_cls = args.get("rel_cls")
+#                     rel_ids_valid = [rid for rid in rel_ids_raw if rid in rel_by_id]
+
+#                     if not rel_ids_valid or rel_cls is None:
+#                         decisions.append({
+#                             "action": "set_rel_cls_skip",
+#                             "requested_relation_ids": rel_ids_raw,
+#                             "rel_cls": rel_cls,
+#                             "justification": justification,
+#                             "remark": remark_val,
+#                             "confidence": confidence_val
+#                         })
+#                         continue
+
+#                     execute_set_rel_cls(rel_by_id, rel_ids_valid, rel_cls)
+
+#                     decisions.append({
+#                         "action": "set_rel_cls",
+#                         "relation_ids": rel_ids_valid,
+#                         "rel_cls": rel_cls,
+#                         "justification": justification,
+#                         "remark": remark_val,
+#                         "confidence": confidence_val
+#                     })
+
+#                 elif fn == "set_rel_cls_group":
+#                     rel_ids_raw = args.get("relation_ids", []) or []
+#                     rel_cls_group = args.get("rel_cls_group")
+#                     rel_ids_valid = [rid for rid in rel_ids_raw if rid in rel_by_id]
+
+#                     if not rel_ids_valid or rel_cls_group is None:
+#                         decisions.append({
+#                             "action": "set_rel_cls_group_skip",
+#                             "requested_relation_ids": rel_ids_raw,
+#                             "rel_cls_group": rel_cls_group,
+#                             "justification": justification,
+#                             "remark": remark_val,
+#                             "confidence": confidence_val
+#                         })
+#                         continue
+
+#                     execute_set_rel_cls_group(rel_by_id, rel_ids_valid, rel_cls_group)
+
+#                     decisions.append({
+#                         "action": "set_rel_cls_group",
+#                         "relation_ids": rel_ids_valid,
+#                         "rel_cls_group": rel_cls_group,
+#                         "justification": justification,
+#                         "remark": remark_val,
+#                         "confidence": confidence_val
+#                     })
+
+#                 elif fn == "modify_rel_schema":
+#                     rel_ids_raw = args.get("relation_ids", []) or []
+#                     canon_name = args.get("canonical_rel_name")
+#                     canon_desc = args.get("canonical_rel_desc")
+#                     rel_cls = args.get("rel_cls")
+#                     rel_cls_group = args.get("rel_cls_group")
+#                     new_rel_name = args.get("new_relation_name")
+#                     orig_rel_name = args.get("original_relation_name")
+
+#                     rel_ids_valid = [rid for rid in rel_ids_raw if rid in rel_by_id]
+#                     if not rel_ids_valid:
+#                         decisions.append({
+#                             "action": "modify_rel_schema_skip_no_valid_relations",
+#                             "requested_relation_ids": rel_ids_raw,
+#                             "justification": justification,
+#                             "remark": remark_val,
+#                             "confidence": confidence_val
+#                         })
+#                         continue
+
+#                     execute_modify_rel_schema(
+#                         rel_by_id,
+#                         rel_ids_valid,
+#                         canon_name,
+#                         canon_desc,
+#                         rel_cls,
+#                         rel_cls_group,
+#                         new_rel_name,
+#                         orig_rel_name
+#                     )
+
+#                     decisions.append({
+#                         "action": "modify_rel_schema",
+#                         "relation_ids": rel_ids_valid,
+#                         "canonical_rel_name": canon_name,
+#                         "canonical_rel_desc": canon_desc,
+#                         "rel_cls": rel_cls,
+#                         "rel_cls_group": rel_cls_group,
+#                         "new_relation_name": new_rel_name,
+#                         "original_relation_name": orig_rel_name,
+#                         "justification": justification,
+#                         "remark": remark_val,
+#                         "confidence": confidence_val
+#                     })
+
+#                 elif fn == "add_rel_remark":
+#                     rel_ids_raw = args.get("relation_ids", []) or []
+#                     rel_ids_valid = [rid for rid in rel_ids_raw if rid in rel_by_id]
+#                     remark_text = args.get("remark")
+
+#                     if not rel_ids_valid or not remark_text:
+#                         decisions.append({
+#                             "action": "add_rel_remark_skip",
+#                             "requested_relation_ids": rel_ids_raw,
+#                             "remark": remark_text,
+#                             "justification": justification,
+#                             "confidence": confidence_val
+#                         })
+#                         continue
+
+#                     execute_add_rel_remark(rel_by_id, rel_ids_valid, remark_text)
+
+#                     decisions.append({
+#                         "action": "add_rel_remark",
+#                         "relation_ids": rel_ids_valid,
+#                         "remark": remark_text,
+#                         "justification": justification,
+#                         "confidence": confidence_val
+#                     })
+
+#                 else:
+#                     decisions.append({
+#                         "action": "skip_unknown_function",
+#                         "function": fn,
+#                         "raw": step,
+#                         "justification": justification,
+#                         "remark": remark_val,
+#                         "confidence": confidence_val
+#                     })
+
+#             except Exception as e:
+#                 decisions.append({
+#                     "action": "error_executing",
+#                     "function": fn,
+#                     "error": str(e),
+#                     "input": step,
+#                     "justification": justification,
+#                     "remark": remark_val,
+#                     "confidence": confidence_val
+#                 })
+
+#         # write decisions file for this chunk
+#         dec_path = OUT_DIR / f"cluster_{cluster_label_str}_decisions.json"
+#         dec_obj = {
+#             "cluster_label": cluster_label_str,
+#             "cluster_relations": cluster_relations,
+#             "llm_raw": raw_out,
+#             "parsed_steps": parsed,
+#             "executed_decisions": decisions,
+#             "timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+#         }
+#         dec_path.write_text(json.dumps(dec_obj, ensure_ascii=False, indent=2), encoding="utf-8")
+
+#         # append to global action log
+#         with action_log_path.open("a", encoding="utf-8") as fh:
+#             fh.write(json.dumps(dec_obj, ensure_ascii=False) + "\n")
+
+#     # iterate clusters (skip noise -1 first, then noise)
+#     cluster_keys = [k for k in cluster_to_relids.keys() if k != -1]
+#     cluster_keys = sorted(cluster_keys)
+#     if -1 in cluster_to_relids:
+#         cluster_keys.append(-1)
+
+#     for cluster_label in cluster_keys:
+#         rel_ids_global = cluster_to_relids.get(cluster_label, [])
+#         if not rel_ids_global:
+#             continue
+#         print(f"[cluster] {cluster_label} -> {len(rel_ids_global)} relations")
+
+#         # local subclustering for large clusters
+#         if len(rel_ids_global) > MAX_CLUSTER_SIZE_FOR_LOCAL:
+#             print(f"[cluster] {cluster_label}: size {len(rel_ids_global)} > {MAX_CLUSTER_SIZE_FOR_LOCAL}, running local HDBSCAN")
+#             idxs = [rel_id_to_index[rid] for rid in rel_ids_global]
+#             try:
+#                 sub_emb = combined_emb[idxs]
+#                 local_clusterer = hdbscan.HDBSCAN(
+#                     min_cluster_size=max(2, LOCAL_HDBSCAN_MIN_CLUSTER_SIZE),
+#                     min_samples=LOCAL_HDBSCAN_MIN_SAMPLES,
+#                     metric="euclidean",
+#                     cluster_selection_method="eom"
+#                 )
+#                 local_labels = local_clusterer.fit_predict(sub_emb)
+#             except Exception as e:
+#                 print(f"[warn] local HDBSCAN failed for cluster {cluster_label}: {e}. Treating as single group.")
+#                 local_labels = np.zeros(len(idxs), dtype=int)
+
+#             local_map: Dict[int, List[str]] = {}
+#             for i_local, lab_local in enumerate(local_labels):
+#                 rid = rel_ids_global[i_local]
+#                 local_map.setdefault(int(lab_local), []).append(rid)
+
+#             for lab_local, local_rel_ids in sorted(local_map.items(), key=lambda x: x[0]):
+#                 label_prefix = f"{cluster_label}_loc{lab_local}"
+#                 # split into chunks for LLM
+#                 for part_idx in range(0, len(local_rel_ids), MAX_MEMBERS_PER_PROMPT):
+#                     part_rel_ids = local_rel_ids[part_idx:part_idx + MAX_MEMBERS_PER_PROMPT]
+#                     chunk_label = f"{label_prefix}_p{part_idx//MAX_MEMBERS_PER_PROMPT}"
+#                     print(f"[cluster] {chunk_label}: processing {len(part_rel_ids)} relations")
+#                     run_llm_on_subset(part_rel_ids, chunk_label)
+
+#         else:
+#             label_prefix = str(cluster_label)
+#             for part_idx in range(0, len(rel_ids_global), MAX_MEMBERS_PER_PROMPT):
+#                 part_rel_ids = rel_ids_global[part_idx:part_idx + MAX_MEMBERS_PER_PROMPT]
+#                 chunk_label = f"{label_prefix}_p{part_idx//MAX_MEMBERS_PER_PROMPT}"
+#                 print(f"[cluster] {chunk_label}: processing {len(part_rel_ids)} relations")
+#                 run_llm_on_subset(part_rel_ids, chunk_label)
+
+#     # After all chunks processed: write final relations output
+#     final_relations = list(rel_by_id.values())
+#     out_json = OUT_DIR / "relations_resolved.json"
+#     out_jsonl = OUT_DIR / "relations_resolved.jsonl"
+#     out_json.write_text(json.dumps(final_relations, ensure_ascii=False, indent=2), encoding="utf-8")
+#     with out_jsonl.open("w", encoding="utf-8") as fh:
+#         for r in final_relations:
+#             fh.write(json.dumps(r, ensure_ascii=False) + "\n")
+
+#     print(f"[done] wrote final resolved relations -> {out_json}  (count={len(final_relations)})")
+#     print(f"[done] action log -> {action_log_path}")
+
+#     # ---------------------- SUMMARY AGGREGATION ---------------------
+
+#     summary_dir = OUT_DIR / "summary"
+#     summary_dir.mkdir(exist_ok=True)
+
+#     # Aggregate per-chunk decision files
+#     cluster_decisions: List[Dict[str, Any]] = []
+#     for path in sorted(OUT_DIR.glob("cluster_*_decisions.json")):
+#         try:
+#             obj = json.loads(path.read_text(encoding="utf-8"))
+#             cluster_decisions.append(obj)
+#         except Exception as e:
+#             print(f"[warn] failed to read {path}: {e}")
+
+#     all_clusters_decisions_path = summary_dir / "all_clusters_decisions.json"
+#     all_clusters_decisions_path.write_text(
+#         json.dumps(cluster_decisions, ensure_ascii=False, indent=2),
+#         encoding="utf-8"
+#     )
+
+#     total_clusters = len(cluster_decisions)  # here "cluster" means one LLM chunk
+#     actions_by_type: Dict[str, int] = {}
+#     total_remarks = 0
+#     clusters_with_any_decisions = 0
+
+#     for cd in cluster_decisions:
+#         decs = cd.get("executed_decisions", [])
+#         if not decs:
+#             continue
+#         clusters_with_any_decisions += 1
+#         for d in decs:
+#             act = d.get("action")
+#             actions_by_type[act] = actions_by_type.get(act, 0) + 1
+#             rem = d.get("remark")
+#             if rem:
+#                 total_remarks += 1
+
+#     total_errors = actions_by_type.get("error_executing", 0)
+
+#     stats = {
+#         "total_chunks": total_clusters,
+#         "total_chunks_with_any_decisions": clusters_with_any_decisions,
+#         "total_actions_by_type": actions_by_type,
+#         "total_errors": total_errors,
+#         "total_remarks_logged": total_remarks,
+#         "generated_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+#     }
+
+#     stats_path = summary_dir / "stats_summary.json"
+#     stats_path.write_text(json.dumps(stats, ensure_ascii=False, indent=2), encoding="utf-8")
+
+#     print(f"[done] summary decisions -> {all_clusters_decisions_path}")
+#     print(f"[done] summary stats -> {stats_path}")
+
+#     # ---------------------- SCHEMA AGGREGATION ----------------------
+
+#     # 1) Canonical relation schema
+#     canonical_map: Dict[str, Dict[str, Any]] = {}
+#     for r in final_relations:
+#         cname = safe_str(r.get("canonical_rel_name", ""))
+#         if not cname or cname.upper() == "TBD":
+#             continue
+#         cdesc = safe_str(r.get("canonical_rel_desc", ""))
+#         rel_cls = safe_str(r.get("rel_cls", ""))
+#         rel_grp = safe_str(r.get("rel_cls_group", ""))
+#         rid = r.get("relation_id")
+
+#         entry = canonical_map.setdefault(cname, {
+#             "canonical_rel_name": cname,
+#             "canonical_rel_desc_candidates": set(),
+#             "rel_cls_set": set(),
+#             "rel_cls_group_set": set(),
+#             "relation_ids": []
+#         })
+#         if cdesc:
+#             entry["canonical_rel_desc_candidates"].add(cdesc)
+#         if rel_cls and rel_cls.upper() != "TBD":
+#             entry["rel_cls_set"].add(rel_cls)
+#         if rel_grp and rel_grp.upper() != "TBD":
+#             entry["rel_cls_group_set"].add(rel_grp)
+#         if rid:
+#             entry["relation_ids"].append(rid)
+
+#     canonical_schema = []
+#     for cname, info in canonical_map.items():
+#         desc_candidates = list(info["canonical_rel_desc_candidates"])
+#         chosen_desc = desc_candidates[0] if desc_candidates else ""
+#         canonical_schema.append({
+#             "canonical_rel_name": cname,
+#             "canonical_rel_desc": chosen_desc,
+#             "rel_cls": sorted(info["rel_cls_set"]),
+#             "rel_cls_group": sorted(info["rel_cls_group_set"]),
+#             "instance_count": len(info["relation_ids"]),
+#             "example_relation_ids": info["relation_ids"][:10]
+#         })
+
+#     canonical_schema_path = summary_dir / "canonical_rel_schema.json"
+#     canonical_schema_path.write_text(
+#         json.dumps(canonical_schema, ensure_ascii=False, indent=2),
+#         encoding="utf-8"
+#     )
+
+#     # 2) Relation class schema
+#     cls_map: Dict[str, Dict[str, Any]] = {}
+#     for r in final_relations:
+#         cls_name = safe_str(r.get("rel_cls", ""))
+#         if not cls_name or cls_name.upper() == "TBD":
+#             continue
+#         grp_name = safe_str(r.get("rel_cls_group", ""))
+#         cname = safe_str(r.get("canonical_rel_name", ""))
+#         rid = r.get("relation_id")
+
+#         entry = cls_map.setdefault(cls_name, {
+#             "rel_cls": cls_name,
+#             "rel_cls_group_set": set(),
+#             "canonical_rel_names": set(),
+#             "relation_ids": []
+#         })
+#         if grp_name and grp_name.upper() != "TBD":
+#             entry["rel_cls_group_set"].add(grp_name)
+#         if cname and cname.upper() != "TBD":
+#             entry["canonical_rel_names"].add(cname)
+#         if rid:
+#             entry["relation_ids"].append(rid)
+
+#     cls_schema = []
+#     for cls_name, info in cls_map.items():
+#         cls_schema.append({
+#             "rel_cls": cls_name,
+#             "rel_cls_group": sorted(info["rel_cls_group_set"]),
+#             "canonical_rel_names": sorted(info["canonical_rel_names"]),
+#             "instance_count": len(info["relation_ids"]),
+#             "example_relation_ids": info["relation_ids"][:10]
+#         })
+
+#     cls_schema_path = summary_dir / "rel_cls_schema.json"
+#     cls_schema_path.write_text(
+#         json.dumps(cls_schema, ensure_ascii=False, indent=2),
+#         encoding="utf-8"
+#     )
+
+#     # 3) Relation class group schema
+#     grp_map: Dict[str, Dict[str, Any]] = {}
+#     for r in final_relations:
+#         grp_name = safe_str(r.get("rel_cls_group", ""))
+#         if not grp_name or grp_name.upper() == "TBD":
+#             continue
+#         cls_name = safe_str(r.get("rel_cls", ""))
+#         cname = safe_str(r.get("canonical_rel_name", ""))
+#         rid = r.get("relation_id")
+
+#         entry = grp_map.setdefault(grp_name, {
+#             "rel_cls_group": grp_name,
+#             "rel_cls_set": set(),
+#             "canonical_rel_names": set(),
+#             "relation_ids": []
+#         })
+#         if cls_name and cls_name.upper() != "TBD":
+#             entry["rel_cls_set"].add(cls_name)
+#         if cname and cname.upper() != "TBD":
+#             entry["canonical_rel_names"].add(cname)
+#         if rid:
+#             entry["relation_ids"].append(rid)
+
+#     grp_schema = []
+#     for grp_name, info in grp_map.items():
+#         grp_schema.append({
+#             "rel_cls_group": grp_name,
+#             "rel_cls": sorted(info["rel_cls_set"]),
+#             "canonical_rel_names": sorted(info["canonical_rel_names"]),
+#             "instance_count": len(info["relation_ids"]),
+#             "example_relation_ids": info["relation_ids"][:10]
+#         })
+
+#     grp_schema_path = summary_dir / "rel_cls_group_schema.json"
+#     grp_schema_path.write_text(
+#         json.dumps(grp_schema, ensure_ascii=False, indent=2),
+#         encoding="utf-8"
+#     )
+
+#     print(f"[done] canonical relation schema -> {canonical_schema_path}")
+#     print(f"[done] relation class schema -> {cls_schema_path}")
+#     print(f"[done] relation class group schema -> {grp_schema_path}")
+
+
+# # if __name__ == "__main__":
+# #     relres_main()
 
 #endregion#?   Rel Res V10  - DSPy LLM Config + Canonical + RelCls + RelClsGroup + Schema + LocalSubcluster
 #*#########################  End  ##########################
 
 
-#?######################### Start ##########################
+
+
+#*######################### Start ##########################
 #region:#?   Rel Res V10  - DSPy LLM Config + Canonical + RelCls + RelClsGroup + Schema + LocalSubcluster (+ MergeRelations)
+
+
+
+# #!/usr/bin/env python3
+# """
+# relres_iterative_v10_dspy.py
+
+# Relation Resolution (Rel Res) — cluster relation instances, ask LLM to
+# assign/normalize:
+
+#   - canonical_rel_name    (normalized predicate used on KG edges)
+#   - canonical_rel_desc    (reusable description of that predicate)
+#   - rel_cls               (relation class, groups canonical_rel_names)
+#   - rel_cls_group         (broad group like COMPOSITION, CAUSALITY, ...)
+
+# while preserving:
+
+#   - relation_name         (raw name from Rel Rec)
+#   - rel_desc              (instance-level description)
+#   - qualifiers, head/tail, etc.
+
+# Key properties:
+# - We NEVER remove relation instances; we only enrich them with schema.
+#   Exception: exact-duplicate deduplication via merge_relations (LLM-driven) or strict auto-merge (post-pass).
+# - canonical_rel_name is what will be used as edge label in the KG.
+# - rel_cls / rel_cls_group give you a 2-layer schema for relations.
+# - Multi-run friendly: TBD fields can be filled in the first run, refined later.
+# - Uses global HDBSCAN + optional local subclustering + MAX_MEMBERS_PER_PROMPT
+#   so LLM chunks stay reasonably small.
+
+# Input:
+#   data/Relations/Rel Rec/relations_raw.jsonl
+
+# Output (under OUT_DIR):
+#   - per-(cluster,local,part) decisions: cluster_<ID>_decisions.json
+#   - per-(cluster,local,part) raw llm output: llm_raw/cluster_<ID>_llm_raw.txt
+#   - per-(cluster,local,part) prompts: llm_raw/cluster_<ID>_prompt.txt
+#   - cumulative action log: rel_res_action_log.jsonl
+#   - final resolved relations: relations_resolved.json and .jsonl
+#   - summary/all_clusters_decisions.json
+#   - summary/stats_summary.json
+#   - summary/canonical_rel_schema.json
+#   - summary/rel_cls_schema.json
+#   - summary/rel_cls_group_schema.json
+
+# LLM usage:
+# - All LLM calls go through a single DSPy LM obtained from TraceKGLLMConfig
+#   via make_lm_for_step(cfg, "rel_res").
+# - If no llm_config is provided, relres_main builds a minimal TraceKGLLMConfig
+#   using the `model` and `max_tokens` arguments, so existing code that just
+#   calls relres_main() (or passes a model string) still works.
+# """
+
+# import json
+# import os
+# import re
+# import time
+# import uuid
+# from pathlib import Path
+# from typing import List, Dict, Any, Optional, Tuple
+
+# import numpy as np
+# import torch
+# from sklearn.preprocessing import normalize
+
+# # clustering libs
+# try:
+#     import hdbscan
+# except Exception:
+#     raise RuntimeError("hdbscan required: pip install hdbscan")
+# try:
+#     import umap
+#     UMAP_AVAILABLE = True
+# except Exception:
+#     UMAP_AVAILABLE = False
+
+# # transformers embedder
+# from transformers import AutoTokenizer, AutoModel
+
+# # ----------------------------- CONFIG -----------------------------
+
+# INPUT_RELATIONS = Path("data/Relations/Rel Rec/relations_raw.jsonl")
+# OUT_DIR = Path("data/Relations/Rel Res")
+# OUT_DIR.mkdir(parents=True, exist_ok=True)
+# RAW_LLM_DIR = OUT_DIR / "llm_raw"
+# RAW_LLM_DIR.mkdir(exist_ok=True)
+
+# # Embedding model
+# EMBED_MODEL = "BAAI/bge-large-en-v1.5"
+# DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
+# BATCH_SIZE = 32
+
+# # Weights for buckets used to build relation embeddings
+# # Buckets:
+# #   name            = relation_name
+# #   desc            = rel_desc
+# #   head_tail       = subject/object names + class info
+# #   hint_canonical  = rel_hint_type + canonical_rel_name + canonical_rel_desc + rel_cls
+# REL_EMB_WEIGHTS = {
+#     "name": 0.25,
+#     "desc": 0.15,
+#     "head_tail": 0.20,
+#     "hint_canonical": 0.40,
+# }
+
+# # Global clustering params
+# USE_UMAP = True
+# UMAP_N_COMPONENTS = 64
+# UMAP_N_NEIGHBORS = 8
+# UMAP_MIN_DIST = 0.0
+# HDBSCAN_MIN_CLUSTER_SIZE = 2
+# HDBSCAN_MIN_SAMPLES = 1
+# HDBSCAN_METRIC = "euclidean"
+
+# # Local subcluster params (when a cluster is very large)
+# MAX_CLUSTER_SIZE_FOR_LOCAL = 30
+# LOCAL_HDBSCAN_MIN_CLUSTER_SIZE = 2
+# LOCAL_HDBSCAN_MIN_SAMPLES = 1
+
+# # LLM prompt chunking
+# MAX_MEMBERS_PER_PROMPT = 10  # max relation instances per LLM call
+
+# # LLM (DSPy / central config)
+# MODEL_NAME = "gpt-5.1"
+# LLM_MAX_TOKENS_DEFAULT = 16000
+
+# VERBOSE = False
+
+# # NEW: strict deterministic post-pass merge (safe; only merges exact duplicates)
+# AUTO_MERGE_EXACT_DUPLICATES = True
+
+# # ---------------------- HF Embedder --------------------------------
+
+# def mean_pool(token_embeddings: torch.Tensor, attention_mask: torch.Tensor):
+#     input_mask_expanded = attention_mask.unsqueeze(-1).expand(token_embeddings.size()).float()
+#     sum_embeddings = torch.sum(token_embeddings * input_mask_expanded, 1)
+#     sum_mask = torch.clamp(input_mask_expanded.sum(1), min=1e-9)
+#     return sum_embeddings / sum_mask
+
+# class HFEmbedder:
+#     def __init__(self, model_name=EMBED_MODEL, device=DEVICE):
+#         if VERBOSE:
+#             print(f"[embedder] loading {model_name} on {device}")
+#         self.device = device
+#         self.tokenizer = AutoTokenizer.from_pretrained(model_name, use_fast=True)
+#         self.model = AutoModel.from_pretrained(model_name)
+#         self.model.to(device)
+#         self.model.eval()
+#         for p in self.model.parameters():
+#             p.requires_grad = False
+
+#     @property
+#     def dim(self) -> int:
+#         return getattr(self.model.config, "hidden_size", 1024)
+
+#     @torch.no_grad()
+#     def encode_batch(self, texts: List[str], batch_size: int = BATCH_SIZE) -> np.ndarray:
+#         """
+#         Encode a list of texts into L2-normalized embeddings.
+#         """
+#         if len(texts) == 0:
+#             D = self.dim
+#             return np.zeros((0, D))
+#         embs = []
+#         for i in range(0, len(texts), batch_size):
+#             batch = texts[i:i + batch_size]
+#             enc = self.tokenizer(
+#                 batch,
+#                 padding=True,
+#                 truncation=True,
+#                 return_tensors="pt",
+#                 max_length=512,
+#             )
+#             input_ids = enc["input_ids"].to(self.device)
+#             attention_mask = enc["attention_mask"].to(self.device)
+#             out = self.model(input_ids=input_ids, attention_mask=attention_mask, return_dict=True)
+#             token_embeds = out.last_hidden_state
+#             pooled = mean_pool(token_embeds, attention_mask)
+#             embs.append(pooled.cpu().numpy())
+#         embs = np.vstack(embs)
+#         embs = normalize(embs, axis=1)
+#         return embs
+
+# # ---------------------- IO helpers ---------------------------------
+
+# def load_relations(path: Path) -> List[Dict[str, Any]]:
+#     """
+#     Load relations_raw.jsonl and ensure schema-related fields exist:
+
+#       - canonical_rel_name (default "TBD")
+#       - canonical_rel_desc (default "")
+#       - rel_cls (default "TBD")
+#       - rel_cls_group (default "TBD")
+#       - remarks (list of strings)
+#     """
+#     rels: List[Dict[str, Any]] = []
+#     if not path.exists():
+#         raise FileNotFoundError(f"Relations file not found: {path}")
+#     with path.open("r", encoding="utf-8") as f:
+#         for line in f:
+#             line = line.strip()
+#             if not line:
+#                 continue
+#             obj = json.loads(line)
+#             # ensure relation_id exists
+#             rid = obj.get("relation_id") or ("RelR_" + uuid.uuid4().hex[:8])
+#             obj["relation_id"] = rid
+
+#             # ensure schema fields
+#             if "canonical_rel_name" not in obj or str(obj.get("canonical_rel_name", "")).strip() == "":
+#                 obj["canonical_rel_name"] = "TBD"
+#             if "canonical_rel_desc" not in obj or obj.get("canonical_rel_desc") is None:
+#                 obj["canonical_rel_desc"] = ""
+#             if "rel_cls" not in obj or str(obj.get("rel_cls", "")).strip() == "":
+#                 obj["rel_cls"] = "TBD"
+#             if "rel_cls_group" not in obj or str(obj.get("rel_cls_group", "")).strip() == "":
+#                 obj["rel_cls_group"] = "TBD"
+
+#             # normalize remarks: merge original remark + remarks list into a 'remarks' list
+#             initial_remark = obj.get("remark")
+#             remarks = obj.get("remarks")
+#             norm_remarks: List[str] = []
+#             if isinstance(remarks, list):
+#                 norm_remarks.extend([str(r) for r in remarks if r])
+#             elif isinstance(remarks, str) and remarks.strip():
+#                 norm_remarks.append(remarks.strip())
+#             if isinstance(initial_remark, str) and initial_remark.strip():
+#                 norm_remarks.append(initial_remark.strip())
+#             obj["remarks"] = norm_remarks
+
+#             # ensure qualifiers exists
+#             if "qualifiers" not in obj or obj.get("qualifiers") is None:
+#                 obj["qualifiers"] = {}
+
+#             rels.append(obj)
+#     if VERBOSE:
+#         print(f"[start] loaded {len(rels)} relations from {path}")
+#     return rels
+
+# def safe_str(s: Optional[str]) -> str:
+#     if not s:
+#         return ""
+#     return str(s).replace("\n", " ").strip()
+
+# def _dedupe_preserve_order(seq: List[str]) -> List[str]:
+#     seen = set()
+#     out = []
+#     for x in seq:
+#         if x in seen:
+#             continue
+#         seen.add(x)
+#         out.append(x)
+#     return out
+
+# def _norm_qualifiers(q: Any) -> Dict[str, str]:
+#     """
+#     Normalize qualifiers dict into only non-empty string values.
+#     """
+#     if not isinstance(q, dict):
+#         return {}
+#     out: Dict[str, str] = {}
+#     for k, v in q.items():
+#         if v is None:
+#             continue
+#         sv = str(v).strip()
+#         if not sv or sv.lower() == "null":
+#             continue
+#         out[str(k)] = sv
+#     return out
+
+# def _qualifiers_subset(a: Dict[str, str], b: Dict[str, str]) -> bool:
+#     """
+#     True if a is subset of b (all keys in a exist in b with same value).
+#     """
+#     for k, v in a.items():
+#         if k not in b or b[k] != v:
+#             return False
+#     return True
+
+# def _merge_qualifiers_safe(q_list: List[Dict[str, Any]]) -> Tuple[Optional[Dict[str, Any]], bool]:
+#     """
+#     Attempt a safe merge of qualifiers under strict rules:
+#     - If all normalized qualifiers equal => merge OK (return that)
+#     - If some are empty and others non-empty => merge OK (return the most informative)
+#     - If conflicting non-empty values exist => merge NOT OK
+#     Returns: (merged_qualifiers_or_none, ok_flag)
+#     """
+#     if not q_list:
+#         return {}, True
+#     normed = [_norm_qualifiers(q) for q in q_list]
+#     # pick the most informative as base
+#     base = max(normed, key=lambda d: len(d))
+#     for d in normed:
+#         if _qualifiers_subset(d, base):
+#             continue
+#         if _qualifiers_subset(base, d):
+#             base = d
+#             continue
+#         # conflict
+#         return None, False
+#     return base, True
+
+# # ---------------------- Build relation texts & embeddings ----------
+
+# def build_relation_texts(
+#     relations: List[Dict[str, Any]]
+# ) -> Tuple[List[str], List[str], List[str], List[str]]:
+#     """
+#     Build four text buckets for each relation:
+
+#     - name_texts:       relation_name
+#     - desc_texts:       rel_desc
+#     - head_tail_texts:  head/tail entity + class info
+#     - hint_texts:       rel_hint_type + canonical_rel_name + canonical_rel_desc + rel_cls
+#     """
+#     name_texts, desc_texts, head_tail_texts, hint_texts = [], [], [], []
+
+#     for r in relations:
+#         # name
+#         rname = safe_str(r.get("relation_name", ""))
+#         name_texts.append(rname[:256])
+
+#         # desc
+#         rdesc = safe_str(r.get("rel_desc", ""))
+#         desc_texts.append(rdesc[:512])
+
+#         # head_tail
+#         subj_name = safe_str(r.get("subject_entity_name", ""))
+#         subj_cl = safe_str(r.get("subject_class_label", ""))
+#         subj_cg = safe_str(r.get("subject_class_group", ""))
+#         obj_name = safe_str(r.get("object_entity_name", ""))
+#         obj_cl = safe_str(r.get("object_class_label", ""))
+#         obj_cg = safe_str(r.get("object_class_group", ""))
+
+#         head_tail = f"{subj_name} ({subj_cl}, {subj_cg}) -> {obj_name} ({obj_cl}, {obj_cg})"
+#         head_tail_texts.append(head_tail[:512])
+
+#         # hint_canonical
+#         hint_parts = []
+#         for key in ["rel_hint_type", "canonical_rel_name", "canonical_rel_desc", "rel_cls"]:
+#             val = safe_str(r.get(key, ""))
+#             if val and val.upper() != "TBD":
+#                 hint_parts.append(val)
+#         hint_text = " ; ".join(hint_parts)
+#         hint_texts.append(hint_text[:512])
+
+#     return name_texts, desc_texts, head_tail_texts, hint_texts
+
+# def any_nonempty(lst: List[str]) -> bool:
+#     return any(safe_str(t) for t in lst)
+
+# def compute_relation_embeddings(
+#     embedder: HFEmbedder,
+#     relations: List[Dict[str, Any]],
+#     weights: Dict[str, float]
+# ) -> np.ndarray:
+#     """
+#     Compute combined embeddings for relations using four buckets with fixed weights.
+#     """
+#     N = len(relations)
+#     if N == 0:
+#         raise ValueError("No relations to embed")
+
+#     name_texts, desc_texts, head_tail_texts, hint_texts = build_relation_texts(relations)
+
+#     emb_name = embedder.encode_batch(name_texts) if any_nonempty(name_texts) else None
+#     emb_desc = embedder.encode_batch(desc_texts) if any_nonempty(desc_texts) else None
+#     emb_ht = embedder.encode_batch(head_tail_texts) if any_nonempty(head_tail_texts) else None
+#     emb_hint = embedder.encode_batch(hint_texts) if any_nonempty(hint_texts) else None
+
+#     D = embedder.dim
+#     combined = np.zeros((N, D), dtype=np.float32)
+
+#     def add_bucket(emb: Optional[np.ndarray], weight: float):
+#         nonlocal combined
+#         if emb is None:
+#             return
+#         if emb.shape[0] != N:
+#             raise ValueError("embedding row mismatch")
+#         combined += weight * emb  # emb already row-normalized
+
+#     add_bucket(emb_name, weights.get("name", 0.0))
+#     add_bucket(emb_desc, weights.get("desc", 0.0))
+#     add_bucket(emb_ht, weights.get("head_tail", 0.0))
+#     add_bucket(emb_hint, weights.get("hint_canonical", 0.0))
+
+#     combined = normalize(combined, axis=1)
+#     return combined
+
+# # ---------------------- clustering ---------------------------------
+
+# def run_hdbscan(
+#     embeddings: np.ndarray,
+#     min_cluster_size: int = HDBSCAN_MIN_CLUSTER_SIZE,
+#     min_samples: int = HDBSCAN_MIN_SAMPLES,
+#     metric: str = HDBSCAN_METRIC,
+#     use_umap: bool = USE_UMAP
+# ) -> Tuple[np.ndarray, object]:
+#     X = embeddings
+#     N = X.shape[0]
+#     if use_umap and UMAP_AVAILABLE and N >= 6:
+#         safe_n_components = min(UMAP_N_COMPONENTS, max(2, N - 2))
+#         safe_n_neighbors = min(UMAP_N_NEIGHBORS, max(2, N - 1))
+#         try:
+#             reducer = umap.UMAP(
+#                 n_components=safe_n_components,
+#                 n_neighbors=safe_n_neighbors,
+#                 min_dist=UMAP_MIN_DIST,
+#                 metric="cosine",
+#                 random_state=42
+#             )
+#             X_reduced = reducer.fit_transform(X)
+#             if X_reduced is not None and X_reduced.shape[0] == N:
+#                 X = X_reduced
+#             else:
+#                 if VERBOSE:
+#                     print(f"[warn] UMAP returned invalid shape; skipping UMAP")
+#         except Exception as e:
+#             if VERBOSE:
+#                 print(f"[warn] UMAP failed (N={N}): {e}. Proceeding without UMAP.")
+#             X = embeddings
+#     clusterer = hdbscan.HDBSCAN(
+#         min_cluster_size=min_cluster_size,
+#         min_samples=min_samples,
+#         metric=metric,
+#         cluster_selection_method="eom"
+#     )
+#     labels = clusterer.fit_predict(X)
+#     return labels, clusterer
+
+# # ---------------------- LLM prompt template ------------------------
+# from TKG_Prompts import REL_RES_PROMPT_TEMPLATE
+# RELRES_PROMPT_TEMPLATE = REL_RES_PROMPT_TEMPLATE
+
+# def sanitize_json_array(text: str) -> Optional[Any]:
+#     """
+#     Extract and parse the first JSON array from the text.
+#     Grab [ ... ] block, fix simple trailing commas, and json.loads.
+#     """
+#     if not text or not text.strip():
+#         return None
+#     s = coerce_llm_text(text).strip()
+#     # replace smart quotes
+#     s = s.replace("“", '"').replace("”", '"').replace("‘", "'").replace("’", "'")
+#     start = s.find("[")
+#     end = s.rfind("]")
+#     if start == -1 or end == -1 or end <= start:
+#         return None
+#     cand = s[start:end + 1]
+#     # remove trailing commas before closing braces/brackets
+#     cand = re.sub(r",\s*([\]}])", r"\1", cand)
+#     try:
+#         return json.loads(cand)
+#     except Exception:
+#         return None
+
+# # ---------------------- DSPy / LLM helpers -------------------------
+
+# def _get_lm_for_rel_res(
+#     llm_config: Optional["TraceKGLLMConfig"],
+#     model: str,
+#     max_tokens: int,
+# ):
+#     """
+#     Resolve a DSPy LM for the Relation Resolution step.
+
+#     - If llm_config is provided, we use it directly (per-step override: 'rel_res').
+#     - Otherwise, we synthesize a minimal TraceKGLLMConfig using (model, max_tokens)
+#       so existing code can still call relres_main(model="...").
+#     """
+#     if llm_config is not None:
+#         cfg = llm_config
+#     else:
+#         cfg = TraceKGLLMConfig(default_model=model, max_tokens=max_tokens)
+
+#     try:
+#         cfg.validate()
+#     except Exception as e:
+#         if VERBOSE:
+#             print(f"[RelRes] llm_config.validate() failed: {e}")
+
+#     lm = make_lm_for_step(cfg, "rel_res")
+#     return lm
+
+# def _call_rel_res_lm(lm, prompt: str) -> str:
+#     """
+#     Call the DSPy LM and normalize the output into a plain string.
+#     """
+#     try:
+#         outputs = lm(prompt)
+#     except Exception as e:
+#         print("[RelRes] LM call error:", e)
+#         return ""
+
+#     if isinstance(outputs, list):
+#         return outputs[0] if outputs else ""
+#     return str(outputs or "")
+
+# # ---------------------- Action executors ----------------------------
+
+# def execute_set_canonical_rel(
+#     rel_by_id: Dict[str, Dict[str, Any]],
+#     relation_ids: List[str],
+#     canonical_rel_name: Optional[str],
+#     canonical_rel_desc: Optional[str],
+# ):
+#     if canonical_rel_name is None:
+#         return
+#     canon_name = canonical_rel_name.strip()
+#     if not canon_name:
+#         return
+#     for rid in relation_ids:
+#         if rid not in rel_by_id:
+#             continue
+#         r = rel_by_id[rid]
+#         r["canonical_rel_name"] = canon_name
+#         if canonical_rel_desc is not None:
+#             r["canonical_rel_desc"] = canonical_rel_desc.strip()
+#         rel_by_id[rid] = r
+
+# def execute_set_rel_cls(
+#     rel_by_id: Dict[str, Dict[str, Any]],
+#     relation_ids: List[str],
+#     rel_cls: Optional[str],
+# ):
+#     if rel_cls is None:
+#         return
+#     cls_name = rel_cls.strip()
+#     if not cls_name:
+#         return
+#     for rid in relation_ids:
+#         if rid not in rel_by_id:
+#             continue
+#         r = rel_by_id[rid]
+#         r["rel_cls"] = cls_name
+#         rel_by_id[rid] = r
+
+# def execute_set_rel_cls_group(
+#     rel_by_id: Dict[str, Dict[str, Any]],
+#     relation_ids: List[str],
+#     rel_cls_group: Optional[str],
+# ):
+#     if rel_cls_group is None:
+#         return
+#     grp_name = rel_cls_group.strip()
+#     if not grp_name:
+#         return
+#     for rid in relation_ids:
+#         if rid not in rel_by_id:
+#             continue
+#         r = rel_by_id[rid]
+#         r["rel_cls_group"] = grp_name
+#         rel_by_id[rid] = r
+
+# def execute_modify_rel_schema(
+#     rel_by_id: Dict[str, Dict[str, Any]],
+#     relation_ids: List[str],
+#     canonical_rel_name: Optional[str],
+#     canonical_rel_desc: Optional[str],
+#     rel_cls: Optional[str],
+#     rel_cls_group: Optional[str],
+#     new_relation_name: Optional[str],
+#     original_relation_name: Optional[str],
+# ):
+#     for rid in relation_ids:
+#         if rid not in rel_by_id:
+#             continue
+#         r = rel_by_id[rid]
+
+#         if canonical_rel_name is not None and canonical_rel_name.strip():
+#             r["canonical_rel_name"] = canonical_rel_name.strip()
+#         if canonical_rel_desc is not None:
+#             r["canonical_rel_desc"] = canonical_rel_desc.strip()
+#         if rel_cls is not None and rel_cls.strip():
+#             r["rel_cls"] = rel_cls.strip()
+#         if rel_cls_group is not None and rel_cls_group.strip():
+#             r["rel_cls_group"] = rel_cls_group.strip()
+
+#         if new_relation_name is not None and new_relation_name.strip():
+#             if "original_relation_name" not in r:
+#                 if original_relation_name:
+#                     r["original_relation_name"] = original_relation_name
+#                 else:
+#                     r["original_relation_name"] = r.get("relation_name", "")
+#             r["relation_name"] = new_relation_name.strip()
+
+#         rel_by_id[rid] = r
+
+# def execute_add_rel_remark(
+#     rel_by_id: Dict[str, Dict[str, Any]],
+#     relation_ids: List[str],
+#     remark: Optional[str],
+# ):
+#     if remark is None:
+#         return
+#     txt = remark.strip()
+#     if not txt:
+#         return
+#     for rid in relation_ids:
+#         if rid not in rel_by_id:
+#             continue
+#         r = rel_by_id[rid]
+#         existing = r.get("remarks")
+#         if existing is None:
+#             existing = []
+#         elif not isinstance(existing, list):
+#             existing = [str(existing)]
+#         existing.append(txt)
+#         r["remarks"] = existing
+#         rel_by_id[rid] = r
+
+# def execute_merge_relations(
+#     rel_by_id: Dict[str, Dict[str, Any]],
+#     relation_ids: List[str],
+#     provisional_id: str,
+#     subject_entity_id: str,
+#     object_entity_id: str,
+#     canonical_rel_name: str,
+#     canonical_rel_desc: Optional[str],
+#     new_rel_cls: Optional[str],
+#     new_rel_cls_group: Optional[str],
+#     relation_name: Optional[str],
+#     rel_desc: Optional[str],
+#     rel_hint_type: Optional[str],
+#     subject_entity_name: Optional[str],
+#     object_entity_name: Optional[str],
+#     qualifiers: Optional[Dict[str, Any]],
+#     remark: Optional[str],
+#     confidence: Optional[float],
+# ) -> str:
+#     """
+#     Merge two or more EXACT duplicate relations into one new relation instance.
+#     Strict validation:
+#       - all relation_ids exist
+#       - all share identical subject_entity_id and object_entity_id
+#       - canonical_rel_name provided (direction+meaning) and must match (or be set) consistently
+#     """
+#     # validate ids exist
+#     relation_ids = [rid for rid in relation_ids if rid in rel_by_id]
+#     if len(relation_ids) < 2:
+#         raise ValueError("merge_relations: need at least 2 valid relation_ids")
+
+#     # validate head/tail identical
+#     for rid in relation_ids:
+#         r = rel_by_id[rid]
+#         if str(r.get("subject_entity_id", "")).strip() != str(subject_entity_id).strip():
+#             raise ValueError("merge_relations: subject_entity_id mismatch across relation_ids")
+#         if str(r.get("object_entity_id", "")).strip() != str(object_entity_id).strip():
+#             raise ValueError("merge_relations: object_entity_id mismatch across relation_ids")
+
+#     # validate / select canonical
+#     canon = str(canonical_rel_name or "").strip()
+#     if not canon:
+#         raise ValueError("merge_relations: canonical_rel_name is required")
+
+#     # qualifiers: use provided if present else safe-merge
+#     if qualifiers is None:
+#         q_list = [rel_by_id[rid].get("qualifiers", {}) for rid in relation_ids]
+#         merged_q, ok = _merge_qualifiers_safe(q_list)
+#         if not ok:
+#             raise ValueError("merge_relations: qualifiers conflict; refuse to merge without explicit merged qualifiers")
+#         qualifiers = merged_q or {}
+
+#     # choose base relation (first) for inherited fields
+#     base = rel_by_id[relation_ids[0]]
+
+#     # merge remarks
+#     merged_remarks: List[str] = []
+#     for rid in relation_ids:
+#         rr = rel_by_id[rid]
+#         rs = rr.get("remarks", [])
+#         if isinstance(rs, list):
+#             merged_remarks.extend([str(x) for x in rs if x])
+#         elif isinstance(rs, str) and rs.strip():
+#             merged_remarks.append(rs.strip())
+#     if remark and str(remark).strip():
+#         merged_remarks.append(str(remark).strip())
+#     merged_remarks = _dedupe_preserve_order([r for r in merged_remarks if r])
+
+#     # merge evidence excerpts (keep both a legacy single field and a list for traceability)
+#     ev_list: List[str] = []
+#     for rid in relation_ids:
+#         rr = rel_by_id[rid]
+#         ev = rr.get("evidence_excerpt") or rr.get("evidence_excerpts")
+#         if isinstance(ev, str) and ev.strip():
+#             ev_list.append(ev.strip())
+#         elif isinstance(ev, list):
+#             ev_list.extend([str(x).strip() for x in ev if str(x).strip()])
+#     ev_list = _dedupe_preserve_order(ev_list)
+
+#     # confidence
+#     if confidence is None:
+#         confidence = max(float(rel_by_id[rid].get("confidence", 0.0)) for rid in relation_ids)
+
+#     new_rid = "RelR_" + uuid.uuid4().hex[:8]
+
+#     merged_obj = dict(base)  # start from base to preserve unknown fields safely
+#     merged_obj["relation_id"] = new_rid
+#     merged_obj["provisional_id"] = provisional_id
+#     merged_obj["merged_from"] = list(relation_ids)
+#     merged_obj["_merged_at"] = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+
+#     # set key schema + identity fields
+#     merged_obj["subject_entity_id"] = str(subject_entity_id)
+#     merged_obj["object_entity_id"] = str(object_entity_id)
+
+#     if subject_entity_name is not None and str(subject_entity_name).strip():
+#         merged_obj["subject_entity_name"] = str(subject_entity_name).strip()
+#     if object_entity_name is not None and str(object_entity_name).strip():
+#         merged_obj["object_entity_name"] = str(object_entity_name).strip()
+
+#     merged_obj["canonical_rel_name"] = canon
+#     if canonical_rel_desc is not None:
+#         merged_obj["canonical_rel_desc"] = str(canonical_rel_desc).strip()
+
+#     if new_rel_cls is not None and str(new_rel_cls).strip():
+#         merged_obj["rel_cls"] = str(new_rel_cls).strip()
+#     if new_rel_cls_group is not None and str(new_rel_cls_group).strip():
+#         merged_obj["rel_cls_group"] = str(new_rel_cls_group).strip()
+
+#     if relation_name is not None and str(relation_name).strip():
+#         merged_obj["relation_name"] = str(relation_name).strip()
+#     if rel_desc is not None and str(rel_desc).strip():
+#         merged_obj["rel_desc"] = str(rel_desc).strip()
+#     if rel_hint_type is not None and str(rel_hint_type).strip():
+#         merged_obj["rel_hint_type"] = str(rel_hint_type).strip()
+
+#     merged_obj["qualifiers"] = qualifiers or {}
+#     merged_obj["confidence"] = float(confidence or 0.0)
+#     merged_obj["remarks"] = merged_remarks
+
+#     # evidence fields
+#     if ev_list:
+#         merged_obj["evidence_excerpt"] = ev_list[0]
+#         merged_obj["evidence_excerpts"] = ev_list
+
+#     # remove old relations
+#     for rid in relation_ids:
+#         rel_by_id.pop(rid, None)
+
+#     # insert merged relation
+#     rel_by_id[new_rid] = merged_obj
+#     return new_rid
+
+# def auto_merge_exact_duplicates(rel_by_id: Dict[str, Dict[str, Any]]) -> Tuple[Dict[str, Dict[str, Any]], int]:
+#     """
+#     Strict deterministic dedup:
+#     - Merge ONLY when (subject_entity_id, object_entity_id, canonical_rel_name) match
+#     - Also require rel_cls and rel_cls_group to match (or be both TBD/empty)
+#     - Qualifiers must be compatible under strict rules (subset/identical), else do not merge
+#     Returns: (new_rel_by_id, merged_count)
+#     """
+#     rels = list(rel_by_id.values())
+#     buckets: Dict[Tuple[str, str, str, str, str], List[Dict[str, Any]]] = {}
+#     for r in rels:
+#         subj = safe_str(r.get("subject_entity_id", ""))
+#         obj = safe_str(r.get("object_entity_id", ""))
+#         canon = safe_str(r.get("canonical_rel_name", ""))
+#         if not subj or not obj or not canon or canon.upper() == "TBD":
+#             continue
+#         cls = safe_str(r.get("rel_cls", ""))
+#         grp = safe_str(r.get("rel_cls_group", ""))
+#         key = (subj, obj, canon, cls, grp)
+#         buckets.setdefault(key, []).append(r)
+
+#     merged_count = 0
+#     new_rel_by_id = dict(rel_by_id)
+
+#     for key, group in buckets.items():
+#         if len(group) < 2:
+#             continue
+
+#         # find a compatible merge set around the most informative qualifiers
+#         # (this merges empties into informative, but rejects conflicts)
+#         # pick base candidate with max non-empty qualifiers
+#         group_sorted = sorted(group, key=lambda r: len(_norm_qualifiers(r.get("qualifiers", {}))), reverse=True)
+#         base = group_sorted[0]
+#         base_q = _norm_qualifiers(base.get("qualifiers", {}))
+
+#         to_merge = [base]
+#         for r in group_sorted[1:]:
+#             rq = _norm_qualifiers(r.get("qualifiers", {}))
+#             if _qualifiers_subset(rq, base_q) or _qualifiers_subset(base_q, rq):
+#                 # update base if r is more informative but compatible
+#                 if _qualifiers_subset(base_q, rq):
+#                     base_q = rq
+#                     base = r
+#                 to_merge.append(r)
+
+#         if len(to_merge) < 2:
+#             continue
+
+#         # ensure all to_merge still exist (may have been merged already)
+#         to_merge_ids = [r["relation_id"] for r in to_merge if r.get("relation_id") in new_rel_by_id]
+#         if len(to_merge_ids) < 2:
+#             continue
+
+#         # compute merged qualifiers safely
+#         q_list = [new_rel_by_id[rid].get("qualifiers", {}) for rid in to_merge_ids]
+#         merged_q, ok = _merge_qualifiers_safe(q_list)
+#         if not ok:
+#             continue  # strict: skip if conflict
+
+#         subj, obj, canon, cls, grp = key
+#         prov = "MERGE(" + "|".join(to_merge_ids) + ")"
+
+#         new_id = execute_merge_relations(
+#             new_rel_by_id,
+#             to_merge_ids,
+#             provisional_id=prov,
+#             subject_entity_id=subj,
+#             object_entity_id=obj,
+#             canonical_rel_name=canon,
+#             canonical_rel_desc=new_rel_by_id[to_merge_ids[0]].get("canonical_rel_desc", ""),
+#             new_rel_cls=cls if cls else None,
+#             new_rel_cls_group=grp if grp else None,
+#             relation_name=None,
+#             rel_desc=None,
+#             rel_hint_type=None,
+#             subject_entity_name=new_rel_by_id[to_merge_ids[0]].get("subject_entity_name"),
+#             object_entity_name=new_rel_by_id[to_merge_ids[0]].get("object_entity_name"),
+#             qualifiers=merged_q or {},
+#             remark="auto_merge_exact_duplicates: merged exact duplicate edges",
+#             confidence=None,
+#         )
+#         merged_count += (len(to_merge_ids) - 1)
+
+#     return new_rel_by_id, merged_count
+
+# # ---------------------- Main orchestration -------------------------
+
+# def relres_main(
+#     model: str = MODEL_NAME,
+#     max_tokens: int = LLM_MAX_TOKENS_DEFAULT,
+#     llm_config: Optional["TraceKGLLMConfig"] = None,
+#     # input_relations_path: Path = INPUT_RELATIONS,
+#     input_relations_path: Optional[Path] = None,
+
+# ) -> None:
+#     """
+#     Run Relation Resolution end-to-end.
+
+#     LLM behavior:
+#       * If llm_config is provided, it is used via make_lm_for_step(cfg, "rel_res").
+#       * If llm_config is None, a minimal TraceKGLLMConfig(default_model=model,
+#         max_tokens=max_tokens) is synthesized so existing code that calls
+#         relres_main() or relres_main(model="...") still works.
+#     """
+    
+#         # Resolve input_relations_path at runtime (avoid default-arg binding trap)
+#     if input_relations_path is None:
+#         input_relations_path = INPUT_RELATIONS
+
+#     # allow callers to pass either Path or str
+#     if not isinstance(input_relations_path, Path):
+#         input_relations_path = Path(str(input_relations_path))
+
+#     # fail fast if input file missing (prevents silent reuse of old data)
+#     if not input_relations_path.exists():
+#         raise FileNotFoundError(
+#             f"relres_main: input_relations_path does not exist: {input_relations_path!s}"
+#         )
+
+
+#     # load relations
+#     relations = load_relations(input_relations_path)
+#     rel_by_id: Dict[str, Dict[str, Any]] = {r["relation_id"]: r for r in relations}
+
+#     # NEW: provisional_id mapping + alias mapping (for merges)
+#     provisional_to_real: Dict[str, str] = {}   # provisional_id -> real relation_id
+#     alias_map: Dict[str, str] = {}             # old_relation_id -> new_relation_id
+
+#     def resolve_relation_ref(rid_or_prov: str) -> str:
+#         """
+#         Resolve a reference that might be:
+#           - a real relation_id
+#           - a provisional_id from merge_relations
+#           - an old id that got merged (alias_map)
+#         """
+#         if rid_or_prov in provisional_to_real:
+#             rid_or_prov = provisional_to_real[rid_or_prov]
+#         # follow alias chain
+#         seen = set()
+#         cur = rid_or_prov
+#         while cur in alias_map and alias_map[cur] != cur and cur not in seen:
+#             seen.add(cur)
+#             cur = alias_map[cur]
+#             if cur in provisional_to_real:
+#                 cur = provisional_to_real[cur]
+#         return cur
+
+#     def resolve_many(ids: List[str]) -> List[str]:
+#         resolved = [resolve_relation_ref(str(x)) for x in (ids or [])]
+#         # keep only those that still exist
+#         resolved = [rid for rid in resolved if rid in rel_by_id]
+#         return _dedupe_preserve_order(resolved)
+
+#     # embedder
+#     embedder = HFEmbedder(model_name=EMBED_MODEL, device=DEVICE)
+#     rel_ids_order = [r["relation_id"] for r in relations]
+#     rel_id_to_index = {rid: i for i, rid in enumerate(rel_ids_order)}
+#     combined_emb = compute_relation_embeddings(embedder, relations, REL_EMB_WEIGHTS)
+#     print("[info] relation embeddings computed shape:", combined_emb.shape)
+
+#     # global clustering
+#     labels, clusterer = run_hdbscan(
+#         combined_emb,
+#         min_cluster_size=HDBSCAN_MIN_CLUSTER_SIZE,
+#         min_samples=HDBSCAN_MIN_SAMPLES,
+#         use_umap=USE_UMAP
+#     )
+#     unique_labels = sorted(set(labels))
+#     print("[info] global clustering done. unique labels:", unique_labels)
+
+#     # map cluster -> relation ids
+#     cluster_to_relids: Dict[int, List[str]] = {}
+#     for idx, lab in enumerate(labels):
+#         rid = rel_ids_order[idx]
+#         cluster_to_relids.setdefault(int(lab), []).append(rid)
+
+#     # action log
+#     action_log_path = OUT_DIR / "rel_res_action_log.jsonl"
+#     if action_log_path.exists():
+#         action_log_path.unlink()
+
+#     # build LM once
+#     lm = _get_lm_for_rel_res(llm_config=llm_config, model=model, max_tokens=max_tokens)
+
+#     # helper to process a subset of relation ids with LLM (one prompt)
+#     def run_llm_on_subset(sub_rel_ids: List[str], cluster_label_str: str):
+#         if not sub_rel_ids:
+#             return
+
+#         # build compact representation for this chunk
+#         cluster_relations = []
+#         for rid in sub_rel_ids:
+#             r = rel_by_id.get(rid)
+#             if not r:
+#                 continue
+#             cluster_relations.append({
+#                 "relation_id": r["relation_id"],
+#                 "relation_name": safe_str(r.get("relation_name", "")),
+#                 "rel_desc": safe_str(r.get("rel_desc", "")),
+#                 "rel_hint_type": safe_str(r.get("rel_hint_type", "")),
+#                 "canonical_rel_name": safe_str(r.get("canonical_rel_name", "")),
+#                 "canonical_rel_desc": safe_str(r.get("canonical_rel_desc", "")),
+#                 "rel_cls": safe_str(r.get("rel_cls", "")),
+#                 "rel_cls_group": safe_str(r.get("rel_cls_group", "")),
+#                 "subject_entity_id": safe_str(r.get("subject_entity_id", "")),
+#                 "object_entity_id": safe_str(r.get("object_entity_id", "")),
+#                 "subject_entity_name": safe_str(r.get("subject_entity_name", "")),
+#                 "object_entity_name": safe_str(r.get("object_entity_name", "")),
+#                 "subject_class_label": safe_str(r.get("subject_class_label", "")),
+#                 "subject_class_group": safe_str(r.get("subject_class_group", "")),
+#                 "object_class_label": safe_str(r.get("object_class_label", "")),
+#                 "object_class_group": safe_str(r.get("object_class_group", "")),
+#                 "qualifiers": r.get("qualifiers", {}),
+#                 "confidence": float(r.get("confidence", 0.0)),
+#                 "remarks": r.get("remarks", [])
+#             })
+
+#         if not cluster_relations:
+#             return
+
+#         cluster_block = json.dumps(cluster_relations, ensure_ascii=False, indent=2)
+#         prompt = RELRES_PROMPT_TEMPLATE.replace("{cluster_block}", cluster_block)
+
+#         # log prompt
+#         prompt_path = RAW_LLM_DIR / f"cluster_{cluster_label_str}_prompt.txt"
+#         prompt_path.write_text(prompt, encoding="utf-8")
+
+#         # call LLM via DSPy
+#         raw_out = ""
+#         try:
+#             raw_out = _call_rel_res_lm(lm, prompt)
+#         except Exception as e:
+#             print(f"[warning] LLM call failed for {cluster_label_str}: {e}")
+#             raw_out = ""
+
+#         # write raw output
+#         raw_path = RAW_LLM_DIR / f"cluster_{cluster_label_str}_llm_raw.txt"
+#         raw_path.write_text(raw_out, encoding="utf-8")
+
+#         parsed = sanitize_json_array(raw_out)
+#         if parsed is None:
+#             print(f"[warn] failed to parse LLM output for chunk {cluster_label_str}; skipping automated actions for this chunk.")
+#             dec_path = OUT_DIR / f"cluster_{cluster_label_str}_decisions.json"
+#             dec_path.write_text(
+#                 json.dumps({"cluster_label": cluster_label_str, "raw_llm": raw_out}, ensure_ascii=False, indent=2),
+#                 encoding="utf-8"
+#             )
+#             return
+
+#         decisions: List[Dict[str, Any]] = []
+
+#         # execute parsed function list in order
+#         for step in parsed:
+#             if not isinstance(step, dict):
+#                 continue
+#             fn = step.get("function")
+#             args = step.get("args", {}) or {}
+#             justification = args.get("justification")
+#             confidence_val = args.get("confidence", None)
+#             remark_val = args.get("remark")
+
+#             try:
+#                 if fn == "set_canonical_rel":
+#                     rel_ids_raw = args.get("relation_ids", []) or []
+#                     rel_ids_valid = resolve_many([str(x) for x in rel_ids_raw])
+#                     canon_name = args.get("canonical_rel_name")
+#                     canon_desc = args.get("canonical_rel_desc")
+
+#                     if not rel_ids_valid or canon_name is None:
+#                         decisions.append({
+#                             "action": "set_canonical_rel_skip",
+#                             "requested_relation_ids": rel_ids_raw,
+#                             "canonical_rel_name": canon_name,
+#                             "justification": justification,
+#                             "remark": remark_val,
+#                             "confidence": confidence_val
+#                         })
+#                         continue
+
+#                     execute_set_canonical_rel(rel_by_id, rel_ids_valid, canon_name, canon_desc)
+
+#                     decisions.append({
+#                         "action": "set_canonical_rel",
+#                         "relation_ids": rel_ids_valid,
+#                         "canonical_rel_name": canon_name,
+#                         "canonical_rel_desc": canon_desc,
+#                         "justification": justification,
+#                         "remark": remark_val,
+#                         "confidence": confidence_val
+#                     })
+
+#                 elif fn == "set_rel_cls":
+#                     rel_ids_raw = args.get("relation_ids", []) or []
+#                     rel_ids_valid = resolve_many([str(x) for x in rel_ids_raw])
+#                     rel_cls = args.get("rel_cls")
+
+#                     if not rel_ids_valid or rel_cls is None:
+#                         decisions.append({
+#                             "action": "set_rel_cls_skip",
+#                             "requested_relation_ids": rel_ids_raw,
+#                             "rel_cls": rel_cls,
+#                             "justification": justification,
+#                             "remark": remark_val,
+#                             "confidence": confidence_val
+#                         })
+#                         continue
+
+#                     execute_set_rel_cls(rel_by_id, rel_ids_valid, rel_cls)
+
+#                     decisions.append({
+#                         "action": "set_rel_cls",
+#                         "relation_ids": rel_ids_valid,
+#                         "rel_cls": rel_cls,
+#                         "justification": justification,
+#                         "remark": remark_val,
+#                         "confidence": confidence_val
+#                     })
+
+#                 elif fn == "set_rel_cls_group":
+#                     rel_ids_raw = args.get("relation_ids", []) or []
+#                     rel_ids_valid = resolve_many([str(x) for x in rel_ids_raw])
+#                     rel_cls_group = args.get("rel_cls_group")
+
+#                     if not rel_ids_valid or rel_cls_group is None:
+#                         decisions.append({
+#                             "action": "set_rel_cls_group_skip",
+#                             "requested_relation_ids": rel_ids_raw,
+#                             "rel_cls_group": rel_cls_group,
+#                             "justification": justification,
+#                             "remark": remark_val,
+#                             "confidence": confidence_val
+#                         })
+#                         continue
+
+#                     execute_set_rel_cls_group(rel_by_id, rel_ids_valid, rel_cls_group)
+
+#                     decisions.append({
+#                         "action": "set_rel_cls_group",
+#                         "relation_ids": rel_ids_valid,
+#                         "rel_cls_group": rel_cls_group,
+#                         "justification": justification,
+#                         "remark": remark_val,
+#                         "confidence": confidence_val
+#                     })
+
+#                 elif fn == "modify_rel_schema":
+#                     rel_ids_raw = args.get("relation_ids", []) or []
+#                     rel_ids_valid = resolve_many([str(x) for x in rel_ids_raw])
+
+#                     canon_name = args.get("canonical_rel_name")
+#                     canon_desc = args.get("canonical_rel_desc")
+#                     rel_cls = args.get("rel_cls")
+#                     rel_cls_group = args.get("rel_cls_group")
+#                     new_rel_name = args.get("new_relation_name")
+#                     orig_rel_name = args.get("original_relation_name")
+
+#                     if not rel_ids_valid:
+#                         decisions.append({
+#                             "action": "modify_rel_schema_skip_no_valid_relations",
+#                             "requested_relation_ids": rel_ids_raw,
+#                             "justification": justification,
+#                             "remark": remark_val,
+#                             "confidence": confidence_val
+#                         })
+#                         continue
+
+#                     execute_modify_rel_schema(
+#                         rel_by_id,
+#                         rel_ids_valid,
+#                         canon_name,
+#                         canon_desc,
+#                         rel_cls,
+#                         rel_cls_group,
+#                         new_rel_name,
+#                         orig_rel_name
+#                     )
+
+#                     decisions.append({
+#                         "action": "modify_rel_schema",
+#                         "relation_ids": rel_ids_valid,
+#                         "canonical_rel_name": canon_name,
+#                         "canonical_rel_desc": canon_desc,
+#                         "rel_cls": rel_cls,
+#                         "rel_cls_group": rel_cls_group,
+#                         "new_relation_name": new_rel_name,
+#                         "original_relation_name": orig_rel_name,
+#                         "justification": justification,
+#                         "remark": remark_val,
+#                         "confidence": confidence_val
+#                     })
+
+#                 elif fn == "add_rel_remark":
+#                     rel_ids_raw = args.get("relation_ids", []) or []
+#                     rel_ids_valid = resolve_many([str(x) for x in rel_ids_raw])
+#                     remark_text = args.get("remark")
+
+#                     if not rel_ids_valid or not remark_text:
+#                         decisions.append({
+#                             "action": "add_rel_remark_skip",
+#                             "requested_relation_ids": rel_ids_raw,
+#                             "remark": remark_text,
+#                             "justification": justification,
+#                             "confidence": confidence_val
+#                         })
+#                         continue
+
+#                     execute_add_rel_remark(rel_by_id, rel_ids_valid, remark_text)
+
+#                     decisions.append({
+#                         "action": "add_rel_remark",
+#                         "relation_ids": rel_ids_valid,
+#                         "remark": remark_text,
+#                         "justification": justification,
+#                         "confidence": confidence_val
+#                     })
+
+#                 elif fn == "merge_relations":
+#                     rel_ids_raw = args.get("relation_ids", []) or []
+#                     rel_ids_valid = resolve_many([str(x) for x in rel_ids_raw])
+
+#                     prov = args.get("provisional_id") or ("MERGE(" + "|".join(rel_ids_raw) + ")")
+#                     subj_id = safe_str(args.get("subject_entity_id", ""))
+#                     obj_id = safe_str(args.get("object_entity_id", ""))
+#                     canon_name = safe_str(args.get("canonical_rel_name", ""))
+#                     canon_desc = args.get("canonical_rel_desc")
+
+#                     # accept either new_rel_cls/new_rel_cls_group or rel_cls/rel_cls_group
+#                     new_rel_cls = args.get("new_rel_cls", None)
+#                     new_rel_cls_group = args.get("new_rel_cls_group", None)
+#                     if new_rel_cls is None:
+#                         new_rel_cls = args.get("rel_cls", None)
+#                     if new_rel_cls_group is None:
+#                         new_rel_cls_group = args.get("rel_cls_group", None)
+
+#                     rel_name = args.get("relation_name", None)
+#                     rel_desc = args.get("rel_desc", None)
+#                     rel_hint = args.get("rel_hint_type", None)
+#                     subj_name = args.get("subject_entity_name", None)
+#                     obj_name = args.get("object_entity_name", None)
+#                     quals = args.get("qualifiers", None)
+#                     remark = args.get("remark", None)
+#                     conf = args.get("confidence", None)
+
+#                     if len(rel_ids_valid) < 2 or not subj_id or not obj_id or not canon_name:
+#                         decisions.append({
+#                             "action": "merge_relations_skip_invalid_args",
+#                             "requested_relation_ids": rel_ids_raw,
+#                             "resolved_relation_ids": rel_ids_valid,
+#                             "provisional_id": prov,
+#                             "subject_entity_id": subj_id,
+#                             "object_entity_id": obj_id,
+#                             "canonical_rel_name": canon_name,
+#                             "justification": justification,
+#                             "remark": remark_val,
+#                             "confidence": confidence_val
+#                         })
+#                         continue
+
+#                     # strict: ensure canonical_rel_name identical across the to-be-merged items (if already filled)
+#                     # (We still allow merging TBD into canon_name, but do not allow disagreement.)
+#                     mismatch = False
+#                     for rid in rel_ids_valid:
+#                         existing_c = safe_str(rel_by_id[rid].get("canonical_rel_name", ""))
+#                         if existing_c and existing_c.upper() != "TBD" and existing_c != canon_name:
+#                             mismatch = True
+#                             break
+#                     if mismatch:
+#                         decisions.append({
+#                             "action": "merge_relations_skip_canonical_mismatch",
+#                             "relation_ids": rel_ids_valid,
+#                             "canonical_rel_name": canon_name,
+#                             "justification": justification,
+#                             "remark": "Refused: canonical_rel_name mismatch across candidates",
+#                             "confidence": confidence_val
+#                         })
+#                         continue
+
+#                     new_id = execute_merge_relations(
+#                         rel_by_id,
+#                         rel_ids_valid,
+#                         provisional_id=str(prov),
+#                         subject_entity_id=subj_id,
+#                         object_entity_id=obj_id,
+#                         canonical_rel_name=canon_name,
+#                         canonical_rel_desc=canon_desc,
+#                         new_rel_cls=new_rel_cls,
+#                         new_rel_cls_group=new_rel_cls_group,
+#                         relation_name=rel_name,
+#                         rel_desc=rel_desc,
+#                         rel_hint_type=rel_hint,
+#                         subject_entity_name=subj_name,
+#                         object_entity_name=obj_name,
+#                         qualifiers=quals,
+#                         remark=remark,
+#                         confidence=conf,
+#                     )
+
+#                     # record alias + provisional mapping
+#                     provisional_to_real[str(prov)] = new_id
+#                     alias_map[str(prov)] = new_id
+#                     for old in rel_ids_valid:
+#                         alias_map[old] = new_id
+
+#                     decisions.append({
+#                         "action": "merge_relations",
+#                         "merged_relation_id": new_id,
+#                         "provisional_id": prov,
+#                         "merged_from": rel_ids_valid,
+#                         "subject_entity_id": subj_id,
+#                         "object_entity_id": obj_id,
+#                         "canonical_rel_name": canon_name,
+#                         "justification": justification,
+#                         "remark": remark,
+#                         "confidence": conf
+#                     })
+
+#                 else:
+#                     decisions.append({
+#                         "action": "skip_unknown_function",
+#                         "function": fn,
+#                         "raw": step,
+#                         "justification": justification,
+#                         "remark": remark_val,
+#                         "confidence": confidence_val
+#                     })
+
+#             except Exception as e:
+#                 decisions.append({
+#                     "action": "error_executing",
+#                     "function": fn,
+#                     "error": str(e),
+#                     "input": step,
+#                     "justification": justification,
+#                     "remark": remark_val,
+#                     "confidence": confidence_val
+#                 })
+
+#         # write decisions file for this chunk
+#         dec_path = OUT_DIR / f"cluster_{cluster_label_str}_decisions.json"
+#         dec_obj = {
+#             "cluster_label": cluster_label_str,
+#             "cluster_relations": cluster_relations,
+#             "llm_raw": raw_out,
+#             "parsed_steps": parsed,
+#             "executed_decisions": decisions,
+#             "timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+#         }
+#         dec_path.write_text(json.dumps(dec_obj, ensure_ascii=False, indent=2), encoding="utf-8")
+
+#         # append to global action log
+#         with action_log_path.open("a", encoding="utf-8") as fh:
+#             fh.write(json.dumps(dec_obj, ensure_ascii=False) + "\n")
+
+#     # iterate clusters (skip noise -1 first, then noise)
+#     cluster_keys = [k for k in cluster_to_relids.keys() if k != -1]
+#     cluster_keys = sorted(cluster_keys)
+#     if -1 in cluster_to_relids:
+#         cluster_keys.append(-1)
+
+#     for cluster_label in cluster_keys:
+#         rel_ids_global = cluster_to_relids.get(cluster_label, [])
+#         if not rel_ids_global:
+#             continue
+#         print(f"[cluster] {cluster_label} -> {len(rel_ids_global)} relations")
+
+#         # local subclustering for large clusters
+#         if len(rel_ids_global) > MAX_CLUSTER_SIZE_FOR_LOCAL:
+#             print(f"[cluster] {cluster_label}: size {len(rel_ids_global)} > {MAX_CLUSTER_SIZE_FOR_LOCAL}, running local HDBSCAN")
+#             idxs = [rel_id_to_index[rid] for rid in rel_ids_global]
+#             try:
+#                 sub_emb = combined_emb[idxs]
+#                 local_clusterer = hdbscan.HDBSCAN(
+#                     min_cluster_size=max(2, LOCAL_HDBSCAN_MIN_CLUSTER_SIZE),
+#                     min_samples=LOCAL_HDBSCAN_MIN_SAMPLES,
+#                     metric="euclidean",
+#                     cluster_selection_method="eom"
+#                 )
+#                 local_labels = local_clusterer.fit_predict(sub_emb)
+#             except Exception as e:
+#                 print(f"[warn] local HDBSCAN failed for cluster {cluster_label}: {e}. Treating as single group.")
+#                 local_labels = np.zeros(len(idxs), dtype=int)
+
+#             local_map: Dict[int, List[str]] = {}
+#             for i_local, lab_local in enumerate(local_labels):
+#                 rid = rel_ids_global[i_local]
+#                 local_map.setdefault(int(lab_local), []).append(rid)
+
+#             for lab_local, local_rel_ids in sorted(local_map.items(), key=lambda x: x[0]):
+#                 label_prefix = f"{cluster_label}_loc{lab_local}"
+#                 # split into chunks for LLM
+#                 for part_idx in range(0, len(local_rel_ids), MAX_MEMBERS_PER_PROMPT):
+#                     part_rel_ids = local_rel_ids[part_idx:part_idx + MAX_MEMBERS_PER_PROMPT]
+#                     chunk_label = f"{label_prefix}_p{part_idx//MAX_MEMBERS_PER_PROMPT}"
+#                     print(f"[cluster] {chunk_label}: processing {len(part_rel_ids)} relations")
+#                     run_llm_on_subset(part_rel_ids, chunk_label)
+
+#         else:
+#             label_prefix = str(cluster_label)
+#             for part_idx in range(0, len(rel_ids_global), MAX_MEMBERS_PER_PROMPT):
+#                 part_rel_ids = rel_ids_global[part_idx:part_idx + MAX_MEMBERS_PER_PROMPT]
+#                 chunk_label = f"{label_prefix}_p{part_idx//MAX_MEMBERS_PER_PROMPT}"
+#                 print(f"[cluster] {chunk_label}: processing {len(part_rel_ids)} relations")
+#                 run_llm_on_subset(part_rel_ids, chunk_label)
+
+#     # NEW: strict deterministic post-pass to remove exact duplicates safely
+#     if AUTO_MERGE_EXACT_DUPLICATES:
+#         before = len(rel_by_id)
+#         rel_by_id, merged_n = auto_merge_exact_duplicates(rel_by_id)
+#         after = len(rel_by_id)
+#         if merged_n > 0:
+#             print(f"[dedup] auto_merge_exact_duplicates merged {merged_n} duplicate edges; relations {before} -> {after}")
+#         else:
+#             print(f"[dedup] auto_merge_exact_duplicates: no merges; relations {before} -> {after}")
+
+#     # After all chunks processed: write final relations output
+#     final_relations = list(rel_by_id.values())
+#     out_json = OUT_DIR / "relations_resolved.json"
+#     out_jsonl = OUT_DIR / "relations_resolved.jsonl"
+#     out_json.write_text(json.dumps(final_relations, ensure_ascii=False, indent=2), encoding="utf-8")
+#     with out_jsonl.open("w", encoding="utf-8") as fh:
+#         for r in final_relations:
+#             fh.write(json.dumps(r, ensure_ascii=False) + "\n")
+
+#     print(f"[done] wrote final resolved relations -> {out_json}  (count={len(final_relations)})")
+#     print(f"[done] action log -> {action_log_path}")
+
+#     # ---------------------- SUMMARY AGGREGATION ---------------------
+
+#     summary_dir = OUT_DIR / "summary"
+#     summary_dir.mkdir(exist_ok=True)
+
+#     # Aggregate per-chunk decision files
+#     cluster_decisions: List[Dict[str, Any]] = []
+#     for path in sorted(OUT_DIR.glob("cluster_*_decisions.json")):
+#         try:
+#             obj = json.loads(path.read_text(encoding="utf-8"))
+#             cluster_decisions.append(obj)
+#         except Exception as e:
+#             print(f"[warn] failed to read {path}: {e}")
+
+#     all_clusters_decisions_path = summary_dir / "all_clusters_decisions.json"
+#     all_clusters_decisions_path.write_text(
+#         json.dumps(cluster_decisions, ensure_ascii=False, indent=2),
+#         encoding="utf-8"
+#     )
+
+#     total_clusters = len(cluster_decisions)  # here "cluster" means one LLM chunk
+#     actions_by_type: Dict[str, int] = {}
+#     total_remarks = 0
+#     clusters_with_any_decisions = 0
+
+#     for cd in cluster_decisions:
+#         decs = cd.get("executed_decisions", [])
+#         if not decs:
+#             continue
+#         clusters_with_any_decisions += 1
+#         for d in decs:
+#             act = d.get("action")
+#             actions_by_type[act] = actions_by_type.get(act, 0) + 1
+#             rem = d.get("remark")
+#             if rem:
+#                 total_remarks += 1
+
+#     total_errors = actions_by_type.get("error_executing", 0)
+
+#     stats = {
+#         "total_chunks": total_clusters,
+#         "total_chunks_with_any_decisions": clusters_with_any_decisions,
+#         "total_actions_by_type": actions_by_type,
+#         "total_errors": total_errors,
+#         "total_remarks_logged": total_remarks,
+#         "generated_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+#     }
+
+#     stats_path = summary_dir / "stats_summary.json"
+#     stats_path.write_text(json.dumps(stats, ensure_ascii=False, indent=2), encoding="utf-8")
+
+#     print(f"[done] summary decisions -> {all_clusters_decisions_path}")
+#     print(f"[done] summary stats -> {stats_path}")
+
+#     # ---------------------- SCHEMA AGGREGATION ----------------------
+
+#     # 1) Canonical relation schema
+#     canonical_map: Dict[str, Dict[str, Any]] = {}
+#     for r in final_relations:
+#         cname = safe_str(r.get("canonical_rel_name", ""))
+#         if not cname or cname.upper() == "TBD":
+#             continue
+#         cdesc = safe_str(r.get("canonical_rel_desc", ""))
+#         rel_cls = safe_str(r.get("rel_cls", ""))
+#         rel_grp = safe_str(r.get("rel_cls_group", ""))
+#         rid = r.get("relation_id")
+
+#         entry = canonical_map.setdefault(cname, {
+#             "canonical_rel_name": cname,
+#             "canonical_rel_desc_candidates": set(),
+#             "rel_cls_set": set(),
+#             "rel_cls_group_set": set(),
+#             "relation_ids": []
+#         })
+#         if cdesc:
+#             entry["canonical_rel_desc_candidates"].add(cdesc)
+#         if rel_cls and rel_cls.upper() != "TBD":
+#             entry["rel_cls_set"].add(rel_cls)
+#         if rel_grp and rel_grp.upper() != "TBD":
+#             entry["rel_cls_group_set"].add(rel_grp)
+#         if rid:
+#             entry["relation_ids"].append(rid)
+
+#     canonical_schema = []
+#     for cname, info in canonical_map.items():
+#         desc_candidates = list(info["canonical_rel_desc_candidates"])
+#         chosen_desc = desc_candidates[0] if desc_candidates else ""
+#         canonical_schema.append({
+#             "canonical_rel_name": cname,
+#             "canonical_rel_desc": chosen_desc,
+#             "rel_cls": sorted(info["rel_cls_set"]),
+#             "rel_cls_group": sorted(info["rel_cls_group_set"]),
+#             "instance_count": len(info["relation_ids"]),
+#             "example_relation_ids": info["relation_ids"][:10]
+#         })
+
+#     canonical_schema_path = summary_dir / "canonical_rel_schema.json"
+#     canonical_schema_path.write_text(
+#         json.dumps(canonical_schema, ensure_ascii=False, indent=2),
+#         encoding="utf-8"
+#     )
+
+#     # 2) Relation class schema
+#     cls_map: Dict[str, Dict[str, Any]] = {}
+#     for r in final_relations:
+#         cls_name = safe_str(r.get("rel_cls", ""))
+#         if not cls_name or cls_name.upper() == "TBD":
+#             continue
+#         grp_name = safe_str(r.get("rel_cls_group", ""))
+#         cname = safe_str(r.get("canonical_rel_name", ""))
+#         rid = r.get("relation_id")
+
+#         entry = cls_map.setdefault(cls_name, {
+#             "rel_cls": cls_name,
+#             "rel_cls_group_set": set(),
+#             "canonical_rel_names": set(),
+#             "relation_ids": []
+#         })
+#         if grp_name and grp_name.upper() != "TBD":
+#             entry["rel_cls_group_set"].add(grp_name)
+#         if cname and cname.upper() != "TBD":
+#             entry["canonical_rel_names"].add(cname)
+#         if rid:
+#             entry["relation_ids"].append(rid)
+
+#     cls_schema = []
+#     for cls_name, info in cls_map.items():
+#         cls_schema.append({
+#             "rel_cls": cls_name,
+#             "rel_cls_group": sorted(info["rel_cls_group_set"]),
+#             "canonical_rel_names": sorted(info["canonical_rel_names"]),
+#             "instance_count": len(info["relation_ids"]),
+#             "example_relation_ids": info["relation_ids"][:10]
+#         })
+
+#     cls_schema_path = summary_dir / "rel_cls_schema.json"
+#     cls_schema_path.write_text(
+#         json.dumps(cls_schema, ensure_ascii=False, indent=2),
+#         encoding="utf-8"
+#     )
+
+#     # 3) Relation class group schema
+#     grp_map: Dict[str, Dict[str, Any]] = {}
+#     for r in final_relations:
+#         grp_name = safe_str(r.get("rel_cls_group", ""))
+#         if not grp_name or grp_name.upper() == "TBD":
+#             continue
+#         cls_name = safe_str(r.get("rel_cls", ""))
+#         cname = safe_str(r.get("canonical_rel_name", ""))
+#         rid = r.get("relation_id")
+
+#         entry = grp_map.setdefault(grp_name, {
+#             "rel_cls_group": grp_name,
+#             "rel_cls_set": set(),
+#             "canonical_rel_names": set(),
+#             "relation_ids": []
+#         })
+#         if cls_name and cls_name.upper() != "TBD":
+#             entry["rel_cls_set"].add(cls_name)
+#         if cname and cname.upper() != "TBD":
+#             entry["canonical_rel_names"].add(cname)
+#         if rid:
+#             entry["relation_ids"].append(rid)
+
+#     grp_schema = []
+#     for grp_name, info in grp_map.items():
+#         grp_schema.append({
+#             "rel_cls_group": grp_name,
+#             "rel_cls": sorted(info["rel_cls_set"]),
+#             "canonical_rel_names": sorted(info["canonical_rel_names"]),
+#             "instance_count": len(info["relation_ids"]),
+#             "example_relation_ids": info["relation_ids"][:10]
+#         })
+
+#     grp_schema_path = summary_dir / "rel_cls_group_schema.json"
+#     grp_schema_path.write_text(
+#         json.dumps(grp_schema, ensure_ascii=False, indent=2),
+#         encoding="utf-8"
+#     )
+
+#     print(f"[done] canonical relation schema -> {canonical_schema_path}")
+#     print(f"[done] relation class schema -> {cls_schema_path}")
+#     print(f"[done] relation class group schema -> {grp_schema_path}")
+
+
+# # if __name__ == "__main__":
+# #     relres_main()
+
+#endregion#?   Rel Res V10  - DSPy LLM Config + Canonical + RelCls + RelClsGroup + Schema + LocalSubcluster (+ MergeRelations)
+#*#########################  End  ##########################
+
+
+
+#?######################### Start ##########################
+#region:#?   Rel Res V11  - DSPy LLM Config + Canonical + RelCls + RelClsGroup + Schema + LocalSubcluster (+ MergeRelations)
 
 #!/usr/bin/env python3
 """
-relres_iterative_v10_dspy.py
+relres_iterative_v11_dspy.py
 
 Relation Resolution (Rel Res) — cluster relation instances, ask LLM to
 assign/normalize:
@@ -6985,6 +8925,12 @@ Key properties:
 - Multi-run friendly: TBD fields can be filled in the first run, refined later.
 - Uses global HDBSCAN + optional local subclustering + MAX_MEMBERS_PER_PROMPT
   so LLM chunks stay reasonably small.
+
+V11 changes:
+- merge_relations now allows merging relations connecting the same two nodes
+  even if some candidates are reversed direction (subject/object swapped).
+- Code DOES NOT pre-check canonical_rel_name consistency for merge_relations.
+  That is the LLM's responsibility. Code only validates the entity-pair match.
 
 Input:
   data/Relations/Rel Rec/relations_raw.jsonl
@@ -7257,6 +9203,20 @@ def _merge_qualifiers_safe(q_list: List[Dict[str, Any]]) -> Tuple[Optional[Dict[
         # conflict
         return None, False
     return base, True
+
+def _swap_subject_object_fields_in_place(r: Dict[str, Any]) -> None:
+    """
+    Swap all subject_* and object_* fields in-place.
+    Used to normalize reversed-direction relations into a chosen direction.
+    """
+    keys = list(r.keys())
+    for k in keys:
+        if not k.startswith("subject_"):
+            continue
+        suffix = k[len("subject_"):]
+        k2 = "object_" + suffix
+        if k2 in r:
+            r[k], r[k2] = r[k2], r[k]
 
 # ---------------------- Build relation texts & embeddings ----------
 
@@ -7587,26 +9547,51 @@ def execute_merge_relations(
     confidence: Optional[float],
 ) -> str:
     """
-    Merge two or more EXACT duplicate relations into one new relation instance.
+    Merge two or more relations into one new relation instance.
+
     Strict validation:
       - all relation_ids exist
-      - all share identical subject_entity_id and object_entity_id
-      - canonical_rel_name provided (direction+meaning) and must match (or be set) consistently
+      - all relations connect the SAME entity pair {A,B} (direction may differ)
+      - canonical_rel_name is required (LLM responsibility for correctness)
+      - qualifiers must be compatible (unless explicitly provided)
     """
     # validate ids exist
     relation_ids = [rid for rid in relation_ids if rid in rel_by_id]
     if len(relation_ids) < 2:
         raise ValueError("merge_relations: need at least 2 valid relation_ids")
 
-    # validate head/tail identical
+    subj_final = safe_str(subject_entity_id)
+    obj_final = safe_str(object_entity_id)
+    if not subj_final or not obj_final:
+        raise ValueError("merge_relations: subject_entity_id and object_entity_id are required")
+
+    # validate entity pair match (allow reversed direction)
+    reversed_ids: List[str] = []
+    rel_view_by_id: Dict[str, Dict[str, Any]] = {}
+
     for rid in relation_ids:
         r = rel_by_id[rid]
-        if str(r.get("subject_entity_id", "")).strip() != str(subject_entity_id).strip():
-            raise ValueError("merge_relations: subject_entity_id mismatch across relation_ids")
-        if str(r.get("object_entity_id", "")).strip() != str(object_entity_id).strip():
-            raise ValueError("merge_relations: object_entity_id mismatch across relation_ids")
+        s = safe_str(r.get("subject_entity_id", ""))
+        o = safe_str(r.get("object_entity_id", ""))
 
-    # validate / select canonical
+        if s == subj_final and o == obj_final:
+            rel_view_by_id[rid] = r
+            continue
+
+        if s == obj_final and o == subj_final:
+            reversed_ids.append(rid)
+            rr = dict(r)
+            _swap_subject_object_fields_in_place(rr)
+            rr["_direction_flipped_for_merge"] = True
+            rel_view_by_id[rid] = rr
+            continue
+
+        raise ValueError(
+            "merge_relations: relation_ids are not all between the same entity pair "
+            "(even allowing reversed direction)"
+        )
+
+    # canonical required
     canon = str(canonical_rel_name or "").strip()
     if not canon:
         raise ValueError("merge_relations: canonical_rel_name is required")
@@ -7619,8 +9604,8 @@ def execute_merge_relations(
             raise ValueError("merge_relations: qualifiers conflict; refuse to merge without explicit merged qualifiers")
         qualifiers = merged_q or {}
 
-    # choose base relation (first) for inherited fields
-    base = rel_by_id[relation_ids[0]]
+    # choose base relation (first) for inherited fields (use normalized view)
+    base = rel_view_by_id[relation_ids[0]]
 
     # merge remarks
     merged_remarks: List[str] = []
@@ -7631,6 +9616,12 @@ def execute_merge_relations(
             merged_remarks.extend([str(x) for x in rs if x])
         elif isinstance(rs, str) and rs.strip():
             merged_remarks.append(rs.strip())
+
+    if reversed_ids:
+        merged_remarks.append(
+            f"merge_relations: normalized {len(reversed_ids)} reversed-direction relation(s) to match ({subj_final} -> {obj_final})"
+        )
+
     if remark and str(remark).strip():
         merged_remarks.append(str(remark).strip())
     merged_remarks = _dedupe_preserve_order([r for r in merged_remarks if r])
@@ -7652,11 +9643,13 @@ def execute_merge_relations(
 
     new_rid = "RelR_" + uuid.uuid4().hex[:8]
 
-    merged_obj = dict(base)  # start from base to preserve unknown fields safely
+    merged_obj = dict(base)  # base is normalized (direction aligned) if it was reversed
     merged_obj["relation_id"] = new_rid
     merged_obj["provisional_id"] = provisional_id
     merged_obj["merged_from"] = list(relation_ids)
     merged_obj["_merged_at"] = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+    if reversed_ids:
+        merged_obj["merged_from_reversed_direction"] = list(reversed_ids)
 
     # set key schema + identity fields
     merged_obj["subject_entity_id"] = str(subject_entity_id)
@@ -7728,9 +9721,6 @@ def auto_merge_exact_duplicates(rel_by_id: Dict[str, Dict[str, Any]]) -> Tuple[D
         if len(group) < 2:
             continue
 
-        # find a compatible merge set around the most informative qualifiers
-        # (this merges empties into informative, but rejects conflicts)
-        # pick base candidate with max non-empty qualifiers
         group_sorted = sorted(group, key=lambda r: len(_norm_qualifiers(r.get("qualifiers", {}))), reverse=True)
         base = group_sorted[0]
         base_q = _norm_qualifiers(base.get("qualifiers", {}))
@@ -7739,7 +9729,6 @@ def auto_merge_exact_duplicates(rel_by_id: Dict[str, Dict[str, Any]]) -> Tuple[D
         for r in group_sorted[1:]:
             rq = _norm_qualifiers(r.get("qualifiers", {}))
             if _qualifiers_subset(rq, base_q) or _qualifiers_subset(base_q, rq):
-                # update base if r is more informative but compatible
                 if _qualifiers_subset(base_q, rq):
                     base_q = rq
                     base = r
@@ -7748,16 +9737,14 @@ def auto_merge_exact_duplicates(rel_by_id: Dict[str, Dict[str, Any]]) -> Tuple[D
         if len(to_merge) < 2:
             continue
 
-        # ensure all to_merge still exist (may have been merged already)
         to_merge_ids = [r["relation_id"] for r in to_merge if r.get("relation_id") in new_rel_by_id]
         if len(to_merge_ids) < 2:
             continue
 
-        # compute merged qualifiers safely
         q_list = [new_rel_by_id[rid].get("qualifiers", {}) for rid in to_merge_ids]
         merged_q, ok = _merge_qualifiers_safe(q_list)
         if not ok:
-            continue  # strict: skip if conflict
+            continue
 
         subj, obj, canon, cls, grp = key
         prov = "MERGE(" + "|".join(to_merge_ids) + ")"
@@ -7791,7 +9778,7 @@ def relres_main(
     model: str = MODEL_NAME,
     max_tokens: int = LLM_MAX_TOKENS_DEFAULT,
     llm_config: Optional["TraceKGLLMConfig"] = None,
-    input_relations_path: Path = INPUT_RELATIONS,
+    input_relations_path: Optional[Path] = None,
 ) -> None:
     """
     Run Relation Resolution end-to-end.
@@ -7802,24 +9789,31 @@ def relres_main(
         max_tokens=max_tokens) is synthesized so existing code that calls
         relres_main() or relres_main(model="...") still works.
     """
+    # Resolve input_relations_path at runtime (avoid default-arg binding trap)
+    if input_relations_path is None:
+        input_relations_path = INPUT_RELATIONS
+
+    # allow callers to pass either Path or str
+    if not isinstance(input_relations_path, Path):
+        input_relations_path = Path(str(input_relations_path))
+
+    # fail fast if input file missing (prevents silent reuse of old data)
+    if not input_relations_path.exists():
+        raise FileNotFoundError(
+            f"relres_main: input_relations_path does not exist: {input_relations_path!s}"
+        )
+
     # load relations
     relations = load_relations(input_relations_path)
     rel_by_id: Dict[str, Dict[str, Any]] = {r["relation_id"]: r for r in relations}
 
-    # NEW: provisional_id mapping + alias mapping (for merges)
-    provisional_to_real: Dict[str, str] = {}   # provisional_id -> real relation_id
-    alias_map: Dict[str, str] = {}             # old_relation_id -> new_relation_id
+    # provisional_id mapping + alias mapping (for merges)
+    provisional_to_real: Dict[str, str] = {}
+    alias_map: Dict[str, str] = {}
 
     def resolve_relation_ref(rid_or_prov: str) -> str:
-        """
-        Resolve a reference that might be:
-          - a real relation_id
-          - a provisional_id from merge_relations
-          - an old id that got merged (alias_map)
-        """
         if rid_or_prov in provisional_to_real:
             rid_or_prov = provisional_to_real[rid_or_prov]
-        # follow alias chain
         seen = set()
         cur = rid_or_prov
         while cur in alias_map and alias_map[cur] != cur and cur not in seen:
@@ -7831,7 +9825,6 @@ def relres_main(
 
     def resolve_many(ids: List[str]) -> List[str]:
         resolved = [resolve_relation_ref(str(x)) for x in (ids or [])]
-        # keep only those that still exist
         resolved = [rid for rid in resolved if rid in rel_by_id]
         return _dedupe_preserve_order(resolved)
 
@@ -7866,12 +9859,10 @@ def relres_main(
     # build LM once
     lm = _get_lm_for_rel_res(llm_config=llm_config, model=model, max_tokens=max_tokens)
 
-    # helper to process a subset of relation ids with LLM (one prompt)
     def run_llm_on_subset(sub_rel_ids: List[str], cluster_label_str: str):
         if not sub_rel_ids:
             return
 
-        # build compact representation for this chunk
         cluster_relations = []
         for rid in sub_rel_ids:
             r = rel_by_id.get(rid)
@@ -7905,11 +9896,9 @@ def relres_main(
         cluster_block = json.dumps(cluster_relations, ensure_ascii=False, indent=2)
         prompt = RELRES_PROMPT_TEMPLATE.replace("{cluster_block}", cluster_block)
 
-        # log prompt
         prompt_path = RAW_LLM_DIR / f"cluster_{cluster_label_str}_prompt.txt"
         prompt_path.write_text(prompt, encoding="utf-8")
 
-        # call LLM via DSPy
         raw_out = ""
         try:
             raw_out = _call_rel_res_lm(lm, prompt)
@@ -7917,7 +9906,6 @@ def relres_main(
             print(f"[warning] LLM call failed for {cluster_label_str}: {e}")
             raw_out = ""
 
-        # write raw output
         raw_path = RAW_LLM_DIR / f"cluster_{cluster_label_str}_llm_raw.txt"
         raw_path.write_text(raw_out, encoding="utf-8")
 
@@ -7933,7 +9921,6 @@ def relres_main(
 
         decisions: List[Dict[str, Any]] = []
 
-        # execute parsed function list in order
         for step in parsed:
             if not isinstance(step, dict):
                 continue
@@ -8108,7 +10095,6 @@ def relres_main(
                     canon_name = safe_str(args.get("canonical_rel_name", ""))
                     canon_desc = args.get("canonical_rel_desc")
 
-                    # accept either new_rel_cls/new_rel_cls_group or rel_cls/rel_cls_group
                     new_rel_cls = args.get("new_rel_cls", None)
                     new_rel_cls_group = args.get("new_rel_cls_group", None)
                     if new_rel_cls is None:
@@ -8140,24 +10126,8 @@ def relres_main(
                         })
                         continue
 
-                    # strict: ensure canonical_rel_name identical across the to-be-merged items (if already filled)
-                    # (We still allow merging TBD into canon_name, but do not allow disagreement.)
-                    mismatch = False
-                    for rid in rel_ids_valid:
-                        existing_c = safe_str(rel_by_id[rid].get("canonical_rel_name", ""))
-                        if existing_c and existing_c.upper() != "TBD" and existing_c != canon_name:
-                            mismatch = True
-                            break
-                    if mismatch:
-                        decisions.append({
-                            "action": "merge_relations_skip_canonical_mismatch",
-                            "relation_ids": rel_ids_valid,
-                            "canonical_rel_name": canon_name,
-                            "justification": justification,
-                            "remark": "Refused: canonical_rel_name mismatch across candidates",
-                            "confidence": confidence_val
-                        })
-                        continue
+                    # NOTE (V11): no canonical mismatch checking here.
+                    # LLM is responsible; code only enforces "same entity pair (allow reversed)" in execute_merge_relations.
 
                     new_id = execute_merge_relations(
                         rel_by_id,
@@ -8179,7 +10149,6 @@ def relres_main(
                         confidence=conf,
                     )
 
-                    # record alias + provisional mapping
                     provisional_to_real[str(prov)] = new_id
                     alias_map[str(prov)] = new_id
                     for old in rel_ids_valid:
@@ -8219,7 +10188,6 @@ def relres_main(
                     "confidence": confidence_val
                 })
 
-        # write decisions file for this chunk
         dec_path = OUT_DIR / f"cluster_{cluster_label_str}_decisions.json"
         dec_obj = {
             "cluster_label": cluster_label_str,
@@ -8231,7 +10199,6 @@ def relres_main(
         }
         dec_path.write_text(json.dumps(dec_obj, ensure_ascii=False, indent=2), encoding="utf-8")
 
-        # append to global action log
         with action_log_path.open("a", encoding="utf-8") as fh:
             fh.write(json.dumps(dec_obj, ensure_ascii=False) + "\n")
 
@@ -8247,7 +10214,6 @@ def relres_main(
             continue
         print(f"[cluster] {cluster_label} -> {len(rel_ids_global)} relations")
 
-        # local subclustering for large clusters
         if len(rel_ids_global) > MAX_CLUSTER_SIZE_FOR_LOCAL:
             print(f"[cluster] {cluster_label}: size {len(rel_ids_global)} > {MAX_CLUSTER_SIZE_FOR_LOCAL}, running local HDBSCAN")
             idxs = [rel_id_to_index[rid] for rid in rel_ids_global]
@@ -8271,7 +10237,6 @@ def relres_main(
 
             for lab_local, local_rel_ids in sorted(local_map.items(), key=lambda x: x[0]):
                 label_prefix = f"{cluster_label}_loc{lab_local}"
-                # split into chunks for LLM
                 for part_idx in range(0, len(local_rel_ids), MAX_MEMBERS_PER_PROMPT):
                     part_rel_ids = local_rel_ids[part_idx:part_idx + MAX_MEMBERS_PER_PROMPT]
                     chunk_label = f"{label_prefix}_p{part_idx//MAX_MEMBERS_PER_PROMPT}"
@@ -8286,7 +10251,7 @@ def relres_main(
                 print(f"[cluster] {chunk_label}: processing {len(part_rel_ids)} relations")
                 run_llm_on_subset(part_rel_ids, chunk_label)
 
-    # NEW: strict deterministic post-pass to remove exact duplicates safely
+    # strict deterministic post-pass to remove exact duplicates safely
     if AUTO_MERGE_EXACT_DUPLICATES:
         before = len(rel_by_id)
         rel_by_id, merged_n = auto_merge_exact_duplicates(rel_by_id)
@@ -8296,7 +10261,7 @@ def relres_main(
         else:
             print(f"[dedup] auto_merge_exact_duplicates: no merges; relations {before} -> {after}")
 
-    # After all chunks processed: write final relations output
+    # write final relations output
     final_relations = list(rel_by_id.values())
     out_json = OUT_DIR / "relations_resolved.json"
     out_jsonl = OUT_DIR / "relations_resolved.jsonl"
@@ -8313,7 +10278,6 @@ def relres_main(
     summary_dir = OUT_DIR / "summary"
     summary_dir.mkdir(exist_ok=True)
 
-    # Aggregate per-chunk decision files
     cluster_decisions: List[Dict[str, Any]] = []
     for path in sorted(OUT_DIR.glob("cluster_*_decisions.json")):
         try:
@@ -8328,7 +10292,7 @@ def relres_main(
         encoding="utf-8"
     )
 
-    total_clusters = len(cluster_decisions)  # here "cluster" means one LLM chunk
+    total_clusters = len(cluster_decisions)
     actions_by_type: Dict[str, int] = {}
     total_remarks = 0
     clusters_with_any_decisions = 0
@@ -8364,7 +10328,6 @@ def relres_main(
 
     # ---------------------- SCHEMA AGGREGATION ----------------------
 
-    # 1) Canonical relation schema
     canonical_map: Dict[str, Dict[str, Any]] = {}
     for r in final_relations:
         cname = safe_str(r.get("canonical_rel_name", ""))
@@ -8410,7 +10373,6 @@ def relres_main(
         encoding="utf-8"
     )
 
-    # 2) Relation class schema
     cls_map: Dict[str, Dict[str, Any]] = {}
     for r in final_relations:
         cls_name = safe_str(r.get("rel_cls", ""))
@@ -8449,7 +10411,6 @@ def relres_main(
         encoding="utf-8"
     )
 
-    # 3) Relation class group schema
     grp_map: Dict[str, Dict[str, Any]] = {}
     for r in final_relations:
         grp_name = safe_str(r.get("rel_cls_group", ""))
@@ -8496,17 +10457,332 @@ def relres_main(
 # if __name__ == "__main__":
 #     relres_main()
 
-#endregion#?   Rel Res V10  - DSPy LLM Config + Canonical + RelCls + RelClsGroup + Schema + LocalSubcluster (+ MergeRelations)
+#endregion#?   Rel Res V11  - DSPy LLM Config + Canonical + RelCls + RelClsGroup + Schema + LocalSubcluster (+ MergeRelations)
 #?#########################  End  ##########################
 
 
 
+#*######################### Start ##########################
+#region:#?   Multi Run Rel Res
 
+# import json
+# import time
+# from pathlib import Path
+# from typing import Any, Dict, List, Optional
+
+# # -----------------------
+# # CONFIG - Rel Res iterative
+# # -----------------------
+
+# # First-run input: raw relations from Rel Rec
+# BASE_INPUT_RELATIONS = Path("data/Relations/Rel Rec/relations_raw.jsonl")
+
+# # Root for iterative runs; each run gets its own subfolder
+# EXPERIMENT_ROOT = Path("data/Relations/Rel Res_IterativeRuns")
+
+# MAX_RUNS: int = 4
+
+# # If total schema-modifying actions in a run <= SCHEMA_CHANGE_THRESHOLD,
+# # that run is considered "no-change" w.r.t schema.
+# SCHEMA_CHANGE_THRESHOLD: Optional[int] = 0
+
+# # Optional: if total actions (including skips, remarks, etc.) <= this threshold,
+# # you may also treat the run as "no-change".
+# TOTAL_ACTIONS_THRESHOLD: Optional[int] = None
+
+# # Stop after this many consecutive "no-change" runs (if not None)
+# MAX_NO_CHANGE_RUNS: Optional[int] = 1
+
+# FINAL_RELATIONS_FILENAME_JSON = "relations_resolved.json"
+# FINAL_RELATIONS_FILENAME_JSONL = "relations_resolved.jsonl"
+# ACTION_LOG_FILENAME = "rel_res_action_log.jsonl"
+
+# # -----------------------
+# # Helpers
+# # -----------------------
+
+# def _write_json(path: Path, obj: Any) -> None:
+#     path.parent.mkdir(parents=True, exist_ok=True)
+#     path.write_text(json.dumps(obj, ensure_ascii=False, indent=2), encoding="utf-8")
+
+# def _load_json(path: Path) -> Any:
+#     return json.loads(path.read_text(encoding="utf-8"))
+
+# def _safe_json_load_line(line: str) -> Optional[Dict]:
+#     line = line.strip()
+#     if not line:
+#         return None
+#     try:
+#         return json.loads(line)
+#     except Exception:
+#         return None
+
+# def compute_run_summary_from_action_log(action_log_path: Path) -> Dict[str, Any]:
+#     """
+#     Summarize a single Rel Res run based on rel_res_action_log.jsonl.
+
+#     We treat the following actions as "schema-modifying":
+#       - set_canonical_rel
+#       - set_rel_cls
+#       - set_rel_cls_group
+#       - modify_rel_schema
+
+#     Remarks-only:
+#       - add_rel_remark
+
+#     Everything else (skips, errors, unknown) is counted but not schema-changing.
+#     """
+#     summary = {
+#         "total_chunks": 0,                          # each line ~ one LLM chunk
+#         "total_chunks_with_any_decisions": 0,
+#         "total_chunks_with_schema_changes": 0,
+#         "total_actions_by_type": {},
+#         "total_schema_actions": 0,
+#         "total_remark_actions": 0,                  # add_rel_remark calls
+#         "total_errors": 0,
+#         "total_remarks_logged": 0,                  # remark fields in actions
+#         "generated_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+#     }
+#     if not action_log_path.exists():
+#         return summary
+
+#     schema_actions = {"set_canonical_rel", "set_rel_cls", "set_rel_cls_group", "modify_rel_schema"}
+
+#     with action_log_path.open("r", encoding="utf-8") as fh:
+#         for line in fh:
+#             obj = _safe_json_load_line(line)
+#             if not obj:
+#                 continue
+#             summary["total_chunks"] += 1
+#             executed = obj.get("executed_decisions", []) or []
+#             if executed:
+#                 summary["total_chunks_with_any_decisions"] += 1
+
+#             schema_here = 0
+#             remark_actions_here = 0
+#             remarks_logged_here = 0
+
+#             for entry in executed:
+#                 action = entry.get("action")
+#                 summary["total_actions_by_type"].setdefault(action, 0)
+#                 summary["total_actions_by_type"][action] += 1
+
+#                 if action in schema_actions:
+#                     schema_here += 1
+#                 elif action == "add_rel_remark":
+#                     remark_actions_here += 1
+#                 elif action == "error_executing":
+#                     summary["total_errors"] += 1
+
+#                 # count explicit remark fields
+#                 if isinstance(entry, dict) and entry.get("remark"):
+#                     remarks_logged_here += 1
+
+#             summary["total_schema_actions"] += schema_here
+#             summary["total_remark_actions"] += remark_actions_here
+#             if schema_here > 0:
+#                 summary["total_chunks_with_schema_changes"] += 1
+#             summary["total_remarks_logged"] += remarks_logged_here
+
+#     return summary
+
+# # -----------------------
+# # Main iterative runner for Rel Res
+# # -----------------------
+
+# def run_relres_iteratively():
+#     """
+#     Run relres_main() multiple times, feeding the previous run's
+#     relations_resolved.jsonl as the next run's input, until convergence
+#     or MAX_RUNS is reached.
+
+#     Convergence is defined via:
+#       - SCHEMA_CHANGE_THRESHOLD
+#       - TOTAL_ACTIONS_THRESHOLD
+#       - MAX_NO_CHANGE_RUNS
+#     """
+#     from pathlib import Path  # ensure Path is in local scope if importing externally
+
+#     EXPERIMENT_ROOT.mkdir(parents=True, exist_ok=True)
+
+#     overall_runs: List[Dict[str, Any]] = []
+#     no_change_streak = 0
+
+#     # First run input is the raw relations from Rel Rec
+#     current_input_path = BASE_INPUT_RELATIONS
+#     last_run_dir: Optional[Path] = None
+
+#     for run_idx in range(MAX_RUNS):
+#         print("\n" + "=" * 36)
+#         print(f"=== REL RES RUN {run_idx:02d} ===")
+#         print("=" * 36)
+
+#         run_dir = EXPERIMENT_ROOT / f"run_{run_idx:02d}"
+#         run_dir.mkdir(parents=True, exist_ok=True)
+#         last_run_dir = run_dir
+
+#         # Set globals used by Rel Res V4 pipeline
+#         globals()["INPUT_RELATIONS"] = current_input_path
+#         globals()["OUT_DIR"] = run_dir
+#         globals()["RAW_LLM_DIR"] = run_dir / "llm_raw"
+#         globals()["RAW_LLM_DIR"].mkdir(parents=True, exist_ok=True)
+
+#         # Call the pipeline's main function (assumes relres_main defined already)
+#         print(f"[run {run_idx}] calling relres_main() with INPUT_RELATIONS={current_input_path} OUT_DIR={run_dir}")
+#         relres_main()
+
+#         final_relations_json = run_dir / FINAL_RELATIONS_FILENAME_JSON
+#         final_relations_jsonl = run_dir / FINAL_RELATIONS_FILENAME_JSONL
+#         action_log_path = run_dir / ACTION_LOG_FILENAME
+
+#         run_summary = compute_run_summary_from_action_log(action_log_path)
+#         run_summary["run_index"] = run_idx
+#         run_summary["run_path"] = str(run_dir)
+#         run_summary["final_relations_json"] = str(final_relations_json) if final_relations_json.exists() else None
+#         run_summary["final_relations_jsonl"] = str(final_relations_jsonl) if final_relations_jsonl.exists() else None
+
+#         summary_dir = run_dir / "summary"
+#         summary_dir.mkdir(parents=True, exist_ok=True)
+#         run_summary_path = summary_dir / "rel_res_summary.json"
+#         _write_json(run_summary_path, run_summary)
+
+#         overall_runs.append({
+#             "run_index": run_idx,
+#             "run_dir": str(run_dir),
+#             "summary_path": str(run_summary_path)
+#         })
+
+#         total_schema = int(run_summary.get("total_schema_actions", 0))
+#         total_actions = int(sum(run_summary.get("total_actions_by_type", {}).values() or []))
+
+#         print(f"[run {run_idx}] total_schema_actions = {total_schema}")
+#         print(f"[run {run_idx}] total_actions = {total_actions}")
+
+#         # Determine if this run counts as "no-change"
+#         is_no_change = False
+#         if SCHEMA_CHANGE_THRESHOLD is not None and total_schema <= SCHEMA_CHANGE_THRESHOLD:
+#             is_no_change = True
+#         if TOTAL_ACTIONS_THRESHOLD is not None and total_actions <= TOTAL_ACTIONS_THRESHOLD:
+#             is_no_change = True
+
+#         if MAX_NO_CHANGE_RUNS is not None:
+#             if is_no_change:
+#                 no_change_streak += 1
+#             else:
+#                 no_change_streak = 0
+
+#             print(f"[run {run_idx}] no_change_streak = {no_change_streak} (threshold {MAX_NO_CHANGE_RUNS})")
+#             if no_change_streak >= MAX_NO_CHANGE_RUNS:
+#                 print(f"[stop] Rel Res convergence achieved after run {run_idx} (no_change_streak={no_change_streak}).")
+#                 # still update current_input_path for downstream use
+#                 if final_relations_jsonl.exists():
+#                     current_input_path = final_relations_jsonl
+#                 break
+
+#         # Prepare next-run input
+#         if final_relations_jsonl.exists():
+#             current_input_path = final_relations_jsonl
+#         else:
+#             print(f"[warn] final relations jsonl not found for run {run_idx}. Stopping iterative runs.")
+#             break
+
+#     # -----------------------
+#     # OVERALL SUMMARY EXPORTS
+#     # -----------------------
+#     overall_dir = EXPERIMENT_ROOT / "overall_summary"
+#     overall_dir.mkdir(parents=True, exist_ok=True)
+
+#     # collect per-run summaries
+#     per_run_stats: List[Dict[str, Any]] = []
+#     for r in overall_runs:
+#         sp = Path(r["summary_path"])
+#         if sp.exists():
+#             try:
+#                 per_run_stats.append(_load_json(sp))
+#             except Exception:
+#                 per_run_stats.append({"run_index": r["run_index"], "error": "failed to load summary"})
+
+#     aggregated = {
+#         "total_runs_executed": len(per_run_stats),
+#         "sum_total_chunks": sum([p.get("total_chunks", 0) for p in per_run_stats]),
+#         "sum_total_schema_actions": sum([p.get("total_schema_actions", 0) for p in per_run_stats]),
+#         "sum_total_errors": sum([p.get("total_errors", 0) for p in per_run_stats]),
+#         "sum_total_remarks_logged": sum([p.get("total_remarks_logged", 0) for p in per_run_stats]),
+#         "by_run": per_run_stats,
+#         "generated_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+#     }
+
+#     stats_path = overall_dir / "stats.json"
+#     _write_json(stats_path, aggregated)
+
+#     # Copy final relations + schema from the last run
+#     if last_run_dir is not None:
+#         final_relations_json = last_run_dir / FINAL_RELATIONS_FILENAME_JSON
+#         final_relations_jsonl = last_run_dir / FINAL_RELATIONS_FILENAME_JSONL
+#         final_summary_dir = last_run_dir / "summary"
+
+#         final_relations = []
+#         if final_relations_json.exists():
+#             try:
+#                 final_relations = _load_json(final_relations_json)
+#             except Exception:
+#                 final_relations = []
+
+#         # write a copy of final relations into overall_summary
+#         final_relations_path_out = overall_dir / "relations_resolved.json"
+#         final_relations_jsonl_path_out = overall_dir / "relations_resolved.jsonl"
+#         _write_json(final_relations_path_out, final_relations)
+
+#         if final_relations_jsonl.exists():
+#             # copy jsonl line-by-line
+#             with final_relations_jsonl.open("r", encoding="utf-8") as src, \
+#                  final_relations_jsonl_path_out.open("w", encoding="utf-8") as dst:
+#                 for line in src:
+#                     dst.write(line)
+
+#         # also copy the latest schema files for convenience
+#         canonical_schema_src = final_summary_dir / "canonical_rel_schema.json"
+#         rel_cls_schema_src = final_summary_dir / "rel_cls_schema.json"
+#         rel_cls_group_schema_src = final_summary_dir / "rel_cls_group_schema.json"
+
+#         if canonical_schema_src.exists():
+#             canonical_schema = _load_json(canonical_schema_src)
+#             _write_json(overall_dir / "canonical_rel_schema.json", canonical_schema)
+
+#         if rel_cls_schema_src.exists():
+#             cls_schema = _load_json(rel_cls_schema_src)
+#             _write_json(overall_dir / "rel_cls_schema.json", cls_schema)
+
+#         if rel_cls_group_schema_src.exists():
+#             grp_schema = _load_json(rel_cls_group_schema_src)
+#             _write_json(overall_dir / "rel_cls_group_schema.json", grp_schema)
+
+#         print(f"\n[done] Overall stats written to: {stats_path}")
+#         print(f"[done] Final relations (copy) written to: {final_relations_path_out}")
+#         print(f"[done] Final relations jsonl (copy) written to: {final_relations_jsonl_path_out}")
+#         print(f"[done] Final canonical_rel_schema copied to overall_summary (if present)")
+#         print(f"[done] Final rel_cls_schema copied to overall_summary (if present)")
+#         print(f"[done] Final rel_cls_group_schema copied to overall_summary (if present)")
+#     else:
+#         print("[warn] No runs executed; nothing to export to overall_summary.")
+
+
+
+# # # # -----------------------
+# # # Relation Res Multi Run - Run statement
+# # # -----------------------
+
+# # run_relres_iteratively() 
+
+
+
+#endregion#?   Multi Run Rel Res
+#*#########################  End  ##########################
 
 
 
 #?######################### Start ##########################
-#region:#?   Multi Run Rel Res
+#region:#?   Multi Run Rel Res (FIXED: uses previous run output as next run input)
 
 import json
 import time
@@ -8514,31 +10790,20 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 # -----------------------
-# CONFIG - Rel Res iterative
+# CONFIG - Rel Res iterative (namespaced)
 # -----------------------
 
-# First-run input: raw relations from Rel Rec
-BASE_INPUT_RELATIONS = Path("data/Relations/Rel Rec/relations_raw.jsonl")
+RELRES_BASE_INPUT_RELATIONS = Path("data/Relations/Rel Rec/relations_raw.jsonl")
+RELRES_EXPERIMENT_ROOT      = Path("data/Relations/Rel Res_IterativeRuns")
 
-# Root for iterative runs; each run gets its own subfolder
-EXPERIMENT_ROOT = Path("data/Relations/Rel Res_IterativeRuns")
+RELRES_MAX_RUNS: int = 4
+RELRES_SCHEMA_CHANGE_THRESHOLD: Optional[int] = 0
+RELRES_TOTAL_ACTIONS_THRESHOLD: Optional[int] = None
+RELRES_MAX_NO_CHANGE_RUNS: Optional[int] = 3
 
-MAX_RUNS: int = 4
-
-# If total schema-modifying actions in a run <= SCHEMA_CHANGE_THRESHOLD,
-# that run is considered "no-change" w.r.t schema.
-SCHEMA_CHANGE_THRESHOLD: Optional[int] = 0
-
-# Optional: if total actions (including skips, remarks, etc.) <= this threshold,
-# you may also treat the run as "no-change".
-TOTAL_ACTIONS_THRESHOLD: Optional[int] = None
-
-# Stop after this many consecutive "no-change" runs (if not None)
-MAX_NO_CHANGE_RUNS: Optional[int] = 1
-
-FINAL_RELATIONS_FILENAME_JSON = "relations_resolved.json"
-FINAL_RELATIONS_FILENAME_JSONL = "relations_resolved.jsonl"
-ACTION_LOG_FILENAME = "rel_res_action_log.jsonl"
+RELRES_FINAL_RELATIONS_FILENAME_JSON  = "relations_resolved.json"
+RELRES_FINAL_RELATIONS_FILENAME_JSONL = "relations_resolved.jsonl"
+RELRES_ACTION_LOG_FILENAME            = "rel_res_action_log.jsonl"
 
 # -----------------------
 # Helpers
@@ -8561,29 +10826,15 @@ def _safe_json_load_line(line: str) -> Optional[Dict]:
         return None
 
 def compute_run_summary_from_action_log(action_log_path: Path) -> Dict[str, Any]:
-    """
-    Summarize a single Rel Res run based on rel_res_action_log.jsonl.
-
-    We treat the following actions as "schema-modifying":
-      - set_canonical_rel
-      - set_rel_cls
-      - set_rel_cls_group
-      - modify_rel_schema
-
-    Remarks-only:
-      - add_rel_remark
-
-    Everything else (skips, errors, unknown) is counted but not schema-changing.
-    """
     summary = {
-        "total_chunks": 0,                          # each line ~ one LLM chunk
+        "total_chunks": 0,
         "total_chunks_with_any_decisions": 0,
         "total_chunks_with_schema_changes": 0,
         "total_actions_by_type": {},
         "total_schema_actions": 0,
-        "total_remark_actions": 0,                  # add_rel_remark calls
+        "total_remark_actions": 0,
         "total_errors": 0,
-        "total_remarks_logged": 0,                  # remark fields in actions
+        "total_remarks_logged": 0,
         "generated_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
     }
     if not action_log_path.exists():
@@ -8596,6 +10847,7 @@ def compute_run_summary_from_action_log(action_log_path: Path) -> Dict[str, Any]
             obj = _safe_json_load_line(line)
             if not obj:
                 continue
+
             summary["total_chunks"] += 1
             executed = obj.get("executed_decisions", []) or []
             if executed:
@@ -8617,7 +10869,6 @@ def compute_run_summary_from_action_log(action_log_path: Path) -> Dict[str, Any]
                 elif action == "error_executing":
                     summary["total_errors"] += 1
 
-                # count explicit remark fields
                 if isinstance(entry, dict) and entry.get("remark"):
                     remarks_logged_here += 1
 
@@ -8630,58 +10881,79 @@ def compute_run_summary_from_action_log(action_log_path: Path) -> Dict[str, Any]
     return summary
 
 # -----------------------
-# Main iterative runner for Rel Res
+# Main iterative runner for Rel Res (FIXED)
 # -----------------------
 
-def run_relres_iteratively():
+def run_relres_iteratively(
+    llm_config=None,
+    base_input_relations: Path = RELRES_BASE_INPUT_RELATIONS,
+    experiment_root: Path = RELRES_EXPERIMENT_ROOT,
+    max_runs: int = RELRES_MAX_RUNS,
+    schema_change_threshold: Optional[int] = RELRES_SCHEMA_CHANGE_THRESHOLD,
+    total_actions_threshold: Optional[int] = RELRES_TOTAL_ACTIONS_THRESHOLD,
+    max_no_change_runs: Optional[int] = RELRES_MAX_NO_CHANGE_RUNS,
+    final_relations_filename_json: str = RELRES_FINAL_RELATIONS_FILENAME_JSON,
+    final_relations_filename_jsonl: str = RELRES_FINAL_RELATIONS_FILENAME_JSONL,
+    action_log_filename: str = RELRES_ACTION_LOG_FILENAME,
+    model: Optional[str] = None,
+    max_tokens: Optional[int] = None,
+) -> None:
     """
-    Run relres_main() multiple times, feeding the previous run's
-    relations_resolved.jsonl as the next run's input, until convergence
-    or MAX_RUNS is reached.
-
-    Convergence is defined via:
-      - SCHEMA_CHANGE_THRESHOLD
-      - TOTAL_ACTIONS_THRESHOLD
-      - MAX_NO_CHANGE_RUNS
+    FIXES:
+    - Passes input_relations_path explicitly into relres_main(), so each run
+      actually consumes the previous run's relations_resolved.jsonl.
+    - Accepts llm_config and forwards it into relres_main().
+    - Avoids relying on module globals that can be clobbered by other runners.
     """
-    from pathlib import Path  # ensure Path is in local scope if importing externally
 
-    EXPERIMENT_ROOT.mkdir(parents=True, exist_ok=True)
+    base_input_relations = Path(base_input_relations)
+    experiment_root = Path(experiment_root)
+    experiment_root.mkdir(parents=True, exist_ok=True)
+
+    print(f"[RelRes runner] Using experiment_root = {experiment_root}")
+    print(f"[RelRes runner] Using base_input_relations = {base_input_relations}")
 
     overall_runs: List[Dict[str, Any]] = []
     no_change_streak = 0
-
-    # First run input is the raw relations from Rel Rec
-    current_input_path = BASE_INPUT_RELATIONS
+    current_input_path = base_input_relations
     last_run_dir: Optional[Path] = None
 
-    for run_idx in range(MAX_RUNS):
+    for run_idx in range(max_runs):
         print("\n" + "=" * 36)
         print(f"=== REL RES RUN {run_idx:02d} ===")
         print("=" * 36)
 
-        run_dir = EXPERIMENT_ROOT / f"run_{run_idx:02d}"
+        run_dir = experiment_root / f"run_{run_idx:02d}"
         run_dir.mkdir(parents=True, exist_ok=True)
         last_run_dir = run_dir
 
-        # Set globals used by Rel Res V4 pipeline
-        globals()["INPUT_RELATIONS"] = current_input_path
+        # Set IO globals used by relres_main for outputs (OK to keep this)
         globals()["OUT_DIR"] = run_dir
         globals()["RAW_LLM_DIR"] = run_dir / "llm_raw"
         globals()["RAW_LLM_DIR"].mkdir(parents=True, exist_ok=True)
 
-        # Call the pipeline's main function (assumes relres_main defined already)
-        print(f"[run {run_idx}] calling relres_main() with INPUT_RELATIONS={current_input_path} OUT_DIR={run_dir}")
-        relres_main()
+        # IMPORTANT: call relres_main using explicit input_relations_path
+        print(f"[run {run_idx}] calling relres_main() with input_relations_path={current_input_path} OUT_DIR={run_dir}")
 
-        final_relations_json = run_dir / FINAL_RELATIONS_FILENAME_JSON
-        final_relations_jsonl = run_dir / FINAL_RELATIONS_FILENAME_JSONL
-        action_log_path = run_dir / ACTION_LOG_FILENAME
+        kwargs = {"input_relations_path": current_input_path}
+        if llm_config is not None:
+            kwargs["llm_config"] = llm_config
+        if model is not None:
+            kwargs["model"] = model
+        if max_tokens is not None:
+            kwargs["max_tokens"] = max_tokens
+
+        relres_main(**kwargs)
+
+        final_relations_json  = run_dir / final_relations_filename_json
+        final_relations_jsonl = run_dir / final_relations_filename_jsonl
+        action_log_path       = run_dir / action_log_filename
 
         run_summary = compute_run_summary_from_action_log(action_log_path)
         run_summary["run_index"] = run_idx
         run_summary["run_path"] = str(run_dir)
-        run_summary["final_relations_json"] = str(final_relations_json) if final_relations_json.exists() else None
+        run_summary["input_used"] = str(current_input_path)
+        run_summary["final_relations_json"]  = str(final_relations_json) if final_relations_json.exists() else None
         run_summary["final_relations_jsonl"] = str(final_relations_jsonl) if final_relations_jsonl.exists() else None
 
         summary_dir = run_dir / "summary"
@@ -8689,11 +10961,7 @@ def run_relres_iteratively():
         run_summary_path = summary_dir / "rel_res_summary.json"
         _write_json(run_summary_path, run_summary)
 
-        overall_runs.append({
-            "run_index": run_idx,
-            "run_dir": str(run_dir),
-            "summary_path": str(run_summary_path)
-        })
+        overall_runs.append({"run_index": run_idx, "run_dir": str(run_dir), "summary_path": str(run_summary_path)})
 
         total_schema = int(run_summary.get("total_schema_actions", 0))
         total_actions = int(sum(run_summary.get("total_actions_by_type", {}).values() or []))
@@ -8701,28 +10969,21 @@ def run_relres_iteratively():
         print(f"[run {run_idx}] total_schema_actions = {total_schema}")
         print(f"[run {run_idx}] total_actions = {total_actions}")
 
-        # Determine if this run counts as "no-change"
         is_no_change = False
-        if SCHEMA_CHANGE_THRESHOLD is not None and total_schema <= SCHEMA_CHANGE_THRESHOLD:
+        if schema_change_threshold is not None and total_schema <= schema_change_threshold:
             is_no_change = True
-        if TOTAL_ACTIONS_THRESHOLD is not None and total_actions <= TOTAL_ACTIONS_THRESHOLD:
+        if total_actions_threshold is not None and total_actions <= total_actions_threshold:
             is_no_change = True
 
-        if MAX_NO_CHANGE_RUNS is not None:
-            if is_no_change:
-                no_change_streak += 1
-            else:
-                no_change_streak = 0
-
-            print(f"[run {run_idx}] no_change_streak = {no_change_streak} (threshold {MAX_NO_CHANGE_RUNS})")
-            if no_change_streak >= MAX_NO_CHANGE_RUNS:
+        if max_no_change_runs is not None:
+            no_change_streak = (no_change_streak + 1) if is_no_change else 0
+            print(f"[run {run_idx}] no_change_streak = {no_change_streak} (threshold {max_no_change_runs})")
+            if no_change_streak >= max_no_change_runs:
                 print(f"[stop] Rel Res convergence achieved after run {run_idx} (no_change_streak={no_change_streak}).")
-                # still update current_input_path for downstream use
                 if final_relations_jsonl.exists():
                     current_input_path = final_relations_jsonl
                 break
 
-        # Prepare next-run input
         if final_relations_jsonl.exists():
             current_input_path = final_relations_jsonl
         else:
@@ -8732,10 +10993,9 @@ def run_relres_iteratively():
     # -----------------------
     # OVERALL SUMMARY EXPORTS
     # -----------------------
-    overall_dir = EXPERIMENT_ROOT / "overall_summary"
+    overall_dir = experiment_root / "overall_summary"
     overall_dir.mkdir(parents=True, exist_ok=True)
 
-    # collect per-run summaries
     per_run_stats: List[Dict[str, Any]] = []
     for r in overall_runs:
         sp = Path(r["summary_path"])
@@ -8759,72 +11019,41 @@ def run_relres_iteratively():
     _write_json(stats_path, aggregated)
 
     # Copy final relations + schema from the last run
-    if last_run_dir is not None:
-        final_relations_json = last_run_dir / FINAL_RELATIONS_FILENAME_JSON
-        final_relations_jsonl = last_run_dir / FINAL_RELATIONS_FILENAME_JSONL
-        final_summary_dir = last_run_dir / "summary"
-
-        final_relations = []
-        if final_relations_json.exists():
-            try:
-                final_relations = _load_json(final_relations_json)
-            except Exception:
-                final_relations = []
-
-        # write a copy of final relations into overall_summary
-        final_relations_path_out = overall_dir / "relations_resolved.json"
-        final_relations_jsonl_path_out = overall_dir / "relations_resolved.jsonl"
-        _write_json(final_relations_path_out, final_relations)
-
-        if final_relations_jsonl.exists():
-            # copy jsonl line-by-line
-            with final_relations_jsonl.open("r", encoding="utf-8") as src, \
-                 final_relations_jsonl_path_out.open("w", encoding="utf-8") as dst:
-                for line in src:
-                    dst.write(line)
-
-        # also copy the latest schema files for convenience
-        canonical_schema_src = final_summary_dir / "canonical_rel_schema.json"
-        rel_cls_schema_src = final_summary_dir / "rel_cls_schema.json"
-        rel_cls_group_schema_src = final_summary_dir / "rel_cls_group_schema.json"
-
-        if canonical_schema_src.exists():
-            canonical_schema = _load_json(canonical_schema_src)
-            _write_json(overall_dir / "canonical_rel_schema.json", canonical_schema)
-
-        if rel_cls_schema_src.exists():
-            cls_schema = _load_json(rel_cls_schema_src)
-            _write_json(overall_dir / "rel_cls_schema.json", cls_schema)
-
-        if rel_cls_group_schema_src.exists():
-            grp_schema = _load_json(rel_cls_group_schema_src)
-            _write_json(overall_dir / "rel_cls_group_schema.json", grp_schema)
-
-        print(f"\n[done] Overall stats written to: {stats_path}")
-        print(f"[done] Final relations (copy) written to: {final_relations_path_out}")
-        print(f"[done] Final relations jsonl (copy) written to: {final_relations_jsonl_path_out}")
-        print(f"[done] Final canonical_rel_schema copied to overall_summary (if present)")
-        print(f"[done] Final rel_cls_schema copied to overall_summary (if present)")
-        print(f"[done] Final rel_cls_group_schema copied to overall_summary (if present)")
-    else:
+    if last_run_dir is None:
         print("[warn] No runs executed; nothing to export to overall_summary.")
+        return
 
+    final_relations_json  = last_run_dir / final_relations_filename_json
+    final_relations_jsonl = last_run_dir / final_relations_filename_jsonl
+    final_summary_dir     = last_run_dir / "summary"
 
+    final_relations = []
+    if final_relations_json.exists():
+        try:
+            final_relations = _load_json(final_relations_json)
+        except Exception:
+            final_relations = []
 
+    _write_json(overall_dir / "relations_resolved.json", final_relations)
 
-# # # -----------------------
-# # Relation Res Multi Run - Run statement
-# # -----------------------
+    if final_relations_jsonl.exists():
+        dst = overall_dir / "relations_resolved.jsonl"
+        with final_relations_jsonl.open("r", encoding="utf-8") as src, dst.open("w", encoding="utf-8") as out:
+            for line in src:
+                out.write(line)
 
-# run_relres_iteratively() 
+    # schema copies (if present)
+    for fname in ["canonical_rel_schema.json", "rel_cls_schema.json", "rel_cls_group_schema.json"]:
+        src = final_summary_dir / fname
+        if src.exists():
+            _write_json(overall_dir / fname, _load_json(src))
 
-
+    print(f"\n[done] Overall stats written to: {stats_path}")
+    print(f"[done] Final relations (copy) written to: {overall_dir / 'relations_resolved.json'}")
+    print(f"[done] Final relations jsonl (copy) written to: {overall_dir / 'relations_resolved.jsonl'}")
 
 #endregion#?   Multi Run Rel Res
 #?#########################  End  ##########################
-
-
-
 
 
 
@@ -9294,138 +11523,137 @@ def export_relations_and_nodes_to_csv():
 
 
 
-# # -----------------------
-# # Chunking - Run statement
-# # -----------------------
+# -----------------------
+# Chunking - Run statement
+# -----------------------
 
-# if __name__ == "__main__":
-#     sentence_chunks_token_driven(
-#         "data/pdf_to_json/Plain_Text.json",
-#         "data/Chunks/chunks_sentence.jsonl",
-#         max_tokens_per_chunk=200,   # preferred upper bound (None to disable)
-#         min_tokens_per_chunk=100,   # expand small chunks to reach this minimum (None to disable)
-#         sentence_per_line=True,
-#         keep_ref_text=False,
-#         strip_leading_headings=True,
-#         force=True,
-#         debug=False
-#     )
-
-
-# # -----------------------
-# # embed_and_index_chunks  - Run statement
-# # -----------------------
-
-# if __name__ == "__main__":
-#     embed_and_index_chunks(
-#         "data/Chunks/chunks_sentence.jsonl",
-#         "data/Chunks/chunks_emb",
-#         "BAAI/bge-large-en-v1.5",
-#         "BAAI/bge-small-en-v1.5",
-#         False,   # use_small_model_for_dev
-#         32,     # batch_size
-#         None,   # device -> auto
-#         True,   # save_index
-#         True)  # force
+if __name__ == "__main__":
+    sentence_chunks_token_driven(
+        "data/In_Plain_Text.json",
+        "data/Chunks/chunks_sentence.jsonl",
+        max_tokens_per_chunk=200,   # preferred upper bound (None to disable)
+        min_tokens_per_chunk=100,   # expand small chunks to reach this minimum (None to disable)
+        sentence_per_line=True,
+        keep_ref_text=False,
+        strip_leading_headings=True,
+        force=True,
+        debug=False
+)
 
 
 
-# # -----------------------
-# # Entity Recognition  - Run statement
-# # -----------------------
+# -----------------------
+# embed_and_index_chunks  - Run statement
+# -----------------------
 
-# if __name__ == "__main__":
-#     run_entity_extraction_on_chunks(
-#         chunk_ids,
-#         prev_chunks=5,
-#         save_debug=False,
-#         model="gpt-5.1",
-#         max_tokens=8000
-#     )
+if __name__ == "__main__":
+    embed_and_index_chunks(
+        "data/Chunks/chunks_sentence.jsonl",
+        "data/Chunks/chunks_emb",
+        "BAAI/bge-large-en-v1.5",
+        "BAAI/bge-small-en-v1.5",
+        False,   # use_small_model_for_dev
+        32,     # batch_size
+        None,   # device -> auto
+        True,   # save_index
+        True)  # force
 
 
 
+# -----------------------
+# Entity Recognition  - Run statement
+# -----------------------
 
-
-# # -----------------------
-# # Ent Resolution (Multi Run)  - Run statement
-# # -----------------------
-
-# if __name__ == "__main__":
-#     iterative_resolution()
+if __name__ == "__main__":
+    run_entity_extraction_on_chunks(
+        chunk_ids = ["Ch_000001", "Ch_000002", "Ch_000003", "Ch_000004"],  
+        prev_chunks=5,
+        save_debug=False,
+        model="gpt-5.1",
+        max_tokens=16000
+    )
 
 
 
 
 
+# -----------------------
+# Ent Resolution (Multi Run)  - Run statement
+# -----------------------
 
-# # -----------------------
-# # Cls Rec input producer - Run statement
-# # -----------------------
-
-# if __name__ == "__main__":
-#     produce_clean_jsonl(input_path, out_file)
-
-
-
-
-# # -----------------------
-# # Cls Recognition  - Run statement
-# # -----------------------
-
-
-
-# if __name__ == "__main__":
-#     classrec_iterative_main()
-
-
-
-# # -----------------------
-# # Create input for Cls Res  - Run statement
-# # -----------------------
-
-# if __name__ == "__main__":
-#     main_input_for_cls_res()
+if __name__ == "__main__":
+    iterative_resolution()
 
 
 
 
+input_path = "data/Entities/iterative_runs/entities_iter2.jsonl"
+out_file = "data/Classes/Cls_Input"
+# -----------------------
+# Cls Rec input producer - Run statement
+# -----------------------
 
-# # -----------------------
-# # Cls Res Multi Run - Run statement
-# # -----------------------
-# if __name__ == "__main__":
-#     run_pipeline_iteratively() 
+if __name__ == "__main__":
+    produce_clean_jsonl(input_path, out_file)
 
+
+# -----------------------
+# Cls Recognition  - Run statement
+# -----------------------
+
+
+
+if __name__ == "__main__":
+    classrec_iterative_main()
+
+
+
+# -----------------------
+# Create input for Cls Res  - Run statement
+# -----------------------
+
+if __name__ == "__main__":
+    main_input_for_cls_res()
 
 
 
 
 
+# -----------------------
+# Cls Res Multi Run - Run statement
+# -----------------------
+if __name__ == "__main__":
+    run_pipeline_iteratively() 
 
 
 
-# # # -----------------------
-# # Relation Res Multi Run - Run statement
-# # -----------------------
-# if __name__ == "__main__":
-#     run_relres_iteratively() 
 
 
-
-# # -----------------------
-# # Export KG to CSVs  - Run statement
-# # -----------------------
-
-# if __name__ == "__main__":
-#     export_relations_and_nodes_to_csv()
 
 
 
 
 # # -----------------------
-# # XXXXXXXX  - Run statement
-# # -----------------------
+# Relation Res Multi Run - Run statement
+# -----------------------
+if __name__ == "__main__":
+    run_relres_iteratively() 
+
+
+
+# -----------------------
+# Export KG to CSVs  - Run statement
+# -----------------------
+
+if __name__ == "__main__":
+    export_relations_and_nodes_to_csv()
+
+
+
+
+# -----------------------
+# XXXXXXXX  - Run statement
+# -----------------------
 
 
 

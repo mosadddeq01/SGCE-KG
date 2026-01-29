@@ -1,0 +1,92 @@
+
+
+==================== PAGE 1 ====================
+[FIGURE]
+Identifier: Figure 4
+Caption/Title: Temporal Mapping of Equipment Module EquipmentSEMI E10 States to an IPS EquipmentSEMI E10 State
+
+Text surrogate:
+An IPS tracked in NST has IPS state NST.  
+If an IPS is not tracked in NST, then the IPS is in Operations Time.  
+For an IPS in Operations Time, if any processing equipment module is in PRD, then the IPS state is PRD.  
+If no processing equipment module is in PRD and IPS reliability computed from UDT equipment modules only is 0 (down), then the IPS state is pure UDT.  
+If IPS reliability computed from SDT equipment modules only is 0 (down), then the IPS state is SDT.  
+If IPS reliability computed from combined UDT and SDT equipment modules is 0 (down), then the IPS state is mixed UDT.  
+If IPS reliability based on UDT and SDT equipment modules is not 0 (not down) and any equipment module is in ENG, then the IPS state is ENG.  
+If none of the above conditions apply and no equipment module is in ENG, then the IPS state is SBY.
+
+
+==================== PAGE 2 ====================
+[EQUATION]
+Identifier: (4)
+
+Text surrogate:
+- The formula for mean uptime between failures MTBFu is given by:  
+  \( MTBF_u = \dfrac{\text{uptime}}{\# \text{ of failures during uptime}} \).
+- The numerator "uptime" represents the total duration during which the equipment was in an uptime state.
+- The denominator represents the total count of failures that occurred while the equipment was in an uptime state.
+- MTBFu expresses average uptime duration per failure event during uptime.
+
+[EQUATION]
+Identifier: (5)
+
+Text surrogate:
+- The formula for mean failure duration during uptime MFDu is given by:  
+  \( MFD_u = \dfrac{\text{unscheduled downtime for failures during uptime}}{\# \text{ of failures during uptime}} \).
+- The numerator represents the total unscheduled downtime attributable to failures that occurred during uptime.
+- The denominator represents the total number of such failures during uptime.
+- MFDu expresses average unscheduled downtime length per failure that occurs during uptime.
+
+[EQUATION]
+Identifier: (6)
+
+Text surrogate:
+- The formula for mean uptime between equipment-related failures E-MTBFu is given by:  
+  \( E\text{-}MTBF_u = \dfrac{\text{uptime}}{\# \text{ of equipment-related failures during uptime}} \).
+- The numerator "uptime" represents total uptime over the period of interest.
+- The denominator counts only failures classified as equipment-related that occur during uptime.
+- E-MTBFu expresses average uptime duration per equipment-related failure during uptime.
+
+[EQUATION]
+Identifier: (7)
+
+Text surrogate:
+- The formula for mean productive time between failures MTBFp is given by:  
+  \( MTBF_p = \dfrac{\text{productive time}}{\# \text{ of failures during productive time}} \).
+- The numerator "productive time" represents the total time the equipment was performing its intended productive function.
+- The denominator represents the number of failures that occurred while the equipment was in productive time.
+- MTBFp expresses average productive operating time per failure that occurs during productive time.
+
+[EQUATION]
+Identifier: (8)
+
+Text surrogate:
+- The formula for mean failure duration during productive time MFDp is given by:  
+  \( MFD_p = \dfrac{\text{unscheduled downtime for failures during productive time}}{\# \text{ of failures during productive time}} \).
+- The numerator represents the total unscheduled downtime caused by failures that occurred during productive time.
+- The denominator represents the total number of such failures during productive time.
+- MFDp expresses average unscheduled downtime length per failure that occurs during productive time.
+
+[EQUATION]
+Identifier: (9)
+
+Text surrogate:
+- The formula for mean productive time between equipment-related failures E-MTBFp is given by:  
+  \( E\text{-}MTBF_p = \dfrac{\text{productive time}}{\# \text{ of equipment-related failures during productive time}} \).
+- The numerator "productive time" represents the total productive operating time for the equipment.
+- The denominator represents the number of failures during productive time that are classified as equipment-related.
+- E-MTBFp expresses average productive operating time per equipment-related failure during productive time.
+
+[EQUATION]
+Identifier: (10)
+
+Text surrogate:
+- The formula for mean cycles between failures during uptime MCBFu is given by:  
+  \( MCBF_u = \dfrac{\text{equipment cycles during uptime}}{\# \text{ of failures during uptime}} \).
+- The numerator "equipment cycles during uptime" represents the number of completed equipment cycles that occur while the equipment is in uptime.
+- The denominator represents the number of failures that occur during uptime.
+- MCBFu expresses the average number of equipment cycles completed per failure event during uptime.
+
+
+==================== PAGE 3 ====================
+NO_NON_TEXT_ELEMENTS

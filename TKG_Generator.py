@@ -552,7 +552,7 @@ def generate_trace_kgs(
 
 
 generate_trace_kgs(
-    essay_ids=[123],
+    essay_ids=[100,101,102,103],
     default_model="openai/gpt-4.1-nano",
 )
 

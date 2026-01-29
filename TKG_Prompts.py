@@ -554,7 +554,9 @@ Return JSON array only.
 CLASS_RES_PROMPT_TEMPLATE = """
 You are an expert schema editor for a DOMAIN-AGNOSTIC knowledge graph generator.
 
+========================
 GOAL (THIS STEP ONLY)
+========================
 You are given a *suggestive* cluster of candidate classes. Produce an ORDERED JSON ARRAY of schema-edit function calls that improves:
 1) class_label (the main ontology class level),
 2) class_group (a broad connector above classes),
@@ -562,13 +564,31 @@ You are given a *suggestive* cluster of candidate classes. Produce an ORDERED JS
 
 This step refines the schema. Entities are fixed; you are editing the class layer above them.
 
+THIS STEP IS ITERATIVE (IMPORTANT):
+- You will be called multiple times across runs until the entity schema stabilizes.
+- The same class candidates may appear again in later runs with partially-filled metadata.
+- Your job is to (1) fill missing schema early and (2) refine later.
+
+You do NOT know the run index explicitly, so infer the phase from the data:
+- FIRST-RUN-LIKE: many classes still have class_group=null/"TBD" and/or weak/placeholder labels/descriptions.
+- REFINEMENT-RUN-LIKE: most classes already have reasonable labels + groups; your job is to fix inconsistencies, redundancies, mis-assignments, and over/under-splitting.
+
+
+========================
 ABOUT THE INPUT CLUSTER (CRITICAL)
+========================
 - The cluster was produced automatically from embeddings and is only suggestive.
 - It may contain multiple distinct topics.
 - Do NOT force all classes into the same class_group or merge them just because they appear together.
 - Your job is to correct the cluster into a coherent schema.
 
+- If a cluster mixes multiple distinct topics, split conceptually by using separate class_group assignments and avoid merges.
+- It is acceptable for one cluster to produce multiple unrelated class_groups.
+
+
+========================
 TARGET SCHEMA (WHAT "GOOD" LOOKS LIKE)
+========================
 We want a clean expert-like hierarchy:
 
 Class_Group  →  Class (class_label)  →  Entity
@@ -586,7 +606,16 @@ Choose class_label and class_group jointly so the hierarchy is coherent:
 - Prefer class_group names that help a human navigate the schema and connect sibling classes.
 - Avoid "Misc", "General", "Other" unless truly unavoidable; if you use them, add a remark explaining why.
 
+EFFICIENCY RULE (DO NOT BURN A LEVEL):
+- class_group and class_label must add different value.
+- Avoid cases where class_group is effectively the same as the only class_label it contains (e.g., group="Temporal" and only class="Temporal reference").
+- If a cluster suggests only one class under a group, still choose a class_group that could reasonably host future sibling classes (open-world), OR choose a broader group and keep the class_label specific.
+- If you cannot avoid a near-duplicate group/label, keep it but add a remark explaining why.
+
+
+========================
 WHEN TO PROPOSE STRUCTURAL CHANGES
+========================
 Be proactive, but do not invent structure without evidence:
 - merge_classes: when two+ classes are the SAME concept (synonyms, pluralization, redundant split).
 - split_class: when one class bundles multiple distinct concepts that should become separate classes.
@@ -596,6 +625,7 @@ Be proactive, but do not invent structure without evidence:
 
 It is acceptable that some clusters need only class_group assignment + small metadata fixes.
 Return [] only if you are extremely confident that nothing needs improvement (rare).
+
 
 ========================
 AVAILABLE FUNCTIONS
@@ -625,6 +655,15 @@ Every function call MUST include:
 You MAY include:
   "confidence": <0.0–1.0>
   "remark": <string or null>
+  
+========================
+REMARK PRESERVATION (MULTI-RUN SAFE):
+========================
+- Remarks may already exist in the input (e.g., class.remarks).
+- The system stores only one remark string and later runs may overwrite earlier remarks.
+- If you add a remark and an earlier remark exists, prepend it compactly:
+  "remark": "Prev: [r1; r2; ...] | New: ..."
+
 
 ========================
 EXAMPLES (showing abstraction balance + class_group)
@@ -924,6 +963,7 @@ Now read the appended JSON payload and return the required JSON output.
 
 
 
+
 #?######################### Start ##########################
 #region:#?   Relation Resolution Prompt
 
@@ -934,14 +974,49 @@ Now read the appended JSON payload and return the required JSON output.
 REL_RES_PROMPT_TEMPLATE = """
 You are a proactive RELATION-SCHEMA NORMALIZER for a context-enriched KG.
 
-GOAL (THIS STEP):
+
+THIS STEP IS ITERATIVE (IMPORTANT):
+- You will be called multiple times across runs and we continue until the schema stabilizes.
+- The same relation instance may appear again in later runs with partially-filled schema.
+- Your job is to (1) fill missing schema early and (2) refine + de-duplicate later.
+
+You do NOT know the run index explicitly, so infer the phase from the data:
+- FIRST-RUN-LIKE: many instances still have canonical_rel_name="TBD" and/or rel_cls="TBD" and/or rel_cls_group="TBD".
+- REFINEMENT-RUN-LIKE: most instances already have non-TBD values; your job is to fix inconsistencies, weak naming, wrong grouping, and MERGE all duplicates relations between same subject/object pairs (even if direction differs).
+
+
+Overall GOAL:
 Given a suggestive cluster of relation INSTANCES, produce an ordered list of schema edits that:
-1) Assign / normalize canonical_rel_name + canonical_rel_desc (predicate-level, direction-sensitive)
+1) Assign / normalize canonical_rel_name + canonical_rel_desc (predicate-level)
 2) Assign / normalize rel_cls (relation class = reusable family container)
 3) Assign / normalize rel_cls_group (very broad semantic group; single token)
-4) Merge ONLY exact-duplicate edges when justified (no semantic deletions)
+4) Merge duplicate edges when justified (identical subject/object (even if direction differs) + semantically similar canonical_rel_name)
+
+** Super Important: We care about meaningul, reusable schema (like expert-designed ontologies) rather than normalizing too much to bring everything under one umbrella.(keeping the true balance is your main task) **
+
 
 This step is repeated across multiple runs; if values are already filled, you MUST improve them when inconsistent or weak.
+
+=====================
+PHASE-AWARE BEHAVIOR
+=====================
+The following are suggestive and not hard rules. 
+
+A) If this looks like FIRST-RUN-LIKE (many TBDs in fields):
+- We mostly care about: FILLING schema for TBD fields.
+- Prefer using:
+  - set_canonical_rel   (when canonical_rel_name is "TBD"/empty)
+  - set_rel_cls         (when rel_cls is "TBD"/empty)
+  - set_rel_cls_group   (when rel_cls_group is "TBD"/empty)
+
+
+B) If this looks like REFINEMENT-RUN-LIKE (fields are already filled and you see no TBD in the fields):
+- We mostly care about: IMPROVING CONSISTENCY + QUALITY and MERGING DUPLICATES.
+- Prefer using:
+  - modify_rel_schema (to modify any of canonical_rel_name, canonical_rel_desc, rel_cls, rel_cls_group)
+  - merge_relations   (to merge duplicate edges between same head/tail even if direction differs)
+- You MAY still use set_* for any remaining TBD fields.
+
 
 =====================
 WHAT YOU ARE GIVEN
@@ -984,14 +1059,46 @@ B) rel_cls (relation class / family container)
 
 C) rel_cls_group (very broad group; SINGLE WORD; FIXED VOCAB)
 For THIS pipeline, rel_cls_group MUST be exactly ONE of:
-IDENTITY, COMPOSITION, CAUSALITY, TEMPORALITY, SPATIALITY, ROLE, PURPOSE, DEPENDENCY,
-COUPLING, TRANSFORMATION, COMPARISON, INFORMATION, ASSOCIATION
+
+IDENTITY (same_as, equivalent_to, is_identical_to)
+COMPOSITION (has_part, part_of, consists_of)
+CAUSALITY (causes, leads_to, prevents)
+TEMPORALITY (occurs_before, occurs_after, overlaps_with)
+SPATIALITY (located_in, adjacent_to, surrounds)
+ROLE (acts_as, serves_as, plays_role_of)
+PURPOSE (used_for, intended_for, designed_to)
+DEPENDENCY (depends_on, requires, constrained_by)
+COUPLING (interacts_with, connected_to, coupled_with)
+TRANSFORMATION (converts_to, transforms_into, derived_from)
+COMPARISON (greater_than, similar_to, differs_from)
+INFORMATION (reports, describes, documents)
+ASSOCIATION (related_to, associated_with, linked_to)
 
 - ASSOCIATION is last resort only; if used, explain why and prefer lower confidence.
+
+Clarification for "to-be" verbs:
+- Use IDENTITY only when X and Y are always interchangeable (X same_as Y).
+- Use ROLE when X temporarily or contextually functions as Y (X acts_as Y), even if expressed as "is" in text.
+
 
 Strong default:
 - If rel_hint_type is correct, prefer rel_cls_group = rel_hint_type.
 - If rel_hint_type is wrong, correct it by setting rel_cls_group appropriately.
+
+
+=====================
+ABSTRACTION BALANCE (rel_cls vs rel_cls_group)
+=====================
+Think of rel_cls and rel_cls_group jointly so the 2-level relation schema is efficient:
+
+- rel_cls_group is the broad, fixed-vocabulary macro category (those single word).
+- rel_cls must contribute additional reusable meaning beyond the group.
+  Avoid rel_cls that is just a paraphrase of the group (e.g., "temporal_relation" under TEMPORALITY),
+  unless you truly cannot name a more informative family or you have only one relation of that kind.
+
+OPEN-WORLD GUIDANCE:
+- Even if only a few predicates appear now, choose rel_cls as a family that could plausibly host future sibling predicates.
+- Prefer rel_cls families based on semantic function, not just, for example, “attribute of time” or “attribute of space”.
 
 =====================
 WHAT YOU MUST / MUST NOT DO
@@ -1000,36 +1107,39 @@ MUST:
 - Normalize awkward / overly-specific raw relation_name variants into stable canonical_rel_name values.
 - Harmonize rel_cls and rel_cls_group for relations that truly share semantics.
 - Propose corrections in refinement runs (do not be passive).
+- Merge duplicate edges between the same subject/object when canonical_rel_name are semantically similar, even if direction differs.
 
 MUST NOT:
 - Change subject_entity_id or object_entity_id (entities are fixed).
 - Delete relation instances for “being noisy”.
-- Merge relations that are merely similar but not exact duplicates.
 
 =====================
-EXACT DUPLICATE EDGE MERGING (MANDATORY WHEN APPLICABLE)
+DUPLICATE EDGE MERGING (MANDATORY WHEN APPLICABLE)
 =====================
-You MUST merge relations ONLY when ALL are true:
-1) subject_entity_id is identical
-2) object_entity_id is identical
-3) canonical_rel_name is identical (same meaning + same direction after your normalization)
+You MUST merge relations when the followings are true:
+1) subject_entity_id and object_entity_id are identical. (Same head and tail.)
+2) canonical_rel_name is similar (even if the direction differes in cases like "wrote" and "written_by").
+
+Golden rule for merging:
+** Basically, you MUST MERGE semantically duplicate edges between the same subject/object whenever they are mergable.**
+** It means you MUST try to reconcile them into one consistent edge, unless it is not possible for very concrete reason. **
 
 Qualifier rule:
-- If qualifiers match or one is a strict subset of the other: merge and keep the more informative qualifiers.
-- If qualifiers conflict materially: DO NOT merge; keep both and add a remark explaining the conflict.
+- If qualifiers are different but not conflicting: merge them into a combined set of qualifiers.
+- If qualifiers has a very clear conflict: DO NOT merge; keep both and add a remark explaining the conflict.
 
 IMPORTANT PRACTICAL RULE:
 - If two relations are duplicates except that schema fields differ (e.g., rel_cls differs),
   you should first normalize schema (modify_rel_schema / set_rel_cls / set_rel_cls_group),
   then merge_relations into one consistent edge.
+- For merging relation with different directions between same subject/object pairs, 
+  you can simply choose what relation with which direction to survive, using the merge_relations function.
+
+** Super Important: You MUST never leave more than one node between two same subject/object pairs. YOU MUST MERGE all relation with same head and tail, even if direction differs. **
 
 =====================
-OUTPUT: FUNCTION-CALL LIST ONLY
-=====================
-Return ONLY a JSON ARRAY of ordered function calls.
-
-
 Allowed functions ONLY:
+=====================
 1) set_canonical_rel
 2) set_rel_cls
 3) set_rel_cls_group
@@ -1093,7 +1203,7 @@ args = {
 }
 
 6) merge_relations
-Use ONLY for exact duplicates.
+You MUST USE this when you see duplicates.
 args = {
   "relation_ids": [<relation_id>...],             # at least 2
   "provisional_id": "MERGE(RelR_a|RelR_b|...)",
@@ -1158,8 +1268,8 @@ Actions (illustrative):
   }
 ]
 
-Example 2 (exact-duplicate merge after normalization):
-- RelR_7 and RelR_9 share the same subject_entity_id + object_entity_id + canonical_rel_name
+Example 2 (duplicate merge after normalization):
+- RelR_7 and RelR_9 share the same subject_entity_id + object_entity_id + canonical_rel_name (even if directions differ)
 - RelR_9 has richer qualifiers
 
 Actions (illustrative):
@@ -1192,22 +1302,60 @@ Actions (illustrative):
   }
 ]
 
+Example 3 (duplicate merge with same head and tail but different directions + merge non-conflicting qualifiers):
+- RelR_12: relation_name="authored" (Author -> Work) - Qualifiers: {"temporal": "in 2020" , "OtherQualifier": "Genre: fiction"}
+- RelR_15: relation_name="written_by" (Work -> Author) - Qualifiers: {"spatial": "from New York" , "OtherQualifier": "performance: bestseller"}
+Actions (illustrative):
+[
+  {
+    "function": "merge_relations",
+    "args": {
+      "relation_ids": ["RelR_12","RelR_15"],
+      "provisional_id": "MERGE(RelR_12|RelR_15)",
+      "subject_entity_id": "En_X",
+      "object_entity_id": "En_Y",
+      "canonical_rel_name": "authored",
+      "canonical_rel_desc": "Indicates that the subject created or wrote the object work.",
+      "new_rel_cls": "authorship_relation",
+      "new_rel_cls_group": "ROLE",
+      "relation_name": null,
+      "rel_desc": null,
+      "rel_hint_type": null,
+      "subject_entity_name": "Alice Smith",
+      "object_entity_name": "The Great Novel",
+      "qualifiers": {
+        "TemporalQualifier": "in 2020",
+        "SpatialQualifier": "from New York",
+        "OperationalConstraint": null,
+        "ConditionExpression": null,
+        "UncertaintyQualifier": null,
+        "CausalHint": null,
+        "LogicalMarker": null,
+        "OtherQualifier": "Genre: fiction; performance: bestseller"
+      },
+      "remark": "Merged duplicate edges with opposite directions; combined non-conflicting qualifiers.",
+      "justification": "Same head/tail and same predicate meaning; directions differ but refer to the same authorship relation.",
+      "confidence": 0.88
+    }
+  }
+]
+
+  
 Now read the provided relation-instance cluster and return ONLY the JSON array of function calls.
 
---------------------------------
-INPUT RELATIONS (THIS CHUNK)
---------------------------------
+=====================
+INPUT RELATIONS
+=====================
 
 Below is the JSON array of relation instances in THIS PART of a cluster
 (we split very large clusters into smaller chunks just to keep the prompt size manageable):
 
 {cluster_block}
 
---------------------------------
-OUTPUT
---------------------------------
-
-Return ONLY the JSON ARRAY of function calls, e.g.:
+=====================
+OUTPUT: FUNCTION-CALL LIST ONLY
+=====================
+Return ONLY a JSON ARRAY of ordered function calls. e.g.:
 
 [
   {
@@ -1230,7 +1378,6 @@ Now, produce the output exactly as specified. Producing anything other than the 
 
 #endregion#? Relation Resolution Prompt
 #?#########################  End  ##########################
-
 
 
 
