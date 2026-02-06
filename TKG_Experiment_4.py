@@ -2587,78 +2587,51 @@ def repair_and_extract_json(text: str) -> Optional[dict]:
         return None
 
 
-class OpenAIBackend:
-    def __init__(self, client, model):
-        self.client = client
+from openai import OpenAI
+import json
+
+class OpenAIBackend(LLMBackend):
+    def __init__(self, model: str):
+        self.client = OpenAI()
         self.model = model
 
     def complete(self, system: str, user: str, max_tokens: int) -> str:
-        # 1) Try JSON mode (if supported)
         try:
             resp = self.client.chat.completions.create(
                 model=self.model,
                 temperature=0.0,
                 max_tokens=max_tokens,
-                # keep this but tolerate failure
                 response_format={"type": "json_object"},
                 messages=[
                     {"role": "system", "content": system},
                     {"role": "user", "content": user},
                 ],
             )
-            content = resp.choices[0].message.content or ""
-            # content might already be a dict if client did automatic decode
-            if isinstance(content, (dict, list)):
-                return json.dumps(content, ensure_ascii=False)
-            return str(content)
-        except Exception as e1:
-            # record the exception and retry with strict-prompt fallback
-            err_msg = str(e1)
-            # 2) fallback: normal chat completion but force JSON in prompt
-            fallback_system = system + "\n\nIMPORTANT: The assistant must reply with ONLY a single JSON object (or array). Do not add any commentary."
-            fallback_user = user + "\n\nReturn only valid JSON. Example: {\"parsed_items\": [...], \"meta\": {...}}"
-            try:
-                resp2 = self.client.chat.completions.create(
-                    model=self.model,
-                    temperature=0.0,
-                    max_tokens=max_tokens,
-                    messages=[
-                        {"role": "system", "content": fallback_system},
-                        {"role": "user", "content": fallback_user},
-                    ],
-                )
-                text = resp2.choices[0].message.content or ""
-            except Exception as e2:
-                # final failure: return error object as string so caller can log
-                return json.dumps({"error": f"OpenAI call failed first: {err_msg}; fallback failed: {str(e2)}"})
+            return resp.choices[0].message.content or ""
+        except Exception as e:
+            return json.dumps({"error": f"OpenAI call failed: {str(e)}"})
+        
+        
 
-            # attempt to repair/extract JSON
-            parsed = repair_and_extract_json(text)
-            if parsed is not None:
-                return json.dumps(parsed, ensure_ascii=False)
-            # parsing failed — still return wrapper with raw content for auditing
-            short = (text[:2000] + "...") if len(text) > 2000 else text
-            return json.dumps({"error": "parse_failed", "raw": short})
-
-
-def make_backend(use_llm: bool, prefer_dspy: bool, model: str, max_tokens: int, step: str) -> Optional[LLMBackend]:
+def make_backend(use_llm: bool, prefer_dspy: bool, model: str, max_tokens: int, step: str) -> LLMBackend:
     if not use_llm:
-        return None
+        raise RuntimeError("use_llm=False, but SchemaEval requires an LLM backend.")
+
+    # Try DSPy first (if requested)
     if prefer_dspy:
         try:
             return DSPyBackend(model=model, max_tokens=max_tokens, step=step)
-        except Exception:
-            try:
-                return OpenAIBackend(model=model)
-            except Exception:
-                return None
-    else:
-        try:
-            return OpenAIBackend(model=model)
-        except Exception:
-            return None
+        except Exception as e:
+            print(f"[WARN] DSPyBackend init failed for step='{step}'. Falling back to OpenAIBackend.")
+            print(f"[WARN] DSPy error: {e}")
 
-
+    # Fallback: OpenAI
+    try:
+        return OpenAIBackend(model=model)
+    except Exception as e:
+        raise RuntimeError(f"[FATAL] Could not initialize any LLM backend. OpenAIBackend failed: {e}")
+    
+    
 # ============================================================
 # LLM prompting + robust JSON extraction
 # ============================================================
@@ -2920,7 +2893,7 @@ def judge_kind(
             items_norm = rec.get("parsed_items", []) or []
         else:
             if backend is None:
-                raw = '{"ref_label":"%s","ref_kind":"%s","items":[]}' % (ref_label, kind)
+                raw = json.dumps({"error": "NO_BACKEND_INITIALIZED", "ref_label": ref_label, "ref_kind": kind, "items": []})
                 obj = _extract_json_obj(raw)
             else:
                 raw = backend.complete(system=system, user=prompt, max_tokens=cfg.llm.max_tokens)
@@ -3400,6 +3373,9 @@ def run_schema_evaluation(
     # LLM backends
     rel_backend = make_backend(cfg.llm.use_llm, cfg.llm.prefer_dspy, cfg.llm.model, cfg.llm.max_tokens, step="rel_res")
     ent_backend = make_backend(cfg.llm.use_llm, cfg.llm.prefer_dspy, cfg.llm.model, cfg.llm.max_tokens, step="class_res")
+    
+    print("[LLM] rel_backend =", type(rel_backend).__name__)
+    print("[LLM] ent_backend =", type(ent_backend).__name__)
 
     # Judge anchors (write FULL prompt+raw+parsed per anchor)
     rel_records = out_dir / "llm_relation_records.jsonl"
