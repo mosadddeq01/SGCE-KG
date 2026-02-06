@@ -2148,7 +2148,6 @@ OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY", "")
 MODEL_NAME = "gpt-5.1" #"gpt-4o-mini"  # Cost-effective; change to "gpt-4o" or others as needed
 
 # Paths
-ESSAYS_JSON_PATH     = REPO_ROOT / "Experiments/MYNE/Ex1/QA_and_OthersAnswers/Plain_Text_100_Essays.json"
 DATASET_JSON_PATH    = REPO_ROOT / "Experiments/MYNE/Ex1/QA_and_OthersAnswers/mine_evaluation_dataset.json"
 OUTPUT_DATASET_PATH  = REPO_ROOT / "Experiments/MYNE/Ex1/QA_and_OthersAnswers/mine_evaluation_dataset_with_autoschemakg.json"
 OUTPUT_KGS_DIR       = REPO_ROOT / "Experiments/MYNE/Ex1/AutoSchemaKG_KGs"
@@ -2166,30 +2165,30 @@ ESSAY_IDS: Optional[List[int]] = None  # e.g., [1, 2] for testing
 # HELPER: Convert essays JSON → AutoSchemaKG JSONL format
 # ---------------------------------------------------------------------------
 
+
 def essays_to_autoschemakg_jsonl(
-    essays: List[Dict[str, Any]],
+    dataset: List[Dict[str, Any]],
     essay_id: int,
     output_dir: Path,
 ) -> Path:
     """
     Write a single essay as a JSONL file that AutoSchemaKG can read.
-
-    AutoSchemaKG expects:
-      {"id": "...", "text": "...", "metadata": {"lang": "en"}}
-
-    Returns the path to the directory containing the JSONL file.
+    Looks up the essay by its "id" field in the dataset (mine_evaluation_dataset.json).
     """
     data_dir = output_dir / f"essay_{essay_id:03d}_input"
     data_dir.mkdir(parents=True, exist_ok=True)
 
-    # Find the essay by matching dataset id to essay index
-    # The evaluation dataset has 1-based IDs matching essay order
-    essay = essays[essay_id - 1] if essay_id <= len(essays) else None
+    # Find the essay by "id" field (NOT by list position)
+    essay = None
+    for item in dataset:
+        if int(item.get("id", -1)) == essay_id:
+            essay = item
+            break
     if essay is None:
-        raise ValueError(f"Essay ID {essay_id} not found (only {len(essays)} essays)")
+        raise ValueError(f"Essay ID {essay_id} not found in dataset")
 
-    text = essay.get("text", "")
-    title = essay.get("title", f"Essay_{essay_id}")
+    text = essay.get("essay_content", "")       # <-- was "text", now "essay_content"
+    title = essay.get("essay_topic", f"Essay_{essay_id}")  # <-- was "title", now "essay_topic"
 
     # Clean up text: remove markdown-style backtick wrappers
     text = text.strip()
@@ -2405,17 +2404,38 @@ def main():
     print("AutoSchemaKG KG Generation for MINE-1 Evaluation")
     print("=" * 70)
 
-    # 1. Load essays
-    print(f"\n[1] Loading essays from: {ESSAYS_JSON_PATH}")
-    with open(ESSAYS_JSON_PATH, "r", encoding="utf-8") as f:
-        essays = json.load(f)
-    print(f"    Loaded {len(essays)} essays.")
 
-    # 2. Load evaluation dataset
-    print(f"\n[2] Loading evaluation dataset from: {DATASET_JSON_PATH}")
+
+
+    # # 1. Load essays
+    # print(f"\n[1] Loading essays from: {ESSAYS_JSON_PATH}")
+    # with open(ESSAYS_JSON_PATH, "r", encoding="utf-8") as f:
+    #     essays = json.load(f)
+    # print(f"    Loaded {len(essays)} essays.")
+
+    # # 2. Load evaluation dataset
+    # print(f"\n[2] Loading evaluation dataset from: {DATASET_JSON_PATH}")
+    # with open(DATASET_JSON_PATH, "r", encoding="utf-8") as f:
+    #     dataset = json.load(f)
+    # print(f"    Loaded {len(dataset)} evaluation items.")
+
+    # # Build map: dataset_id → index in dataset list
+    # id_to_idx = {}
+    # for idx, item in enumerate(dataset):
+    #     did = item.get("id")
+    #     if did is not None:
+    #         id_to_idx[int(did)] = idx
+
+    # # Determine which IDs to process
+    # target_ids = ESSAY_IDS if ESSAY_IDS else sorted(id_to_idx.keys())
+    # print(f"    Will process {len(target_ids)} essay(s): {target_ids[:10]}{'...' if len(target_ids) > 10 else ''}")
+        
+
+    # Load evaluation dataset (contains essay text + KG data for other methods)
     with open(DATASET_JSON_PATH, "r", encoding="utf-8") as f:
         dataset = json.load(f)
-    print(f"    Loaded {len(dataset)} evaluation items.")
+    print(f"Loaded {len(dataset)} evaluation items from {DATASET_JSON_PATH.name}")
+
 
     # Build map: dataset_id → index in dataset list
     id_to_idx = {}
@@ -2424,9 +2444,8 @@ def main():
         if did is not None:
             id_to_idx[int(did)] = idx
 
-    # Determine which IDs to process
-    target_ids = ESSAY_IDS if ESSAY_IDS else sorted(id_to_idx.keys())
-    print(f"    Will process {len(target_ids)} essay(s): {target_ids[:10]}{'...' if len(target_ids) > 10 else ''}")
+
+
 
     # 3. Setup OpenAI client
     print(f"\n[3] Setting up LLM client: model={MODEL_NAME}")
@@ -2451,15 +2470,16 @@ def main():
             print(f"    SKIP: essay_id={essay_id} not found in evaluation dataset.")
             continue
 
-        if essay_id > len(essays):
-            print(f"    SKIP: essay_id={essay_id} exceeds essays list length ({len(essays)}).")
-            continue
+        # if essay_id > len(essays):
+        #     print(f"    SKIP: essay_id={essay_id} exceeds essays list length ({len(essays)}).")
+        #     continue
 
         t0 = time.time()
 
         try:
             # a) Prepare input data
-            data_dir = essays_to_autoschemakg_jsonl(essays, essay_id, OUTPUT_KGS_DIR)
+            # data_dir = essays_to_autoschemakg_jsonl(essays, essay_id, OUTPUT_KGS_DIR)
+            data_dir = essays_to_autoschemakg_jsonl(dataset, essay_id, OUTPUT_KGS_DIR)
 
             # b) Run extraction
             kg_result = run_autoschemakg_extraction(
@@ -2619,7 +2639,6 @@ from openai import OpenAI
 OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY", "")
 MODEL_NAME     =  "gpt-4o-mini" #"gpt-5.1" #"gpt-4o-mini"     # cost-effective; swap to "gpt-4o" etc.
 
-ESSAYS_JSON_PATH    = REPO_ROOT / "Experiments/MYNE/Ex1/QA_and_OthersAnswers/Plain_Text_100_Essays.json"
 DATASET_JSON_PATH   = REPO_ROOT / "Experiments/MYNE/Ex1/QA_and_OthersAnswers/mine_evaluation_dataset.json"
 OUTPUT_DATASET_PATH = REPO_ROOT / "Experiments/MYNE/Ex1/QA_and_OthersAnswers/mine_evaluation_dataset_with_autoschemakg.json"
 OUTPUT_KGS_DIR      = REPO_ROOT / "Experiments/MYNE/Ex1/AutoSchemaKG_KGs"
@@ -2641,15 +2660,25 @@ def _clean_essay_text(text: str) -> str:
     return text.strip()
 
 
-def _write_essay_as_jsonl(essay: dict, essay_id: int, out_dir: Path) -> Path:
+def _write_essay_as_jsonl(dataset: list, essay_id: int, out_dir: Path) -> Path:
     """
     Write one essay as a JSONL file that AutoSchemaKG's load_dataset() can read.
+    Looks up the essay by its "id" field in the dataset (mine_evaluation_dataset.json).
     Returns the *directory* path (= data_directory for ProcessingConfig).
     """
     data_dir = out_dir / f"input_{essay_id:03d}"
     data_dir.mkdir(parents=True, exist_ok=True)
 
-    text = _clean_essay_text(essay.get("text", ""))
+    # Find essay by "id" field, NOT by list position
+    essay = None
+    for item in dataset:
+        if int(item.get("id", -1)) == essay_id:
+            essay = item
+            break
+    if essay is None:
+        raise ValueError(f"Essay ID {essay_id} not found in dataset")
+
+    text = _clean_essay_text(essay.get("essay_content", ""))  # was "text"
     record = {
         "id": str(essay_id),
         "text": text,
@@ -2659,6 +2688,7 @@ def _write_essay_as_jsonl(essay: dict, essay_id: int, out_dir: Path) -> Path:
     with open(jsonl_path, "w", encoding="utf-8") as f:
         f.write(json.dumps(record, ensure_ascii=False) + "\n")
     return data_dir
+
 
 
 def _collect_triples_from_extraction_dir(extraction_dir: str) -> List[Dict[str, str]]:
@@ -2762,15 +2792,16 @@ def run_autoschemakg_for_mine1():
     print("AutoSchemaKG  ·  KG Generation for MINE-1")
     print("=" * 70)
 
-    # Load essays
-    with open(ESSAYS_JSON_PATH, "r", encoding="utf-8") as f:
-        essays = json.load(f)
-    print(f"Loaded {len(essays)} essays from {ESSAYS_JSON_PATH.name}")
-
-    # Load evaluation dataset
+    
+    
+    # Load evaluation dataset (contains essay text + KG data for other methods)
     with open(DATASET_JSON_PATH, "r", encoding="utf-8") as f:
         dataset = json.load(f)
-    print(f"Loaded {len(dataset)} evaluation items")
+    print(f"Loaded {len(dataset)} evaluation items from {DATASET_JSON_PATH.name}")
+
+
+
+
 
     id_to_idx = {int(item["id"]): idx for idx, item in enumerate(dataset)}
     target_ids = ESSAY_IDS if ESSAY_IDS else sorted(id_to_idx.keys())
@@ -2786,15 +2817,17 @@ def run_autoschemakg_for_mine1():
 
     for i, eid in enumerate(target_ids):
         print(f"──── Essay {eid}  ({i+1}/{len(target_ids)}) ", end="", flush=True)
-        if eid not in id_to_idx or eid > len(essays):
-            print("SKIP (not found)")
+        
+        if eid not in id_to_idx:
+            print("SKIP (not found in evaluation dataset)")
             continue
-
+        
+        
         t0 = time.time()
         keyword = f"essay_{eid:03d}"
         try:
             # a) write essay as JSONL
-            data_dir = _write_essay_as_jsonl(essays[eid - 1], eid, OUTPUT_KGS_DIR)
+            data_dir = _write_essay_as_jsonl(dataset, eid, OUTPUT_KGS_DIR)
             out_dir  = str(OUTPUT_KGS_DIR / keyword)
 
             # b) configure AutoSchemaKG
