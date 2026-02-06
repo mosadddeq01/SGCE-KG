@@ -2243,58 +2243,928 @@ for key in data:
 #region:#!   Comparing our schema with Text2KG Benchmark Ontology
 
 
-#?######################### Start ##########################
+#*######################### Start ##########################
 #region:#?   convert ont_19_film_ground_truth.jsonl → gold_triples.jsonl
 
 
+# from pathlib import Path
+# import json
+
+# src = Path("Experiments/MYNE/Ex4_T2KGBench/dbpedia-webnlg/Raw/ground_truth/ont_19_film_ground_truth.jsonl")
+# out = Path("Experiments/MYNE/Ex4_T2KGBench/KGs_from_Essays/KG_Run_F3/OntCompResults/gold_triples.jsonl")   # evaluator default
+# out_lines = []
+
+# if not src.exists():
+#     raise FileNotFoundError(f"{src} not found")
+
+# with src.open("r", encoding="utf-8") as f:
+#     for ln in f:
+#         ln = ln.strip()
+#         if not ln:
+#             continue
+#         j = json.loads(ln)
+#         # j has fields: id, sent, triples: [ {sub,rel,obj}, ...]
+#         tlist = j.get("triples", [])
+#         for t in tlist:
+#             # normalize keys if necessary
+#             s = t.get("sub") or t.get("subject") or ""
+#             p = t.get("rel") or t.get("predicate") or ""
+#             o = t.get("obj") or t.get("object") or ""
+#             if not (s and p and o):
+#                 continue
+#             out_lines.append({"sentence_id": j.get("id"), "subject": s, "predicate": p, "object": o})
+
+# # write out simplified JSONL for the evaluator
+# with out.open("w", encoding="utf-8") as f:
+#     for rec in out_lines:
+#         f.write(json.dumps(rec, ensure_ascii=False) + "\n")
+
+# print(f"Wrote {len(out_lines)} gold triples to {out}")
+
+
+
+#endregion#? convert ont_19_film_ground_truth.jsonl → gold_triples.jsonl
+#*#########################  End  ##########################
+
+
+
+
+
+#?######################### Start ##########################
+#region:#?   # Text2KGBench → gold_triples.jsonl (train+valid+test)
+
+# ==============================
+# Text2KGBench → gold_triples.jsonl (train+valid+test)
+# ==============================
+from __future__ import annotations
 from pathlib import Path
 import json
+import re
+from typing import Dict, List, Optional, Tuple
 
-src = Path("Experiments/MYNE/Ex4_T2KGBench/dbpedia-webnlg/Raw/ground_truth/ont_19_film_ground_truth.jsonl")
-out = Path("Experiments/MYNE/Ex4_T2KGBench/KGs_from_Essays/KG_Run_F3/OntCompResults/gold_triples.jsonl")   # evaluator default
-out_lines = []
+def _read_jsonl(path: Path) -> List[dict]:
+    out = []
+    if not path.exists():
+        return out
+    with path.open("r", encoding="utf-8", errors="replace") as f:
+        for ln in f:
+            ln = ln.strip()
+            if not ln:
+                continue
+            try:
+                out.append(json.loads(ln))
+            except Exception:
+                continue
+    return out
 
-if not src.exists():
-    raise FileNotFoundError(f"{src} not found")
+def _infer_split_from_id(sentence_id: str) -> str:
+    s = (sentence_id or "").lower()
+    if re.search(r"(^|_)train(_|$)", s): return "train"
+    if re.search(r"(^|_)valid(_|$)|(^|_)dev(_|$)|(^|_)val(_|$)", s): return "valid"
+    if re.search(r"(^|_)test(_|$)", s): return "test"
+    return "all"
 
-with src.open("r", encoding="utf-8") as f:
-    for ln in f:
-        ln = ln.strip()
-        if not ln:
+def resolve_ontology_key(data_root: Path, ontology_num_or_key: str | int) -> str:
+    """
+    If you pass 19 -> finds '19_film_ontology.json' and returns '19_film'
+    If you pass '19_film' -> returns it (and checks the ontology exists).
+    """
+    data_root = Path(data_root).resolve()
+    ont_dir = data_root / "dbpedia-webnlg" / "Raw" / "ontologies"
+    x = str(ontology_num_or_key).strip()
+
+    # already like "19_film"
+    if "_" in x and x.split("_")[0].isdigit():
+        key = x
+        ont_path = ont_dir / f"{key}_ontology.json"
+        if not ont_path.exists():
+            raise FileNotFoundError(f"Ontology not found: {ont_path}")
+        return key
+
+    # numeric like "19"
+    if not x.isdigit():
+        raise ValueError(f"ontology_num_or_key must be int or like '19_film'. Got: {ontology_num_or_key}")
+
+    num = int(x)
+    hits = sorted(ont_dir.glob(f"{num}_*_ontology.json"))
+    if not hits:
+        raise FileNotFoundError(f"No ontology file found for {num} in {ont_dir}")
+    if len(hits) > 1:
+        # usually only one; pick the shortest stem
+        hits = sorted(hits, key=lambda p: len(p.stem))
+    # "19_film_ontology" -> "19_film"
+    stem = hits[0].stem
+    key = stem.replace("_ontology", "")
+    return key
+
+def locate_split_files(data_root: Path, ontology_key: str) -> Dict[str, Optional[Path]]:
+    """
+    Returns paths for:
+      train: Raw/train/ont_{key}_train.jsonl (contains triples)
+      valid: Raw/valid|val|dev/ont_{key}_valid.jsonl (if exists, contains triples)
+      test_gold: Raw/ground_truth/ont_{key}_ground_truth.jsonl (contains triples for test)
+      test_text: Raw/test/ont_{key}_test.jsonl (text-only, optional; not used for triples)
+    """
+    data_root = Path(data_root).resolve()
+    raw = data_root / "dbpedia-webnlg" / "Raw"
+
+    train = raw / "train" / f"ont_{ontology_key}_train.jsonl"
+
+    valid_candidates = [
+        raw / "valid" / f"ont_{ontology_key}_valid.jsonl",
+        raw / "valid" / f"ont_{ontology_key}_dev.jsonl",
+        raw / "dev"   / f"ont_{ontology_key}_dev.jsonl",
+        raw / "val"   / f"ont_{ontology_key}_val.jsonl",
+        raw / "val"   / f"ont_{ontology_key}_valid.jsonl",
+    ]
+    valid = next((p for p in valid_candidates if p.exists()), None)
+
+    test_text = raw / "test" / f"ont_{ontology_key}_test.jsonl"  # usually NO triples
+    test_gold = raw / "ground_truth" / f"ont_{ontology_key}_ground_truth.jsonl"
+
+    return {
+        "train": train,
+        "valid": valid,
+        "test_text": test_text if test_text.exists() else None,
+        "test_gold": test_gold,
+    }
+
+def extract_triples_from_file(path: Path, split_override: Optional[str] = None) -> List[dict]:
+    """
+    Accepts rows like:
+      {"id": "...", "sent": "...", "triples":[{"sub","rel","obj"},...]}
+    Returns one-triple-per-row:
+      {split, sentence_id, sent, subject, predicate, object}
+    """
+    rows = _read_jsonl(path)
+    out = []
+    for j in rows:
+        sid = j.get("id") or j.get("sentence_id") or ""
+        sent = j.get("sent") or ""
+        triples = j.get("triples", [])
+        if not sid or not isinstance(triples, list):
             continue
-        j = json.loads(ln)
-        # j has fields: id, sent, triples: [ {sub,rel,obj}, ...]
-        tlist = j.get("triples", [])
-        for t in tlist:
-            # normalize keys if necessary
+        split = split_override or _infer_split_from_id(str(sid))
+        for t in triples:
             s = t.get("sub") or t.get("subject") or ""
             p = t.get("rel") or t.get("predicate") or ""
             o = t.get("obj") or t.get("object") or ""
             if not (s and p and o):
                 continue
-            out_lines.append({"sentence_id": j.get("id"), "subject": s, "predicate": p, "object": o})
+            out.append({
+                "split": split,
+                "sentence_id": sid,
+                "sent": sent,
+                "subject": s,
+                "predicate": p,
+                "object": o,
+            })
+    return out
 
-# write out simplified JSONL for the evaluator
-with out.open("w", encoding="utf-8") as f:
-    for rec in out_lines:
-        f.write(json.dumps(rec, ensure_ascii=False) + "\n")
+def build_gold_triples_jsonl(
+    *,
+    data_root: Path,
+    ontology_num_or_key: str | int,
+    out_path: Path,
+    include_train: bool = True,
+    include_valid: bool = True,
+    include_test: bool = True,
+) -> Tuple[str, Dict[str,int]]:
+    """
+    Builds gold_triples.jsonl with train+valid+test triples.
+    Test triples are read from ground_truth file.
+    """
+    data_root = Path(data_root).resolve()
+    out_path = Path(out_path).resolve()
 
-print(f"Wrote {len(out_lines)} gold triples to {out}")
+    ontology_key = resolve_ontology_key(data_root, ontology_num_or_key)
+    paths = locate_split_files(data_root, ontology_key)
 
+    # sanity checks
+    if include_train and not paths["train"].exists():
+        raise FileNotFoundError(f"Train file not found: {paths['train']}")
+    if include_test and not paths["test_gold"].exists():
+        raise FileNotFoundError(f"Ground truth (test triples) not found: {paths['test_gold']}")
 
+    all_rows = []
 
-#endregion#? convert ont_19_film_ground_truth.jsonl → gold_triples.jsonl
+    if include_train:
+        all_rows.extend(extract_triples_from_file(paths["train"], split_override="train"))
+
+    if include_valid and paths["valid"] is not None and paths["valid"].exists():
+        # valid file usually has triples like train
+        all_rows.extend(extract_triples_from_file(paths["valid"], split_override="valid"))
+
+    if include_test:
+        # test triples come from ground_truth
+        # IDs are typically "..._test_..."
+        all_rows.extend(extract_triples_from_file(paths["test_gold"], split_override="test"))
+
+    # write
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    with out_path.open("w", encoding="utf-8") as f:
+        for r in all_rows:
+            f.write(json.dumps(r, ensure_ascii=False) + "\n")
+
+    # stats
+    counts = {"train":0, "valid":0, "test":0, "all":len(all_rows)}
+    for r in all_rows:
+        sp = r.get("split","all")
+        if sp in counts:
+            counts[sp] += 1
+
+    print(f"[gold] ontology_key={ontology_key}")
+    print(f"[gold] wrote {len(all_rows)} triples → {out_path}")
+    print("[gold] split counts:", counts)
+    print("[gold] inputs:", {k: (str(v) if v else None) for k,v in paths.items()})
+    return ontology_key, counts
+
+# ---- EXAMPLE (FILM = 19) ----
+DATA_ROOT = Path("Experiments/MYNE/Ex4_T2KGBench").resolve()
+RUN_ROOT  = DATA_ROOT / "KGs_from_Essays" / "KG_Run_F3"
+ontology_key, _ = build_gold_triples_jsonl(
+    data_root=DATA_ROOT,
+    ontology_num_or_key=19,
+    out_path=RUN_ROOT / "OntCompResults" / "gold_triples.jsonl",
+    include_train=True, include_valid=True, include_test=True
+)
+
+#endregion#? # Text2KGBench → gold_triples.jsonl (train+valid+test)
 #?#########################  End  ##########################
 
 
-#?######################### Start ##########################
+
+#*######################### Start ##########################
 #region:#?    Cluster-based Concept Mapping v5
 
 
+# from __future__ import annotations
+# import json, re
+# from pathlib import Path
+# from collections import defaultdict, Counter
+# from typing import List, Dict, Any, Tuple, Optional
+
+# import numpy as np
+# from sklearn.preprocessing import normalize
+# from sentence_transformers import SentenceTransformer
+# import hdbscan
+# try:
+#     import umap
+#     UMAP_AVAILABLE = True
+# except Exception:
+#     UMAP_AVAILABLE = False
+
+
+# # ---------------------------
+# # Paths (you can edit ROOT only)
+# # ---------------------------
+# ROOT = Path("Experiments/MYNE/Ex4_T2KGBench/KGs_from_Essays/KG_Run_F3").resolve()
+# TRACE_ROOT = ROOT  # keep naming explicit
+# REF_ONTOLOGY = Path("Experiments/MYNE/Ex4_T2KGBench/dbpedia-webnlg/Raw/ontologies/19_film_ontology.json").resolve()
+# GOLD_TRIPLES = ROOT / "OntCompResults" / "gold_triples.jsonl"
+
+# OUT_DIR = ROOT / "OntCompResults" / "AnchoredClusters"
+# OUT_DIR.mkdir(parents=True, exist_ok=True)
+
+
+# # ---------------------------
+# # IO helpers
+# # ---------------------------
+# def read_text(p: Path) -> str:
+#     return p.read_text(encoding="utf-8", errors="replace")
+
+# def read_json(p: Path) -> Any:
+#     return json.loads(read_text(p))
+
+# def read_jsonl(p: Path) -> List[dict]:
+#     out=[]
+#     if not p.exists():
+#         return out
+#     with p.open("r", encoding="utf-8", errors="replace") as f:
+#         for ln in f:
+#             ln = ln.strip()
+#             if not ln:
+#                 continue
+#             try:
+#                 out.append(json.loads(ln))
+#             except Exception:
+#                 continue
+#     return out
+
+# def write_json(p: Path, obj: Any):
+#     p.parent.mkdir(parents=True, exist_ok=True)
+#     p.write_text(json.dumps(obj, ensure_ascii=False, indent=2), encoding="utf-8")
+
+# def write_jsonl(p: Path, rows: List[dict]):
+#     p.parent.mkdir(parents=True, exist_ok=True)
+#     with p.open("w", encoding="utf-8") as f:
+#         for r in rows:
+#             f.write(json.dumps(r, ensure_ascii=False) + "\n")
+
+# def first_existing(cands: List[Path]) -> Optional[Path]:
+#     for p in cands:
+#         if p.exists():
+#             return p
+#     return None
+
+
+# # ---------------------------
+# # Normalization
+# # ---------------------------
+# def clean_label(x: Any) -> str:
+#     if x is None:
+#         return ""
+#     s = str(x).strip()
+#     s = re.sub(r"\s+", " ", s)
+#     return s
+
+
+# # ---------------------------
+# # Locate TRACE canonical files
+# # ---------------------------
+# def locate_trace_class_file(root: Path) -> Path:
+#     cands = [
+#         root / "Schema" / "Classes" / "Cls_Res" / "Cls_Res_IterativeRuns" / "overall_summary" / "final_classes_resolved.json",
+#         root / "data" / "Classes" / "Cls_Res" / "Cls_Res_IterativeRuns" / "overall_summary" / "final_classes_resolved.json",
+#         root / "Classes" / "Cls_Res" / "Cls_Res_IterativeRuns" / "overall_summary" / "final_classes_resolved.json",
+#     ]
+#     p = first_existing(cands)
+#     if not p:
+#         raise FileNotFoundError("Could not find final_classes_resolved.json in expected TRACE folders.")
+#     return p
+
+# def locate_trace_relation_file(root: Path) -> Path:
+#     cands = [
+#         # user stated location with spaces:
+#         root / "Schema" / "Relations" / "Rel Res_IterativeRuns" / "overall_summary" / "relations_resolved.jsonl",
+#         root / "Schema" / "Relations" / "Rel Res_IterativeRuns" / "overall_summary" / "relations_resolved.json",
+#         # common TRACE locations (no Schema):
+#         root / "data" / "Relations" / "Rel Res_IterativeRuns" / "overall_summary" / "relations_resolved.jsonl",
+#         root / "data" / "Relations" / "Rel Res_IterativeRuns" / "overall_summary" / "relations_resolved.json",
+#         root / "data" / "Relations" / "relations_resolved.jsonl",
+#         root / "data" / "Relations" / "relations_resolved.json",
+#         root / "Relations" / "Rel Res_IterativeRuns" / "overall_summary" / "relations_resolved.jsonl",
+#         root / "Relations" / "Rel Res_IterativeRuns" / "overall_summary" / "relations_resolved.json",
+#     ]
+#     p = first_existing(cands)
+#     if not p:
+#         raise FileNotFoundError("Could not find relations_resolved.jsonl/json in expected TRACE folders.")
+#     return p
+
+
+# # ---------------------------
+# # Load TRACE entity classes (correct source)
+# # ---------------------------
+# def load_trace_entity_classes(final_classes_path: Path, max_member_samples: int = 25) -> List[dict]:
+#     data = read_json(final_classes_path)
+#     if not isinstance(data, list):
+#         raise ValueError("final_classes_resolved.json must be a JSON list.")
+
+#     items=[]
+#     for rec in data:
+#         cls_label = clean_label(rec.get("class_label"))
+#         if not cls_label:
+#             continue
+
+#         cls_group = clean_label(rec.get("class_group"))
+#         cls_type_hint = clean_label(rec.get("class_type_hint"))
+#         cls_desc = clean_label(rec.get("class_description"))
+#         evidence = clean_label(rec.get("evidence_excerpt"))
+
+#         members = rec.get("members") or []
+#         member_names=[]
+#         member_evidence=[]
+#         for m in members:
+#             nm = clean_label(m.get("entity_name"))
+#             ds = clean_label(m.get("entity_description"))
+#             if nm:
+#                 member_names.append(nm)
+#             if nm and ds:
+#                 member_evidence.append(f"{nm}: {ds}")
+
+#         member_names = list(dict.fromkeys(member_names))[:max_member_samples]
+#         member_evidence = list(dict.fromkeys(member_evidence))[:max_member_samples]
+
+#         type_hint = " :: ".join([x for x in [cls_group, cls_type_hint] if x]) or "TRACE_CLASS"
+#         desc = cls_desc
+#         # evidence bucket: evidence excerpt + a couple member descriptions
+#         ev = evidence
+#         if member_evidence:
+#             ev = (ev + " | " if ev else "") + " ; ".join(member_evidence[:8])
+
+#         items.append({
+#             "source": "trace",
+#             "kind": "entity_class",
+#             "ref_anchor_ok": False,
+#             "label": cls_label,
+#             "desc": desc,
+#             "type_hint": type_hint,
+#             "evidence": ev,
+#             "members": " ; ".join(member_names),
+#             "meta": {
+#                 "class_group": cls_group,
+#                 "class_type_hint": cls_type_hint,
+#                 "confidence": rec.get("confidence"),
+#                 "candidate_id": rec.get("candidate_id") or rec.get("candidate_ids"),
+#                 "source_files": rec.get("source_files"),
+#                 "member_ids": rec.get("member_ids"),
+#             }
+#         })
+
+#     return items
+
+
+# # ---------------------------
+# # Load TRACE relations (correct source)
+# # ---------------------------
+# def load_trace_relations(rel_path: Path, max_surface_samples: int = 25, max_ev_samples: int = 20) -> List[dict]:
+#     # relations file may be jsonl or json list
+#     if rel_path.suffix.lower() == ".jsonl":
+#         rows = read_jsonl(rel_path)
+#     else:
+#         rows = read_json(rel_path)
+#         if isinstance(rows, dict) and "relations" in rows:
+#             rows = rows["relations"]
+#         if not isinstance(rows, list):
+#             raise ValueError("relations_resolved must be a list or jsonl.")
+
+#     # aggregate by canonical_rel_name
+#     agg = {}
+#     for r in rows:
+#         canon = clean_label(r.get("canonical_rel_name") or r.get("relation_name"))
+#         if not canon:
+#             continue
+
+#         rec = agg.setdefault(canon, {
+#             "canon": canon,
+#             "canon_desc": clean_label(r.get("canonical_rel_desc") or ""),
+#             "rel_cls": clean_label(r.get("rel_cls") or ""),
+#             "rel_cls_group": clean_label(r.get("rel_cls_group") or r.get("rel_hint_type") or ""),
+#             "surfaces": [],
+#             "evidence_excerpts": [],
+#             "domain_classes": [],
+#             "range_classes": [],
+#             "domain_groups": [],
+#             "range_groups": [],
+#             "examples": [],
+#             "count": 0,
+#         })
+
+#         rec["count"] += 1
+
+#         surf = clean_label(r.get("relation_surface") or "")
+#         if surf:
+#             rec["surfaces"].append(surf)
+
+#         ev = clean_label(r.get("evidence_excerpt") or "")
+#         if ev:
+#             rec["evidence_excerpts"].append(ev)
+
+#         # domain/range classes/groups from resolved relation record
+#         dcls = clean_label(r.get("subject_class_label") or "")
+#         rcls = clean_label(r.get("object_class_label") or "")
+#         dgrp = clean_label(r.get("subject_class_group") or "")
+#         rgrp = clean_label(r.get("object_class_group") or "")
+#         if dcls:
+#             rec["domain_classes"].append(dcls)
+#         if rcls:
+#             rec["range_classes"].append(rcls)
+#         if dgrp:
+#             rec["domain_groups"].append(dgrp)
+#         if rgrp:
+#             rec["range_groups"].append(rgrp)
+
+#         sname = clean_label(r.get("subject_entity_name") or "")
+#         oname = clean_label(r.get("object_entity_name") or "")
+#         if sname and oname:
+#             rec["examples"].append(f"{sname} -> {oname}")
+
+#     items=[]
+#     for canon, rec in agg.items():
+#         surfaces = list(dict.fromkeys(rec["surfaces"]))[:max_surface_samples]
+#         excerpts = list(dict.fromkeys(rec["evidence_excerpts"]))[:max_ev_samples]
+#         dclasses = sorted(set(rec["domain_classes"]))
+#         rclasses = sorted(set(rec["range_classes"]))
+
+#         # description = canonical description + domain/range classes (top few)
+#         desc_parts=[]
+#         if rec["canon_desc"]:
+#             desc_parts.append(rec["canon_desc"])
+#         if dclasses or rclasses:
+#             desc_parts.append(f"domain={dclasses[:6]}; range={rclasses[:6]}")
+#         desc = " | ".join(desc_parts)
+
+#         type_hint = " :: ".join([x for x in [rec["rel_cls_group"], rec["rel_cls"]] if x]) or "TRACE_REL"
+
+#         ev_parts=[]
+#         if excerpts:
+#             ev_parts.append(" ; ".join(excerpts[:8]))
+#         ex_pairs = list(dict.fromkeys(rec["examples"]))[:10]
+#         if ex_pairs:
+#             ev_parts.append("examples=" + " ; ".join(ex_pairs[:6]))
+#         evidence = " | ".join(ev_parts)
+
+#         items.append({
+#             "source": "trace",
+#             "kind": "relation",
+#             "ref_anchor_ok": False,
+#             "label": canon,
+#             "desc": desc,
+#             "type_hint": type_hint,
+#             "evidence": evidence,
+#             "members": " ; ".join(surfaces),  # surface forms are best "members" for relations
+#             "meta": {
+#                 "canonical_rel_desc": rec["canon_desc"],
+#                 "rel_cls_group": rec["rel_cls_group"],
+#                 "rel_cls": rec["rel_cls"],
+#                 "count": rec["count"],
+#                 "domain_classes": dclasses,
+#                 "range_classes": rclasses,
+#             }
+#         })
+
+#     return items
+
+
+# # ---------------------------
+# # Load REF ontology (correct structure)
+# # ---------------------------
+# def load_ref_ontology(ref_path: Path) -> Tuple[List[dict], List[dict], Dict[str, Tuple[str,str]]]:
+#     data = read_json(ref_path)
+#     concepts = data.get("concepts", [])
+#     relations = data.get("relations", [])
+
+#     ref_classes=[]
+#     for c in concepts:
+#         lbl = clean_label(c.get("label") or c.get("qid") or "")
+#         if not lbl:
+#             continue
+#         ref_classes.append({
+#             "source":"ref",
+#             "kind":"entity_class",
+#             "ref_anchor_ok":True,
+#             "label": lbl,
+#             "desc": "",
+#             "type_hint":"REF_ONTOLOGY",
+#             "evidence":"",
+#             "members":"",
+#             "meta":{"ref_qid": c.get("qid"), "ref_label": lbl}
+#         })
+
+#     ref_rels=[]
+#     rel_dr={}
+#     for r in relations:
+#         lbl = clean_label(r.get("label") or r.get("pid") or "")
+#         if not lbl:
+#             continue
+#         dom = clean_label(r.get("domain") or "")
+#         rng = clean_label(r.get("range") or "")
+#         rel_dr[lbl] = (dom, rng)
+#         ref_rels.append({
+#             "source":"ref",
+#             "kind":"relation",
+#             "ref_anchor_ok":True,
+#             "label": lbl,
+#             "desc": (f"domain={dom}; range={rng}" if (dom or rng) else ""),
+#             "type_hint":"REF_ONTOLOGY",
+#             "evidence":"",
+#             "members":"",
+#             "meta":{"ref_pid": r.get("pid"), "domain": dom, "range": rng}
+#         })
+
+#     # dedup (safety)
+#     def dedup(items):
+#         seen=set(); out=[]
+#         for it in items:
+#             if it["label"] in seen: 
+#                 continue
+#             seen.add(it["label"]); out.append(it)
+#         return out
+
+#     return dedup(ref_classes), dedup(ref_rels), rel_dr
+
+
+# # ---------------------------
+# # Gold triples (your format): one triple per row
+# # ---------------------------
+# def load_gold_triples(gold_path: Path) -> List[dict]:
+#     rows = read_jsonl(gold_path)
+#     out=[]
+#     for r in rows:
+#         sub = clean_label(r.get("subject") or r.get("sub") or "")
+#         pred = clean_label(r.get("predicate") or r.get("rel") or "")
+#         obj = clean_label(r.get("object") or r.get("obj") or "")
+#         if pred and (sub or obj):
+#             out.append({"sub": sub, "pred": pred, "obj": obj, "sentence_id": r.get("sentence_id")})
+#     return out
+
+# def build_gold_index(gold_rows: List[dict], k_per_rel: int = 25) -> Tuple[Dict[str,List[str]], Dict[str,List[str]], Dict[str,List[str]]]:
+#     """
+#     Returns:
+#       rel2pairs[pred] = [ "sub -> obj", ... ]
+#       rel2subs[pred]  = [ sub, ... ]
+#       rel2objs[pred]  = [ obj, ... ]
+#     """
+#     rel2pairs=defaultdict(list)
+#     rel2subs=defaultdict(list)
+#     rel2objs=defaultdict(list)
+#     for r in gold_rows:
+#         p=r["pred"]; s=r["sub"]; o=r["obj"]
+#         if p:
+#             if s and o:
+#                 rel2pairs[p].append(f"{s} -> {o}")
+#             if s:
+#                 rel2subs[p].append(s)
+#             if o:
+#                 rel2objs[p].append(o)
+#     # dedup + cut
+#     for d in (rel2pairs, rel2subs, rel2objs):
+#         for k,v in list(d.items()):
+#             d[k] = list(dict.fromkeys(v))[:k_per_rel]
+#     return rel2pairs, rel2subs, rel2objs
+
+
+# def attach_ref_members_from_gold(
+#     ref_classes: List[dict],
+#     ref_rels: List[dict],
+#     rel_domain_range: Dict[str,Tuple[str,str]],
+#     gold_rel2pairs: Dict[str,List[str]],
+#     gold_rel2subs: Dict[str,List[str]],
+#     gold_rel2objs: Dict[str,List[str]],
+#     max_members: int = 25
+# ):
+#     # relations: members are gold examples
+#     for it in ref_rels:
+#         p = it["label"]
+#         ex = gold_rel2pairs.get(p, [])
+#         if ex:
+#             it["members"] = " ; ".join(ex[:max_members])
+#             it["evidence"] = f"{len(ex)} gold examples (sample): " + " ; ".join(ex[:10])
+
+#     # concepts: members gathered via domain/range predicates
+#     # - if C is domain of p: use subjects from p
+#     # - if C is range of p: use objects from p
+#     dom_map=defaultdict(list)
+#     rng_map=defaultdict(list)
+#     for p,(d,r) in rel_domain_range.items():
+#         if d:
+#             dom_map[d].append(p)
+#         if r:
+#             rng_map[r].append(p)
+
+#     for it in ref_classes:
+#         c = it["label"]
+#         mem=[]
+#         # domain preds
+#         for p in dom_map.get(c, []):
+#             mem += gold_rel2subs.get(p, [])
+#         # range preds
+#         for p in rng_map.get(c, []):
+#             mem += gold_rel2objs.get(p, [])
+#         mem = list(dict.fromkeys(mem))[:max_members]
+#         if mem:
+#             it["members"] = " ; ".join(mem)
+#             it["evidence"] = f"{len(mem)} instances from gold (sample): " + " ; ".join(mem[:10])
+#         # desc: helpful structural context
+#         dom_preds = dom_map.get(c, [])
+#         rng_preds = rng_map.get(c, [])
+#         if dom_preds or rng_preds:
+#             it["desc"] = f"domain_of={sorted(dom_preds)[:8]}; range_of={sorted(rng_preds)[:8]}"
+
+
+# # ---------------------------
+# # Embedding (same 5 buckets idea)
+# # ---------------------------
+# def embed_items(model: SentenceTransformer, items: List[dict], weights: Dict[str,float]) -> np.ndarray:
+#     N=len(items)
+#     if N==0:
+#         return np.zeros((0,384), dtype=np.float32)
+
+#     def col(k):
+#         return [str((it.get(k) or "")).strip()[:1600] for it in items]
+
+#     buckets = {
+#         "label": col("label"),
+#         "desc": col("desc"),
+#         "type_hint": col("type_hint"),
+#         "evidence": col("evidence"),
+#         "members": col("members"),
+#     }
+
+#     embs={}
+#     D=None
+#     for k,txts in buckets.items():
+#         if any(t for t in txts):
+#             e=model.encode(txts, normalize_embeddings=True, show_progress_bar=False)
+#             embs[k]=np.asarray(e, dtype=np.float32)
+#             D=embs[k].shape[1]
+#         else:
+#             embs[k]=None
+
+#     if D is None:
+#         raise ValueError("All text buckets empty; cannot embed.")
+
+#     for k in buckets.keys():
+#         if embs[k] is None:
+#             embs[k]=np.zeros((N,D), dtype=np.float32)
+
+#     w={k: float(weights.get(k,0.0)) for k in buckets.keys()}
+#     W=sum(max(0.0,x) for x in w.values())
+#     if W<=0:
+#         raise ValueError("Weights sum to 0.")
+#     for k in w:
+#         w[k]=max(0.0,w[k])/W
+
+#     X = sum(w[k]*embs[k] for k in buckets.keys())
+#     X = normalize(X, axis=1)
+#     return X
+
+
+# def run_hdbscan_diag(emb: np.ndarray, min_cluster_size=3, min_samples=2, use_umap=True):
+#     X=emb
+#     N=X.shape[0]
+#     if use_umap and UMAP_AVAILABLE and N>=6:
+#         import umap
+#         comp=min(15, max(2, N-2))
+#         neigh=min(15, max(2, N-1))
+#         try:
+#             reducer=umap.UMAP(n_components=comp, n_neighbors=neigh, min_dist=0.1, metric="cosine", random_state=42)
+#             Xr=reducer.fit_transform(X)
+#             if Xr.shape[0]==N:
+#                 X=Xr
+#         except Exception:
+#             X=emb
+
+#     clusterer=hdbscan.HDBSCAN(
+#         min_cluster_size=min_cluster_size,
+#         min_samples=min_samples,
+#         metric="euclidean",
+#         cluster_selection_method="eom"
+#     )
+#     return clusterer.fit_predict(X)
+
+
+# # ---------------------------
+# # Anchored assignment: exactly one REF per cluster
+# # ---------------------------
+# def anchored_assign(ref_items, trace_items, ref_emb, trace_emb, min_sim=0.20):
+#     if len(ref_items)==0:
+#         raise ValueError("No ref anchors.")
+#     # cosine sim because normalized
+#     S = trace_emb @ ref_emb.T
+#     best = np.argmax(S, axis=1) if len(trace_items) else np.array([], dtype=int)
+#     best_sim = S[np.arange(S.shape[0]), best] if len(trace_items) else np.array([], dtype=float)
+
+#     clusters={}
+#     for r in ref_items:
+#         rid=f"REF::{r['kind']}::{r['label']}"
+#         clusters[rid]={"anchor": r, "members": [], "stats": {"n_trace":0, "dropped":0}}
+
+#     dropped_total=0
+#     for i,t in enumerate(trace_items):
+#         j=int(best[i]); sim=float(best_sim[i])
+#         rid=f"REF::{ref_items[j]['kind']}::{ref_items[j]['label']}"
+#         if sim>=min_sim:
+#             t2=dict(t)
+#             t2["anchor_label"]=ref_items[j]["label"]
+#             t2["anchor_sim"]=sim
+#             clusters[rid]["members"].append(t2)
+#             clusters[rid]["stats"]["n_trace"]+=1
+#         else:
+#             clusters[rid]["stats"]["dropped"]+=1
+#             dropped_total+=1
+
+#     clusters["_global"]={"min_sim": min_sim, "dropped_total": dropped_total}
+#     return clusters
+
+
+# # ---------------------------
+# # MAIN
+# # ---------------------------
+# def build_and_cluster():
+#     # locate canonical TRACE files
+#     trace_class_path = locate_trace_class_file(TRACE_ROOT)
+#     trace_rel_path   = locate_trace_relation_file(TRACE_ROOT)
+
+#     print("[TRACE] class file:", trace_class_path)
+#     print("[TRACE] rel file  :", trace_rel_path)
+#     print("[REF]   ontology  :", REF_ONTOLOGY)
+#     print("[GOLD]  triples   :", GOLD_TRIPLES)
+
+#     # load TRACE pools (correct)
+#     trace_ent_items = load_trace_entity_classes(trace_class_path)
+#     trace_rel_items = load_trace_relations(trace_rel_path)
+
+#     # load REF pools
+#     ref_ent_items, ref_rel_items, ref_rel_dr = load_ref_ontology(REF_ONTOLOGY)
+
+#     # gold evidence
+#     gold_rows = load_gold_triples(GOLD_TRIPLES)
+#     gold_rel2pairs, gold_rel2subs, gold_rel2objs = build_gold_index(gold_rows)
+
+#     attach_ref_members_from_gold(
+#         ref_ent_items, ref_rel_items, ref_rel_dr,
+#         gold_rel2pairs, gold_rel2subs, gold_rel2objs
+#     )
+
+#     # embedding model
+#     MODEL_NAME = "sentence-transformers/all-MiniLM-L6-v2"
+#     model = SentenceTransformer(MODEL_NAME)
+
+#     # weights: make "label" dominant, but TRACE benefits from desc/type/evidence/members
+#     ENT_WEIGHTS = {"label":0.45, "desc":0.20, "type_hint":0.15, "evidence":0.10, "members":0.10}
+#     REL_WEIGHTS = {"label":0.45, "desc":0.20, "type_hint":0.15, "evidence":0.10, "members":0.10}
+
+#     # embed separately
+#     ref_ent_emb   = embed_items(model, ref_ent_items, ENT_WEIGHTS)
+#     trace_ent_emb = embed_items(model, trace_ent_items, ENT_WEIGHTS)
+
+#     ref_rel_emb   = embed_items(model, ref_rel_items, REL_WEIGHTS)
+#     trace_rel_emb = embed_items(model, trace_rel_items, REL_WEIGHTS)
+
+#     # diagnostics: pooled HDBSCAN labels
+#     ent_pool = ref_ent_items + trace_ent_items
+#     ent_pool_emb = np.vstack([ref_ent_emb, trace_ent_emb]) if len(ent_pool) else np.zeros((0,384), np.float32)
+#     ent_labels = run_hdbscan_diag(ent_pool_emb) if ent_pool_emb.shape[0] else np.array([])
+
+#     rel_pool = ref_rel_items + trace_rel_items
+#     rel_pool_emb = np.vstack([ref_rel_emb, trace_rel_emb]) if len(rel_pool) else np.zeros((0,384), np.float32)
+#     rel_labels = run_hdbscan_diag(rel_pool_emb) if rel_pool_emb.shape[0] else np.array([])
+
+#     # anchored clusters
+#     ent_clusters = anchored_assign(ref_ent_items, trace_ent_items, ref_ent_emb, trace_ent_emb, min_sim=0.20)
+#     rel_clusters = anchored_assign(ref_rel_items, trace_rel_items, ref_rel_emb, trace_rel_emb, min_sim=0.20)
+
+#     # write pools
+#     ent_rows=[]
+#     for i,it in enumerate(ent_pool):
+#         row=dict(it)
+#         row["hdbscan_label"]=int(ent_labels[i]) if ent_labels.size else -1
+#         ent_rows.append(row)
+#     write_jsonl(OUT_DIR / "entity_pool_with_hdbscan_labels.jsonl", ent_rows)
+
+#     rel_rows=[]
+#     for i,it in enumerate(rel_pool):
+#         row=dict(it)
+#         row["hdbscan_label"]=int(rel_labels[i]) if rel_labels.size else -1
+#         rel_rows.append(row)
+#     write_jsonl(OUT_DIR / "relation_pool_with_hdbscan_labels.jsonl", rel_rows)
+
+#     # write clusters
+#     write_json(OUT_DIR / "entity_anchored_clusters.json", ent_clusters)
+#     write_json(OUT_DIR / "relation_anchored_clusters.json", rel_clusters)
+
+#     summary = {
+#         "paths": {
+#             "trace_final_classes_resolved": str(trace_class_path),
+#             "trace_relations_resolved": str(trace_rel_path),
+#             "ref_ontology": str(REF_ONTOLOGY),
+#             "gold_triples": str(GOLD_TRIPLES),
+#             "out_dir": str(OUT_DIR),
+#         },
+#         "counts": {
+#             "ref_concepts": len(ref_ent_items),
+#             "ref_relations": len(ref_rel_items),
+#             "trace_classes": len(trace_ent_items),
+#             "trace_relations": len(trace_rel_items),
+#             "gold_triples_rows": len(gold_rows),
+#         },
+#         "anchored": {
+#             "min_sim": ent_clusters["_global"]["min_sim"],
+#             "entity_dropped": ent_clusters["_global"]["dropped_total"],
+#             "relation_dropped": rel_clusters["_global"]["dropped_total"],
+#         }
+#     }
+#     write_json(OUT_DIR / "summary.json", summary)
+
+#     print("\n[OK] v5 complete. Outputs:")
+#     print(" -", OUT_DIR / "entity_pool_with_hdbscan_labels.jsonl")
+#     print(" -", OUT_DIR / "relation_pool_with_hdbscan_labels.jsonl")
+#     print(" -", OUT_DIR / "entity_anchored_clusters.json")
+#     print(" -", OUT_DIR / "relation_anchored_clusters.json")
+#     print(" -", OUT_DIR / "summary.json")
+
+
+# # RUN
+# build_and_cluster()
+
+#endregion#?  Cluster-based Concept Mapping v5
+#*#########################  End  ##########################
+
+
+
+#?######################### Start ##########################
+#region:#?     # Cluster-based Concept Mapping v5 (generic, split-aware)
+
+
+
+# ==============================
+# Cluster-based Concept Mapping v5 (generic, split-aware)
+# ==============================
 from __future__ import annotations
 import json, re
 from pathlib import Path
-from collections import defaultdict, Counter
+from collections import defaultdict
 from typing import List, Dict, Any, Tuple, Optional
 
 import numpy as np
@@ -2307,22 +3177,7 @@ try:
 except Exception:
     UMAP_AVAILABLE = False
 
-
-# ---------------------------
-# Paths (you can edit ROOT only)
-# ---------------------------
-ROOT = Path("Experiments/MYNE/Ex4_T2KGBench/KGs_from_Essays/KG_Run_F3").resolve()
-TRACE_ROOT = ROOT  # keep naming explicit
-REF_ONTOLOGY = Path("Experiments/MYNE/Ex4_T2KGBench/dbpedia-webnlg/Raw/ontologies/19_film_ontology.json").resolve()
-GOLD_TRIPLES = ROOT / "OntCompResults" / "gold_triples.jsonl"
-
-OUT_DIR = ROOT / "OntCompResults" / "AnchoredClusters"
-OUT_DIR.mkdir(parents=True, exist_ok=True)
-
-
-# ---------------------------
-# IO helpers
-# ---------------------------
+# ---------- IO ----------
 def read_text(p: Path) -> str:
     return p.read_text(encoding="utf-8", errors="replace")
 
@@ -2360,10 +3215,7 @@ def first_existing(cands: List[Path]) -> Optional[Path]:
             return p
     return None
 
-
-# ---------------------------
-# Normalization
-# ---------------------------
+# ---------- Normalization ----------
 def clean_label(x: Any) -> str:
     if x is None:
         return ""
@@ -2371,15 +3223,19 @@ def clean_label(x: Any) -> str:
     s = re.sub(r"\s+", " ", s)
     return s
 
+def infer_split_from_id(sentence_id: str) -> str:
+    s = (sentence_id or "").lower()
+    if re.search(r"(^|_)train(_|$)", s): return "train"
+    if re.search(r"(^|_)valid(_|$)|(^|_)dev(_|$)|(^|_)val(_|$)", s): return "valid"
+    if re.search(r"(^|_)test(_|$)", s): return "test"
+    return "all"
 
-# ---------------------------
-# Locate TRACE canonical files
-# ---------------------------
+# ---------- locate TRACE canonical files ----------
 def locate_trace_class_file(root: Path) -> Path:
     cands = [
         root / "Schema" / "Classes" / "Cls_Res" / "Cls_Res_IterativeRuns" / "overall_summary" / "final_classes_resolved.json",
-        root / "data" / "Classes" / "Cls_Res" / "Cls_Res_IterativeRuns" / "overall_summary" / "final_classes_resolved.json",
-        root / "Classes" / "Cls_Res" / "Cls_Res_IterativeRuns" / "overall_summary" / "final_classes_resolved.json",
+        root / "data"   / "Classes" / "Cls_Res" / "Cls_Res_IterativeRuns" / "overall_summary" / "final_classes_resolved.json",
+        root / "Classes"/ "Cls_Res" / "Cls_Res_IterativeRuns" / "overall_summary" / "final_classes_resolved.json",
     ]
     p = first_existing(cands)
     if not p:
@@ -2388,14 +3244,12 @@ def locate_trace_class_file(root: Path) -> Path:
 
 def locate_trace_relation_file(root: Path) -> Path:
     cands = [
-        # user stated location with spaces:
         root / "Schema" / "Relations" / "Rel Res_IterativeRuns" / "overall_summary" / "relations_resolved.jsonl",
         root / "Schema" / "Relations" / "Rel Res_IterativeRuns" / "overall_summary" / "relations_resolved.json",
-        # common TRACE locations (no Schema):
-        root / "data" / "Relations" / "Rel Res_IterativeRuns" / "overall_summary" / "relations_resolved.jsonl",
-        root / "data" / "Relations" / "Rel Res_IterativeRuns" / "overall_summary" / "relations_resolved.json",
-        root / "data" / "Relations" / "relations_resolved.jsonl",
-        root / "data" / "Relations" / "relations_resolved.json",
+        root / "data"   / "Relations" / "Rel Res_IterativeRuns" / "overall_summary" / "relations_resolved.jsonl",
+        root / "data"   / "Relations" / "Rel Res_IterativeRuns" / "overall_summary" / "relations_resolved.json",
+        root / "data"   / "Relations" / "relations_resolved.jsonl",
+        root / "data"   / "Relations" / "relations_resolved.json",
         root / "Relations" / "Rel Res_IterativeRuns" / "overall_summary" / "relations_resolved.jsonl",
         root / "Relations" / "Rel Res_IterativeRuns" / "overall_summary" / "relations_resolved.json",
     ]
@@ -2404,10 +3258,7 @@ def locate_trace_relation_file(root: Path) -> Path:
         raise FileNotFoundError("Could not find relations_resolved.jsonl/json in expected TRACE folders.")
     return p
 
-
-# ---------------------------
-# Load TRACE entity classes (correct source)
-# ---------------------------
+# ---------- TRACE loaders ----------
 def load_trace_entity_classes(final_classes_path: Path, max_member_samples: int = 25) -> List[dict]:
     data = read_json(final_classes_path)
     if not isinstance(data, list):
@@ -2418,7 +3269,6 @@ def load_trace_entity_classes(final_classes_path: Path, max_member_samples: int 
         cls_label = clean_label(rec.get("class_label"))
         if not cls_label:
             continue
-
         cls_group = clean_label(rec.get("class_group"))
         cls_type_hint = clean_label(rec.get("class_type_hint"))
         cls_desc = clean_label(rec.get("class_description"))
@@ -2439,8 +3289,6 @@ def load_trace_entity_classes(final_classes_path: Path, max_member_samples: int 
         member_evidence = list(dict.fromkeys(member_evidence))[:max_member_samples]
 
         type_hint = " :: ".join([x for x in [cls_group, cls_type_hint] if x]) or "TRACE_CLASS"
-        desc = cls_desc
-        # evidence bucket: evidence excerpt + a couple member descriptions
         ev = evidence
         if member_evidence:
             ev = (ev + " | " if ev else "") + " ; ".join(member_evidence[:8])
@@ -2450,7 +3298,7 @@ def load_trace_entity_classes(final_classes_path: Path, max_member_samples: int 
             "kind": "entity_class",
             "ref_anchor_ok": False,
             "label": cls_label,
-            "desc": desc,
+            "desc": cls_desc,
             "type_hint": type_hint,
             "evidence": ev,
             "members": " ; ".join(member_names),
@@ -2459,35 +3307,22 @@ def load_trace_entity_classes(final_classes_path: Path, max_member_samples: int 
                 "class_type_hint": cls_type_hint,
                 "confidence": rec.get("confidence"),
                 "candidate_id": rec.get("candidate_id") or rec.get("candidate_ids"),
-                "source_files": rec.get("source_files"),
-                "member_ids": rec.get("member_ids"),
             }
         })
-
     return items
 
-
-# ---------------------------
-# Load TRACE relations (correct source)
-# ---------------------------
 def load_trace_relations(rel_path: Path, max_surface_samples: int = 25, max_ev_samples: int = 20) -> List[dict]:
-    # relations file may be jsonl or json list
-    if rel_path.suffix.lower() == ".jsonl":
-        rows = read_jsonl(rel_path)
-    else:
-        rows = read_json(rel_path)
-        if isinstance(rows, dict) and "relations" in rows:
-            rows = rows["relations"]
-        if not isinstance(rows, list):
-            raise ValueError("relations_resolved must be a list or jsonl.")
+    rows = read_jsonl(rel_path) if rel_path.suffix.lower()==".jsonl" else read_json(rel_path)
+    if isinstance(rows, dict) and "relations" in rows:
+        rows = rows["relations"]
+    if not isinstance(rows, list):
+        raise ValueError("relations_resolved must be a list or jsonl.")
 
-    # aggregate by canonical_rel_name
     agg = {}
     for r in rows:
         canon = clean_label(r.get("canonical_rel_name") or r.get("relation_name"))
         if not canon:
             continue
-
         rec = agg.setdefault(canon, {
             "canon": canon,
             "canon_desc": clean_label(r.get("canonical_rel_desc") or ""),
@@ -2497,35 +3332,23 @@ def load_trace_relations(rel_path: Path, max_surface_samples: int = 25, max_ev_s
             "evidence_excerpts": [],
             "domain_classes": [],
             "range_classes": [],
-            "domain_groups": [],
-            "range_groups": [],
             "examples": [],
             "count": 0,
         })
-
         rec["count"] += 1
-
         surf = clean_label(r.get("relation_surface") or "")
         if surf:
             rec["surfaces"].append(surf)
-
         ev = clean_label(r.get("evidence_excerpt") or "")
         if ev:
             rec["evidence_excerpts"].append(ev)
 
-        # domain/range classes/groups from resolved relation record
         dcls = clean_label(r.get("subject_class_label") or "")
         rcls = clean_label(r.get("object_class_label") or "")
-        dgrp = clean_label(r.get("subject_class_group") or "")
-        rgrp = clean_label(r.get("object_class_group") or "")
         if dcls:
             rec["domain_classes"].append(dcls)
         if rcls:
             rec["range_classes"].append(rcls)
-        if dgrp:
-            rec["domain_groups"].append(dgrp)
-        if rgrp:
-            rec["range_groups"].append(rgrp)
 
         sname = clean_label(r.get("subject_entity_name") or "")
         oname = clean_label(r.get("object_entity_name") or "")
@@ -2539,7 +3362,6 @@ def load_trace_relations(rel_path: Path, max_surface_samples: int = 25, max_ev_s
         dclasses = sorted(set(rec["domain_classes"]))
         rclasses = sorted(set(rec["range_classes"]))
 
-        # description = canonical description + domain/range classes (top few)
         desc_parts=[]
         if rec["canon_desc"]:
             desc_parts.append(rec["canon_desc"])
@@ -2565,7 +3387,7 @@ def load_trace_relations(rel_path: Path, max_surface_samples: int = 25, max_ev_s
             "desc": desc,
             "type_hint": type_hint,
             "evidence": evidence,
-            "members": " ; ".join(surfaces),  # surface forms are best "members" for relations
+            "members": " ; ".join(surfaces),
             "meta": {
                 "canonical_rel_desc": rec["canon_desc"],
                 "rel_cls_group": rec["rel_cls_group"],
@@ -2575,13 +3397,9 @@ def load_trace_relations(rel_path: Path, max_surface_samples: int = 25, max_ev_s
                 "range_classes": rclasses,
             }
         })
-
     return items
 
-
-# ---------------------------
-# Load REF ontology (correct structure)
-# ---------------------------
+# ---------- REF ontology loader ----------
 def load_ref_ontology(ref_path: Path) -> Tuple[List[dict], List[dict], Dict[str, Tuple[str,str]]]:
     data = read_json(ref_path)
     concepts = data.get("concepts", [])
@@ -2625,39 +3443,38 @@ def load_ref_ontology(ref_path: Path) -> Tuple[List[dict], List[dict], Dict[str,
             "meta":{"ref_pid": r.get("pid"), "domain": dom, "range": rng}
         })
 
-    # dedup (safety)
     def dedup(items):
         seen=set(); out=[]
         for it in items:
-            if it["label"] in seen: 
+            if it["label"] in seen:
                 continue
             seen.add(it["label"]); out.append(it)
         return out
 
     return dedup(ref_classes), dedup(ref_rels), rel_dr
 
-
-# ---------------------------
-# Gold triples (your format): one triple per row
-# ---------------------------
-def load_gold_triples(gold_path: Path) -> List[dict]:
+# ---------- gold loading (split-aware) ----------
+def load_gold_triples(gold_path: Path, context_split: str = "all") -> List[dict]:
+    """
+    Reads one-triple-per-line records:
+      {split?, sentence_id, subject, predicate, object, sent?}
+    Filters by context_split in {"all","train","valid","test"}.
+    """
     rows = read_jsonl(gold_path)
     out=[]
     for r in rows:
+        sid = clean_label(r.get("sentence_id") or r.get("id") or "")
+        sp  = clean_label(r.get("split") or "") or infer_split_from_id(sid)
+        if context_split != "all" and sp != context_split:
+            continue
         sub = clean_label(r.get("subject") or r.get("sub") or "")
         pred = clean_label(r.get("predicate") or r.get("rel") or "")
         obj = clean_label(r.get("object") or r.get("obj") or "")
         if pred and (sub or obj):
-            out.append({"sub": sub, "pred": pred, "obj": obj, "sentence_id": r.get("sentence_id")})
+            out.append({"split": sp, "sentence_id": sid, "sub": sub, "pred": pred, "obj": obj})
     return out
 
 def build_gold_index(gold_rows: List[dict], k_per_rel: int = 25) -> Tuple[Dict[str,List[str]], Dict[str,List[str]], Dict[str,List[str]]]:
-    """
-    Returns:
-      rel2pairs[pred] = [ "sub -> obj", ... ]
-      rel2subs[pred]  = [ sub, ... ]
-      rel2objs[pred]  = [ obj, ... ]
-    """
     rel2pairs=defaultdict(list)
     rel2subs=defaultdict(list)
     rel2objs=defaultdict(list)
@@ -2670,23 +3487,12 @@ def build_gold_index(gold_rows: List[dict], k_per_rel: int = 25) -> Tuple[Dict[s
                 rel2subs[p].append(s)
             if o:
                 rel2objs[p].append(o)
-    # dedup + cut
     for d in (rel2pairs, rel2subs, rel2objs):
         for k,v in list(d.items()):
             d[k] = list(dict.fromkeys(v))[:k_per_rel]
     return rel2pairs, rel2subs, rel2objs
 
-
-def attach_ref_members_from_gold(
-    ref_classes: List[dict],
-    ref_rels: List[dict],
-    rel_domain_range: Dict[str,Tuple[str,str]],
-    gold_rel2pairs: Dict[str,List[str]],
-    gold_rel2subs: Dict[str,List[str]],
-    gold_rel2objs: Dict[str,List[str]],
-    max_members: int = 25
-):
-    # relations: members are gold examples
+def attach_ref_members_from_gold(ref_classes, ref_rels, rel_domain_range, gold_rel2pairs, gold_rel2subs, gold_rel2objs, max_members=25):
     for it in ref_rels:
         p = it["label"]
         ex = gold_rel2pairs.get(p, [])
@@ -2694,40 +3500,25 @@ def attach_ref_members_from_gold(
             it["members"] = " ; ".join(ex[:max_members])
             it["evidence"] = f"{len(ex)} gold examples (sample): " + " ; ".join(ex[:10])
 
-    # concepts: members gathered via domain/range predicates
-    # - if C is domain of p: use subjects from p
-    # - if C is range of p: use objects from p
     dom_map=defaultdict(list)
     rng_map=defaultdict(list)
     for p,(d,r) in rel_domain_range.items():
-        if d:
-            dom_map[d].append(p)
-        if r:
-            rng_map[r].append(p)
+        if d: dom_map[d].append(p)
+        if r: rng_map[r].append(p)
 
     for it in ref_classes:
         c = it["label"]
         mem=[]
-        # domain preds
         for p in dom_map.get(c, []):
             mem += gold_rel2subs.get(p, [])
-        # range preds
         for p in rng_map.get(c, []):
             mem += gold_rel2objs.get(p, [])
         mem = list(dict.fromkeys(mem))[:max_members]
         if mem:
             it["members"] = " ; ".join(mem)
             it["evidence"] = f"{len(mem)} instances from gold (sample): " + " ; ".join(mem[:10])
-        # desc: helpful structural context
-        dom_preds = dom_map.get(c, [])
-        rng_preds = rng_map.get(c, [])
-        if dom_preds or rng_preds:
-            it["desc"] = f"domain_of={sorted(dom_preds)[:8]}; range_of={sorted(rng_preds)[:8]}"
 
-
-# ---------------------------
-# Embedding (same 5 buckets idea)
-# ---------------------------
+# ---------- embeddings ----------
 def embed_items(model: SentenceTransformer, items: List[dict], weights: Dict[str,float]) -> np.ndarray:
     N=len(items)
     if N==0:
@@ -2772,7 +3563,6 @@ def embed_items(model: SentenceTransformer, items: List[dict], weights: Dict[str
     X = normalize(X, axis=1)
     return X
 
-
 def run_hdbscan_diag(emb: np.ndarray, min_cluster_size=3, min_samples=2, use_umap=True):
     X=emb
     N=X.shape[0]
@@ -2796,14 +3586,773 @@ def run_hdbscan_diag(emb: np.ndarray, min_cluster_size=3, min_samples=2, use_uma
     )
     return clusterer.fit_predict(X)
 
-
-# ---------------------------
-# Anchored assignment: exactly one REF per cluster
-# ---------------------------
 def anchored_assign(ref_items, trace_items, ref_emb, trace_emb, min_sim=0.20):
-    if len(ref_items)==0:
-        raise ValueError("No ref anchors.")
-    # cosine sim because normalized
+    S = trace_emb @ ref_emb.T  # cosine sim (normalized)
+    best = np.argmax(S, axis=1) if len(trace_items) else np.array([], dtype=int)
+    best_sim = S[np.arange(S.shape[0]), best] if len(trace_items) else np.array([], dtype=float)
+
+    clusters={}
+    for r in ref_items:
+        rid=f"REF::{r['kind']}::{r['label']}"
+        clusters[rid]={"anchor": r, "members": [], "stats": {"n_trace":0, "dropped":0}}
+
+    dropped_total=0
+    for i,t in enumerate(trace_items):
+        j=int(best[i]); sim=float(best_sim[i])
+        rid=f"REF::{ref_items[j]['kind']}::{ref_items[j]['label']}"
+        if sim>=min_sim:
+            t2=dict(t)
+            t2["anchor_label"]=ref_items[j]["label"]
+            t2["anchor_sim"]=sim
+            clusters[rid]["members"].append(t2)
+            clusters[rid]["stats"]["n_trace"]+=1
+        else:
+            clusters[rid]["stats"]["dropped"]+=1
+            dropped_total+=1
+
+    clusters["_global"]={"min_sim": float(min_sim), "dropped_total": int(dropped_total)}
+    return clusters
+
+# ---------- MAIN ----------
+def build_anchored_clusters(
+    *,
+    data_root: Path,
+    run_root: Path,
+    ontology_num_or_key: str | int,
+    gold_triples_path: Optional[Path] = None,
+    context_split_for_ref_evidence: str = "all",  # "all" or "train"
+    out_dir: Optional[Path] = None,
+    min_sim: float = 0.20,
+    also_write_flat: bool = True,
+):
+    data_root = Path(data_root).resolve()
+    run_root = Path(run_root).resolve()
+
+    ontology_key = resolve_ontology_key(data_root, ontology_num_or_key)
+    ref_ontology = data_root / "dbpedia-webnlg" / "Raw" / "ontologies" / f"{ontology_key}_ontology.json"
+    if not ref_ontology.exists():
+        raise FileNotFoundError(f"REF ontology not found: {ref_ontology}")
+
+    gold_triples_path = Path(gold_triples_path).resolve() if gold_triples_path else (run_root / "OntCompResults" / "gold_triples.jsonl")
+    if not gold_triples_path.exists():
+        raise FileNotFoundError(f"gold_triples not found: {gold_triples_path}")
+
+    out_dir = Path(out_dir).resolve() if out_dir else (run_root / "OntCompResults" / "AnchoredClusters" / ontology_key)
+    out_dir.mkdir(parents=True, exist_ok=True)
+
+    trace_class_path = locate_trace_class_file(run_root)
+    trace_rel_path   = locate_trace_relation_file(run_root)
+
+    print("[TRACE] class file:", trace_class_path)
+    print("[TRACE] rel file  :", trace_rel_path)
+    print("[REF]   ontology  :", ref_ontology)
+    print("[GOLD]  triples   :", gold_triples_path)
+    print("[CTX]   ref evidence split:", context_split_for_ref_evidence)
+    print("[OUT]   out_dir:", out_dir)
+
+    trace_ent_items = load_trace_entity_classes(trace_class_path)
+    trace_rel_items = load_trace_relations(trace_rel_path)
+
+    ref_ent_items, ref_rel_items, ref_rel_dr = load_ref_ontology(ref_ontology)
+
+    gold_rows = load_gold_triples(gold_triples_path, context_split=context_split_for_ref_evidence)
+    gold_rel2pairs, gold_rel2subs, gold_rel2objs = build_gold_index(gold_rows)
+
+    attach_ref_members_from_gold(ref_ent_items, ref_rel_items, ref_rel_dr, gold_rel2pairs, gold_rel2subs, gold_rel2objs)
+
+    model = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
+    ENT_WEIGHTS = {"label":0.45, "desc":0.20, "type_hint":0.15, "evidence":0.10, "members":0.10}
+    REL_WEIGHTS = {"label":0.45, "desc":0.20, "type_hint":0.15, "evidence":0.10, "members":0.10}
+
+    ref_ent_emb   = embed_items(model, ref_ent_items, ENT_WEIGHTS)
+    trace_ent_emb = embed_items(model, trace_ent_items, ENT_WEIGHTS)
+    ref_rel_emb   = embed_items(model, ref_rel_items, REL_WEIGHTS)
+    trace_rel_emb = embed_items(model, trace_rel_items, REL_WEIGHTS)
+
+    # pooled hdbscan labels (diagnostic only)
+    ent_pool = ref_ent_items + trace_ent_items
+    ent_pool_emb = np.vstack([ref_ent_emb, trace_ent_emb]) if len(ent_pool) else np.zeros((0,384), np.float32)
+    ent_labels = run_hdbscan_diag(ent_pool_emb) if ent_pool_emb.shape[0] else np.array([])
+
+    rel_pool = ref_rel_items + trace_rel_items
+    rel_pool_emb = np.vstack([ref_rel_emb, trace_rel_emb]) if len(rel_pool) else np.zeros((0,384), np.float32)
+    rel_labels = run_hdbscan_diag(rel_pool_emb) if rel_pool_emb.shape[0] else np.array([])
+
+    ent_clusters = anchored_assign(ref_ent_items, trace_ent_items, ref_ent_emb, trace_ent_emb, min_sim=min_sim)
+    rel_clusters = anchored_assign(ref_rel_items, trace_rel_items, ref_rel_emb, trace_rel_emb, min_sim=min_sim)
+
+    # write pools with diag labels
+    ent_rows=[]
+    for i,it in enumerate(ent_pool):
+        row=dict(it)
+        row["hdbscan_label"]=int(ent_labels[i]) if ent_labels.size else -1
+        ent_rows.append(row)
+    write_jsonl(out_dir / "entity_pool_with_hdbscan_labels.jsonl", ent_rows)
+
+    rel_rows=[]
+    for i,it in enumerate(rel_pool):
+        row=dict(it)
+        row["hdbscan_label"]=int(rel_labels[i]) if rel_labels.size else -1
+        rel_rows.append(row)
+    write_jsonl(out_dir / "relation_pool_with_hdbscan_labels.jsonl", rel_rows)
+
+    # write clusters
+    write_json(out_dir / "entity_anchored_clusters.json", ent_clusters)
+    write_json(out_dir / "relation_anchored_clusters.json", rel_clusters)
+
+    summary = {
+        "ontology_key": ontology_key,
+        "paths": {
+            "trace_final_classes_resolved": str(trace_class_path),
+            "trace_relations_resolved": str(trace_rel_path),
+            "ref_ontology": str(ref_ontology),
+            "gold_triples": str(gold_triples_path),
+            "out_dir": str(out_dir),
+        },
+        "counts": {
+            "ref_concepts": len(ref_ent_items),
+            "ref_relations": len(ref_rel_items),
+            "trace_classes": len(trace_ent_items),
+            "trace_relations": len(trace_rel_items),
+            "gold_triples_rows_used_for_context": len(gold_rows),
+        },
+        "anchored": {
+            "min_sim": ent_clusters["_global"]["min_sim"],
+            "entity_dropped": ent_clusters["_global"]["dropped_total"],
+            "relation_dropped": rel_clusters["_global"]["dropped_total"],
+        }
+    }
+    write_json(out_dir / "summary.json", summary)
+
+    # backward compatible flat copies
+    if also_write_flat:
+        flat_dir = run_root / "OntCompResults" / "AnchoredClusters"
+        flat_dir.mkdir(parents=True, exist_ok=True)
+        write_json(flat_dir / "entity_anchored_clusters.json", ent_clusters)
+        write_json(flat_dir / "relation_anchored_clusters.json", rel_clusters)
+        write_json(flat_dir / "summary.json", summary)
+
+    print("\n[OK] Anchored clusters built.")
+    print(" -", out_dir / "entity_anchored_clusters.json")
+    print(" -", out_dir / "relation_anchored_clusters.json")
+    print(" -", out_dir / "summary.json")
+    return out_dir
+
+# ---- EXAMPLE ----
+DATA_ROOT = Path("Experiments/MYNE/Ex4_T2KGBench").resolve()
+RUN_ROOT  = DATA_ROOT / "KGs_from_Essays" / "KG_Run_F3"
+out_dir = build_anchored_clusters(
+    data_root=DATA_ROOT,
+    run_root=RUN_ROOT,
+    ontology_num_or_key=19,
+    gold_triples_path=RUN_ROOT / "OntCompResults" / "gold_triples.jsonl",
+    context_split_for_ref_evidence="all",   # switch to "train" later for strict generalization protocol
+    min_sim=0.20,
+    also_write_flat=True,
+)
+
+#endregion#?   # Cluster-based Concept Mapping v5 (generic, split-aware)
+#?#########################  End  ##########################
+
+
+
+
+
+
+
+
+
+
+
+#?######################### Start ##########################
+#region:#?    # Text2KGBench → gold_triples.jsonl  +  AnchoredClusters (TRACE↔REF)
+
+
+# ==============================
+# Text2KGBench → gold_triples.jsonl  +  AnchoredClusters (TRACE↔REF)
+# (single integrated, notebook-friendly code)
+# ==============================
+
+from __future__ import annotations
+from pathlib import Path
+import json, re
+from typing import Dict, List, Optional, Tuple, Any
+from collections import defaultdict
+
+import numpy as np
+from sklearn.preprocessing import normalize
+from sentence_transformers import SentenceTransformer
+import hdbscan
+
+try:
+    import umap
+    UMAP_AVAILABLE = True
+except Exception:
+    UMAP_AVAILABLE = False
+
+
+# ------------------------------------------------------------
+# Small IO helpers
+# ------------------------------------------------------------
+def read_text(p: Path) -> str:
+    return p.read_text(encoding="utf-8", errors="replace")
+
+def read_json(p: Path) -> Any:
+    return json.loads(read_text(p))
+
+def read_jsonl(p: Path) -> List[dict]:
+    out = []
+    if not p.exists():
+        return out
+    with p.open("r", encoding="utf-8", errors="replace") as f:
+        for ln in f:
+            ln = ln.strip()
+            if not ln:
+                continue
+            try:
+                out.append(json.loads(ln))
+            except Exception:
+                continue
+    return out
+
+def write_json(p: Path, obj: Any) -> None:
+    p.parent.mkdir(parents=True, exist_ok=True)
+    p.write_text(json.dumps(obj, ensure_ascii=False, indent=2), encoding="utf-8")
+
+def write_jsonl(p: Path, rows: List[dict]) -> None:
+    p.parent.mkdir(parents=True, exist_ok=True)
+    with p.open("w", encoding="utf-8") as f:
+        for r in rows:
+            f.write(json.dumps(r, ensure_ascii=False) + "\n")
+
+def first_existing(cands: List[Path]) -> Optional[Path]:
+    for p in cands:
+        if p.exists():
+            return p
+    return None
+
+
+# ------------------------------------------------------------
+# Normalization / split inference
+# ------------------------------------------------------------
+def clean_label(x: Any) -> str:
+    if x is None:
+        return ""
+    s = str(x).strip()
+    s = re.sub(r"\s+", " ", s)
+    return s
+
+def infer_split_from_id(sentence_id: str) -> str:
+    s = (sentence_id or "").lower()
+    if re.search(r"(^|_)train(_|$)", s): return "train"
+    if re.search(r"(^|_)valid(_|$)|(^|_)dev(_|$)|(^|_)val(_|$)", s): return "valid"
+    if re.search(r"(^|_)test(_|$)", s): return "test"
+    return "all"
+
+def resolve_ontology_key(data_root: Path, ontology_num_or_key: str | int) -> str:
+    """
+    19 -> finds '19_film_ontology.json' and returns '19_film'
+    '19_film' -> returns it (after checking it exists).
+    """
+    data_root = Path(data_root).resolve()
+    ont_dir = data_root / "dbpedia-webnlg" / "Raw" / "ontologies"
+    x = str(ontology_num_or_key).strip()
+
+    if "_" in x and x.split("_")[0].isdigit():
+        key = x
+        ont_path = ont_dir / f"{key}_ontology.json"
+        if not ont_path.exists():
+            raise FileNotFoundError(f"Ontology not found: {ont_path}")
+        return key
+
+    if not x.isdigit():
+        raise ValueError(f"ontology_num_or_key must be int or like '19_film'. Got: {ontology_num_or_key}")
+
+    num = int(x)
+    hits = sorted(ont_dir.glob(f"{num}_*_ontology.json"))
+    if not hits:
+        raise FileNotFoundError(f"No ontology file found for {num} in {ont_dir}")
+    hits = sorted(hits, key=lambda p: len(p.stem))
+    key = hits[0].stem.replace("_ontology", "")
+    return key
+
+
+# ============================================================
+# PART A) Build gold_triples.jsonl (train + valid + test)
+# ============================================================
+def locate_split_files(data_root: Path, ontology_key: str) -> Dict[str, Optional[Path]]:
+    """
+    train: Raw/train/ont_{key}_train.jsonl (has triples)
+    valid: Raw/valid|dev|val/... (optional, has triples)
+    test_text: Raw/test/ont_{key}_test.jsonl (usually text-only)
+    test_gold: Raw/ground_truth/ont_{key}_ground_truth.jsonl (has test triples)
+    """
+    data_root = Path(data_root).resolve()
+    raw = data_root / "dbpedia-webnlg" / "Raw"
+
+    train = raw / "train" / f"ont_{ontology_key}_train.jsonl"
+
+    valid_candidates = [
+        raw / "valid" / f"ont_{ontology_key}_valid.jsonl",
+        raw / "valid" / f"ont_{ontology_key}_dev.jsonl",
+        raw / "dev"   / f"ont_{ontology_key}_dev.jsonl",
+        raw / "val"   / f"ont_{ontology_key}_val.jsonl",
+        raw / "val"   / f"ont_{ontology_key}_valid.jsonl",
+    ]
+    valid = next((p for p in valid_candidates if p.exists()), None)
+
+    test_text = raw / "test" / f"ont_{ontology_key}_test.jsonl"
+    test_gold = raw / "ground_truth" / f"ont_{ontology_key}_ground_truth.jsonl"
+
+    return {
+        "train": train,
+        "valid": valid,
+        "test_text": test_text if test_text.exists() else None,
+        "test_gold": test_gold,
+    }
+
+def extract_triples_from_file(path: Path, split_override: Optional[str] = None) -> List[dict]:
+    """
+    Input rows:
+      {"id": "...", "sent": "...", "triples":[{"sub","rel","obj"},...]}
+    Output (one triple per row):
+      {split, sentence_id, sent, subject, predicate, object}
+    """
+    rows = read_jsonl(path)
+    out: List[dict] = []
+    for j in rows:
+        sid = j.get("id") or j.get("sentence_id") or ""
+        sent = j.get("sent") or ""
+        triples = j.get("triples", [])
+        if not sid or not isinstance(triples, list):
+            continue
+        split = split_override or infer_split_from_id(str(sid))
+        for t in triples:
+            s = t.get("sub") or t.get("subject") or ""
+            p = t.get("rel") or t.get("predicate") or ""
+            o = t.get("obj") or t.get("object") or ""
+            if not (s and p and o):
+                continue
+            out.append({
+                "split": split,
+                "sentence_id": sid,
+                "sent": sent,
+                "subject": s,
+                "predicate": p,
+                "object": o,
+            })
+    return out
+
+def build_gold_triples_jsonl(
+    *,
+    data_root: Path,
+    ontology_num_or_key: str | int,
+    out_path: Path,
+    include_train: bool = True,
+    include_valid: bool = True,
+    include_test: bool = True,
+) -> Tuple[str, Dict[str,int]]:
+    """
+    Writes gold triples (train + valid + test) into one JSONL.
+    Note: test triples come from Raw/ground_truth/*_ground_truth.jsonl
+    """
+    data_root = Path(data_root).resolve()
+    out_path = Path(out_path).resolve()
+
+    ontology_key = resolve_ontology_key(data_root, ontology_num_or_key)
+    paths = locate_split_files(data_root, ontology_key)
+
+    if include_train and not paths["train"].exists():
+        raise FileNotFoundError(f"Train file not found: {paths['train']}")
+    if include_test and not paths["test_gold"].exists():
+        raise FileNotFoundError(f"Ground truth (test triples) not found: {paths['test_gold']}")
+
+    all_rows: List[dict] = []
+    if include_train:
+        all_rows.extend(extract_triples_from_file(paths["train"], split_override="train"))
+    if include_valid and paths["valid"] is not None and paths["valid"].exists():
+        all_rows.extend(extract_triples_from_file(paths["valid"], split_override="valid"))
+    if include_test:
+        all_rows.extend(extract_triples_from_file(paths["test_gold"], split_override="test"))
+
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    with out_path.open("w", encoding="utf-8") as f:
+        for r in all_rows:
+            f.write(json.dumps(r, ensure_ascii=False) + "\n")
+
+    counts = {"train":0, "valid":0, "test":0, "all":len(all_rows)}
+    for r in all_rows:
+        sp = r.get("split","all")
+        if sp in counts:
+            counts[sp] += 1
+
+    print(f"[gold] ontology_key={ontology_key}")
+    print(f"[gold] wrote {len(all_rows)} triples → {out_path}")
+    print("[gold] split counts:", counts)
+    print("[gold] inputs:", {k: (str(v) if v else None) for k,v in paths.items()})
+    return ontology_key, counts
+
+
+# ============================================================
+# PART B) Build anchored clusters (TRACE schema ↔ REF ontology)
+# ============================================================
+def locate_trace_class_file(root: Path) -> Path:
+    cands = [
+        root / "Schema" / "Classes" / "Cls_Res" / "Cls_Res_IterativeRuns" / "overall_summary" / "final_classes_resolved.json",
+        root / "data"   / "Classes" / "Cls_Res" / "Cls_Res_IterativeRuns" / "overall_summary" / "final_classes_resolved.json",
+        root / "Classes"/ "Cls_Res" / "Cls_Res_IterativeRuns" / "overall_summary" / "final_classes_resolved.json",
+    ]
+    p = first_existing(cands)
+    if not p:
+        raise FileNotFoundError("Could not find final_classes_resolved.json in expected TRACE folders.")
+    return p
+
+def locate_trace_relation_file(root: Path) -> Path:
+    cands = [
+        root / "Schema" / "Relations" / "Rel Res_IterativeRuns" / "overall_summary" / "relations_resolved.jsonl",
+        root / "Schema" / "Relations" / "Rel Res_IterativeRuns" / "overall_summary" / "relations_resolved.json",
+        root / "data"   / "Relations" / "Rel Res_IterativeRuns" / "overall_summary" / "relations_resolved.jsonl",
+        root / "data"   / "Relations" / "Rel Res_IterativeRuns" / "overall_summary" / "relations_resolved.json",
+        root / "data"   / "Relations" / "relations_resolved.jsonl",
+        root / "data"   / "Relations" / "relations_resolved.json",
+        root / "Relations" / "Rel Res_IterativeRuns" / "overall_summary" / "relations_resolved.jsonl",
+        root / "Relations" / "Rel Res_IterativeRuns" / "overall_summary" / "relations_resolved.json",
+    ]
+    p = first_existing(cands)
+    if not p:
+        raise FileNotFoundError("Could not find relations_resolved.jsonl/json in expected TRACE folders.")
+    return p
+
+def load_trace_entity_classes(final_classes_path: Path, max_member_samples: int = 25) -> List[dict]:
+    data = read_json(final_classes_path)
+    if not isinstance(data, list):
+        raise ValueError("final_classes_resolved.json must be a JSON list.")
+
+    items=[]
+    for rec in data:
+        cls_label = clean_label(rec.get("class_label"))
+        if not cls_label:
+            continue
+        cls_group = clean_label(rec.get("class_group"))
+        cls_type_hint = clean_label(rec.get("class_type_hint"))
+        cls_desc = clean_label(rec.get("class_description"))
+        evidence = clean_label(rec.get("evidence_excerpt"))
+
+        members = rec.get("members") or []
+        member_names=[]
+        member_evidence=[]
+        for m in members:
+            nm = clean_label(m.get("entity_name"))
+            ds = clean_label(m.get("entity_description"))
+            if nm:
+                member_names.append(nm)
+            if nm and ds:
+                member_evidence.append(f"{nm}: {ds}")
+
+        member_names = list(dict.fromkeys(member_names))[:max_member_samples]
+        member_evidence = list(dict.fromkeys(member_evidence))[:max_member_samples]
+
+        type_hint = " :: ".join([x for x in [cls_group, cls_type_hint] if x]) or "TRACE_CLASS"
+        ev = evidence
+        if member_evidence:
+            ev = (ev + " | " if ev else "") + " ; ".join(member_evidence[:8])
+
+        items.append({
+            "source": "trace",
+            "kind": "entity_class",
+            "ref_anchor_ok": False,
+            "label": cls_label,
+            "desc": cls_desc,
+            "type_hint": type_hint,
+            "evidence": ev,
+            "members": " ; ".join(member_names),
+            "meta": {
+                "class_group": cls_group,
+                "class_type_hint": cls_type_hint,
+                "confidence": rec.get("confidence"),
+                "candidate_id": rec.get("candidate_id") or rec.get("candidate_ids"),
+            }
+        })
+    return items
+
+def load_trace_relations(rel_path: Path, max_surface_samples: int = 25, max_ev_samples: int = 20) -> List[dict]:
+    rows = read_jsonl(rel_path) if rel_path.suffix.lower()==".jsonl" else read_json(rel_path)
+    if isinstance(rows, dict) and "relations" in rows:
+        rows = rows["relations"]
+    if not isinstance(rows, list):
+        raise ValueError("relations_resolved must be a list or jsonl.")
+
+    agg = {}
+    for r in rows:
+        canon = clean_label(r.get("canonical_rel_name") or r.get("relation_name"))
+        if not canon:
+            continue
+        rec = agg.setdefault(canon, {
+            "canon": canon,
+            "canon_desc": clean_label(r.get("canonical_rel_desc") or ""),
+            "rel_cls": clean_label(r.get("rel_cls") or ""),
+            "rel_cls_group": clean_label(r.get("rel_cls_group") or r.get("rel_hint_type") or ""),
+            "surfaces": [],
+            "evidence_excerpts": [],
+            "domain_classes": [],
+            "range_classes": [],
+            "examples": [],
+            "count": 0,
+        })
+        rec["count"] += 1
+
+        surf = clean_label(r.get("relation_surface") or "")
+        if surf:
+            rec["surfaces"].append(surf)
+
+        ev = clean_label(r.get("evidence_excerpt") or "")
+        if ev:
+            rec["evidence_excerpts"].append(ev)
+
+        dcls = clean_label(r.get("subject_class_label") or "")
+        rcls = clean_label(r.get("object_class_label") or "")
+        if dcls: rec["domain_classes"].append(dcls)
+        if rcls: rec["range_classes"].append(rcls)
+
+        sname = clean_label(r.get("subject_entity_name") or "")
+        oname = clean_label(r.get("object_entity_name") or "")
+        if sname and oname:
+            rec["examples"].append(f"{sname} -> {oname}")
+
+    items=[]
+    for canon, rec in agg.items():
+        surfaces = list(dict.fromkeys(rec["surfaces"]))[:max_surface_samples]
+        excerpts = list(dict.fromkeys(rec["evidence_excerpts"]))[:max_ev_samples]
+        dclasses = sorted(set(rec["domain_classes"]))
+        rclasses = sorted(set(rec["range_classes"]))
+
+        desc_parts=[]
+        if rec["canon_desc"]:
+            desc_parts.append(rec["canon_desc"])
+        if dclasses or rclasses:
+            desc_parts.append(f"domain={dclasses[:6]}; range={rclasses[:6]}")
+        desc = " | ".join(desc_parts)
+
+        type_hint = " :: ".join([x for x in [rec["rel_cls_group"], rec["rel_cls"]] if x]) or "TRACE_REL"
+
+        ev_parts=[]
+        if excerpts:
+            ev_parts.append(" ; ".join(excerpts[:8]))
+        ex_pairs = list(dict.fromkeys(rec["examples"]))[:10]
+        if ex_pairs:
+            ev_parts.append("examples=" + " ; ".join(ex_pairs[:6]))
+        evidence = " | ".join(ev_parts)
+
+        items.append({
+            "source": "trace",
+            "kind": "relation",
+            "ref_anchor_ok": False,
+            "label": canon,
+            "desc": desc,
+            "type_hint": type_hint,
+            "evidence": evidence,
+            "members": " ; ".join(surfaces),
+            "meta": {
+                "canonical_rel_desc": rec["canon_desc"],
+                "rel_cls_group": rec["rel_cls_group"],
+                "rel_cls": rec["rel_cls"],
+                "count": rec["count"],
+                "domain_classes": dclasses,
+                "range_classes": rclasses,
+            }
+        })
+    return items
+
+def load_ref_ontology(ref_path: Path) -> Tuple[List[dict], List[dict], Dict[str, Tuple[str,str]]]:
+    data = read_json(ref_path)
+    concepts = data.get("concepts", [])
+    relations = data.get("relations", [])
+
+    ref_classes=[]
+    for c in concepts:
+        lbl = clean_label(c.get("label") or c.get("qid") or "")
+        if not lbl:
+            continue
+        ref_classes.append({
+            "source":"ref",
+            "kind":"entity_class",
+            "ref_anchor_ok":True,
+            "label": lbl,
+            "desc": "",
+            "type_hint":"REF_ONTOLOGY",
+            "evidence":"",
+            "members":"",
+            "meta":{"ref_qid": c.get("qid"), "ref_label": lbl}
+        })
+
+    ref_rels=[]
+    rel_dr={}
+    for r in relations:
+        lbl = clean_label(r.get("label") or r.get("pid") or "")
+        if not lbl:
+            continue
+        dom = clean_label(r.get("domain") or "")
+        rng = clean_label(r.get("range") or "")
+        rel_dr[lbl] = (dom, rng)
+        ref_rels.append({
+            "source":"ref",
+            "kind":"relation",
+            "ref_anchor_ok":True,
+            "label": lbl,
+            "desc": (f"domain={dom}; range={rng}" if (dom or rng) else ""),
+            "type_hint":"REF_ONTOLOGY",
+            "evidence":"",
+            "members":"",
+            "meta":{"ref_pid": r.get("pid"), "domain": dom, "range": rng}
+        })
+
+    def dedup(items):
+        seen=set(); out=[]
+        for it in items:
+            if it["label"] in seen:
+                continue
+            seen.add(it["label"]); out.append(it)
+        return out
+
+    return dedup(ref_classes), dedup(ref_rels), rel_dr
+
+def load_gold_triples_for_context(gold_path: Path, context_split: str = "all") -> List[dict]:
+    """
+    context_split in {"all","train","valid","test","train+valid"}
+    """
+    rows = read_jsonl(gold_path)
+    out=[]
+    for r in rows:
+        sid = clean_label(r.get("sentence_id") or r.get("id") or "")
+        sp  = clean_label(r.get("split") or "") or infer_split_from_id(sid)
+
+        keep = (context_split == "all") or (sp == context_split)
+        if context_split == "train+valid":
+            keep = sp in ("train", "valid")
+        if not keep:
+            continue
+
+        sub = clean_label(r.get("subject") or r.get("sub") or "")
+        pred = clean_label(r.get("predicate") or r.get("rel") or "")
+        obj = clean_label(r.get("object") or r.get("obj") or "")
+        if pred and (sub or obj):
+            out.append({"split": sp, "sentence_id": sid, "sub": sub, "pred": pred, "obj": obj})
+    return out
+
+def build_gold_index(gold_rows: List[dict], k_per_rel: int = 25) -> Tuple[Dict[str,List[str]], Dict[str,List[str]], Dict[str,List[str]]]:
+    rel2pairs=defaultdict(list)
+    rel2subs=defaultdict(list)
+    rel2objs=defaultdict(list)
+    for r in gold_rows:
+        p=r["pred"]; s=r["sub"]; o=r["obj"]
+        if p:
+            if s and o:
+                rel2pairs[p].append(f"{s} -> {o}")
+            if s:
+                rel2subs[p].append(s)
+            if o:
+                rel2objs[p].append(o)
+    for d in (rel2pairs, rel2subs, rel2objs):
+        for k,v in list(d.items()):
+            d[k] = list(dict.fromkeys(v))[:k_per_rel]
+    return rel2pairs, rel2subs, rel2objs
+
+def attach_ref_members_from_gold(ref_classes, ref_rels, rel_domain_range, gold_rel2pairs, gold_rel2subs, gold_rel2objs, max_members=25):
+    # relations: examples
+    for it in ref_rels:
+        p = it["label"]
+        ex = gold_rel2pairs.get(p, [])
+        if ex:
+            it["members"] = " ; ".join(ex[:max_members])
+            it["evidence"] = f"{len(ex)} gold examples (sample): " + " ; ".join(ex[:10])
+
+    # concepts: instances derived via domain/range of predicates
+    dom_map=defaultdict(list)
+    rng_map=defaultdict(list)
+    for p,(d,r) in rel_domain_range.items():
+        if d: dom_map[d].append(p)
+        if r: rng_map[r].append(p)
+
+    for it in ref_classes:
+        c = it["label"]
+        mem=[]
+        for p in dom_map.get(c, []):
+            mem += gold_rel2subs.get(p, [])
+        for p in rng_map.get(c, []):
+            mem += gold_rel2objs.get(p, [])
+        mem = list(dict.fromkeys(mem))[:max_members]
+        if mem:
+            it["members"] = " ; ".join(mem)
+            it["evidence"] = f"{len(mem)} instances from gold (sample): " + " ; ".join(mem[:10])
+
+def embed_items(model: SentenceTransformer, items: List[dict], weights: Dict[str,float]) -> np.ndarray:
+    N=len(items)
+    if N==0:
+        return np.zeros((0,384), dtype=np.float32)
+
+    def col(k):
+        return [str((it.get(k) or "")).strip()[:1600] for it in items]
+
+    buckets = {
+        "label": col("label"),
+        "desc": col("desc"),
+        "type_hint": col("type_hint"),
+        "evidence": col("evidence"),
+        "members": col("members"),
+    }
+
+    embs={}
+    D=None
+    for k,txts in buckets.items():
+        if any(t for t in txts):
+            e=model.encode(txts, normalize_embeddings=True, show_progress_bar=False)
+            embs[k]=np.asarray(e, dtype=np.float32)
+            D=embs[k].shape[1]
+        else:
+            embs[k]=None
+
+    if D is None:
+        raise ValueError("All text buckets empty; cannot embed.")
+
+    for k in buckets.keys():
+        if embs[k] is None:
+            embs[k]=np.zeros((N,D), dtype=np.float32)
+
+    w={k: float(weights.get(k,0.0)) for k in buckets.keys()}
+    W=sum(max(0.0,x) for x in w.values())
+    if W<=0:
+        raise ValueError("Weights sum to 0.")
+    for k in w:
+        w[k]=max(0.0,w[k])/W
+
+    X = sum(w[k]*embs[k] for k in buckets.keys())
+    X = normalize(X, axis=1)
+    return X
+
+def run_hdbscan_diag(emb: np.ndarray, min_cluster_size=3, min_samples=2, use_umap=True):
+    X=emb
+    N=X.shape[0]
+    if use_umap and UMAP_AVAILABLE and N>=6:
+        comp=min(15, max(2, N-2))
+        neigh=min(15, max(2, N-1))
+        try:
+            reducer=umap.UMAP(n_components=comp, n_neighbors=neigh, min_dist=0.1, metric="cosine", random_state=42)
+            Xr=reducer.fit_transform(X)
+            if Xr.shape[0]==N:
+                X=Xr
+        except Exception:
+            X=emb
+
+    clusterer=hdbscan.HDBSCAN(
+        min_cluster_size=min_cluster_size,
+        min_samples=min_samples,
+        metric="euclidean",
+        cluster_selection_method="eom"
+    )
+    return clusterer.fit_predict(X)
+
+def anchored_assign(ref_items, trace_items, ref_emb, trace_emb, min_sim=0.20):
+    # cosine sim (normalized)
     S = trace_emb @ ref_emb.T
     best = np.argmax(S, axis=1) if len(trace_items) else np.array([], dtype=int)
     best_sim = S[np.arange(S.shape[0]), best] if len(trace_items) else np.array([], dtype=float)
@@ -2827,55 +4376,102 @@ def anchored_assign(ref_items, trace_items, ref_emb, trace_emb, min_sim=0.20):
             clusters[rid]["stats"]["dropped"]+=1
             dropped_total+=1
 
-    clusters["_global"]={"min_sim": min_sim, "dropped_total": dropped_total}
+    clusters["_global"]={"min_sim": float(min_sim), "dropped_total": int(dropped_total)}
     return clusters
 
 
-# ---------------------------
-# MAIN
-# ---------------------------
-def build_and_cluster():
-    # locate canonical TRACE files
-    trace_class_path = locate_trace_class_file(TRACE_ROOT)
-    trace_rel_path   = locate_trace_relation_file(TRACE_ROOT)
+def build_gold_and_anchored_clusters(
+    *,
+    data_root: Path,
+    run_root: Path,
+    ontology_num_or_key: str | int,
+    # gold output (per ontology)
+    gold_out_dir: Optional[Path] = None,
+    include_train: bool = True,
+    include_valid: bool = True,
+    include_test: bool = True,
+    # anchored clusters
+    context_split_for_ref_evidence: str = "train+valid",  # recommended: avoid test leakage
+    min_sim: float = 0.20,
+    out_dir: Optional[Path] = None,
+    also_write_flat: bool = True,
+) -> Path:
+    """
+    One-shot:
+      (1) build gold triples jsonl (train/valid/test)
+      (2) build anchored clusters for THIS ontology using TRACE schema in run_root
+    Returns the per-ontology anchored-clusters directory.
+    """
+    data_root = Path(data_root).resolve()
+    run_root = Path(run_root).resolve()
 
-    print("[TRACE] class file:", trace_class_path)
-    print("[TRACE] rel file  :", trace_rel_path)
-    print("[REF]   ontology  :", REF_ONTOLOGY)
-    print("[GOLD]  triples   :", GOLD_TRIPLES)
+    ontology_key = resolve_ontology_key(data_root, ontology_num_or_key)
 
-    # load TRACE pools (correct)
+    # --- gold path (per ontology) ---
+    gold_out_dir = Path(gold_out_dir).resolve() if gold_out_dir else (run_root / "OntCompResults" / "Gold")
+    gold_out_dir.mkdir(parents=True, exist_ok=True)
+    gold_out_path = gold_out_dir / f"{ontology_key}_gold_triples.jsonl"
+
+    # build gold
+    _key, counts = build_gold_triples_jsonl(
+        data_root=data_root,
+        ontology_num_or_key=ontology_key,
+        out_path=gold_out_path,
+        include_train=include_train,
+        include_valid=include_valid,
+        include_test=include_test,
+    )
+
+    # (optional) backward-compatible copy (the evaluator default path many scripts use)
+    compat_gold = run_root / "OntCompResults" / "gold_triples.jsonl"
+    compat_gold.parent.mkdir(parents=True, exist_ok=True)
+    compat_gold.write_text(gold_out_path.read_text(encoding="utf-8", errors="replace"), encoding="utf-8")
+    print(f"[gold] wrote compat copy → {compat_gold}")
+
+    # --- locate REF ontology ---
+    ref_ontology = data_root / "dbpedia-webnlg" / "Raw" / "ontologies" / f"{ontology_key}_ontology.json"
+    if not ref_ontology.exists():
+        raise FileNotFoundError(f"REF ontology not found: {ref_ontology}")
+
+    # --- output dir ---
+    out_dir = Path(out_dir).resolve() if out_dir else (run_root / "OntCompResults" / "AnchoredClusters" / ontology_key)
+    out_dir.mkdir(parents=True, exist_ok=True)
+
+    # --- locate TRACE canonical files ---
+    trace_class_path = locate_trace_class_file(run_root)
+    trace_rel_path   = locate_trace_relation_file(run_root)
+
+    print("\n[cluster] ontology_key:", ontology_key)
+    print("[cluster] TRACE class file:", trace_class_path)
+    print("[cluster] TRACE rel file  :", trace_rel_path)
+    print("[cluster] REF ontology    :", ref_ontology)
+    print("[cluster] GOLD (context)  :", gold_out_path)
+    print("[cluster] context_split_for_ref_evidence:", context_split_for_ref_evidence)
+    print("[cluster] out_dir:", out_dir)
+
+    # --- load TRACE pools ---
     trace_ent_items = load_trace_entity_classes(trace_class_path)
     trace_rel_items = load_trace_relations(trace_rel_path)
 
-    # load REF pools
-    ref_ent_items, ref_rel_items, ref_rel_dr = load_ref_ontology(REF_ONTOLOGY)
+    # --- load REF pools ---
+    ref_ent_items, ref_rel_items, ref_rel_dr = load_ref_ontology(ref_ontology)
 
-    # gold evidence
-    gold_rows = load_gold_triples(GOLD_TRIPLES)
-    gold_rel2pairs, gold_rel2subs, gold_rel2objs = build_gold_index(gold_rows)
+    # --- attach REF evidence from gold (split-aware) ---
+    gold_rows_ctx = load_gold_triples_for_context(gold_out_path, context_split=context_split_for_ref_evidence)
+    gold_rel2pairs, gold_rel2subs, gold_rel2objs = build_gold_index(gold_rows_ctx)
+    attach_ref_members_from_gold(ref_ent_items, ref_rel_items, ref_rel_dr, gold_rel2pairs, gold_rel2subs, gold_rel2objs)
 
-    attach_ref_members_from_gold(
-        ref_ent_items, ref_rel_items, ref_rel_dr,
-        gold_rel2pairs, gold_rel2subs, gold_rel2objs
-    )
-
-    # embedding model
-    MODEL_NAME = "sentence-transformers/all-MiniLM-L6-v2"
-    model = SentenceTransformer(MODEL_NAME)
-
-    # weights: make "label" dominant, but TRACE benefits from desc/type/evidence/members
+    # --- embeddings ---
+    model = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
     ENT_WEIGHTS = {"label":0.45, "desc":0.20, "type_hint":0.15, "evidence":0.10, "members":0.10}
     REL_WEIGHTS = {"label":0.45, "desc":0.20, "type_hint":0.15, "evidence":0.10, "members":0.10}
 
-    # embed separately
     ref_ent_emb   = embed_items(model, ref_ent_items, ENT_WEIGHTS)
     trace_ent_emb = embed_items(model, trace_ent_items, ENT_WEIGHTS)
-
     ref_rel_emb   = embed_items(model, ref_rel_items, REL_WEIGHTS)
     trace_rel_emb = embed_items(model, trace_rel_items, REL_WEIGHTS)
 
-    # diagnostics: pooled HDBSCAN labels
+    # pooled hdbscan labels (diagnostic only)
     ent_pool = ref_ent_items + trace_ent_items
     ent_pool_emb = np.vstack([ref_ent_emb, trace_ent_emb]) if len(ent_pool) else np.zeros((0,384), np.float32)
     ent_labels = run_hdbscan_diag(ent_pool_emb) if ent_pool_emb.shape[0] else np.array([])
@@ -2885,64 +4481,99 @@ def build_and_cluster():
     rel_labels = run_hdbscan_diag(rel_pool_emb) if rel_pool_emb.shape[0] else np.array([])
 
     # anchored clusters
-    ent_clusters = anchored_assign(ref_ent_items, trace_ent_items, ref_ent_emb, trace_ent_emb, min_sim=0.20)
-    rel_clusters = anchored_assign(ref_rel_items, trace_rel_items, ref_rel_emb, trace_rel_emb, min_sim=0.20)
+    ent_clusters = anchored_assign(ref_ent_items, trace_ent_items, ref_ent_emb, trace_ent_emb, min_sim=min_sim)
+    rel_clusters = anchored_assign(ref_rel_items, trace_rel_items, ref_rel_emb, trace_rel_emb, min_sim=min_sim)
 
-    # write pools
+    # write pools with diag labels
     ent_rows=[]
     for i,it in enumerate(ent_pool):
         row=dict(it)
         row["hdbscan_label"]=int(ent_labels[i]) if ent_labels.size else -1
         ent_rows.append(row)
-    write_jsonl(OUT_DIR / "entity_pool_with_hdbscan_labels.jsonl", ent_rows)
+    write_jsonl(out_dir / "entity_pool_with_hdbscan_labels.jsonl", ent_rows)
 
     rel_rows=[]
     for i,it in enumerate(rel_pool):
         row=dict(it)
         row["hdbscan_label"]=int(rel_labels[i]) if rel_labels.size else -1
         rel_rows.append(row)
-    write_jsonl(OUT_DIR / "relation_pool_with_hdbscan_labels.jsonl", rel_rows)
+    write_jsonl(out_dir / "relation_pool_with_hdbscan_labels.jsonl", rel_rows)
 
     # write clusters
-    write_json(OUT_DIR / "entity_anchored_clusters.json", ent_clusters)
-    write_json(OUT_DIR / "relation_anchored_clusters.json", rel_clusters)
+    write_json(out_dir / "entity_anchored_clusters.json", ent_clusters)
+    write_json(out_dir / "relation_anchored_clusters.json", rel_clusters)
 
     summary = {
+        "ontology_key": ontology_key,
+        "gold_counts": counts,
         "paths": {
             "trace_final_classes_resolved": str(trace_class_path),
             "trace_relations_resolved": str(trace_rel_path),
-            "ref_ontology": str(REF_ONTOLOGY),
-            "gold_triples": str(GOLD_TRIPLES),
-            "out_dir": str(OUT_DIR),
+            "ref_ontology": str(ref_ontology),
+            "gold_triples": str(gold_out_path),
+            "compat_gold_triples": str(compat_gold),
+            "out_dir": str(out_dir),
         },
         "counts": {
             "ref_concepts": len(ref_ent_items),
             "ref_relations": len(ref_rel_items),
             "trace_classes": len(trace_ent_items),
             "trace_relations": len(trace_rel_items),
-            "gold_triples_rows": len(gold_rows),
+            "gold_triples_rows_used_for_context": len(gold_rows_ctx),
         },
         "anchored": {
             "min_sim": ent_clusters["_global"]["min_sim"],
             "entity_dropped": ent_clusters["_global"]["dropped_total"],
             "relation_dropped": rel_clusters["_global"]["dropped_total"],
-        }
+        },
+        "context_split_for_ref_evidence": context_split_for_ref_evidence,
     }
-    write_json(OUT_DIR / "summary.json", summary)
+    write_json(out_dir / "summary.json", summary)
 
-    print("\n[OK] v5 complete. Outputs:")
-    print(" -", OUT_DIR / "entity_pool_with_hdbscan_labels.jsonl")
-    print(" -", OUT_DIR / "relation_pool_with_hdbscan_labels.jsonl")
-    print(" -", OUT_DIR / "entity_anchored_clusters.json")
-    print(" -", OUT_DIR / "relation_anchored_clusters.json")
-    print(" -", OUT_DIR / "summary.json")
+    # backward-compatible flat copies (some of your older scripts read these)
+    if also_write_flat:
+        flat_dir = run_root / "OntCompResults" / "AnchoredClusters"
+        flat_dir.mkdir(parents=True, exist_ok=True)
+        write_json(flat_dir / "entity_anchored_clusters.json", ent_clusters)
+        write_json(flat_dir / "relation_anchored_clusters.json", rel_clusters)
+        write_json(flat_dir / "summary.json", summary)
+
+    print("\n[OK] gold + anchored clusters ready.")
+    print(" - gold:", gold_out_path)
+    print(" - entity clusters:", out_dir / "entity_anchored_clusters.json")
+    print(" - relation clusters:", out_dir / "relation_anchored_clusters.json")
+    print(" - summary:", out_dir / "summary.json")
+    return out_dir
 
 
-# RUN
-build_and_cluster()
+# ============================================================
+# RUN (edit only these)
+# ============================================================
+DATA_ROOT = Path("Experiments/MYNE/Ex4_T2KGBench").resolve()
+RUN_ROOT  = DATA_ROOT / "KGs_from_Essays" / "KG_Run_F3"   # where TRACE outputs exist for this ontology run
+ONTOLOGY  = 19  # or "19_film"
 
-#endregion#?  Cluster-based Concept Mapping v5
+out_dir = build_gold_and_anchored_clusters(
+    data_root=DATA_ROOT,
+    run_root=RUN_ROOT,
+    ontology_num_or_key=ONTOLOGY,
+    include_train=True,
+    include_valid=True,
+    include_test=True,
+    context_split_for_ref_evidence="train+valid",  # recommended (no test leakage)
+    min_sim=0.20,
+    also_write_flat=True,
+)
+
+print("DONE →", out_dir)
+
+
+
+#endregion#?  # Text2KGBench → gold_triples.jsonl  +  AnchoredClusters (TRACE↔REF)
 #?#########################  End  ##########################
+
+
+
 
 
 
@@ -4113,31 +5744,157 @@ class DSPyBackend(LLMBackend):
 
         return txt
 
+# class OpenAIBackend(LLMBackend):
+#     """
+#     Fallback backend using OpenAI python SDK (minimal).
+#     """
+#     def __init__(self, model: str):
+#         from openai import OpenAI
+#         self.client = OpenAI()
+#         self.model = model
+
+#     def complete(self, system: str, user: str, max_tokens: int) -> str:
+#         # Use chat.completions for broad compatibility.
+#         # If you prefer DSPy (recommended in your repo), set prefer_dspy=True.
+#         try:
+#             resp = self.client.chat.completions.create(
+#                 model=self.model,
+#                 temperature=0.0,
+#                 max_tokens=max_tokens,
+#                 messages=[
+#                     {"role": "system", "content": system},
+#                     {"role": "user", "content": user},
+#                 ],
+#             )
+#             return resp.choices[0].message.content or ""
+#         except Exception as e:
+#             return f'{{"error":"OpenAI call failed: {str(e)}"}}'
+
+# class OpenAIBackend(LLMBackend):
+#     """
+#     Uses OpenAI python SDK.
+#     - For GPT-5.* and o-series reasoning models: use Responses API + max_output_tokens
+#     - Otherwise: use chat.completions + max_tokens
+#     """
+#     def __init__(self, model: str):
+#         from openai import OpenAI
+#         self.client = OpenAI()
+#         self.model = model
+
+#     def complete(self, system: str, user: str, max_tokens: int) -> str:
+#         import json
+
+#         try:
+#             base = (self.model.split("/")[-1]).lower()
+
+#             # GPT-5 + most o-series: Responses API (OpenAI docs recommend max_output_tokens here)
+#             if base.startswith("gpt-5") or base.startswith("o1") or base.startswith("o3") or base.startswith("o4"):
+#                 resp = self.client.responses.create(
+#                     model=self.model,
+#                     instructions=system,
+#                     input=user,
+#                     max_output_tokens=max_tokens,
+#                     # temperature is often not supported for these; omit or keep 0 if your SDK allows
+#                 )
+#                 # OpenAI SDK exposes output_text convenience on Responses
+#                 return getattr(resp, "output_text", "") or ""
+
+#             # Classic chat models:
+#             resp = self.client.chat.completions.create(
+#                 model=self.model,
+#                 temperature=0.0,
+#                 max_tokens=max_tokens,
+#                 messages=[
+#                     {"role": "system", "content": system},
+#                     {"role": "user", "content": user},
+#                 ],
+#             )
+#             return resp.choices[0].message.content or ""
+
+#         except Exception as e:
+#             # IMPORTANT: return valid JSON (so your extractor doesn't explode)
+#             return json.dumps({"error": f"OpenAI call failed: {str(e)}"}, ensure_ascii=False)
+
+
+
 class OpenAIBackend(LLMBackend):
     """
-    Fallback backend using OpenAI python SDK (minimal).
+    Robust OpenAI backend: prefer Responses API (max_output_tokens),
+    fallback to chat.completions if necessary. Returns plain string.
     """
     def __init__(self, model: str):
         from openai import OpenAI
         self.client = OpenAI()
         self.model = model
 
-    def complete(self, system: str, user: str, max_tokens: int) -> str:
-        # Use chat.completions for broad compatibility.
-        # If you prefer DSPy (recommended in your repo), set prefer_dspy=True.
+    def _resp_to_text(self, resp) -> str:
+        # try common SDK helpers
+        txt = ""
         try:
-            resp = self.client.chat.completions.create(
-                model=self.model,
-                temperature=0.0,
-                max_tokens=max_tokens,
-                messages=[
-                    {"role": "system", "content": system},
-                    {"role": "user", "content": user},
-                ],
-            )
-            return resp.choices[0].message.content or ""
+            txt = getattr(resp, "output_text", "") or ""
+        except Exception:
+            txt = ""
+        if not txt:
+            try:
+                # older/alternative shape: resp.output[0].content[0].text
+                out = resp.get("output") if isinstance(resp, dict) else None
+                if out and isinstance(out, list) and len(out) > 0:
+                    c0 = out[0].get("content") if isinstance(out[0], dict) else None
+                    if c0 and isinstance(c0, list) and len(c0) > 0:
+                        txt = c0[0].get("text", "") or ""
+            except Exception:
+                txt = ""
+        if not txt:
+            # fallback to string
+            try:
+                txt = str(resp)
+            except Exception:
+                txt = ""
+        return txt
+
+    def complete(self, system: str, user: str, max_tokens: int) -> str:
+        import json
+        try:
+            # Try Responses API (preferred for gpt-5 / o-* models)
+            try:
+                resp = self.client.responses.create(
+                    model=self.model,
+                    instructions=system,
+                    input=user,
+                    max_output_tokens=max_tokens,
+                )
+                text = self._resp_to_text(resp)
+                return text or json.dumps({"error":"empty_response"})
+            except Exception as e_resp:
+                # If the Responses call fails due to unsupported params or API, fall back
+                # to chat.completions (some deployments still need that).
+                # Keep the original exception message for debugging if second call fails.
+                resp_err_msg = str(e_resp)
+
+            # Fallback: chat completions (omit max_tokens if it causes issues)
+            try:
+                resp2 = self.client.chat.completions.create(
+                    model=self.model,
+                    messages=[
+                        {"role":"system","content": system},
+                        {"role":"user","content": user},
+                    ],
+                    temperature=0.0,
+                    # do not pass max_tokens here to avoid 'unsupported' errors
+                )
+                # sdk: resp2.choices[0].message.content
+                try:
+                    return resp2.choices[0].message.content or ""
+                except Exception:
+                    return str(resp2)
+            except Exception as e_chat:
+                return json.dumps({"error": f"Responses_error: {resp_err_msg} | Chat_error: {str(e_chat)}"})
         except Exception as e:
-            return f'{{"error":"OpenAI call failed: {str(e)}"}}'
+            return json.dumps({"error": f"OpenAI unexpected failure: {str(e)}"})
+
+
+
+
 
 def make_backend(llm_cfg: LLMConfig, step: str) -> Optional[LLMBackend]:
     if not llm_cfg.use_llm:
@@ -5185,64 +6942,39 @@ print("Done →", out_summary)
 
 
 
-from pathlib import Path
-import json
-
-# Path to the relation anchored clusters you already generated
-REL_CLUSTERS_PATH = Path(
-    "Experiments/MYNE/Ex4_T2KGBench/KGs_from_Essays/KG_Run_F3/OntCompResults/AnchoredClusters/relation_anchored_clusters.json"
-).resolve()
-
-data = json.loads(REL_CLUSTERS_PATH.read_text(encoding="utf-8", errors="replace"))
-rel_clusters = {k: v for k, v in data.items() if k != "_global"}   # drop global block
-print("Loaded rel_clusters:", len(rel_clusters), "anchors")
-print("Sample keys:", list(rel_clusters.keys())[:3])
 
 
-# Make sure cfg + make_backend + build_relation_prompt + get_topk_members exist in the notebook
-rel_backend = make_backend(cfg.llm, step="rel_res")
 
-some_ref_key = next(iter(rel_clusters.keys()))
-blk = rel_clusters[some_ref_key]
-anchor = blk.get("anchor", {}) or {}
-cands = get_topk_members(blk, cfg.llm.top_k)
-
-prompt = build_relation_prompt(anchor, cands)
-raw = rel_backend.complete(
-    system="You are a precise ontology alignment judge. Return strict JSON only. No markdown.",
-    user=prompt,
-    max_tokens=cfg.llm.max_tokens,
-)
-
-print("=== RAW LLM OUTPUT (first 1200 chars) ===")
-print(raw[:1200])
-print("\n=== PARSED OBJECT ===")
-print(_extract_json_obj(raw))
 
 
 #?######################### Start ##########################
-#region:#?   A print statement for improvement
+#region:#?   p1
+
 
 from pathlib import Path
-import json, csv
-from collections import Counter
+import json
+from collections import Counter, defaultdict
 
-# =========================
-# EDIT THIS ONLY (if needed)
-# =========================
-OUT_DIR = Path("Experiments/MYNE/Ex4_T2KGBench/KGs_from_Essays/KG_Run_F3/OntCompResults/SchemaEval").resolve()
+# ============
+# CONFIG
+# ============
+BASE = Path("Experiments/MYNE/Ex4_T2KGBench/KGs_from_Essays/KG_Run_F3/OntCompResults/SchemaEvaL").resolve()
 
-# -------------------------
-# Helpers
-# -------------------------
-def read_csv(p: Path):
-    if not p.exists():
-        return []
-    with p.open("r", encoding="utf-8", newline="") as f:
-        return list(csv.DictReader(f))
+# Try common case variants if path is slightly different
+if not BASE.exists():
+    for alt in [
+        BASE.parent / "SchemaEval",
+        BASE.parent / "SCHEMAEVAL",
+        BASE.parent / "SchemaEVAL",
+        BASE.parent / "SchemaEvaluation",
+    ]:
+        if alt.exists():
+            BASE = alt.resolve()
+            break
 
-def read_json(p: Path):
-    return json.loads(p.read_text(encoding="utf-8", errors="replace"))
+print("=== TRACE↔REF SchemaEval Digest ===")
+print("Using BASE:", BASE)
+print("Exists:", BASE.exists())
 
 def read_jsonl(p: Path):
     rows = []
@@ -5256,238 +6988,226 @@ def read_jsonl(p: Path):
             try:
                 rows.append(json.loads(ln))
             except Exception:
-                pass
+                continue
     return rows
 
-def as_int(x, default=0):
-    try:
-        if x is None or x == "":
-            return default
-        return int(float(x))
-    except Exception:
-        return default
+# pandas optional
+try:
+    import pandas as pd
+    PANDAS_OK = True
+except Exception:
+    PANDAS_OK = False
 
-def as_float(x, default=0.0):
-    try:
-        if x is None or x == "":
-            return default
-        return float(x)
-    except Exception:
-        return default
-
-# -------------------------
-# 0) List files
-# -------------------------
-print("\n==================")
-print("OUT_DIR:", OUT_DIR)
-print("==================")
-if not OUT_DIR.exists():
-    raise FileNotFoundError(f"OUT_DIR does not exist: {OUT_DIR}")
-
-files = sorted([p for p in OUT_DIR.iterdir() if p.is_file()])
-for p in files:
-    print(f"- {p.name:28s}  size={p.stat().st_size}")
-
-# -------------------------
-# 1) summary.csv (core table)
-# -------------------------
-summary_path = OUT_DIR / "summary.csv"
-summary = read_csv(summary_path)
-print("\n==================")
-print("summary.csv (ALL ROWS)")
-print("==================")
-for r in summary:
-    # print only the headline columns first (still includes all rows)
-    headline = {
-        "ontology_id": r.get("ontology_id",""),
-        "split": r.get("split",""),
-        "n_active_ref_relations": r.get("n_active_ref_relations",""),
-        "n_active_ref_concepts_anchored": r.get("n_active_ref_concepts_anchored",""),
-        "rel_coverage_valid_weighted": r.get("rel_coverage_valid_weighted",""),
-        "rel_coverage_equiv_weighted": r.get("rel_coverage_equiv_weighted",""),
-        "rel_hits_at_k_valid_weighted": r.get("rel_hits_at_k_valid_weighted",""),
-        "rel_mrr_at_k_valid_weighted": r.get("rel_mrr_at_k_valid_weighted",""),
-        "concept_coverage_valid_weighted": r.get("concept_coverage_valid_weighted",""),
-        "concept_coverage_equiv_weighted": r.get("concept_coverage_equiv_weighted",""),
-        "concept_hits_at_k_valid_weighted": r.get("concept_hits_at_k_valid_weighted",""),
-        "concept_mrr_at_k_valid_weighted": r.get("concept_mrr_at_k_valid_weighted",""),
-        "rel_domain_range_acc_weighted_llmMap_fallbackAuto": r.get("rel_domain_range_acc_weighted_llmMap_fallbackAuto",""),
-        "rel_sim_AP_validity": r.get("rel_sim_AP_validity",""),
-        "concept_sim_AP_validity": r.get("concept_sim_AP_validity",""),
-    }
-    print(json.dumps(headline, indent=2))
-
-# -------------------------
-# 2) summary.json (config + missing anchors)
-# -------------------------
-sumjson_path = OUT_DIR / "summary.json"
-if sumjson_path.exists():
-    sumjson = read_json(sumjson_path)
-    print("\n==================")
-    print("summary.json (KEY EXCERPTS)")
-    print("==================")
-    print("ontology_id:", sumjson.get("ontology_id"))
-    print("paths:", json.dumps(sumjson.get("paths", {}), indent=2)[:2000])
-    print("cluster_globals:", json.dumps(sumjson.get("cluster_globals", {}), indent=2)[:2000])
-    print("config:", json.dumps(sumjson.get("config", {}), indent=2)[:2000])
-    miss = sumjson.get("active_missing_concepts", []) or []
-    print("active_missing_concepts (first 50):", miss[:50])
-else:
-    print("\n(summary.json not found)")
-
-# -------------------------
-# 3) by_relation.csv + by_concept.csv (where the action is)
-# -------------------------
-def print_coverage_report(name, rows, weight_col="active_weight_all"):
-    active = [r for r in rows if as_int(r.get(weight_col, 0)) > 0]
-    covered = [r for r in active if as_int(r.get("covered_valid", 0)) == 1]
-    uncovered = [r for r in active if as_int(r.get("covered_valid", 0)) == 0]
-
-    total_w = sum(as_int(r.get(weight_col, 0)) for r in active) or 1
-    covered_w = sum(as_int(r.get(weight_col, 0)) for r in covered)
-
-    print("\n==================")
-    print(f"{name} coverage report")
-    print("==================")
-    print(f"Active anchors: {len(active)} / total rows {len(rows)}")
-    print(f"Covered(active): {len(covered)}   Uncovered(active): {len(uncovered)}")
-    print(f"Weighted coverage (from file columns): {covered_w/total_w:.4f}")
-
-    # Top uncovered by weight
-    uncovered_sorted = sorted(uncovered, key=lambda r: as_int(r.get(weight_col, 0)), reverse=True)
-    print("\nTop 15 uncovered ACTIVE anchors (by weight):")
-    for r in uncovered_sorted[:15]:
-        print({
-            "ref_label": r.get("ref_label",""),
-            weight_col: as_int(r.get(weight_col, 0)),
-            "n_candidates_present": as_int(r.get("n_candidates_present",0)),
-            "n_judged": as_int(r.get("n_judged",0)),
-            "first_valid_rank": r.get("first_valid_rank",""),
-            "n_valid": as_int(r.get("n_valid",0)),
-        })
-
-    # Top covered by weight
-    covered_sorted = sorted(covered, key=lambda r: as_int(r.get(weight_col, 0)), reverse=True)
-    print("\nTop 10 covered ACTIVE anchors (by weight):")
-    for r in covered_sorted[:10]:
-        print({
-            "ref_label": r.get("ref_label",""),
-            weight_col: as_int(r.get(weight_col, 0)),
-            "first_valid_rank": r.get("first_valid_rank",""),
-            "n_valid": as_int(r.get("n_valid",0)),
-            "n_equiv": as_int(r.get("n_equiv",0)),
-        })
-
-by_rel_path = OUT_DIR / "by_relation.csv"
-by_con_path = OUT_DIR / "by_concept.csv"
-by_rel = read_csv(by_rel_path)
-by_con = read_csv(by_con_path)
-
-if by_rel:
-    print_coverage_report("RELATIONS (by_relation.csv)", by_rel, weight_col="active_weight_all")
-else:
-    print("\n(by_relation.csv missing/empty)")
-
-if by_con:
-    print_coverage_report("CONCEPTS (by_concept.csv)", by_con, weight_col="active_weight_all")
-else:
-    print("\n(by_concept.csv missing/empty)")
-
-# -------------------------
-# 4) LLM judgement JSONLs (global stats + a few samples)
-# -------------------------
-def llm_stats(jsonl_path: Path, kind: str, n_show_anchors=5, n_show_items=10):
-    rows = read_jsonl(jsonl_path)
-    print("\n==================")
-    print(f"{kind} LLM judgements: {jsonl_path.name}")
-    print("==================")
-    print("n_anchor_records:", len(rows))
-
-    err = [r for r in rows if (r.get("raw_error") or "").strip()]
-    print("anchors_with_raw_error:", len(err))
-    if err[:5]:
-        print("raw_error examples (up to 5):")
-        for r in err[:5]:
-            print({"ref_label": r.get("ref_label"), "raw_error": r.get("raw_error")})
-
-    judg = Counter()
-    action = Counter()
-    valid_cnt = 0
-    total_items = 0
-    confs_valid = []
-
-    for r in rows:
-        items = r.get("items") or []
-        for it in items:
-            total_items += 1
-            judg[it.get("judgement","")] += 1
-            action[it.get("suggested_action","")] += 1
-            is_valid = (it.get("judgement") in ("Equivalent","Narrower")) and bool(it.get("usable_as_schema"))
-            if is_valid:
-                valid_cnt += 1
-                confs_valid.append(as_float(it.get("confidence"), 0.0))
-
-    print("total_judged_items:", total_items)
-    print("valid_items (Equiv/Narrower & usable):", valid_cnt)
-    print("valid_rate:", (valid_cnt / total_items) if total_items else 0.0)
-    print("judgement_dist:", dict(judg))
-    print("action_dist:", dict(action))
-    if confs_valid:
-        confs_valid_sorted = sorted(confs_valid)
-        print("valid_confidence: mean=", sum(confs_valid)/len(confs_valid),
-              " median=", confs_valid_sorted[len(confs_valid_sorted)//2])
-
-    # show a few anchor records (truncated)
-    print(f"\nSample {n_show_anchors} anchors (first ones):")
-    for r in rows[:n_show_anchors]:
-        print({"ref_label": r.get("ref_label"), "n_items": len(r.get("items") or []), "raw_error": r.get("raw_error","")})
-        for it in (r.get("items") or [])[:n_show_items]:
-            print("  ", {
-                "trace_label": it.get("trace_label"),
-                "judgement": it.get("judgement"),
-                "usable": it.get("usable_as_schema"),
-                "conf": it.get("confidence"),
-                "action": it.get("suggested_action"),
-            })
-
-llm_rel_path = OUT_DIR / "llm_rel_judgements.jsonl"
-llm_ent_path = OUT_DIR / "llm_ent_judgements.jsonl"
-if llm_rel_path.exists():
-    llm_stats(llm_rel_path, "RELATION", n_show_anchors=3, n_show_items=8)
-else:
-    print("\n(llm_rel_judgements.jsonl not found)")
-
-if llm_ent_path.exists():
-    llm_stats(llm_ent_path, "CONCEPT", n_show_anchors=3, n_show_items=8)
-else:
-    print("\n(llm_ent_judgements.jsonl not found)")
-
-# -------------------------
-# 5) PR calibration CSVs (if present)
-# -------------------------
-def print_pr_head_tail(p: Path, n=5):
+def read_csv_any(p: Path):
     if not p.exists():
-        print(f"\n({p.name} not found)")
+        return None
+    if PANDAS_OK:
+        return pd.read_csv(p)
+    # fallback minimal csv reader
+    import csv
+    with p.open("r", encoding="utf-8", newline="") as f:
+        return list(csv.DictReader(f))
+
+def print_df_head(df, name, n=10):
+    print(f"\n--- {name} ---")
+    if df is None:
+        print("(missing)")
         return
-    rows = read_csv(p)
-    print("\n==================")
-    print(p.name, f"(rows={len(rows)}) head/tail")
-    print("==================")
-    for r in rows[:n]:
-        print(r)
-    if len(rows) > n:
-        print("...")
-        for r in rows[-n:]:
+    if PANDAS_OK and hasattr(df, "head"):
+        print("shape:", df.shape)
+        print(df.head(n).to_string(index=False))
+    else:
+        print("rows:", len(df))
+        for r in df[:n]:
             print(r)
 
-print_pr_head_tail(OUT_DIR / "sim_calibration_rel.csv", n=5)
-print_pr_head_tail(OUT_DIR / "sim_calibration_ent.csv", n=5)
+# ============
+# 1) List files
+# ============
+print("\n[1] Files in BASE:")
+if BASE.exists():
+    for p in sorted(BASE.glob("*")):
+        if p.is_file():
+            print(f" - {p.name:28s}  size={p.stat().st_size}")
 
-print("\nDONE.")
+# ============
+# 2) summary.csv + summary.json
+# ============
+summary_csv = BASE / "summary.csv"
+summary_json = BASE / "summary.json"
 
-#endregion#? A print statement for improvement
+df_sum = read_csv_any(summary_csv)
+print_df_head(df_sum, "summary.csv", n=20)
+
+print("\n--- summary.json (key fields) ---")
+if summary_json.exists():
+    sj = json.loads(summary_json.read_text(encoding="utf-8", errors="replace"))
+    # print only what matters
+    print("ontology_id:", sj.get("ontology_id"))
+    print("paths:", sj.get("paths"))
+    print("cluster_globals:", sj.get("cluster_globals"))
+    cfg = sj.get("config", {})
+    print("config.llm:", cfg.get("llm", {}))
+    print("config.flags:", {k: cfg.get(k) for k in ["compute_train_test", "compute_pr_curve"]})
+    missing = sj.get("active_missing_concepts", []) or []
+    print("active_missing_concepts_count:", len(missing))
+    print("active_missing_concepts_sample:", missing[:25])
+    print("notes:", sj.get("notes", []))
+else:
+    print("(missing summary.json)")
+
+# ============
+# 3) by_relation.csv / by_concept.csv
+# ============
+by_rel = BASE / "by_relation.csv"
+by_con = BASE / "by_concept.csv"
+
+df_rel = read_csv_any(by_rel)
+df_con = read_csv_any(by_con)
+
+print_df_head(df_rel, "by_relation.csv", n=15)
+print_df_head(df_con, "by_concept.csv", n=15)
+
+def top_missed(df, kind, weight_col_pref=("active_weight_all",), topn=15):
+    if df is None:
+        print(f"\n[!] {kind}: missing table")
+        return []
+    if not PANDAS_OK:
+        # fallback: can't easily sort; just return empty
+        print(f"\n[!] {kind}: pandas not available, skipping top-missed extraction.")
+        return []
+    # pick a weight column
+    wcol = None
+    for c in weight_col_pref:
+        if c in df.columns:
+            wcol = c
+            break
+    if wcol is None:
+        # pick any active_weight_* column
+        cand = [c for c in df.columns if c.startswith("active_weight_")]
+        wcol = cand[0] if cand else None
+    if wcol is None:
+        print(f"\n[!] {kind}: no active_weight_* columns found")
+        return []
+
+    # coerce
+    tmp = df.copy()
+    tmp[wcol] = pd.to_numeric(tmp[wcol], errors="coerce").fillna(0).astype(int)
+    tmp["covered_valid"] = pd.to_numeric(tmp.get("covered_valid", 0), errors="coerce").fillna(0).astype(int)
+    miss = tmp[(tmp[wcol] > 0) & (tmp["covered_valid"] == 0)].sort_values(wcol, ascending=False)
+
+    print(f"\n[Top Missed] {kind} (by {wcol}) — showing top {topn}")
+    show_cols = [c for c in ["ref_label", wcol, "covered_valid", "covered_equiv", "n_candidates_present", "n_judged", "first_valid_rank"] if c in miss.columns]
+    print(miss[show_cols].head(topn).to_string(index=False))
+    return miss["ref_label"].head(topn).tolist()
+
+miss_rel = top_missed(df_rel, "RELATIONS", topn=20)
+miss_con = top_missed(df_con, "CONCEPTS", topn=20)
+
+# ============
+# 4) LLM judgement JSONLs: distributions + show candidates for top missed anchors
+# ============
+rel_j = BASE / "llm_rel_judgements.jsonl"
+ent_j = BASE / "llm_ent_judgements.jsonl"
+
+rel_rows = read_jsonl(rel_j)
+ent_rows = read_jsonl(ent_j)
+
+print("\n[4] LLM judgement files:")
+print(" - llm_rel_judgements.jsonl exists:", rel_j.exists(), "records:", len(rel_rows))
+print(" - llm_ent_judgements.jsonl exists:", ent_j.exists(), "records:", len(ent_rows))
+
+def summarize_llm(rows, label):
+    if not rows:
+        print(f"\n--- {label} (no rows) ---")
+        return {}
+    judg = Counter()
+    usable = Counter()
+    actions = Counter()
+    conf = []
+    per_ref = {}
+    for r in rows:
+        ref = r.get("ref_label","")
+        items = r.get("items", []) or []
+        per_ref[ref] = items
+        for it in items:
+            judg[it.get("judgement","")] += 1
+            usable[str(bool(it.get("usable_as_schema", False)))] += 1
+            actions[it.get("suggested_action","")] += 1
+            try:
+                conf.append(float(it.get("confidence", 0.0)))
+            except Exception:
+                pass
+    print(f"\n--- {label} summary ---")
+    print("judgement_counts:", dict(judg))
+    print("usable_as_schema_counts:", dict(usable))
+    print("suggested_action_counts:", dict(actions))
+    if conf:
+        conf_sorted = sorted(conf)
+        def pct(p): return conf_sorted[int(p*(len(conf_sorted)-1))]
+        print(f"confidence: n={len(conf_sorted)}  min={conf_sorted[0]:.3f}  p50={pct(0.50):.3f}  p90={pct(0.90):.3f}  max={conf_sorted[-1]:.3f}")
+    return per_ref
+
+rel_per_ref = summarize_llm(rel_rows, "RELATION judgements")
+ent_per_ref = summarize_llm(ent_rows, "CONCEPT judgements")
+
+def print_anchor_details(per_ref, ref_label, title, max_items=12):
+    items = per_ref.get(ref_label, [])
+    print(f"\n--- {title}: {ref_label} ---")
+    if not items:
+        print("(no judged items for this anchor)")
+        return
+    for i,it in enumerate(items[:max_items], start=1):
+        print(f"[{i}] trace_label={it.get('trace_label','')!r} | judgement={it.get('judgement','')} | usable={it.get('usable_as_schema')} | conf={it.get('confidence')} | action={it.get('suggested_action')} | note={it.get('note','')[:140]}")
+
+if miss_rel:
+    print("\n[5] Showing candidate judgements for TOP MISSED RELATIONS:")
+    for rlbl in miss_rel[:8]:
+        print_anchor_details(rel_per_ref, rlbl, "MISSED RELATION", max_items=20)
+
+if miss_con:
+    print("\n[6] Showing candidate judgements for TOP MISSED CONCEPTS:")
+    for clbl in miss_con[:8]:
+        print_anchor_details(ent_per_ref, clbl, "MISSED CONCEPT", max_items=20)
+
+# ============
+# 5) Similarity calibration files (optional)
+# ============
+sim_rel = BASE / "sim_calibration_rel.csv"
+sim_ent = BASE / "sim_calibration_ent.csv"
+
+df_sim_rel = read_csv_any(sim_rel)
+df_sim_ent = read_csv_any(sim_ent)
+
+print_df_head(df_sim_rel, "sim_calibration_rel.csv", n=12)
+print_df_head(df_sim_ent, "sim_calibration_ent.csv", n=12)
+
+print("\n=== END DIGEST ===")
+
+
+#endregion#? p1
 #?#########################  End  ##########################
- 
+
+
+
+
+#?######################### Start ##########################
+#region:#?   
+
+#endregion#? 
+#?#########################  End  ##########################
+
+
+
+
+
+#?######################### Start ##########################
+#region:#?   
+
+#endregion#? 
+#?#########################  End  ##########################
+
+
 
 #endregion#! Comparing our schema with Text2KG Benchmark Ontology
 #!#############################################  End Chapter  ##################################################
