@@ -5392,7 +5392,7 @@ from typing import Any, Dict, List, Optional
 CLSRES_BASE_INPUT_CLASSES = Path("data/Classes/Cls_Res/Cls_Res_input/classes_for_cls_res.json")
 CLSRES_EXPERIMENT_ROOT    = Path("data/Classes/Cls_Res/Cls_Res_IterativeRuns")
 
-CLSRES_MAX_RUNS: int = 4
+CLSRES_MAX_RUNS: int = 6
 CLSRES_STRUCTURAL_CHANGE_THRESHOLD: Optional[int] = 0
 CLSRES_TOTAL_ACTIONS_THRESHOLD: Optional[int] = None
 CLSRES_MAX_NO_CHANGE_RUNS: Optional[int] = 3
@@ -10796,7 +10796,7 @@ from typing import Any, Dict, List, Optional
 RELRES_BASE_INPUT_RELATIONS = Path("data/Relations/Rel Rec/relations_raw.jsonl")
 RELRES_EXPERIMENT_ROOT      = Path("data/Relations/Rel Res_IterativeRuns")
 
-RELRES_MAX_RUNS: int = 4
+RELRES_MAX_RUNS: int = 6
 RELRES_SCHEMA_CHANGE_THRESHOLD: Optional[int] = 0
 RELRES_TOTAL_ACTIONS_THRESHOLD: Optional[int] = None
 RELRES_MAX_NO_CHANGE_RUNS: Optional[int] = 3

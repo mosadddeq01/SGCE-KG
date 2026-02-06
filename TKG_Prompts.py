@@ -963,7 +963,6 @@ Now read the appended JSON payload and return the required JSON output.
 
 
 
-
 #?######################### Start ##########################
 #region:#?   Relation Resolution Prompt
 
@@ -1135,7 +1134,8 @@ IMPORTANT PRACTICAL RULE:
 - For merging relation with different directions between same subject/object pairs, 
   you can simply choose what relation with which direction to survive, using the merge_relations function.
 
-** Super Important: You MUST never leave more than one node between two same subject/object pairs. YOU MUST MERGE all relation with same head and tail, even if direction differs. **
+** Super Important: You MUST never leave more than one relation between the same subject–object pair. YOU MUST MERGE all relations that share identical head and tail, even if their expressed direction differs. **
+** We want the final KG to have at most one edge between any subject–object pair. Therefore merge them as soon as possible.**
 
 =====================
 Allowed functions ONLY:
