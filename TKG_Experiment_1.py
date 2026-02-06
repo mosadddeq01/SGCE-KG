@@ -3993,9 +3993,463 @@ if __name__ == "__main__":
 
 
 #?######################### Start ##########################
-#region:#?   
+#region:#?       Post-hoc Compression & Information-Leakage Analysis for MINE-1 Evaluation
 
-#endregion#? 
+
+"""
+Post-hoc Compression & Information-Leakage Analysis for MINE-1 Evaluation
+==========================================================================
+
+Run this AFTER you have already computed the 5-method comparison.
+It reads the same data sources and adds compression/leakage metrics.
+
+Usage:
+    python TKG_Experiment_1_CompressionAnalysis.py
+"""
+
+import json
+import os
+import re
+import numpy as np
+import pandas as pd
+from pathlib import Path
+from typing import Dict, List, Any, Optional, Tuple, Set
+from collections import defaultdict
+
+
+# ============================================================
+# 1. CONFIG — same paths as your main experiment
+# ============================================================
+
+REPO_ROOT = Path(".").resolve()
+
+DATASET_JSON_PATH = REPO_ROOT / "Experiments/MYNE/Ex1/QA_and_OthersAnswers/mine_evaluation_dataset.json"
+KG_SNAPSHOTS_ROOT = REPO_ROOT / "Experiments/MYNE/Ex1/KGs_from_Essays_KFE_test"
+
+# The results directory where your 5-method comparison wrote per-method JSON files
+RESULTS_ROOT = REPO_ROOT / "Experiments/MYNE/Ex1/RES/tracekg_mine_results_weighted_openai_v11_inducedsubgraph_strictjudge"
+
+# Output
+OUTPUT_PATH = REPO_ROOT / "Experiments/MYNE/Ex1/RES/compression_analysis.json"
+OUTPUT_TABLE_PATH = REPO_ROOT / "Experiments/MYNE/Ex1/RES/compression_analysis_table.txt"
+
+# Which essay IDs were evaluated (must match your EVAL_ESSAY_IDS)
+EVAL_ESSAY_IDS: List[int] = [1, 2] #, 10, 15, 24, 47, 52, 53, 64, 67, 88, 91]
+
+# Method name → key in mine_evaluation_dataset.json
+METHOD_TO_KEY = {
+    "kggen":        "kggen",
+    "graphrag":     "graphrag_kg",
+    "openie":       "openie_kg",
+    "autoschemakg": "autoschemakg",
+}
+
+
+# ============================================================
+# 2. Core analysis functions
+# ============================================================
+
+def clean_essay_text(text: str) -> str:
+    """Strip backtick wrappers and normalize whitespace."""
+    text = text.strip()
+    if text.startswith("```"):
+        text = text[3:]
+    if text.endswith("```"):
+        text = text[:-3]
+    return text.strip()
+
+
+def word_count(text: str) -> int:
+    """Simple whitespace-based word count."""
+    return len(text.split()) if text and text.strip() else 0
+
+
+def compute_kg_compression_stats(
+    kg_data: Dict,
+    essay_text: str,
+) -> Dict[str, Any]:
+    """
+    Compute compression and granularity metrics for one KG on one essay.
+
+    Metrics:
+        - num_entities: total entity count
+        - num_edges: unique edge/relation type count
+        - num_relations: total relation triple count
+        - avg_entity_words: mean word count per entity string
+        - median_entity_words: median word count per entity
+        - max_entity_words: longest entity (in words)
+        - pct_entities_gt5: % of entities with >5 words (sentence-like)
+        - pct_entities_gt10: % of entities with >10 words (almost certainly a sentence)
+        - total_entity_words: sum of words across all entities
+        - total_triple_words: sum of words across all (head + rel + tail)
+        - essay_words: word count of the source essay
+        - entity_compression_ratio: total_entity_words / essay_words
+        - triple_compression_ratio: total_triple_words / essay_words
+        - avg_head_words: mean word count of relation heads
+        - avg_tail_words: mean word count of relation tails
+        - avg_rel_words: mean word count of relation predicates (edge labels)
+        - verbatim_overlap_score: fraction of essay 4-grams found in entity text
+    """
+    entities = [str(e) for e in kg_data.get("entities", [])]
+    edges = kg_data.get("edges", [])
+    relations = kg_data.get("relations", [])
+
+    essay_clean = clean_essay_text(essay_text)
+    essay_words = word_count(essay_clean)
+
+    # --- Entity-level stats ---
+    ent_word_counts = [word_count(e) for e in entities]
+    total_entity_words = sum(ent_word_counts)
+    avg_entity_words = np.mean(ent_word_counts) if ent_word_counts else 0.0
+    median_entity_words = float(np.median(ent_word_counts)) if ent_word_counts else 0.0
+    max_entity_words = max(ent_word_counts) if ent_word_counts else 0
+    pct_gt5 = (sum(1 for w in ent_word_counts if w > 5) / len(ent_word_counts) * 100) if ent_word_counts else 0.0
+    pct_gt10 = (sum(1 for w in ent_word_counts if w > 10) / len(ent_word_counts) * 100) if ent_word_counts else 0.0
+
+    # --- Relation triple stats ---
+    head_words_list = []
+    tail_words_list = []
+    rel_words_list = []
+    total_triple_words = 0
+
+    for r in relations:
+        if isinstance(r, (list, tuple)) and len(r) == 3:
+            hw = word_count(str(r[0]))
+            rw = word_count(str(r[1]))
+            tw = word_count(str(r[2]))
+            head_words_list.append(hw)
+            rel_words_list.append(rw)
+            tail_words_list.append(tw)
+            total_triple_words += hw + rw + tw
+
+    avg_head_words = np.mean(head_words_list) if head_words_list else 0.0
+    avg_tail_words = np.mean(tail_words_list) if tail_words_list else 0.0
+    avg_rel_words = np.mean(rel_words_list) if rel_words_list else 0.0
+
+    # --- Compression ratios ---
+    entity_compression_ratio = total_entity_words / max(essay_words, 1)
+    triple_compression_ratio = total_triple_words / max(essay_words, 1)
+
+    # --- Verbatim overlap: what fraction of essay 4-grams appear in entity text ---
+    verbatim_score = _compute_ngram_overlap(essay_clean, entities, n=4)
+
+    return {
+        "num_entities": len(entities),
+        "num_edges": len(edges) if isinstance(edges, list) else 0,
+        "num_relations": len(relations),
+        "avg_entity_words": round(float(avg_entity_words), 2),
+        "median_entity_words": round(median_entity_words, 2),
+        "max_entity_words": max_entity_words,
+        "pct_entities_gt5_words": round(pct_gt5, 1),
+        "pct_entities_gt10_words": round(pct_gt10, 1),
+        "total_entity_words": total_entity_words,
+        "total_triple_words": total_triple_words,
+        "essay_words": essay_words,
+        "entity_compression_ratio": round(entity_compression_ratio, 4),
+        "triple_compression_ratio": round(triple_compression_ratio, 4),
+        "avg_head_words": round(float(avg_head_words), 2),
+        "avg_tail_words": round(float(avg_tail_words), 2),
+        "avg_rel_words": round(float(avg_rel_words), 2),
+        "verbatim_4gram_overlap": round(verbatim_score, 4),
+    }
+
+
+def _compute_ngram_overlap(essay_text: str, entities: List[str], n: int = 4) -> float:
+    """
+    What fraction of the essay's n-grams appear verbatim in the entity strings?
+    High score = the KG entities are just copying the source text.
+    """
+    def get_ngrams(text: str, n: int) -> Set[Tuple[str, ...]]:
+        words = text.lower().split()
+        if len(words) < n:
+            return set()
+        return {tuple(words[i:i+n]) for i in range(len(words) - n + 1)}
+
+    essay_ngrams = get_ngrams(essay_text, n)
+    if not essay_ngrams:
+        return 0.0
+
+    # Combine all entity text into one big string
+    all_entity_text = " ".join(entities)
+    entity_ngrams = get_ngrams(all_entity_text, n)
+
+    overlap = essay_ngrams & entity_ngrams
+    return len(overlap) / len(essay_ngrams)
+
+
+def compute_tracekg_compression_stats(
+    snapshot_path: Path,
+    essay_text: str,
+) -> Dict[str, Any]:
+    """
+    Compute compression stats for TRACE KG from its CSV files.
+    Converts to the same format as baseline KGs for uniform analysis.
+    """
+    nodes_csv = snapshot_path / "KG" / "nodes.csv"
+    rels_csv = snapshot_path / "KG" / "rels_fixed_no_raw.csv"
+
+    if not nodes_csv.exists() or not rels_csv.exists():
+        return {"error": f"Missing CSV files in {snapshot_path}"}
+
+    nodes_df = pd.read_csv(nodes_csv)
+    rels_df = pd.read_csv(rels_csv)
+
+    # Build a pseudo kg_data dict matching baseline format
+    entities = []
+    for _, row in nodes_df.iterrows():
+        name = str(row.get("name", "")) if pd.notna(row.get("name")) else ""
+        if name:
+            entities.append(name)
+
+    relations = []
+    edges_set = set()
+    for _, row in rels_df.iterrows():
+        src = str(row.get("source_name", row.get("source", ""))) if pd.notna(row.get("source_name", row.get("source"))) else ""
+        rel = str(row.get("relation", "")) if pd.notna(row.get("relation")) else ""
+        tgt = str(row.get("target_name", row.get("target", ""))) if pd.notna(row.get("target_name", row.get("target"))) else ""
+        if src and rel and tgt:
+            relations.append([src, rel, tgt])
+            edges_set.add(rel)
+
+    kg_data = {
+        "entities": entities,
+        "edges": sorted(edges_set),
+        "relations": relations,
+    }
+
+    return compute_kg_compression_stats(kg_data, essay_text)
+
+
+# ============================================================
+# 3. Load accuracy results from already-computed evaluation
+# ============================================================
+
+def load_accuracy_from_results(results_root: Path, methods: List[str], essay_ids: List[int]) -> Dict[str, Dict[int, float]]:
+    """
+    Read the per-snapshot JSON result files to get accuracy per method per essay.
+    Returns: {method: {essay_id: accuracy}}
+    """
+    acc_map: Dict[str, Dict[int, float]] = {m: {} for m in methods}
+
+    for method in methods:
+        method_dir = results_root / method
+        if not method_dir.exists():
+            continue
+        for f in sorted(method_dir.glob("results_*.json")):
+            try:
+                with open(f, "r", encoding="utf-8") as fh:
+                    data = json.load(fh)
+                summary = data.get("summary", {})
+                did = summary.get("dataset_id")
+                acc = summary.get("accuracy")
+                if did is not None and acc is not None:
+                    acc_map[method][int(did)] = float(acc)
+            except Exception:
+                continue
+
+    return acc_map
+
+
+# ============================================================
+# 4. Main analysis
+# ============================================================
+
+def run_compression_analysis():
+    print("=" * 80)
+    print("MINE-1 Compression & Information-Leakage Analysis")
+    print("=" * 80)
+
+    # Load evaluation dataset
+    with open(DATASET_JSON_PATH, "r", encoding="utf-8") as f:
+        dataset = json.load(f)
+
+    id_to_item = {int(item["id"]): item for item in dataset if "id" in item}
+    print(f"Loaded {len(id_to_item)} items from evaluation dataset")
+
+    # All methods including tracekg
+    all_methods = ["kggen", "graphrag", "openie", "autoschemakg", "tracekg"]
+
+    # Load pre-computed accuracy
+    acc_map = load_accuracy_from_results(RESULTS_ROOT, all_methods, EVAL_ESSAY_IDS)
+
+    # Compute compression stats per method per essay
+    all_stats: Dict[str, List[Dict[str, Any]]] = {m: [] for m in all_methods}
+
+    for eid in EVAL_ESSAY_IDS:
+        item = id_to_item.get(eid)
+        if item is None:
+            print(f"  [warn] essay_id={eid} not in dataset, skipping")
+            continue
+
+        essay_text = item.get("essay_content", "")
+
+        # Baseline methods (from dataset JSON)
+        for method in ["kggen", "graphrag", "openie", "autoschemakg"]:
+            kg_key = METHOD_TO_KEY[method]
+            kg_data = item.get(kg_key)
+            if kg_data is None:
+                continue
+            stats = compute_kg_compression_stats(kg_data, essay_text)
+            stats["essay_id"] = eid
+            stats["method"] = method
+            stats["accuracy"] = acc_map.get(method, {}).get(eid, None)
+            all_stats[method].append(stats)
+
+        # TRACE KG (from snapshot CSV)
+        label = f"{eid:03d}"
+        snap_path = KG_SNAPSHOTS_ROOT / f"KG_Essay_{label}"
+        if snap_path.is_dir():
+            stats = compute_tracekg_compression_stats(snap_path, essay_text)
+            if "error" not in stats:
+                stats["essay_id"] = eid
+                stats["method"] = "tracekg"
+                stats["accuracy"] = acc_map.get("tracekg", {}).get(eid, None)
+                all_stats["tracekg"].append(stats)
+
+    # ============================================================
+    # 5. Aggregate and print
+    # ============================================================
+
+    print("\n" + "=" * 80)
+    print("PER-METHOD AGGREGATE STATISTICS")
+    print("=" * 80)
+
+    agg_results = {}
+
+    for method in all_methods:
+        entries = all_stats[method]
+        if not entries:
+            print(f"\n  {method}: NO DATA")
+            continue
+
+        n = len(entries)
+        agg = {
+            "method": method,
+            "n_essays": n,
+            "mean_accuracy": _safe_mean([e["accuracy"] for e in entries if e.get("accuracy") is not None]),
+            "mean_num_entities": _safe_mean([e["num_entities"] for e in entries]),
+            "mean_num_relations": _safe_mean([e["num_relations"] for e in entries]),
+            "mean_avg_entity_words": _safe_mean([e["avg_entity_words"] for e in entries]),
+            "mean_median_entity_words": _safe_mean([e["median_entity_words"] for e in entries]),
+            "mean_max_entity_words": _safe_mean([e["max_entity_words"] for e in entries]),
+            "mean_pct_entities_gt5": _safe_mean([e["pct_entities_gt5_words"] for e in entries]),
+            "mean_pct_entities_gt10": _safe_mean([e["pct_entities_gt10_words"] for e in entries]),
+            "mean_entity_compression_ratio": _safe_mean([e["entity_compression_ratio"] for e in entries]),
+            "mean_triple_compression_ratio": _safe_mean([e["triple_compression_ratio"] for e in entries]),
+            "mean_avg_head_words": _safe_mean([e["avg_head_words"] for e in entries]),
+            "mean_avg_tail_words": _safe_mean([e["avg_tail_words"] for e in entries]),
+            "mean_avg_rel_words": _safe_mean([e["avg_rel_words"] for e in entries]),
+            "mean_verbatim_4gram_overlap": _safe_mean([e["verbatim_4gram_overlap"] for e in entries]),
+        }
+        agg_results[method] = agg
+
+    # --- Print compact comparison table ---
+    print("\n" + "=" * 120)
+    print("COMPARISON TABLE")
+    print("=" * 120)
+
+    header = (
+        f"{'Method':<16} | {'Acc%':>6} | {'#Ent':>5} | {'#Rel':>5} | "
+        f"{'AvgEW':>6} | {'MedEW':>6} | {'MaxEW':>6} | "
+        f"{'%>5w':>6} | {'%>10w':>6} | "
+        f"{'EntCR':>7} | {'TriCR':>7} | {'4gram%':>7}"
+    )
+    print(header)
+    print("-" * len(header))
+
+    for method in all_methods:
+        a = agg_results.get(method)
+        if a is None:
+            print(f"{method:<16} | {'N/A':>6} |")
+            continue
+        print(
+            f"{method:<16} | "
+            f"{a['mean_accuracy']*100:5.1f}% | "
+            f"{a['mean_num_entities']:5.0f} | "
+            f"{a['mean_num_relations']:5.0f} | "
+            f"{a['mean_avg_entity_words']:6.1f} | "
+            f"{a['mean_median_entity_words']:6.1f} | "
+            f"{a['mean_max_entity_words']:6.0f} | "
+            f"{a['mean_pct_entities_gt5']:5.1f}% | "
+            f"{a['mean_pct_entities_gt10']:5.1f}% | "
+            f"{a['mean_entity_compression_ratio']:7.3f} | "
+            f"{a['mean_triple_compression_ratio']:7.3f} | "
+            f"{a['mean_verbatim_4gram_overlap']*100:6.1f}%"
+        )
+
+    # --- Print interpretation guide ---
+    print("\n" + "-" * 80)
+    print("COLUMN LEGEND:")
+    print("  Acc%     = Mean accuracy from MINE-1 evaluation (LLM judge)")
+    print("  #Ent     = Mean number of entities in the KG")
+    print("  #Rel     = Mean number of relation triples")
+    print("  AvgEW    = Mean words per entity (lower = more atomic)")
+    print("  MedEW    = Median words per entity")
+    print("  MaxEW    = Max words in any single entity")
+    print("  %>5w     = % of entities with >5 words (sentence fragments)")
+    print("  %>10w    = % of entities with >10 words (full sentences)")
+    print("  EntCR    = Entity compression ratio (total entity words / essay words)")
+    print("             <1.0 = KG compresses; >1.0 = KG is BIGGER than source")
+    print("  TriCR    = Triple compression ratio (total triple words / essay words)")
+    print("  4gram%   = % of essay 4-grams found verbatim in entity text")
+    print("             High = information leakage (entities copy source text)")
+    print("-" * 80)
+
+    # Save detailed results
+    output = {
+        "config": {
+            "eval_essay_ids": EVAL_ESSAY_IDS,
+            "dataset_path": str(DATASET_JSON_PATH),
+            "snapshots_root": str(KG_SNAPSHOTS_ROOT),
+            "results_root": str(RESULTS_ROOT),
+        },
+        "aggregate": agg_results,
+        "per_essay": {m: entries for m, entries in all_stats.items()},
+    }
+
+    OUTPUT_PATH.parent.mkdir(parents=True, exist_ok=True)
+    with open(OUTPUT_PATH, "w", encoding="utf-8") as f:
+        json.dump(output, f, ensure_ascii=False, indent=2, default=str)
+    print(f"\nDetailed results saved to: {OUTPUT_PATH}")
+
+    # Save table as text
+    with open(OUTPUT_TABLE_PATH, "w", encoding="utf-8") as f:
+        f.write(header + "\n")
+        f.write("-" * len(header) + "\n")
+        for method in all_methods:
+            a = agg_results.get(method)
+            if a is None:
+                continue
+            f.write(
+                f"{method:<16} | "
+                f"{a['mean_accuracy']*100:5.1f}% | "
+                f"{a['mean_num_entities']:5.0f} | "
+                f"{a['mean_num_relations']:5.0f} | "
+                f"{a['mean_avg_entity_words']:6.1f} | "
+                f"{a['mean_median_entity_words']:6.1f} | "
+                f"{a['mean_max_entity_words']:6.0f} | "
+                f"{a['mean_pct_entities_gt5']:5.1f}% | "
+                f"{a['mean_pct_entities_gt10']:5.1f}% | "
+                f"{a['mean_entity_compression_ratio']:7.3f} | "
+                f"{a['mean_triple_compression_ratio']:7.3f} | "
+                f"{a['mean_verbatim_4gram_overlap']*100:6.1f}%\n"
+            )
+    print(f"Table saved to: {OUTPUT_TABLE_PATH}")
+
+
+def _safe_mean(values: list) -> float:
+    clean = [v for v in values if v is not None]
+    return float(np.mean(clean)) if clean else 0.0
+
+
+# ============================================================
+# Entry point
+# ============================================================
+
+if __name__ == "__main__":
+    run_compression_analysis()
+    
+#endregion#?     Post-hoc Compression & Information-Leakage Analysis for MINE-1 Evaluation
 #?#########################  End  ##########################
 
 

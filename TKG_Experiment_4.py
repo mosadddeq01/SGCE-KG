@@ -2210,6 +2210,8 @@ print("DONE →", out_dir)
 
 
 
+
+
 #?######################### Start ##########################
 #region:#?     # TRACE ↔ REF Schema Evaluation Pipeline (KDD-ready, direction-relaxed)
 
@@ -2482,46 +2484,6 @@ class DSPyBackend(LLMBackend):
             return str(out[0] if out else "")
         return str(out or "")
 
-# class OpenAIBackend(LLMBackend):
-#     def __init__(self, model: str):
-#         from openai import OpenAI
-#         self.client = OpenAI()
-#         self.model = model
-            
-#     def complete(self, system: str, user: str, max_tokens: int) -> str:
-#         # Use JSON mode to force the model to return strict JSON
-#         try:
-#             resp = self.client.chat.completions.create(
-#                 model=self.model,
-#                 temperature=0.0,
-#                 max_tokens=max_tokens,
-#                 response_format={"type": "json_object"},
-#                 messages=[
-#                     {"role": "system", "content": system},
-#                     {"role": "user", "content": user},
-#                 ],
-#             )
-#             # the API returns a JSON object directly in content when using json mode
-#             return resp.choices[0].message.content or ""
-#         except Exception as e:
-#             return json.dumps({"error": f"OpenAI call failed: {str(e)}"})        
-
-#     # def complete(self, system: str, user: str, max_tokens: int) -> str:
-#     #     try:
-#     #         resp = self.client.chat.completions.create(
-#     #             model=self.model,
-#     #             temperature=0.0,
-#     #             max_tokens=max_tokens,
-#     #             messages=[
-#     #                 {"role": "system", "content": system},
-#     #                 {"role": "user", "content": user},
-#     #             ],
-#     #         )
-#     #         return resp.choices[0].message.content or ""
-#     #     except Exception as e:
-#     #         return f'{{"error":"OpenAI call failed: {str(e)}"}}'
-
-
 
 import json, re
 from typing import Optional
@@ -2744,21 +2706,32 @@ def build_concept_prompt(anchor: dict, candidates: List[dict]) -> str:
         lines.append(f"    members: {str(c.get('members',''))[:240]}")
         lines.append(f"    trace_meta: class_group={meta_c.get('class_group','')}, class_type_hint={meta_c.get('class_type_hint','')}")
 
+
     lines.append(
         """
 Task:
 For EACH TRACE candidate, classify its semantic relation to the REF concept:
 
-- Equivalent: same concept/type.
-- Narrower: valid subtype/refinement of REF.
-- Broader: supertype/generalization.
-- Unrelated: not corresponding.
+- Equivalent: same concept/type (possibly with a different name).
+- Narrower: valid subtype/refinement of REF (e.g., Actor is Narrower than Person).
+- Broader: supertype/generalization (e.g., Agent is Broader than Person).
+- Unrelated: not corresponding at all.
 
 Fields:
-- usable_as_schema: true if this TRACE concept can be used to cover the REF concept in schema evaluation.
+- usable_as_schema: IMPORTANT — set this to true if the TRACE concept meaningfully
+  covers or partially covers the REF concept in a schema evaluation context.
+  Specifically:
+    * Equivalent → ALWAYS usable_as_schema = true
+    * Narrower → usable_as_schema = true IF the TRACE concept covers a significant
+      portion of the REF concept's instances in this domain. A subtype that captures
+      the dominant or primary subset of the REF concept IS usable. Only set false if
+      the subtype is extremely niche and covers a negligible fraction.
+    * Broader → usable_as_schema = true IF the broader concept is still informative
+      and not excessively generic (e.g., "Thing" or "Entity" would be false).
+    * Unrelated → ALWAYS usable_as_schema = false
 - confidence: 0..1
 - justification: one sentence
-- remark: any extra note
+- remark: any extra note (e.g., coverage extent, what is missed)
 
 Return STRICT JSON ONLY:
 {
@@ -3609,14 +3582,14 @@ ONTOLOGY  = 19   # or "19_film"
 cfg = EvalConfig(
     llm=LLMConfig(
         use_llm=True,
-        prefer_dspy=True,      # uses TKG_Main.py DSPy gateway if available
+        prefer_dspy=True,
         model="gpt-5.1",
-        max_tokens=1400,
-        top_k=6,
+        max_tokens=16000,       # was 1400 — gpt-5.1 requires >= 16000
+        top_k=10,
         reuse_cached=False,
         judge_inactive_anchors=False,
     ),
-    report_splits=("test", "all"),  # you can add "train" too
+    report_splits=("test", "all"),
     compute_pr_curve=True,
     audit_n=12,
 )
