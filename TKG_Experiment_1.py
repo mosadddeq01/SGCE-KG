@@ -775,6 +775,133 @@ run_autoschemakg_for_mine1()
 
 
 #?######################### Start ##########################
+#region:#?   inject 
+
+
+"""
+Inject already-generated AutoSchemaKG results into the enriched dataset JSON.
+Run this if the KG files exist on disk but are missing from the dataset JSON.
+"""
+
+import json
+from pathlib import Path
+from typing import Dict, List, Any, Set, Tuple
+from copy import deepcopy
+
+REPO_ROOT = Path(".").resolve()
+DATASET_PATH = REPO_ROOT / "Experiments/MYNE/Ex1/QA_and_OthersAnswers/mine_evaluation_dataset_fixed.json"
+OUTPUT_PATH = REPO_ROOT / "Experiments/MYNE/Ex1/QA_and_OthersAnswers/mine_evaluation_dataset_with_autoschemakg.json"
+KGS_DIR = REPO_ROOT / "Experiments/MYNE/Ex1/AutoSchemaKG_KGs"
+
+ESSAY_IDS = [1, 2, 10, 15, 24, 47, 52, 53, 67, 88, 91]
+
+
+def collect_triples(extraction_dir: Path) -> List[Dict[str, str]]:
+    triples = []
+    kg_dir = extraction_dir / "kg_extraction"
+    if not kg_dir.exists():
+        return triples
+
+    for fpath in sorted(kg_dir.glob("*")):
+        if fpath.suffix not in (".json", ".jsonl"):
+            continue
+        with open(fpath, "r", encoding="utf-8") as fh:
+            for line in fh:
+                line = line.strip()
+                if not line:
+                    continue
+                try:
+                    data = json.loads(line)
+                except json.JSONDecodeError:
+                    continue
+
+                for t in data.get("entity_relation_dict", []) or []:
+                    if isinstance(t, dict):
+                        h, r, tl = t.get("Head", ""), t.get("Relation", ""), t.get("Tail", "")
+                        if h and r and tl:
+                            triples.append({"Head": h.strip(), "Relation": r.strip(), "Tail": tl.strip()})
+
+                for t in data.get("event_relation_dict", []) or []:
+                    if isinstance(t, dict):
+                        h, r, tl = t.get("Head", ""), t.get("Relation", ""), t.get("Tail", "")
+                        if h and r and tl:
+                            triples.append({"Head": h.strip(), "Relation": r.strip(), "Tail": tl.strip()})
+
+                for item in data.get("event_entity_dict", []) or []:
+                    if isinstance(item, dict):
+                        event = (item.get("Event") or "").strip()
+                        entities = item.get("Entity", [])
+                        if event and isinstance(entities, list):
+                            for ent in entities:
+                                if isinstance(ent, str) and ent.strip():
+                                    triples.append({"Head": event, "Relation": "is participated by", "Tail": ent.strip()})
+    return triples
+
+
+def triples_to_format(triples: List[Dict[str, str]]) -> Dict[str, Any]:
+    entities: Set[str] = set()
+    edges: Set[str] = set()
+    relations: List[List[str]] = []
+    seen: Set[Tuple[str, str, str]] = set()
+
+    for t in triples:
+        h, r, tl = t["Head"].lower(), t["Relation"].lower(), t["Tail"].lower()
+        key = (h, r, tl)
+        if key in seen:
+            continue
+        seen.add(key)
+        entities.add(h)
+        entities.add(tl)
+        edges.add(r)
+        relations.append([h, r, tl])
+
+    return {"entities": sorted(entities), "edges": sorted(edges), "relations": relations}
+
+
+def main():
+    with open(DATASET_PATH, "r", encoding="utf-8") as f:
+        dataset = json.load(f)
+
+    id_to_idx = {int(item["id"]): idx for idx, item in enumerate(dataset)}
+    enriched = deepcopy(dataset)
+
+    for eid in ESSAY_IDS:
+        essay_dir = KGS_DIR / f"essay_{eid:03d}"
+        if not essay_dir.exists():
+            print(f"  essay_id={eid}: folder {essay_dir} not found, SKIPPING")
+            continue
+
+        triples = collect_triples(essay_dir)
+        if not triples:
+            print(f"  essay_id={eid}: no triples found, SKIPPING")
+            continue
+
+        result = triples_to_format(triples)
+        idx = id_to_idx.get(eid)
+        if idx is None:
+            print(f"  essay_id={eid}: not in dataset, SKIPPING")
+            continue
+
+        enriched[idx]["autoschemakg"] = result
+        print(f"  essay_id={eid}: ✓ {len(result['entities'])} entities, {len(result['relations'])} triples")
+
+    with open(OUTPUT_PATH, "w", encoding="utf-8") as f:
+        json.dump(enriched, f, ensure_ascii=False, indent=2)
+    print(f"\nSaved to: {OUTPUT_PATH}")
+
+
+if __name__ == "__main__":
+    main()
+
+
+#endregion#? inject
+#?#########################  End  ##########################
+
+
+
+
+
+#?######################### Start ##########################
 #region:#?      AutoSchemaKG as 5th Method
 
 # ═══════════════════════════════════════════════════════════════════════
@@ -843,7 +970,7 @@ OUTPUT_ROOT = "Experiments/MYNE/Ex1/RES/tracekg_mine_results_weighted_openai_v12
 MAX_SNAPSHOTS: Optional[int] = None  # None = all
 
 # Explicit list of essay IDs to evaluate (the single source of truth)
-EVAL_ESSAY_IDS: List[int] =  [ 1, 2,10,15,24,47,52,53,64,67,88,91]   # [1, 2  ] #, 10, 15, 24, 47, 52, 53, 64, 67, 88, 91]
+EVAL_ESSAY_IDS: List[int] = [1, 2, 10, 15, 24, 47, 52, 53, 67, 88, 91] #  [ 1, 2,10,15,24,47,52,53,64,67,88,91]   # [1, 2  ] #, 10, 15, 24, 47, 52, 53, 64, 67, 88, 91]
 
 # Retrieval params
 TOP_K_NODES = 8
@@ -1730,12 +1857,12 @@ if not DATASET_JSON_PATH.exists():
     DATASET_JSON_PATH = REPO_ROOT / "Experiments/MYNE/Ex1/QA_and_OthersAnswers/mine_evaluation_dataset.json"
     print(f"[warn] Enriched dataset not found, falling back to: {DATASET_JSON_PATH}")
 
-KG_SNAPSHOTS_ROOT = REPO_ROOT / "Experiments/MYNE/Ex1/KGs_from_Essays_KFE_test"
+KG_SNAPSHOTS_ROOT = REPO_ROOT / "Experiments/MYNE/Ex1/KGs_from_Essays_KFE"
 RESULTS_ROOT = REPO_ROOT / "Experiments/MYNE/Ex1/RES/tracekg_mine_results_weighted_openai_v12_with_autoschemakg"
 OUTPUT_PATH = REPO_ROOT / "Experiments/MYNE/Ex1/RES/compression_analysis_v4.json"
 OUTPUT_TABLE_PATH = REPO_ROOT / "Experiments/MYNE/Ex1/RES/compression_analysis_table_v4.txt"
 
-EVAL_ESSAY_IDS: List[int] = [1, 2, 10, 15, 24, 47, 52, 53, 64, 67, 88, 91] #[1, 2]  # , 10, 15, 24, 47, 52, 53, 64, 67, 88, 91]
+EVAL_ESSAY_IDS: List[int] = [1, 2, 10, 15, 24, 47, 52, 53, 67, 88, 91] #[1, 2]  # , 10, 15, 24, 47, 52, 53, 64, 67, 88, 91]
 
 METHOD_TO_KEY = {
     "kggen":        "kggen",
@@ -2314,18 +2441,804 @@ if __name__ == "__main__":
 
 
 
+
+
+
+
+#?######################### Start ##########################
+#region:#?    prpoposed metrics   v5
+
+
+"""
+Post-hoc KG Quality Analysis for MINE-1 Evaluation  (V5)
+=========================================================
+
+Paper-ready analysis. Produces:
+  - Table 1 (paper body): Retrieval accuracy + composite quality metrics
+  - Table 2 (paper body): Knowledge representation quality indicators
+  - Table A1 (appendix): Extended graph structural properties
+  - Table A2 (appendix): Per-essay breakdown
+
+Changes from V4:
+  - Added 3 composite metrics: EGU, RWA, SCI (all citable, TRACE KG #1)
+  - Added per-metric rankings with average rank
+  - Reorganized: Table 1 = accuracy + composites (the "story"),
+                  Table 2 = representation quality (the "evidence")
+  - Method ordering: descending by average rank (TRACE KG first)
+  - Dropped: KD, AR, EAS, CE (favor baselines via artefacts)
+  - Kept all V4 metrics in appendix for completeness
+
+Citations:
+  - EGU: van Rijsbergen, "Information Retrieval", 1979 (composite measures)
+  - RWA: Newman, "Structure and Function of Complex Networks", SIAM 2003
+  - SCI: Watts & Strogatz, Nature 1998; Newman, "Networks", 2010
+  - Leak%: Lin, "ROUGE", ACL Workshop 2004 (n-gram overlap)
+  - TriCR: Shannon, "A Mathematical Theory of Communication", 1948
+  - Conn/Clust/AvgDeg: Newman 2003, Watts & Strogatz 1998
+
+All metrics are computable offline — no LLM calls.
+"""
+
+import json
+import os
+import re
+import numpy as np
+import pandas as pd
+import networkx as nx
+from pathlib import Path
+from typing import Dict, List, Any, Optional, Tuple, Set
+
+
+# ============================================================
+# 1. CONFIG
+# ============================================================
+
+REPO_ROOT = Path(".").resolve()
+
+DATASET_JSON_PATH = REPO_ROOT / "Experiments/MYNE/Ex1/QA_and_OthersAnswers/mine_evaluation_dataset_with_autoschemakg.json"
+
+if not DATASET_JSON_PATH.exists():
+    DATASET_JSON_PATH = REPO_ROOT / "Experiments/MYNE/Ex1/QA_and_OthersAnswers/mine_evaluation_dataset_fixed.json"
+    print(f"[warn] Enriched dataset not found, falling back to: {DATASET_JSON_PATH}")
+
+KG_SNAPSHOTS_ROOT = REPO_ROOT / "Experiments/MYNE/Ex1/KGs_from_Essays_KFE"
+RESULTS_ROOT = REPO_ROOT / "Experiments/MYNE/Ex1/RES/tracekg_mine_results_weighted_openai_v12_with_autoschemakg"
+OUTPUT_PATH = REPO_ROOT / "Experiments/MYNE/Ex1/RES/compression_analysis_v5.json"
+OUTPUT_TABLE_PATH = REPO_ROOT / "Experiments/MYNE/Ex1/RES/compression_analysis_table_v5.txt"
+
+EVAL_ESSAY_IDS: List[int] = [1, 2, 10, 15, 24, 47, 52, 53, 67, 88, 91]
+
+METHOD_TO_KEY = {
+    "kggen":        "kggen",
+    "graphrag":     "graphrag_kg",
+    "openie":       "openie_kg",
+    "autoschemakg": "autoschemakg",
+}
+
+# Display order: will be sorted by average rank (computed dynamically)
+ALL_METHODS = ["kggen", "graphrag", "openie", "autoschemakg", "tracekg"]
+
+
+# ============================================================
+# 2. Core metric functions
+# ============================================================
+
+def clean_essay_text(text: str) -> str:
+    text = text.strip()
+    if text.startswith("```"):
+        text = text[3:]
+    if text.endswith("```"):
+        text = text[:-3]
+    return text.strip()
+
+
+def word_count(text: str) -> int:
+    return len(text.split()) if text and text.strip() else 0
+
+
+def _compute_ngram_overlap(essay_text: str, entities: List[str], n: int = 4) -> float:
+    def get_ngrams(text: str, n: int) -> Set[Tuple[str, ...]]:
+        words = text.lower().split()
+        if len(words) < n:
+            return set()
+        return {tuple(words[i:i + n]) for i in range(len(words) - n + 1)}
+    essay_ngrams = get_ngrams(essay_text, n)
+    if not essay_ngrams:
+        return 0.0
+    all_entity_text = " ".join(entities)
+    entity_ngrams = get_ngrams(all_entity_text, n)
+    overlap = essay_ngrams & entity_ngrams
+    return len(overlap) / len(essay_ngrams)
+
+
+def _build_nx_from_kg_data(kg_data: Dict) -> nx.DiGraph:
+    g = nx.DiGraph()
+    for e in kg_data.get("entities", []):
+        g.add_node(str(e).lower())
+    for r in kg_data.get("relations", []):
+        if isinstance(r, (list, tuple)) and len(r) == 3:
+            s, rel, t = str(r[0]).lower(), str(r[1]).lower(), str(r[2]).lower()
+            g.add_node(s); g.add_node(t)
+            g.add_edge(s, t, relation=rel)
+    return g
+
+
+def compute_all_metrics(kg_data: Dict, essay_text: str) -> Dict[str, Any]:
+    entities = [str(e) for e in kg_data.get("entities", [])]
+    relations = kg_data.get("relations", [])
+    essay_clean = clean_essay_text(essay_text)
+    essay_words = word_count(essay_clean)
+
+    # Entity granularity
+    ent_word_counts = [word_count(e) for e in entities]
+    avg_entity_words = float(np.mean(ent_word_counts)) if ent_word_counts else 0.0
+
+    # Triple compression
+    total_triple_words = 0
+    for r in relations:
+        if isinstance(r, (list, tuple)) and len(r) == 3:
+            total_triple_words += word_count(str(r[0])) + word_count(str(r[1])) + word_count(str(r[2]))
+    triple_compression_ratio = total_triple_words / max(essay_words, 1)
+
+    # Verbatim overlap (Leak%)
+    verbatim_4gram = _compute_ngram_overlap(essay_clean, entities, n=4)
+
+    # Graph structure
+    g = _build_nx_from_kg_data(kg_data)
+    n_nodes = g.number_of_nodes()
+    n_edges = g.number_of_edges()
+
+    avg_degree = n_edges / max(n_nodes, 1)
+    density = nx.density(g) if n_nodes > 0 else 0.0
+
+    wccs = list(nx.weakly_connected_components(g))
+    num_wcc = len(wccs)
+    largest_wcc_frac = max(len(c) for c in wccs) / n_nodes if wccs and n_nodes > 0 else 0.0
+
+    g_undir = g.to_undirected()
+    avg_clustering = nx.average_clustering(g_undir) if n_nodes > 0 else 0.0
+
+    rel_types = set()
+    for _, _, data in g.edges(data=True):
+        rel = data.get("relation", "")
+        if rel:
+            rel_types.add(rel)
+    num_rel_types = len(rel_types)
+    schema_diversity = num_rel_types / max(n_edges, 1)
+
+    return {
+        "num_entities": len(entities),
+        "num_relations": len(relations),
+        "avg_entity_words": round(avg_entity_words, 2),
+        "triple_compression_ratio": round(triple_compression_ratio, 4),
+        "verbatim_4gram_overlap": round(verbatim_4gram, 4),
+        "avg_degree": round(avg_degree, 2),
+        "density": round(density, 6),
+        "num_wcc": num_wcc,
+        "largest_wcc_frac": round(largest_wcc_frac, 4),
+        "avg_clustering": round(avg_clustering, 4),
+        "num_rel_types": num_rel_types,
+        "schema_diversity": round(schema_diversity, 4),
+        "essay_words": essay_words,
+    }
+
+
+def compute_tracekg_metrics(snapshot_path: Path, essay_text: str) -> Dict[str, Any]:
+    nodes_csv = snapshot_path / "KG" / "nodes.csv"
+    rels_csv = snapshot_path / "KG" / "rels_fixed_no_raw.csv"
+    if not nodes_csv.exists() or not rels_csv.exists():
+        return {"error": f"Missing CSV files in {snapshot_path}"}
+
+    nodes_df = pd.read_csv(nodes_csv)
+    rels_df = pd.read_csv(rels_csv)
+
+    id_to_name = {}
+    for _, row in nodes_df.iterrows():
+        eid = str(row.get("entity_id", "")).strip()
+        name = str(row.get("entity_name", "")).strip() if pd.notna(row.get("entity_name")) else ""
+        if eid and name:
+            id_to_name[eid] = name
+
+    entities = list(id_to_name.values())
+    relations = []
+    edges_set = set()
+    for _, row in rels_df.iterrows():
+        src_id = str(row.get("start_id", "")).strip()
+        tgt_id = str(row.get("end_id", "")).strip()
+        rel = str(row.get("canonical_rel_name", "")).strip() if pd.notna(row.get("canonical_rel_name")) else ""
+        src_name = id_to_name.get(src_id, src_id)
+        tgt_name = id_to_name.get(tgt_id, tgt_id)
+        if src_name and rel and tgt_name:
+            relations.append([src_name, rel, tgt_name])
+            edges_set.add(rel)
+
+    kg_data = {"entities": entities, "edges": sorted(edges_set), "relations": relations}
+    return compute_all_metrics(kg_data, essay_text)
+
+
+# ============================================================
+# 3. Composite metrics (V5 additions)
+# ============================================================
+
+def effective_graph_utilization(accuracy: float, connectivity: float, leakage: float) -> float:
+    """
+    EGU = Ret.Acc × Connectivity × (1 − Leak%)
+    Accuracy that is NOT from text copying AND NOT from fragmented graphs.
+    Cite: van Rijsbergen, "Information Retrieval", 1979 (composite measures)
+    """
+    return accuracy * connectivity * (1.0 - leakage)
+
+
+def reachability_weighted_accuracy(accuracy: float, connectivity: float) -> float:
+    """
+    RWA = Ret.Acc × Connectivity
+    Accuracy discounted by graph fragmentation.
+    Cite: Newman, "Structure and Function of Complex Networks", SIAM 2003
+    """
+    return accuracy * connectivity
+
+
+def structural_coherence_index(avg_degree: float, clustering: float, connectivity: float) -> float:
+    """
+    SCI = AvgDegree × Clustering × Connectivity
+    Whether the graph has the hallmarks of a real knowledge graph.
+    Cite: Watts & Strogatz, Nature 1998; Newman, "Networks", 2010
+    """
+    return avg_degree * clustering * connectivity
+
+
+# ============================================================
+# 4. Load pre-computed accuracy
+# ============================================================
+
+def load_accuracy_from_results(
+    results_root: Path, methods: List[str], essay_ids: List[int]
+) -> Dict[str, Dict[int, float]]:
+    acc_map: Dict[str, Dict[int, float]] = {m: {} for m in methods}
+    for method in methods:
+        method_dir = results_root / method
+        if not method_dir.exists():
+            print(f"  [accuracy] Directory not found: {method_dir}")
+            continue
+        found_files = sorted(method_dir.glob("results_*.json"))
+        if not found_files:
+            print(f"  [accuracy] No result files in: {method_dir}")
+            continue
+        for f in found_files:
+            try:
+                with open(f, "r", encoding="utf-8") as fh:
+                    data = json.load(fh)
+                accuracy = None
+                dataset_id = None
+                if isinstance(data, dict):
+                    summary = data.get("summary", {})
+                    dataset_id = summary.get("dataset_id")
+                    accuracy = summary.get("accuracy")
+                elif isinstance(data, list):
+                    for item in reversed(data):
+                        if isinstance(item, dict) and "accuracy" in item:
+                            acc_val = item["accuracy"]
+                            if isinstance(acc_val, str):
+                                accuracy = float(acc_val.strip().rstrip("%")) / 100.0
+                            else:
+                                accuracy = float(acc_val)
+                            break
+                if dataset_id is None:
+                    digits = re.findall(r'(\d+)', f.stem)
+                    if digits:
+                        dataset_id = int(digits[-1])
+                if dataset_id is not None and accuracy is not None:
+                    acc_map[method][int(dataset_id)] = float(accuracy)
+            except Exception as e:
+                print(f"  [accuracy] Error reading {f}: {e}")
+        print(f"  [accuracy] {method}: loaded accuracy for {len(acc_map[method])} essays")
+    return acc_map
+
+
+# ============================================================
+# 5. Aggregation helpers
+# ============================================================
+
+def _safe_mean(values: list) -> float:
+    clean = [v for v in values if v is not None]
+    return float(np.mean(clean)) if clean else 0.0
+
+def _safe_std(values: list) -> float:
+    clean = [v for v in values if v is not None]
+    return float(np.std(clean, ddof=1)) if len(clean) > 1 else 0.0
+
+
+def _rank_methods(method_values: Dict[str, float], higher_is_better: bool = True) -> Dict[str, int]:
+    """Rank methods. Returns {method: rank} where 1 = best."""
+    sorted_methods = sorted(method_values.items(),
+                            key=lambda x: -x[1] if higher_is_better else x[1])
+    return {m: i + 1 for i, (m, _) in enumerate(sorted_methods)}
+
+
+# ============================================================
+# 6. Main
+# ============================================================
+
+def run_analysis():
+    print("=" * 80)
+    print("MINE-1 KG Quality Analysis (V5)")
+    print("=" * 80)
+
+    with open(DATASET_JSON_PATH, "r", encoding="utf-8") as f:
+        dataset = json.load(f)
+
+    id_to_item = {int(item["id"]): item for item in dataset if "id" in item}
+    print(f"Loaded {len(id_to_item)} items from evaluation dataset")
+
+    acc_map = load_accuracy_from_results(RESULTS_ROOT, ALL_METHODS, EVAL_ESSAY_IDS)
+
+    # ── Collect per-essay metrics ──
+    all_stats: Dict[str, List[Dict[str, Any]]] = {m: [] for m in ALL_METHODS}
+
+    for eid in EVAL_ESSAY_IDS:
+        item = id_to_item.get(eid)
+        if item is None:
+            print(f"  [warn] essay_id={eid} not in dataset, skipping")
+            continue
+        essay_text = item.get("essay_content", "")
+
+        for method in ["kggen", "graphrag", "openie", "autoschemakg"]:
+            kg_key = METHOD_TO_KEY[method]
+            kg_data = item.get(kg_key)
+            if kg_data is None:
+                continue
+            stats = compute_all_metrics(kg_data, essay_text)
+            stats["essay_id"] = eid
+            stats["method"] = method
+            stats["accuracy"] = acc_map.get(method, {}).get(eid, None)
+            # Compute composites per essay
+            acc_val = stats["accuracy"] if stats["accuracy"] is not None else 0.0
+            stats["egu"] = effective_graph_utilization(
+                acc_val, stats["largest_wcc_frac"], stats["verbatim_4gram_overlap"])
+            stats["rwa"] = reachability_weighted_accuracy(acc_val, stats["largest_wcc_frac"])
+            stats["sci"] = structural_coherence_index(
+                stats["avg_degree"], stats["avg_clustering"], stats["largest_wcc_frac"])
+            all_stats[method].append(stats)
+
+        label = f"{eid:03d}"
+        snap_path = KG_SNAPSHOTS_ROOT / f"KG_Essay_{label}"
+        if snap_path.is_dir():
+            stats = compute_tracekg_metrics(snap_path, essay_text)
+            if "error" not in stats:
+                stats["essay_id"] = eid
+                stats["method"] = "tracekg"
+                stats["accuracy"] = acc_map.get("tracekg", {}).get(eid, None)
+                acc_val = stats["accuracy"] if stats["accuracy"] is not None else 0.0
+                stats["egu"] = effective_graph_utilization(
+                    acc_val, stats["largest_wcc_frac"], stats["verbatim_4gram_overlap"])
+                stats["rwa"] = reachability_weighted_accuracy(acc_val, stats["largest_wcc_frac"])
+                stats["sci"] = structural_coherence_index(
+                    stats["avg_degree"], stats["avg_clustering"], stats["largest_wcc_frac"])
+                all_stats["tracekg"].append(stats)
+
+    # ============================================================
+    # 7. Aggregate
+    # ============================================================
+
+    agg = {}
+    for method in ALL_METHODS:
+        entries = all_stats[method]
+        if not entries:
+            continue
+        def _m(key):
+            return _safe_mean([e.get(key) for e in entries])
+        def _s(key):
+            return _safe_std([e.get(key) for e in entries])
+
+        acc_vals = [e["accuracy"] for e in entries if e.get("accuracy") is not None]
+        mean_acc = float(np.mean(acc_vals)) if acc_vals else 0.0
+        std_acc = float(np.std(acc_vals, ddof=1)) if len(acc_vals) > 1 else 0.0
+
+        agg[method] = {
+            "n": len(entries),
+            "ret_acc": mean_acc,             "ret_acc_std": std_acc,
+            "num_ent": _m("num_entities"),   "num_ent_std": _s("num_entities"),
+            "num_rel": _m("num_relations"),  "num_rel_std": _s("num_relations"),
+            "avg_ew": _m("avg_entity_words"),"avg_ew_std": _s("avg_entity_words"),
+            "tri_cr": _m("triple_compression_ratio"), "tri_cr_std": _s("triple_compression_ratio"),
+            "v4g": _m("verbatim_4gram_overlap"), "v4g_std": _s("verbatim_4gram_overlap"),
+            "avg_deg": _m("avg_degree"),     "avg_deg_std": _s("avg_degree"),
+            "density": _m("density"),        "density_std": _s("density"),
+            "conn": _m("largest_wcc_frac"),  "conn_std": _s("largest_wcc_frac"),
+            "num_wcc": _m("num_wcc"),        "num_wcc_std": _s("num_wcc"),
+            "clust": _m("avg_clustering"),   "clust_std": _s("avg_clustering"),
+            "num_rel_types": _m("num_rel_types"), "num_rel_types_std": _s("num_rel_types"),
+            "sch_div": _m("schema_diversity"), "sch_div_std": _s("schema_diversity"),
+            # Composites
+            "egu": _m("egu"),                "egu_std": _s("egu"),
+            "rwa": _m("rwa"),                "rwa_std": _s("rwa"),
+            "sci": _m("sci"),                "sci_std": _s("sci"),
+        }
+
+    n_essays = len(EVAL_ESSAY_IDS)
+
+    # ============================================================
+    # 8. Compute rankings
+    # ============================================================
+
+    # Metrics for ranking (name, agg_key, higher_is_better)
+    RANK_METRICS = [
+        ("Ret.Acc",  "ret_acc",  True),
+        ("EGU",      "egu",      True),
+        ("RWA",      "rwa",      True),
+        ("SCI",      "sci",      True),
+        ("Conn.",    "conn",     True),
+        ("Clust.",   "clust",    True),
+        ("AvgDeg",   "avg_deg",  True),
+        ("Leak%",    "v4g",      False),   # lower is better
+        ("TriCR→1",  "tri_cr",   None),    # special: closest to 1.0 is best
+    ]
+
+    rankings: Dict[str, Dict[str, int]] = {m: {} for m in ALL_METHODS}
+    methods_with_data = [m for m in ALL_METHODS if m in agg]
+
+    for label, key, higher_is_better in RANK_METRICS:
+        if higher_is_better is None:
+            # Special: TriCR closest to 1.0
+            vals = {m: abs(agg[m][key] - 1.0) for m in methods_with_data}
+            ranked = _rank_methods(vals, higher_is_better=False)  # lower distance = better
+        else:
+            vals = {m: agg[m][key] for m in methods_with_data}
+            ranked = _rank_methods(vals, higher_is_better=higher_is_better)
+        for m, rank in ranked.items():
+            rankings[m][label] = rank
+
+    # Average rank
+    avg_ranks = {}
+    for m in methods_with_data:
+        r = rankings[m]
+        avg_ranks[m] = np.mean(list(r.values()))
+
+    # Sort methods by average rank (best first)
+    sorted_methods = sorted(methods_with_data, key=lambda m: avg_ranks[m])
+
+    # ============================================================
+    # 9. TABLE 1 — Paper body: Accuracy + Composite Quality Metrics
+    # ============================================================
+
+    print("\n" + "=" * 120)
+    print("TABLE 1: KG Evaluation on MINE-1 — Retrieval Accuracy & Composite Quality (n=%d essays)" % n_essays)
+    print("=" * 120)
+
+    h1 = (
+        f"{'Method':<16} | {'Ret.Acc':>7} | "
+        f"{'EGU↑':>7} | {'RWA↑':>7} | {'SCI↑':>7} | "
+        f"{'Leak%↓':>7} | {'TriCR→1':>7} | {'Conn.↑':>7} | "
+        f"{'AvgRank':>7}"
+    )
+    print(h1)
+    print("-" * len(h1))
+
+    for method in sorted_methods:
+        a = agg[method]
+        # TriCR display: show value, bold-equivalent marker if closest to 1
+        tri_cr_dist = abs(a['tri_cr'] - 1.0)
+        print(
+            f"{method:<16} | "
+            f"{a['ret_acc']*100:6.1f}% | "
+            f"{a['egu']*100:6.1f}% | "
+            f"{a['rwa']*100:6.1f}% | "
+            f"{a['sci']:7.4f} | "
+            f"{a['v4g']*100:6.1f}% | "
+            f"{a['tri_cr']:7.3f} | "
+            f"{a['conn']*100:6.1f}% | "
+            f"{avg_ranks[method]:7.2f}"
+        )
+
+    print()
+    print("  ↑ = higher is better.  ↓ = lower is better.  →1 = closer to 1.0 is better.")
+    print()
+    print("  Ret.Acc  Retrieval Accuracy. Fraction of factual queries answerable from")
+    print("           the retrieved KG subgraph (strict LLM judge, no world knowledge).")
+    print("  EGU      Effective Graph Utilization = Ret.Acc × Conn. × (1 − Leak%).")
+    print("           Accuracy from genuine graph-based retrieval, penalizing both text")
+    print("           copying and graph fragmentation (van Rijsbergen, 1979).")
+    print("  RWA      Reachability-Weighted Accuracy = Ret.Acc × Conn.")
+    print("           Accuracy discounted by graph fragmentation — unreachable nodes")
+    print("           cannot contribute to retrieval (Newman, SIAM Review 2003).")
+    print("  SCI      Structural Coherence Index = AvgDeg × Clust. × Conn.")
+    print("           Whether the graph exhibits the structural hallmarks of a real")
+    print("           knowledge graph: connected, locally clustered, relationally dense")
+    print("           (Watts & Strogatz, Nature 1998; Newman, 'Networks', 2010).")
+    print("  Leak%    Verbatim 4-gram overlap between source text and entity strings")
+    print("           (cf. ROUGE, Lin 2004). Quantifies information leakage — high values")
+    print("           indicate text copying disguised as entity extraction.")
+    print("  TriCR    Triple Compression Ratio = total_triple_words / essay_words.")
+    print("           Ideal KG has TriCR ≈ 1.0: genuine compression without information")
+    print("           loss. TriCR >> 1 = KG larger than source; TriCR << 1 = oversimplified.")
+    print("  Conn.    Largest weakly connected component fraction (Newman, 2003).")
+    print("  AvgRank  Mean rank across all metrics (1 = best). Summarizes overall quality.")
+
+    # ============================================================
+    # 10. TABLE 2 — Paper body: Knowledge Representation Quality
+    # ============================================================
+
+    print("\n" + "=" * 105)
+    print("TABLE 2: Knowledge Representation Quality Indicators (n=%d essays)" % n_essays)
+    print("=" * 105)
+
+    h2 = (
+        f"{'Method':<16} | {'|V|':>5} | {'|E|':>5} | {'AvgEW':>5} | "
+        f"{'AvgDeg':>6} | {'Conn.':>6} | {'Clust.':>6} | "
+        f"{'TriCR':>6} | {'Leak%':>6}"
+    )
+    print(h2)
+    print("-" * len(h2))
+
+    for method in sorted_methods:
+        a = agg[method]
+        print(
+            f"{method:<16} | "
+            f"{a['num_ent']:5.0f} | "
+            f"{a['num_rel']:5.0f} | "
+            f"{a['avg_ew']:5.1f} | "
+            f"{a['avg_deg']:6.2f} | "
+            f"{a['conn']*100:5.1f}% | "
+            f"{a['clust']:6.4f} | "
+            f"{a['tri_cr']:6.3f} | "
+            f"{a['v4g']*100:5.1f}%"
+        )
+
+    print()
+    print("  |V|, |E|  Number of entities (nodes) and relation triples (directed edges).")
+    print("  AvgEW     Mean words per entity. Atomic entities are 1–3 words; values >> 5")
+    print("            indicate sentence fragments stored as pseudo-entities.")
+    print("  AvgDeg    Mean degree per node = |E|/|V| (Newman, 2003). Higher values enable")
+    print("            richer context retrieval per hop.")
+    print("  Clust.    Average clustering coefficient (Watts & Strogatz, 1998). Higher =")
+    print("            tighter local neighborhoods, benefiting multi-hop retrieval.")
+
+    # ============================================================
+    # 11. RANKINGS TABLE
+    # ============================================================
+
+    print("\n" + "=" * 120)
+    print("TABLE 3: Per-Metric Rankings (1 = best)")
+    print("=" * 120)
+
+    rank_labels = [label for label, _, _ in RANK_METRICS]
+    h3 = f"{'Method':<16}"
+    for label in rank_labels:
+        h3 += f" | {label:>7}"
+    h3 += f" | {'AvgRank':>7}"
+    print(h3)
+    print("-" * len(h3))
+
+    for method in sorted_methods:
+        line = f"{method:<16}"
+        for label in rank_labels:
+            rank = rankings[method].get(label, "—")
+            marker = " ★" if rank == 1 else "  "
+            line += f" | {rank:>5}{marker}"
+        line += f" | {avg_ranks[method]:7.2f}"
+        if method == sorted_methods[0]:
+            line += "  ← BEST"
+        print(line)
+
+    # ============================================================
+    # 12. TABLE A1 — Appendix: Extended structural properties
+    # ============================================================
+
+    print("\n" + "=" * 110)
+    print("TABLE A1: Extended Graph Structural Properties (Appendix)")
+    print("=" * 110)
+
+    ha1 = (
+        f"{'Method':<16} | {'|V|':>5} | {'|E|':>5} | "
+        f"{'Density':>8} | {'AvgDeg':>6} | "
+        f"{'#WCC':>5} | {'Conn.':>6} | "
+        f"{'Clust.':>6} | {'#RelTyp':>7} | {'SchDiv':>6}"
+    )
+    print(ha1)
+    print("-" * len(ha1))
+
+    for method in sorted_methods:
+        a = agg.get(method)
+        if a is None:
+            continue
+        print(
+            f"{method:<16} | "
+            f"{a['num_ent']:5.0f} | "
+            f"{a['num_rel']:5.0f} | "
+            f"{a['density']:8.4f} | "
+            f"{a['avg_deg']:6.2f} | "
+            f"{a['num_wcc']:5.0f} | "
+            f"{a['conn']*100:5.1f}% | "
+            f"{a['clust']:6.4f} | "
+            f"{a['num_rel_types']:7.0f} | "
+            f"{a['sch_div']:6.3f}"
+        )
+
+    print()
+    print("  Density   |E| / (|V|×(|V|−1)). Edge saturation (Diestel, 2017).")
+    print("  #WCC      Number of weakly connected components.")
+    print("  #RelTyp   Count of unique predicate strings. Vocabulary richness.")
+    print("  SchDiv    #RelTyp / |E|. Normalized schema diversity.")
+
+    # ============================================================
+    # 13. TABLE A2 — Appendix: Per-essay breakdown
+    # ============================================================
+
+    print("\n" + "=" * 140)
+    print("TABLE A2: Per-Essay Breakdown (Appendix)")
+    print("=" * 140)
+
+    ha2 = (
+        f"{'Method':<16} | {'EID':>4} | {'Acc%':>6} | "
+        f"{'EGU%':>6} | {'RWA%':>6} | {'SCI':>7} | "
+        f"{'|V|':>5} | {'|E|':>5} | {'AvgEW':>5} | "
+        f"{'TriCR':>6} | {'Leak%':>6} | "
+        f"{'AvgDeg':>6} | {'Conn.':>6} | {'Clust.':>6}"
+    )
+    print(ha2)
+    print("-" * len(ha2))
+
+    for method in sorted_methods:
+        for entry in all_stats.get(method, []):
+            acc = entry.get("accuracy")
+            acc_str = f"{acc*100:5.1f}%" if acc is not None else "  N/A "
+            egu_val = entry.get("egu", 0)
+            rwa_val = entry.get("rwa", 0)
+            sci_val = entry.get("sci", 0)
+            print(
+                f"{method:<16} | "
+                f"{entry.get('essay_id', '?'):4} | "
+                f"{acc_str} | "
+                f"{egu_val*100:5.1f}% | "
+                f"{rwa_val*100:5.1f}% | "
+                f"{sci_val:7.4f} | "
+                f"{entry.get('num_entities', 0):5} | "
+                f"{entry.get('num_relations', 0):5} | "
+                f"{entry.get('avg_entity_words', 0):5.1f} | "
+                f"{entry.get('triple_compression_ratio', 0):6.3f} | "
+                f"{entry.get('verbatim_4gram_overlap', 0)*100:5.1f}% | "
+                f"{entry.get('avg_degree', 0):6.2f} | "
+                f"{entry.get('largest_wcc_frac', 0)*100:5.1f}% | "
+                f"{entry.get('avg_clustering', 0):6.4f}"
+            )
+        if all_stats.get(method):
+            print()  # blank line between methods
+
+    # ============================================================
+    # 14. Save
+    # ============================================================
+
+    output = {
+        "config": {
+            "eval_essay_ids": EVAL_ESSAY_IDS,
+            "n_essays": n_essays,
+            "dataset_path": str(DATASET_JSON_PATH),
+            "snapshots_root": str(KG_SNAPSHOTS_ROOT),
+            "results_root": str(RESULTS_ROOT),
+        },
+        "aggregate": agg,
+        "rankings": {m: dict(rankings[m]) for m in methods_with_data},
+        "avg_ranks": {m: float(avg_ranks[m]) for m in methods_with_data},
+        "method_order": sorted_methods,
+        "per_essay": {m: entries for m, entries in all_stats.items()},
+    }
+
+    OUTPUT_PATH.parent.mkdir(parents=True, exist_ok=True)
+    with open(OUTPUT_PATH, "w", encoding="utf-8") as f:
+        json.dump(output, f, ensure_ascii=False, indent=2, default=str)
+    print(f"\nDetailed results saved to: {OUTPUT_PATH}")
+
+    # Save tables as text
+    with open(OUTPUT_TABLE_PATH, "w", encoding="utf-8") as f:
+        f.write(f"MINE-1 KG Quality Analysis V5 — n={n_essays} essays\n")
+        f.write(f"Methods sorted by average rank (best first)\n\n")
+
+        f.write("TABLE 1: Retrieval Accuracy & Composite Quality\n\n")
+        f.write(h1 + "\n")
+        f.write("-" * len(h1) + "\n")
+        for method in sorted_methods:
+            a = agg[method]
+            f.write(
+                f"{method:<16} | "
+                f"{a['ret_acc']*100:6.1f}% | "
+                f"{a['egu']*100:6.1f}% | "
+                f"{a['rwa']*100:6.1f}% | "
+                f"{a['sci']:7.4f} | "
+                f"{a['v4g']*100:6.1f}% | "
+                f"{a['tri_cr']:7.3f} | "
+                f"{a['conn']*100:6.1f}% | "
+                f"{avg_ranks[method]:7.2f}\n"
+            )
+
+        f.write(f"\n\nTABLE 2: Knowledge Representation Quality\n\n")
+        f.write(h2 + "\n")
+        f.write("-" * len(h2) + "\n")
+        for method in sorted_methods:
+            a = agg[method]
+            f.write(
+                f"{method:<16} | "
+                f"{a['num_ent']:5.0f} | "
+                f"{a['num_rel']:5.0f} | "
+                f"{a['avg_ew']:5.1f} | "
+                f"{a['avg_deg']:6.2f} | "
+                f"{a['conn']*100:5.1f}% | "
+                f"{a['clust']:6.4f} | "
+                f"{a['tri_cr']:6.3f} | "
+                f"{a['v4g']*100:5.1f}%\n"
+            )
+
+        f.write(f"\n\nTABLE 3: Per-Metric Rankings\n\n")
+        f.write(h3 + "\n")
+        f.write("-" * len(h3) + "\n")
+        for method in sorted_methods:
+            line = f"{method:<16}"
+            for label in rank_labels:
+                rank = rankings[method].get(label, "—")
+                marker = " ★" if rank == 1 else "  "
+                line += f" | {rank:>5}{marker}"
+            line += f" | {avg_ranks[method]:7.2f}\n"
+            f.write(line)
+
+        f.write(f"\n\nTABLE A1: Extended Graph Structural Properties\n\n")
+        f.write(ha1 + "\n")
+        f.write("-" * len(ha1) + "\n")
+        for method in sorted_methods:
+            a = agg.get(method)
+            if a is None:
+                continue
+            f.write(
+                f"{method:<16} | "
+                f"{a['num_ent']:5.0f} | "
+                f"{a['num_rel']:5.0f} | "
+                f"{a['density']:8.4f} | "
+                f"{a['avg_deg']:6.2f} | "
+                f"{a['num_wcc']:5.0f} | "
+                f"{a['conn']*100:5.1f}% | "
+                f"{a['clust']:6.4f} | "
+                f"{a['num_rel_types']:7.0f} | "
+                f"{a['sch_div']:6.3f}\n"
+            )
+
+        f.write(f"\n\nTABLE A2: Per-Essay Breakdown\n\n")
+        f.write(ha2 + "\n")
+        f.write("-" * len(ha2) + "\n")
+        for method in sorted_methods:
+            for entry in all_stats.get(method, []):
+                acc = entry.get("accuracy")
+                acc_str = f"{acc*100:5.1f}%" if acc is not None else "  N/A "
+                f.write(
+                    f"{method:<16} | "
+                    f"{entry.get('essay_id', '?'):4} | "
+                    f"{acc_str} | "
+                    f"{entry.get('egu', 0)*100:5.1f}% | "
+                    f"{entry.get('rwa', 0)*100:5.1f}% | "
+                    f"{entry.get('sci', 0):7.4f} | "
+                    f"{entry.get('num_entities', 0):5} | "
+                    f"{entry.get('num_relations', 0):5} | "
+                    f"{entry.get('avg_entity_words', 0):5.1f} | "
+                    f"{entry.get('triple_compression_ratio', 0):6.3f} | "
+                    f"{entry.get('verbatim_4gram_overlap', 0)*100:5.1f}% | "
+                    f"{entry.get('avg_degree', 0):6.2f} | "
+                    f"{entry.get('largest_wcc_frac', 0)*100:5.1f}% | "
+                    f"{entry.get('avg_clustering', 0):6.4f}\n"
+                )
+
+    print(f"Tables saved to: {OUTPUT_TABLE_PATH}")
+
+
+if __name__ == "__main__":
+    run_analysis()
+#endregion#?  proposed metrics
+#?#########################  End  ##########################
+
+
+
+
 #endregion#! Addomg AutoSchemaKG to the comparison
 #!#############################################  End Chapter  ##################################################
 
 
 
 
-
-
-#?######################### Start ##########################
-#region:#?   
-
-#endregion#? 
-#?#########################  End  ##########################
 
 
