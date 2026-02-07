@@ -1434,7 +1434,7 @@ from pathlib import Path
 # ============================================================
 # CONFIG — EDIT THESE
 # ============================================================
-ONTOLOGY_NUMBERS = [7, 18]  # <--- ontologies to run (by number)
+ONTOLOGY_NUMBERS = [6,9,10] #[7, 18]  # <--- ontologies to run (by number)
 
 DEFAULT_MODEL = "gpt-5.1"
 MAX_TOKENS = 16000
