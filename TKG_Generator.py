@@ -543,10 +543,10 @@ def generate_trace_kgs(
 
 # # from TRACE_KG_Generator import generate_trace_kgs
 
-# generate_trace_kgs(
-#     essay_ids=[123],
-#     default_model="openai/gpt-5-nano",
-# )
+generate_trace_kgs(
+    essay_ids=[4,6,14,28,30,33,44,46,47,68,70,76,82],
+    default_model="gpt-5.1",
+)
 
 # from Trace_KG import TraceKGLLMConfig, main
 

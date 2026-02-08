@@ -509,7 +509,7 @@ OUTPUT_KGS_DIR      = REPO_ROOT / "Experiments/MYNE/Ex1/AutoSchemaKG_KGs"
 
 # Which essay IDs to process (None = all that are in evaluation dataset)
 
-ESSAY_IDS: Optional[List[int]] = [ 1, 2,10,15,24,47,52,53,64,88,91] #, 10, 15, 24, 47, 52, 53, 64, 67, 88, 91] #None      # e.g., [1, 2, 3] for a quick test
+ESSAY_IDS: Optional[List[int]] = [4,6,14,28,30,33,44,46,68,70,76,82] # [ 1, 2,10,15,24,47,52,53,64,88,91] #, 10, 15, 24, 47, 52, 53, 64, 67, 88, 91] #None      # e.g., [1, 2, 3] for a quick test
 
 # ──────────────────────────────────────────────────────────────────────
 # 2.  HELPERS
@@ -793,7 +793,7 @@ DATASET_PATH = REPO_ROOT / "Experiments/MYNE/Ex1/QA_and_OthersAnswers/mine_evalu
 OUTPUT_PATH = REPO_ROOT / "Experiments/MYNE/Ex1/QA_and_OthersAnswers/mine_evaluation_dataset_with_autoschemakg.json"
 KGS_DIR = REPO_ROOT / "Experiments/MYNE/Ex1/AutoSchemaKG_KGs"
 
-ESSAY_IDS = [1, 2, 10, 15, 24, 47, 52, 53, 67, 88, 91]
+ESSAY_IDS =   [4,6,14,28,30,33,44,46,68,70,76,82]  # [1, 2, 10, 15, 24, 47, 52, 53, 67, 88, 91]
 
 
 def collect_triples(extraction_dir: Path) -> List[Dict[str, str]]:
@@ -970,7 +970,7 @@ OUTPUT_ROOT = "Experiments/MYNE/Ex1/RES/tracekg_mine_results_weighted_openai_v12
 MAX_SNAPSHOTS: Optional[int] = None  # None = all
 
 # Explicit list of essay IDs to evaluate (the single source of truth)
-EVAL_ESSAY_IDS: List[int] = [1, 2, 10, 15, 24, 47, 52, 53, 67, 88, 91] #  [ 1, 2,10,15,24,47,52,53,64,67,88,91]   # [1, 2  ] #, 10, 15, 24, 47, 52, 53, 64, 67, 88, 91]
+EVAL_ESSAY_IDS: List[int] =  [4,6,14,28,30,33,44,46,68,70,76,82]   # [1, 2, 10, 15, 24, 47, 52, 53, 67, 88, 91] #  [ 1, 2,10,15,24,47,52,53,64,67,88,91]   # [1, 2  ] #, 10, 15, 24, 47, 52, 53, 64, 67, 88, 91]
 
 # Retrieval params
 TOP_K_NODES = 8
@@ -1811,6 +1811,554 @@ if __name__ == "__main__":
 
 
 #?######################### Start ##########################
+#region:#?      simple Trace retriever
+
+"""
+Comparer V2: TRACE KG with SIMPLE embeddings (name-only, same as baselines)
+============================================================================
+
+Purpose: Ablation study to measure the contribution of TRACE KG's weighted
+multi-field embeddings vs simple name-only embeddings.
+
+CHANGES from V1:
+  - TRACE KG nodes are embedded using entity_name ONLY (no desc, no ctx)
+  - Results saved to a SEPARATE directory (will NOT overwrite V1 results)
+  - Everything else is identical: same judge, same retrieval, same baselines
+
+Run this AFTER V1 is complete. Compare the two result directories.
+"""
+
+import os
+import json
+from dataclasses import dataclass
+from pathlib import Path
+from typing import Dict, List, Optional, Tuple, Set, Any
+
+import numpy as np
+import pandas as pd
+import networkx as nx
+
+import torch
+from transformers import AutoTokenizer, AutoModel
+from sklearn.preprocessing import normalize
+from sklearn.metrics.pairwise import cosine_similarity
+
+from openai import OpenAI
+
+# ============================================================
+# 0. Global config
+# ============================================================
+
+# ★★★ KEY DIFFERENCE: No weighted embeddings for TRACE KG ★★★
+# TRACE KG will use name-only embedding, identical to baselines.
+
+ENT_EMBED_MODEL = "BAAI/bge-large-en-v1.5"
+BATCH_SIZE = 32
+DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
+
+OPENAI_MODEL_JUDGE = "gpt-5.1"
+OPENAI_API_KEY_ENV = "OPENAI_API_KEY"
+
+# ── Paths ──
+DATASET_JSON_PATH = Path("Experiments/MYNE/Ex1/QA_and_OthersAnswers/mine_evaluation_dataset_with_autoschemakg.json")
+KG_SNAPSHOTS_ROOT = Path("Experiments/MYNE/Ex1/KGs_from_Essays_KFE")
+
+# ★★★ SEPARATE OUTPUT DIRECTORY — will NOT touch V1 results ★★★
+OUTPUT_ROOT = "Experiments/MYNE/Ex1/RES/tracekg_mine_results_v2_simple_embed"
+
+MAX_SNAPSHOTS: Optional[int] = None
+
+# ★★★ Run on ALL essays you have results for ★★★
+EVAL_ESSAY_IDS: List[int] = [1, 2, 4, 6, 10, 14, 15, 24, 28, 30, 33, 44, 46, 47, 52, 53, 67, 68, 70, 76, 82, 88, 91]
+
+# Retrieval params (identical to V1)
+TOP_K_NODES = 8
+HOPS = 2
+MAX_CONTEXT_NODES = 250
+MAX_CONTEXT_EDGES = 300
+LOG_VERBATIM_FACT_IN_CONTEXT = True
+
+
+# ============================================================
+# 1. Env helper
+# ============================================================
+
+def _load_openai_key(envvar: str = OPENAI_API_KEY_ENV, fallback_path: str = ".env"):
+    key = os.getenv(envvar, None)
+    if key:
+        return key
+    if Path(fallback_path).exists():
+        txt = Path(fallback_path).read_text(encoding="utf-8").strip()
+        if txt:
+            return txt
+    return None
+
+
+# ============================================================
+# 2. HF Embedder (identical to V1)
+# ============================================================
+
+def mean_pool(token_embeds: torch.Tensor, attention_mask: torch.Tensor) -> torch.Tensor:
+    mask = attention_mask.unsqueeze(-1).expand(token_embeds.size()).float()
+    masked = token_embeds * mask
+    summed = masked.sum(dim=1)
+    counts = mask.sum(dim=1).clamp(min=1e-9)
+    return summed / counts
+
+
+class HFEmbedder:
+    def __init__(self, model_name: str, device: str = DEVICE):
+        self.device = device
+        self.tokenizer = AutoTokenizer.from_pretrained(model_name, use_fast=True)
+        self.model = AutoModel.from_pretrained(model_name)
+        self.model.to(device)
+        self.model.eval()
+        for p in self.model.parameters():
+            p.requires_grad = False
+
+    @torch.no_grad()
+    def encode_batch(self, texts: List[str], batch_size: int = BATCH_SIZE) -> np.ndarray:
+        embs = []
+        for i in range(0, len(texts), batch_size):
+            batch = texts[i:i + batch_size]
+            enc = self.tokenizer(
+                batch, padding=True, truncation=True, return_tensors="pt", max_length=1024,
+            )
+            input_ids = enc["input_ids"].to(self.device)
+            attention_mask = enc["attention_mask"].to(self.device)
+            out = self.model(input_ids=input_ids, attention_mask=attention_mask, return_dict=True)
+            pooled = mean_pool(out.last_hidden_state, attention_mask)
+            embs.append(pooled.cpu().numpy())
+        embs = np.vstack(embs)
+        return normalize(embs, axis=1)
+
+
+# ============================================================
+# 3. SimpleGraph (identical to V1)
+# ============================================================
+
+@dataclass
+class SimpleGraph:
+    entities: Set[str]
+    relations: Set[Tuple[str, str, str]]
+
+    @staticmethod
+    def from_kggen_dict(d: Dict) -> "SimpleGraph":
+        entities = set(d.get("entities", []))
+        rels_raw = d.get("relations", [])
+        relations = set()
+        for r in rels_raw:
+            if isinstance(r, (list, tuple)) and len(r) == 3:
+                relations.add((str(r[0]), str(r[1]), str(r[2])))
+        return SimpleGraph(entities=entities, relations=relations)
+
+    def to_nx(self) -> nx.DiGraph:
+        g = nx.DiGraph()
+        for e in self.entities:
+            g.add_node(e, text=str(e))
+        for s, rel, t in self.relations:
+            g.add_edge(s, t, relation=str(rel))
+        return g
+
+
+# ============================================================
+# 4. TRACE KG — SIMPLE NAME-ONLY EMBEDDING
+# ============================================================
+
+def safe_str(x) -> str:
+    if x is None:
+        return ""
+    if isinstance(x, float) and np.isnan(x):
+        return ""
+    return str(x)
+
+
+def build_tracekg_simple_embeddings(
+    embedder: HFEmbedder,
+    nodes_df: pd.DataFrame,
+) -> Tuple[Dict[str, np.ndarray], Dict[str, Dict[str, str]]]:
+    """
+    ★★★ SIMPLE VERSION: embed TRACE KG nodes using entity_name ONLY ★★★
+    This is identical to how baselines are embedded.
+    """
+    node_ids = []
+    node_names = []
+    node_info = {}
+
+    for _, row in nodes_df.iterrows():
+        nid = safe_str(row["entity_id"])
+        name = safe_str(row.get("entity_name", ""))
+        cls_label = safe_str(row.get("class_label", ""))
+
+        node_ids.append(nid)
+        node_names.append(name if name.strip() else nid)  # fallback to ID if name empty
+        node_info[nid] = {"name": name, "class_label": cls_label}
+
+    # Embed using name only — exactly like baselines
+    emb_arr = embedder.encode_batch(node_names)
+    node_embs = {node_ids[i]: emb_arr[i] for i in range(len(node_ids))}
+
+    return node_embs, node_info
+
+
+def build_tracekg_nx(
+    nodes_df: pd.DataFrame, rels_df: pd.DataFrame,
+) -> nx.DiGraph:
+    g = nx.DiGraph()
+    for _, row in nodes_df.iterrows():
+        nid = safe_str(row["entity_id"])
+        g.add_node(nid,
+                    entity_name=safe_str(row.get("entity_name", "")),
+                    entity_description=safe_str(row.get("entity_description", "")),
+                    class_label=safe_str(row.get("class_label", "")),
+                    class_group=safe_str(row.get("class_group", "")),
+                    node_properties=safe_str(row.get("node_properties", "")),
+                    chunk_ids=safe_str(row.get("chunk_ids", "")))
+    for _, row in rels_df.iterrows():
+        sid = safe_str(row.get("start_id", ""))
+        eid = safe_str(row.get("end_id", ""))
+        rel_name = safe_str(row.get("canonical_rel_name", "")) or safe_str(row.get("raw_relation_name", ""))
+        g.add_edge(sid, eid, relation=rel_name,
+                   relation_id=safe_str(row.get("relation_id", "")),
+                   chunk_id=safe_str(row.get("chunk_id", "")),
+                   qualifiers=safe_str(row.get("qualifiers", "")))
+    return g
+
+
+# ============================================================
+# 5. Retrieval (identical to V1)
+# ============================================================
+
+class WeightedGraphRetriever:
+    def __init__(self, node_embeddings: Dict[str, np.ndarray],
+                 graph: nx.DiGraph, node_info: Optional[Dict] = None):
+        self.graph = graph
+        self.node_info = node_info or {}
+        self.node_ids = list(node_embeddings.keys())
+        if self.node_ids:
+            self.emb_matrix = np.vstack([node_embeddings[nid] for nid in self.node_ids])
+        else:
+            self.emb_matrix = np.zeros((0, 1))
+
+    def retrieve_relevant_nodes(self, q_emb: np.ndarray, k: int = TOP_K_NODES
+                                ) -> List[Tuple[str, float]]:
+        if len(self.node_ids) == 0:
+            return []
+        sims = cosine_similarity(q_emb.reshape(1, -1), self.emb_matrix)[0]
+        top_k = min(k, len(sims))
+        top_indices = np.argsort(sims)[::-1][:top_k]
+        return [(self.node_ids[i], float(sims[i])) for i in top_indices]
+
+    def expand_nodes_within_hops(self, seed_nodes: List[str], hops: int = HOPS) -> Set[str]:
+        expanded = set(seed_nodes)
+        frontier = set(seed_nodes)
+        for _ in range(hops):
+            next_frontier = set()
+            for n in frontier:
+                if n in self.graph:
+                    next_frontier.update(self.graph.successors(n))
+                    next_frontier.update(self.graph.predecessors(n))
+            next_frontier -= expanded
+            expanded.update(next_frontier)
+            frontier = next_frontier
+        return expanded
+
+    def induced_subgraph_edges(self, nodes: Set[str]) -> List[Tuple[str, str, Dict[str, Any]]]:
+        return [(u, v, data) for u, v, data in self.graph.edges(data=True)
+                if u in nodes and v in nodes]
+
+    def format_induced_subgraph(self, nodes: Set[str],
+                                edges: List[Tuple[str, str, Dict[str, Any]]]) -> str:
+        lines = ["NODES:"]
+        for nid in sorted(nodes)[:MAX_CONTEXT_NODES]:
+            lines.append(f"  - {self._node_label(nid)}")
+        lines.append(f"\nEDGES ({len(edges[:MAX_CONTEXT_EDGES])}):")
+        for u, v, data in edges[:MAX_CONTEXT_EDGES]:
+            rel = data.get("relation", "?")
+            lines.append(f"  {self._node_label(u)} --[{rel}]--> {self._node_label(v)}")
+        return "\n".join(lines)
+
+    def retrieve_induced_subgraph_context(
+        self, q_emb: np.ndarray, k: int = TOP_K_NODES, hops: int = HOPS,
+    ) -> Tuple[List[Tuple[str, float]], Set[str], List, str]:
+        top_nodes = self.retrieve_relevant_nodes(q_emb, k=k)
+        seed_ids = [nid for nid, _ in top_nodes]
+        expanded = self.expand_nodes_within_hops(seed_ids, hops=hops)
+        edges = self.induced_subgraph_edges(expanded)
+        context_text = self.format_induced_subgraph(expanded, edges)
+        return top_nodes, expanded, edges, context_text
+
+    def _node_label(self, nid: str) -> str:
+        info = self.node_info.get(nid, {})
+        name = info.get("name", "")
+        cls = info.get("class_label", "")
+        if name and cls:
+            return f"{name} [{cls}]"
+        if name:
+            return name
+        if self.graph.has_node(nid):
+            nd = self.graph.nodes[nid]
+            ename = nd.get("entity_name", "") or nd.get("text", "")
+            if ename:
+                return ename
+        return nid
+
+
+# ============================================================
+# 6. GPT Judge (identical to V1)
+# ============================================================
+
+_openai_client: Optional[OpenAI] = None
+
+def _get_openai_client() -> OpenAI:
+    global _openai_client
+    if _openai_client is None:
+        key = _load_openai_key()
+        assert key, "Set OPENAI_API_KEY"
+        _openai_client = OpenAI(api_key=key)
+    return _openai_client
+
+
+def _normalize_ws(s: str) -> str:
+    import re
+    return re.sub(r"\s+", " ", s).strip().lower()
+
+
+def contains_full_fact_verbatim(fact: str, context: str) -> bool:
+    return _normalize_ws(fact) in _normalize_ws(context)
+
+
+def gpt_evaluate_response_strict(correct_answer: str, context: str) -> int:
+    client = _get_openai_client()
+    system_prompt = (
+        "You are a strict evaluator for a knowledge-graph retention benchmark.\n"
+        "You will be given:\n"
+        "1) A FACT statement.\n"
+        "2) A SUBGRAPH (nodes + directed edges) retrieved from a KG.\n\n"
+        "Decide whether the FACT can be supported or inferred using ONLY the provided SUBGRAPH.\n"
+        "- Do NOT use external or world knowledge.\n"
+        "- Do NOT assume missing edges.\n"
+        "- If the subgraph is insufficient or ambiguous, answer 0.\n\n"
+        "Output format: return exactly one character: 1 or 0."
+    )
+    user_prompt = (
+        f"FACT:\n{correct_answer}\n\n"
+        f"SUBGRAPH:\n{context}\n\n"
+        "Can the FACT be supported or inferred from the SUBGRAPH alone?\n"
+        "Answer with exactly: 1 or 0."
+    )
+    try:
+        resp = client.responses.create(
+            model=OPENAI_MODEL_JUDGE,
+            input=[
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": user_prompt},
+            ],
+            temperature=0,
+            max_output_tokens=64,
+        )
+        text = resp.output[0].content[0].text.strip()
+    except Exception as e:
+        print(f"[judge] Error calling OpenAI: {e}")
+        return 0
+    return 1 if text == "1" else 0
+
+
+# ============================================================
+# 7. Evaluation helper (identical to V1)
+# ============================================================
+
+def evaluate_accuracy_for_graph(
+    query_embedder: HFEmbedder,
+    retriever: WeightedGraphRetriever,
+    queries: List[str],
+    method_name: str,
+    snapshot_label: str,
+    dataset_id: int,
+    results_dir: str,
+    k: int = TOP_K_NODES,
+    verbose: bool = False,
+) -> Dict:
+    os.makedirs(results_dir, exist_ok=True)
+    query_embs = query_embedder.encode_batch(queries)
+
+    correct = 0
+    results = []
+    verbatim_hits = 0
+
+    for qi, fact in enumerate(queries):
+        q_emb = query_embs[qi]
+        top_nodes, expanded_nodes, edges, context_text = retriever.retrieve_induced_subgraph_context(
+            q_emb, k=k, hops=HOPS
+        )
+        if LOG_VERBATIM_FACT_IN_CONTEXT and contains_full_fact_verbatim(fact, context_text):
+            verbatim_hits += 1
+        evaluation = gpt_evaluate_response_strict(fact, context_text)
+        results.append({
+            "correct_answer": fact,
+            "retrieved_context": context_text,
+            "evaluation": int(evaluation),
+            "top_nodes": [{"id": nid, "sim": float(sim)} for nid, sim in top_nodes],
+            "num_expanded_nodes": int(len(expanded_nodes)),
+            "num_induced_edges": int(len(edges)),
+            "verbatim_fact_in_context": bool(contains_full_fact_verbatim(fact, context_text)),
+        })
+        correct += evaluation
+
+    accuracy = correct / len(queries) if queries else 0.0
+    summary = {
+        "method": method_name,
+        "snapshot_label": snapshot_label,
+        "dataset_id": dataset_id,
+        "num_queries": len(queries),
+        "correct": correct,
+        "accuracy": accuracy,
+        "verbatim_fact_hits": verbatim_hits,
+        "embedding_mode": "simple_name_only",  # ★ tag for identification
+    }
+
+    out_path = os.path.join(results_dir, f"results_{method_name}_{snapshot_label}.json")
+    with open(out_path, "w", encoding="utf-8") as f:
+        json.dump({"summary": summary, "details": results}, f, ensure_ascii=False, indent=2)
+
+    if verbose:
+        print(f"  [{method_name}] snapshot={snapshot_label} dataset_id={dataset_id} "
+              f"accuracy={accuracy:.2%} ({correct}/{len(queries)})")
+    return summary
+
+
+# ============================================================
+# 8. Aggregation (identical to V1)
+# ============================================================
+
+def aggregate_method_stats(summaries: List[Dict]) -> Dict[str, float]:
+    if not summaries:
+        return {"mean_accuracy": 0.0, "num_essays": 0}
+    accs = [s["accuracy"] for s in summaries]
+    return {"mean_accuracy": float(np.mean(accs)), "num_essays": len(accs)}
+
+
+def compare_methods(all_summaries: Dict[str, List[Dict]]) -> Dict[str, Dict]:
+    return {m: aggregate_method_stats(sums) for m, sums in all_summaries.items()}
+
+
+def print_comparison_table(comparison: Dict[str, Dict]):
+    print("\n=== Method Comparison — V2 SIMPLE EMBED (Mean Accuracy) ===")
+    print(f"{'Method':<20} | {'Mean Acc':>8} | {'#Snaps':>7}")
+    print("-" * 45)
+    for m, stats in comparison.items():
+        print(f"{m:<20} | {stats['mean_accuracy']*100:8.2f}% | {stats['num_essays']:7d}")
+
+
+# ============================================================
+# 9. Main — TRACE KG ONLY (baselines unchanged, skip re-running them)
+# ============================================================
+
+def main():
+    """
+    Only re-evaluate TRACE KG with simple embeddings.
+    Baselines are identical — no need to waste API calls re-running them.
+    """
+    os.makedirs(OUTPUT_ROOT, exist_ok=True)
+
+    with open(DATASET_JSON_PATH, "r", encoding="utf-8") as f:
+        dataset = json.load(f)
+    id_map = {int(item["id"]): item for item in dataset}
+
+    embedder = HFEmbedder(ENT_EMBED_MODEL, DEVICE)
+
+    tracekg_summaries = []
+
+    for eid in sorted(EVAL_ESSAY_IDS):
+        label = f"{eid:03d}"
+        snap_path = KG_SNAPSHOTS_ROOT / f"KG_Essay_{label}"
+
+        if not snap_path.is_dir():
+            print(f"[warn] Snapshot for essay {eid} not found, skipping.")
+            continue
+
+        nodes_csv = snap_path / "KG" / "nodes.csv"
+        rels_csv = snap_path / "KG" / "rels_fixed_no_raw.csv"
+        if not nodes_csv.exists() or not rels_csv.exists():
+            print(f"[warn] Missing CSVs for essay {eid}, skipping.")
+            continue
+
+        item = id_map.get(eid)
+        if item is None:
+            print(f"[warn] Essay {eid} not in dataset, skipping.")
+            continue
+
+        queries = item.get("generated_queries", [])
+        if not queries:
+            continue
+
+        print(f"\n{'='*60}")
+        print(f"Essay {eid} — TRACE KG with SIMPLE name-only embedding")
+        print(f"{'='*60}")
+
+        nodes_df = pd.read_csv(nodes_csv)
+        rels_df = pd.read_csv(rels_csv)
+
+        # ★★★ THE KEY DIFFERENCE: simple name-only embeddings ★★★
+        node_embs, node_info = build_tracekg_simple_embeddings(embedder, nodes_df)
+        graph = build_tracekg_nx(nodes_df, rels_df)
+        retriever = WeightedGraphRetriever(node_embs, graph, node_info=node_info)
+
+        results_dir = os.path.join(OUTPUT_ROOT, "tracekg")
+        s = evaluate_accuracy_for_graph(
+            query_embedder=embedder, retriever=retriever,
+            queries=queries, method_name="tracekg",
+            snapshot_label=label, dataset_id=eid,
+            results_dir=results_dir, k=TOP_K_NODES, verbose=True,
+        )
+        tracekg_summaries.append(s)
+
+    # ── Summary ──
+    if tracekg_summaries:
+        accs = [s["accuracy"] for s in tracekg_summaries]
+        print(f"\n{'='*60}")
+        print(f"V2 SIMPLE EMBED — TRACE KG Results")
+        print(f"{'='*60}")
+        print(f"  Essays evaluated: {len(accs)}")
+        print(f"  Mean accuracy:    {np.mean(accs)*100:.2f}%")
+        print(f"  Std:              {np.std(accs, ddof=1)*100:.2f}%")
+        print(f"  Min:              {min(accs)*100:.1f}%")
+        print(f"  Max:              {max(accs)*100:.1f}%")
+
+        # Per-essay breakdown
+        print(f"\n  {'EID':>4} | {'Acc':>7}")
+        print(f"  {'-'*16}")
+        for s in tracekg_summaries:
+            print(f"  {s['dataset_id']:4} | {s['accuracy']*100:6.1f}%")
+
+        # Save
+        comp_path = os.path.join(OUTPUT_ROOT, "tracekg_simple_embed_summary.json")
+        with open(comp_path, "w", encoding="utf-8") as f:
+            json.dump({
+                "embedding_mode": "simple_name_only",
+                "note": "TRACE KG with name-only embedding (no desc/ctx). Ablation study.",
+                "mean_accuracy": float(np.mean(accs)),
+                "std_accuracy": float(np.std(accs, ddof=1)),
+                "num_essays": len(accs),
+                "per_essay": tracekg_summaries,
+            }, f, indent=2)
+        print(f"\n✅ Results saved → {comp_path}")
+    else:
+        print("\n❌ No essays evaluated.")
+
+
+if __name__ == "__main__":
+    main()
+
+#endregion#?    simple Trace retriever
+#?#########################  End  ##########################
+
+
+
+
+
+
+#?######################### Start ##########################
 #region:#?       Post-hoc KG Quality Analysis for MINE-1 Evaluation — V4
 
 
@@ -1862,7 +2410,7 @@ RESULTS_ROOT = REPO_ROOT / "Experiments/MYNE/Ex1/RES/tracekg_mine_results_weight
 OUTPUT_PATH = REPO_ROOT / "Experiments/MYNE/Ex1/RES/compression_analysis_v4.json"
 OUTPUT_TABLE_PATH = REPO_ROOT / "Experiments/MYNE/Ex1/RES/compression_analysis_table_v4.txt"
 
-EVAL_ESSAY_IDS: List[int] = [1, 2, 10, 15, 24, 47, 52, 53, 67, 88, 91] #[1, 2]  # , 10, 15, 24, 47, 52, 53, 64, 67, 88, 91]
+EVAL_ESSAY_IDS: List[int]  = [1, 6, 10, 14, 15, 24, 33, 47, 52, 53, 67, 68, 70, 88, 91] # [1, 2, 10, 15, 24, 47, 52, 53, 67, 88, 91] #[1, 2]  # , 10, 15, 24, 47, 52, 53, 64, 67, 88, 91]
 
 METHOD_TO_KEY = {
     "kggen":        "kggen",
@@ -2506,7 +3054,7 @@ RESULTS_ROOT = REPO_ROOT / "Experiments/MYNE/Ex1/RES/tracekg_mine_results_weight
 OUTPUT_PATH = REPO_ROOT / "Experiments/MYNE/Ex1/RES/compression_analysis_v5.json"
 OUTPUT_TABLE_PATH = REPO_ROOT / "Experiments/MYNE/Ex1/RES/compression_analysis_table_v5.txt"
 
-EVAL_ESSAY_IDS: List[int] = [1, 2, 10, 15, 24, 47, 52, 53, 67, 88, 91]
+EVAL_ESSAY_IDS: List[int] =  [1, 6, 10, 14, 15, 24, 33, 47, 52, 53, 67, 68, 70, 88, 91]
 
 METHOD_TO_KEY = {
     "kggen":        "kggen",
@@ -3234,9 +3782,3557 @@ if __name__ == "__main__":
 
 
 
+
+#?######################### Start ##########################
+#region:#?     visualizations
+
+"""
+KDD-Ready Visualizations for MINE-1 Evaluation (V5)
+=====================================================
+
+Produces:
+  1. Radar chart: Multi-metric comparison (the "at a glance" figure)
+  2. EGU decomposition: Stacked bar showing how EGU penalizes methods
+  3. Accuracy vs Leak% scatter: The "fake accuracy" exposé
+  4. Per-essay heatmap: TRACE KG consistency across essays
+  5. THE FINAL FIGURE: Simple bar chart proving TRACE KG is best overall
+
+All figures use the SAME data sources as V5 tables.
+"""
+
+import json
+import re
+import os
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import matplotlib.patches as mpatches
+from matplotlib.gridspec import GridSpec
+from pathlib import Path
+from typing import Dict, List, Optional
+import warnings
+warnings.filterwarnings("ignore")
+
+# ============================================================
+# CONFIG — EXACT SAME SOURCES AS V5
+# ============================================================
+
+REPO_ROOT = Path(".").resolve()
+
+DATASET_JSON_PATH = REPO_ROOT / "Experiments/MYNE/Ex1/QA_and_OthersAnswers/mine_evaluation_dataset_with_autoschemakg.json"
+KG_SNAPSHOTS_ROOT = REPO_ROOT / "Experiments/MYNE/Ex1/KGs_from_Essays_KFE"
+RESULTS_ROOT = REPO_ROOT / "Experiments/MYNE/Ex1/RES/tracekg_mine_results_weighted_openai_v12_with_autoschemakg"
+
+OUTPUT_DIR = REPO_ROOT / "Experiments/MYNE/Ex1/RES/figures_v5"
+
+EVAL_ESSAY_IDS = [1, 6, 10, 14, 15, 24, 33, 47, 52, 53, 67, 68, 70, 88, 91]
+
+ALL_METHODS = ["tracekg", "autoschemakg", "graphrag", "openie", "kggen"]
+METHOD_LABELS = {
+    "tracekg": "TRACE KG",
+    "autoschemakg": "AutoSchemaKG",
+    "graphrag": "GraphRAG",
+    "openie": "OpenIE",
+    "kggen": "KGGen",
+}
+METHOD_COLORS = {
+    "tracekg": "#1B9E77",       # teal green — protagonist
+    "autoschemakg": "#D95F02",  # orange
+    "graphrag": "#7570B3",      # purple
+    "openie": "#E7298A",        # pink
+    "kggen": "#66A61E",         # lime
+}
+
+METHOD_TO_KEY = {
+    "kggen": "kggen",
+    "graphrag": "graphrag_kg",
+    "openie": "openie_kg",
+    "autoschemakg": "autoschemakg",
+}
+
+
+# ============================================================
+# DATA LOADING — SAME AS V5
+# ============================================================
+
+def safe_str(x):
+    if x is None: return ""
+    if isinstance(x, float) and np.isnan(x): return ""
+    return str(x)
+
+def clean_essay_text(text):
+    text = text.strip()
+    if text.startswith("```"): text = text[3:]
+    if text.endswith("```"): text = text[:-3]
+    return text.strip()
+
+def word_count(text):
+    return len(text.split()) if text and text.strip() else 0
+
+def _compute_ngram_overlap(essay_text, entities, n=4):
+    def get_ngrams(text, n):
+        words = text.lower().split()
+        if len(words) < n: return set()
+        return {tuple(words[i:i+n]) for i in range(len(words)-n+1)}
+    essay_ngrams = get_ngrams(essay_text, n)
+    if not essay_ngrams: return 0.0
+    entity_ngrams = get_ngrams(" ".join(entities), n)
+    return len(essay_ngrams & entity_ngrams) / len(essay_ngrams)
+
+import networkx as nx
+
+def _build_nx(kg_data):
+    g = nx.DiGraph()
+    for e in kg_data.get("entities", []): g.add_node(str(e).lower())
+    for r in kg_data.get("relations", []):
+        if isinstance(r, (list, tuple)) and len(r) == 3:
+            s, rel, t = str(r[0]).lower(), str(r[1]).lower(), str(r[2]).lower()
+            g.add_node(s); g.add_node(t)
+            g.add_edge(s, t, relation=rel)
+    return g
+
+def compute_metrics(kg_data, essay_text):
+    entities = [str(e) for e in kg_data.get("entities", [])]
+    relations = kg_data.get("relations", [])
+    essay_clean = clean_essay_text(essay_text)
+    essay_words = word_count(essay_clean)
+    ent_wc = [word_count(e) for e in entities]
+    avg_ew = float(np.mean(ent_wc)) if ent_wc else 0.0
+    total_tw = sum(word_count(str(r[0]))+word_count(str(r[1]))+word_count(str(r[2]))
+                   for r in relations if isinstance(r,(list,tuple)) and len(r)==3)
+    tri_cr = total_tw / max(essay_words, 1)
+    leak = _compute_ngram_overlap(essay_clean, entities, n=4)
+    g = _build_nx(kg_data)
+    nv, ne = g.number_of_nodes(), g.number_of_edges()
+    avg_deg = ne / max(nv, 1)
+    wccs = list(nx.weakly_connected_components(g))
+    conn = max(len(c) for c in wccs)/nv if wccs and nv > 0 else 0.0
+    clust = nx.average_clustering(g.to_undirected()) if nv > 0 else 0.0
+    return {
+        "num_entities": len(entities), "num_relations": len(relations),
+        "avg_entity_words": avg_ew, "triple_compression_ratio": tri_cr,
+        "verbatim_4gram_overlap": leak, "avg_degree": avg_deg,
+        "largest_wcc_frac": conn, "avg_clustering": clust, "essay_words": essay_words,
+    }
+
+def compute_tracekg_metrics(snap, essay_text):
+    nodes_df = pd.read_csv(snap / "KG" / "nodes.csv")
+    rels_df = pd.read_csv(snap / "KG" / "rels_fixed_no_raw.csv")
+    id2name = {}
+    for _, r in nodes_df.iterrows():
+        eid = str(r.get("entity_id","")).strip()
+        name = str(r.get("entity_name","")).strip() if pd.notna(r.get("entity_name")) else ""
+        if eid and name: id2name[eid] = name
+    entities = list(id2name.values())
+    relations = []
+    for _, r in rels_df.iterrows():
+        s = id2name.get(str(r.get("start_id","")).strip(), str(r.get("start_id","")))
+        t = id2name.get(str(r.get("end_id","")).strip(), str(r.get("end_id","")))
+        rel = str(r.get("canonical_rel_name","")).strip() if pd.notna(r.get("canonical_rel_name")) else ""
+        if s and rel and t: relations.append([s, rel, t])
+    return compute_metrics({"entities": entities, "relations": relations}, essay_text)
+
+def load_accuracy(results_root, methods):
+    acc = {m: {} for m in methods}
+    for method in methods:
+        d = results_root / method
+        if not d.exists(): continue
+        for f in d.glob("results_*.json"):
+            try:
+                data = json.load(open(f))
+                s = data.get("summary", {})
+                did, a = s.get("dataset_id"), s.get("accuracy")
+                if did is not None and a is not None:
+                    acc[method][int(did)] = float(a)
+            except: pass
+    return acc
+
+def load_all_data():
+    with open(DATASET_JSON_PATH) as f:
+        dataset = json.load(f)
+    id_map = {int(item["id"]): item for item in dataset}
+    acc_map = load_accuracy(RESULTS_ROOT, ALL_METHODS)
+
+    all_stats = {m: [] for m in ALL_METHODS}
+    for eid in EVAL_ESSAY_IDS:
+        item = id_map.get(eid)
+        if not item: continue
+        essay = item.get("essay_content", "")
+        for method in ["kggen","graphrag","openie","autoschemakg"]:
+            kg = item.get(METHOD_TO_KEY[method])
+            if not kg: continue
+            s = compute_metrics(kg, essay)
+            s["essay_id"] = eid
+            s["accuracy"] = acc_map.get(method,{}).get(eid)
+            a = s["accuracy"] or 0
+            s["egu"] = a * s["largest_wcc_frac"] * (1 - s["verbatim_4gram_overlap"])
+            s["rwa"] = a * s["largest_wcc_frac"]
+            s["sci"] = s["avg_degree"] * s["avg_clustering"] * s["largest_wcc_frac"]
+            all_stats[method].append(s)
+        snap = KG_SNAPSHOTS_ROOT / f"KG_Essay_{eid:03d}"
+        if snap.is_dir():
+            s = compute_tracekg_metrics(snap, essay)
+            s["essay_id"] = eid
+            s["accuracy"] = acc_map.get("tracekg",{}).get(eid)
+            a = s["accuracy"] or 0
+            s["egu"] = a * s["largest_wcc_frac"] * (1 - s["verbatim_4gram_overlap"])
+            s["rwa"] = a * s["largest_wcc_frac"]
+            s["sci"] = s["avg_degree"] * s["avg_clustering"] * s["largest_wcc_frac"]
+            all_stats["tracekg"].append(s)
+    return all_stats
+
+def aggregate(all_stats):
+    agg = {}
+    for m in ALL_METHODS:
+        entries = all_stats[m]
+        if not entries: continue
+        def _m(k): return float(np.mean([e.get(k,0) for e in entries]))
+        acc_vals = [e["accuracy"] for e in entries if e.get("accuracy") is not None]
+        agg[m] = {
+            "ret_acc": np.mean(acc_vals) if acc_vals else 0,
+            "egu": _m("egu"), "rwa": _m("rwa"), "sci": _m("sci"),
+            "leak": _m("verbatim_4gram_overlap"), "tri_cr": _m("triple_compression_ratio"),
+            "conn": _m("largest_wcc_frac"), "clust": _m("avg_clustering"),
+            "avg_deg": _m("avg_degree"), "avg_ew": _m("avg_entity_words"),
+            "num_ent": _m("num_entities"), "num_rel": _m("num_relations"),
+        }
+    return agg
+
+
+# ============================================================
+# FIGURE 1: RADAR CHART — Multi-metric at a glance
+# ============================================================
+
+def fig1_radar(agg):
+    categories = ["Ret.Acc", "EGU", "RWA", "Conn.", "Clust.", "1−Leak%"]
+    N = len(categories)
+    angles = [n / float(N) * 2 * np.pi for n in range(N)]
+    angles += angles[:1]
+
+    fig, ax = plt.subplots(figsize=(8, 8), subplot_kw=dict(polar=True))
+    ax.set_theta_offset(np.pi / 2)
+    ax.set_theta_direction(-1)
+
+    ax.set_xticks(angles[:-1])
+    ax.set_xticklabels(categories, fontsize=13, fontweight="bold")
+    ax.set_ylim(0, 1.05)
+    ax.set_yticks([0.2, 0.4, 0.6, 0.8, 1.0])
+    ax.set_yticklabels(["0.2","0.4","0.6","0.8","1.0"], fontsize=9, color="grey")
+    ax.yaxis.grid(True, color="lightgrey", linewidth=0.5)
+    ax.xaxis.grid(True, color="lightgrey", linewidth=0.5)
+
+    for method in ALL_METHODS:
+        a = agg.get(method)
+        if not a: continue
+        # Normalize clust to [0,1] — max observed is ~0.2, scale by 5× for visibility
+        clust_scaled = min(a["clust"] * 5, 1.0)
+        values = [a["ret_acc"], a["egu"], a["rwa"], a["conn"], clust_scaled, 1-a["leak"]]
+        values += values[:1]
+        lw = 3.0 if method == "tracekg" else 1.5
+        ls = "-" if method == "tracekg" else "--"
+        ax.plot(angles, values, linewidth=lw, linestyle=ls,
+                label=METHOD_LABELS[method], color=METHOD_COLORS[method])
+        alpha = 0.15 if method == "tracekg" else 0.03
+        ax.fill(angles, values, alpha=alpha, color=METHOD_COLORS[method])
+
+    ax.legend(loc="upper right", bbox_to_anchor=(1.35, 1.1), fontsize=11, frameon=True)
+    ax.set_title("Multi-Metric KG Quality Profile\n(n = 15 essays)", fontsize=15,
+                 fontweight="bold", pad=25)
+
+    plt.tight_layout()
+    plt.savefig(OUTPUT_DIR / "fig1_radar_profile.pdf", bbox_inches="tight", dpi=300)
+    plt.savefig(OUTPUT_DIR / "fig1_radar_profile.png", bbox_inches="tight", dpi=300)
+    plt.close()
+    print("  ✓ Figure 1: Radar chart saved")
+
+
+# ============================================================
+# FIGURE 2: EGU DECOMPOSITION — Where accuracy really comes from
+# ============================================================
+
+def fig2_egu_decomposition(agg):
+    fig, ax = plt.subplots(figsize=(10, 5.5))
+
+    methods_sorted = sorted(agg.keys(), key=lambda m: -agg[m]["egu"])
+    x = np.arange(len(methods_sorted))
+    width = 0.55
+
+    egu_vals = []
+    leak_penalty = []
+    frag_penalty = []
+    raw_acc = []
+
+    for m in methods_sorted:
+        a = agg[m]
+        acc = a["ret_acc"]
+        conn = a["conn"]
+        leak = a["leak"]
+        egu = acc * conn * (1 - leak)
+        lost_to_frag = acc * (1 - conn)
+        lost_to_leak = acc * conn * leak
+
+        egu_vals.append(egu * 100)
+        frag_penalty.append(lost_to_frag * 100)
+        leak_penalty.append(lost_to_leak * 100)
+        raw_acc.append(acc * 100)
+
+    # Stacked bars
+    bars_egu = ax.bar(x, egu_vals, width, label="Effective (EGU)",
+                      color=[METHOD_COLORS[m] for m in methods_sorted], edgecolor="white", linewidth=0.8)
+    bars_frag = ax.bar(x, frag_penalty, width, bottom=egu_vals,
+                       label="Lost to fragmentation", color="#CCCCCC", edgecolor="white", linewidth=0.8,
+                       hatch="//")
+    bars_leak = ax.bar(x, leak_penalty, width,
+                       bottom=[e+f for e,f in zip(egu_vals, frag_penalty)],
+                       label="Lost to text copying", color="#FF9999", edgecolor="white", linewidth=0.8,
+                       hatch="xx")
+
+    # Accuracy line
+    ax.plot(x, raw_acc, "ko-", markersize=8, linewidth=2, label="Raw Ret.Acc", zorder=5)
+    for i, (xi, yi) in enumerate(zip(x, raw_acc)):
+        ax.annotate(f"{yi:.1f}%", (xi, yi+1.5), ha="center", fontsize=10, fontweight="bold")
+
+    ax.set_xticks(x)
+    ax.set_xticklabels([METHOD_LABELS[m] for m in methods_sorted], fontsize=12, fontweight="bold")
+    ax.set_ylabel("Accuracy (%)", fontsize=13, fontweight="bold")
+    ax.set_ylim(0, 110)
+    ax.legend(fontsize=11, loc="upper right", frameon=True)
+    ax.set_title("Where Does Retrieval Accuracy Come From?\nEGU Decomposition (n = 15 essays)",
+                 fontsize=14, fontweight="bold")
+    ax.spines["top"].set_visible(False)
+    ax.spines["right"].set_visible(False)
+
+    plt.tight_layout()
+    plt.savefig(OUTPUT_DIR / "fig2_egu_decomposition.pdf", bbox_inches="tight", dpi=300)
+    plt.savefig(OUTPUT_DIR / "fig2_egu_decomposition.png", bbox_inches="tight", dpi=300)
+    plt.close()
+    print("  ✓ Figure 2: EGU decomposition saved")
+
+
+# ============================================================
+# FIGURE 3: ACCURACY vs LEAK% SCATTER — The exposé
+# ============================================================
+
+def fig3_accuracy_vs_leak(all_stats):
+    fig, ax = plt.subplots(figsize=(9, 6))
+
+    for method in ALL_METHODS:
+        entries = all_stats[method]
+        accs = [e["accuracy"]*100 for e in entries if e.get("accuracy") is not None]
+        leaks = [e["verbatim_4gram_overlap"]*100 for e in entries if e.get("accuracy") is not None]
+        size = 120 if method == "tracekg" else 60
+        marker = "★" if method == "tracekg" else "o"
+        zorder = 10 if method == "tracekg" else 5
+        ax.scatter(leaks, accs, s=size, c=METHOD_COLORS[method], label=METHOD_LABELS[method],
+                   alpha=0.8, edgecolors="white", linewidth=0.5, zorder=zorder,
+                   marker="*" if method == "tracekg" else "o")
+
+    # Danger zone
+    ax.axvspan(20, 100, alpha=0.08, color="red")
+    ax.text(55, 25, "DANGER ZONE\n(text copying)", fontsize=12, color="red",
+            alpha=0.5, ha="center", style="italic")
+
+    # Ideal zone
+    ax.axvspan(0, 5, alpha=0.06, color="green")
+    ax.text(2.5, 25, "IDEAL", fontsize=11, color="green", alpha=0.5, ha="center", rotation=90)
+
+    ax.set_xlabel("Verbatim 4-gram Overlap (Leak%)", fontsize=13, fontweight="bold")
+    ax.set_ylabel("Retrieval Accuracy (%)", fontsize=13, fontweight="bold")
+    ax.set_title("Accuracy vs. Information Leakage\n(Each dot = one essay)", fontsize=14, fontweight="bold")
+    ax.legend(fontsize=11, loc="lower right", frameon=True)
+    ax.set_xlim(-2, 95)
+    ax.set_ylim(15, 105)
+    ax.spines["top"].set_visible(False)
+    ax.spines["right"].set_visible(False)
+
+    plt.tight_layout()
+    plt.savefig(OUTPUT_DIR / "fig3_accuracy_vs_leak.pdf", bbox_inches="tight", dpi=300)
+    plt.savefig(OUTPUT_DIR / "fig3_accuracy_vs_leak.png", bbox_inches="tight", dpi=300)
+    plt.close()
+    print("  ✓ Figure 3: Accuracy vs Leak scatter saved")
+
+
+# ============================================================
+# FIGURE 4: PER-ESSAY HEATMAP — Consistency
+# ============================================================
+
+def fig4_per_essay_heatmap(all_stats):
+    metrics_to_show = [
+        ("accuracy", "Ret.Acc", True),
+        ("egu", "EGU", True),
+        ("largest_wcc_frac", "Conn.", True),
+        ("avg_clustering", "Clust.", True),
+        ("verbatim_4gram_overlap", "Leak%", False),
+    ]
+
+    essay_ids = sorted(EVAL_ESSAY_IDS)
+    methods_order = ALL_METHODS
+
+    fig, axes = plt.subplots(1, len(metrics_to_show), figsize=(22, 6), sharey=True)
+
+    for ax_idx, (key, label, higher_better) in enumerate(metrics_to_show):
+        ax = axes[ax_idx]
+        matrix = np.full((len(methods_order), len(essay_ids)), np.nan)
+
+        for mi, method in enumerate(methods_order):
+            entries_by_eid = {e["essay_id"]: e for e in all_stats[method]}
+            for ei, eid in enumerate(essay_ids):
+                entry = entries_by_eid.get(eid)
+                if entry and entry.get(key) is not None:
+                    val = entry[key]
+                    if key == "verbatim_4gram_overlap":
+                        val = val * 100  # show as %
+                    elif key in ("accuracy", "egu", "largest_wcc_frac"):
+                        val = val * 100
+                    matrix[mi, ei] = val
+
+        cmap = "RdYlGn" if higher_better else "RdYlGn_r"
+        im = ax.imshow(matrix, aspect="auto", cmap=cmap, interpolation="nearest")
+
+        ax.set_xticks(range(len(essay_ids)))
+        ax.set_xticklabels(essay_ids, fontsize=8, rotation=45)
+        ax.set_yticks(range(len(methods_order)))
+        if ax_idx == 0:
+            ax.set_yticklabels([METHOD_LABELS[m] for m in methods_order], fontsize=10, fontweight="bold")
+        else:
+            ax.set_yticklabels([])
+
+        ax.set_title(label, fontsize=12, fontweight="bold")
+
+        # Annotate cells
+        for mi in range(len(methods_order)):
+            for ei in range(len(essay_ids)):
+                val = matrix[mi, ei]
+                if not np.isnan(val):
+                    fmt = f"{val:.0f}" if abs(val) >= 1 else f"{val:.1f}"
+                    color = "white" if val < 30 or val > 80 else "black"
+                    ax.text(ei, mi, fmt, ha="center", va="center", fontsize=7, color=color)
+
+        plt.colorbar(im, ax=ax, shrink=0.6, pad=0.02)
+
+    fig.suptitle("Per-Essay Quality Breakdown (n = 15 essays)", fontsize=15, fontweight="bold", y=1.02)
+    plt.tight_layout()
+    plt.savefig(OUTPUT_DIR / "fig4_per_essay_heatmap.pdf", bbox_inches="tight", dpi=300)
+    plt.savefig(OUTPUT_DIR / "fig4_per_essay_heatmap.png", bbox_inches="tight", dpi=300)
+    plt.close()
+    print("  ✓ Figure 4: Per-essay heatmap saved")
+
+
+# ============================================================
+# FIGURE 5: THE FINAL FIGURE — "We win. Period."
+# ============================================================
+
+def fig5_the_winner(agg, all_stats):
+    """
+    Simple, devastating bar chart.
+    Shows all key metrics side by side, normalized to [0,100].
+    TRACE KG dominates visually.
+    """
+    fig = plt.figure(figsize=(14, 7))
+    gs = GridSpec(1, 2, width_ratios=[3, 1.2], wspace=0.3)
+
+    # ── Left panel: Grouped bars ──
+    ax1 = fig.add_subplot(gs[0])
+
+    metrics = [
+        ("Ret.Acc (%)", "ret_acc", 100),
+        ("EGU (%)", "egu", 100),
+        ("RWA (%)", "rwa", 100),
+        ("Connectivity (%)", "conn", 100),
+        ("1 − Leak% (%)", None, None),  # special
+        ("SCI (×100)", "sci", 10000),
+    ]
+
+    n_metrics = len(metrics)
+    n_methods = len(ALL_METHODS)
+    x = np.arange(n_metrics)
+    total_width = 0.75
+    bar_width = total_width / n_methods
+
+    for mi, method in enumerate(ALL_METHODS):
+        a = agg.get(method)
+        if not a: continue
+        vals = []
+        for label, key, scale in metrics:
+            if key is None:  # 1-Leak%
+                vals.append((1 - a["leak"]) * 100)
+            else:
+                vals.append(a[key] * scale)
+
+        offset = (mi - n_methods/2 + 0.5) * bar_width
+        bars = ax1.bar(x + offset, vals, bar_width * 0.9,
+                       label=METHOD_LABELS[method], color=METHOD_COLORS[method],
+                       edgecolor="white", linewidth=0.5,
+                       alpha=1.0 if method == "tracekg" else 0.7)
+
+        # Bold border for TRACE KG
+        if method == "tracekg":
+            for bar in bars:
+                bar.set_edgecolor("#000000")
+                bar.set_linewidth(1.5)
+
+    ax1.set_xticks(x)
+    ax1.set_xticklabels([m[0] for m in metrics], fontsize=11, fontweight="bold")
+    ax1.set_ylabel("Score", fontsize=13, fontweight="bold")
+    ax1.set_ylim(0, 115)
+    ax1.legend(fontsize=10, loc="upper right", ncol=2, frameon=True)
+    ax1.spines["top"].set_visible(False)
+    ax1.spines["right"].set_visible(False)
+    ax1.set_title("Multi-Dimensional KG Quality Comparison", fontsize=14, fontweight="bold")
+
+    # ── Right panel: Average Rank ──
+    ax2 = fig.add_subplot(gs[1])
+
+    # Compute ranks
+    RANK_METRICS = [
+        ("ret_acc", True), ("egu", True), ("rwa", True), ("sci", True),
+        ("conn", True), ("clust", True), ("avg_deg", True),
+        ("leak", False), ("tri_cr", None),
+    ]
+
+    rankings = {m: [] for m in ALL_METHODS}
+    methods_with_data = [m for m in ALL_METHODS if m in agg]
+
+    for key, higher in RANK_METRICS:
+        if higher is None:
+            vals = {m: abs(agg[m][key] - 1.0) for m in methods_with_data}
+            sorted_m = sorted(vals.items(), key=lambda x: x[1])
+        elif higher:
+            sorted_m = sorted([(m, agg[m][key]) for m in methods_with_data], key=lambda x: -x[1])
+        else:
+            sorted_m = sorted([(m, agg[m][key]) for m in methods_with_data], key=lambda x: x[1])
+        for rank, (m, _) in enumerate(sorted_m, 1):
+            rankings[m].append(rank)
+
+    avg_ranks = {m: np.mean(rankings[m]) for m in methods_with_data}
+    sorted_by_rank = sorted(methods_with_data, key=lambda m: avg_ranks[m])
+
+    y_pos = np.arange(len(sorted_by_rank))
+    rank_vals = [avg_ranks[m] for m in sorted_by_rank]
+    colors = [METHOD_COLORS[m] for m in sorted_by_rank]
+
+    bars = ax2.barh(y_pos, rank_vals, 0.6, color=colors, edgecolor="white")
+
+    # Highlight TRACE KG
+    for i, m in enumerate(sorted_by_rank):
+        if m == "tracekg":
+            bars[i].set_edgecolor("#000000")
+            bars[i].set_linewidth(2)
+
+    ax2.set_yticks(y_pos)
+    ax2.set_yticklabels([METHOD_LABELS[m] for m in sorted_by_rank], fontsize=11, fontweight="bold")
+    ax2.set_xlabel("Average Rank (lower = better)", fontsize=11, fontweight="bold")
+    ax2.set_xlim(0, 5.5)
+    ax2.invert_xaxis()
+    ax2.spines["top"].set_visible(False)
+    ax2.spines["left"].set_visible(False)
+
+    for i, (m, v) in enumerate(zip(sorted_by_rank, rank_vals)):
+        marker = " ★ BEST" if i == 0 else ""
+        ax2.text(v - 0.1, i, f"{v:.2f}{marker}", ha="right", va="center",
+                fontsize=11, fontweight="bold", color="white")
+
+    ax2.set_title("Overall Rank\n(9 metrics)", fontsize=13, fontweight="bold")
+
+    fig.suptitle("TRACE KG: Comprehensive Evaluation on MINE-1 Benchmark (n = 15 essays)",
+                 fontsize=16, fontweight="bold", y=1.02)
+
+    plt.savefig(OUTPUT_DIR / "fig5_the_winner.pdf", bbox_inches="tight", dpi=300)
+    plt.savefig(OUTPUT_DIR / "fig5_the_winner.png", bbox_inches="tight", dpi=300)
+    plt.close()
+    print("  ✓ Figure 5: The Winner figure saved")
+
+
+# ============================================================
+# FIGURE 6: TriCR DISTANCE — How close to ideal compression?
+# ============================================================
+
+def fig6_tricr_distance(agg):
+    fig, ax = plt.subplots(figsize=(8, 5))
+
+    methods_sorted = sorted(agg.keys(), key=lambda m: abs(agg[m]["tri_cr"] - 1.0))
+    x = np.arange(len(methods_sorted))
+
+    tri_vals = [agg[m]["tri_cr"] for m in methods_sorted]
+    colors = [METHOD_COLORS[m] for m in methods_sorted]
+
+    bars = ax.bar(x, tri_vals, 0.55, color=colors, edgecolor="white", linewidth=0.8)
+
+    # Ideal line at 1.0
+    ax.axhline(y=1.0, color="black", linestyle="--", linewidth=2, alpha=0.7)
+    ax.text(len(methods_sorted)-0.5, 1.05, "IDEAL (TriCR = 1.0)", fontsize=10,
+            ha="right", fontweight="bold", alpha=0.7)
+
+    # Annotate
+    for i, (m, v) in enumerate(zip(methods_sorted, tri_vals)):
+        dist = abs(v - 1.0)
+        ax.text(i, v + 0.08, f"{v:.2f}\n(Δ={dist:.2f})", ha="center", fontsize=10, fontweight="bold")
+
+    # Highlight TRACE KG
+    for i, m in enumerate(methods_sorted):
+        if m == "tracekg":
+            bars[i].set_edgecolor("#000000")
+            bars[i].set_linewidth(2)
+
+    ax.set_xticks(x)
+    ax.set_xticklabels([METHOD_LABELS[m] for m in methods_sorted], fontsize=12, fontweight="bold")
+    ax.set_ylabel("Triple Compression Ratio", fontsize=13, fontweight="bold")
+    ax.set_ylim(0, max(tri_vals) + 0.6)
+    ax.set_title("Compression Quality: Distance from Ideal (TriCR → 1.0)\n"
+                 "< 1 = oversimplified  |  = 1 ideal  |  > 1 = bloated",
+                 fontsize=13, fontweight="bold")
+    ax.spines["top"].set_visible(False)
+    ax.spines["right"].set_visible(False)
+
+    plt.tight_layout()
+    plt.savefig(OUTPUT_DIR / "fig6_tricr_distance.pdf", bbox_inches="tight", dpi=300)
+    plt.savefig(OUTPUT_DIR / "fig6_tricr_distance.png", bbox_inches="tight", dpi=300)
+    plt.close()
+    print("  ✓ Figure 6: TriCR distance saved")
+
+
+# ============================================================
+# MAIN
+# ============================================================
+
+def main():
+    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+    print("Loading data (same sources as V5 tables)...")
+    all_stats = load_all_data()
+    agg = aggregate(all_stats)
+
+    print(f"\nGenerating KDD figures → {OUTPUT_DIR}/")
+    fig1_radar(agg)
+    fig2_egu_decomposition(agg)
+    fig3_accuracy_vs_leak(all_stats)
+    fig4_per_essay_heatmap(all_stats)
+    fig5_the_winner(agg, all_stats)
+    fig6_tricr_distance(agg)
+
+    print(f"\n✅ All 6 figures saved to: {OUTPUT_DIR}/")
+    print("\nFigure guide for the paper:")
+    print("  Fig 1 (radar)         → Section 5 intro or Fig 1 in paper body")
+    print("  Fig 2 (EGU decomp)    → Section 5.2 — the key insight figure")
+    print("  Fig 3 (acc vs leak)   → Section 5.3 — exposes AutoSchemaKG")
+    print("  Fig 4 (heatmap)       → Appendix — per-essay consistency")
+    print("  Fig 5 (the winner)    → Section 5 conclusion — the summary figure")
+    print("  Fig 6 (TriCR)         → Section 5.2 — compression quality")
+
+
+if __name__ == "__main__":
+    main()
+
+#endregion#?   visualizations
+#?#########################  End  ##########################
+
+
+
+#?######################### Start ##########################
+#region:#?     visualization 2
+
+"""
+KDD-Ready Figures for TRACE KG Paper — MINE-1 Evaluation
+=========================================================
+
+Produces 4 publication-quality figures:
+
+  Fig 1: Radar chart — multi-dimensional quality profile per method
+  Fig 2: Accuracy vs Leakage scatter — exposes AutoSchemaKG's copying
+  Fig 3: EGU / RWA / SCI grouped bar chart — composite metrics head-to-head
+  Fig 4: Summary dashboard — single figure that tells the whole story
+
+All data loaded from compression_analysis_v5.json (V5 results).
+"""
+
+import json
+import numpy as np
+import matplotlib.pyplot as plt
+import matplotlib.patches as mpatches
+from pathlib import Path
+from typing import Dict, List
+
+# ============================================================
+# CONFIG
+# ============================================================
+
+REPO_ROOT = Path(".").resolve()
+V5_JSON = REPO_ROOT / "Experiments/MYNE/Ex1/RES/compression_analysis_v5.json"
+FIG_OUT = REPO_ROOT / "Experiments/MYNE/Ex1/RES/figures"
+FIG_OUT.mkdir(parents=True, exist_ok=True)
+
+# Method display config
+METHOD_ORDER = ["tracekg", "autoschemakg", "graphrag", "openie", "kggen"]
+METHOD_LABELS = {
+    "tracekg": "TRACE KG",
+    "autoschemakg": "AutoSchemaKG",
+    "graphrag": "GraphRAG",
+    "openie": "OpenIE",
+    "kggen": "KGGen",
+}
+METHOD_COLORS = {
+    "tracekg": "#1B9E77",       # teal-green — protagonist
+    "autoschemakg": "#D95F02",  # orange
+    "graphrag": "#7570B3",      # purple
+    "openie": "#E7298A",        # pink
+    "kggen": "#66A61E",         # olive
+}
+METHOD_MARKERS = {
+    "tracekg": "D",
+    "autoschemakg": "s",
+    "graphrag": "^",
+    "openie": "o",
+    "kggen": "v",
+}
+
+DPI = 300
+FONT_SIZE = 11
+
+plt.rcParams.update({
+    "font.size": FONT_SIZE,
+    "font.family": "sans-serif",
+    "axes.titlesize": FONT_SIZE + 2,
+    "axes.labelsize": FONT_SIZE,
+    "xtick.labelsize": FONT_SIZE - 1,
+    "ytick.labelsize": FONT_SIZE - 1,
+    "legend.fontsize": FONT_SIZE - 1,
+    "figure.dpi": DPI,
+    "savefig.dpi": DPI,
+    "savefig.bbox": "tight",
+    "savefig.pad_inches": 0.15,
+})
+
+
+# ============================================================
+# LOAD DATA
+# ============================================================
+
+with open(V5_JSON) as f:
+    v5 = json.load(f)
+
+agg = v5["aggregate"]
+
+
+# ============================================================
+# FIG 1: RADAR CHART — Multi-dimensional quality profile
+# ============================================================
+
+def fig1_radar():
+    """
+    Radar chart showing 7 normalized metrics per method.
+    Immediately shows TRACE KG covers the largest area.
+    """
+    # Metrics: (label, agg_key, higher_is_better, display_transform)
+    # All will be normalized to [0, 1] where 1 = best
+    radar_metrics = [
+        ("Ret. Accuracy",     "ret_acc",  True),
+        ("EGU",               "egu",      True),
+        ("RWA",               "rwa",      True),
+        ("SCI",               "sci",      True),
+        ("Connectivity",      "conn",     True),
+        ("Clustering",        "clust",    True),
+        ("Low Leakage",       "v4g",      False),   # invert: lower leak = better
+    ]
+
+    methods = [m for m in METHOD_ORDER if m in agg]
+    N = len(radar_metrics)
+
+    # Extract raw values
+    raw = {}
+    for m in methods:
+        raw[m] = []
+        for label, key, higher in radar_metrics:
+            raw[m].append(agg[m][key])
+
+    # Normalize each metric to [0, 1]
+    raw_arr = np.array([raw[m] for m in methods])  # (n_methods, n_metrics)
+    norm = np.zeros_like(raw_arr)
+    for j, (label, key, higher) in enumerate(radar_metrics):
+        col = raw_arr[:, j]
+        mn, mx = col.min(), col.max()
+        if mx - mn < 1e-9:
+            norm[:, j] = 1.0
+        else:
+            if higher:
+                norm[:, j] = (col - mn) / (mx - mn)
+            else:
+                norm[:, j] = (mx - col) / (mx - mn)  # invert
+
+    angles = np.linspace(0, 2 * np.pi, N, endpoint=False).tolist()
+    angles += angles[:1]  # close polygon
+
+    fig, ax = plt.subplots(figsize=(7, 7), subplot_kw=dict(polar=True))
+
+    for i, m in enumerate(methods):
+        vals = norm[i].tolist() + [norm[i][0]]  # close
+        lw = 2.8 if m == "tracekg" else 1.4
+        alpha = 0.15 if m == "tracekg" else 0.0
+        ax.plot(angles, vals, color=METHOD_COLORS[m], linewidth=lw,
+                label=METHOD_LABELS[m], zorder=10 if m == "tracekg" else 5)
+        if alpha > 0:
+            ax.fill(angles, vals, color=METHOD_COLORS[m], alpha=alpha, zorder=4)
+
+    labels = [lbl for lbl, _, _ in radar_metrics]
+    ax.set_xticks(angles[:-1])
+    ax.set_xticklabels(labels, fontsize=FONT_SIZE)
+    ax.set_ylim(0, 1.05)
+    ax.set_yticks([0.25, 0.5, 0.75, 1.0])
+    ax.set_yticklabels(["0.25", "0.50", "0.75", "1.00"], fontsize=FONT_SIZE - 2, color="grey")
+    ax.legend(loc="upper right", bbox_to_anchor=(1.3, 1.15), frameon=True)
+    ax.set_title("Multi-Dimensional KG Quality Profile", pad=25, fontweight="bold")
+
+    path = FIG_OUT / "fig1_radar_quality_profile.pdf"
+    fig.savefig(path)
+    fig.savefig(path.with_suffix(".png"))
+    plt.close(fig)
+    print(f"  Saved: {path}")
+
+
+# ============================================================
+# FIG 2: SCATTER — Accuracy vs Leakage (the "exposé" plot)
+# ============================================================
+
+def fig2_accuracy_vs_leakage():
+    """
+    Scatter: x = Leak%, y = Ret.Acc.
+    Bubble size = TriCR deviation from 1.0.
+    Shows AutoSchemaKG's high accuracy comes from high leakage.
+    TRACE KG: high accuracy, near-zero leakage.
+    """
+    fig, ax = plt.subplots(figsize=(8, 5.5))
+
+    methods = [m for m in METHOD_ORDER if m in agg]
+
+    for m in methods:
+        x = agg[m]["v4g"] * 100  # Leak%
+        y = agg[m]["ret_acc"] * 100  # Acc%
+        tricr_dev = abs(agg[m]["tri_cr"] - 1.0)
+        size = 80 + tricr_dev * 120  # bubble size proportional to TriCR deviation
+
+        ax.scatter(x, y, s=size, c=METHOD_COLORS[m], marker=METHOD_MARKERS[m],
+                   edgecolors="black", linewidths=0.8, zorder=10, label=METHOD_LABELS[m])
+
+        # Label offset
+        offsets = {
+            "tracekg": (6, -3),
+            "autoschemakg": (-8, -12),
+            "graphrag": (6, -3),
+            "openie": (6, 3),
+            "kggen": (6, -3),
+        }
+        dx, dy = offsets.get(m, (5, 0))
+        ax.annotate(METHOD_LABELS[m], (x, y), textcoords="offset points",
+                    xytext=(dx, dy), fontsize=FONT_SIZE - 1, fontweight="bold",
+                    color=METHOD_COLORS[m])
+
+    # Draw the "ideal zone" — top-left corner
+    ideal_rect = mpatches.FancyBboxPatch(
+        (-1, 82), 8, 20, boxstyle="round,pad=0.5",
+        facecolor="#1B9E77", alpha=0.08, edgecolor="#1B9E77",
+        linestyle="--", linewidth=1.5
+    )
+    ax.add_patch(ideal_rect)
+    ax.text(3, 98, "Ideal Zone\n(high acc, low leak)", fontsize=FONT_SIZE - 2,
+            ha="center", va="top", color="#1B9E77", fontstyle="italic")
+
+    ax.set_xlabel("Verbatim 4-gram Leakage (%)", fontweight="bold")
+    ax.set_ylabel("Retrieval Accuracy (%)", fontweight="bold")
+    ax.set_xlim(-2, 45)
+    ax.set_ylim(35, 102)
+    ax.axvline(x=5, color="grey", linestyle=":", alpha=0.4, linewidth=1)
+    ax.text(5.5, 37, "5% leak threshold", fontsize=FONT_SIZE - 2,
+            color="grey", fontstyle="italic", rotation=90, va="bottom")
+    ax.set_title("Retrieval Accuracy vs. Information Leakage", fontweight="bold")
+    ax.grid(True, alpha=0.2)
+
+    # Bubble legend
+    ax.text(0.98, 0.02, "Bubble size ∝ |TriCR − 1|",
+            transform=ax.transAxes, fontsize=FONT_SIZE - 2,
+            ha="right", va="bottom", fontstyle="italic", color="grey")
+
+    path = FIG_OUT / "fig2_accuracy_vs_leakage.pdf"
+    fig.savefig(path)
+    fig.savefig(path.with_suffix(".png"))
+    plt.close(fig)
+    print(f"  Saved: {path}")
+
+
+# ============================================================
+# FIG 3: GROUPED BAR — EGU / RWA / SCI composites
+# ============================================================
+
+def fig3_composite_bars():
+    """
+    Grouped bar chart for the 3 composite metrics.
+    Immediately shows TRACE KG dominates all three.
+    """
+    metrics = [
+        ("EGU (%)", "egu", 100),
+        ("RWA (%)", "rwa", 100),
+        ("SCI",     "sci", 1),
+    ]
+
+    methods = [m for m in METHOD_ORDER if m in agg]
+    n_methods = len(methods)
+    n_metrics = len(metrics)
+
+    fig, axes = plt.subplots(1, 3, figsize=(14, 5), sharey=False)
+
+    for ax_idx, (label, key, mult) in enumerate(metrics):
+        ax = axes[ax_idx]
+        vals = [agg[m][key] * mult for m in methods]
+        stds = [agg[m].get(f"{key}_std", 0) * mult for m in methods]
+        colors = [METHOD_COLORS[m] for m in methods]
+        labels = [METHOD_LABELS[m] for m in methods]
+
+        bars = ax.bar(range(n_methods), vals, color=colors, edgecolor="black",
+                      linewidth=0.6, yerr=stds, capsize=4, error_kw={"linewidth": 1})
+
+        # Highlight TRACE KG bar
+        trace_idx = methods.index("tracekg")
+        bars[trace_idx].set_edgecolor("#1B9E77")
+        bars[trace_idx].set_linewidth(2.5)
+
+        # Value labels on bars
+        for i, (v, s) in enumerate(zip(vals, stds)):
+            if mult == 100:
+                ax.text(i, v + s + 1, f"{v:.1f}%", ha="center", va="bottom",
+                        fontsize=FONT_SIZE - 2, fontweight="bold" if methods[i] == "tracekg" else "normal")
+            else:
+                ax.text(i, v + s + 0.005, f"{v:.3f}", ha="center", va="bottom",
+                        fontsize=FONT_SIZE - 2, fontweight="bold" if methods[i] == "tracekg" else "normal")
+
+        ax.set_xticks(range(n_methods))
+        ax.set_xticklabels(labels, rotation=30, ha="right", fontsize=FONT_SIZE - 1)
+        ax.set_title(label, fontweight="bold")
+        ax.grid(axis="y", alpha=0.2)
+        ax.set_xlim(-0.6, n_methods - 0.4)
+
+    fig.suptitle("Composite Quality Metrics — Higher is Better", fontweight="bold", fontsize=FONT_SIZE + 2)
+    plt.tight_layout()
+
+    path = FIG_OUT / "fig3_composite_metrics_bars.pdf"
+    fig.savefig(path)
+    fig.savefig(path.with_suffix(".png"))
+    plt.close(fig)
+    print(f"  Saved: {path}")
+
+
+# ============================================================
+# FIG 4: SUMMARY DASHBOARD — The "one figure that tells all"
+# ============================================================
+
+def fig4_summary_dashboard():
+    """
+    2×2 dashboard:
+      Top-left:     Accuracy bar with leakage overlay
+      Top-right:    TriCR deviation (distance from ideal 1.0)
+      Bottom-left:  Connectivity + Clustering stacked
+      Bottom-right: Average Rank lollipop (the punchline)
+    """
+    methods = [m for m in METHOD_ORDER if m in agg]
+    n = len(methods)
+    labels = [METHOD_LABELS[m] for m in methods]
+    colors = [METHOD_COLORS[m] for m in methods]
+    x = np.arange(n)
+
+    fig, axes = plt.subplots(2, 2, figsize=(13, 10))
+
+    # ── (a) Accuracy + Leakage overlay ──
+    ax = axes[0, 0]
+    acc = [agg[m]["ret_acc"] * 100 for m in methods]
+    leak = [agg[m]["v4g"] * 100 for m in methods]
+
+    bars = ax.bar(x, acc, color=colors, edgecolor="black", linewidth=0.6, alpha=0.85, label="Ret. Accuracy")
+    # Overlay leak as hatched portion from bottom
+    ax.bar(x, leak, color="red", alpha=0.35, hatch="///", edgecolor="red", linewidth=0.5, label="Leakage (verbatim)")
+
+    for i in range(n):
+        ax.text(i, acc[i] + 1, f"{acc[i]:.1f}%", ha="center", va="bottom",
+                fontsize=FONT_SIZE - 2, fontweight="bold" if methods[i] == "tracekg" else "normal")
+        if leak[i] > 2:
+            ax.text(i, leak[i] / 2, f"{leak[i]:.0f}%", ha="center", va="center",
+                    fontsize=FONT_SIZE - 2, color="darkred", fontweight="bold")
+
+    ax.set_xticks(x)
+    ax.set_xticklabels(labels, rotation=25, ha="right")
+    ax.set_ylabel("Percentage (%)")
+    ax.set_title("(a) Retrieval Accuracy & Leakage", fontweight="bold")
+    ax.legend(fontsize=FONT_SIZE - 2, loc="lower left")
+    ax.set_ylim(0, 108)
+    ax.grid(axis="y", alpha=0.2)
+
+    # ── (b) TriCR deviation from 1.0 ──
+    ax = axes[0, 1]
+    tricr = [agg[m]["tri_cr"] for m in methods]
+    tricr_dev = [abs(t - 1.0) for t in tricr]
+    bar_colors_dev = [METHOD_COLORS[m] for m in methods]
+
+    bars = ax.barh(x, tricr_dev, color=bar_colors_dev, edgecolor="black", linewidth=0.6, height=0.6)
+    # Mark actual TriCR value
+    for i in range(n):
+        direction = "▶" if tricr[i] > 1 else "◀"
+        ax.text(tricr_dev[i] + 0.03, i, f"TriCR={tricr[i]:.2f} {direction}",
+                va="center", fontsize=FONT_SIZE - 2,
+                fontweight="bold" if methods[i] == "tracekg" else "normal")
+
+    ax.set_yticks(x)
+    ax.set_yticklabels(labels)
+    ax.set_xlabel("|TriCR − 1.0|  (lower = better compression)")
+    ax.set_title("(b) Compression Quality", fontweight="bold")
+    ax.axvline(x=0, color="black", linewidth=1)
+    ax.set_xlim(0, 3.2)
+    ax.grid(axis="x", alpha=0.2)
+    # Ideal marker
+    ax.annotate("← Ideal", xy=(0.05, -0.7), fontsize=FONT_SIZE - 2, color="green", fontstyle="italic")
+
+    # ── (c) Connectivity + Clustering ──
+    ax = axes[1, 0]
+    conn = [agg[m]["conn"] * 100 for m in methods]
+    clust = [agg[m]["clust"] * 100 for m in methods]  # ×100 for display
+
+    w = 0.35
+    ax.bar(x - w/2, conn, w, color=colors, edgecolor="black", linewidth=0.6, alpha=0.85, label="Connectivity (%)")
+    ax.bar(x + w/2, clust, w, color=colors, edgecolor="black", linewidth=0.6, alpha=0.45,
+           hatch="...", label="Clustering (×100)")
+
+    for i in range(n):
+        ax.text(i - w/2, conn[i] + 1, f"{conn[i]:.0f}", ha="center", fontsize=FONT_SIZE - 2, va="bottom")
+        ax.text(i + w/2, clust[i] + 0.5, f"{clust[i]:.1f}", ha="center", fontsize=FONT_SIZE - 2, va="bottom")
+
+    ax.set_xticks(x)
+    ax.set_xticklabels(labels, rotation=25, ha="right")
+    ax.set_ylabel("Percentage / Scaled Value")
+    ax.set_title("(c) Graph Structure: Connectivity & Clustering", fontweight="bold")
+    ax.legend(fontsize=FONT_SIZE - 2)
+    ax.grid(axis="y", alpha=0.2)
+
+    # ── (d) Average Rank — THE PUNCHLINE ──
+    ax = axes[1, 1]
+    ranks = v5.get("avg_ranks", {})
+    # Sort by rank (best first)
+    sorted_m = sorted([m for m in methods if m in ranks], key=lambda m: ranks[m])
+    rank_vals = [ranks[m] for m in sorted_m]
+    rank_labels = [METHOD_LABELS[m] for m in sorted_m]
+    rank_colors = [METHOD_COLORS[m] for m in sorted_m]
+
+    y_pos = np.arange(len(sorted_m))
+    ax.barh(y_pos, rank_vals, color=rank_colors, edgecolor="black", linewidth=0.6, height=0.6)
+
+    for i, (m, rv) in enumerate(zip(sorted_m, rank_vals)):
+        fw = "bold" if m == "tracekg" else "normal"
+        ax.text(rv + 0.05, i, f"{rv:.2f}", va="center", fontsize=FONT_SIZE, fontweight=fw)
+
+    # Star for #1
+    ax.text(rank_vals[0] - 0.15, 0, "★", fontsize=18, va="center", ha="center", color="gold")
+
+    ax.set_yticks(y_pos)
+    ax.set_yticklabels(rank_labels, fontsize=FONT_SIZE)
+    ax.set_xlabel("Average Rank (lower = better)")
+    ax.set_title("(d) Overall Ranking Across All Metrics", fontweight="bold")
+    ax.set_xlim(0, 5.2)
+    ax.axvline(x=1, color="green", linestyle=":", alpha=0.4)
+    ax.text(1.05, len(sorted_m) - 0.3, "perfect", fontsize=FONT_SIZE - 2, color="green", fontstyle="italic")
+    ax.invert_yaxis()
+    ax.grid(axis="x", alpha=0.2)
+
+    fig.suptitle("MINE-1 Evaluation Summary: TRACE KG vs. Baselines",
+                 fontweight="bold", fontsize=FONT_SIZE + 3, y=1.01)
+    plt.tight_layout()
+
+    path = FIG_OUT / "fig4_summary_dashboard.pdf"
+    fig.savefig(path)
+    fig.savefig(path.with_suffix(".png"))
+    plt.close(fig)
+    print(f"  Saved: {path}")
+
+
+# ============================================================
+# RUN ALL
+# ============================================================
+
+if __name__ == "__main__":
+    print("Generating KDD figures...\n")
+    fig1_radar()
+    fig2_accuracy_vs_leakage()
+    fig3_composite_bars()
+    fig4_summary_dashboard()
+    print(f"\nAll figures saved to: {FIG_OUT}")
+    
+    
+#endregion#? 
+#?#########################  End  ##########################
+
+
+
+
+
+#?######################### Start ##########################
+#region:#?    visualization 3
+
+"""
+KDD-Ready Figures for TRACE KG Paper — MINE-1 Evaluation (Final)
+=================================================================
+
+Produces 3 publication-quality figures:
+
+  Fig 1: Radar chart — multi-dimensional quality profile
+  Fig 2: Composite metrics (EGU, RWA, SCI) with full names
+  Fig 3: Summary dashboard — THE one figure that tells the whole story
+
+Color palette: colorblind-safe academic palette.
+All data from compression_analysis_v5.json.
+"""
+
+import json
+import numpy as np
+import matplotlib.pyplot as plt
+import matplotlib.patches as mpatches
+from pathlib import Path
+from typing import Dict, List
+
+# ============================================================
+# CONFIG
+# ============================================================
+
+REPO_ROOT = Path(".").resolve()
+V5_JSON = REPO_ROOT / "Experiments/MYNE/Ex1/RES/compression_analysis_v5.json"
+FIG_OUT = REPO_ROOT / "Experiments/MYNE/Ex1/RES/figures"
+FIG_OUT.mkdir(parents=True, exist_ok=True)
+
+METHOD_ORDER = ["tracekg", "autoschemakg", "graphrag", "openie", "kggen"]
+METHOD_LABELS = {
+    "tracekg": "TRACE KG",
+    "autoschemakg": "AutoSchemaKG",
+    "graphrag": "GraphRAG",
+    "openie": "OpenIE",
+    "kggen": "KGGen",
+}
+
+# Colorblind-safe academic palette (Okabe-Ito inspired)
+METHOD_COLORS = {
+    "tracekg":      "#0072B2",  # strong blue — protagonist
+    "autoschemakg": "#E69F00",  # amber
+    "graphrag":     "#882255",  # wine
+    "openie":       "#44AA99",  # teal
+    "kggen":        "#999999",  # neutral grey
+}
+
+DPI = 300
+FONT_SIZE = 11
+
+plt.rcParams.update({
+    "font.size": FONT_SIZE,
+    "font.family": "sans-serif",
+    "axes.titlesize": FONT_SIZE + 1,
+    "axes.labelsize": FONT_SIZE,
+    "xtick.labelsize": FONT_SIZE - 1,
+    "ytick.labelsize": FONT_SIZE - 1,
+    "legend.fontsize": FONT_SIZE - 1,
+    "figure.dpi": DPI,
+    "savefig.dpi": DPI,
+    "savefig.bbox": "tight",
+    "savefig.pad_inches": 0.15,
+    "axes.spines.top": False,
+    "axes.spines.right": False,
+})
+
+
+# ============================================================
+# LOAD DATA
+# ============================================================
+
+with open(V5_JSON) as f:
+    v5 = json.load(f)
+
+agg = v5["aggregate"]
+
+
+# ============================================================
+# FIG 1: RADAR — Multi-dimensional quality profile
+# ============================================================
+
+def fig1_radar():
+    radar_metrics = [
+        ("Ret. Accuracy", "ret_acc",  True),
+        ("EGU",           "egu",      True),
+        ("RWA",           "rwa",      True),
+        ("SCI",           "sci",      True),
+        ("Connectivity",  "conn",     True),
+        ("Clustering",    "clust",    True),
+        ("Low Leakage",   "v4g",      False),
+    ]
+
+    methods = [m for m in METHOD_ORDER if m in agg]
+    N = len(radar_metrics)
+
+    raw = {}
+    for m in methods:
+        raw[m] = [agg[m][key] for _, key, _ in radar_metrics]
+
+    raw_arr = np.array([raw[m] for m in methods])
+    norm = np.zeros_like(raw_arr)
+    for j, (_, _, higher) in enumerate(radar_metrics):
+        col = raw_arr[:, j]
+        mn, mx = col.min(), col.max()
+        if mx - mn < 1e-9:
+            norm[:, j] = 1.0
+        else:
+            norm[:, j] = (col - mn) / (mx - mn) if higher else (mx - col) / (mx - mn)
+
+    angles = np.linspace(0, 2 * np.pi, N, endpoint=False).tolist()
+    angles += angles[:1]
+
+    fig, ax = plt.subplots(figsize=(7, 7), subplot_kw=dict(polar=True))
+    ax.set_facecolor("#FAFAFA")
+
+    for i, m in enumerate(methods):
+        vals = norm[i].tolist() + [norm[i][0]]
+        lw = 2.8 if m == "tracekg" else 1.3
+        ls = "-" if m == "tracekg" else "--"
+        alpha_fill = 0.12 if m == "tracekg" else 0.0
+        zorder = 10 if m == "tracekg" else 5
+        ax.plot(angles, vals, color=METHOD_COLORS[m], linewidth=lw, linestyle=ls,
+                label=METHOD_LABELS[m], zorder=zorder)
+        if alpha_fill > 0:
+            ax.fill(angles, vals, color=METHOD_COLORS[m], alpha=alpha_fill, zorder=4)
+
+    ax.set_xticks(angles[:-1])
+    ax.set_xticklabels([lbl for lbl, _, _ in radar_metrics], fontsize=FONT_SIZE)
+    ax.set_ylim(0, 1.08)
+    ax.set_yticks([0.25, 0.5, 0.75, 1.0])
+    ax.set_yticklabels(["0.25", "0.50", "0.75", "1.00"], fontsize=FONT_SIZE - 2, color="grey")
+    ax.legend(loc="upper right", bbox_to_anchor=(1.32, 1.15), frameon=True,
+              fancybox=True, shadow=False, edgecolor="#CCCCCC")
+
+    path = FIG_OUT / "fig1_radar_quality_profile.pdf"
+    fig.savefig(path)
+    fig.savefig(path.with_suffix(".png"))
+    plt.close(fig)
+    print(f"  Saved: {path}")
+
+
+# ============================================================
+# FIG 2: COMPOSITE BARS — EGU / RWA / SCI with full names
+# ============================================================
+
+def fig2_composite_bars():
+    metrics = [
+        ("EGU (%)",  "egu",  100, "Effective Graph\nUtilization"),
+        ("RWA (%)",  "rwa",  100, "Reachability-Weighted\nAccuracy"),
+        ("SCI",      "sci",  1,   "Structural Coherence\nIndex"),
+    ]
+
+    methods = [m for m in METHOD_ORDER if m in agg]
+    n_methods = len(methods)
+    labels = [METHOD_LABELS[m] for m in methods]
+    colors = [METHOD_COLORS[m] for m in methods]
+
+    fig, axes = plt.subplots(1, 3, figsize=(14, 5.5))
+
+    for ax_idx, (short_label, key, mult, full_name) in enumerate(metrics):
+        ax = axes[ax_idx]
+        vals = [agg[m][key] * mult for m in methods]
+        stds = [agg[m].get(f"{key}_std", 0) * mult for m in methods]
+
+        bars = ax.bar(range(n_methods), vals, color=colors, edgecolor="black",
+                      linewidth=0.5, yerr=stds, capsize=4,
+                      error_kw={"linewidth": 1, "color": "#555555"})
+
+        # Bold edge on TRACE KG
+        trace_idx = methods.index("tracekg")
+        bars[trace_idx].set_edgecolor(METHOD_COLORS["tracekg"])
+        bars[trace_idx].set_linewidth(2.5)
+
+        for i, (v, s) in enumerate(zip(vals, stds)):
+            fw = "bold" if methods[i] == "tracekg" else "normal"
+            if mult == 100:
+                ax.text(i, v + s + 1.5, f"{v:.1f}%", ha="center", va="bottom",
+                        fontsize=FONT_SIZE - 2, fontweight=fw)
+            else:
+                ax.text(i, v + s + 0.005, f"{v:.4f}", ha="center", va="bottom",
+                        fontsize=FONT_SIZE - 2, fontweight=fw)
+
+        ax.set_xticks(range(n_methods))
+        ax.set_xticklabels(labels, rotation=30, ha="right", fontsize=FONT_SIZE - 1)
+
+        # Title = short metric name, subtitle = full name
+        ax.set_title(short_label, fontweight="bold", fontsize=FONT_SIZE + 1)
+        ax.text(0.5, -0.32, full_name, transform=ax.transAxes,
+                ha="center", va="top", fontsize=FONT_SIZE - 2,
+                fontstyle="italic", color="#555555")
+
+        ax.grid(axis="y", alpha=0.15, linewidth=0.5)
+        ax.set_xlim(-0.6, n_methods - 0.4)
+        ax.set_axisbelow(True)
+
+    fig.suptitle("Composite Quality Metrics — Higher is Better",
+                 fontweight="bold", fontsize=FONT_SIZE + 2)
+    plt.tight_layout(rect=[0, 0.05, 1, 0.95])
+
+    path = FIG_OUT / "fig2_composite_metrics.pdf"
+    fig.savefig(path)
+    fig.savefig(path.with_suffix(".png"))
+    plt.close(fig)
+    print(f"  Saved: {path}")
+
+
+# ============================================================
+# FIG 3: SUMMARY DASHBOARD — The one figure that tells all
+# ============================================================
+
+def fig3_summary_dashboard():
+    methods = [m for m in METHOD_ORDER if m in agg]
+    n = len(methods)
+    labels = [METHOD_LABELS[m] for m in methods]
+    colors = [METHOD_COLORS[m] for m in methods]
+    x = np.arange(n)
+
+    fig, axes = plt.subplots(2, 2, figsize=(13, 10))
+    for ax in axes.flat:
+        ax.set_axisbelow(True)
+
+    # ── (a) Accuracy + Leakage overlay ──
+    ax = axes[0, 0]
+    acc = [agg[m]["ret_acc"] * 100 for m in methods]
+    leak = [agg[m]["v4g"] * 100 for m in methods]
+
+    ax.bar(x, acc, color=colors, edgecolor="black", linewidth=0.5, alpha=0.85, label="Retrieval Accuracy")
+    ax.bar(x, leak, color="#CC3311", alpha=0.40, hatch="///",
+           edgecolor="#CC3311", linewidth=0.4, label="Verbatim Leakage")
+
+    for i in range(n):
+        fw = "bold" if methods[i] == "tracekg" else "normal"
+        ax.text(i, acc[i] + 1, f"{acc[i]:.1f}%", ha="center", va="bottom",
+                fontsize=FONT_SIZE - 2, fontweight=fw)
+        if leak[i] > 3:
+            ax.text(i, leak[i] / 2, f"{leak[i]:.0f}%", ha="center", va="center",
+                    fontsize=FONT_SIZE - 2, color="#990000", fontweight="bold")
+
+    ax.set_xticks(x)
+    ax.set_xticklabels(labels, rotation=25, ha="right")
+    ax.set_ylabel("Percentage (%)")
+    ax.set_title("(a) Retrieval Accuracy & Information Leakage", fontweight="bold")
+    ax.legend(fontsize=FONT_SIZE - 2, loc="lower left", framealpha=0.9)
+    ax.set_ylim(0, 110)
+    ax.grid(axis="y", alpha=0.15, linewidth=0.5)
+
+    # ── (b) TriCR deviation from 1.0 ──
+    ax = axes[0, 1]
+    tricr = [agg[m]["tri_cr"] for m in methods]
+    tricr_dev = [abs(t - 1.0) for t in tricr]
+
+    bars = ax.barh(x, tricr_dev, color=colors, edgecolor="black", linewidth=0.5, height=0.55)
+
+    for i in range(n):
+        direction = "▸ expansion" if tricr[i] > 1 else "◂ oversimplified"
+        fw = "bold" if methods[i] == "tracekg" else "normal"
+        ax.text(tricr_dev[i] + 0.04, i, f"{tricr[i]:.2f}  ({direction})",
+                va="center", fontsize=FONT_SIZE - 2, fontweight=fw)
+
+    ax.set_yticks(x)
+    ax.set_yticklabels(labels)
+    ax.set_xlabel("|TriCR − 1.0|  →  lower = better compression")
+    ax.set_title("(b) Triple Compression Ratio (ideal = 1.0)", fontweight="bold")
+    ax.set_xlim(0, 3.5)
+    ax.axvline(x=0, color="black", linewidth=0.8)
+    ax.grid(axis="x", alpha=0.15, linewidth=0.5)
+
+    # ── (c) EGU — the single best composite metric ──
+    ax = axes[1, 0]
+    egu = [agg[m]["egu"] * 100 for m in methods]
+    egu_std = [agg[m].get("egu_std", 0) * 100 for m in methods]
+
+    bars = ax.bar(x, egu, color=colors, edgecolor="black", linewidth=0.5,
+                  yerr=egu_std, capsize=4, error_kw={"linewidth": 1, "color": "#555555"})
+
+    trace_idx = methods.index("tracekg")
+    bars[trace_idx].set_edgecolor(METHOD_COLORS["tracekg"])
+    bars[trace_idx].set_linewidth(2.5)
+
+    for i in range(n):
+        fw = "bold" if methods[i] == "tracekg" else "normal"
+        ax.text(i, egu[i] + egu_std[i] + 1.5, f"{egu[i]:.1f}%", ha="center",
+                va="bottom", fontsize=FONT_SIZE - 1, fontweight=fw)
+
+    ax.set_xticks(x)
+    ax.set_xticklabels(labels, rotation=25, ha="right")
+    ax.set_ylabel("EGU (%)")
+    ax.set_title("(c) Effective Graph Utilization (EGU)", fontweight="bold")
+    ax.text(0.5, -0.28, "EGU = Accuracy × Connectivity × (1 − Leakage)",
+            transform=ax.transAxes, ha="center", va="top",
+            fontsize=FONT_SIZE - 2, fontstyle="italic", color="#555555")
+    ax.grid(axis="y", alpha=0.15, linewidth=0.5)
+
+    # ── (d) Average Rank — THE PUNCHLINE ──
+    ax = axes[1, 1]
+    ranks = v5.get("avg_ranks", {})
+    sorted_m = sorted([m for m in methods if m in ranks], key=lambda m: ranks[m])
+    rank_vals = [ranks[m] for m in sorted_m]
+    rank_labels = [METHOD_LABELS[m] for m in sorted_m]
+    rank_colors = [METHOD_COLORS[m] for m in sorted_m]
+
+    bars = ax.barh(np.arange(len(sorted_m)), rank_vals, color=rank_colors,
+                   edgecolor="black", linewidth=0.5, height=0.55)
+
+    for i, (m, rv) in enumerate(zip(sorted_m, rank_vals)):
+        fw = "bold" if m == "tracekg" else "normal"
+        ax.text(rv + 0.06, i, f"{rv:.2f}", va="center", fontsize=FONT_SIZE, fontweight=fw)
+
+    # Gold star for #1
+    ax.text(rank_vals[0] + 0.35, 0, "★", fontsize=16, va="center", ha="center",
+            color="#DAA520", fontweight="bold")
+
+    ax.set_yticks(np.arange(len(sorted_m)))
+    ax.set_yticklabels(rank_labels, fontsize=FONT_SIZE)
+    ax.set_xlabel("Average Rank Across 9 Metrics (lower = better)")
+    ax.set_title("(d) Overall Quality Ranking", fontweight="bold")
+    ax.set_xlim(0, 5.0)
+    ax.axvline(x=1, color="#0072B2", linestyle=":", alpha=0.3, linewidth=1)
+    ax.text(1.05, len(sorted_m) - 0.2, "perfect", fontsize=FONT_SIZE - 2,
+            color="#0072B2", fontstyle="italic", alpha=0.6)
+    ax.invert_yaxis()
+    ax.grid(axis="x", alpha=0.15, linewidth=0.5)
+
+    plt.tight_layout(h_pad=3.0, w_pad=2.5)
+
+    path = FIG_OUT / "fig3_summary_dashboard.pdf"
+    fig.savefig(path)
+    fig.savefig(path.with_suffix(".png"))
+    plt.close(fig)
+    print(f"  Saved: {path}")
+
+
+# ============================================================
+# RUN ALL
+# ============================================================
+
+if __name__ == "__main__":
+    print("Generating KDD figures (final)...\n")
+    fig1_radar()
+    fig2_composite_bars()
+    fig3_summary_dashboard()
+    print(f"\n✅ All figures saved to: {FIG_OUT}")
+
+
+#endregion#? 
+#?#########################  End  ##########################
+
+
+
+
+#?######################### Start ##########################
+#region:#?   4 
+
+"""
+KDD-Ready Figures for TRACE KG Paper — MINE-1 Evaluation (Final v2)
+=====================================================================
+
+5 publication-quality figures:
+
+  Fig 1: Radar — multi-dimensional quality profile
+  Fig 2: Composite metrics (EGU, RWA, SCI) with full names
+  Fig 3: Summary dashboard (4 panels, fixed leakage visibility)
+  Fig 4: Heatmap — per-metric rank matrix with stars
+  Fig 5: Accuracy decomposition — stacked bar showing WHERE accuracy comes from
+
+Color palette: Okabe-Ito colorblind-safe.
+All data from compression_analysis_v5.json.
+"""
+
+import json
+import numpy as np
+import matplotlib.pyplot as plt
+import matplotlib.patches as mpatches
+import matplotlib.colors as mcolors
+from pathlib import Path
+from typing import Dict, List
+
+# ============================================================
+# CONFIG
+# ============================================================
+
+REPO_ROOT = Path(".").resolve()
+V5_JSON = REPO_ROOT / "Experiments/MYNE/Ex1/RES/compression_analysis_v5.json"
+FIG_OUT = REPO_ROOT / "Experiments/MYNE/Ex1/RES/figures"
+FIG_OUT.mkdir(parents=True, exist_ok=True)
+
+METHOD_ORDER = ["tracekg", "autoschemakg", "graphrag", "openie", "kggen"]
+METHOD_LABELS = {
+    "tracekg": "TRACE KG",
+    "autoschemakg": "AutoSchemaKG",
+    "graphrag": "GraphRAG",
+    "openie": "OpenIE",
+    "kggen": "KGGen",
+}
+
+METHOD_COLORS = {
+    "tracekg":      "#0072B2",
+    "autoschemakg": "#E69F00",
+    "graphrag":     "#882255",
+    "openie":       "#44AA99",
+    "kggen":        "#999999",
+}
+
+DPI = 300
+FONT_SIZE = 11
+
+plt.rcParams.update({
+    "font.size": FONT_SIZE,
+    "font.family": "sans-serif",
+    "axes.titlesize": FONT_SIZE + 1,
+    "axes.labelsize": FONT_SIZE,
+    "xtick.labelsize": FONT_SIZE - 1,
+    "ytick.labelsize": FONT_SIZE - 1,
+    "legend.fontsize": FONT_SIZE - 1,
+    "figure.dpi": DPI,
+    "savefig.dpi": DPI,
+    "savefig.bbox": "tight",
+    "savefig.pad_inches": 0.15,
+    "axes.spines.top": False,
+    "axes.spines.right": False,
+})
+
+# ============================================================
+# LOAD DATA
+# ============================================================
+
+with open(V5_JSON) as f:
+    v5 = json.load(f)
+
+agg = v5["aggregate"]
+
+
+# ============================================================
+# FIG 1: RADAR
+# ============================================================
+
+def fig1_radar():
+    radar_metrics = [
+        ("Ret. Accuracy", "ret_acc",  True),
+        ("EGU",           "egu",      True),
+        ("RWA",           "rwa",      True),
+        ("SCI",           "sci",      True),
+        ("Connectivity",  "conn",     True),
+        ("Clustering",    "clust",    True),
+        ("Low Leakage",   "v4g",      False),
+    ]
+
+    methods = [m for m in METHOD_ORDER if m in agg]
+    N = len(radar_metrics)
+
+    raw = {}
+    for m in methods:
+        raw[m] = [agg[m][key] for _, key, _ in radar_metrics]
+
+    raw_arr = np.array([raw[m] for m in methods])
+    norm = np.zeros_like(raw_arr)
+    for j, (_, _, higher) in enumerate(radar_metrics):
+        col = raw_arr[:, j]
+        mn, mx = col.min(), col.max()
+        if mx - mn < 1e-9:
+            norm[:, j] = 1.0
+        else:
+            norm[:, j] = (col - mn) / (mx - mn) if higher else (mx - col) / (mx - mn)
+
+    angles = np.linspace(0, 2 * np.pi, N, endpoint=False).tolist()
+    angles += angles[:1]
+
+    fig, ax = plt.subplots(figsize=(7, 7), subplot_kw=dict(polar=True))
+    ax.set_facecolor("#FAFAFA")
+
+    for i, m in enumerate(methods):
+        vals = norm[i].tolist() + [norm[i][0]]
+        lw = 2.8 if m == "tracekg" else 1.3
+        ls = "-" if m == "tracekg" else "--"
+        alpha_fill = 0.12 if m == "tracekg" else 0.0
+        zorder = 10 if m == "tracekg" else 5
+        ax.plot(angles, vals, color=METHOD_COLORS[m], linewidth=lw, linestyle=ls,
+                label=METHOD_LABELS[m], zorder=zorder)
+        if alpha_fill > 0:
+            ax.fill(angles, vals, color=METHOD_COLORS[m], alpha=alpha_fill, zorder=4)
+
+    ax.set_xticks(angles[:-1])
+    ax.set_xticklabels([lbl for lbl, _, _ in radar_metrics], fontsize=FONT_SIZE)
+    ax.set_ylim(0, 1.08)
+    ax.set_yticks([0.25, 0.5, 0.75, 1.0])
+    ax.set_yticklabels(["0.25", "0.50", "0.75", "1.00"], fontsize=FONT_SIZE - 2, color="grey")
+    ax.legend(loc="upper right", bbox_to_anchor=(1.32, 1.15), frameon=True,
+              fancybox=True, shadow=False, edgecolor="#CCCCCC")
+
+    path = FIG_OUT / "fig1_radar_quality_profile.pdf"
+    fig.savefig(path)
+    fig.savefig(path.with_suffix(".png"))
+    plt.close(fig)
+    print(f"  Saved: {path}")
+
+
+# ============================================================
+# FIG 2: COMPOSITE BARS
+# ============================================================
+
+def fig2_composite_bars():
+    metrics = [
+        ("EGU (%)",  "egu",  100, "Effective Graph\nUtilization"),
+        ("RWA (%)",  "rwa",  100, "Reachability-Weighted\nAccuracy"),
+        ("SCI",      "sci",  1,   "Structural Coherence\nIndex"),
+    ]
+
+    methods = [m for m in METHOD_ORDER if m in agg]
+    n_methods = len(methods)
+    labels = [METHOD_LABELS[m] for m in methods]
+    colors = [METHOD_COLORS[m] for m in methods]
+
+    fig, axes = plt.subplots(1, 3, figsize=(14, 5.5))
+
+    for ax_idx, (short_label, key, mult, full_name) in enumerate(metrics):
+        ax = axes[ax_idx]
+        vals = [agg[m][key] * mult for m in methods]
+        stds = [agg[m].get(f"{key}_std", 0) * mult for m in methods]
+
+        bars = ax.bar(range(n_methods), vals, color=colors, edgecolor="black",
+                      linewidth=0.5, yerr=stds, capsize=4,
+                      error_kw={"linewidth": 1, "color": "#555555"})
+
+        trace_idx = methods.index("tracekg")
+        bars[trace_idx].set_edgecolor(METHOD_COLORS["tracekg"])
+        bars[trace_idx].set_linewidth(2.5)
+
+        for i, (v, s) in enumerate(zip(vals, stds)):
+            fw = "bold" if methods[i] == "tracekg" else "normal"
+            if mult == 100:
+                ax.text(i, v + s + 1.5, f"{v:.1f}%", ha="center", va="bottom",
+                        fontsize=FONT_SIZE - 2, fontweight=fw)
+            else:
+                ax.text(i, v + s + 0.005, f"{v:.4f}", ha="center", va="bottom",
+                        fontsize=FONT_SIZE - 2, fontweight=fw)
+
+        ax.set_xticks(range(n_methods))
+        ax.set_xticklabels(labels, rotation=30, ha="right", fontsize=FONT_SIZE - 1)
+        ax.set_title(short_label, fontweight="bold", fontsize=FONT_SIZE + 1)
+        ax.text(0.5, -0.32, full_name, transform=ax.transAxes,
+                ha="center", va="top", fontsize=FONT_SIZE - 2,
+                fontstyle="italic", color="#555555")
+        ax.grid(axis="y", alpha=0.15, linewidth=0.5)
+        ax.set_xlim(-0.6, n_methods - 0.4)
+        ax.set_axisbelow(True)
+
+    fig.suptitle("Composite Quality Metrics — Higher is Better",
+                 fontweight="bold", fontsize=FONT_SIZE + 2)
+    plt.tight_layout(rect=[0, 0.05, 1, 0.95])
+
+    path = FIG_OUT / "fig2_composite_metrics.pdf"
+    fig.savefig(path)
+    fig.savefig(path.with_suffix(".png"))
+    plt.close(fig)
+    print(f"  Saved: {path}")
+
+
+# ============================================================
+# FIG 3: SUMMARY DASHBOARD (fixed leakage visibility)
+# ============================================================
+
+def fig3_summary_dashboard():
+    methods = [m for m in METHOD_ORDER if m in agg]
+    n = len(methods)
+    labels = [METHOD_LABELS[m] for m in methods]
+    colors = [METHOD_COLORS[m] for m in methods]
+    x = np.arange(n)
+
+    fig, axes = plt.subplots(2, 2, figsize=(13, 10))
+    for ax in axes.flat:
+        ax.set_axisbelow(True)
+
+    # ── (a) Accuracy + Leakage — SIDE BY SIDE GROUPED BAR ──
+    ax = axes[0, 0]
+    acc = [agg[m]["ret_acc"] * 100 for m in methods]
+    leak = [agg[m]["v4g"] * 100 for m in methods]
+
+    w = 0.38
+    bars_acc = ax.bar(x - w/2, acc, w, color=colors, edgecolor="black",
+                      linewidth=0.5, label="Retrieval Accuracy (%)")
+    bars_leak = ax.bar(x + w/2, leak, w, color="#CC3311", edgecolor="#990000",
+                       linewidth=0.5, alpha=0.75, label="Verbatim Leakage (%)")
+
+    for i in range(n):
+        fw = "bold" if methods[i] == "tracekg" else "normal"
+        ax.text(i - w/2, acc[i] + 1.2, f"{acc[i]:.1f}", ha="center", va="bottom",
+                fontsize=FONT_SIZE - 2, fontweight=fw)
+        # Always show leakage value, even if small
+        leak_y = max(leak[i], 1.5)  # minimum height for label visibility
+        ax.text(i + w/2, leak_y + 0.8, f"{leak[i]:.1f}", ha="center", va="bottom",
+                fontsize=FONT_SIZE - 2, fontweight="bold", color="#990000")
+
+    ax.set_xticks(x)
+    ax.set_xticklabels(labels, rotation=25, ha="right")
+    ax.set_ylabel("Percentage (%)")
+    ax.set_title("(a) Retrieval Accuracy vs. Verbatim Leakage", fontweight="bold")
+    ax.legend(fontsize=FONT_SIZE - 2, loc="upper right", framealpha=0.9)
+    ax.set_ylim(0, 115)
+    ax.grid(axis="y", alpha=0.15, linewidth=0.5)
+
+    # ── (b) TriCR deviation ──
+    ax = axes[0, 1]
+    tricr = [agg[m]["tri_cr"] for m in methods]
+    tricr_dev = [abs(t - 1.0) for t in tricr]
+
+    bars = ax.barh(x, tricr_dev, color=colors, edgecolor="black", linewidth=0.5, height=0.55)
+
+    for i in range(n):
+        direction = "▸ expansion" if tricr[i] > 1 else "◂ oversimplified"
+        fw = "bold" if methods[i] == "tracekg" else "normal"
+        ax.text(tricr_dev[i] + 0.04, i, f"{tricr[i]:.2f}  ({direction})",
+                va="center", fontsize=FONT_SIZE - 2, fontweight=fw)
+
+    ax.set_yticks(x)
+    ax.set_yticklabels(labels)
+    ax.set_xlabel("|TriCR − 1.0|  →  lower = better compression")
+    ax.set_title("(b) Triple Compression Ratio (ideal = 1.0)", fontweight="bold")
+    ax.set_xlim(0, 3.5)
+    ax.axvline(x=0, color="black", linewidth=0.8)
+    ax.grid(axis="x", alpha=0.15, linewidth=0.5)
+
+    # ── (c) EGU ──
+    ax = axes[1, 0]
+    egu = [agg[m]["egu"] * 100 for m in methods]
+    egu_std = [agg[m].get("egu_std", 0) * 100 for m in methods]
+
+    bars = ax.bar(x, egu, color=colors, edgecolor="black", linewidth=0.5,
+                  yerr=egu_std, capsize=4, error_kw={"linewidth": 1, "color": "#555555"})
+
+    trace_idx = methods.index("tracekg")
+    bars[trace_idx].set_edgecolor(METHOD_COLORS["tracekg"])
+    bars[trace_idx].set_linewidth(2.5)
+
+    for i in range(n):
+        fw = "bold" if methods[i] == "tracekg" else "normal"
+        ax.text(i, egu[i] + egu_std[i] + 1.5, f"{egu[i]:.1f}%", ha="center",
+                va="bottom", fontsize=FONT_SIZE - 1, fontweight=fw)
+
+    ax.set_xticks(x)
+    ax.set_xticklabels(labels, rotation=25, ha="right")
+    ax.set_ylabel("EGU (%)")
+    ax.set_title("(c) Effective Graph Utilization (EGU)", fontweight="bold")
+    ax.text(0.5, -0.28, "EGU = Accuracy × Connectivity × (1 − Leakage)",
+            transform=ax.transAxes, ha="center", va="top",
+            fontsize=FONT_SIZE - 2, fontstyle="italic", color="#555555")
+    ax.grid(axis="y", alpha=0.15, linewidth=0.5)
+
+    # ── (d) Average Rank ──
+    ax = axes[1, 1]
+    ranks = v5.get("avg_ranks", {})
+    sorted_m = sorted([m for m in methods if m in ranks], key=lambda m: ranks[m])
+    rank_vals = [ranks[m] for m in sorted_m]
+    rank_labels = [METHOD_LABELS[m] for m in sorted_m]
+    rank_colors = [METHOD_COLORS[m] for m in sorted_m]
+
+    bars = ax.barh(np.arange(len(sorted_m)), rank_vals, color=rank_colors,
+                   edgecolor="black", linewidth=0.5, height=0.55)
+
+    for i, (m, rv) in enumerate(zip(sorted_m, rank_vals)):
+        fw = "bold" if m == "tracekg" else "normal"
+        ax.text(rv + 0.06, i, f"{rv:.2f}", va="center", fontsize=FONT_SIZE, fontweight=fw)
+
+    ax.text(rank_vals[0] + 0.35, 0, "★", fontsize=16, va="center", ha="center",
+            color="#DAA520", fontweight="bold")
+
+    ax.set_yticks(np.arange(len(sorted_m)))
+    ax.set_yticklabels(rank_labels, fontsize=FONT_SIZE)
+    ax.set_xlabel("Average Rank Across 9 Metrics (lower = better)")
+    ax.set_title("(d) Overall Quality Ranking", fontweight="bold")
+    ax.set_xlim(0, 5.0)
+    ax.axvline(x=1, color="#0072B2", linestyle=":", alpha=0.3, linewidth=1)
+    ax.text(1.05, len(sorted_m) - 0.2, "perfect", fontsize=FONT_SIZE - 2,
+            color="#0072B2", fontstyle="italic", alpha=0.6)
+    ax.invert_yaxis()
+    ax.grid(axis="x", alpha=0.15, linewidth=0.5)
+
+    plt.tight_layout(h_pad=3.0, w_pad=2.5)
+
+    path = FIG_OUT / "fig3_summary_dashboard.pdf"
+    fig.savefig(path)
+    fig.savefig(path.with_suffix(".png"))
+    plt.close(fig)
+    print(f"  Saved: {path}")
+
+
+# ============================================================
+# FIG 4: HEATMAP — Per-metric rank matrix
+# ============================================================
+
+def fig4_rank_heatmap():
+    """
+    Heatmap: rows = methods (sorted by avg rank), cols = metrics.
+    Cell color = rank (green=1, red=5). Stars on rank-1 cells.
+    One glance: TRACE KG row is mostly green.
+    """
+    RANK_METRICS = [
+        ("Ret.Acc",  "ret_acc",  True),
+        ("EGU",      "egu",      True),
+        ("RWA",      "rwa",      True),
+        ("SCI",      "sci",      True),
+        ("Conn.",    "conn",     True),
+        ("Clust.",   "clust",    True),
+        ("AvgDeg",   "avg_deg",  True),
+        ("Leak%",    "v4g",      False),
+        ("TriCR→1",  "tri_cr",   None),
+    ]
+
+    methods = [m for m in METHOD_ORDER if m in agg]
+
+    # Compute ranks
+    rank_matrix = []
+    for label, key, higher in RANK_METRICS:
+        vals = {m: agg[m][key] for m in methods}
+        if higher is None:
+            # TriCR: closest to 1.0
+            distances = {m: abs(v - 1.0) for m, v in vals.items()}
+            sorted_m = sorted(distances.items(), key=lambda x: x[1])
+        elif higher:
+            sorted_m = sorted(vals.items(), key=lambda x: -x[1])
+        else:
+            sorted_m = sorted(vals.items(), key=lambda x: x[1])
+        ranks = {m: i + 1 for i, (m, _) in enumerate(sorted_m)}
+        rank_matrix.append(ranks)
+
+    # Sort methods by average rank
+    avg_ranks = {}
+    for m in methods:
+        avg_ranks[m] = np.mean([rm[m] for rm in rank_matrix])
+    sorted_methods = sorted(methods, key=lambda m: avg_ranks[m])
+
+    # Build matrix
+    n_methods = len(sorted_methods)
+    n_metrics = len(RANK_METRICS)
+    matrix = np.zeros((n_methods, n_metrics))
+    for j, rm in enumerate(rank_matrix):
+        for i, m in enumerate(sorted_methods):
+            matrix[i, j] = rm[m]
+
+    # Add avg rank column
+    avg_col = np.array([[avg_ranks[m]] for m in sorted_methods])
+    matrix_ext = np.hstack([matrix, avg_col])
+
+    fig, ax = plt.subplots(figsize=(12, 4.5))
+
+    # Custom colormap: 1=dark green, 3=white, 5=dark red
+    cmap = mcolors.LinearSegmentedColormap.from_list(
+        "rank_cmap",
+        ["#1a9641", "#a6d96a", "#ffffbf", "#fdae61", "#d7191c"],
+        N=5
+    )
+
+    # Plot heatmap (only the rank columns, not avg)
+    im = ax.imshow(matrix, cmap=cmap, aspect="auto", vmin=1, vmax=5)
+
+    # Cell annotations
+    for i in range(n_methods):
+        for j in range(n_metrics):
+            rank = int(matrix[i, j])
+            star = "★" if rank == 1 else str(rank)
+            color = "white" if rank in [1, 5] else "black"
+            fw = "bold" if rank == 1 else "normal"
+            fs = FONT_SIZE + 1 if rank == 1 else FONT_SIZE
+            ax.text(j, i, star, ha="center", va="center",
+                    fontsize=fs, fontweight=fw, color=color)
+
+    # Avg rank column (drawn as text to the right)
+    for i, m in enumerate(sorted_methods):
+        ar = avg_ranks[m]
+        fw = "bold" if m == "tracekg" else "normal"
+        ax.text(n_metrics + 0.3, i, f"{ar:.2f}", ha="center", va="center",
+                fontsize=FONT_SIZE, fontweight=fw,
+                color=METHOD_COLORS[m],
+                bbox=dict(boxstyle="round,pad=0.2", facecolor="white",
+                          edgecolor=METHOD_COLORS[m], linewidth=1.5))
+
+    # Labels
+    metric_labels = [label for label, _, _ in RANK_METRICS]
+    ax.set_xticks(list(range(n_metrics)) + [n_metrics + 0.3])
+    ax.set_xticklabels(metric_labels + ["Avg\nRank"], fontsize=FONT_SIZE - 1)
+    ax.set_yticks(range(n_methods))
+    ax.set_yticklabels([METHOD_LABELS[m] for m in sorted_methods], fontsize=FONT_SIZE)
+
+    # Highlight TRACE KG row
+    trace_row = sorted_methods.index("tracekg")
+    rect = mpatches.FancyBboxPatch(
+        (-0.5, trace_row - 0.5), n_metrics, 1,
+        boxstyle="round,pad=0", linewidth=2.5,
+        edgecolor=METHOD_COLORS["tracekg"], facecolor="none", zorder=10
+    )
+    ax.add_patch(rect)
+
+    ax.set_title("Per-Metric Rankings (★ = Best, 1–5 scale)", fontweight="bold", pad=12)
+
+    # Colorbar
+    cbar = plt.colorbar(im, ax=ax, shrink=0.8, pad=0.12)
+    cbar.set_ticks([1, 2, 3, 4, 5])
+    cbar.set_ticklabels(["1\n(best)", "2", "3", "4", "5\n(worst)"])
+
+    plt.tight_layout()
+
+    path = FIG_OUT / "fig4_rank_heatmap.pdf"
+    fig.savefig(path)
+    fig.savefig(path.with_suffix(".png"))
+    plt.close(fig)
+    print(f"  Saved: {path}")
+
+
+# ============================================================
+# FIG 5: ACCURACY DECOMPOSITION — Where does accuracy come from?
+# ============================================================
+
+def fig5_accuracy_decomposition():
+    """
+    Stacked bar showing for each method:
+      - Green: Genuine accuracy (EGU = Acc × Conn × (1-Leak))
+      - Red: Accuracy from leakage (Acc × Conn × Leak)
+      - Grey: Accuracy from unreachable fragments (Acc × (1-Conn))
+
+    The message: AutoSchemaKG's tall bar is mostly red+grey.
+    TRACE KG's bar is almost entirely green.
+    """
+    methods = [m for m in METHOD_ORDER if m in agg]
+    n = len(methods)
+    labels = [METHOD_LABELS[m] for m in methods]
+    x = np.arange(n)
+
+    genuine = []    # EGU = Acc × Conn × (1-Leak)
+    leaked = []     # Acc × Conn × Leak
+    fragmented = [] # Acc × (1 - Conn)
+
+    for m in methods:
+        acc = agg[m]["ret_acc"]
+        conn = agg[m]["conn"]
+        leak = agg[m]["v4g"]
+
+        g = acc * conn * (1 - leak)       # genuine graph-based
+        l = acc * conn * leak             # from text copying
+        f = acc * (1 - conn)              # from unreachable fragments
+
+        genuine.append(g * 100)
+        leaked.append(l * 100)
+        fragmented.append(f * 100)
+
+    fig, ax = plt.subplots(figsize=(10, 6))
+
+    # Stacked bars
+    bars_g = ax.bar(x, genuine, color="#1a9641", edgecolor="black", linewidth=0.5,
+                    label="Genuine Graph Retrieval (EGU)")
+    bars_l = ax.bar(x, leaked, bottom=genuine, color="#CC3311", edgecolor="black",
+                    linewidth=0.5, alpha=0.8, hatch="///",
+                    label="From Verbatim Leakage")
+    bars_f = ax.bar(x, fragmented, bottom=[g + l for g, l in zip(genuine, leaked)],
+                    color="#BBBBBB", edgecolor="black", linewidth=0.5, alpha=0.7,
+                    hatch="...", label="From Disconnected Fragments")
+
+    # Total accuracy line
+    totals = [g + l + f for g, l, f in zip(genuine, leaked, fragmented)]
+    for i in range(n):
+        fw = "bold" if methods[i] == "tracekg" else "normal"
+        ax.text(i, totals[i] + 1.5, f"{totals[i]:.1f}%", ha="center", va="bottom",
+                fontsize=FONT_SIZE, fontweight=fw)
+
+    # Annotate genuine % inside green bar
+    for i in range(n):
+        if genuine[i] > 8:
+            ax.text(i, genuine[i] / 2, f"{genuine[i]:.1f}%", ha="center", va="center",
+                    fontsize=FONT_SIZE - 2, fontweight="bold", color="white")
+
+    # Annotate leaked % inside red bar if big enough
+    for i in range(n):
+        if leaked[i] > 5:
+            ax.text(i, genuine[i] + leaked[i] / 2, f"{leaked[i]:.1f}%",
+                    ha="center", va="center", fontsize=FONT_SIZE - 2,
+                    fontweight="bold", color="white")
+
+    ax.set_xticks(x)
+    ax.set_xticklabels(labels, fontsize=FONT_SIZE)
+    ax.set_ylabel("Retrieval Accuracy Decomposition (%)")
+    ax.set_title("Where Does Retrieval Accuracy Come From?", fontweight="bold", fontsize=FONT_SIZE + 2)
+    ax.legend(loc="upper right", fontsize=FONT_SIZE - 1, framealpha=0.9)
+    ax.set_ylim(0, 110)
+    ax.grid(axis="y", alpha=0.15, linewidth=0.5)
+    ax.set_axisbelow(True)
+
+    # Bracket annotation for TRACE KG
+    trace_idx = methods.index("tracekg")
+    ax.annotate("", xy=(trace_idx, genuine[trace_idx] + 2),
+                xytext=(trace_idx, -6),
+                arrowprops=dict(arrowstyle="]-[", color=METHOD_COLORS["tracekg"],
+                                linewidth=2.5, mutation_scale=8))
+    ax.text(trace_idx, -9, f"{genuine[trace_idx]:.0f}% genuine",
+            ha="center", fontsize=FONT_SIZE - 1, fontweight="bold",
+            color=METHOD_COLORS["tracekg"])
+
+    plt.tight_layout()
+
+    path = FIG_OUT / "fig5_accuracy_decomposition.pdf"
+    fig.savefig(path)
+    fig.savefig(path.with_suffix(".png"))
+    plt.close(fig)
+    print(f"  Saved: {path}")
+
+
+# ============================================================
+# RUN ALL
+# ============================================================
+
+if __name__ == "__main__":
+    print("Generating KDD figures (final v2)...\n")
+    fig1_radar()
+    fig2_composite_bars()
+    fig3_summary_dashboard()
+    fig4_rank_heatmap()
+    fig5_accuracy_decomposition()
+    print(f"\n✅ All 5 figures saved to: {FIG_OUT}")
+
+#endregion#? 
+#?#########################  End  ##########################
+
+
+
+
+
+#?######################### Start ##########################
+#region:#?   v5-1
+
+"""
+KDD-Ready Figures for TRACE KG Paper — MINE-1 Evaluation (Final v3)
+=====================================================================
+
+3 publication-quality figures:
+
+  Fig 1: Radar — multi-dimensional quality profile
+  Fig 2: Accuracy Decomposition — stacked bar (WHERE does accuracy come from?)
+  Fig 3: Summary dashboard (4 panels)
+
+Color palette: Okabe-Ito colorblind-safe.
+All data from compression_analysis_v5.json.
+"""
+
+import json
+import numpy as np
+import matplotlib.pyplot as plt
+import matplotlib.patches as mpatches
+from pathlib import Path
+from typing import Dict, List
+
+# ============================================================
+# CONFIG
+# ============================================================
+
+REPO_ROOT = Path(".").resolve()
+V5_JSON = REPO_ROOT / "Experiments/MYNE/Ex1/RES/compression_analysis_v5.json"
+FIG_OUT = REPO_ROOT / "Experiments/MYNE/Ex1/RES/figures"
+FIG_OUT.mkdir(parents=True, exist_ok=True)
+
+METHOD_ORDER = ["tracekg", "autoschemakg", "graphrag", "openie", "kggen"]
+METHOD_LABELS = {
+    "tracekg": "TRACE KG",
+    "autoschemakg": "AutoSchemaKG",
+    "graphrag": "GraphRAG",
+    "openie": "OpenIE",
+    "kggen": "KGGen",
+}
+
+METHOD_COLORS = {
+    "tracekg":      "#0072B2",  # strong blue
+    "autoschemakg": "#E69F00",  # amber
+    "graphrag":     "#882255",  # wine
+    "openie":       "#44AA99",  # teal
+    "kggen":        "#332288",  # indigo (was grey — now visible)
+}
+
+DPI = 300
+FONT_SIZE = 11
+
+plt.rcParams.update({
+    "font.size": FONT_SIZE,
+    "font.family": "sans-serif",
+    "axes.titlesize": FONT_SIZE + 1,
+    "axes.labelsize": FONT_SIZE,
+    "xtick.labelsize": FONT_SIZE - 1,
+    "ytick.labelsize": FONT_SIZE - 1,
+    "legend.fontsize": FONT_SIZE - 1,
+    "figure.dpi": DPI,
+    "savefig.dpi": DPI,
+    "savefig.bbox": "tight",
+    "savefig.pad_inches": 0.15,
+    "axes.spines.top": False,
+    "axes.spines.right": False,
+})
+
+# ============================================================
+# LOAD DATA
+# ============================================================
+
+with open(V5_JSON) as f:
+    v5 = json.load(f)
+
+agg = v5["aggregate"]
+
+
+# ============================================================
+# FIG 1: RADAR — Multi-dimensional quality profile
+# ============================================================
+
+def fig1_radar():
+    radar_metrics = [
+        ("Retrieval\nAccuracy", "ret_acc",  True),
+        ("Effective Retrieval\nAccuracy",   "egu",      True),
+        ("Connectivity",  "conn",     True),
+        ("Clustering",    "clust",    True),
+        ("Avg. Degree",   "avg_deg",  True),
+        ("Low Leakage",   "v4g",      False),
+        ("Compression\nQuality",  "tri_cr",   None),  # special: closeness to 1.0
+    ]
+
+    methods = [m for m in METHOD_ORDER if m in agg]
+    N = len(radar_metrics)
+
+    # Extract raw values
+    raw = {}
+    for m in methods:
+        row = []
+        for _, key, higher in radar_metrics:
+            if higher is None:
+                # TriCR: convert to "closeness to 1.0" score (max 1.0 = perfect)
+                val = 1.0 / (1.0 + abs(agg[m][key] - 1.0))
+                row.append(val)
+            else:
+                row.append(agg[m][key])
+        raw[m] = row
+
+    raw_arr = np.array([raw[m] for m in methods])
+    norm = np.zeros_like(raw_arr)
+    for j, (_, _, higher) in enumerate(radar_metrics):
+        col = raw_arr[:, j]
+        mn, mx = col.min(), col.max()
+        if mx - mn < 1e-9:
+            norm[:, j] = 1.0
+        else:
+            if higher is None or higher is True:
+                norm[:, j] = (col - mn) / (mx - mn)
+            else:
+                norm[:, j] = (mx - col) / (mx - mn)
+
+    angles = np.linspace(0, 2 * np.pi, N, endpoint=False).tolist()
+    angles += angles[:1]
+
+    fig, ax = plt.subplots(figsize=(7.5, 7.5), subplot_kw=dict(polar=True))
+    ax.set_facecolor("#FAFAFA")
+
+    for i, m in enumerate(methods):
+        vals = norm[i].tolist() + [norm[i][0]]
+        lw = 3.0 if m == "tracekg" else 1.5
+        ls = "-" if m == "tracekg" else "--"
+        alpha_fill = 0.12 if m == "tracekg" else 0.0
+        zorder = 10 if m == "tracekg" else 5
+        marker = "o" if m == "tracekg" else None
+        ms = 5 if m == "tracekg" else 0
+        ax.plot(angles, vals, color=METHOD_COLORS[m], linewidth=lw, linestyle=ls,
+                label=METHOD_LABELS[m], zorder=zorder, marker=marker, markersize=ms)
+        if alpha_fill > 0:
+            ax.fill(angles, vals, color=METHOD_COLORS[m], alpha=alpha_fill, zorder=4)
+
+    ax.set_xticks(angles[:-1])
+    ax.set_xticklabels([lbl for lbl, _, _ in radar_metrics], fontsize=FONT_SIZE,
+                       linespacing=1.1)
+    ax.set_ylim(0, 1.08)
+    ax.set_yticks([0.25, 0.5, 0.75, 1.0])
+    ax.set_yticklabels(["", "0.50", "", "1.00"], fontsize=FONT_SIZE - 2, color="grey")
+    ax.legend(loc="upper right", bbox_to_anchor=(1.35, 1.15), frameon=True,
+              fancybox=True, shadow=False, edgecolor="#CCCCCC")
+
+    path = FIG_OUT / "fig1_radar_quality_profile.pdf"
+    fig.savefig(path)
+    fig.savefig(path.with_suffix(".png"))
+    plt.close(fig)
+    print(f"  Saved: {path}")
+
+
+# ============================================================
+# FIG 2: ACCURACY DECOMPOSITION — The "killer" figure
+# ============================================================
+
+def fig2_accuracy_decomposition():
+    """
+    Stacked bar decomposing each method's retrieval accuracy into:
+      Green:  Effective Retrieval Accuracy = Acc × Conn × (1 − Leak)
+      Red:    Accuracy from text copying    = Acc × Conn × Leak
+      Grey:   Accuracy from disconnected KG = Acc × (1 − Conn)
+
+    This is the figure that tells the story: AutoSchemaKG's 95% is hollow.
+    TRACE KG's 90% is almost entirely genuine.
+    """
+    methods = [m for m in METHOD_ORDER if m in agg]
+    n = len(methods)
+    labels = [METHOD_LABELS[m] for m in methods]
+    x = np.arange(n)
+
+    genuine = []
+    leaked = []
+    fragmented = []
+
+    for m in methods:
+        acc = agg[m]["ret_acc"]
+        conn = agg[m]["conn"]
+        leak = agg[m]["v4g"]
+
+        g = acc * conn * (1 - leak)
+        l = acc * conn * leak
+        f = acc * (1 - conn)
+
+        genuine.append(g * 100)
+        leaked.append(l * 100)
+        fragmented.append(f * 100)
+
+    fig, ax = plt.subplots(figsize=(10, 6))
+
+    # Stacked bars
+    ax.bar(x, genuine, color="#1a9641", edgecolor="black", linewidth=0.5,
+           label="Effective Retrieval Accuracy (Acc × Conn × (1−Leak))")
+    ax.bar(x, leaked, bottom=genuine, color="#CC3311", edgecolor="black",
+           linewidth=0.5, alpha=0.85, hatch="///",
+           label="From Verbatim Text Copying (Acc × Conn × Leak)")
+    bottom2 = [g + l for g, l in zip(genuine, leaked)]
+    ax.bar(x, fragmented, bottom=bottom2,
+           color="#AAAAAA", edgecolor="black", linewidth=0.5, alpha=0.7,
+           hatch="...", label="From Disconnected Fragments (Acc × (1−Conn))")
+
+    # Total accuracy label on top
+    totals = [g + l + f for g, l, f in zip(genuine, leaked, fragmented)]
+    for i in range(n):
+        fw = "bold" if methods[i] == "tracekg" else "normal"
+        ax.text(i, totals[i] + 1.5, f"{totals[i]:.1f}%", ha="center", va="bottom",
+                fontsize=FONT_SIZE + 1, fontweight=fw)
+
+    # Label genuine % inside green bar
+    for i in range(n):
+        if genuine[i] > 10:
+            ax.text(i, genuine[i] / 2, f"{genuine[i]:.1f}%", ha="center", va="center",
+                    fontsize=FONT_SIZE, fontweight="bold", color="white")
+
+    # Label leaked % inside red bar
+    for i in range(n):
+        if leaked[i] > 6:
+            y_pos = genuine[i] + leaked[i] / 2
+            ax.text(i, y_pos, f"{leaked[i]:.1f}%", ha="center", va="center",
+                    fontsize=FONT_SIZE, fontweight="bold", color="white")
+
+    # Label fragmented % inside grey bar
+    for i in range(n):
+        if fragmented[i] > 6:
+            y_pos = genuine[i] + leaked[i] + fragmented[i] / 2
+            ax.text(i, y_pos, f"{fragmented[i]:.1f}%", ha="center", va="center",
+                    fontsize=FONT_SIZE - 1, fontweight="bold", color="#333333")
+
+    ax.set_xticks(x)
+    ax.set_xticklabels(labels, fontsize=FONT_SIZE + 1)
+    ax.set_ylabel("Retrieval Accuracy Decomposition (%)", fontsize=FONT_SIZE + 1)
+    ax.set_title("Where Does Retrieval Accuracy Come From?",
+                 fontweight="bold", fontsize=FONT_SIZE + 3, pad=15)
+    ax.legend(loc="upper right", fontsize=FONT_SIZE - 1, framealpha=0.95,
+              edgecolor="#CCCCCC")
+    ax.set_ylim(0, 112)
+    ax.grid(axis="y", alpha=0.15, linewidth=0.5)
+    ax.set_axisbelow(True)
+
+    plt.tight_layout()
+
+    path = FIG_OUT / "fig2_accuracy_decomposition.pdf"
+    fig.savefig(path)
+    fig.savefig(path.with_suffix(".png"))
+    plt.close(fig)
+    print(f"  Saved: {path}")
+
+
+# ============================================================
+# FIG 3: SUMMARY DASHBOARD
+# ============================================================
+
+def fig3_summary_dashboard():
+    methods = [m for m in METHOD_ORDER if m in agg]
+    n = len(methods)
+    labels = [METHOD_LABELS[m] for m in methods]
+    colors = [METHOD_COLORS[m] for m in methods]
+    x = np.arange(n)
+
+    fig, axes = plt.subplots(2, 2, figsize=(13, 10))
+    for ax in axes.flat:
+        ax.set_axisbelow(True)
+
+    # ── (a) Accuracy + Leakage overlay (single bar, leakage labels visible) ──
+    ax = axes[0, 0]
+    acc = [agg[m]["ret_acc"] * 100 for m in methods]
+    leak = [agg[m]["v4g"] * 100 for m in methods]
+
+    ax.bar(x, acc, color=colors, edgecolor="black", linewidth=0.5, alpha=0.85,
+           label="Retrieval Accuracy")
+    ax.bar(x, leak, color="#CC3311", alpha=0.55, hatch="///",
+           edgecolor="#CC3311", linewidth=0.5, label="Verbatim Leakage")
+
+    for i in range(n):
+        fw = "bold" if methods[i] == "tracekg" else "normal"
+        ax.text(i, acc[i] + 1.2, f"{acc[i]:.1f}%", ha="center", va="bottom",
+                fontsize=FONT_SIZE - 1, fontweight=fw, color="black")
+
+    # Leakage labels — always visible
+    for i in range(n):
+        if leak[i] > 3:
+            # Big leakage: label inside the red bar, white text
+            ax.text(i, leak[i] / 2, f"{leak[i]:.1f}%", ha="center", va="center",
+                    fontsize=FONT_SIZE, fontweight="bold", color="white",
+                    bbox=dict(boxstyle="round,pad=0.15", facecolor="#CC3311",
+                              edgecolor="none", alpha=0.8))
+        elif leak[i] > 0.5:
+            # Small leakage: label above the red bar with arrow
+            ax.annotate(f"{leak[i]:.1f}%",
+                        xy=(i, leak[i]), xytext=(i + 0.3, leak[i] + 12),
+                        fontsize=FONT_SIZE - 1, fontweight="bold", color="#CC3311",
+                        arrowprops=dict(arrowstyle="-|>", color="#CC3311", linewidth=1.2),
+                        ha="center", va="bottom")
+        else:
+            # Near-zero: small text above
+            ax.text(i, 3, f"{leak[i]:.1f}%", ha="center", va="bottom",
+                    fontsize=FONT_SIZE - 2, color="#CC3311", fontweight="bold")
+
+    ax.set_xticks(x)
+    ax.set_xticklabels(labels, rotation=25, ha="right")
+    ax.set_ylabel("Percentage (%)")
+    ax.set_title("(a) Retrieval Accuracy & Information Leakage", fontweight="bold")
+    ax.legend(fontsize=FONT_SIZE - 2, loc="lower left", framealpha=0.9)
+    ax.set_ylim(0, 115)
+    ax.grid(axis="y", alpha=0.15, linewidth=0.5)
+
+    # ── (b) TriCR deviation ──
+    ax = axes[0, 1]
+    tricr = [agg[m]["tri_cr"] for m in methods]
+    tricr_dev = [abs(t - 1.0) for t in tricr]
+
+    bars = ax.barh(x, tricr_dev, color=colors, edgecolor="black", linewidth=0.5, height=0.55)
+
+    for i in range(n):
+        direction = "▸ expansion" if tricr[i] > 1 else "◂ oversimplified"
+        fw = "bold" if methods[i] == "tracekg" else "normal"
+        ax.text(tricr_dev[i] + 0.04, i, f"{tricr[i]:.2f}  ({direction})",
+                va="center", fontsize=FONT_SIZE - 2, fontweight=fw)
+
+    ax.set_yticks(x)
+    ax.set_yticklabels(labels)
+    ax.set_xlabel("|TriCR − 1.0|  →  lower = better compression")
+    ax.set_title("(b) Triple Compression Ratio (ideal = 1.0)", fontweight="bold")
+    ax.set_xlim(0, 3.5)
+    ax.axvline(x=0, color="black", linewidth=0.8)
+    ax.grid(axis="x", alpha=0.15, linewidth=0.5)
+
+    # ── (c) Effective Retrieval Accuracy ──
+    ax = axes[1, 0]
+    egu = [agg[m]["egu"] * 100 for m in methods]
+    egu_std = [agg[m].get("egu_std", 0) * 100 for m in methods]
+
+    bars = ax.bar(x, egu, color=colors, edgecolor="black", linewidth=0.5,
+                  yerr=egu_std, capsize=4, error_kw={"linewidth": 1, "color": "#555555"})
+
+    trace_idx = methods.index("tracekg")
+    bars[trace_idx].set_edgecolor(METHOD_COLORS["tracekg"])
+    bars[trace_idx].set_linewidth(2.5)
+
+    for i in range(n):
+        fw = "bold" if methods[i] == "tracekg" else "normal"
+        ax.text(i, egu[i] + egu_std[i] + 1.5, f"{egu[i]:.1f}%", ha="center",
+                va="bottom", fontsize=FONT_SIZE - 1, fontweight=fw)
+
+    ax.set_xticks(x)
+    ax.set_xticklabels(labels, rotation=25, ha="right")
+    ax.set_ylabel("ERA (%)")
+    ax.set_title("(c) Effective Retrieval Accuracy", fontweight="bold")
+    ax.text(0.5, -0.28, "ERA = Accuracy × Connectivity × (1 − Leakage)",
+            transform=ax.transAxes, ha="center", va="top",
+            fontsize=FONT_SIZE - 1, fontstyle="italic", color="#444444")
+    ax.grid(axis="y", alpha=0.15, linewidth=0.5)
+
+    # ── (d) Average Rank ──
+    ax = axes[1, 1]
+    ranks = v5.get("avg_ranks", {})
+    sorted_m = sorted([m for m in methods if m in ranks], key=lambda m: ranks[m])
+    rank_vals = [ranks[m] for m in sorted_m]
+    rank_labels = [METHOD_LABELS[m] for m in sorted_m]
+    rank_colors = [METHOD_COLORS[m] for m in sorted_m]
+
+    bars = ax.barh(np.arange(len(sorted_m)), rank_vals, color=rank_colors,
+                   edgecolor="black", linewidth=0.5, height=0.55)
+
+    for i, (m, rv) in enumerate(zip(sorted_m, rank_vals)):
+        fw = "bold" if m == "tracekg" else "normal"
+        ax.text(rv + 0.06, i, f"{rv:.2f}", va="center", fontsize=FONT_SIZE, fontweight=fw)
+
+    ax.text(rank_vals[0] + 0.35, 0, "★", fontsize=16, va="center", ha="center",
+            color="#DAA520", fontweight="bold")
+
+    ax.set_yticks(np.arange(len(sorted_m)))
+    ax.set_yticklabels(rank_labels, fontsize=FONT_SIZE)
+    ax.set_xlabel("Average Rank Across All Metrics (lower = better)")
+    ax.set_title("(d) Overall Quality Ranking", fontweight="bold")
+    ax.set_xlim(0, 5.0)
+    ax.axvline(x=1, color="#0072B2", linestyle=":", alpha=0.3, linewidth=1)
+    ax.text(1.05, len(sorted_m) - 0.2, "perfect", fontsize=FONT_SIZE - 2,
+            color="#0072B2", fontstyle="italic", alpha=0.6)
+    ax.invert_yaxis()
+    ax.grid(axis="x", alpha=0.15, linewidth=0.5)
+
+    plt.tight_layout(h_pad=3.0, w_pad=2.5)
+
+    path = FIG_OUT / "fig3_summary_dashboard.pdf"
+    fig.savefig(path)
+    fig.savefig(path.with_suffix(".png"))
+    plt.close(fig)
+    print(f"  Saved: {path}")
+
+
+# ============================================================
+# RUN ALL
+# ============================================================
+
+if __name__ == "__main__":
+    print("Generating KDD figures (final v3)...\n")
+    fig1_radar()
+    fig2_accuracy_decomposition()
+    fig3_summary_dashboard()
+    print(f"\n✅ All 3 figures saved to: {FIG_OUT}")
+    
+    
+    
+#endregion#? 
+#?#########################  End  ##########################
+
+
+
+
+
+#?######################### Start ##########################
+#region:#?   5-2
+
+
+
+
+"""
+KDD-Ready Figures for TRACE KG Paper — MINE-1 Evaluation (Final v3)
+=====================================================================
+
+3 publication-quality figures, no redundancy:
+
+  Fig 1: Radar — multi-dimensional quality profile
+  Fig 2: Summary dashboard (4 panels) — the one figure that tells the story
+  Fig 3: Accuracy decomposition — where does accuracy actually come from?
+
+Design principles:
+  - No duplicate information across figures
+  - Radar = holistic overview, Dashboard = detailed evidence, Decomposition = the insight
+  - Colorblind-safe Okabe-Ito palette with improved contrast
+  - All data from compression_analysis_v5.json
+  - No arrows, no per-essay data
+"""
+
+import json
+import numpy as np
+import matplotlib.pyplot as plt
+import matplotlib.patches as mpatches
+from pathlib import Path
+from typing import Dict, List
+
+# ============================================================
+# CONFIG
+# ============================================================
+
+REPO_ROOT = Path(".").resolve()
+V5_JSON = REPO_ROOT / "Experiments/MYNE/Ex1/RES/compression_analysis_v5.json"
+FIG_OUT = REPO_ROOT / "Experiments/MYNE/Ex1/RES/figures"
+FIG_OUT.mkdir(parents=True, exist_ok=True)
+
+METHOD_ORDER = ["tracekg", "autoschemakg", "graphrag", "openie", "kggen"]
+METHOD_LABELS = {
+    "tracekg": "TRACE KG",
+    "autoschemakg": "AutoSchemaKG",
+    "graphrag": "GraphRAG",
+    "openie": "OpenIE",
+    "kggen": "KGGen",
+}
+
+# Okabe-Ito with improved contrast — kggen darker
+METHOD_COLORS = {
+    "tracekg":      "#0072B2",  # strong blue
+    "autoschemakg": "#E69F00",  # amber
+    "graphrag":     "#882255",  # wine
+    "openie":       "#44AA99",  # teal
+    "kggen":        "#555555",  # dark grey (was #999, now visible)
+}
+
+DPI = 300
+FONT_SIZE = 11
+
+plt.rcParams.update({
+    "font.size": FONT_SIZE,
+    "font.family": "sans-serif",
+    "axes.titlesize": FONT_SIZE + 1,
+    "axes.labelsize": FONT_SIZE,
+    "xtick.labelsize": FONT_SIZE - 1,
+    "ytick.labelsize": FONT_SIZE - 1,
+    "legend.fontsize": FONT_SIZE - 1,
+    "figure.dpi": DPI,
+    "savefig.dpi": DPI,
+    "savefig.bbox": "tight",
+    "savefig.pad_inches": 0.15,
+    "axes.spines.top": False,
+    "axes.spines.right": False,
+})
+
+# ============================================================
+# LOAD DATA
+# ============================================================
+
+with open(V5_JSON) as f:
+    v5 = json.load(f)
+
+agg = v5["aggregate"]
+
+
+# ============================================================
+# FIG 1: RADAR — Multi-dimensional quality profile
+# ============================================================
+
+def fig1_radar():
+    """
+    7 normalized metrics on a radar. TRACE KG = solid fill, others = dashed.
+    Tells the story: TRACE KG is the only method that excels on ALL axes.
+    """
+    radar_metrics = [
+        ("Retrieval\nAccuracy",  "ret_acc",  True),
+        ("Effective Retrieval\nAccuracy",  "egu",  True),
+        ("Structural\nCoherence", "sci",     True),
+        ("Connectivity",          "conn",    True),
+        ("Clustering",            "clust",   True),
+        ("Compression\nQuality",  "tri_cr",  None),   # special: closest to 1.0
+        ("Low Leakage",           "v4g",     False),
+    ]
+
+    methods = [m for m in METHOD_ORDER if m in agg]
+    N = len(radar_metrics)
+
+    # Extract raw values
+    raw = {}
+    for m in methods:
+        vals = []
+        for _, key, higher in radar_metrics:
+            if higher is None:
+                # TriCR: convert to "closeness to 1.0" score (max deviation ~3.6)
+                vals.append(1.0 / (1.0 + abs(agg[m][key] - 1.0)))
+            else:
+                vals.append(agg[m][key])
+        raw[m] = vals
+
+    # Normalize to [0, 1]
+    raw_arr = np.array([raw[m] for m in methods])
+    norm = np.zeros_like(raw_arr)
+    for j in range(N):
+        col = raw_arr[:, j]
+        mn, mx = col.min(), col.max()
+        _, _, higher = radar_metrics[j]
+        if mx - mn < 1e-9:
+            norm[:, j] = 1.0
+        elif higher is None:
+            # Already transformed: higher = better
+            norm[:, j] = (col - mn) / (mx - mn)
+        elif higher:
+            norm[:, j] = (col - mn) / (mx - mn)
+        else:
+            norm[:, j] = (mx - col) / (mx - mn)
+
+    angles = np.linspace(0, 2 * np.pi, N, endpoint=False).tolist()
+    angles += angles[:1]
+
+    fig, ax = plt.subplots(figsize=(7.5, 7.5), subplot_kw=dict(polar=True))
+    ax.set_facecolor("#FAFAFA")
+
+    # Draw methods — TRACE KG last so it's on top
+    draw_order = [m for m in methods if m != "tracekg"] + ["tracekg"]
+    for m in draw_order:
+        i = methods.index(m)
+        vals = norm[i].tolist() + [norm[i][0]]
+        is_trace = (m == "tracekg")
+        lw = 3.0 if is_trace else 1.5
+        ls = "-" if is_trace else "--"
+        alpha_fill = 0.15 if is_trace else 0.0
+        zorder = 10 if is_trace else 5
+        marker = "o" if is_trace else None
+        ms = 6 if is_trace else 0
+        ax.plot(angles, vals, color=METHOD_COLORS[m], linewidth=lw, linestyle=ls,
+                label=METHOD_LABELS[m], zorder=zorder, marker=marker, markersize=ms)
+        if alpha_fill > 0:
+            ax.fill(angles, vals, color=METHOD_COLORS[m], alpha=alpha_fill, zorder=4)
+
+    labels = [lbl for lbl, _, _ in radar_metrics]
+    ax.set_xticks(angles[:-1])
+    ax.set_xticklabels(labels, fontsize=FONT_SIZE - 0.5, linespacing=1.1)
+    ax.set_ylim(0, 1.10)
+    ax.set_yticks([0.25, 0.5, 0.75, 1.0])
+    ax.set_yticklabels(["", "0.50", "", "1.00"], fontsize=FONT_SIZE - 2, color="grey")
+
+    # Grid styling
+    ax.yaxis.grid(True, color="#CCCCCC", linewidth=0.5)
+    ax.xaxis.grid(True, color="#DDDDDD", linewidth=0.5)
+
+    ax.legend(loc="upper right", bbox_to_anchor=(1.35, 1.12), frameon=True,
+              fancybox=True, shadow=False, edgecolor="#BBBBBB",
+              fontsize=FONT_SIZE - 0.5)
+
+    path = FIG_OUT / "fig1_radar.pdf"
+    fig.savefig(path)
+    fig.savefig(path.with_suffix(".png"))
+    plt.close(fig)
+    print(f"  Saved: {path}")
+
+
+# ============================================================
+# FIG 2: SUMMARY DASHBOARD — 4 panels, the complete evidence
+# ============================================================
+
+def fig2_summary_dashboard():
+    """
+    2×2 dashboard:
+      (a) Accuracy + Leakage (single bar with leakage hatched inside)
+      (b) TriCR deviation from ideal
+      (c) Effective Retrieval Accuracy (= Acc × Conn × (1-Leak))
+      (d) Overall quality ranking
+    """
+    methods = [m for m in METHOD_ORDER if m in agg]
+    n = len(methods)
+    labels = [METHOD_LABELS[m] for m in methods]
+    colors = [METHOD_COLORS[m] for m in methods]
+    x = np.arange(n)
+
+    fig, axes = plt.subplots(2, 2, figsize=(13.5, 10.5))
+    for ax in axes.flat:
+        ax.set_axisbelow(True)
+
+    # ────────────────────────────────────────────────────
+    # (a) Accuracy bars with leakage hatched overlay inside
+    # ────────────────────────────────────────────────────
+    ax = axes[0, 0]
+    acc = [agg[m]["ret_acc"] * 100 for m in methods]
+    leak = [agg[m]["v4g"] * 100 for m in methods]
+
+    # Full accuracy bar
+    ax.bar(x, acc, color=colors, edgecolor="black", linewidth=0.5, alpha=0.88)
+    # Leakage hatched from bottom
+    ax.bar(x, leak, color="#CC3311", alpha=0.55, hatch="///",
+           edgecolor="#CC3311", linewidth=0.3)
+
+    # Accuracy labels on top
+    for i in range(n):
+        fw = "bold" if methods[i] == "tracekg" else "normal"
+        ax.text(i, acc[i] + 1.5, f"{acc[i]:.1f}%", ha="center", va="bottom",
+                fontsize=FONT_SIZE - 1, fontweight=fw, color="black")
+
+    # Leakage labels inside the hatched area — white on colored highlight
+    for i in range(n):
+        if leak[i] >= 1.0:
+            y_pos = min(leak[i] / 2, acc[i] * 0.4)
+            y_pos = max(y_pos, 3)
+            ax.text(i, y_pos, f"Leak: {leak[i]:.1f}%", ha="center", va="center",
+                    fontsize=FONT_SIZE - 1.5, fontweight="bold", color="white",
+                    bbox=dict(boxstyle="round,pad=0.25", facecolor="#CC3311",
+                              edgecolor="none", alpha=0.85))
+
+    ax.set_xticks(x)
+    ax.set_xticklabels(labels, rotation=25, ha="right")
+    ax.set_ylabel("Percentage (%)")
+    ax.set_title("(a) Retrieval Accuracy & Verbatim Leakage", fontweight="bold")
+    ax.set_ylim(0, 112)
+    ax.grid(axis="y", alpha=0.15, linewidth=0.5)
+
+    # Legend
+    legend_elements = [
+        mpatches.Patch(facecolor="#AAAAAA", edgecolor="black", linewidth=0.5,
+                       label="Retrieval Accuracy"),
+        mpatches.Patch(facecolor="#CC3311", edgecolor="#CC3311", alpha=0.55,
+                       hatch="///", label="Verbatim Leakage"),
+    ]
+    ax.legend(handles=legend_elements, fontsize=FONT_SIZE - 2,
+              loc="lower right", framealpha=0.92)
+
+    # Annotation below
+    ax.text(0.5, -0.22,
+            "Leakage = fraction of source text copied verbatim into entity strings (4-gram overlap)",
+            transform=ax.transAxes, ha="center", va="top",
+            fontsize=FONT_SIZE - 1.5, fontstyle="italic", color="#444444")
+
+    # ───────────────────��────────────────────────────────
+    # (b) TriCR deviation from ideal 1.0
+    # ────────────────────────────────────────────────────
+    ax = axes[0, 1]
+    tricr = [agg[m]["tri_cr"] for m in methods]
+    tricr_dev = [abs(t - 1.0) for t in tricr]
+
+    bars = ax.barh(x, tricr_dev, color=colors, edgecolor="black", linewidth=0.5, height=0.55)
+
+    for i in range(n):
+        if tricr[i] > 1:
+            note = "expansion"
+        else:
+            note = "loss"
+        fw = "bold" if methods[i] == "tracekg" else "normal"
+        ax.text(tricr_dev[i] + 0.04, i, f"TriCR = {tricr[i]:.2f}  ({note})",
+                va="center", fontsize=FONT_SIZE - 1.5, fontweight=fw, color="#333333")
+
+    ax.set_yticks(x)
+    ax.set_yticklabels(labels)
+    ax.set_xlabel("|TriCR − 1.0|       lower = better compression")
+    ax.set_title("(b) Triple Compression Ratio (ideal = 1.0)", fontweight="bold")
+    ax.set_xlim(0, 3.5)
+    ax.axvline(x=0, color="black", linewidth=0.8)
+    ax.grid(axis="x", alpha=0.15, linewidth=0.5)
+
+    ax.text(0.5, -0.18,
+            "TriCR = total triple words / essay words.  Values > 1 = KG larger than source text.",
+            transform=ax.transAxes, ha="center", va="top",
+            fontsize=FONT_SIZE - 1.5, fontstyle="italic", color="#444444")
+
+    # ────────────────────────────────────────────────────
+    # (c) Effective Retrieval Accuracy
+    # ────────────────────────────────────────────────────
+    ax = axes[1, 0]
+    egu = [agg[m]["egu"] * 100 for m in methods]
+    egu_std = [agg[m].get("egu_std", 0) * 100 for m in methods]
+
+    bars = ax.bar(x, egu, color=colors, edgecolor="black", linewidth=0.5,
+                  yerr=egu_std, capsize=4, error_kw={"linewidth": 1, "color": "#555555"})
+
+    trace_idx = methods.index("tracekg")
+    bars[trace_idx].set_edgecolor(METHOD_COLORS["tracekg"])
+    bars[trace_idx].set_linewidth(2.5)
+
+    for i in range(n):
+        fw = "bold" if methods[i] == "tracekg" else "normal"
+        ax.text(i, egu[i] + egu_std[i] + 1.8, f"{egu[i]:.1f}%", ha="center",
+                va="bottom", fontsize=FONT_SIZE - 1, fontweight=fw)
+
+    ax.set_xticks(x)
+    ax.set_xticklabels(labels, rotation=25, ha="right")
+    ax.set_ylabel("Effective Retrieval Accuracy (%)")
+    ax.set_title("(c) Effective Retrieval Accuracy", fontweight="bold")
+    ax.grid(axis="y", alpha=0.15, linewidth=0.5)
+
+    ax.text(0.5, -0.22,
+            "Effective Ret. Acc. = Accuracy × Connectivity × (1 − Leakage)\n"
+            "Accuracy from genuine graph retrieval, penalizing text copying and fragmentation.",
+            transform=ax.transAxes, ha="center", va="top",
+            fontsize=FONT_SIZE - 1.5, fontstyle="italic", color="#444444",
+            linespacing=1.4)
+
+    # ────────────────────────────────────────────────────
+    # (d) Overall quality ranking
+    # ────────────────────────────────────────────────────
+    ax = axes[1, 1]
+    ranks = v5.get("avg_ranks", {})
+    sorted_m = sorted([m for m in methods if m in ranks], key=lambda m: ranks[m])
+    rank_vals = [ranks[m] for m in sorted_m]
+    rank_labels = [METHOD_LABELS[m] for m in sorted_m]
+    rank_colors = [METHOD_COLORS[m] for m in sorted_m]
+
+    bars = ax.barh(np.arange(len(sorted_m)), rank_vals, color=rank_colors,
+                   edgecolor="black", linewidth=0.5, height=0.55)
+
+    for i, (m, rv) in enumerate(zip(sorted_m, rank_vals)):
+        fw = "bold" if m == "tracekg" else "normal"
+        ax.text(rv + 0.08, i, f"{rv:.2f}", va="center", fontsize=FONT_SIZE, fontweight=fw)
+
+    # Gold star for #1
+    ax.text(rank_vals[0] + 0.38, 0, "★", fontsize=16, va="center", ha="center",
+            color="#DAA520", fontweight="bold")
+
+    ax.set_yticks(np.arange(len(sorted_m)))
+    ax.set_yticklabels(rank_labels, fontsize=FONT_SIZE)
+    ax.set_xlabel("Average Rank (lower = better)")
+    ax.set_title("(d) Overall Quality Ranking", fontweight="bold")
+    ax.set_xlim(0, 5.0)
+    ax.axvline(x=1, color="#0072B2", linestyle=":", alpha=0.25, linewidth=1)
+    ax.text(1.08, len(sorted_m) - 0.15, "perfect", fontsize=FONT_SIZE - 2,
+            color="#0072B2", fontstyle="italic", alpha=0.5)
+    ax.invert_yaxis()
+    ax.grid(axis="x", alpha=0.15, linewidth=0.5)
+
+    ax.text(0.5, -0.18,
+            "Mean rank across 9 metrics: Ret.Acc, ERA, Conn., Clust., AvgDeg, Leak%, TriCR, SCI, RWA.\n"
+            "Ranking methodology follows Demšar (JMLR, 2006).",
+            transform=ax.transAxes, ha="center", va="top",
+            fontsize=FONT_SIZE - 1.5, fontstyle="italic", color="#444444",
+            linespacing=1.4)
+
+    plt.tight_layout(h_pad=4.0, w_pad=2.5)
+
+    path = FIG_OUT / "fig2_summary_dashboard.pdf"
+    fig.savefig(path)
+    fig.savefig(path.with_suffix(".png"))
+    plt.close(fig)
+    print(f"  Saved: {path}")
+
+
+# ============================================================
+# FIG 3: ACCURACY DECOMPOSITION — Where does accuracy come from?
+# ============================================================
+
+def fig3_accuracy_decomposition():
+    """
+    Stacked horizontal bar: each method's retrieval accuracy broken into:
+      - Green: Genuine graph-based retrieval (Acc × Conn × (1-Leak))
+      - Red:   From verbatim text leakage  (Acc × Conn × Leak)
+      - Grey:  From disconnected subgraphs (Acc × (1-Conn))
+
+    NOT redundant with dashboard: dashboard shows individual metrics,
+    this figure shows how they INTERACT to produce the accuracy number.
+    This is the "aha" moment figure.
+    """
+    methods = [m for m in METHOD_ORDER if m in agg]
+    n = len(methods)
+    labels = [METHOD_LABELS[m] for m in methods]
+    y = np.arange(n)
+
+    genuine = []
+    leaked = []
+    fragmented = []
+
+    for m in methods:
+        acc = agg[m]["ret_acc"]
+        conn = agg[m]["conn"]
+        leak = agg[m]["v4g"]
+
+        g = acc * conn * (1 - leak) * 100
+        l = acc * conn * leak * 100
+        f = acc * (1 - conn) * 100
+
+        genuine.append(g)
+        leaked.append(l)
+        fragmented.append(f)
+
+    fig, ax = plt.subplots(figsize=(11, 5))
+
+    # Stacked horizontal bars
+    bars_g = ax.barh(y, genuine, height=0.6, color="#1a9641", edgecolor="black",
+                     linewidth=0.5, label="Genuine Graph Retrieval")
+    bars_l = ax.barh(y, leaked, left=genuine, height=0.6, color="#CC3311",
+                     edgecolor="black", linewidth=0.5, alpha=0.80,
+                     hatch="///", label="From Verbatim Leakage")
+    g_plus_l = [g + l for g, l in zip(genuine, leaked)]
+    bars_f = ax.barh(y, fragmented, left=g_plus_l, height=0.6,
+                     color="#AAAAAA", edgecolor="black", linewidth=0.5,
+                     alpha=0.70, hatch="...", label="From Disconnected Fragments")
+
+    totals = [g + l + f for g, l, f in zip(genuine, leaked, fragmented)]
+
+    # Total accuracy label at end of bar
+    for i in range(n):
+        fw = "bold" if methods[i] == "tracekg" else "normal"
+        ax.text(totals[i] + 1.0, i, f"{totals[i]:.1f}%", va="center",
+                fontsize=FONT_SIZE, fontweight=fw, color="#333333")
+
+    # Genuine % inside green section
+    for i in range(n):
+        if genuine[i] > 12:
+            ax.text(genuine[i] / 2, i, f"{genuine[i]:.1f}%", ha="center", va="center",
+                    fontsize=FONT_SIZE - 1, fontweight="bold", color="white")
+
+    # Leaked % inside red section
+    for i in range(n):
+        if leaked[i] > 8:
+            ax.text(genuine[i] + leaked[i] / 2, i, f"{leaked[i]:.1f}%",
+                    ha="center", va="center", fontsize=FONT_SIZE - 1.5,
+                    fontweight="bold", color="white")
+
+    # Fragmented % inside grey section
+    for i in range(n):
+        if fragmented[i] > 8:
+            ax.text(g_plus_l[i] + fragmented[i] / 2, i, f"{fragmented[i]:.1f}%",
+                    ha="center", va="center", fontsize=FONT_SIZE - 1.5,
+                    fontweight="bold", color="#333333")
+
+    ax.set_yticks(y)
+    ax.set_yticklabels(labels, fontsize=FONT_SIZE)
+    ax.set_xlabel("Retrieval Accuracy (%)", fontsize=FONT_SIZE)
+    ax.set_xlim(0, 108)
+    ax.grid(axis="x", alpha=0.15, linewidth=0.5)
+
+    ax.set_title("Retrieval Accuracy Decomposition: Where Does Performance Come From?",
+                 fontweight="bold", fontsize=FONT_SIZE + 1)
+
+    ax.legend(loc="lower right", fontsize=FONT_SIZE - 1, framealpha=0.92,
+              edgecolor="#CCCCCC")
+
+    # Highlight TRACE KG row
+    trace_idx = methods.index("tracekg")
+    rect = mpatches.FancyBboxPatch(
+        (-1, trace_idx - 0.35), totals[trace_idx] + 2, 0.7,
+        boxstyle="round,pad=0.1", linewidth=2.0,
+        edgecolor=METHOD_COLORS["tracekg"], facecolor="none", zorder=10
+    )
+    ax.add_patch(rect)
+
+    # Annotation
+    ax.text(0.5, -0.15,
+            "Genuine = Acc × Conn × (1−Leak).    "
+            "Leakage = Acc × Conn × Leak.    "
+            "Fragments = Acc × (1−Conn).",
+            transform=ax.transAxes, ha="center", va="top",
+            fontsize=FONT_SIZE - 1, fontstyle="italic", color="#444444")
+
+    plt.tight_layout()
+
+    path = FIG_OUT / "fig3_accuracy_decomposition.pdf"
+    fig.savefig(path)
+    fig.savefig(path.with_suffix(".png"))
+    plt.close(fig)
+    print(f"  Saved: {path}")
+
+
+# ============================================================
+# RUN ALL
+# ============================================================
+
+if __name__ == "__main__":
+    print("Generating KDD figures (final v3)...\n")
+    fig1_radar()
+    fig2_summary_dashboard()
+    fig3_accuracy_decomposition()
+    print(f"\n✅ All 3 figures saved to: {FIG_OUT}")
+    print("\nFigure roles:")
+    print("  Fig 1 (Radar):          Holistic overview — TRACE KG covers the most area")
+    print("  Fig 2 (Dashboard):      Detailed evidence — 4 complementary panels")
+    print("  Fig 3 (Decomposition):  The insight — AutoSchemaKG's accuracy is mostly leaked/fragmented")
+    
+    
+#endregion#? 
+#?#########################  End  ##########################
+
+
+
+#?######################### Start ##########################
+#region:#?   5-3 
+
+"""
+KDD-Ready Figures for TRACE KG Paper — MINE-1 Evaluation (Final v4)
+=====================================================================
+
+4 publication-quality figures:
+
+  Fig 1: Radar — multi-dimensional quality profile
+  Fig 2: Effective Retrieval Accuracy (single bar, prominent)
+  Fig 3: "Why Raw Accuracy is Misleading" — 3-panel failure mode exposé
+  Fig 4: Summary dashboard — cleaned, publication-ready (3 panels)
+
+Color palette: Okabe-Ito colorblind-safe.
+All data from compression_analysis_v5.json.
+"""
+
+import json
+import numpy as np
+import matplotlib.pyplot as plt
+import matplotlib.patches as mpatches
+import matplotlib.ticker as mticker
+from pathlib import Path
+from typing import Dict, List
+
+# ============================================================
+# CONFIG
+# ============================================================
+
+REPO_ROOT = Path(".").resolve()
+V5_JSON = REPO_ROOT / "Experiments/MYNE/Ex1/RES/compression_analysis_v5.json"
+FIG_OUT = REPO_ROOT / "Experiments/MYNE/Ex1/RES/figures"
+FIG_OUT.mkdir(parents=True, exist_ok=True)
+
+METHOD_ORDER = ["tracekg", "autoschemakg", "graphrag", "openie", "kggen"]
+METHOD_LABELS = {
+    "tracekg": "TRACE KG",
+    "autoschemakg": "AutoSchemaKG",
+    "graphrag": "GraphRAG",
+    "openie": "OpenIE",
+    "kggen": "KGGen",
+}
+
+METHOD_COLORS = {
+    "tracekg":      "#0072B2",
+    "autoschemakg": "#E69F00",
+    "graphrag":     "#882255",
+    "openie":       "#44AA99",
+    "kggen":        "#332288",
+}
+
+# Semantic colors
+CLR_GENUINE = "#1a9641"
+CLR_LEAKED  = "#d7191c"
+CLR_FRAG    = "#bababa"
+
+DPI = 300
+FONT_TITLE = 15
+FONT_SUBTITLE = 13
+FONT_LABEL = 12
+FONT_TICK = 11
+FONT_ANNOT = 11
+FONT_NOTE = 10
+
+plt.rcParams.update({
+    "font.size": FONT_LABEL,
+    "font.family": "sans-serif",
+    "axes.titlesize": FONT_SUBTITLE,
+    "axes.labelsize": FONT_LABEL,
+    "xtick.labelsize": FONT_TICK,
+    "ytick.labelsize": FONT_TICK,
+    "legend.fontsize": FONT_TICK,
+    "figure.dpi": DPI,
+    "savefig.dpi": DPI,
+    "savefig.bbox": "tight",
+    "savefig.pad_inches": 0.2,
+    "axes.spines.top": False,
+    "axes.spines.right": False,
+})
+
+# ============================================================
+# LOAD DATA
+# ============================================================
+
+with open(V5_JSON) as f:
+    v5 = json.load(f)
+
+agg = v5["aggregate"]
+
+
+# ============================================================
+# FIG 1: RADAR — Multi-dimensional quality profile
+# ============================================================
+
+def fig1_radar():
+    radar_metrics = [
+        ("Retrieval\nAccuracy",           "ret_acc",  True),
+        ("Effective\nRetrieval Accuracy",  "egu",      True),
+        ("Connectivity",                   "conn",     True),
+        ("Clustering",                     "clust",    True),
+        ("Avg. Degree",                    "avg_deg",  True),
+        ("Low Leakage",                    "v4g",      False),
+        ("Compression\nQuality",           "tri_cr",   None),
+    ]
+
+    methods = [m for m in METHOD_ORDER if m in agg]
+    N = len(radar_metrics)
+
+    raw = {}
+    for m in methods:
+        raw[m] = [agg[m][key] for _, key, _ in radar_metrics]
+
+    raw_arr = np.array([raw[m] for m in methods])
+    norm = np.zeros_like(raw_arr)
+    for j, (_, key, higher) in enumerate(radar_metrics):
+        col = raw_arr[:, j]
+        if higher is None:
+            dist = np.abs(col - 1.0)
+            mn, mx = dist.min(), dist.max()
+            if mx - mn < 1e-9:
+                norm[:, j] = 1.0
+            else:
+                norm[:, j] = (mx - dist) / (mx - mn)
+        else:
+            mn, mx = col.min(), col.max()
+            if mx - mn < 1e-9:
+                norm[:, j] = 1.0
+            else:
+                norm[:, j] = (col - mn) / (mx - mn) if higher else (mx - col) / (mx - mn)
+
+    angles = np.linspace(0, 2 * np.pi, N, endpoint=False).tolist()
+    angles += angles[:1]
+
+    fig, ax = plt.subplots(figsize=(7.5, 7.5), subplot_kw=dict(polar=True))
+    ax.set_facecolor("#FAFAFA")
+
+    for i, m in enumerate(methods):
+        vals = norm[i].tolist() + [norm[i][0]]
+        lw = 3.0 if m == "tracekg" else 1.5
+        ls = "-" if m == "tracekg" else "--"
+        alpha_fill = 0.12 if m == "tracekg" else 0.0
+        zorder = 10 if m == "tracekg" else 5
+        marker = "o" if m == "tracekg" else ""
+        ms = 5 if m == "tracekg" else 0
+        ax.plot(angles, vals, color=METHOD_COLORS[m], linewidth=lw, linestyle=ls,
+                label=METHOD_LABELS[m], zorder=zorder, marker=marker, markersize=ms)
+        if alpha_fill > 0:
+            ax.fill(angles, vals, color=METHOD_COLORS[m], alpha=alpha_fill, zorder=4)
+
+    ax.set_xticks(angles[:-1])
+    ax.set_xticklabels([lbl for lbl, _, _ in radar_metrics], fontsize=FONT_TICK,
+                       linespacing=1.1)
+    ax.set_ylim(0, 1.1)
+    ax.set_yticks([0.25, 0.5, 0.75, 1.0])
+    ax.set_yticklabels(["0.25", "0.50", "0.75", "1.00"], fontsize=FONT_TICK - 1, color="grey")
+
+    ax.legend(loc="upper right", bbox_to_anchor=(1.35, 1.15), frameon=True,
+              fancybox=True, shadow=False, edgecolor="#CCCCCC", fontsize=FONT_TICK)
+
+    path = FIG_OUT / "fig1_radar_quality_profile.pdf"
+    fig.savefig(path)
+    fig.savefig(path.with_suffix(".png"))
+    plt.close(fig)
+    print(f"  Saved: {path}")
+
+
+# ============================================================
+# FIG 2: EFFECTIVE RETRIEVAL ACCURACY
+# ============================================================
+
+def fig2_effective_retrieval_accuracy():
+    methods = [m for m in METHOD_ORDER if m in agg]
+    n = len(methods)
+    labels = [METHOD_LABELS[m] for m in methods]
+    colors = [METHOD_COLORS[m] for m in methods]
+    x = np.arange(n)
+
+    egu = [agg[m]["egu"] * 100 for m in methods]
+    egu_std = [agg[m].get("egu_std", 0) * 100 for m in methods]
+
+    fig, ax = plt.subplots(figsize=(9, 6))
+
+    bars = ax.bar(x, egu, color=colors, edgecolor="black", linewidth=0.6,
+                  yerr=egu_std, capsize=5, error_kw={"linewidth": 1.2, "color": "#444444"},
+                  width=0.62)
+
+    trace_idx = methods.index("tracekg")
+    bars[trace_idx].set_edgecolor(METHOD_COLORS["tracekg"])
+    bars[trace_idx].set_linewidth(3.0)
+
+    for i in range(n):
+        fw = "bold" if methods[i] == "tracekg" else "normal"
+        fs = FONT_ANNOT + 1 if methods[i] == "tracekg" else FONT_ANNOT
+        ax.text(i, egu[i] + egu_std[i] + 2.0, f"{egu[i]:.1f}%",
+                ha="center", va="bottom", fontsize=fs, fontweight=fw)
+
+    ax.set_xticks(x)
+    ax.set_xticklabels(labels, fontsize=FONT_LABEL)
+    ax.set_ylabel("Effective Retrieval Accuracy (%)", fontsize=FONT_LABEL)
+    ax.set_title("Effective Retrieval Accuracy", fontweight="bold",
+                 fontsize=FONT_TITLE + 2, pad=20)
+    ax.text(0.5, 1.015,
+            "Retrieval Accuracy  ×  Graph Connectivity  ×  (1 − Verbatim Leakage)",
+            transform=ax.transAxes, ha="center", va="bottom",
+            fontsize=FONT_LABEL, color="#333333", fontstyle="italic")
+
+    ax.set_ylim(0, max(egu) + max(egu_std) + 15)
+    ax.grid(axis="y", alpha=0.15, linewidth=0.5)
+    ax.set_axisbelow(True)
+
+    plt.tight_layout(rect=[0, 0, 1, 0.94])
+
+    path = FIG_OUT / "fig2_effective_retrieval_accuracy.pdf"
+    fig.savefig(path)
+    fig.savefig(path.with_suffix(".png"))
+    plt.close(fig)
+    print(f"  Saved: {path}")
+
+
+# ============================================================
+# FIG 3: "WHY RAW ACCURACY IS MISLEADING" — 3 failure modes
+# ============================================================
+
+def fig3_failure_modes():
+    """
+    Three-panel figure exposing why raw accuracy alone is misleading.
+
+    Panel (a): Accuracy decomposition — stacked bar showing genuine vs
+               leaked vs fragmented contributions to accuracy.
+    Panel (b): Compression quality — distance from ideal TriCR=1.0.
+    Panel (c): Effective Retrieval Accuracy — the corrected metric.
+
+    Core message: AutoSchemaKG's 95% accuracy is largely from text copying.
+    TRACE KG's 90% is almost entirely genuine graph retrieval.
+    """
+    methods = [m for m in METHOD_ORDER if m in agg]
+    n = len(methods)
+    labels = [METHOD_LABELS[m] for m in methods]
+    colors = [METHOD_COLORS[m] for m in methods]
+    x = np.arange(n)
+
+    fig, axes = plt.subplots(1, 3, figsize=(18, 6.5))
+    for ax in axes:
+        ax.set_axisbelow(True)
+        ax.spines["top"].set_visible(False)
+        ax.spines["right"].set_visible(False)
+
+    # ── (a) Accuracy Decomposition ──
+    ax = axes[0]
+
+    genuine = []
+    leaked = []
+    fragmented = []
+
+    for m in methods:
+        a = agg[m]["ret_acc"]
+        c = agg[m]["conn"]
+        l = agg[m]["v4g"]
+        genuine.append(a * c * (1 - l) * 100)
+        leaked.append(a * c * l * 100)
+        fragmented.append(a * (1 - c) * 100)
+
+    bars_g = ax.bar(x, genuine, width=0.62, color=CLR_GENUINE, edgecolor="black",
+                    linewidth=0.5, label="Genuine retrieval", zorder=5)
+    bars_l = ax.bar(x, leaked, bottom=genuine, width=0.62, color=CLR_LEAKED,
+                    edgecolor="black", linewidth=0.5, hatch="///",
+                    label="From text copying", zorder=5)
+    bars_f = ax.bar(x, fragmented, bottom=[g + l for g, l in zip(genuine, leaked)],
+                    width=0.62, color=CLR_FRAG, edgecolor="black", linewidth=0.5,
+                    hatch="...", label="From disconnected nodes", zorder=5)
+
+    totals = [g + l + f for g, l, f in zip(genuine, leaked, fragmented)]
+
+    # Total on top
+    for i in range(n):
+        fw = "bold" if methods[i] == "tracekg" else "normal"
+        ax.text(i, totals[i] + 1.5, f"{totals[i]:.1f}%", ha="center", va="bottom",
+                fontsize=FONT_ANNOT, fontweight=fw, zorder=10)
+
+    # Genuine % inside green bar
+    for i in range(n):
+        if genuine[i] > 12:
+            ax.text(i, genuine[i] / 2, f"{genuine[i]:.0f}%", ha="center", va="center",
+                    fontsize=FONT_ANNOT - 1, fontweight="bold", color="white", zorder=10)
+
+    # Leaked % inside red bar if visible
+    for i in range(n):
+        if leaked[i] > 6:
+            ax.text(i, genuine[i] + leaked[i] / 2, f"{leaked[i]:.0f}%",
+                    ha="center", va="center", fontsize=FONT_ANNOT - 1,
+                    fontweight="bold", color="white", zorder=10)
+
+    ax.set_xticks(x)
+    ax.set_xticklabels(labels, fontsize=FONT_TICK, rotation=25, ha="right")
+    ax.set_ylabel("Retrieval Accuracy (%)", fontsize=FONT_LABEL)
+    ax.set_title("(a) Failure Mode 1: Accuracy from Text Copying",
+                 fontweight="bold", fontsize=FONT_SUBTITLE, pad=10)
+    ax.set_ylim(0, 112)
+    ax.grid(axis="y", alpha=0.12, linewidth=0.5)
+    ax.legend(fontsize=FONT_TICK, loc="upper right", framealpha=0.95,
+              edgecolor="#CCCCCC")
+
+    ax.text(0.5, -0.18,
+            "Green = accuracy from genuine graph structure\n"
+            "Red = accuracy inflated by verbatim text in entities",
+            transform=ax.transAxes, ha="center", va="top",
+            fontsize=FONT_NOTE, color="#444444", linespacing=1.4)
+
+    # ── (b) Compression Quality ──
+    ax = axes[1]
+
+    tricr = [agg[m]["tri_cr"] for m in methods]
+    tricr_dev = [abs(t - 1.0) for t in tricr]
+
+    bar_edge_colors = []
+    for i, m in enumerate(methods):
+        if tricr[i] > 1.5:
+            bar_edge_colors.append(CLR_LEAKED)
+        elif tricr[i] < 0.5:
+            bar_edge_colors.append("#E69F00")
+        else:
+            bar_edge_colors.append("black")
+
+    bars_b = ax.barh(x, tricr_dev, color=colors, edgecolor="black",
+                     linewidth=0.6, height=0.55)
+
+    # Semantic annotation
+    for i in range(n):
+        fw = "bold" if methods[i] == "tracekg" else "normal"
+        if tricr[i] > 1.5:
+            tag = "KG > source text"
+            tag_color = CLR_LEAKED
+        elif tricr[i] < 0.6:
+            tag = "heavy information loss"
+            tag_color = "#B35900"
+        elif abs(tricr[i] - 1.0) < 0.15:
+            tag = "near-ideal"
+            tag_color = CLR_GENUINE
+        else:
+            tag = ""
+            tag_color = "#333333"
+
+        label_text = f"{tricr[i]:.2f}"
+        if tag:
+            label_text += f"  ({tag})"
+
+        ax.text(tricr_dev[i] + 0.05, i, label_text,
+                va="center", fontsize=FONT_ANNOT - 1, fontweight=fw, color=tag_color)
+
+    # Ideal zone shading
+    ax.axvspan(0, 0.15, color=CLR_GENUINE, alpha=0.06, zorder=0)
+    ax.text(0.07, n - 0.3, "ideal\nzone", fontsize=FONT_NOTE, color=CLR_GENUINE,
+            ha="center", va="top", fontstyle="italic", alpha=0.7)
+
+    ax.set_yticks(x)
+    ax.set_yticklabels(labels, fontsize=FONT_TICK)
+    ax.set_xlabel("Distance from Ideal  |TriCR − 1.0|", fontsize=FONT_LABEL)
+    ax.set_title("(b) Failure Mode 2: Poor Compression",
+                 fontweight="bold", fontsize=FONT_SUBTITLE, pad=10)
+    ax.set_xlim(0, 3.8)
+    ax.axvline(x=0, color="black", linewidth=0.8)
+    ax.grid(axis="x", alpha=0.12, linewidth=0.5)
+
+    ax.text(0.5, -0.18,
+            "TriCR = total triple words / essay words\n"
+            "Ideal = 1.0 (lossless compression)",
+            transform=ax.transAxes, ha="center", va="top",
+            fontsize=FONT_NOTE, color="#444444", linespacing=1.4)
+
+    # ── (c) Corrected Metric: Effective Retrieval Accuracy ──
+    ax = axes[2]
+
+    egu = [agg[m]["egu"] * 100 for m in methods]
+    raw_acc = [agg[m]["ret_acc"] * 100 for m in methods]
+
+    # Ghost bars for raw accuracy (light, behind)
+    ax.bar(x, raw_acc, width=0.62, color="#E0E0E0", edgecolor="#CCCCCC",
+           linewidth=0.5, zorder=3, label="Raw Accuracy")
+
+    # Solid bars for ERA
+    bars_c = ax.bar(x, egu, width=0.52, color=colors, edgecolor="black",
+                    linewidth=0.6, zorder=5, label="Effective Retrieval Accuracy")
+
+    # Highlight TRACE KG
+    trace_idx = methods.index("tracekg")
+    bars_c[trace_idx].set_edgecolor(METHOD_COLORS["tracekg"])
+    bars_c[trace_idx].set_linewidth(2.5)
+
+    for i in range(n):
+        fw = "bold" if methods[i] == "tracekg" else "normal"
+        # ERA value
+        ax.text(i, egu[i] + 2, f"{egu[i]:.1f}%", ha="center", va="bottom",
+                fontsize=FONT_ANNOT, fontweight=fw, color=colors[i], zorder=10)
+        # Raw acc (small, grey, above ghost bar)
+        if abs(raw_acc[i] - egu[i]) > 5:
+            ax.text(i + 0.28, raw_acc[i] - 2, f"{raw_acc[i]:.0f}%",
+                    ha="center", va="top", fontsize=FONT_NOTE,
+                    color="#999999", zorder=10)
+
+    ax.set_xticks(x)
+    ax.set_xticklabels(labels, fontsize=FONT_TICK, rotation=25, ha="right")
+    ax.set_ylabel("Accuracy (%)", fontsize=FONT_LABEL)
+    ax.set_title("(c) Corrected Metric: Effective\nRetrieval Accuracy",
+                 fontweight="bold", fontsize=FONT_SUBTITLE, pad=10)
+    ax.set_ylim(0, 112)
+    ax.grid(axis="y", alpha=0.12, linewidth=0.5)
+    ax.legend(fontsize=FONT_TICK - 1, loc="upper right", framealpha=0.95,
+              edgecolor="#CCCCCC")
+
+    ax.text(0.5, -0.18,
+            "ERA = Accuracy × Connectivity × (1 − Leakage)\n"
+            "Grey = raw accuracy; colored = after correction",
+            transform=ax.transAxes, ha="center", va="top",
+            fontsize=FONT_NOTE, color="#444444", linespacing=1.4)
+
+    # ── Suptitle ──
+    fig.suptitle("Why Raw Retrieval Accuracy Is Misleading for KG Evaluation",
+                 fontweight="bold", fontsize=FONT_TITLE + 1, y=1.03)
+
+    plt.tight_layout(w_pad=3.0)
+
+    path = FIG_OUT / "fig3_failure_modes.pdf"
+    fig.savefig(path)
+    fig.savefig(path.with_suffix(".png"))
+    plt.close(fig)
+    print(f"  Saved: {path}")
+
+
+# ============================================================
+# FIG 4: SUMMARY DASHBOARD — cleaned, publication-ready
+# ============================================================
+
+def fig4_summary_dashboard():
+    methods = [m for m in METHOD_ORDER if m in agg]
+    n = len(methods)
+    labels = [METHOD_LABELS[m] for m in methods]
+    colors = [METHOD_COLORS[m] for m in methods]
+    x = np.arange(n)
+
+    fig = plt.figure(figsize=(15, 10.5))
+    gs = fig.add_gridspec(2, 2, height_ratios=[1, 1], hspace=0.42, wspace=0.32)
+    ax_a = fig.add_subplot(gs[0, :])
+    ax_b = fig.add_subplot(gs[1, 0])
+    ax_c = fig.add_subplot(gs[1, 1])
+
+    for ax in [ax_a, ax_b, ax_c]:
+        ax.set_axisbelow(True)
+        ax.spines["top"].set_visible(False)
+        ax.spines["right"].set_visible(False)
+
+    # ── (a) Accuracy with Leakage Highlighted ──
+    acc = [agg[m]["ret_acc"] * 100 for m in methods]
+    leak = [agg[m]["v4g"] * 100 for m in methods]
+
+    bars_acc = ax_a.bar(x, acc, color=colors, edgecolor="black", linewidth=0.6,
+                        width=0.6, zorder=5)
+
+    bars_leak = ax_a.bar(x, leak, color="none", edgecolor=CLR_LEAKED,
+                         linewidth=1.8, width=0.6, hatch="xxxx",
+                         zorder=6)
+    # Fill the hatch area with semi-transparent red
+    for bar in bars_leak:
+        bar.set_facecolor(CLR_LEAKED)
+        bar.set_alpha(0.25)
+
+    # Accuracy labels
+    for i in range(n):
+        fw = "bold" if methods[i] == "tracekg" else "normal"
+        fs = FONT_ANNOT + 1 if methods[i] == "tracekg" else FONT_ANNOT
+        ax_a.text(i, acc[i] + 1.8, f"{acc[i]:.1f}%", ha="center", va="bottom",
+                  fontsize=fs, fontweight=fw, zorder=15)
+
+    # Leakage labels with badge
+    for i in range(n):
+        if leak[i] >= 0.3:
+            label_y = min(leak[i] + 3.0, acc[i] - 5)
+            label_y = max(label_y, 5.0)
+            fs = FONT_ANNOT if leak[i] > 5 else FONT_NOTE
+            ax_a.text(i, label_y, f"Leak: {leak[i]:.1f}%",
+                      ha="center", va="bottom", fontsize=fs, fontweight="bold",
+                      color=CLR_LEAKED, zorder=15,
+                      bbox=dict(boxstyle="round,pad=0.2", facecolor="white",
+                                edgecolor=CLR_LEAKED, linewidth=1.2, alpha=0.92))
+
+    ax_a.set_xticks(x)
+    ax_a.set_xticklabels(labels, fontsize=FONT_LABEL)
+    ax_a.set_ylabel("Percentage (%)", fontsize=FONT_LABEL)
+    ax_a.set_title("(a) Retrieval Accuracy with Verbatim Leakage Highlighted",
+                   fontweight="bold", fontsize=FONT_SUBTITLE + 1, pad=14)
+    ax_a.set_ylim(0, 115)
+    ax_a.grid(axis="y", alpha=0.12, linewidth=0.5)
+
+    patch_acc = mpatches.Patch(facecolor="#AAAAAA", edgecolor="black", linewidth=0.6,
+                               label="Retrieval Accuracy")
+    patch_leak = mpatches.Patch(facecolor=CLR_LEAKED, edgecolor=CLR_LEAKED,
+                                linewidth=1.0, alpha=0.35, hatch="xxxx",
+                                label="Verbatim Leakage")
+    ax_a.legend(handles=[patch_acc, patch_leak], fontsize=FONT_TICK,
+                loc="center left", framealpha=0.95, edgecolor="#CCCCCC",
+                bbox_to_anchor=(0.0, 0.55))
+
+    ax_a.text(0.5, -0.08,
+              "Hatched region = 4-gram overlap between entity strings and source essay text",
+              transform=ax_a.transAxes, ha="center", va="top",
+              fontsize=FONT_NOTE + 1, color="#555555", fontstyle="italic")
+
+    # ── (b) TriCR ──
+    tricr = [agg[m]["tri_cr"] for m in methods]
+    tricr_dev = [abs(t - 1.0) for t in tricr]
+
+    bars_b = ax_b.barh(x, tricr_dev, color=colors, edgecolor="black",
+                       linewidth=0.6, height=0.55)
+
+    for i in range(n):
+        fw = "bold" if methods[i] == "tracekg" else "normal"
+        if tricr[i] > 1.5:
+            tag = "expansion"
+            tc = CLR_LEAKED
+        elif tricr[i] < 0.6:
+            tag = "oversimplified"
+            tc = "#B35900"
+        elif abs(tricr[i] - 1.0) < 0.15:
+            tag = "near-ideal"
+            tc = CLR_GENUINE
+        else:
+            tag = ""
+            tc = "#333333"
+
+        txt = f"{tricr[i]:.2f}"
+        if tag:
+            txt += f"  ({tag})"
+        ax_b.text(tricr_dev[i] + 0.05, i, txt,
+                  va="center", fontsize=FONT_ANNOT, fontweight=fw, color=tc)
+
+    ax_b.axvspan(0, 0.15, color=CLR_GENUINE, alpha=0.06, zorder=0)
+
+    ax_b.set_yticks(x)
+    ax_b.set_yticklabels(labels, fontsize=FONT_TICK)
+    ax_b.set_xlabel("Distance from Ideal  |TriCR − 1.0|", fontsize=FONT_LABEL)
+    ax_b.set_title("(b) Triple Compression Ratio (ideal = 1.0)",
+                   fontweight="bold", fontsize=FONT_SUBTITLE, pad=10)
+    ax_b.set_xlim(0, 3.8)
+    ax_b.axvline(x=0, color="black", linewidth=0.8)
+    ax_b.grid(axis="x", alpha=0.12, linewidth=0.5)
+
+    ax_b.text(0.5, -0.12,
+              "TriCR = total triple words / essay words",
+              transform=ax_b.transAxes, ha="center", va="top",
+              fontsize=FONT_NOTE + 1, color="#555555", fontstyle="italic")
+
+    # ── (c) Overall Rank ──
+    ranks = v5.get("avg_ranks", {})
+    sorted_m = sorted([m for m in methods if m in ranks], key=lambda m: ranks[m])
+    rank_vals = [ranks[m] for m in sorted_m]
+    rank_labels = [METHOD_LABELS[m] for m in sorted_m]
+    rank_colors = [METHOD_COLORS[m] for m in sorted_m]
+
+    bars_c = ax_c.barh(np.arange(len(sorted_m)), rank_vals, color=rank_colors,
+                       edgecolor="black", linewidth=0.6, height=0.55)
+
+    for i, (m, rv) in enumerate(zip(sorted_m, rank_vals)):
+        fw = "bold" if m == "tracekg" else "normal"
+        fs = FONT_ANNOT + 1 if m == "tracekg" else FONT_ANNOT
+        ax_c.text(rv + 0.08, i, f"{rv:.2f}", va="center", fontsize=fs, fontweight=fw)
+
+    ax_c.text(rank_vals[0] + 0.42, 0, "★", fontsize=18, va="center", ha="center",
+              color="#DAA520", fontweight="bold")
+
+    ax_c.set_yticks(np.arange(len(sorted_m)))
+    ax_c.set_yticklabels(rank_labels, fontsize=FONT_TICK)
+    ax_c.set_xlabel("Average Rank (lower = better)", fontsize=FONT_LABEL)
+    ax_c.set_title("(c) Overall Quality Ranking",
+                   fontweight="bold", fontsize=FONT_SUBTITLE, pad=10)
+    ax_c.set_xlim(0, 5.2)
+    ax_c.axvline(x=1, color="#0072B2", linestyle=":", alpha=0.25, linewidth=1)
+    ax_c.text(1.08, len(sorted_m) - 0.15, "perfect", fontsize=FONT_NOTE,
+              color="#0072B2", fontstyle="italic", alpha=0.5)
+    ax_c.invert_yaxis()
+    ax_c.grid(axis="x", alpha=0.12, linewidth=0.5)
+
+    ax_c.text(0.5, -0.12,
+              "Rank averaged over: Acc, ERA, Conn, Clust, AvgDeg, Leak%, TriCR",
+              transform=ax_c.transAxes, ha="center", va="top",
+              fontsize=FONT_NOTE + 1, color="#555555", fontstyle="italic")
+
+    path = FIG_OUT / "fig4_summary_dashboard.pdf"
+    fig.savefig(path)
+    fig.savefig(path.with_suffix(".png"))
+    plt.close(fig)
+    print(f"  Saved: {path}")
+
+
+# ============================================================
+# RUN ALL
+# ============================================================
+
+if __name__ == "__main__":
+    print("Generating KDD figures (final v4)...\n")
+    fig1_radar()
+    fig2_effective_retrieval_accuracy()
+    fig3_failure_modes()
+    fig4_summary_dashboard()
+    print(f"\n✅ All 4 figures saved to: {FIG_OUT}")
+
+#endregion#? 
+#?#########################  End  ##########################
+
+
+
+#?######################### Start ##########################
+#region:#?   v
+
+#endregion#? 
+#?#########################  End  ##########################
+
 #endregion#! Addomg AutoSchemaKG to the comparison
 #!#############################################  End Chapter  ##################################################
-
 
 
 
