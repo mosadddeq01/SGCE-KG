@@ -2,7 +2,8 @@
 
 
 
-
+#!############################################# Start Chapter ##################################################
+#region:#!   Ex 2
 
 
   #!############################################# Start Chapter ##################################################
@@ -7903,10 +7904,805 @@ generate_all_kdd_reports(
 
 
 
-#?######################### Start ##########################
-#region:#?   
 
-#endregion#? 
+#endregion#! Ex 2
+#!#############################################  End Chapter  ##################################################
+
+
+
+#?######################### Start ##########################
+#region:#?   Base Ex2
+
+
+
+
+
+#?######################### Start ##########################
+#region:#?     KDD-Ready Post-SchemaEval Reporting (v5 — Final for KDD)
+
+"""
+KDD-Ready Post-SchemaEval Reporting — v5 (Final)
+─────────────────────────────────────────────────
+Produces publication-quality tables + figures from SchemaEval outputs.
+
+Tables (per ontology):
+  Table 1: Schema Alignment Summary (main paper) — Test + All columns
+  Table 2: Granularity Analysis
+  Table A1–A4: Appendix detail
+
+Cross-ontology:
+  Table X: Aggregate across all ontologies (THE main KDD table)
+
+Figures:
+  Fig 1: Coverage bar chart across ontologies
+  Fig 2: Refinement composition (stacked bar)
+  Fig 3: Domain/Range accuracy vs coverage scatter
+  Fig 4: Judgement distribution pie/donut
+  Fig 5: MRR@K radar/bar chart
+"""
+
+from __future__ import annotations
+import csv, json, math
+from pathlib import Path
+from typing import Any, Dict, List, Optional, Tuple
+from collections import Counter, defaultdict
+
+# ────────────────────────────────────────────────
+# IO helpers (prefixed to avoid notebook collisions)
+# ────────────────────────────────────────────────
+def _csv(p: Path) -> List[dict]:
+    if not p.exists(): return []
+    with p.open("r", encoding="utf-8", newline="") as f:
+        return list(csv.DictReader(f))
+
+def _jsonl(p: Path) -> List[dict]:
+    out = []
+    if not p.exists(): return out
+    with p.open("r", encoding="utf-8", errors="replace") as f:
+        for ln in f:
+            ln = ln.strip()
+            if ln:
+                try: out.append(json.loads(ln))
+                except: pass
+    return out
+
+def _json(p: Path) -> Any:
+    if not p.exists(): return None
+    return json.loads(p.read_text(encoding="utf-8", errors="replace"))
+
+def _f(x, d=0.0):
+    """Safe float parse."""
+    try:
+        if x is None or str(x).strip() in ("", "nan", "None"): return d
+        return float(x)
+    except: return d
+
+def _i(x, d=0):
+    """Safe int parse."""
+    try:
+        if x is None or str(x).strip() in ("", "nan", "None"): return d
+        return int(float(x))
+    except: return d
+
+def _pct(v, d=1):
+    """Format 0..1 float as 'XX.X%'."""
+    if v is None: return "—"
+    return f"{v*100:.{d}f}%"
+
+def _dec(v, d=3):
+    """Format float as '0.XXX'."""
+    if v is None: return "—"
+    return f"{v:.{d}f}"
+
+def _lpct(v):
+    """LaTeX percentage."""
+    return f"{v*100:.1f}\\%"
+
+def _w(p: Path, text: str):
+    p.parent.mkdir(parents=True, exist_ok=True)
+    p.write_text(text, encoding="utf-8")
+
+
+# ────────────────────────────────────────────────
+# Data loader for one ontology
+# ───────────────────────────────────���────────────
+def load_eval_data(eval_dir: Path) -> dict:
+    """Load all SchemaEval outputs for one ontology into a dict."""
+    ed = Path(eval_dir).resolve()
+    summary_rows = _csv(ed / "summary.csv")
+    by_split = {}
+    for r in summary_rows:
+        by_split[r.get("split", "")] = r
+
+    return {
+        "eval_dir": ed,
+        "summary_by_split": by_split,
+        "by_rel": _csv(ed / "by_relation.csv"),
+        "by_con": _csv(ed / "by_concept.csv"),
+        "rel_records": _jsonl(ed / "llm_relation_records.jsonl"),
+        "con_records": _jsonl(ed / "llm_concept_records.jsonl"),
+        "summary_json": _json(ed / "summary.json") or {},
+    }
+
+
+# ────────────────────────────────────────────────
+# Extract clean metrics dict from one split row
+# ────────────────────────────────────────────────
+def extract_metrics(split_row: dict, by_rel: List[dict], by_con: List[dict]) -> dict:
+    """Pull all metrics from a summary.csv row into a clean dict."""
+    r = split_row
+    return {
+        "n_ref_rel_total": _i(r.get("n_ref_relations_total")),
+        "n_ref_con_total": _i(r.get("n_ref_concepts_total")),
+        "n_active_rel": _i(r.get("n_active_ref_relations")),
+        "n_active_con": _i(r.get("n_active_ref_concepts_anchored")),
+
+        "rel_cov_exact": _f(r.get("rel_cov_exact_w")),
+        "rel_cov_compat": _f(r.get("rel_cov_compat_w")),
+        "rel_cov_gen": _f(r.get("rel_cov_gen_w")),
+        "rel_hits_k": _f(r.get("rel_hits@k_compat_w")),
+        "rel_mrr_k": _f(r.get("rel_mrr@k_compat_w")),
+        "rel_prec_compat": _f(r.get("rel_candidate_precision_compat")),
+        "rel_refine": _f(r.get("rel_refinement_rate_only_narrower_w")),
+
+        "con_cov_exact": _f(r.get("con_cov_exact_w")),
+        "con_cov_compat": _f(r.get("con_cov_compat_w")),
+        "con_cov_gen": _f(r.get("con_cov_gen_w")),
+        "con_hits_k": _f(r.get("con_hits@k_compat_w")),
+        "con_mrr_k": _f(r.get("con_mrr@k_compat_w")),
+        "con_prec_compat": _f(r.get("con_candidate_precision_compat")),
+        "con_refine": _f(r.get("con_refinement_rate_only_narrower_w")),
+
+        "dr_acc": _f(r.get("rel_dr_acc_any_direction_w")),
+        "dr_n_compared": _i(r.get("rel_dr_n_compared")),
+        "dr_same": _i(r.get("rel_dr_same_dir_hits")),
+        "dr_inv": _i(r.get("rel_dr_inverse_dir_hits")),
+    }
+
+
+# ================================================================
+#  TABLE 1 — Schema Alignment Summary (per ontology, BOTH splits)
+# ================================================================
+def make_table1(ont_key: str, data: dict) -> str:
+    s = data["summary_by_split"]
+    test_m = extract_metrics(s.get("test", {}), data["by_rel"], data["by_con"])
+    all_m  = extract_metrics(s.get("all", {}), data["by_rel"], data["by_con"])
+
+    W = 76
+    lines = []
+    lines.append("=" * W)
+    lines.append(f"  Table 1: Schema Alignment — {ont_key}")
+    lines.append(f"  Schema induced from train.  Evaluated on test & all splits.")
+    lines.append("=" * W)
+    lines.append(f"  {'':40s} {'Test':>14s} {'All':>14s}")
+    lines.append("  " + "-" * (W - 4))
+
+    def row(label, t, a):
+        lines.append(f"  {label:40s} {t:>14s} {a:>14s}")
+
+    # --- Counts ---
+    row("Active / Total REF Relations",
+        f"{test_m['n_active_rel']}/{test_m['n_ref_rel_total']}",
+        f"{all_m['n_active_rel']}/{all_m['n_ref_rel_total']}")
+    row("Active / Total REF Concepts",
+        f"{test_m['n_active_con']}/{test_m['n_ref_con_total']}",
+        f"{all_m['n_active_con']}/{all_m['n_ref_con_total']}")
+    lines.append("")
+
+    # --- Relation metrics ---
+    row("Relation Coverage (Compat)",
+        _pct(test_m["rel_cov_compat"]), _pct(all_m["rel_cov_compat"]))
+    row("  of which Exact (Equivalent)",
+        _pct(test_m["rel_cov_exact"]), _pct(all_m["rel_cov_exact"]))
+    row("  of which Narrower only",
+        _pct(test_m["rel_cov_compat"] - test_m["rel_cov_exact"]),
+        _pct(all_m["rel_cov_compat"] - all_m["rel_cov_exact"]))
+    row("Relation MRR@K",
+        _dec(test_m["rel_mrr_k"]), _dec(all_m["rel_mrr_k"]))
+    row("Relation Candidate Precision",
+        _pct(test_m["rel_prec_compat"]), _pct(all_m["rel_prec_compat"]))
+    lines.append("")
+
+    # --- Concept metrics ---
+    row("Concept Coverage (Compat)",
+        _pct(test_m["con_cov_compat"]), _pct(all_m["con_cov_compat"]))
+    row("  of which Exact (Equivalent)",
+        _pct(test_m["con_cov_exact"]), _pct(all_m["con_cov_exact"]))
+    row("  of which Narrower only",
+        _pct(test_m["con_cov_compat"] - test_m["con_cov_exact"]),
+        _pct(all_m["con_cov_compat"] - all_m["con_cov_exact"]))
+    row("Concept MRR@K",
+        _dec(test_m["con_mrr_k"]), _dec(all_m["con_mrr_k"]))
+    row("Concept Candidate Precision",
+        _pct(test_m["con_prec_compat"]), _pct(all_m["con_prec_compat"]))
+    lines.append("")
+
+    # --- Domain/Range ---
+    row("Domain/Range Accuracy",
+        _pct(test_m["dr_acc"]), _pct(all_m["dr_acc"]))
+
+    lines.append("=" * W)
+    lines.append("  Coverage = Equivalent + valid Narrower (direction-relaxed).")
+    lines.append("  Weighted by gold-triple frequency per split.  GPT-5.1 judge.")
+    return "\n".join(lines)
+
+
+# ================================================================
+#  TABLE 2 — Granularity Analysis (per ontology)
+# ================================================================
+def make_table2(ont_key: str, data: dict) -> str:
+    s = data["summary_by_split"]
+    t = extract_metrics(s.get("test", {}), data["by_rel"], data["by_con"])
+    a = extract_metrics(s.get("all", {}), data["by_rel"], data["by_con"])
+
+    W = 78
+    lines = []
+    lines.append("=" * W)
+    lines.append(f"  Table 2: Granularity Analysis — {ont_key}")
+    lines.append("=" * W)
+    lines.append(f"  {'Tier':<18s} {'Rel(Test)':>10s} {'Rel(All)':>10s} {'Con(Test)':>10s} {'Con(All)':>10s}")
+    lines.append("  " + "-" * (W - 4))
+
+    def row(label, rt, ra, ct, ca):
+        lines.append(f"  {label:<18s} {rt:>10s} {ra:>10s} {ct:>10s} {ca:>10s}")
+
+    row("Exact",     _pct(t["rel_cov_exact"]),  _pct(a["rel_cov_exact"]),
+                     _pct(t["con_cov_exact"]),  _pct(a["con_cov_exact"]))
+    row("Compat",    _pct(t["rel_cov_compat"]), _pct(a["rel_cov_compat"]),
+                     _pct(t["con_cov_compat"]), _pct(a["con_cov_compat"]))
+    row("Gen",       _pct(t["rel_cov_gen"]),    _pct(a["rel_cov_gen"]),
+                     _pct(t["con_cov_gen"]),    _pct(a["con_cov_gen"]))
+    lines.append("  " + "-" * (W - 4))
+    row("Compat−Exact",
+        _pct(t["rel_cov_compat"]-t["rel_cov_exact"]),
+        _pct(a["rel_cov_compat"]-a["rel_cov_exact"]),
+        _pct(t["con_cov_compat"]-t["con_cov_exact"]),
+        _pct(a["con_cov_compat"]-a["con_cov_exact"]))
+    row("Refinement Rate",
+        _pct(t["rel_refine"]), _pct(a["rel_refine"]),
+        _pct(t["con_refine"]), _pct(a["con_refine"]))
+    lines.append("=" * W)
+    return "\n".join(lines)
+
+
+# ================================================================
+#  TABLE A1 — Per-Relation (per ontology, appendix)
+# ================================================================
+def make_table_a1(ont_key: str, data: dict) -> str:
+    by_rel = data["by_rel"]
+    if not by_rel: return "(No by_relation.csv data)"
+
+    wcol = "active_weight_test"
+    if by_rel and wcol not in by_rel[0]:
+        wc = [c for c in by_rel[0] if c.startswith("active_weight_")]
+        wcol = wc[0] if wc else None
+
+    rows = sorted(by_rel, key=lambda r: _i(r.get(wcol, 0)), reverse=True)
+
+    lines = [
+        "=" * 95,
+        f"  Table A1: Per-Relation — {ont_key}",
+        "=" * 95,
+        f"  {'REF Relation':<25s} {'w':>5s} {'Exact':>6s} {'Compat':>7s} {'Rank':>5s} {'#Eq':>4s} {'#Nar':>5s}",
+        "  " + "-" * 58,
+    ]
+    for r in rows:
+        lbl = r.get("ref_label", "")
+        w   = _i(r.get(wcol, 0))
+        ce  = "✓" if _i(r.get("covered_exact")) else "✗"
+        cc  = "✓" if _i(r.get("covered_compat")) else "✗"
+        rk  = r.get("first_rank_compat", "") or "—"
+        neq = _i(r.get("n_equivalent_usable"))
+        nar = _i(r.get("n_compat_usable")) - neq
+        mark = "" if w > 0 else " (inactive)"
+        lines.append(f"  {lbl:<25s} {w:>5d} {ce:>6s} {cc:>7s} {rk:>5s} {neq:>4d} {nar:>5d}{mark}")
+
+    active = [r for r in rows if _i(r.get(wcol, 0)) > 0]
+    n_a = len(active)
+    nc = sum(1 for r in active if _i(r.get("covered_compat")))
+    lines.append("  " + "-" * 58)
+    lines.append(f"  Active: {n_a}   Covered (Compat): {nc}/{n_a}")
+    lines.append("=" * 95)
+    return "\n".join(lines)
+
+
+# ================================================================
+#  TABLE A2 — Per-Concept (per ontology, appendix)
+# ================================================================
+def make_table_a2(ont_key: str, data: dict) -> str:
+    by_con = data["by_con"]
+    con_rec = data["con_records"]
+    if not by_con: return "(No by_concept.csv data)"
+
+    wcol = "active_weight_test"
+    if by_con and wcol not in by_con[0]:
+        wc = [c for c in by_con[0] if c.startswith("active_weight_")]
+        wcol = wc[0] if wc else None
+
+    # Best match lookup
+    best = {}
+    for rec in con_rec:
+        rl = rec.get("ref_label", "")
+        items = rec.get("parsed_items") or []
+        pri = {"Equivalent": 3, "Narrower": 2, "Broader": 1}
+        b = None; bs = -1
+        for it in items:
+            if not it.get("usable_as_schema"): continue
+            sc = pri.get(it.get("judgement", ""), 0)
+            if sc > bs: bs = sc; b = it
+        best[rl] = f"{b['trace_label']} ({b['judgement']})" if b else "—"
+
+    rows = sorted(by_con, key=lambda r: _i(r.get(wcol, 0)), reverse=True)
+
+    lines = [
+        "=" * 100,
+        f"  Table A2: Per-Concept — {ont_key}",
+        "=" * 100,
+        f"  {'REF Concept':<22s} {'w':>5s} {'Exact':>6s} {'Compat':>7s} {'Rank':>5s} {'Best Match':<30s}",
+        "  " + "-" * 78,
+    ]
+    for r in rows:
+        lbl = r.get("ref_label", "")
+        w = _i(r.get(wcol, 0))
+        ce = "✓" if _i(r.get("covered_exact")) else "✗"
+        cc = "✓" if _i(r.get("covered_compat")) else "✗"
+        rk = r.get("first_rank_compat", "") or "—"
+        bm = best.get(lbl, "—")
+        if len(bm) > 30: bm = bm[:27] + "..."
+        lines.append(f"  {lbl:<22s} {w:>5d} {ce:>6s} {cc:>7s} {rk:>5s} {bm:<30s}")
+
+    lines.append("=" * 100)
+    return "\n".join(lines)
+
+
+# ================================================================
+#  TABLE A3 — LLM Judge Statistics (per ontology, appendix)
+# ================================================================
+def make_table_a3(ont_key: str, data: dict) -> str:
+    def stats(records, kind):
+        jd = Counter(); confs = []; pe = 0; n = 0
+        for rec in records:
+            if (rec.get("parse_error") or "").strip(): pe += 1
+            for it in (rec.get("parsed_items") or []):
+                n += 1
+                jd[it.get("judgement", "?")] += 1
+                c = _f(it.get("confidence"), d=None)
+                if c is not None: confs.append(c)
+        confs.sort()
+        nc = len(confs)
+        return {
+            "kind": kind, "n_anchors": len(records), "n_items": n,
+            "parse_ok": f"{(1 - pe / max(len(records),1)) * 100:.0f}%",
+            "jd": dict(jd),
+            "p50": f"{confs[nc//2]:.2f}" if nc else "—",
+            "p90": f"{confs[int(.9*(nc-1))]:.2f}" if nc >= 2 else "—",
+        }
+
+    rs = stats(data["rel_records"], "Relation")
+    cs = stats(data["con_records"], "Concept")
+
+    lines = ["=" * 70, f"  Table A3: LLM Judge Statistics — {ont_key}", "=" * 70]
+    for s in [rs, cs]:
+        lines.append(f"\n  {s['kind']}: {s['n_anchors']} anchors, {s['n_items']} judgements, parse={s['parse_ok']}")
+        for j in ["Equivalent", "Narrower", "Broader", "Unrelated"]:
+            c = s["jd"].get(j, 0)
+            lines.append(f"    {j:<14s}: {c:>4d} ({c/max(s['n_items'],1)*100:.1f}%)")
+        lines.append(f"    Confidence p50={s['p50']}  p90={s['p90']}")
+    lines.append("=" * 70)
+    return "\n".join(lines)
+
+
+# ================================================================
+#  TABLE X — Cross-Ontology Aggregate (THE main KDD table)
+# ================================================================
+def make_cross_ontology_table(all_data: Dict[str, dict]) -> str:
+    """
+    One row per ontology.  Columns: key metrics from the TEST split.
+    This is the table a KDD reviewer looks at first.
+    """
+    keys = sorted(all_data.keys())
+
+    W = 130
+    lines = [
+        "=" * W,
+        "  Table X: Cross-Ontology Schema Alignment Summary (Test Split)",
+        "=" * W,
+        (f"  {'Ontology':<18s} {'#Rel':>5s} {'#Con':>5s}"
+         f" {'RelCov%':>8s} {'RelExact%':>10s} {'RelMRR':>7s}"
+         f" {'ConCov%':>8s} {'ConExact%':>10s} {'ConMRR':>7s}"
+         f" {'DR%':>6s} {'RelPrec%':>9s} {'ConPrec%':>9s}"),
+        "  " + "-" * (W - 4),
+    ]
+
+    agg = defaultdict(list)  # for computing averages
+
+    for k in keys:
+        d = all_data[k]
+        s = d["summary_by_split"].get("test", {})
+        m = extract_metrics(s, d["by_rel"], d["by_con"])
+
+        lines.append(
+            f"  {k:<18s}"
+            f" {m['n_active_rel']:>5d} {m['n_active_con']:>5d}"
+            f" {_pct(m['rel_cov_compat']):>8s} {_pct(m['rel_cov_exact']):>10s} {_dec(m['rel_mrr_k']):>7s}"
+            f" {_pct(m['con_cov_compat']):>8s} {_pct(m['con_cov_exact']):>10s} {_dec(m['con_mrr_k']):>7s}"
+            f" {_pct(m['dr_acc']):>6s} {_pct(m['rel_prec_compat']):>9s} {_pct(m['con_prec_compat']):>9s}"
+        )
+
+        for fld in ["rel_cov_compat", "rel_cov_exact", "rel_mrr_k",
+                     "con_cov_compat", "con_cov_exact", "con_mrr_k",
+                     "dr_acc", "rel_prec_compat", "con_prec_compat"]:
+            agg[fld].append(m[fld])
+
+    # Macro-average row
+    lines.append("  " + "-" * (W - 4))
+    def avg(lst):
+        return sum(lst) / len(lst) if lst else 0.0
+
+    lines.append(
+        f"  {'MACRO AVG':<18s}"
+        f" {'':>5s} {'':>5s}"
+        f" {_pct(avg(agg['rel_cov_compat'])):>8s} {_pct(avg(agg['rel_cov_exact'])):>10s} {_dec(avg(agg['rel_mrr_k'])):>7s}"
+        f" {_pct(avg(agg['con_cov_compat'])):>8s} {_pct(avg(agg['con_cov_exact'])):>10s} {_dec(avg(agg['con_mrr_k'])):>7s}"
+        f" {_pct(avg(agg['dr_acc'])):>6s} {_pct(avg(agg['rel_prec_compat'])):>9s} {_pct(avg(agg['con_prec_compat'])):>9s}"
+    )
+
+    lines.append("=" * W)
+    lines.append("  #Rel/#Con = active REF relations/concepts in test.  Cov = Compat coverage.")
+    lines.append("  Exact = Equivalent-only coverage.  MRR = Mean Reciprocal Rank @ top-K.")
+    lines.append("  DR = Domain/Range accuracy (direction-relaxed).  Prec = Candidate precision.")
+    lines.append("  All metrics weighted by gold-triple frequency.  GPT-5.1 judge.")
+    return "\n".join(lines)
+
+
+# ================================================================
+#  LaTeX: Cross-Ontology Table (main paper table)
+# ================================================================
+def make_latex_cross_table(all_data: Dict[str, dict]) -> str:
+    keys = sorted(all_data.keys())
+
+    latex = [
+        "\\begin{table*}[t]",
+        "\\centering",
+        "\\caption{Schema alignment across six Text2KGBench ontologies (test split). "
+        "Coverage reports the weighted fraction of reference schema elements recovered "
+        "(Equivalent + valid Narrower). Direction-relaxed; GPT-5.1 LLM judge.}",
+        "\\label{tab:cross-ontology}",
+        "\\small",
+        "\\begin{tabular}{l rr rr r rr rr r}",
+        "\\toprule",
+        " & \\multicolumn{2}{c}{\\textbf{Active}} & \\multicolumn{2}{c}{\\textbf{Rel. Coverage}} & & \\multicolumn{2}{c}{\\textbf{Con. Coverage}} & & \\textbf{DR} \\\\",
+        "\\cmidrule(lr){2-3} \\cmidrule(lr){4-5} \\cmidrule(lr){7-8}",
+        "\\textbf{Ontology} & \\textbf{\\#Rel} & \\textbf{\\#Con} & \\textbf{Compat} & \\textbf{Exact} & \\textbf{MRR} & \\textbf{Compat} & \\textbf{Exact} & \\textbf{MRR} & \\textbf{Acc.} \\\\",
+        "\\midrule",
+    ]
+
+    agg = defaultdict(list)
+    for k in keys:
+        d = all_data[k]
+        s = d["summary_by_split"].get("test", {})
+        m = extract_metrics(s, d["by_rel"], d["by_con"])
+
+        name = k.replace("_", "\\_")
+        latex.append(
+            f"{name} & {m['n_active_rel']} & {m['n_active_con']}"
+            f" & {_lpct(m['rel_cov_compat'])} & {_lpct(m['rel_cov_exact'])} & {m['rel_mrr_k']:.3f}"
+            f" & {_lpct(m['con_cov_compat'])} & {_lpct(m['con_cov_exact'])} & {m['con_mrr_k']:.3f}"
+            f" & {_lpct(m['dr_acc'])} \\\\"
+        )
+        for fld in ["rel_cov_compat", "rel_cov_exact", "rel_mrr_k",
+                     "con_cov_compat", "con_cov_exact", "con_mrr_k", "dr_acc"]:
+            agg[fld].append(m[fld])
+
+    def avg(lst): return sum(lst)/len(lst) if lst else 0
+
+    latex.append("\\midrule")
+    latex.append(
+        f"\\textbf{{Macro Avg.}} & & "
+        f" & {_lpct(avg(agg['rel_cov_compat']))} & {_lpct(avg(agg['rel_cov_exact']))} & {avg(agg['rel_mrr_k']):.3f}"
+        f" & {_lpct(avg(agg['con_cov_compat']))} & {_lpct(avg(agg['con_cov_exact']))} & {avg(agg['con_mrr_k']):.3f}"
+        f" & {_lpct(avg(agg['dr_acc']))} \\\\"
+    )
+
+    latex += [
+        "\\bottomrule",
+        "\\end{tabular}",
+        "\\end{table*}",
+    ]
+    return "\n".join(latex)
+
+
+# ================================================================
+#  FIGURES (requires matplotlib)
+# ================================================================
+TRACE_COLORS = ["#882255", "#44AA99", "#332288", "#E69F00", "#0072B2", "#CC6677"]
+
+def generate_figures(all_data: Dict[str, dict], out_dir: Path):
+    """Generate KDD-quality figures. Fails gracefully if matplotlib missing."""
+    try:
+        import matplotlib
+        matplotlib.use("Agg")
+        import matplotlib.pyplot as plt
+        import numpy as np
+    except ImportError:
+        print("  [WARN] matplotlib not available — skipping figures.")
+        return
+
+    out_dir.mkdir(parents=True, exist_ok=True)
+    keys = sorted(all_data.keys())
+    n = len(keys)
+    short_names = [k.split("_", 1)[1] if "_" in k else k for k in keys]
+
+    # Gather test-split metrics
+    ms = []
+    for k in keys:
+        d = all_data[k]
+        s = d["summary_by_split"].get("test", {})
+        ms.append(extract_metrics(s, d["by_rel"], d["by_con"]))
+
+    # ─── Fig 1: Compat Coverage (grouped bar) ───
+    fig, ax = plt.subplots(figsize=(8, 4))
+    x = np.arange(n)
+    w = 0.35
+    rel_vals = [m["rel_cov_compat"] * 100 for m in ms]
+    con_vals = [m["con_cov_compat"] * 100 for m in ms]
+    ax.bar(x - w/2, rel_vals, w, label="Relation Coverage", color=TRACE_COLORS[0])
+    ax.bar(x + w/2, con_vals, w, label="Concept Coverage", color=TRACE_COLORS[1])
+    ax.set_ylabel("Compat Coverage (%)")
+    ax.set_xticks(x)
+    ax.set_xticklabels(short_names, rotation=25, ha="right")
+    ax.set_ylim(0, 105)
+    ax.legend(frameon=False)
+    ax.set_title("Schema Coverage Across Ontologies (Test Split)")
+    for i in range(n):
+        ax.text(x[i] - w/2, rel_vals[i] + 1, f"{rel_vals[i]:.0f}", ha="center", va="bottom", fontsize=7)
+        ax.text(x[i] + w/2, con_vals[i] + 1, f"{con_vals[i]:.0f}", ha="center", va="bottom", fontsize=7)
+    fig.tight_layout()
+    fig.savefig(out_dir / "fig1_coverage_bar.pdf", dpi=300)
+    fig.savefig(out_dir / "fig1_coverage_bar.png", dpi=300)
+    plt.close(fig)
+    print(f"  Fig 1 → {out_dir / 'fig1_coverage_bar.pdf'}")
+
+    # ─── Fig 2: Stacked bar — Exact vs Narrower-only gap ───
+    fig, axes = plt.subplots(1, 2, figsize=(10, 4), sharey=True)
+    for idx, (title, ex_key, co_key) in enumerate([
+        ("Relations", "rel_cov_exact", "rel_cov_compat"),
+        ("Concepts", "con_cov_exact", "con_cov_compat"),
+    ]):
+        ax = axes[idx]
+        exact = [m[ex_key] * 100 for m in ms]
+        nar   = [(m[co_key] - m[ex_key]) * 100 for m in ms]
+        ax.bar(x, exact, 0.6, label="Equivalent (Exact)", color=TRACE_COLORS[2])
+        ax.bar(x, nar, 0.6, bottom=exact, label="Narrower (Subtype)", color=TRACE_COLORS[3])
+        ax.set_xticks(x)
+        ax.set_xticklabels(short_names, rotation=25, ha="right")
+        ax.set_ylabel("Coverage (%)" if idx == 0 else "")
+        ax.set_ylim(0, 105)
+        ax.set_title(title)
+        ax.legend(frameon=False, fontsize=8)
+    fig.suptitle("Coverage Composition: Exact vs Subtype Refinement (Test)", fontsize=11)
+    fig.tight_layout()
+    fig.savefig(out_dir / "fig2_stacked_exact_narrower.pdf", dpi=300)
+    fig.savefig(out_dir / "fig2_stacked_exact_narrower.png", dpi=300)
+    plt.close(fig)
+    print(f"  Fig 2 → {out_dir / 'fig2_stacked_exact_narrower.pdf'}")
+
+    # ─── Fig 3: DR Accuracy vs Relation Coverage scatter ───
+    fig, ax = plt.subplots(figsize=(6, 5))
+    rel_cov = [m["rel_cov_compat"] * 100 for m in ms]
+    dr_acc  = [m["dr_acc"] * 100 for m in ms]
+    for i in range(n):
+        ax.scatter(rel_cov[i], dr_acc[i], s=120, color=TRACE_COLORS[i % len(TRACE_COLORS)],
+                   zorder=5, edgecolors="black", linewidth=0.5)
+        ax.annotate(short_names[i], (rel_cov[i], dr_acc[i]),
+                    textcoords="offset points", xytext=(6, 6), fontsize=8)
+    ax.set_xlabel("Relation Compat Coverage (%)")
+    ax.set_ylabel("Domain/Range Accuracy (%)")
+    ax.set_title("Coverage vs Domain/Range Accuracy (Test)")
+    ax.set_xlim(max(0, min(rel_cov) - 10), 105)
+    ax.set_ylim(max(0, min(dr_acc) - 10), 105)
+    ax.grid(True, alpha=0.3)
+    fig.tight_layout()
+    fig.savefig(out_dir / "fig3_coverage_vs_dr.pdf", dpi=300)
+    fig.savefig(out_dir / "fig3_coverage_vs_dr.png", dpi=300)
+    plt.close(fig)
+    print(f"  Fig 3 → {out_dir / 'fig3_coverage_vs_dr.pdf'}")
+
+    # ─── Fig 4: Judgement Distribution (donut, aggregated) ───
+    all_jd_rel = Counter()
+    all_jd_con = Counter()
+    for k in keys:
+        for rec in all_data[k]["rel_records"]:
+            for it in (rec.get("parsed_items") or []):
+                all_jd_rel[it.get("judgement", "?")] += 1
+        for rec in all_data[k]["con_records"]:
+            for it in (rec.get("parsed_items") or []):
+                all_jd_con[it.get("judgement", "?")] += 1
+
+    fig, axes = plt.subplots(1, 2, figsize=(10, 4.5))
+    jd_order = ["Equivalent", "Narrower", "Broader", "Unrelated"]
+    jd_colors = [TRACE_COLORS[2], TRACE_COLORS[3], TRACE_COLORS[1], "#BBBBBB"]
+
+    for idx, (title, counter) in enumerate([("Relation Judgements", all_jd_rel),
+                                             ("Concept Judgements", all_jd_con)]):
+        ax = axes[idx]
+        vals = [counter.get(j, 0) for j in jd_order]
+        total = sum(vals)
+        labels = [f"{j}\n{v} ({v/total*100:.0f}%)" for j, v in zip(jd_order, vals)]
+        wedges, _ = ax.pie(vals, colors=jd_colors, startangle=90,
+                           wedgeprops=dict(width=0.45, edgecolor='white'))
+        ax.legend(wedges, labels, loc="center left", bbox_to_anchor=(0.85, 0.5), fontsize=8, frameon=False)
+        ax.set_title(title, fontsize=10)
+
+    fig.suptitle("LLM Judge Verdicts (Aggregated Across All Ontologies)", fontsize=11)
+    fig.tight_layout()
+    fig.savefig(out_dir / "fig4_judgement_donuts.pdf", dpi=300)
+    fig.savefig(out_dir / "fig4_judgement_donuts.png", dpi=300)
+    plt.close(fig)
+    print(f"  Fig 4 → {out_dir / 'fig4_judgement_donuts.pdf'}")
+
+    # ─── Fig 5: MRR@K comparison (horizontal bar) ───
+    fig, ax = plt.subplots(figsize=(7, 4))
+    y = np.arange(n)
+    h = 0.35
+    rel_mrr = [m["rel_mrr_k"] for m in ms]
+    con_mrr = [m["con_mrr_k"] for m in ms]
+    ax.barh(y + h/2, rel_mrr, h, label="Relation MRR@K", color=TRACE_COLORS[0])
+    ax.barh(y - h/2, con_mrr, h, label="Concept MRR@K", color=TRACE_COLORS[1])
+    ax.set_yticks(y)
+    ax.set_yticklabels(short_names)
+    ax.set_xlabel("MRR@K")
+    ax.set_xlim(0, 1.05)
+    ax.legend(frameon=False)
+    ax.set_title("Mean Reciprocal Rank Across Ontologies (Test)")
+    for i in range(n):
+        ax.text(rel_mrr[i] + 0.01, y[i] + h/2, f"{rel_mrr[i]:.2f}", va="center", fontsize=7)
+        ax.text(con_mrr[i] + 0.01, y[i] - h/2, f"{con_mrr[i]:.2f}", va="center", fontsize=7)
+    fig.tight_layout()
+    fig.savefig(out_dir / "fig5_mrr_hbar.pdf", dpi=300)
+    fig.savefig(out_dir / "fig5_mrr_hbar.png", dpi=300)
+    plt.close(fig)
+    print(f"  Fig 5 → {out_dir / 'fig5_mrr_hbar.pdf'}")
+
+
+# ================================================================
+#  MAIN DRIVER: generate_kdd_report (single ontology)
+# ================================================================
+def generate_kdd_report(eval_dir: Path, ont_key: str, write: bool = True) -> dict:
+    """Generate all per-ontology tables.  Returns the loaded data dict."""
+    ed = Path(eval_dir).resolve()
+    data = load_eval_data(ed)
+    out = ed / "KDD_Tables"
+
+    t1  = make_table1(ont_key, data)
+    t2  = make_table2(ont_key, data)
+    ta1 = make_table_a1(ont_key, data)
+    ta2 = make_table_a2(ont_key, data)
+    ta3 = make_table_a3(ont_key, data)
+
+    print(f"\n{'='*60}")
+    print(f"  KDD Report: {ont_key}")
+    print(f"{'='*60}")
+    print(t1)
+    print()
+    print(t2)
+
+    if write:
+        _w(out / "Table1_Schema_Alignment.txt", t1)
+        _w(out / "Table2_Granularity.txt", t2)
+        _w(out / "TableA1_Per_Relation.txt", ta1)
+        _w(out / "TableA2_Per_Concept.txt", ta2)
+        _w(out / "TableA3_LLM_Judge.txt", ta3)
+
+        # JSON bundle for programmatic access
+        metrics = {}
+        for sp, row in data["summary_by_split"].items():
+            metrics[sp] = extract_metrics(row, data["by_rel"], data["by_con"])
+        _w(out / "all_metrics.json", json.dumps(
+            {"ontology_key": ont_key, "metrics_by_split": metrics},
+            ensure_ascii=False, indent=2))
+
+        print(f"  Files → {out}")
+
+    return data
+
+
+# ================================================================
+#  MAIN DRIVER: generate_all_kdd_reports (multi-ontology)
+# ================================================================
+def generate_all_kdd_reports(
+    ontologies: Dict[str, Path],
+    cross_out_dir: Path,
+    write: bool = True,
+    make_figs: bool = True,
+) -> None:
+    """
+    Run per-ontology reports + cross-ontology aggregate table + figures.
+
+    Args:
+        ontologies: {ontology_key: eval_dir_path, ...}
+        cross_out_dir: where to write aggregate outputs + figures
+        write: whether to write files
+        make_figs: whether to generate matplotlib figures
+    """
+    all_data: Dict[str, dict] = {}
+
+    # Per-ontology
+    for ont_key, eval_dir in sorted(ontologies.items()):
+        data = generate_kdd_report(eval_dir, ont_key, write=write)
+        all_data[ont_key] = data
+
+    # Cross-ontology
+    cross_out = Path(cross_out_dir).resolve()
+    cross_out.mkdir(parents=True, exist_ok=True)
+
+    cross_txt = make_cross_ontology_table(all_data)
+    cross_latex = make_latex_cross_table(all_data)
+
+    print(f"\n{'='*60}")
+    print("  Cross-Ontology Summary")
+    print(f"{'='*60}")
+    print(cross_txt)
+    print()
+    print(cross_latex)
+
+    if write:
+        _w(cross_out / "TableX_Cross_Ontology.txt", cross_txt)
+        _w(cross_out / "TableX_Cross_Ontology_latex.tex", cross_latex)
+
+        # Aggregate JSON
+        agg = {}
+        for k, d in all_data.items():
+            s = d["summary_by_split"].get("test", {})
+            agg[k] = extract_metrics(s, d["by_rel"], d["by_con"])
+        _w(cross_out / "cross_ontology_metrics.json",
+           json.dumps(agg, ensure_ascii=False, indent=2))
+
+    if make_figs:
+        print("\nGenerating figures...")
+        generate_figures(all_data, cross_out / "figures")
+
+    print(f"\n  All cross-ontology outputs → {cross_out}")
+
+
+#endregion#?   KDD-Ready Post-SchemaEval Reporting (v5 — Final)
+#?#########################  End  ##########################
+
+
+# ================================================================
+#  RUN — Single ontology
+# ================================================================
+# generate_kdd_report(
+#     eval_dir=Path("Experiments/MYNE/Ex4_T2KGBench/KGs_from_Essays/KG_Ont_6_politician/OntCompResults/SchemaEval/6_politician"),
+#     ont_key="6_politician",
+# )
+
+
+# ================================================================
+#  RUN — All 6 ontologies + cross-ontology aggregate + figures
+# ================================================================
+BASE = Path("Experiments/MYNE/Ex4_T2KGBench/KGs_from_Essays")
+
+ONTOLOGIES = {
+    "6_politician":       BASE / "KG_Ont_6_politician"       / "OntCompResults/SchemaEval/6_politician",
+    # "7_company":          BASE / "KG_Ont_7_company"           / "OntCompResults/SchemaEval/7_company",
+    # "9_comicscharacter":  BASE / "KG_Ont_9_comicscharacter"   / "OntCompResults/SchemaEval/9_comicscharacter",
+    # "10_celestialbody":   BASE / "KG_Ont_10_celestialbody"    / "OntCompResults/SchemaEval/10_celestialbody",
+    # "18_scientist":       BASE / "KG_Ont_18_scientist"        / "OntCompResults/SchemaEval/18_scientist",
+    "19_film":            BASE / "KG_Ont_19_film"             / "OntCompResults/SchemaEval/19_film",
+}
+
+generate_all_kdd_reports(
+    ontologies=ONTOLOGIES,
+    cross_out_dir=BASE / "KDD_Cross_Ontology_Results",
+    write=True,
+    make_figs=True,
+)
+    
+    
+    
+
+#endregion#? Base Ex2
 #?#########################  End  ##########################
 
 
@@ -7916,9 +8712,23 @@ generate_all_kdd_reports(
 
 
 
+#?######################### Start ##########################
+#region:#?     N1
+
+#endregion#?   N1
+#?#########################  End  ##########################
 
 
 
+
+
+
+
+#?######################### Start ##########################
+#region:#?     N2
+
+#endregion#?   N2
+#?#########################  End  ##########################
 
 
 

@@ -1,7 +1,4 @@
 
-  
-
-
 
 
 #!############################################# Start Chapter ##################################################
@@ -6715,8 +6712,11 @@ if __name__ == "__main__":
 
 
 
+
+
 #?######################### Start ##########################
-#region:#?   5-3 
+#region:#?  Base
+
 
 """
 KDD-Ready Figures for TRACE KG Paper — MINE-1 Evaluation (Final v4)
@@ -7325,16 +7325,646 @@ if __name__ == "__main__":
 
 
 
-#?######################### Start ##########################
-#region:#?   v
-
-#endregion#? 
-#?#########################  End  ##########################
-
 #endregion#! Addomg AutoSchemaKG to the comparison
 #!#############################################  End Chapter  ##################################################
 
 
+
+
+
+
+
+
+#?######################### Start ##########################
+#region:#?  Base
+
+
+"""
+KDD-Ready Figures for TRACE KG Paper — MINE-1 Evaluation (Final v4)
+=====================================================================
+
+4 publication-quality figures:
+
+  Fig 1: Radar — multi-dimensional quality profile
+  Fig 2: Effective Retrieval Accuracy (single bar, prominent)
+  Fig 3: "Why Raw Accuracy is Misleading" — 3-panel failure mode exposé
+  Fig 4: Summary dashboard — cleaned, publication-ready (3 panels)
+
+Color palette: Okabe-Ito colorblind-safe.
+All data from compression_analysis_v5.json.
+"""
+
+import json
+import numpy as np
+import matplotlib.pyplot as plt
+import matplotlib.patches as mpatches
+import matplotlib.ticker as mticker
+from pathlib import Path
+from typing import Dict, List
+
+# ============================================================
+# CONFIG
+# ============================================================
+
+REPO_ROOT = Path(".").resolve()
+V5_JSON = REPO_ROOT / "Experiments/MYNE/Ex1/RES/compression_analysis_v5.json"
+FIG_OUT = REPO_ROOT / "Experiments/MYNE/Ex1/RES/figures"
+FIG_OUT.mkdir(parents=True, exist_ok=True)
+
+METHOD_ORDER = ["tracekg", "autoschemakg", "graphrag", "openie", "kggen"]
+METHOD_LABELS = {
+    "tracekg": "TRACE KG",
+    "autoschemakg": "AutoSchemaKG",
+    "graphrag": "GraphRAG",
+    "openie": "OpenIE",
+    "kggen": "KGGen",
+}
+
+METHOD_COLORS = {
+    "tracekg":      "#0072B2",
+    "autoschemakg": "#E69F00",
+    "graphrag":     "#882255",
+    "openie":       "#44AA99",
+    "kggen":        "#332288",
+}
+
+# Semantic colors
+CLR_GENUINE = "#1a9641"
+CLR_LEAKED  = "#d7191c"
+CLR_FRAG    = "#bababa"
+
+DPI = 300
+FONT_TITLE = 15
+FONT_SUBTITLE = 13
+FONT_LABEL = 12
+FONT_TICK = 11
+FONT_ANNOT = 11
+FONT_NOTE = 10
+
+plt.rcParams.update({
+    "font.size": FONT_LABEL,
+    "font.family": "sans-serif",
+    "axes.titlesize": FONT_SUBTITLE,
+    "axes.labelsize": FONT_LABEL,
+    "xtick.labelsize": FONT_TICK,
+    "ytick.labelsize": FONT_TICK,
+    "legend.fontsize": FONT_TICK,
+    "figure.dpi": DPI,
+    "savefig.dpi": DPI,
+    "savefig.bbox": "tight",
+    "savefig.pad_inches": 0.2,
+    "axes.spines.top": False,
+    "axes.spines.right": False,
+})
+
+# ============================================================
+# LOAD DATA
+# ============================================================
+
+with open(V5_JSON) as f:
+    v5 = json.load(f)
+
+agg = v5["aggregate"]
+
+
+# ============================================================
+# FIG 1: RADAR — Multi-dimensional quality profile
+# ============================================================
+
+def fig1_radar():
+    radar_metrics = [
+        ("Retrieval\nAccuracy",           "ret_acc",  True),
+        ("Effective\nRetrieval Accuracy",  "egu",      True),
+        ("Connectivity",                   "conn",     True),
+        ("Clustering",                     "clust",    True),
+        ("Avg. Degree",                    "avg_deg",  True),
+        ("Low Leakage",                    "v4g",      False),
+        ("Compression\nQuality",           "tri_cr",   None),
+    ]
+
+    methods = [m for m in METHOD_ORDER if m in agg]
+    N = len(radar_metrics)
+
+    raw = {}
+    for m in methods:
+        raw[m] = [agg[m][key] for _, key, _ in radar_metrics]
+
+    raw_arr = np.array([raw[m] for m in methods])
+    norm = np.zeros_like(raw_arr)
+    for j, (_, key, higher) in enumerate(radar_metrics):
+        col = raw_arr[:, j]
+        if higher is None:
+            dist = np.abs(col - 1.0)
+            mn, mx = dist.min(), dist.max()
+            if mx - mn < 1e-9:
+                norm[:, j] = 1.0
+            else:
+                norm[:, j] = (mx - dist) / (mx - mn)
+        else:
+            mn, mx = col.min(), col.max()
+            if mx - mn < 1e-9:
+                norm[:, j] = 1.0
+            else:
+                norm[:, j] = (col - mn) / (mx - mn) if higher else (mx - col) / (mx - mn)
+
+    angles = np.linspace(0, 2 * np.pi, N, endpoint=False).tolist()
+    angles += angles[:1]
+
+    fig, ax = plt.subplots(figsize=(7.5, 7.5), subplot_kw=dict(polar=True))
+    ax.set_facecolor("#FAFAFA")
+
+    for i, m in enumerate(methods):
+        vals = norm[i].tolist() + [norm[i][0]]
+        lw = 3.0 if m == "tracekg" else 1.5
+        ls = "-" if m == "tracekg" else "--"
+        alpha_fill = 0.12 if m == "tracekg" else 0.0
+        zorder = 10 if m == "tracekg" else 5
+        marker = "o" if m == "tracekg" else ""
+        ms = 5 if m == "tracekg" else 0
+        ax.plot(angles, vals, color=METHOD_COLORS[m], linewidth=lw, linestyle=ls,
+                label=METHOD_LABELS[m], zorder=zorder, marker=marker, markersize=ms)
+        if alpha_fill > 0:
+            ax.fill(angles, vals, color=METHOD_COLORS[m], alpha=alpha_fill, zorder=4)
+
+    ax.set_xticks(angles[:-1])
+    ax.set_xticklabels([lbl for lbl, _, _ in radar_metrics], fontsize=FONT_TICK,
+                       linespacing=1.1)
+    ax.set_ylim(0, 1.1)
+    ax.set_yticks([0.25, 0.5, 0.75, 1.0])
+    ax.set_yticklabels(["0.25", "0.50", "0.75", "1.00"], fontsize=FONT_TICK - 1, color="grey")
+
+    ax.legend(loc="upper right", bbox_to_anchor=(1.35, 1.15), frameon=True,
+              fancybox=True, shadow=False, edgecolor="#CCCCCC", fontsize=FONT_TICK)
+
+    path = FIG_OUT / "fig1_radar_quality_profile.pdf"
+    fig.savefig(path)
+    fig.savefig(path.with_suffix(".png"))
+    plt.close(fig)
+    print(f"  Saved: {path}")
+
+
+# ============================================================
+# FIG 2: EFFECTIVE RETRIEVAL ACCURACY
+# ============================================================
+
+def fig2_effective_retrieval_accuracy():
+    methods = [m for m in METHOD_ORDER if m in agg]
+    n = len(methods)
+    labels = [METHOD_LABELS[m] for m in methods]
+    colors = [METHOD_COLORS[m] for m in methods]
+    x = np.arange(n)
+
+    egu = [agg[m]["egu"] * 100 for m in methods]
+    egu_std = [agg[m].get("egu_std", 0) * 100 for m in methods]
+
+    fig, ax = plt.subplots(figsize=(9, 6))
+
+    bars = ax.bar(x, egu, color=colors, edgecolor="black", linewidth=0.6,
+                  yerr=egu_std, capsize=5, error_kw={"linewidth": 1.2, "color": "#444444"},
+                  width=0.62)
+
+    trace_idx = methods.index("tracekg")
+    bars[trace_idx].set_edgecolor(METHOD_COLORS["tracekg"])
+    bars[trace_idx].set_linewidth(3.0)
+
+    for i in range(n):
+        fw = "bold" if methods[i] == "tracekg" else "normal"
+        fs = FONT_ANNOT + 1 if methods[i] == "tracekg" else FONT_ANNOT
+        ax.text(i, egu[i] + egu_std[i] + 2.0, f"{egu[i]:.1f}%",
+                ha="center", va="bottom", fontsize=fs, fontweight=fw)
+
+    ax.set_xticks(x)
+    ax.set_xticklabels(labels, fontsize=FONT_LABEL)
+    ax.set_ylabel("Effective Retrieval Accuracy (%)", fontsize=FONT_LABEL)
+    ax.set_title("Effective Retrieval Accuracy", fontweight="bold",
+                 fontsize=FONT_TITLE + 2, pad=20)
+    ax.text(0.5, 1.015,
+            "Retrieval Accuracy  ×  Graph Connectivity  ×  (1 − Verbatim Leakage)",
+            transform=ax.transAxes, ha="center", va="bottom",
+            fontsize=FONT_LABEL, color="#333333", fontstyle="italic")
+
+    ax.set_ylim(0, max(egu) + max(egu_std) + 15)
+    ax.grid(axis="y", alpha=0.15, linewidth=0.5)
+    ax.set_axisbelow(True)
+
+    plt.tight_layout(rect=[0, 0, 1, 0.94])
+
+    path = FIG_OUT / "fig2_effective_retrieval_accuracy.pdf"
+    fig.savefig(path)
+    fig.savefig(path.with_suffix(".png"))
+    plt.close(fig)
+    print(f"  Saved: {path}")
+
+
+# ============================================================
+# FIG 3: "WHY RAW ACCURACY IS MISLEADING" — 3 failure modes
+# ============================================================
+
+def fig3_failure_modes():
+    """
+    Three-panel figure exposing why raw accuracy alone is misleading.
+
+    Panel (a): Accuracy decomposition — stacked bar showing genuine vs
+               leaked vs fragmented contributions to accuracy.
+    Panel (b): Compression quality — distance from ideal TriCR=1.0.
+    Panel (c): Effective Retrieval Accuracy — the corrected metric.
+
+    Core message: AutoSchemaKG's 95% accuracy is largely from text copying.
+    TRACE KG's 90% is almost entirely genuine graph retrieval.
+    """
+    methods = [m for m in METHOD_ORDER if m in agg]
+    n = len(methods)
+    labels = [METHOD_LABELS[m] for m in methods]
+    colors = [METHOD_COLORS[m] for m in methods]
+    x = np.arange(n)
+
+    fig, axes = plt.subplots(1, 3, figsize=(18, 6.5))
+    for ax in axes:
+        ax.set_axisbelow(True)
+        ax.spines["top"].set_visible(False)
+        ax.spines["right"].set_visible(False)
+
+    # ── (a) Accuracy Decomposition ──
+    ax = axes[0]
+
+    genuine = []
+    leaked = []
+    fragmented = []
+
+    for m in methods:
+        a = agg[m]["ret_acc"]
+        c = agg[m]["conn"]
+        l = agg[m]["v4g"]
+        genuine.append(a * c * (1 - l) * 100)
+        leaked.append(a * c * l * 100)
+        fragmented.append(a * (1 - c) * 100)
+
+    bars_g = ax.bar(x, genuine, width=0.62, color=CLR_GENUINE, edgecolor="black",
+                    linewidth=0.5, label="Genuine retrieval", zorder=5)
+    bars_l = ax.bar(x, leaked, bottom=genuine, width=0.62, color=CLR_LEAKED,
+                    edgecolor="black", linewidth=0.5, hatch="///",
+                    label="From text copying", zorder=5)
+    bars_f = ax.bar(x, fragmented, bottom=[g + l for g, l in zip(genuine, leaked)],
+                    width=0.62, color=CLR_FRAG, edgecolor="black", linewidth=0.5,
+                    hatch="...", label="From disconnected nodes", zorder=5)
+
+    totals = [g + l + f for g, l, f in zip(genuine, leaked, fragmented)]
+
+    # Total on top
+    for i in range(n):
+        fw = "bold" if methods[i] == "tracekg" else "normal"
+        ax.text(i, totals[i] + 1.5, f"{totals[i]:.1f}%", ha="center", va="bottom",
+                fontsize=FONT_ANNOT, fontweight=fw, zorder=10)
+
+    # Genuine % inside green bar
+    for i in range(n):
+        if genuine[i] > 12:
+            ax.text(i, genuine[i] / 2, f"{genuine[i]:.0f}%", ha="center", va="center",
+                    fontsize=FONT_ANNOT - 1, fontweight="bold", color="white", zorder=10)
+
+    # Leaked % inside red bar if visible
+    for i in range(n):
+        if leaked[i] > 6:
+            ax.text(i, genuine[i] + leaked[i] / 2, f"{leaked[i]:.0f}%",
+                    ha="center", va="center", fontsize=FONT_ANNOT - 1,
+                    fontweight="bold", color="white", zorder=10)
+
+    ax.set_xticks(x)
+    ax.set_xticklabels(labels, fontsize=FONT_TICK, rotation=25, ha="right")
+    ax.set_ylabel("Retrieval Accuracy (%)", fontsize=FONT_LABEL)
+    ax.set_title("(a) Failure Mode 1: Accuracy from Text Copying",
+                 fontweight="bold", fontsize=FONT_SUBTITLE, pad=10)
+    ax.set_ylim(0, 112)
+    ax.grid(axis="y", alpha=0.12, linewidth=0.5)
+    ax.legend(fontsize=FONT_TICK, loc="upper right", framealpha=0.95,
+              edgecolor="#CCCCCC")
+
+    ax.text(0.5, -0.18,
+            "Green = accuracy from genuine graph structure\n"
+            "Red = accuracy inflated by verbatim text in entities",
+            transform=ax.transAxes, ha="center", va="top",
+            fontsize=FONT_NOTE, color="#444444", linespacing=1.4)
+
+    # ── (b) Compression Quality ──
+    ax = axes[1]
+
+    tricr = [agg[m]["tri_cr"] for m in methods]
+    tricr_dev = [abs(t - 1.0) for t in tricr]
+
+    bar_edge_colors = []
+    for i, m in enumerate(methods):
+        if tricr[i] > 1.5:
+            bar_edge_colors.append(CLR_LEAKED)
+        elif tricr[i] < 0.5:
+            bar_edge_colors.append("#E69F00")
+        else:
+            bar_edge_colors.append("black")
+
+    bars_b = ax.barh(x, tricr_dev, color=colors, edgecolor="black",
+                     linewidth=0.6, height=0.55)
+
+    # Semantic annotation
+    for i in range(n):
+        fw = "bold" if methods[i] == "tracekg" else "normal"
+        if tricr[i] > 1.5:
+            tag = "KG > source text"
+            tag_color = CLR_LEAKED
+        elif tricr[i] < 0.6:
+            tag = "heavy information loss"
+            tag_color = "#B35900"
+        elif abs(tricr[i] - 1.0) < 0.15:
+            tag = "near-ideal"
+            tag_color = CLR_GENUINE
+        else:
+            tag = ""
+            tag_color = "#333333"
+
+        label_text = f"{tricr[i]:.2f}"
+        if tag:
+            label_text += f"  ({tag})"
+
+        ax.text(tricr_dev[i] + 0.05, i, label_text,
+                va="center", fontsize=FONT_ANNOT - 1, fontweight=fw, color=tag_color)
+
+    # Ideal zone shading
+    ax.axvspan(0, 0.15, color=CLR_GENUINE, alpha=0.06, zorder=0)
+    ax.text(0.07, n - 0.3, "ideal\nzone", fontsize=FONT_NOTE, color=CLR_GENUINE,
+            ha="center", va="top", fontstyle="italic", alpha=0.7)
+
+    ax.set_yticks(x)
+    ax.set_yticklabels(labels, fontsize=FONT_TICK)
+    ax.set_xlabel("Distance from Ideal  |TriCR − 1.0|", fontsize=FONT_LABEL)
+    ax.set_title("(b) Failure Mode 2: Poor Compression",
+                 fontweight="bold", fontsize=FONT_SUBTITLE, pad=10)
+    ax.set_xlim(0, 3.8)
+    ax.axvline(x=0, color="black", linewidth=0.8)
+    ax.grid(axis="x", alpha=0.12, linewidth=0.5)
+
+    ax.text(0.5, -0.18,
+            "TriCR = total triple words / essay words\n"
+            "Ideal = 1.0 (lossless compression)",
+            transform=ax.transAxes, ha="center", va="top",
+            fontsize=FONT_NOTE, color="#444444", linespacing=1.4)
+
+    # ── (c) Corrected Metric: Effective Retrieval Accuracy ──
+    ax = axes[2]
+
+    egu = [agg[m]["egu"] * 100 for m in methods]
+    raw_acc = [agg[m]["ret_acc"] * 100 for m in methods]
+
+    # Ghost bars for raw accuracy (light, behind)
+    ax.bar(x, raw_acc, width=0.62, color="#E0E0E0", edgecolor="#CCCCCC",
+           linewidth=0.5, zorder=3, label="Raw Accuracy")
+
+    # Solid bars for ERA
+    bars_c = ax.bar(x, egu, width=0.52, color=colors, edgecolor="black",
+                    linewidth=0.6, zorder=5, label="Effective Retrieval Accuracy")
+
+    # Highlight TRACE KG
+    trace_idx = methods.index("tracekg")
+    bars_c[trace_idx].set_edgecolor(METHOD_COLORS["tracekg"])
+    bars_c[trace_idx].set_linewidth(2.5)
+
+    for i in range(n):
+        fw = "bold" if methods[i] == "tracekg" else "normal"
+        # ERA value
+        ax.text(i, egu[i] + 2, f"{egu[i]:.1f}%", ha="center", va="bottom",
+                fontsize=FONT_ANNOT, fontweight=fw, color=colors[i], zorder=10)
+        # Raw acc (small, grey, above ghost bar)
+        if abs(raw_acc[i] - egu[i]) > 5:
+            ax.text(i + 0.28, raw_acc[i] - 2, f"{raw_acc[i]:.0f}%",
+                    ha="center", va="top", fontsize=FONT_NOTE,
+                    color="#999999", zorder=10)
+
+    ax.set_xticks(x)
+    ax.set_xticklabels(labels, fontsize=FONT_TICK, rotation=25, ha="right")
+    ax.set_ylabel("Accuracy (%)", fontsize=FONT_LABEL)
+    ax.set_title("(c) Corrected Metric: Effective\nRetrieval Accuracy",
+                 fontweight="bold", fontsize=FONT_SUBTITLE, pad=10)
+    ax.set_ylim(0, 112)
+    ax.grid(axis="y", alpha=0.12, linewidth=0.5)
+    ax.legend(fontsize=FONT_TICK - 1, loc="upper right", framealpha=0.95,
+              edgecolor="#CCCCCC")
+
+    ax.text(0.5, -0.18,
+            "ERA = Accuracy × Connectivity × (1 − Leakage)\n"
+            "Grey = raw accuracy; colored = after correction",
+            transform=ax.transAxes, ha="center", va="top",
+            fontsize=FONT_NOTE, color="#444444", linespacing=1.4)
+
+    # ── Suptitle ──
+    fig.suptitle("Why Raw Retrieval Accuracy Is Misleading for KG Evaluation",
+                 fontweight="bold", fontsize=FONT_TITLE + 1, y=1.03)
+
+    plt.tight_layout(w_pad=3.0)
+
+    path = FIG_OUT / "fig3_failure_modes.pdf"
+    fig.savefig(path)
+    fig.savefig(path.with_suffix(".png"))
+    plt.close(fig)
+    print(f"  Saved: {path}")
+
+
+# ============================================================
+# FIG 4: SUMMARY DASHBOARD — cleaned, publication-ready
+# ============================================================
+
+def fig4_summary_dashboard():
+    methods = [m for m in METHOD_ORDER if m in agg]
+    n = len(methods)
+    labels = [METHOD_LABELS[m] for m in methods]
+    colors = [METHOD_COLORS[m] for m in methods]
+    x = np.arange(n)
+
+    fig = plt.figure(figsize=(15, 10.5))
+    gs = fig.add_gridspec(2, 2, height_ratios=[1, 1], hspace=0.42, wspace=0.32)
+    ax_a = fig.add_subplot(gs[0, :])
+    ax_b = fig.add_subplot(gs[1, 0])
+    ax_c = fig.add_subplot(gs[1, 1])
+
+    for ax in [ax_a, ax_b, ax_c]:
+        ax.set_axisbelow(True)
+        ax.spines["top"].set_visible(False)
+        ax.spines["right"].set_visible(False)
+
+    # ── (a) Accuracy with Leakage Highlighted ──
+    acc = [agg[m]["ret_acc"] * 100 for m in methods]
+    leak = [agg[m]["v4g"] * 100 for m in methods]
+
+    bars_acc = ax_a.bar(x, acc, color=colors, edgecolor="black", linewidth=0.6,
+                        width=0.6, zorder=5)
+
+    bars_leak = ax_a.bar(x, leak, color="none", edgecolor=CLR_LEAKED,
+                         linewidth=1.8, width=0.6, hatch="xxxx",
+                         zorder=6)
+    # Fill the hatch area with semi-transparent red
+    for bar in bars_leak:
+        bar.set_facecolor(CLR_LEAKED)
+        bar.set_alpha(0.25)
+
+    # Accuracy labels
+    for i in range(n):
+        fw = "bold" if methods[i] == "tracekg" else "normal"
+        fs = FONT_ANNOT + 1 if methods[i] == "tracekg" else FONT_ANNOT
+        ax_a.text(i, acc[i] + 1.8, f"{acc[i]:.1f}%", ha="center", va="bottom",
+                  fontsize=fs, fontweight=fw, zorder=15)
+
+    # Leakage labels with badge
+    for i in range(n):
+        if leak[i] >= 0.3:
+            label_y = min(leak[i] + 3.0, acc[i] - 5)
+            label_y = max(label_y, 5.0)
+            fs = FONT_ANNOT if leak[i] > 5 else FONT_NOTE
+            ax_a.text(i, label_y, f"Leak: {leak[i]:.1f}%",
+                      ha="center", va="bottom", fontsize=fs, fontweight="bold",
+                      color=CLR_LEAKED, zorder=15,
+                      bbox=dict(boxstyle="round,pad=0.2", facecolor="white",
+                                edgecolor=CLR_LEAKED, linewidth=1.2, alpha=0.92))
+
+    ax_a.set_xticks(x)
+    ax_a.set_xticklabels(labels, fontsize=FONT_LABEL)
+    ax_a.set_ylabel("Percentage (%)", fontsize=FONT_LABEL)
+    ax_a.set_title("(a) Retrieval Accuracy with Verbatim Leakage Highlighted",
+                   fontweight="bold", fontsize=FONT_SUBTITLE + 1, pad=14)
+    ax_a.set_ylim(0, 115)
+    ax_a.grid(axis="y", alpha=0.12, linewidth=0.5)
+
+    patch_acc = mpatches.Patch(facecolor="#AAAAAA", edgecolor="black", linewidth=0.6,
+                               label="Retrieval Accuracy")
+    patch_leak = mpatches.Patch(facecolor=CLR_LEAKED, edgecolor=CLR_LEAKED,
+                                linewidth=1.0, alpha=0.35, hatch="xxxx",
+                                label="Verbatim Leakage")
+    ax_a.legend(handles=[patch_acc, patch_leak], fontsize=FONT_TICK,
+                loc="center left", framealpha=0.95, edgecolor="#CCCCCC",
+                bbox_to_anchor=(0.0, 0.55))
+
+    ax_a.text(0.5, -0.08,
+              "Hatched region = 4-gram overlap between entity strings and source essay text",
+              transform=ax_a.transAxes, ha="center", va="top",
+              fontsize=FONT_NOTE + 1, color="#555555", fontstyle="italic")
+
+    # ── (b) TriCR ──
+    tricr = [agg[m]["tri_cr"] for m in methods]
+    tricr_dev = [abs(t - 1.0) for t in tricr]
+
+    bars_b = ax_b.barh(x, tricr_dev, color=colors, edgecolor="black",
+                       linewidth=0.6, height=0.55)
+
+    for i in range(n):
+        fw = "bold" if methods[i] == "tracekg" else "normal"
+        if tricr[i] > 1.5:
+            tag = "expansion"
+            tc = CLR_LEAKED
+        elif tricr[i] < 0.6:
+            tag = "oversimplified"
+            tc = "#B35900"
+        elif abs(tricr[i] - 1.0) < 0.15:
+            tag = "near-ideal"
+            tc = CLR_GENUINE
+        else:
+            tag = ""
+            tc = "#333333"
+
+        txt = f"{tricr[i]:.2f}"
+        if tag:
+            txt += f"  ({tag})"
+        ax_b.text(tricr_dev[i] + 0.05, i, txt,
+                  va="center", fontsize=FONT_ANNOT, fontweight=fw, color=tc)
+
+    ax_b.axvspan(0, 0.15, color=CLR_GENUINE, alpha=0.06, zorder=0)
+
+    ax_b.set_yticks(x)
+    ax_b.set_yticklabels(labels, fontsize=FONT_TICK)
+    ax_b.set_xlabel("Distance from Ideal  |TriCR − 1.0|", fontsize=FONT_LABEL)
+    ax_b.set_title("(b) Triple Compression Ratio (ideal = 1.0)",
+                   fontweight="bold", fontsize=FONT_SUBTITLE, pad=10)
+    ax_b.set_xlim(0, 3.8)
+    ax_b.axvline(x=0, color="black", linewidth=0.8)
+    ax_b.grid(axis="x", alpha=0.12, linewidth=0.5)
+
+    ax_b.text(0.5, -0.12,
+              "TriCR = total triple words / essay words",
+              transform=ax_b.transAxes, ha="center", va="top",
+              fontsize=FONT_NOTE + 1, color="#555555", fontstyle="italic")
+
+    # ── (c) Overall Rank ──
+    ranks = v5.get("avg_ranks", {})
+    sorted_m = sorted([m for m in methods if m in ranks], key=lambda m: ranks[m])
+    rank_vals = [ranks[m] for m in sorted_m]
+    rank_labels = [METHOD_LABELS[m] for m in sorted_m]
+    rank_colors = [METHOD_COLORS[m] for m in sorted_m]
+
+    bars_c = ax_c.barh(np.arange(len(sorted_m)), rank_vals, color=rank_colors,
+                       edgecolor="black", linewidth=0.6, height=0.55)
+
+    for i, (m, rv) in enumerate(zip(sorted_m, rank_vals)):
+        fw = "bold" if m == "tracekg" else "normal"
+        fs = FONT_ANNOT + 1 if m == "tracekg" else FONT_ANNOT
+        ax_c.text(rv + 0.08, i, f"{rv:.2f}", va="center", fontsize=fs, fontweight=fw)
+
+    ax_c.text(rank_vals[0] + 0.42, 0, "★", fontsize=18, va="center", ha="center",
+              color="#DAA520", fontweight="bold")
+
+    ax_c.set_yticks(np.arange(len(sorted_m)))
+    ax_c.set_yticklabels(rank_labels, fontsize=FONT_TICK)
+    ax_c.set_xlabel("Average Rank (lower = better)", fontsize=FONT_LABEL)
+    ax_c.set_title("(c) Overall Quality Ranking",
+                   fontweight="bold", fontsize=FONT_SUBTITLE, pad=10)
+    ax_c.set_xlim(0, 5.2)
+    ax_c.axvline(x=1, color="#0072B2", linestyle=":", alpha=0.25, linewidth=1)
+    ax_c.text(1.08, len(sorted_m) - 0.15, "perfect", fontsize=FONT_NOTE,
+              color="#0072B2", fontstyle="italic", alpha=0.5)
+    ax_c.invert_yaxis()
+    ax_c.grid(axis="x", alpha=0.12, linewidth=0.5)
+
+    ax_c.text(0.5, -0.12,
+              "Rank averaged over: Acc, ERA, Conn, Clust, AvgDeg, Leak%, TriCR",
+              transform=ax_c.transAxes, ha="center", va="top",
+              fontsize=FONT_NOTE + 1, color="#555555", fontstyle="italic")
+
+    path = FIG_OUT / "fig4_summary_dashboard.pdf"
+    fig.savefig(path)
+    fig.savefig(path.with_suffix(".png"))
+    plt.close(fig)
+    print(f"  Saved: {path}")
+
+
+# ============================================================
+# RUN ALL
+# ============================================================
+
+if __name__ == "__main__":
+    print("Generating KDD figures (final v4)...\n")
+    fig1_radar()
+    fig2_effective_retrieval_accuracy()
+    fig3_failure_modes()
+    fig4_summary_dashboard()
+    print(f"\n✅ All 4 figures saved to: {FIG_OUT}")
+
+#endregion#? 
+#?#########################  End  ##########################
+
+
+
+
+
+#?######################### Start ##########################
+#region:#?     N1
+
+#endregion#?   N1
+#?#########################  End  ##########################
+
+
+
+
+
+
+
+#?######################### Start ##########################
+#region:#?     N2
+
+#endregion#?   N2
+#?#########################  End  ##########################
 
 
 

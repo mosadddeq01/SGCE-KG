@@ -544,7 +544,7 @@ def generate_trace_kgs(
 # # from TRACE_KG_Generator import generate_trace_kgs
 
 generate_trace_kgs(
-    essay_ids=[4,6,14,28,30,33,44,46,47,68,70,76,82],
+    essay_ids=[200],
     default_model="gpt-5.1",
 )
 
@@ -599,3 +599,51 @@ generate_trace_kgs(
 #endregion#? Some Test Calls
 #?#########################  End  ##########################
 
+
+
+
+
+
+
+
+
+
+# fix_json_escapes.py
+import re, json, shutil, os, sys
+
+p = "data/In_Plain_Text.json"
+if not os.path.exists(p):
+    print("ERROR: file not found:", p)
+    sys.exit(1)
+
+# 1) backup
+shutil.copyfile(p, p + ".bak")
+print("Backup created:", p + ".bak")
+
+# 2) read raw text
+with open(p, "r", encoding="utf-8") as f:
+    raw = f.read()
+
+# 3) escape backslashes that are NOT followed by a valid JSON escape char
+# valid escapes after backslash: "  \  /  b  f  n  r  t  u
+fixed = re.sub(r'\\(?!["\\\\/bfnrtu])', r'\\\\', raw)
+
+# 4) normalize CRLF -> LF (optional, safe)
+fixed = fixed.replace("\r\n", "\n")
+
+# 5) write fixed file
+with open(p, "w", encoding="utf-8") as f:
+    f.write(fixed)
+print("Wrote fixed JSON to:", p)
+
+# 6) test parse
+try:
+    with open(p, "r", encoding="utf-8") as f:
+        obj = json.load(f)
+    print("JSON parsed OK. Top-level type:", type(obj).__name__)
+except Exception as e:
+    print("Parsing failed after fix:", repr(e))
+    # restore backup
+    shutil.copyfile(p + ".bak", p)
+    print("Backup restored.")
+    sys.exit(2)
